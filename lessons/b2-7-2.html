@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.2 复数的四则运算 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .ops { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .ops .btn { font-size: 14px; padding: 6px 12px; }
+  .warn-box { background: var(--no-soft); border-left: 4px solid var(--no); border-radius: 8px; padding: 10px 14px; margin: 10px 0; font-size: 14px; }
+</style>
+</head>
+<body data-sec="b2-7-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 7 章 复数</p>
+<h1>7.2 复数的四则运算</h1>
+<p class="lead">把 \(i\) 当作字母像多项式一样加减乘，唯独记住 \(i^2=-1\)；除法借共轭把分母实数化。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>初中我们做多项式运算时，遇到含字母的式子如 \((2 + 3x) + (4 - x)\)，只需要把同类项合并，就得到 \(6 + 2x\)。</p>
+  <p>在复数中，复数由实部和虚部组成。如果把两个复数加起来，运算法则也是这样自然：</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>入门题：计算 \((1 + 2i) + (3 + 4i)\)，实部和实部相加、虚部和虚部相加，结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4 + 6i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4 + 5i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(3 + 8i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(10i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。很自然！实部 \(1+3=4\)，虚部 \(2+4=6\)，合起来就是 \(4+6i\)。</p>
+      <p>复数的加减法，跟多项式合并同类项一模一样：实部与实部算，虚部与虚部算。</p>
+      <p>那如果遇到两个虚数相乘（会出现 \(i^2\)），或者除法（分母上有 \(i\)），该怎么算？这一节我们就把复数的加、减、乘、除四则运算与几何意义一次讲透。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：7.1 复数的概念与复平面（<a href="b2-7-1.html">回看 7.1</a>）；初中多项式乘法与平方差公式；平面向量的加减法则。</p>
+
+  <div class="card">
+    <p><b>虚数单位 \(i\)</b>：定义 \(i^2 = -1\)。加减乘时把它当成多项式中的字母，唯独在遇到 \(i^2\) 时替换为 \(-1\)。</p>
+    <p>例：\(3i \times 2i = 6i^2 = 6 \times (-1) = -6\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>共轭复数</b>：实部相同、虚部互为相反数的两个复数互为共轭。若 \(z = a + bi\)（\(a,b\in\mathbf{R}\)），其共轭记为 \(\overline{z} = a - bi\)。复平面上它们关于实轴对称。</p>
+    <p>例：\(3 + 2i\) 的共轭是 \(3 - 2i\)；纯虚数 \(5i\) 的共轭是 \(-5i\)；实数 \(4\) 的共轭就是它本身 \(4\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>分母实数化</b>：复数除法中，分子分母同乘分母的共轭复数，利用 \((c+di)(c-di) = c^2 + d^2\) 把分母变成非零正实数。</p>
+    <p>例：\(\dfrac{1}{1+i} = \dfrac{1-i}{(1+i)(1-i)} = \dfrac{1-i}{1^2 - i^2} = \dfrac{1-i}{2} = \dfrac{1}{2} - \dfrac{1}{2}i\)。</p>
+  </div>
+
+  <h3>2. 加法与减法：实部虚部分别算，对应向量平行四边形法则</h3>
+  <p>设 \(z_1 = a + bi\)，\(z_2 = c + di\)（\(a,b,c,d\in\mathbf{R}\)）：</p>
+  <div class="key" style="text-align:center">
+    加法：\((a+bi) + (c+di) = (a+c) + (b+d)i\)<br>
+    减法：\((a+bi) - (c+di) = (a-c) + (b-d)i\)
+  </div>
+  <p><b>几何意义</b>：在复平面内，复数 \(z_1, z_2\) 对应向量 \(\overrightarrow{OZ_1} = (a,b)\)，\(\overrightarrow{OZ_2} = (c,d)\)。</p>
+  <ul>
+    <li>加法 \(z_1 + z_2\) 对应的向量是 \(\overrightarrow{OZ_1} + \overrightarrow{OZ_2}\)，完全符合平面向量的<b>平行四边形法则</b>（或三角形法则）。</li>
+    <li>减法 \(z_1 - z_2\) 对应的向量是 \(\overrightarrow{Z_2Z_1}\)（从 \(Z_2\) 指向 \(Z_1\)）。它的模长 \(|z_1 - z_2|\) 就是复平面上点 \(Z_1\) 与 \(Z_2\) 之间的<b>距离</b>！</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 1（加减法示范）</p>
+    <p>已知 \(z_1 = 3 - 2i\)，\(z_2 = -1 + 4i\)，求 \(z_1 + z_2\) 与 \(z_1 - z_2\)。</p>
+    <p><b>解</b>：</p>
+    <p>\(z_1 + z_2 = [3 + (-1)] + [-2 + 4]i = 2 + 2i\)。</p>
+    <p>\(z_1 - z_2 = [3 - (-1)] + [-2 - 4]i = 4 - 6i\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：已知 \(z_1 = 2 + 3i\)，\(z_2 = 4 - i\)，则 \(z_1 - z_2\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-2 + 2i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-2 + 4i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2 + 4i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-2 - 4i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。实部相减：\(2 - 4 = -2\)；虚部相减：\(3 - (-1) = 4\)，所以结果为 \(-2 + 4i\)。</p>
+      <p>选 A 的同学把虚部算成了 \(3 - 1 = 2\)（漏掉了负负得正）；选 C 的同学把实部 \(2-4\) 错算成了 \(2\)。</p>
+    </div>
+  </div>
+
+  <h3>3. 乘法与共轭：像多项式展开，遇见 \(i^2\) 换成 \(-1\)</h3>
+  <p>两个复数相乘，不需要死记公式，直接按多项式乘法展开：</p>
+  <p style="text-align:center">\((a+bi)(c+di) = ac + adi + bci + bdi^2\)</p>
+  <p>因为 \(i^2 = -1\)，最后两项合并整理得到：</p>
+  <div class="key" style="text-align:center">
+    \((a+bi)(c+di) = (ac - bd) + (ad + bc)i\)
+  </div>
+  <p><b>共轭复数相乘的神奇性质</b>：</p>
+  <div class="key" style="text-align:center">
+    \(z \cdot \overline{z} = (a+bi)(a-bi) = a^2 - b^2 i^2 = a^2 + b^2 = |z|^2\)
+  </div>
+  <p>两个互为共轭的复数相乘，虚部相消，结果永远是一个<b>非负实数</b>，且正好等于该复数模长的平方！这是解决除法分母实数化的核心工具。</p>
+  <div class="card">
+    <p class="small">例 2（乘法与共轭示范）</p>
+    <p>计算：(1) \((2 + i)(3 - 2i)\)；(2) \((2 - 3i)(2 + 3i)\)。</p>
+    <p><b>解</b>：</p>
+    <p>(1) 展开：\(2\times 3 + 2\times(-2i) + i\times 3 - 2i^2 = 6 - 4i + 3i - 2(-1) = (6+2) + (-4+3)i = 8 - i\)。</p>
+    <p>(2) 利用共轭乘积性质：\(2^2 + (-3)^2 = 4 + 9 = 13\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：计算 \((1 + 2i)(2 - i)\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4 + 3i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4 - 3i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2 + 3i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。展开多项式：\(1\times 2 - 1\times i + 2i\times 2 - 2i^2 = 2 - i + 4i - 2(-1) = (2+2) + (-1+4)i = 4 + 3i\)。</p>
+      <p>选 B 的同学漏算了实部常数项；选 D 的同学把 \(i^2\) 当作 \(0\) 扔掉了。</p>
+    </div>
+  </div>
+
+  <h3>4. 除法：分子分母同乘分母的共轭，将分母实数化</h3>
+  <p>复数除法是乘法的逆运算。只要<b>除数不为 0</b>（即 \(c+di \ne 0\)，\(c^2+d^2 \ne 0\)），通过分子分母同乘分母的共轭复数 \(c-di\)：</p>
+  <div class="key" style="text-align:center">
+    \(\dfrac{a+bi}{c+di} = \dfrac{(a+bi)(c-di)}{(c+di)(c-di)} = \dfrac{(ac+bd) + (bc-ad)i}{c^2+d^2} = \dfrac{ac+bd}{c^2+d^2} + \dfrac{bc-ad}{c^2+d^2}i\)
+  </div>
+  <p>分母乘完变成了实数 \(c^2+d^2\)，之后把实部与虚部分开写成代数形式 \(A + Bi\) 即可。</p>
+  <div class="card">
+    <p class="small">例 3（除法示范）</p>
+    <p>计算 \(\dfrac{5+5i}{2+i}\)。</p>
+    <p><b>解</b>：分子分母同乘 \(2-i\)：</p>
+    <p style="text-align:center">\(\dfrac{5+5i}{2+i} = \dfrac{(5+5i)(2-i)}{(2+i)(2-i)} = \dfrac{10 - 5i + 10i - 5i^2}{2^2 - i^2} = \dfrac{15 + 5i}{4 - (-1)} = \dfrac{15 + 5i}{5} = 3 + i\)。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="D">
+    <p>自己试试：化简 \(\dfrac{2}{1+i}\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1 + i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2 - 2i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-1 + i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1 - i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。分子分母同乘 \(1-i\)：\(\dfrac{2(1-i)}{(1+i)(1-i)} = \dfrac{2(1-i)}{1 - i^2} = \dfrac{2(1-i)}{2} = 1 - i\)。</p>
+      <p>选 B 的同学分子乘了共轭，分母却忘了乘以共轭；选 A 的同学直接把分母移到分子变号，没有做分母实数化。</p>
+    </div>
+  </div>
+
+  <h3>5. 用之前要注意（专题卡 M2-07-B 关键边界）</h3>
+  <ol>
+    <li><b>虚数单位 \(i\) 的周期性（周期为 4）</b>：<br>
+      \(i^1 = i\)，\(i^2 = -1\)，\(i^3 = -i\)，\(i^4 = 1\)；接着 \(i^5 = i\)，\(i^6 = -1\dots\)<br>
+      任何正整数指数除以 4 看余数：连续 4 个连续整数次幂的和为零：\(i + i^2 + i^3 + i^4 = i - 1 - i + 1 = 0\)。<br>
+      <span class="small">提示：遇到高次幂时先除以 4，如 \(i^{100} = (i^4)^{25} = 1\)，\(i^{103} = i^3 = -i\)。</span>
+    </li>
+    <li><b>负数根式乘法绝对不能套用实数乘法公式</b>：<br>
+      实数中当 \(a, b \ge 0\) 时才有 \(\sqrt{a}\cdot\sqrt{b} = \sqrt{ab}\)。如果两个都是负数，<b>必须先化成虚数单位 \(i\) 的形式再相乘</b>！<br>
+      \(\sqrt{-2}\cdot\sqrt{-3} = (\sqrt{2}i)\cdot(\sqrt{3}i) = \sqrt{6}i^2 = -\sqrt{6}\)。<br>
+      <div class="warn-box">常见致命错误：直接写成 \(\sqrt{(-2)\times(-3)} = \sqrt{6}\)，符号完全相反！</div>
+    </li>
+    <li><b>复数没有大小顺序</b>：<br>
+      实数可以在数轴上排大小（如 \(3 &gt; 2\)），但复平面是二维的，<b>虚数不能比较大小</b>！我们不能写 \(2+3i &gt; 1+4i\) 或 \(i &gt; 0\)。<br>
+      只有实数或复数的<b>模</b>（模是非负实数）才可以比较大小（如 \(|2+3i| = \sqrt{13} &lt; \sqrt{17} = |1+4i|\)）。
+    </li>
+    <li><b>不能无条件搬用实数不等式与绝对值性质</b>：<br>
+      实数中 \(|a+b| = |a| + |b|\)（当同号时）；但在复数中，\(|z_1 + z_2|\) 对应三角形的第三边，\(|z_1|\) 和 \(|z_2|\) 对应两边，一般满足向量三角不等式：<br>
+      \(||z_1| - |z_2|| \le |z_1 \pm z_2| \le |z_1| + |z_2|\)，等号当且仅当对应向量同向（或反向）共线时才取到。
+    </li>
+    <li><b>实系数一元二次方程在复数集的根</b>：<br>
+      若实系数方程 \(ax^2 + bx + c = 0\)（\(a\ne 0\)）的判别式 \(\Delta = b^2 - 4ac &lt; 0\)，方程在实数范围无解，但在复数集内有一对互为共轭的虚根：<br>
+      \(x = \dfrac{-b \pm \sqrt{|\Delta|}i}{2a}\)。解题时必须明确指出是在复数范围内求解。
+    </li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点：高频简算结构与模的运算技巧（可以先跳过）</summary>
+    <p><b>高考与模拟高频结构</b>：</p>
+    <ul>
+      <li>\((1+i)^2 = 2i\)，\((1-i)^2 = -2i\)（计算高次幂时常先平方）。</li>
+      <li>\(\dfrac{1+i}{1-i} = \dfrac{(1+i)^2}{2} = i\)；\(\dfrac{1-i}{1+i} = -i\)。</li>
+      <li><b>模的乘除法性质</b>：\(|z_1 \cdot z_2| = |z_1| \cdot |z_2|\)；\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)（\(z_2\ne 0\)）。很多题目只求模长时，先取模再乘除，比先化简复数再求模快数倍！</li>
+    </ul>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 复平面的四则运算与几何向量</h3>
+  <p class="small">复平面上实轴为横轴，虚轴为纵轴。拖动圆点 \(z_1\)（松绿）或 \(z_2\)（赤金）（或选中后用键盘方向键操作），切换上方运算按钮，观察代数运算式与几何向量的动态对应。</p>
+  <div class="card">
+    <div class="ctrl ops" id="mode-ctrl">
+      <button class="btn op-btn" type="button" data-mode="add">加法 z1+z2（平行四边形）</button>
+      <button class="btn ghost op-btn" type="button" data-mode="mul">乘法 z1·z2</button>
+      <button class="btn ghost op-btn" type="button" data-mode="conj">共轭 z̄1</button>
+    </div>
+    <svg class="fig" id="plane" viewBox="0 0 560 360" role="img" aria-label="复平面，可拖动复数 z1 与 z2 观察四则运算与共轭的几何意义"></svg>
+    <div class="result" id="planeout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="reset" type="button">重置</button>
+      <span class="small" id="planehint">方向键微调选中点坐标；拖动可自由改变位置。</span>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是典型易错陷阱，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 计算 \((2 + i)(1 - 2i)\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4 - 3i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2 - 3i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4 + 3i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-3i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。展开得 \(2 - 4i + i - 2i^2 = 2 - 3i - 2(-1) = 4 - 3i\)。</p>
+      <p>选 B 的同学漏算了 \(-2i^2 = +2\)；选 C 的同学虚部符号搞反。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 已知复数 \(z = \dfrac{3+i}{1-i}\)，则 \(z\) 的共轭复数 \(\overline{z}\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1 + 2i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1 - 2i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2 + i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-1 - 2i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。先化简 \(z\)：分子分母同乘 \(1+i\)，得 \(z = \dfrac{(3+i)(1+i)}{(1-i)(1+i)} = \dfrac{3+3i+i+i^2}{1-(-1)} = \dfrac{2+4i}{2} = 1 + 2i\)。</p>
+      <p>注意题目问的是<b>共轭复数</b> \(\overline{z}\)，虚部变号，得 \(\overline{z} = 1 - 2i\)。选 A 的同学直接选了 \(z\) 而忘了求共轭！</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-1" data-answer="B">
+    <p>3. 计算 \(\sqrt{-3} \times \sqrt{-12}\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(6i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-6i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。在复数范围内，负数根式乘法<b>不能</b>套用实数乘法公式 \(\sqrt{a}\cdot\sqrt{b} = \sqrt{ab}\)！</p>
+      <p>必须先提虚数单位 \(i\)：\(\sqrt{-3} = \sqrt{3}i\)，\(\sqrt{-12} = 2\sqrt{3}i\)。相乘得 \((\sqrt{3}i)(2\sqrt{3}i) = 6i^2 = -6\)。</p>
+      <p>若直接算 \(\sqrt{(-3)\times(-12)} = \sqrt{36} = 6\) 就中了经典负号陷阱！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-2" data-answer="C">
+    <p>4. 计算 \(i + i^2 + i^3 + \dots + i^{2026}\) 的值是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-1 + i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。因为 \(i^1 = i, i^2 = -1, i^3 = -i, i^4 = 1\)，连续四项之和 \(i + i^2 + i^3 + i^4 = 0\)。以 4 为周期循环。</p>
+      <p>一共有 2026 项，\(2026 \div 4 = 506\) 余 \(2\)。因此前 \(506\times 4 = 2024\) 项全部抵消为 0，只剩下最后两项：\(i^{2025} + i^{2026} = i^1 + i^2 = i + (-1) = -1 + i\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-3" data-answer="B">
+    <p>5. 设 \(z_1 = 3 + 4i\)，\(z_2 = 1 + 2i\)，下列结论正确的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(z_1 &gt; z_2\)</button>
+      <button class="opt" data-v="B"><b>B</b>虚数不能比较大小，因此 \(z_1\) 与 \(z_2\) 无法比大小；但它们的模满足 \(|z_1| &gt; |z_2|\)</button>
+      <button class="opt" data-v="C"><b>C</b>因为实部 \(3 &gt; 1\) 且虚部 \(4 &gt; 2\)，所以 \(z_1 &gt; z_2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(z_1 - z_2 = 2 + 2i &gt; 0\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。复数没有本章意义下的大小顺序，只要含有非零虚部，两个复数就<b>绝不能写大于号或小于号</b>！A、C、D 都是严重的概念错误。</p>
+      <p>但是，模长 \(|z_1| = \sqrt{3^2+4^2}=5\)，\(|z_2| = \sqrt{1^2+2^2}=\sqrt{5}\)，模长是实数，可以比较大小，\(|z_1| &gt; |z_2|\)。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-hard-1" data-answer="A">
+    <p>6. 已知复数 \(z\) 满足 \((1+i)z = |3 - 4i| + 3i\)，则复数 \(z\) 的模 \(|z|\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\sqrt{17}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(17\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{34}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(5\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。注意 \(|3-4i| = \sqrt{3^2+(-4)^2} = 5\) 是实数，所以等式为 \((1+i)z = 5 + 3i\)。</p>
+      <p><b>方法一（速算模长）</b>：两边同时取模，\(|(1+i)z| = |1+i| \cdot |z| = \sqrt{2}|z|\)。右边模长 \(|5+3i| = \sqrt{5^2+3^2} = \sqrt{34}\)。所以 \(|z| = \dfrac{\sqrt{34}}{\sqrt{2}} = \sqrt{17}\)。</p>
+      <p><b>方法二（先求 \(z\)）</b>：\(z = \dfrac{5+3i}{1+i} = \dfrac{(5+3i)(1-i)}{2} = \dfrac{8-2i}{2} = 4-i\)，则 \(|z| = \sqrt{4^2+(-1)^2} = \sqrt{17}\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function f1(x) {
+    var s = (Math.round(x * 10) / 10).toFixed(1).replace(/\.0$/, "");
+    return s === "-0" ? "0" : s;
+  }
+  function f2(x) {
+    var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, "");
+    return s === "-0" ? "0" : s;
+  }
+
+  function texComplex(x, y) {
+    x = Math.round(x * 10) / 10;
+    y = Math.round(y * 10) / 10;
+    if (y === 0) return String(x);
+    if (x === 0) {
+      if (y === 1) return "i";
+      if (y === -1) return "-i";
+      return y + "i";
+    }
+    var sign = y > 0 ? " + " : " - ";
+    var absY = Math.abs(y);
+    var yPart = absY === 1 ? "i" : absY + "i";
+    return x + sign + yPart;
+  }
+
+  function texParen(x, y) {
+    x = Math.round(x * 10) / 10;
+    y = Math.round(y * 10) / 10;
+    var s = texComplex(x, y);
+    if (x !== 0 && y !== 0) return "(" + s + ")";
+    if (x < 0 || y < 0) return "(" + s + ")";
+    return s;
+  }
+
+  var fig = document.getElementById("plane");
+  var out = document.getElementById("planeout");
+  var resetBtn = document.getElementById("reset");
+  var modeCtrl = document.getElementById("mode-ctrl");
+
+  var OX = 280, OY = 180, U = 32;
+  function toScreen(x, y) { return { sx: OX + x * U, sy: OY - y * U }; }
+  function toMath(sx, sy) { return { x: (sx - OX) / U, y: (OY - sy) / U }; }
+
+  var z1 = { x: 2, y: 1 };
+  var z2 = { x: 1, y: 2 };
+  var curMode = "add";
+  var activeHandle = null;
+
+  function drawArrow(parent, x1, y1, x2, y2, color, width, dash) {
+    var line = svg("line", { x1: x1, y1: y1, x2: x2, y2: y2, stroke: color, "stroke-width": width || 2.5 }, parent);
+    if (dash) line.setAttribute("stroke-dasharray", dash);
+    var len = Math.hypot(x2 - x1, y2 - y1);
+    if (len > 8) {
+      var dx = (x2 - x1) / len, dy = (y2 - y1) / len;
+      var hLen = 8, hWidth = 5;
+      var bx = x2 - hLen * dx, by = y2 - hLen * dy;
+      var p1x = bx - hWidth * dy, p1y = by + hWidth * dx;
+      var p2x = bx + hWidth * dy, p2y = by - hWidth * dx;
+      svg("polygon", {
+        points: x2 + "," + y2 + " " + p1x + "," + p1y + " " + p2x + "," + p2y,
+        fill: color
+      }, parent);
+    }
+  }
+
+  function renderPlane(keepFocusId) {
+    fig.innerHTML = "";
+    var fg = css("--fg") || "#1A2822";
+    var muted = css("--muted") || "#5E6B64";
+    var lineCol = css("--line") || "#E2DCD0";
+    var card = css("--card") || "#FFFFFF";
+    var ca = css("--a") || "#2F7A56";
+    var cb = css("--b") || "#966524";
+    var cc = css("--c") || "#3E5C76";
+    var chl = css("--hl") || "#D9A441";
+
+    for (var gx = -7; gx <= 7; gx++) {
+      var sgx = toScreen(gx, 0);
+      svg("line", { x1: sgx.sx, y1: 20, x2: sgx.sx, y2: 340, stroke: lineCol, "stroke-width": 1, opacity: 0.6 }, fig);
+    }
+    for (var gy = -4; gy <= 4; gy++) {
+      var sgy = toScreen(0, gy);
+      svg("line", { x1: 20, y1: sgy.sy, x2: 540, y2: sgy.sy, stroke: lineCol, "stroke-width": 1, opacity: 0.6 }, fig);
+    }
+
+    drawArrow(fig, 20, OY, 545, OY, fg, 2);
+    drawArrow(fig, OX, 340, OX, 15, fg, 2);
+    var tRe = svg("text", { x: 546, y: OY + 18, "text-anchor": "end", "font-weight": 700, "font-size": 18 }, fig);
+    tRe.textContent = "实轴 (Re)";
+    var tIm = svg("text", { x: OX + 10, y: 22, "font-weight": 700, "font-size": 18 }, fig);
+    tIm.textContent = "虚轴 (Im)";
+    var tO = svg("text", { x: OX - 14, y: OY + 18, "font-size": 16, fill: muted }, fig);
+    tO.textContent = "O";
+
+    [-6, -4, -2, 2, 4, 6].forEach(function (v) {
+      var pos = toScreen(v, 0);
+      svg("line", { x1: pos.sx, y1: OY - 3, x2: pos.sx, y2: OY + 3, stroke: fg, "stroke-width": 1.5 }, fig);
+      var txt = svg("text", { x: pos.sx, y: OY + 16, "text-anchor": "middle", "font-size": 13, fill: muted }, fig);
+      txt.textContent = v;
+    });
+    [-3, -2, -1, 1, 2, 3].forEach(function (v) {
+      var pos = toScreen(0, v);
+      svg("line", { x1: OX - 3, y1: pos.sy, x2: OX + 3, y2: pos.sy, stroke: fg, "stroke-width": 1.5 }, fig);
+      var txt = svg("text", { x: OX - 10, y: pos.sy + 4, "text-anchor": "end", "font-size": 13, fill: muted }, fig);
+      txt.textContent = v + "i";
+    });
+
+    var p1 = toScreen(z1.x, z1.y);
+    var p2 = toScreen(z2.x, z2.y);
+    var outHtml = "";
+
+    if (curMode === "add") {
+      var sx = z1.x + z2.x, sy = z1.y + z2.y;
+      var pSum = toScreen(sx, sy);
+
+      svg("line", { x1: p1.sx, y1: p1.sy, x2: pSum.sx, y2: pSum.sy, stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "4 4" }, fig);
+      svg("line", { x1: p2.sx, y1: p2.sy, x2: pSum.sx, y2: pSum.sy, stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "4 4" }, fig);
+
+      drawArrow(fig, OX, OY, p1.sx, p1.sy, ca, 2.5);
+      drawArrow(fig, OX, OY, p2.sx, p2.sy, cb, 2.5);
+      drawArrow(fig, OX, OY, pSum.sx, pSum.sy, cc, 3.5);
+
+      svg("circle", { cx: pSum.sx, cy: pSum.sy, r: 6, fill: cc }, fig);
+      var tSum = svg("text", { x: pSum.sx + 10, y: pSum.sy - 8, fill: cc, "font-weight": 700, "font-size": 18 }, fig);
+      tSum.textContent = "z₁ + z₂ (" + f1(sx) + ", " + f1(sy) + ")";
+
+      var mod1 = Math.hypot(z1.x, z1.y);
+      var mod2 = Math.hypot(z2.x, z2.y);
+      var modSum = Math.hypot(sx, sy);
+      outHtml = "<div><b>加法运算</b>：\\( z_1 = " + texComplex(z1.x, z1.y) + ",\\quad z_2 = " + texComplex(z2.x, z2.y) + " \\)</div>" +
+        "<div>\\( z_1 + z_2 = (" + z1.x + " + " + texParen(z2.x, 0) + ") + (" + z1.y + " + " + texParen(z2.y, 0) + ")i = \\) " +
+        '<span class="eq">\\(' + texComplex(sx, sy) + "\\)</span></div>" +
+        '<div class="small">向量模长：\\( |z_1| \\approx ' + f2(mod1) + ',\\ |z_2| \\approx ' + f2(mod2) +
+        ',\\ |z_1+z_2| \\approx ' + f2(modSum) + ' \\)。几何上对应以 \\( \\overrightarrow{OZ_1} \\) 与 \\( \\overrightarrow{OZ_2} \\) 为邻边的<b>平行四边形法则</b>（满足三角不等式 \\( |z_1+z_2| \\le |z_1|+|z_2| \\)）。</div>';
+
+    } else if (curMode === "mul") {
+      var px = z1.x * z2.x - z1.y * z2.y;
+      var py = z1.x * z2.y + z1.y * z2.x;
+      px = Math.round(px * 100) / 100;
+      py = Math.round(py * 100) / 100;
+      var pProd = toScreen(px, py);
+
+      drawArrow(fig, OX, OY, p1.sx, p1.sy, ca, 2.5);
+      drawArrow(fig, OX, OY, p2.sx, p2.sy, cb, 2.5);
+
+      var isInside = pProd.sx >= 10 && pProd.sx <= 550 && pProd.sy >= 10 && pProd.sy <= 350;
+      if (isInside) {
+        drawArrow(fig, OX, OY, pProd.sx, pProd.sy, cc, 3.5);
+        svg("circle", { cx: pProd.sx, cy: pProd.sy, r: 6, fill: cc }, fig);
+        var tProd = svg("text", { x: pProd.sx + 10, y: pProd.sy - 8, fill: cc, "font-weight": 700, "font-size": 18 }, fig);
+        tProd.textContent = "z₁ · z₂";
+      } else {
+        var angle = Math.atan2(OY - pProd.sy, pProd.sx - OX);
+        var edgeX = OX + Math.cos(angle) * 150;
+        var edgeY = OY - Math.sin(angle) * 150;
+        drawArrow(fig, OX, OY, edgeX, edgeY, cc, 2.5, "4 4");
+        var tOut = svg("text", { x: edgeX + 8, y: edgeY, fill: cc, "font-weight": 700, "font-size": 15 }, fig);
+        tOut.textContent = "z₁·z₂ 方向↑";
+      }
+
+      var m1 = Math.hypot(z1.x, z1.y);
+      var m2 = Math.hypot(z2.x, z2.y);
+      var mProd = Math.hypot(px, py);
+      outHtml = "<div><b>乘法运算</b>：\\( (" + texComplex(z1.x, z1.y) + ")(" + texComplex(z2.x, z2.y) + ") \\)</div>" +
+        "<div>按多项式展开代入 \\( i^2=-1 \\)：\\( (" + f1(z1.x * z2.x) + " - " + f1(z1.y * z2.y) + ") + (" + f1(z1.x * z2.y) + " + " + f1(z1.y * z2.x) + ")i = \\) " +
+        '<span class="eq">\\(' + texComplex(px, py) + "\\)</span></div>" +
+        '<div class="small">模长关系：\\( |z_1| \\approx ' + f2(m1) + ',\\ |z_2| \\approx ' + f2(m2) +
+        ',\\ |z_1 \\cdot z_2| = |z_1| \\times |z_2| \\approx ' + f2(mProd) + ' \\)。几何上乘法对应<b>模长相乘、辐角相加</b>（绕原点旋转并伸缩）。</div>';
+
+    } else if (curMode === "conj") {
+      var conjX = z1.x, conjY = -z1.y;
+      var pConj = toScreen(conjX, conjY);
+      var modSq = Math.round((z1.x * z1.x + z1.y * z1.y) * 100) / 100;
+      var pModSq = toScreen(modSq, 0);
+
+      svg("line", { x1: p1.sx, y1: p1.sy, x2: pConj.sx, y2: pConj.sy, stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "3 3" }, fig);
+
+      drawArrow(fig, OX, OY, p1.sx, p1.sy, ca, 2.5);
+      drawArrow(fig, OX, OY, pConj.sx, pConj.sy, cc, 2.5);
+
+      svg("circle", { cx: pConj.sx, cy: pConj.sy, r: 6, fill: cc }, fig);
+      var tConj = svg("text", { x: pConj.sx + 10, y: pConj.sy + 18, fill: cc, "font-weight": 700, "font-size": 18 }, fig);
+      tConj.textContent = "z̄₁ (" + f1(conjX) + ", " + f1(conjY) + ")";
+
+      if (pModSq.sx <= 540) {
+        svg("circle", { cx: pModSq.sx, cy: OY, r: 5, fill: chl }, fig);
+        var tMSq = svg("text", { x: pModSq.sx, y: OY - 12, fill: chl, "font-weight": 700, "font-size": 16, "text-anchor": "middle" }, fig);
+        tMSq.textContent = "|z₁|²=" + f2(modSq);
+      }
+
+      outHtml = "<div><b>共轭复数</b>：\\( z_1 = " + texComplex(z1.x, z1.y) + " \\implies \\overline{z}_1 = \\) " +
+        '<span class="eq">\\(' + texComplex(conjX, conjY) + "\\)</span>（实部不变，虚部变相反数）</div>" +
+        "<div><b>共轭乘积</b>：\\( z_1 \\cdot \\overline{z}_1 = (" + z1.x + ")^2 + (" + z1.y + ")^2 = " +
+        '<span class="eq">' + f2(modSq) + "</span> = |z_1|^2 \\ge 0 \\)</div>" +
+        '<div class="small">几何上 \\( z_1 \\) 与 \\( \\overline{z}_1 \\) <b>关于实轴对称</b>。因为 \\( z \\cdot \\overline{z} \\) 永远是非负实数，所以复数除法通过分子分母同乘分母的共轭来实现「分母实数化」。</div>';
+    }
+
+    var h1 = svg("circle", {
+      id: "h-z1", cx: p1.sx, cy: p1.sy, r: 10, fill: card, stroke: ca, "stroke-width": 3.5,
+      tabindex: 0, role: "slider", "aria-label": "复数 z1 控制点", style: "cursor: grab;"
+    }, fig);
+    var tz1 = svg("text", { x: p1.sx - 12, y: p1.sy - 12, fill: ca, "font-weight": 700, "font-size": 18 }, fig);
+    tz1.textContent = "z₁ (" + f1(z1.x) + ", " + f1(z1.y) + ")";
+    attachEvents(h1, "z1");
+
+    if (curMode !== "conj") {
+      var h2 = svg("circle", {
+        id: "h-z2", cx: p2.sx, cy: p2.sy, r: 10, fill: card, stroke: cb, "stroke-width": 3.5,
+        tabindex: 0, role: "slider", "aria-label": "复数 z2 控制点", style: "cursor: grab;"
+      }, fig);
+      var tz2 = svg("text", { x: p2.sx + 10, y: p2.sy - 10, fill: cb, "font-weight": 700, "font-size": 18 }, fig);
+      tz2.textContent = "z₂ (" + f1(z2.x) + ", " + f1(z2.y) + ")";
+      attachEvents(h2, "z2");
+    }
+
+    out.innerHTML = outHtml;
+    if (window.Peiyu && window.Peiyu.math) Peiyu.math(out);
+
+    if (keepFocusId) {
+      var target = document.getElementById(keepFocusId);
+      if (target && target.focus) target.focus();
+    }
+  }
+
+  function attachEvents(handle, which) {
+    handle.addEventListener("keydown", function (ev) {
+      var d = { ArrowLeft: [-0.5, 0], ArrowRight: [0.5, 0], ArrowUp: [0, 0.5], ArrowDown: [0, -0.5] }[ev.key];
+      if (!d) return;
+      ev.preventDefault();
+      var target = which === "z1" ? z1 : z2;
+      target.x = clamp(Math.round((target.x + d[0]) * 2) / 2, -6, 6);
+      target.y = clamp(Math.round((target.y + d[1]) * 2) / 2, -4, 4);
+      renderPlane("h-" + which);
+      if (window.Peiyu && window.Peiyu.log) {
+        Peiyu.log("interact", { handle: which, x: target.x, y: target.y, key: ev.key });
+      }
+    });
+
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      activeHandle = which;
+      try { handle.setPointerCapture(ev.pointerId); } catch (e) {}
+      function onMove(e) {
+        var rect = fig.getBoundingClientRect();
+        var clientX = e.clientX, clientY = e.clientY;
+        var relX = (clientX - rect.left) * (560 / rect.width);
+        var relY = (clientY - rect.top) * (360 / rect.height);
+        var m = toMath(relX, relY);
+        var target = activeHandle === "z1" ? z1 : z2;
+        target.x = clamp(Math.round(m.x * 2) / 2, -6, 6);
+        target.y = clamp(Math.round(m.y * 2) / 2, -4, 4);
+        renderPlane();
+      }
+      function onUp() {
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        if (window.Peiyu && window.Peiyu.log) {
+          var target = activeHandle === "z1" ? z1 : z2;
+          Peiyu.log("interact", { handle: activeHandle, x: target.x, y: target.y });
+        }
+        activeHandle = null;
+      }
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+    });
+  }
+
+  var modeButtons = modeCtrl.querySelectorAll(".op-btn");
+  modeButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      curMode = btn.getAttribute("data-mode");
+      modeButtons.forEach(function (b) {
+        b.classList.toggle("ghost", b.getAttribute("data-mode") !== curMode);
+      });
+      renderPlane();
+      if (window.Peiyu && window.Peiyu.log) {
+        Peiyu.log("interact", { action: "switch-mode", mode: curMode });
+      }
+    });
+  });
+
+  resetBtn.addEventListener("click", function () {
+    curMode = "add";
+    z1 = { x: 2, y: 1 };
+    z2 = { x: 1, y: 2 };
+    modeButtons.forEach(function (b) {
+      b.classList.toggle("ghost", b.getAttribute("data-mode") !== curMode);
+    });
+    renderPlane();
+    if (window.Peiyu && window.Peiyu.log) {
+      Peiyu.log("interact", { action: "reset" });
+    }
+  });
+
+  renderPlane();
+})();
+</script>
+</body></html>

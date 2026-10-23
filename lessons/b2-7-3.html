@@ -1,0 +1,771 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.3 复数的三角表示（选学） · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.2em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3.2em; font-weight: 600; }
+  .btn-sm { padding: 4px 10px; font-size: 13px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-7-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 7 章 复数</p>
+<h1>7.3 复数的三角表示（选学）</h1>
+<p class="lead">用模长与辐角表示复数：让乘除法变成「模相乘除、角相加减」的旋转与伸缩，架起代数与平面几何的桥梁。<br><span class="small" style="color:var(--muted)">本节为选学内容，帮助建立代数与几何旋转的深层联系。</span></p>
+
+<section class="step" data-title="从例子进入">
+  <p>在数轴上，把一个数乘以 \(-1\)，相当于把这个点绕原点逆时针旋转了 \(180^\circ\)（半圈）。如果乘以虚数单位 \(i\)，因为 \(i^2 = -1\)，连续乘两次 \(i\) 相当于旋转 \(180^\circ\)。猜一猜：乘一次 \(i\)，是不是逆时针转 \(90^\circ\)？这一节学了乘法法则就能说清楚。</p>
+  <p>如果从正实轴上的点 \((1, 0)\) 出发，绕原点逆时针旋转 \(45^\circ\)（长度保持为 \(1\)），它落在了第一象限的角平分线上。这个点在复平面上对应的复数是多少？</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>入门题：把复平面上对应实数 \(1\) 的单位向量绕原点逆时针旋转 \(45^\circ\)，终点对应的复数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{2} + \dfrac{1}{2}i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{\sqrt{2}}{2} + \dfrac{\sqrt{2}}{2}i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1 + i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{\sqrt{3}}{2} + \dfrac{1}{2}i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。根据直角三角形与三角函数定义：向量长度 \(r=1\)，横坐标为 \(\cos 45^\circ = \dfrac{\sqrt{2}}{2}\)，纵坐标为 \(\sin 45^\circ = \dfrac{\sqrt{2}}{2}\)。所以对应的复数是 \(\dfrac{\sqrt{2}}{2} + \dfrac{\sqrt{2}}{2}i\)。</p>
+      <p>用代数形式 \(a+bi\) 看起来，这一堆根号并不直观；但如果用「长度为 \(1\)、方向角为 \(45^\circ\)」来看，位置一目了然！这一节我们就来学习<b>复数的三角表示</b>：用距离和方向角描述复数，让几何旋转变成乘除运算。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：复数的代数形式、复平面和模（<a href="b2-7-1.html">回看 7.1</a>）；复数的乘除（<a href="b2-7-2.html">回看 7.2</a>）；任意角的三角函数（<a href="b1-5-2.html">回看 5.2</a>）；两角和与差的公式（<a href="b1-5-5.html">回看 5.5</a>）。</p>
+
+  <div class="card">
+    <p><b>模 \(r=|z|\)</b>：复数 \(z=a+bi\) 对应的点 \(Z(a,b)\) 到原点的距离，\(r=\sqrt{a^2+b^2}\)。它总是 \(\ge 0\)，只有 \(z=0\) 时等于 \(0\)。</p>
+    <p>例：\(z=1+\sqrt3 i\) 的模 \(r=\sqrt{1^2+(\sqrt3)^2}=2\)；\(z=-3\) 的模是 \(3\)，不是 \(-3\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>辐角</b>：以正实轴为始边、射线 \(OZ\) 为终边的角 \(\theta\)，叫 \(z\) 的辐角。转一整圈回到同一条射线，所以一个非零复数的辐角有无数个，彼此相差 \(2k\pi\)（\(k\in\mathbf Z\)）。</p>
+    <p>例：\(z=1+i\) 在第一象限角平分线上，\(\dfrac{\pi}{4}\)、\(\dfrac{9\pi}{4}\)、\(-\dfrac{7\pi}{4}\) 都是它的辐角。</p>
+  </div>
+
+  <div class="card">
+    <p><b>辐角主值 \(\arg z\)</b>：无数个辐角里，落在 \([0,2\pi)\) 内的那一个（本书的约定）。每个非零复数恰有一个主值。</p>
+    <p>例：\(\arg i=\dfrac{\pi}{2}\)，\(\arg(-1)=\pi\)，\(\arg(-i)=\dfrac{3\pi}{2}\)，\(\arg(1+i)=\dfrac{\pi}{4}\)（不是 \(\dfrac{9\pi}{4}\)）。</p>
+  </div>
+
+  <h3>2. 代数形式和三角形式互化</h3>
+  <p>非零复数 \(z=a+bi\) 对应点 \(Z(a,b)\)。设模为 \(r\)、辐角为 \(\theta\)，由任意角三角函数的定义，\(a=r\cos\theta\)，\(b=r\sin\theta\)。代回 \(z=a+bi\)：</p>
+  <div class="key" style="text-align:center">\(z=r(\cos\theta+i\sin\theta)\)<br>其中 \(r=|z|&gt;0\)，\(\cos\theta=\dfrac{a}{r}\)，\(\sin\theta=\dfrac{b}{r}\)。</div>
+  <p>这叫复数的<b>三角形式</b>。标准写法有四条要求：\(r&gt;0\)；中间是「\(+\)」；\(\cos\) 在前、\(i\sin\) 在后；两个角相同。</p>
+  <ul>
+    <li><b>三角 → 代数</b>：算出 \(\cos\theta\)、\(\sin\theta\)，乘进去就行。</li>
+    <li><b>代数 → 三角</b>：先算 \(r\)；再<b>看点 \((a,b)\) 在哪个象限或哪条轴上</b>，找同时满足 \(\cos\theta=\dfrac ar\)、\(\sin\theta=\dfrac br\) 的角。只看 \(\tan\theta=\dfrac ba\) 容易差半圈。</li>
+  </ul>
+
+  <div class="card">
+    <p class="small">例 1（两个方向各走一遍）</p>
+    <p>(1) 把 \(z=-\sqrt3+i\) 写成三角形式。(2) 把 \(w=2\left(\cos\dfrac{4\pi}{3}+i\sin\dfrac{4\pi}{3}\right)\) 写成代数形式。</p>
+    <p><b>解</b>：(1) 模 \(r=\sqrt{(-\sqrt3)^2+1^2}=2\)。\(\cos\theta=-\dfrac{\sqrt3}{2}\)，\(\sin\theta=\dfrac12\)，点 \((-\sqrt3,1)\) 在第二象限，取 \(\theta=\dfrac{5\pi}{6}\)。</p>
+    <p>所以 \(z=2\left(\cos\dfrac{5\pi}{6}+i\sin\dfrac{5\pi}{6}\right)\)，辐角主值 \(\dfrac{5\pi}{6}\)。</p>
+    <p>(2) \(\cos\dfrac{4\pi}{3}=-\dfrac12\)，\(\sin\dfrac{4\pi}{3}=-\dfrac{\sqrt3}{2}\)，</p>
+    <p>\(w=2\left(-\dfrac12-\dfrac{\sqrt3}{2}i\right)=-1-\sqrt3 i\)。点 \((-1,-\sqrt3)\) 在第三象限，和 \(\dfrac{4\pi}{3}\) 对得上。</p>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：把 \(z = 1 - i\) 化为标准三角形式，模和辐角主值是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(r = \sqrt{2}\)，\(\theta = \dfrac{7\pi}{4}\)，写作 \(\sqrt{2}\left(\cos\dfrac{7\pi}{4} + i\sin\dfrac{7\pi}{4}\right)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(r = \sqrt{2}\)，\(\theta = \dfrac{\pi}{4}\)，写作 \(\sqrt{2}\left(\cos\dfrac{\pi}{4} - i\sin\dfrac{\pi}{4}\right)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(r = 2\)，\(\theta = \dfrac{7\pi}{4}\)，写作 \(2\left(\cos\dfrac{7\pi}{4} + i\sin\dfrac{7\pi}{4}\right)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(r = -\sqrt{2}\)，\(\theta = \dfrac{3\pi}{4}\)，写作 \(-\sqrt{2}\left(\cos\dfrac{3\pi}{4} + i\sin\dfrac{3\pi}{4}\right)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。模 \(r = \sqrt{1^2 + (-1)^2} = \sqrt{2}\)；\(\cos\theta = \dfrac{\sqrt{2}}{2}\)，\(\sin\theta = -\dfrac{\sqrt{2}}{2}\)，点 \((1,-1)\) 在第四象限，主值是 \(\dfrac{7\pi}{4}\)。</p>
+      <p>选 B：数值对，但中间是减号，不是标准形；选 C：模忘了开方；选 D：模不能是负数。</p>
+    </div>
+  </div>
+
+  <h3>3. 乘法：模相乘，辐角相加</h3>
+  <p>设 \(z_1=r_1(\cos\theta_1+i\sin\theta_1)\)，\(z_2=r_2(\cos\theta_2+i\sin\theta_2)\)。直接展开（\(i^2=-1\)）：</p>
+  \[\begin{aligned} &z_1 z_2 = r_1 r_2 \big[ \\ &\quad(\cos\theta_1\cos\theta_2 - \sin\theta_1\sin\theta_2) \\ &\quad+ i(\sin\theta_1\cos\theta_2 + \cos\theta_1\sin\theta_2)\big]\end{aligned}\]
+  <p>两个圆括号正好是 \(\cos(\theta_1+\theta_2)\) 和 \(\sin(\theta_1+\theta_2)\) 的展开式，于是：</p>
+  <div class="key">
+    \[\begin{aligned} z_1 z_2 = r_1 r_2\big[&\cos(\theta_1+\theta_2) \\ &+ i\sin(\theta_1+\theta_2)\big]\end{aligned}\]
+    模相乘，辐角相加。
+  </div>
+  <p><b>几何意义</b>：\(z\) 乘以 \(r_0(\cos\theta_0+i\sin\theta_0)\)，就是把向量 \(\overrightarrow{OZ}\) 伸缩到原来的 \(r_0\) 倍，再绕原点逆时针转 \(\theta_0\)（\(\theta_0&lt;0\) 时顺时针）。比如 \(i=\cos\dfrac{\pi}{2}+i\sin\dfrac{\pi}{2}\)，乘 \(i\) 就是逆时针转 \(90^\circ\)，长度不变。</p>
+
+  <div class="card">
+    <p class="small">例 2（用三角形式算，再用代数形式验）</p>
+    <p>求 \((1+\sqrt3 i)(\sqrt3+i)\)。</p>
+    <p><b>解</b>：\(1+\sqrt3 i=2\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{3}\right)\)，\(\sqrt3+i=2\left(\cos\dfrac{\pi}{6}+i\sin\dfrac{\pi}{6}\right)\)。</p>
+    <p>模相乘 \(2\times2=4\)，辐角相加 \(\dfrac{\pi}{3}+\dfrac{\pi}{6}=\dfrac{\pi}{2}\)：</p>
+    <p>积 \(=4\left(\cos\dfrac{\pi}{2}+i\sin\dfrac{\pi}{2}\right)=4i\)。</p>
+    <p>验算：\((1+\sqrt3 i)(\sqrt3+i)=\sqrt3+i+3i+\sqrt3 i^2=4i\)。一致。</p>
+  </div>
+
+  <div class="card predict" data-id="try-mul" data-answer="A">
+    <p>自己试试：\(z_1=2\left(\cos\dfrac{5\pi}{4}+i\sin\dfrac{5\pi}{4}\right)\)，\(z_2=3(\cos\pi+i\sin\pi)\)。\(z_1z_2\) 的模和辐角主值是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>模 \(6\)，主值 \(\dfrac{\pi}{4}\)</button>
+      <button class="opt" data-v="B"><b>B</b>模 \(5\)，主值 \(\dfrac{\pi}{4}\)</button>
+      <button class="opt" data-v="C"><b>C</b>模 \(6\)，主值 \(\dfrac{9\pi}{4}\)</button>
+      <button class="opt" data-v="D"><b>D</b>模 \(\dfrac32\)，主值 \(\dfrac{\pi}{4}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。模 \(2\times3=6\)；辐角 \(\dfrac{5\pi}{4}+\pi=\dfrac{9\pi}{4}\)，超出 \([0,2\pi)\)，减去 \(2\pi\) 得主值 \(\dfrac{\pi}{4}\)。积 \(=3\sqrt2+3\sqrt2 i\)。</p>
+      <p>选 C：\(\dfrac{9\pi}{4}\) 是辐角，但不是主值；选 B：模要相乘，不是相加；选 D：把模相除了。</p>
+    </div>
+  </div>
+
+  <h3>4. 除法：模相除，辐角相减</h3>
+  <p>为什么：设 \(\dfrac{z_1}{z_2}=w\)（\(z_2\ne0\)），则 \(w\cdot z_2=z_1\)。按乘法法则，\(w\) 的模乘 \(r_2\) 得 \(r_1\)，\(w\) 的辐角加 \(\theta_2\) 得 \(\theta_1\)，所以 \(w\) 的模是 \(\dfrac{r_1}{r_2}\)，辐角是 \(\theta_1-\theta_2\)。</p>
+  <div class="key">
+    \[\begin{aligned} \frac{z_1}{z_2} = \frac{r_1}{r_2}\big[&\cos(\theta_1-\theta_2) \\ &+ i\sin(\theta_1-\theta_2)\big]\end{aligned}\]
+    模相除，辐角相减（被除数的角减除数的角）；要求 \(z_2\ne0\)。
+  </div>
+  <p>几何上，除以 \(z_2\) 就是伸缩到 \(\dfrac{1}{r_2}\) 倍，再顺时针转 \(\theta_2\)。</p>
+
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>\(z_1=2\left(\cos\dfrac{\pi}{6}+i\sin\dfrac{\pi}{6}\right)\)，\(z_2=\cos\dfrac{2\pi}{3}+i\sin\dfrac{2\pi}{3}\)，求 \(\dfrac{z_1}{z_2}\)。</p>
+    <p><b>解</b>：模 \(\dfrac{2}{1}=2\)；辐角 \(\dfrac{\pi}{6}-\dfrac{2\pi}{3}=-\dfrac{\pi}{2}\)。</p>
+    <p>\(\dfrac{z_1}{z_2}=2\left[\cos\left(-\dfrac{\pi}{2}\right)+i\sin\left(-\dfrac{\pi}{2}\right)\right]=-2i\)。</p>
+    <p>减出负角没关系，它也是辐角；要主值就加 \(2\pi\)，得 \(\dfrac{3\pi}{2}\)。</p>
+    <p>验算：\(-2i\cdot z_2=-2i\left(-\dfrac12+\dfrac{\sqrt3}{2}i\right)=i+\sqrt3\)，正是 \(z_1=\sqrt3+i\)。</p>
+  </div>
+
+  <div class="card predict" data-id="try-div" data-answer="A">
+    <p>自己试试：\(z_1=3\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{3}\right)\)，\(z_2=6\left(\cos\dfrac{5\pi}{6}+i\sin\dfrac{5\pi}{6}\right)\)。\(\dfrac{z_1}{z_2}=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-\dfrac12 i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12 i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-2i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac12\left(\cos\dfrac{7\pi}{6}+i\sin\dfrac{7\pi}{6}\right)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。模 \(\dfrac36=\dfrac12\)；辐角 \(\dfrac{\pi}{3}-\dfrac{5\pi}{6}=-\dfrac{\pi}{2}\)，所以商 \(=\dfrac12(0-i)=-\dfrac12 i\)。</p>
+      <p>选 B：减反了，用了 \(\theta_2-\theta_1\)；选 C：模除反了；选 D：除法却把角相加了。</p>
+    </div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <ol>
+    <li><b>0 没有确定的辐角，不写三角形式；除数不能是 0</b>。三角形式要求 \(r&gt;0\)，原点引不出确定方向的射线。<br><span class="small">反例：写 \(0=0(\cos0+i\sin0)\)，换成 \(0(\cos1+i\sin1)\) 也等于 \(0\)，角想取什么都行，所以「\(\arg 0=0\)」没有意义。</span></li>
+    <li><b>模必须是正数</b>。<br><span class="small">反例：\(-2\left(\cos\dfrac{\pi}{4}+i\sin\dfrac{\pi}{4}\right)=-\sqrt2-\sqrt2 i\)，它的模是 \(2\)、主值是 \(\dfrac{5\pi}{4}\)，标准形是 \(2\left(\cos\dfrac{5\pi}{4}+i\sin\dfrac{5\pi}{4}\right)\)，不能读成「模 \(-2\)、角 \(\dfrac{\pi}{4}\)」。</span></li>
+    <li><b>必须是「\(\cos\theta+i\sin\theta\)」：加号、cos 在前、两个角相同</b>，否则不能直接读模和角、不能套乘除法则。<br><span class="small">反例：\(2\left(\cos\dfrac{\pi}{3}-i\sin\dfrac{\pi}{3}\right)\) 的辐角是 \(-\dfrac{\pi}{3}\)，不是 \(\dfrac{\pi}{3}\)；\(\sin\theta+i\cos\theta\) 要改写成 \(\cos\left(\dfrac{\pi}{2}-\theta\right)+i\sin\left(\dfrac{\pi}{2}-\theta\right)\)；\(2\left(\cos\dfrac{\pi}{3}+i\sin\dfrac{\pi}{6}\right)=1+i\)，模其实是 \(\sqrt2\)，两个角不同就不是三角形式。</span></li>
+    <li><b>判断辐角要看象限，不能只看 \(\tan\)</b>。<br><span class="small">反例：\(-1-i\) 的 \(\tan\theta=1\)，但它在第三象限，主值是 \(\dfrac{5\pi}{4}\)，不是 \(\dfrac{\pi}{4}\)。</span></li>
+    <li><b>辐角有无数个，相差 \(2k\pi\)；主值才唯一</b>。相加、相减后的角可能跑出 \([0,2\pi)\)，要主值就加减 \(2\pi\) 的整数倍。讲「转了多少度」时也一样：转 \(\theta\) 和转 \(\theta+2\pi\) 落在同一处。<br><span class="small">反例：两角相加得 \(\dfrac{7\pi}{3}\)，主值是 \(\dfrac{\pi}{3}\)；有的书把主值取在 \((-\pi,\pi]\)，看到不同答案先核对约定。</span></li>
+  </ol>
+  <div class="key">三角形式只给非零复数，标准形是 \(r(\cos\theta+i\sin\theta)\)，\(r&gt;0\)。乘：模乘、角加；除：模除、角减，除数非零。角算完记得按需化成主值。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>乘方</b>：同一个复数连乘 \(n\) 次，模变成 \(r^n\)，辐角变成 \(n\theta\)：</p>
+    <p style="text-align:center">\(z^n=r^n(\cos n\theta+i\sin n\theta)\)。</p>
+    <p>例：\((1+i)^4\)：模 \((\sqrt2)^4=4\)，角 \(4\times\dfrac{\pi}{4}=\pi\)，结果 \(-4\)。</p>
+    <p><b>方程 \(z^n=1\) 的根</b>（拓展，不要求人人会）：模为 \(1\)、辐角为 \(\dfrac{2k\pi}{n}\)（\(k=0,1,\dots,n-1\)）的 \(n\) 个点，在 \(n\ge3\) 时正好是单位圆内接正 \(n\) 边形的顶点。这里辐角的多值性很关键：\(n\theta\) 只要等于 \(2k\pi\) 就行，不一定是 \(0\)。</p>
+    <p><b>以后会见到</b>：大学里把 \(\cos\theta+i\sin\theta\) 记作 \(\mathrm e^{i\theta}\)（欧拉公式），「角相加」就成了指数相加。本节不用它。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 极坐标与代数形式：拖动手柄改变模长与辐角</h3>
+  <p class="small">虚线同心圆代表模长 \(r=1,2,3\)，射线代表典型辐角。在复平面上拖动圆点 \(Z\)（或选中后用方向键微调），也可以调节下方的滑块。观察三角形式与代数形式的实时对应，特别注意把 \(r\) 调为 \(0\) 时的变化。</p>
+  <div class="card">
+    <svg class="fig" id="fig1" viewBox="0 0 560 360" role="img" aria-label="复平面的极坐标网格与复数向量"></svg>
+    <div class="ctrl">
+      <label for="r1in">模长 \(r\)</label>
+      <input type="range" id="r1in" min="0" max="3" step="0.1" value="2">
+      <output id="r1out">2.0</output>
+    </div>
+    <div class="ctrl">
+      <label for="th1in">辐角 \(\theta\)</label>
+      <input type="range" id="th1in" min="0" max="360" step="1" value="60">
+      <output id="th1out">60°</output>
+    </div>
+    <div class="ctrl" style="gap:6px">
+      <span class="small" style="font-weight:600">快捷角度：</span>
+      <button class="btn ghost btn-sm" type="button" data-ang="0">0</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="30">π/6</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="45">π/4</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="60">π/3</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="90">π/2</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="120">2π/3</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="180">π</button>
+      <button class="btn ghost btn-sm" type="button" data-ang="270">3π/2</button>
+      <button class="btn ghost btn-sm" type="button" id="btn-zero">r = 0 (零复数)</button>
+    </div>
+    <div class="result" id="fig1out" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：复数乘法的几何意义——旋转与拉伸</h3>
+  <p class="small">固定基础复数 \(z_1 = 1+i = \sqrt{2}\left(\cos\dfrac{\pi}{4}+i\sin\dfrac{\pi}{4}\right)\)（金色）。调节乘数 \(z_2 = r_2(\cos\theta_2 + i\sin\theta_2)\)（黛蓝），观察乘积 \(w = z_1 z_2\)（松绿）在复平面上的变换。点击预设按钮感受经典几何变换！</p>
+  <div class="card">
+    <svg class="fig" id="fig2" viewBox="0 0 560 340" role="img" aria-label="复数乘法的向量旋转与拉伸"></svg>
+    <div class="ctrl">
+      <label for="r2in">乘数模 \(r_2\)</label>
+      <input type="range" id="r2in" min="0" max="2.2" step="0.1" value="1.0">
+      <output id="r2out">1.0</output>
+    </div>
+    <div class="ctrl">
+      <label for="th2in">乘数角 \(\theta_2\)</label>
+      <input type="range" id="th2in" min="0" max="360" step="5" value="90">
+      <output id="th2out">90°</output>
+    </div>
+    <div class="ctrl" style="gap:6px">
+      <span class="small" style="font-weight:600">经典变换：</span>
+      <button class="btn ghost btn-sm" type="button" id="m-i">乘以 i（逆时针转 90°）</button>
+      <button class="btn ghost btn-sm" type="button" id="m-neg1">乘以 -1（旋转 180°）</button>
+      <button class="btn ghost btn-sm" type="button" id="m-2">乘以 2（纯拉伸 2 倍）</button>
+      <button class="btn ghost btn-sm" type="button" id="m-half60">乘 0.5∠60°（缩半并转 60°）</button>
+    </div>
+    <div class="result" id="fig2out" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset2" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间两道考察专题卡边界与易错点，最后一道是综合挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-eval" data-answer="A">
+    <p>1. 复数 \(z = 4\left(\cos\dfrac{2\pi}{3} + i\sin\dfrac{2\pi}{3}\right)\) 的代数形式 \(a+bi\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-2 + 2\sqrt{3}i\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2 - 2\sqrt{3}i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-2\sqrt{3} + 2i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2 + 2\sqrt{3}i\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。计算特殊角三角函数值：\(\cos\dfrac{2\pi}{3} = -\dfrac{1}{2}\)，\(\sin\dfrac{2\pi}{3} = \dfrac{\sqrt{3}}{2}\)。</p>
+      <p>展开可得：\(z = 4\left(-\dfrac{1}{2} + \dfrac{\sqrt{3}}{2}i\right) = -2 + 2\sqrt{3}i\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-basic-mul" data-answer="B">
+    <p>2. 已知 \(z_1 = 2\left(\cos\dfrac{\pi}{6} + i\sin\dfrac{\pi}{6}\right)\)，\(z_2 = 3\left(\cos\dfrac{\pi}{3} + i\sin\dfrac{\pi}{3}\right)\)，则 \(z_1 z_2\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\left(\cos\dfrac{\pi}{6} + i\sin\dfrac{\pi}{6}\right)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。应用复数乘法的三角法则：<b>模相乘、辐角相加</b>。</p>
+      <p>模长为 \(2 \times 3 = 6\)；辐角为 \(\dfrac{\pi}{6} + \dfrac{\pi}{3} = \dfrac{\pi}{2}\)。</p>
+      <p>所以 \(z_1 z_2 = 6\left(\cos\dfrac{\pi}{2} + i\sin\dfrac{\pi}{2}\right) = 6(0 + i) = 6i\)。</p>
+      <p>选 C 的同学错把模长相加了；选 D 的同学把辐角相减了（\(\dfrac{\pi}{3}-\dfrac{\pi}{6}=\dfrac{\pi}{6}\)），乘法要相加。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-std" data-answer="D">
+    <p>3. 下列各式中，哪一个是复数的<b>标准三角形式</b>？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(-2\left(\cos\dfrac{\pi}{4} + i\sin\dfrac{\pi}{4}\right)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2\left(\cos\dfrac{\pi}{4} - i\sin\dfrac{\pi}{4}\right)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\left(\sin\dfrac{\pi}{4} + i\cos\dfrac{\pi}{4}\right)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\left(\cos\dfrac{7\pi}{4} + i\sin\dfrac{7\pi}{4}\right)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。标准三角形式必须同时满足四要素：模 \(r > 0\)；中间必须是加号；前余弦、后正弦；两处角完全一致。</p>
+      <p>A 的模长为 \(-2 &lt; 0\)，三角形式要求模 \(r&gt;0\)；</p>
+      <p>B 中间是减号，不是加号；</p>
+      <p>C 前正弦后余弦，颠倒了；</p>
+      <p>D 完全符合标准结构（它对应的正是点 \((\sqrt{2}, -\sqrt{2})\) 在第四象限的三角形式）。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-zero" data-answer="B">
+    <p>4. 关于复数 \(z = 0\) 的模与辐角，下列说法正确的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>模为 \(0\)，辐角主值为 \(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>模为 \(0\)，但辐角是任意的、不确定的</button>
+      <button class="opt" data-v="C"><b>C</b>模不存在，辐角为 \(0\)</button>
+      <button class="opt" data-v="D"><b>D</b>三角形式为 \(0(\cos 0 + i\sin 0)\)，因此辐角一定是 \(0\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。复数 \(0\) 在复平面上对应原点 \(O\)。到原点的距离（模）确定且等于 \(0\)；但从原点出发不能确定一条射线的方向，因此<b>零复数没有确定的辐角</b>（或称辐角是任意的）。</p>
+      <p>零复数不能写成确定的标准三角形式，这也是除法法则中分母必须非零的原因。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge-div" data-answer="A">
+    <p>5. 复数 \(z_1 = 1 + \sqrt{3}i\)，\(z_2 = 1 + i\)。计算商 \(\dfrac{z_1}{z_2}\) 的模与辐角主值是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>模为 \(\sqrt{2}\)，辐角主值为 \(\dfrac{\pi}{12}\)</button>
+      <button class="opt" data-v="B"><b>B</b>模为 \(2\)，辐角主值为 \(\dfrac{\pi}{12}\)</button>
+      <button class="opt" data-v="C"><b>C</b>模为 \(\sqrt{2}\)，辐角主值为 \(\dfrac{7\pi}{12}\)</button>
+      <button class="opt" data-v="D"><b>D</b>模为 \(1\)，辐角主值为 \(\dfrac{\pi}{6}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。化为三角形式：</p>
+      <p>\(z_1 = 1 + \sqrt{3}i = 2\left(\cos\dfrac{\pi}{3} + i\sin\dfrac{\pi}{3}\right)\)，模 \(r_1 = 2\)，\(\arg z_1 = \dfrac{\pi}{3}\)；</p>
+      <p>\(z_2 = 1 + i = \sqrt{2}\left(\cos\dfrac{\pi}{4} + i\sin\dfrac{\pi}{4}\right)\)，模 \(r_2 = \sqrt{2}\)，\(\arg z_2 = \dfrac{\pi}{4}\)。</p>
+      <p>根据除法法则（模相除、角相减）：</p>
+      <p>模长为 \(\dfrac{r_1}{r_2} = \dfrac{2}{\sqrt{2}} = \sqrt{2}\)；辐角为 \(\dfrac{\pi}{3} - \dfrac{\pi}{4} = \dfrac{\pi}{12}\)。</p>
+      <p>所以 \(\dfrac{z_1}{z_2} = \sqrt{2}\left(\cos\dfrac{\pi}{12} + i\sin\dfrac{\pi}{12}\right)\)。如果用代数形式实数化分母，计算会繁琐得多；三角形式让除法变得异常简洁！</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节为选学内容，真题先空着。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+
+  // 角度映射表（特殊角的美化显示）
+  var EXACT_ANGLES = {
+    0: { tex: "0", rad: 0 },
+    30: { tex: "\\dfrac{\\pi}{6}", rad: Math.PI / 6 },
+    45: { tex: "\\dfrac{\\pi}{4}", rad: Math.PI / 4 },
+    60: { tex: "\\dfrac{\\pi}{3}", rad: Math.PI / 3 },
+    90: { tex: "\\dfrac{\\pi}{2}", rad: Math.PI / 2 },
+    120: { tex: "\\dfrac{2\\pi}{3}", rad: 2 * Math.PI / 3 },
+    135: { tex: "\\dfrac{3\\pi}{4}", rad: 3 * Math.PI / 4 },
+    150: { tex: "\\dfrac{5\\pi}{6}", rad: 5 * Math.PI / 6 },
+    180: { tex: "\\pi", rad: Math.PI },
+    210: { tex: "\\dfrac{7\\pi}{6}", rad: 7 * Math.PI / 6 },
+    225: { tex: "\\dfrac{5\\pi}{4}", rad: 5 * Math.PI / 4 },
+    240: { tex: "\\dfrac{4\\pi}{3}", rad: 4 * Math.PI / 3 },
+    270: { tex: "\\dfrac{3\\pi}{2}", rad: 3 * Math.PI / 2 },
+    300: { tex: "\\dfrac{5\\pi}{3}", rad: 5 * Math.PI / 3 },
+    315: { tex: "\\dfrac{7\\pi}{4}", rad: 7 * Math.PI / 4 },
+    330: { tex: "\\dfrac{11\\pi}{6}", rad: 11 * Math.PI / 6 },
+    360: { tex: "2\\pi", rad: 2 * Math.PI }
+  };
+
+  function angleTex(deg) {
+    var d = ((deg % 360) + 360) % 360;
+    if (EXACT_ANGLES[d]) return EXACT_ANGLES[d].tex;
+    return d + "^\\circ";
+  }
+
+  function toSvg(svgEl, ev, defW, defH) {
+    var r = svgEl.getBoundingClientRect();
+    var w = (svgEl.viewBox && svgEl.viewBox.baseVal && svgEl.viewBox.baseVal.width) || defW || 560;
+    var h = (svgEl.viewBox && svgEl.viewBox.baseVal && svgEl.viewBox.baseVal.height) || defH || 360;
+    var rw = r.width || defW || 560;
+    var rh = r.height || defH || 360;
+    return {
+      x: ((ev.clientX || 0) - (r.left || 0)) * w / rw,
+      y: ((ev.clientY || 0) - (r.top || 0)) * h / rh
+    };
+  }
+
+  /* ================= ① 极坐标与代数形式 ================= */
+  var fig1 = document.getElementById("fig1");
+  var r1In = document.getElementById("r1in");
+  var th1In = document.getElementById("th1in");
+  var r1Out = document.getElementById("r1out");
+  var th1Out = document.getElementById("th1out");
+  var fig1Out = document.getElementById("fig1out");
+  var reset1 = document.getElementById("reset");
+
+  var CX1 = 280, CY1 = 180, U1 = 50; // 每单位 50 像素
+  var r1Val = 2.0, th1Val = 60; // 模长与角度（度）
+
+  function fig1Reset() {
+    r1Val = 2.0;
+    th1Val = 60;
+    if (r1In) r1In.value = r1Val;
+    if (th1In) th1In.value = th1Val;
+    fig1Draw();
+  }
+
+  function fig1Draw(keepFocus) {
+    var fg = css("--fg"), aCol = css("--a"), bCol = css("--b"), cCol = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line"), card = css("--card"), noCol = css("--no");
+    fig1.innerHTML = "";
+
+    // 绘制极坐标网格（同心圆）
+    for (var ri = 1; ri <= 3; ri++) {
+      svg("circle", { cx: CX1, cy: CY1, r: ri * U1, fill: "none", stroke: line, "stroke-width": 1.2, "stroke-dasharray": "4 4" }, fig1);
+      svg("text", { x: CX1 + ri * U1 + 3, y: CY1 + 16, "font-size": "12", fill: muted }, fig1).textContent = String(ri);
+    }
+
+    // 绘制典型极角射线
+    var rays = [30, 45, 60, 120, 135, 150, 210, 225, 240, 300, 315, 330];
+    for (var k = 0; k < rays.length; k++) {
+      var radRay = rays[k] * Math.PI / 180;
+      var rx = CX1 + 175 * Math.cos(radRay), ry = CY1 - 175 * Math.sin(radRay);
+      svg("line", { x1: CX1, y1: CY1, x2: rx, y2: ry, stroke: line, "stroke-width": 1, "stroke-dasharray": "2 3" }, fig1);
+    }
+
+    // 坐标轴 Re 与 Im
+    svg("line", { x1: 25, y1: CY1, x2: 535, y2: CY1, stroke: fg, "stroke-width": 1.5 }, fig1);
+    svg("polygon", { points: "535," + (CY1 - 4) + " 545," + CY1 + " 535," + (CY1 + 4), fill: fg }, fig1);
+    svg("text", { x: 546, y: CY1 + 14, "font-size": "13", "font-weight": "bold", fill: fg }, fig1).textContent = "Re";
+
+    svg("line", { x1: CX1, y1: 345, x2: CX1, y2: 15, stroke: fg, "stroke-width": 1.5 }, fig1);
+    svg("polygon", { points: (CX1 - 4) + ",15 " + CX1 + ",5 " + (CX1 + 4) + ",15", fill: fg }, fig1);
+    svg("text", { x: CX1 + 8, y: 18, "font-size": "13", "font-weight": "bold", fill: fg }, fig1).textContent = "Im";
+
+    svg("text", { x: CX1 - 16, y: CY1 + 18, "font-size": "14", fill: muted }, fig1).textContent = "O";
+
+    // 极角弧度与坐标换算
+    var rad1 = th1Val * Math.PI / 180;
+    var zx = CX1 + r1Val * U1 * Math.cos(rad1);
+    var zy = CY1 - r1Val * U1 * Math.sin(rad1);
+    var realPart = r1Val * Math.cos(rad1);
+    var imagPart = r1Val * Math.sin(rad1);
+
+    // 角度弧
+    if (r1Val > 0.05 && th1Val > 0 && th1Val < 360) {
+      var arcR = Math.min(36, r1Val * U1 * 0.6);
+      var ax0 = CX1 + arcR, ay0 = CY1;
+      var ax1 = CX1 + arcR * Math.cos(rad1), ay1 = CY1 - arcR * Math.sin(rad1);
+      var largeArc = th1Val > 180 ? 1 : 0;
+      var arcD = "M " + ax0 + " " + ay0 + " A " + arcR + " " + arcR + " 0 " + largeArc + " 0 " + ax1 + " " + ay1;
+      svg("path", { d: arcD, fill: "none", stroke: hl, "stroke-width": 2 }, fig1);
+      var midRad = (th1Val / 2) * Math.PI / 180;
+      var tx = CX1 + (arcR + 14) * Math.cos(midRad);
+      var ty = CY1 - (arcR + 14) * Math.sin(midRad);
+      svg("text", { x: tx, y: ty + 4, "font-size": "13", "text-anchor": "middle", fill: hl, "font-weight": "bold" }, fig1).textContent = "θ";
+    }
+
+    // 投影虚线 (代数形式对照)
+    if (r1Val > 0.05) {
+      svg("line", { x1: zx, y1: zy, x2: zx, y2: CY1, stroke: cCol, "stroke-dasharray": "3 3", "stroke-width": 1.5 }, fig1);
+      svg("line", { x1: zx, y1: zy, x2: CX1, y2: zy, stroke: bCol, "stroke-dasharray": "3 3", "stroke-width": 1.5 }, fig1);
+      // 实部投影点与虚部投影点
+      svg("circle", { cx: zx, cy: CY1, r: 3, fill: cCol }, fig1);
+      svg("circle", { cx: CX1, cy: zy, r: 3, fill: bCol }, fig1);
+    }
+
+    // 向量 OZ
+    if (r1Val > 0.02) {
+      svg("line", { x1: CX1, y1: CY1, x2: zx, y2: zy, stroke: aCol, "stroke-width": 3.5 }, fig1);
+      // 箭头
+      var angleNorm = Math.atan2(CY1 - zy, zx - CX1);
+      var ah1x = zx - 12 * Math.cos(angleNorm - 0.35);
+      var ah1y = zy + 12 * Math.sin(angleNorm - 0.35);
+      var ah2x = zx - 12 * Math.cos(angleNorm + 0.35);
+      var ah2y = zy + 12 * Math.sin(angleNorm + 0.35);
+      svg("polygon", { points: zx + "," + zy + " " + ah1x + "," + ah1y + " " + ah2x + "," + ah2y, fill: aCol }, fig1);
+    }
+
+    // 点 Z 手柄
+    var zh = svg("circle", {
+      cx: zx, cy: zy, r: 9, fill: card, stroke: aCol, "stroke-width": 3,
+      tabindex: 0, role: "slider", "aria-label": "复数 Z 的位置", style: "cursor:grab"
+    }, fig1);
+
+    var labelX = zx + (Math.cos(rad1) >= 0 ? 12 : -22);
+    var labelY = zy + (Math.sin(rad1) >= 0 ? -10 : 20);
+    svg("text", { x: labelX, y: labelY, "font-size": "15", "font-weight": "bold", fill: aCol }, fig1).textContent = r1Val < 0.05 ? "Z(0)" : "Z";
+
+    // 键盘支持
+    zh.addEventListener("keydown", function (ev) {
+      var handled = true;
+      if (ev.key === "ArrowLeft") { th1Val = (th1Val - 5 + 360) % 360; }
+      else if (ev.key === "ArrowRight") { th1Val = (th1Val + 5) % 360; }
+      else if (ev.key === "ArrowUp") { r1Val = clamp(Math.round((r1Val + 0.1) * 10) / 10, 0, 3.0); }
+      else if (ev.key === "ArrowDown") { r1Val = clamp(Math.round((r1Val - 0.1) * 10) / 10, 0, 3.0); }
+      else { handled = false; }
+      if (handled) {
+        ev.preventDefault();
+        if (r1In) r1In.value = r1Val;
+        if (th1In) th1In.value = th1Val;
+        fig1Draw(true);
+      }
+    });
+
+    // 拖动手柄
+    var dragging1 = false;
+    zh.addEventListener("pointerdown", function (ev) {
+      dragging1 = true;
+      zh.setPointerCapture(ev.pointerId);
+      zh.focus();
+      ev.preventDefault();
+    });
+
+    zh.addEventListener("pointermove", function (ev) {
+      if (!dragging1) return;
+      var p = toSvg(fig1, ev, 560, 360);
+      var dx = p.x - CX1, dy = CY1 - p.y;
+      var dist = Math.sqrt(dx * dx + dy * dy) / U1;
+      r1Val = clamp(Math.round(dist * 10) / 10, 0, 3.0);
+      if (r1Val > 0.05) {
+        var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        if (ang < 0) ang += 360;
+        // 特殊角吸附 (±3 度内吸附到特殊角)
+        var sps = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+        for (var s = 0; s < sps.length; s++) {
+          if (Math.abs(ang - sps[s]) <= 3) { ang = sps[s] % 360; break; }
+        }
+        th1Val = Math.round(ang) % 360;
+      }
+      if (r1In) r1In.value = r1Val;
+      if (th1In) th1In.value = th1Val;
+      fig1Draw(true);
+    });
+
+    function endDrag1() {
+      if (dragging1) {
+        dragging1 = false;
+        Peiyu.log("interact", { w: "fig1-drag", r: r1Val, th: th1Val });
+      }
+    }
+    zh.addEventListener("pointerup", endDrag1);
+    zh.addEventListener("pointercancel", endDrag1);
+
+    if (keepFocus) {
+      var curH = fig1.querySelector("[role=slider]");
+      if (curH) curH.focus();
+    }
+
+    // 更新界面文本
+    if (r1Out) r1Out.textContent = f2(r1Val);
+    if (th1Out) th1Out.textContent = th1Val + "°";
+
+    if (r1Val < 0.05) {
+      fig1Out.innerHTML = '<span class="bad"><b>零复数 \\(z = 0\\)</b>：模长 \\(r = 0\\)，对应原点。零向量没有确定的方向，因此<b>零复数没有确定的辐角</b>，不能写成确定主值的三角形式！</span>';
+    } else {
+      var aStr = f2(realPart), bStr = f2(Math.abs(imagPart));
+      var algSign = imagPart >= 0 ? " + " : " - ";
+      var algTex = aStr + algSign + bStr + "i";
+      var tTex = angleTex(th1Val);
+      var trigTex = f2(r1Val) + "\\left(\\cos " + tTex + " + i\\sin " + tTex + "\\right)";
+      var thDisp = th1Val + "^\\circ" + (tTex !== (th1Val + "^\\circ") ? " = " + tTex : "");
+
+      fig1Out.innerHTML = '三角形式：\\(z = ' + trigTex + '\\)<br>' +
+        '代数形式：\\(z \\approx ' + algTex + '\\)<br>' +
+        '<span class="eq">模长 \\(r = ' + f2(r1Val) + '\\)，辐角主值 \\(\\arg z = ' + thDisp + '\\)</span>';
+    }
+    Peiyu.math(fig1Out);
+  }
+
+  // 控件事件绑定
+  if (r1In) {
+    r1In.addEventListener("input", function () {
+      r1Val = clamp(parseFloat(r1In.value) || 0, 0, 3.0);
+      fig1Draw();
+    });
+    r1In.addEventListener("change", function () { Peiyu.log("interact", { w: "r1In", r: r1Val }); });
+  }
+
+  if (th1In) {
+    th1In.addEventListener("input", function () {
+      th1Val = clamp(parseInt(th1In.value, 10) || 0, 0, 360) % 360;
+      fig1Draw();
+    });
+    th1In.addEventListener("change", function () { Peiyu.log("interact", { w: "th1In", th: th1Val }); });
+  }
+
+  var angButtons = document.querySelectorAll("[data-ang]");
+  [].forEach.call(angButtons, function (b) {
+    b.addEventListener("click", function () {
+      th1Val = parseInt(b.getAttribute("data-ang"), 10) || 0;
+      if (r1Val < 0.2) r1Val = 2.0;
+      if (r1In) r1In.value = r1Val;
+      if (th1In) th1In.value = th1Val;
+      fig1Draw();
+      Peiyu.log("interact", { w: "quick-ang", th: th1Val });
+    });
+  });
+
+  var btnZero = document.getElementById("btn-zero");
+  if (btnZero) {
+    btnZero.addEventListener("click", function () {
+      r1Val = 0;
+      if (r1In) r1In.value = 0;
+      fig1Draw();
+      Peiyu.log("interact", { w: "quick-zero" });
+    });
+  }
+
+  if (reset1) reset1.addEventListener("click", fig1Reset);
+
+  /* ================= ② 乘法的几何意义 ================= */
+  var fig2 = document.getElementById("fig2");
+  var r2In = document.getElementById("r2in");
+  var th2In = document.getElementById("th2in");
+  var r2Out = document.getElementById("r2out");
+  var th2Out = document.getElementById("th2out");
+  var fig2Out = document.getElementById("fig2out");
+  var reset2 = document.getElementById("reset2");
+
+  var CX2 = 280, CY2 = 170, U2 = 48; // 单位像素
+  var r2Val = 1.0, th2Val = 90; // 乘数
+
+  // 固定的 z1 = 1 + i = √2(cos 45° + i sin 45°)
+  var r1Fixed = Math.SQRT2, th1Fixed = 45;
+
+  function fig2Reset() {
+    r2Val = 1.0;
+    th2Val = 90;
+    if (r2In) r2In.value = r2Val;
+    if (th2In) th2In.value = th2Val;
+    fig2Draw();
+  }
+
+  function fig2Draw() {
+    var fg = css("--fg"), aCol = css("--a"), bCol = css("--b"), cCol = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line"), noCol = css("--no");
+    fig2.innerHTML = "";
+
+    // 极坐标同心圆与坐标轴
+    for (var ri = 1; ri <= 3; ri++) {
+      svg("circle", { cx: CX2, cy: CY2, r: ri * U2, fill: "none", stroke: line, "stroke-width": 1, "stroke-dasharray": "3 4" }, fig2);
+    }
+    svg("line", { x1: 30, y1: CY2, x2: 530, y2: CY2, stroke: fg, "stroke-width": 1.2 }, fig2);
+    svg("polygon", { points: "530," + (CY2 - 4) + " 538," + CY2 + " 530," + (CY2 + 4), fill: fg }, fig2);
+    svg("text", { x: 538, y: CY2 + 14, "font-size": "13", "font-weight": "bold", fill: fg }, fig2).textContent = "Re";
+
+    svg("line", { x1: CX2, y1: 325, x2: CX2, y2: 15, stroke: fg, "stroke-width": 1.2 }, fig2);
+    svg("polygon", { points: (CX2 - 4) + ",15 " + CX2 + ",7 " + (CX2 + 4) + ",15", fill: fg }, fig2);
+    svg("text", { x: CX2 + 8, y: 16, "font-size": "13", "font-weight": "bold", fill: fg }, fig2).textContent = "Im";
+
+    // 向量 1: z1 = 1 + i (基准向量，赤金)
+    var rad1 = th1Fixed * Math.PI / 180;
+    var z1x = CX2 + r1Fixed * U2 * Math.cos(rad1);
+    var z1y = CY2 - r1Fixed * U2 * Math.sin(rad1);
+    svg("line", { x1: CX2, y1: CY2, x2: z1x, y2: z1y, stroke: bCol, "stroke-width": 2.5 }, fig2);
+    svg("circle", { cx: z1x, cy: z1y, r: 4, fill: bCol }, fig2);
+    svg("text", { x: z1x + 8, y: z1y - 4, "font-size": "14", "font-weight": "bold", fill: bCol }, fig2).textContent = "z₁ (1+i)";
+
+    // 向量 2: z2 (乘数，黛蓝)
+    var rad2 = th2Val * Math.PI / 180;
+    var z2x = CX2 + r2Val * U2 * Math.cos(rad2);
+    var z2y = CY2 - r2Val * U2 * Math.sin(rad2);
+    if (r2Val > 0.05) {
+      svg("line", { x1: CX2, y1: CY2, x2: z2x, y2: z2y, stroke: cCol, "stroke-width": 2, "stroke-dasharray": "4 3" }, fig2);
+      svg("circle", { cx: z2x, cy: z2y, r: 4, fill: cCol }, fig2);
+      svg("text", { x: z2x + 8, y: z2y + 4, "font-size": "13", fill: cCol }, fig2).textContent = "z₂";
+    }
+
+    // 积向量: w = z1 * z2 (模相乘，角相加)
+    var rw = r1Fixed * r2Val;
+    var thw = (th1Fixed + th2Val) % 360;
+    var radw = thw * Math.PI / 180;
+    var wx = CX2 + rw * U2 * Math.cos(radw);
+    var wy = CY2 - rw * U2 * Math.sin(radw);
+
+    if (rw > 0.05) {
+      svg("line", { x1: CX2, y1: CY2, x2: wx, y2: wy, stroke: aCol, "stroke-width": 3.5 }, fig2);
+      svg("circle", { cx: wx, cy: wy, r: 6, fill: aCol }, fig2);
+      svg("text", { x: wx + (Math.cos(radw) >= 0 ? 10 : -35), y: wy + (Math.sin(radw) >= 0 ? -8 : 16), "font-size": "15", "font-weight": "bold", fill: aCol }, fig2).textContent = "w = z₁z₂";
+
+      // 旋转指示弧：从 z1 的角度转到 w 的角度（旋转量为 th2Val）
+      if (th2Val > 0 && th2Val < 360 && r2Val > 0.05) {
+        var rotR = 60;
+        var rotStartX = CX2 + rotR * Math.cos(rad1), rotStartY = CY2 - rotR * Math.sin(rad1);
+        var rotEndX = CX2 + rotR * Math.cos(radw), rotEndY = CY2 - rotR * Math.sin(radw);
+        var largeRot = th2Val > 180 ? 1 : 0;
+        var rotD = "M " + rotStartX + " " + rotStartY + " A " + rotR + " " + rotR + " 0 " + largeRot + " 0 " + rotEndX + " " + rotEndY;
+        svg("path", { d: rotD, fill: "none", stroke: hl, "stroke-width": 2, "stroke-dasharray": "3 2" }, fig2);
+        var midRot = (th1Fixed + th2Val / 2) * Math.PI / 180;
+        svg("text", {
+          x: CX2 + (rotR + 15) * Math.cos(midRot), y: CY2 - (rotR + 15) * Math.sin(midRot) + 4,
+          "font-size": "12", "text-anchor": "middle", fill: hl, "font-weight": "bold"
+        }, fig2).textContent = "+" + th2Val + "°";
+      }
+    } else {
+      svg("circle", { cx: CX2, cy: CY2, r: 6, fill: noCol }, fig2);
+      svg("text", { x: CX2 + 10, y: CY2 + 18, "font-size": "14", fill: noCol, "font-weight": "bold" }, fig2).textContent = "w = 0 (退化为原点)";
+    }
+
+    if (r2Out) r2Out.textContent = f2(r2Val);
+    if (th2Out) th2Out.textContent = th2Val + "°";
+
+    if (r2Val < 0.05) {
+      fig2Out.innerHTML = '<span class="bad">乘数 \\(z_2 = 0\\)：乘积 \\(w = z_1 \\cdot 0 = 0\\)，向量模长变为 \\(0\\)，退化为原点。</span>';
+    } else {
+      var z1Tex = "\\sqrt{2}\\left(\\cos\\dfrac{\\pi}{4} + i\\sin\\dfrac{\\pi}{4}\\right)";
+      var z2tTex = angleTex(th2Val);
+      var z2Tex = f2(r2Val) + "\\left(\\cos " + z2tTex + " + i\\sin " + z2tTex + "\\right)";
+      var wtTex = angleTex(thw);
+      var wTex = (Math.abs(r2Val - 1) < 0.01 ? "" : f2(r2Val)) + "\\sqrt{2}\\left(\\cos " + wtTex + " + i\\sin " + wtTex + "\\right)";
+
+      var geomDesc = [];
+      if (Math.abs(r2Val - 1.0) < 0.01) {
+        geomDesc.push("模长不变（保持 \\(\\sqrt{2}\\)）");
+      } else {
+        geomDesc.push("模长伸缩为 \\(\\sqrt{2}\\times " + f2(r2Val) + " \\approx " + f2(rw) + "\\)");
+      }
+      if (th2Val === 0) {
+        geomDesc.push("方向不旋转");
+      } else {
+        geomDesc.push("逆时针旋转 \\(" + th2Val + "^\\circ\\)（辐角由 \\(45^\\circ\\) 变为 \\(" + thw + "^\\circ\\)）");
+      }
+
+      fig2Out.innerHTML = '基准 \\(z_1 = ' + z1Tex + '\\)<br>' +
+        '乘数 \\(z_2 = ' + z2Tex + '\\)<br>' +
+        '乘积 \\(w = z_1 z_2 = ' + wTex + '\\)<br>' +
+        '<span class="eq">几何变换：' + geomDesc.join("，") + '。</span>';
+    }
+    Peiyu.math(fig2Out);
+  }
+
+  if (r2In) {
+    r2In.addEventListener("input", function () {
+      r2Val = clamp(parseFloat(r2In.value) || 0, 0, 2.2);
+      fig2Draw();
+    });
+    r2In.addEventListener("change", function () { Peiyu.log("interact", { w: "r2In", r: r2Val }); });
+  }
+
+  if (th2In) {
+    th2In.addEventListener("input", function () {
+      th2Val = clamp(parseInt(th2In.value, 10) || 0, 0, 360) % 360;
+      fig2Draw();
+    });
+    th2In.addEventListener("change", function () { Peiyu.log("interact", { w: "th2In", th: th2Val }); });
+  }
+
+  var mi = document.getElementById("m-i");
+  if (mi) mi.addEventListener("click", function () { r2Val = 1.0; th2Val = 90; if (r2In) r2In.value = 1; if (th2In) th2In.value = 90; fig2Draw(); Peiyu.log("interact", { w: "preset-i" }); });
+
+  var mneg1 = document.getElementById("m-neg1");
+  if (mneg1) mneg1.addEventListener("click", function () { r2Val = 1.0; th2Val = 180; if (r2In) r2In.value = 1; if (th2In) th2In.value = 180; fig2Draw(); Peiyu.log("interact", { w: "preset-neg1" }); });
+
+  var m2 = document.getElementById("m-2");
+  if (m2) m2.addEventListener("click", function () { r2Val = 2.0; th2Val = 0; if (r2In) r2In.value = 2; if (th2In) th2In.value = 0; fig2Draw(); Peiyu.log("interact", { w: "preset-2" }); });
+
+  var mhalf60 = document.getElementById("m-half60");
+  if (mhalf60) mhalf60.addEventListener("click", function () { r2Val = 0.5; th2Val = 60; if (r2In) r2In.value = 0.5; if (th2In) th2In.value = 60; fig2Draw(); Peiyu.log("interact", { w: "preset-half60" }); });
+
+  if (reset2) reset2.addEventListener("click", fig2Reset);
+
+  document.addEventListener("DOMContentLoaded", function () {
+    fig1Reset();
+    fig2Reset();
+  });
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+      fig1Draw();
+      fig2Draw();
+    });
+  }
+})();
+</script>
+</body></html>

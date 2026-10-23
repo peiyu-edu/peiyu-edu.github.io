@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.1 数列的概念 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  #seq text, #sn text { font-size: 22px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e2-4-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第二册 · 第 4 章 数列</p>
+<h1>4.1 数列的概念</h1>
+<p class="lead">把数按顺序排成一列，就是数列。这一节学三种描述它的办法：通项公式、递推公式、前 \(n\) 项和，以及它们各自的「使用条件」。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>小林开始练跑步，记下每天跑的圈数：第 1 天 \(3\) 圈，第 2 天 \(5\) 圈，第 3 天 \(7\) 圈，第 4 天 \(9\) 圈……每天都比前一天多 \(2\) 圈。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>照这个规律，第 6 天跑几圈？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(11\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(13\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(18\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。接着往下数：第 5 天 \(11\)，第 6 天 \(13\)。</p>
+      <p>你其实用了两种想法。一种是<b>一天一天往后推</b>：「今天 = 昨天 \(+2\)」。另一种是<b>直接由第几天算出圈数</b>：第 \(n\) 天是 \(2n+1\) 圈，\(n=6\) 时 \(13\)。要问「前 6 天一共跑了多少圈」，就是把这些数加起来：\(3+5+7+9+11+13=48\)。</p>
+      <p>这一节就讲这几件事：按顺序排的一列数（<b>数列</b>）、由位置算出数（<b>通项公式</b>）、由前一项推后一项（<b>递推公式</b>），以及把前几项加起来（<b>前 \(n\) 项和</b>）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：函数的概念，「定义域里每个 \(x\) 对应唯一一个值」（<a href="b1-3-1.html">回看 3.1 函数的概念及其表示</a>）。</p>
+
+  <div class="card">
+    <p><b>数列、项</b>：按确定的顺序排成的一列数叫<b>数列</b>，其中每个数叫这个数列的<b>项</b>。</p>
+    <p>例：\(1,\,4,\,9,\,16,\,25\) 是一个数列，第 1 项是 \(1\)，第 3 项是 \(9\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>下标和 \(a_n\)</b>：第 \(n\) 项记作 \(a_n\)。下标 \(n\) 是<b>位置</b>，\(a_n\) 是这个位置上的<b>值</b>，两件事别混。</p>
+    <p>例：数列 \(5,\,3,\,1,\,-1\) 里，\(a_2=3\)：下标是 \(2\)，值是 \(3\)；\(a_4=-1\)，下标 \(4\) 是正整数，值 \(-1\) 可以是负数。</p>
+  </div>
+
+  <div class="card">
+    <p><b>有穷数列、无穷数列</b>：项数有限的叫有穷数列，有无限多项的叫无穷数列。</p>
+    <p>例：一周 7 天每天的最高气温，是 7 项的有穷数列；正奇数 \(1,\,3,\,5,\,7,\,\dots\) 一直排下去，是无穷数列。</p>
+  </div>
+
+  <div class="card">
+    <p><b>前 \(n\) 项和 \(S_n\)</b>：从第 1 项加到第 \(n\) 项，\(S_n=a_1+a_2+\dots+a_n\)。</p>
+    <p>例：数列 \(2,\,4,\,6,\,8\)：\(S_1=2\)，\(S_2=2+4=6\)，\(S_3=2+4+6=12\)，\(S_4=20\)。</p>
+  </div>
+
+  <h3>2. 数列是一种特殊的函数：通项公式</h3>
+  <p>每个位置 \(n\) 对应唯一一个值 \(a_n\)，这正是函数：自变量是位置 \(n\)，定义域是正整数集 \(\mathbf N^*\)（无穷数列）或 \(\{1,2,\dots,m\}\)（有穷数列）。如果 \(a_n\) 和 \(n\) 的关系能写成一个式子 \(a_n=f(n)\)，这个式子叫数列的<b>通项公式</b>。</p>
+  <p>画图时横坐标是 \(n\)，纵坐标是 \(a_n\)，得到的是一个个分开的点 \((n,a_n)\)，不是连着的曲线。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>数列的通项公式是 \(a_n=n^2-3n\)。（1）写出前 4 项；（2）\(18\) 是不是这个数列的项？\(5\) 呢？</p>
+    <p>（1）依次代 \(n=1,2,3,4\)：\(a_1=-2\)，\(a_2=-2\)，\(a_3=0\)，\(a_4=4\)。前两项相等，这没关系，数列的项可以重复。</p>
+    <p>（2）设 \(n^2-3n=18\)，即 \((n-6)(n+3)=0\)，\(n=6\) 或 \(n=-3\)。下标必须是正整数，舍去 \(-3\)，所以 \(18\) 是第 \(6\) 项。</p>
+    <p>设 \(n^2-3n=5\)，得 \(n=\dfrac{3\pm\sqrt{29}}{2}\)，不是正整数，所以 \(5\) 不是这个数列的项。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：数列 \(a_n=3n+1\) 中，\(25\) 是第几项？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>第 \(8\) 项</button>
+      <button class="opt" data-v="B"><b>B</b>第 \(76\) 项</button>
+      <button class="opt" data-v="C"><b>C</b>第 \(9\) 项</button>
+      <button class="opt" data-v="D"><b>D</b>不是它的项</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。解 \(3n+1=25\) 得 \(n=8\)，是正整数。选 B 的同学把 \(25\) 当成下标代进去，算出的 \(76\) 是 \(a_{25}\)：「第几项」问的是下标，要解方程，不是代入。</p></div>
+  </div>
+
+  <h3>3. 递推公式：由前一项推后一项</h3>
+  <p>只给出第 1 项（<b>初始条件</b>），再给出「由前一项算后一项」的规则，也能一项一项地确定整个数列。这个规则叫<b>递推公式</b>，比如 \(a_{n+1}=a_n+2\)。开头的跑步：\(a_1=3\)，\(a_{n+1}=a_n+2\)。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>\(a_1=1\)，\(a_{n+1}=2a_n+1\)。写出前 5 项。</p>
+    <p>\(a_2=2\times1+1=3\)，\(a_3=2\times3+1=7\)，\(a_4=2\times7+1=15\)，\(a_5=2\times15+1=31\)。前 5 项：\(1,\,3,\,7,\,15,\,31\)。</p>
+    <p>观察：每项加 \(1\) 是 \(2,4,8,16,32\)，于是<b>猜</b> \(a_n=2^n-1\)。这只是猜，要说明它对所有 \(n\) 都对，还得证明（见「再深一点」）。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(a_1=2\)，\(a_{n+1}=a_n+3\)，\(a_4\) 是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(11\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(14\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(9\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(a_2=5\)，\(a_3=8\)，\(a_4=11\)：从 \(a_1\) 到 \(a_4\) 只推 \(3\) 步。选 B 的同学多推了一步，那是 \(a_5\)；选 D 的同学算成了 \(4\times3\)。</p></div>
+  </div>
+
+  <h3>4. 由前 \(n\) 项和求通项</h3>
+  <p>\(S_n\) 比 \(S_{n-1}\) 正好多加了一个 \(a_n\)，所以 \(n\ge2\) 时 \(a_n=S_n-S_{n-1}\)。\(n=1\) 时 \(S_0\) 没有定义，这个式子用不了，只能直接用 \(a_1=S_1\)。</p>
+  <div class="key" style="text-align:center">\(a_n=\begin{cases}S_1, &amp; n=1\\ S_n-S_{n-1}, &amp; n\ge2\end{cases}\)</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>数列的前 \(n\) 项和 \(S_n=n^2+2n\)，求通项公式。</p>
+    <p>\(n=1\)：\(a_1=S_1=1+2=3\)。</p>
+    <p>\(n\ge2\)：\(a_n=S_n-S_{n-1}=(n^2+2n)-[(n-1)^2+2(n-1)]=2n+1\)。</p>
+    <p>检验：\(2n+1\) 在 \(n=1\) 时是 \(3\)，正好等于 \(a_1\)，所以能合写成 \(a_n=2n+1\)。<b>这一步检验不能省</b>，下一块就有合不起来的例子。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：\(S_n=n^2\)，\(a_3\) 是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(9\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(3\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(4\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(a_3=S_3-S_2=9-4=5\)。选 B 的同学把 \(S_3\)（前三项的和）当成了 \(a_3\)（第三项本身）。</p></div>
+  </div>
+
+  <h3>5. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>有序，可以重复</b>：数列看顺序，\(1,2,3\) 和 \(3,2,1\) 是两个不同的数列；同一个数可以出现多次，\(2,2,2,\dots\) 也是数列（常数列）。<br><span class="small">反例：集合 \(\{1,2,3\}=\{3,2,1\}\)，元素不能重复；数列和集合不是一回事。</span></li>
+    <li><b>下标是正整数，图象是离散的点</b>：定义域是 \(\mathbf N^*\) 或 \(\{1,\dots,m\}\)。<br><span class="small">反例：\(a_n=\dfrac1n\) 的图象是 \((1,1)\)、\(\left(2,\tfrac12\right)\)、\(\left(3,\tfrac13\right)\)…一串点，不能连成曲线 \(y=\dfrac1x\)；\(a_0\)、\(a_{1.5}\) 都没有意义。</span></li>
+    <li><b>最值只在整数下标上取</b>：<br><span class="small">反例：\(a_n=-n^2+5n\)。把 \(n\) 当实数，顶点在 \(n=2.5\)，值 \(6.25\)；可 \(2.5\) 不是下标。比较 \(a_2=6\)、\(a_3=6\)，最大项是 \(6\)，在第 2、3 项，不是 \(6.25\)。</span></li>
+    <li><b>\(a_n=S_n-S_{n-1}\) 只对 \(n\ge2\)</b>：\(a_1=S_1\) 要单独算，再检验能不能合写。<br><span class="small">反例：\(S_n=n^2+1\)。\(a_1=S_1=2\)；\(n\ge2\) 时 \(a_n=2n-1\)，可它在 \(n=1\) 时是 \(1\ne2\)。所以 \(a_n=\begin{cases}2, &amp; n=1\\ 2n-1, &amp; n\ge2\end{cases}\)，不能直接写成 \(2n-1\)。</span></li>
+    <li><b>递推公式要配初始条件</b>：<br><span class="small">反例：只说 \(a_{n+1}=a_n+2\)。\(a_1=1\) 时是 \(1,3,5,\dots\)；\(a_1=0\) 时是 \(0,2,4,\dots\)。规则一样，数列不同。</span></li>
+    <li><b>由前几项猜通项，答案不唯一</b>：<br><span class="small">反例：前三项 \(1,2,4\)。\(a_n=2^{n-1}\) 符合，第 4 项是 \(8\)；\(a_n=\dfrac{n^2-n+2}{2}\) 也符合（代 \(n=1,2,3\) 得 \(1,2,4\)），第 4 项却是 \(7\)。「写出一个符合的公式」和「证明这个数列就是它」是两件事。</span></li>
+  </ol>
+  <div class="key">数列是定义在正整数上的函数：看顺序、取整数下标、点是分开的；由 \(S_n\) 求 \(a_n\) 先单独算 \(a_1\)；递推要有初始条件；猜出的通项要验证或证明。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>数列的增减</b>：如果从第 2 项起每一项都比前一项大（\(a_{n+1}>a_n\) 对每个 \(n\) 成立），叫<b>递增数列</b>；每一项都比前一项小，叫<b>递减数列</b>；各项都相等，叫常数列；有时大有时小，叫摆动数列，比如 \(a_n=(-1)^n\)。</p>
+    <p><b>用差判断增减</b>：\(a_n=\dfrac{n}{n+1}\)，\(a_{n+1}-a_n=\dfrac{n+1}{n+2}-\dfrac{n}{n+1}=\dfrac{1}{(n+1)(n+2)}>0\)，所以它是递增数列。</p>
+    <p><b>找最大项的另一种办法</b>：第 \(k\) 项最大，要 \(a_k\ge a_{k-1}\) 且 \(a_k\ge a_{k+1}\)，解出整数 \(k\)。对 \(a_n=-n^2+5n\)：\(a_{k}-a_{k-1}=6-2k\ge0\) 且 \(a_k-a_{k+1}=2k-4\ge0\)，得 \(2\le k\le3\)。</p>
+    <p><b>把猜想变成结论</b>：例 2 里，\(a_{n+1}=2a_n+1\) 两边加 \(1\)：\(a_{n+1}+1=2(a_n+1)\)。从 \(a_1+1=2\) 开始每次乘 \(2\)，所以 \(a_n+1=2^n\)。更一般的证明方法见 4.4 数学归纳法。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 通项和递推：看点、看 \(S_n\)</h3>
+  <p class="small">先选「通项」或「递推」，拖滑块改参数，图上的点和下面的式子一起变。拖动金色圆点（或选中后按方向键）选第 \(k\) 项，看 \(a_k\) 和 \(S_k\)。通项模式里虚线是把 \(n\) 当实数画出的曲线，只作参考：数列只有上面那些点。打开时两种模式给出的是同一个数列 \(1,3,5,\dots\)。</p>
+  <div class="card">
+    <div class="ctrl"><button class="btn" id="mgen" type="button" aria-pressed="true">通项</button><button class="btn ghost" id="mrec" type="button" aria-pressed="false">递推</button></div>
+    <svg class="fig" id="seq" viewBox="0 0 560 338" role="img" aria-label="数列前 N 项的点图"></svg>
+    <div id="genctl">
+      <div class="ctrl"><label for="ga">\(n^2\) 的系数</label><input type="range" id="ga" min="-20" max="20" step="5"><output id="gaout"></output></div>
+      <div class="ctrl"><label for="gb">\(n\) 的系数</label><input type="range" id="gb" min="-10" max="10" step="1"><output id="gbout"></output></div>
+      <div class="ctrl"><label for="gc">常数项</label><input type="range" id="gc" min="-10" max="10" step="1"><output id="gcout"></output></div>
+    </div>
+    <div id="recctl" hidden>
+      <div class="ctrl"><label for="ra1">\(a_1\)</label><input type="range" id="ra1" min="-5" max="5" step="1"><output id="ra1out"></output></div>
+      <div class="ctrl"><label for="rr">乘 \(r\)</label><input type="range" id="rr" min="-20" max="20" step="5"><output id="rrout"></output></div>
+      <div class="ctrl"><label for="rd">加 \(d\)</label><input type="range" id="rd" min="-5" max="5" step="1"><output id="rdout"></output></div>
+    </div>
+    <div class="ctrl"><label for="nn">项数 \(N\)</label><input type="range" id="nn" min="1" max="12" step="1"><output id="nnout"></output></div>
+    <div class="result" id="seqout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="seqreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：由 \(S_n\) 求 \(a_n\)，第 1 项合不合得上</h3>
+  <p class="small">设 \(S_n=pn^2+qn+c\)。实心点是真正的 \(a_n\)（\(a_1=S_1\)，\(n\ge2\) 时 \(a_n=S_n-S_{n-1}\)）；空心圈是把 \(n\ge2\) 的式子 \(2pn+q-p\) 硬代 \(n=1,2,\dots\) 得到的值。先看 \(c=0\)，再把 \(c\) 调成 \(1\)（就是 \(S_n=n^2+1\)），看第 1 个点。</p>
+  <div class="card">
+    <svg class="fig" id="sn" viewBox="0 0 560 338" role="img" aria-label="由前 n 项和求出的各项，和 n 大于等于 2 的公式对比"></svg>
+    <div class="ctrl"><label for="sp">\(p\)</label><input type="range" id="sp" min="-3" max="3" step="1"><output id="spout"></output></div>
+    <div class="ctrl"><label for="sq">\(q\)</label><input type="range" id="sq" min="-5" max="5" step="1"><output id="sqout"></output></div>
+    <div class="ctrl"><label for="sc">\(c\)</label><input type="range" id="sc" min="-5" max="5" step="1"><output id="scout"></output></div>
+    <div class="result" id="snout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="snreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 数列 \(a_n=\dfrac{n}{n+1}\)，第 4 项是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac45\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac54\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac34\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac43\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。代 \(n=4\)：\(a_4=\dfrac{4}{4+1}=\dfrac45\)。选 B 是分子分母写反了；选 C 是代成了 \(n=3\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(a_1=3\)，\(a_{n+1}=2a_n-1\)，\(a_3\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(9\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(17\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(11\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(a_2=2\times3-1=5\)，\(a_3=2\times5-1=9\)。选 B 只推了一步（那是 \(a_2\)），选 C 推了三步（那是 \(a_4\)）。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-sn" data-answer="C">
+    <p>3. 数列的前 \(n\) 项和 \(S_n=n^2+1\)，它的通项公式是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(a_n=2n-1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(a_n=n^2+1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(a_n=\begin{cases}2, &amp; n=1\\ 2n-1, &amp; n\ge2\end{cases}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(a_n=S_n-S_{n-1}\) 只对 \(n\ge2\) 成立，得 \(2n-1\)；\(a_1\) 要单独算：\(a_1=S_1=2\)。可 \(2n-1\) 在 \(n=1\) 时是 \(1\)，对不上，只能分段写。</p>
+      <p>选 A 的同学漏了检验 \(n=1\)；选 B 是把和 \(S_n\) 当成了第 \(n\) 项。可以在「动手」②里把 \(p=1,q=0,c=1\) 调出来看第 1 个点。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-max" data-answer="B">
+    <p>4. 数列 \(a_n=-n^2+7n\) 的最大项是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{49}{4}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。把 \(n\) 当实数，顶点在 \(n=3.5\)，值 \(\dfrac{49}{4}\)；可下标只能取正整数，\(3.5\) 不是一项。看离它最近的两个整数：\(a_3=-9+21=12\)，\(a_4=-16+28=12\)，最大项是 \(12\)（第 3、4 项）。选 A 的同学把离散的点当成了连续的抛物线。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-guess" data-answer="B">
+    <p>5. 一个数列的前三项是 \(2,\,4,\,8\)。下面哪句话对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>第 4 项一定是 \(16\)</button>
+      <button class="opt" data-v="B"><b>B</b>第 4 项可能是 \(14\)</button>
+      <button class="opt" data-v="C"><b>C</b>它和 \(8,\,4,\,2\) 是同一个数列</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(a_n=n^2-n+2\) 也符合：\(n=1,2,3\) 时是 \(2,4,8\)，\(n=4\) 时是 \(14\)。只给前几项，通项不唯一，第 4 项也就定不下来，A 错。</p>
+      <p>C 错：数列讲顺序，\(2,4,8\) 和 \(8,4,2\) 的第 1 项就不同，是两个数列。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. \(a_1=2\)，\(a_{n+1}=1-\dfrac1{a_n}\)。\(a_{2026}\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。先推几项：\(a_2=1-\dfrac12=\dfrac12\)，\(a_3=1-2=-1\)，\(a_4=1-(-1)=2=a_1\)。从这里起又按 \(2,\dfrac12,-1\) 重复，每 \(3\) 项一轮。\(2026=3\times675+1\)，所以 \(a_{2026}=a_1=2\)。</p>
+      <p>初始条件换了，结果也跟着换：\(a_1=3\) 时数列是 \(3,\dfrac23,-\dfrac12,3,\dots\)，\(a_{2026}=3\)。光有递推式，定不出答案。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) {
+    if (!isFinite(x)) return "?";
+    var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, "");
+    return s === "-0" ? "0" : s;
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { onMove(toSvg(fig, e).x); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  function num(id, dflt, lo, hi) {
+    var v = parseInt(document.getElementById(id).value, 10);
+    return clamp(isFinite(v) ? v : dflt, lo, hi);
+  }
+  // 多项式 TeX：terms = [[系数, 符号], ...]
+  function poly(terms) {
+    var s = "";
+    terms.forEach(function (t) {
+      var c = t[0], v = t[1];
+      if (c === 0) return;
+      var a = Math.abs(c), core = (a === 1 && v) ? v : f2(a) + v;
+      s += (c < 0 ? "-" : (s ? "+" : "")) + core;
+    });
+    return s || "0";
+  }
+  function sub(n) { return String(n).replace(/\d/g, function (d) { return "₀₁₂₃₄₅₆₇₈₉"[d]; }); }
+  function niceStep(raw) {
+    var mag = Math.pow(10, Math.floor(Math.log10(raw))), r = raw / mag;
+    return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 5 ? 5 : 10) * mag;
+  }
+  // 画坐标：返回 cx、cy。lo..hi 是要容纳的值（会自动含 0）
+  var X0 = 86, X1 = 540, Yt = 24, Yb = 280;
+  function axes(el, nmax, lo, hi) {
+    lo = Math.min(lo, 0); hi = Math.max(hi, 0);
+    if (!(hi - lo > 1e-9)) { lo -= 1; hi += 1; }
+    var st = niceStep((hi - lo) / 5);
+    lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st;
+    if (hi - lo < st * 2) hi += st;
+    var fg = css("--fg"), line = css("--line");
+    function cx(n) { return X0 + (n - 0.5) / nmax * (X1 - X0); }
+    function cy(y) { return Yb - (y - lo) / (hi - lo) * (Yb - Yt); }
+    for (var y = lo; y <= hi + st / 2; y += st) {
+      svg("line", { x1: X0, y1: cy(y), x2: X1, y2: cy(y), stroke: line, "stroke-width": 1 }, el);
+      svg("text", { x: X0 - 8, y: cy(y) + 7, "text-anchor": "end" }, el).textContent = f2(y);
+    }
+    svg("line", { x1: X0, y1: cy(0), x2: X1, y2: cy(0), stroke: fg, "stroke-width": 1.5 }, el);
+    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt, stroke: fg, "stroke-width": 1.5 }, el);
+    for (var n = 1; n <= nmax; n++) svg("text", { x: cx(n), y: Yb + 26, "text-anchor": "middle" }, el).textContent = n;
+    svg("text", { x: X1, y: Yb + 50, "text-anchor": "end" }, el).textContent = "n（下标）";
+    return { cx: cx, cy: cy, lo: lo, hi: hi };
+  }
+
+  /* ================= ① 通项 / 递推 ================= */
+  var seq = document.getElementById("seq"), NMAX = 12;
+  var mode, k;
+  var IDS = ["ga", "gb", "gc", "ra1", "rr", "rd", "nn"];
+  var DEF = { ga: 0, gb: 2, gc: -1, ra1: 1, rr: 10, rd: 2, nn: 8 };
+  function P() {
+    return {
+      a: num("ga", 0, -20, 20) / 10, b: num("gb", 2, -10, 10), c: num("gc", -1, -10, 10),
+      a1: num("ra1", 1, -5, 5), r: num("rr", 10, -20, 20) / 10, d: num("rd", 2, -5, 5),
+      N: num("nn", 8, 1, 12)
+    };
+  }
+  function terms(p) {
+    var v = [], x;
+    for (var n = 1; n <= p.N; n++) {
+      if (mode === "gen") x = p.a * n * n + p.b * n + p.c;
+      else x = n === 1 ? p.a1 : p.r * v[n - 2] + p.d;
+      v.push(x);
+    }
+    return v;
+  }
+  function seqReset() {
+    IDS.forEach(function (id) { document.getElementById(id).value = DEF[id]; });
+    k = 4; setMode("gen");
+  }
+  function setMode(m) {
+    mode = m;
+    var g = document.getElementById("mgen"), r = document.getElementById("mrec");
+    g.className = m === "gen" ? "btn" : "btn ghost"; r.className = m === "rec" ? "btn" : "btn ghost";
+    g.setAttribute("aria-pressed", m === "gen" ? "true" : "false"); r.setAttribute("aria-pressed", m === "rec" ? "true" : "false");
+    document.getElementById("genctl").hidden = m !== "gen";
+    document.getElementById("recctl").hidden = m !== "rec";
+    seqDraw();
+  }
+  function seqDraw(keepFocus) {
+    var p = P(), v = terms(p), N = p.N;
+    k = clamp(k, 1, N);
+    var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v);
+    var vx = null;
+    if (mode === "gen" && p.a !== 0) {
+      vx = -p.b / (2 * p.a);
+      if (vx >= 1 && vx <= N) { var vy = p.a * vx * vx + p.b * vx + p.c; lo = Math.min(lo, vy); hi = Math.max(hi, vy); }
+    }
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), card = css("--card");
+    seq.innerHTML = "";
+    var ax = axes(seq, NMAX, lo, hi), cx = ax.cx, cy = ax.cy;
+    // 通项模式：把 n 当实数的参考曲线
+    if (mode === "gen") {
+      var d = "", steps = 120;
+      for (var i = 0; i <= steps; i++) {
+        var x = 1 + (N - 1) * i / steps, y = p.a * x * x + p.b * x + p.c;
+        d += (i ? "L" : "M") + cx(x).toFixed(1) + " " + cy(y).toFixed(1);
+      }
+      if (N > 1) svg("path", { d: d, fill: "none", stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "4 5" }, seq);
+    }
+    // S_k：前 k 个点实心
+    for (var n = 1; n <= N; n++) {
+      var on = n <= k;
+      svg("line", { x1: cx(n), y1: cy(0), x2: cx(n), y2: cy(v[n - 1]), stroke: on ? cc : muted, "stroke-width": on ? 2 : 1, opacity: on ? 0.6 : 0.4 }, seq);
+      svg("circle", { cx: cx(n), cy: cy(v[n - 1]), r: 6, fill: on ? ca : card, stroke: ca, "stroke-width": 2.5 }, seq);
+    }
+    var kx = cx(k), ky = cy(v[k - 1]);
+    var h = svg("circle", { cx: kx, cy: ky, r: 12, fill: "none", stroke: hl, "stroke-width": 4, tabindex: 0, role: "slider",
+      "aria-label": "选第 k 项", "aria-valuemin": 1, "aria-valuemax": N, "aria-valuenow": k, style: "cursor:grab" }, seq);
+    var right = kx < (X0 + X1) / 2;
+    svg("text", { x: kx + (right ? 16 : -16), y: ky < Yt + 30 ? ky + 30 : ky - 14, "text-anchor": right ? "start" : "end", "font-weight": 700 }, seq).textContent = "a" + sub(k) + " = " + f2(v[k - 1]);
+    h.addEventListener("keydown", function (ev) {
+      var dd = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[ev.key];
+      if (ev.key === "Home") dd = 1 - k; else if (ev.key === "End") dd = N - k;
+      if (!dd) return;
+      ev.preventDefault(); k = clamp(k + dd, 1, N); seqDraw(true);
+    });
+    draggable(seq, h, function (x) {
+      var nv = clamp(Math.round((x - X0) / (X1 - X0) * NMAX + 0.5), 1, N);
+      if (nv !== k) { k = nv; seqDraw(true); }
+    }, function () { Peiyu.log("interact", { id: "seq-k", mode: mode, k: k }); });
+    if (keepFocus) { var hh = seq.querySelector("[role=slider]"); if (hh) hh.focus(); }
+
+    document.getElementById("gaout").textContent = f2(p.a);
+    document.getElementById("gbout").textContent = p.b;
+    document.getElementById("gcout").textContent = p.c;
+    document.getElementById("ra1out").textContent = p.a1;
+    document.getElementById("rrout").textContent = f2(p.r);
+    document.getElementById("rdout").textContent = p.d;
+    document.getElementById("nnout").textContent = N;
+
+    var S = 0; for (var j = 0; j < k; j++) S += v[j];
+    var lines = [];
+    if (mode === "gen") lines.push("通项：\\(a_n=" + poly([[p.a, "n^2"], [p.b, "n"], [p.c, ""]]) + "\\)，\\(n=1,2,\\dots," + N + "\\)");
+    else lines.push("递推：\\(a_1=" + p.a1 + "\\)，\\(a_{n+1}=" + poly([[p.r, "a_n"], [p.d, ""]]) + "\\)");
+    lines.push("前 " + N + " 项：\\(" + v.map(f2).join(",\\ ") + "\\)");
+    var parts = v.slice(0, k).map(function (x) { return x < 0 ? "(" + f2(x) + ")" : f2(x); });
+    lines.push("\\(S_{" + k + "}=" + (k > 3 ? parts.slice(0, 2).join("+") + "+\\dots+" + parts[k - 1] : parts.join("+")) + "=" + f2(S) + "\\)" + (k === 1 ? "，就是 \\(a_1\\)" : ""));
+    // 最值：只看整数下标
+    var mx = Math.max.apply(null, v), mn = Math.min.apply(null, v);
+    function at(val) { var r = []; v.forEach(function (x, i) { if (Math.abs(x - val) < 1e-9) r.push(i + 1); }); return r.join("、"); }
+    var ext = "前 " + N + " 项里最大项 \\(" + f2(mx) + "\\)（第 " + at(mx) + " 项），最小项 \\(" + f2(mn) + "\\)（第 " + at(mn) + " 项）。";
+    if (vx !== null && vx >= 1 && vx <= N && Math.abs(vx - Math.round(vx)) > 1e-9) {
+      ext += '<br><span class="bad">虚线顶点在 \\(n=' + f2(vx) + "\\)，不是整数下标</span>，最值只能从整数项里比出来。";
+    }
+    if (N === 1) ext = "只有 1 项：\\(a_1=" + f2(v[0]) + "\\)，有穷数列也可以只有一项。";
+    lines.push(ext);
+    var out = document.getElementById("seqout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  IDS.forEach(function (id) {
+    var el = document.getElementById(id);
+    el.addEventListener("input", function () { seqDraw(); });
+    el.addEventListener("change", function () { Peiyu.log("interact", { id: "seq-" + id, v: el.value, mode: mode }); });
+  });
+  document.getElementById("mgen").onclick = function () { setMode("gen"); Peiyu.log("interact", { id: "seq-mode", mode: "gen" }); };
+  document.getElementById("mrec").onclick = function () { setMode("rec"); Peiyu.log("interact", { id: "seq-mode", mode: "rec" }); };
+  document.getElementById("seqreset").onclick = seqReset;
+
+  /* ================= ② 由 S_n 求 a_n ================= */
+  var sn = document.getElementById("sn"), SN = 8;
+  function snReset() {
+    document.getElementById("sp").value = 1; document.getElementById("sq").value = 0; document.getElementById("sc").value = 0;
+    snDraw();
+  }
+  function snDraw() {
+    var p = num("sp", 1, -3, 3), q = num("sq", 0, -5, 5), c = num("sc", 0, -5, 5);
+    function S(n) { return p * n * n + q * n + c; }
+    var a = [], g = [];
+    for (var n = 1; n <= SN; n++) { a.push(n === 1 ? S(1) : S(n) - S(n - 1)); g.push(2 * p * n + q - p); }
+    var all = a.concat(g), lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+    var ca = css("--a"), cc = css("--c"), no = css("--no"), card = css("--card");
+    sn.innerHTML = "";
+    var ax = axes(sn, SN, lo, hi), cx = ax.cx, cy = ax.cy;
+    var ok = c === 0;
+    for (n = 1; n <= SN; n++) {
+      var bad = n === 1 && !ok;
+      svg("circle", { cx: cx(n), cy: cy(g[n - 1]), r: 11, fill: "none", stroke: bad ? no : cc, "stroke-width": 2.5 }, sn);
+      svg("circle", { cx: cx(n), cy: cy(a[n - 1]), r: 6, fill: ca }, sn);
+    }
+    if (!ok) {
+      var y1 = cy(a[0]), y2 = cy(g[0]);
+      svg("line", { x1: cx(1), y1: y1, x2: cx(1), y2: y2, stroke: no, "stroke-width": 2, "stroke-dasharray": "3 3" }, sn);
+      svg("text", { x: cx(1) + 18, y: (y1 + y2) / 2 + 7, fill: no, "font-weight": 700 }, sn).textContent = "差 " + f2(Math.abs(c));
+    }
+    document.getElementById("spout").textContent = p;
+    document.getElementById("sqout").textContent = q;
+    document.getElementById("scout").textContent = c;
+    var gt = poly([[2 * p, "n"], [q - p, ""]]);
+    var lines = [];
+    lines.push("\\(S_n=" + poly([[p, "n^2"], [q, "n"], [c, ""]]) + "\\)");
+    lines.push("\\(a_1=S_1=" + f2(S(1)) + "\\)；\\(n\\ge2\\) 时 \\(a_n=S_n-S_{n-1}=" + gt + "\\)");
+    if (ok) {
+      lines.push('<span class="eq">代 \\(n=1\\) 得 \\(' + f2(g[0]) + "=a_1\\)，合得上</span>，可以合写成 \\(a_n=" + gt + "\\)。");
+    } else {
+      lines.push('<span class="bad">代 \\(n=1\\) 得 \\(' + f2(g[0]) + "\\)，可 \\(a_1=" + f2(a[0]) + "\\)，差了常数项 \\(" + c + "\\)</span>：只能分段写 \\(a_n=\\begin{cases}" + f2(a[0]) + ",&amp;n=1\\\\" + gt + ",&amp;n\\ge2\\end{cases}\\)");
+    }
+    lines.push("\\(a_1\\sim a_{" + SN + "}\\)：\\(" + a.map(f2).join(",\\ ") + "\\)");
+    var out = document.getElementById("snout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  ["sp", "sq", "sc"].forEach(function (id) {
+    var el = document.getElementById(id);
+    el.addEventListener("input", snDraw);
+    el.addEventListener("change", function () { Peiyu.log("interact", { id: "sn-" + id, v: el.value }); });
+  });
+  document.getElementById("snreset").onclick = snReset;
+
+  document.addEventListener("DOMContentLoaded", function () { seqReset(); snReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { seqDraw(); snDraw(); });
+})();
+</script>
+</body></html>

@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.2 三角函数的概念 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .circ { fill: none; stroke: var(--muted); stroke-width: 2; }
+  .fig .qpos { fill: var(--ok-soft); }
+  .fig .qneg { fill: var(--no-soft); }
+  .fig text.sg { font-size: 34px; font-weight: 700; text-anchor: middle; }
+  .fig text.sg.p { fill: var(--a); }
+  .fig text.sg.n { fill: var(--no); }
+  .fig text.lab { font-size: 20px; fill: var(--muted); }
+  .fig text.pl { font-size: 22px; font-weight: 700; fill: var(--fg); }
+  .fig text.ml { font-size: 20px; fill: var(--dim); }
+  .fig .rad { stroke: var(--fg); stroke-width: 2; }
+  .fig .cosl { stroke: var(--b); stroke-width: 6; stroke-linecap: round; }
+  .fig .sinl { stroke: var(--a); stroke-width: 6; stroke-linecap: round; }
+  .fig .arc { fill: none; stroke: var(--c); stroke-width: 2.5; }
+  .fig .arch { fill: var(--c); }
+  .fig .mir { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 5 5; }
+  .fig .mirp { fill: var(--card); stroke: var(--dim); stroke-width: 2; }
+  .fig .h { fill: var(--hl); stroke: var(--fg); stroke-width: 2; cursor: grab; outline: none; }
+  .fig .h:focus-visible { stroke: var(--c); stroke-width: 5; }
+  .fig .hit { fill: transparent; cursor: grab; }
+  .rd { font-size: 16px; line-height: 1.75; }
+  .rd .row { margin: 3px 0; }
+  .rd .no { color: var(--no); font-weight: 600; }
+  .btn[aria-pressed="true"] { background: var(--a); color: #fff; }
+  table.sgn td, table.sgn th { text-align: center; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-5-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 5 章 三角函数</p>
+<h1>5.2 三角函数的概念</h1>
+<p class="lead">初中的 sin、cos、tan 只管锐角。把角放进坐标系、让终边去碰单位圆，任意角都有了正弦、余弦、正切，还顺带有了正负号。先从一座摩天轮开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一座摩天轮，半径 \(10\) 米。一个座舱从和中心一样高的最右边出发，逆时针转。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>座舱绕中心转过 \(30^\circ\) 时，它比中心高多少米？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\) 米</button>
+      <button class="opt" data-v="B"><b>B</b>约 \(8.7\) 米</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\) 米</button>
+      <button class="opt" data-v="D"><b>D</b>\(3\) 米</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。从座舱向水平线作垂线，得到一个直角三角形：斜边是半径 \(10\)，\(30^\circ\) 角的对边是斜边的一半，\(5\) 米。约 \(8.7\) 米是邻边（水平方向走了多远）。</p>
+      <p>高度 \(\div\) 半径 \(=\dfrac5{10}=\dfrac12\)，正好是 \(\sin30^\circ\)。</p>
+      <p>可座舱还会接着转：转过 \(150^\circ\) 时又比中心高 \(5\) 米；转过 \(210^\circ\) 时在中心<b>下方</b> \(5\) 米，记作 \(-5\)。这时已经画不出含这个角的直角三角形，但「高度 \(\div\) 半径」照样算得出来。这一节就用这个办法，给任意角定义正弦、余弦、正切。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：初中的锐角三角函数（对边比斜边）；5.1 的任意角和弧度制（<a href="b1-5-1.html">回看 5.1</a>）。</p>
+
+  <div class="card">
+    <p><b>终边</b>：把角的顶点放在原点、始边放在 \(x\) 轴的非负半轴，绕原点转（逆时针为正、顺时针为负），停下来的那条射线就是终边。</p>
+    <p>例：\(30^\circ\)、\(390^\circ\)（多转一圈）、\(-330^\circ\)（反着转）停在同一条射线上，终边相同；可它们是三个不同的角，转的量不一样。</p>
+  </div>
+
+  <div class="card">
+    <p><b>象限角、轴线角</b>：终边落在第几象限，就叫第几象限角；终边落在坐标轴上的叫轴线角，<b>不属于任何象限</b>。</p>
+    <p>例：\(120^\circ\) 是第二象限角，\(-30^\circ\) 是第四象限角；\(90^\circ\)、\(180^\circ\)、\(\dfrac{3\pi}2\) 是轴线角。</p>
+  </div>
+
+  <div class="card">
+    <p><b>单位圆</b>：圆心在原点、半径为 \(1\) 的圆。圆上的点 \((x,y)\) 到原点的距离是 \(1\)，所以 \(x^2+y^2=1\)，\(x\)、\(y\) 都在 \(-1\) 到 \(1\) 之间。</p>
+    <p>例：\((0.6,\,0.8)\) 在单位圆上，\(0.36+0.64=1\)；\((1,1)\) 不在，\(1+1=2\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>\(\sin^2\alpha\) 的写法</b>：\(\sin^2\alpha\) 指 \((\sin\alpha)^2\)，先求正弦再平方，不是 \(\sin(\alpha^2)\)。</p>
+    <p>例：\(\sin30^\circ=\dfrac12\)，\(\sin^230^\circ=\dfrac14\)。</p>
+  </div>
+
+  <h3>2. 定义：读单位圆上的坐标</h3>
+  <p>角 \(\alpha\) 的终边和单位圆交于点 \(P(x,y)\)。摩天轮的半径换成 \(1\)，「高度 \(\div\) 半径」就是 \(y\) 本身：</p>
+  <div class="key">\(\sin\alpha=y\)，\(\cos\alpha=x\)，\(\tan\alpha=\dfrac yx\ (x\ne0)\)。<br>正弦是 \(P\) 的纵坐标，余弦是横坐标，正切是纵横坐标之比。</div>
+  <p>为什么和初中一致：对锐角，从 \(P\) 向 \(x\) 轴作垂线，得到斜边为 \(1\) 的直角三角形，对边是 \(y\)，邻边是 \(x\)，「对边比斜边」正好是 \(y\)。新定义只是把旧定义推广到了所有角。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>求 \(\alpha=\dfrac{2\pi}3\)（即 \(120^\circ\)）的三个三角函数值。</p>
+    <p>终边在第二象限，和 \(x\) 轴负半轴夹 \(60^\circ\)。从 \(P\) 向 \(x\) 轴作垂线：斜边 \(1\)，竖直边 \(\dfrac{\sqrt3}2\)，水平边 \(\dfrac12\)。\(P\) 在 \(y\) 轴左边、\(x\) 轴上方，所以 \(P\left(-\dfrac12,\dfrac{\sqrt3}2\right)\)。</p>
+    <p>\(\sin\dfrac{2\pi}3=\dfrac{\sqrt3}2\)，\(\cos\dfrac{2\pi}3=-\dfrac12\)，\(\tan\dfrac{2\pi}3=\dfrac{\sqrt3/2}{-1/2}=-\sqrt3\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="C">
+    <p>自己试试：\(\cos\pi=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-1\)</button>
+      <button class="opt" data-v="D"><b>D</b>没有意义</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(\pi\) 的终边是 \(x\) 轴负半轴，碰到单位圆在 \(P(-1,0)\)，\(\cos\pi=x=-1\)。选 A 的同学把 \(x\)、\(y\) 弄反了（\(\sin\pi=0\)）；选 B 是忘了 \(P\) 在左边。余弦对任何角都有意义，没意义的只可能是正切。</p></div>
+  </div>
+
+  <h3>3. 终边上任取一点也行</h3>
+  <p>终边上任取一点 \((x,y)\)（不是原点），记它到原点的距离 \(r=\sqrt{x^2+y^2}\)。把它按比例缩到单位圆上（三个坐标都除以 \(r\)），就得到</p>
+  <div class="key">\(\sin\alpha=\dfrac yr\)，\(\cos\alpha=\dfrac xr\)，\(\tan\alpha=\dfrac yx\)。\(r\) 是距离，总是正的，正负号全由 \(x\)、\(y\) 决定。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>角 \(\alpha\) 的终边经过点 \((-3,4)\)，求 \(\sin\alpha\)、\(\cos\alpha\)、\(\tan\alpha\)。</p>
+    <p>\(r=\sqrt{(-3)^2+4^2}=5\)。\(\sin\alpha=\dfrac45\)，\(\cos\alpha=\dfrac{-3}5=-\dfrac35\)，\(\tan\alpha=\dfrac4{-3}=-\dfrac43\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="C">
+    <p>自己试试：角 \(\alpha\) 的终边经过点 \(P(3,-4)\)，\(\sin\alpha=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac45\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac45\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac43\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(r=\sqrt{3^2+(-4)^2}=5\)，\(\sin\alpha=\dfrac{-4}{5}\)。</p>
+      <p>选 B 是按「边长都是正的」想的，可点在 \(x\) 轴下方，纵坐标是负的。选 A 忘了除以 \(r\)。选 D 把 \(\dfrac yx\) 当成了正弦，那是 \(\tan\alpha\)。</p>
+    </div>
+  </div>
+
+  <h3>4. 正负号看象限</h3>
+  <p>正负号就是 \(P\) 的坐标符号：\(x\) 轴上方 \(y\) 为正，\(y\) 轴右边 \(x\) 为正，\(\tan\) 看 \(x\)、\(y\) 同号还是异号。</p>
+  <table class="rec sgn">
+    <tr><th></th><th>一</th><th>二</th><th>三</th><th>四</th></tr>
+    <tr><td>\(\sin\alpha\)</td><td>+</td><td>+</td><td>−</td><td>−</td></tr>
+    <tr><td>\(\cos\alpha\)</td><td>+</td><td>−</td><td>−</td><td>+</td></tr>
+    <tr><td>\(\tan\alpha\)</td><td>+</td><td>−</td><td>+</td><td>−</td></tr>
+  </table>
+  <p class="small">不用死记：想一下点在哪儿就行。「动手」里可以按按钮给四个象限涂上符号。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>判断 \(\sin4\)、\(\cos4\)、\(\tan4\) 的正负（\(4\) 是弧度）。</p>
+    <p>\(\pi\approx3.14\)，\(\dfrac{3\pi}2\approx4.71\)，\(\pi&lt;4&lt;\dfrac{3\pi}2\)，终边在第三象限，\(P\) 在左下方：\(\sin4&lt;0\)，\(\cos4&lt;0\)，\(\tan4&gt;0\)（负除以负）。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：\(\tan\alpha&gt;0\) 且 \(\cos\alpha&lt;0\)，\(\alpha\) 是第几象限角？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>第一象限</button>
+      <button class="opt" data-v="B"><b>B</b>第二象限</button>
+      <button class="opt" data-v="C"><b>C</b>第三象限</button>
+      <button class="opt" data-v="D"><b>D</b>第四象限</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(\tan\alpha&gt;0\)：第一或第三象限；\(\cos\alpha&lt;0\)：第二或第三象限。两条都满足的只有第三象限。选 A 的同学只看了正切一个条件。</p></div>
+  </div>
+
+  <h3>5. 平方关系：知一求二</h3>
+  <p>\(P(x,y)\) 在单位圆上，\(x^2+y^2=1\)；正切本来就是 \(y\) 除以 \(x\)。换成三角函数的写法：</p>
+  <div class="key">\(\sin^2\alpha+\cos^2\alpha=1\)（对一切 \(\alpha\)）<br>\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}\)（要求 \(\cos\alpha\ne0\)）</div>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>已知 \(\sin\alpha=-\dfrac5{13}\)，\(\alpha\) 是第三象限角，求 \(\cos\alpha\)、\(\tan\alpha\)。</p>
+    <p>\(\cos^2\alpha=1-\dfrac{25}{169}=\dfrac{144}{169}\)，开方得 \(\pm\dfrac{12}{13}\)。第三象限余弦为负，所以 \(\cos\alpha=-\dfrac{12}{13}\)。</p>
+    <p>\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}=\dfrac{-5/13}{-12/13}=\dfrac5{12}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="B">
+    <p>自己试试：\(\cos\alpha=\dfrac35\)，\(\alpha\) 是第四象限角，\(\sin\alpha=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac45\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac45\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\pm\dfrac45\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac43\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\sin^2\alpha=1-\dfrac9{25}=\dfrac{16}{25}\)，第四象限正弦为负，取 \(-\dfrac45\)。选 A 是开方后忘了看象限；题目已经给了象限，所以不用写 C 的两种。D 是 \(\tan\alpha\)。</p></div>
+  </div>
+
+  <h3>6. 商关系：已知正切，把式子化成正切</h3>
+  <div class="card">
+    <p class="small">例 5</p>
+    <p>\(\tan\alpha=2\)，求 \(\dfrac{\sin\alpha+\cos\alpha}{\sin\alpha-\cos\alpha}\)。</p>
+    <p>正切存在，说明 \(\cos\alpha\ne0\)，可以把分子、分母同除以 \(\cos\alpha\)：</p>
+    <p style="text-align:center">\(\dfrac{\tan\alpha+1}{\tan\alpha-1}=\dfrac{2+1}{2-1}=3\)。</p>
+  </div>
+  <div class="card predict" data-id="try-5" data-answer="A">
+    <p>自己试试：\(\tan\alpha=3\)，\(\dfrac{2\sin\alpha-\cos\alpha}{\sin\alpha+\cos\alpha}=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac54\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac34\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac74\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。同除以 \(\cos\alpha\)：\(\dfrac{2\tan\alpha-1}{\tan\alpha+1}=\dfrac{6-1}{3+1}=\dfrac54\)。选 B 是把 \(\dfrac{\cos\alpha}{\cos\alpha}\) 错写成了 \(\tan\alpha\)；选 C 是把分子的减号抄成了加号。</p></div>
+  </div>
+  <div class="key">除以 \(\cos\alpha\)（或 \(\sin\alpha\)）之前，先说明它不等于 \(0\)。</div>
+
+  <h3>7. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>轴线角不属于任何象限。</b><br><span class="small">反例：\(\dfrac{3\pi}2\) 不是第三象限角。它的终边是 \(y\) 轴负半轴，\(P(0,-1)\)，不能套「第三象限正切为正」。</span></li>
+    <li><b>正切要求 \(\alpha\ne\dfrac\pi2+k\pi\ (k\in\Z)\)。</b><br><span class="small">反例：\(\alpha=\dfrac\pi2\) 时 \(P(0,1)\)，\(\dfrac yx\) 要除以 \(0\)，\(\tan\dfrac\pi2\) 没有意义。正弦、余弦则对一切角都有意义，值在 \([-1,1]\) 里。</span></li>
+    <li><b>终边相同，函数值相同；角不一定相同。</b><br><span class="small">反例：\(\sin30^\circ=\sin390^\circ=\dfrac12\)，可 \(390^\circ\ne30^\circ\)。所以由 \(\sin\alpha=\dfrac12\) 推不出 \(\alpha=30^\circ\)。</span></li>
+    <li><b>由平方求值，正负号要靠象限或角的范围定；没给就两种都写。</b><br><span class="small">反例：只知道 \(\sin\alpha=\dfrac35\)，\(\alpha\) 可能在第一或第二象限，\(\cos\alpha=\pm\dfrac45\)。</span></li>
+    <li><b>两边除以 \(\cos\alpha\)、\(\sin\alpha\) 之前，查它是不是 \(0\)。</b><br><span class="small">反例：解 \(\sin\alpha\cos\alpha=\cos\alpha\)，两边直接约掉 \(\cos\alpha\) 得 \(\sin\alpha=1\)，就丢了 \(\alpha=\dfrac{3\pi}2\) 这类角（\(\cos\alpha=0\)，两边都是 \(0\)）。</span></li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么取哪个点都一样</b>：终边上两个点 \((x,y)\) 和 \((x',y')\) 在同一条射线上，坐标成比例，\(\dfrac yr=\dfrac{y'}{r'}\)。所以三角函数值只看终边，不看取了哪个点。</p>
+    <p><b>把「1」换掉</b>：分母只有 \(1\) 的式子也能化成正切。\(\tan\alpha=2\) 时，\(\sin\alpha\cos\alpha=\dfrac{\sin\alpha\cos\alpha}{\sin^2\alpha+\cos^2\alpha}\)，上下同除以 \(\cos^2\alpha\)，得 \(\dfrac{\tan\alpha}{\tan^2\alpha+1}=\dfrac25\)。高考真题里常见这一步。</p>
+    <p><b>同正弦的两个点</b>：\(P(x,y)\) 和它关于 \(y\) 轴的对称点 \(P'(-x,y)\) 正弦相同、余弦相反。「动手」图里虚线连着的就是它们。这件事到 5.3 诱导公式会再用到。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>单位圆：拖点 \(P\)，读三个函数值</h3>
+  <p class="small">拖动单位圆上的金色点 \(P\) 转动终边（可以多转几圈，也可以顺时针转成负角）。<span class="cb">横的粗线</span>是 \(\cos\alpha\)，<span class="ca">竖的粗线</span>是 \(\sin\alpha\)。下面的按钮给四个象限涂上某个函数的正负号。键盘：Tab 选中 \(P\)，方向键每次 5°，PageUp / PageDown 每次 90°。</p>
+  <div class="card">
+    <svg class="fig" id="fig" viewBox="0 0 560 420" role="group" aria-label="单位圆，终边上的点 P 可拖动"></svg>
+    <div class="ctrl">
+      <button class="btn ghost" type="button" data-f="sin" aria-pressed="true">sin 的符号</button>
+      <button class="btn ghost" type="button" data-f="cos" aria-pressed="false">cos 的符号</button>
+      <button class="btn ghost" type="button" data-f="tan" aria-pressed="false">tan 的符号</button>
+      <button class="btn ghost" id="reset" type="button">重置</button>
+    </div>
+    <div class="rd" id="readout" aria-live="polite"></div>
+    <p class="small">试一试：把 \(P\) 拖到 \(y\) 轴上，看 \(\tan\alpha\) 怎样；再看虚线连着的点 \(P'\)——它和 \(P\) 的正弦一样，余弦相反。</p>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="D">
+    <p>1. 角 \(\alpha\) 的终边经过点 \((-5,12)\)，\(\cos\alpha=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac5{13}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{12}{13}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac5{12}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac5{13}\)</button>
+    </div>
+    <div class="reveal"><p><b>D</b>。\(r=\sqrt{25+144}=13\)，\(\cos\alpha=\dfrac xr=-\dfrac5{13}\)。A 丢了负号；B 是 \(\sin\alpha\)；C 是 \(\dfrac xy\)，既不是余弦也不是正切。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. \(\alpha\) 是第二象限角，\(\sin\alpha=\dfrac45\)，\(\tan\alpha=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac43\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac43\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac34\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac34\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\cos^2\alpha=1-\dfrac{16}{25}=\dfrac9{25}\)，第二象限余弦为负，\(\cos\alpha=-\dfrac35\)，\(\tan\alpha=\dfrac{4/5}{-3/5}=-\dfrac43\)。A 忘了余弦的负号；C 把正切算成了 \(\dfrac{\cos\alpha}{\sin\alpha}\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="trap-sign" data-answer="C">
+    <p>3. 已知 \(\sin\alpha=\dfrac35\)，那么 \(\cos\alpha=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac45\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac45\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac45\) 或 \(-\dfrac45\)</button>
+      <button class="opt" data-v="D"><b>D</b>条件不够，求不出</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。由 \(\cos^2\alpha=1-\dfrac9{25}=\dfrac{16}{25}\)，开方得 \(\pm\dfrac45\)。</p>
+      <p>正弦为正，终边可能在第一象限，也可能在第二象限：在单位圆上就是 \(y=\dfrac35\) 这条横线碰到的<b>两个</b>点，一左一右。只写 \(\dfrac45\) 丢了一种；说「求不出」也不对，结果只有这两种。题目给了象限（或角的范围），才能定下一个符号。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-axis" data-answer="A">
+    <p>4. \(\alpha=\dfrac{3\pi}2\) 时，下面哪句对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\sin\alpha=-1\)，\(\cos\alpha=0\)，\(\tan\alpha\) 没有意义</button>
+      <button class="opt" data-v="B"><b>B</b>\(\alpha\) 是第三象限角，所以 \(\tan\alpha&gt;0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}=-\infty\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\tan\alpha=0\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(\dfrac{3\pi}2\) 的终边是 \(y\) 轴负半轴，碰到单位圆在 \((0,-1)\)：\(\sin\alpha=-1\)，\(\cos\alpha=0\)。</p>
+      <p>B 错：终边在坐标轴上的角不属于任何象限，不能套象限符号表。C 错：\(\cos\alpha=0\) 时 \(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}\) 这个关系本身就不能用，「\(-\infty\)」不是一个数。D 把横纵坐标弄反了。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-divide" data-answer="B">
+    <p>5. 已知 \(\sin\alpha=2\cos\alpha\)。小明两边同除以 \(\cos\alpha\)，得 \(\tan\alpha=2\)。他这一步还缺什么？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>什么也不缺</button>
+      <button class="opt" data-v="B"><b>B</b>要先说明 \(\cos\alpha\ne0\)：若 \(\cos\alpha=0\)，则 \(\sin\alpha=0\)，与 \(\sin^2\alpha+\cos^2\alpha=1\) 矛盾</button>
+      <button class="opt" data-v="C"><b>C</b>结果应该是 \(\tan\alpha=\pm2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。结论 \(\tan\alpha=2\) 是对的，但除法有前提：除数不能为 \(0\)。</p>
+      <p>这里正好能用平方关系排除 \(\cos\alpha=0\)：那样 \(\sin\alpha\) 也得是 \(0\)，两者的平方和就成了 \(0\)，不是 \(1\)。写上这一句，推理才完整。C 错：两边相除不会产生正负号，正负号是开平方时才有的。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="C">
+    <p>6. \(\alpha\in(0,\pi)\)，\(\sin\alpha+\cos\alpha=\dfrac15\)，\(\tan\alpha=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-\dfrac34\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac43\) 或 \(-\dfrac34\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac43\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac43\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。把 \(\sin\alpha+\cos\alpha=\dfrac15\) 和 \(\sin^2\alpha+\cos^2\alpha=1\) 联立：设 \(\sin\alpha=s\)，则 \(\cos\alpha=\dfrac15-s\)，代入得 \(s^2+\left(\dfrac15-s\right)^2=1\)，整理成 \(25s^2-5s-12=0\)，\(s=\dfrac45\) 或 \(s=-\dfrac35\)。</p>
+      <p>\(\alpha\in(0,\pi)\)，终边在 \(x\) 轴上方，\(\sin\alpha&gt;0\)，只能 \(\sin\alpha=\dfrac45\)，\(\cos\alpha=-\dfrac35\)，\(\tan\alpha=-\dfrac43\)。选 B 是没用角的范围去掉 \(\sin\alpha=-\dfrac35\)、\(\cos\alpha=\dfrac45\) 那一组。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById("fig"), out = document.getElementById("readout");
+  var NS = "http://www.w3.org/2000/svg";
+  var OX = 260, OY = 210, R = 150, MIN = -720, MAX = 720, DEF_DEG = 30;
+  var deg = DEF_DEG, fn = "sin";
+  var G = {}, handle, hit;
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function mod(a, m) { return ((a % m) + m) % m; }
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  function clamp(v) { return Math.max(MIN, Math.min(MAX, v)); }
+  function num(v) {
+    var s = (Math.round(v * 1000) / 1000).toFixed(3);
+    return s === "-0.000" ? "0.000" : s;
+  }
+  // 弧度：15° 的倍数写成 π 的分数，否则写近似值
+  function radStr(d) {
+    if (d % 15 !== 0) return "\\approx " + (d * Math.PI / 180).toFixed(2);
+    var n = d / 15, g = gcd(Math.abs(n), 12) || 12, a = n / g, b = 12 / g;
+    if (a === 0) return "0";
+    var s = a < 0 ? "-" : "", m = Math.abs(a);
+    if (b === 1) return s + (m === 1 ? "" : m) + "\\pi";
+    return s + "\\frac{" + (m === 1 ? "" : m) + "\\pi}{" + b + "}";
+  }
+  // 特殊角给精确值（参考角为 0、30、45、60、90 度）
+  var SINV = { 0: "0", 30: "\\frac12", 45: "\\frac{\\sqrt2}{2}", 60: "\\frac{\\sqrt3}{2}", 90: "1" };
+  var TANV = { 0: "0", 30: "\\frac{\\sqrt3}{3}", 45: "1", 60: "\\sqrt3" };
+  function refAngle(d) { var r = mod(d, 180); return r <= 90 ? r : 180 - r; }
+  function exact(table, ra, v) {
+    if (!(ra in table)) return null;
+    var t = table[ra];
+    return (t !== "0" && v < 0 ? "-" : "") + t;
+  }
+  function show(E, v) {
+    if (E && /^-?[01]$/.test(E)) return E;
+    return E ? E + "\\approx " + num(v) : num(v);
+  }
+  function where(d) {
+    var r = mod(d, 360);
+    if (r === 0) return "终边在 \\(x\\) 轴正半轴（轴线角，不属于任何象限）";
+    if (r === 90) return "终边在 \\(y\\) 轴正半轴（轴线角，不属于任何象限）";
+    if (r === 180) return "终边在 \\(x\\) 轴负半轴（轴线角，不属于任何象限）";
+    if (r === 270) return "终边在 \\(y\\) 轴负半轴（轴线角，不属于任何象限）";
+    return "第" + "一二三四".charAt(Math.floor(r / 90)) + "象限角";
+  }
+  function sgnOf(f, q) { // q: 0..3 象限
+    if (f === "sin") return q < 2 ? 1 : -1;
+    if (f === "cos") return (q === 0 || q === 3) ? 1 : -1;
+    return (q === 0 || q === 2) ? 1 : -1;
+  }
+
+  function build() {
+    svg.innerHTML = "";
+    G.quad = mk("g", {});
+    var QR = [[OX, OY - 190, 240, 190], [OX - 240, OY - 190, 240, 190], [OX - 240, OY, 240, 200], [OX, OY, 240, 200]];
+    G.qr = QR.map(function (q) { return mk("rect", { x: q[0], y: q[1], width: q[2], height: q[3] }, G.quad); });
+    var SP = [[OX + 125, OY - 110], [OX - 125, OY - 110], [OX - 125, OY + 135], [OX + 125, OY + 135]];
+    G.qs = SP.map(function (p) { return mk("text", { x: p[0], y: p[1], "class": "sg" }, G.quad); });
+    mk("line", { x1: 20, y1: OY, x2: 520, y2: OY, "class": "axis" });
+    mk("line", { x1: OX, y1: 410, x2: OX, y2: 12, "class": "axis" });
+    mk("path", { d: "M520 " + (OY - 6) + " L532 " + OY + " L520 " + (OY + 6) + "Z", fill: "var(--muted)" });
+    mk("path", { d: "M" + (OX - 6) + " 14 L" + OX + " 2 L" + (OX + 6) + " 14Z", fill: "var(--muted)" });
+    mk("text", { x: 530, y: OY + 26, "class": "lab" }).textContent = "x";
+    mk("text", { x: OX + 10, y: 22, "class": "lab" }).textContent = "y";
+    mk("text", { x: OX - 22, y: OY + 22, "class": "lab" }).textContent = "O";
+    mk("text", { x: OX + R + 4, y: OY + 22, "class": "lab" }).textContent = "1";
+    mk("circle", { cx: OX, cy: OY, r: R, "class": "circ" });
+    G.dyn = mk("g", {});
+    var hg = mk("g", {});
+    hit = mk("circle", { r: 24, "class": "hit" }, hg);
+    handle = mk("circle", { r: 11, "class": "h", tabindex: "0", role: "slider", "aria-label": "终边上的点 P，角 α 的度数",
+      "aria-valuemin": MIN, "aria-valuemax": MAX }, hg);
+    bind(hg);
+  }
+
+  function draw() {
+    var a = deg * Math.PI / 180, x = Math.cos(a), y = Math.sin(a);
+    var r = mod(deg, 360), onAxis = r % 90 === 0;
+    if (onAxis) { x = [1, 0, -1, 0][r / 90]; y = [0, 1, 0, -1][r / 90]; }
+    var tanOk = mod(deg, 180) !== 90;
+    var px = OX + R * x, py = OY - R * y;
+
+    // 象限涂色
+    for (var q = 0; q < 4; q++) {
+      var s = sgnOf(fn, q);
+      G.qr[q].setAttribute("class", s > 0 ? "qpos" : "qneg");
+      G.qs[q].setAttribute("class", "sg " + (s > 0 ? "p" : "n"));
+      G.qs[q].textContent = s > 0 ? "+" : "−";
+    }
+
+    var D = G.dyn; D.innerHTML = "";
+    // 转过的角：螺旋线，每多转一圈半径变大一点，看得出圈数
+    var pts = [], step = deg >= 0 ? 3 : -3, t;
+    for (t = 0; Math.abs(t) < Math.abs(deg); t += step) pts.push(t);
+    pts.push(deg);
+    if (deg !== 0) {
+      var d = "", last = null, prev = null;
+      pts.forEach(function (tt, i) {
+        var rr = 28 + 11 * Math.abs(tt) / 360, ang = tt * Math.PI / 180;
+        var X = OX + rr * Math.cos(ang), Y = OY - rr * Math.sin(ang);
+        d += (i ? " L" : "M") + X.toFixed(1) + " " + Y.toFixed(1);
+        prev = last; last = [X, Y];
+      });
+      mk("path", { d: d, "class": "arc" }, D);
+      if (prev) {
+        var dx = last[0] - prev[0], dy = last[1] - prev[1], L = Math.sqrt(dx * dx + dy * dy) || 1;
+        dx /= L; dy /= L;
+        var bx = last[0] - 9 * dx, by = last[1] - 9 * dy;
+        mk("path", { d: "M" + last[0].toFixed(1) + " " + last[1].toFixed(1) + " L" + (bx - 5 * dy).toFixed(1) + " " + (by + 5 * dx).toFixed(1) +
+          " L" + (bx + 5 * dy).toFixed(1) + " " + (by - 5 * dx).toFixed(1) + "Z", "class": "arch" }, D);
+      }
+    }
+    // 同正弦的另一点 P'
+    if (Math.abs(x) > 1e-9) {
+      var mx = OX - R * x;
+      mk("line", { x1: mx, y1: py, x2: px, y2: py, "class": "mir" }, D);
+      mk("circle", { cx: mx, cy: py, r: 7, "class": "mirp" }, D);
+      mk("text", { x: mx + (x > 0 ? -38 : 12), y: py + (y >= 0 ? -10 : 26), "class": "ml" }, D).textContent = "P′";
+    }
+    mk("line", { x1: OX, y1: OY, x2: px, y2: py, "class": "rad" }, D);
+    if (Math.abs(x) > 1e-9) mk("line", { x1: OX, y1: OY, x2: px, y2: OY, "class": "cosl" }, D);
+    if (Math.abs(y) > 1e-9) mk("line", { x1: px, y1: OY, x2: px, y2: py, "class": "sinl" }, D);
+    mk("text", { x: px + (x >= 0 ? 14 : -32), y: py + (y >= 0 ? -12 : 30), "class": "pl" }, D).textContent = "P";
+    handle.setAttribute("cx", px); handle.setAttribute("cy", py);
+    hit.setAttribute("cx", px); hit.setAttribute("cy", py);
+    handle.setAttribute("aria-valuenow", deg);
+    handle.setAttribute("aria-valuetext", deg + " 度，" + where(deg).replace(/\\\(|\\\)/g, ""));
+
+    // 读数
+    var ra = refAngle(deg);
+    var sE = exact(SINV, ra, y), cE = exact(SINV, 90 - ra, x), tE = tanOk ? exact(TANV, ra, y / x) : null;
+    var tanVal = tanOk ? y / x : null;
+    var h = "";
+    var turns = Math.trunc(deg / 360);
+    h += '<div class="row">\\(\\alpha=' + deg + '^\\circ=' + radStr(deg) + '\\)，' + where(deg);
+    if (turns !== 0) h += '；与 \\(' + (deg - 360 * turns) + '^\\circ\\) 终边相同（差 ' + Math.abs(turns) + ' 圈），三个函数值也相同';
+    h += '</div>';
+    h += '<div class="row">\\(P(x,y)=(' + num(x) + ',\\ ' + num(y) + ')\\)</div>';
+    h += '<div class="row"><span class="ca">\\(\\sin\\alpha=y=' + show(sE, y) + '\\)</span>　<span class="cb">\\(\\cos\\alpha=x=' + show(cE, x) + '\\)</span></div>';
+    h += '<div class="row">\\(\\tan\\alpha=\\dfrac yx' + (tanOk ? '=' + show(tE, tanVal) + '\\)' : '\\)：<span class="no">没有意义</span>（终边在 \\(y\\) 轴上，\\(x=0\\)）') + '</div>';
+    h += '<div class="row">\\(\\sin^2\\alpha+\\cos^2\\alpha=' + num(y * y) + '+' + num(x * x) + '=' + num(x * x + y * y) + '\\)</div>';
+    if (Math.abs(x) > 1e-9) h += '<div class="small">只知道 \\(\\sin\\alpha=' + num(y) + '\\) 时，\\(P\\) 和 \\(P\'\\) 都可能，\\(\\cos\\alpha=\\pm' + num(Math.abs(x)) + '\\)，要靠象限定符号。</div>';
+    else h += '<div class="small">这时 \\(P\'\\) 和 \\(P\\) 重合：\\(\\sin\\alpha=\\pm1\\) 只对应 \\(\\cos\\alpha=0\\) 一种。</div>';
+    out.innerHTML = h;
+    if (window.Peiyu) Peiyu.math(out);
+  }
+
+  function logState(how) { if (window.Peiyu) Peiyu.log("interact", { how: how, deg: deg, fn: fn }); }
+
+  function bind(g) {
+    var drag = null;
+    function ptAngle(ev) {
+      var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+      var m = svg.getScreenCTM(); if (!m) return null;
+      var p = pt.matrixTransform(m.inverse()), dx = p.x - OX, dy = OY - p.y;
+      if (!isFinite(dx) || !isFinite(dy) || (Math.abs(dx) < 1 && Math.abs(dy) < 1)) return null;
+      return Math.atan2(dy, dx) * 180 / Math.PI;
+    }
+    g.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault(); drag = { id: ev.pointerId, moved: false };
+      try { g.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+      handle.focus({ preventScroll: true });
+    });
+    g.addEventListener("pointermove", function (ev) {
+      if (!drag || ev.pointerId !== drag.id) return;
+      var a = ptAngle(ev); if (a === null) return;
+      // 接着当前的角走：取和上一个位置最近的那一圈，保留转过的圈数
+      var delta = mod(a - deg + 180, 360) - 180, nd = deg + delta;
+      var snap = Math.round(nd / 15) * 15;
+      nd = Math.abs(nd - snap) < 2.5 ? snap : Math.round(nd);
+      nd = clamp(nd);
+      if (nd !== deg) { deg = nd; drag.moved = true; draw(); }
+    });
+    function up(ev) { if (drag && ev.pointerId === drag.id) { if (drag.moved) logState("drag"); drag = null; } }
+    g.addEventListener("pointerup", up);
+    g.addEventListener("pointercancel", function () { drag = null; });
+    handle.addEventListener("keydown", function (ev) {
+      var k = ev.key, nd = deg;
+      if (k === "ArrowRight" || k === "ArrowUp") nd = deg + 5;
+      else if (k === "ArrowLeft" || k === "ArrowDown") nd = deg - 5;
+      else if (k === "PageUp") nd = deg + 90;
+      else if (k === "PageDown") nd = deg - 90;
+      else if (k === "Home") nd = 0;
+      else return;
+      ev.preventDefault(); deg = clamp(nd); draw(); logState("key");
+    });
+  }
+
+  [].forEach.call(document.querySelectorAll("button[data-f]"), function (b) {
+    b.addEventListener("click", function () {
+      fn = b.getAttribute("data-f");
+      [].forEach.call(document.querySelectorAll("button[data-f]"), function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      draw(); logState("sign-" + fn);
+    });
+  });
+  function reset() {
+    deg = DEF_DEG; fn = "sin";
+    [].forEach.call(document.querySelectorAll("button[data-f]"), function (o) { o.setAttribute("aria-pressed", o.getAttribute("data-f") === "sin" ? "true" : "false"); });
+    draw();
+  }
+  document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  build();
+  document.addEventListener("DOMContentLoaded", function () { reset(); });
+  if (document.readyState !== "loading") reset();
+})();
+</script>
+</body></html>

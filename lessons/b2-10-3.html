@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10.3 频率与概率 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  #toss text, #crowd text { font-size: 20px; }
+  table.tb { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+  table.tb th, table.tb td { border: 1px solid var(--line); padding: 4px 8px; text-align: center; }
+  .groups { font-family: ui-monospace, Menlo, monospace; letter-spacing: 1px; overflow-wrap: anywhere; }
+  .groups b { color: var(--a); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-10-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 10 章 概率</p>
+<h1>10.3 频率与概率</h1>
+<p class="lead">一次试验的结果猜不准，做很多次，「出现的比例」却会稳在一个数附近。这一节讲怎么用这个比例去估计概率，以及它和概率到底差在哪。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>拿一枚普通的硬币，连着抛 \(100\) 次，数一数正面朝上几次。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>正面朝上的次数，最可能在哪个数附近？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(10\) 次左右</button>
+      <button class="opt" data-v="B"><b>B</b>\(50\) 次左右</button>
+      <button class="opt" data-v="C"><b>C</b>\(90\) 次左右</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。正面、反面机会一样，\(100\) 次里大约一半是正面。</p>
+      <p>不过真去抛，很可能是 \(46\) 次、\(53\) 次，正好 \(50\) 次的时候反而不多；换个人再抛 \(100\) 次，又是另一个数。</p>
+      <p>这一节就讲这件事：<b>「正面占的比例」每次做都不一样，可做的次数越多，它越稳地待在 \(\dfrac12\) 附近</b>。反过来，一件事的概率算不出来时，就能靠大量试验的这个比例去估计。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：随机事件、古典概型算概率（<a href="b2-10-1.html">回看 10.1</a>）；频数、频率在统计里见过（<a href="b2-9-2.html">回看 9.2</a>）。</p>
+
+  <div class="card">
+    <p><b>频数和频率</b>：做 \(n\) 次试验，事件 \(A\) 发生了 \(n_A\) 次。\(n_A\) 叫<b>频数</b>，\(\dfrac{n_A}{n}\) 叫<b>频率</b>，记作 \(f_n(A)\)。</p>
+    <p>例：抛硬币 \(20\) 次，正面 \(9\) 次。频数是 \(9\)，频率 \(f_{20}(\text{正面})=\dfrac{9}{20}=0.45\)。</p>
+    <p class="small">频率一定在 \(0\) 到 \(1\) 之间：发生次数不会是负数，也不会超过总次数。</p>
+  </div>
+
+  <div class="card">
+    <p><b>概率</b>：事件发生可能性大小的那个数，记作 \(P(A)\)。它由事件本身决定，<b>不用做试验</b>，也不会因为谁做试验而变。</p>
+    <p>例：均匀硬币 \(P(\text{正面})=\dfrac12\)；均匀骰子 \(P(\text{掷出 6 点})=\dfrac16\)。上面那 \(20\) 次得到 \(0.45\)，概率还是 \(\dfrac12\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>随机模拟</b>：不真的抛、真的摸，而是用随机数（计算器、电脑、抽签都能产生）代替试验，规定好「哪些数代表事件发生」，再数频率。</p>
+    <p>例：用 \(1\sim6\) 的随机整数代替掷骰子，出现 \(6\) 就算「掷出 6 点」。产生 \(60\) 个数，里面有 \(11\) 个 \(6\)，频率 \(=\dfrac{11}{60}\approx0.183\)。</p>
+  </div>
+
+  <h3>2. 频率会变，但会稳下来</h3>
+  <p>同一个试验做 \(n\) 次，频率 \(f_n(A)\) 是<b>随机</b>的：这一批是 \(0.45\)，下一批可能是 \(0.53\)。但 \(n\) 越来越大时，它的摆动越来越小，<b>稳定在概率 \(P(A)\) 附近</b>。这叫频率的<b>稳定性</b>。</p>
+  <p>为什么会这样？次数少时，多一次正面就能让比例变很多（\(10\) 次里多 \(1\) 次，比例差 \(0.1\)）；次数多了，一两次的偶然被大量结果「冲淡」，比例就不太动了。</p>
+  <div class="key">试验次数足够多时，可以用频率 \(f_n(A)\) 作为概率 \(P(A)\) 的<b>估计值</b>。</div>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>一枚图钉往桌上抛，「钉尖朝上」的概率没法像硬币那样直接算。几个同学合起来抛，记录如下：</p>
+    <table class="tb">
+      <tr><th>抛的次数 \(n\)</th><td>\(100\)</td><td>\(500\)</td><td>\(1000\)</td><td>\(2000\)</td></tr>
+      <tr><th>钉尖朝上次数</th><td>\(62\)</td><td>\(304\)</td><td>\(611\)</td><td>\(1218\)</td></tr>
+    </table>
+    <p>算频率：\(\dfrac{62}{100}=0.62\)，\(\dfrac{304}{500}=0.608\)，\(\dfrac{611}{1000}=0.611\)，\(\dfrac{1218}{2000}=0.609\)。</p>
+    <p>次数多了以后，频率稳在 \(0.61\) 附近，所以估计 \(P(\text{钉尖朝上})\approx0.61\)。</p>
+    <p class="small">写「\(\approx\)」：这是估计值，换一批人再抛，会得到略有不同的数。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：做种子发芽试验，\(800\) 粒种子里有 \(712\) 粒发芽。估计这批种子的发芽概率约是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.89\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.712\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.11\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(712\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。频率 \(=\dfrac{712}{800}=0.89\)，用它估计概率。选 B 的同学把分母当成了 \(1000\)；选 C 的 \(0.11\) 是没发芽的频率 \(\dfrac{88}{800}\)，题目问的是发芽；选 D 把频数当成了概率——概率不会大于 \(1\)。</p></div>
+  </div>
+
+  <h3>3. 用估计出的概率，反过来估计数量</h3>
+  <p>袋子里球的颜色看不见，但可以有放回地摸很多次：摸到红球的频率 \(\approx\) 红球占的比例。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>不透明袋里有红、白两种球共 \(20\) 个。每次摸一个、记下颜色、放回、摇匀，共摸 \(400\) 次，红球 \(98\) 次。估计红球有几个。</p>
+    <p>红球的频率 \(=\dfrac{98}{400}=0.245\)，估计摸到红球的概率约 \(0.245\)。</p>
+    <p>摸到红球的概率等于 \(\dfrac{\text{红球个数}}{20}\)，所以红球约 \(20\times0.245=4.9\)，个数是整数，估计 \(5\) 个。</p>
+    <p class="small">「放回、摇匀」是为了每次试验条件一样，否则每次摸到红球的概率在变，频率就不是在估计同一个数。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：袋里黑、白球共 \(30\) 个，有放回地摸 \(300\) 次，黑球 \(102\) 次。估计黑球约有几个？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(10\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(20\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(34\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(102\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。频率 \(=\dfrac{102}{300}=0.34\)，黑球约 \(30\times0.34=10.2\)，估计 \(10\) 个。选 D 的同学把摸到的次数当成了球的个数；选 C 是把 \(0.34\) 直接写成了 \(34\)，超过了总数 \(30\)。</p></div>
+  </div>
+
+  <h3>4. 随机模拟</h3>
+  <p>有些试验真做太慢，就用随机数代替。关键是<b>规定对应关系</b>：让「代表事件发生」的数，在全部可能的数里占的比例正好等于那个概率。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>某人投篮命中率是 \(0.4\)，估计他投 \(3\) 次恰好中 \(2\) 次的概率。</p>
+    <p>规定：用 \(0\sim9\) 的随机数字，\(0,1,2,3\) 这 \(4\) 个代表「命中」，其余 \(6\) 个代表「没中」，命中占 \(\dfrac{4}{10}=0.4\)，对得上。每 \(3\) 个数字一组代表投 \(3\) 次。产生 \(20\) 组：</p>
+    <p class="groups">907 966 <b>191</b> 925 <b>271</b> <b>932</b> <b>812</b> 458 569 683 <b>431</b> 257 398 <b>027</b> 556 488 750 113 537 989</p>
+    <p>逐组数「\(0\sim3\) 恰好有 \(2\) 个」的：\(191,271,932,812,431,027\)，共 \(6\) 组（\(113\) 三个数字都在 \(0\sim3\) 里，是投中 \(3\) 次，不算）。</p>
+    <p>频率 \(=\dfrac{6}{20}=0.3\)，估计概率约 \(0.3\)。</p>
+    <p class="small">只有 \(20\) 组，估计很粗；组数越多越可靠。学了 <a href="b2-10-2.html">10.2</a> 能算出精确值 \(3\times0.4^2\times0.6=0.288\)，模拟值在它附近，但不相等。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：要用随机数模拟「中奖概率是 \(0.3\) 的抽奖」，下面哪种规定对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(0\sim9\) 的随机数字，\(0,1,2\) 代表中奖</button>
+      <button class="opt" data-v="B"><b>B</b>\(0\sim9\) 的随机数字，\(0,1,2,3\) 代表中奖</button>
+      <button class="opt" data-v="C"><b>C</b>掷一个骰子，掷出 \(1\) 或 \(2\) 代表中奖</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(0\sim9\) 共 \(10\) 个数字，\(3\) 个代表中奖，占 \(0.3\)。B 是 \(4\) 个，占 \(0.4\)——常见错是数「\(1\) 到 \(3\)」时把 \(0\) 也顺手算进去。C 是 \(\dfrac26=\dfrac13\approx0.333\)，接近但不等于 \(0.3\)。</p></div>
+  </div>
+
+  <h3>5. 频率和概率，别混为一谈</h3>
+  <p>用频率估计概率很方便，但下面几件事最容易说错：</p>
+  <ol>
+    <li><b>频率是随机的，概率是确定的</b>。频率要做了试验才有，每批都可能不同；概率是事件本身的一个数，不随试验变。<br><span class="small">反例：甲、乙各抛 \(100\) 次，甲得 \(47\) 次正面、乙得 \(55\) 次，两人的频率是 \(0.47\) 和 \(0.55\)，可硬币正面的概率始终是 \(0.5\)。</span></li>
+    <li><b>「稳定在附近」不是「等于」，也不是「每一步都更近」</b>。次数多时频率大体在概率附近小幅摆动，但某一次加多了次数，频率完全可能离得更远。<br><span class="small">反例：前 \(10\) 次正面 \(5\) 次，频率正好 \(0.5\)；前 \(20\) 次正面 \(9\) 次，频率 \(0.45\)，次数多了，反而离 \(0.5\) 远了。</span></li>
+    <li><b>概率不是少量试验里必有的比例</b>。\(P=\dfrac12\) 不代表抛 \(10\) 次一定 \(5\) 次正面。<br><span class="small">反例：抛 \(10\) 次，正好 \(5\) 次正面的概率只有约 \(0.246\)（「再深一点」里有算法），大多数时候都不是 \(5\) 次。</span></li>
+    <li><b>前面的结果不「欠」后面的</b>。每次试验互不影响时，前面连续没发生，下一次发生的概率并不变大。<br><span class="small">反例：硬币已经连着 \(5\) 次反面，第 \(6\) 次正面的概率仍是 \(\dfrac12\)。硬币不记得前面的结果。</span></li>
+    <li><b>条件要一致，模拟只是估计</b>。每次试验条件要相同（比如有放回、摇匀）；随机模拟的映射要和真实概率对上；得到的频率只是估计值，写「\(\approx\)」。<br><span class="small">反例：摸球不放回，每摸走一个，袋里比例就变了，这时数出来的频率不是在估计「摸到红球的概率」这一个数。</span></li>
+  </ol>
+  <div class="key">频率：做出来的，随机，写「\(\approx\)」估计；概率：事件本身的，确定。次数多时，前者稳定在后者附近。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>摆动大约多大</b>：抛均匀硬币 \(n\) 次，频率离 \(0.5\) 的偏差，常见大小大约是 \(\dfrac{1}{2\sqrt n}\) 这个量级：\(n=100\) 时约 \(0.05\)，\(n=10000\) 时约 \(0.005\)。次数变成 \(100\) 倍，摆动只缩到 \(\dfrac1{10}\)，所以想估计得更准，要多做很多次。这只是一个大致的感觉，严格说法属于大学的「大数定律」。</p>
+    <p><b>正好 5 次正面的概率</b>：抛 \(10\) 次共有 \(2^{10}=1024\) 种等可能的正反序列，其中恰有 \(5\) 个正面的有 \(252\) 种（从 \(10\) 个位置里选 \(5\) 个放正面），所以概率 \(=\dfrac{252}{1024}\approx0.246\)。数「选法」要到选择性必修的计数原理才系统学。</p>
+    <p><b>频率也能检验理论</b>：抛两枚硬币，有人说「两正、两反、一正一反」三种结果所以「一正一反」的概率是 \(\dfrac13\)。真抛 \(1000\) 次会发现频率稳在 \(0.5\) 附近，提示这三种不是等可能的——「练一练」最后一题就是它。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 抛很多次：看频率怎么走</h3>
+  <p class="small">点「再抛」按钮，看频率随次数变化的折线。虚线是概率。多点几次「再抛 10 次」，看折线有没有每次都更靠近虚线；再点「再抛 1000 次」看整体。可以切换成掷骰子看「6 点」。</p>
+  <div class="card">
+    <div class="ctrl">
+      <button class="btn active" id="ev-coin" type="button">硬币：正面</button>
+      <button class="btn ghost" id="ev-die" type="button">骰子：6 点</button>
+    </div>
+    <svg class="fig" id="toss" viewBox="0 0 560 320" role="img" aria-label="频率随试验次数变化的折线，虚线是概率"></svg>
+    <div class="ctrl">
+      <button class="btn" id="add10" type="button">再抛 10 次</button>
+      <button class="btn" id="add100" type="button">再抛 100 次</button>
+      <button class="btn" id="add1000" type="button">再抛 1000 次</button>
+      <button class="btn ghost" id="tossreset" type="button">重置</button>
+    </div>
+    <div class="result" id="tossout" aria-live="polite"></div>
+  </div>
+
+  <h3>② 进阶：30 个同学同时做</h3>
+  <p class="small">每个圆点是一个同学的频率。三列分别是每人抛 \(10\) 次、\(100\) 次、\(1000\) 次。看：同样的硬币，每人的频率不一样；次数多的那列，点挤得更紧，但不是都正好落在虚线上。</p>
+  <div class="card">
+    <svg class="fig" id="crowd" viewBox="0 0 560 320" role="img" aria-label="30 个同学各自抛硬币的频率，按抛的次数分三列"></svg>
+    <div class="ctrl">
+      <button class="btn" id="crowdnew" type="button">换一批同学</button>
+      <button class="btn ghost" id="crowdreset" type="button">重置</button>
+    </div>
+    <div class="result" id="crowdout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的说错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. 某射击运动员练习射击 \(200\) 次，中靶 \(170\) 次。估计他射击一次中靶的概率约是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.17\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.85\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(170\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。频率 \(=\dfrac{170}{200}=0.85\)，用它估计概率。C 的 \(0.15\) 是没中靶的频率；A 是把分母当成 \(1000\)；D 是频数，概率不会大于 \(1\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 不透明袋里有 \(5\) 个红球和若干个白球。有放回地摸 \(500\) 次，摸到红球 \(125\) 次。估计白球约有几个？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(15\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(20\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(25\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(375\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。红球频率 \(=\dfrac{125}{500}=0.25\)，即 \(\dfrac{5}{\text{总数}}\approx0.25\)，总数约 \(20\)，白球约 \(20-5=15\)。选 B 的同学求出总数就停了；D 是白球被摸到的次数，不是个数。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-random" data-answer="B">
+    <p>3. 小明把一枚均匀硬币抛了 \(10\) 次，正面 \(7\) 次。下面说法对的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>这枚硬币正面朝上的概率是 \(0.7\)</button>
+      <button class="opt" data-v="B"><b>B</b>这 \(10\) 次里正面的频率是 \(0.7\)，正面的概率仍是 \(0.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>他再抛 \(10\) 次，一定是 \(3\) 次正面</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。频率是这一批试验做出来的，随机；概率是均匀硬币本身的，确定，不因为这 \(10\) 次而改。</p>
+      <p>A 把一次少量试验的频率当成了概率。C 以为后面要「补回来」，可每次抛互不影响，下一批 \(10\) 次几次正面都有可能。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-streak" data-answer="C">
+    <p>4. 某抽奖每次中奖的概率是 \(0.1\)，每次抽奖互不影响。小红已经连抽 \(9\) 次都没中。她第 \(10\) 次中奖的概率是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(1\)，因为 \(10\) 次里总该中 \(1\) 次</button>
+      <button class="opt" data-v="B"><b>B</b>比 \(0.1\) 大，因为前面一直没中</button>
+      <button class="opt" data-v="C"><b>C</b>仍是 \(0.1\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。概率 \(0.1\) 不是「\(10\) 次里必中 \(1\) 次」的保证，前面没中也不会让后面「欠」她一次。每次互不影响，第 \(10\) 次和第 \(1\) 次一样，都是 \(0.1\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-closer" data-answer="B">
+    <p>5. 抛一枚均匀硬币，前 \(100\) 次正面频率是 \(0.52\)，抛满 \(200\) 次时正面频率是 \(0.535\)。对此，哪种说法对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>不可能，次数越多，频率一定越接近 \(0.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>完全可能，次数多时频率稳定在 \(0.5\) 附近，但不保证每加一批都更近</button>
+      <button class="opt" data-v="C"><b>C</b>说明这枚硬币正面的概率是 \(0.535\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。前 \(100\) 次有 \(52\) 次正面，后 \(100\) 次有 \(107-52=55\) 次，合起来频率 \(\dfrac{107}{200}=0.535\)，比之前离 \(0.5\) 远了一点，这很正常。在「动手」①里多点几次「再抛 10 次」就能看到。</p>
+      <p>A 把「稳定在附近」说成了「一步步逼近」。C 把一次的频率当成了概率；\(200\) 次还不算多，\(0.035\) 的偏差在正常摆动范围里。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 同时抛两枚均匀硬币，看是不是「一正一反」。这样抛 \(1000\) 次，「一正一反」的频率最可能在哪个数附近？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。把两枚硬币分成甲、乙，等可能的结果有 \(4\) 种：正正、正反、反正、反反。「一正一反」占 \(2\) 种，概率 \(=\dfrac24=\dfrac12\)。\(1000\) 次不算少，频率会稳在 \(0.5\) 附近。</p>
+      <p>选 A 的同学把结果分成「两正、两反、一正一反」三种，当成等可能了；其实「一正一反」有两种来路。真做 \(1000\) 次，频率不会在 \(0.33\) 附近——这正是用频率检验理论的例子。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  // 页面内伪随机（mulberry32），种子不同结果不同
+  function rng(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) >>> 0;
+      var t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function newSeed() { return (Date.now() ^ Math.floor(Math.random() * 4294967296)) >>> 0; }
+  // 频率写法：正好是三位以内小数用「=」，否则「≈」
+  function freqTex(k, n) {
+    if (!n) return "";
+    var v = k / n, r = Math.round(v * 1000) / 1000, s = r.toFixed(3);
+    if (Math.abs(r - v) < 1e-12) return "=" + s.replace(/\.?0+$/, "");
+    return "\\approx " + s;
+  }
+  function f3(x) { return (Math.round(x * 1000) / 1000).toFixed(3); }
+
+  /* ================= ① 频率折线 ================= */
+  var EV = {
+    coin: { p: 0.5, pTex: "\\dfrac12", pLab: "概率 1/2", name: "正面", act: "抛" },
+    die: { p: 1 / 6, pTex: "\\dfrac16", pLab: "概率 1/6", name: "6 点", act: "掷" }
+  };
+  var MAXN = 20000;
+  var fig = document.getElementById("toss");
+  var X0 = 70, X1 = 540, Yt = 16, Yb = 270;
+  var ev, rand, hits, n, freqs, marks; // freqs[i] = 前 i+1 次的频率；marks：每次按按钮后的 [n, 频数]
+  function fx(i, N) { return X0 + (N ? i / N : 0) * (X1 - X0); }
+  function fy(v) { return Yb - v * (Yb - Yt); }
+  function tossStart(kind, first) {
+    ev = kind; rand = rng(newSeed()); hits = 0; n = 0; freqs = new Float32Array(MAXN); marks = [];
+    document.getElementById("ev-coin").className = "btn " + (kind === "coin" ? "active" : "ghost");
+    document.getElementById("ev-die").className = "btn " + (kind === "die" ? "active" : "ghost");
+    if (first) addTosses(20, true); else tossDraw();
+  }
+  function addTosses(m, quiet) {
+    var e = EV[ev], todo = Math.min(m, MAXN - n);
+    for (var i = 0; i < todo; i++) {
+      if (rand() < e.p) hits++;
+      freqs[n] = hits / (n + 1); n++;
+    }
+    if (todo > 0) marks.push([n, hits]);
+    if (!quiet) Peiyu.log("interact", { id: "toss", ev: ev, add: m, n: n, hits: hits });
+    tossDraw();
+  }
+  function niceStep(N) {
+    var raw = N / 5, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), r = raw / p;
+    return (r <= 1 ? 1 : r <= 2 ? 2 : r <= 5 ? 5 : 10) * p;
+  }
+  function tossDraw() {
+    var e = EV[ev], fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line");
+    var N = Math.max(n, 10);
+    fig.innerHTML = "";
+    // 网格与坐标
+    [0, 0.25, 0.5, 0.75, 1].forEach(function (v) {
+      svg("line", { x1: X0, y1: fy(v), x2: X1, y2: fy(v), stroke: line }, fig);
+      svg("text", { x: X0 - 8, y: fy(v) + 7, "text-anchor": "end", fill: muted }, fig).textContent = v === 0 || v === 1 ? String(v) : String(v).replace(/^0/, "");
+    });
+    svg("line", { x1: X0, y1: Yb, x2: X1, y2: Yb, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt, stroke: fg, "stroke-width": 1.5 }, fig);
+    var st = niceStep(N);
+    for (var t = 0; t <= N + 1e-9; t += st) {
+      var xx = fx(t, N);
+      svg("line", { x1: xx, y1: Yb, x2: xx, y2: Yb + 5, stroke: fg }, fig);
+      var anchor = t === 0 ? "start" : (xx > X1 - 30 ? "end" : "middle");
+      svg("text", { x: xx, y: Yb + 26, "text-anchor": anchor, fill: muted }, fig).textContent = t;
+    }
+    svg("text", { x: X0 - 8, y: Yb + 46, "text-anchor": "start", fill: muted }, fig).textContent = "次数 n →";
+    // 概率虚线
+    svg("line", { x1: X0, y1: fy(e.p), x2: X1, y2: fy(e.p), stroke: cc, "stroke-width": 2.5, "stroke-dasharray": "8 6" }, fig);
+    svg("text", { x: X1, y: fy(e.p) - 8, "text-anchor": "end", fill: cc, "font-weight": 700 }, fig).textContent = e.pLab;
+    if (n === 0) {
+      svg("text", { x: (X0 + X1) / 2, y: fy(0.82), "text-anchor": "middle", fill: muted }, fig).textContent = "还没" + e.act + "，点下面的按钮开始";
+    } else {
+      var step = Math.max(1, Math.floor(n / 600)), d = "M" + fx(1, N).toFixed(1) + " " + fy(freqs[0]).toFixed(1);
+      for (var i = step; i < n; i += step) d += "L" + fx(i + 1, N).toFixed(1) + " " + fy(freqs[i]).toFixed(1);
+      d += "L" + fx(n, N).toFixed(1) + " " + fy(freqs[n - 1]).toFixed(1);
+      svg("path", { d: d, fill: "none", stroke: ca, "stroke-width": 2.5, "stroke-linejoin": "round" }, fig);
+      svg("circle", { cx: fx(n, N), cy: fy(freqs[n - 1]), r: 6, fill: hl, stroke: fg, "stroke-width": 1.5 }, fig);
+    }
+    // 文字
+    var out = document.getElementById("tossout"), s;
+    if (n === 0) {
+      s = "\\(n=0\\)，还没有频率。概率 \\(P(\\text{" + e.name + "})=" + e.pTex + (e.p === 0.5 ? "=0.5" : "\\approx " + f3(e.p)) + "\\)，不用试验就确定。";
+    } else {
+      var fr = hits / n, dev = Math.abs(fr - e.p);
+      s = "已" + e.act + " \\(n=" + n + "\\) 次，" + e.name + " \\(" + hits + "\\) 次，频率 \\(f_n=\\dfrac{" + hits + "}{" + n + "}" + freqTex(hits, n) + "\\)；概率 \\(=" + e.pTex + "\\)。";
+      s += "<br>相差 " + (dev < 1e-12 ? "\\(0\\)" : "\\(" + (e.p === 0.5 ? freqTex(Math.abs(2 * hits - n), 2 * n) : "\\approx " + f3(dev)) + "\\)") + (dev < 1e-12 ? '（<span class="eq">这一刻正好相等，再' + e.act + "几次多半就不等了</span>）" : "") + "。";
+      if (marks.length >= 2) {
+        var pm = marks[marks.length - 2], pd = Math.abs(pm[1] / pm[0] - e.p);
+        if (dev > pd + 1e-12) s += '与上次（\\(n=' + pm[0] + "\\)，相差 \\(\\approx " + f3(pd) + '\\)）比，<span class="bad">这次反而离远了</span>——稳定不等于每步都更近。';
+        else if (dev < pd - 1e-12) s += "与上次（\\(n=" + pm[0] + "\\)，相差 \\(\\approx " + f3(pd) + "\\)）比，这次更近了。";
+      }
+      if (n >= MAXN) s += "<br>已到 \\(" + MAXN + "\\) 次上限，点「重置」重新开始。";
+    }
+    out.innerHTML = s;
+    Peiyu.math(out);
+    ["add10", "add100", "add1000"].forEach(function (id) { document.getElementById(id).disabled = n >= MAXN; });
+    ["add10", "add100", "add1000"].forEach(function (id, j) { document.getElementById(id).textContent = "再" + e.act + " " + [10, 100, 1000][j] + " 次"; });
+  }
+  document.getElementById("add10").onclick = function () { addTosses(10); };
+  document.getElementById("add100").onclick = function () { addTosses(100); };
+  document.getElementById("add1000").onclick = function () { addTosses(1000); };
+  document.getElementById("tossreset").onclick = function () { tossStart(ev, false); Peiyu.log("interact", { id: "toss-reset", ev: ev }); };
+  document.getElementById("ev-coin").onclick = function () { tossStart("coin", true); };
+  document.getElementById("ev-die").onclick = function () { tossStart("die", true); };
+
+  /* ================= ② 30 个同学 ================= */
+  var crowd = document.getElementById("crowd");
+  var PEOPLE = 30, NS3 = [10, 100, 1000], CX0 = 70, CX1 = 540, CYt = 16, CYb = 262;
+  var cseed, cdata; // cdata[j][i]：第 i 人抛 NS3[j] 次的正面数
+  function cy(v) { return CYb - v * (CYb - CYt); }
+  function crowdGen(seed) {
+    cseed = seed; var r = rng(seed); cdata = [];
+    NS3.forEach(function (m) {
+      var col = [];
+      for (var i = 0; i < PEOPLE; i++) { var h = 0; for (var k = 0; k < m; k++) if (r() < 0.5) h++; col.push(h); }
+      cdata.push(col);
+    });
+    crowdDraw();
+  }
+  function crowdDraw() {
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), muted = css("--muted"), line = css("--line");
+    crowd.innerHTML = "";
+    [0, 0.25, 0.5, 0.75, 1].forEach(function (v) {
+      svg("line", { x1: CX0, y1: cy(v), x2: CX1, y2: cy(v), stroke: line }, crowd);
+      svg("text", { x: CX0 - 8, y: cy(v) + 7, "text-anchor": "end", fill: muted }, crowd).textContent = v === 0 || v === 1 ? String(v) : String(v).replace(/^0/, "");
+    });
+    svg("line", { x1: CX0, y1: CYb, x2: CX1, y2: CYb, stroke: fg, "stroke-width": 1.5 }, crowd);
+    svg("line", { x1: CX0, y1: cy(0.5), x2: CX1, y2: cy(0.5), stroke: cc, "stroke-width": 2.5, "stroke-dasharray": "8 6" }, crowd);
+    var colW = (CX1 - CX0) / 3, lines = [];
+    NS3.forEach(function (m, j) {
+      var mid = CX0 + colW * (j + 0.5), lo = 1, hi = 0, eq = 0;
+      cdata[j].forEach(function (h, i) {
+        var v = h / m, jit = ((i * 7) % PEOPLE) / (PEOPLE - 1) - 0.5;
+        lo = Math.min(lo, v); hi = Math.max(hi, v); if (2 * h === m) eq++;
+        svg("circle", { cx: mid + jit * colW * 0.6, cy: cy(v), r: 5, fill: ca, "fill-opacity": 0.75 }, crowd);
+      });
+      svg("line", { x1: mid - colW * 0.38, y1: cy(lo), x2: mid + colW * 0.38, y2: cy(lo), stroke: muted, "stroke-dasharray": "3 3" }, crowd);
+      svg("line", { x1: mid - colW * 0.38, y1: cy(hi), x2: mid + colW * 0.38, y2: cy(hi), stroke: muted, "stroke-dasharray": "3 3" }, crowd);
+      svg("text", { x: mid, y: CYb + 28, "text-anchor": "middle", fill: fg, "font-weight": 700 }, crowd).textContent = "每人 " + m + " 次";
+      lines.push("每人 \\(" + m + "\\) 次：频率最低 \\(" + freqTex(Math.round(lo * m), m) + "\\)，最高 \\(" + freqTex(Math.round(hi * m), m) + "\\)，跨度 \\(" + freqTex(Math.round(hi * m) - Math.round(lo * m), m) + "\\)；正好等于 \\(0.5\\) 的有 \\(" + eq + "\\) 人。");
+    });
+    svg("text", { x: CX1, y: cy(0.5) - 8, "text-anchor": "end", fill: cc, "font-weight": 700 }, crowd).textContent = "概率 1/2";
+    var out = document.getElementById("crowdout");
+    out.innerHTML = lines.join("<br>") + "<br>同一枚硬币，概率都是 \\(0.5\\)；每人的频率却各不相同。次数越多，跨度一般越小。";
+    Peiyu.math(out);
+  }
+  document.getElementById("crowdnew").onclick = function () { crowdGen(newSeed()); Peiyu.log("interact", { id: "crowd-new" }); };
+  document.getElementById("crowdreset").onclick = function () { crowdGen(20261023); };
+
+  document.addEventListener("DOMContentLoaded", function () { tossStart("coin", true); crowdGen(20261023); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { tossDraw(); crowdDraw(); });
+})();
+</script>
+</body></html>

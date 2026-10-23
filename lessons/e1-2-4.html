@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.4 圆的方程 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.9; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .fig text { font-size: 20px; }
+  .ctrl output { min-width: 2.4em; font-weight: 600; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e1-2-4">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第一册 · 第 2 章 直线和圆的方程</p>
+<h1>2.4 圆的方程</h1>
+<p class="lead">圆就是「到一个点距离一样」的所有点。把这句话用两点距离公式写出来，就得到圆的方程；再学会从方程里读出圆心和半径。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>草地上钉一根木桩，小狗用 \(5\) 米长的绳子拴在上面。以木桩为原点建坐标系，单位是米。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>小狗把绳子拉直时，它可能站在下面哪个点？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((3,4)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((4,4)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((5,5)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((2,3)\)</button>
+    </div>
+    <div class="reveal">
+      <p>算到原点的距离：\((3,4)\) 是 \(\sqrt{9+16}=5\)；\((4,4)\) 是 \(\sqrt{32}\approx5.66\)；\((5,5)\) 是 \(\sqrt{50}\approx7.07\)；\((2,3)\) 是 \(\sqrt{13}\approx3.61\)。只有 <b>A</b> 正好是 \(5\)。</p>
+      <p>绳子拉直时，小狗到木桩的距离总是 \(5\)，它能站的点连起来是一个圆。点 \((x,y)\) 在这个圆上，就是 \(\sqrt{x^2+y^2}=5\)，也就是 \(x^2+y^2=25\)。</p>
+      <p>这一节就讲：怎样用一个方程表示圆，怎样从方程看出圆心、半径，以及什么样的方程<b>不是</b>圆。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：两点间的距离公式 \(|AB|=\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}\)（<a href="e1-2-3.html">回看 2.3</a>）；初中学过的配方。</p>
+
+  <div class="card">
+    <p><b>圆、圆心、半径</b>：平面上到一个定点距离等于定长的所有点，组成圆。定点叫圆心，定长叫半径，半径是<b>正数</b>。</p>
+    <p>例：到 \((1,2)\) 距离是 \(3\) 的点，有 \((4,2)\)、\((1,5)\)、\((-2,2)\)、\((1,-1)\)……它们都在以 \((1,2)\) 为圆心、\(3\) 为半径的圆上。</p>
+  </div>
+
+  <div class="card">
+    <p><b>曲线的方程</b>：说「某个方程是这条曲线的方程」，意思是两句话都成立：曲线上每个点的坐标都满足方程；坐标满足方程的点都在曲线上。</p>
+    <p>例：\((3,4)\) 代入 \(x^2+y^2=25\)：\(9+16=25\)，成立，所以在圆上；\((4,4)\) 代入得 \(32\ne25\)，不在圆上。</p>
+  </div>
+
+  <div class="card">
+    <p><b>配方</b>：把 \(x^2+px\) 凑成一个完全平方，再减去多出来的数：\(x^2+px=\left(x+\dfrac p2\right)^2-\dfrac{p^2}{4}\)。</p>
+    <p>例：\(x^2-6x=(x-3)^2-9\)；\(y^2+4y=(y+2)^2-4\)。展开右边就能验算。</p>
+  </div>
+
+  <h3>2. 圆的标准方程</h3>
+  <p>圆心 \(C(a,b)\)，半径 \(r\)。点 \(P(x,y)\) 在圆上，就是 \(|PC|=r\)，用距离公式写出来是 \(\sqrt{(x-a)^2+(y-b)^2}=r\)。两边都不是负数，平方后意思不变：</p>
+  <div class="key" style="text-align:center">\((x-a)^2+(y-b)^2=r^2\)　（\(r>0\)）<br>圆心 \((a,b)\)，半径 \(r\)。</div>
+  <p>读方程时注意符号：括号里是「减圆心」。\((x+1)^2\) 就是 \((x-(-1))^2\)，圆心横坐标是 \(-1\)。右边是 \(r^2\)，半径要开方。</p>
+  <p>点和圆的位置也靠它看：把点代进左边，和 \(r^2\) 比，大于就在圆外，等于在圆上，小于在圆内（其实就是比点到圆心的距离和 \(r\)）。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>圆心是 \((2,-1)\)，圆经过点 \((5,3)\)，求圆的方程。</p>
+    <p>半径就是圆心到这个点的距离：\(r^2=(5-2)^2+(3-(-1))^2=9+16=25\)，\(r=5\)。</p>
+    <p>所以方程是 \((x-2)^2+(y+1)^2=25\)。</p>
+    <p>顺便判断原点在哪：\((0-2)^2+(0+1)^2=5&lt;25\)，原点在圆内。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：圆 \((x-1)^2+(y+2)^2=9\) 的圆心和半径是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((1,-2)\)，\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-1,2)\)，\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((1,-2)\)，\(9\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((1,2)\)，\(3\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((y+2)^2=(y-(-2))^2\)，圆心纵坐标是 \(-2\)；\(r^2=9\)，\(r=3\)。选 B 是把两个符号都弄反了；选 C 忘了开方，\(9\) 是 \(r^2\)。</p></div>
+  </div>
+
+  <h3>3. 圆的一般方程</h3>
+  <p>把标准方程展开：\(x^2+y^2-2ax-2by+(a^2+b^2-r^2)=0\)。记 \(D=-2a\)，\(E=-2b\)，\(F=a^2+b^2-r^2\)，就是</p>
+  <div class="key" style="text-align:center">\(x^2+y^2+Dx+Ey+F=0\)</div>
+  <p>反过来，拿到这样一个方程，对 \(x\)、\(y\) 分别配方：</p>
+  <p style="text-align:center">\(\left(x+\dfrac D2\right)^2+\left(y+\dfrac E2\right)^2=\dfrac{D^2+E^2-4F}{4}\)</p>
+  <p>左边是两个平方的和，不会是负数。所以要看右边：</p>
+  <div class="key">\(D^2+E^2-4F>0\)：是圆，圆心 \(\left(-\dfrac D2,-\dfrac E2\right)\)，半径 \(\dfrac{\sqrt{D^2+E^2-4F}}{2}\)。<br>\(D^2+E^2-4F=0\)：只有一个点 \(\left(-\dfrac D2,-\dfrac E2\right)\)。<br>\(D^2+E^2-4F&lt;0\)：没有一个实数点满足它。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>方程 \(x^2+y^2-4x+6y-3=0\) 表示什么图形？</p>
+    <p>配方：\((x^2-4x+4)+(y^2+6y+9)=3+4+9\)，即 \((x-2)^2+(y+3)^2=16\)。</p>
+    <p>右边 \(16>0\)，是圆，圆心 \((2,-3)\)，半径 \(4\)。</p>
+    <p>用公式核对：\(D^2+E^2-4F=16+36+12=64>0\)，半径 \(\dfrac{\sqrt{64}}{2}=4\)，一样。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(x^2+y^2+2x-4y-4=0\) 的圆心和半径是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((-1,2)\)，\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((1,-2)\)，\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((-1,2)\)，\(2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((-1,2)\)，\(9\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((x^2+2x+1)+(y^2-4y+4)=4+1+4\)，即 \((x+1)^2+(y-2)^2=9\)。选 C 是配方时只加了常数 \(4\)，忘了把补进去的 \(1\) 和 \(4\) 也加到右边；选 B 是圆心符号反了。</p></div>
+  </div>
+
+  <h3>4. 求圆的方程：先设，再解</h3>
+  <p>标准方程有 \(a,b,r\) 三个未知数，一般方程有 \(D,E,F\) 三个，所以一般要三个条件。选哪种设法看条件：</p>
+  <ul>
+    <li>条件和圆心、半径有关（圆心在某条线上、和某点距离多少）→ 设标准方程。</li>
+    <li>给了圆上三个点 → 设一般方程，代入得到关于 \(D,E,F\) 的一次方程组，好解。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>求过 \(O(0,0)\)、\(A(4,0)\)、\(B(0,2)\) 三点的圆的方程。</p>
+    <p>设 \(x^2+y^2+Dx+Ey+F=0\)。代入 \(O\)：\(F=0\)；代入 \(A\)：\(16+4D=0\)，\(D=-4\)；代入 \(B\)：\(4+2E=0\)，\(E=-2\)。</p>
+    <p>方程是 \(x^2+y^2-4x-2y=0\)，配方得 \((x-2)^2+(y-1)^2=5\)，圆心 \((2,1)\)，半径 \(\sqrt5\)。验算 \(B\)：\(4+1=5\)，对。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：过 \((0,0)\)、\((2,0)\)、\((0,6)\) 三点的圆，圆心是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((1,3)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-1,-3)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((2,6)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((1,-3)\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(F=0\)；\(4+2D=0\)，\(D=-2\)；\(36+6E=0\)，\(E=-6\)。圆心 \(\left(-\dfrac D2,-\dfrac E2\right)=(1,3)\)。选 B 是直接拿 \(\left(\dfrac D2,\dfrac E2\right)\) 当圆心，少了负号；选 C 把 \(-D\)、\(-E\) 当成了圆心。</p></div>
+  </div>
+
+  <h3>5. 简单的轨迹</h3>
+  <p>「点按某个规则动，它走过的路线是什么」，求的就是轨迹方程。做法：设动点 \(M(x,y)\)，把规则翻译成 \(x,y\) 的等式，化简。最后还要回头查：方程上的点是不是都符合规则（多出来的点要去掉）。</p>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>点 \(A(4,0)\)，点 \(Q\) 在圆 \(x^2+y^2=4\) 上运动，求线段 \(AQ\) 的中点 \(M\) 的轨迹方程。</p>
+    <p>设 \(M(x,y)\)。\(M\) 是中点，所以 \(Q=(2x-4,\,2y)\)。\(Q\) 在圆上：\((2x-4)^2+(2y)^2=4\)，两边除以 \(4\)：\((x-2)^2+y^2=1\)。</p>
+    <p>反过来查：这个圆上任取一点 \(M\)，令 \(Q=(2x-4,2y)\)，代回去 \(Q\) 正好在 \(x^2+y^2=4\) 上，\(M\) 就是 \(AQ\) 的中点。没有多出来的点。</p>
+    <p>所以轨迹是以 \((2,0)\) 为圆心、\(1\) 为半径的圆。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="A">
+    <p>自己试试：点 \(P\) 到 \(A(-1,0)\)、\(B(1,0)\) 的距离的平方和是 \(10\)，\(P\) 的轨迹方程是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(x^2+y^2=4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x^2+y^2=5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x^2+y^2=10\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x^2+y^2=9\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((x+1)^2+y^2+(x-1)^2+y^2=10\)，展开 \(2x^2+2y^2+2=10\)，所以 \(x^2+y^2=4\)。选 B 是展开时把两个 \(1\) 丢了。</p></div>
+  </div>
+
+  <h3>6. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>标准方程右边要是正数</b>：\(r>0\)。<br><span class="small">反例：\((x-1)^2+(y+2)^2=0\) 只有 \(x=1\)、\(y=-2\) 满足，是一个点 \((1,-2)\)，不是圆；\((x-1)^2+(y+2)^2=-4\) 一个点都没有。</span></li>
+    <li><b>一般方程先看 \(D^2+E^2-4F\)</b>：大于 \(0\) 才是圆，等于 \(0\) 是一个点，小于 \(0\) 没有实点。<br><span class="small">反例：\(x^2+y^2-2x+4y+5=0\) 看着像圆，可 \(D^2+E^2-4F=4+16-20=0\)，配方得 \((x-1)^2+(y+2)^2=0\)，只是点 \((1,-2)\)。\(x^2+y^2+2x+3=0\) 的 \(4-12&lt;0\)，配方得 \((x+1)^2+y^2=-2\)，没有点。</span></li>
+    <li><b>样子要对</b>：\(x^2\) 和 \(y^2\) 的系数相等（不是 \(0\)），而且没有 \(xy\) 项。系数相等但不是 \(1\) 时，先两边同除。<br><span class="small">反例：\(x^2+2y^2=4\) 过 \((2,0)\) 和 \((0,\sqrt2)\)，这两点到原点的距离不同，而图形关于原点对称，它不是圆；\(x^2+y^2+xy=1\) 有 \(xy\) 项，也不是圆。\(2x^2+2y^2-4x=0\) 除以 \(2\) 得 \(x^2+y^2-2x=0\)，是圆。</span></li>
+    <li><b>三个点要不共线</b>：不在一条直线上的三点确定唯一的圆；共线的三点，没有圆能同时经过。<br><span class="small">反例：\((0,0)\)、\((1,1)\)、\((2,2)\)。代入一般方程得 \(F=0\)，\(D+E=-2\)，\(D+E=-4\)，矛盾，无解。</span></li>
+    <li><b>轨迹要补范围、去掉不合规则的点</b>：化简出来的方程可能比真正的轨迹多几个点。<br><span class="small">反例：\(A(-2,0)\)、\(B(2,0)\)，求使 \(\angle APB=90^\circ\) 的点 \(P\)。由勾股定理 \(|PA|^2+|PB|^2=|AB|^2\) 化简得 \(x^2+y^2=4\)。但 \(P\) 取 \(A\) 或 \(B\) 时根本没有角，要去掉：轨迹是 \(x^2+y^2=4\)（除去 \((-2,0)\)、\((2,0)\) 两点）。</span></li>
+  </ol>
+  <div class="key">拿到 \(x^2+y^2+Dx+Ey+F=0\)，先算 \(D^2+E^2-4F\)，再说它是不是圆。求轨迹，最后一步是回头查有没有多出来的点。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么「平方」不会多出点</b>：\(\sqrt{(x-a)^2+(y-b)^2}=r\) 两边都不小于 \(0\)，所以平方前后等价。要是右边可能是负数，平方就会多出解，这也是标准方程要求 \(r>0\) 的原因之一。</p>
+    <p><b>圆心在已知直线上</b>：比如「圆心在 \(y=x\) 上，过 \((0,0)\) 和 \((2,0)\)」，就设 \((x-a)^2+(y-a)^2=r^2\)，只剩 \(a,r\) 两个未知数，两个条件正好够：\(2a^2=r^2\)，\((2-a)^2+a^2=r^2\)，解得 \(a=1\)，\(r^2=2\)。</p>
+    <p><b>三点共线时还可以这样看</b>：圆上任意两点的连线（弦）的垂直平分线都过圆心。三点不共线时，两条垂直平分线交于一点，就是圆心；三点共线时这两条线平行，没有交点，所以没有圆。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖圆心和半径点，看两种方程</h3>
+  <p class="small">拖动圆心 \(C\) 或圆上的点 \(P\)（也可以点一下再按方向键），两个点都停在格点上。看标准方程和展开后的一般方程一起变。</p>
+  <div class="card">
+    <svg class="fig" id="circ" viewBox="0 0 560 400" role="img" aria-label="坐标系里的圆，圆心 C 和圆上一点 P 可以拖动"></svg>
+    <div class="result" id="circout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="circreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：调 D、E、F，什么时候不是圆</h3>
+  <p class="small">方程 \(x^2+y^2+Dx+Ey+F=0\)。拉动三个滑块，看 \(D^2+E^2-4F\) 的正负：正的画圆，等于 \(0\) 只剩一个点，负的一个点都没有。</p>
+  <div class="card">
+    <svg class="fig" id="gen" viewBox="0 0 560 400" role="img" aria-label="一般方程对应的图形：圆、一个点，或者没有点"></svg>
+    <div class="ctrl"><label for="din">\(D\)</label><input type="range" id="din" min="-10" max="10" step="1"><output id="dout"></output></div>
+    <div class="ctrl"><label for="ein">\(E\)</label><input type="range" id="ein" min="-10" max="10" step="1"><output id="eout"></output></div>
+    <div class="ctrl"><label for="fin">\(F\)</label><input type="range" id="fin" min="-10" max="10" step="1"><output id="fout"></output></div>
+    <div class="result" id="genout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="genpt" type="button">试 \(x^2+y^2-2x+4y+5=0\)</button>
+      <button class="btn ghost" id="genreset" type="button">重置</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 圆心 \((-2,1)\)、半径 \(3\) 的圆，一般方程是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x^2+y^2+4x-2y-4=0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x^2+y^2-4x+2y-4=0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x^2+y^2+4x-2y+14=0\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x^2+y^2+4x-2y+2=0\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((x+2)^2+(y-1)^2=9\)，展开 \(x^2+4x+4+y^2-2y+1=9\)，移项得 \(x^2+y^2+4x-2y-4=0\)。B 是圆心符号反了；C 把 \(9\) 加到了左边（应该减）；D 减的是 \(3\)，忘了右边是 \(r^2=9\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 圆 \(x^2+y^2-6x+8y=0\) 的圆心和半径是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((3,-4)\)，\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-3,4)\)，\(5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((3,-4)\)，\(25\)</button>
+      <button class="opt" data-v="D"><b>D</b>常数项是 \(0\)，半径 \(0\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((x-3)^2+(y+4)^2=9+16=25\)，半径 \(5\)。半径由 \(D^2+E^2-4F=36+64-0=100\) 决定，不是看常数项：\(F=0\) 只说明圆过原点（\(0+0+0+0+0=0\)）。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-point" data-answer="B">
+    <p>3. 方程 \(x^2+y^2-2x+4y+5=0\) 表示什么？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>圆心 \((1,-2)\)、半径 \(\sqrt5\) 的圆</button>
+      <button class="opt" data-v="B"><b>B</b>一个点 \((1,-2)\)</button>
+      <button class="opt" data-v="C"><b>C</b>什么也不表示，没有点</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(D^2+E^2-4F=4+16-20=0\)。配方：\((x-1)^2+(y+2)^2=1+4-5=0\)，两个平方加起来是 \(0\)，只能都是 \(0\)，只有 \((1,-2)\) 一个点。选 A 是没算 \(D^2+E^2-4F\) 就当成了圆。可以在「动手」②里点按钮看看。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-form" data-answer="C">
+    <p>4. 下面哪一个方程表示圆？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x^2+2y^2-2x=0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x^2+y^2+xy-1=0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2x^2+2y^2-4x+8y+2=0\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x^2+y^2+2x+4=0\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。两边除以 \(2\)：\(x^2+y^2-2x+4y+1=0\)，\(D^2+E^2-4F=4+16-4=16>0\)，是圆心 \((1,-2)\)、半径 \(2\) 的圆。</p>
+      <p>A：\(x^2\)、\(y^2\) 系数不相等。B：有 \(xy\) 项。D：样子对，但 \(4+0-16=-12&lt;0\)，没有点。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-collinear" data-answer="C">
+    <p>5. 经过 \((1,1)\)、\((2,2)\)、\((3,3)\) 三点的圆有几个？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>恰好 \(1\) 个</button>
+      <button class="opt" data-v="B"><b>B</b>无数个</button>
+      <button class="opt" data-v="C"><b>C</b>一个也没有</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。三点都在直线 \(y=x\) 上。代入一般方程：\(2+D+E+F=0\)，\(8+2D+2E+F=0\)，\(18+3D+3E+F=0\)。前两式相减得 \(D+E=-6\)，后两式相减得 \(D+E=-10\)，矛盾。一条直线和一个圆最多两个公共点，所以「三点定一圆」要求三点不共线。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="C">
+    <p>6. \(A(0,0)\)、\(B(2,0)\)，\(\triangle ABC\) 中 \(|CA|=|AB|\)。顶点 \(C\) 的轨迹是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x^2+y^2=4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x^2+y^2=4\)，除去点 \((2,0)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x^2+y^2=4\)，除去点 \((2,0)\) 和 \((-2,0)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x^2+y^2=4\)，除去 \((\pm2,0)\) 和 \((0,\pm2)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(|CA|=|AB|=2\)，所以 \(x^2+y^2=4\)。还要 \(A,B,C\) 能构成三角形，\(C\) 不能在直线 \(AB\)（\(x\) 轴）上。圆和 \(x\) 轴交于 \((2,0)\) 和 \((-2,0)\)：前一个和 \(B\) 重合，后一个让三点共线，都要去掉。</p>
+      <p>B 只想到了和 \(B\) 重合；\((0,\pm2)\) 构成直角三角形，没问题，不用去掉。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { var p = toSvg(fig, e); onMove(p.x, p.y); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  var KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] };
+
+  // 坐标：原点在 (280,200)，每单位 40 像素；x ∈ [-7,7]，y ∈ [-5,5]
+  var U = 40, OX = 280, OY = 200, XM = 7, YM = 5;
+  function sx(x) { return OX + x * U; }
+  function sy(y) { return OY - y * U; }
+  function grid(el, clipId) {
+    var fg = css("--fg"), line = css("--line");
+    var defs = svg("defs", {}, el), cp = svg("clipPath", { id: clipId }, defs);
+    svg("rect", { x: 0, y: 0, width: 560, height: 400 }, cp);
+    for (var i = -XM; i <= XM; i++) svg("line", { x1: sx(i), y1: 0, x2: sx(i), y2: 400, stroke: line, "stroke-width": 1 }, el);
+    for (var j = -YM; j <= YM; j++) svg("line", { x1: 0, y1: sy(j), x2: 560, y2: sy(j), stroke: line, "stroke-width": 1 }, el);
+    svg("line", { x1: 0, y1: OY, x2: 560, y2: OY, stroke: fg, "stroke-width": 1.5 }, el);
+    svg("line", { x1: OX, y1: 0, x2: OX, y2: 400, stroke: fg, "stroke-width": 1.5 }, el);
+    [-6, -4, -2, 2, 4, 6].forEach(function (t) { svg("text", { x: sx(t), y: OY + 22, "text-anchor": "middle", opacity: 0.7 }, el).textContent = t; });
+    [-4, -2, 2, 4].forEach(function (t) { svg("text", { x: OX - 6, y: sy(t) + 7, "text-anchor": "end", opacity: 0.7 }, el).textContent = t; });
+    svg("text", { x: 552, y: OY - 8, "text-anchor": "end" }, el).textContent = "x";
+    svg("text", { x: OX + 8, y: 20 }, el).textContent = "y";
+    return svg("g", { "clip-path": "url(#" + clipId + ")" }, el);
+  }
+
+  // 多项式：[[系数, 变量], ...] → TeX，系数 0 的项省掉
+  function poly(terms) {
+    var s = "";
+    terms.forEach(function (t) {
+      var c = t[0], v = t[1];
+      if (c === 0) return;
+      var abs = Math.abs(c), body = (abs === 1 && v) ? v : abs + v;
+      s += (c < 0 ? "-" : (s ? "+" : "")) + body;
+    });
+    return s || "0";
+  }
+  function sqTerm(v, a) { return a === 0 ? v + "^2" : "(" + v + (a > 0 ? "-" : "+") + Math.abs(a) + ")^2"; }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function frac(n, d) { // n/d → TeX，d>0
+    var g = gcd(n, d); n /= g; d /= g;
+    if (d === 1) return String(n);
+    return (n < 0 ? "-" : "") + "\\frac{" + Math.abs(n) + "}{" + d + "}";
+  }
+  // √n / d 化简，n ≥ 0 整数
+  function rootFrac(n, d) {
+    var m = 1, k = n;
+    for (var i = 2; i * i <= k; i++) while (k % (i * i) === 0) { k /= i * i; m *= i; }
+    var g = gcd(m, d); m /= g; d /= g;
+    var top = k === 1 ? String(m) : (m === 1 ? "" : m) + "\\sqrt{" + k + "}";
+    return d === 1 ? top : "\\frac{" + top + "}{" + d + "}";
+  }
+  function neg(n) { return n < 0 ? "(" + n + ")" : String(n); }
+
+  /* ================= ① 拖圆心和半径点 ================= */
+  var circ = document.getElementById("circ");
+  var ca, cb, px, py; // 圆心 (ca,cb)，圆上点 (px,py)，都是整数
+  function circReset() { ca = 1; cb = 0; px = 4; py = 4; circDraw(); }
+  function moveCenter(na, nb) {
+    var da = na - ca, db = nb - cb;
+    // 圆心和 P 一起平移，两个都留在图里
+    da = clamp(da, Math.max(-XM + 1 - ca, -XM - px), Math.min(XM - 1 - ca, XM - px));
+    db = clamp(db, Math.max(-YM + 1 - cb, -YM - py), Math.min(YM - 1 - cb, YM - py));
+    if (!da && !db) return false;
+    ca += da; cb += db; px += da; py += db; return true;
+  }
+  function moveP(nx, ny) {
+    nx = clamp(nx, -XM, XM); ny = clamp(ny, -YM, YM);
+    if ((nx === ca && ny === cb) || (nx === px && ny === py)) return false; // 半径不能是 0
+    px = nx; py = ny; return true;
+  }
+  function circDraw(focus) {
+    var fg = css("--fg"), cA = css("--a"), cB = css("--b"), hl = css("--hl"), card = css("--card");
+    circ.innerHTML = "";
+    var g = grid(circ, "circclip");
+    var r2 = (px - ca) * (px - ca) + (py - cb) * (py - cb), r = Math.sqrt(r2);
+    svg("circle", { cx: sx(ca), cy: sy(cb), r: r * U, fill: "none", stroke: cA, "stroke-width": 3 }, g);
+    svg("line", { x1: sx(ca), y1: sy(cb), x2: sx(px), y2: sy(py), stroke: hl, "stroke-width": 3, "stroke-dasharray": "7 5" }, g);
+    var C = svg("circle", { cx: sx(ca), cy: sy(cb), r: 10, fill: cA, stroke: card, "stroke-width": 2.5, tabindex: 0, role: "slider",
+      "aria-label": "圆心 C，方向键移动", "aria-valuenow": ca, "aria-valuetext": "C(" + ca + "," + cb + ")", style: "cursor:grab" }, circ);
+    var P = svg("circle", { cx: sx(px), cy: sy(py), r: 10, fill: card, stroke: cB, "stroke-width": 3.5, tabindex: 0, role: "slider",
+      "aria-label": "圆上的点 P，方向键移动", "aria-valuenow": px, "aria-valuetext": "P(" + px + "," + py + ")", style: "cursor:grab" }, circ);
+    // 标签放在不出画的一侧
+    svg("text", { x: sx(ca) - 14, y: sy(cb) + 28, "text-anchor": "end", fill: fg, "font-weight": 700 }, circ).textContent = "C";
+    svg("text", { x: sx(px) + (px >= 6 ? -14 : 14), y: sy(py) + (py >= 5 ? 32 : -12), "text-anchor": px >= 6 ? "end" : "start", "font-weight": 700 }, circ).textContent = "P";
+    function onKey(which) {
+      return function (ev) {
+        var d = KEYS[ev.key]; if (!d) return;
+        ev.preventDefault();
+        var ok = which === "C" ? moveCenter(ca + d[0], cb + d[1]) : moveP(px + d[0], py + d[1]);
+        if (ok) circDraw(which);
+      };
+    }
+    C.addEventListener("keydown", onKey("C"));
+    P.addEventListener("keydown", onKey("P"));
+    function rnd(v) { return Math.round(v / U); }
+    draggable(circ, C, function (x, y) {
+      if (moveCenter(rnd(x - OX), rnd(OY - y))) circDraw("C");
+    }, function () { Peiyu.log("interact", { id: "circle-C", a: ca, b: cb, r2: (px - ca) * (px - ca) + (py - cb) * (py - cb) }); });
+    draggable(circ, P, function (x, y) {
+      if (moveP(rnd(x - OX), rnd(OY - y))) circDraw("P");
+    }, function () { Peiyu.log("interact", { id: "circle-P", a: ca, b: cb, r2: (px - ca) * (px - ca) + (py - cb) * (py - cb) }); });
+    if (focus) { var h = focus === "C" ? C : P; if (h.focus) h.focus(); }
+
+    var D = -2 * ca, E = -2 * cb, F = ca * ca + cb * cb - r2, rt = rootFrac(r2, 1);
+    var lines = [];
+    lines.push("圆心 \\(C(" + ca + "," + cb + ")\\)，\\(P(" + px + "," + py + ")\\)，\\(r^2=|CP|^2=" + neg(px - ca) + "^2+" + neg(py - cb) + "^2=" + r2 + "\\)，\\(r=" + rt + "\\)。");
+    lines.push('标准方程：<span class="eq">\\(' + sqTerm("x", ca) + "+" + sqTerm("y", cb) + "=" + r2 + "\\)</span>");
+    lines.push("\\(D=-2a=" + D + "\\)，\\(E=-2b=" + E + "\\)，\\(F=a^2+b^2-r^2=" + F + "\\)");
+    lines.push('一般方程：<span class="eq">\\(' + poly([[1, "x^2"], [1, "y^2"], [D, "x"], [E, "y"], [F, ""]]) + "=0\\)</span>");
+    lines.push("核对：\\(D^2+E^2-4F=" + (D * D + E * E - 4 * F) + "=4r^2>0\\)。");
+    var out = document.getElementById("circout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  document.getElementById("circreset").onclick = function () { circReset(); Peiyu.log("interact", { id: "circle-reset" }); };
+
+  /* ================= ② 调 D、E、F ================= */
+  var gen = document.getElementById("gen");
+  var din = document.getElementById("din"), ein = document.getElementById("ein"), fin = document.getElementById("fin");
+  var gD, gE, gF;
+  function setGen(d, e, f) { gD = d; gE = e; gF = f; din.value = d; ein.value = e; fin.value = f; genDraw(); }
+  function genReset() { setGen(-4, 2, -4); }
+  function halfSq(v, c) { // (v + c/2)^2
+    if (c === 0) return v + "^2";
+    var t = frac(Math.abs(c), 2);
+    return "\\left(" + v + (c > 0 ? "+" : "-") + t + "\\right)^2";
+  }
+  function genDraw() {
+    var cA = css("--a"), no = css("--no");
+    gen.innerHTML = "";
+    var g = grid(gen, "genclip");
+    var disc = gD * gD + gE * gE - 4 * gF, h = -gD / 2, k = -gE / 2;
+    var hT = frac(-gD, 2), kT = frac(-gE, 2);
+    if (disc > 0) {
+      var r = Math.sqrt(disc) / 2;
+      svg("circle", { cx: sx(h), cy: sy(k), r: r * U, fill: "none", stroke: cA, "stroke-width": 3 }, g);
+      svg("circle", { cx: sx(h), cy: sy(k), r: 5, fill: cA }, g);
+    } else if (disc === 0) {
+      svg("circle", { cx: sx(h), cy: sy(k), r: 8, fill: cA }, g);
+      svg("text", { x: sx(h) + (h > 3 ? -14 : 14), y: sy(k) + (k > 4 ? 32 : -12), "text-anchor": h > 3 ? "end" : "start", fill: cA, "font-weight": 700 }, g).textContent = "只有这一个点";
+    } else {
+      svg("rect", { x: 150, y: 46, width: 260, height: 44, rx: 8, fill: css("--card"), stroke: no, "stroke-width": 2 }, gen);
+      svg("text", { x: 280, y: 76, "text-anchor": "middle", fill: no, "font-weight": 700 }, gen).textContent = "没有实点";
+    }
+    document.getElementById("dout").textContent = gD;
+    document.getElementById("eout").textContent = gE;
+    document.getElementById("fout").textContent = gF;
+
+    var lines = [];
+    lines.push("\\(" + poly([[1, "x^2"], [1, "y^2"], [gD, "x"], [gE, "y"], [gF, ""]]) + "=0\\)");
+    lines.push("配方：\\(" + halfSq("x", gD) + "+" + halfSq("y", gE) + "=" + frac(disc, 4) + "\\)");
+    var dt = "\\(D^2+E^2-4F=" + neg(gD) + "^2+" + neg(gE) + "^2-4\\times" + neg(gF) + "=" + disc + "\\)";
+    if (disc > 0) lines.push(dt + '，<span class="eq">大于 0，是圆</span>：圆心 \\((' + hT + "," + kT + ")\\)，半径 \\(" + rootFrac(disc, 2) + "\\)。");
+    else if (disc === 0) lines.push(dt + '，<span class="bad">等于 0，只是一个点</span> \\((' + hT + "," + kT + ")\\)，不是圆。");
+    else lines.push(dt + '，<span class="bad">小于 0</span>：右边是负数，两个平方的和不可能是负数，没有一个实数点满足方程。');
+    var out = document.getElementById("genout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  function readGen() {
+    gD = clamp(parseInt(din.value, 10) || 0, -10, 10);
+    gE = clamp(parseInt(ein.value, 10) || 0, -10, 10);
+    gF = clamp(parseInt(fin.value, 10) || 0, -10, 10);
+    genDraw();
+  }
+  [din, ein, fin].forEach(function (el) {
+    el.addEventListener("input", readGen);
+    el.addEventListener("change", function () { Peiyu.log("interact", { id: "general", D: gD, E: gE, F: gF, disc: gD * gD + gE * gE - 4 * gF }); });
+  });
+  document.getElementById("genpt").onclick = function () { setGen(-2, 4, 5); Peiyu.log("interact", { id: "general-point" }); };
+  document.getElementById("genreset").onclick = function () { genReset(); Peiyu.log("interact", { id: "general-reset" }); };
+
+  document.addEventListener("DOMContentLoaded", function () { circReset(); genReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { circDraw(); genDraw(); });
+})();
+</script>
+</body></html>

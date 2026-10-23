@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.2 空间向量基本定理 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-weight: 700; font-size: 14px; margin-top: 4px; }
+  .badge.ok { background: var(--ok-soft); color: var(--a); border: 1px solid var(--a); }
+  .badge.bad { background: var(--no-soft); color: var(--no); border: 1px solid var(--no); }
+  .ctrl label { min-width: 130px; font-size: 14.5px; }
+  .ctrl output { font-weight: 700; min-width: 3.2em; display: inline-block; }
+  .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
+</style>
+</head>
+<body data-sec="e1-1-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第一册 · 第 1 章 空间向量与立体几何</p>
+<h1>1.2 空间向量基本定理</h1>
+<p class="lead">从平面向量基本定理升维到三维空间，只需三个「不共面」的向量即可搭建起整个空间的基底框架。空间任意向量均可唯一线性分解，奠定了立体几何代数化与空间坐标法的理论基石。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>在平面向量中，只要在纸面上找出两个不共线的基向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\)，纸面上任意向量都能唯一写成 \(x\boldsymbol{e}_1 + y\boldsymbol{e}_2\)。现在想象我们站在一间教室的地板上。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>如果只在地板平面上画出两个不共线的向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\)，能否用它们线性表示出从地面原点指向天花板吊灯的向量 \(\overrightarrow{OP}\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>能，因为向量可以任意自由平移，平面向量的线性组合能覆盖整个三维空间</button>
+      <button class="opt" data-v="B"><b>B</b>不能，因为地板上两向量的线性组合只能生成地板平面内的向量，无法表达脱离地面的「高度」维度</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。两个不共线的向量只能张成一个二维平面。</p>
+      <p>吊灯位于教室上空，具有垂直于地板的「高度」分量。不论地板上的 \(x\boldsymbol{e}_1 + y\boldsymbol{e}_2\) 怎样伸缩合成，所得到的向量依然永远躺在地板平面内，绝不可能凭空翘起指向空中！</p>
+      <p>要抵达三维空间中的任意一点，我们必须跨出这个平面，引入第三个<b>不与前两个向量共面</b>的基向量 \(\boldsymbol{e}_3\)。这就是本节要建立的核心：<b>空间向量基本定理</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：<a href="b2-6-3.html">必修二 6.3 平面向量基本定理</a>、<a href="e1-1-1.html">1.1 空间向量及其运算</a>、<a href="b2-8-4.html">必修二 8.4 空间点线面位置关系</a>。</p>
+
+  <div class="card">
+    <p><b>共面向量与不共面</b>：</p>
+    <ul>
+      <li><b>共面向量</b>：平行于同一个平面的向量叫做共面向量。空间任意两个向量平移到同一起点后必然在同一平面内，因此<b>任意两个空间向量总是共面的</b>；但三个向量不一定共面。</li>
+      <li><b>不共面向量</b>：若三个向量平移到同一起点后，不落在同一个平面内，就称这三个向量<b>不共面</b>。</li>
+    </ul>
+    <p>例：长方体同一顶点引出的三条棱向量 \(\overrightarrow{AB}, \overrightarrow{AD}, \overrightarrow{AA_1}\) 分别指向长、宽、高三个不同方向，它们不共面；而底面对角线 \(\overrightarrow{AC} = \overrightarrow{AB} + \overrightarrow{AD}\) 与两底棱 \(\overrightarrow{AB}, \overrightarrow{AD}\) 落在同一底面内，是共面的。</p>
+  </div>
+
+  <div class="card">
+    <p><b>空间基底与基向量</b>：</p>
+    <p>如果三个空间向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2, \boldsymbol{e}_3\) <b>不共面</b>，那么集合 \(\{\boldsymbol{e}_1, \boldsymbol{e}_2, \boldsymbol{e}_3\}\) 叫做空间的一个<b>基底</b>，\(\boldsymbol{e}_1, \boldsymbol{e}_2, \boldsymbol{e}_3\) 都叫做<b>基向量</b>。</p>
+    <p>例：空间直角坐标系中沿三个坐标轴正方向的单位向量 \(\{\boldsymbol{i}, \boldsymbol{j}, \boldsymbol{k}\}\) 是最常用的基底（称为<b>单位正交基底</b>）；但基向量并不要求互相垂直或等长，任意倾斜的三棱锥的三条侧棱，只要不共面，也完全能作为基底。</p>
+  </div>
+
+  <div class="card">
+    <p><b>唯一有序实数组</b>：</p>
+    <p>基底一旦确定，空间中任何一个向量 \(\boldsymbol{p}\) 都有且只有一组实数 \((x, y, z)\)，使得 \(\boldsymbol{p} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3\)。</p>
+    <p>例：若 \(\boldsymbol{p} = 2\boldsymbol{e}_1 - 3\boldsymbol{e}_2 + 5\boldsymbol{e}_3\)，对应唯一实数组 \((2, -3, 5)\)。若另有 \(\boldsymbol{p} = x'\boldsymbol{e}_1 + y'\boldsymbol{e}_2 + z'\boldsymbol{e}_3\)，必有 \(x'=2, y'=-3, z'=5\)。</p>
+  </div>
+
+  <h3>2. 基底的条件：三个向量不共面</h3>
+  <p>开头的题已经看到：两个不共线的向量只能「铺满」一个平面。三个向量如果共面，不管怎么伸缩相加，结果还躺在那个平面里，够不着平面外的方向。所以能当基底的条件就是：</p>
+  <div class="key">\(\{\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\}\) 能做空间的基底 \(\iff\) \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 不共面。</div>
+  <p>怎么判断三个向量共面：看其中一个能不能用另外两个（不共线的）线性表示出来；能表示，就共面。另外，零向量和谁都共面，所以基向量都不是零向量；向量可以平移，判断时不要求三个向量起点相同。</p>
+
+  <div class="card">
+    <p class="small">例 1（哪几组能做基底）</p>
+    <p>正方体 \(ABCD-A_1B_1C_1D_1\) 中，记 \(\overrightarrow{AB}=\boldsymbol{a}, \overrightarrow{AD}=\boldsymbol{b}, \overrightarrow{AA_1}=\boldsymbol{c}\)。下面三组向量，哪些能做空间的基底？</p>
+    <p>① \(\overrightarrow{AB}, \overrightarrow{A_1D_1}, \overrightarrow{CC_1}\)；② \(\overrightarrow{AB}, \overrightarrow{AC}, \overrightarrow{AD}\)；③ \(\overrightarrow{AB_1}, \overrightarrow{B_1C}, \overrightarrow{AC}\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>① 平移后 \(\overrightarrow{A_1D_1}=\boldsymbol{b}\)，\(\overrightarrow{CC_1}=\boldsymbol{c}\)，这一组就是 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\)，三条棱方向不共面，<b>能</b>做基底。起点不同没关系。</p>
+      <p>② \(\overrightarrow{AC}=\boldsymbol{a}+\boldsymbol{b}\)，能用另外两个表示，三个向量都在底面 \(ABCD\) 内，共面，<b>不能</b>。</p>
+      <p>③ \(\overrightarrow{AB_1}=\boldsymbol{a}+\boldsymbol{c}\)，\(\overrightarrow{B_1C}=\boldsymbol{b}-\boldsymbol{c}\)，\(\overrightarrow{AC}=\boldsymbol{a}+\boldsymbol{b}\)。</p>
+      <p>$$\overrightarrow{AB_1}+\overrightarrow{B_1C}=(\boldsymbol{a}+\boldsymbol{c})+(\boldsymbol{b}-\boldsymbol{c})=\overrightarrow{AC}$$</p>
+      <p>它们是 \(\triangle AB_1C\) 的三条边，两两不共线，却共面，<b>不能</b>。</p>
+      <p>答：只有 ① 能。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-basis" data-answer="C">
+    <p><b>自己试试</b>：已知 \(\{\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\}\) 是空间的一个基底。下面哪一组<b>也</b>能做空间的基底？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\boldsymbol{a},\ \boldsymbol{b},\ \boldsymbol{a}+\boldsymbol{b}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\boldsymbol{a},\ \boldsymbol{a}+\boldsymbol{b},\ \boldsymbol{a}-\boldsymbol{b}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\boldsymbol{a}+\boldsymbol{b},\ \boldsymbol{b},\ \boldsymbol{c}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\boldsymbol{a}-\boldsymbol{b},\ \boldsymbol{b}-\boldsymbol{c},\ \boldsymbol{c}-\boldsymbol{a}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(\boldsymbol{a}+\boldsymbol{b}\) 和 \(\boldsymbol{b}\) 都在 \(\boldsymbol{a}, \boldsymbol{b}\) 所在的平面里，而 \(\boldsymbol{c}\) 不在这个平面里，三个不共面。</p>
+      <p>A：第三个就是前两个的和，共面。B：三个向量都只含 \(\boldsymbol{a}, \boldsymbol{b}\)，都在同一个平面里。D：三个加起来 \(=\boldsymbol{0}\)，所以 \(\boldsymbol{c}-\boldsymbol{a}=-(\boldsymbol{a}-\boldsymbol{b})-(\boldsymbol{b}-\boldsymbol{c})\)，共面。</p>
+      <p class="small">常见算错：B、D 两组都两两不共线，看着「方向各不相同」就以为能做基底；要检查的是三个合起来共不共面。</p>
+    </div>
+  </div>
+
+  <h3>3. 空间向量基本定理：分解存在，而且唯一</h3>
+  <div class="key">
+    <b>空间向量基本定理</b>：如果三个向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2, \boldsymbol{e}_3\) 不共面，那么对空间任一向量 \(\boldsymbol{p}\)，存在唯一的有序实数组 \((x, y, z)\)，使得
+    $$\boldsymbol{p} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3$$
+  </div>
+  <p><b>为什么能分解、又为什么唯一？</b>取共起点的基向量 \(\overrightarrow{OA}=\boldsymbol{e}_1, \overrightarrow{OB}=\boldsymbol{e}_2, \overrightarrow{OC}=\boldsymbol{e}_3\)，设 \(\overrightarrow{OP}=\boldsymbol{p}\)：</p>
+  <ul>
+    <li>过点 \(P\) 作直线平行于 \(OC\)，交平面 \(OAB\) 于点 \(P'\)（\(OC\) 不在平面 \(OAB\) 内，所以交点存在且只有一个）；</li>
+    <li>\(P'P \parallel OC\)，由共线向量定理，有唯一实数 \(z\) 使 \(\overrightarrow{P'P} = z\boldsymbol{e}_3\)；</li>
+    <li>在平面 \(OAB\) 内，\(\boldsymbol{e}_1, \boldsymbol{e}_2\) 不共线，由平面向量基本定理，有唯一实数对 \((x, y)\) 使 \(\overrightarrow{OP'} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2\)；</li>
+    <li>相加：\(\overrightarrow{OP} = \overrightarrow{OP'} + \overrightarrow{P'P} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3\)。每一步都唯一，所以 \((x, y, z)\) 唯一。</li>
+  </ul>
+  <p>用起来就是：把要求的向量沿着图里的线段「走一条路」，走到每一段都能用基向量写出来为止。唯一性保证换一条路走，最后的系数也一样，所以可以两边比较系数列方程。</p>
+
+  <div class="card">
+    <p class="small">例 2（用基底表示向量）</p>
+    <p>在空间四面体 \(O-ABC\) 中，设 \(\overrightarrow{OA}=\boldsymbol{a}, \overrightarrow{OB}=\boldsymbol{b}, \overrightarrow{OC}=\boldsymbol{c}\)。点 \(M\) 在棱 \(OA\) 上且满足 \(OM = 2MA\)，点 \(N\) 为棱 \(BC\) 的中点，点 \(G\) 为线段 \(MN\) 的中点。试用基底 \(\{\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\}\) 表示向量 \(\overrightarrow{OG}\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>由 \(OM = 2MA\) 得 \(OM = \dfrac{2}{3}OA\)，所以 \(\overrightarrow{OM} = \dfrac{2}{3}\overrightarrow{OA} = \dfrac{2}{3}\boldsymbol{a}\)。</p>
+      <p>点 \(N\) 为 \(BC\) 的中点，由中点公式：</p>
+      <p>$$\overrightarrow{ON} = \frac{1}{2}(\overrightarrow{OB} + \overrightarrow{OC}) = \frac{1}{2}\boldsymbol{b} + \frac{1}{2}\boldsymbol{c}$$</p>
+      <p>\(G\) 是线段 \(MN\) 的中点，再用一次中点公式：</p>
+      <p>$$\begin{aligned}\overrightarrow{OG} &amp;= \frac{1}{2}(\overrightarrow{OM} + \overrightarrow{ON}) = \frac{1}{2}\left(\frac{2}{3}\boldsymbol{a} + \frac{1}{2}\boldsymbol{b} + \frac{1}{2}\boldsymbol{c}\right)\\ &amp;= \frac{1}{3}\boldsymbol{a} + \frac{1}{4}\boldsymbol{b} + \frac{1}{4}\boldsymbol{c}\end{aligned}$$</p>
+      <p class="small">由唯一性，换一条路（比如 \(\overrightarrow{OG}=\overrightarrow{OM}+\dfrac12\overrightarrow{MN}\)）算出来的系数也一定是 \(\left(\dfrac13, \dfrac14, \dfrac14\right)\)，可以拿来验算。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p><b>自己试试</b>：在平行六面体 \(ABCD-A_1B_1C_1D_1\) 中，取 \(\{\overrightarrow{AB}=\boldsymbol{a}, \overrightarrow{AD}=\boldsymbol{b}, \overrightarrow{AA_1}=\boldsymbol{c}\}\) 为基底。点 \(P\) 是上底面对角线 \(A_1C_1\) 的中点，则向量 \(\overrightarrow{AP}\) 用该基底表示为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{2}\boldsymbol{a} + \dfrac{1}{2}\boldsymbol{b} + \boldsymbol{c}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\boldsymbol{a} + \boldsymbol{b} + \dfrac{1}{2}\boldsymbol{c}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{1}{2}\boldsymbol{a} + \dfrac{1}{2}\boldsymbol{b} + \dfrac{1}{2}\boldsymbol{c}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{1}{2}\boldsymbol{a} + \boldsymbol{b} + \boldsymbol{c}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。分解路径：\(\overrightarrow{AP} = \overrightarrow{AA_1} + \overrightarrow{A_1P}\)。</p>
+      <p>因为 \(P\) 是上底面平行四边形 \(A_1B_1C_1D_1\) 对角线 \(A_1C_1\) 的中点，\(\overrightarrow{A_1C_1} = \overrightarrow{A_1B_1} + \overrightarrow{A_1D_1} = \boldsymbol{a} + \boldsymbol{b}\)，所以：</p>
+      <p>$$\overrightarrow{A_1P} = \frac{1}{2}\overrightarrow{A_1C_1} = \frac{1}{2}\boldsymbol{a} + \frac{1}{2}\boldsymbol{b}$$</p>
+      <p>加上竖直棱向量 \(\overrightarrow{AA_1} = \boldsymbol{c}\)，即得 \(\overrightarrow{AP} = \dfrac{1}{2}\boldsymbol{a} + \dfrac{1}{2}\boldsymbol{b} + \boldsymbol{c}\)。</p>
+      <p class="small">常见算错：选 C 的同学误把 \(P\) 当成了体对角线中点，把竖直分量也乘了 \(\dfrac{1}{2}\)；选 B 的同学忘了给底面对角线乘 \(\dfrac{1}{2}\)。</p>
+    </div>
+  </div>
+
+  <h3>4. 用基底判断四点共面：系数和等于 1</h3>
+  <p>取平面 \(ABC\) 外一点 \(O\)（\(A, B, C\) 不共线），这时 \(\{\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\}\) 是基底，任一点 \(P\) 都能唯一写成 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)。点 \(P\) 在不在平面 \(ABC\) 上，只看三个系数的和：</p>
+  <div class="key" style="text-align:center">\(P, A, B, C\) 四点共面 \(\iff x + y + z = 1\)</div>
+  <p><b>为什么</b>：两边同减 \(\overrightarrow{OC}\)，把 \(\overrightarrow{OA}\)、\(\overrightarrow{OB}\) 改写成 \(\overrightarrow{CA}+\overrightarrow{OC}\)、\(\overrightarrow{CB}+\overrightarrow{OC}\)，得到</p>
+  <p>$$\overrightarrow{CP} = x\overrightarrow{CA} + y\overrightarrow{CB} + (x+y+z-1)\overrightarrow{OC}$$</p>
+  <p>系数和为 \(1\) 时，最后一项消失，\(\overrightarrow{CP}\) 由平面 \(ABC\) 里的 \(\overrightarrow{CA}, \overrightarrow{CB}\) 合成，\(P\) 在平面上。反过来，\(P\) 在平面上时 \(\overrightarrow{CP}\) 能写成 \(s\overrightarrow{CA}+t\overrightarrow{CB}\)，而 \(\overrightarrow{OC}\) 指出平面外；由分解唯一，最后一项系数只能是 \(0\)。</p>
+  <p>注意：系数可以是负数，负数只说明 \(P\) 在三角形 \(ABC\) 外面，不说明在平面外。</p>
+
+  <div class="card">
+    <p class="small">例 3（用系数和判断、求参数）</p>
+    <p>点 \(O\) 在平面 \(ABC\) 外（\(A, B, C\) 不共线）。</p>
+    <p>(1) 点 \(P\) 满足 \(\overrightarrow{AP} = 2\overrightarrow{AB} - \overrightarrow{AC}\)，把 \(\overrightarrow{OP}\) 写成 \(\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\) 的组合，并验证 \(P\) 在平面 \(ABC\) 上；</p>
+    <p>(2) 点 \(Q\) 满足 \(\overrightarrow{OQ} = \overrightarrow{OA} + \overrightarrow{OB} + \overrightarrow{OC}\)，\(Q\) 在平面 \(ABC\) 上吗？</p>
+    <p>(3) 点 \(R\) 满足 \(\overrightarrow{OR} = t\overrightarrow{OA} + 2t\overrightarrow{OB} - \dfrac{1}{2}\overrightarrow{OC}\)，且 \(R\) 在平面 \(ABC\) 上，求 \(t\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) 每个向量都换成「终点减起点」：</p>
+      <p>$$\overrightarrow{OP}-\overrightarrow{OA} = 2(\overrightarrow{OB}-\overrightarrow{OA}) - (\overrightarrow{OC}-\overrightarrow{OA})$$</p>
+      <p>整理得 \(\overrightarrow{OP} = 0\cdot\overrightarrow{OA} + 2\overrightarrow{OB} - \overrightarrow{OC}\)。系数和 \(0 + 2 - 1 = 1\)，\(P\) 在平面 \(ABC\) 上。（本来 \(\overrightarrow{AP}\) 就是由 \(\overrightarrow{AB}, \overrightarrow{AC}\) 合成的，结论一致。）</p>
+      <p>(2) 系数和 \(1 + 1 + 1 = 3 \ne 1\)，\(Q\) 不在平面 \(ABC\) 上。</p>
+      <p>(3) 由 \(t + 2t - \dfrac{1}{2} = 1\) 得 \(3t = \dfrac{3}{2}\)，所以 \(t = \dfrac{1}{2}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-coplanar" data-answer="A">
+    <p><b>自己试试</b>：点 \(O\) 在平面 \(ABC\) 外（\(A, B, C\) 不共线），点 \(P\) 满足 \(\overrightarrow{OP} = 2\overrightarrow{OA} + \overrightarrow{OB} - 2\overrightarrow{OC}\)。点 \(P\)：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>在平面 \(ABC\) 上</button>
+      <button class="opt" data-v="B"><b>B</b>不在，因为有负的系数</button>
+      <button class="opt" data-v="C"><b>C</b>不在，因为系数和是 \(5\)</button>
+      <button class="opt" data-v="D"><b>D</b>条件不够，判断不了</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。系数和 \(2 + 1 + (-2) = 1\)，所以 \(P, A, B, C\) 四点共面。</p>
+      <p class="small">常见算错：选 B 是把「系数有负数」当成「在平面外」，负数只说明 \(P\) 落在三角形 \(ABC\) 外面，仍在平面上；选 C 是把 \(-2\) 当成 \(2\) 加了进去。</p>
+    </div>
+  </div>
+
+  <h3>5. 用之前，先查三条红线</h3>
+  <div class="card">
+    <ol>
+      <li><b>红线 1：仅「两两不共线」不能保证三向量不共面</b><br>
+        三个向量可能两两不平行，却能平移到同一个平面内（比如三角形三条边向量）。<br>
+        <span class="small">反例：\(\boldsymbol{a}=(1,0,0), \boldsymbol{b}=(0,1,0), \boldsymbol{c}=(1,1,0)\) 两两不共线，但都在 \(xOy\) 平面内，合成不出 \((0,0,1)\)，不能做空间基底。</span>
+      </li>
+      <li><b>红线 2：零向量不能做基向量</b><br>
+        <span class="small">反例：\(\{\boldsymbol{0}, \boldsymbol{i}, \boldsymbol{j}\}\) 中 \(\boldsymbol{i}, \boldsymbol{j}\) 不共线，但 \(\boldsymbol{0}\) 和它们共面，合成不出 \(\boldsymbol{k}\)；而且 \(\boldsymbol{i} = 0\cdot\boldsymbol{0} + \boldsymbol{i}\) 和 \(\boldsymbol{i} = 5\cdot\boldsymbol{0} + \boldsymbol{i}\) 都成立，分解也不唯一。</span>
+      </li>
+      <li><b>红线 3：基向量不两两垂直时，求模长、数量积要保留交叉项</b><br>
+        只有在单位正交基底下，模长才是 \(\sqrt{x^2+y^2+z^2}\)。一般基底下展开 \(|\boldsymbol{p}|^2 = (x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3)^2\)，要把两两的数量积都留下：
+        <div class="warn">
+          $$\begin{aligned}|\boldsymbol{p}|^2 = {}&amp; x^2\boldsymbol{e}_1^2 + y^2\boldsymbol{e}_2^2 + z^2\boldsymbol{e}_3^2 \\ &amp;+ 2xy\,\boldsymbol{e}_1\cdot\boldsymbol{e}_2 + 2yz\,\boldsymbol{e}_2\cdot\boldsymbol{e}_3 + 2zx\,\boldsymbol{e}_3\cdot\boldsymbol{e}_1\end{aligned}$$
+          <span class="small">反例：\(|\boldsymbol{e}_1|=|\boldsymbol{e}_2|=|\boldsymbol{e}_3|=1\)，两两夹角都是 \(60^\circ\)，\(\boldsymbol{p}=\boldsymbol{e}_1+\boldsymbol{e}_2+\boldsymbol{e}_3\)。\(|\boldsymbol{p}|^2 = 3 + 2\times3\times\dfrac12 = 6\)，\(|\boldsymbol{p}|=\sqrt6\)，不是 \(\sqrt3\)。</span>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）：维数与重心坐标</summary>
+    <p><b>空间的维数</b>：在大学线性代数中，三维空间中「任意三个不共面的向量构成一组基」，本质上反映了三维线性空间的维数是 3。空间中任意 4 个向量里，至少有一个能用另外三个表示出来。</p>
+    <p><b>重心坐标</b>：四点共面条件 \(x+y+z=1\) 中，实数组 \((x, y, z)\) 正好是点 \(P\) 关于 \(\triangle ABC\) 的<b>重心坐标</b>。\(x, y, z\) 都大于 \(0\) 时，\(P\) 在 \(\triangle ABC\) 内部；某个系数为 \(0\)，落在三角形的边所在直线上；出现负数，落在三角形外、但仍在平面 \(ABC\) 上。</p>
+    <p><b>向量方法不等于坐标法</b>：本节用一般基底就能算，不一定要建坐标系；三个向量是否共面，本章也不用叉积、行列式判断，看「能否用另两个表示」即可。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>空间基底分解与四点共面交互模拟器</h3>
+  <p class="small">以三棱锥 \(O-ABC\) 为空间框架，三条侧棱为基底 \(\boldsymbol{e}_1 = \overrightarrow{OA}, \boldsymbol{e}_2 = \overrightarrow{OB}, \boldsymbol{e}_3 = \overrightarrow{OC}\)。拖动滑块调节系数 \((x, y, z)\)，观察折线阶梯合成向量 \(\overrightarrow{OP}\)；点击校验按钮检验四点共面条件：</p>
+
+  <div class="card">
+    <svg class="fig" id="basisSvg" viewBox="0 0 560 320" role="img" aria-label="空间基底分解与四点共面演示图"></svg>
+
+    <div class="ctrl">
+      <label for="rangeX">基向量 \(\boldsymbol{e}_1\) 系数 \(x\) = </label>
+      <input type="range" id="rangeX" min="-0.2" max="1.2" step="0.05" value="0.35">
+      <output id="outX">0.35</output>
+
+      <label for="rangeY" style="margin-left:12px">基向量 \(\boldsymbol{e}_2\) 系数 \(y\) = </label>
+      <input type="range" id="rangeY" min="-0.2" max="1.2" step="0.05" value="0.35">
+      <output id="outY">0.35</output>
+
+      <label for="rangeZ" style="margin-left:12px">基向量 \(\boldsymbol{e}_3\) 系数 \(z\) = </label>
+      <input type="range" id="rangeZ" min="-0.2" max="1.2" step="0.05" value="0.30">
+      <output id="outZ">0.30</output>
+    </div>
+
+    <div class="ctrl" style="margin-top:10px">
+      <button class="btn" id="btnCoplanar" type="button">四点共面校验与对齐</button>
+      <button class="btn ghost" id="btnCentroid" type="button">设为底面重心</button>
+      <button class="btn ghost" id="reset" type="button">重置</button>
+    </div>
+
+    <div class="result" id="simDesc" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用定理，中间两道辨析易错红线，最后一道挑战综合应用。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-use-1" data-answer="A">
+    <p>1. 已知四面体 \(O-ABC\) 中，\(\{\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\}\) 构成一组基底，点 \(M\) 为棱 \(BC\) 的中点，点 \(P\) 满足 \(\overrightarrow{OP} = 2\overrightarrow{PM}\)。则向量 \(\overrightarrow{AP}\) 用该基底表示为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-\overrightarrow{OA} + \dfrac{1}{3}\overrightarrow{OB} + \dfrac{1}{3}\overrightarrow{OC}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\overrightarrow{OA} + \dfrac{1}{3}\overrightarrow{OB} + \dfrac{1}{3}\overrightarrow{OC}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{1}{2}\overrightarrow{OA} + \dfrac{1}{2}\overrightarrow{OB} + \dfrac{1}{2}\overrightarrow{OC}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\overrightarrow{OA} + \dfrac{2}{3}\overrightarrow{OB} + \dfrac{2}{3}\overrightarrow{OC}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。化简共线关系：\(\overrightarrow{OP} = 2(\overrightarrow{OM} - \overrightarrow{OP}) \implies 3\overrightarrow{OP} = 2\overrightarrow{OM} \implies \overrightarrow{OP} = \dfrac{2}{3}\overrightarrow{OM}\)。</p>
+      <p>因为 \(M\) 是 \(BC\) 的中点，\(\overrightarrow{OM} = \dfrac{1}{2}\overrightarrow{OB} + \dfrac{1}{2}\overrightarrow{OC}\)，代入得：</p>
+      <p>$$\overrightarrow{OP} = \frac{2}{3}\left(\frac{1}{2}\overrightarrow{OB} + \frac{1}{2}\overrightarrow{OC}\right) = \frac{1}{3}\overrightarrow{OB} + \frac{1}{3}\overrightarrow{OC}$$</p>
+      <p>因此 \(\overrightarrow{AP} = \overrightarrow{OP} - \overrightarrow{OA} = -\overrightarrow{OA} + \dfrac{1}{3}\overrightarrow{OB} + \dfrac{1}{3}\overrightarrow{OC}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-use-2" data-answer="A">
+    <p>2. 已知空间四点 \(P, A, B, C\) 满足关系式 \(\overrightarrow{OP} = \dfrac{1}{2}\overrightarrow{OA} + \dfrac{1}{3}\overrightarrow{OB} + \lambda\overrightarrow{OC}\)（其中 \(O\) 是平面 \(ABC\) 外的任意一点，\(A, B, C\) 不共线）。若 \(P, A, B, C\) 四点共面，则实数 \(\lambda\) 的值为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{6}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac{1}{6}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{5}{6}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。由四点共面充要定理：对空间任意参考点 \(O\)，若 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)，则 \(P, A, B, C\) 四点共面当且仅当 \(x + y + z = 1\)。</p>
+      <p>直接代入：\(\dfrac{1}{2} + \dfrac{1}{3} + \lambda = 1 \implies \dfrac{5}{6} + \lambda = 1 \implies \lambda = \dfrac{1}{6}\)。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-basis" data-answer="C">
+    <p>3. 设 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 是空间中的三个向量，下列命题中<b>正确</b>的是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>若 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 两两不共线，则它们必能构成空间的一个基底</button>
+      <button class="opt" data-v="B"><b>B</b>若 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 中有一个是零向量，只要其余两向量不共线，也能构成基底</button>
+      <button class="opt" data-v="C"><b>C</b>若 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 不共面，则对空间任一向量 \(\boldsymbol{p}\)，存在唯一有序实数组 \((x, y, z)\) 使 \(\boldsymbol{p} = x\boldsymbol{a} + y\boldsymbol{b} + z\boldsymbol{c}\)</button>
+      <button class="opt" data-v="D"><b>D</b>若存在不全为零的实数 \(x, y, z\) 使得 \(x\boldsymbol{a} + y\boldsymbol{b} + z\boldsymbol{c} = \boldsymbol{0}\)，则 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 能构成基底</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。逐项剖析红线边界：</p>
+      <ul>
+        <li><b>A 错</b>：两两不共线不等于不共面！正三角形的三边向量两两不共线，但共面，绝不能作空间基底；</li>
+        <li><b>B 错</b>：零向量与任意向量共面，基向量必须全为非零向量；</li>
+        <li><b>D 错</b>：若存在不全为零的系数使线性组合为零向量，说明这三个向量线性相关（共面），恰恰不能构成基底；</li>
+        <li><b>C 对</b>：空间向量基本定理的核心定义与唯一性。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-dot" data-answer="B">
+    <p>4. 在棱长均为 1、底面为正方形的四棱锥 \(P-ABCD\) 中，\(\angle PAB = \angle PAD = 60^\circ\)。若取 \(\{\overrightarrow{AB}, \overrightarrow{AD}, \overrightarrow{AP}\}\) 为基底，计算向量 \(\overrightarrow{PC} = \overrightarrow{AB} + \overrightarrow{AD} - \overrightarrow{AP}\) 的模长 \(|\overrightarrow{PC}|\)。某同学直接按直角坐标套用 \(\sqrt{1^2 + 1^2 + (-1)^2} = \sqrt{3}\)。这种做法错在：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>向量分解关系写错了，\(\overrightarrow{PC}\) 应该等于 \(\overrightarrow{AB} - \overrightarrow{AD} + \overrightarrow{AP}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{\overrightarrow{AB}, \overrightarrow{AD}, \overrightarrow{AP}\}\) 是斜基底，展开模长平方时忽略了夹角余弦的数量积交叉项</button>
+      <button class="opt" data-v="C"><b>C</b>空间向量不能用来计算立体几何中的线段长度</button>
+      <button class="opt" data-v="D"><b>D</b>基底选错了，空间中不能以同一个顶点的三条相交棱为基底</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。直角坐标模长公式仅在单位正交基底下成立。</p>
+      <p>本题中 \(\overrightarrow{AB} \perp \overrightarrow{AD}\)（数量积为 0），但 \(\overrightarrow{AP}\) 与 \(\overrightarrow{AB}\)、\(\overrightarrow{AD}\) 的夹角均为 \(60^\circ\)，数量积为 \(1\times 1 \times \cos 60^\circ = \dfrac{1}{2}\)。</p>
+      <p>正确计算展开式必须保留交叉项：</p>
+      <p>$$|\overrightarrow{PC}|^2 = |\overrightarrow{AB}|^2 + |\overrightarrow{AD}|^2 + |\overrightarrow{AP}|^2 + 2\overrightarrow{AB}\cdot\overrightarrow{AD} - 2\overrightarrow{AB}\cdot\overrightarrow{AP} - 2\overrightarrow{AD}\cdot\overrightarrow{AP}$$</p>
+      <p>$$= 1 + 1 + 1 + 0 - 2\left(\frac{1}{2}\right) - 2\left(\frac{1}{2}\right) = 3 - 1 - 1 = 1$$</p>
+      <p>故真实长度 \(|\overrightarrow{PC}| = 1\)，绝不是 \(\sqrt{3}\)！</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>5. 已知四面体 \(A-BCD\) 中，点 \(G\) 为底面 \(\triangle BCD\) 的重心，点 \(M\) 在线段 \(AG\) 上且满足 \(AM = 3MG\)。过点 \(M\) 的平面交棱 \(AB, AC, AD\) 分别于 \(E, F, H\)，且 \(\overrightarrow{AE} = m\overrightarrow{AB}\), \(\overrightarrow{AF} = n\overrightarrow{AC}\), \(\overrightarrow{AH} = p\overrightarrow{AD}\)（\(m, n, p > 0\)）。则 \(\dfrac{1}{m} + \dfrac{1}{n} + \dfrac{1}{p}\) 的定值为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{4}{3}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。由底面重心性质：\(\overrightarrow{AG} = \dfrac{1}{3}\overrightarrow{AB} + \dfrac{1}{3}\overrightarrow{AC} + \dfrac{1}{3}\overrightarrow{AD}\)。</p>
+      <p>因为 \(AM = 3MG\)，所以 \(AM = \dfrac{3}{4}AG\)，即：</p>
+      <p>$$\overrightarrow{AM} = \frac{3}{4}\overrightarrow{AG} = \frac{1}{4}\overrightarrow{AB} + \frac{1}{4}\overrightarrow{AC} + \frac{1}{4}\overrightarrow{AD}$$</p>
+      <p>将 \(\overrightarrow{AB} = \dfrac{1}{m}\overrightarrow{AE}\), \(\overrightarrow{AC} = \dfrac{1}{n}\overrightarrow{AF}\), \(\overrightarrow{AD} = \dfrac{1}{p}\overrightarrow{AH}\) 代入基底表示式：</p>
+      <p>$$\overrightarrow{AM} = \frac{1}{4m}\overrightarrow{AE} + \frac{1}{4n}\overrightarrow{AF} + \frac{1}{4p}\overrightarrow{AH}$$</p>
+      <p>因为点 \(M, E, F, H\) 四点共面，由四点共面定理充要条件：</p>
+      <p>$$\frac{1}{4m} + \frac{1}{4n} + \frac{1}{4p} = 1 \implies \frac{1}{m} + \frac{1}{n} + \frac{1}{p} = 4$$</p>
+      <p class="small">这是高考与各省模考中考查四点共面定理与重心性质的经典结论题！</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var rangeX = document.getElementById("rangeX");
+  var rangeY = document.getElementById("rangeY");
+  var rangeZ = document.getElementById("rangeZ");
+  var outX = document.getElementById("outX");
+  var outY = document.getElementById("outY");
+  var outZ = document.getElementById("outZ");
+  var svg = document.getElementById("basisSvg");
+  var desc = document.getElementById("simDesc");
+
+  var btnCoplanar = document.getElementById("btnCoplanar");
+  var btnCentroid = document.getElementById("btnCentroid");
+  var btnReset = document.getElementById("reset");
+
+  function getVal(input, def) {
+    if (!input) return def;
+    var v = parseFloat(input.value);
+    return isNaN(v) ? def : v;
+  }
+
+  function render() {
+    var x = getVal(rangeX, 0.35);
+    var y = getVal(rangeY, 0.35);
+    var z = getVal(rangeZ, 0.30);
+
+    if (outX) outX.textContent = x.toFixed(2);
+    if (outY) outY.textContent = y.toFixed(2);
+    if (outZ) outZ.textContent = z.toFixed(2);
+
+    if (!svg) return;
+    svg.innerHTML = "";
+
+    // 定义箭头标记
+    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+    defs.innerHTML =
+      '<marker id="arrA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--b)" /></marker>' +
+      '<marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--c)" /></marker>' +
+      '<marker id="arrC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--a)" /></marker>' +
+      '<marker id="arrP" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="var(--no)" /></marker>';
+    svg.appendChild(defs);
+
+    // 三维投影原点 O 及三个基向量 e1, e2, e3 的二维投影增量
+    var oX = 180, oY = 235;
+    var v1x = -90, v1y = 55;   // e1 沿左下方斜向 (OA)
+    var v2x = 190, v2y = 0;    // e2 沿右侧水平 (OB)
+    var v3x = 60,  v3y = -165; // e3 沿右上方竖直倾斜 (OC)
+
+    var ptO = [oX, oY];
+    var ptA = [oX + v1x, oY + v1y];
+    var ptB = [oX + v2x, oY + v2y];
+    var ptC = [oX + v3x, oY + v3y];
+
+    // 折线分解点: O -> Px -> Pxy -> P
+    var ptPx  = [oX + x * v1x, oY + x * v1y];
+    var ptPxy = [ptPx[0] + y * v2x, ptPx[1] + y * v2y];
+    var ptP   = [ptPxy[0] + z * v3x, ptPxy[1] + z * v3y];
+
+    var sum = x + y + z;
+    var isCoplanar = Math.abs(sum - 1.0) <= 0.02;
+
+    function drawLine(p1, p2, color, isDash, w, marker) {
+      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      l.setAttribute("x1", p1[0].toFixed(1));
+      l.setAttribute("y1", p1[1].toFixed(1));
+      l.setAttribute("x2", p2[0].toFixed(1));
+      l.setAttribute("y2", p2[1].toFixed(1));
+      l.setAttribute("stroke", color);
+      l.setAttribute("stroke-width", w || "1.6");
+      if (isDash) l.setAttribute("stroke-dasharray", "4,3");
+      if (marker) l.setAttribute("marker-end", "url(#" + marker + ")");
+      svg.appendChild(l);
+    }
+
+    // 1. 底面三角形 ABC 面（四点共面参考面）
+    var poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    poly.setAttribute("points", ptA[0].toFixed(1) + "," + ptA[1].toFixed(1) + " " +
+                                ptB[0].toFixed(1) + "," + ptB[1].toFixed(1) + " " +
+                                ptC[0].toFixed(1) + "," + ptC[1].toFixed(1));
+    if (isCoplanar) {
+      poly.setAttribute("fill", "rgba(47, 122, 86, 0.22)");
+      poly.setAttribute("stroke", "var(--a)");
+      poly.setAttribute("stroke-width", "2.2");
+    } else {
+      poly.setAttribute("fill", "rgba(163, 157, 144, 0.09)");
+      poly.setAttribute("stroke", "var(--line)");
+      poly.setAttribute("stroke-width", "1.4");
+      poly.setAttribute("stroke-dasharray", "4,3");
+    }
+    svg.appendChild(poly);
+
+    // 2. 空间三棱锥边框框架 (AB, BC, CA)
+    drawLine(ptA, ptB, isCoplanar ? "var(--a)" : "var(--line)", !isCoplanar, isCoplanar ? "2" : "1.2");
+    drawLine(ptB, ptC, isCoplanar ? "var(--a)" : "var(--line)", !isCoplanar, isCoplanar ? "2" : "1.2");
+    drawLine(ptC, ptA, isCoplanar ? "var(--a)" : "var(--line)", !isCoplanar, isCoplanar ? "2" : "1.2");
+
+    // 3. 三条基向量 OA, OB, OC
+    drawLine(ptO, ptA, "var(--b)", false, "2.6", "arrA");
+    drawLine(ptO, ptB, "var(--c)", false, "2.6", "arrB");
+    drawLine(ptO, ptC, "var(--a)", false, "2.6", "arrC");
+
+    // 4. 向量分解的阶梯折线 (Px, Pxy, P)
+    if (Math.abs(x) > 0.01 || Math.abs(y) > 0.01) {
+      drawLine(ptPx, ptPxy, "var(--c)", true, "1.8");
+    }
+    if (Math.abs(z) > 0.01) {
+      drawLine(ptPxy, ptP, "var(--a)", true, "1.8");
+    }
+
+    // 5. 空间合向量 OP
+    drawLine(ptO, ptP, "var(--no)", false, "3.4", "arrP");
+
+    // 绘制顶点标记
+    function drawPoint(pt, fill, label, tx, ty, r) {
+      var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("cx", pt[0].toFixed(1));
+      c.setAttribute("cy", pt[1].toFixed(1));
+      c.setAttribute("r", r || "4.5");
+      c.setAttribute("fill", fill);
+      svg.appendChild(c);
+
+      if (label) {
+        var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("x", (pt[0] + tx).toFixed(1));
+        t.setAttribute("y", (pt[1] + ty).toFixed(1));
+        t.setAttribute("fill", fill);
+        t.setAttribute("font-weight", "700");
+        t.setAttribute("font-size", "14");
+        t.textContent = label;
+        svg.appendChild(t);
+      }
+    }
+
+    drawPoint(ptO, "var(--fg)", "O(原点)", -14, 18);
+    drawPoint(ptA, "var(--b)", "A (e₁)", -18, 18);
+    drawPoint(ptB, "var(--c)", "B (e₂)", 8, 16);
+    drawPoint(ptC, "var(--a)", "C (e₃)", -14, -8);
+
+    drawPoint(ptP, "var(--no)", "P(" + x.toFixed(2) + ", " + y.toFixed(2) + ", " + z.toFixed(2) + ")", 10, -6, "6");
+
+    // 动态文字说明与共面状态徽章
+    var badgeHtml = "";
+    if (isCoplanar) {
+      badgeHtml = '<span class="badge ok">✔ 四点共面：点 P 位于平面 ABC 内（x + y + z = ' + sum.toFixed(2) + ' = 1）</span>';
+    } else if (sum > 1.02) {
+      badgeHtml = '<span class="badge bad">● 不共面：点 P 悬浮在平面 ABC 外侧上方（x + y + z = ' + sum.toFixed(2) + ' &gt; 1）</span>';
+    } else {
+      badgeHtml = '<span class="badge bad">● 不共面：点 P 位于平面 ABC 与原点 O 之间（x + y + z = ' + sum.toFixed(2) + ' &lt; 1）</span>';
+    }
+
+    if (desc) {
+      desc.innerHTML =
+        "<b>向量合成</b>：\\(\\overrightarrow{OP} = " + x.toFixed(2) + "\\boldsymbol{e}_1 + " + y.toFixed(2) + "\\boldsymbol{e}_2 + " + z.toFixed(2) + "\\boldsymbol{e}_3\\)<br>" +
+        "<b>系数之和</b>：\\(x + y + z = " + sum.toFixed(2) + "\\) " + badgeHtml;
+
+      if (window.renderMathInElement) {
+        window.renderMathInElement(desc, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\(", right: "\\)", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+  }
+
+  if (rangeX) rangeX.addEventListener("input", render);
+  if (rangeY) rangeY.addEventListener("input", render);
+  if (rangeZ) rangeZ.addEventListener("input", render);
+
+  if (btnCoplanar) {
+    btnCoplanar.addEventListener("click", function () {
+      var x = getVal(rangeX, 0.35);
+      var y = getVal(rangeY, 0.35);
+      var needZ = Math.round((1.0 - x - y) * 100) / 100;
+      if (needZ < -0.2 || needZ > 1.2) {
+        // 如果越界则重调为对称的底面点 (0.35, 0.35, 0.30)
+        rangeX.value = "0.35";
+        rangeY.value = "0.35";
+        rangeZ.value = "0.30";
+      } else {
+        rangeZ.value = needZ.toFixed(2);
+      }
+      render();
+    });
+  }
+
+  if (btnCentroid) {
+    btnCentroid.addEventListener("click", function () {
+      rangeX.value = "0.33";
+      rangeY.value = "0.33";
+      rangeZ.value = "0.34";
+      render();
+    });
+  }
+
+  if (btnReset) {
+    btnReset.addEventListener("click", function () {
+      if (rangeX) rangeX.value = "0.35";
+      if (rangeY) rangeY.value = "0.35";
+      if (rangeZ) rangeZ.value = "0.30";
+      render();
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.1 等式性质与不等式性质 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .tick { stroke: var(--muted); stroke-width: 1; }
+  .fig text.num { font-size: 12px; fill: var(--muted); text-anchor: middle; }
+  .fig text.ttl { font-size: 13px; fill: var(--dim); }
+  .fig text.lab { font-size: 15px; font-weight: 700; text-anchor: middle; }
+  .fig .link { stroke-width: 1.5; stroke-dasharray: 4 4; fill: none; }
+  .fig .h { stroke-width: 3; cursor: grab; outline: none; }
+  .fig .h:focus-visible { stroke: var(--hl); stroke-width: 5; }
+  .fig .hit { fill: transparent; cursor: grab; }
+  .fig .slider { stroke: var(--line); stroke-width: 6; stroke-linecap: round; }
+  .fig text.bad { font-size: 14px; fill: var(--no); text-anchor: middle; }
+  .ops { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
+  .ops button { min-width: 64px; }
+  .ops button.on { background: var(--a); color: var(--card); border-color: var(--a); }
+  .rd { font-size: 16px; line-height: 1.75; }
+  .rd .row { margin: 4px 0; }
+  .rd .yes { color: var(--a); font-weight: 600; }
+  .rd .nope { color: var(--no); font-weight: 600; }
+  .verdict { font-size: 17px; font-weight: 700; margin: 8px 0 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip { font-size: 14px; border: 1px dashed var(--line); border-radius: 999px; padding: 2px 10px; color: var(--dim); }
+  .chip.got { border-style: solid; border-color: var(--a); color: var(--a); background: var(--ok-soft); }
+  table.rec td, table.rec th { vertical-align: top; }
+  .tbl { overflow-x: auto; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-2-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 2 章 一元二次函数、方程和不等式</p>
+<h1>2.1 等式性质与不等式性质</h1>
+<p class="lead">等式两边做同样的事，还相等；不等式两边做同样的事，方向却可能反过来。这一节弄清楚：哪些操作随便做，哪些要先看正、负、零。先从两个人比身高开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>小明身高 \(165\) 厘米，小红身高 \(160\) 厘米。拍合照时，两人一起站上一级 \(20\) 厘米高的台阶。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>站上台阶以后，谁的头顶更高？高多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>小明，高 \(5\) 厘米</button>
+      <button class="opt" data-v="B"><b>B</b>小明，高 \(25\) 厘米</button>
+      <button class="opt" data-v="C"><b>C</b>一样高</button>
+      <button class="opt" data-v="D"><b>D</b>小红</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(185-180=5\)：两个人都加了 \(20\)，<b>差</b>一点没变，谁高谁矮也不变。</p>
+      <p>比大小，其实就是看差：差是正的，前一个大。这一节先学会「看差」，再用它检查：两边同加、同乘、平方、取倒数以后，大小关系还在不在。加法像站台阶一样安全；别的操作，有时会把方向反过来。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：初中解一元一次不等式（乘负数要变号）；1.4 的「\(\Rightarrow\)」和「\(\iff\)」（<a href="b1-1-4.html">回看 1.4</a>）。</p>
+
+  <div class="card">
+    <p><b>作差</b>：把两个数（或两个式子）相减，看结果。</p>
+    <p>例：\(7\) 和 \(4\)，\(7-4=3\)，是正的，所以 \(7&gt;4\)；\(-2\) 和 \(1\)，\(-2-1=-3\)，是负的，所以 \(-2&lt;1\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>符号</b>：一个数是正、负还是零。<b>非负</b>就是「正数或 \(0\)」。</p>
+    <p>例：\(3\) 是正的，\(-0.5\) 是负的，\(0\) 既不正也不负。\(x^2\) 总是非负：\(x=2\) 时是 \(4\)，\(x=-2\) 时也是 \(4\)，\(x=0\) 时是 \(0\)——非负不等于正。</p>
+  </div>
+
+  <div class="card">
+    <p><b>同号、异号</b>：两个数都正或都负叫同号，乘积是正的；一正一负叫异号，乘积是负的。</p>
+    <p>例：\((-2)\times(-3)=6&gt;0\)，同号；\(2\times(-3)=-6&lt;0\)，异号。</p>
+  </div>
+
+  <div class="card">
+    <p><b>等价（\(\iff\)）和单向（\(\Rightarrow\)）</b>：一步推理倒得回去，写 \(\iff\)；只能往前推、倒不回去，只写 \(\Rightarrow\)。</p>
+    <p>例：\(x+2&gt;5\iff x&gt;3\)（两边减 \(2\)、加 \(2\) 都行）。\(x&gt;3\Rightarrow x&gt;1\)，可倒不回去：\(x=2\) 满足 \(x&gt;1\)，不满足 \(x&gt;3\)。</p>
+  </div>
+
+  <h3>2. 比大小，就看差的符号</h3>
+  <p>在数轴上，\(a-b\) 是从 \(b\) 走到 \(a\) 的「带方向的距离」：往右走是正，往左走是负，没动是零。所以</p>
+  <div class="key">\(a&gt;b \iff a-b&gt;0\)　　\(a=b \iff a-b=0\)　　\(a&lt;b \iff a-b&lt;0\)</div>
+  <p>两个式子谁大，不用猜：算差，再把差变形成一眼看得出符号的样子。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>对任意实数 \(x\)，比较 \(x^2+3\) 和 \(2x+1\) 的大小。</p>
+    <p>作差：\((x^2+3)-(2x+1)=x^2-2x+2\)。</p>
+    <p>配方：\(x^2-2x+2=(x-1)^2+1\)。</p>
+    <p>判断：\((x-1)^2\ge0\)，再加 \(1\)，一定 \(&gt;0\)。</p>
+    <p>结论：对任意 \(x\)，都有 \(x^2+3&gt;2x+1\)。</p>
+  </div>
+  <div class="key"><b>作差法</b>：作差 → 变形（因式分解、配方、通分）→ 判断符号 → 下结论。</div>
+  <div class="card predict" data-id="try-diff" data-answer="B">
+    <p>自己试试：对任意实数 \(a\)，\(a^2+1\) 和 \(2a\) 的大小关系是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>总有 \(a^2+1&gt;2a\)</button>
+      <button class="opt" data-v="B"><b>B</b>总有 \(a^2+1\ge2a\)，\(a=1\) 时相等</button>
+      <button class="opt" data-v="C"><b>C</b>要看 \(a\) 是正是负</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。作差：\(a^2+1-2a=(a-1)^2\ge0\)，\(a=1\) 时差是 \(0\)。选 A 的同学把「平方 \(\ge0\)」当成了「平方 \(&gt;0\)」：\(a=1\) 时 \(2=2\)，不是严格大于。</p></div>
+  </div>
+
+  <h3>3. 等式：两边做同样的事</h3>
+  <p>等式的性质大家熟：\(a=b\) 时 \(b=a\)；\(a=b\)，\(b=c\) 推出 \(a=c\)；两边同加、同减、同乘同一个数，还相等；两边同除以同一个<b>不为 \(0\)</b> 的数，还相等。</p>
+  <p>要小心的只有除法：由 \(ac=bc\) 推不出 \(a=b\)。\(3\times0=5\times0\)，可 \(3\ne5\)。确定 \(c\ne0\) 才能两边除以 \(c\)。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>解方程 \(x^2=3x\)。</p>
+    <p>不能两边直接除以 \(x\)：\(x\) 可能是 \(0\)。移项：\(x^2-3x=0\)，分解：\(x(x-3)=0\)，所以 \(x=0\) 或 \(x=3\)。</p>
+    <p>要是两边除以 \(x\)，只剩 \(x=3\)，丢了 \(x=0\)。</p>
+  </div>
+  <div class="card predict" data-id="try-eq" data-answer="B">
+    <p>自己试试：方程 \(x(x+1)=2(x+1)\) 的解是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(x=2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x=2\) 或 \(x=-1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x=-1\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。移项：\(x(x+1)-2(x+1)=0\)，提公因式：\((x+1)(x-2)=0\)。选 A 的同学两边除以了 \(x+1\)，可 \(x+1\) 可能是 \(0\)，丢了 \(x=-1\)。</p></div>
+  </div>
+
+  <h3>4. 不等式：同加不变，同乘看符号</h3>
+  <p>把等式的性质换成「\(&gt;\)」，用作差一条条检验：</p>
+  <ul>
+    <li><b>传递</b>：\(a&gt;b\)，\(b&gt;c\Rightarrow a&gt;c\)。因为 \(a-c=(a-b)+(b-c)&gt;0\)。</li>
+    <li><b>同加</b>：\(a&gt;b\iff a+c&gt;b+c\)。差还是 \(a-b\)。</li>
+    <li><b>同乘</b>：\(ac-bc=c(a-b)\)，\(a-b&gt;0\)，所以符号跟着 \(c\) 走：\(c&gt;0\) 时 \(ac&gt;bc\)；\(c&lt;0\) 时 \(ac&lt;bc\)；\(c=0\) 时两边相等。</li>
+  </ul>
+  <div class="key">同加、同减：方向不变。<br>同乘、同除：先看这个数<b>正、负还是零</b>——正数不变向，负数要变向，零会把不等号变成等号；除数不能是 \(0\)。</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>已知 \(a&gt;b\)，比较 \(1-3a\) 和 \(1-3b\)。</p>
+    <p>两边乘 \(-3\)，是负数，方向反过来：\(-3a&lt;-3b\)。</p>
+    <p>两边加 \(1\)，方向不变：\(1-3a&lt;1-3b\)。</p>
+    <p>作差核对：\((1-3a)-(1-3b)=-3(a-b)&lt;0\)，一样。</p>
+  </div>
+  <div class="card predict" data-id="try-mul" data-answer="B">
+    <p>自己试试：已知 \(a&gt;b\)，那么 \(5-2a\) ___ \(5-2b\)。</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(&gt;\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(&lt;\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(=\)</button>
+      <button class="opt" data-v="D"><b>D</b>不能确定</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。乘 \(-2\) 要变向：\(-2a&lt;-2b\)，再加 \(5\)：\(5-2a&lt;5-2b\)。选 A 的同学乘了负数却忘了变向。</p></div>
+  </div>
+
+  <h3>5. 两个不等式合起来：同向相加</h3>
+  <p>\(a&gt;b\)，\(c&gt;d\Rightarrow a+c&gt;b+d\)，因为 \((a+c)-(b+d)=(a-b)+(c-d)&gt;0\)。这一步是单向的（倒不回去），但求范围够用了。</p>
+  <p>要求「差」的范围，<b>不能两个不等式直接相减</b>：先把减数变成「加它的相反数」，乘 \(-1\) 时变向，再相加。</p>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>已知 \(1&lt;a&lt;3\)，\(2&lt;b&lt;5\)，求 \(a+b\) 和 \(a-b\) 的范围。</p>
+    <p>同向相加：\(1+2&lt;a+b&lt;3+5\)，即 \(3&lt;a+b&lt;8\)。</p>
+    <p>求 \(a-b\)：先由 \(2&lt;b&lt;5\) 乘 \(-1\)，变向得 \(-5&lt;-b&lt;-2\)；再和 \(1&lt;a&lt;3\) 相加：\(-4&lt;a-b&lt;1\)。</p>
+  </div>
+  <div class="card predict" data-id="try-range" data-answer="A">
+    <p>自己试试：已知 \(3&lt;a&lt;6\)，\(1&lt;b&lt;2\)，\(a-b\) 的范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1&lt;a-b&lt;5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2&lt;a-b&lt;4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1&lt;a-b&lt;4\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(-2&lt;-b&lt;-1\)，加上 \(3&lt;a&lt;6\)：\(1&lt;a-b&lt;5\)。选 B 的同学「下限减下限、上限减上限」：\(3-1=2\)，\(6-2=4\)。可 \(a=5.9\)，\(b=1.1\) 时 \(a-b=4.8\)，已经超过 \(4\)。</p></div>
+  </div>
+
+  <h3>6. 平方和取倒数：看符号</h3>
+  <p>还是作差：</p>
+  <ul>
+    <li><b>平方</b>：\(a^2-b^2=(a+b)(a-b)\)。\(a&gt;b\) 时方向看 \(a+b\)：两边都非负，平方不变向。</li>
+    <li><b>取倒数</b>：\(\dfrac1a-\dfrac1b=\dfrac{b-a}{ab}\)。\(a&gt;b\) 时分子是负的，方向看 \(ab\)：同号时 \(\dfrac1a&lt;\dfrac1b\)，异号时反而 \(\dfrac1a&gt;\dfrac1b\)。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 5</p>
+    <p>已知 \(a&lt;b&lt;0\)，比较 \(a^2\) 和 \(b^2\)。</p>
+    <p>作差：\(a^2-b^2=(a+b)(a-b)\)。两个都是负数，\(a+b&lt;0\)；\(a&lt;b\)，\(a-b&lt;0\)。负乘负是正，所以 \(a^2&gt;b^2\)。</p>
+    <p>代数字核对：\(a=-3\)，\(b=-1\)，\(9&gt;1\)。小的数平方后反而大了。</p>
+  </div>
+  <div class="card predict" data-id="trap-reciprocal" data-answer="C">
+    <p>自己试试：已知 \(a&gt;b\)，且 \(a,b\) 都不为 \(0\)。什么时候一定有 \(\dfrac1a&lt;\dfrac1b\)？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>总是成立，大数的倒数小</button>
+      <button class="opt" data-v="B"><b>B</b>只要 \(a&gt;0\)</button>
+      <button class="opt" data-v="C"><b>C</b>当 \(a,b\) 同号（\(ab&gt;0\)）时</button>
+      <button class="opt" data-v="D"><b>D</b>永远不成立</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>C</b>。作差：\(\dfrac1a-\dfrac1b=\dfrac{b-a}{ab}\)，分子 \(b-a&lt;0\)。\(ab&gt;0\) 时整个差是负的，\(\dfrac1a&lt;\dfrac1b\)；\(ab&lt;0\) 时结论反过来。</p>
+      <p>B 的反例：\(a=2,\ b=-1\)，\(a&gt;0\)，可 \(\tfrac12&gt;-1\)。「大数的倒数小」只在两个数同号时才对。</p>
+    </div>
+  </div>
+
+  <h3>7. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>乘、除的那个数：正、负，还是零？</b>零会把「\(&gt;\)」变成「\(=\)」，除数不能是零。<br><span class="small">反例：\(a&gt;b\) 推不出 \(ac^2&gt;bc^2\)：\(c=0\) 时两边都是 \(0\)。</span></li>
+    <li><b>取倒数：两边同号、都不为 \(0\)。</b><br><span class="small">反例：\(2&gt;-1\)，可 \(\tfrac12&gt;-1\)，方向没反。</span></li>
+    <li><b>平方、开方：两边都非负。</b><br><span class="small">反例：\(1&gt;-2\)，可 \(1^2=1&lt;4=(-2)^2\)。</span></li>
+    <li><b>两个不等式：只能同向相加；相乘要四个数都正；不能直接相减、相除。</b><br><span class="small">反例：\(1&gt;-2\)，\(1&gt;-3\)，可 \(1\times1=1&lt;6=(-2)\times(-3)\)。\(5&gt;4\)，\(3&gt;0\)，相减 \(5-3=2&lt;4=4-0\)。</span></li>
+    <li><b>每一步标上 \(\iff\) 还是 \(\Rightarrow\)。</b><br><span class="small">反例：同向相加只是单向：\(0+5&gt;1+0\) 成立，可 \(0&gt;1\) 不成立。</span></li>
+  </ol>
+  <p>题里带字母参数时，符号不知道，就分 正、零、负 三种情况讨论：</p>
+  <div class="card">
+    <p class="small">例 6</p>
+    <p>解关于 \(x\) 的不等式 \(mx&gt;2m\)。</p>
+    <p>两边要除以 \(m\)，先看 \(m\) 的符号：</p>
+    <ul>
+      <li>\(m&gt;0\)：除以正数，不变向，\(x&gt;2\)；</li>
+      <li>\(m=0\)：变成 \(0&gt;0\)，不成立，无解；</li>
+      <li>\(m&lt;0\)：除以负数，要变向，\(x&lt;2\)。</li>
+    </ul>
+  </div>
+  <div class="warn">符号不知道的时候，<b>不能直接两边相乘、不能取倒数、不能平方</b>：先分情况。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>全部性质一张表</b>（每条都能用作差证）：</p>
+    <div class="tbl"><table class="rec">
+      <tr><th>性质</th><th>条件与结论</th><th>为什么（作差）</th></tr>
+      <tr><td>对称</td><td>\(a&gt;b\iff b&lt;a\)</td><td>换个说法</td></tr>
+      <tr><td>传递</td><td>\(a&gt;b,\ b&gt;c\Rightarrow a&gt;c\)</td><td>\(a-c=(a-b)+(b-c)\)</td></tr>
+      <tr><td>同加</td><td>\(a&gt;b\iff a+c&gt;b+c\)</td><td>差还是 \(a-b\)</td></tr>
+      <tr><td>同乘</td><td>\(c&gt;0\)：\(ac&gt;bc\)；\(c&lt;0\)：\(ac&lt;bc\)</td><td>\(ac-bc=c(a-b)\)</td></tr>
+      <tr><td>同向相加</td><td>\(a&gt;b,\ c&gt;d\Rightarrow a+c&gt;b+d\)</td><td>\((a-b)+(c-d)\)</td></tr>
+      <tr><td>同正相乘</td><td>\(a&gt;b&gt;0,\ c&gt;d&gt;0\Rightarrow ac&gt;bd\)</td><td>\(ac-bd=c(a-b)+b(c-d)\)</td></tr>
+      <tr><td>乘方</td><td>\(a&gt;b&gt;0\Rightarrow a^n&gt;b^n\)（\(n\ge2\) 为整数）</td><td>同正相乘反复用</td></tr>
+    </table></div>
+    <p><b>开方</b>：\(a&gt;b\ge0\Rightarrow\sqrt a&gt;\sqrt b\)。反过来想：要是 \(\sqrt a\le\sqrt b\)，两边非负，平方得 \(a\le b\)，矛盾。负数没有平方根，所以要求非负。</p>
+    <p><b>等式和不等式哪里一样、哪里不同</b>：对称、传递、同加，两者一样；同乘时，等式乘什么都行，不等式要看符号。等式两边可以随便平方（得到的还相等），不等式不行。</p>
+    <p><b>作商</b>：两个<b>正数</b>比大小，也可以看 \(\dfrac ab\) 和 \(1\) 谁大。比如 \(\dfrac{2^{10}}{3^{6}}=\dfrac{1024}{729}&gt;1\)，所以 \(2^{10}&gt;3^6\)。前提是 \(b&gt;0\)，否则除完方向会变。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <p>上面的数轴放着 <span class="ca">\(a\)</span> 和 <span class="cb">\(b\)</span>，拖动它们（或 Tab 选中后按左右方向键）。选一种操作，下面的数轴画出两边做完操作以后的位置，看看大小关系变没变。</p>
+  <div class="card">
+    <div class="ops" id="ops" role="group" aria-label="对两边做的操作">
+      <button class="btn ghost" type="button" data-op="add">加 \(c\)</button>
+      <button class="btn ghost" type="button" data-op="mul">乘 \(k\)</button>
+      <button class="btn ghost" type="button" data-op="sq">平方</button>
+      <button class="btn ghost" type="button" data-op="inv">取倒数</button>
+    </div>
+    <svg class="fig" id="fig" viewBox="0 0 420 270" role="group" aria-label="两条数轴：上面是 a 和 b，下面是对两边做同一操作后的结果，可拖动 a、b 和参数"></svg>
+    <div class="rd" id="readout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset" type="button">重置</button><span class="small">挑战：把四种结果都弄出来一次。</span></div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. 对任意实数 \(x\)，比较 \((x+1)(x+3)\) 和 \((x+2)^2\)。</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>前者大</button>
+      <button class="opt" data-v="B"><b>B</b>前者小</button>
+      <button class="opt" data-v="C"><b>C</b>相等</button>
+      <button class="opt" data-v="D"><b>D</b>要看 \(x\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。作差：\((x^2+4x+3)-(x^2+4x+4)=-1&lt;0\)，不管 \(x\) 是多少，前者总比后者小 \(1\)。选 D 的同学没算差就猜了：式子里有 \(x\)，差却可能是个常数。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 已知 \(-1&lt;x&lt;2\)，\(3-2x\) 的范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-1&lt;3-2x&lt;5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1&lt;3-2x&lt;7\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-4&lt;3-2x&lt;2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。乘 \(-2\) 变向：\(-4&lt;-2x&lt;2\)；再加 \(3\)：\(-1&lt;3-2x&lt;5\)。核对端点：\(x\) 接近 \(-1\) 时 \(3-2x\) 接近 \(5\)，\(x\) 接近 \(2\) 时接近 \(-1\)。B 是把 \(-2x\) 当成了 \(2x\)；C 是忘了加 \(3\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="warmup" data-answer="D">
+    <p>3. 已知 \(a&gt;b\)，\(c\) 是任意实数。下面哪一个<b>一定</b>成立？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(a^2&gt;b^2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac1a&lt;\dfrac1b\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(ac&gt;bc\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(a-c&gt;b-c\)</button>
+    </div>
+    <div class="reveal">
+      <p>答案是 <b>D</b>：两边同时减去同一个数，差 \(a-b\) 一点没变，方向当然不变。</p>
+      <p>A：取 \(a=1,\ b=-2\)，\(a&gt;b\)，可是 \(a^2=1&lt;4=b^2\)。两边有负数时不能放心平方。</p>
+      <p>B：取 \(a=1,\ b=-1\)，\(\tfrac1a=1\)，\(\tfrac1b=-1\)，\(1&lt;-1\) 不成立。而且 \(b=0\) 时 \(\tfrac1b\) 根本没有意义。</p>
+      <p>C：\(c=0\) 时两边都是 \(0\)；\(c&lt;0\) 时方向还会反过来。</p>
+      <p>记住：<b>加减随便做，乘、除、平方、取倒数之前，先看符号。</b></p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-zero" data-answer="B">
+    <p>4. 下面两个推理，哪个对？<br>① 若 \(a&gt;b\)，则 \(ac^2&gt;bc^2\)　② 若 \(ac^2&gt;bc^2\)，则 \(a&gt;b\)</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>两个都对</button>
+      <button class="opt" data-v="B"><b>B</b>只有 ② 对</button>
+      <button class="opt" data-v="C"><b>C</b>只有 ① 对</button>
+      <button class="opt" data-v="D"><b>D</b>两个都不对</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>B</b>。\(c^2\) 不会是负数，很多人就当它是正数，选 A。可它<b>可以是 0</b>。</p>
+      <p>①：\(c=0\) 时两边都是 \(0\)，\(0&gt;0\) 不成立，所以 ① 错。</p>
+      <p>②：既然 \(ac^2&gt;bc^2\)，两边就不可能都等于 0，说明 \(c^2\ne0\)，即 \(c^2&gt;0\)。两边同除以正数 \(c^2\)，方向不变，得 \(a&gt;b\)。② 对。</p>
+      <p>同一对式子，一个方向对、一个方向错——这就是「单向推论」。乘一个带字母的数之前，正、负、零三种情况都要想到。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-multiply" data-answer="B">
+    <p>5. 已知 \(a&gt;b\)，\(c&gt;d\)。能推出 \(ac&gt;bd\) 吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>能，同向不等式可以相乘</button>
+      <button class="opt" data-v="B"><b>B</b>不一定，要 \(a&gt;b&gt;0\) 且 \(c&gt;d&gt;0\) 才行</button>
+      <button class="opt" data-v="C"><b>C</b>能，只要 \(a,c\) 是正数</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>B</b>。同向不等式能<b>相加</b>，不能随便<b>相乘</b>。</p>
+      <p>A、C 的反例：\(a=1,\ b=-2,\ c=1,\ d=-3\)。\(a,c\) 都是正数，但 \(ac=1\)，\(bd=6\)，\(ac&lt;bd\)。</p>
+      <p>原因看作差：\(ac-bd=c(a-b)+b(c-d)\)。\(a-b\) 和 \(c-d\) 都是正的，还需要 \(c&gt;0\)、\(b&gt;0\) 才能保证两项都正——也就是四个数都是正数。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. 已知 \(-1&lt;a+b&lt;3\)，\(2&lt;a-b&lt;4\)。\(2a+3b\) 的范围是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(-\dfrac92&lt;2a+3b&lt;\dfrac{13}{2}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac{13}{2}&lt;2a+3b&lt;\dfrac{17}{2}\)</button>
+      <button class="opt" data-v="C"><b>C</b>条件不够，求不出</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。常见错法：先分别求出 \(\dfrac12&lt;a&lt;\dfrac72\)，\(-\dfrac52&lt;b&lt;\dfrac12\)，再相加得 B。可 B 的上端要 \(a\) 靠近 \(\dfrac72\)、\(b\) 靠近 \(\dfrac12\) 同时发生：前者要 \(a-b\) 靠近 \(4\)，后者要 \(a-b\) 靠近 \(2\)，做不到。拆成 \(a\)、\(b\) 两个范围再相加，丢了它们之间的联系，范围被放大了。</p>
+      <p>正确做法：把 \(2a+3b\) 直接写成 \(a+b\) 和 \(a-b\) 的组合。设 \(2a+3b=m(a+b)+n(a-b)\)，比较系数 \(m+n=2\)，\(m-n=3\)，得 \(m=\dfrac52\)，\(n=-\dfrac12\)。</p>
+      <p>\(-\dfrac52&lt;\dfrac52(a+b)&lt;\dfrac{15}{2}\)，\(-2&lt;-\dfrac12(a-b)&lt;-1\)（乘负数变向），相加：\(-\dfrac92&lt;2a+3b&lt;\dfrac{13}{2}\)。两端分别在 \(a+b\to-1,\ a-b\to4\) 和 \(a+b\to3,\ a-b\to2\) 时靠近，都能无限接近。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById("fig"), out = document.getElementById("readout"), chipsEl = document.getElementById("chips");
+  var opBtns = [].slice.call(document.querySelectorAll("#ops button"));
+  var NS = "http://www.w3.org/2000/svg";
+  var X0 = 30, X1 = 390, YT = 72, YB = 172, YK = 242, STEP = 0.5;
+  var LIM = { a: [-4, 4], b: [-4, 4], p: [-3, 3] };
+  var DEF = { a: 2, b: 1, p: -2, op: "mul" };
+  var RANGES = [[2, 0.5], [3, 1], [4, 1], [6, 2], [8, 2], [12, 3], [16, 4]];
+  var RESULTS = ["方向不变", "方向反了", "变成相等", "这一步不能做"];
+  var st, got = {}, G = {}, H = {};
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function clear(g) { while (g.firstChild) g.removeChild(g.firstChild); }
+  function fmt(v) {
+    var s = (Math.round(v * 100) / 100).toString();
+    return s === "-0" ? "0" : s;
+  }
+  function par(v) { return v < 0 ? "(" + fmt(v) + ")" : fmt(v); }
+  function sgn(v) { return Math.abs(v) < 1e-9 ? 0 : (v > 0 ? 1 : -1); }
+  function rel(s) { return s > 0 ? "&gt;" : s < 0 ? "&lt;" : "="; }
+  function gcd(x, y) { x = Math.abs(x); y = Math.abs(y); while (y) { var t = y; y = x % y; x = t; } return x || 1; }
+  // 1/v，v 是 0.5 的倍数：v = n/2，1/v = 2/n
+  function invTex(v) {
+    var n = Math.round(v * 2), num = 2, g = gcd(num, n);
+    num /= g; n /= g;
+    if (n < 0) { n = -n; num = -num; }
+    if (n === 1) return String(num);
+    return (num < 0 ? "-" : "") + "\\tfrac{" + Math.abs(num) + "}{" + n + "}";
+  }
+
+  function sxT(v) { return X0 + (v + 4) / 8 * (X1 - X0); }
+  function vxT(px) { return (px - X0) / (X1 - X0) * 8 - 4; }
+  function sxK(v) { return X0 + 60 + (v + 3) / 6 * (X1 - X0 - 60); }
+  function vxK(px) { return (px - X0 - 60) / (X1 - X0 - 60) * 6 - 3; }
+
+  function f(x) {
+    if (st.op === "add") return x + st.p;
+    if (st.op === "mul") return st.p * x;
+    if (st.op === "sq") return x * x;
+    return Math.abs(x) < 1e-9 ? null : 1 / x;
+  }
+  function fname(w) {
+    if (st.op === "add") return w + "+c";
+    if (st.op === "mul") return "k" + w;
+    if (st.op === "sq") return w + "^2";
+    return "\\tfrac1" + w;
+  }
+
+  function axis(g, y, lo, hi, step, sx) {
+    mk("line", { x1: X0 - 12, y1: y, x2: X1 + 12, y2: y, "class": "axis" }, g);
+    mk("path", { d: "M" + (X1 + 18) + " " + y + " l-8 -4 v8 z", fill: "var(--muted)" }, g);
+    for (var v = lo; v <= hi + 1e-9; v += step) {
+      var x = sx(v);
+      mk("line", { x1: x, y1: y - 5, x2: x, y2: y + 5, "class": "tick" }, g);
+      mk("text", { x: x, y: y + 20, "class": "num" }, g).textContent = fmt(v);
+    }
+  }
+
+  function handle(key, color, label) {
+    var g = mk("g", {}, G.h);
+    var hit = mk("circle", { r: 22, "class": "hit" }, g);
+    var c = mk("circle", { r: 9, "class": "h", fill: "var(--card)", stroke: color, tabindex: 0, role: "slider",
+      "aria-label": label, "aria-valuemin": LIM[key][0], "aria-valuemax": LIM[key][1] }, g);
+    var h = { key: key, g: g, hit: hit, c: c };
+    bind(h); H[key] = h; return h;
+  }
+
+  function build() {
+    G.top = mk("g", {}); G.bot = mk("g", {}); G.k = mk("g", {}); G.link = mk("g", {}); G.lab = mk("g", {}); G.h = mk("g", {});
+    mk("text", { x: 4, y: 22, "class": "ttl" }, G.top).textContent = "原来";
+    axis(G.top, YT, -4, 4, 1, sxT);
+    G.botTtl = mk("text", { x: 4, y: 122, "class": "ttl" }, G.top);
+    handle("a", "var(--a)", "a 的值");
+    handle("b", "var(--b)", "b 的值");
+    handle("p", "var(--c)", "参数");
+  }
+
+  function place(h, x, y) {
+    h.c.setAttribute("cx", x); h.c.setAttribute("cy", y);
+    h.hit.setAttribute("cx", x); h.hit.setAttribute("cy", y);
+  }
+  function label(g, x, y, text, color) {
+    var t = mk("text", { x: Math.min(Math.max(x, 14), 406), y: y, "class": "lab", fill: color }, g);
+    t.textContent = text; return t;
+  }
+
+  function draw() {
+    var a = st.a, b = st.b, fa = f(a), fb = f(b);
+    var hasP = st.op === "add" || st.op === "mul";
+    opBtns.forEach(function (bt) {
+      var on = bt.getAttribute("data-op") === st.op;
+      bt.classList.toggle("on", on); bt.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    // 下面的数轴：按结果自动选刻度
+    var m = Math.max(Math.abs(fa || 0), Math.abs(fb || 0), 1), R = RANGES[RANGES.length - 1];
+    for (var i = 0; i < RANGES.length; i++) if (RANGES[i][0] >= m - 1e-9) { R = RANGES[i]; break; }
+    var sxB = function (v) { return X0 + (v + R[0]) / (2 * R[0]) * (X1 - X0); };
+    clear(G.bot); clear(G.k); clear(G.link); clear(G.lab);
+    axis(G.bot, YB, -R[0], R[0], R[1], sxB);
+    G.botTtl.textContent = "两边都" + { add: "加上 c", mul: "乘以 k", sq: "平方", inv: "取倒数" }[st.op] + "以后";
+
+    // a、b 及其像
+    var close = Math.abs(sxT(a) - sxT(b)) < 22;
+    place(H.a, sxT(a), YT); place(H.b, sxT(b), YT);
+    label(G.lab, sxT(a), YT - 16, "a", "var(--a)");
+    label(G.lab, sxT(b), YT - (close ? 34 : 16), "b", "var(--b)");
+    [[a, fa, "var(--a)", "a"], [b, fb, "var(--b)", "b"]].forEach(function (q, j) {
+      if (q[1] === null) {
+        label(G.lab, sxT(q[0]), YB - 30 - 18 * j, "1/0 无意义", "var(--no)").setAttribute("class", "bad");
+        return;
+      }
+      var xb = sxB(q[1]);
+      mk("path", { d: "M" + sxT(q[0]) + " " + (YT + 10) + " L" + xb + " " + (YB - 9), "class": "link", stroke: q[2] }, G.link);
+      mk("circle", { cx: xb, cy: YB, r: 7, fill: q[2] }, G.lab);
+    });
+    var closeB = fa !== null && fb !== null && Math.abs(sxB(fa) - sxB(fb)) < 40;
+    if (fa !== null) label(G.lab, sxB(fa), YB - 16, mathText("a"), "var(--a)");
+    if (fb !== null) label(G.lab, sxB(fb), YB - (closeB ? 34 : 16), mathText("b"), "var(--b)");
+
+    // 参数滑条
+    H.p.g.style.display = hasP ? "" : "none";
+    H.p.c.setAttribute("tabindex", hasP ? 0 : -1);
+    if (hasP) {
+      var pn = st.op === "add" ? "c" : "k";
+      mk("text", { x: 4, y: YK + 5, "class": "ttl" }, G.k).textContent = pn + " = " + fmt(st.p);
+      mk("line", { x1: sxK(-3), y1: YK, x2: sxK(3), y2: YK, "class": "slider" }, G.k);
+      [-3, 0, 3].forEach(function (v) { mk("text", { x: sxK(v), y: YK + 22, "class": "num" }, G.k).textContent = v; });
+      place(H.p, sxK(st.p), YK);
+      H.p.c.setAttribute("aria-label", "参数 " + pn);
+    } else {
+      mk("text", { x: 4, y: YK + 5, "class": "ttl" }, G.k).textContent = "这种操作没有参数";
+    }
+    ["a", "b", "p"].forEach(function (k) {
+      H[k].c.setAttribute("aria-valuenow", st[k]);
+      H[k].c.setAttribute("aria-valuetext", fmt(st[k]));
+      H[k].c.setAttribute("fill", "var(--card)");
+    });
+
+    readout(a, b, fa, fb);
+  }
+  function mathText(w) {
+    return st.op === "add" ? w + "+c" : st.op === "mul" ? "k" + w : st.op === "sq" ? w + "²" : "1/" + w;
+  }
+
+  function readout(a, b, fa, fb) {
+    var s0 = sgn(a - b), res, why = "", diff = "";
+    var html = '<div class="row"><span class="ca">\\(a=' + fmt(a) + '\\)</span>，<span class="cb">\\(b=' + fmt(b) + '\\)</span>，\\(a' + rel(s0) + 'b\\)</div>';
+    if (fa === null || fb === null) {
+      res = "这一步不能做";
+      why = '<span class="nope">0 没有倒数</span>：\\(' + (fa === null ? "a" : "b") + '=0\\)，\\(\\tfrac10\\) 没有意义。取倒数前要先保证两边都不为 0。';
+    } else {
+      var d = fa - fb, s1 = sgn(d);
+      if (st.op === "add") {
+        diff = "(a+c)-(b+c)=a-b=" + fmt(a - b);
+        why = "加同一个数，差根本没变，方向不变。";
+      } else if (st.op === "mul") {
+        diff = "ka-kb=k(a-b)=" + par(st.p) + "\\times" + par(a - b) + "=" + fmt(d);
+        why = st.p > 0 ? "\\(k&gt;0\\)，乘正数，方向不变。" : st.p < 0 ? "\\(k&lt;0\\)，乘负数，方向反过来。" : "\\(k=0\\)，两边都变成 0，差被抹掉了。";
+      } else if (st.op === "sq") {
+        diff = "a^2-b^2=(a+b)(a-b)=" + par(a + b) + "\\times" + par(a - b) + "=" + fmt(d);
+        why = "方向看 \\(a+b\\) 的符号：\\(a+b=" + fmt(a + b) + "\\)" + (sgn(a + b) > 0 ? "，是正的，方向不变。" : sgn(a + b) < 0 ? "，是负的，方向反了。" : "，平方后相等。");
+        if (s0 !== 0 && (a < 0 || b < 0)) why += "（两边有负数时，平方要小心。）";
+      } else {
+        diff = "\\tfrac1a-\\tfrac1b=\\dfrac{b-a}{ab}=\\dfrac{" + fmt(b - a) + "}{" + fmt(a * b) + "}";
+        why = "方向看 \\(ab\\) 的符号：\\(ab=" + fmt(a * b) + "\\)" + (a * b > 0 ? "，同号，方向反过来。" : "，异号，方向不变。");
+      }
+      if (s0 === 0) res = "变成相等";
+      else res = s1 === s0 ? "方向不变" : s1 === -s0 ? "方向反了" : "变成相等";
+      var fA = st.op === "inv" ? invTex(a) : fmt(fa), fB = st.op === "inv" ? invTex(b) : fmt(fb);
+      html += '<div class="row">\\(' + fname("a") + "=" + fA + "\\)，\\(" + fname("b") + "=" + fB + "\\)，\\(" + fname("a") + rel(s1) + fname("b") + "\\)</div>";
+      html += '<div class="row">作差：\\(' + diff + "\\)</div>";
+    }
+    if (s0 === 0 && res !== "这一步不能做") why = "\\(a=b\\) 时两边本来就相等，做同样的事还相等（等式的性质）。";
+    var cls = res === "方向不变" ? "yes" : "nope";
+    html += '<div class="verdict"><span class="' + cls + '">' + res + "</span></div>";
+    html += '<div class="small">' + why + "</div>";
+    out.innerHTML = html;
+    if (window.Peiyu) Peiyu.math(out);
+    if (s0 !== 0 || res === "这一步不能做") got[res] = true;
+    st._res = res;
+    chipsEl.innerHTML = "";
+    RESULTS.forEach(function (name) {
+      var sp = document.createElement("span");
+      sp.className = "chip" + (got[name] ? " got" : "");
+      sp.textContent = (got[name] ? "✓ " : "") + name;
+      chipsEl.appendChild(sp);
+    });
+  }
+
+  function setVal(key, v) {
+    if (!isFinite(v)) return;
+    v = Math.round(v / STEP) * STEP;
+    st[key] = Math.min(Math.max(v, LIM[key][0]), LIM[key][1]);
+  }
+  function logState(how) {
+    if (window.Peiyu) Peiyu.log("interact", { how: how, op: st.op, a: st.a, b: st.b, p: st.p, result: st._res });
+  }
+  function bind(h) {
+    var drag = null;
+    function svgX(ev) {
+      var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+      var m = svg.getScreenCTM(); if (!m) return null;
+      return pt.matrixTransform(m.inverse()).x;
+    }
+    h.g.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault(); drag = ev.pointerId;
+      try { h.g.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+      h.c.focus({ preventScroll: true });
+    });
+    h.g.addEventListener("pointermove", function (ev) {
+      if (drag !== ev.pointerId) return;
+      var x = svgX(ev); if (x === null) return;
+      var before = st[h.key];
+      setVal(h.key, h.key === "p" ? vxK(x) : vxT(x));
+      if (st[h.key] !== before) draw();
+    });
+    h.g.addEventListener("pointerup", function (ev) { if (drag === ev.pointerId) { drag = null; logState("drag"); } });
+    h.g.addEventListener("pointercancel", function () { drag = null; });
+    h.c.addEventListener("keydown", function (ev) {
+      var k = ev.key, cur = st[h.key];
+      if (k === "ArrowLeft" || k === "ArrowDown") setVal(h.key, cur - STEP);
+      else if (k === "ArrowRight" || k === "ArrowUp") setVal(h.key, cur + STEP);
+      else if (k === "Home") setVal(h.key, LIM[h.key][0]);
+      else if (k === "End") setVal(h.key, LIM[h.key][1]);
+      else return;
+      ev.preventDefault(); draw(); logState("key");
+    });
+  }
+
+  opBtns.forEach(function (bt) {
+    bt.addEventListener("click", function () {
+      st.op = bt.getAttribute("data-op");
+      if (st.op === "add" && st.p === DEF.p) st.p = 1;
+      draw(); logState("op");
+    });
+  });
+  function reset() { st = JSON.parse(JSON.stringify(DEF)); draw(); }
+  document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  build();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", reset);
+  else reset();
+})();
+</script>
+</body></html>

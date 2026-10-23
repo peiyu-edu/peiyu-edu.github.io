@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.1 空间向量及其运算 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .tabs button { font: inherit; font-size: 14px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; transition: all 0.15s; }
+  .tabs button.on { background: var(--a); color: #fff; border-color: var(--a); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); margin: 6px 0 10px; justify-content: center; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 12px; height: 3px; border-radius: 2px; }
+  .fig .handle { cursor: grab; }
+  .fig .handle:focus-visible { outline: 3px solid var(--hl); }
+  .fig .handle:active { cursor: grabbing; }
+  .slider-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 10px 0; }
+  .slider-card { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+  .slider-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 13.5px; }
+  .slider-row label { min-width: 60px; color: var(--muted); }
+  .slider-row input[type=range] { flex: 1; accent-color: var(--a); }
+  .slider-row output { font-weight: 700; min-width: 2em; text-align: right; }
+  .tag-status { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+  .tag-acute { background: var(--ok-soft); color: var(--a); }
+  .tag-right { background: var(--hl-soft); color: var(--b); }
+  .tag-obtuse { background: var(--no-soft); color: var(--no); }
+</style>
+</head>
+<body data-sec="e1-1-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第一册 · 第 1 章 空间向量与立体几何</p>
+<h1>1.1 空间向量及其运算</h1>
+<p class="lead">把平面向量的加减、数乘和数量积搬到空间：法则不变，新多出来的问题是三个向量共不共面。这一节学这些运算，以及怎样用它们算长度、判垂直。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一架无人机在无风的天空中执行巡检任务。从起飞点出发，无人机先沿水平向东飞行了 \(12\text{ m}\)，接着沿水平向北飞行了 \(5\text{ m}\)，最后垂直向上爬升了 \(9\text{ m}\)。</p>
+  <div class="card predict" data-id="entry" data-answer="C">
+    <p>地面飞控员想知道：无人机现在的空间位置相对于起飞点的总位移大小是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(12 + 5 + 9 = 26\text{ m}\)</button>
+      <button class="opt" data-v="B"><b>B</b>无法计算，高度和地面不在同一平面内</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{12^2 + 5^2 + 9^2} \approx 15.8\text{ m}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(13\text{ m}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。水平地面上的向东 \(12\text{ m}\) 与向北 \(5\text{ m}\) 互相垂直，合成后的水平位移大小是 \(\sqrt{12^2+5^2}=13\text{ m}\)；该水平位移再与竖直向上的 \(9\text{ m}\) 垂直合成，总位移长度恰好是一个长方体的体对角线长：\(\sqrt{13^2+9^2} = \sqrt{12^2+5^2+9^2} = \sqrt{250} \approx 15.8\text{ m}\)。</p>
+      <p>物理中的位移与力具有大小和方向，可以在三维空间中自由合成。那么在数学上，平面向量的加减法法则、共线共面关系以及数量积公式，如何自然推广到三维立体空间？这就是本节要建立的核心体系。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：平面向量概念与加减法（<a href="b2-6-1.html">回看 6.1</a>、<a href="b2-6-2.html">6.2</a>）；空间两条直线的位置关系（<a href="b2-8-4.html">回看 8.4</a>）。</p>
+
+  <div class="card">
+    <p><b>空间自由向量</b>：在空间中，具有大小和方向的量叫做空间向量。向量的大小叫做向量的<b>模</b>（或长度），记作 \(|\boldsymbol{a}|\)。向量只由大小与方向决定，与起点位置无关，可以在三维空间中<b>自由平行移动</b>。</p>
+    <p>例：正方体 \(ABCD-A_1B_1C_1D_1\) 中，底面棱向量 \(\overrightarrow{AB}\) 与顶面平行棱向量 \(\overrightarrow{D_1C_1}\)，长度相等且方向相同，它们是<b>同一个向量</b>，即 \(\overrightarrow{AB} = \overrightarrow{D_1C_1}\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>空间任意两向量必共面</b>：两条空间直线可以既不平行也不相交（异面直线），但<b>向量绝没有「异面」之说</b>！任意给定空间中两个向量，只要把它们的起点平移到同一点 \(O\)，两条有向线段必落在同一个平面内（或在同一条直线上）。</p>
+    <p>例：正方体中异面棱 \(AB\) 与 \(CC_1\)，其向量 \(\overrightarrow{AB}\) 与 \(\overrightarrow{CC_1}\) 将起点平移到 \(B\) 后为 \(\overrightarrow{AB}\) 与 \(\overrightarrow{BB_1}\)，都在侧面 \(ABB_1A_1\) 内。因此：<b>空间任意两个向量一定共面</b>。</p>
+  </div>
+
+  <div class="card">
+    <p><b>空间向量的夹角</b>：两个非零向量 \(\boldsymbol{a}, \boldsymbol{b}\) 平移到同一起点 \(O\)，它们所成的较小非负角叫做夹角，记作 \(\langle\boldsymbol{a},\boldsymbol{b}\rangle\)，规定范围为 \([0, \pi]\)（即 \(0^\circ \le \langle\boldsymbol{a},\boldsymbol{b}\rangle \le 180^\circ\)）。</p>
+    <p>例：同向夹角为 \(0\)，互相垂直夹角为 \(90^\circ\)，反向夹角为 \(180^\circ\)。若 \(\boldsymbol{a}\cdot\boldsymbol{b} = 0\) 且两向量非零，则 \(\boldsymbol{a}\perp\boldsymbol{b}\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>投影向量与投影数量</b>：设 \(\boldsymbol{e} = \dfrac{\boldsymbol{b}}{|\boldsymbol{b}|}\) 是与 \(\boldsymbol{b}\) 同向的单位向量，\(\boldsymbol{a}\) 在 \(\boldsymbol{b}\) 上的<b>投影向量</b>为 \((\boldsymbol{a}\cdot\boldsymbol{e})\boldsymbol{e} = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{b}|^2}\boldsymbol{b}\)（是一个向量）；而<b>投影数量</b>（有向投影长）是实数 \(|\boldsymbol{a}|\cos\langle\boldsymbol{a},\boldsymbol{b}\rangle = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{b}|}\)。</p>
+    <p>例：若 \(|\boldsymbol{a}|=4\)，夹角为 \(60^\circ\)，则在 \(\boldsymbol{b}\) 上的投影数量为 \(4\cos 60^\circ = 2\)，投影向量是沿 \(\boldsymbol{b}\) 方向长度为 \(2\) 的向量。</p>
+  </div>
+
+  <h3>2. 加减法与折线回路</h3>
+  <p><b>意思</b>：空间向量的加法、减法、数乘，规则和平面里一样。<b>为什么</b>：任意两个向量平移到同一起点后落在同一个平面内，两个向量相加就是在这个平面里用平面向量的法则；三个以上的向量，一个一个往上加即可。</p>
+  <ul>
+    <li><b>三角形法则（首尾相接）</b>：\(\overrightarrow{AB} + \overrightarrow{BC} = \overrightarrow{AC}\)；减法：\(\overrightarrow{OB} - \overrightarrow{OA} = \overrightarrow{AB}\)（终点减起点）。</li>
+    <li><b>平行四边形法则（共起点）</b>：\(\overrightarrow{OA} + \overrightarrow{OB}\) 是以 \(OA, OB\) 为邻边的平行四边形的对角线向量。</li>
+    <li><b>折线回路</b>：首尾相接、最后回到出发点的一串向量，和是零向量：
+      $$\overrightarrow{A_1A_2} + \overrightarrow{A_2A_3} + \cdots + \overrightarrow{A_nA_1} = \boldsymbol{0}$$
+    </li>
+    <li><b>平行六面体法则</b>：以 \(\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\) 为三条棱作平行六面体，从 \(O\) 出发的体对角线向量
+      $$\overrightarrow{OP} = \overrightarrow{OA} + \overrightarrow{OB} + \overrightarrow{OC}$$
+    </li>
+  </ul>
+  <div class="key">首尾相接，结果从第一个起点指向最后一个终点；绕一圈回到起点，和是 \(\boldsymbol{0}\)。</div>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>在正方体 \(ABCD-A_1B_1C_1D_1\) 中，化简：</p>
+    <p>(1) \(\overrightarrow{AB} + \overrightarrow{CC_1} - \overrightarrow{DA}\)；(2) \(\overrightarrow{AB} + \overrightarrow{BB_1} + \overrightarrow{B_1D_1} + \overrightarrow{D_1A}\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) 减去一个向量等于加上它的相反向量：\(-\overrightarrow{DA} = \overrightarrow{AD}\)。所以</p>
+      <p>$$\begin{aligned}\text{原式} &amp;= (\overrightarrow{AB} + \overrightarrow{AD}) + \overrightarrow{CC_1}\\ &amp;= \overrightarrow{AC} + \overrightarrow{CC_1} = \overrightarrow{AC_1}\end{aligned}$$</p>
+      <p>第一步是底面上的平行四边形法则，第二步是三角形法则。也可以看成：\(\overrightarrow{CC_1} = \overrightarrow{AA_1}\)，三条共起点的棱相加，得体对角线 \(\overrightarrow{AC_1}\)。</p>
+      <p>(2) 四个向量首尾相接：\(A \to B \to B_1 \to D_1 \to A\)，最后回到出发点 \(A\)，是一条闭合折线，所以原式 \(= \boldsymbol{0}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p><b>自己试试</b>：在空间四面体 \(O-ABC\) 中，点 \(M\) 是棱 \(BC\) 的中点，化简 \(\overrightarrow{OM} - \dfrac{1}{2}\overrightarrow{OB} - \dfrac{1}{2}\overrightarrow{OC}\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\boldsymbol{0}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\overrightarrow{BC}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\overrightarrow{OA}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。在 \(\triangle OBC\) 中，\(M\) 是 \(BC\) 中点，\(\overrightarrow{OM} = \dfrac{1}{2}(\overrightarrow{OB} + \overrightarrow{OC})\)，代入后正好减完，结果是零向量 \(\boldsymbol{0}\)。</p>
+      <p class="small">常见算错：选 B。向量减向量，结果还是向量，要写 \(\boldsymbol{0}\)；实数 \(0\) 是数，不是向量。</p>
+    </div>
+  </div>
+
+  <h3>3. 共线向量与共面向量定理</h3>
+  <p><b>意思</b>：判断三点共线、四点共面，就看一个向量能不能用别的向量「伸缩再相加」表示出来。<b>为什么</b>：和 \(\boldsymbol{b}\) 平行的向量只是把 \(\boldsymbol{b}\) 拉长、缩短或反向；两个不共线的向量 \(\boldsymbol{a}, \boldsymbol{b}\) 伸缩后相加，只能走遍它们所在的那个平面。</p>
+  <ul>
+    <li><b>共线向量定理</b>：\(\boldsymbol{b}\ne\boldsymbol{0}\) 时，\(\boldsymbol{a} \parallel \boldsymbol{b} \iff\) 存在唯一实数 \(\lambda\)，使 \(\boldsymbol{a} = \lambda\boldsymbol{b}\)。</li>
+    <li><b>共面向量定理</b>：\(\boldsymbol{a}, \boldsymbol{b}\) 不共线时，\(\boldsymbol{p}\) 与 \(\boldsymbol{a}, \boldsymbol{b}\) 共面 \(\iff\) 存在唯一实数对 \((x, y)\)，使 \(\boldsymbol{p} = x\boldsymbol{a} + y\boldsymbol{b}\)。</li>
+    <li><b>四点共面</b>：\(A, B, C\) 不共线，点 \(O\) 在平面 \(ABC\) 外。若
+      $$\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}$$
+      则 \(P\) 在平面 \(ABC\) 上 \(\iff x + y + z = 1\)（为什么见 <a href="e1-1-2.html">1.2</a> 第 4 块）。
+    </li>
+  </ul>
+  <div class="key">共线：\(\boldsymbol{a} = \lambda\boldsymbol{b}\)；共面：\(\boldsymbol{p} = x\boldsymbol{a} + y\boldsymbol{b}\)（\(\boldsymbol{a}, \boldsymbol{b}\) 不共线）。用平面外一点 \(O\) 展开时，四点共面 \(\iff\) 系数和 \(= 1\)。</div>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>(1) 已知 \(\boldsymbol{a}, \boldsymbol{b}\) 不共线，\(\overrightarrow{AB} = \boldsymbol{a} - 2\boldsymbol{b}\)，\(\overrightarrow{BC} = k\boldsymbol{a} + 6\boldsymbol{b}\)。若 \(A, B, C\) 三点共线，求 \(k\)。</p>
+    <p>(2) \(A, B, C\) 不共线，点 \(O\) 在平面 \(ABC\) 外，\(\overrightarrow{OP} = \dfrac{1}{3}\overrightarrow{OA} + \dfrac{1}{2}\overrightarrow{OB} + m\overrightarrow{OC}\)。若点 \(P\) 在平面 \(ABC\) 上，求 \(m\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) \(A, B, C\) 共线，\(\overrightarrow{AB}\) 与 \(\overrightarrow{BC}\) 共线。\(\overrightarrow{AB} \ne \boldsymbol{0}\)，所以存在 \(\lambda\) 使 \(\overrightarrow{BC} = \lambda\overrightarrow{AB}\)：</p>
+      <p>$$k\boldsymbol{a} + 6\boldsymbol{b} = \lambda\boldsymbol{a} - 2\lambda\boldsymbol{b}$$</p>
+      <p>\(\boldsymbol{a}, \boldsymbol{b}\) 不共线，两边系数对应相等：\(k = \lambda\)，\(6 = -2\lambda\)。所以 \(\lambda = -3\)，\(k = -3\)。</p>
+      <p>(2) \(O\) 在平面外，\(P\) 在平面 \(ABC\) 上，系数和为 \(1\)：</p>
+      <p>$$\frac{1}{3} + \frac{1}{2} + m = 1$$</p>
+      <p>所以 \(m = 1 - \dfrac{5}{6} = \dfrac{1}{6}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p><b>自己试试</b>：\(A, B, C\) 不共线，点 \(P\) 满足 \(\overrightarrow{AP} = 2\overrightarrow{AB} - 3\overrightarrow{AC}\)。点 \(P\) 与平面 \(ABC\) 的关系是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>不一定在平面上</button>
+      <button class="opt" data-v="B"><b>B</b>一定在平面上</button>
+      <button class="opt" data-v="C"><b>C</b>一定在直线 \(AB\) 上</button>
+      <button class="opt" data-v="D"><b>D</b>一定不在平面上</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(\overrightarrow{AP}\) 已经写成了不共线的 \(\overrightarrow{AB}, \overrightarrow{AC}\) 的组合，由共面向量定理，\(\overrightarrow{AP}\) 与它们共面；三个向量又都从 \(A\) 出发，所以 \(P\) 在平面 \(ABC\) 上。</p>
+      <p class="small">常见算错：算 \(2 + (-3) = -1 \ne 1\)，就选 D。「系数和为 1」只用在从平面外一点 \(O\) 出发、写成 \(\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\) 三项的式子；这里是从 \(A\) 出发的两项式子，系数取什么都共面。</p>
+    </div>
+  </div>
+
+  <h3>4. 数量积与长度、角度、垂直</h3>
+  <p><b>意思</b>：\(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}||\boldsymbol{b}|\cos\langle\boldsymbol{a},\boldsymbol{b}\rangle\)，定义和平面里一样。<b>为什么能照搬</b>：两个向量平移到同一起点后在同一平面内，夹角就在这个平面里量。有了它，长度、角度、垂直都能算：</p>
+  <ul>
+    <li><b>垂直</b>：\(\boldsymbol{a}, \boldsymbol{b}\) 非零时，\(\boldsymbol{a} \perp \boldsymbol{b} \iff \boldsymbol{a}\cdot\boldsymbol{b} = 0\)。</li>
+    <li><b>长度</b>：\(|\boldsymbol{a}|^2 = \boldsymbol{a}\cdot\boldsymbol{a}\)，所以 \(|\boldsymbol{a}| = \sqrt{\boldsymbol{a}\cdot\boldsymbol{a}}\)。</li>
+    <li><b>夹角</b>：\(\boldsymbol{a}, \boldsymbol{b}\) 非零时，\(\cos\langle\boldsymbol{a},\boldsymbol{b}\rangle = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{a}||\boldsymbol{b}|}\)。</li>
+  </ul>
+  <p>做法：把要求的向量拆成几个「长度、夹角都知道」的向量，再展开。两个基向量不垂直时，展开后的交叉项 \(2\boldsymbol{a}\cdot\boldsymbol{b}\) 不是 \(0\)，必须留着。</p>
+  <div class="key">求长度先平方：\(|\boldsymbol{a}+\boldsymbol{b}|^2 = |\boldsymbol{a}|^2 + 2\boldsymbol{a}\cdot\boldsymbol{b} + |\boldsymbol{b}|^2\)，交叉项别丢。</div>
+
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>正四面体 \(A-BCD\) 的棱长都是 \(2\)。(1) 求 \(\overrightarrow{AB}\cdot\overrightarrow{CD}\)，说明 \(AB\) 与 \(CD\) 的位置关系；(2) 求 \(|\overrightarrow{AB}+\overrightarrow{CD}|\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) 用从 \(A\) 出发的棱来拆：\(\overrightarrow{CD} = \overrightarrow{AD} - \overrightarrow{AC}\)。</p>
+      <p>$$\begin{aligned}\overrightarrow{AB}\cdot\overrightarrow{CD} &amp;= \overrightarrow{AB}\cdot(\overrightarrow{AD}-\overrightarrow{AC})\\ &amp;= \overrightarrow{AB}\cdot\overrightarrow{AD} - \overrightarrow{AB}\cdot\overrightarrow{AC}\end{aligned}$$</p>
+      <p>每个面都是等边三角形，从 \(A\) 出发的两条棱夹角 \(60^\circ\)：</p>
+      <p>$$\overrightarrow{AB}\cdot\overrightarrow{AD} = \overrightarrow{AB}\cdot\overrightarrow{AC} = 2\times 2\times\cos 60^\circ = 2$$</p>
+      <p>所以 \(\overrightarrow{AB}\cdot\overrightarrow{CD} = 2 - 2 = 0\)。两个向量都非零，\(\overrightarrow{AB} \perp \overrightarrow{CD}\)：正四面体的对棱互相垂直（它们是异面直线，垂直指所成角为 \(90^\circ\)）。</p>
+      <p>(2) 先算平方，交叉项由 (1) 得 \(0\)：</p>
+      <p>$$\begin{aligned}|\overrightarrow{AB}+\overrightarrow{CD}|^2 &amp;= |\overrightarrow{AB}|^2 + 2\overrightarrow{AB}\cdot\overrightarrow{CD} + |\overrightarrow{CD}|^2\\ &amp;= 4 + 0 + 4 = 8\end{aligned}$$</p>
+      <p>所以 \(|\overrightarrow{AB}+\overrightarrow{CD}| = \sqrt{8} = 2\sqrt{2}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-dot" data-answer="A">
+    <p><b>自己试试</b>：空间向量 \(\boldsymbol{a}, \boldsymbol{b}\) 满足 \(|\boldsymbol{a}| = 2\)，\(|\boldsymbol{b}| = 3\)，\(\langle\boldsymbol{a},\boldsymbol{b}\rangle = 60^\circ\)。\(|\boldsymbol{a}-\boldsymbol{b}|\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\sqrt{7}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt{13}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{19}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(\boldsymbol{a}\cdot\boldsymbol{b} = 2\times 3\times\cos 60^\circ = 3\)。</p>
+      <p>$$|\boldsymbol{a}-\boldsymbol{b}|^2 = 4 - 2\times 3 + 9 = 7$$</p>
+      <p>所以 \(|\boldsymbol{a}-\boldsymbol{b}| = \sqrt{7}\)。</p>
+      <p class="small">常见算错：选 B 是丢了交叉项（\(\boldsymbol{a}, \boldsymbol{b}\) 不垂直，\(2\boldsymbol{a}\cdot\boldsymbol{b} \ne 0\)）；选 C 是交叉项符号写成了加号；选 D 是把长度直接相减 \(3 - 2\)。</p>
+    </div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <p>从平面到空间，下面四条最容易出错，各配一个反例：</p>
+  <ol>
+    <li><b>两两不共线，不等于不共面</b><br>
+      <span class="small">反例：同一个平面内两两成 \(120^\circ\) 的三个向量，两两不共线，但都在这个平面里，不能做空间的基底。</span>
+    </li>
+    <li><b>数量积没有结合律</b><br>
+      <span class="small">反例：\((\boldsymbol{a}\cdot\boldsymbol{b})\boldsymbol{c}\) 是平行于 \(\boldsymbol{c}\) 的向量，而 \(\boldsymbol{a}(\boldsymbol{b}\cdot\boldsymbol{c})\) 是平行于 \(\boldsymbol{a}\) 的向量。\(\boldsymbol{a}\) 与 \(\boldsymbol{c}\) 不共线时，除非 \(\boldsymbol{a}\cdot\boldsymbol{b}\) 与 \(\boldsymbol{b}\cdot\boldsymbol{c}\) 都是 \(0\)，两边不相等。</span>
+    </li>
+    <li><b>数量积不能约去</b><br>
+      <span class="small">反例：若 \(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c}\)（\(\boldsymbol{a}\ne\boldsymbol{0}\)），移项得 \(\boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{c}) = 0\)，只能说明 \(\boldsymbol{a} \perp (\boldsymbol{b}-\boldsymbol{c})\) 或 \(\boldsymbol{b}=\boldsymbol{c}\)，不能得出 \(\boldsymbol{b}=\boldsymbol{c}\)。例：\(\boldsymbol{a}\) 是竖直向上的单位向量，\(\boldsymbol{b}, \boldsymbol{c}\) 是两个不同的水平向量，\(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c} = 0\)，但 \(\boldsymbol{b}\ne\boldsymbol{c}\)。</span>
+    </li>
+    <li><b>基向量不垂直时，交叉项要保留</b><br>
+      <span class="small">反例：计算 \(|\boldsymbol{a}+\boldsymbol{b}|^2\) 时，只有当 \(\boldsymbol{a}\perp\boldsymbol{b}\)（直角系）时才等于 \(|\boldsymbol{a}|^2+|\boldsymbol{b}|^2\)；一般基底下必须保留 \(2\boldsymbol{a}\cdot\boldsymbol{b} = 2|\boldsymbol{a}||\boldsymbol{b}|\cos\theta\)。例：\(|\boldsymbol{a}| = |\boldsymbol{b}| = 1\)，夹角 \(60^\circ\)，\(|\boldsymbol{a}+\boldsymbol{b}|^2 = 1 + 1 + 1 = 3\)，不是 \(2\)。</span>
+    </li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>空间里四个向量，为什么总有一个能用另外三个表示？</b>空间只有三个「方向自由度」：三个不共面的向量就能表示空间里所有向量，第四个必然能用它们表示出来。下一节（<a href="e1-1-2.html">1.2 空间向量基本定理</a>）把这件事讲清楚。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 空间向量 3D 斜测透视交互台</h3>
+  <p class="small">在三维空间直观体验向量的几何运算法则。在下方切换观察「加法平行四边形/三角形」、「数量积与空间夹角 \(\theta\)」以及「投影向量」。可拖动滑块改变向量 \(\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 的空间分量：</p>
+
+  <div class="tabs" id="modeTabs" role="tablist">
+    <button type="button" class="on" data-mode="add" role="tab" aria-selected="true">加法：平行四边形 / 三角形</button>
+    <button type="button" data-mode="dot" role="tab" aria-selected="false">数量积与空间夹角 \(\theta\)</button>
+    <button type="button" data-mode="proj" role="tab" aria-selected="false">投影向量</button>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--a)"></span>向量 \(\boldsymbol{a}\)（松绿）</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c)"></span>向量 \(\boldsymbol{b}\)（黛蓝）</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--b)"></span>运算结果（合向量 / 投影）</span>
+  </div>
+
+  <div class="card">
+    <svg class="fig" id="fig3d" viewBox="0 0 560 330" role="img" aria-label="3D空间向量演示器，展示空间向量加法、数量积夹角与投影向量"></svg>
+    <div class="result" id="vecResult" aria-live="polite"></div>
+
+    <div class="slider-grid">
+      <div class="slider-card">
+        <div style="font-weight:700;color:var(--a);margin-bottom:4px;">向量 \(\boldsymbol{a}\) 空间分量</div>
+        <div class="slider-row"><label for="ax">横向 \(x\)</label><input type="range" id="ax" min="-3" max="5" step="1" value="3"><output id="axOut">3</output></div>
+        <div class="slider-row"><label for="ay">进深 \(y\)</label><input type="range" id="ay" min="-2" max="4" step="1" value="1"><output id="ayOut">1</output></div>
+        <div class="slider-row"><label for="az">垂直 \(z\)</label><input type="range" id="az" min="-2" max="5" step="1" value="3"><output id="azOut">3</output></div>
+      </div>
+      <div class="slider-card">
+        <div style="font-weight:700;color:var(--c);margin-bottom:4px;">向量 \(\boldsymbol{b}\) 空间分量</div>
+        <div class="slider-row"><label for="bx">横向 \(x\)</label><input type="range" id="bx" min="-3" max="5" step="1" value="2"><output id="bxOut">2</output></div>
+        <div class="slider-row"><label for="by">进深 \(y\)</label><input type="range" id="by" min="-2" max="4" step="1" value="4"><output id="byOut">4</output></div>
+        <div class="slider-row"><label for="bz">垂直 \(z\)</label><input type="range" id="bz" min="-2" max="5" step="1" value="0"><output id="bzOut">0</output></div>
+      </div>
+    </div>
+
+    <div class="ctrl">
+      <button class="btn ghost" id="reset" type="button">重置</button>
+      <span class="small">支持方向键精细调节分量，极端零向量测试不报错。</span>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接运用，中间两道攻坚易错红线，最后一道挑战综合几何。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-loop" data-answer="A">
+    <p>1. 在正方体 \(ABCD-A_1B_1C_1D_1\) 中，化简空间折线回路向量表达式 \(\overrightarrow{AB} + \overrightarrow{BC} + \overrightarrow{CC_1} + \overrightarrow{D_1A_1}\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\overrightarrow{AB_1}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\overrightarrow{AC_1}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\overrightarrow{AD_1}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\boldsymbol{0}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。逐步相加：前三项首尾相连 \(\overrightarrow{AB} + \overrightarrow{BC} + \overrightarrow{CC_1} = \overrightarrow{AC_1}\)。在正方体顶面中，棱向量 \(\overrightarrow{D_1A_1} = \overrightarrow{C_1B_1}\)。故原式 \(= \overrightarrow{AC_1} + \overrightarrow{C_1B_1} = \overrightarrow{AB_1}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-basic-dot" data-answer="A">
+    <p>2. 已知空间向量 \(\boldsymbol{a}, \boldsymbol{b}\) 满足 \(|\boldsymbol{a}|=2, |\boldsymbol{b}|=3\)，且 \((\boldsymbol{a}+2\boldsymbol{b})\perp (2\boldsymbol{a}-\boldsymbol{b})\)。则数量积 \(\boldsymbol{a}\cdot\boldsymbol{b}\) 的值为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{10}{3}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-\dfrac{10}{3}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{5}{3}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。由垂直充要条件，两向量数量积为 0：</p>
+      <p style="text-align:center">\((\boldsymbol{a}+2\boldsymbol{b})\cdot(2\boldsymbol{a}-\boldsymbol{b}) = 2\boldsymbol{a}^2 + 3\boldsymbol{a}\cdot\boldsymbol{b} - 2\boldsymbol{b}^2 = 0\)。</p>
+      <p>代入模长 \(|\boldsymbol{a}|=2, |\boldsymbol{b}|=3\)：\(2\times 4 + 3\boldsymbol{a}\cdot\boldsymbol{b} - 2\times 9 = 0 \implies 8 + 3\boldsymbol{a}\cdot\boldsymbol{b} - 18 = 0 \implies 3\boldsymbol{a}\cdot\boldsymbol{b} = 10\)，解得 \(\boldsymbol{a}\cdot\boldsymbol{b} = \dfrac{10}{3}\)。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-coplanar" data-answer="C">
+    <p>3. 下列关于空间向量概念与共面性的命题中，<b>正确</b>的是哪一个？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>若空间两直线 \(l_1, l_2\) 异面，则分别在两直线上的方向向量也是「异面向量」</button>
+      <button class="opt" data-v="B"><b>B</b>空间任意三个向量，只要它们两两不共线，就一定不共面（能构成空间基底）</button>
+      <button class="opt" data-v="C"><b>C</b>空间中任意两个非零向量一定共面</button>
+      <button class="opt" data-v="D"><b>D</b>若 \(\overrightarrow{OP} = \dfrac{1}{2}\overrightarrow{OA} + \dfrac{1}{3}\overrightarrow{OB} + \dfrac{1}{4}\overrightarrow{OC}\)，则 \(P, A, B, C\) 四点必共面</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。逐项辨析核心边界：</p>
+      <p><b>C 正确</b>：空间向量是自由向量，平移到同一起点后必在同一平面内，空间中<b>绝对不存在「异面向量」</b>。</p>
+      <p><b>A 错误</b>：直线可以异面，但向量可自由平移，不存在异面向量概念。</p>
+      <p><b>B 错误</b>：两两不共线不等于不共面！例如正三角形的三边向量两两不共线，但完全共面。</p>
+      <p><b>D 错误</b>：四点共面充要条件是系数和等于 1，而 \(\dfrac{1}{2}+\dfrac{1}{3}+\dfrac{1}{4} = \dfrac{13}{12} \ne 1\)，四点不共面。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-dot-rules" data-answer="C">
+    <p>4. 设 \(\boldsymbol{a}, \boldsymbol{b}, \boldsymbol{c}\) 是空间中三个非零向量，下列运算律中<b>恒成立</b>的是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>若 \(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c}\)，则 \(\boldsymbol{b}=\boldsymbol{c}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((\boldsymbol{a}\cdot\boldsymbol{b})\boldsymbol{c} = \boldsymbol{a}(\boldsymbol{b}\cdot\boldsymbol{c})\)</button>
+      <button class="opt" data-v="C"><b>C</b>若 \(\boldsymbol{a}\cdot\boldsymbol{b} = 0\)，则 \(\boldsymbol{a}\perp\boldsymbol{b}\)</button>
+      <button class="opt" data-v="D"><b>D</b>若 \(\boldsymbol{a}\cdot\boldsymbol{b} &lt; 0\)，则 \(\langle\boldsymbol{a},\boldsymbol{b}\rangle\) 必为钝角</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。辨析数量积的关键边界：</p>
+      <p><b>C 恒成立</b>：两向量已知非零，\(\boldsymbol{a}\cdot\boldsymbol{b}=0 \iff \cos\theta=0 \iff \theta=90^\circ \iff \boldsymbol{a}\perp\boldsymbol{b}\)。</p>
+      <p><b>A 错误</b>：数量积没有消去律！\(\boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{c})=0\) 可能是 \(\boldsymbol{a}\perp(\boldsymbol{b}-\boldsymbol{c})\)，不能推得 \(\boldsymbol{b}=\boldsymbol{c}\)。</p>
+      <p><b>B 错误</b>：数量积不满足结合律！左边共线于 \(\boldsymbol{c}\)，右边共线于 \(\boldsymbol{a}\)。</p>
+      <p><b>D 错误</b>：夹角可能是 \(180^\circ\)（反向平角），平角不是钝角。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge-tetra" data-answer="B">
+    <p>5. 在棱长为 \(2\) 的正四面体 \(A-BCD\) 中，点 \(E, F\) 分别是棱 \(AB, CD\) 的中点。则对棱中点连线段 \(EF\) 的长度（即向量模长 \(|\overrightarrow{EF}|\)）为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt{2}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{3}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{\sqrt{6}}{2}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。选定基底 \(\overrightarrow{AB}=\boldsymbol{a}, \overrightarrow{AC}=\boldsymbol{b}, \overrightarrow{AD}=\boldsymbol{c}\)，模长均为 2，两两夹角为 \(60^\circ\)，两两数量积为 \(2\times 2\times\cos 60^\circ = 2\)。</p>
+      <p>\(\overrightarrow{AE} = \dfrac{1}{2}\boldsymbol{a}\)，\(\overrightarrow{AF} = \dfrac{1}{2}(\boldsymbol{b}+\boldsymbol{c})\)，故 \(\overrightarrow{EF} = \overrightarrow{AF} - \overrightarrow{AE} = \dfrac{1}{2}(\boldsymbol{b}+\boldsymbol{c}-\boldsymbol{a})\)。</p>
+      <p>展开求模平方：</p>
+      <p>$$|\overrightarrow{EF}|^2 = \frac{1}{4}\left(\boldsymbol{b}^2+\boldsymbol{c}^2+\boldsymbol{a}^2 + 2\boldsymbol{b}\cdot\boldsymbol{c} - 2\boldsymbol{a}\cdot\boldsymbol{b} - 2\boldsymbol{a}\cdot\boldsymbol{c}\right) = \frac{1}{4}(4+4+4 + 4 - 4 - 4) = 2$$</p>
+      <p>故线段长 \(|\overrightarrow{EF}| = \sqrt{2}\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var axIn = document.getElementById("ax");
+  var ayIn = document.getElementById("ay");
+  var azIn = document.getElementById("az");
+  var bxIn = document.getElementById("bx");
+  var byIn = document.getElementById("by");
+  var bzIn = document.getElementById("bz");
+
+  var axOut = document.getElementById("axOut");
+  var ayOut = document.getElementById("ayOut");
+  var azOut = document.getElementById("azOut");
+  var bxOut = document.getElementById("bxOut");
+  var byOut = document.getElementById("byOut");
+  var bzOut = document.getElementById("bzOut");
+
+  var svg = document.getElementById("fig3d");
+  var desc = document.getElementById("vecResult");
+  var resetBtn = document.getElementById("reset");
+  var modeTabs = document.getElementById("modeTabs");
+
+  var curMode = "add";
+
+  // 空间斜二测投影参数：原点 (250, 205)，缩放尺 25 px/单位
+  var origin = [250, 205];
+  var scale = 25;
+
+  function toScreen(x, y, z) {
+    // x: 水平向右, y: 进深斜向左下(成45度，长度减半), z: 竖直向上
+    var px = origin[0] + (x - 0.3536 * y) * scale;
+    var py = origin[1] - (z - 0.3536 * y) * scale;
+    return [px, py];
+  }
+
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
+        el.setAttribute(k, attrs[k]);
+      }
+    }
+    return el;
+  }
+
+  function drawArrow(p1, p2, color, w, dash) {
+    var dx = p2[0] - p1[0], dy = p2[1] - p1[1];
+    var len = Math.hypot(dx, dy);
+    if (len < 1) return;
+    var ux = dx / len, uy = dy / len;
+    var al = Math.min(10, len * 0.4);
+    var aw = al * 0.55;
+    var endX = p2[0] - ux * (al * 0.7);
+    var endY = p2[1] - uy * (al * 0.7);
+
+    var line = svgEl("line", {
+      x1: p1[0].toFixed(1), y1: p1[1].toFixed(1),
+      x2: endX.toFixed(1), y2: endY.toFixed(1),
+      stroke: color, "stroke-width": w || "2.5"
+    });
+    if (dash) line.setAttribute("stroke-dasharray", dash);
+    svg.appendChild(line);
+
+    var tipX = p2[0], tipY = p2[1];
+    var leftX = tipX - ux * al - uy * aw;
+    var leftY = tipY - uy * al + ux * aw;
+    var rightX = tipX - ux * al + uy * aw;
+    var rightY = tipY - uy * al - ux * aw;
+    var poly = svgEl("polygon", {
+      points: tipX.toFixed(1) + "," + tipY.toFixed(1) + " " +
+              leftX.toFixed(1) + "," + leftY.toFixed(1) + " " +
+              rightX.toFixed(1) + "," + rightY.toFixed(1),
+      fill: color
+    });
+    svg.appendChild(poly);
+  }
+
+  function drawText(pt, str, color, dx, dy, sz) {
+    var txt = svgEl("text", {
+      x: (pt[0] + (dx || 0)).toFixed(1),
+      y: (pt[1] + (dy || 0)).toFixed(1),
+      fill: color || "var(--fg)",
+      "font-size": sz || "13",
+      "font-weight": "700"
+    });
+    txt.textContent = str;
+    svg.appendChild(txt);
+  }
+
+  function drawCircle(pt, r, color, strokeColor) {
+    var circ = svgEl("circle", {
+      cx: pt[0].toFixed(1), cy: pt[1].toFixed(1),
+      r: r, fill: color
+    });
+    if (strokeColor) {
+      circ.setAttribute("stroke", strokeColor);
+      circ.setAttribute("stroke-width", "2");
+    }
+    svg.appendChild(circ);
+    return circ;
+  }
+
+  function render() {
+    var ax = parseFloat(axIn.value);
+    var ay = parseFloat(ayIn.value);
+    var az = parseFloat(azIn.value);
+    var bx = parseFloat(bxIn.value);
+    var by = parseFloat(byIn.value);
+    var bz = parseFloat(bzIn.value);
+
+    axOut.textContent = ax;
+    ayOut.textContent = ay;
+    azOut.textContent = az;
+    bxOut.textContent = bx;
+    byOut.textContent = by;
+    bzOut.textContent = bz;
+
+    svg.innerHTML = "";
+
+    var O = toScreen(0, 0, 0);
+
+    // 绘制地面网格 (x-y 平面基底)
+    for (var gx = -2; gx <= 5; gx += 1) {
+      var g1 = toScreen(gx, -1, 0);
+      var g2 = toScreen(gx, 4, 0);
+      var gl = svgEl("line", {
+        x1: g1[0].toFixed(1), y1: g1[1].toFixed(1),
+        x2: g2[0].toFixed(1), y2: g2[1].toFixed(1),
+        stroke: "var(--line)", "stroke-width": "0.9"
+      });
+      svg.appendChild(gl);
+    }
+    for (var gy = -1; gy <= 4; gy += 1) {
+      var h1 = toScreen(-2, gy, 0);
+      var h2 = toScreen(5, gy, 0);
+      var hl = svgEl("line", {
+        x1: h1[0].toFixed(1), y1: h1[1].toFixed(1),
+        x2: h2[0].toFixed(1), y2: h2[1].toFixed(1),
+        stroke: "var(--line)", "stroke-width": "0.9"
+      });
+      svg.appendChild(hl);
+    }
+
+    // 绘制 3 根坐标轴
+    var xEnd = toScreen(6.2, 0, 0);
+    var yEnd = toScreen(0, 5.2, 0);
+    var zEnd = toScreen(0, 0, 5.5);
+    drawArrow(O, xEnd, "var(--muted)", "1.5");
+    drawArrow(O, yEnd, "var(--muted)", "1.5");
+    drawArrow(O, zEnd, "var(--muted)", "1.5");
+    drawText(xEnd, "x", "var(--muted)", 8, 4);
+    drawText(yEnd, "y", "var(--muted)", -14, 14);
+    drawText(zEnd, "z", "var(--muted)", -4, -8);
+    drawText(O, "O", "var(--fg)", -14, 14);
+
+    var ptA = toScreen(ax, ay, az);
+    var ptB = toScreen(bx, by, bz);
+
+    // 投影虚线（显示点 A、B 在地面的空间垂直射影）
+    var ptA_ground = toScreen(ax, ay, 0);
+    var ptB_ground = toScreen(bx, by, 0);
+    var dashA = svgEl("line", {
+      x1: ptA[0].toFixed(1), y1: ptA[1].toFixed(1),
+      x2: ptA_ground[0].toFixed(1), y2: ptA_ground[1].toFixed(1),
+      stroke: "var(--a)", "stroke-width": "1.2", "stroke-dasharray": "3,3", opacity: "0.6"
+    });
+    svg.appendChild(dashA);
+    var dashB = svgEl("line", {
+      x1: ptB[0].toFixed(1), y1: ptB[1].toFixed(1),
+      x2: ptB_ground[0].toFixed(1), y2: ptB_ground[1].toFixed(1),
+      stroke: "var(--c)", "stroke-width": "1.2", "stroke-dasharray": "3,3", opacity: "0.6"
+    });
+    svg.appendChild(dashB);
+
+    // 模长与数量积计算
+    var lenA = Math.hypot(ax, ay, az);
+    var lenB = Math.hypot(bx, by, bz);
+    var dot = ax * bx + ay * by + az * bz;
+    var hasAngle = (lenA > 1e-4 && lenB > 1e-4);
+    var cosTheta = hasAngle ? Math.max(-1, Math.min(1, dot / (lenA * lenB))) : 1;
+    var deg = Math.acos(cosTheta) * 180 / Math.PI;
+
+    if (curMode === "add") {
+      // 模式 1：加法（平行四边形法则与三角形法则）
+      var sumX = ax + bx, sumY = ay + by, sumZ = az + bz;
+      var ptP = toScreen(sumX, sumY, sumZ);
+
+      // 平行四边形两边辅助虚线：A -> P (向量 b) 与 B -> P (向量 a)
+      var aux1 = svgEl("line", {
+        x1: ptA[0].toFixed(1), y1: ptA[1].toFixed(1),
+        x2: ptP[0].toFixed(1), y2: ptP[1].toFixed(1),
+        stroke: "var(--c)", "stroke-width": "1.5", "stroke-dasharray": "4,3", opacity: "0.8"
+      });
+      var aux2 = svgEl("line", {
+        x1: ptB[0].toFixed(1), y1: ptB[1].toFixed(1),
+        x2: ptP[0].toFixed(1), y2: ptP[1].toFixed(1),
+        stroke: "var(--a)", "stroke-width": "1.5", "stroke-dasharray": "4,3", opacity: "0.8"
+      });
+      svg.appendChild(aux1);
+      svg.appendChild(aux2);
+
+      // 主向量 a, b 与合向量 a+b
+      drawArrow(O, ptA, "var(--a)", "3");
+      drawArrow(O, ptB, "var(--c)", "3");
+      drawArrow(O, ptP, "var(--b)", "3.8");
+
+      drawCircle(ptA, 4, "var(--a)", "#fff");
+      drawCircle(ptB, 4, "var(--c)", "#fff");
+      drawCircle(ptP, 5, "var(--b)", "#fff");
+
+      drawText(ptA, "a", "var(--a)", -12, -8);
+      drawText(ptB, "b", "var(--c)", 8, 14);
+      drawText(ptP, "a+b", "var(--b)", 10, -6);
+
+      var lenP = Math.hypot(sumX, sumY, sumZ);
+      desc.innerHTML =
+        "<b>空间向量加法</b>：\\(\\boldsymbol{a} = (" + ax + ", " + ay + ", " + az + ")\\)，\\(\\boldsymbol{b} = (" + bx + ", " + by + ", " + bz + ")\\)；<br>" +
+        "合向量 \\(\\boldsymbol{a} + \\boldsymbol{b} = (" + sumX + ", " + sumY + ", " + sumZ + ")\\)，" +
+        "模长 \\(|\\boldsymbol{a} + \\boldsymbol{b}| = " + lenP.toFixed(2) + "\\)。<br>" +
+        "<span class=\"small\">既满足平行四边形法则（对角线 \\(\\overrightarrow{OP}\\)），也满足三角形法则（首尾相接 \\(\\overrightarrow{OA}+\\overrightarrow{AP}\\)）。</span>";
+    } else if (curMode === "dot") {
+      // 模式 2：空间夹角与数量积
+      drawArrow(O, ptA, "var(--a)", "3");
+      drawArrow(O, ptB, "var(--c)", "3");
+
+      drawCircle(ptA, 4, "var(--a)", "#fff");
+      drawCircle(ptB, 4, "var(--c)", "#fff");
+      drawText(ptA, "a", "var(--a)", -12, -8);
+      drawText(ptB, "b", "var(--c)", 8, 14);
+
+      // 绘制空间两向量夹角扇弧
+      if (hasAngle && deg > 1) {
+        var arcPts = [];
+        var steps = 14;
+        var rVal = 1.3;
+        for (var i = 0; i <= steps; i++) {
+          var t = i / steps;
+          // 在 3D 中沿单位向量插值
+          var ux = (1 - t) * (ax / lenA) + t * (bx / lenB);
+          var uy = (1 - t) * (ay / lenA) + t * (by / lenB);
+          var uz = (1 - t) * (az / lenA) + t * (bz / lenB);
+          var uLen = Math.hypot(ux, uy, uz);
+          if (uLen > 1e-4) {
+            ux = (ux / uLen) * rVal;
+            uy = (uy / uLen) * rVal;
+            uz = (uz / uLen) * rVal;
+          }
+          arcPts.push(toScreen(ux, uy, uz));
+        }
+        var pathD = "M " + O[0].toFixed(1) + " " + O[1].toFixed(1);
+        for (var k = 0; k < arcPts.length; k++) {
+          pathD += " L " + arcPts[k][0].toFixed(1) + " " + arcPts[k][1].toFixed(1);
+        }
+        pathD += " Z";
+        var arcPoly = svgEl("path", {
+          d: pathD,
+          fill: "var(--hl-soft)",
+          stroke: "var(--hl)",
+          "stroke-width": "1.5",
+          opacity: "0.85"
+        });
+        svg.appendChild(arcPoly);
+
+        var midPt = arcPts[Math.floor(steps / 2)];
+        drawText(midPt, "θ", "var(--b)", 4, -4);
+      }
+
+      var tagCls = "tag-acute", tagTxt = "锐角";
+      if (!hasAngle) { tagCls = ""; tagTxt = "含零向量"; }
+      else if (Math.abs(deg - 90) < 0.1) { tagCls = "tag-right"; tagTxt = "垂直 (90°)"; }
+      else if (deg > 90) { tagCls = "tag-obtuse"; tagTxt = "钝角"; }
+      else if (deg < 0.1) { tagCls = "tag-acute"; tagTxt = "同向 (0°)"; }
+      else if (Math.abs(deg - 180) < 0.1) { tagCls = "tag-obtuse"; tagTxt = "反向 (180°)"; }
+
+      desc.innerHTML =
+        "<b>空间数量积与夹角</b>：\\(|\\boldsymbol{a}| = " + lenA.toFixed(2) + "\\)，\\(|\\boldsymbol{b}| = " + lenB.toFixed(2) + "\\)；<br>" +
+        "数量积 \\(\\boldsymbol{a}\\cdot\\boldsymbol{b} = " + dot.toFixed(2) + "\\)，" +
+        "空间夹角 \\(\\theta = " + (hasAngle ? deg.toFixed(1) + "^\\circ" : "未定义") + "\\)" +
+        (hasAngle ? " <span class=\"tag-status " + tagCls + "\">" + tagTxt + "</span>" : "") + "。<br>" +
+        "<span class=\"small\">" + (dot === 0 && hasAngle ? "★ 数量积为 0，两非零空间向量垂直！" : "注意：空间向量夹角规定在 [0, π] 范围内。") + "</span>";
+    } else if (curMode === "proj") {
+      // 模式 3：投影向量
+      drawArrow(O, ptA, "var(--a)", "3");
+      drawArrow(O, ptB, "var(--c)", "3");
+
+      var bLenSq = bx * bx + by * by + bz * bz;
+      var hx = 0, hy = 0, hz = 0;
+      var projScalar = 0;
+      if (bLenSq > 1e-4) {
+        var coeff = dot / bLenSq;
+        hx = coeff * bx;
+        hy = coeff * by;
+        hz = coeff * bz;
+        projScalar = dot / lenB;
+      }
+      var ptH = toScreen(hx, hy, hz);
+
+      // 从点 A 向向量 b 所在直线作垂线 A -> H
+      var perp = svgEl("line", {
+        x1: ptA[0].toFixed(1), y1: ptA[1].toFixed(1),
+        x2: ptH[0].toFixed(1), y2: ptH[1].toFixed(1),
+        stroke: "var(--no)", "stroke-width": "1.6", "stroke-dasharray": "4,3"
+      });
+      svg.appendChild(perp);
+
+      // 高亮绘制投影向量 OH
+      drawArrow(O, ptH, "var(--b)", "4");
+      drawCircle(ptH, 4, "var(--b)", "#fff");
+      drawCircle(ptA, 4, "var(--a)", "#fff");
+      drawCircle(ptB, 4, "var(--c)", "#fff");
+
+      drawText(ptA, "a", "var(--a)", -12, -8);
+      drawText(ptB, "b", "var(--c)", 8, 14);
+      drawText(ptH, "H", "var(--b)", -12, 16);
+
+      desc.innerHTML =
+        "<b>投影向量</b>：将 \\(\\boldsymbol{a}\\) 的终点向 \\(\\boldsymbol{b}\\) 所在直线作垂线，垂足为 \\(H\\)；<br>" +
+        "投影向量 \\(\\overrightarrow{OH} = (\\boldsymbol{a}\\cdot\\boldsymbol{e})\\boldsymbol{e} = (" + hx.toFixed(2) + ", " + hy.toFixed(2) + ", " + hz.toFixed(2) + ")\\)；<br>" +
+        "投影数量（有向长）：\\(|\\boldsymbol{a}|\\cos\\theta = \\dfrac{\\boldsymbol{a}\\cdot\\boldsymbol{b}}{|\\boldsymbol{b}|} = " + projScalar.toFixed(2) + "\\)。";
+    }
+
+    if (window.renderMathInElement) {
+      window.renderMathInElement(desc, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    }
+  }
+
+  [axIn, ayIn, azIn, bxIn, byIn, bzIn].forEach(function (inp) {
+    inp.addEventListener("input", render);
+  });
+
+  resetBtn.addEventListener("click", function () {
+    axIn.value = 3;
+    ayIn.value = 1;
+    azIn.value = 3;
+    bxIn.value = 2;
+    byIn.value = 4;
+    bzIn.value = 0;
+    curMode = "add";
+    [].forEach.call(modeTabs.children, function (btn) {
+      btn.classList.toggle("on", btn.getAttribute("data-mode") === "add");
+      btn.setAttribute("aria-selected", btn.getAttribute("data-mode") === "add" ? "true" : "false");
+    });
+    render();
+  });
+
+  modeTabs.addEventListener("click", function (ev) {
+    var btn = ev.target.closest("button");
+    if (!btn) return;
+    var m = btn.getAttribute("data-mode");
+    if (!m) return;
+    curMode = m;
+    [].forEach.call(modeTabs.children, function (b) {
+      var sel = b === btn;
+      b.classList.toggle("on", sel);
+      b.setAttribute("aria-selected", sel ? "true" : "false");
+    });
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

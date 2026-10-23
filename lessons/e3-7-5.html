@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.5 正态分布 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  #nfig text, #hfig text { font-size: 20px; }
+  table.tb { border-collapse: collapse; margin: 8px auto; font-size: 15px; }
+  table.tb th, table.tb td { border: 1px solid var(--line); padding: 4px 12px; text-align: center; }
+  table.tb th { background: var(--hl-soft); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e3-7-5">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 7 章 随机变量及其分布</p>
+<h1>7.5 正态分布</h1>
+<p class="lead">身高、零件尺寸、测量误差……很多量的直方图都是「中间高、两边低、左右对称」。这一节用一条钟形曲线描述它们：概率就是曲线下的面积。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一台机器往袋子里装大米，每袋标的是 \(500\) 克。抽了 \(100\) 袋称重，结果如下（每组含左端、不含右端）：</p>
+  <table class="tb">
+    <tr><th>重量（克）</th><th>袋数</th></tr>
+    <tr><td>低于 \(496\)</td><td>\(2\)</td></tr>
+    <tr><td>\(496\sim498\)</td><td>\(14\)</td></tr>
+    <tr><td>\(498\sim500\)</td><td>\(34\)</td></tr>
+    <tr><td>\(500\sim502\)</td><td>\(34\)</td></tr>
+    <tr><td>\(502\sim504\)</td><td>\(14\)</td></tr>
+    <tr><td>\(504\) 及以上</td><td>\(2\)</td></tr>
+  </table>
+  <div class="card predict" data-id="entry" data-answer="C">
+    <p>再随手拿一袋，重量在 \(498\sim502\) 克之间的可能性，用这组数据估计大约是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(34\%\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(50\%\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(68\%\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(98\%\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(498\sim500\) 有 \(34\) 袋，\(500\sim502\) 有 \(34\) 袋，合起来 \(68\) 袋，频率 \(0.68\)，用它估计概率约 \(68\%\)。</p>
+      <p>再看整张表：中间多、两边少，左右差不多对称。画成直方图就是一个「钟」。袋数再多、分组再细，直方图的上沿会越来越像一条光滑的钟形曲线。</p>
+      <p>这一节就讲这条曲线——<b>正态曲线</b>：落在某一段的概率，就是这一段曲线下面的面积。那个 \(68\%\) 也不是巧合，后面会看到。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：均值、方差、标准差（<a href="e3-7-3.html">回看 7.3</a>）；频率分布直方图（<a href="b2-9-2.html">回看必修二 9.2</a>）。</p>
+
+  <div class="card">
+    <p><b>均值和标准差</b>：均值说「中心在哪」；方差说「散得多开」，标准差是方差的算术平方根，和原数据同一个单位。</p>
+    <p>例：大米重量均值 \(500\) 克，方差 \(4\)，那么标准差是 \(\sqrt4=2\) 克，不是 \(4\) 克。</p>
+  </div>
+
+  <div class="card">
+    <p><b>直方图里，面积才是频率</b>：频率分布直方图的纵轴是「频率 ÷ 组距」，小长方形的<b>面积</b> \(=\) 组距 \(\times\) 高 \(=\) 这一组的频率，所有长方形面积加起来是 \(1\)。</p>
+    <p>例：上面 \(498\sim500\) 这组，组距 \(2\)，频率 \(0.34\)，长方形的高是 \(0.34\div2=0.17\)。高 \(0.17\) 不是频率，面积 \(2\times0.17=0.34\) 才是。</p>
+  </div>
+
+  <div class="card">
+    <p><b>取值连成一片的量</b>：前几节的随机变量（次数、个数）只取 \(0,1,2,\dots\) 这样一个一个的值，能列分布列。重量、身高可以取一段里的任何数，列不完，只能问「落在某一段里」的概率。</p>
+    <p>例：问「一袋恰好重 \(500.000\cdots\) 克」没有意义，秤再准也碰不上；问「在 \(499.5\sim500.5\) 克之间」才有意义。</p>
+  </div>
+
+  <h3>2. 正态曲线和 \(N(\mu,\sigma^2)\)</h3>
+  <p>样本越来越多、组距越来越小，钟形直方图的上沿贴近一条光滑曲线。如果随机变量 \(X\) 落在任一区间 \([a,b]\) 的概率，都等于这条曲线在 \(a\) 到 \(b\) 之间、\(x\) 轴上方的面积，就说 \(X\) 服从<b>正态分布</b>，记作</p>
+  <div class="key" style="text-align:center">\(X\sim N(\mu,\sigma^2)\)，其中 \(\mu\) 是均值，\(\sigma^2\) 是方差，\(\sigma>0\) 是标准差。</div>
+  <p>曲线长这样（在「动手」里可以拖）：</p>
+  <ul>
+    <li>整条曲线在 \(x\) 轴上方，关于直线 \(x=\mu\) 对称，在 \(x=\mu\) 处最高；</li>
+    <li>曲线和 \(x\) 轴之间的总面积是 \(1\)；</li>
+    <li>\(\mu\) 管位置：\(\mu\) 变，曲线整条左右平移，形状不变；</li>
+    <li>\(\sigma\) 管胖瘦：\(\sigma\) 越小越「瘦高」，越大越「矮胖」——总面积要保持 \(1\)，变窄了就只能变高。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么读）</p>
+    <p>\(X\sim N(3,4)\)。说出均值、标准差，并比较 \(P(X>5)\) 和 \(P(X&lt;1)\)。</p>
+    <p>对照 \(N(\mu,\sigma^2)\)：\(\mu=3\)，\(\sigma^2=4\)，所以标准差 \(\sigma=2\)。</p>
+    <p>曲线关于 \(x=3\) 对称，\(5\) 和 \(1\) 离 \(3\) 都是 \(2\)，一个在右、一个在左，两块尾巴面积一样：\(P(X>5)=P(X&lt;1)\)。另外 \(P(X&lt;3)=P(X>3)=0.5\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：\(X\sim N(10,9)\)，\(X\) 的标准差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(9\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(81\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。括号里第二个数是<b>方差</b> \(\sigma^2=9\)，标准差 \(\sigma=\sqrt9=3\)。选 A 是把方差当成了标准差，这是最常见的错；\(10\) 是均值。</p></div>
+  </div>
+
+  <h3>3. 区间概率 = 面积，用对称性求</h3>
+  <p>正态分布下，求 \(P(a&lt;X&lt;b)\) 就是求一块面积。高中不用积分算它，靠三样东西：<b>对称性</b>、<b>总面积 \(1\)</b>、<b>题目给的或下面要讲的几个数</b>。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>\(X\sim N(2,\sigma^2)\)，已知 \(P(X>4)=0.1\)。求 \(P(X&lt;0)\)、\(P(0&lt;X&lt;4)\)、\(P(2&lt;X&lt;4)\)。</p>
+    <p>对称轴是 \(x=2\)，\(0\) 和 \(4\) 关于它对称，所以 \(P(X&lt;0)=P(X>4)=0.1\)。</p>
+    <p>中间一块 \(=\) 总面积减两边：\(P(0&lt;X&lt;4)=1-0.1-0.1=0.8\)。</p>
+    <p>它被 \(x=2\) 平分：\(P(2&lt;X&lt;4)=0.8\div2=0.4\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：\(X\sim N(1,\sigma^2)\)，\(P(X&lt;-1)=0.2\)。\(P(1&lt;X&lt;3)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(-1\) 和 \(3\) 关于 \(x=1\) 对称，\(P(X>3)=0.2\)；\(P(-1&lt;X&lt;3)=1-0.4=0.6\)；\(1\) 到 \(3\) 是它的一半，\(0.3\)。选 C 的同学停在了 \(0.6\)，忘了只要右半边。</p></div>
+  </div>
+
+  <h3>4. 三个要记的数</h3>
+  <p>不管 \(\mu\)、\(\sigma\) 是多少，离均值「几个标准差」以内的面积都一样：</p>
+  <div class="key">
+    \(P(\mu-\sigma\le X\le\mu+\sigma)\approx0.6827\)<br>
+    \(P(\mu-2\sigma\le X\le\mu+2\sigma)\approx0.9545\)<br>
+    \(P(\mu-3\sigma\le X\le\mu+3\sigma)\approx0.9973\)
+  </div>
+  <p>开头大米那题的 \(68\%\) 就是第一个数：那批大米大约是 \(N(500,2^2)\)，\(498\sim502\) 正好是 \(\mu\pm\sigma\)。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>袋装大米重量 \(X\sim N(500,2^2)\)（单位：克）。求 \(P(496\le X\le504)\) 和 \(P(X>504)\)；\(1000\) 袋里大约有几袋超过 \(504\) 克？</p>
+    <p>\(\mu=500\)，\(\sigma=2\)。\(496\sim504\) 是 \(\mu\pm2\sigma\)，所以 \(P(496\le X\le504)\approx0.9545\)。</p>
+    <p>两边尾巴合起来约 \(1-0.9545=0.0455\)，左右对称各一半：\(P(X>504)\approx0.0455\div2\approx0.0228\)。</p>
+    <p>\(1000\times0.0228\approx23\)，大约 \(23\) 袋。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：\(X\sim N(80,25)\)，\(P(X>85)\) 约是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.1587\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.3173\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.6827\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.0228\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\sigma=\sqrt{25}=5\)，\(85=\mu+\sigma\)。\(\mu\pm\sigma\) 外面一共约 \(1-0.6827=0.3173\)，右边一半约 \(0.1587\)。选 B 忘了除以 \(2\)；选 D 是错用了 \(2\sigma\) 那一行。</p></div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <ol>
+    <li><b>高度不是概率，面积才是。</b>曲线的高度可以比 \(1\) 还大：\(\sigma=0.2\) 时最高点约 \(2\)，概率不可能是 \(2\)。<br>
+      <span class="small">单独一个点没有宽度，面积是 \(0\)：\(P(X=\mu)=0\)，哪怕 \(\mu\) 处曲线最高。所以 \(P(a\le X\le b)=P(a&lt;X&lt;b)\)，端点带不带等号都一样。</span></li>
+    <li><b>先问：正态是题目给的，还是数据支持的假设？</b>题目写了「服从正态分布」才能直接用；拿真实数据，要先看直方图是不是单峰、大致对称，并说明这是一个近似的假设。<br>
+      <span class="small">反例：居民收入的直方图常常是左边一个高峰、右边拖着长尾巴，不对称，用正态去算会出错。大致对称的钟形，也不一定就是正态。</span></li>
+    <li><b>\(3\sigma\) 外很少，但不是 \(0\)。</b>\(\mu\pm3\sigma\) 外大约占 \(1-0.9973=0.0027\)，即 \(1000\) 次里平均约 \(2.7\) 次。<br>
+      <span class="small">反例：一台正常的机器生产 \(10000\) 个零件，平均约 \(27\) 个会落在 \(\mu\pm3\sigma\) 外。看到一个就断定「机器一定坏了」是错的；该说「这种情况很少见，值得停下来检查」。</span></li>
+    <li><b>别的区间</b>：靠对称性、题目给的数据、或者查表、用计算器，不用自己积分。</li>
+  </ol>
+  <div class="key">区间概率 \(=\) 曲线下面积；单点概率 \(=0\)。「几乎不可能」\(\ne\)「绝不会发生」。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>曲线的式子</b>：\(f(x)=\dfrac{1}{\sigma\sqrt{2\pi}}\,\mathrm{e}^{-\frac{(x-\mu)^2}{2\sigma^2}}\)。认得它就行，高中不拿它算面积。最高点在 \(x=\mu\)，高 \(\dfrac{1}{\sigma\sqrt{2\pi}}\)：\(\sigma\) 越小越高，\(\sigma=0.2\) 时约 \(1.99\)。</p>
+    <p><b>标准正态分布</b>：\(\mu=0\)，\(\sigma=1\) 的 \(N(0,1)\)。很多书后面的「正态分布表」就是按它列的。</p>
+    <p><b>为什么误差、身高常像正态</b>：大致说，它受很多个小因素共同影响、每个影响都不大时，常常接近正态。严格的说法要到大学学，这里不当作已知结论用。</p>
+    <p><b>质量控制里的「\(3\sigma\)」</b>：工厂常把 \(\mu\pm3\sigma\) 定为控制线，超出就报警、去查原因。报警是「值得查」，不是「已经证明出了问题」。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 正态曲线：调 \(\mu\)、\(\sigma\)，拖 \(a\)、\(b\) 看面积</h3>
+  <p class="small">拖横轴上的圆点 \(a\)、\(b\)（或选中后按方向键），阴影面积就是 \(P(a&lt;X&lt;b)\)。点下面的按钮一键设成 \(\mu\pm\sigma\)、\(\mu\pm2\sigma\)、\(\mu\pm3\sigma\)，再调 \(\mu\)、\(\sigma\)：面积不变。把 \(\sigma\) 调到最小，看最高点有多高。</p>
+  <div class="card">
+    <svg class="fig" id="nfig" viewBox="0 0 560 334" role="img" aria-label="正态曲线，阴影是 a 到 b 之间的面积"></svg>
+    <div class="ctrl"><label for="muin">\(\mu\)</label><input type="range" id="muin" min="-20" max="20" step="1"><output id="muout"></output></div>
+    <div class="ctrl"><label for="sgin">\(\sigma\)</label><input type="range" id="sgin" min="2" max="20" step="1"><output id="sgout"></output></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="k1" type="button">\(\mu\pm\sigma\)</button>
+      <button class="btn ghost" id="k2" type="button">\(\mu\pm2\sigma\)</button>
+      <button class="btn ghost" id="k3" type="button">\(\mu\pm3\sigma\)</button>
+    </div>
+    <div class="result" id="nout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="nreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：样本越多，直方图越贴近曲线；\(3\sigma\) 外仍会出现</h3>
+  <p class="small">下面的大米重量是电脑按 \(N(500,2^2)\) 模拟出来的（所以我们知道它是正态；真实数据要先看图再决定能不能用正态）。拖动样本量，看直方图怎样贴近曲线；红点是落在 \(\mu\pm3\sigma\)（\(494\sim506\) 克）外面的袋子。</p>
+  <div class="card">
+    <svg class="fig" id="hfig" viewBox="0 0 560 310" role="img" aria-label="模拟样本的频率分布直方图和正态曲线"></svg>
+    <div class="ctrl"><label for="nin">样本量</label><input type="range" id="nin" min="0" max="4" step="1"><output id="nnout"></output></div>
+    <div class="result" id="hout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="hnew" type="button">换一批样本</button><button class="btn ghost" id="hreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. \(X\sim N(\mu,\sigma^2)\)，且 \(P(X&lt;1)=P(X>5)\)。\(\mu=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。左边 \(x&lt;1\) 的尾巴和右边 \(x>5\) 的尾巴一样大，说明 \(1\) 和 \(5\) 关于对称轴 \(x=\mu\) 对称，\(\mu=\dfrac{1+5}{2}=3\)。选 D 是把 \(1+5\) 忘了除以 \(2\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 某次考试 \(1000\) 人参加，题目给出成绩 \(X\sim N(100,10^2)\)。\(120\) 分以上的大约有多少人？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(23\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(46\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(159\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\sigma=10\)，\(120=\mu+2\sigma\)。\(\mu\pm2\sigma\) 外约 \(1-0.9545=0.0455\)，右边一半约 \(0.0228\)，\(1000\times0.0228\approx23\)。选 B 没除以 \(2\)；选 C 用的是 \(\mu+\sigma\) 那一行；选 D 用的是 \(3\sigma\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-height" data-answer="C">
+    <p>3. \(X\sim N(0,0.2^2)\)，它的曲线在 \(x=0\) 处最高，高约 \(1.99\)。\(P(X=0)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>约 \(1.99\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0\)</button>
+      <button class="opt" data-v="D"><b>D</b>约 \(0.68\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。概率是面积，不是高度。\(1.99\) 比 \(1\) 还大，本来就不可能是概率。「\(X=0\)」只是一个点，没有宽度，面积为 \(0\)。</p>
+      <p>B 是 \(P(X\le0)\)，D 是 \(P(-0.2\le X\le0.2)\)，都是一段，不是一个点。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-model" data-answer="B">
+    <p>4. 某市居民月收入的直方图：左边一个高峰，右边拖着很长的尾巴。小明说：「收入服从正态分布，所以收入低于平均数的人正好占一半。」</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>对，有峰的图都是正态</button>
+      <button class="opt" data-v="B"><b>B</b>不对：图明显不对称，正态既不是题设、也没有数据支持，不能套用「各占一半」</button>
+      <button class="opt" data-v="C"><b>C</b>对，只要样本足够多，任何数据都服从正态分布</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。用正态之前先问：是题目给的，还是数据支持的假设？这张图左右不对称，正态的「关于均值对称」不成立。少数很高的收入会把平均数往上拉，低于平均数的人往往超过一半。</p>
+      <p>C 也错：样本再多，也只是把原来的形状看得更清楚，歪的还是歪的。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-3s" data-answer="B">
+    <p>5. 一条生产线上零件长度 \(X\sim N(\mu,\sigma^2)\)，一直运行正常。今天抽检，有一个零件落在 \(\mu\pm3\sigma\) 外。下面哪个说法对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(3\sigma\) 外的事不会发生，所以机器一定坏了</button>
+      <button class="opt" data-v="B"><b>B</b>这种情况很少见（约 \(0.27\%\)），值得停下来检查，但单凭这一个不能肯定机器坏了</button>
+      <button class="opt" data-v="C"><b>C</b>概率是 \(0\)，说明数据一定记错了</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\mu\pm3\sigma\) 外的概率约 \(0.0027\)，很小但不是 \(0\)：正常机器做 \(10000\) 个，平均也有二三十个落在外面。「几乎不可能」不等于「绝不发生」，一次异常是警报，不是证明。在「动手」②里把样本量拉到最大，就能看到红点。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. 某种灯泡的寿命 \(X\sim N(1000,50^2)\)（单位：小时，题设）。买一只，寿命在 \(950\sim1100\) 小时之间的概率约是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.8186\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.6827\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.9545\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.8413\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(\sigma=50\)：\(950=\mu-\sigma\)，\(1100=\mu+2\sigma\)，左右不一样宽，以 \(\mu=1000\) 为界拆成两块：</p>
+      <p>左块 \(950\sim1000\) 是 \(\mu\pm\sigma\) 的一半，约 \(0.6827\div2=0.34135\)；右块 \(1000\sim1100\) 是 \(\mu\pm2\sigma\) 的一半，约 \(0.9545\div2=0.47725\)。合计约 \(0.8186\)。</p>
+      <p>B、C 只用了一边的数；D 是 \(P(X&lt;1050)\approx0.5+0.34135\)，区间看错了。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function $(id) { return document.getElementById(id); }
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { var x = toSvg(fig, e).x; if (isFinite(x)) onMove(x); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  var KEYS = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 };
+  // 误差函数（Abramowitz–Stegun 7.1.26，误差约 1.5e-7），只用来算面积，页面上不讲积分
+  function erf(x) {
+    var s = x < 0 ? -1 : 1; x = Math.abs(x);
+    var t = 1 / (1 + 0.3275911 * x);
+    var y = 1 - ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+    return s * y;
+  }
+  function Phi(z) { return 0.5 * (1 + erf(z / Math.SQRT2)); }
+  function pTex(p) { return p < 0.0001 ? "\\lt 0.0001" : "\\approx " + p.toFixed(4); }
+  function sigTex(z) {
+    var r = Math.round(z * 100) / 100;
+    if (r === 0) return "\\mu";
+    var a = Math.abs(r), k = a === 1 ? "" : f2(a);
+    return "\\mu" + (r < 0 ? "-" : "+") + k + "\\sigma";
+  }
+
+  /* ================= ① 正态曲线 ================= */
+  var nf = $("nfig"), muIn = $("muin"), sgIn = $("sgin");
+  var X0 = 58, X1 = 540, Yb = 262, Yt = 34, XL = -8, XR = 8;
+  var m10, s10, a10, b10, mode; // 都存成 10 倍整数；mode = 0 自由拖，1/2/3 跟着 μ±kσ
+  function nx(x) { return X0 + (x - XL) / (XR - XL) * (X1 - X0); }
+  function follow() { if (mode) { a10 = clamp(m10 - mode * s10, -80, 80); b10 = clamp(m10 + mode * s10, -80, 80); } }
+  function nReset() { m10 = 0; s10 = 10; mode = 1; follow(); muIn.value = m10; sgIn.value = s10; nDraw(); }
+  function nDraw(focus) {
+    var mu = m10 / 10, sg = s10 / 10, peak = 1 / (sg * Math.sqrt(2 * Math.PI));
+    var ymax = Math.max(0.85, peak * 1.08), scaled = peak * 1.08 > 0.85;
+    function ny(y) { return Yb - y / ymax * (Yb - Yt); }
+    function dens(x) { var z = (x - mu) / sg; return peak * Math.exp(-z * z / 2); }
+    var lo = Math.min(a10, b10) / 10, hi = Math.max(a10, b10) / 10;
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), card = css("--card"), no = css("--no");
+    nf.innerHTML = "";
+    // 坐标轴
+    svg("line", { x1: X0, y1: Yb, x2: X1 + 6, y2: Yb, stroke: fg, "stroke-width": 1.5 }, nf);
+    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt - 10, stroke: fg, "stroke-width": 1.5 }, nf);
+    for (var t = XL; t <= XR; t += 2) {
+      svg("line", { x1: nx(t), y1: Yb, x2: nx(t), y2: Yb + 5, stroke: fg }, nf);
+      svg("text", { x: nx(t), y: Yb + 30, "text-anchor": "middle" }, nf).textContent = t;
+    }
+    var step = ymax > 1.2 ? 0.5 : 0.2;
+    for (var v = step; v <= ymax + 1e-9; v += step) {
+      svg("line", { x1: X0 - 5, y1: ny(v), x2: X0, y2: ny(v), stroke: fg }, nf);
+      svg("text", { x: X0 - 8, y: ny(v) + 7, "text-anchor": "end" }, nf).textContent = v.toFixed(1);
+    }
+    if (scaled) svg("text", { x: X1, y: 24, "text-anchor": "end", fill: muted }, nf).textContent = "纵轴已压缩";
+    // 阴影
+    if (hi > lo) {
+      var d = "M" + nx(lo).toFixed(1) + " " + Yb, n = 200;
+      for (var i = 0; i <= n; i++) { var x = lo + (hi - lo) * i / n; d += "L" + nx(x).toFixed(1) + " " + ny(dens(x)).toFixed(1); }
+      d += "L" + nx(hi).toFixed(1) + " " + Yb + "Z";
+      svg("path", { d: d, fill: hl, opacity: 0.45 }, nf);
+    }
+    // μ±kσ 刻度
+    for (var k = -3; k <= 3; k++) {
+      var xs = mu + k * sg;
+      if (k && xs >= XL && xs <= XR) svg("line", { x1: nx(xs), y1: Yb - 9, x2: nx(xs), y2: Yb, stroke: cc, "stroke-width": 2 }, nf);
+    }
+    // 曲线
+    var c = "";
+    for (var j = 0; j <= 600; j++) { var xx = XL + (XR - XL) * j / 600; c += (j ? "L" : "M") + nx(xx).toFixed(1) + " " + ny(dens(xx)).toFixed(1); }
+    svg("path", { d: c, fill: "none", stroke: ca, "stroke-width": 3 }, nf);
+    // 对称轴
+    svg("line", { x1: nx(mu), y1: ny(peak), x2: nx(mu), y2: Yb, stroke: muted, "stroke-dasharray": "4 4" }, nf);
+    svg("text", { x: nx(mu), y: Math.max(ny(peak) - 10, 22), "text-anchor": "middle", fill: muted }, nf).textContent = "μ";
+    // 端点 a、b
+    [["a", a10], ["b", b10]].forEach(function (h) {
+      var cxp = nx(h[1] / 10);
+      svg("line", { x1: cxp, y1: Yb, x2: cxp, y2: ny(dens(h[1] / 10)), stroke: no, "stroke-width": 2 }, nf);
+      var el = svg("circle", { cx: cxp, cy: Yb, r: 11, fill: card, stroke: no, "stroke-width": 3, tabindex: 0, role: "slider", "data-h": h[0],
+        "aria-label": "端点 " + h[0], "aria-valuemin": XL, "aria-valuemax": XR, "aria-valuenow": h[1] / 10, style: "cursor:grab" }, nf);
+      var gap = Math.abs(nx(a10 / 10) - nx(b10 / 10)), push = gap < 26 ? (26 - gap) / 2 * ((h[0] === "a") === (a10 <= b10) ? -1 : 1) : 0;
+      svg("text", { x: cxp + push, y: Yb + 58, "text-anchor": "middle", fill: no, "font-weight": 700 }, nf).textContent = h[0];
+      function set(v) { mode = 0; if (h[0] === "a") a10 = v; else b10 = v; nDraw(h[0]); }
+      el.addEventListener("keydown", function (ev) {
+        var dd = KEYS[ev.key], cur = h[0] === "a" ? a10 : b10;
+        if (ev.key === "Home") dd = -80 - cur; else if (ev.key === "End") dd = 80 - cur;
+        if (!dd) return;
+        ev.preventDefault(); set(clamp(cur + dd, -80, 80));
+      });
+      draggable(nf, el, function (x) {
+        var v = clamp(Math.round(((x - X0) / (X1 - X0) * (XR - XL) + XL) * 10), -80, 80);
+        if (v !== (h[0] === "a" ? a10 : b10)) set(v);
+      }, function () { Peiyu.log("interact", { id: "normal-ab", mu: mu, sigma: sg, a: a10 / 10, b: b10 / 10 }); });
+    });
+    if (focus) { var ff = nf.querySelector('[data-h="' + focus + '"]'); if (ff) ff.focus(); }
+
+    $("muout").textContent = f2(mu); $("sgout").textContent = f2(sg);
+    var P = hi > lo ? Math.max(0, Phi((hi - mu) / sg) - Phi((lo - mu) / sg)) : 0;
+    var L = [];
+    L.push("\\(X\\sim N(" + f2(mu) + ",\\," + f2(sg) + "^2)\\)：均值 \\(" + f2(mu) + "\\)，标准差 \\(\\sigma=" + f2(sg) + "\\)，方差 \\(\\sigma^2=" + f2(sg * sg) + "\\)。");
+    if (hi > lo) {
+      L.push("阴影从 \\(" + f2(lo) + "\\) 到 \\(" + f2(hi) + "\\)，即 \\(" + sigTex((lo - mu) / sg) + "\\) 到 \\(" + sigTex((hi - mu) / sg) + "\\)：");
+      L.push('<span class="eq">\\(P(' + f2(lo) + "&lt;X&lt;" + f2(hi) + ")" + pTex(P) + "\\)</span>" + (P < 0.0001 ? "（很小，但不是 \\(0\\)）" : "") + "。");
+      if (mode) L.push("不管 \\(\\mu\\)、\\(\\sigma\\) 怎么调，\\(\\mu\\pm" + (mode === 1 ? "" : mode) + "\\sigma\\) 内的面积都约是 \\(" + ["0.6827", "0.9545", "0.9973"][mode - 1] + "\\)" + (mode === 3 ? "；外面剩约 \\(0.0027\\)，很小，但不是 \\(0\\)。" : "。"));
+    } else {
+      L.push('<span class="bad">\\(a\\)、\\(b\\) 重合</span>：区间缩成一个点，没有宽度，面积为 \\(0\\)，\\(P(X=' + f2(lo) + ")=0\\)。");
+    }
+    L.push("曲线最高点（\\(x=" + f2(mu) + "\\) 处）高约 \\(" + peak.toFixed(2) + "\\)" + (peak > 1 ? '，<span class="bad">比 \\(1\\) 还大</span>——高度不是概率，面积才是。' : "。\\(\\sigma\\) 越小曲线越瘦越高，总面积始终是 \\(1\\)。"));
+    var out = $("nout");
+    out.innerHTML = L.join("<br>");
+    Peiyu.math(out);
+  }
+  muIn.addEventListener("input", function () { m10 = clamp(parseInt(muIn.value, 10) || 0, -20, 20); follow(); nDraw(); });
+  sgIn.addEventListener("input", function () { s10 = clamp(parseInt(sgIn.value, 10) || 10, 2, 20); follow(); nDraw(); });
+  muIn.addEventListener("change", function () { Peiyu.log("interact", { id: "normal-mu", mu: m10 / 10 }); });
+  sgIn.addEventListener("change", function () { Peiyu.log("interact", { id: "normal-sigma", sigma: s10 / 10 }); });
+  [1, 2, 3].forEach(function (k) {
+    $("k" + k).onclick = function () { mode = k; follow(); nDraw(); Peiyu.log("interact", { id: "normal-ksigma", k: k }); };
+  });
+  $("nreset").onclick = nReset;
+
+  /* ================= ② 模拟直方图 ================= */
+  var hf = $("hfig"), nIn = $("nin");
+  var NN = [50, 200, 1000, 5000, 20000], WW = [2, 1, 0.5, 0.5, 0.25];
+  var HMU = 500, HSG = 2, HL = 492, HR = 508, H0 = 58, H1 = 540, HYb = 262, HYt = 40;
+  var seed, data, ni;
+  function rng(s) {
+    return function () {
+      s = (s + 0x6D2B79F5) | 0;
+      var t = Math.imul(s ^ (s >>> 15), 1 | s);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function gen() { // Box–Muller，固定种子：同一批每次都一样
+    var r = rng(seed * 7919 + 11);
+    data = [];
+    for (var i = 0; i < 20000; i += 2) {
+      var u1 = 1 - r(), u2 = r(), rad = Math.sqrt(-2 * Math.log(u1));
+      data.push(HMU + HSG * rad * Math.cos(2 * Math.PI * u2), HMU + HSG * rad * Math.sin(2 * Math.PI * u2));
+    }
+  }
+  function hx(x) { return H0 + (x - HL) / (HR - HL) * (H1 - H0); }
+  function hReset() { seed = 1; ni = 2; nIn.value = ni; gen(); hDraw(); }
+  function hDraw() {
+    var n = NN[ni], w = WW[ni], nb = Math.round((HR - HL) / w), cnt = [], in1 = 0, in2 = 0, out = [], far = HMU, i;
+    for (i = 0; i < nb; i++) cnt.push(0);
+    for (i = 0; i < n; i++) {
+      var x = data[i], z = Math.abs(x - HMU) / HSG, bi = Math.floor((x - HL) / w);
+      if (bi >= 0 && bi < nb) cnt[bi]++;
+      if (z <= 1) in1++;
+      if (z <= 2) in2++;
+      if (z > 3) out.push(x);
+      if (z > Math.abs(far - HMU) / HSG) far = x;
+    }
+    var maxd = 0;
+    for (i = 0; i < nb; i++) maxd = Math.max(maxd, cnt[i] / (n * w));
+    var ymax = Math.max(0.24, maxd * 1.05), peak = 1 / (HSG * Math.sqrt(2 * Math.PI));
+    function hy(y) { return HYb - y / ymax * (HYb - HYt); }
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), no = css("--no");
+    hf.innerHTML = "";
+    for (i = 0; i < nb; i++) {
+      var dh = cnt[i] / (n * w);
+      if (dh > 0) svg("rect", { x: hx(HL + i * w), y: hy(dh), width: Math.max(hx(HL + w) - hx(HL), 0.5), height: HYb - hy(dh), fill: ca, "fill-opacity": 0.3, stroke: ca, "stroke-width": 1 }, hf);
+    }
+    svg("line", { x1: H0, y1: HYb, x2: H1 + 6, y2: HYb, stroke: fg, "stroke-width": 1.5 }, hf);
+    svg("line", { x1: H0, y1: HYb, x2: H0, y2: HYt - 12, stroke: fg, "stroke-width": 1.5 }, hf);
+    for (var t = HL; t <= HR; t += 2) {
+      svg("line", { x1: hx(t), y1: HYb, x2: hx(t), y2: HYb + 5, stroke: fg }, hf);
+      svg("text", { x: hx(t), y: HYb + 30, "text-anchor": "middle" }, hf).textContent = t;
+    }
+    var st = ymax > 0.3 ? 0.1 : 0.05;
+    for (var v = st; v <= ymax + 1e-9; v += st) {
+      svg("line", { x1: H0 - 5, y1: hy(v), x2: H0, y2: hy(v), stroke: fg }, hf);
+      svg("text", { x: H0 - 8, y: hy(v) + 7, "text-anchor": "end" }, hf).textContent = v.toFixed(2).replace(/0$/, "");
+    }
+    var c = "";
+    for (var j = 0; j <= 300; j++) { var xx = HL + (HR - HL) * j / 300, zz = (xx - HMU) / HSG; c += (j ? "L" : "M") + hx(xx).toFixed(1) + " " + hy(peak * Math.exp(-zz * zz / 2)).toFixed(1); }
+    svg("path", { d: c, fill: "none", stroke: cc, "stroke-width": 3 }, hf);
+    [HMU - 3 * HSG, HMU + 3 * HSG].forEach(function (xl, q) {
+      svg("line", { x1: hx(xl), y1: HYt - 8, x2: hx(xl), y2: HYb, stroke: no, "stroke-dasharray": "5 4", "stroke-width": 1.5 }, hf);
+      svg("text", { x: hx(xl), y: 22, "text-anchor": "middle", fill: no }, hf).textContent = q ? "μ+3σ" : "μ−3σ";
+    });
+    out.forEach(function (x) {
+      svg("circle", { cx: hx(clamp(x, HL + 0.1, HR - 0.1)), cy: HYb - 7, r: 5, fill: no }, hf);
+    });
+
+    $("nnout").textContent = n;
+    function pc(k) { return (k / n * 100).toFixed(2) + "\\%"; }
+    var zf = Math.abs(far - HMU) / HSG;
+    var L = [];
+    L.push("\\(n=" + n + "\\)，组距 \\(" + w + "\\) 克。样本越多、组距越小，直方图越贴近曲线。");
+    L.push("落在 \\(\\mu\\pm\\sigma\\)（\\(498\\sim502\\)）内：\\(" + pc(in1) + "\\)，理论约 \\(68.27\\%\\)；\\(\\mu\\pm2\\sigma\\) 内：\\(" + pc(in2) + "\\)，理论约 \\(95.45\\%\\)。");
+    L.push('<span class="bad">\\(\\mu\\pm3\\sigma\\) 外：' + out.length + " 个</span>，占 \\(" + pc(out.length) + "\\)，理论约 \\(0.27\\%\\)（平均约 \\(" + f2(n * 0.0027) + "\\) 个）。" + (out.length ? "很少，但出现了：这些袋子并没有「出错」，正常机器也会装出来。" : "这一批碰巧一个也没有，样本多了就会出现。"));
+    L.push("离 \\(500\\) 最远的一袋是 \\(" + far.toFixed(2) + "\\) 克，偏了约 \\(" + zf.toFixed(1) + "\\) 个 \\(\\sigma\\)。");
+    var ho = $("hout");
+    ho.innerHTML = L.join("<br>");
+    Peiyu.math(ho);
+  }
+  nIn.addEventListener("input", function () { ni = clamp(parseInt(nIn.value, 10) || 0, 0, 4); hDraw(); });
+  nIn.addEventListener("change", function () { Peiyu.log("interact", { id: "hist-n", n: NN[ni] }); });
+  $("hnew").onclick = function () { seed++; gen(); hDraw(); Peiyu.log("interact", { id: "hist-new", seed: seed }); };
+  $("hreset").onclick = hReset;
+
+  document.addEventListener("DOMContentLoaded", function () { nReset(); hReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { nDraw(); hDraw(); });
+})();
+</script>
+</body></html>

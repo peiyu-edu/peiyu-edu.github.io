@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.4 充分条件与必要条件 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .tick { stroke: var(--muted); stroke-width: 1; }
+  .fig text.num { font-size: 13px; fill: var(--muted); text-anchor: middle; }
+  .fig .guide { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 4; }
+  .fig .barP { stroke: var(--a); stroke-width: 7; stroke-linecap: butt; }
+  .fig .barQ { stroke: var(--b); stroke-width: 7; stroke-linecap: butt; }
+  .fig .h { stroke-width: 3; cursor: grab; outline: none; }
+  .fig .h.P { stroke: var(--a); }
+  .fig .h.Q { stroke: var(--b); }
+  .fig .h:focus-visible { stroke: var(--hl); stroke-width: 5; }
+  .fig .hit { fill: transparent; cursor: grab; }
+  .fig .cex { fill: var(--no); }
+  .fig text.cexl { font-size: 13px; fill: var(--no); text-anchor: middle; }
+  .fig text.lab { font-size: 16px; font-weight: 700; }
+  .rd { font-size: 16px; line-height: 1.7; }
+  .rd .row { margin: 4px 0; }
+  .rd .yes { color: var(--a); font-weight: 600; }
+  .rd .nope { color: var(--no); font-weight: 600; }
+  .verdict { font-size: 17px; font-weight: 700; margin: 8px 0 2px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip { font-size: 14px; border: 1px dashed var(--line); border-radius: 999px; padding: 2px 10px; color: var(--dim); }
+  .chip.got { border-style: solid; border-color: var(--a); color: var(--a); background: var(--ok-soft); }
+  table.rec td, table.rec th { vertical-align: top; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-1-4">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 1 章 集合与常用逻辑用语</p>
+<h1>1.4 充分条件与必要条件</h1>
+<p class="lead">一件事能不能保证另一件事？学会用「推得出 / 推不出 + 反例」说清楚两个条件的关系。先从一个地名开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>杭州是浙江省的一个城市。宁波、温州也在浙江。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>下面哪句话<b>一定</b>对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>一个人在杭州，他就一定在浙江</button>
+      <button class="opt" data-v="B"><b>B</b>一个人在浙江，他就一定在杭州</button>
+      <button class="opt" data-v="C"><b>C</b>两句都一定对</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。杭州整个在浙江里面，人在杭州，就一定在浙江。</p>
+      <p>反过来不一定：在宁波的人也在浙江，却不在杭州。像「在宁波的人」这样，说明一句话不成立的具体例子，叫<b>反例</b>。</p>
+      <p>数学上这样说：「在杭州」<b>足够</b>保证「在浙江」，所以「在杭州」是「在浙江」的<b>充分条件</b>；想在杭州，「在浙江」<b>少不了</b>，所以「在浙江」是「在杭州」的<b>必要条件</b>。这一节就讲：两个条件之间，谁能推出谁，怎么说，怎么查。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：初中学过的「命题」（能判断对错的话）；1.1 用描述法写集合（<a href="b1-1-1.html">回看 1.1</a>）；1.2 的子集、真子集（<a href="b1-1-2.html">回看 1.2</a>）。</p>
+
+  <div class="card">
+    <p><b>「若 \(p\)，则 \(q\)」</b>：很多命题能写成这个样子，\(p\) 是前提，\(q\) 是结论。对的叫真命题，错的叫假命题。</p>
+    <p>例：「若 \(x=2\)，则 \(x^2=4\)」是真命题；「若 \(x^2=4\)，则 \(x=2\)」是假命题。前提和结论换了位置，真假就可能变。</p>
+  </div>
+
+  <div class="card">
+    <p><b>推出 \(\Rightarrow\)</b>：「若 \(p\)，则 \(q\)」是真命题，就写 \(p\Rightarrow q\)，读作「\(p\) 推出 \(q\)」；是假命题，就写 \(p\nRightarrow q\)。</p>
+    <p>例：\(x=2\Rightarrow x^2=4\)；\(x^2=4\nRightarrow x=2\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>反例</b>：满足 \(p\)、却不满足 \(q\) 的一个具体例子。有一个反例，「若 \(p\)，则 \(q\)」就是错的。</p>
+    <p>例：\(x=-2\) 满足 \(x^2=4\)，却不满足 \(x=2\)，它就是「若 \(x^2=4\)，则 \(x=2\)」的反例。</p>
+  </div>
+
+  <div class="card">
+    <p><b>子集和真子集</b>：\(A\subseteq B\) 是说 \(A\) 的每个元素都在 \(B\) 里；如果 \(B\) 里还有不在 \(A\) 里的元素，就是真子集 \(A\subsetneqq B\)。</p>
+    <p>例：\(\{x\mid x&gt;2\}\subsetneqq\{x\mid x&gt;1\}\)。\(3\) 在两个集合里都有；\(1.5\) 只在后一个里。</p>
+  </div>
+
+  <h3>2. 充分条件和必要条件</h3>
+  <p>拿到两个条件 \(p\)、\(q\)，先问一句：「若 \(p\) 成立，\(q\) 一定成立吗？」如果一定成立，就是 \(p\Rightarrow q\)。这时我们说：</p>
+  <div class="key">\(p\Rightarrow q\) 时，\(p\) 是 \(q\) 的<b>充分条件</b>，\(q\) 是 \(p\) 的<b>必要条件</b>。<br>两句话说的是同一件事，只是站的角度不同。</div>
+  <p><b>为什么叫「充分」？</b>有了 \(p\) 就<b>足够</b>保证 \(q\)，不用再加别的。</p>
+  <p><b>为什么叫「必要」？</b>想让 \(p\) 成立，\(q\) 是<b>少不了</b>的：一旦 \(q\) 不成立，\(p\) 也不可能成立（否则就推出 \(q\) 了）。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>对整数 \(n\)，说明「\(n\) 能被 \(4\) 整除」\(\Rightarrow\)「\(n\) 是偶数」，并用「充分」「必要」各说一句。</p>
+    <p>\(n\) 能被 \(4\) 整除，就是 \(n=4k\)（\(k\) 是整数）。于是 \(n=2\times(2k)\)，\(2k\) 是整数，\(n\) 是偶数。所以「能被 \(4\) 整除」\(\Rightarrow\)「是偶数」。</p>
+    <p>说法一：「能被 \(4\) 整除」是「是偶数」的<b>充分条件</b>。</p>
+    <p>说法二：「是偶数」是「能被 \(4\) 整除」的<b>必要条件</b>——不是偶数（比如 \(7\)），就不可能被 \(4\) 整除。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：「若一个四边形是正方形，则它是矩形」是真命题。那么「是矩形」是「是正方形」的？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>充分条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要条件</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。正方形 \(\Rightarrow\) 矩形，箭头后面的「矩形」是必要条件：想当正方形，先得是矩形。选 A 的同学看到「是矩形」写在问句前面，就当成了充分条件。先找出谁推谁，再看问的是哪一个。</p></div>
+  </div>
+
+  <h3>3. 两个方向都要查</h3>
+  <p>只查 \(p\Rightarrow q\) 还不够。要说清楚关系，\(q\Rightarrow p\) 也得看：</p>
+  <table class="rec">
+    <tr><th>\(p\Rightarrow q\)？</th><th>\(q\Rightarrow p\)？</th><th>结论：\(p\) 是 \(q\) 的……</th></tr>
+    <tr><td>成立</td><td>不成立</td><td>充分不必要条件</td></tr>
+    <tr><td>不成立</td><td>成立</td><td>必要不充分条件</td></tr>
+    <tr><td>成立</td><td>成立</td><td>充要条件，记 \(p\Leftrightarrow q\)</td></tr>
+    <tr><td>不成立</td><td>不成立</td><td>既不充分也不必要条件</td></tr>
+  </table>
+  <div class="key"><b>推得出</b>：要对<b>所有</b>满足 \(p\) 的情况说明 \(q\) 成立，是一个证明。<br><b>推不出</b>：只要找到<b>一个</b>反例就够了。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>对整数 \(n\)，「\(n\) 能被 \(4\) 整除」是「\(n\) 是偶数」的什么条件？</p>
+    <p>前推后：例 1 已经说明，成立。</p>
+    <p>后推前：找反例。\(n=6\) 是偶数，可 \(6\div4=1.5\) 不是整数，不能被 \(4\) 整除。推不出。</p>
+    <p>结论：前推后成立、后推前不成立，「能被 \(4\) 整除」是「是偶数」的<b>充分不必要条件</b>。说「不必要」，一定要拿出 \(n=6\) 这样的反例。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：「\(x=1\)」是「\(x^2=1\)」的什么条件？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>充分不必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要不充分条件</button>
+      <button class="opt" data-v="C"><b>C</b>充要条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(x=1\Rightarrow x^2=1\)，成立；反过来 \(x=-1\) 也满足 \(x^2=1\)，却不是 \(1\)，是反例，推不出。选 C 的同学只查了一个方向，或者忘了 \(x=-1\)。</p></div>
+  </div>
+
+  <h3>4. 用集合看：小范围推大范围</h3>
+  <p>如果 \(p\)、\(q\) 说的是<b>同一个变量</b>（比如都在说实数 \(x\)），可以把满足它们的 \(x\) 收集成集合：\(P=\{x\mid p\}\)，\(Q=\{x\mid q\}\)。那么</p>
+  <div class="key">\(p\Rightarrow q\) 就是 \(P\subseteq Q\)：小范围推得出大范围。<br>\(P\subsetneqq Q\)：\(p\) 是 \(q\) 的充分不必要条件；\(P=Q\)：充要条件。</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>\(p\)：\(-1&lt;x&lt;3\)，\(q\)：\(0&lt;x&lt;2\)。\(p\) 是 \(q\) 的什么条件？</p>
+    <p>\(P=\{x\mid -1&lt;x&lt;3\}\)，\(Q=\{x\mid 0&lt;x&lt;2\}\)。在数轴上，\(Q\) 那一段整个落在 \(P\) 里面，\(P\) 还多出两头，所以 \(Q\subsetneqq P\)。</p>
+    <p>\(q\Rightarrow p\)：\(0&lt;x&lt;2\) 的数一定满足 \(-1&lt;x&lt;3\)，成立。</p>
+    <p>\(p\nRightarrow q\)：反例 \(x=2.5\)，满足 \(-1&lt;x&lt;3\)，不满足 \(0&lt;x&lt;2\)。</p>
+    <p>结论：\(p\) 是 \(q\) 的<b>必要不充分条件</b>（换个角度：\(q\) 是 \(p\) 的充分不必要条件）。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：「\(x&gt;2\)」是「\(x&gt;1\)」的什么条件？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>充分不必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要不充分条件</button>
+      <button class="opt" data-v="C"><b>C</b>充要条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(\{x\mid x&gt;2\}\subsetneqq\{x\mid x&gt;1\}\)：\(x&gt;2\) 那一段整个在 \(x&gt;1\) 那一段里面，是小的那段，小推大成立；反过来，\(x=1.5\) 满足 \(x&gt;1\)、不满足 \(x&gt;2\)，是反例。</p>
+      <p>选 B 的同学常这样想：「\(2\) 比 \(1\) 大，所以 \(x&gt;2\) 管的范围更大」。正好反了：要求越<b>严</b>（范围越小）的那个，越容易当充分条件。</p>
+    </div>
+  </div>
+
+  <h3>5. 定义、判定、性质</h3>
+  <p>学过的很多结论，其实都在说条件关系：</p>
+  <ul>
+    <li><b>定义</b>是充要条件：「\(n\) 是偶数」\(\Leftrightarrow\)「\(n\) 能被 \(2\) 整除」，两边可以互相替换。</li>
+    <li><b>判定</b>一类的结论（「只要……，就是……」）给的是<b>充分条件</b>：「整数 \(n\) 的末位是 \(0\)」\(\Rightarrow\)「\(n\) 能被 \(5\) 整除」。它必要不必要要另外查，这里不必要，\(n=15\) 是反例。</li>
+    <li><b>性质</b>一类的结论（「是……，就有……」）给的是<b>必要条件</b>：有这个身份，就一定有这个性质。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>「对顶角相等」是一条性质。「两个角相等」是「两个角是对顶角」的什么条件？</p>
+    <p>性质说的是：两个角是对顶角 \(\Rightarrow\) 两个角相等。所以「相等」是「对顶角」的必要条件。</p>
+    <p>反过来：一个三角形里的两个 \(60^\circ\) 角相等，却不是对顶角，是反例，推不出。</p>
+    <p>结论：<b>必要不充分条件</b>。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="B">
+    <p>自己试试：由等式的性质，\(x=y\Rightarrow x^2=y^2\)。「\(x^2=y^2\)」是「\(x=y\)」的什么条件？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>充分不必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要不充分条件</button>
+      <button class="opt" data-v="C"><b>C</b>充要条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(x=y\Rightarrow x^2=y^2\)，所以 \(x^2=y^2\) 是必要条件；反过来 \(x=1\)，\(y=-1\) 时 \(x^2=y^2=1\)，可 \(x\ne y\)，推不出。选 C 的同学把「平方相等」当成「本身相等」，忘了还可能 \(x=-y\)。</p></div>
+  </div>
+
+  <h3>6. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>变量和范围先统一</b>。<br><span class="small">反例：「\(x^2=4\)」和「\(x=2\)」，在全体实数里 \(x=-2\) 是反例，\(x^2=4\nRightarrow x=2\)；如果题目先说了 \(x&gt;0\)，\(-2\) 不在考虑范围里，两者就能互相推出，结论变成充要。端点也一样：\(\{x\mid 0\le x\le 2\}\) 和 \(\{x\mid 0&lt;x\le 2\}\) 只差一个 \(0\)，这一个点就是反例。</span></li>
+    <li><b>两个方向分开说明</b>：证了 \(p\Rightarrow q\)（充分性），不等于证了 \(q\Rightarrow p\)（必要性）。<br><span class="small">反例：\(x=1\Rightarrow x^2=1\) 成立，可 \(x^2=1\nRightarrow x=1\)（\(x=-1\)）。</span></li>
+    <li><b>举几个例子不是证明</b>：试了几个数都对，不等于推得出；一个反例却能推翻「推得出」。<br><span class="small">反例：「若 \(x&gt;0\)，则 \(x^2&gt;x\)」，试 \(x=2,3,10\) 都对；可 \(x=0.5\) 时 \(x^2=0.25&lt;0.5\)，这句话是错的。</span></li>
+    <li><b>先还原成「若……则……」，别背口诀</b>：同一个意思有好几种说法。<br><span class="small">反例：「偶数的充分条件是能被 \(4\) 整除」听着像「偶数 \(\Rightarrow\) 能被 \(4\) 整除」，其实说的是「能被 \(4\) 整除 \(\Rightarrow\) 偶数」。</span></li>
+  </ol>
+  <div class="key">「A 是 B 的充分条件」＝「B 的充分条件是 A」＝ A \(\Rightarrow\) B<br>「A 是 B 的必要条件」＝「B 的必要条件是 A」＝ B \(\Rightarrow\) A</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>两个变量</b>：条件说的是 \(x\)、\(y\) 两个数时，集合里的元素是点 \((x,y)\)，要在平面上比，不能只看一条数轴。例：「\(x&gt;0\) 且 \(y&gt;0\)」\(\Rightarrow\)「\(xy&gt;0\)」成立；反过来 \(x=y=-1\) 是反例。</p>
+    <p><b>当且仅当</b>：\(p\) 是 \(q\) 的充要条件，也说成「\(p\) 当且仅当 \(q\)」。「当」是 \(q\Rightarrow p\)，「仅当」是 \(p\Rightarrow q\)。</p>
+    <p><b>能接起来</b>：\(p\Rightarrow q\)，\(q\Rightarrow r\)，就有 \(p\Rightarrow r\)。例：能被 \(4\) 整除 \(\Rightarrow\) 是偶数 \(\Rightarrow\) 末位是 \(0,2,4,6,8\) 之一。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <p>两个条件都说同一个实数 \(x\)：<span class="ca">\(p\)：\(x\in P\)</span>，<span class="cb">\(q\)：\(x\in Q\)</span>。拖动端点改区间；<b>点一下</b>端点（或选中后按回车）在实心「含端点」和空心「不含端点」之间切换。键盘：Tab 选中端点，左右方向键移动。</p>
+  <div class="card">
+    <svg class="fig" id="fig" viewBox="0 0 420 200" role="group" aria-label="数轴上的两个区间 P 和 Q，端点可拖动"></svg>
+    <div class="rd" id="readout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset" type="button">重置</button><span class="small">挑战：四种结论都拖出来一次。再试试只差一个端点时会怎样。</span></div>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. \(a\)、\(b\) 是实数。「\(a=0\)」是「\(ab=0\)」的什么条件？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>充分不必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要不充分条件</button>
+      <button class="opt" data-v="C"><b>C</b>充要条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(a=0\) 时 \(ab=0\times b=0\)，成立；反过来 \(a=1\)，\(b=0\) 时 \(ab=0\)，可 \(a\ne0\)，是反例。选 C 的同学忘了 \(ab=0\) 也可能是 \(b=0\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 「\(|x|=2\)」是「\(x=2\)」的什么条件？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>充分不必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要不充分条件</button>
+      <button class="opt" data-v="C"><b>C</b>充要条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(x=2\Rightarrow|x|=2\)；反过来 \(x=-2\) 时 \(|x|=2\)，却不是 \(2\)，推不出。问的是「\(|x|=2\)」：它被推出，是必要条件，不充分。选 A 的同学把方向看反了。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="trap-direction" data-answer="C">
+    <p>3. 下面哪句话是<b>对</b>的？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>「\(x=3\)」是「\(x^2=9\)」的必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>「\(x^2=9\)」的必要条件是「\(x=3\)」</button>
+      <button class="opt" data-v="C"><b>C</b>「\(x^2=9\)」的充分条件是「\(x=3\)」</button>
+      <button class="opt" data-v="D"><b>D</b>「\(x=3\)」的充分条件是「\(x^2=9\)」</button>
+    </div>
+    <div class="reveal">
+      <p>只有 \(x=3\Rightarrow x^2=9\) 成立（反过来 \(x=-3\) 是反例）。</p>
+      <p>C 说「\(x^2=9\) 的充分条件是 \(x=3\)」，等于说「\(x=3\) 是 \(x^2=9\) 的充分条件」，就是 \(x=3\Rightarrow x^2=9\)，对。</p>
+      <p>A 和 B 其实是同一句话，都在说 \(x^2=9\Rightarrow x=3\)，错；D 也在说 \(x^2=9\Rightarrow x=3\)，错。换个说法、换个语序，先还原成「若……则……」再判断。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-domain" data-answer="C">
+    <p>4. 已知 \(x&gt;0\)。在这个前提下，「\(x^2&gt;1\)」是「\(x&gt;1\)」的什么条件？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>充分不必要条件</button>
+      <button class="opt" data-v="B"><b>B</b>必要不充分条件</button>
+      <button class="opt" data-v="C"><b>C</b>充要条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>C</b>。很多同学条件反射选 B，因为记得「\(x=-2\) 是反例」。</p>
+      <p>但题目已经限定 \(x&gt;0\)，\(-2\) 根本不在考虑范围里。在 \(x&gt;0\) 时，\(x^2&gt;1\) 和 \(x&gt;1\) 能互相推出，是充要条件。</p>
+      <p>用集合比大小之前，先看清变量和范围：范围变了，集合变了，结论也会变。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-example" data-answer="B">
+    <p>5. 小明判断「\(x^3&gt;x\)」和「\(x&gt;1\)」的关系：他试了 \(x=2,3,10\)，两个条件都成立，于是说它们互为充要条件。他说得对吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>对，试了好几个数都成立</button>
+      <button class="opt" data-v="B"><b>B</b>不对：\(x&gt;1\Rightarrow x^3&gt;x\) 成立，但反过来有反例</button>
+      <button class="opt" data-v="C"><b>C</b>不对：两个方向都推不出</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>B</b>。试几个数只是举例，不是证明。</p>
+      <p>\(x&gt;1\) 时 \(x^2&gt;1\)，两边乘正数 \(x\) 得 \(x^3&gt;x\)，前推后成立（这是对所有 \(x&gt;1\) 的说明）。</p>
+      <p>反过来，取 \(x=-\tfrac12\)：\(x^3=-\tfrac18&gt;-\tfrac12\)，满足 \(x^3&gt;x\)，却不满足 \(x&gt;1\)。一个反例就说明推不出。所以「\(x&gt;1\)」是「\(x^3&gt;x\)」的充分不必要条件。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. \(p\)：\(x&gt;a\)，\(q\)：\(x&gt;2\)。如果 \(p\) 是 \(q\) 的充分不必要条件，实数 \(a\) 的取值范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(a&gt;2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(a\ge2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(a&lt;2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(a\le2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。充分不必要就是 \(P\subsetneqq Q\)，\(P=\{x\mid x&gt;a\}\)，\(Q=\{x\mid x&gt;2\}\)。</p>
+      <p>\(P\subseteq Q\) 要 \(a\ge2\)：比如 \(a=1\) 时 \(x=1.5\) 在 \(P\) 里、不在 \(Q\) 里。可 \(a=2\) 时 \(P=Q\)，是充要条件，不是「不必要」，要去掉。所以 \(a&gt;2\)。选 B 的同学没单独查端点 \(a=2\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById("fig"), out = document.getElementById("readout"), chipsEl = document.getElementById("chips");
+  var NS = "http://www.w3.org/2000/svg";
+  var MIN = -5, MAX = 5, STEP = 0.5, X0 = 30, X1 = 390, YP = 52, YQ = 112, YAX = 165;
+  var DEF = { P: { a: 1, b: 3, ca: true, cb: true }, Q: { a: 0, b: 4, ca: true, cb: true } };
+  var st;
+  var VERDICTS = ["充分不必要", "必要不充分", "充要", "既不充分也不必要"];
+  var got = {};
+
+  function sx(v) { return X0 + (v - MIN) / (MAX - MIN) * (X1 - X0); }
+  function vx(px) { return MIN + (px - X0) / (X1 - X0) * (MAX - MIN); }
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function fmt(v) {
+    var s = (Math.round(v * 100) / 100).toString();
+    return s === "-0" ? "0" : s;
+  }
+  function inSet(x, I) {
+    return (x > I.a || (x === I.a && I.ca)) && (x < I.b || (x === I.b && I.cb));
+  }
+  function itv(I) { return (I.ca ? "[" : "(") + fmt(I.a) + ", " + fmt(I.b) + (I.cb ? "]" : ")"); }
+
+  // 在 A 里但不在 B 里的点。端点都是 0.5 的倍数，所以 A\B 的每一段要么含一个端点、要么含一个 0.25 格点：
+  // 在 0.25 格点上逐个检查就是精确的。优先给整数，其次 0.5，再次 0.25。
+  function counterexample(A, B) {
+    var best = null, bestRank = 9;
+    for (var i = MIN * 4; i <= MAX * 4; i++) {
+      var x = i / 4;
+      if (inSet(x, A) && !inSet(x, B)) {
+        var r = (i % 4 === 0) ? 0 : (i % 2 === 0 ? 1 : 2);
+        if (r < bestRank) { best = x; bestRank = r; }
+      }
+    }
+    return best;
+  }
+
+  function verdictOf(pq, qp) {
+    if (pq && !qp) return VERDICTS[0];
+    if (!pq && qp) return VERDICTS[1];
+    if (pq && qp) return VERDICTS[2];
+    return VERDICTS[3];
+  }
+
+  var handles = {};
+  function build() {
+    svg.innerHTML = "";
+    mk("line", { x1: X0 - 8, y1: YAX, x2: X1 + 10, y2: YAX, "class": "axis" });
+    mk("path", { d: "M" + (X1 + 10) + " " + (YAX - 5) + " L" + (X1 + 18) + " " + YAX + " L" + (X1 + 10) + " " + (YAX + 5) + "Z", fill: "var(--muted)" });
+    for (var v = MIN; v <= MAX; v++) {
+      mk("line", { x1: sx(v), y1: YAX - 4, x2: sx(v), y2: YAX + 4, "class": "tick" });
+      mk("text", { x: sx(v), y: YAX + 20, "class": "num" }).textContent = v;
+    }
+    var lp = mk("text", { x: 8, y: YP + 5, "class": "lab", fill: "var(--a)" }); lp.textContent = "p";
+    var lq = mk("text", { x: 8, y: YQ + 5, "class": "lab", fill: "var(--b)" }); lq.textContent = "q";
+    svg._g = {
+      guides: mk("g", {}), bars: mk("g", {}), cex: mk("g", {}), hs: mk("g", {})
+    };
+    ["P", "Q"].forEach(function (S) {
+      ["a", "b"].forEach(function (end) {
+        var g = mk("g", {}, svg._g.hs);
+        var hit = mk("circle", { r: 20, "class": "hit" }, g);
+        var c = mk("circle", { r: 8, "class": "h " + S, tabindex: "0", role: "slider",
+          "aria-label": (S === "P" ? "p" : "q") + " 的" + (end === "a" ? "左" : "右") + "端点",
+          "aria-valuemin": MIN, "aria-valuemax": MAX }, g);
+        handles[S + end] = { g: g, c: c, hit: hit, S: S, end: end };
+        bindHandle(handles[S + end]);
+      });
+    });
+  }
+
+  function draw() {
+    var G = svg._g;
+    G.guides.innerHTML = ""; G.bars.innerHTML = ""; G.cex.innerHTML = "";
+    [["P", YP, "barP"], ["Q", YQ, "barQ"]].forEach(function (z) {
+      var I = st[z[0]];
+      mk("line", { x1: sx(I.a), y1: z[1], x2: sx(I.b), y2: z[1], "class": z[2] }, G.bars);
+      [I.a, I.b].forEach(function (v) { mk("line", { x1: sx(v), y1: z[1] + 10, x2: sx(v), y2: YAX - 4, "class": "guide" }, G.guides); });
+    });
+    ["Pa", "Pb", "Qa", "Qb"].forEach(function (k) {
+      var h = handles[k], I = st[h.S], v = I[h.end], closed = h.end === "a" ? I.ca : I.cb;
+      var y = h.S === "P" ? YP : YQ;
+      h.c.setAttribute("cx", sx(v)); h.c.setAttribute("cy", y);
+      h.hit.setAttribute("cx", sx(v)); h.hit.setAttribute("cy", y);
+      h.c.setAttribute("fill", closed ? (h.S === "P" ? "var(--a)" : "var(--b)") : "var(--card)");
+      h.c.setAttribute("aria-valuenow", v);
+      h.c.setAttribute("aria-valuetext", fmt(v) + (closed ? "，含端点" : "，不含端点"));
+    });
+
+    var P = st.P, Q = st.Q;
+    var cPQ = counterexample(P, Q), cQP = counterexample(Q, P);
+    var pq = cPQ === null, qp = cQP === null;
+    var v = verdictOf(pq, qp);
+    // 反例点画在数轴上
+    var marks = [];
+    if (!pq) marks.push([cPQ, "p⇏q"]);
+    if (!qp) marks.push([cQP, "q⇏p"]);
+    marks.forEach(function (m, i) {
+      mk("circle", { cx: sx(m[0]), cy: YAX, r: 5.5, "class": "cex" }, G.cex);
+      var dy = (marks.length === 2 && Math.abs(marks[0][0] - marks[1][0]) < 1.6 && i === 1) ? -12 : 0;
+      mk("text", { x: Math.min(Math.max(sx(m[0]), 30), 392), y: YAX - 12 + dy - (i === 0 ? 0 : 0), "class": "cexl" }, G.cex).textContent = "x=" + fmt(m[0]);
+    });
+
+    var rel = pq && qp ? "\\(P=Q\\)" : pq ? "\\(P\\subsetneqq Q\\)" : qp ? "\\(Q\\subsetneqq P\\)" : "谁也不包含谁";
+    var html = "";
+    html += '<div class="row"><span class="ca">\\(P=' + itv(P) + '\\)</span>，<span class="cb">\\(Q=' + itv(Q) + '\\)</span>　（' + rel + '）</div>';
+    html += '<div class="row">\\(p\\Rightarrow q\\)？ ' + (pq ? '<span class="yes">成立</span>：\\(P\\) 里每个数都在 \\(Q\\) 里。'
+      : '<span class="nope">不成立</span>，反例 \\(x=' + fmt(cPQ) + '\\)：满足 \\(p\\)，不满足 \\(q\\)。') + '</div>';
+    html += '<div class="row">\\(q\\Rightarrow p\\)？ ' + (qp ? '<span class="yes">成立</span>：\\(Q\\) 里每个数都在 \\(P\\) 里。'
+      : '<span class="nope">不成立</span>，反例 \\(x=' + fmt(cQP) + '\\)：满足 \\(q\\)，不满足 \\(p\\)。') + '</div>';
+    var back = { "充分不必要": "必要不充分", "必要不充分": "充分不必要", "充要": "充要", "既不充分也不必要": "既不充分也不必要" }[v];
+    html += '<div class="verdict">\\(p\\) 是 \\(q\\) 的' + v + '条件</div>';
+    html += '<div class="small">换个角度说：\\(q\\) 是 \\(p\\) 的' + back + '条件。</div>';
+    out.innerHTML = html;
+    if (window.Peiyu) Peiyu.math(out);
+
+    got[v] = true;
+    chipsEl.innerHTML = "";
+    VERDICTS.forEach(function (name) {
+      var s = document.createElement("span");
+      s.className = "chip" + (got[name] ? " got" : "");
+      s.textContent = (got[name] ? "✓ " : "") + name;
+      chipsEl.appendChild(s);
+    });
+    st._verdict = v;
+  }
+
+  function setVal(h, val) {
+    var I = st[h.S];
+    val = Math.round(val / STEP) * STEP;
+    if (h.end === "a") I.a = Math.min(Math.max(val, MIN), I.b - STEP);
+    else I.b = Math.max(Math.min(val, MAX), I.a + STEP);
+  }
+  function toggle(h) {
+    var I = st[h.S];
+    if (h.end === "a") I.ca = !I.ca; else I.cb = !I.cb;
+  }
+  function logState(how) {
+    if (window.Peiyu) Peiyu.log("interact", { how: how, p: itv(st.P), q: itv(st.Q), verdict: st._verdict });
+  }
+
+  function bindHandle(h) {
+    var drag = null;
+    function svgX(ev) {
+      var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+      var m = svg.getScreenCTM(); if (!m) return null;
+      return pt.matrixTransform(m.inverse()).x;
+    }
+    function down(ev) {
+      ev.preventDefault();
+      drag = { moved: false, start: st[h.S][h.end], id: ev.pointerId };
+      try { h.g.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+      h.c.focus({ preventScroll: true });
+    }
+    function move(ev) {
+      if (!drag || ev.pointerId !== drag.id) return;
+      var x = svgX(ev); if (x === null) return;
+      var before = st[h.S][h.end];
+      setVal(h, vx(x));
+      if (st[h.S][h.end] !== drag.start) drag.moved = true;
+      if (st[h.S][h.end] !== before) draw();
+    }
+    function up(ev) {
+      if (!drag || ev.pointerId !== drag.id) return;
+      if (!drag.moved) { toggle(h); draw(); logState("toggle"); }
+      else logState("drag");
+      drag = null;
+    }
+    h.g.addEventListener("pointerdown", down);
+    h.g.addEventListener("pointermove", move);
+    h.g.addEventListener("pointerup", up);
+    h.g.addEventListener("pointercancel", function () { drag = null; });
+    h.c.addEventListener("keydown", function (ev) {
+      var k = ev.key, cur = st[h.S][h.end];
+      if (k === "ArrowLeft" || k === "ArrowDown") setVal(h, cur - STEP);
+      else if (k === "ArrowRight" || k === "ArrowUp") setVal(h, cur + STEP);
+      else if (k === "Home") setVal(h, MIN);
+      else if (k === "End") setVal(h, MAX);
+      else if (k === "Enter" || k === " ") toggle(h);
+      else return;
+      ev.preventDefault(); draw(); logState("key");
+    });
+  }
+
+  function reset() {
+    st = JSON.parse(JSON.stringify(DEF));
+    draw();
+  }
+  document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  build();
+  document.addEventListener("DOMContentLoaded", function () { reset(); });
+  if (document.readyState !== "loading") reset();
+})();
+</script>
+</body></html>

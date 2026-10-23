@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10.2 事件的相互独立性 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .fig.big text { font-size: 20px; }
+  .fig:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+  .ctrl select { font: inherit; font-size: 16px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--fg); max-width: 100%; }
+  .ctrl input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--a); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-10-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 10 章 概率</p>
+<h1>10.2 事件的相互独立性</h1>
+<p class="lead">两件事「互不影响」，在数学里用一个等式来说：\(P(AB)=P(A)P(B)\)。它和「互斥」是两回事，判断它要靠算或靠试验本身，不能凭感觉。先从一枚硬币和一颗骰子开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>先抛一枚硬币，再掷一颗骰子。硬币有正、反 \(2\) 种结果，骰子有 \(1\sim6\) 共 \(6\) 种，合起来 \(2\times6=12\) 种，每种可能性一样。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>「硬币正面朝上，并且骰子掷出 \(6\)」的概率是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{12}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac18\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac1{36}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(12\) 种结果里，只有「正，\(6\)」这一种符合，概率 \(\dfrac1{12}\)。</p>
+      <p>再看：硬币正面的概率是 \(\dfrac12\)，骰子掷出 \(6\) 的概率是 \(\dfrac16\)，而 \(\dfrac12\times\dfrac16=\dfrac1{12}\)，正好是两个概率相乘。</p>
+      <p>硬币怎么落，不影响骰子怎么落，所以能乘。这一节就讲：什么样的两个事件能这样相乘（叫「相互独立」），怎么判断，以及它和「互斥」有什么不同。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：10.1 的样本空间、古典概型、事件的关系和运算（<a href="b2-10-1.html">回看 10.1</a>）。</p>
+
+  <div class="card">
+    <p><b>积事件 \(AB\)</b>：\(A\) 和 \(B\) <b>同时</b>发生，也写成 \(A\cap B\)。</p>
+    <p>例：掷一颗骰子，\(A=\)「点数是偶数」\(=\{2,4,6\}\)，\(B=\)「点数 \(\ge4\)」\(=\{4,5,6\}\)。那么 \(AB=\{4,6\}\)，\(P(AB)=\dfrac26=\dfrac13\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>互斥</b>：\(A\)、\(B\) 不可能同时发生，\(AB\) 是空的，\(P(AB)=0\)。</p>
+    <p>例：掷一颗骰子，\(A=\{2,4,6\}\)，\(C=\)「点数是 \(1\) 或 \(3\)」\(=\{1,3\}\)。没有公共的点数，\(A\)、\(C\) 互斥。</p>
+  </div>
+
+  <div class="card">
+    <p><b>对立事件 \(\overline A\)</b>：\(A\) 不发生。\(P(\overline A)=1-P(A)\)。</p>
+    <p>例：\(A=\)「点数是偶数」，\(\overline A=\)「点数是奇数」\(=\{1,3,5\}\)，\(P(\overline A)=1-\dfrac12=\dfrac12\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>两步试验的样本空间</b>：掷两颗骰子，结果记成 \((i,j)\)，\(i\) 是第一颗、\(j\) 是第二颗的点数。一共 \(6\times6=36\) 种，可能性一样，可以排成一张 \(6\times6\) 的格子。</p>
+    <p>例：「点数和为 \(3\)」\(=\{(1,2),(2,1)\}\)，占 \(2\) 格，概率 \(\dfrac2{36}=\dfrac1{18}\)。</p>
+  </div>
+
+  <h3>2. 什么叫相互独立</h3>
+  <p>入门题里，「硬币正面」和「骰子是 \(6\)」同时发生的概率，正好等于两个概率相乘。我们就用这个等式来定义「互不影响」：</p>
+  <div class="key">如果 \(P(AB)=P(A)P(B)\)，就说事件 \(A\) 与 \(B\) <b>相互独立</b>（简称独立）。</div>
+  <p>为什么是相乘：两步各自进行时，样本点是「第一步的结果 \(\times\) 第二步的结果」。\(A\) 只看第一步、\(B\) 只看第二步，那么 \(AB\) 的个数 \(=\) \(A\) 的个数 \(\times\) \(B\) 的个数，除以总数，就是概率相乘。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>掷两颗骰子，\(A=\)「第一颗是偶数」，\(B=\)「点数和为 \(7\)」。\(A\) 与 \(B\) 独立吗？</p>
+    <p>\(A\)：第一颗是 \(2,4,6\)，第二颗随便，\(3\times6=18\) 格，\(P(A)=\dfrac{18}{36}=\dfrac12\)。</p>
+    <p>\(B\)：\((1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\)，\(6\) 格，\(P(B)=\dfrac6{36}=\dfrac16\)。</p>
+    <p>\(AB\)：上面第一颗是偶数的 \((2,5),(4,3),(6,1)\)，\(3\) 格，\(P(AB)=\dfrac3{36}=\dfrac1{12}\)。</p>
+    <p>\(P(A)P(B)=\dfrac12\times\dfrac16=\dfrac1{12}=P(AB)\)，所以 \(A\) 与 \(B\) 独立。</p>
+    <p class="small">「和」明明跟第一颗有关，算出来却是独立的。所以判断独立要算，不能看着像就下结论。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：掷两颗骰子，\(A=\)「第一颗是偶数」，\(B=\)「点数和为 \(8\)」。\(A\) 与 \(B\) 独立吗？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>独立</button>
+      <button class="opt" data-v="B"><b>B</b>不独立</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(B=\{(2,6),(3,5),(4,4),(5,3),(6,2)\}\)，只有 \(5\) 格，\(P(B)=\dfrac5{36}\)；\(AB=\{(2,6),(4,4),(6,2)\}\)，\(P(AB)=\dfrac3{36}=\dfrac1{12}\)。而 \(P(A)P(B)=\dfrac12\times\dfrac5{36}=\dfrac5{72}\)，\(\dfrac1{12}=\dfrac6{72}\ne\dfrac5{72}\)，不独立。和为 \(7\) 独立，不等于和为 \(8\) 也独立；常见的错是照例 1 类推，或者把和为 \(8\) 也数成 \(6\) 格。</p></div>
+  </div>
+
+  <h3>3. 已知独立，就用乘法</h3>
+  <p>实际问题里，独立通常来自试验本身：两个人各自射击、两台机器各自运转、摸球后放回再摸……一次的结果碰不到另一次。题目说「相互独立」也算。这时直接用 \(P(AB)=P(A)P(B)\)。</p>
+  <p>还有一条常用：\(A\) 与 \(B\) 独立，那么 \(A\) 与 \(\overline B\)、\(\overline A\) 与 \(B\)、\(\overline A\) 与 \(\overline B\) 也都独立（「甲没中」和「乙没中」照样互不影响），「都不发生」也能用乘法。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>甲、乙各自射击一次，甲命中的概率是 \(0.8\)，乙是 \(0.6\)，两人互不影响。求：(1) 都命中；(2) 恰有一人命中；(3) 至少一人命中。</p>
+    <p>记 \(A=\)「甲中」，\(B=\)「乙中」，相互独立，\(P(\overline A)=0.2\)，\(P(\overline B)=0.4\)。</p>
+    <p>(1) \(P(AB)=0.8\times0.6=0.48\)。</p>
+    <p>(2) 恰一人中是「甲中乙不中」或「甲不中乙中」，这两种互斥，可以相加：\(0.8\times0.4+0.2\times0.6=0.32+0.12=0.44\)。</p>
+    <p>(3) 「至少一人中」的对立是「两人都没中」：\(1-P(\overline A\,\overline B)=1-0.2\times0.4=0.92\)。</p>
+    <p class="small">核对：\(0.48+0.44=0.92\)，和 (3) 一样。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：两个开关各自工作，正常的概率分别是 \(0.9\) 和 \(0.7\)，互不影响。至少一个正常的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.63\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.97\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1.6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。两个都坏的概率 \(0.1\times0.3=0.03\)，所以至少一个正常是 \(1-0.03=0.97\)。A 算的是「两个都正常」；C 直接把 \(0.9+0.7\) 相加，超过了 \(1\)。概率直接相加只对互斥事件成立，这两个事件能同时发生。</p></div>
+  </div>
+  <div class="key">都发生：\(P(AB)=P(A)P(B)\)（要先有独立）。<br>至少一个发生：\(1-P(\overline A)P(\overline B)\)。</div>
+
+  <h3>4. 用之前要注意</h3>
+  <ol>
+    <li><b>独立不是互斥。</b>互斥是「不能同时发生」，\(P(AB)=0\)；独立是 \(P(AB)=P(A)P(B)\)。如果 \(P(A)>0\)、\(P(B)>0\) 又互斥，那 \(P(AB)=0\)，\(P(A)P(B)>0\)，<b>一定不独立</b>。<br><span class="small">反例：掷一颗骰子，\(A=\)「偶数」，\(B=\)「奇数」。互斥，\(P(AB)=0\)，可 \(P(A)P(B)=\dfrac14\)，不独立。其实互斥是「影响很大」：\(A\) 一发生，\(B\) 就一定不发生。</span></li>
+    <li><b>独立要有根据。</b>根据只有三种：试验本身各自进行、题目给出、或者算出 \(P(AB)=P(A)P(B)\)。「看起来无关」不算数。<br><span class="small">反例：同一颗骰子，\(A=\)「偶数」，\(B=\)「点数 \(\le3\)」。\(AB=\{2\}\)，\(P(AB)=\dfrac16\)，\(P(A)P(B)=\dfrac12\times\dfrac12=\dfrac14\)，不独立；把 \(B\) 换成「点数 \(\le4\)」，又独立了（练一练第 4 题）。看不出来，只能算。</span></li>
+    <li><b>不放回抽取，一般不独立。</b>先摸走一个，后面剩下的就变了。<br><span class="small">反例：袋里 \(2\) 红 \(1\) 白，不放回依次摸两个，\(A=\)「第一个红」，\(B=\)「第二个红」。按顺序数有 \(3\times2=6\) 种，\(P(A)=P(B)=\dfrac46=\dfrac23\)，\(P(AB)=\dfrac26=\dfrac13\)，而 \(\dfrac23\times\dfrac23=\dfrac49\ne\dfrac13\)。要是摸完放回，\(9\) 种里两红占 \(4\) 种，\(\dfrac49\)，就独立了。</span></li>
+  </ol>
+  <div class="key">判断独立：看试验是不是各自进行，或者算 \(P(AB)\) 和 \(P(A)P(B)\) 比一比。<br>两个概率都是正的事件，互斥就一定不独立。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么换成对立事件还独立</b>：\(AB\) 和 \(A\overline B\) 互斥，合起来是 \(A\)，所以 \(P(A\overline B)=P(A)-P(AB)=P(A)-P(A)P(B)=P(A)\big(1-P(B)\big)=P(A)P(\overline B)\)。另外两种同理。</p>
+    <p><b>两两独立，不等于三个一起独立</b>：抛两枚硬币，\(A=\)「第一枚正」，\(B=\)「第二枚正」，\(C=\)「两枚一样」。三个概率都是 \(\dfrac12\)，\(AB\)、\(AC\)、\(BC\) 都只有「正正」一种，概率 \(\dfrac14=\dfrac12\times\dfrac12\)，两两独立。可 \(ABC\) 也只有「正正」，\(P(ABC)=\dfrac14\ne\dfrac18\)。三个事件「相互独立」要求两两独立，并且 \(P(ABC)=P(A)P(B)P(C)\)。像几个人各自射击、各自破译这类，从试验本身就能确定相互独立。</p>
+    <p><b>概率为 \(0\) 的事件</b>：比如不可能事件 \(\varnothing\)，\(P(\varnothing\,B)=0=0\times P(B)\)，它和任何事件都独立，同时也和任何事件互斥。所以「互斥就不独立」一定要带上「两个概率都是正的」。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 两颗骰子：选两个事件，看独不独立</h3>
+  <p class="small">\(6\times6\) 的格子是掷两颗骰子的 \(36\) 种结果（行是第一颗，列是第二颗）。选好 \(A\)、\(B\)，格子标出 \(A\)、\(B\)、\(AB\)，下面算 \(P(AB)\) 和 \(P(A)P(B)\)。试试「点数和为 \(7\)」和「点数和为 \(8\)」，再试试一对互斥的。</p>
+  <div class="card">
+    <svg class="fig big" id="dice" viewBox="0 0 560 390" role="img" aria-label="6 乘 6 的格子，标出事件 A、B 和 AB 占的格子"></svg>
+    <div class="ctrl"><label for="selA">\(A\)</label><select id="selA"></select><label><input type="checkbox" id="notA"> 换成对立事件</label></div>
+    <div class="ctrl"><label for="selB">\(B\)</label><select id="selB"></select><label><input type="checkbox" id="notB"> 换成对立事件</label></div>
+    <div class="result" id="diceout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="dicereset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：自己画一个事件 B</h3>
+  <p class="small">点格子（或选中图后用方向键移动、空格切换），把它放进或拿出 \(B\)。试着画一个<b>和 \(A\) 互斥、又和 \(A\) 独立</b>的 \(B\)，\(B\) 不能是空的——看看为什么做不到。</p>
+  <div class="card">
+    <svg class="fig big" id="paint" viewBox="0 0 560 390" tabindex="0" role="application" aria-label="6 乘 6 的格子，点格子把它加入或移出事件 B；方向键移动，空格切换"></svg>
+    <div class="ctrl"><label for="selA2">\(A\)</label><select id="selA2"></select></div>
+    <div class="result" id="paintout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="paintclear" type="button">清空 B</button><button class="btn ghost" id="paintreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 掷两颗骰子，\(A=\)「第一颗点数 \(\le2\)」，\(B=\)「第二颗是 \(6\)」。\(P(AB)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{18}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac1{36}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。两颗骰子各掷各的，\(A\) 只看第一颗、\(B\) 只看第二颗，独立。\(P(A)=\dfrac26=\dfrac13\)，\(P(B)=\dfrac16\)，\(P(AB)=\dfrac13\times\dfrac16=\dfrac1{18}\)。数格子也一样：\((1,6),(2,6)\) 两格，\(\dfrac2{36}=\dfrac1{18}\)。B 是把两个概率加起来了；D 是只数了一格。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 甲、乙两人各自参加一次考试，及格的概率分别是 \(0.7\) 和 \(0.5\)，互不影响。恰有一人及格的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.35\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.85\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1.2\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。「甲过乙不过」\(0.7\times0.5=0.35\)，「甲不过乙过」\(0.3\times0.5=0.15\)，两种互斥，相加得 \(0.5\)。A 只算了一种（也是「都及格」的概率）；C 是「至少一人及格」\(1-0.3\times0.5=0.85\)；D 直接相加，超过了 \(1\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-mutex" data-answer="B">
+    <p>3. 掷一颗骰子，\(A=\)「点数是 \(1\) 或 \(2\)」，\(B=\)「点数是 \(5\) 或 \(6\)」。下面哪句对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(A\)、\(B\) 互斥，所以独立</button>
+      <button class="opt" data-v="B"><b>B</b>\(A\)、\(B\) 互斥，不独立</button>
+      <button class="opt" data-v="C"><b>C</b>\(A\)、\(B\) 不互斥，独立</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。没有公共点数，互斥，\(P(AB)=0\)；但 \(P(A)P(B)=\dfrac13\times\dfrac13=\dfrac19\ne0\)，不独立。选 A 是把「互斥」当成了「互不影响」：其实 \(A\) 一发生，\(B\) 就一定不发生，影响最大。两个概率都正的事件，互斥就一定不独立。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-feel" data-answer="A">
+    <p>4. 掷一颗骰子，\(A=\)「点数是偶数」，\(B=\)「点数 \(\le4\)」。\(A\) 与 \(B\)：</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>独立</button>
+      <button class="opt" data-v="B"><b>B</b>不独立</button>
+      <button class="opt" data-v="C"><b>C</b>同一次掷骰子里的两件事，没法谈独立</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(P(A)=\dfrac12\)，\(P(B)=\dfrac46=\dfrac23\)，\(AB=\{2,4\}\)，\(P(AB)=\dfrac26=\dfrac13\)，而 \(\dfrac12\times\dfrac23=\dfrac13\)，相等，独立。同一次试验里的两个事件也能谈独立，标准只有 \(P(AB)=P(A)P(B)\)。凭感觉选 B 的同学可以对比：把 \(B\) 换成「点数 \(\le3\)」，\(P(AB)=\dfrac16\ne\dfrac14\)，才不独立。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-noreplace" data-answer="B">
+    <p>5. \(10\) 张奖券里有 \(2\) 张有奖。甲先抽一张，乙再从剩下的里抽一张（不放回）。甲、乙都中奖的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{25}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac1{45}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac15\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。按顺序数：甲有 \(10\) 种抽法，乙有 \(9\) 种，共 \(90\) 种。两人都中奖：甲 \(2\) 种、乙只剩 \(1\) 种，\(2\) 种，概率 \(\dfrac2{90}=\dfrac1{45}\)。</p>
+      <p>A 是 \(\dfrac15\times\dfrac15\)：甲、乙各自中奖的概率确实都是 \(\dfrac15\)（乙中奖有 \(2\times1+8\times2=18\) 种，\(\dfrac{18}{90}=\dfrac15\)），可不放回时两件事不独立，不能相乘。放回再抽，答案才是 \(\dfrac1{25}\)。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 甲、乙、丙三人各自破译同一个密码，能破译的概率分别是 \(\dfrac12\)、\(\dfrac13\)、\(\dfrac14\)，互不影响。密码被破译（至少一人破译）的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{24}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac34\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{13}{12}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac14\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。三人各自破译，相互独立。都破译不了：\(\dfrac12\times\dfrac23\times\dfrac34=\dfrac14\)，所以至少一人破译：\(1-\dfrac14=\dfrac34\)。A 是三人都破译；C 是三个概率相加，超过了 \(1\)；D 是「都破译不了」，忘了用 \(1\) 去减。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  // 最简分数的 TeX；0 和 1 写整数
+  function frac(n, d) {
+    if (n === 0) return "0";
+    var g = gcd(n, d); n /= g; d /= g;
+    return d === 1 ? String(n) : "\\dfrac{" + n + "}{" + d + "}";
+  }
+  // n/36，没约分的话先写原样再写「= 最简」
+  function frac36(n) {
+    var r = frac(n, 36);
+    return (n === 0 || r === "\\dfrac{" + n + "}{36}") ? r : "\\dfrac{" + n + "}{36}=" + r;
+  }
+
+  // 事件：i 是第一颗，j 是第二颗，都在 1..6
+  var EVENTS = [
+    { id: "a-even", t: "第一颗是偶数", f: function (i) { return i % 2 === 0; } },
+    { id: "a-odd", t: "第一颗是奇数", f: function (i) { return i % 2 === 1; } },
+    { id: "a-6", t: "第一颗是 6", f: function (i) { return i === 6; } },
+    { id: "a-le2", t: "第一颗 ≤ 2", f: function (i) { return i <= 2; } },
+    { id: "b-even", t: "第二颗是偶数", f: function (i, j) { return j % 2 === 0; } },
+    { id: "b-6", t: "第二颗是 6", f: function (i, j) { return j === 6; } },
+    { id: "b-1", t: "第二颗是 1", f: function (i, j) { return j === 1; } },
+    { id: "s7", t: "点数和为 7", f: function (i, j) { return i + j === 7; } },
+    { id: "s8", t: "点数和为 8", f: function (i, j) { return i + j === 8; } },
+    { id: "s10", t: "点数和 ≥ 10", f: function (i, j) { return i + j >= 10; } },
+    { id: "same", t: "两颗点数相同", f: function (i, j) { return i === j; } },
+    { id: "bothodd", t: "两颗都是奇数", f: function (i, j) { return i % 2 === 1 && j % 2 === 1; } }
+  ];
+  function fillSelect(sel) {
+    EVENTS.forEach(function (e, k) {
+      var o = document.createElement("option"); o.value = k; o.textContent = e.t; sel.appendChild(o);
+    });
+  }
+  function evIndex(sel, dflt) { var k = parseInt(sel.value, 10); return (k >= 0 && k < EVENTS.length) ? k : dflt; }
+
+  // 格子布局
+  var GX = 150, GY = 70, S = 50;
+  function drawGrid(el, inA, inB, cur) {
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), line = css("--line"), card = css("--card"), cc = css("--c");
+    el.innerHTML = "";
+    svg("text", { x: GX + 3 * S, y: 24, "text-anchor": "middle" }, el).textContent = "第二颗 →";
+    svg("text", { x: 62, y: GY + 3 * S - 4, "text-anchor": "middle" }, el).textContent = "第一颗";
+    svg("text", { x: 62, y: GY + 3 * S + 22, "text-anchor": "middle" }, el).textContent = "↓";
+    for (var t = 1; t <= 6; t++) {
+      svg("text", { x: GX + (t - 0.5) * S, y: GY - 12, "text-anchor": "middle" }, el).textContent = t;
+      svg("text", { x: GX - 14, y: GY + (t - 0.5) * S + 7, "text-anchor": "end" }, el).textContent = t;
+    }
+    for (var i = 1; i <= 6; i++) {
+      for (var j = 1; j <= 6; j++) {
+        var a = inA(i, j), b = inB(i, j), x = GX + (j - 1) * S, y = GY + (i - 1) * S;
+        var fill = a && b ? hl : a ? ca : b ? cb : card, op = a && b ? 0.85 : (a || b) ? 0.32 : 1;
+        svg("rect", { x: x, y: y, width: S, height: S, fill: card, stroke: "none" }, el);
+        svg("rect", { x: x, y: y, width: S, height: S, fill: fill, "fill-opacity": op, stroke: line, "stroke-width": 1.5 }, el);
+        if (a || b) svg("text", { x: x + S / 2, y: y + S / 2 + 7, "text-anchor": "middle", "font-weight": 700 }, el).textContent = a && b ? "AB" : a ? "A" : "B";
+      }
+    }
+    svg("rect", { x: GX, y: GY, width: 6 * S, height: 6 * S, fill: "none", stroke: fg, "stroke-width": 1.5 }, el);
+    if (cur) svg("rect", { x: GX + cur[1] * S + 2, y: GY + cur[0] * S + 2, width: S - 4, height: S - 4, fill: "none", stroke: cc, "stroke-width": 4 }, el);
+    // 图例
+    var LX = 466;
+    [["只 A", ca, 0.32], ["只 B", cb, 0.32], ["AB", hl, 0.85]].forEach(function (it, k) {
+      var y = GY + 10 + k * 40;
+      svg("rect", { x: LX, y: y, width: 22, height: 22, fill: it[1], "fill-opacity": it[2], stroke: line }, el);
+      svg("text", { x: LX + 30, y: y + 19 }, el).textContent = it[0];
+    });
+  }
+
+  function count(inA, inB) {
+    var nA = 0, nB = 0, nAB = 0;
+    for (var i = 1; i <= 6; i++) for (var j = 1; j <= 6; j++) {
+      var a = inA(i, j), b = inB(i, j);
+      if (a) nA++; if (b) nB++; if (a && b) nAB++;
+    }
+    return { nA: nA, nB: nB, nAB: nAB };
+  }
+
+  // 结果文字：全部由格子数算出
+  function verdict(c, nameA, nameB) {
+    var lines = [];
+    lines.push("\\(A\\)：" + nameA + "，" + c.nA + " 格；\\(B\\)：" + nameB + "，" + c.nB + " 格；\\(AB\\)：" + c.nAB + " 格。");
+    var pa = frac(c.nA, 36), pb = frac(c.nB, 36);
+    lines.push("\\(P(A)=" + frac36(c.nA) + "\\)，\\(P(B)=" + frac36(c.nB) + "\\)");
+    lines.push("\\(P(AB)=" + frac36(c.nAB) + "\\)，\\(P(A)P(B)=" + pa + "\\times " + pb + "=" + frac(c.nA * c.nB, 1296) + "\\)");
+    var indep = c.nA * c.nB === 36 * c.nAB;
+    lines.push(indep
+      ? '<span class="eq">\\(P(AB)=P(A)P(B)\\)，\\(A\\) 与 \\(B\\) 相互独立。</span>'
+      : '<span class="bad">\\(P(AB)\\ne P(A)P(B)\\)，\\(A\\) 与 \\(B\\) 不独立。</span>');
+    if (c.nAB === 0) {
+      if (c.nA > 0 && c.nB > 0) lines.push("\\(A\\)、\\(B\\) 互斥（没有公共的格子）。概率又都是正的：\\(P(AB)=0\\)，\\(P(A)P(B)>0\\)，所以一定不独立。");
+      else lines.push("有一个事件一格都没有（概率 \\(0\\)）：它和任何事件都既互斥、又独立。");
+    } else {
+      lines.push("\\(A\\)、\\(B\\) 不互斥（有 " + c.nAB + " 个公共格子）。");
+      if (c.nA === 36 || c.nB === 36) lines.push("有一个事件占满了 \\(36\\) 格（必然事件），它和任何事件都独立。");
+    }
+    return lines.join("<br>");
+  }
+
+  /* ================= ① 选两个事件 ================= */
+  var dice = document.getElementById("dice"), selA = document.getElementById("selA"), selB = document.getElementById("selB");
+  var notA = document.getElementById("notA"), notB = document.getElementById("notB");
+  fillSelect(selA); fillSelect(selB);
+  var DA = 0, DB = 5; // 默认：第一颗是偶数、第二颗是 6
+  function diceReset() { selA.value = DA; selB.value = DB; notA.checked = false; notB.checked = false; diceDraw(); }
+  function diceDraw() {
+    var ea = EVENTS[evIndex(selA, DA)], eb = EVENTS[evIndex(selB, DB)], na = !!notA.checked, nb = !!notB.checked;
+    var inA = function (i, j) { return ea.f(i, j) !== na; }, inB = function (i, j) { return eb.f(i, j) !== nb; };
+    drawGrid(dice, inA, inB, null);
+    var nameA = na ? "「" + ea.t + "」的对立事件" : ea.t, nameB = nb ? "「" + eb.t + "」的对立事件" : eb.t;
+    var out = document.getElementById("diceout");
+    out.innerHTML = verdict(count(inA, inB), nameA, nameB);
+    Peiyu.math(out);
+  }
+  function diceLog() { Peiyu.log("interact", { id: "dice", A: EVENTS[evIndex(selA, DA)].id, B: EVENTS[evIndex(selB, DB)].id, notA: !!notA.checked, notB: !!notB.checked }); }
+  [selA, selB, notA, notB].forEach(function (el) {
+    el.addEventListener("change", function () { diceDraw(); diceLog(); });
+  });
+  document.getElementById("dicereset").onclick = diceReset;
+
+  /* ================= ② 自己画 B ================= */
+  var paint = document.getElementById("paint"), selA2 = document.getElementById("selA2");
+  fillSelect(selA2);
+  var B = [], cur = [0, 0], focused = false;
+  function paintReset() {
+    selA2.value = 0; cur = [0, 0];
+    B = []; for (var i = 0; i < 6; i++) { B.push([]); for (var j = 0; j < 6; j++) B[i].push(j < 3); } // 默认 B：第二颗 ≤ 3
+    paintDraw();
+  }
+  function paintDraw() {
+    var ea = EVENTS[evIndex(selA2, 0)];
+    var inA = function (i, j) { return !!ea.f(i, j); }, inB = function (i, j) { return !!(B[i - 1] && B[i - 1][j - 1]); };
+    drawGrid(paint, inA, inB, focused ? cur : null);
+    var out = document.getElementById("paintout");
+    out.innerHTML = verdict(count(inA, inB), ea.t, "你画的事件");
+    Peiyu.math(out);
+  }
+  function toggle(r, c) {
+    if (r < 0 || r > 5 || c < 0 || c > 5 || !B[r]) return;
+    B[r][c] = !B[r][c]; cur = [r, c]; paintDraw();
+    Peiyu.log("interact", { id: "paint", cell: (r + 1) + "," + (c + 1), on: B[r][c] });
+  }
+  paint.addEventListener("click", function (ev) {
+    var m = paint.getScreenCTM && paint.getScreenCTM();
+    if (!m) return;
+    var pt = paint.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var p = pt.matrixTransform(m.inverse());
+    var c = Math.floor((p.x - GX) / S), r = Math.floor((p.y - GY) / S);
+    if (r >= 0 && r <= 5 && c >= 0 && c <= 5) toggle(r, c);
+  });
+  paint.addEventListener("keydown", function (ev) {
+    var d = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] }[ev.key];
+    if (d) { ev.preventDefault(); cur = [clamp(cur[0] + d[0], 0, 5), clamp(cur[1] + d[1], 0, 5)]; paintDraw(); return; }
+    if (ev.key === " " || ev.key === "Enter") { ev.preventDefault(); toggle(cur[0], cur[1]); }
+  });
+  paint.addEventListener("focus", function () { focused = true; paintDraw(); });
+  paint.addEventListener("blur", function () { focused = false; paintDraw(); });
+  selA2.addEventListener("change", function () { paintDraw(); Peiyu.log("interact", { id: "paint-A", A: EVENTS[evIndex(selA2, 0)].id }); });
+  document.getElementById("paintclear").onclick = function () { for (var i = 0; i < 6; i++) for (var j = 0; j < 6; j++) B[i][j] = false; paintDraw(); };
+  document.getElementById("paintreset").onclick = paintReset;
+
+  document.addEventListener("DOMContentLoaded", function () { diceReset(); paintReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { diceDraw(); paintDraw(); });
+})();
+</script>
+</body></html>

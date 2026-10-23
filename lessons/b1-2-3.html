@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.3 二次函数与一元二次方程、不等式 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .ops button.on { background: var(--a); color: #fff; }
+  .sl { display: grid; grid-template-columns: 2.2em 1fr 3.2em; gap: 8px; align-items: center; margin: 6px 0; font-size: 16px; }
+  .sl input[type=range] { width: 100%; }
+  .sl output { text-align: right; font-variant-numeric: tabular-nums; }
+  .info { font-size: 16px; margin: 8px 0; line-height: 1.9; overflow-wrap: anywhere; }
+  .info .eq { color: var(--a); font-weight: 700; }
+  .info .bad { color: var(--no); font-weight: 700; }
+  .sets { display: grid; gap: 4px; margin: 6px 0; }
+  .sets div { padding: 4px 10px; border-radius: 8px; border: 1px solid var(--line); overflow-wrap: anywhere; }
+  .sets div.on { background: var(--hl-soft); border-color: var(--hl); font-weight: 600; }
+  .note0 { min-height: 1.4em; }
+  #pf text, #pm text { font-size: 20px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-2-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 2 章 一元二次函数、方程和不等式</p>
+<h1>2.3 二次函数与一元二次方程、不等式</h1>
+<p class="lead">一条抛物线，同时回答三个问题：方程 \(ax^2+bx+c=0\) 有哪些根，不等式 \(ax^2+bx+c>0\)（或 \(&lt;0\)）在哪里成立。看图读答案，比背表格可靠。先从抛一个球开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>把一个球往上抛，\(t\) 秒后它离地面的高度是 \(h=4t-t^2\)（米）。</p>
+  <div class="card predict" data-id="entry" data-answer="D">
+    <p>下面哪一刻，球正好落回地面？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(t=1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(t=2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(t=3\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(t=4\)</button>
+    </div>
+    <div class="reveal">
+      <p>代进去算：\(t=1\) 时 \(h=3\)，\(t=2\) 时 \(h=4\)，\(t=3\) 时 \(h=3\)，\(t=4\) 时 \(h=16-16=0\)。<b>D</b>。</p>
+      <p>「落地」就是 \(h=0\)，也就是方程 \(4t-t^2=0\)，即 \(t(4-t)=0\)，根是 \(0\)（刚抛出）和 \(4\)（落地）。「在空中」就是 \(h>0\)，也就是不等式 \(4t-t^2>0\)，答案是 \(0&lt;t&lt;4\)。</p>
+      <p>把 \(h\) 随 \(t\) 的变化画出来是一条开口向下的抛物线：和横轴交在 \(0\) 和 \(4\)，中间拱在横轴上方。<b>方程的根看交点，不等式的解看上方还是下方</b>——这一节就讲这件事。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：初中的二次函数图象（开口方向、和 \(x\) 轴的交点）和因式分解；集合的写法（<a href="b1-1-1.html">回看 1.1</a>）；2.1 的不等式性质，两边乘负数要反向（<a href="b1-2-1.html">回看 2.1</a>）。</p>
+
+  <div class="card">
+    <p><b>二次式、一元二次不等式</b>：形如 \(ax^2+bx+c\) 并且 \(a\neq0\) 的式子叫二次式。只含一个未知数、最高是 \(2\) 次的不等式，叫一元二次不等式。</p>
+    <p>例：\(2x^2-3x+1\) 是二次式，\(a=2\)，\(b=-3\)，\(c=1\)；\(x^2-4\) 也是（\(b=0\)）；\(3x-1\) 不是，它没有 \(x^2\) 项。\(x^2-4>0\) 是一元二次不等式。</p>
+  </div>
+
+  <div class="card">
+    <p><b>判别式</b> \(\Delta=b^2-4ac\)：不用解方程，就能知道 \(ax^2+bx+c=0\) 有几个实根。\(\Delta>0\) 两个不同实根，\(\Delta=0\) 两根相等（叫<b>重根</b>），\(\Delta&lt;0\) 没有实根。</p>
+    <p>例：\(x^2-2x-3\)，\(\Delta=4+12=16>0\)，根 \(-1\) 和 \(3\)；\(x^2-2x+1\)，\(\Delta=4-4=0\)，重根 \(1\)；\(x^2-2x+2\)，\(\Delta=4-8=-4&lt;0\)，没有实根。</p>
+  </div>
+
+  <div class="card">
+    <p><b>零点</b>：让函数值等于 \(0\) 的那个 \(x\)。它是一个<b>实数</b>，不是一个点。</p>
+    <p>例：\(y=x^2-x-2=(x+1)(x-2)\)，\(x=-1\) 和 \(x=2\) 时 \(y=0\)，所以零点是 \(-1\) 和 \(2\)。图象经过的 \((-1,0)\)、\((2,0)\) 是和 \(x\) 轴的交点，零点是它们的横坐标。</p>
+  </div>
+
+  <div class="card">
+    <p><b>解集和区间</b>：不等式所有的解组成的集合叫解集，可以写成集合，也可以写成区间。</p>
+    <p>例：\(\{x\mid -1&lt;x&lt;3\}\) 写成 \((-1,3)\)，圆括号表示端点不要；\(\{x\mid -1\le x\le 3\}\) 写成 \([-1,3]\)，方括号表示端点要；「\(x\le-1\) 或 \(x>3\)」写成 \((-\infty,-1]\cup(3,+\infty)\)。所有实数是 \(\mathbf R\)，一个解也没有是 \(\varnothing\)。</p>
+  </div>
+
+  <h3>2. 一个式子，三种问法</h3>
+  <p>设 \(a\neq0\)，把 \(ax^2+bx+c\) 看成函数 \(y=ax^2+bx+c\)，图象是抛物线。</p>
+  <ul>
+    <li>方程 \(ax^2+bx+c=0\) 的实根 = 函数的零点 = 抛物线和 \(x\) 轴交点的横坐标。</li>
+    <li>不等式 \(ax^2+bx+c>0\) 的解，是抛物线在 \(x\) 轴<b>上方</b>那部分对应的 \(x\)；\(&lt;0\) 看<b>下方</b>。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>求方程 \(2x^2-3x-2=0\) 的实根、函数 \(y=2x^2-3x-2\) 的零点，以及图象和 \(x\) 轴的交点。</p>
+    <p>因式分解：\(2x^2-3x-2=(2x+1)(x-2)\)。令它等于 \(0\)，得 \(x=-\dfrac12\) 或 \(x=2\)。</p>
+    <p>所以方程的实根是 \(-\dfrac12\) 和 \(2\)；函数的零点也是 \(-\dfrac12\) 和 \(2\)；图象和 \(x\) 轴交于 \(\left(-\dfrac12,0\right)\) 和 \((2,0)\)。</p>
+  </div>
+  <div class="card predict" data-id="e-zero" data-answer="B">
+    <p>自己试试：函数 \(y=x^2-4x+3\) 的零点是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((1,0)\) 和 \((3,0)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1\) 和 \(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((0,3)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1&lt;x&lt;3\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(x^2-4x+3=(x-1)(x-3)\)，\(x=1\) 和 \(x=3\) 时函数值是 \(0\)。选 A 的同学写成了交点，零点是交点的<b>横坐标</b>，是实数。C 是和 \(y\) 轴的交点；D 是 \(y&lt;0\) 的解集。</p></div>
+  </div>
+
+  <h3>3. 开口向上：三步解不等式</h3>
+  <ol>
+    <li><b>标准化</b>：移项让右边是 \(0\)，\(x^2\) 的系数是正的。</li>
+    <li><b>找根</b>：能因式分解就分解；不能就算 \(\Delta\)、用求根公式。</li>
+    <li><b>读图</b>：开口向上、两根 \(x_1&lt;x_2\) 时，<b>两边在上、中间在下</b>。\(>0\) 取两边，\(&lt;0\) 取中间；带「\(=\)」的把两根也算进去。</li>
+  </ol>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>解不等式 \(x^2-x-6\ge0\)。</p>
+    <p>\(x^2-x-6=(x+2)(x-3)\)，两根 \(-2\) 和 \(3\)。开口向上，两边在 \(x\) 轴上方，中间在下方。要「\(\ge0\)」，取两边，并且两根本身（值是 \(0\)）也要。</p>
+    <p>解集是 \(\{x\mid x\le-2\text{ 或 }x\ge3\}\)，即 \((-\infty,-2]\cup[3,+\infty)\)。验一下：中间的 \(x=0\) 代进去是 \(-6\)，确实不满足。</p>
+  </div>
+  <div class="card predict" data-id="try-up" data-answer="A">
+    <p>自己试试：不等式 \(x^2-5x+4&lt;0\) 的解集是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((1,4)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-\infty,1)\cup(4,+\infty)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\([1,4]\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((-4,-1)\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(x^2-5x+4=(x-1)(x-4)\)，两根 \(1\) 和 \(4\)，「\(&lt;0\)」取中间，根不要。选 D 的同学把根的符号弄反了：\(x-1=0\) 得 \(x=1\)，不是 \(-1\)。选 B 是读成了「\(>0\)」，选 C 是多要了端点。</p></div>
+  </div>
+
+  <h3>4. 开口向下：先乘 \(-1\)</h3>
+  <p>\(x^2\) 的系数是负的，抛物线开口向下，「两边在上」就反过来了。最稳的办法：两边同乘 \(-1\)，<b>不等号反向</b>，变成开口向上，再按第 3 块读。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>解不等式 \(-2x^2+x+1\ge0\)。</p>
+    <p>两边乘 \(-1\)，不等号反向：\(2x^2-x-1\le0\)。因式分解 \((2x+1)(x-1)\le0\)，两根 \(-\dfrac12\) 和 \(1\)。开口向上，「\(\le0\)」取中间，根也要。</p>
+    <p>解集是 \(\left[-\dfrac12,1\right]\)。验一下：\(x=0\) 代进原式是 \(1\ge0\)，成立。</p>
+  </div>
+  <div class="card predict" data-id="try-down" data-answer="A">
+    <p>自己试试：不等式 \(-x^2+2x+8>0\) 的解集是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((-2,4)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-\infty,-2)\cup(4,+\infty)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((-4,2)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\varnothing\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。乘 \(-1\) 得 \(x^2-2x-8&lt;0\)，即 \((x+2)(x-4)&lt;0\)，取中间 \(-2&lt;x&lt;4\)。选 B 的同学乘了 \(-1\) 却忘了把「\(>\)」改成「\(&lt;\)」。代 \(x=0\) 检查：\(8>0\)，\(0\) 应该在解集里，B 里没有它。</p></div>
+  </div>
+
+  <h3>5. \(\Delta=0\) 和 \(\Delta&lt;0\)：碰一下、碰不到</h3>
+  <p>开口向上时：</p>
+  <ul>
+    <li><b>\(\Delta=0\)</b>，重根 \(x_0\)：抛物线在 \(x_0\) 处碰一下 \(x\) 轴又回到上方，<b>不穿过去</b>。除了 \(x_0\) 处值是 \(0\)，别处都 \(>0\)。</li>
+    <li><b>\(\Delta&lt;0\)</b>：整条抛物线都在 \(x\) 轴上方，值处处 \(>0\)。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>（1）解 \(x^2-6x+9\le0\)。\(x^2-6x+9=(x-3)^2\)，平方不会是负数，只有 \(x=3\) 时等于 \(0\)。所以解集是 \(\{3\}\)。</p>
+    <p>（2）解 \(x^2+x+1>0\)。\(\Delta=1-4=-3&lt;0\)，没有实根，开口向上，整条在 \(x\) 轴上方。所以解集是 \(\mathbf R\)。</p>
+  </div>
+  <div class="card predict" data-id="try-touch" data-answer="A">
+    <p>自己试试：不等式 \(x^2+2x+1&lt;0\) 的解集是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\varnothing\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{-1\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\mathbf R\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\{x\mid x\neq-1\}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(x^2+2x+1=(x+1)^2\ge0\)，永远不会小于 \(0\)。选 B 的同学把「\(&lt;0\)」当成了「\(\le0\)」：\(x=-1\) 时值是 \(0\)，不满足「小于」。D 是「\(>0\)」的答案。</p></div>
+  </div>
+  <div class="key">这些情形不用背。画个草图：开口朝哪、和 \(x\) 轴交在哪，答案就在图上。<b>重根处不变号</b>；根本身要不要，只看不等号带不带「\(=\)」。</div>
+
+  <h3>6. 用之前，查五件事</h3>
+  <ol>
+    <li><b>真是二次吗</b>：\(x^2\) 的系数是参数时，先单独看它等于 \(0\) 的情形。<br><span class="small">反例：\(mx^2+x-2>0\)，\(m=0\) 时变成 \(x-2>0\)，解集是 \((2,+\infty)\)，图象是直线，不能用 \(\Delta\) 和「两边、中间」。</span></li>
+    <li><b>开口朝哪</b>：系数为负，先乘 \(-1\) 并反向。<br><span class="small">反例：\(-x^2+1>0\) 照背「大于取两边」写 \(x&lt;-1\) 或 \(x>1\)；代 \(x=2\) 得 \(-3\)，并不大于 \(0\)。正确是 \(-1&lt;x&lt;1\)。</span></li>
+    <li><b>根要不要</b>：带「\(=\)」要，不带不要；重根处不变号。<br><span class="small">反例：\((x-1)^2>0\) 的解集不是 \(\mathbf R\)，\(x=1\) 时值是 \(0\)，要去掉。</span></li>
+    <li><b>零点是数</b>：写 \(1\)，不写 \((1,0)\)。<br><span class="small">反例：「\(y=x^2-1\) 的零点是 \((\pm1,0)\)」是错的，零点是 \(-1\) 和 \(1\)。</span></li>
+    <li><b>实际问题取交集</b>：算出的解集还要和问题允许的范围取交集。<br><span class="small">反例：\(x\) 是一段长度，由 \(x^2-x-6&lt;0\) 得 \(-2&lt;x&lt;3\)；可长度要 \(x>0\)，答案是 \(0&lt;x&lt;3\)。</span></li>
+  </ol>
+  <div class="key">解集写成集合或区间：\(\{x\mid -1&lt;x&lt;3\}\) 或 \((-1,3)\)；两段用「或」/ \(\cup\) 连起来；没有解写 \(\varnothing\)。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>根不是整数时</b>：\(x^2-2x-1&lt;0\) 分解不了，\(\Delta=4+4=8\)，根 \(x=\dfrac{2\pm2\sqrt2}{2}=1\pm\sqrt2\)。开口向上取中间，解集 \((1-\sqrt2,1+\sqrt2)\)。</p>
+    <p><b>从解集倒推</b>：如果 \(ax^2+bx+c>0\) 的解集是 \((-1,2)\)，「\(>0\)」取了中间，说明开口向下 \(a&lt;0\)，并且 \(-1\)、\(2\) 是两根，所以 \(ax^2+bx+c=a(x+1)(x-2)\)。</p>
+    <p><b>另一种看法：符号</b>：\((x+1)(x-3)&lt;0\) 就是两个因式一正一负，只能 \(x+1>0\) 且 \(x-3&lt;0\)，得 \(-1&lt;x&lt;3\)，和读图的答案一样。</p>
+    <p><b>「一侧一直上升」</b>：开口向上的抛物线在顶点右边越来越高，这里靠初中的图象知识就够用；严格的说法（单调性）在第 3 章。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖抛物线，看根和解集</h3>
+  <p class="small">拉滑块改 \(a,b,c\)；也可以直接拖图上的顶点（键盘：先按 Tab 选中，再用方向键）。点下面四个按钮切换不等号，图上 \(x\) 轴的高亮段就是解集。实心点 ● 表示根在解集里，空心点 ○ 表示不在。</p>
+  <div class="card">
+    <svg class="fig" id="pf" viewBox="0 0 560 320" role="img" aria-label="抛物线 y=ax²+bx+c 和 x 轴，可拖动顶点"></svg>
+    <label class="sl"><span>\(a\)</span><input type="range" id="sa" min="-3" max="3" step="0.5" aria-label="a"><output id="oa"></output></label>
+    <label class="sl"><span>\(b\)</span><input type="range" id="sb" min="-6" max="6" step="0.5" aria-label="b"><output id="ob"></output></label>
+    <label class="sl"><span>\(c\)</span><input type="range" id="sc" min="-6" max="6" step="0.5" aria-label="c"><output id="oc"></output></label>
+    <div class="ctrl ops" id="rels">
+      <button class="btn ghost" type="button" data-r="gt">\(&gt;0\)</button>
+      <button class="btn ghost" type="button" data-r="ge">\(\ge 0\)</button>
+      <button class="btn ghost" type="button" data-r="lt">\(&lt;0\)</button>
+      <button class="btn ghost" type="button" data-r="le">\(\le 0\)</button>
+    </div>
+    <div class="info" id="info" aria-live="polite"></div>
+    <div class="sets" id="sets"></div>
+    <p class="small note0" id="note0"></p>
+    <div class="ctrl">
+      <span class="small">试试：</span>
+      <button class="btn ghost" type="button" data-p="1,-2,-3">两个根</button>
+      <button class="btn ghost" type="button" data-p="1,-2,1">重根</button>
+      <button class="btn ghost" type="button" data-p="1,-2,2">没有根</button>
+      <button class="btn ghost" type="button" data-p="-1,1,2">开口向下</button>
+      <button class="btn ghost" type="button" data-p="0,1,-2">\(a=0\)</button>
+      <button class="btn ghost" id="reset" type="button">重置</button>
+    </div>
+  </div>
+
+  <h3>② 进阶：含参数，什么时候对一切 \(x\) 都成立</h3>
+  <p class="small">看 \(f(x)=mx^2-mx+1\)。拉 \(m\)（选中滑块后也能用方向键），看抛物线是不是整条在 \(x\) 轴上方。红色是 \(f(x)\le0\) 的地方，有红色就说明「\(f(x)>0\) 对一切 \(x\) 成立」不对。特别看看 \(m=0\) 和 \(m=4\)。</p>
+  <div class="card">
+    <svg class="fig" id="pm" viewBox="0 0 560 300" role="img" aria-label="含参数 m 的抛物线 y=mx²−mx+1 和 x 轴"></svg>
+    <label class="sl"><span>\(m\)</span><input type="range" id="ms" min="-2" max="6" step="0.5" aria-label="m"><output id="om"></output></label>
+    <div class="info" id="pminfo" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="pmreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 不等式 \(x^2+x-12\le0\) 的解集是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\([-4,3]\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-4,3)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((-\infty,-4]\cup[3,+\infty)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\([-3,4]\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(x^2+x-12=(x+4)(x-3)\)，两根 \(-4\) 和 \(3\)。开口向上，「\(\le0\)」取中间，根也要。选 B 漏了端点；选 C 读到了上方；选 D 是根的符号弄反了。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 关于 \(x\) 的方程 \(x^2-2x+k=0\) 没有实根，\(k\) 的取值范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(k>1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(k&lt;1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(k\ge1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(k\le1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。没有实根就是 \(\Delta&lt;0\)：\((-2)^2-4k=4-4k&lt;0\)，得 \(k>1\)。选 C 的同学把 \(k=1\) 也算进来了：那时 \(\Delta=0\)，方程是 \((x-1)^2=0\)，有一个重根 \(1\)。B、D 是有实根的情形。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>3. 不等式 \(-x^2+x+2>0\) 的解集是什么？（提示：\(-x^2+x+2=0\) 的两个根是 \(-1\) 和 \(2\)。）</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\{x\mid x&lt;-1\text{ 或 }x>2\}\)，因为「大于取两边」</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{x\mid -1&lt;x&lt;2\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{x\mid x>2\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\{-1,2\}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。卡在「开口朝哪」：\(x^2\) 前面是 \(-1\)，开口<b>向下</b>，中间拱在 \(x\) 轴上方，两边掉到下方，所以「大于 0」在两根<b>中间</b>。代 \(x=0\)：\(2>0\)，确实成立。</p>
+      <p>选 A 的同学背了「大于取两边」，这句话只在开口向上时对。稳妥的做法是先乘 \(-1\)、不等号反向，变成 \(x^2-x-2&lt;0\) 再读。选 D 是把不等式和方程弄混了：\(-1\) 和 \(2\) 让式子<b>等于</b> 0，恰恰不满足「大于 0」。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="e-double" data-answer="C">
+    <p>4. 不等式 \(x^2-4x+4>0\) 的解集是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\varnothing\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\mathbf R\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{x\mid x\neq 2\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\{2\}\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。卡在「根要不要」：\(x^2-4x+4=(x-2)^2\)，\(\Delta=0\)，抛物线在 \(x=2\) 处碰到 \(x\) 轴又回到上方——重根处<b>不变号</b>。除了 \(x=2\) 那一点值是 0，其余地方都大于 0。B 是「\(\ge 0\)」的答案；D 是「\(\le0\)」的答案。在「动手」①里点「重根」，再把四个不等号点一遍。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-range" data-answer="A">
+    <p>5. 一块长方形菜地，长比宽多 \(2\) 米，面积至少 \(8\) 平方米。设宽为 \(x\) 米，\(x\) 的取值范围是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x\ge2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x\le-4\) 或 \(x\ge2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-4\le x\le2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x\ge4\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。卡在「实际问题取交集」：\(x(x+2)\ge8\)，即 \(x^2+2x-8\ge0\)，\((x+4)(x-2)\ge0\)，解得 \(x\le-4\) 或 \(x\ge2\)。宽是长度，要 \(x>0\)，取交集只剩 \(x\ge2\)。选 B 的同学停在了不等式的解集；选 C 读成了中间。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="e-a0" data-answer="B">
+    <p>6. 关于 \(x\) 的不等式 \(mx^2-mx+1>0\) 对一切实数 \(x\) 都成立，\(m\) 的取值范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0&lt;m&lt;4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0\le m&lt;4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0\le m\le 4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(m&lt;0\) 或 \(m>4\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。卡在「真是二次吗」：\(m\) 是参数，先看 \(m=0\)：式子变成 \(1>0\)，对所有 \(x\) 都成立，所以 \(m=0\) 要算进去。</p>
+      <p>\(m\neq0\) 时是二次式。要整条抛物线都在 \(x\) 轴上方，必须开口向上 \(m>0\)，并且和 \(x\) 轴没有交点 \(\Delta=m^2-4m&lt;0\)，得 \(0&lt;m&lt;4\)。\(m=4\) 时 \(\Delta=0\)，式子是 \((2x-1)^2\)，在 \(x=\tfrac12\) 处等于 0，不满足「\(>0\)」。合起来是 \(0\le m&lt;4\)。选 A 漏了 \(m=0\)；选 C 多了 \(m=4\)。可以在「动手」②里拉 \(m\) 对照。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时（集合写法、区间写法都对），看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function half(v) { return Math.round(v * 2) / 2; }
+  function num(v) { var s = String(Math.round(v * 100) / 100); return s === "-0" ? "0" : s; }
+  function gcd(p, q) { p = Math.abs(p); q = Math.abs(q); while (q) { var t = p % q; p = q; q = t; } return p || 1; }
+
+  // 分数 n/d 的 TeX（n、d 为整数，d≠0）
+  function frac(n, d) {
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcd(n, d); n /= g; d /= g;
+    if (n === 0) return "0";
+    if (d === 1) return String(n);
+    return (n < 0 ? "-" : "") + "\\frac{" + Math.abs(n) + "}{" + d + "}";
+  }
+  // √D 化简：D = k²·m
+  function sqrtSplit(D) {
+    var k = 1, m = D;
+    for (var f = 2; f * f <= m; f++) while (m % (f * f) === 0) { m /= f * f; k *= f; }
+    return [k, m];
+  }
+
+  /* 根：用 A=2a, B=2b, C=2c（都是整数）精确算，返回 [{v, tex}]，从小到大 */
+  function roots(a, b, c) {
+    var A = Math.round(2 * a), B = Math.round(2 * b), C = Math.round(2 * c);
+    if (A === 0) {
+      if (B === 0) return [];
+      return [{ v: -c / b, tex: frac(-C, B) }];
+    }
+    var D = B * B - 4 * A * C;
+    if (D < 0) return [];
+    if (D === 0) return [{ v: -b / (2 * a), tex: frac(-B, 2 * A) }];
+    var s = Math.round(Math.sqrt(D)), r;
+    if (s * s === D) {
+      r = [{ v: (-B - s) / (2 * A), tex: frac(-B - s, 2 * A) }, { v: (-B + s) / (2 * A), tex: frac(-B + s, 2 * A) }];
+    } else {
+      var km = sqrtSplit(D), k = km[0], m = km[1];
+      var g = gcd(gcd(B, k), 2 * A), p = -B / g, q = k / g, d = 2 * A / g;
+      if (d < 0) { p = -p; d = -d; }
+      var rad = (q === 1 ? "" : q) + "\\sqrt{" + m + "}";
+      var mk = function (sg) {
+        var top = (p !== 0 ? p + sg : (sg === "-" ? "-" : "")) + rad;
+        return d === 1 ? top : "\\frac{" + top + "}{" + d + "}";
+      };
+      // 分母 d>0，所以 (p−q√m)/d 是较小的根
+      var u1 = (-B - Math.sqrt(D)) / (2 * A), u2 = (-B + Math.sqrt(D)) / (2 * A);
+      r = [{ v: Math.min(u1, u2), tex: mk("-") }, { v: Math.max(u1, u2), tex: mk("+") }];
+    }
+    r.sort(function (u, w) { return u.v - w.v; });
+    return r;
+  }
+
+  function polyTex(a, b, c) {
+    var out = "";
+    function term(k, x) {
+      if (k === 0) return;
+      var s = k < 0 ? "-" : (out ? "+" : "");
+      var ab = Math.abs(k);
+      out += s + (x && ab === 1 ? "" : num(ab)) + x;
+    }
+    term(a, "x^2"); term(b, "x"); term(c, "");
+    return out || "0";
+  }
+
+  var REL = { gt: ">", ge: "\\ge", lt: "<", le: "\\le" };
+  function ok(rel, v) { return rel === "gt" ? v > 0 : rel === "ge" ? v >= 0 : rel === "lt" ? v < 0 : v <= 0; }
+
+  /* 解集：按根把数轴切成「段 + 点」，逐段判号，再合并 */
+  function solve(a, b, c, rs, rel) {
+    var f = function (x) { return a * x * x + b * x + c; };
+    var items = [];
+    for (var i = 0; i <= rs.length; i++) {
+      var L = i > 0 ? rs[i - 1] : null, R = i < rs.length ? rs[i] : null;
+      var t = L && R ? (L.v + R.v) / 2 : L ? L.v + 1 : R ? R.v - 1 : 0;
+      items.push({ pt: false, L: L, R: R, in: ok(rel, f(t)) });
+      if (R) items.push({ pt: true, r: R, in: ok(rel, 0) });
+    }
+    var segs = [], cur = null;
+    items.forEach(function (it) {
+      if (it.in) {
+        if (!cur) cur = it.pt ? { l: it.r, lc: true } : { l: it.L, lc: false };
+        if (it.pt) { cur.r = it.r; cur.rc = true; } else { cur.r = it.R; cur.rc = false; }
+      } else if (cur) { segs.push(cur); cur = null; }
+    });
+    if (cur) segs.push(cur);
+    return segs;
+  }
+  function setTex(segs) {
+    if (!segs.length) return "\\varnothing";
+    if (segs.length === 1 && !segs[0].l && !segs[0].r) return "\\mathbf R";
+    var s = segs.map(function (g) {
+      if (g.l && g.r && g.l === g.r) return "\\{" + g.l.tex + "\\}";
+      return (g.l ? (g.lc ? "[" : "(") + g.l.tex : "(-\\infty") + "," + (g.r ? g.r.tex + (g.rc ? "]" : ")") : "+\\infty)");
+    }).join("\\cup ");
+    // 去掉一个点的情形，补一句集合写法
+    if (segs.length === 2 && !segs[0].l && !segs[1].r && segs[0].r === segs[1].l) s += "\\ \\text{即}\\ \\{x\\mid x\\neq " + segs[0].r.tex + "\\}";
+    return s;
+  }
+
+  /* ---------- 图 ---------- */
+  var W = 560, H = 320, XL = -6, XR = 6, YB = -5, YT = 5, PX0 = 20, PX1 = 540, PY0 = 12, PY1 = 300;
+  function px(x) { return PX0 + (x - XL) / (XR - XL) * (PX1 - PX0); }
+  function py(y) { return PY1 - (y - YB) / (YT - YB) * (PY1 - PY0); }
+  function ux(p) { return XL + (p - PX0) / (PX1 - PX0) * (XR - XL); }
+  function uy(p) { return YB + (PY1 - p) / (PY1 - PY0) * (YT - YB); }
+
+  var fig = document.getElementById("pf");
+  var sa = document.getElementById("sa"), sb = document.getElementById("sb"), sc = document.getElementById("sc");
+  var st = { a: 1, b: -2, c: -3, rel: "gt" };
+
+  function handlePos() {
+    if (st.a === 0) return { x: 0, y: st.c };
+    return { x: -st.b / (2 * st.a), y: st.c - st.b * st.b / (4 * st.a) };
+  }
+
+  function draw() {
+    var a = st.a, b = st.b, c = st.c, rel = st.rel;
+    sa.value = a; sb.value = b; sc.value = c;
+    document.getElementById("oa").textContent = num(a);
+    document.getElementById("ob").textContent = num(b);
+    document.getElementById("oc").textContent = num(c);
+    var rs = roots(a, b, c), segs = solve(a, b, c, rs, rel);
+    var fg = css("--fg"), muted = css("--muted"), line = css("--line"), ca = css("--a"), hl = css("--hl"), card = css("--card");
+
+    fig.innerHTML = "";
+    var defs = svg("defs", {}, fig);
+    var cp = svg("clipPath", { id: "pfclip" }, defs);
+    svg("rect", { x: PX0, y: PY0, width: PX1 - PX0, height: PY1 - PY0 }, cp);
+    // 网格
+    for (var gx = XL; gx <= XR; gx++) svg("line", { x1: px(gx), y1: PY0, x2: px(gx), y2: PY1, stroke: line, "stroke-width": 1 }, fig);
+    for (var gy = YB; gy <= YT; gy++) svg("line", { x1: PX0, y1: py(gy), x2: PX1, y2: py(gy), stroke: line, "stroke-width": 1 }, fig);
+    // 坐标轴
+    svg("line", { x1: PX0, y1: py(0), x2: PX1 + 6, y2: py(0), stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("path", { d: "M" + (PX1 + 12) + " " + py(0) + " l-9 -5 v10 z", fill: fg }, fig);
+    svg("line", { x1: px(0), y1: PY1, x2: px(0), y2: PY0, stroke: fg, "stroke-width": 1.5 }, fig);
+    for (var t = XL + 1; t < XR; t++) {
+      if (t === 0 || t % 2) continue;
+      svg("text", { x: px(t), y: py(0) + 20, "text-anchor": "middle", fill: muted }, fig).textContent = String(t).replace("-", "−");
+    }
+    svg("text", { x: PX1 - 4, y: py(0) - 8, "text-anchor": "end", "font-style": "italic" }, fig).textContent = "x";
+    svg("text", { x: px(0) + 8, y: PY0 + 14, "font-style": "italic" }, fig).textContent = "y";
+
+    // 解集：x 轴上的高亮带 + 曲线上对应的部分
+    var g = svg("g", { "clip-path": "url(#pfclip)" }, fig);
+    segs.forEach(function (s) {
+      var l = s.l ? px(s.l.v) : PX0 - 20, r = s.r ? px(s.r.v) : PX1 + 20;
+      svg("rect", { x: l, y: py(0) - 6, width: Math.max(r - l, 4), height: 12, rx: 4, fill: hl, opacity: 0.55 }, g);
+    });
+    // 曲线
+    var f = function (x) { return a * x * x + b * x + c; };
+    var d = "", dh = "", N = 260;
+    function inSet(x) { return ok(rel, f(x)); }
+    for (var i = 0; i <= N; i++) {
+      var x = XL - 0.5 + (XR - XL + 1) * i / N, y = clamp(f(x), -60, 60);
+      d += (i ? "L" : "M") + px(x).toFixed(1) + " " + py(y).toFixed(1);
+      if (inSet(x)) { dh += (dh && inSet(XL - 0.5 + (XR - XL + 1) * (i - 1) / N) ? "L" : "M") + px(x).toFixed(1) + " " + py(y).toFixed(1); }
+    }
+    if (dh) svg("path", { d: dh, fill: "none", stroke: hl, "stroke-width": 9, "stroke-linecap": "round", opacity: 0.6 }, g);
+    svg("path", { d: d, fill: "none", stroke: ca, "stroke-width": 3 }, g);
+
+    // 根
+    rs.forEach(function (r, k) {
+      if (r.v < XL - 0.2 || r.v > XR + 0.2) return;
+      var inc = ok(rel, 0);
+      svg("circle", { cx: px(r.v), cy: py(0), r: 7, fill: inc ? fg : card, stroke: fg, "stroke-width": 2.5 }, fig);
+      var lab = Math.abs(r.v - Math.round(r.v)) < 1e-9 ? num(r.v) : "≈" + num(r.v);
+      svg("text", { x: px(r.v), y: py(0) - (k % 2 ? 36 : 14), "text-anchor": "middle", "font-weight": 700 }, fig).textContent = lab.replace("-", "−");
+    });
+
+    // 可拖动的点：顶点（a≠0）或 y 轴截距（a=0）
+    var hp = handlePos(), hx = clamp(px(hp.x), PX0, PX1), hy = clamp(py(hp.y), PY0, PY1);
+    var h = svg("circle", { cx: hx, cy: hy, r: 11, fill: ca, stroke: card, "stroke-width": 3, tabindex: 0, role: "slider",
+      "aria-label": st.a === 0 ? "直线和 y 轴的交点，上下拖改 c" : "抛物线顶点，拖动改 b 和 c", "aria-valuenow": num(hp.y), style: "cursor:grab" }, fig);
+    h.id = "pfh";
+    h.addEventListener("pointerdown", startDrag);
+    h.addEventListener("keydown", onKey);
+
+    // 文字
+    var info = document.getElementById("info");
+    var poly = polyTex(a, b, c), html;
+    if (a === 0) {
+      html = "\\(f(x)=" + poly + "\\)：\\(a=0\\)，<b>不是二次函数</b>。";
+    } else {
+      var D = b * b - 4 * a * c;
+      html = "\\(f(x)=" + poly + "\\)，开口" + (a > 0 ? "向上" : "向下") + "，\\(\\Delta=b^2-4ac=" + num(D) + "\\)" +
+        (D > 0 ? "\\(>0\\)" : D === 0 ? "\\(=0\\)" : "\\(<0\\)") + "<br>";
+      html += rs.length === 2 ? "两个不同实根：\\(x_1=" + rs[0].tex + "\\)，\\(x_2=" + rs[1].tex + "\\)"
+        : rs.length === 1 ? "一个重根：\\(x_1=x_2=" + rs[0].tex + "\\)（碰到 \\(x\\) 轴，不穿过）"
+        : "没有实根：抛物线整个在 \\(x\\) 轴" + (a > 0 ? "上方" : "下方");
+    }
+    info.innerHTML = html;
+    Peiyu.math(info);
+
+    var sets = document.getElementById("sets");
+    sets.innerHTML = "";
+    ["gt", "ge", "lt", "le"].forEach(function (k) {
+      var row = document.createElement("div");
+      if (k === rel) row.className = "on";
+      row.innerHTML = "\\(f(x)" + REL[k] + "0\\)：\\(" + setTex(solve(a, b, c, rs, k)) + "\\)";
+      sets.appendChild(row);
+    });
+    Peiyu.math(sets);
+
+    var n0 = document.getElementById("note0");
+    n0.innerHTML = a === 0
+      ? "\\(a=0\\) 时 \\(x^2\\) 项消失，图象是直线，这是一次不等式" + (b === 0 ? "（这里 \\(b=0\\)，只剩常数 \\(" + num(c) + "\\)，解集不是 \\(\\mathbf R\\) 就是 \\(\\varnothing\\)）" : "") + "。含参数的题，要先单独讨论这种情况。"
+      : a < 0 ? "开口向下：可以两边乘 \\(-1\\)、不等号反向，变成开口向上再读。" : "";
+    Peiyu.math(n0);
+
+    [].forEach.call(document.querySelectorAll("#rels button"), function (bt) { bt.classList.toggle("on", bt.getAttribute("data-r") === rel); });
+  }
+
+  // 改顶点 (hx, hy) → 求 b, c
+  function setVertex(x, y) {
+    if (st.a === 0) { st.c = clamp(half(y), -6, 6); return; }
+    st.b = clamp(half(-2 * st.a * x), -6, 6);
+    st.c = clamp(half(st.a * x * x + y), -6, 6);
+  }
+  function onKey(ev) {
+    var hp = handlePos(), dx = 0, dy = 0;
+    if (ev.key === "ArrowLeft") dx = -0.5; else if (ev.key === "ArrowRight") dx = 0.5;
+    else if (ev.key === "ArrowUp") dy = 0.5; else if (ev.key === "ArrowDown") dy = -0.5;
+    else return;
+    ev.preventDefault();
+    if (st.a === 0) { if (dy) st.c = clamp(st.c + dy, -6, 6); }
+    else setVertex(half(hp.x) + dx, hp.y + dy);
+    draw(); logIt();
+    var again = document.getElementById("pfh"); if (again) again.focus();
+  }
+  var dragging = false;
+  function startDrag(ev) {
+    dragging = true; ev.preventDefault();
+    window.addEventListener("pointermove", onDrag); window.addEventListener("pointerup", endDrag);
+  }
+  function onDrag(ev) {
+    if (!dragging) return;
+    var pt = fig.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var p = pt.matrixTransform(fig.getScreenCTM().inverse());
+    var x = half(clamp(ux(p.x), XL, XR)), y = half(clamp(uy(p.y), YB, YT));
+    var old = st.b + "," + st.c;
+    setVertex(x, y);
+    if (st.b + "," + st.c !== old) draw();
+  }
+  function endDrag() {
+    if (dragging) logIt();
+    dragging = false; window.removeEventListener("pointermove", onDrag); window.removeEventListener("pointerup", endDrag);
+  }
+  function logIt() { Peiyu.log("interact", { id: "parabola", a: st.a, b: st.b, c: st.c, rel: st.rel }); }
+
+  [[sa, "a"], [sb, "b"], [sc, "c"]].forEach(function (z) {
+    z[0].addEventListener("input", function () { var v = parseFloat(z[0].value); if (isFinite(v)) { st[z[1]] = v; draw(); } });
+    z[0].addEventListener("change", logIt);
+  });
+  [].forEach.call(document.querySelectorAll("#rels button"), function (bt) {
+    bt.onclick = function () { st.rel = bt.getAttribute("data-r"); draw(); logIt(); };
+  });
+  [].forEach.call(document.querySelectorAll("[data-p]"), function (bt) {
+    bt.onclick = function () {
+      var v = bt.getAttribute("data-p").split(",").map(Number);
+      st.a = v[0]; st.b = v[1]; st.c = v[2]; draw(); logIt();
+    };
+  });
+  document.getElementById("reset").onclick = function () { st = { a: 1, b: -2, c: -3, rel: "gt" }; draw(); };
+
+  /* ---------- ② 进阶：f(x)=mx²−mx+1 ---------- */
+  var pm = document.getElementById("pm"), ms = document.getElementById("ms");
+  var QL = -2, QR = 3, QB = -3, QT = 5, QX0 = 30, QX1 = 540, QY0 = 12, QY1 = 280;
+  function qx(x) { return QX0 + (x - QL) / (QR - QL) * (QX1 - QX0); }
+  function qy(y) { return QY1 - (y - QB) / (QT - QB) * (QY1 - QY0); }
+  var M = 1;
+  function mReset() { M = 1; mDraw(); }
+  function mDraw() {
+    M = clamp(half(M), -2, 6);
+    ms.value = M;
+    document.getElementById("om").textContent = num(M);
+    var fg = css("--fg"), muted = css("--muted"), line = css("--line"), ca = css("--a"), no = css("--no"), card = css("--card");
+    var fm = function (x) { return M * x * x - M * x + 1; };
+    var D = M * M - 4 * M, r1 = null, r2 = null;
+    if (M !== 0 && D >= 0) {
+      var s = Math.sqrt(D);
+      r1 = Math.min((M - s) / (2 * M), (M + s) / (2 * M));
+      r2 = Math.max((M - s) / (2 * M), (M + s) / (2 * M));
+    }
+    pm.innerHTML = "";
+    var defs = svg("defs", {}, pm), cp = svg("clipPath", { id: "pmclip" }, defs);
+    svg("rect", { x: QX0, y: QY0, width: QX1 - QX0, height: QY1 - QY0 }, cp);
+    for (var gx = QL; gx <= QR; gx++) svg("line", { x1: qx(gx), y1: QY0, x2: qx(gx), y2: QY1, stroke: line }, pm);
+    for (var gy = QB; gy <= QT; gy++) svg("line", { x1: QX0, y1: qy(gy), x2: QX1, y2: qy(gy), stroke: line }, pm);
+    svg("line", { x1: QX0, y1: qy(0), x2: QX1, y2: qy(0), stroke: fg, "stroke-width": 1.5 }, pm);
+    svg("line", { x1: qx(0), y1: QY1, x2: qx(0), y2: QY0, stroke: fg, "stroke-width": 1.5 }, pm);
+    for (var t = QL; t <= QR; t++) {
+      if (t === 0) continue;
+      svg("text", { x: qx(t), y: qy(0) + 24, "text-anchor": "middle", fill: muted }, pm).textContent = String(t).replace("-", "−");
+    }
+    svg("text", { x: qx(0) - 8, y: qy(1) + 7, "text-anchor": "end", fill: muted }, pm).textContent = "1";
+    var g = svg("g", { "clip-path": "url(#pmclip)" }, pm);
+    // f(x)≤0 的部分：x 轴上标红
+    var bad = [];
+    if (M < 0) bad = [[QL - 1, r1], [r2, QR + 1]];
+    else if (M > 4) bad = [[r1, r2]];
+    bad.forEach(function (b) {
+      svg("rect", { x: qx(b[0]), y: qy(0) - 6, width: Math.max(qx(b[1]) - qx(b[0]), 4), height: 12, rx: 4, fill: no, opacity: 0.55 }, g);
+    });
+    var d = "", N = 200;
+    for (var i = 0; i <= N; i++) {
+      var x = QL - 0.2 + (QR - QL + 0.4) * i / N;
+      d += (i ? "L" : "M") + qx(x).toFixed(1) + " " + qy(clamp(fm(x), -40, 40)).toFixed(1);
+    }
+    svg("path", { d: d, fill: "none", stroke: ca, "stroke-width": 3 }, g);
+    if (M === 4) svg("circle", { cx: qx(0.5), cy: qy(0), r: 7, fill: no }, pm);
+    else if (M > 0) svg("circle", { cx: qx(0.5), cy: qy(fm(0.5)), r: 6, fill: card, stroke: ca, "stroke-width": 2.5 }, pm);
+
+    var poly = polyTex(M, -M, 1), html = "\\(f(x)=" + poly + "\\)。";
+    if (M === 0) {
+      html += "<br>\\(m=0\\)：\\(x^2\\) 项没了，只剩 \\(f(x)=1\\)，图象是直线 \\(y=1\\)，整条在 \\(x\\) 轴上方。" +
+        '<span class="eq">对一切 \\(x\\) 成立</span>。这时不是二次式，不能用 \\(\\Delta\\) 判断，要单独算进去。';
+    } else {
+      html += "开口" + (M > 0 ? "向上" : "向下") + "，\\(\\Delta=m^2-4m=" + num(D) + "\\)" + (D > 0 ? "\\(>0\\)" : D === 0 ? "\\(=0\\)" : "\\(<0\\)") + "<br>";
+      if (M < 0) html += '<span class="bad">不成立</span>：开口向下，左右两边一定掉到 \\(x\\) 轴下方：\\(x\\le' + num(Math.min(r1, r2)) + "\\) 或 \\(x\\ge " + num(Math.max(r1, r2)) + "\\)（约）时 \\(f(x)\\le0\\)。";
+      else if (M < 4) html += '<span class="eq">成立</span>：开口向上且 \\(\\Delta<0\\)，最低点 \\(f(\\tfrac12)=1-\\tfrac m4=' + String(1 - M / 4) + "\\)，仍在 \\(x\\) 轴上方。";
+      else if (M === 4) html += '<span class="bad">不成立</span>：\\(\\Delta=0\\)，\\(f(x)=(2x-1)^2\\)，在 \\(x=\\tfrac12\\) 处等于 \\(0\\)，不满足「\\(>0\\)」。';
+      else html += '<span class="bad">不成立</span>：\\(\\Delta>0\\)，在 \\(' + num(r1) + "\\) 到 \\(" + num(r2) + "\\) 之间（约）\\(f(x)\\le0\\)。";
+    }
+    var o = document.getElementById("pminfo");
+    o.innerHTML = html;
+    Peiyu.math(o);
+  }
+  ms.addEventListener("input", function () { var v = parseFloat(ms.value); if (isFinite(v)) { M = v; mDraw(); } });
+  ms.addEventListener("change", function () { Peiyu.log("interact", { id: "param-m", m: M }); });
+  document.getElementById("pmreset").onclick = mReset;
+
+  document.addEventListener("DOMContentLoaded", function () { draw(); mReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw(); mDraw(); });
+})();
+</script>
+</body></html>

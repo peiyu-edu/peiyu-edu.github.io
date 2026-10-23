@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.3 集合的基本运算 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+  .chip { min-width: 44px; min-height: 40px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: inherit; cursor: pointer; }
+  .chip[data-in="A"] { border-color: var(--a); box-shadow: inset 0 -4px 0 var(--a); }
+  .chip[data-in="B"] { border-color: var(--b); box-shadow: inset 0 -4px 0 var(--b); }
+  .chip[data-in="AB"] { border-color: var(--c); box-shadow: inset 0 -4px 0 var(--a), inset 0 -8px 0 var(--b); }
+  .chip.hit { background: var(--hl-soft); font-weight: 700; }
+  .ops button.on { background: var(--a); color: #fff; }
+  .result { font-size: 17px; margin: 8px 0; min-height: 1.8em; }
+  .endbtn { min-width: 44px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-1-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 1 章 集合与常用逻辑用语</p>
+<h1>1.3 集合的基本运算</h1>
+<p class="lead">两个集合放在一起，能「取公共的」「全放一起」，也能「从全集里去掉」。这一节把这三种运算弄清楚，尤其是数轴上的端点。先从两张名单开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>班里有两个兴趣小组。篮球组：小明、小红、小刚、小丽；合唱组：小红、小丽、小强。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>两个组<b>都</b>参加了的是谁？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>小红和小丽</button>
+      <button class="opt" data-v="B"><b>B</b>小明和小刚</button>
+      <button class="opt" data-v="C"><b>C</b>只有小强</button>
+      <button class="opt" data-v="D"><b>D</b>没有人</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。两张名单里都出现的只有小红和小丽。</p>
+      <p>换几个问法：「至少参加一个组的」是小明、小红、小刚、小丽、小强，共 \(5\) 人——小红、小丽在两张名单上，人只算一次；「没参加篮球组的」要先说清在哪群人里找：在全班找，就是全班去掉篮球组那 \(4\) 人。</p>
+      <p>这三种问法，就是这一节的三种运算：<span class="ca">交集</span>（都在）、<span class="cb">并集</span>（至少在一个里）、<span class="cc">补集</span>（在大范围里、但不在它里面）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：集合、元素、\(\in\)（<a href="b1-1-1.html">回看 1.1</a>）；子集 \(\subseteq\)、空集 \(\varnothing\)（<a href="b1-1-2.html">回看 1.2</a>）；初中在数轴上表示不等式。</p>
+
+  <div class="card">
+    <p><b>「同时」和「至少一个」</b>：「同时满足」是两个条件都要满足；「至少满足一个」是满足一个就行，两个都满足也算。</p>
+    <p>例：在 \(1\) 到 \(10\) 里，「是偶数，同时大于 \(5\)」的有 \(6,8,10\)；「是偶数，或大于 \(5\)（至少一个）」的有 \(2,4,6,7,8,9,10\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>全集</b>：讨论一个问题时，所有对象都在里面的那个大集合，记作 \(U\)。</p>
+    <p>例：说「不是偶数的数」。在 \(U=\{1,2,3,4,5,6\}\) 里，是 \(1,3,5\)；在全体整数里，还有 \(-1\)、\(7\)、\(9\)……范围一换，答案就换了。</p>
+  </div>
+
+  <div class="card">
+    <p><b>端点「取到」和「取不到」</b>：\(x\le 3\) 取到 \(3\)，数轴上画实心点 ●；\(x&lt;3\) 取不到 \(3\)，画空心点 ○。</p>
+    <p>例：\(\{x\mid 1\le x&lt;3\}\) 里，\(1\) 在，\(3\) 不在，\(2.5\)、\(2.99\) 都在（没说是整数，就是一整段实数）。</p>
+    <p class="small">「动手」② 里会用简写：\([1,3)\) 就是 \(\{x\mid 1\le x&lt;3\}\)，方括号表示端点取到，圆括号表示取不到；\(+\infty\)、\(-\infty\) 表示一直往右、往左。这叫区间，3.1 会正式讲。</p>
+  </div>
+
+  <div class="card">
+    <p><b>空集 \(\varnothing\)</b>：一个元素也没有的集合。</p>
+    <p>例：「小于 \(0\) 的正整数」组成的集合是 \(\varnothing\)。注意 \(\{0\}\) 不是空集，它里面有一个元素 \(0\)。</p>
+  </div>
+
+  <h3>2. 交集和并集</h3>
+  <p><span class="ca">交集</span> \(A\cap B\)（读「\(A\) 交 \(B\)」）：<b>同时</b>属于 \(A\) 和 \(B\) 的元素。<span class="cb">并集</span> \(A\cup B\)（读「\(A\) 并 \(B\)」）：<b>至少属于其中一个</b>的元素。</p>
+  <p>为什么并集里两边都有的元素只写一次：集合里的元素不重复，就像入口的例子里，小红只算一个人。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>\(A=\{1,2,3,4\}\)，\(B=\{3,4,5,6\}\)，求 \(A\cap B\) 和 \(A\cup B\)。</p>
+    <p>两边都有的是 \(3\) 和 \(4\)，所以 \(A\cap B=\{3,4\}\)。</p>
+    <p>把两边的元素放在一起：\(1,2,3,4\) 和 \(3,4,5,6\)，重复的 \(3,4\) 只写一次，\(A\cup B=\{1,2,3,4,5,6\}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：\(A=\{1,3,5,7\}\)，\(B=\{2,3,5,8\}\)。\(A\cup B\) 有几个元素？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(8\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(A\cup B=\{1,2,3,5,7,8\}\)，\(6\) 个。选 C 的同学把 \(3\)、\(5\) 数了两次；选 D 的同学数的是交集 \(\{3,5\}\)。</p></div>
+  </div>
+
+  <h3>3. 补集</h3>
+  <p><span class="cc">补集</span> \(\complement_U A\)：在全集 \(U\) 里、但<b>不属于</b> \(A\) 的元素（这里 \(A\subseteq U\)）。</p>
+  <div class="key">补集一定要先知道全集 \(U\) 是什么。同一个 \(A\)，换一个 \(U\)，补集就变了。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>\(U=\{1,2,3,4,5,6\}\)，\(A=\{1,3,5\}\)，求 \(\complement_U A\)。</p>
+    <p>从 \(U\) 里把 \(A\) 的元素 \(1,3,5\) 去掉，剩下 \(2,4,6\)，所以 \(\complement_U A=\{2,4,6\}\)。</p>
+    <p>再看换全集：\(A=\{1,2\}\)，在 \(U=\{1,2,3\}\) 里 \(\complement_U A=\{3\}\)；在 \(U=\{1,2,3,4,5\}\) 里 \(\complement_U A=\{3,4,5\}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(U=\{1,2,3,4,5,6,7\}\)，\(A=\{2,4,6\}\)，\(B=\{1,2,3\}\)。\((\complement_U A)\cap B=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\{1,3\}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{1,3,5,7\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{2\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\{5,7\}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。先算 \(\complement_U A=\{1,3,5,7\}\)，再和 \(B=\{1,2,3\}\) 取公共的：\(\{1,3\}\)。选 B 的同学算完补集就停了，忘了「\(\cap B\)」；选 C 算成了 \(A\cap B\)。</p></div>
+  </div>
+
+  <h3>4. 数轴上的交、并、补：盯住端点</h3>
+  <p>元素是一段一段的实数时，列不出来，就画数轴：交集看「两段重叠的地方」，并集看「被盖住的地方」，补集看「没被盖住的地方」。最容易错的是<b>端点</b>：</p>
+  <ul>
+    <li>端点在两个集合里都取到，交集才取到它；</li>
+    <li>端点只要在一个集合里取到，并集就取到它；</li>
+    <li>\(A\) 取到的端点，\(\complement_U A\) 就取不到；\(A\) 取不到的，补集就取到（前提是它在 \(U\) 里）。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>\(A=\{x\mid -1\le x&lt;3\}\)，\(B=\{x\mid 1&lt;x\le 5\}\)，全集 \(\mathbf R\)。求 \(A\cap B\)、\(A\cup B\)、\(\complement_{\mathbf R}A\)。</p>
+    <p>重叠部分从 \(1\) 到 \(3\)。端点 \(1\)：\(B\) 取不到，交集就取不到；端点 \(3\)：\(A\) 取不到，交集也取不到。\(A\cap B=\{x\mid 1&lt;x&lt;3\}\)。</p>
+    <p>盖住的部分从 \(-1\) 到 \(5\)。\(-1\) 在 \(A\) 里，\(5\) 在 \(B\) 里，都取到；中间的 \(3\) 虽然 \(A\) 取不到，但 \(B\) 盖住了它。\(A\cup B=\{x\mid -1\le x\le 5\}\)。</p>
+    <p>\(A\) 没盖住的：\(-1\) 左边（\(-1\) 本身在 \(A\) 里，不要）和 \(3\) 右边（\(3\) 不在 \(A\) 里，要）。\(\complement_{\mathbf R}A=\{x\mid x&lt;-1\text{ 或 }x\ge 3\}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：\(A=\{x\mid x\le 2\}\)，全集 \(\mathbf R\)。\(\complement_{\mathbf R}A=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\{x\mid x>2\}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{x\mid x\ge 2\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{x\mid x&lt;2\}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(2\) 在 \(A\) 里，补集就不能再要它。选 B 的同学把「反过来」只改了方向，没管端点：那样 \(2\) 同时在 \(A\) 和补集里，不可能。</p></div>
+  </div>
+
+  <h3>5. 几条一看就懂的关系</h3>
+  <p>\(A\cap B\subseteq A\subseteq A\cup B\)：取公共的只会变少，全放一起只会变多。</p>
+  <div class="key">\(A\cap B=A\)、\(A\cup B=B\)、\(A\subseteq B\)，三句说的是同一件事。高考里常把「\(A\subseteq B\)」藏成前两种写法。</div>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>\(A=\{1,2\}\)，\(B=\{1,2,3\}\)，\(A\subseteq B\)。算一算：\(A\cap B=\{1,2\}=A\)，\(A\cup B=\{1,2,3\}=B\)。\(A\) 整个在 \(B\) 里，所以「公共部分」就是 \(A\) 自己，「放一起」也没多出东西。</p>
+  </div>
+  <div class="card predict" data-id="e-subset" data-answer="B">
+    <p>自己试试：已知 \(A\cup B=B\)。下面哪句一定对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(B\subseteq A\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(A\subseteq B\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(A=B\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。把 \(A\) 并进来，\(B\) 一点没变，说明 \(A\) 的元素本来就都在 \(B\) 里。不一定相等：上面的 \(A=\{1,2\}\)，\(B=\{1,2,3\}\) 就满足。在「动手」① 的 Venn 图里，把所有 A 的数都改成「两个都在」，再看 \(A\cup B\) 和 \(B\)。</p></div>
+  </div>
+
+  <h3>6. 用之前，查四件事</h3>
+  <ol>
+    <li><b>全集</b>：求补集先看 \(U\) 是什么。<br><span class="small">反例：\(A=\{x\mid x&lt;2\}\)，\(U=\mathbf R\) 时 \(\complement_U A=\{x\mid x\ge 2\}\)；\(U\) 换成全体整数，补集就只剩 \(2,3,4,\dots\) 这些整数。</span></li>
+    <li><b>端点</b>：数轴上每个端点单独判断取不取到。<br><span class="small">反例：\(A=\{x\mid x&lt;1\}\)，\(B=\{x\mid x\ge 1\}\)，\(A\cap B=\varnothing\)；把 \(A\) 改成 \(x\le 1\)，交集就成了 \(\{1\}\)。只差一个端点，答案就不一样。</span></li>
+    <li><b>空集不是 \(\{0\}\)</b>：没有公共元素写 \(\varnothing\)。<br><span class="small">反例：\(\{1\}\cap\{2\}=\varnothing\)，写成 \(\{0\}\) 就错了——\(\{0\}\) 里有一个元素 \(0\)，可 \(0\) 并不在两个集合里。</span></li>
+    <li><b>带字母时，先想空集</b>：集合里有参数，不能默认它一定有元素。<br><span class="small">反例：\(A=\{x\mid a&lt;x&lt;1\}\)，要 \(A\subseteq B\)。\(a\ge 1\) 时 \(A=\varnothing\)，空集是任何集合的子集，这些 \(a\) 不管 \(B\) 是什么都满足，漏了就错。</span></li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>补集和交、并换着用</b>：\(\complement_U(A\cup B)=\complement_U A\cap\complement_U B\)，\(\complement_U(A\cap B)=\complement_U A\cup\complement_U B\)。例：\(U=\{1,\dots,6\}\)，\(A=\{1,2\}\)，\(B=\{2,3\}\)，\(\complement_U(A\cup B)=\{4,5,6\}\)，\(\complement_U A\cap\complement_U B=\{3,4,5,6\}\cap\{1,4,5,6\}=\{4,5,6\}\)，一样。「动手」① 可以随手验证。</p>
+    <p><b>「\(A\) 去掉 \(B\)」</b>：属于 \(A\) 但不属于 \(B\) 的元素，就是 \(A\cap\complement_U B\)。例：\(U=\{1,\dots,5\}\)，\(A=\{1,2,3,4\}\)，\(B=\{3,4,5\}\)，\(A\cap\complement_U B=\{1,2\}\)。有的书叫它「差集」，课本不专门讲，用交和补就能写出来。</p>
+    <p><b>先看元素是什么</b>：\(\{(x,y)\mid y=x\}\cap\{(x,y)\mid y=2-x\}\) 的元素是点，交集是 \(\{(1,1)\}\)，不能写成 \(\{1\}\)。</p>
+    <p><b>数一数元素个数</b>：有限集合里，\(A\cup B\) 的元素个数 \(=\) \(A\) 的个数 \(+\) \(B\) 的个数 \(-\) \(A\cap B\) 的个数。入口的例子：\(4+3-2=5\) 人。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① Venn 图：点数字，把它放进 A、B</h3>
+  <p class="small">全集 \(U=\{1,2,\dots,12\}\)。点一个数字，它会在「都不在 → 只在 A → 只在 B → 两个都在」之间切换。再点上面的运算，看哪些数被选中。</p>
+  <div class="card">
+    <svg class="fig" id="venn" viewBox="0 0 560 300" role="img" aria-label="Venn 图，显示集合 A、B 和全集 U"></svg>
+    <div class="chips" id="chips"></div>
+    <div class="ctrl ops" id="vops">
+      <button class="btn ghost" type="button" data-op="and">\(A\cap B\)</button>
+      <button class="btn ghost" type="button" data-op="or">\(A\cup B\)</button>
+      <button class="btn ghost" type="button" data-op="notA">\(\complement_U A\)</button>
+      <button class="btn ghost" type="button" data-op="notOr">\(\complement_U(A\cup B)\)</button>
+      <button class="btn ghost" type="button" data-op="andNot">\(\complement_U A\cap\complement_U B\)</button>
+    </div>
+    <div class="result" id="vout" aria-live="polite"></div>
+    <p class="small" id="vhint"></p>
+    <div class="ctrl"><button class="btn ghost" id="vreset" type="button">重置</button> <button class="btn ghost" id="v23" type="button">换一组：2 的倍数和 3 的倍数</button></div>
+  </div>
+
+  <h3>② 进阶：数轴上拖端点，看交、并、补</h3>
+  <p class="small">拖动圆点（或选中后按方向键）改端点；点端点下面的按钮（或选中圆点按空格）切换「取到 ● / 取不到 ○」。全集是全体实数 \(\mathbf R\)。试试让两段只在一个端点处相碰，再切换这个端点。</p>
+  <div class="card">
+    <svg class="fig" id="nl" viewBox="0 0 560 190" role="img" aria-label="数轴上的两个区间 A 和 B，可拖动端点"></svg>
+    <div class="ctrl">
+      <span class="small">端点：</span>
+      <button class="btn ghost endbtn" type="button" data-end="a0">A 左</button>
+      <button class="btn ghost endbtn" type="button" data-end="a1">A 右</button>
+      <button class="btn ghost endbtn" type="button" data-end="b0">B 左</button>
+      <button class="btn ghost endbtn" type="button" data-end="b1">B 右</button>
+    </div>
+    <div class="ctrl ops" id="nlops">
+      <button class="btn ghost" type="button" data-op="and">\(A\cap B\)</button>
+      <button class="btn ghost" type="button" data-op="or">\(A\cup B\)</button>
+      <button class="btn ghost" type="button" data-op="notA">\(\complement_{\mathbf R}A\)</button>
+      <button class="btn ghost" type="button" data-op="notAorB">\(\complement_{\mathbf R}A\cup B\)</button>
+    </div>
+    <div class="result" id="nlout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="nlreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. \(A\) 是小于 \(10\) 的正奇数组成的集合，\(B=\{3,6,9\}\)。\(A\cap B=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\{3\}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{3,9\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{3,6,9\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\{1,3,5,6,7,9\}\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。先把 \(A\) 列出来：\(A=\{1,3,5,7,9\}\)。和 \(B\) 都有的是 \(3\)、\(9\)。选 C 的同学把 \(6\) 也算进去了，可 \(6\) 不是奇数；D 是并集。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(A=\{x\mid -2&lt;x\le 3\}\)，\(B=\{x\mid x>1\}\)。\(A\cup B=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\{x\mid x>-2\}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{x\mid 1&lt;x\le 3\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{x\mid x\ge -2\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\{x\mid -2&lt;x\le 3\}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。画数轴：\(A\) 从 \(-2\) 盖到 \(3\)，\(B\) 从 \(1\) 往右一直盖下去，合起来是 \(-2\) 右边的全部。\(-2\) 两个集合都不含，取不到。B 是交集；C 把端点 \(-2\) 算进去了；D 漏了 \(3\) 右边那一段。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>3. \(A=\{x\mid x&lt;2\}\)，\(B=\{x\mid x\ge 1\}\)。\(A\cap B\) 是什么？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\{1\}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{x\mid 1\le x&lt;2\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{1,2\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\varnothing\)，因为一个是「小于」一个是「大于等于」</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>（端点）。这里的 \(x\) 没说是整数，所以 \(1\) 和 \(2\) 之间的 \(1.5\)、\(1.99\) 都在两个集合里。</p>
+      <p>选 A 或 C 的同学，是把它们当成了整数；选 D 的同学，是看到符号方向相反就以为没有交集。画一条数轴，两段一叠就看出来了：左端 \(1\) 取到（\(\ge\)），右端 \(2\) 取不到（\(&lt;\)）。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="e-universe" data-answer="C">
+    <p>4. \(A=\{x\mid x&lt;2\}\)。如果全集 \(U=\mathbf Z\)（全体整数），\(\complement_U A\) 是什么？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\{x\mid x\ge 2\}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{x\mid x>2\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{2,3,4,\dots\}\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>（全集）。补集只能在全集里找。全集是整数，补集里就只有整数，是 \(\{x\in\mathbf Z\mid x\ge 2\}\)。A 是 \(U=\mathbf R\) 时的答案；B 把端点 \(2\) 弄丢了：\(A\) 取不到 \(2\)，补集就取到 \(2\)。</p></div>
+  </div>
+  <div class="card predict" data-id="e-empty" data-answer="A">
+    <p>5. \(A=\{1,3\}\)，\(B=\{2,4\}\)。\(A\cap B\) 应该写成？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\varnothing\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\{0\}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{\varnothing\}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>（空集）。没有公共元素，交集就是空集 \(\varnothing\)。\(\{0\}\) 有一个元素 \(0\)；\(\{\varnothing\}\) 有一个元素（这个元素是空集）；\(0\) 是数，不是集合。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. \(B=\{x\mid 1\le x\le 4\}\)，\(A=\{x\mid m\le x\le 2m\}\)，且 \(A\cap B=A\)。\(m\) 的取值范围是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(1\le m\le 2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(m&lt;0\) 或 \(1\le m\le 2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(m\le 2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0\le m\le 2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(A\cap B=A\) 就是 \(A\subseteq B\)。带字母，先想空集：</p>
+      <p>\(m>2m\)，即 \(m&lt;0\) 时，\(A=\varnothing\)，空集是 \(B\) 的子集，满足。</p>
+      <p>\(m\ge 0\) 时 \(A\) 不空，要整段落在 \([1,4]\) 里：\(m\ge 1\) 且 \(2m\le 4\)，得 \(1\le m\le 2\)。（\(m=0\) 时 \(A=\{0\}\)，\(0\) 不在 \(B\) 里，不行。）</p>
+      <p>合起来是 B。选 A 的同学漏了空集；选 C、D 的同学没检查 \(0\le m&lt;1\)：比如 \(m=0.5\)，\(A=\{x\mid 0.5\le x\le 1\}\)，\(0.5\) 不在 \(B\) 里。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function fmt(x) { return (Math.round(x * 2) / 2).toString().replace("-", "−"); }
+
+  /* ================= ① 数轴 ================= */
+  var LO = -5, HI = 5, X0 = 30, X1 = 530;
+  var nl = document.getElementById("nl");
+  var st, op;
+  function nlReset() {
+    st = { a0: { v: -3, c: true }, a1: { v: 1, c: false }, b0: { v: -1, c: true }, b1: { v: 3, c: true } };
+    op = "and"; nlDraw();
+  }
+  function px(v) { return X0 + (v - LO) / (HI - LO) * (X1 - X0); }
+  function val(x) { return Math.max(LO, Math.min(HI, Math.round(((x - X0) / (X1 - X0) * (HI - LO) + LO) * 2) / 2)); }
+
+  // 区间集合运算：一个集合 = 若干段 {l, r, lc, rc}（l 可为 -Inf，r 可为 Inf）
+  function A() { return [{ l: st.a0.v, r: st.a1.v, lc: st.a0.c, rc: st.a1.c }]; }
+  function B() { return [{ l: st.b0.v, r: st.b1.v, lc: st.b0.c, rc: st.b1.c }]; }
+  function has(S, x) { return S.some(function (s) { return (x > s.l || (x === s.l && s.lc)) && (x < s.r || (x === s.r && s.rc)); }); }
+  // 用「判定点」重建结果：所有端点 + 端点之间的中点，逐个判断属于与否，再合并成段
+  function build(test) {
+    var pts = [], all = [st.a0.v, st.a1.v, st.b0.v, st.b1.v];
+    all = all.filter(function (v, i) { return all.indexOf(v) === i; }).sort(function (p, q) { return p - q; });
+    var probes = [{ x: -Infinity, mid: true, at: all[0] - 1 }];
+    all.forEach(function (v, i) {
+      probes.push({ x: v, mid: false, at: v });
+      probes.push({ x: v, mid: true, at: i + 1 < all.length ? (v + all[i + 1]) / 2 : v + 1 });
+    });
+    probes.forEach(function (p) { pts.push({ p: p, in: test(p.at) }); });
+    var segs = [], cur = null;
+    pts.forEach(function (q) {
+      var p = q.p;
+      if (q.in) {
+        if (!cur) cur = p.mid ? { l: p.x, lc: false } : { l: p.x, lc: true };
+        if (p.mid) { cur.r = Infinity; cur.rc = false; } else { cur.r = p.x; cur.rc = true; cur.point = true; }
+      } else if (cur) {
+        if (p.mid) { /* 中点不在：段在上一个端点结束（已记为闭） */ }
+        else { cur.r = p.x; cur.rc = false; }
+        segs.push(cur); cur = null;
+      }
+    });
+    if (cur) segs.push(cur);
+    return segs.filter(function (s) { return s.l < s.r || (s.l === s.r && s.lc && s.rc); });
+  }
+  function result() {
+    var a = A(), b = B();
+    var f = {
+      and: function (x) { return has(a, x) && has(b, x); },
+      or: function (x) { return has(a, x) || has(b, x); },
+      notA: function (x) { return !has(a, x); },
+      notAorB: function (x) { return !has(a, x) || has(b, x); }
+    }[op];
+    return build(f);
+  }
+  function segTex(s) {
+    if (s.l === s.r) return "\\{" + fmt(s.l) + "\\}";
+    var l = s.l === -Infinity ? "(-\\infty" : (s.lc ? "[" : "(") + fmt(s.l);
+    var r = s.r === Infinity ? "+\\infty)" : fmt(s.r) + (s.rc ? "]" : ")");
+    return l + "," + r;
+  }
+  var OPTEX = { and: "A\\cap B", or: "A\\cup B", notA: "\\complement_{\\mathbf R}A", notAorB: "\\complement_{\\mathbf R}A\\cup B" };
+  function nlDraw() {
+    // 保持左端 ≤ 右端
+    if (st.a0.v > st.a1.v) { var t = st.a0.v; st.a0.v = st.a1.v; st.a1.v = t; }
+    if (st.b0.v > st.b1.v) { var u = st.b0.v; st.b0.v = st.b1.v; st.b1.v = u; }
+    nl.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), card = css("--card");
+    var segs = result();
+    // 结果高亮带
+    segs.forEach(function (s) {
+      var l = s.l === -Infinity ? X0 - 10 : px(s.l), r = s.r === Infinity ? X1 + 10 : px(s.r);
+      svg("rect", { x: l, y: 128, width: Math.max(r - l, 3), height: 14, rx: 4, fill: hl, opacity: 0.85 }, nl);
+    });
+    // 数轴
+    svg("line", { x1: X0 - 10, y1: 135, x2: X1 + 14, y2: 135, stroke: fg, "stroke-width": 1.5 }, nl);
+    svg("path", { d: "M" + (X1 + 18) + " 135 l-9 -5 v10 z", fill: fg }, nl);
+    for (var v = LO; v <= HI; v++) {
+      svg("line", { x1: px(v), y1: 130, x2: px(v), y2: 140, stroke: fg }, nl);
+      svg("text", { x: px(v), y: 162, "text-anchor": "middle" }, nl).textContent = String(v).replace("-", "−");
+    }
+    // 两段
+    [["a", 50, ca, "A"], ["b", 92, cb, "B"]].forEach(function (z) {
+      var l = st[z[0] + "0"], r = st[z[0] + "1"], y = z[1];
+      svg("line", { x1: px(l.v), y1: y, x2: px(r.v), y2: y, stroke: z[2], "stroke-width": 6, "stroke-linecap": "butt" }, nl);
+      svg("text", { x: X0 - 18, y: y + 5, fill: z[2], "font-weight": 700 }, nl).textContent = z[3];
+      [[l, z[0] + "0"], [r, z[0] + "1"]].forEach(function (e) {
+        svg("line", { x1: px(e[0].v), y1: y, x2: px(e[0].v), y2: 135, stroke: z[2], "stroke-dasharray": "3 3", opacity: 0.6 }, nl);
+        var c = svg("circle", { cx: px(e[0].v), cy: y, r: 9, fill: e[0].c ? z[2] : card, stroke: z[2], "stroke-width": 3, tabindex: 0, role: "slider",
+          "aria-label": z[3] + (e[1].slice(-1) === "0" ? " 左端点" : " 右端点"), "aria-valuenow": e[0].v, "data-k": e[1], style: "cursor:grab" }, nl);
+        c.addEventListener("pointerdown", startDrag);
+        c.addEventListener("keydown", function (ev) {
+          var k = this.getAttribute("data-k");
+          if (ev.key === "ArrowLeft" || ev.key === "ArrowDown") { st[k].v = Math.max(LO, st[k].v - 0.5); }
+          else if (ev.key === "ArrowRight" || ev.key === "ArrowUp") { st[k].v = Math.min(HI, st[k].v + 0.5); }
+          else if (ev.key === " " || ev.key === "Enter") { st[k].c = !st[k].c; }
+          else return;
+          ev.preventDefault(); nlDraw(); var again = nl.querySelector('[data-k="' + k + '"]'); if (again) again.focus();
+        });
+      });
+    });
+    // 文字结果
+    var a = segTex(A()[0]), b = segTex(B()[0]);
+    var r = segs.length ? segs.map(segTex).join("\\cup ") : "\\varnothing";
+    var out = document.getElementById("nlout");
+    out.innerHTML = "\\(A=" + a + "\\)，\\(B=" + b + "\\)<br>\\(" + OPTEX[op] + "=" + r + "\\)";
+    Peiyu.math(out);
+    [].forEach.call(document.querySelectorAll("#nlops button"), function (bt) { bt.classList.toggle("on", bt.getAttribute("data-op") === op); });
+    [].forEach.call(document.querySelectorAll(".endbtn"), function (bt) {
+      var k = bt.getAttribute("data-end"); bt.textContent = (k[0] === "a" ? "A" : "B") + (k[1] === "0" ? " 左 " : " 右 ") + (st[k].c ? "●" : "○");
+    });
+  }
+  var dragK = null;
+  function startDrag(ev) {
+    dragK = this.getAttribute("data-k"); ev.preventDefault();
+    window.addEventListener("pointermove", onDrag); window.addEventListener("pointerup", endDrag);
+  }
+  function onDrag(ev) {
+    if (!dragK) return;
+    var pt = nl.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var p = pt.matrixTransform(nl.getScreenCTM().inverse());
+    var v = val(p.x);
+    if (v !== st[dragK].v) { st[dragK].v = v; var k = dragK; nlDraw(); dragK = k; }
+  }
+  function endDrag() {
+    if (dragK) Peiyu.log("interact", { id: "numberline", op: op, a: [st.a0.v, st.a1.v], b: [st.b0.v, st.b1.v] });
+    dragK = null; window.removeEventListener("pointermove", onDrag); window.removeEventListener("pointerup", endDrag);
+  }
+  [].forEach.call(document.querySelectorAll(".endbtn"), function (bt) {
+    bt.onclick = function () { var k = bt.getAttribute("data-end"); st[k].c = !st[k].c; nlDraw(); };
+  });
+  [].forEach.call(document.querySelectorAll("#nlops button"), function (bt) {
+    bt.onclick = function () { op = bt.getAttribute("data-op"); nlDraw(); Peiyu.log("interact", { id: "numberline-op", op: op }); };
+  });
+  document.getElementById("nlreset").onclick = nlReset;
+
+  /* ================= ② Venn ================= */
+  var venn = document.getElementById("venn"), chips = document.getElementById("chips");
+  var mem, vop = "and";
+  var CYCLE = ["", "A", "B", "AB"];
+  var VTEX = { and: "A\\cap B", or: "A\\cup B", notA: "\\complement_U A", notOr: "\\complement_U(A\\cup B)", andNot: "\\complement_U A\\cap\\complement_U B" };
+  function vReset(kind) {
+    mem = {};
+    for (var n = 1; n <= 12; n++) {
+      if (kind === "23") mem[n] = (n % 2 === 0 ? "A" : "") + (n % 3 === 0 ? "B" : "");
+      else mem[n] = { 1: "A", 2: "A", 3: "AB", 4: "AB", 5: "B", 6: "B" }[n] || "";
+    }
+    vDraw();
+  }
+  function inA(n) { return mem[n].indexOf("A") >= 0; }
+  function inB(n) { return mem[n].indexOf("B") >= 0; }
+  function vTest(n) {
+    return {
+      and: inA(n) && inB(n), or: inA(n) || inB(n), notA: !inA(n),
+      notOr: !(inA(n) || inB(n)), andNot: !inA(n) && !inB(n)
+    }[vop];
+  }
+  function vDraw() {
+    venn.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl");
+    // 区域高亮：用剪裁画四个区域
+    var defs = svg("defs", {}, venn);
+    var cpA = svg("clipPath", { id: "cpA" }, defs); svg("circle", { cx: 215, cy: 155, r: 105 }, cpA);
+    var cpB = svg("clipPath", { id: "cpB" }, defs); svg("circle", { cx: 345, cy: 155, r: 105 }, cpB);
+    var mk = svg("mask", { id: "mOut" }, defs);
+    svg("rect", { x: 0, y: 0, width: 560, height: 300, fill: "#fff" }, mk);
+    svg("circle", { cx: 215, cy: 155, r: 105, fill: "#000" }, mk); svg("circle", { cx: 345, cy: 155, r: 105, fill: "#000" }, mk);
+    var mkA = svg("mask", { id: "mAonly" }, defs);
+    svg("circle", { cx: 215, cy: 155, r: 105, fill: "#fff" }, mkA); svg("circle", { cx: 345, cy: 155, r: 105, fill: "#000" }, mkA);
+    var mkB = svg("mask", { id: "mBonly" }, defs);
+    svg("circle", { cx: 345, cy: 155, r: 105, fill: "#fff" }, mkB); svg("circle", { cx: 215, cy: 155, r: 105, fill: "#000" }, mkB);
+    var region = { A: !!{ or: 1, andNot: 0 }[vop] && vop === "or", B: vop === "or", AB: vop === "and" || vop === "or", O: vop === "notA" || vop === "notOr" || vop === "andNot" };
+    region.Aonly = vop === "or"; region.Bonly = vop === "or" || vop === "notA";
+    var op_ = 0.35;
+    if (region.O) svg("rect", { x: 12, y: 12, width: 536, height: 276, rx: 12, fill: hl, opacity: op_, mask: "url(#mOut)" }, venn);
+    if (region.Aonly) svg("circle", { cx: 215, cy: 155, r: 105, fill: hl, opacity: op_, mask: "url(#mAonly)" }, venn);
+    if (region.Bonly) svg("circle", { cx: 345, cy: 155, r: 105, fill: hl, opacity: op_, mask: "url(#mBonly)" }, venn);
+    if (region.AB) svg("circle", { cx: 215, cy: 155, r: 105, fill: hl, opacity: op_, "clip-path": "url(#cpB)" }, venn);
+    svg("rect", { x: 12, y: 12, width: 536, height: 276, rx: 12, fill: "none", stroke: fg, "stroke-width": 1.5 }, venn);
+    svg("text", { x: 26, y: 38, "font-weight": 700 }, venn).textContent = "U";
+    svg("circle", { cx: 215, cy: 155, r: 105, fill: "none", stroke: ca, "stroke-width": 3 }, venn);
+    svg("circle", { cx: 345, cy: 155, r: 105, fill: "none", stroke: cb, "stroke-width": 3 }, venn);
+    svg("text", { x: 135, y: 60, fill: ca, "font-weight": 700 }, venn).textContent = "A";
+    svg("text", { x: 418, y: 60, fill: cb, "font-weight": 700 }, venn).textContent = "B";
+    // 把数放进区域
+    var spots = { A: [], B: [], AB: [], "": [] };
+    for (var n = 1; n <= 12; n++) spots[mem[n]].push(n);
+    var place = {
+      A: function (i) { return [150 + (i % 2) * 34, 110 + Math.floor(i / 2) * 32]; },
+      B: function (i) { return [376 + (i % 2) * 34, 110 + Math.floor(i / 2) * 32]; },
+      AB: function (i) { return [266 + (i % 2) * 28, 110 + Math.floor(i / 2) * 32]; },
+      "": function (i) { return i < 6 ? [40 + (i % 2) * 30, 80 + Math.floor(i / 2) * 50] : [470 + (i % 2) * 30, 80 + Math.floor((i - 6) / 2) * 50]; }
+    };
+    Object.keys(spots).forEach(function (k) {
+      spots[k].forEach(function (n, i) {
+        var xy = place[k](i);
+        var hit = vTest(n);
+        svg("text", { x: xy[0], y: xy[1] + 5, "text-anchor": "middle", "font-weight": hit ? 700 : 400, "text-decoration": hit ? "underline" : "none" }, venn).textContent = n;
+      });
+    });
+    // 数字按钮
+    chips.innerHTML = "";
+    for (var m = 1; m <= 12; m++) {
+      (function (m) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "chip" + (vTest(m) ? " hit" : ""); b.textContent = m;
+        b.setAttribute("data-in", mem[m]);
+        b.setAttribute("aria-label", m + "：" + ({ "": "都不在", A: "只在 A", B: "只在 B", AB: "两个都在" }[mem[m]]));
+        b.onclick = function () {
+          mem[m] = CYCLE[(CYCLE.indexOf(mem[m]) + 1) % 4]; vDraw();
+          var again = chips.children[m - 1]; if (again) again.focus();
+          Peiyu.log("interact", { id: "venn-move", n: m, to: mem[m] });
+        };
+        chips.appendChild(b);
+      })(m);
+    }
+    var list = []; for (var q = 1; q <= 12; q++) if (vTest(q)) list.push(q);
+    var aL = [], bL = []; for (var w = 1; w <= 12; w++) { if (inA(w)) aL.push(w); if (inB(w)) bL.push(w); }
+    function setTex(xs) { return xs.length ? "\\{" + xs.join(",") + "\\}" : "\\varnothing"; }
+    var out = document.getElementById("vout");
+    out.innerHTML = "\\(A=" + setTex(aL) + "\\)，\\(B=" + setTex(bL) + "\\)<br>\\(" + VTEX[vop] + "=" + setTex(list) + "\\)";
+    Peiyu.math(out);
+    var hint = document.getElementById("vhint");
+    hint.textContent = (vop === "notOr" || vop === "andNot")
+      ? "对比 ∁U(A∪B) 和 ∁UA∩∁UB：不管你怎么放数字，两个结果总是一样——都是「两个圈外面」那块。"
+      : "";
+    [].forEach.call(document.querySelectorAll("#vops button"), function (bt) { bt.classList.toggle("on", bt.getAttribute("data-op") === vop); });
+  }
+  [].forEach.call(document.querySelectorAll("#vops button"), function (bt) {
+    bt.onclick = function () { vop = bt.getAttribute("data-op"); vDraw(); Peiyu.log("interact", { id: "venn-op", op: vop }); };
+  });
+  document.getElementById("vreset").onclick = function () { vReset(""); };
+  document.getElementById("v23").onclick = function () { vReset("23"); };
+
+  document.addEventListener("DOMContentLoaded", function () { nlReset(); vReset(""); });
+  // 深浅色切换时重画
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { nlDraw(); vDraw(); });
+})();
+</script>
+</body></html>

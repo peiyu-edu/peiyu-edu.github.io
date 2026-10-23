@@ -1,0 +1,154 @@
+/* 培玉 · 高中数学互动站 — 公共样式。配色来自 brand/peiyu/build.py */
+:root {
+  --bg: #F7F4EE;
+  --card: #FFFFFF;
+  --fg: #1A2822;
+  --muted: #5E6B64;
+  --line: #E2DCD0;
+  --a: #2F7A56;      /* 松绿：第一个量、主色 */
+  --b: #966524;      /* 赤金：第二个量 */
+  --c: #3E5C76;      /* 黛蓝：第三个量 */
+  --hl: #D9A441;     /* 金：重点 */
+  --hl-soft: #F6E7C4;
+  --no: #B5452F;     /* 朱：错误、反例 */
+  --ok-soft: #DCEFE3;
+  --no-soft: #F6DED8;
+  --dim: #A39D90;
+  --radius: 12px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141B18; --card: #1D2622; --fg: #E9E5DC; --muted: #A8B0AA; --line: #2E3A34;
+    --a: #5FB58A; --b: #D3A15C; --c: #7FA3C4; --hl: #E2B65A; --hl-soft: #3A3220;
+    --no: #E07A62; --ok-soft: #1F3A2C; --no-soft: #3D2620; --dim: #6F6A60;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141B18; --card: #1D2622; --fg: #E9E5DC; --muted: #A8B0AA; --line: #2E3A34;
+  --a: #5FB58A; --b: #D3A15C; --c: #7FA3C4; --hl: #E2B65A; --hl-soft: #3A3220;
+  --no: #E07A62; --ok-soft: #1F3A2C; --no-soft: #3D2620; --dim: #6F6A60;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.75 -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+}
+a { color: var(--a); }
+.wrap { max-width: clamp(860px, 85vw, 1440px); margin: 0 auto; padding: 0 16px 64px; }
+
+/* 顶栏 */
+.top { display: flex; align-items: center; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+.top img { width: 28px; height: 28px; }
+.top .brand { font-weight: 700; color: var(--fg); text-decoration: none; }
+.top .sp { flex: 1; }
+.top a.rec { font-size: 14px; text-decoration: none; }
+a.home { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border: 1.5px solid var(--a); border-radius: 999px; color: var(--a); font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+a.home:hover, a.home:focus-visible { background: var(--a); color: var(--card); }
+nav.back { text-align: center; margin: 32px 0 8px; }
+nav.back a.home { font-size: 16px; padding: 10px 20px; }
+.crumb { font-size: 14px; color: var(--muted); margin: 0 0 4px; }
+h1 { font-size: 26px; line-height: 1.35; margin: 0 0 6px; }
+h2 { font-size: 20px; margin: 28px 0 10px; }
+h3 { font-size: 17px; margin: 18px 0 6px; }
+.lead { color: var(--muted); margin: 0 0 18px; }
+
+/* 步骤切换 */
+.steps { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin: 12px 0 16px; position: sticky; top: 0; background: var(--bg); z-index: 5; }
+.steps button {
+  flex: 0 0 auto; border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 15px; cursor: pointer;
+}
+.steps button[aria-selected="true"] { background: var(--a); border-color: var(--a); color: #fff; }
+.step { display: none; }
+.step.on { display: block; }
+.next { margin-top: 18px; }
+
+/* 卡片、按钮 */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin: 12px 0; }
+.btn {
+  display: inline-block; border: 1px solid var(--a); background: var(--a); color: #fff; border-radius: 8px;
+  padding: 7px 16px; font: inherit; font-size: 15px; cursor: pointer; text-decoration: none;
+}
+.btn.ghost { background: transparent; color: var(--a); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn:focus-visible, .steps button:focus-visible, .opt:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+.key { background: var(--hl-soft); border-left: 4px solid var(--hl); border-radius: 8px; padding: 10px 14px; margin: 12px 0; }
+.warn { background: var(--no-soft); border-left: 4px solid var(--no); border-radius: 8px; padding: 10px 14px; margin: 12px 0; }
+.small { font-size: 14px; color: var(--muted); }
+.tag { display: inline-block; font-size: 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; margin-right: 6px; }
+.ca { color: var(--a); font-weight: 600; } .cb { color: var(--b); font-weight: 600; } .cc { color: var(--c); font-weight: 600; }
+
+/* 选项（先猜、真题共用） */
+.opts { display: grid; gap: 8px; margin: 10px 0; }
+.opts.cols { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.opt {
+  text-align: left; border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  border-radius: 8px; padding: 8px 12px; font: inherit; cursor: pointer; min-height: 44px;
+}
+.opt b { margin-right: 6px; }
+.opt.sel { border-color: var(--c); box-shadow: inset 0 0 0 1px var(--c); }
+.opt.right { background: var(--ok-soft); border-color: var(--a); }
+.opt.wrong { background: var(--no-soft); border-color: var(--no); }
+.fb { margin-top: 8px; }
+.fb.ok { color: var(--a); } .fb.no { color: var(--no); }
+.sol { border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; }
+.selfrep { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.prob .stem { white-space: pre-line; }
+.prob input[type=text] { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); width: min(260px, 100%); }
+
+/* 互动图 */
+.fig { width: 100%; max-width: 560px; display: block; margin: 8px auto; touch-action: none; user-select: none; }
+.fig text { font-size: 15px; fill: var(--fg); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0; }
+.ctrl label { font-size: 15px; }
+input[type=range] { width: min(240px, 100%); accent-color: var(--a); }
+
+/* 目录页 */
+.book { margin: 26px 0 8px; }
+.chap { margin: 8px 0; }
+.chap summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+.secs { list-style: none; padding: 0; margin: 4px 0 10px; }
+.secs li { display: flex; gap: 10px; align-items: baseline; padding: 6px 10px; border-radius: 8px; }
+.secs li:nth-child(odd) { background: var(--card); }
+.secs .no { color: var(--muted); min-width: 2.6em; }
+.secs .soon { color: var(--dim); }
+.secs .done { margin-left: auto; font-size: 13px; color: var(--a); }
+
+/* 记录页 */
+table.rec { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.rec th, table.rec td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+textarea.export { width: 100%; min-height: 120px; font: 13px/1.5 ui-monospace, monospace; background: var(--card); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+
+footer { margin-top: 48px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+@media (max-width: 480px) { h1 { font-size: 22px; } body { font-size: 15.5px; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* 长的行间公式在手机上不撑宽页面，在自己的框里横向滚动 */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+/* 顶栏在手机上：按钮多了就整体换行，单个按钮里的字不拆行（wiki 按钮、我的记录、返回主页） */
+.top { flex-wrap: wrap; row-gap: 8px; }
+.top .brand, .top a.rec, .top a.home, .top a.wk-topbtn { white-space: nowrap; }
+@media (max-width: 480px) {
+  .top { gap: 8px; }
+  .top a.home { padding: 4px 10px; font-size: 13px; }
+  .top a.wk-topbtn { padding: 3px 8px; font-size: 13px; }
+}
+
+/* 只给真的太宽的段落加横向滚动（lesson.js 量出来后加上 .wide-x），别的段落不动，免得裁掉高公式 */
+.wide-x { overflow-x: auto; padding-bottom: 4px; }
+
+/* 手机上五个步骤标签换行显示，不靠横向滑（滑动看不出来，后两个会被切掉） */
+@media (max-width: 480px) {
+  .steps { flex-wrap: wrap; overflow-x: visible; gap: 6px 5px; }
+  .steps button { padding: 5px 10px; font-size: 14px; }
+}
+
+/* 选项按钮在网格里允许缩窄（网格项默认不能比内容窄，长公式会把整个网格撑出屏幕）；
+   缩窄后仍然太宽的，lesson.js 会给它加 .wide-x，只在按钮里横向滚动 */
+.opts > .opt { min-width: 0; }

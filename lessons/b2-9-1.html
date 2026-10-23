@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9.1 随机抽样 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  svg.fig text { font-size: 20px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-9-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 9 章 统计</p>
+<h1>9.1 随机抽样</h1>
+<p class="lead">想知道一大群人的情况，往往只能问其中一部分人。问谁、怎么挑，才能让这一部分「像」整体？先从一锅汤说起。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一大锅汤煮好了，想知道它咸不咸。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>下面哪种做法最合适？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>把整锅汤都喝完，再下结论</button>
+      <button class="opt" data-v="B"><b>B</b>把汤搅匀，舀一勺尝尝</button>
+      <button class="opt" data-v="C"><b>C</b>不搅，只尝最上面漂着的一点油花</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。喝完整锅当然最准，可汤也没了；只尝一勺就够，前提是先<b>搅匀</b>，让锅里每个地方都有同样的机会进到勺子里。C 尝到的只是上面一层，代表不了整锅。</p>
+      <p>这就是本节的两件事：<b>全部检查</b>还是<b>只看一部分</b>；只看一部分时，怎么「搅匀」——也就是<b>随机抽样</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：初中学过的平均数，以及「普查」「抽样调查」的说法。这是第 9 章第一节，不需要前面高中章节的结论。</p>
+
+  <div class="card">
+    <p><b>总体和个体</b>：要研究的全部对象叫<b>总体</b>，其中每一个叫<b>个体</b>。</p>
+    <p>例：想知道全校 \(1200\) 名学生每周运动多少小时。这 \(1200\) 个人的运动时长合起来是总体，每个人的时长是一个个体。</p>
+  </div>
+
+  <div class="card">
+    <p><b>样本和样本量</b>：从总体里抽出来的那一部分叫<b>样本</b>，样本里个体的个数叫<b>样本量</b>。</p>
+    <p>例：从全校抽了 \(4\) 个人，运动时长是 \(3,5,6,10\) 小时。这 \(4\) 个数是一个样本，样本量是 \(4\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>样本均值和总体均值</b>：样本里数据的平均数叫<b>样本均值</b>，记作 \(\bar y\)；总体里全部数据的平均数叫<b>总体均值</b>，记作 \(\bar Y\)。</p>
+    <p>例：上面的样本，\(\bar y=\dfrac{3+5+6+10}{4}=6\)。总体均值要把 \(1200\) 个人全问到才知道，通常不知道，就用 \(\bar y\) 去<b>估计</b>它。</p>
+  </div>
+
+  <div class="card">
+    <p><b>随机</b>：抽的时候，每个个体被抽到的<b>机会一样</b>，不由人挑。</p>
+    <p>例：全班 \(40\) 人各写一张签，放进箱子搅匀，摸一张：每个人被摸到的可能性都是 \(\dfrac1{40}\)。如果是「老师点一个看着精神的」，那就不随机。</p>
+  </div>
+
+  <h3>2. 全面调查还是抽样调查</h3>
+  <p>把总体里每个个体都调查一遍，叫<b>全面调查</b>（普查）；只调查一部分，再用它推断总体，叫<b>抽样调查</b>。</p>
+  <p>全面调查结果最全，但费时费钱；有时根本不能做——检查本身会毁掉东西（比如测灯泡能亮多久）。抽样调查省时省钱，代价是结果有误差，要靠「抽得好」把误差压小。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么判断）</p>
+    <p>下面四件事，各用哪种调查？</p>
+    <ol>
+      <li>火箭发射前，检查每个关键零件。——<b>全面调查</b>：一个出问题就前功尽弃，必须个个查。</li>
+      <li>了解全国中学生的视力。——<b>抽样调查</b>：人太多，全查成本太高。</li>
+      <li>检测一批袋装牛奶是否合格。——<b>抽样调查</b>：检测要拆袋，拆了就不能卖。</li>
+      <li>统计班里 \(40\) 人要订的校服尺码。——<b>全面调查</b>：每个人都要发到合身的衣服，人也不多。</li>
+    </ol>
+  </div>
+  <div class="card predict" data-id="try-census" data-answer="B">
+    <p>自己试试：工厂想知道一批 \(5000\) 只灯泡平均能亮多少小时。应该用哪种调查？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>全面调查</button>
+      <button class="opt" data-v="B"><b>B</b>抽样调查</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。要知道一只灯泡能亮多久，得一直点到它坏。全面调查虽然「最准」，可测完 \(5000\) 只灯泡全坏了，没有东西可卖。选 A 的同学只想到了准，没想到代价。</p></div>
+  </div>
+
+  <h3>3. 简单随机抽样</h3>
+  <p>从 \(N\) 个个体里一个一个地抽，抽 \(n\) 次：</p>
+  <ul>
+    <li><b>不放回</b>：抽到的不再放回去，每一次在<b>还没被抽到的</b>个体里，每个被抽到的机会都相等；</li>
+    <li><b>放回</b>：每次抽完放回去，每一次在<b>全部</b>个体里，每个被抽到的机会都相等（同一个人可能被抽到两次）。</li>
+  </ul>
+  <p>这两种都叫<b>简单随机抽样</b>。调查人时一般用不放回的。常用两种办法：<b>抽签法</b>（编号、做签、搅匀、摸签）和<b>随机数法</b>（编号后用计算器、软件或随机数表产生号码，重复的号码跳过）。关键在于<b>机会均等</b>：每一次抽取时，还没被抽到的每个个体被选中的可能性都一样，所以总体里每个个体最后被抽进样本的机会也都一样。</p>
+  <div class="key">抽出样本后，用样本均值 \(\bar y=\dfrac{y_1+y_2+\cdots+y_n}{n}\) 估计总体均值 \(\bar Y\)。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>全班 \(40\) 人，用抽签法抽 \(5\) 人调查每周运动时长，并估计全班的平均值。</p>
+    <p>第一步，给 \(40\) 人编号 \(1\sim40\)，做 \(40\) 张一样的签写上号码。第二步，签放进箱子充分搅匀。第三步，不放回地摸 \(5\) 张，对应的 \(5\) 人就是样本。</p>
+    <p>问到 \(5\) 人的时长是 \(3,6,4,8,4\) 小时，样本均值 \(\bar y=\dfrac{3+6+4+8+4}{5}=\dfrac{25}{5}=5\)。估计全班平均每周运动约 \(5\) 小时。</p>
+    <p class="small">说「约」，是因为换一次抽签，样本就不同，\(\bar y\) 也会变。</p>
+  </div>
+  <div class="card predict" data-id="try-srs" data-answer="C">
+    <p>自己试试：从 \(60\) 名同学中，不放回地简单随机抽取 \(6\) 人。小明被抽中的可能性是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{60}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac16\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac1{10}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(6\) 次里每次都可能抽到他。反过来算「一直没抽到」：第 1 次没抽到的可能性 \(\dfrac{59}{60}\)，第 2 次在剩下 \(59\) 人里也没抽到 \(\dfrac{58}{59}\)……连乘下去是 \(\dfrac{59}{60}\cdot\dfrac{58}{59}\cdots\dfrac{54}{55}=\dfrac{54}{60}=\dfrac9{10}\)，所以被抽中的可能性是 \(\dfrac1{10}=\dfrac{6}{60}\)。</p>
+      <p>选 A 的同学只算了第 1 次。结论：不放回简单随机抽样，每个人被抽中的可能性都是 \(\dfrac nN\)，人人一样。</p>
+    </div>
+  </div>
+
+  <h3>4. 分层随机抽样</h3>
+  <p>如果总体里有几类人，而且这几类在要研究的量上差别明显（比如高一、高三的运动时长差很多），简单随机抽样可能碰巧抽到的高三特别多，结果偏低。办法是：先按这个特征把总体分成几<b>层</b>，再<b>在每层里</b>简单随机抽样。这叫<b>分层随机抽样</b>。</p>
+  <p>各层抽多少人，最常用的是<b>按比例分配</b>：每层抽的人数占样本的比例，等于这层人数占总体的比例。这样样本里各类人的比例和总体一样。</p>
+  <div class="key">比例分配：第 \(i\) 层有 \(N_i\) 人，就抽 \(n\cdot\dfrac{N_i}{N}\) 人。<br>估计总体均值：\(\bar y=\dfrac{N_1}{N}\bar y_1+\dfrac{N_2}{N}\bar y_2+\cdots\)，每层的样本均值按这层在总体里的比例加权。</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>某校高一 \(600\) 人、高二 \(500\) 人、高三 \(400\) 人。按年级分层，按比例抽 \(60\) 人调查每周运动时长。各年级抽几人？若三层样本均值分别是 \(6.5\)、\(5\)、\(3.5\) 小时，估计全校平均值。</p>
+    <p>总人数 \(600+500+400=1500\)，抽样比例 \(\dfrac{60}{1500}=\dfrac1{25}\)。各抽 \(600\times\dfrac1{25}=24\) 人、\(500\times\dfrac1{25}=20\) 人、\(400\times\dfrac1{25}=16\) 人，合计 \(60\)。</p>
+    <p>估计全校平均值：</p>
+    <p style="text-align:center">\(\bar y=\dfrac{24\times6.5+20\times5+16\times3.5}{60}\)</p>
+    <p style="text-align:center">\(=\dfrac{156+100+56}{60}=\dfrac{312}{60}=5.2\)（小时）。</p>
+    <p class="small">按比例分配时，把 \(60\) 人的数据直接平均，和按 \(\dfrac{600}{1500},\dfrac{500}{1500},\dfrac{400}{1500}\) 加权，结果一样。</p>
+  </div>
+  <div class="card predict" data-id="try-strat" data-answer="A">
+    <p>自己试试：公司有男职工 \(120\) 人、女职工 \(80\) 人，按性别分层、按比例抽 \(30\) 人。女职工抽几人？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(15\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(18\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。女职工占 \(\dfrac{80}{200}=\dfrac25\)，抽 \(30\times\dfrac25=12\) 人（男职工 \(18\) 人）。选 B 是两层平分，不是按比例；选 C 是把男职工的人数当成了女职工的。</p></div>
+  </div>
+
+  <h3>5. 获取数据的途径</h3>
+  <p>抽样调查只是拿数据的一种方式。按问题选途径：</p>
+  <ul>
+    <li><b>调查</b>：问人或查看现有对象，如问卷了解睡眠时长。</li>
+    <li><b>试验</b>：主动控制条件、比较结果，如一半田施新肥、一半不施，比产量。</li>
+    <li><b>观察</b>：不干预，只记录，如每天记录气温、观测鸟类迁徙。</li>
+    <li><b>查询</b>：用别人已经收集好的数据，如统计年鉴、权威网站。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>想知道本市近 \(10\) 年每年的降水量。——用<b>查询</b>：气象部门早就记下来了，不必自己重新测。想知道新药是否有效。——用<b>试验</b>：要把病人分成用药组和对照组，其他条件尽量相同，才能说清差别是药带来的。</p>
+  </div>
+  <div class="card predict" data-id="try-source" data-answer="A">
+    <p>自己试试：想知道一种新肥料能不能让番茄增产，最合适的获取数据途径是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>试验</button>
+      <button class="opt" data-v="B"><b>B</b>观察</button>
+      <button class="opt" data-v="C"><b>C</b>查询</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。在土质、浇水相同的两块地里，一块施新肥、一块不施，比较产量。选 B 的同学想「看看用了新肥的人家收成好不好」，可那户人家的土和管理可能本来就好，分不清是不是肥料的功劳。新肥料也没有现成数据可查。</p></div>
+  </div>
+
+  <h3>6. 用之前，查几件事</h3>
+  <p>抽样要「像」总体，下面几条缺一不可：</p>
+  <ol>
+    <li><b>真随机，不是「随便」</b>：在路口随便拉人、让愿意的人自己填问卷，都不是随机抽样。<br><span class="small">反例：在网上发问卷问「你每天上网几小时」，上网多的人更容易看到并回答，结果会偏高。</span></li>
+    <li><b>放回、不放回要分清</b>：不放回时，每次在「还没抽到的」里机会相等；放回时，每次在全部个体里机会相等。<br><span class="small">反例：\(40\) 人抽 \(5\) 人，摸到的签又放回去，可能同一个人被抽到两次，样本里实际只有 \(4\) 个不同的人。这是放回抽样，要说清楚。</span></li>
+    <li><b>按和研究的量有关的特征分层，层内还要随机</b>。<br><span class="small">反例：研究运动时长，按学号单双号分层，两层几乎一样，分了等于没分；按年级分才有用。每个年级只抽「离办公室最近的那个班」，层内就不随机了。</span></li>
+    <li><b>不按比例抽时，要按总体比例加权</b>，不能把各层样本直接合起来平均。<br><span class="small">反例：甲层 \(900\) 人、乙层 \(100\) 人，各抽 \(30\) 人，样本均值 \(2\) 和 \(10\)。直接平均得 \(6\)；正确估计是 \(0.9\times2+0.1\times10=2.8\)。乙层只占一成，却在样本里占了一半。</span></li>
+    <li><b>人多救不了抽法偏</b>：抽法有系统偏差时，样本量再大，偏差也还在。<br><span class="small">反例：在健身房门口问 \(2000\) 人每周运动多久，人很多，可问到的大多是爱运动的人，结果一定偏高。「动手」②可以看到这一点。</span></li>
+  </ol>
+  <div class="key">先想清楚三件事：总体是谁、要研究什么量、名单从哪来。然后让每个个体都有相同的机会被抽到；分层时按总体比例加权。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>抽样框</b>：真正用来抽签的那份名单叫抽样框。名单本身漏了人，抽得再随机也补不回来。比如用电话簿抽样调查全市居民，没装座机的人就永远抽不到。</p>
+    <p><b>样本大一点通常更稳，但不保证这一次更准</b>：随机抽 \(50\) 人，多数时候比随机抽 \(10\) 人离总体均值近；可某一次抽 \(10\) 人碰巧比抽 \(50\) 人更准，也完全可能。「动手」①里把 \(n\) 调大调小，各抽 \(20\) 次比一比。</p>
+    <p><b>分层为什么更稳</b>：按比例分层后，样本里各年级的人数固定了，不会碰巧「高三抽多了」。各层差别越大，分层的好处越明显。</p>
+    <p><b>样本方差</b>：除了均值，还能用样本估计总体的波动大小（方差）。分层样本合起来的方差不只是各层方差的平均，还要算上各层均值之间的差别。这些在 9.2 讲。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 简单随机与分层：各抽几次比一比</h3>
+  <p class="small">全校 \(200\) 人，圆越大表示每周运动越久；高一多、高三少（\(100:60:40\)）。选样本量 \(n\)，点按钮抽样：抽到的人会加粗，下面的数轴上记一道样本均值。多抽几次，看哪一行的竖线挤得更紧。</p>
+  <div class="card">
+    <svg class="fig" id="pop" viewBox="0 0 560 420" role="img" aria-label="200 人按年级排成三块，下方数轴记录每次抽样的样本均值"></svg>
+    <div class="ctrl"><label for="nin">样本量 \(n\)</label><input type="range" id="nin" min="10" max="50" step="10"><output id="nout"></output></div>
+    <div class="ctrl">
+      <button class="btn" id="dsrs" type="button">简单随机抽一次</button>
+      <button class="btn" id="dstr" type="button">分层抽一次</button>
+      <button class="btn ghost" id="dmany" type="button">各抽 20 次</button>
+    </div>
+    <div class="result" id="popout" aria-live="polite"></div>
+    <div class="result" id="popsum" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="popreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：人多救不了抽法偏</h3>
+  <p class="small">换成 \(1000\) 人的学校。两种抽法各抽 \(12\) 次：绿点是<b>随机抽样</b>，红点是<b>只在操场上拉人问</b>（越爱运动越容易被问到）。横轴是样本量。拖动滑块看某个样本量下两种抽法的样本均值落在哪里。</p>
+  <div class="card">
+    <svg class="fig" id="bias" viewBox="0 0 560 360" role="img" aria-label="随机抽样与操场抽样的样本均值随样本量变化"></svg>
+    <div class="ctrl"><label for="bin">样本量 \(n\)</label><input type="range" id="bin" min="10" max="100" step="10"><output id="bout"></output></div>
+    <div class="ctrl"><button class="btn" id="bagain" type="button">再抽一轮</button></div>
+    <div class="result" id="biasout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="biasreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. 某校高一 \(900\) 人、高二 \(800\) 人、高三 \(700\) 人，按年级分层、按比例抽 \(48\) 人。高二应抽几人？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(18\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(16\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(14\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。总人数 \(2400\)，抽样比例 \(\dfrac{48}{2400}=\dfrac1{50}\)，高二抽 \(800\times\dfrac1{50}=16\) 人（高一 \(18\)、高三 \(14\)，合计 \(48\)）。选 A、C 是看错了年级；选 D 是把 \(48\) 平分成了 \(4\) 份，可只有 \(3\) 个年级，而且不该平分。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 某年级男生 \(300\) 人、女生 \(200\) 人，按性别分层、按比例抽样。男生样本的平均身高 \(172\) cm，女生样本的平均身高 \(162\) cm。估计全年级平均身高是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(168\) cm</button>
+      <button class="opt" data-v="B"><b>B</b>\(167\) cm</button>
+      <button class="opt" data-v="C"><b>C</b>\(170\) cm</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。男生占 \(\dfrac{300}{500}=0.6\)，女生占 \(0.4\)：\(0.6\times172+0.4\times162=103.2+64.8=168\)。选 B 是把两个均值直接平均，忘了男生人数多、权重大。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-random" data-answer="B">
+    <p>3. 学校想了解学生每天睡几小时，在校园网上挂了问卷，一周收到 \(800\) 份。下面说法对的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>没有人指定谁来答，所以这是简单随机抽样</button>
+      <button class="opt" data-v="B"><b>B</b>回答的人是自己愿意答的，不是随机抽样，结果可能有偏差</button>
+      <button class="opt" data-v="C"><b>C</b>收到 \(800\) 份已经很多，一定能代表全校</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。「没人指定」不等于「随机」：随机是每个人被抽到的机会相等，而这里只有看到问卷、又愿意花时间填的人才进了样本，比如熬夜上网的人可能更容易看到。C 错在以为人多就行，抽法偏了，人再多也不行。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-weight" data-answer="C">
+    <p>4. 某区城区学生 \(800\) 人、郊区学生 \(200\) 人，两层各随机抽 \(50\) 人。城区样本每周阅读时间平均 \(4\) 小时，郊区样本平均 \(9\) 小时。估计全区学生平均每周阅读时间是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(6.5\) 小时</button>
+      <button class="opt" data-v="B"><b>B</b>\(8\) 小时</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\) 小时</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。两层各抽 \(50\) 人，不是按比例分配：郊区只占总体的 \(\dfrac{200}{1000}=0.2\)，在样本里却占了一半。要按总体比例加权：\(0.8\times4+0.2\times9=3.2+1.8=5\)。选 A 是把 \(100\) 人直接平均。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-size" data-answer="B">
+    <p>5. 想估计全市成年人每周运动多久。甲在几家健身房门口问了 \(2000\) 人；乙从全市居民名单中随机抽了 \(200\) 人。哪个结果更可信？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>甲，因为样本量是乙的 \(10\) 倍</button>
+      <button class="opt" data-v="B"><b>B</b>乙，因为抽法没有偏向</button>
+      <button class="opt" data-v="C"><b>C</b>一样可信，都是抽样调查</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。健身房门口的人大多爱运动，甲的抽法本身偏高，问 \(2000\) 人还是偏高，样本量修不了这种偏差。乙的样本小一些，误差来自运气，有时高有时低，不会一直偏向一边。（也不是说乙每一次都比任何样本准，只是它没有系统偏差。）</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 学校要了解学生每天用手机的时长，已知住校生和走读生差别很大，男生女生差别不大。全校住校生 \(480\) 人、走读生 \(720\) 人，要抽 \(50\) 人。最合适的方案是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>按男女分层，按比例抽</button>
+      <button class="opt" data-v="B"><b>B</b>按住校、走读分层，住校生抽 \(20\) 人、走读生抽 \(30\) 人，层内随机</button>
+      <button class="opt" data-v="C"><b>C</b>按住校、走读分层，各抽 \(25\) 人，把 \(50\) 个数直接平均</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。分层要按<b>和研究的量有关</b>的特征分：手机时长和住不住校关系大，和男女关系小，所以 A 分了作用不大。</p>
+      <p>按比例：\(50\times\dfrac{480}{1200}=20\)，\(50\times\dfrac{720}{1200}=30\)。C 两层各 \(25\) 人不是按比例，住校生被多抽了，直接平均会偏向住校生；要用 C 的数据，得按 \(0.4\) 和 \(0.6\) 加权。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  // 两位小数能精确写出就用「=」，否则「≈」
+  function rel(x) { return (Math.abs(x * 100 - Math.round(x * 100)) < 1e-7 ? "=" : "\\approx ") + f2(x); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  // 可复现的随机数（mulberry32）
+  function rng(seed) {
+    return function () {
+      seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  var LAYERS = [{ name: "高一", size: 100, mean: 6.2 }, { name: "高二", size: 60, mean: 4.2 }, { name: "高三", size: 40, mean: 2.4 }];
+  function makePop(scale, seed) {
+    var r = rng(seed), v = [], l = [];
+    LAYERS.forEach(function (L, j) {
+      for (var i = 0; i < L.size * scale; i++) {
+        var z = r() + r() + r() + r() - 2;
+        v.push(clamp(Math.round(L.mean + z * 2.6), 0, 12)); l.push(j);
+      }
+    });
+    return { v: v, l: l, N: v.length };
+  }
+  function mean(arr) { var s = 0; for (var i = 0; i < arr.length; i++) s += arr[i]; return arr.length ? s / arr.length : 0; }
+  // 从 pool（下标数组）里不放回地随机取 k 个
+  function pick(r, pool, k) {
+    var a = pool.slice(), n = Math.min(k, a.length);
+    for (var i = 0; i < n; i++) { var j = i + Math.floor(r() * (a.length - i)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a.slice(0, n);
+  }
+  function range(n) { var a = []; for (var i = 0; i < n; i++) a.push(i); return a; }
+
+  /* ================= ① 简单随机 vs 分层 ================= */
+  var pop = makePop(1, 91), popFig = document.getElementById("pop"), nIn = document.getElementById("nin");
+  var POPMEAN = mean(pop.v), ALL = range(pop.N);
+  var layerIdx = LAYERS.map(function (L, j) { return ALL.filter(function (i) { return pop.l[i] === j; }); });
+  var n1, r1, hist, cur;
+  function dotXY(i) {
+    var j = pop.l[i], k = i - (j === 0 ? 0 : j === 1 ? 100 : 160), col = (j === 0 ? 0 : j === 1 ? 10 : 16) + Math.floor(k / 10), row = k % 10;
+    return { x: 64 + col * 23 + j * 8, y: 52 + row * 19 };
+  }
+  var AX0 = 120, AX1 = 530, AMIN = 1, AMAX = 9;
+  function ax(m) { return AX0 + (clamp(m, AMIN, AMAX) - AMIN) / (AMAX - AMIN) * (AX1 - AX0); }
+  function draw(method) {
+    var idx, parts = null;
+    if (method === "srs") idx = pick(r1, ALL, n1);
+    else {
+      idx = []; parts = [];
+      layerIdx.forEach(function (pool, j) {
+        var k = n1 * LAYERS[j].size / pop.N, s = pick(r1, pool, k);
+        idx = idx.concat(s); parts.push({ k: k, m: mean(s.map(function (i) { return pop.v[i]; })) });
+      });
+    }
+    var vals = idx.map(function (i) { return pop.v[i]; });
+    var est = parts ? parts.reduce(function (s, p, j) { return s + LAYERS[j].size / pop.N * p.m; }, 0) : mean(vals);
+    cur = { method: method, idx: idx, parts: parts, sum: vals.reduce(function (a, b) { return a + b; }, 0), est: est };
+    hist[method].push(est);
+  }
+  function popReset() { n1 = 20; nIn.value = n1; r1 = rng(2026); hist = { srs: [], str: [] }; draw("srs"); popDraw(); }
+  function popDraw() {
+    var fg = css("--fg"), muted = css("--muted"), hl = css("--hl"), cols = [css("--a"), css("--b"), css("--c")];
+    var chosen = {}; cur.idx.forEach(function (i) { chosen[i] = 1; });
+    popFig.innerHTML = "";
+    var heads = [[64 + 4.5 * 23, "高一 100"], [64 + 12.5 * 23 + 8, "高二 60"], [64 + 17.5 * 23 + 16, "高三 40"]];
+    heads.forEach(function (h, j) { svg("text", { x: h[0], y: 30, "text-anchor": "middle", fill: cols[j], "font-weight": 700 }, popFig).textContent = h[1]; });
+    for (var i = 0; i < pop.N; i++) {
+      var p = dotXY(i), on = chosen[i], r = 2.2 + pop.v[i] * 0.55;
+      svg("circle", { cx: p.x, cy: p.y, r: r, fill: cols[pop.l[i]], opacity: on ? 1 : 0.28,
+        stroke: on ? fg : "none", "stroke-width": on ? 2 : 0 }, popFig);
+    }
+    // 数轴
+    var Y1 = 296, Y2 = 348, YA = 384;
+    svg("text", { x: 8, y: Y1 + 7 }, popFig).textContent = "简单随机";
+    svg("text", { x: 8, y: Y2 + 7 }, popFig).textContent = "分层";
+    svg("line", { x1: AX0, y1: YA, x2: AX1, y2: YA, stroke: fg, "stroke-width": 1.5 }, popFig);
+    for (var t = AMIN; t <= AMAX; t++) {
+      svg("line", { x1: ax(t), y1: YA, x2: ax(t), y2: YA + 5, stroke: fg }, popFig);
+      svg("text", { x: ax(t), y: YA + 26, "text-anchor": "middle" }, popFig).textContent = t;
+    }
+    svg("text", { x: AX0 - 10, y: YA + 26, "text-anchor": "end", fill: muted }, popFig).textContent = "小时";
+    var mx = ax(POPMEAN);
+    svg("line", { x1: mx, y1: 266, x2: mx, y2: YA, stroke: muted, "stroke-width": 2, "stroke-dasharray": "5 4" }, popFig);
+    svg("text", { x: mx, y: 260, "text-anchor": "middle", fill: muted }, popFig).textContent = "总体均值 " + f2(POPMEAN);
+    [["srs", Y1], ["str", Y2]].forEach(function (row) {
+      var h = hist[row[0]];
+      h.forEach(function (m, k) {
+        var last = row[0] === cur.method && k === h.length - 1, x = ax(m);
+        svg("line", { x1: x, y1: row[1] - 16, x2: x, y2: row[1] + 16, stroke: last ? hl : (row[0] === "srs" ? cols[0] : cols[2]),
+          "stroke-width": last ? 5 : 2, opacity: last ? 1 : 0.75 }, popFig);
+      });
+      if (!h.length) svg("text", { x: AX0 + 4, y: row[1] + 7, fill: muted }, popFig).textContent = "还没抽";
+    });
+
+    document.getElementById("nout").textContent = n1;
+    var out = document.getElementById("popout"), s;
+    if (cur.method === "srs") {
+      var cnt = [0, 0, 0]; cur.idx.forEach(function (i) { cnt[pop.l[i]]++; });
+      s = "刚才：<b>简单随机</b>抽 \\(" + n1 + "\\) 人，碰巧高一 \\(" + cnt[0] + "\\)、高二 \\(" + cnt[1] + "\\)、高三 \\(" + cnt[2] + "\\) 人（按比例应是 \\(" +
+        n1 / 2 + "," + n1 * 3 / 10 + "," + n1 / 5 + "\\)）。<br>样本均值 \\(\\bar y=\\dfrac{" + cur.sum + "}{" + n1 + "}" + rel(cur.est) + "\\)，总体均值 \\(\\bar Y" + rel(POPMEAN) + "\\)，差约 \\(" + f2(Math.abs(cur.est - POPMEAN)) + "\\)。";
+    } else {
+      var ps = cur.parts;
+      s = "刚才：<b>分层</b>按 \\(5:3:2\\) 抽 \\(" + ps[0].k + "," + ps[1].k + "," + ps[2].k + "\\) 人，三层样本均值 \\(\\bar y_1" + rel(ps[0].m) + "\\)，\\(\\bar y_2" + rel(ps[1].m) + "\\)，\\(\\bar y_3" + rel(ps[2].m) + "\\)。<br>" +
+        "\\(\\bar y=0.5\\bar y_1+0.3\\bar y_2+0.2\\bar y_3" + rel(cur.est) + "\\)，总体均值 \\(\\bar Y" + rel(POPMEAN) + "\\)，差约 \\(" + f2(Math.abs(cur.est - POPMEAN)) + "\\)。";
+    }
+    out.innerHTML = s;
+    var sum = document.getElementById("popsum"), lines = [];
+    [["srs", "简单随机"], ["str", "分层"]].forEach(function (row) {
+      var h = hist[row[0]];
+      if (!h.length) return;
+      var lo = Math.min.apply(null, h), hi = Math.max.apply(null, h), far = Math.max(hi - POPMEAN, POPMEAN - lo);
+      lines.push(row[1] + "：抽了 \\(" + h.length + "\\) 次，样本均值在 \\(" + f2(lo) + "\\) 到 \\(" + f2(hi) + "\\) 之间，离总体均值最远 \\(" + f2(far) + "\\)。");
+    });
+    if (hist.srs.length >= 5 && hist.str.length >= 5) {
+      var w1 = Math.max.apply(null, hist.srs) - Math.min.apply(null, hist.srs), w2 = Math.max.apply(null, hist.str) - Math.min.apply(null, hist.str);
+      lines.push(w2 < w1 ? '<span class="eq">分层的竖线挤得更紧</span>：样本里各年级人数固定了，不会碰巧某个年级抽多。' : "这几次分层没显出优势，多抽几次再看。");
+    }
+    sum.innerHTML = lines.join("<br>");
+    Peiyu.math(out); Peiyu.math(sum);
+  }
+  function act(method, times) {
+    for (var i = 0; i < times; i++) { if (method === "both") { draw("srs"); draw("str"); } else draw(method); }
+    popDraw();
+    Peiyu.log("interact", { id: "sample-" + method, n: n1, times: times });
+  }
+  document.getElementById("dsrs").onclick = function () { act("srs", 1); };
+  document.getElementById("dstr").onclick = function () { act("str", 1); };
+  document.getElementById("dmany").onclick = function () { act("both", 20); };
+  nIn.addEventListener("input", function () {
+    var v = clamp(Math.round((parseInt(nIn.value, 10) || 20) / 10) * 10, 10, 50);
+    if (v === n1) return;
+    n1 = v; hist = { srs: [], str: [] }; draw("srs"); popDraw();
+  });
+  nIn.addEventListener("change", function () { Peiyu.log("interact", { id: "sample-n", n: n1 }); });
+  document.getElementById("popreset").onclick = popReset;
+
+  /* ================= ② 偏差：样本量救不了 ================= */
+  var big = makePop(5, 17), bigAll = range(big.N), BIGMEAN = mean(big.v), bFig = document.getElementById("bias"), bIn = document.getElementById("bin");
+  var REPS = 12, NS_ = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100], bSeed, bData, nSel;
+  // 越爱运动越容易被问到：权重 (v+1)^2，按 u^(1/w) 取前 k 个（不放回加权抽样）
+  function pickBiased(r, k) {
+    var keys = bigAll.map(function (i) { var w = (big.v[i] + 1) * (big.v[i] + 1); return [Math.log(r() || 1e-12) / w, i]; });
+    keys.sort(function (a, b) { return b[0] - a[0]; });
+    return keys.slice(0, k).map(function (p) { return p[1]; });
+  }
+  function bSimulate() {
+    var r = rng(bSeed);
+    bData = NS_.map(function (n) {
+      var a = [], b = [];
+      for (var t = 0; t < REPS; t++) {
+        a.push(mean(pick(r, bigAll, n).map(function (i) { return big.v[i]; })));
+        b.push(mean(pickBiased(r, n).map(function (i) { return big.v[i]; })));
+      }
+      return { n: n, srs: a, bad: b };
+    });
+  }
+  var BX0 = 90, BX1 = 530, BY0 = 300, BY1 = 50, BMIN = 2, BMAX = 9;
+  function bx(n) { return BX0 + 20 + (n - 10) / 90 * (BX1 - BX0 - 40); }
+  function by(m) { return BY0 - (clamp(m, BMIN, BMAX) - BMIN) / (BMAX - BMIN) * (BY0 - BY1); }
+  function biasReset() { bSeed = 7; nSel = 30; bIn.value = nSel; bSimulate(); biasDraw(); }
+  function biasDraw() {
+    var fg = css("--fg"), muted = css("--muted"), ca = css("--a"), no = css("--no"), soft = css("--hl-soft");
+    bFig.innerHTML = "";
+    svg("rect", { x: bx(nSel) - 20, y: BY1 - 6, width: 40, height: BY0 - BY1 + 6, fill: soft }, bFig);
+    svg("line", { x1: BX0, y1: BY0, x2: BX1, y2: BY0, stroke: fg, "stroke-width": 1.5 }, bFig);
+    svg("line", { x1: BX0, y1: BY0, x2: BX0, y2: BY1 - 10, stroke: fg, "stroke-width": 1.5 }, bFig);
+    for (var t = BMIN; t <= BMAX; t++) {
+      svg("line", { x1: BX0 - 5, y1: by(t), x2: BX0, y2: by(t), stroke: fg }, bFig);
+      if (t % 2 === 0) svg("text", { x: BX0 - 9, y: by(t) + 7, "text-anchor": "end" }, bFig).textContent = t;
+    }
+    NS_.forEach(function (n) {
+      svg("line", { x1: bx(n), y1: BY0, x2: bx(n), y2: BY0 + 5, stroke: fg }, bFig);
+      if (n % 20 === 0) svg("text", { x: bx(n), y: BY0 + 27, "text-anchor": "middle" }, bFig).textContent = n;
+    });
+    svg("text", { x: BX1, y: BY0 + 52, "text-anchor": "end", fill: muted }, bFig).textContent = "样本量 n";
+    svg("text", { x: BX0 - 9, y: BY0 + 27, "text-anchor": "end", fill: muted }, bFig).textContent = "小时";
+    svg("line", { x1: BX0, y1: by(BIGMEAN), x2: BX1, y2: by(BIGMEAN), stroke: muted, "stroke-width": 2, "stroke-dasharray": "6 5" }, bFig);
+    // 图例
+    svg("circle", { cx: 20, cy: 22, r: 6, fill: ca }, bFig);
+    svg("text", { x: 32, y: 29 }, bFig).textContent = "随机抽样";
+    svg("circle", { cx: 150, cy: 22, r: 6, fill: no }, bFig);
+    svg("text", { x: 162, y: 29 }, bFig).textContent = "只问操场";
+    svg("line", { x1: 280, y1: 22, x2: 310, y2: 22, stroke: muted, "stroke-width": 2, "stroke-dasharray": "6 5" }, bFig);
+    svg("text", { x: 318, y: 29 }, bFig).textContent = "总体均值 " + f2(BIGMEAN);
+    bData.forEach(function (d) {
+      d.srs.forEach(function (m) { svg("circle", { cx: bx(d.n) - 7, cy: by(m), r: 4, fill: ca, opacity: 0.7 }, bFig); });
+      d.bad.forEach(function (m) { svg("circle", { cx: bx(d.n) + 7, cy: by(m), r: 4, fill: no, opacity: 0.7 }, bFig); });
+    });
+    document.getElementById("bout").textContent = nSel;
+    var d = bData.filter(function (x) { return x.n === nSel; })[0];
+    var lo1 = Math.min.apply(null, d.srs), hi1 = Math.max.apply(null, d.srs), lo2 = Math.min.apply(null, d.bad), hi2 = Math.max.apply(null, d.bad);
+    var off = mean(d.bad) - BIGMEAN;
+    var out = document.getElementById("biasout");
+    out.innerHTML = "\\(n=" + nSel + "\\)，总体均值 \\(\\bar Y" + rel(BIGMEAN) + "\\)。<br>" +
+      '<span class="eq">随机抽样</span> \\(' + REPS + "\\) 次：样本均值在 \\(" + f2(lo1) + "\\) 到 \\(" + f2(hi1) + "\\) 之间，围着 \\(\\bar Y\\) 上下跳。<br>" +
+      '<span class="bad">只问操场</span> \\(' + REPS + "\\) 次：在 \\(" + f2(lo2) + "\\) 到 \\(" + f2(hi2) + "\\) 之间，平均偏" + (off >= 0 ? "高" : "低") + "约 \\(" + f2(Math.abs(off)) + "\\) 小时。" +
+      (nSel >= 60 ? "<br>样本量已经很大，红点挤得很紧，可整团都离开了虚线：越抽越「稳定地错」。" : "<br>往右拖：绿点越来越贴近虚线，红点只是挤紧，并不靠近虚线。");
+    Peiyu.math(out);
+  }
+  bIn.addEventListener("input", function () {
+    var v = clamp(Math.round((parseInt(bIn.value, 10) || 30) / 10) * 10, 10, 100);
+    if (v !== nSel) { nSel = v; biasDraw(); }
+  });
+  bIn.addEventListener("change", function () { Peiyu.log("interact", { id: "bias-n", n: nSel }); });
+  document.getElementById("bagain").onclick = function () { bSeed += 1; bSimulate(); biasDraw(); Peiyu.log("interact", { id: "bias-again", seed: bSeed }); };
+  document.getElementById("biasreset").onclick = biasReset;
+
+  document.addEventListener("DOMContentLoaded", function () { popReset(); biasReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { popDraw(); biasDraw(); });
+})();
+</script>
+</body></html>

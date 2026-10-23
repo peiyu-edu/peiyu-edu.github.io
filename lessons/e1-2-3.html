@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.3 直线的交点坐标与距离公式 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .result .mid { color: var(--b); font-weight: 700; }
+  #ptl text, #two text { font-size: 20px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e1-2-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第一册 · 第 2 章 直线和圆的方程</p>
+<h1>2.3 直线的交点坐标与距离公式</h1>
+<p class="lead">有了直线的方程，「两条路在哪儿相交」「两地相距多远」「点离直线多远」都能直接算出来。先从地图上的一段路开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一张公园地图画在坐标纸上，每格 \(100\) 米。小林家在点 \((1,2)\)，学校在点 \((4,6)\)。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>如果能穿过草坪走直线，家到学校有多远？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(500\) 米</button>
+      <button class="opt" data-v="B"><b>B</b>\(700\) 米</button>
+      <button class="opt" data-v="C"><b>C</b>\(400\) 米</button>
+      <button class="opt" data-v="D"><b>D</b>\(600\) 米</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。往右 \(3\) 格、往上 \(4\) 格，直线正好是直角三角形的斜边：\(\sqrt{3^2+4^2}=5\) 格，即 \(500\) 米。沿格子线走才是 \(3+4=7\) 格（\(700\) 米）。</p>
+      <p>这一节就是把这种「用坐标算」做成公式：两条直线的交点、两点间距离、点到直线的距离、两条平行线间的距离。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：斜率（<a href="e1-2-1.html">回看 2.1</a>）；直线的一般式（<a href="e1-2-2.html">回看 2.2</a>）；向量的坐标和数量积（<a href="b2-6-3.html">回看 6.3</a>、<a href="b2-6-2.html">6.2</a>，只在「再深一点」里用）。</p>
+
+  <div class="card">
+    <p><b>一般式</b>：任何直线都能写成 \(Ax+By+C=0\)，\(A\)、\(B\) 不同时为 \(0\)。所有项都移到等号左边。</p>
+    <p>例：\(y=2x+1\) 移项得 \(2x-y+1=0\)，所以 \(A=2\)，\(B=-1\)，\(C=1\)。注意 \(B\) 是 \(-1\)，不是 \(1\)。竖直线 \(x=3\) 也行：\(x-3=0\)，\(A=1\)，\(B=0\)，\(C=-3\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>点在直线上</b>：点的坐标代进方程，等式成立。</p>
+    <p>例：点 \((1,3)\) 代进 \(2x-y+1=0\)：\(2-3+1=0\)，在线上。点 \((0,0)\) 代进去得 \(1\ne0\)，不在线上。</p>
+  </div>
+
+  <div class="card">
+    <p><b>垂足与距离</b>：从点 \(P\) 向直线作垂线，垂线和直线的交点叫<b>垂足</b>。点到直线的<b>距离</b>就是 \(P\) 到垂足这一段的长，它是 \(P\) 到直线上所有点里最短的。</p>
+    <p>例：点 \((3,4)\) 到 \(x\) 轴，垂足是 \((3,0)\)，距离 \(4\)。到 \(x\) 轴上的原点 \((0,0)\) 是 \(5\)，比 \(4\) 长。</p>
+  </div>
+
+  <div class="card">
+    <p><b>绝对值</b>：距离不能是负数，公式里会套上绝对值。</p>
+    <p>例：\(|-6|=6\)，\(|6|=6\)。代进去算出 \(-6\) 还是 \(6\)，距离都按 \(6\) 算。</p>
+  </div>
+
+  <h3>2. 两条直线的交点：解方程组</h3>
+  <p>交点同时在两条直线上，所以它的坐标同时满足两个方程。把两个方程联立，解出来的 \((x,y)\) 就是交点。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>求直线 \(2x-y+1=0\) 与 \(x+y-4=0\) 的交点。</p>
+    <p>两式相加，\(y\) 消掉：\(3x-3=0\)，\(x=1\)。代回第二式：\(1+y-4=0\)，\(y=3\)。</p>
+    <p>检验：\((1,3)\) 代进第一式 \(2-3+1=0\)，代进第二式 \(1+3-4=0\)，都成立。交点是 \((1,3)\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：直线 \(x-y-1=0\) 与 \(x+y-5=0\) 的交点是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((3,2)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((2,3)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((3,-2)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((2,1)\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。相加得 \(2x-6=0\)，\(x=3\)；代回 \(3+y-5=0\)，\(y=2\)。选 B 的同学把 \(x\)、\(y\) 写反了；最后代回两个方程检验一下就能发现。</p></div>
+  </div>
+  <div class="key">方程组有唯一解 ⟺ 两直线相交；无解 ⟺ 平行；无穷多解 ⟺ 重合。</div>
+
+  <h3>3. 两点间的距离</h3>
+  <p>点 \(P_1(x_1,y_1)\)、\(P_2(x_2,y_2)\)：横着差 \(|x_2-x_1|\)，竖着差 \(|y_2-y_1|\)，这两段是直角边，\(P_1P_2\) 是斜边。勾股定理给出</p>
+  <div class="key" style="text-align:center">\(|P_1P_2|=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\)</div>
+  <p>平方之后正负号就不要紧了，所以谁减谁都可以。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>\(A(-1,2)\)，\(B(2,-2)\)，求 \(|AB|\)。</p>
+    <p>\(x\) 差 \(2-(-1)=3\)，\(y\) 差 \(-2-2=-4\)。\(|AB|=\sqrt{3^2+(-4)^2}=\sqrt{25}=5\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(M(-2,3)\)，\(N(4,-5)\)，\(|MN|\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(10\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(14\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\sqrt2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(100\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(x\) 差 \(6\)，\(y\) 差 \(-8\)，\(\sqrt{36+64}=10\)。B 是 \(6+8\)，那是沿格子走；C 是把坐标加起来了（\(-2+4\)、\(3-5\)）；D 忘了开方。</p></div>
+  </div>
+
+  <h3>4. 点到直线的距离</h3>
+  <p>点 \(P(x_0,y_0)\) 到直线 \(Ax+By+C=0\)（\(A^2+B^2>0\)）的距离</p>
+  <div class="key" style="text-align:center">\(d=\dfrac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}\)</div>
+  <p>先看特殊的：直线 \(y=2\)，写成 \(0\cdot x+1\cdot y-2=0\)。点 \((3,5)\) 到它的距离一眼看出是 \(5-2=3\)，公式给出 \(\dfrac{|0+5-2|}{\sqrt{0+1}}=3\)，一样。直线斜过来时，分子 \(|Ax_0+By_0+C|\) 还是「代进去差多少」，分母 \(\sqrt{A^2+B^2}\) 把系数的大小除掉。为什么正好是它，见「再深一点」。</p>
+  <div class="card">
+    <p class="small">例 3（公式算一遍，再用垂足验一遍）</p>
+    <p>求点 \(P(2,1)\) 到直线 \(3x+4y+5=0\) 的距离。</p>
+    <p>公式：\(d=\dfrac{|3\cdot2+4\cdot1+5|}{\sqrt{3^2+4^2}}=\dfrac{15}{5}=3\)。</p>
+    <p>验证：过 \(P\) 的垂线沿方向 \((3,4)\)，上面的点是 \((2+3t,\ 1+4t)\)。代进直线：\(3(2+3t)+4(1+4t)+5=15+25t=0\)，\(t=-0.6\)，垂足 \(H(0.2,-1.4)\)。\(|PH|=\sqrt{1.8^2+2.4^2}=\sqrt{9}=3\)，对上了。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：原点到直线 \(3x-4y+10=0\) 的距离是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac25\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{10}{7}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{|0-0+10|}{\sqrt{9+16}}=\dfrac{10}{5}=2\)。B 是除以 \(25\)，忘了开方；C 忘了分母；D 是除以 \(3+4\)。</p></div>
+  </div>
+
+  <h3>5. 两条平行线间的距离</h3>
+  <p>在一条上任取一点，算它到另一条的距离就行。如果两条写成<b>同一组</b> \(A\)、\(B\)：\(Ax+By+C_1=0\) 与 \(Ax+By+C_2=0\)，就有</p>
+  <div class="key" style="text-align:center">\(d=\dfrac{|C_1-C_2|}{\sqrt{A^2+B^2}}\)</div>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>求 \(3x+4y-2=0\) 与 \(6x+8y+1=0\) 间的距离。</p>
+    <p>第二条的 \(A\)、\(B\) 是 \(6\)、\(8\)，先两边除以 \(2\)：\(3x+4y+\dfrac12=0\)。现在 \(A\)、\(B\) 一样了，\(d=\dfrac{|-2-\frac12|}{5}=\dfrac12\)。</p>
+    <p>验证：第一条上取点 \((0,\frac12)\)，到第二条 \(\dfrac{|0+4+1|}{\sqrt{36+64}}=\dfrac{5}{10}=\dfrac12\)。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="A">
+    <p>自己试试：\(x+y-1=0\) 与 \(x+y+3=0\) 间的距离是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\sqrt2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{|-1-3|}{\sqrt{1+1}}=\dfrac4{\sqrt2}=2\sqrt2\)。B 忘了分母；C 是 \(C_1+C_2\) 当成了 \(C_1-C_2\)。</p></div>
+  </div>
+
+  <h3>6. 用之前，查四件事</h3>
+  <ol>
+    <li><b>解的个数对应位置</b>：唯一解相交，无解平行，无穷多解重合。<br><span class="small">反例：\(x+2y-3=0\) 与 \(2x+4y-6=0\) 斜率都是 \(-\dfrac12\)，但第二个就是第一个乘 \(2\)，方程组有无穷多解，两线<b>重合</b>，不是平行。换成 \(2x+4y+1=0\) 才无解、平行。斜率相等只说明「平行或重合」。</span></li>
+    <li><b>点线距离先化一般式</b>：所有项移到一边，再读 \(A\)、\(B\)、\(C\)。<br><span class="small">反例：点 \((1,1)\) 到 \(y=2x+1\)。写成 \(2x-y+1=0\) 得 \(\dfrac{|2-1+1|}{\sqrt5}=\dfrac{2}{\sqrt5}\)。若把 \(B\) 当成 \(+1\)，算出 \(\dfrac{4}{\sqrt5}\)，错了。</span></li>
+    <li><b>\(A^2+B^2>0\)，别漏绝对值</b>：\(A\)、\(B\) 同时为 \(0\) 就不是直线，分母也是 \(0\)。<br><span class="small">反例：\(0x+0y+3=0\) 没有一个点满足，不是直线，没法谈距离。另一个：原点到 \(x+y-2=0\)，代进去是 \(-2\)；不加绝对值得 \(-\sqrt2\)，距离成了负数。正确是 \(\sqrt2\)。</span></li>
+    <li><b>平行线距离先统一系数</b>：两式的 \(A\)、\(B\) 必须一模一样，才能直接减 \(C\)。<br><span class="small">反例：\(x+y+1=0\) 与 \(2x+2y+5=0\)。直接减得 \(\dfrac{|1-5|}{\sqrt2}=2\sqrt2\)，错。先把第二条化成 \(x+y+\dfrac52=0\)，\(d=\dfrac{|1-\frac52|}{\sqrt2}=\dfrac{3\sqrt2}{4}\)。</span></li>
+  </ol>
+  <div class="key">点线距离、平行线距离，都先写成一般式；平行线还要让 \(A\)、\(B\) 相同。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>向量投影法推公式</b>：直线 \(Ax+By+C=0\) 上任取两点 \(Q_1\)、\(Q_2\)，两式相减得 \(A(x_2-x_1)+B(y_2-y_1)=0\)，也就是向量 \(\vec n=(A,B)\) 和直线方向垂直，叫<b>法向量</b>。在直线上取一点 \(Q(x_q,y_q)\)，距离就是 \(\overrightarrow{QP}\) 在 \(\vec n\) 方向上投影的长：</p>
+    <p style="text-align:center">\(d=\dfrac{|\overrightarrow{QP}\cdot\vec n|}{|\vec n|}=\dfrac{|A(x_0-x_q)+B(y_0-y_q)|}{\sqrt{A^2+B^2}}=\dfrac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}\)，</p>
+    <p>最后一步用了 \(Ax_q+By_q=-C\)。</p>
+    <p><b>两种方法比一比</b>：例 3 的验证是坐标法——先求垂线、再求垂足、再用两点距离，每一步都具体，但要解方程、算得多；投影法一步到位，几何意思也清楚：分母 \(\sqrt{A^2+B^2}\) 就是法向量的长。求垂足时用坐标法，只要距离时用公式。</p>
+    <p><b>符号的意思</b>：\(Ax_0+By_0+C\) 不加绝对值时，正负说明点在直线的哪一侧，同侧同号。原点代进 \(x+y-2\) 得负，\((3,3)\) 代进去得正，它们在两侧。</p>
+    <p><b>竖直、水平的线</b>：\(x=a\) 时 \(d=|x_0-a|\)，\(y=b\) 时 \(d=|y_0-b|\)，和公式一致，直接看更快。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖点 P 和直线，看垂足和距离</h3>
+  <p class="small">直线由 \(Q_1\)、\(Q_2\) 两点决定。拖动 \(P\)、\(Q_1\)、\(Q_2\)（或选中后按方向键，每次一格）。金色线是垂线段 \(PH\)。下面用两种方法算距离：点线距离公式、两点距离公式算 \(|PH|\)，看它们是不是一样。</p>
+  <div class="card">
+    <svg class="fig" id="ptl" viewBox="0 0 560 360" role="img" aria-label="坐标纸上一条直线和点 P，显示垂足 H 与垂线段"></svg>
+    <div class="result" id="ptlout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="ptlreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：两条直线，方程组有几个解</h3>
+  <p class="small">绿线 \(L_1\) 过 \(P_1\)、\(P_2\)，赤金线 \(L_2\) 过 \(P_3\)、\(P_4\)，四个点都能拖。相交时给交点；平行时先把系数统一，再算两线距离；重合时说明方程组有无穷多解。用按钮可以直接调成平行或重合。</p>
+  <div class="card">
+    <svg class="fig" id="two" viewBox="0 0 560 360" role="img" aria-label="坐标纸上两条直线，显示交点或平行线间的距离"></svg>
+    <div class="result" id="twoout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="twopar" type="button">让 L₂ 平行于 L₁</button>
+      <button class="btn ghost" id="twosame" type="button">让 L₂ 与 L₁ 重合</button>
+      <button class="btn ghost" id="tworeset" type="button">重置</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 点 \(A(1,2)\) 到直线 \(3x-4y+15=0\) 的距离是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(10\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac25\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{26}{5}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{|3-8+15|}{\sqrt{9+16}}=\dfrac{10}{5}=2\)。B 忘了分母；C 除以 \(25\) 没开方；D 把 \(-4\times2\) 算成了 \(+8\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(A(a,3)\)，\(B(1,-1)\)，\(|AB|=5\)，且 \(a>0\)。\(a\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\) 或 \(-2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((a-1)^2+(3+1)^2=25\)，\((a-1)^2=9\)，\(a=4\) 或 \(a=-2\)。题目说 \(a>0\)，只留 \(4\)。选 C 的同学没看条件；D 是漏了 \(y\) 方向的差，只算了 \(a-1=5\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-same" data-answer="C">
+    <p>3. 直线 \(x-2y+1=0\) 与 \(3x-6y+3=0\) 的位置关系是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>平行</button>
+      <button class="opt" data-v="B"><b>B</b>相交</button>
+      <button class="opt" data-v="C"><b>C</b>重合</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。斜率都是 \(\dfrac12\)，但第二个方程就是第一个乘 \(3\)，方程组有无穷多解，两条线是同一条。选 A 的同学只看了斜率，忘了先排除重合。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-form" data-answer="A">
+    <p>4. 点 \((2,3)\) 到直线 \(y=3x-1\) 的距离是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{\sqrt{10}}{5}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{4\sqrt{10}}{5}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{\sqrt{10}}{2}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。先化一般式 \(3x-y-1=0\)：\(\dfrac{|6-3-1|}{\sqrt{9+1}}=\dfrac{2}{\sqrt{10}}=\dfrac{\sqrt{10}}{5}\)。B 是把 \(B\) 当成了 \(+1\)（\(|6+3-1|=8\)）；C 是漏了 \(y\) 那一项（\(|6-1|=5\)）。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-par" data-answer="C">
+    <p>5. 平行直线 \(x+y+1=0\) 与 \(2x+2y+5=0\) 间的距离是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\sqrt2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{3\sqrt2}{4}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac32\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。系数不一样，不能直接减。第二条除以 \(2\)：\(x+y+\dfrac52=0\)，\(d=\dfrac{|1-\frac52|}{\sqrt2}=\dfrac{3}{2\sqrt2}=\dfrac{3\sqrt2}{4}\)。A 是直接拿 \(1\) 和 \(5\) 相减；B 是相减后除以 \(\sqrt{8}\)；D 忘了分母。也可以在「动手」②里摆出两条平行线看。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 过点 \(P(1,2)\)、并且到原点距离为 \(1\) 的直线有几条？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\) 条</button>
+      <button class="opt" data-v="B"><b>B</b>\(2\) 条</button>
+      <button class="opt" data-v="C"><b>C</b>\(0\) 条</button>
+      <button class="opt" data-v="D"><b>D</b>无数条</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。设斜率 \(k\)：\(y-2=k(x-1)\)，即 \(kx-y+2-k=0\)。\(\dfrac{|2-k|}{\sqrt{k^2+1}}=1\)，平方得 \(4-4k+k^2=k^2+1\)，\(k=\dfrac34\)，直线 \(3x-4y+5=0\)。</p>
+      <p>只得到一条就停的同学（选 A），漏了没有斜率的竖直线 \(x=1\)：它过 \(P\)，到原点距离正好是 \(1\)。设斜率之前，先单独看竖直线。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { onMove(toSvg(fig, e)); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+
+  /* ---------- 坐标纸：两张图共用 ---------- */
+  var OX = 280, OY = 180, U = 40, XM = 6, YM = 4;
+  function sx(x) { return OX + x * U; }
+  function sy(y) { return OY - y * U; }
+  function toGrid(p) { return [clamp(Math.round((p.x - OX) / U) || 0, -XM, XM), clamp(Math.round((OY - p.y) / U) || 0, -YM, YM)]; }
+  function inView(x, y) { return Math.abs(x) <= XM + 0.5 && Math.abs(y) <= YM + 0.5; }
+  function grid(fig, clipId) {
+    var line = css("--line"), muted = css("--muted");
+    var defs = svg("defs", {}, fig), cp = svg("clipPath", { id: clipId }, defs);
+    svg("rect", { x: sx(-XM - 0.5), y: sy(YM + 0.5), width: (2 * XM + 1) * U, height: (2 * YM + 1) * U }, cp);
+    for (var i = -XM; i <= XM; i++) svg("line", { x1: sx(i), y1: sy(YM + 0.5), x2: sx(i), y2: sy(-YM - 0.5), stroke: line }, fig);
+    for (var j = -YM; j <= YM; j++) svg("line", { x1: sx(-XM - 0.5), y1: sy(j), x2: sx(XM + 0.5), y2: sy(j), stroke: line }, fig);
+    svg("line", { x1: sx(-XM - 0.5), y1: OY, x2: sx(XM + 0.5), y2: OY, stroke: muted, "stroke-width": 1.5 }, fig);
+    svg("line", { x1: OX, y1: sy(YM + 0.5), x2: OX, y2: sy(-YM - 0.5), stroke: muted, "stroke-width": 1.5 }, fig);
+    [-4, -2, 2, 4].forEach(function (t) {
+      svg("text", { x: sx(t), y: OY + 20, "text-anchor": "middle", style: "fill:" + muted }, fig).textContent = t;
+    });
+    [-2, 2].forEach(function (t) {
+      svg("text", { x: OX - 6, y: sy(t) + 7, "text-anchor": "end", style: "fill:" + muted }, fig).textContent = t;
+    });
+    svg("text", { x: OX - 6, y: OY + 20, "text-anchor": "end", style: "fill:" + muted }, fig).textContent = "O";
+  }
+  // 过两个整点的直线：Ax+By+C=0，约掉公因数，A>0（或 A=0 时 B>0）
+  function lineOf(p, q) {
+    var A = q[1] - p[1], B = p[0] - q[0], C = q[0] * p[1] - p[0] * q[1];
+    var g = gcd(gcd(A, B), C) || 1;
+    A /= g; B /= g; C /= g;
+    if (A < 0 || (A === 0 && B < 0)) { A = -A; B = -B; C = -C; }
+    return [A, B, C];
+  }
+  function drawLine(fig, L, clipId, color) {
+    var A = L[0], B = L[1], C = L[2], S = A * A + B * B;
+    var x0 = -A * C / S, y0 = -B * C / S, dx = -B / Math.sqrt(S), dy = A / Math.sqrt(S), T = 20;
+    svg("line", { x1: sx(x0 - T * dx), y1: sy(y0 - T * dy), x2: sx(x0 + T * dx), y2: sy(y0 + T * dy),
+      stroke: color, "stroke-width": 3, "clip-path": "url(#" + clipId + ")" }, fig);
+  }
+  function termTex(c, v, first) {
+    if (c === 0) return "";
+    var s = c < 0 ? "-" : (first ? "" : "+"), a = Math.abs(c);
+    return s + (a === 1 && v ? "" : String(a)) + v;
+  }
+  function eqTex(L) {
+    var s = termTex(L[0], "x", true);
+    s += termTex(L[1], "y", s === "");
+    s += termTex(L[2], "", false);
+    return s + "=0";
+  }
+  function fracTex(n, d) {
+    if (d < 0) { n = -n; d = -d; }
+    var g = gcd(n, d) || 1; n /= g; d /= g;
+    if (d === 1) return String(n);
+    return (n < 0 ? "-" : "") + "\\frac{" + Math.abs(n) + "}{" + d + "}";
+  }
+  function rootTex(S) {
+    var r = Math.round(Math.sqrt(S));
+    return r * r === S ? String(r) : "\\sqrt{" + S + "}";
+  }
+  function par(n) { return n < 0 ? "(" + n + ")" : String(n); }
+  function ptTex(p) { return "(" + p[0] + "," + p[1] + ")"; }
+  // 可拖的点：透明大圆接手势和键盘，里面画一个小圆
+  function handle(fig, p, color, label, name, onSet, onEnd) {
+    var card = css("--card"), fg = css("--fg");
+    svg("circle", { cx: sx(p[0]), cy: sy(p[1]), r: 9, fill: card, stroke: color, "stroke-width": 3.5 }, fig);
+    var lx = sx(p[0]) + (p[0] >= XM - 0.5 ? -14 : 14), anc = p[0] >= XM - 0.5 ? "end" : "start";
+    var ly = sy(p[1]) + (p[1] >= YM - 0.5 ? 30 : -12);
+    svg("text", { x: lx, y: ly, "text-anchor": anc, "font-weight": 700, style: "fill:" + fg }, fig).textContent = label;
+    var h = svg("circle", { cx: sx(p[0]), cy: sy(p[1]), r: 20, fill: "transparent", tabindex: 0, role: "slider",
+      "data-key": name, "aria-label": "点 " + label + "，现在在 " + ptTex(p) + "，方向键移动",
+      "aria-valuenow": p[0], "aria-valuetext": ptTex(p), style: "cursor:grab" }, fig);
+    h.addEventListener("keydown", function (ev) {
+      var d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[ev.key];
+      if (!d) return;
+      ev.preventDefault();
+      onSet([clamp(p[0] + d[0], -XM, XM), clamp(p[1] + d[1], -YM, YM)], name);
+      onEnd(name);
+    });
+    draggable(fig, h, function (pt) { onSet(toGrid(pt), name); }, function () { onEnd(name); });
+  }
+  function refocus(fig, key) { if (!key) return; var h = fig.querySelector('[data-key="' + key + '"]'); if (h) h.focus(); }
+  function same(a, b) { return a[0] === b[0] && a[1] === b[1]; }
+
+  /* ================= ① 点到直线 ================= */
+  var ptl = document.getElementById("ptl"), ptlOut = document.getElementById("ptlout");
+  var S1 = {};
+  function ptlReset() { S1 = { P: [2, -2], Q1: [-4, -1], Q2: [2, 2] }; ptlDraw(); }
+  function ptlSet(v, key) {
+    var other = key === "Q1" ? S1.Q2 : key === "Q2" ? S1.Q1 : null;
+    if (other && same(v, other)) return;   // 两点重合定不出直线，不接受
+    if (same(v, S1[key])) return;
+    S1[key] = v; ptlDraw(key);
+  }
+  function ptlEnd(key) { Peiyu.log("interact", { id: "point-line", moved: key, P: S1.P, Q1: S1.Q1, Q2: S1.Q2 }); }
+  function ptlDraw(focusKey) {
+    var a = css("--a"), hl = css("--hl"), cc = css("--c"), fg = css("--fg");
+    var L = lineOf(S1.Q1, S1.Q2), A = L[0], B = L[1], C = L[2], S = A * A + B * B;
+    var x0 = S1.P[0], y0 = S1.P[1], N = A * x0 + B * y0 + C;
+    var d = Math.abs(N) / Math.sqrt(S);
+    var hxN = x0 * S - A * N, hyN = y0 * S - B * N, hx = hxN / S, hy = hyN / S;
+    var ph = Math.sqrt((x0 - hx) * (x0 - hx) + (y0 - hy) * (y0 - hy));
+    ptl.innerHTML = "";
+    grid(ptl, "ptlclip");
+    drawLine(ptl, L, "ptlclip", a);
+    if (N !== 0) {
+      svg("line", { x1: sx(x0), y1: sy(y0), x2: sx(hx), y2: sy(hy), stroke: hl, "stroke-width": 4, "clip-path": "url(#ptlclip)" }, ptl);
+      // 直角记号：沿直线方向 u、沿垂线方向 w（指向 P）
+      var r = Math.sqrt(S), ux = -B / r, uy = A / r, sgn = N > 0 ? 1 : -1, wx = sgn * A / r, wy = sgn * B / r, k = 0.3;
+      if (inView(hx, hy)) {
+        svg("path", { d: "M" + sx(hx + k * ux) + " " + sy(hy + k * uy) + " L" + sx(hx + k * ux + k * wx) + " " + sy(hy + k * uy + k * wy) +
+          " L" + sx(hx + k * wx) + " " + sy(hy + k * wy), fill: "none", stroke: fg, "stroke-width": 1.5 }, ptl);
+        svg("circle", { cx: sx(hx), cy: sy(hy), r: 5, fill: cc }, ptl);
+        svg("text", { x: sx(hx - 0.55 * wx), y: sy(hy - 0.55 * wy) + 7, "text-anchor": "middle", "font-weight": 700, style: "fill:" + cc }, ptl).textContent = "H";
+      }
+    }
+    handle(ptl, S1.Q1, a, "Q₁", "Q1", ptlSet, ptlEnd);
+    handle(ptl, S1.Q2, a, "Q₂", "Q2", ptlSet, ptlEnd);
+    handle(ptl, S1.P, hl, "P", "P", ptlSet, ptlEnd);
+    refocus(ptl, focusKey);
+
+    var lines = [];
+    lines.push("直线过 \\(Q_1" + ptTex(S1.Q1) + "\\)、\\(Q_2" + ptTex(S1.Q2) + "\\)，一般式 \\(" + eqTex(L) + "\\)；点 \\(P" + ptTex(S1.P) + "\\)。");
+    lines.push("公式：\\(d=\\dfrac{|" + A + "\\cdot" + par(x0) + "+" + par(B) + "\\cdot" + par(y0) + "+" + par(C) + "|}{\\sqrt{" + A + "^2+" + par(B) + "^2}}=\\dfrac{" + Math.abs(N) + "}{" + rootTex(S) + "}\\approx " + f2(d) + "\\)");
+    if (N === 0) {
+      lines.push('<span class="eq">\\(P\\) 在直线上</span>：代进去正好是 \\(0\\)，距离 \\(0\\)，垂足就是 \\(P\\) 自己。');
+    } else {
+      lines.push("垂足 \\(H\\left(" + fracTex(hxN, S) + "," + fracTex(hyN, S) + "\\right)\\)" + (inView(hx, hy) ? "" : "（在图外）") +
+        "，两点距离 \\(|PH|=\\sqrt{(x_0-x_H)^2+(y_0-y_H)^2}\\approx " + f2(ph) + "\\)");
+      lines.push(Math.abs(ph - d) < 1e-9 ? '<span class="eq">两种算法一样</span>：公式算的就是垂线段的长。' : '<span class="bad">两种算法不一致</span>');
+    }
+    ptlOut.innerHTML = lines.join("<br>");
+    Peiyu.math(ptlOut);
+  }
+  document.getElementById("ptlreset").onclick = function () { ptlReset(); Peiyu.log("interact", { id: "point-line-reset" }); };
+
+  /* ================= ② 两条直线 ================= */
+  var two = document.getElementById("two"), twoOut = document.getElementById("twoout");
+  var S2 = {};
+  function twoReset() { S2 = { P1: [-5, -2], P2: [3, 2], P3: [-3, 3], P4: [3, -3] }; twoDraw(); }
+  var PAIR = { P1: "P2", P2: "P1", P3: "P4", P4: "P3" };
+  function twoSet(v, key) {
+    if (same(v, S2[PAIR[key]]) || same(v, S2[key])) return;
+    S2[key] = v; twoDraw(key);
+  }
+  function twoEnd(key) { Peiyu.log("interact", { id: "two-lines", moved: key, P1: S2.P1, P2: S2.P2, P3: S2.P3, P4: S2.P4 }); }
+  function onLine(L, p) { return L[0] * p[0] + L[1] * p[1] + L[2] === 0; }
+  function inGrid(p) { return Math.abs(p[0]) <= XM && Math.abs(p[1]) <= YM; }
+  function step(p, q) { var dx = q[0] - p[0], dy = q[1] - p[1], g = gcd(dx, dy) || 1; return [dx / g, dy / g]; }
+  // 让 L2 平行于 L1：找离 P3 最近、不在 L1 上的整点，再沿 L1 的方向走一步放 P4
+  function makeParallel() {
+    var L1 = lineOf(S2.P1, S2.P2), st = step(S2.P1, S2.P2), best = null, bd = 1e9;
+    for (var x = -XM; x <= XM; x++) for (var y = -YM; y <= YM; y++) {
+      var c = [x, y], dd = (x - S2.P3[0]) * (x - S2.P3[0]) + (y - S2.P3[1]) * (y - S2.P3[1]);
+      if (dd >= bd || onLine(L1, c)) continue;
+      for (var k = 1; k <= 12; k++) {
+        var q1 = [x + k * st[0], y + k * st[1]], q2 = [x - k * st[0], y - k * st[1]];
+        var q = inGrid(q1) ? q1 : inGrid(q2) ? q2 : null;
+        if (q) { bd = dd; best = [c, q]; break; }
+      }
+    }
+    if (best) { S2.P3 = best[0]; S2.P4 = best[1]; }
+    twoDraw(); Peiyu.log("interact", { id: "two-lines-parallel" });
+  }
+  // 让 L2 与 L1 重合：在 L1 上另取两个整点，尽量不和 P1、P2 叠在一起
+  function makeSame() {
+    var st = step(S2.P1, S2.P2), pts = [], k;
+    for (k = -12; k <= 12; k++) {
+      var q = [S2.P1[0] + k * st[0], S2.P1[1] + k * st[1]];
+      if (inGrid(q)) pts.push(q);
+    }
+    var free = pts.filter(function (q) { return !same(q, S2.P1) && !same(q, S2.P2); });
+    var pick = free.length >= 2 ? [free[0], free[free.length - 1]] : free.length === 1 ? [free[0], same(free[0], S2.P1) ? S2.P2 : S2.P1] : [S2.P1, S2.P2];
+    if (same(pick[0], pick[1])) pick = [S2.P1, S2.P2];
+    S2.P3 = pick[0]; S2.P4 = pick[1];
+    twoDraw(); Peiyu.log("interact", { id: "two-lines-same" });
+  }
+  function twoDraw(focusKey) {
+    var a = css("--a"), b = css("--b"), hl = css("--hl");
+    var L1 = lineOf(S2.P1, S2.P2), L2 = lineOf(S2.P3, S2.P4);
+    var A1 = L1[0], B1 = L1[1], C1 = L1[2], A2 = L2[0], B2 = L2[1], C2 = L2[2];
+    var D = A1 * B2 - A2 * B1;
+    two.innerHTML = "";
+    grid(two, "twoclip");
+    drawLine(two, L1, "twoclip", a);
+    drawLine(two, L2, "twoclip", b);
+    var lines = ["\\(L_1:\\ " + eqTex(L1) + "\\)，\\(L_2:\\ " + eqTex(L2) + "\\)。"];
+    if (D !== 0) {
+      var xn = B1 * C2 - B2 * C1, yn = A2 * C1 - A1 * C2, ix = xn / D, iy = yn / D;
+      if (inView(ix, iy)) svg("circle", { cx: sx(ix), cy: sy(iy), r: 7, fill: hl }, two);
+      lines.push('<span class="eq">方程组有唯一解 → 相交</span>，交点 \\(\\left(' + fracTex(xn, D) + "," + fracTex(yn, D) + "\\right)\\)" + (inView(ix, iy) ? "。" : "（在图外）。"));
+      if (A1 * A2 + B1 * B2 === 0) lines.push("而且 \\(A_1A_2+B_1B_2=0\\)，两条线互相垂直。");
+    } else if (onLine(L1, S2.P3)) {
+      lines.push('<span class="mid">方程组有无穷多解 → 重合</span>：两个方程约简后一模一样，\\(L_2\\) 上的点都在 \\(L_1\\) 上。');
+    } else {
+      // 平行：把 L2 乘一个数，让 A、B 与 L1 相同（约简后 A、B 本来就一样，这里按原始系数演示）
+      var R2 = [S2.P4[1] - S2.P3[1], S2.P3[0] - S2.P4[0]], r2c = S2.P4[0] * S2.P3[1] - S2.P3[0] * S2.P4[1];
+      var num, den;   // 统一后的 C2' = r2c * (A1/R2A) 或 r2c * (B1/R2B)
+      if (R2[0] !== 0) { num = r2c * A1; den = R2[0]; } else { num = r2c * B1; den = R2[1]; }
+      var S = A1 * A1 + B1 * B1, c2 = num / den, dist = Math.abs(C1 - c2) / Math.sqrt(S);
+      // 公垂线段：从 P1 到 L2 的垂足
+      var n1 = A2 * S2.P1[0] + B2 * S2.P1[1] + C2, s2 = A2 * A2 + B2 * B2;
+      var fx = S2.P1[0] - A2 * n1 / s2, fy = S2.P1[1] - B2 * n1 / s2;
+      svg("line", { x1: sx(S2.P1[0]), y1: sy(S2.P1[1]), x2: sx(fx), y2: sy(fy), stroke: hl, "stroke-width": 4, "stroke-dasharray": "7 5", "clip-path": "url(#twoclip)" }, two);
+      var raw = [R2[0], R2[1], r2c];
+      if (raw[0] < 0 || (raw[0] === 0 && raw[1] < 0)) { raw = [-raw[0], -raw[1], -raw[2]]; }
+      lines.push('<span class="bad">方程组无解 → 平行</span>。由 \\(P_3\\)、\\(P_4\\) 直接写出 \\(L_2\\)：\\(' + eqTex(raw) + "\\)。");
+      lines.push("先化成和 \\(L_1\\) 一样的 \\(A=" + A1 + "\\)、\\(B=" + B1 + "\\)：\\(" + eqTex([A1, B1, 0]).replace("=0", "") + (c2 === 0 ? "" : (c2 > 0 ? "+" : "-") + fracTex(Math.abs(num), Math.abs(den))) + "=0\\)，");
+      lines.push("\\(d=\\dfrac{|C_1-C_2|}{\\sqrt{A^2+B^2}}=\\dfrac{|" + C1 + "-" + (num * den < 0 ? "(" + fracTex(num, den) + ")" : fracTex(num, den)) + "|}{" + rootTex(S) + "}\\approx " + f2(dist) + "\\)。");
+      var chk = Math.abs(n1) / Math.sqrt(s2);
+      lines.push("验证：\\(L_1\\) 上的 \\(P_1" + ptTex(S2.P1) + "\\) 到 \\(L_2\\) 的点线距离 \\(\\approx " + f2(chk) + "\\)" + (Math.abs(chk - dist) < 1e-9 ? "，一样。" : "。"));
+    }
+    handle(two, S2.P1, a, "P₁", "P1", twoSet, twoEnd);
+    handle(two, S2.P2, a, "P₂", "P2", twoSet, twoEnd);
+    handle(two, S2.P3, b, "P₃", "P3", twoSet, twoEnd);
+    handle(two, S2.P4, b, "P₄", "P4", twoSet, twoEnd);
+    refocus(two, focusKey);
+    twoOut.innerHTML = lines.join("<br>");
+    Peiyu.math(twoOut);
+  }
+  document.getElementById("twopar").onclick = makeParallel;
+  document.getElementById("twosame").onclick = makeSame;
+  document.getElementById("tworeset").onclick = function () { twoReset(); Peiyu.log("interact", { id: "two-lines-reset" }); };
+
+  document.addEventListener("DOMContentLoaded", function () { ptlReset(); twoReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ptlDraw(); twoDraw(); });
+})();
+</script>
+</body></html>

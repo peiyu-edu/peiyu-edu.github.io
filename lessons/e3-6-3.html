@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.3 二项式定理 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.2em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .btn.active { background: var(--a); color: #fff; border-color: var(--a); }
+  .ctrl-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin: 8px 0; }
+  .term-pill { display: inline-block; padding: 3px 8px; margin: 2px 4px; border-radius: 6px; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-family: monospace; font-size: 14px; transition: all .15s; }
+  .term-pill:hover { border-color: var(--a); background: var(--ok-soft); }
+  .term-pill.active { border-color: var(--b); background: var(--hl-soft); font-weight: 700; color: var(--fg); }
+  .tri-cell { cursor: pointer; }
+  .tri-cell rect { transition: all .2s; }
+  .tri-cell:hover rect { stroke: var(--a); stroke-width: 2px; }
+  .badge-tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-left: 6px; }
+</style>
+</head>
+<body data-sec="e3-6-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 6 章 计数原理</p>
+<h1>6.3 二项式定理</h1>
+<p class="lead">\((a+b)^2\)、\((a+b)^3\) 初中就会展开。次数变成 \(5\)、\(10\) 时，每一项的系数怎么一下子写出来？这一节用组合数回答，并学会求某一项、常数项和各项系数的和。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>初中我们熟记 \((a+b)^2 = a^2 + 2ab + b^2\) 和 \((a+b)^3 = a^3 + 3a^2b + 3ab^2 + b^3\)。若要展开 \((a+b)^4 = (a+b)(a+b)(a+b)(a+b)\)：</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>在展开多项式 \((a+b)^n\) 时，为什么项 \(a^{n-r}b^r\) 前面的系数恰好等于组合数 \(C_n^r\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>只是古人凑巧归纳出的数字巧合，与排列组合没有内在逻辑关联</button>
+      <button class="opt" data-v="B"><b>B</b>因为展开相当于从 \(n\) 个因式 \((a+b)\) 中各选 1 个字母：选出 \(r\) 个 \(b\)（其余选 \(a\)）的组合数正是 \(C_n^r\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。多项式乘法的本质就是从每一个相乘的括号中任挑一个字母相乘！</p>
+      <p>\((a+b)^n = \underbrace{(a+b)(a+b)\dots(a+b)}_{n \text{ 个因式}}\)。要得到形如 \(a^{n-r}b^r\) 的单项式，必须且只需在其中的 \(r\) 个括号里选字母 \(b\)，而在剩下的 \(n-r\) 个括号里全部选字母 \(a\)。</p>
+      <p>从这 \(n\) 个括号中选出 \(r\) 个括号贡献 \(b\)，选法总数正是从 \(n\) 个不同对象中选 \(r\) 个的组合数 <b>\(C_n^r\)</b>！</p>
+      <p>这一节我们就来系统建立二项式定理、通项公式以及高考秒杀利器——赋值法。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：6.2 的组合数 \(C_n^r\) 和它的算法（<a href="e3-6-2.html">回看 6.2</a>）；初中的完全平方公式、幂的运算 \(x^m\cdot x^k=x^{m+k}\)、\(\dfrac1x=x^{-1}\)。</p>
+
+  <div class="card">
+    <p><b>二项式、展开式</b>：两项相加的式子 \(a+b\) 叫二项式；把 \((a+b)^n\) 乘开、合并同类项后写成的多项式叫它的<b>展开式</b>。</p>
+    <p>例：\((a+b)^2\) 的展开式是 \(a^2+2ab+b^2\)，有 \(3\) 项；\((a+b)^3\) 的展开式有 \(4\) 项。</p>
+  </div>
+
+  <div class="card">
+    <p><b>二项式系数</b>：展开式里每一项前面的组合数 \(C_n^r\)，只和 \(n\)、\(r\) 有关，一定是正整数。</p>
+    <p>例：\((a+b)^3=a^3+3a^2b+3ab^2+b^3\)，四个二项式系数是 \(C_3^0,C_3^1,C_3^2,C_3^3\)，即 \(1,3,3,1\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>项的系数</b>：把 \(a\)、\(b\) 换成具体的式子以后，某一项化简完，字母前面的<b>全部数字</b>（连同正负号）。</p>
+    <p>例：\((x-2)^2=x^2-4x+4\)。中间一项的二项式系数是 \(C_2^1=2\)，项的系数却是 \(-4\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>第几项</b>：展开式按 \(b\) 的次数从 \(0\) 到 \(n\) 排，\(b\) 的次数是 \(r\) 的那一项排在<b>第 \(r+1\) 位</b>。</p>
+    <p>例：\((a+b)^3\) 中，\(3ab^2\) 里 \(b\) 是 \(2\) 次，它是第 \(3\) 项，不是第 \(2\) 项。</p>
+  </div>
+
+  <div class="card">
+    <p><b>常数项</b>：不含 \(x\)（\(x\) 的次数是 \(0\)）的那一项。</p>
+    <p>例：\(\left(x+\dfrac1x\right)^2=x^2+2+\dfrac1{x^2}\)，常数项是 \(2\)。</p>
+  </div>
+
+  <h3>2. 二项式定理和通项</h3>
+  <p>\((a+b)^n\) 是 \(n\) 个 \((a+b)\) 相乘。乘开时，每个括号里挑一个字母（\(a\) 或 \(b\)），挑出来的乘在一起就是一项。挑了 \(r\) 个 \(b\)、其余 \(n-r\) 个 \(a\)，得到 \(a^{n-r}b^r\)；从 \(n\) 个括号里定下哪 \(r\) 个出 \(b\)，有 \(C_n^r\) 种挑法，所以 \(a^{n-r}b^r\) 一共出现 \(C_n^r\) 次。\(r\) 从 \(0\) 取到 \(n\)，就是：</p>
+  <div class="key">二项式定理（\(n\) 是正整数）：
+    $$(a+b)^n=\sum_{r=0}^{n}C_n^r\,a^{n-r}b^r$$
+    $$=C_n^0a^n+C_n^1a^{n-1}b+\cdots+C_n^nb^n$$
+    第 \(r+1\) 项（<b>通项</b>）：
+    $$T_{r+1}=C_n^r\,a^{n-r}b^r\quad(r=0,1,\dots,n)$$
+  </div>
+  <p>看三件事：一共 \(n+1\) 项；每一项 \(a\)、\(b\) 的次数加起来都是 \(n\)；\(a\) 的次数一项项减 \(1\)，\(b\) 的次数一项项加 \(1\)。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>把 \((x-2)^4\) 展开。</p>
+    <p>这里 \(a=x\)，\(b=-2\)（负号跟着 \(b\) 走，整体加括号），\(n=4\)。二项式系数 \(C_4^0,\dots,C_4^4\) 是 \(1,4,6,4,1\)。</p>
+    $$\begin{aligned}(x-2)^4&=x^4+4x^3(-2)+6x^2(-2)^2\\&\quad+4x(-2)^3+(-2)^4\\&=x^4-8x^3+24x^2-32x+16\end{aligned}$$
+    <p>检查：令 \(x=1\)，左边 \((1-2)^4=1\)，右边 \(1-8+24-32+16=1\)，对得上。</p>
+  </div>
+  <div class="card predict" data-id="try-expand" data-answer="A">
+    <p>自己试试：\((1+2x)^5\) 展开式的第 \(3\) 项是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(40x^2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(80x^3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10x^2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(20x^2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。第 \(3\) 项对应 \(r=2\)：\(T_3=C_5^2\cdot1^3\cdot(2x)^2=10\times4x^2=40x^2\)。选 B 是把 \(r\) 取成了 \(3\)（那是第 \(4\) 项）；选 C 是忘了 \(2x\) 里的 \(2\) 也要平方；选 D 是 \(2\) 只乘了一次。</p></div>
+  </div>
+
+  <h3>3. 求指定的项、常数项</h3>
+  <p>问「含 \(x^k\) 的项」「常数项」时，不用全部展开，抓住通项就够了：</p>
+  <div class="key">① 写出通项 \(T_{r+1}\)，负号、分式整体带括号代进去；<br>② 把数字和 \(x\) 分开，\(x\) 的次数合并成一个关于 \(r\) 的式子；<br>③ 让这个次数等于要求的次数（常数项就等于 \(0\)），解出 \(r\)；<br>④ 查 \(r\) 是不是 \(0,1,\dots,n\) 里的整数：是，代回去；不是，这一项不存在。</div>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>求 \(\left(2x-\dfrac1x\right)^6\) 展开式的常数项；问展开式里有没有含 \(x\) 的一次项。</p>
+    <p>① \(a=2x\)，\(b=-\dfrac1x=-x^{-1}\)，\(n=6\)：</p>
+    $$T_{r+1}=C_6^r(2x)^{6-r}\left(-\dfrac1x\right)^r$$
+    <p>② 数字和 \(x\) 分开：</p>
+    $$T_{r+1}=(-1)^r\,2^{6-r}\,C_6^r\cdot x^{6-2r}$$
+    <p>③ 常数项：\(6-2r=0\)，\(r=3\)，是 \(0\) 到 \(6\) 之间的整数。</p>
+    <p>④ 常数项是第 \(4\) 项：\(T_4=(-1)^3\times2^3\times C_6^3=-1\times8\times20=-160\)。</p>
+    <p>一次项：\(6-2r=1\)，\(r=2.5\)，不是整数，所以展开式里<b>没有</b>含 \(x\) 的项（它的系数是 \(0\)）。</p>
+  </div>
+  <div class="card predict" data-id="try-const" data-answer="A">
+    <p>自己试试：\(\left(x-\dfrac{2}{x^2}\right)^6\) 展开式的常数项是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(60\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(15\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-60\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-160\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(T_{r+1}=C_6^r\,x^{6-r}\left(-2x^{-2}\right)^r=(-2)^r C_6^r\,x^{6-3r}\)。令 \(6-3r=0\)，\(r=2\)，常数项 \(=(-2)^2\times C_6^2=4\times15=60\)。选 B 是忘了乘 \((-2)^2\)；选 C 是负号没跟着平方；选 D 是把 \(x^{-2}\) 的 \(r\) 次方算成了 \(x^{-r}\)，次数写成 \(6-2r\)，解出 \(r=3\)。</p></div>
+  </div>
+
+  <h3>4. 二项式系数和项的系数</h3>
+  <p>两个都叫「系数」，意思不一样，题目问哪个就算哪个：</p>
+  <ul>
+    <li><b>二项式系数</b>只是 \(C_n^r\)，和括号里的数字、正负号无关，永远是正的；</li>
+    <li><b>项的系数</b>要把 \(a^{n-r}\)、\(b^r\) 里的数字连同符号都乘进去。</li>
+  </ul>
+  <p>只有 \((x+1)^n\)、\((1+x)^n\) 这种括号里没有别的数字的式子，两者才相同。</p>
+
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>\((3x-2)^4\) 展开式中，含 \(x^2\) 的项的二项式系数和系数各是多少？</p>
+    <p>通项 \(T_{r+1}=C_4^r(3x)^{4-r}(-2)^r\)。要 \(x^2\)：\(4-r=2\)，\(r=2\)。</p>
+    <p>二项式系数：\(C_4^2=6\)。</p>
+    <p>项：\(T_3=6\times(3x)^2\times(-2)^2=6\times9x^2\times4=216x^2\)，系数是 \(216\)。</p>
+    <p>两个数差了 \(36\) 倍，差的正是 \(3^2\times(-2)^2\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：在 \((2x - 1)^5\) 的展开式中，第 3 项的「二项式系数」与该项的「系数」分别是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>二项式系数为 \(10\)，项的系数为 \(80\)</button>
+      <button class="opt" data-v="B"><b>B</b>二项式系数为 \(10\)，项的系数为 \(-80\)</button>
+      <button class="opt" data-v="C"><b>C</b>二项式系数为 \(20\)，项的系数为 \(80\)</button>
+      <button class="opt" data-v="D"><b>D</b>二项式系数为 \(80\)，项的系数为 \(10\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。通项是 \(T_{r+1} = C_5^r (2x)^{5-r}(-1)^r\)，第 3 项对应 \(r=2\)。</p>
+      <p>二项式系数只看组合数：\(C_5^2 = 10\)。</p>
+      <p>项：\(T_3 = 10\times(2x)^3\times(-1)^2 = 80x^3\)，系数 \(80\)，\((-1)^2=1\) 所以是正的。</p>
+      <p>选 B 是把 \((-1)^2\) 的符号算成了负；选 C 是把 \(C_5^2\) 算成了 \(5\times4=20\)，忘了除以 \(2\)；选 D 是把两个词弄反了。</p>
+    </div>
+  </div>
+
+  <h3>5. 杨辉三角和赋值法</h3>
+  <p>把 \(n=0,1,2,\dots\) 的二项式系数一行行排起来，就是<b>杨辉三角</b>：</p>
+  <p style="text-align:center;line-height:1.6">\(1\)<br>\(1\quad1\)<br>\(1\quad2\quad1\)<br>\(1\quad3\quad3\quad1\)<br>\(1\quad4\quad6\quad4\quad1\)<br>\(1\quad5\quad10\quad10\quad5\quad1\)</p>
+  <p>从表里能直接看出：</p>
+  <ul>
+    <li><b>对称</b>：\(C_n^r=C_n^{n-r}\)，离两头一样远的两个数相等；</li>
+    <li><b>肩上两数之和等于脚下的数</b>：\(C_n^{r-1}+C_n^r=C_{n+1}^r\)，如 \(4+6=10\)；</li>
+    <li><b>中间最大</b>：\(n\) 是偶数时正中间一项最大，\(n\) 是奇数时中间两项并列最大；</li>
+    <li><b>每行之和是 \(2^n\)</b>：\(1+4+6+4+1=16=2^4\)。</li>
+  </ul>
+  <p>最后一条是令 \((1+x)^n\) 中 \(x=1\) 得到的。这个办法叫<b>赋值法</b>：展开式对所有 \(x\) 都成立，给 \(x\) 代一个特殊值，各项系数就会以想要的方式加在一起。设 \(f(x)=a_0+a_1x+\cdots+a_nx^n\)：</p>
+  <div class="key">令 \(x=1\)：\(a_0+a_1+\cdots+a_n=f(1)\)（各项系数之和）<br>令 \(x=0\)：\(a_0=f(0)\)（常数项）<br>令 \(x=-1\)：\(a_0-a_1+a_2-\cdots=f(-1)\)<br>偶次项系数和 \(=\dfrac{f(1)+f(-1)}{2}\)，奇次项系数和 \(=\dfrac{f(1)-f(-1)}{2}\)</div>
+  <p>对 \((1+x)^n\) 用 \(x=-1\)，得到 \(C_n^0+C_n^2+\cdots=C_n^1+C_n^3+\cdots=2^{n-1}\)。</p>
+
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>设 \((1-2x)^5=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4+a_5x^5\)。求 ① \(a_0\)；② \(a_1+a_2+\cdots+a_5\)；③ \(a_0+a_2+a_4\)。</p>
+    <p>① 令 \(x=0\)：\(a_0=1^5=1\)。</p>
+    <p>② 令 \(x=1\)：\(a_0+a_1+\cdots+a_5=(1-2)^5=-1\)，减去 \(a_0\)：\(a_1+\cdots+a_5=-1-1=-2\)。</p>
+    <p>③ 令 \(x=-1\)：\(a_0-a_1+a_2-a_3+a_4-a_5=3^5=243\)。和 ② 里的 \(-1\) 相加，奇次项抵消：</p>
+    $$2(a_0+a_2+a_4)=-1+243=242$$
+    <p>所以 \(a_0+a_2+a_4=121\)。</p>
+    <p>核对：展开得 \(1-10x+40x^2-80x^3+80x^4-32x^5\)，\(1+40+80=121\)。</p>
+  </div>
+  <div class="card predict" data-id="try-assign" data-answer="C">
+    <p>自己试试：设 \((2x+1)^4=a_0+a_1x+a_2x^2+a_3x^3+a_4x^4\)，则 \(a_0+a_2+a_4=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(81\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(40\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(41\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(8\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。令 \(x=1\) 得 \(f(1)=3^4=81\)，令 \(x=-1\) 得 \(f(-1)=(-1)^4=1\)。偶次项系数和 \(=\dfrac{81+1}{2}=41\)（展开式是 \(16x^4+32x^3+24x^2+8x+1\)，\(1+24+16=41\)）。选 A 是所有系数都加了；选 B 是用了减号，算成了奇次项系数和；选 D 是套了二项式系数的 \(2^{n-1}\)，可这里问的是项的系数。</p></div>
+  </div>
+
+  <h3>6. 用之前要注意</h3>
+  <ol>
+    <li><b>\(n\) 是正整数</b>，\(r\) 只能取 \(0,1,\dots,n\) 中的整数。<br><span class="small">反例：\((1+x)^{-1}\)、\((1+x)^{\frac12}\) 不能套这个公式；指数方程解出 \(r=2.5\) 或 \(r=7\)（\(n=6\)）时，那一项不存在（例 2）。</span></li>
+    <li><b>第 \(k\) 项对应 \(r=k-1\)</b>。<br><span class="small">反例：\((1+2x)^5\) 的第 \(3\) 项是 \(40x^2\)；代成 \(r=3\) 得到的 \(80x^3\) 是第 \(4\) 项。</span></li>
+    <li><b>二项式系数不等于项的系数</b>。<br><span class="small">反例：\((3x-2)^4\) 中 \(x^2\) 项，二项式系数 \(6\)，系数 \(216\)。</span></li>
+    <li><b>三种「和」不要混</b>：各项系数和令 \(x=1\)；二项式系数和总是 \(2^n\)；奇（偶）次项系数和要 \(x=1\)、\(x=-1\) 两式相加减。<br><span class="small">反例：\((2x-3)^5\) 的各项系数和是 \((2-3)^5=-1\)，二项式系数和是 \(2^5=32\)。</span></li>
+    <li><b>「奇数项」按位置数，「奇次项」按 \(x\) 的次数数</b>，两者不一定是同一批。<br><span class="small">反例：\((x+1)^5\) 的奇数项（第 \(1,3,5\) 项）是 \(x^5,10x^3,5x\)，全是奇次项；换成 \((1+x)^5\)，奇数项是 \(1,10x^2,5x^4\)，全是偶次项。</span></li>
+    <li><b>项的位置跟着 \(a\)、\(b\) 的先后走</b>：\((a+b)^n\) 和 \((b+a)^n\) 展开式顺序相反，「第几项」会不同。<br><span class="small">反例：\((x+1)^3\) 的第 \(2\) 项是 \(3x^2\)，\((1+x)^3\) 的第 \(2\) 项是 \(3x\)。</span></li>
+  </ol>
+  <p class="small">二项式定理也可以用数学归纳法证明，这一节不要求。</p>
+
+  <details class="more"><summary>再深一点（可以先跳过）</summary>
+    <p><b>系数绝对值之和</b>：\((1-2x)^5\) 的 \(|a_0|+|a_1|+\cdots+|a_5|\)，等于 \((1+2x)^5\) 的各项系数和，令 \(x=1\) 得 \(3^5=243\)。</p>
+    <p><b>为什么肩上两数之和等于脚下的数</b>：从 \(n+1\) 个人里选 \(r\) 个，盯住其中一个人甲：选了甲，还要从其余 \(n\) 人里选 \(r-1\) 个，有 \(C_n^{r-1}\) 种；没选甲，从其余 \(n\) 人里选 \(r\) 个，有 \(C_n^r\) 种。两类加起来就是 \(C_{n+1}^r\)。</p>
+    <p><b>系数最大的项</b>不一定是二项式系数最大的那项。\((1+2x)^5\) 的系数是 \(1,10,40,80,80,32\)，最大的是第 \(4\)、\(5\) 项；二项式系数最大的是第 \(3\)、\(4\) 项。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>杨辉三角与二项展开式实时推演实验室</h3>
+  <p class="small">调节指数 \(n\)（1～7，支持键盘 ← / → 调节），实时生成杨辉三角金字塔。点击金字塔数字可高亮展开项；切换赋值开关即刻验证全系数和与交错项：</p>
+
+  <div class="ctrl-bar">
+    <label for="valN">指数 <b>\(n\)</b> = </label>
+    <input type="range" id="valN" min="1" max="7" step="1" value="4">
+    <output id="valNOut" style="font-weight:700;min-width:1.5em">4</output>
+
+    <button type="button" class="btn ghost" id="resetBtn">重置</button>
+  </div>
+
+  <div class="ctrl-bar" style="margin-bottom:12px">
+    <span style="font-size:14px;color:var(--muted)">赋值推演：</span>
+    <button type="button" class="btn ghost active" id="btnModeNorm">常规展开 (x + a)ⁿ</button>
+    <button type="button" class="btn ghost" id="btnModeSum">令 x=1, a=1（系数和 2ⁿ）</button>
+    <button type="button" class="btn ghost" id="btnModeAlt">令 a=-1（交错项 (x - 1)ⁿ）</button>
+  </div>
+
+  <svg class="fig" id="pascalSvg" viewBox="0 0 560 250" role="img" aria-label="杨辉三角金字塔互动演示"></svg>
+
+  <div class="card" style="margin-top:8px">
+    <div style="font-weight:700;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between">
+      <span>完整代数展开式：</span>
+      <span class="badge-tag" style="background:var(--ok-soft);color:var(--a)" id="termCountBadge">共 5 项</span>
+    </div>
+    <div id="expandFormula" style="line-height:2.2"></div>
+  </div>
+
+  <div class="card" id="detailCard" style="background:var(--bg)">
+    <div id="termDetail" class="result" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间两道是最常见的致命陷阱，最后一道是高考综合挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. \((x + 2)^5\) 展开式中 \(x^3\) 项的系数为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(10\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(40\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(80\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(20\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。通项公式为 \(T_{r+1} = C_5^r x^{5-r} 2^r\)。</p>
+      <p>令 \(5 - r = 3 \implies r = 2\)。</p>
+      <p>代入求该项系数：\(C_5^2 \times 2^2 = 10 \times 4 = 40\)。</p>
+      <p>注意区分：该项的「二项式系数」是 \(C_5^2 = 10\)，而「项的系数」是 \(40\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 已知 \((1 + x)^n\) 展开式中所有项的二项式系数之和为 \(128\)，则该展开式共有多少项？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(7\) 项</button>
+      <button class="opt" data-v="B"><b>B</b>\(8\) 项</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\) 项</button>
+      <button class="opt" data-v="D"><b>D</b>\(128\) 项</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。二项式系数之和公式为 \(\sum_{r=0}^n C_n^r = 2^n\)。</p>
+      <p>已知 \(2^n = 128 = 2^7\)，解得 \(n = 7\)。</p>
+      <p>展开式一共有 <b>\(n + 1 = 7 + 1 = 8\) 项</b>！无数考生在此粗心错选 A。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-term" data-answer="B">
+    <p>3. 展开式 \(\left(x - \dfrac{1}{x}\right)^6\) 中的第 4 项为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(20\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-20\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(15x^2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-15x^2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。通项公式为 \(T_{r+1} = C_6^r x^{6-r}\left(-\dfrac{1}{x}\right)^r = (-1)^r C_6^r x^{6-2r}\)。</p>
+      <p><b>易错红线 1</b>：求第 4 项必须代入 <b>\(r = 4 - 1 = 3\)</b>（不是 \(r = 4\)）！</p>
+      <p><b>易错红线 2</b>：负号在奇数次方下必须保留：\((-1)^3 = -1\)。</p>
+      <p>因此第 4 项为 \(T_4 = (-1)^3 C_6^3 x^{6-6} = -1 \times 20 \times 1 = -20\)。漏掉负号就会错选 A。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-assign" data-answer="A">
+    <p>4. 若 \((2x - 3)^5 = a_0 + a_1 x + a_2 x^2 + a_3 x^3 + a_4 x^4 + a_5 x^5\)，则该展开式中「各项系数之和」与「各项二项式系数之和」分别为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>各项系数和为 \(-1\)，二项式系数和为 \(32\)</button>
+      <button class="opt" data-v="B"><b>B</b>各项系数和为 \(32\)，二项式系数和为 \(32\)</button>
+      <button class="opt" data-v="C"><b>C</b>各项系数和为 \(-1\)，二项式系数和为 \(-1\)</button>
+      <button class="opt" data-v="D"><b>D</b>各项系数和为 \(1\)，二项式系数和为 \(32\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。<b>必须严格区分「系数和」与「二项式系数和」</b>：</p>
+      <p>① 求各项系数之和：利用赋值法令 \(x = 1\)，左边为 \((2\times 1 - 3)^5 = (-1)^5 = -1\)，右边恰好是 \(a_0 + a_1 + a_2 + a_3 + a_4 + a_5\)；</p>
+      <p>② 求二项式系数之和：它仅由组合数决定，恒等于 \(C_5^0 + C_5^1 + \dots + C_5^5 = 2^5 = 32\)。</p>
+      <p>两者含义迥然不同，考场上必须先看清题目问的是哪个词！</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-adv-product" data-answer="D">
+    <p>5. 在 \((x - 1)(x + 2)^4\) 的展开式中，\(x^3\) 项的系数为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-8\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(24\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(16\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。双因式相乘，用乘法分配律拆解为两组展开：</p>
+      <p>\((x - 1)(x + 2)^4 = x \cdot (x + 2)^4 - 1 \cdot (x + 2)^4\)。</p>
+      <p>要凑成 \(x^3\) 项，有两种途径：</p>
+      <p>① 前项 \(x \cdot (x + 2)^4\) 中，需要 \((x+2)^4\) 贡献 \(x^2\) 项：对应 \(r=2\)，即 \(C_4^2 x^2 2^2 = 6 \times 4 x^2 = 24x^2\)，乘面前的 \(x\) 得到 \(24x^3\)；</p>
+      <p>② 后项 \(-1 \cdot (x + 2)^4\) 中，需要 \((x+2)^4\) 贡献 \(x^3\) 项：对应 \(r=1\)，即 \(C_4^1 x^3 2^1 = 4 \times 2 x^3 = 8x^3\)，乘面前的 \(-1\) 得到 \(-8x^3\)；</p>
+      <p>合并两处同类项：\(24x^3 - 8x^3 = 16x^3\)，因此系数为 <b>\(16\)</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题正在整理中。选择题点选项自动判对错；填空题写法不同时，看答案自己判。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var nIn = document.getElementById("valN");
+  var nOut = document.getElementById("valNOut");
+  var resetBtn = document.getElementById("resetBtn");
+  var btnNorm = document.getElementById("btnModeNorm");
+  var btnSum = document.getElementById("btnModeSum");
+  var btnAlt = document.getElementById("btnModeAlt");
+  var svg = document.getElementById("pascalSvg");
+  var formulaBox = document.getElementById("expandFormula");
+  var termBadge = document.getElementById("termCountBadge");
+  var detailBox = document.getElementById("termDetail");
+
+  var curMode = "norm"; // "norm" | "sum" | "alt"
+  var selectedK = null;  // 选中的项序号 0..n
+
+  // 计算杨辉三角每行数字
+  function getPascalRow(n) {
+    var row = [1];
+    for (var i = 1; i <= n; i++) {
+      var next = [1];
+      for (var j = 1; j < row.length; j++) {
+        next.push(row[j - 1] + row[j]);
+      }
+      next.push(1);
+      row = next;
+    }
+    return row;
+  }
+
+  function setMode(mode) {
+    curMode = mode;
+    btnNorm.className = "btn ghost" + (mode === "norm" ? " active" : "");
+    btnSum.className = "btn ghost" + (mode === "sum" ? " active" : "");
+    btnAlt.className = "btn ghost" + (mode === "alt" ? " active" : "");
+    render();
+  }
+
+  btnNorm.addEventListener("click", function () { setMode("norm"); });
+  btnSum.addEventListener("click", function () { setMode("sum"); });
+  btnAlt.addEventListener("click", function () { setMode("alt"); });
+
+  function selectTerm(k) {
+    if (selectedK === k) {
+      selectedK = null;
+    } else {
+      selectedK = k;
+    }
+    render();
+  }
+
+  function render() {
+    var n = parseInt(nIn.value, 10) || 4;
+    if (n < 1) n = 1;
+    if (n > 7) n = 7;
+    nIn.value = n;
+    nOut.textContent = n;
+
+    if (selectedK !== null && selectedK > n) {
+      selectedK = null;
+    }
+
+    termBadge.textContent = "共 " + (n + 1) + " 项";
+
+    // 绘制杨辉三角金字塔（0 到 7 行）
+    var svgh = [];
+    var rowH = 28;
+    var baseY = 24;
+    var nodeW = 38;
+    var nodeH = 22;
+    var colGap = 48;
+
+    // 先画当前层与上一层的连接线，直观呈现递推关系
+    if (n >= 1) {
+      var prevY = baseY + (n - 1) * rowH;
+      var curY = baseY + n * rowH;
+      for (var k = 0; k <= n; k++) {
+        var curX = 280 + (k - n / 2) * colGap;
+        // 左肩
+        if (k > 0) {
+          var pLeftX = 280 + ((k - 1) - (n - 1) / 2) * colGap;
+          var isHlLine = (selectedK === k);
+          svgh.push('<line x1="' + pLeftX + '" y1="' + (prevY + 6) + '" x2="' + curX + '" y2="' + (curY - 6) + '" stroke="' + (isHlLine ? 'var(--hl)' : 'var(--line)') + '" stroke-width="' + (isHlLine ? '2.5' : '1') + '"/>');
+        }
+        // 右肩
+        if (k < n) {
+          var pRightX = 280 + (k - (n - 1) / 2) * colGap;
+          var isHlLine2 = (selectedK === k);
+          svgh.push('<line x1="' + pRightX + '" y1="' + (prevY + 6) + '" x2="' + curX + '" y2="' + (curY - 6) + '" stroke="' + (isHlLine2 ? 'var(--hl)' : 'var(--line)') + '" stroke-width="' + (isHlLine2 ? '2.5' : '1') + '"/>');
+        }
+      }
+    }
+
+    // 画所有节点 (r=0..7)
+    for (var r = 0; r <= 7; r++) {
+      var curRow = getPascalRow(r);
+      var curRowY = baseY + r * rowH;
+      var isCurrentLayer = (r === n);
+
+      for (var c = 0; c < curRow.length; c++) {
+        var nodeX = 280 + (c - r / 2) * colGap;
+        var val = curRow[c];
+        var isSelected = (isCurrentLayer && selectedK === c);
+        var isParent = (selectedK !== null && r === n - 1 && (c === selectedK - 1 || c === selectedK));
+
+        var rectFill = "var(--card)";
+        var rectStroke = "var(--line)";
+        var strokeWidth = "1";
+        var textFill = "var(--muted)";
+        var fontWeight = "normal";
+
+        if (isSelected) {
+          rectFill = "var(--hl-soft)";
+          rectStroke = "var(--hl)";
+          strokeWidth = "2.5";
+          textFill = "var(--fg)";
+          fontWeight = "700";
+        } else if (isParent) {
+          rectFill = "var(--ok-soft)";
+          rectStroke = "var(--a)";
+          strokeWidth = "2";
+          textFill = "var(--a)";
+          fontWeight = "700";
+        } else if (isCurrentLayer) {
+          rectFill = "var(--a)";
+          rectStroke = "var(--a)";
+          textFill = "#ffffff";
+          fontWeight = "700";
+        } else if (r < n) {
+          rectFill = "var(--card)";
+          textFill = "var(--fg)";
+        } else {
+          // 下方未到达的行淡化
+          rectFill = "transparent";
+          rectStroke = "var(--line)";
+          textFill = "var(--dim)";
+        }
+
+        var cursorStyle = isCurrentLayer ? 'style="cursor:pointer"' : '';
+        svgh.push('<g class="tri-cell" data-r="' + r + '" data-c="' + c + '" ' + cursorStyle + '>');
+        svgh.push('<rect x="' + (nodeX - nodeW / 2) + '" y="' + (curRowY - nodeH / 2) + '" width="' + nodeW + '" height="' + nodeH + '" rx="4" fill="' + rectFill + '" stroke="' + rectStroke + '" stroke-width="' + strokeWidth + '"/>');
+        svgh.push('<text x="' + nodeX + '" y="' + (curRowY + 4) + '" font-size="11" font-weight="' + fontWeight + '" fill="' + textFill + '" text-anchor="middle">' + val + '</text>');
+        svgh.push('</g>');
+      }
+    }
+
+    svg.innerHTML = svgh.join("");
+
+    // 生成展开式
+    var targetRow = getPascalRow(n);
+    var pills = [];
+
+    for (var i = 0; i <= n; i++) {
+      var coef = targetRow[i];
+      var px = n - i;
+      var py = i;
+      var termHtml = "";
+      var isAct = (selectedK === i);
+
+      if (curMode === "norm") {
+        var txt = "";
+        if (coef !== 1 || (px === 0 && py === 0)) txt += coef;
+        if (px > 0) txt += "x" + (px > 1 ? "<sup>" + px + "</sup>" : "");
+        if (py > 0) txt += "a" + (py > 1 ? "<sup>" + py + "</sup>" : "");
+        termHtml = txt;
+      } else if (curMode === "sum") {
+        // 令 x=1, a=1，直接展示各项组合数数值
+        termHtml = 'C<sub>' + n + '</sub><sup>' + i + '</sup> (' + coef + ')';
+      } else if (curMode === "alt") {
+        // 令 a=-1，交错符号
+        var sign = (i % 2 === 0 ? "+" : "−");
+        if (i === 0) sign = "";
+        var altTxt = (sign ? sign + " " : "");
+        if (coef !== 1 || px === 0) altTxt += coef;
+        if (px > 0) altTxt += "x" + (px > 1 ? "<sup>" + px + "</sup>" : "");
+        termHtml = altTxt;
+      }
+
+      var activeClass = isAct ? " active" : "";
+      pills.push('<span class="term-pill' + activeClass + '" data-k="' + i + '">' + termHtml + '</span>');
+    }
+
+    var prefix = "";
+    if (curMode === "norm") {
+      prefix = '<b>(x + a)<sup>' + n + '</sup></b> = ';
+      formulaBox.innerHTML = prefix + pills.join(" + ");
+    } else if (curMode === "sum") {
+      var sumVal = Math.pow(2, n);
+      prefix = '<b>(1 + 1)<sup>' + n + '</sup></b> = ';
+      formulaBox.innerHTML = prefix + pills.join(" + ") + ' = <b>2<sup>' + n + '</sup> = ' + sumVal + '</b>';
+    } else if (curMode === "alt") {
+      prefix = '<b>(x − 1)<sup>' + n + '</sup></b> = ';
+      formulaBox.innerHTML = prefix + pills.join(" ");
+    }
+
+    // 绑定展开式各项点击
+    var pillEls = formulaBox.querySelectorAll(".term-pill");
+    for (var p = 0; p < pillEls.length; p++) {
+      (function (idx) {
+        pillEls[idx].addEventListener("click", function () {
+          selectTerm(idx);
+        });
+      })(p);
+    }
+
+    // 详细信息面板
+    var maxCoef = Math.max.apply(null, targetRow);
+    var midInfo = "";
+    if (n % 2 === 0) {
+      midInfo = "n 为偶数，中间仅有 1 项最大：C_" + n + "^" + (n / 2) + " = " + maxCoef;
+    } else {
+      var m1 = Math.floor(n / 2);
+      var m2 = m1 + 1;
+      midInfo = "n 为奇数，中间有 2 项并列最大：C_" + n + "^" + m1 + " = C_" + n + "^" + m2 + " = " + maxCoef;
+    }
+
+    if (selectedK !== null) {
+      var k = selectedK;
+      var cVal = targetRow[k];
+      var termName = "第 " + (k + 1) + " 项（T<sub>" + (k + 1) + "</sub>）";
+      var recurrenceText = "";
+      if (n >= 1 && k > 0 && k < n) {
+        var prevR = getPascalRow(n - 1);
+        recurrenceText = '；由肩上两数相加而得：<b>' + prevR[k - 1] + ' + ' + prevR[k] + ' = ' + cVal + '</b>（递推公式 C<sub>n</sub><sup>r</sup> = C<sub>n-1</sub><sup>r-1</sup> + C<sub>n-1</sub><sup>r</sup>）';
+      }
+
+      detailBox.innerHTML = '<b>【已选定】' + termName + '</b><br>' +
+        '• <b>二项式系数</b>：C<sub>' + n + '</sub><sup>' + k + '</sup> = <b>' + cVal + '</b>' + recurrenceText + '<br>' +
+        '• <b>通项公式代入</b>：T<sub>' + (k + 1) + '</sub> = C<sub>' + n + '</sub><sup>' + k + '</sup> · x<sup>' + (n - k) + '</sup> · a<sup>' + k + '</sup><br>' +
+        '• <b>对称性质</b>：与末端第 ' + (n - k + 1) + ' 项（T<sub>' + (n - k + 1) + '</sub>）二项式系数完全对称相等（C<sub>' + n + '</sub><sup>' + k + '</sup> = C<sub>' + n + '</sub><sup>' + (n - k) + '</sup> = ' + cVal + '）。';
+    } else {
+      var sumVal2 = Math.pow(2, n);
+      var halfVal = Math.pow(2, n - 1);
+      if (curMode === "norm") {
+        detailBox.innerHTML = '<b>当前指数 n = ' + n + '</b>（共 <b>' + (n + 1) + ' 项</b>）：<br>' +
+          '• <b>二项式系数列表</b>：' + targetRow.join(", ") + '<br>' +
+          '• <b>极值项分布</b>：' + midInfo + '<br>' +
+          '• <b>提示</b>：点击上方金字塔数字或下方展开项，可高亮查看对应项的通项公式与杨辉三角递推来源。';
+      } else if (curMode === "sum") {
+        detailBox.innerHTML = '<b>赋值法验证全系数之和</b>：<br>' +
+          '• 令 x = 1, a = 1，各项二项式系数总和 = <b>2<sup>' + n + '</sup> = ' + sumVal2 + '</b>；<br>' +
+          '• 奇数项系数和 = 偶数项系数和 = <b>2<sup>' + (n - 1) + '</sup> = ' + halfVal + '</b>。';
+      } else if (curMode === "alt") {
+        detailBox.innerHTML = '<b>赋值法验证交错项与奇偶对称</b>：<br>' +
+          '• 展开式中负号由于 (-1)<sup>r</sup> 随项序交替出现；<br>' +
+          '• 令 x = 1 时，展开式为 (1 - 1)<sup>' + n + '</sup> = 0，从而严格证明奇数项系数和与偶数项系数和完全抵消相等！';
+      }
+    }
+  }
+
+  // 点击 SVG 节点
+  svg.addEventListener("click", function (e) {
+    var cell = e.target && e.target.closest ? e.target.closest(".tri-cell") : null;
+    if (!cell) return;
+    var r = parseInt(cell.getAttribute("data-r"), 10);
+    var c = parseInt(cell.getAttribute("data-c"), 10);
+    var n = parseInt(nIn.value, 10) || 4;
+    if (r === n) {
+      selectTerm(c);
+    }
+  });
+
+  // 滑块输入
+  nIn.addEventListener("input", function () {
+    selectedK = null;
+    render();
+  });
+
+  // 重置
+  resetBtn.addEventListener("click", function () {
+    nIn.value = 4;
+    curMode = "norm";
+    selectedK = null;
+    btnNorm.className = "btn ghost active";
+    btnSum.className = "btn ghost";
+    btnAlt.className = "btn ghost";
+    render();
+  });
+
+  // 键盘左右方向键调节 n（极端值不报错）
+  window.addEventListener("keydown", function (e) {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON") && e.target.id !== "valN") return;
+    if (e.key === "ArrowLeft") {
+      var cur = parseInt(nIn.value, 10) || 4;
+      if (cur > 1) {
+        nIn.value = cur - 1;
+        selectedK = null;
+        render();
+      }
+    } else if (e.key === "ArrowRight") {
+      var cur2 = parseInt(nIn.value, 10) || 4;
+      if (cur2 < 7) {
+        nIn.value = cur2 + 1;
+        selectedK = null;
+        render();
+      }
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

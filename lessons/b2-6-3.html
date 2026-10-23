@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.3 平面向量基本定理及坐标表示 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig { width: 100%; height: auto; touch-action: none; user-select: none; display: block; }
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .grid { stroke: var(--line); stroke-width: 0.8; stroke-dasharray: 2 2; }
+  .fig text.num { font-size: 13px; fill: var(--muted); text-anchor: middle; font-family: -apple-system, sans-serif; }
+  .fig text.axis-lab { font-size: 15px; font-weight: 700; fill: var(--fg); font-style: italic; }
+  .fig .h { cursor: grab; outline: none; transition: r 0.15s; }
+  .fig .h:hover { r: 12px; }
+  .fig .h:focus-visible { stroke: var(--hl); stroke-width: 4px; }
+  .fig .hit { fill: transparent; cursor: grab; }
+  .fig .vec-a { stroke: var(--a); stroke-width: 3.5; stroke-linecap: round; }
+  .fig .vec-b { stroke: var(--b); stroke-width: 3.5; stroke-linecap: round; }
+  .fig .vec-sum { stroke: var(--c); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 3; }
+  .fig .para-line { stroke: var(--dim); stroke-width: 1.2; stroke-dasharray: 4 4; fill: none; }
+  
+  .ctrl-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; align-items: center; }
+  .ctrl-bar .btn { font-size: 14px; padding: 6px 12px; }
+  
+  .readout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 12px 0; }
+  .stat-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; background: var(--bg); }
+  .stat-card .title { font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .stat-card .val { font-size: 15px; font-weight: 700; line-height: 1.6; }
+  
+  .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0 6px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; border: 1px solid var(--line); color: var(--muted); background: var(--card); }
+  .badge.on-collinear { border-color: var(--b); color: var(--b); background: var(--hl-soft); }
+  .badge.on-perp { border-color: var(--a); color: var(--a); background: var(--ok-soft); }
+  .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  
+  .calc-detail { font-size: 15px; line-height: 1.8; margin-top: 6px; padding: 8px 12px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--line); }
+  .calc-detail.hit-collinear { border-left-color: var(--b); }
+  .calc-detail.hit-perp { border-left-color: var(--a); }
+  
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-6-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 6 章 平面向量及其应用</p>
+<h1>6.3 平面向量基本定理及坐标表示</h1>
+<p class="lead">给平面挑两个不共线的基准向量，任何向量都能被唯一分解；选单位正交基底，几何图形就彻底变成了有序数对——从此向量加减、求模、判定平行和垂直，全都可以由代数坐标代刀代劳。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>方格棋盘上，巡检无人机停在基准点 \(O(0,0)\)。它接收两种基础位移指令：</p>
+  <ul>
+    <li>指令 \(\boldsymbol{e}_1\)：向东平移 \(1\) 格；</li>
+    <li>指令 \(\boldsymbol{e}_2\)：向北平移 \(1\) 格。</li>
+  </ul>
+  <p>现在目标设备在点 \(P\)（位于 \(O\) 点以东 \(4\) 格、以北 \(3\) 格）。怎样下达位移指令能让无人机准确抵达 \(P\)？</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>下面四种指令组合，哪一种能使无人机从 \(O\) 抵达 \(P\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>向东 \(3\) 格，向北 \(4\) 格</button>
+      <button class="opt" data-v="B"><b>B</b>向东 \(4\) 格，向北 \(3\) 格（即 \(4\boldsymbol{e}_1 + 3\boldsymbol{e}_2\)）</button>
+      <button class="opt" data-v="C"><b>C</b>必须直飞，用这两个方向无法合成</button>
+      <button class="opt" data-v="D"><b>D</b>走法很多，对应的指令实数对不唯一</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。向东 \(4\) 步加上向北 \(3\) 步，合位移就是 \(4\boldsymbol{e}_1 + 3\boldsymbol{e}_2\)。而且只要目标位置 \(P\) 确定，这组步数 \((4, 3)\) 是<b>有且仅有一组</b>的。</p>
+      <p>更巧妙的是：只要两个基准方向<b>不共线</b>（哪怕不是正东和正北，而是斜着交叉），平面上的任何一个点、任何一条向量，都能用它们唯一地表示出来！</p>
+      <p>这就是<b>平面向量基本定理</b>。借由这个定理，几何里的线段和夹角，就化作了一目了然的代数坐标。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：向量加法的平行四边形法则、数乘向量与数量积（<a href="b2-6-2.html">回看 6.2</a>）；初中平面直角坐标系与勾股定理。</p>
+
+  <div class="card">
+    <p><b>基底与基向量</b>：同一平面内<b>两个不共线</b>的向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\) 叫作该平面的一组<b>基底</b>，\(\boldsymbol{e}_1, \boldsymbol{e}_2\) 叫作<b>基向量</b>。基向量绝不能共线，也不能是零向量。</p>
+    <p>例：向东 \(1\) 格的 \(\boldsymbol{e}_1\) 与向北 \(1\) 格的 \(\boldsymbol{e}_2\) 不共线，是一组基底；而 \((1, 0)\) 与 \((2, 0)\) 在同一直线上（共线），不能当基底。</p>
+  </div>
+
+  <div class="card">
+    <p><b>线性表示（分解）</b>：把平面内的任意向量 \(\boldsymbol{a}\) 写成基向量数乘相加的形式：\(\boldsymbol{a} = \lambda_1\boldsymbol{e}_1 + \lambda_2\boldsymbol{e}_2\)。实数对 \((\lambda_1, \lambda_2)\) 是唯一确定的。</p>
+    <p>例：\(\boldsymbol{a} = 3\boldsymbol{e}_1 - 2\boldsymbol{e}_2\)；若 \(\boldsymbol{a}\) 是零向量 \(\boldsymbol{0}\)，则对应唯一的一对实数 \((0, 0)\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>单位正交基底</b>：长度都为 \(1\)（单位）、夹角为 \(90^\circ\)（正交、互相垂直）的两个基向量，通常记为 \(\boldsymbol{i}, \boldsymbol{j}\)。直角坐标系就是建立在单位正交基底之上的。</p>
+    <p>例：平面直角坐标系中，\(x\) 轴正方向的单位向量 \(\boldsymbol{i}=(1,0)\) 与 \(y\) 轴正方向的单位向量 \(\boldsymbol{j}=(0,1)\) 是标准的单位正交基底。</p>
+  </div>
+
+  <div class="card">
+    <p><b>向量的坐标</b>：在单位正交基底下，若 \(\boldsymbol{a} = x\boldsymbol{i} + y\boldsymbol{j}\)，有序实数对 \((x, y)\) 就叫向量 \(\boldsymbol{a}\) 的坐标，记作 \(\boldsymbol{a} = (x, y)\)。</p>
+    <p>例：起点在原点 \(O(0,0)\)、终点在 \(P(3, 4)\) 的向量 \(\vec{OP}\)，坐标就是 \((3, 4)\)。</p>
+  </div>
+
+  <h3>2. 平面向量基本定理</h3>
+  <p>只要在平面内选定两个不共线的基准向量，任何向量都能用它们拼出来，而且拼法唯一：</p>
+  <div class="key" style="text-align:center">如果 \(\boldsymbol{e}_1, \boldsymbol{e}_2\) 是同一平面内的两个<b>不共线向量</b>，那么对于这一平面内的任一向量 \(\boldsymbol{a}\)，<b>有且只有一对</b>实数 \(\lambda_1, \lambda_2\)，使<br>\[\boldsymbol{a} = \lambda_1\boldsymbol{e}_1 + \lambda_2\boldsymbol{e}_2\]</div>
+  <p><b>为什么存在且唯一</b>：过向量 \(\boldsymbol{a}\) 的终点分别作基向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\) 所在直线的平行线。因为两基底不共线（两直线相交），这两条平行线必分别与两基底所在直线交于唯一的一点，由平行四边形法则，即可唯一分解出两个分量 \(\lambda_1\boldsymbol{e}_1\) 与 \(\lambda_2\boldsymbol{e}_2\)。</p>
+
+  <div class="card">
+    <p class="small">例 1（基底表示）</p>
+    <p>平行四边形 \(ABCD\) 中，对角线交于点 \(O\)，设 \(\vec{AB} = \boldsymbol{a}, \vec{AD} = \boldsymbol{b}\)。试用基底 \(\{\boldsymbol{a}, \boldsymbol{b}\}\) 表示：</p>
+    <p>(1) 对角线向量 \(\vec{AC}\)；(2) 向量 \(\vec{AO}\)；(3) 若 \(M\) 是边 \(BC\) 的中点，表示向量 \(\vec{AM}\)。</p>
+    <p><b>解</b>：</p>
+    <p>(1) 由平行四边形法则，\(\vec{AC} = \vec{AB} + \vec{AD} = \boldsymbol{a} + \boldsymbol{b}\)；</p>
+    <p>(2) 对角线互相平分，\(O\) 是 \(AC\) 中点，故 \(\vec{AO} = \dfrac{1}{2}\vec{AC} = \dfrac{1}{2}\boldsymbol{a} + \dfrac{1}{2}\boldsymbol{b}\)；</p>
+    <p>(3) \(\vec{AM} = \vec{AB} + \vec{BM} = \vec{AB} + \dfrac{1}{2}\vec{BC} = \boldsymbol{a} + \dfrac{1}{2}\boldsymbol{b}\)。（因为 \(\vec{BC}=\vec{AD}=\boldsymbol{b}\)）</p>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：在 \(\triangle ABC\) 中，点 \(D\) 是 \(BC\) 边上的中点。若设 \(\vec{AB} = \boldsymbol{c}, \vec{AC} = \boldsymbol{b}\)，则中线向量 \(\vec{AD} =\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{2}\boldsymbol{b} + \dfrac{1}{2}\boldsymbol{c}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\boldsymbol{b} + \boldsymbol{c}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{1}{2}\boldsymbol{b} - \dfrac{1}{2}\boldsymbol{c}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\boldsymbol{c} - \dfrac{1}{2}\boldsymbol{b}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。因为 \(D\) 是中点，\(\vec{AD} = \vec{AB} + \vec{BD} = \boldsymbol{c} + \dfrac{1}{2}(\boldsymbol{b}-\boldsymbol{c}) = \dfrac{1}{2}\boldsymbol{b} + \dfrac{1}{2}\boldsymbol{c}\)。也可以看作以 \(AB, AC\) 为邻边的平行四边形对角线的一半。选 B 的同学漏除了 \(2\)；选 C 的正负号搞反了。</p></div>
+  </div>
+
+  <h3>3. 向量的坐标表示与运算</h3>
+  <p>在平面直角坐标系中，设单位正交基底为 \(\boldsymbol{i}, \boldsymbol{j}\)。向量 \(\boldsymbol{a} = (x_1, y_1), \boldsymbol{b} = (x_2, y_2)\)：</p>
+  <ul>
+    <li><b>加减法</b>：横横相加减，纵纵相加减。<br>\(\boldsymbol{a} + \boldsymbol{b} = (x_1 + x_2, y_1 + y_2)\)，\(\boldsymbol{a} - \boldsymbol{b} = (x_1 - x_2, y_1 - y_2)\)。</li>
+    <li><b>数乘</b>：实数乘进每个坐标。<br>\(\lambda\boldsymbol{a} = (\lambda x_1, \lambda y_1)\)。</li>
+    <li><b>终点坐标减起点坐标</b>：若点 \(A(x_1, y_1), B(x_2, y_2)\)，则向量<br>\(\vec{AB} = \vec{OB} - \vec{OA} = (x_2 - x_1, y_2 - y_1)\)。</li>
+    <li><b>模长公式</b>（由勾股定理）：<br>\(|\boldsymbol{a}| = \sqrt{x_1^2 + y_1^2}\)；两点间距离 \(|AB| = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}\)。</li>
+  </ul>
+
+  <div class="card">
+    <p class="small">例 2（坐标运算与模长）</p>
+    <p>已知点 \(A(1, 2), B(4, 6)\)，向量 \(\boldsymbol{c} = (-1, 3)\)。</p>
+    <p>(1) 求向量 \(\vec{AB}\) 的坐标及其模长 \(|\vec{AB}|\)；<br>(2) 求 \(2\vec{AB} - 3\boldsymbol{c}\) 的坐标。</p>
+    <p><b>解</b>：</p>
+    <p>(1) 终点减起点：\(\vec{AB} = (4-1, 6-2) = (3, 4)\)；模长 \(|\vec{AB}| = \sqrt{3^2 + 4^2} = 5\)。</p>
+    <p>(2) \(2\vec{AB} = 2(3, 4) = (6, 8)\)，\(3\boldsymbol{c} = 3(-1, 3) = (-3, 9)\)，<br>故 \(2\vec{AB} - 3\boldsymbol{c} = (6 - (-3), 8 - 9) = (9, -1)\)。</p>
+  </div>
+
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：已知向量 \(\boldsymbol{a} = (2, -1), \boldsymbol{b} = (-3, 4)\)，则向量 \(2\boldsymbol{a} + \boldsymbol{b}\) 的模长等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\sqrt{5}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\sqrt{13}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。先算坐标：\(2\boldsymbol{a} = (4, -2)\)，\(2\boldsymbol{a} + \boldsymbol{b} = (4 + (-3), -2 + 4) = (1, 2)\)。再算模长：\(\sqrt{1^2 + 2^2} = \sqrt{5}\)。选 C 的同学直接把两向量模长相加了（模长不满足 \(|2\boldsymbol{a}+\boldsymbol{b}|=2|\boldsymbol{a}|+|\boldsymbol{b}|\)）；选 B 的把横纵坐标算错了。</p></div>
+  </div>
+
+  <h3>4. 数量积、垂直与共线的坐标公式</h3>
+  <p>设 \(\boldsymbol{a} = (x_1, y_1), \boldsymbol{b} = (x_2, y_2)\)。由于单位正交基底满足 \(\boldsymbol{i}\cdot\boldsymbol{i} = 1\)，\(\boldsymbol{j}\cdot\boldsymbol{j} = 1\)，而 \(\boldsymbol{i}\cdot\boldsymbol{j} = 0\)（互相垂直积为 0）：</p>
+  <div class="key" style="text-align:center">数量积坐标公式：\(\boldsymbol{a}\cdot\boldsymbol{b} = x_1x_2 + y_1y_2\)</div>
+  <p>从数量积出发，立刻得到几何位置关系的坐标判定：</p>
+  <ul>
+    <li><b>垂直充要条件</b>：\(\boldsymbol{a}\perp\boldsymbol{b} \iff x_1x_2 + y_1y_2 = 0\)。</li>
+    <li><b>共线充要条件</b>：\(\boldsymbol{a}\parallel\boldsymbol{b} \iff x_1y_2 - x_2y_1 = 0\)（主对角乘积减副对角乘积，<b>交叉相乘之差</b>）。</li>
+  </ul>
+
+  <div class="card">
+    <p class="small">例 3（位置关系判定）</p>
+    <p>已知向量 \(\boldsymbol{a} = (1, 2), \boldsymbol{b} = (m, -4)\)。</p>
+    <p>(1) 若 \(\boldsymbol{a}\parallel\boldsymbol{b}\)，求实数 \(m\)；<br>(2) 若 \(\boldsymbol{a}\perp\boldsymbol{b}\)，求实数 \(m\)。</p>
+    <p><b>解</b>：</p>
+    <p>(1) \(\boldsymbol{a}\parallel\boldsymbol{b} \iff 1\times(-4) - 2\times m = 0 \implies -4 - 2m = 0 \implies m = -2\)；</p>
+    <p>(2) \(\boldsymbol{a}\perp\boldsymbol{b} \iff 1\times m + 2\times(-4) = 0 \implies m - 8 = 0 \implies m = 8\)。</p>
+  </div>
+
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：已知向量 \(\boldsymbol{a} = (3, 4), \boldsymbol{b} = (x, -6)\)。若 \(\boldsymbol{a}\parallel\boldsymbol{b}\)，则 \(x\) 的值为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(8\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{9}{2}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{9}{2}\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。套用共线公式 \(x_1y_2 - x_2y_1 = 0\)：\(3\times(-6) - 4\times x = 0 \implies -18 - 4x = 0 \implies x = -\dfrac{9}{2}\)。选 A 的同学误用了垂直公式 \(3x + 4(-6) = 0\)；选 D 的算漏了负号。</p></div>
+  </div>
+
+  <h3>5. 用之前，查三条红线</h3>
+  <p>公式虽然整齐，但有三处极其容易踩坑的边界：</p>
+  <ol>
+    <li><b>共线判定决不能直接作除法</b>：<br>很多同学喜欢记「坐标成比例 \(\dfrac{x_1}{x_2} = \dfrac{y_1}{y_2}\)」。但一旦遇到分母为 \(0\)，除法立即崩溃！<br><span class="small">反例：\(\boldsymbol{a}=(0, 2)\) 与 \(\boldsymbol{b}=(0, 4)\) 都在 \(y\) 轴上，显然共线。但若写成 \(\dfrac{0}{0}=\dfrac{2}{4}\) 完全无意义；而用交叉相乘 \(0\times 4 - 2\times 0 = 0\)，永远正确且不会漏解。</span></li>
+    <li><b>斜基底绝不能套勾股公式和点积公式</b>：<br>模长公式 \(|\boldsymbol{a}| = \sqrt{x^2+y^2}\) 和数量积 \(x_1x_2+y_1y_2\) 严格建立在<b>单位正交基底</b>上。<br><span class="small">反例：若基底 \(|\boldsymbol{e}_1|=1, |\boldsymbol{e}_2|=1\)，夹角为 \(60^\circ\)（斜基底）。向量 \(\boldsymbol{a} = \boldsymbol{e}_1 + \boldsymbol{e}_2\) 的系数是 \((1, 1)\)。若误套直角坐标勾股得模长 \(\sqrt{1^2+1^2} = \sqrt{2}\)；但真实模长是 \(\sqrt{|\boldsymbol{e}_1|^2 + 2\boldsymbol{e}_1\cdot\boldsymbol{e}_2 + |\boldsymbol{e}_2|^2} = \sqrt{1 + 2\cos 60^\circ + 1} = \sqrt{3}\)！在斜基底下必须老老实实用数量积展开。</span></li>
+    <li><b>向量共线不等于直线平行</b>：<br>两向量共线 \(\vec{AB}\parallel\vec{CD}\)，反映在几何直线上可能是<b>平行</b>，也可能是<b>重合</b>。<br><span class="small">反例：若 \(\vec{AB}\parallel\vec{AC}\)，两向量有公共点 \(A\)，此时直线 \(AB\) 与 \(AC\) 重合，即 \(A, B, C\) 三点共线，而不是两条平行线。</span></li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么共线是交叉相乘之差</b>：在解析几何与线性代数中，二阶行列式 \(\begin{vmatrix}x_1 & y_1\\ x_2 & y_2\end{vmatrix} = x_1y_2 - x_2y_1\) 的绝对值，正是以 \(\boldsymbol{a}, \boldsymbol{b}\) 为邻边的平行四边形的<b>有向面积</b>。面积等于 \(0\)，意味着平行四边形被压成了一条线段，两向量自然共线。</p>
+    <p><b>向量三点共线定理</b>：若点 \(P\) 在直线 \(AB\) 上，且 \(O\) 是直线外一点，则必有 \(\vec{OP} = \lambda\vec{OA} + \mu\vec{OB}\)，且实数满足 \(\lambda + \mu = 1\)。当 \(\lambda, \mu &gt; 0\) 时，\(P\) 在线段 \(AB\) 内部；一正一负时，\(P\) 在线段 \(AB\) 的延长线上。</p>
+    <p><b>物理里的正交分解</b>：力学分析中把重力分解为沿斜面方向和垂直斜面方向，本质上就是选取了一组适合问题对称性的单位正交基底，从而让各个方向的代数方程互不干扰。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 基础：平面直角坐标系中的双向量与判定器</h3>
+  <p class="small">拖动墨绿点 \(A(x_1, y_1)\) 改变向量 \(\boldsymbol{a}\)，拖动赤金点 \(B(x_2, y_2)\) 改变向量 \(\boldsymbol{b}\)。观察下方坐标、模长、数量积与判定式徽章的实时计算。键盘操作：Tab 选中端点，方向键每次移动 \(1\) 个单位。</p>
+  <div class="card">
+    <svg class="fig" id="fig" viewBox="0 0 560 380" role="img" aria-label="平面直角坐标系，可拖动端点 A 和 B 观察两个向量的坐标运算、共线判定与垂直判定"></svg>
+    <div class="ctrl-bar">
+      <button class="btn ghost" id="reset" type="button">重置</button>
+      <button class="btn ghost" id="preset-perp" type="button">垂直示例 (3,2) 与 (-2,3)</button>
+      <button class="btn ghost" id="preset-collinear" type="button">共线示例 (2,1) 与 (4,2)</button>
+      <button class="btn ghost" id="preset-zero" type="button">零坐标共线 (0,3) 与 (0,-2)</button>
+    </div>
+
+    <div class="readout-grid">
+      <div class="stat-card">
+        <div class="title" style="color:var(--a);">向量 \(\boldsymbol{a}\)（墨绿）</div>
+        <div class="val" id="stat-a">坐标：(3, 2)，模长：\(\sqrt{13} \approx 3.61\)</div>
+      </div>
+      <div class="stat-card">
+        <div class="title" style="color:var(--b);">向量 \(\boldsymbol{b}\)（赤金）</div>
+        <div class="val" id="stat-b">坐标：(-2, 3)，模长：\(\sqrt{13} \approx 3.61\)</div>
+      </div>
+      <div class="stat-card">
+        <div class="title">数量积 \(\boldsymbol{a}\cdot\boldsymbol{b}\)</div>
+        <div class="val" id="stat-dot">\(x_1x_2 + y_1y_2 = 0\)</div>
+      </div>
+    </div>
+
+    <div class="badge-row">
+      <div class="badge" id="badge-perp"><span class="dot"></span><span id="txt-perp">垂直判定：垂直 \(\boldsymbol{a}\perp\boldsymbol{b}\)</span></div>
+      <div class="badge" id="badge-collinear"><span class="dot"></span><span id="txt-collinear">共线判定：不共线（可作基底）</span></div>
+    </div>
+
+    <div class="calc-detail" id="calc-collinear-detail">共线判定式：\(x_1y_2 - x_2y_1 = 3\times 3 - (-2)\times 2 = 9 - (-4) = 13 \ne 0\)</div>
+    <div class="calc-detail" id="calc-perp-detail">垂直判定式：\(x_1x_2 + y_1y_2 = 3\times(-2) + 2\times 3 = -6 + 6 = 0\)</div>
+  </div>
+
+  <h3>② 进阶：斜基底 vs 直角基底（为什么斜基底不能套勾股？）</h3>
+  <p class="small">设单位基底 \(|\boldsymbol{e}_1|=1, |\boldsymbol{e}_2|=1\)，夹角为 \(\theta\)。观察合成向量 \(\boldsymbol{v} = 2\boldsymbol{e}_1 + 2\boldsymbol{e}_2\) 的<b>真实模长</b>与<b>误套直角坐标勾股公式算出的假模长</b>。拖动滑块改变夹角 \(\theta\)：</p>
+  <div class="card">
+    <svg class="fig" id="fig-oblique" viewBox="0 0 560 250" role="img" aria-label="斜基底向量分解示意图，显示夹角 theta 对合成向量模长的影响"></svg>
+    <div class="ctrl-bar">
+      <label for="range-theta" style="font-size:14px; font-weight:600;">基底夹角 \(\theta\)：</label>
+      <input type="range" id="range-theta" min="30" max="150" step="1" value="60" style="flex:1; min-width:140px;">
+      <output id="theta-val" style="min-width:3.5em; font-weight:700;">60°</output>
+      <button class="btn ghost" id="reset-oblique" type="button">重置夹角</button>
+    </div>
+    <div class="readout-grid">
+      <div class="stat-card">
+        <div class="title">真实模长 \(|\boldsymbol{v}|\)（余弦数量积求模）</div>
+        <div class="val" id="stat-real-len">\(\sqrt{8 + 8\cos 60^\circ} = \sqrt{12} \approx 3.46\)</div>
+      </div>
+      <div class="stat-card">
+        <div class="title">误套直角勾股算出的假模长</div>
+        <div class="val" style="color:var(--no);">\(\sqrt{2^2 + 2^2} = \sqrt{8} \approx 2.83\)</div>
+      </div>
+    </div>
+    <p class="small" id="oblique-verdict" style="margin:6px 0 2px; font-weight:600;"></p>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是专题卡里的高频边界，最后一道是综合挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 已知点 \(A(-1, 2), B(2, 6)\)，则向量 \(\vec{AB}\) 的模长 \(|\vec{AB}|\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{17}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(25\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。由终点减起点得 \(\vec{AB} = (2 - (-1), 6 - 2) = (3, 4)\)。由模长公式：\(|\vec{AB}| = \sqrt{3^2 + 4^2} = \sqrt{25} = 5\)。选 C 的同学横坐标忘了减去负号（误算成了 \(2 - 1 = 1\)）；选 D 的同学忘了开平方。</p></div>
+  </div>
+
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 已知向量 \(\boldsymbol{a} = (2, 3), \boldsymbol{b} = (-6, x)\)。若 \(\boldsymbol{a}\perp\boldsymbol{b}\)，则实数 \(x =\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-9\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(9\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。两非零向量垂直充要条件是数量积为 \(0\)：\(\boldsymbol{a}\perp\boldsymbol{b} \iff x_1x_2 + y_1y_2 = 0\)。代入得 \(2\times(-6) + 3\times x = 0 \implies -12 + 3x = 0 \implies x = 4\)。选 A 的同学混淆了共线与垂直公式（误算了 \(2x - 3(-6) = 0\)）；选 C 的符号算错。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-zero" data-answer="B">
+    <p>3. 已知向量 \(\boldsymbol{a} = (0, 3)\) 与 \(\boldsymbol{b} = (m, -6)\) 共线，则实数 \(m =\)？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>无法求解，因为横坐标为 \(0\) 不能作除法分母</button>
+      <button class="opt" data-v="B"><b>B</b>\(0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。牢记<b>共线充要条件是交叉相乘之差为 0</b>：\(x_1y_2 - x_2y_1 = 0\)。</p>
+      <p>代入得 \(0\times(-6) - m\times 3 = 0 \implies -3m = 0 \implies m = 0\)。此时 \(\boldsymbol{b} = (0, -6) = -2\boldsymbol{a}\)，两向量都在 \(y\) 轴上，完全共线。如果套用「坐标相除」\(\dfrac{0}{m} = \dfrac{3}{-6}\)，就会陷入分母为 0 的困境甚至误选 A。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-basis" data-answer="B">
+    <p>4. 下列各组向量中，<b>不能</b>作为平面向量一组基底的是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\boldsymbol{e}_1 = (1, 2), \boldsymbol{e}_2 = (3, 4)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\boldsymbol{e}_1 = (2, -3), \boldsymbol{e}_2 = (-4, 6)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\boldsymbol{e}_1 = (1, 0), \boldsymbol{e}_2 = (0, 1)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\boldsymbol{e}_1 = (2, 1), \boldsymbol{e}_2 = (1, 2)\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。基底的数学前提是<b>两个不共线的向量</b>。检查 B 选项：\(2\times 6 - (-3)\times(-4) = 12 - 12 = 0\)，即 \(\boldsymbol{e}_2 = -2\boldsymbol{e}_1\)，两向量在同一直线上（共线），无法分解出垂直于该直线方向的分量，因此不能作为基底。其余三组交叉相乘之差均不为 \(0\)，两向量互不共线，都是合格基底。</p></div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-oblique" data-answer="B">
+    <p>5. 已知平面基底 \(\{\boldsymbol{e}_1, \boldsymbol{e}_2\}\) 满足 \(|\boldsymbol{e}_1| = 1, |\boldsymbol{e}_2| = 1\)，且 \(\boldsymbol{e}_1\) 与 \(\boldsymbol{e}_2\) 的夹角为 \(60^\circ\)。若向量 \(\boldsymbol{a} = \boldsymbol{e}_1 + \boldsymbol{e}_2\)，则模长 \(|\boldsymbol{a}| =\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\sqrt{2}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt{3}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(3\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。选 A 的同学直接套用了直角坐标勾股公式 \(\sqrt{1^2 + 1^2} = \sqrt{2}\)，这是大忌！只有在<b>单位正交基底</b>（夹角为 \(90^\circ\)）下勾股公式才成立。这里夹角是 \(60^\circ\)，必须求模平方：\(|\boldsymbol{a}|^2 = (\boldsymbol{e}_1 + \boldsymbol{e}_2)^2 = |\boldsymbol{e}_1|^2 + 2\boldsymbol{e}_1\cdot\boldsymbol{e}_2 + |\boldsymbol{e}_2|^2 = 1 + 2\times 1\times 1\times\cos 60^\circ + 1 = 1 + 1 + 1 = 3\)，开方得 \(|\boldsymbol{a}| = \sqrt{3}\)。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. 点 \(O\) 为平面内任一点，向量 \(\vec{OP} = x\vec{OA} + y\vec{OB}\)（其中 \(O, A, B\) 三点不共线）。则点 \(A, P, B\) 三点共线的充要条件是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(x + y = 1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x = y\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(xy = 1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x^2 + y^2 = 1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。这是经典的<b>向量三点共线定理</b>。推导如下：</p>
+      <p>\(A, P, B\) 共线 \(\iff \vec{AP} = t\vec{AB}\) \(\iff \vec{OP} - \vec{OA} = t(\vec{OB} - \vec{OA})\) \(\iff \vec{OP} = (1-t)\vec{OA} + t\vec{OB}\)。令 \(x = 1-t, y = t\)，立得 \(x + y = 1\)。</p>
+      <p>反过来，只要基底前面的两个系数之和等于 \(1\)，终点 \(P\) 就必然落在过 \(A, B\) 的直线上。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var NS = "http://www.w3.org/2000/svg";
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) {
+    try {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    } catch (e) {
+      return "";
+    }
+  }
+
+  /* =================== ① 基础直角坐标双向量互动图 =================== */
+  var fig = document.getElementById("fig");
+  var OX = 280, OY = 190, U = 35; // 步长 35px，X: -7..7, Y: -5..5
+  var aX = 3, aY = 2;   // 向量 a 坐标 (x1, y1)
+  var bX = -2, bY = 3;  // 向量 b 坐标 (x2, y2)
+
+  var G = {
+    grid: null, axes: null, dyn: null,
+    handleA: null, hitA: null,
+    handleB: null, hitB: null
+  };
+
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint ? el.createSVGPoint() : { x: 0, y: 0 };
+    pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM ? el.getScreenCTM() : null;
+    return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+
+  function snap(val, lo, hi) {
+    return Math.max(lo, Math.min(hi, Math.round(val)));
+  }
+
+  function buildFig() {
+    fig.innerHTML = "";
+
+    // 箭头 marker
+    var defs = mk("defs", {}, fig);
+    var marA = mk("marker", { id: "arr-a", viewBox: "0 0 10 10", refX: "7", refY: "5", markerWidth: "6", markerHeight: "6", orient: "auto" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: css("--a") || "#2F7A56" }, marA);
+    var marB = mk("marker", { id: "arr-b", viewBox: "0 0 10 10", refX: "7", refY: "5", markerWidth: "6", markerHeight: "6", orient: "auto" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: css("--b") || "#966524" }, marB);
+    var marSum = mk("marker", { id: "arr-sum", viewBox: "0 0 10 10", refX: "7", refY: "5", markerWidth: "6", markerHeight: "6", orient: "auto" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: css("--c") || "#3E5C76" }, marSum);
+
+    // 网格
+    G.grid = mk("g", { "class": "grid-grp" }, fig);
+    for (var x = -7; x <= 7; x++) {
+      mk("line", { x1: OX + x * U, y1: 15, x2: OX + x * U, y2: 365, "class": "grid" }, G.grid);
+    }
+    for (var y = -5; y <= 5; y++) {
+      mk("line", { x1: 35, y1: OY - y * U, x2: 525, y2: OY - y * U, "class": "grid" }, G.grid);
+    }
+
+    // 坐标轴
+    G.axes = mk("g", {}, fig);
+    mk("line", { x1: 25, y1: OY, x2: 535, y2: OY, "class": "axis" }, G.axes);
+    mk("polygon", { points: "535," + (OY - 4) + " 545," + OY + " 535," + (OY + 4), fill: css("--muted") || "#5E6B64" }, G.axes);
+    mk("text", { x: 538, y: OY + 22, "class": "axis-lab" }, G.axes).textContent = "x";
+
+    mk("line", { x1: OX, y1: 370, x2: OX, y2: 10, "class": "axis" }, G.axes);
+    mk("polygon", { points: (OX - 4) + ",10 " + OX + ",2 " + (OX + 4) + ",10", fill: css("--muted") || "#5E6B64" }, G.axes);
+    mk("text", { x: OX + 12, y: 18, "class": "axis-lab" }, G.axes).textContent = "y";
+
+    // 刻度数字
+    mk("text", { x: OX - 14, y: OY + 18, "class": "num" }, G.axes).textContent = "O";
+    [-6, -4, -2, 2, 4, 6].forEach(function (n) {
+      mk("text", { x: OX + n * U, y: OY + 18, "class": "num" }, G.axes).textContent = String(n);
+    });
+    [-4, -2, 2, 4].forEach(function (n) {
+      mk("text", { x: OX - 14, y: OY - n * U + 5, "class": "num" }, G.axes).textContent = String(n);
+    });
+
+    // 动态绘制层
+    G.dyn = mk("g", {}, fig);
+
+    // 端点 A（向量 a）
+    var grpA = mk("g", { id: "handle-grp-a" }, fig);
+    G.hitA = mk("circle", { r: 24, "class": "hit" }, grpA);
+    G.handleA = mk("circle", {
+      r: 9, "class": "h", fill: css("--a") || "#2F7A56", stroke: css("--card") || "#FFF", "stroke-width": 2,
+      tabindex: "0", role: "slider", "aria-label": "向量 a 的终点", "aria-valuemin": -6, "aria-valuemax": 6
+    }, grpA);
+
+    // 端点 B（向量 b）
+    var grpB = mk("g", { id: "handle-grp-b" }, fig);
+    G.hitB = mk("circle", { r: 24, "class": "hit" }, grpB);
+    G.handleB = mk("circle", {
+      r: 9, "class": "h", fill: css("--b") || "#966524", stroke: css("--card") || "#FFF", "stroke-width": 2,
+      tabindex: "0", role: "slider", "aria-label": "向量 b 的终点", "aria-valuemin": -6, "aria-valuemax": 6
+    }, grpB);
+
+    bindDrag(grpA, function (nx, ny) {
+      aX = snap((nx - OX) / U, -6, 6);
+      aY = snap((OY - ny) / U, -4, 4);
+      update();
+    });
+
+    bindDrag(grpB, function (nx, ny) {
+      bX = snap((nx - OX) / U, -6, 6);
+      bY = snap((OY - ny) / U, -4, 4);
+      update();
+    });
+
+    // 键盘支持
+    G.handleA.addEventListener("keydown", function (ev) {
+      var d = keyStep(ev);
+      if (d) {
+        aX = snap(aX + d[0], -6, 6);
+        aY = snap(aY + d[1], -4, 4);
+        update();
+        ev.preventDefault();
+      }
+    });
+
+    G.handleB.addEventListener("keydown", function (ev) {
+      var d = keyStep(ev);
+      if (d) {
+        bX = snap(bX + d[0], -6, 6);
+        bY = snap(bY + d[1], -4, 4);
+        update();
+        ev.preventDefault();
+      }
+    });
+  }
+
+  function keyStep(ev) {
+    if (ev.key === "ArrowLeft") return [-1, 0];
+    if (ev.key === "ArrowRight") return [1, 0];
+    if (ev.key === "ArrowUp") return [0, 1];
+    if (ev.key === "ArrowDown") return [0, -1];
+    return null;
+  }
+
+  function bindDrag(grp, onMove) {
+    grp.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) {
+        var pt = toSvg(fig, e);
+        onMove(pt.x, pt.y);
+      }
+      function up() {
+        window.removeEventListener("pointermove", mv);
+        window.removeEventListener("pointerup", up);
+      }
+      window.addEventListener("pointermove", mv);
+      window.addEventListener("pointerup", up);
+    });
+  }
+
+  function lenStr(sq) {
+    var r = Math.round(Math.sqrt(sq));
+    if (r * r === sq) return String(r);
+    return "\\sqrt{" + sq + "}\\approx " + (Math.sqrt(sq)).toFixed(2);
+  }
+
+  function update() {
+    var pxA = OX + aX * U, pyA = OY - aY * U;
+    var pxB = OX + bX * U, pyB = OY - bY * U;
+    var pxSum = OX + (aX + bX) * U, pySum = OY - (aY + bY) * U;
+
+    // 定位 handle
+    G.handleA.setAttribute("cx", pxA); G.handleA.setAttribute("cy", pyA);
+    G.hitA.setAttribute("cx", pxA); G.hitA.setAttribute("cy", pyA);
+    G.handleB.setAttribute("cx", pxB); G.handleB.setAttribute("cy", pyB);
+    G.hitB.setAttribute("cx", pxB); G.hitB.setAttribute("cy", pyB);
+
+    // 动态向量线与平行四边形
+    G.dyn.innerHTML = "";
+
+    // 平行四边形辅助虚线
+    if ((aX !== 0 || aY !== 0) && (bX !== 0 || bY !== 0)) {
+      mk("line", { x1: pxA, y1: pyA, x2: pxSum, y2: pySum, "class": "para-line" }, G.dyn);
+      mk("line", { x1: pxB, y1: pyB, x2: pxSum, y2: pySum, "class": "para-line" }, G.dyn);
+      // 和向量
+      mk("line", { x1: OX, y1: OY, x2: pxSum, y2: pySum, "class": "vec-sum", "marker-end": "url(#arr-sum)" }, G.dyn);
+    }
+
+    // 向量 a 与 b
+    if (aX !== 0 || aY !== 0) {
+      mk("line", { x1: OX, y1: OY, x2: pxA, y2: pyA, "class": "vec-a", "marker-end": "url(#arr-a)" }, G.dyn);
+    }
+    if (bX !== 0 || bY !== 0) {
+      mk("line", { x1: OX, y1: OY, x2: pxB, y2: pyB, "class": "vec-b", "marker-end": "url(#arr-b)" }, G.dyn);
+    }
+
+    // 端点文字标签
+    var tA = mk("text", { x: pxA + (aX >= 0 ? 12 : -28), y: pyA + (aY >= 0 ? -10 : 20), "class": "v-tag", fill: css("--a") || "#2F7A56" }, G.dyn);
+    tA.textContent = "a(" + aX + "," + aY + ")";
+    var tB = mk("text", { x: pxB + (bX >= 0 ? 12 : -28), y: pyB + (bY >= 0 ? -10 : 20), "class": "v-tag", fill: css("--b") || "#966524" }, G.dyn);
+    tB.textContent = "b(" + bX + "," + bY + ")";
+
+    // 计算数学量
+    var sqA = aX * aX + aY * aY;
+    var sqB = bX * bX + bY * bY;
+    var isZeroA = (sqA === 0), isZeroB = (sqB === 0);
+
+    var dot = aX * bX + aY * bY;
+    var cross = aX * bY - bX * aY; // x1*y2 - x2*y1
+
+    // 面板数值展示
+    var statA = document.getElementById("stat-a");
+    var statB = document.getElementById("stat-b");
+    var statDot = document.getElementById("stat-dot");
+
+    statA.innerHTML = "坐标：\\((" + aX + ", " + aY + ")\\)，模长：\\(" + lenStr(sqA) + "\\)";
+    statB.innerHTML = "坐标：\\((" + bX + ", " + bY + ")\\)，模长：\\(" + lenStr(sqB) + "\\)";
+    statDot.innerHTML = "\\(x_1x_2 + y_1y_2 = (" + aX + ")\\times(" + bX + ") + (" + aY + ")\\times(" + bY + ") = " + dot + "\\)";
+
+    // 徽章与判定
+    var badgePerp = document.getElementById("badge-perp");
+    var txtPerp = document.getElementById("txt-perp");
+    var calcPerp = document.getElementById("calc-perp-detail");
+
+    var isPerp = (dot === 0 && !isZeroA && !isZeroB);
+    if (isZeroA || isZeroB) {
+      badgePerp.className = "badge on-perp";
+      txtPerp.textContent = "含零向量（零向量与任意向量垂直）";
+    } else if (isPerp) {
+      badgePerp.className = "badge on-perp";
+      txtPerp.innerHTML = "垂直判定：<b>垂直 \\(\\boldsymbol{a}\\perp\\boldsymbol{b}\\)</b>";
+    } else {
+      badgePerp.className = "badge";
+      txtPerp.innerHTML = "垂直判定：不垂直（数量积 \\(" + dot + " \\ne 0\\)）";
+    }
+    calcPerp.className = "calc-detail" + (isPerp ? " hit-perp" : "");
+    calcPerp.innerHTML = "垂直判定式：\\(x_1x_2 + y_1y_2 = (" + aX + ")\\times(" + bX + ") + (" + aY + ")\\times(" + bY + ") = " + dot + (dot === 0 ? " = 0" : " \\ne 0") + "\\)";
+
+    var badgeCollinear = document.getElementById("badge-collinear");
+    var txtCollinear = document.getElementById("txt-collinear");
+    var calcCollinear = document.getElementById("calc-collinear-detail");
+
+    var isCollinear = (cross === 0 && !isZeroA && !isZeroB);
+    if (isZeroA || isZeroB) {
+      badgeCollinear.className = "badge on-collinear";
+      txtCollinear.textContent = "含零向量（零向量与任意向量共线）";
+    } else if (isCollinear) {
+      badgeCollinear.className = "badge on-collinear";
+      var dir = (dot > 0 ? "同向共线" : "反向共线");
+      txtCollinear.innerHTML = "共线判定：<b>共线 \\(\\boldsymbol{a}\\parallel\\boldsymbol{b}\\)（" + dir + "）</b>";
+    } else {
+      badgeCollinear.className = "badge";
+      txtCollinear.innerHTML = "共线判定：不共线（可作一组基底）";
+    }
+    calcCollinear.className = "calc-detail" + (isCollinear ? " hit-collinear" : "");
+    calcCollinear.innerHTML = "共线判定式：\\(x_1y_2 - x_2y_1 = (" + aX + ")\\times(" + bY + ") - (" + bX + ")\\times(" + aY + ") = " + (aX * bY) + " - (" + (bX * aY) + ") = " + cross + (cross === 0 ? " = 0" : " \\ne 0") + "\\)";
+
+    if (window.Peiyu && window.Peiyu.math) {
+      window.Peiyu.math(statA);
+      window.Peiyu.math(statB);
+      window.Peiyu.math(statDot);
+      window.Peiyu.math(txtPerp);
+      window.Peiyu.math(calcPerp);
+      window.Peiyu.math(txtCollinear);
+      window.Peiyu.math(calcCollinear);
+    }
+  }
+
+  // 按钮事件
+  document.getElementById("reset").addEventListener("click", function () {
+    aX = 3; aY = 2; bX = -2; bY = 3; update();
+  });
+  document.getElementById("preset-perp").addEventListener("click", function () {
+    aX = 3; aY = 2; bX = -2; bY = 3; update();
+  });
+  document.getElementById("preset-collinear").addEventListener("click", function () {
+    aX = 2; aY = 1; bX = 4; bY = 2; update();
+  });
+  document.getElementById("preset-zero").addEventListener("click", function () {
+    aX = 0; aY = 3; bX = 0; bY = -2; update();
+  });
+
+  buildFig();
+  update();
+
+  /* =================== ② 进阶斜基底互动图 =================== */
+  var figOblique = document.getElementById("fig-oblique");
+  var rangeTheta = document.getElementById("range-theta");
+  var thetaVal = document.getElementById("theta-val");
+  var statReal = document.getElementById("stat-real-len");
+  var obliqueVerdict = document.getElementById("oblique-verdict");
+  var resetOblique = document.getElementById("reset-oblique");
+
+  var O2X = 90, O2Y = 200, SCALE = 65; // e1 长度 65px
+  var G2 = { dyn: null };
+
+  function buildObliqueFig() {
+    figOblique.innerHTML = "";
+    var defs = mk("defs", {}, figOblique);
+    var marE1 = mk("marker", { id: "arr-e1", viewBox: "0 0 10 10", refX: "7", refY: "5", markerWidth: "6", markerHeight: "6", orient: "auto" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: css("--a") || "#2F7A56" }, marE1);
+    var marE2 = mk("marker", { id: "arr-e2", viewBox: "0 0 10 10", refX: "7", refY: "5", markerWidth: "6", markerHeight: "6", orient: "auto" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: css("--b") || "#966524" }, marE2);
+    var marV = mk("marker", { id: "arr-v", viewBox: "0 0 10 10", refX: "7", refY: "5", markerWidth: "6", markerHeight: "6", orient: "auto" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: css("--c") || "#3E5C76" }, marV);
+
+    G2.dyn = mk("g", {}, figOblique);
+  }
+
+  function updateOblique() {
+    var deg = parseInt(rangeTheta.value, 10) || 60;
+    thetaVal.textContent = deg + "°";
+    var rad = deg * Math.PI / 180;
+    var cosVal = Math.cos(rad);
+
+    var e1x = 1, e1y = 0;
+    var e2x = cosVal, e2y = Math.sin(rad);
+
+    // 向量 v = 2*e1 + 2*e2
+    var vX = 2 * e1x + 2 * e2x;
+    var vY = 2 * e1y + 2 * e2y;
+
+    var pxE1 = O2X + 2 * e1x * SCALE, pyE1 = O2Y - 2 * e1y * SCALE;
+    var pxE2 = O2X + 2 * e2x * SCALE, pyE2 = O2Y - 2 * e2y * SCALE;
+    var pxV = O2X + vX * SCALE, pyV = O2Y - vY * SCALE;
+
+    G2.dyn.innerHTML = "";
+
+    // 平行四边形辅助线
+    mk("line", { x1: pxE1, y1: pyE1, x2: pxV, y2: pyV, "class": "para-line" }, G2.dyn);
+    mk("line", { x1: pxE2, y1: pyE2, x2: pxV, y2: pyV, "class": "para-line" }, G2.dyn);
+
+    // 夹角弧
+    var arcR = 32;
+    var dArc = "M " + (O2X + arcR) + " " + O2Y + " A " + arcR + " " + arcR + " 0 0 0 " + (O2X + arcR * Math.cos(rad)) + " " + (O2Y - arcR * Math.sin(rad));
+    mk("path", { d: dArc, fill: "none", stroke: css("--hl") || "#D9A441", "stroke-width": 2 }, G2.dyn);
+    mk("text", { x: O2X + arcR + 10, y: O2Y - 10, fill: css("--hl") || "#D9A441", "font-size": "13px", "font-weight": "700" }, G2.dyn).textContent = deg + "°";
+
+    // 基向量 2*e1 与 2*e2
+    mk("line", { x1: O2X, y1: O2Y, x2: pxE1, y2: pyE1, stroke: css("--a") || "#2F7A56", "stroke-width": 3, "marker-end": "url(#arr-e1)" }, G2.dyn);
+    mk("text", { x: pxE1 - 20, y: pyE1 + 20, fill: css("--a") || "#2F7A56", "font-size": "14px", "font-weight": "700" }, G2.dyn).textContent = "2e₁";
+
+    mk("line", { x1: O2X, y1: O2Y, x2: pxE2, y2: pyE2, stroke: css("--b") || "#966524", "stroke-width": 3, "marker-end": "url(#arr-e2)" }, G2.dyn);
+    mk("text", { x: pxE2 - 14, y: pyE2 - 10, fill: css("--b") || "#966524", "font-size": "14px", "font-weight": "700" }, G2.dyn).textContent = "2e₂";
+
+    // 合成向量 v
+    mk("line", { x1: O2X, y1: O2Y, x2: pxV, y2: pyV, stroke: css("--c") || "#3E5C76", "stroke-width": 4, "marker-end": "url(#arr-v)" }, G2.dyn);
+    mk("text", { x: pxV + 8, y: pyV + 4, fill: css("--c") || "#3E5C76", "font-size": "15px", "font-weight": "700" }, G2.dyn).textContent = "v = 2e₁ + 2e₂";
+
+    // 模长计算
+    var realModSq = 8 + 8 * cosVal;
+    var realMod = Math.sqrt(Math.max(0, realModSq));
+    var realStr = (deg === 90) ? "\\sqrt{8} \\approx 2.83" : "\\sqrt{8 + 8\\cos " + deg + "^\\circ} \\approx " + realMod.toFixed(2);
+
+    statReal.innerHTML = "\\(" + realStr + "\\)";
+
+    if (deg === 90) {
+      obliqueVerdict.innerHTML = "<span style='color:var(--a);'>\\(\\theta = 90^\\circ\\)（单位正交基底）时，真实模长与勾股公式完全吻合！</span>";
+    } else {
+      obliqueVerdict.innerHTML = "<span style='color:var(--no);'>\\(\\theta = " + deg + "^\\circ\\)（斜基底）时，真实模长（" + realMod.toFixed(2) + "）与直角勾股假模长（2.83）不相等！切忌误套公式。</span>";
+    }
+
+    if (window.Peiyu && window.Peiyu.math) {
+      window.Peiyu.math(statReal);
+      window.Peiyu.math(obliqueVerdict);
+    }
+  }
+
+  rangeTheta.addEventListener("input", updateOblique);
+  resetOblique.addEventListener("click", function () {
+    rangeTheta.value = 60;
+    updateOblique();
+  });
+
+  buildObliqueFig();
+  updateOblique();
+
+})();
+</script>
+</body></html>

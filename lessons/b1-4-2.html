@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.2 指数函数 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .grid { stroke: var(--line); stroke-width: 1; }
+  .fig text { font-size: 20px; }
+  .fig text.num { fill: var(--muted); text-anchor: middle; }
+  .fig .cur { fill: none; stroke: var(--a); stroke-width: 3.5; }
+  .fig .mir { fill: none; stroke: var(--c); stroke-width: 3; stroke-dasharray: 9 6; }
+  .fig .one { fill: none; stroke: var(--no); stroke-width: 3.5; }
+  .fig .fix { fill: var(--hl); stroke: var(--card); stroke-width: 2; }
+  .fig .guide { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 4; }
+  .fig .hdl { fill: var(--b); stroke: var(--card); stroke-width: 2; cursor: grab; outline: none; }
+  .fig .hdl:focus-visible { stroke: var(--hl); stroke-width: 5; }
+  .fig .hdl2 { fill: var(--c); stroke: var(--card); stroke-width: 2; }
+  .sl { display: grid; grid-template-columns: 4.6em 1fr 3.6em; gap: 8px; align-items: center; margin: 6px 0; font-size: 16px; }
+  .sl input[type=range] { width: 100%; }
+  .info { font-size: 16px; margin: 8px 0; line-height: 1.9; overflow-wrap: anywhere; }
+  .info .bad { color: var(--no); font-weight: 600; }
+  .ctrl label { display: inline-flex; gap: 6px; align-items: center; }
+  table.rec { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .fig .cur2 { fill: none; stroke: var(--c); stroke-width: 3.5; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  table.rec td, table.rec th { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; }
+</style>
+</head>
+<body data-sec="b1-4-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 4 章 指数函数与对数函数</p>
+<h1>4.2 指数函数</h1>
+<p class="lead">自变量跑到了指数上：\(y=a^x\) 长什么样？底数 \(a\) 为什么要限制？底数大于 1 和小于 1 有什么不同？先从折纸开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一张纸对折一次变成 \(2\) 层，再对折变成 \(4\) 层，再对折变成 \(8\) 层……</p>
+  <div class="card predict" data-id="entry" data-answer="D">
+    <p>一共对折 \(5\) 次，纸有几层？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(10\) 层</button>
+      <button class="opt" data-v="B"><b>B</b>\(16\) 层</button>
+      <button class="opt" data-v="C"><b>C</b>\(25\) 层</button>
+      <button class="opt" data-v="D"><b>D</b>\(32\) 层</button>
+    </div>
+    <div class="reveal">
+      <p>每折一次，层数<b>乘 \(2\)</b>：\(2,4,8,16,32\)。折 \(5\) 次是 \(2^5=32\) 层，选 <b>D</b>。</p>
+      <p>折 \(x\) 次就是 \(2^x\) 层。这里次数 \(x\) 在<b>指数</b>上：\(x\) 每加 \(1\)，层数就乘同一个数 \(2\)。</p>
+      <p>这一节讲的就是这种函数 \(y=a^x\)：它长什么样，底数 \(a\) 大于 \(1\) 和小于 \(1\) 有什么不同，怎么用它比大小、解不等式。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：4.1 的分数指数幂、负指数幂（<a href="b1-4-1.html">回看 4.1</a>）；3.1 的值域、3.2 的单调性（<a href="b1-3-1.html">回看 3.1</a>、<a href="b1-3-2.html">回看 3.2</a>）。</p>
+
+  <div class="card">
+    <p><b>底数和指数</b>：\(a^x\) 里，\(a\) 是底数，\(x\) 是指数。</p>
+    <p>例：\(2^3=8\)，底数 \(2\)、指数 \(3\)；\(x^2\) 是变量在底数上，\(2^x\) 是变量在指数上，两者不一样：\(x=3\) 时 \(x^2=9\)，\(2^x=8\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>负指数、分数指数</b>：底数是正数时，指数取负数、分数都有意义。</p>
+    <p>例：\(2^{-2}=\dfrac1{2^2}=\dfrac14\)；\(4^{\frac12}=\sqrt4=2\)；\(8^{\frac13}=\sqrt[3]8=2\)。所以 \(2^x\) 里 \(x\) 可以取任何实数。</p>
+  </div>
+
+  <div class="card">
+    <p><b>递增、递减</b>：\(x\) 变大时 \(y\) 跟着变大，叫递增；\(y\) 反而变小，叫递减。</p>
+    <p>例：\(y=2x\)，\(x=1,2,3\) 时 \(y=2,4,6\)，递增；\(y=\dfrac6x\)（\(x>0\)），\(x=1,2,3\) 时 \(y=6,3,2\)，递减。</p>
+  </div>
+
+  <div class="card">
+    <p><b>值域</b>：函数所有能取到的值放在一起。</p>
+    <p>例：\(y=x^2\) 的值能取 \(0\)、\(1\)、\(2.5\)……任何不小于 \(0\) 的数，但取不到负数，值域是 \([0,+\infty)\)。</p>
+  </div>
+
+  <h3>2. 什么是指数函数，底数为什么要限制</h3>
+  <p>折纸、存钱、药量都有同一个样子：\(x\) 每增加 \(1\)，\(y\) 就<b>乘同一个数</b>。一笔钱每年涨 \(5\%\)，\(x\) 年后是原来的 \(1.05^x\) 倍；一种药每过一小时体内剩一半，\(x\) 小时后剩 \(\left(\tfrac12\right)^x\)。</p>
+  <div class="key">函数 \(y=a^x\)（\(a&gt;0\) 且 \(a\ne1\)）叫做<b>指数函数</b>，定义域是 \(\R\)。</div>
+  <p>为什么这样限制底数：我们要 \(x\) 取<b>任何实数</b>时 \(a^x\) 都有意义，而且函数真的在变。</p>
+  <ul>
+    <li>\(a&lt;0\)：比如 \(a=-2\)，\(x=\tfrac12\) 时 \((-2)^{\frac12}=\sqrt{-2}\)，实数里没有意义。</li>
+    <li>\(a=0\)：\(0^0\)、\(0^{-1}\) 都没有意义。</li>
+    <li>\(a=1\)：\(1^x\) 总是 \(1\)，一条水平线，没什么可研究的。</li>
+  </ul>
+  <p>还要看形式：系数是 \(1\)，底数是常数，指数就是 \(x\)。\(y=2\cdot3^x\)、\(y=3^x+1\) 和指数函数有关，但不是指数函数本身。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>\(y=(a-2)^x\) 是指数函数，求 \(a\) 的取值范围。</p>
+    <p>底数是 \(a-2\)，要满足 \(a-2&gt;0\) 且 \(a-2\ne1\)。</p>
+    <p>解得 \(a&gt;2\) 且 \(a\ne3\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：\(y=(2a-1)^x\) 是指数函数，\(a\) 的取值范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(a&gt;\tfrac12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(a&gt;\tfrac12\) 且 \(a\ne1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(a&gt;1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(a\ne1\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(2a-1&gt;0\) 得 \(a&gt;\tfrac12\)；\(2a-1\ne1\) 得 \(a\ne1\)。选 A 的同学漏了「底数不等于 \(1\)」：\(a=1\) 时 \(y=1^x\)，不是指数函数。</p></div>
+  </div>
+
+  <h3>3. 图象和性质：两类，各一个样子</h3>
+  <p>描几个点。\(y=2^x\)：\(x=-2,-1,0,1,2\) 时 \(y=\tfrac14,\tfrac12,1,2,4\)，从左往右一路上升，左边贴着 \(x\) 轴越来越低，但永远碰不到。\(y=\left(\tfrac12\right)^x\)：同样这些 \(y\) 值倒过来排，\(4,2,1,\tfrac12,\tfrac14\)，一路下降。</p>
+  <table class="rec">
+    <tr><th></th><th>\(a&gt;1\)</th><th>\(0&lt;a&lt;1\)</th></tr>
+    <tr><td>定义域</td><td colspan="2">\(\R\)</td></tr>
+    <tr><td>值域</td><td colspan="2">\((0,+\infty)\)：\(a^x\) 永远是正数</td></tr>
+    <tr><td>特殊点</td><td colspan="2">都过 \((0,1)\)，因为 \(a^0=1\)</td></tr>
+    <tr><td>单调性</td><td>在 \(\R\) 上递增</td><td>在 \(\R\) 上递减</td></tr>
+    <tr><td>和 1 比</td><td>\(x&gt;0\) 时 \(a^x&gt;1\)；\(x&lt;0\) 时 \(0&lt;a^x&lt;1\)</td><td>\(x&gt;0\) 时 \(0&lt;a^x&lt;1\)；\(x&lt;0\) 时 \(a^x&gt;1\)</td></tr>
+  </table>
+  <div class="key">\(a&gt;1\) 递增，\(0&lt;a&lt;1\) 递减；不管哪种，图象都在 \(x\) 轴上方，都过 \((0,1)\)。</div>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>求 \(y=2^x\) 在 \([-1,3]\) 上的最大值和最小值。</p>
+    <p>底数 \(2&gt;1\)，函数递增：\(x\) 越大，\(y\) 越大。</p>
+    <p>所以最小值在左端点：\(2^{-1}=\tfrac12\)；最大值在右端点：\(2^3=8\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(y=\left(\tfrac12\right)^x\) 在 \([-1,2]\) 上的最大值是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\tfrac14\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(4\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。底数 \(\tfrac12&lt;1\)，函数递减，最大值在<b>左</b>端点：\(\left(\tfrac12\right)^{-1}=2\)。选 B 的同学照着例 2 去右端点 \(x=2\)，算的 \(\tfrac14\) 其实是最小值。</p></div>
+  </div>
+
+  <h3>4. 比较大小</h3>
+  <p>① <b>同底数</b>：两个数在同一条曲线上，按单调性比。② <b>底数、指数都不同</b>：两个数不在同一条曲线上，找一个中间量，最常用的是 \(1\)（\(a^0=1\)）。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>(1) 比较 \(0.8^{-0.1}\) 和 \(0.8^{-0.2}\)。(2) 比较 \(1.5^{0.3}\) 和 \(0.9^{2}\)。</p>
+    <p>(1) 同底 \(0.8&lt;1\)，\(y=0.8^x\) 递减。\(-0.1&gt;-0.2\)，指数大的反而小，所以 \(0.8^{-0.1}&lt;0.8^{-0.2}\)。</p>
+    <p>(2) 底数不同，和 \(1\) 比：\(1.5&gt;1\)，指数 \(0.3&gt;0\)，所以 \(1.5^{0.3}&gt;1.5^0=1\)；\(0.9&lt;1\)，指数 \(2&gt;0\)，所以 \(0.9^2&lt;0.9^0=1\)。于是 \(1.5^{0.3}&gt;1&gt;0.9^2\)。</p>
+  </div>
+  <div class="card predict" data-id="trap-compare" data-answer="A">
+    <p>自己试试：\(1.7^{0.3}\) 和 \(0.9^{3.1}\) 哪个大？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(1.7^{0.3}\) 大</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.9^{3.1}\) 大，因为它的指数大</button>
+      <button class="opt" data-v="C"><b>C</b>底数、指数都不同，比不了</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。和例 3(2) 一样拿 \(1\) 当中间量：\(1.7^{0.3}&gt;1.7^0=1\)，\(0.9^{3.1}&lt;0.9^0=1\)，所以 \(1.7^{0.3}&gt;1&gt;0.9^{3.1}\)。</p>
+      <p>选 B 是拿「指数大的大」去比两个不同底的数，可它们不在同一条曲线上；选 C 是没想到找中间量。</p>
+    </div>
+  </div>
+
+  <h3>5. 用的时候，查这几件事</h3>
+  <ol>
+    <li><b>底数：\(a&gt;0\) 且 \(a\ne1\)</b>。题目说「是指数函数」，先写出这两个条件。<br><span class="small">反例：\(a=-2\) 时 \((-2)^{\frac12}\) 没有意义；\(a=1\) 时 \(1^x=1\)，不是指数函数。</span></li>
+    <li><b>值域是 \((0,+\infty)\)</b>：\(a^x\) 永远是正数，取不到 \(0\) 和负数。<br><span class="small">反例：方程 \(2^x=-1\) 没有解；\(2^x=0\) 也没有解。</span></li>
+    <li><b>单调性分底数</b>：去掉底数解 \(a^{f(x)}&gt;a^{g(x)}\)，\(a&gt;1\) 时不等号不变，\(0&lt;a&lt;1\) 时要反过来。底数含字母，先分 \(a&gt;1\) 和 \(0&lt;a&lt;1\) 两种情况。<br><span class="small">反例：\(a^2&lt;a^3\) 对 \(a=2\) 成立（\(4&lt;8\)），对 \(a=\tfrac12\) 就不成立（\(\tfrac14&gt;\tfrac18\)）。</span></li>
+    <li><b>不同底不能直接套单调性</b>：「底数大，值就大」只在 \(x&gt;0\) 时对。<br><span class="small">反例：\(x=-2\) 时 \(2^{-2}=\tfrac14\)，\(3^{-2}=\tfrac19\)，底数小的反而大。</span></li>
+  </ol>
+  <div class="key">比较、解不等式之前先问两件事：两个数是不是同底？底数比 \(1\) 大还是小？</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>\(y=\left(\tfrac1a\right)^x\) 和 \(y=a^x\) 关于 \(y\) 轴对称</b>：因为 \(\left(\tfrac1a\right)^x=a^{-x}\)，前一个在 \(x\) 处的值，就是后一个在 \(-x\) 处的值。会画 \(a&gt;1\) 的图，翻过去就得到 \(0&lt;a&lt;1\) 的图。「动手」①里勾选一下就能看到。</p>
+    <p><b>底数大小怎样影响图象</b>：在 \(y\) 轴右边（\(x&gt;0\)），底数越大，曲线越高、越陡；在 \(y\) 轴左边（\(x&lt;0\)），顺序反过来；所有曲线都在 \((0,1)\) 交在一起。「动手」②可以拖着看。</p>
+    <p><b>同指数、不同底</b>：比如 \(2^{0.3}\) 和 \(3^{0.3}\)，指数是正数，看 \(y\) 轴右边，底大的高，\(2^{0.3}&lt;3^{0.3}\)；指数是负数时反过来。</p>
+    <p><b>长得有多快</b>：\(2^x\) 每次乘 \(2\)，\(x=10\) 时已经是 \(1024\)，\(x=20\) 时超过一百万。它和 \(y=2x\) 这类一次函数比谁长得快，要说清在哪一段 \(x\) 上比，4.4 会专门讲。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖底数，看曲线</h3>
+  <p class="small">拖滑块改底数 \(a\)，看曲线怎么变；拖曲线上的<span class="cb">橙点 P</span>（或选中后按左右方向键）看函数值和 \(1\) 的大小关系。勾选后同时画出 \(y=\left(\tfrac1a\right)^x\)。</p>
+  <div class="card">
+    <svg class="fig" id="fig" viewBox="0 0 560 380" role="group" aria-label="指数函数 y=a^x 的图象，底数可调，曲线上的点可拖动"></svg>
+    <label class="sl"><span>底数 \(a\)</span><input type="range" id="sa" min="0.1" max="4" step="0.05" aria-label="底数 a"><output id="oa"></output></label>
+    <div class="ctrl">
+      <span class="small">试试：</span>
+      <button class="btn ghost" type="button" data-a="2">\(a=2\)</button>
+      <button class="btn ghost" type="button" data-a="0.5">\(a=\tfrac12\)</button>
+      <button class="btn ghost" type="button" data-a="3">\(a=3\)</button>
+      <button class="btn ghost" type="button" data-a="1">\(a=1\)</button>
+    </div>
+    <div class="ctrl"><label><input type="checkbox" id="mir"> 同时画 \(y=\left(\tfrac1a\right)^x\)</label><button class="btn ghost" id="reset" type="button">重置</button></div>
+    <div class="info" id="info" aria-live="polite"></div>
+  </div>
+
+  <h3>② 进阶：两个底数，谁大要看 \(x\) 在哪边</h3>
+  <p class="small">两条曲线 <span class="ca">\(y=a^x\)</span> 和 <span class="cc">\(y=b^x\)</span>。拖图（或用 \(x\) 滑块）移动竖线，比较同一个 \(x\) 处两个值的大小。先看 \(x&gt;0\)，再把竖线拖到 \(y\) 轴左边。</p>
+  <div class="card">
+    <svg class="fig" id="fig2" viewBox="0 0 560 380" role="group" aria-label="两个指数函数的图象，竖线位置可拖动，比较同一个 x 处的函数值"></svg>
+    <label class="sl"><span>\(a\)</span><input type="range" id="s2a" min="0.2" max="4" step="0.1" aria-label="底数 a"><output id="o2a"></output></label>
+    <label class="sl"><span>\(b\)</span><input type="range" id="s2b" min="0.2" max="4" step="0.1" aria-label="底数 b"><output id="o2b"></output></label>
+    <label class="sl"><span>\(x\)</span><input type="range" id="s2x" min="-3" max="3" step="0.1" aria-label="竖线的横坐标 x"><output id="o2x"></output></label>
+    <div class="ctrl"><button class="btn ghost" id="reset2" type="button">重置</button></div>
+    <div class="info" id="info2" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 不等式 \(2^x\ge\tfrac14\) 的解集是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(x\ge-2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x\le-2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x\ge2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(x\ge\tfrac14\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。先化成同底：\(\tfrac14=2^{-2}\)，不等式是 \(2^x\ge2^{-2}\)。底数 \(2&gt;1\)，递增，不等号不变，\(x\ge-2\)。选 C 的同学把 \(\tfrac14\) 写成了 \(2^2\)；选 D 是直接把 \(\tfrac14\) 当成了指数。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="C">
+    <p>2. \(a&gt;0\) 且 \(a\ne1\)。函数 \(y=a^{x-1}+2\) 的图象一定经过哪个点？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((0,1)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((1,2)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((1,3)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((0,3)\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。不管 \(a\) 是多少，\(a^0=1\)。让指数 \(x-1=0\)，即 \(x=1\)，这时 \(y=1+2=3\)。选 A 是照搬 \(y=a^x\) 的定点；选 B 是忘了 \(a^0\) 是 \(1\) 不是 \(0\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="trap-def" data-answer="D">
+    <p>3. 下面哪一个是指数函数？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(y=(-2)^x\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y=1^x\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y=x^3\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(y=\left(\tfrac13\right)^x\)</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>D</b>：底数 \(\tfrac13\) 满足 \(a&gt;0\) 且 \(a\ne1\)。</p>
+      <p>A 底数是负数，\(x=\tfrac12\) 时就没有意义；B 底数是 1，\(y\) 恒等于 1，被定义排除了；C 变量在底数上，不是指数函数。</p>
+      <p>有同学觉得「\(\tfrac13\) 小于 1，不像指数函数」——底数小于 1 完全可以，只是函数递减。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-ineq" data-answer="B">
+    <p>4. 不等式 \(\left(\tfrac12\right)^x&gt;\left(\tfrac12\right)^3\) 的解集是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x&gt;3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x&lt;3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x&gt;\tfrac18\)</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>B</b>。底数 \(\tfrac12\) 在 \(0\) 和 \(1\) 之间，\(y=\left(\tfrac12\right)^x\) 是减函数：函数值大，自变量反而小。去掉底数时不等号要反过来，得 \(x&lt;3\)。</p>
+      <p>选 A 是把所有指数函数都当成增函数了。验证一下：\(x=0\) 时左边是 1，确实比 \(\tfrac18\) 大，而 \(0&lt;3\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>5. 当 \(x=-2\) 时，\(2^x\) 和 \(3^x\) 哪个大？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(3^x\) 大，底数大的当然大</button>
+      <button class="opt" data-v="B"><b>B</b>\(2^x\) 大</button>
+      <button class="opt" data-v="C"><b>C</b>一样大</button>
+      <button class="opt" data-v="D"><b>D</b>没法比较</button>
+    </div>
+    <div class="reveal">
+      <p>答案是 <b>B</b>。算一下：\(2^{-2}=\tfrac14\)，\(3^{-2}=\tfrac19\)，而 \(\tfrac14&gt;\tfrac19\)。</p>
+      <p>「底数大，值就大」只在 \(x&gt;0\) 时对。指数是负数时，\(a^{-2}=\tfrac{1}{a^2}\)，底数越大，分母越大，值反而越小。在「动手」②里把竖线拖到 \(x=-2\) 就能看到：\(y\) 轴左边两条曲线的上下正好反过来。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="C">
+    <p>6. \(a&gt;0\) 且 \(a\ne1\)，函数 \(y=a^x\) 在 \([1,2]\) 上的最大值比最小值大 \(\tfrac a2\)。\(a\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\tfrac32\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\tfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\tfrac32\) 或 \(\tfrac12\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。底数含字母，先分两种情况。</p>
+      <p>\(a&gt;1\)：递增，最大 \(a^2\)、最小 \(a\)，\(a^2-a=\tfrac a2\)，得 \(a=\tfrac32\)，满足 \(a&gt;1\)。</p>
+      <p>\(0&lt;a&lt;1\)：递减，最大 \(a\)、最小 \(a^2\)，\(a-a^2=\tfrac a2\)，得 \(a=\tfrac12\)，满足 \(0&lt;a&lt;1\)。</p>
+      <p>两个都对。选 A 的同学默认了 \(a&gt;1\)，漏掉了递减的情况。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("fig"), info = document.getElementById("info");
+  var sa = document.getElementById("sa"), oa = document.getElementById("oa"), mirBox = document.getElementById("mir");
+  var XMIN = -3, XMAX = 3, YMIN = -1, YMAX = 8;
+  var L = 40, R = 540, T = 20, B = 350;
+  var DEF = { a: 2, x: 1.5, mir: false };
+  var st = { a: DEF.a, x: DEF.x, mir: DEF.mir };
+
+  function sx(x) { return L + (x - XMIN) / (XMAX - XMIN) * (R - L); }
+  function sy(y) { return B - (y - YMIN) / (YMAX - YMIN) * (B - T); }
+  function xs(px) { return XMIN + (px - L) / (R - L) * (XMAX - XMIN); }
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function clampY(y) { return Math.max(YMIN - 2, Math.min(YMAX + 2, y)); }
+  function trim(s) { return s.indexOf(".") >= 0 ? s.replace(/0+$/, "").replace(/\.$/, "") : s; }
+  function fa(a) { return trim(a.toFixed(2)); }
+  function fx(x) { var s = trim(x.toFixed(1)); return s === "-0" ? "0" : s; }
+  function fy(y) {
+    if (!isFinite(y)) return "?";
+    if (y >= 100) return String(Math.round(y));
+    if (y >= 1) return trim(y.toFixed(2));
+    return trim(y.toPrecision(3));
+  }
+  function pow(a, x) { return Math.pow(a, x); }
+
+  // 静态部分：网格、坐标轴、刻度
+  var g = {};
+  function build() {
+    svg.innerHTML = "";
+    var defs = mk("defs", {});
+    var cp = mk("clipPath", { id: "plotclip" }, defs);
+    mk("rect", { x: L, y: T, width: R - L, height: B - T }, cp);
+    var x, y;
+    for (x = XMIN; x <= XMAX; x++) mk("line", { x1: sx(x), y1: T, x2: sx(x), y2: B, "class": "grid" });
+    for (y = 0; y <= YMAX; y += 1) mk("line", { x1: L, y1: sy(y), x2: R, y2: sy(y), "class": "grid" });
+    mk("line", { x1: L, y1: sy(0), x2: R, y2: sy(0), "class": "axis" });
+    mk("line", { x1: sx(0), y1: B, x2: sx(0), y2: T, "class": "axis" });
+    for (x = XMIN; x <= XMAX; x++) if (x !== 0) mk("text", { x: sx(x), y: sy(0) + 24, "class": "num" }).textContent = x;
+    [2, 4, 6, 8].forEach(function (v) { mk("text", { x: sx(0) - 16, y: sy(v) + 7, "class": "num" }).textContent = v; });
+    mk("text", { x: R - 8, y: sy(0) - 8, "class": "num" }).textContent = "x";
+    mk("text", { x: sx(0) + 14, y: T + 18, "class": "num" }).textContent = "y";
+    var plot = mk("g", { "clip-path": "url(#plotclip)" });
+    g.mir = mk("path", { "class": "mir" }, plot);
+    g.cur = mk("path", { "class": "cur" }, plot);
+    g.guides = mk("g", {}, plot);
+    g.fix = mk("circle", { cx: sx(0), cy: sy(1), r: 7, "class": "fix" });
+    g.fixl = mk("text", { x: sx(0) + 12, y: sy(1) + 24 }); g.fixl.textContent = "(0, 1)";
+    g.lab = mk("text", { x: L + 8, y: T + 30, style: "font-size:24px" });
+    g.labA = mk("tspan", {}, g.lab);
+    var sup = mk("tspan", { dy: -11, style: "font-size:20px" }, g.lab); sup.textContent = "x";
+    g.p2 = mk("circle", { r: 8, "class": "hdl2" });
+    g.hit = mk("circle", { r: 22, fill: "transparent", style: "cursor:grab" });
+    g.p = mk("circle", { r: 9, "class": "hdl", tabindex: "0", role: "slider", "aria-label": "曲线上的点 P 的横坐标",
+      "aria-valuemin": XMIN, "aria-valuemax": XMAX });
+    g.pl = mk("text", {});
+  }
+
+  function curvePath(a) {
+    var d = "", n = 240;
+    for (var i = 0; i <= n; i++) {
+      var x = XMIN + (XMAX - XMIN) * i / n;
+      d += (i ? "L" : "M") + sx(x).toFixed(1) + " " + sy(clampY(pow(a, x))).toFixed(1);
+    }
+    return d;
+  }
+
+  function draw() {
+    var a = st.a, x = st.x, y = pow(a, x), isOne = Math.abs(a - 1) < 1e-9;
+    g.cur.setAttribute("d", curvePath(a));
+    g.cur.setAttribute("class", isOne ? "one" : "cur");
+    g.mir.setAttribute("d", st.mir && !isOne ? curvePath(1 / a) : "");
+    g.labA.textContent = "y = " + fa(a);
+    g.lab.setAttribute("fill", isOne ? "var(--no)" : "var(--a)");
+
+    // 点 P（出了图就停在边上）
+    var py = sy(Math.min(y, YMAX)), cx = sx(x);
+    g.p.setAttribute("cx", cx); g.p.setAttribute("cy", py);
+    g.hit.setAttribute("cx", cx); g.hit.setAttribute("cy", py);
+    g.p.setAttribute("aria-valuenow", x);
+    g.p.setAttribute("aria-valuetext", "x=" + fx(x) + "，y≈" + fy(y));
+    g.pl.textContent = y > YMAX ? "P ↑" : "P";
+    g.pl.setAttribute("x", Math.min(Math.max(cx + 12, L + 4), R - 50));
+    g.pl.setAttribute("y", Math.max(py - 12, T + 40));
+    g.pl.setAttribute("fill", "var(--b)");
+    g.guides.innerHTML = "";
+    if (y <= YMAX) {
+      mk("line", { x1: cx, y1: sy(0), x2: cx, y2: py, "class": "guide" }, g.guides);
+      mk("line", { x1: sx(0), y1: py, x2: cx, y2: py, "class": "guide" }, g.guides);
+    }
+    var y2 = pow(1 / a, -x), show2 = st.mir && !isOne;
+    g.p2.setAttribute("cx", sx(-x)); g.p2.setAttribute("cy", sy(Math.min(y2, YMAX)));
+    g.p2.style.display = show2 ? "" : "none";
+
+    oa.textContent = fa(a);
+    var h = "";
+    if (isOne) {
+      h += '<div class="bad">\\(a=1\\)：\\(y=1^x=1\\)，是一条水平线，不算指数函数。</div>';
+      h += "<div>点 P：\\(x=" + fx(x) + "\\) 时 \\(y=1\\)，怎么拖都不变。</div>";
+    } else {
+      h += "<div>\\(y=" + fa(a) + "^x\\)：" + (a > 1 ? "\\(a&gt;1\\)，在 \\(\\R\\) 上<b>递增</b>" : "\\(0&lt;a&lt;1\\)，在 \\(\\R\\) 上<b>递减</b>") + "；值域 \\((0,+\\infty)\\)，过 \\((0,1)\\)。</div>";
+      var cmp, why;
+      if (Math.abs(x) < 1e-9) { cmp = "\\(=1\\)"; why = "任何底数的 0 次方都是 1"; }
+      else {
+        var big = (a > 1) === (x > 0);
+        cmp = big ? "\\(&gt;1\\)" : "\\(&lt;1\\)";
+        why = (a > 1 ? "\\(a&gt;1\\)" : "\\(0&lt;a&lt;1\\)") + "，且 \\(x" + (x > 0 ? "&gt;" : "&lt;") + "0\\)";
+      }
+      h += "<div>点 P：\\(" + fa(a) + "^{" + fx(x) + "}\\approx" + fy(y) + "\\) " + cmp + "（" + why + "）" + (y > YMAX ? "，已经高出图外" : "") + "。</div>";
+      if (st.mir) {
+        h += '<div><span class="cc">虚线</span> \\(y=\\left(\\tfrac1a\\right)^x=' + fy(1 / a) + "^x\\)：在 \\(x=" + fx(-x) + "\\) 处的值也是 \\(" + fy(y2) + "\\)，两条曲线关于 \\(y\\) 轴对称。</div>";
+      }
+    }
+    info.innerHTML = h;
+    if (window.Peiyu) Peiyu.math(info);
+  }
+
+  function setA(v) {
+    v = Math.round(v * 20) / 20;
+    if (!isFinite(v)) v = DEF.a;
+    st.a = Math.min(4, Math.max(0.1, v));
+    sa.value = st.a;
+  }
+  function setX(v) {
+    v = Math.round(v * 10) / 10;
+    if (!isFinite(v)) v = DEF.x;
+    st.x = Math.min(XMAX, Math.max(XMIN, v));
+    if (Math.abs(st.x) < 1e-9) st.x = 0;
+  }
+  function logIt(how) { if (window.Peiyu) Peiyu.log("interact", { how: how, a: st.a, x: st.x, mir: st.mir }); }
+
+  build();
+  sa.addEventListener("input", function () { setA(parseFloat(sa.value)); draw(); });
+  sa.addEventListener("change", function () { logIt("slider"); });
+  mirBox.addEventListener("change", function () { st.mir = !!mirBox.checked; draw(); logIt("mirror"); });
+  [].forEach.call(document.querySelectorAll("button[data-a]"), function (b) {
+    b.addEventListener("click", function () { setA(parseFloat(b.getAttribute("data-a"))); draw(); logIt("preset"); });
+  });
+
+  var drag = null;
+  function svgX(ev) {
+    var m = svg.getScreenCTM(); if (!m) return null;
+    var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    return pt.matrixTransform(m.inverse()).x;
+  }
+  function down(ev) {
+    ev.preventDefault();
+    drag = ev.pointerId;
+    try { svg.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+    g.p.focus({ preventScroll: true });
+    var px = svgX(ev); if (px !== null) { setX(xs(px)); draw(); }
+  }
+  svg.addEventListener("pointerdown", down);
+  svg.addEventListener("pointermove", function (ev) {
+    if (drag === null || ev.pointerId !== drag) return;
+    var px = svgX(ev); if (px === null) return;
+    var before = st.x; setX(xs(px)); if (st.x !== before) draw();
+  });
+  svg.addEventListener("pointerup", function (ev) { if (drag !== null && ev.pointerId === drag) { drag = null; logIt("drag"); } });
+  svg.addEventListener("pointercancel", function () { drag = null; });
+  g.p.addEventListener("keydown", function (ev) {
+    var k = ev.key;
+    if (k === "ArrowLeft" || k === "ArrowDown") setX(st.x - 0.1);
+    else if (k === "ArrowRight" || k === "ArrowUp") setX(st.x + 0.1);
+    else if (k === "Home") setX(XMIN);
+    else if (k === "End") setX(XMAX);
+    else return;
+    ev.preventDefault(); draw(); logIt("key");
+  });
+
+  function reset() {
+    st.mir = DEF.mir; mirBox.checked = false;
+    setA(DEF.a); setX(DEF.x); draw();
+  }
+  document.getElementById("reset").addEventListener("click", function () { reset(); logIt("reset"); });
+  reset();
+  document.addEventListener("DOMContentLoaded", draw);
+
+  /* ===== ② 进阶：两个底数，同一个 x 处比大小 ===== */
+  var f2 = document.getElementById("fig2"), info2 = document.getElementById("info2");
+  var s2a = document.getElementById("s2a"), s2b = document.getElementById("s2b"), s2x = document.getElementById("s2x");
+  var DEF2 = { a: 2, b: 3, x: 1 };
+  var t2 = { a: DEF2.a, b: DEF2.b, x: DEF2.x };
+  var h2 = {};
+  function build2() {
+    f2.innerHTML = "";
+    var defs = mk("defs", {}, f2), cp = mk("clipPath", { id: "plotclip2" }, defs);
+    mk("rect", { x: L, y: T, width: R - L, height: B - T }, cp);
+    var x, y;
+    for (x = XMIN; x <= XMAX; x++) mk("line", { x1: sx(x), y1: T, x2: sx(x), y2: B, "class": "grid" }, f2);
+    for (y = 0; y <= YMAX; y += 1) mk("line", { x1: L, y1: sy(y), x2: R, y2: sy(y), "class": "grid" }, f2);
+    mk("line", { x1: L, y1: sy(0), x2: R, y2: sy(0), "class": "axis" }, f2);
+    mk("line", { x1: sx(0), y1: B, x2: sx(0), y2: T, "class": "axis" }, f2);
+    for (x = XMIN; x <= XMAX; x++) if (x !== 0) mk("text", { x: sx(x), y: sy(0) + 24, "class": "num" }, f2).textContent = x;
+    [2, 4, 6, 8].forEach(function (v) { mk("text", { x: sx(0) - 16, y: sy(v) + 7, "class": "num" }, f2).textContent = v; });
+    var plot = mk("g", { "clip-path": "url(#plotclip2)" }, f2);
+    h2.cb = mk("path", { "class": "cur2" }, plot);
+    h2.ca = mk("path", { "class": "cur" }, plot);
+    h2.v = mk("line", { y1: T, y2: B, "class": "guide" }, f2);
+    h2.pb = mk("circle", { r: 8, fill: "var(--c)", stroke: "var(--card)", "stroke-width": 2 }, f2);
+    h2.pa = mk("circle", { r: 8, fill: "var(--a)", stroke: "var(--card)", "stroke-width": 2 }, f2);
+    function legend(yy, color) {
+      var tx = mk("text", { x: L + 8, y: yy, fill: color, style: "font-size:22px" }, f2);
+      var base = mk("tspan", {}, tx);
+      var sup = mk("tspan", { dy: -10, style: "font-size:18px" }, tx); sup.textContent = "x";
+      return base;
+    }
+    h2.la = legend(T + 30, "var(--a)");
+    h2.lb = legend(T + 62, "var(--c)");
+  }
+  function draw2() {
+    var a = t2.a, b = t2.b, x = t2.x, ya = pow(a, x), yb = pow(b, x);
+    h2.ca.setAttribute("d", curvePath(a));
+    h2.cb.setAttribute("d", curvePath(b));
+    var cx = sx(x);
+    h2.v.setAttribute("x1", cx); h2.v.setAttribute("x2", cx);
+    h2.pa.setAttribute("cx", cx); h2.pa.setAttribute("cy", sy(Math.min(ya, YMAX + 0.3)));
+    h2.pb.setAttribute("cx", cx); h2.pb.setAttribute("cy", sy(Math.min(yb, YMAX + 0.3)));
+    h2.la.textContent = "y = " + fa(a);
+    h2.lb.textContent = "y = " + fa(b);
+    s2a.value = a; s2b.value = b; s2x.value = x;
+    document.getElementById("o2a").textContent = fa(a);
+    document.getElementById("o2b").textContent = fa(b);
+    document.getElementById("o2x").textContent = fx(x);
+
+    function eqv(base, y) { return "\\(" + fa(base) + "^{" + fx(x) + "}" + (Math.abs(parseFloat(fy(y)) - y) < 1e-9 ? "=" : "\\approx ") + fy(y) + "\\)"; }
+    var ta = eqv(a, ya), tb = eqv(b, yb);
+    var h = "<div>" + '<span class="ca">' + ta + "</span>，" + '<span class="cc">' + tb + "</span></div>";
+    if (Math.abs(a - b) < 1e-9) {
+      h += "<div>两个底数一样，是同一条曲线，值当然相等。把一个底数拖开再看。</div>";
+    } else if (Math.abs(x) < 1e-9) {
+      h += "<div>\\(x=0\\)：两个都是 \\(1\\)，一样大。所有指数函数的图象都在 \\((0,1)\\) 交在一起。</div>";
+    } else {
+      var bigBase = a > b ? fa(a) : fa(b), smallBase = a > b ? fa(b) : fa(a);
+      var winner = (x > 0) ? bigBase : smallBase;
+      h += "<div>底数 \\(" + winner + "\\) 的那个大。" + (x > 0
+        ? "\\(x&gt;0\\)（\\(y\\) 轴右边）：底数大的，值也大。"
+        : '<span class="bad">\\(x&lt;0\\)（\\(y\\) 轴左边）：底数大的，值反而小</span>，「底数大就大」在这里不成立。') + "</div>";
+    }
+    if (Math.abs(a - 1) < 1e-9 || Math.abs(b - 1) < 1e-9) h += '<div class="small">底数是 \\(1\\) 的那条是水平线 \\(y=1\\)，不算指数函数，这里只当参照。</div>';
+    info2.innerHTML = h;
+    if (window.Peiyu) Peiyu.math(info2);
+  }
+  function set2(k, v, lo, hi, step) {
+    v = Math.round(v / step) * step;
+    if (!isFinite(v)) v = DEF2[k];
+    v = Math.min(hi, Math.max(lo, v));
+    v = Math.round(v * 10) / 10;
+    t2[k] = Math.abs(v) < 1e-9 ? 0 : v;
+  }
+  function log2(how) { if (window.Peiyu) Peiyu.log("interact", { id: "two-bases", how: how, a: t2.a, b: t2.b, x: t2.x }); }
+  build2();
+  s2a.addEventListener("input", function () { set2("a", parseFloat(s2a.value), 0.2, 4, 0.1); draw2(); });
+  s2b.addEventListener("input", function () { set2("b", parseFloat(s2b.value), 0.2, 4, 0.1); draw2(); });
+  s2x.addEventListener("input", function () { set2("x", parseFloat(s2x.value), XMIN, XMAX, 0.1); draw2(); });
+  [s2a, s2b, s2x].forEach(function (s) { s.addEventListener("change", function () { log2("slider"); }); });
+  var drag2 = null;
+  function moveTo2(ev) {
+    var m = f2.getScreenCTM(); if (!m) return;
+    var pt = f2.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var before = t2.x; set2("x", xs(pt.matrixTransform(m.inverse()).x), XMIN, XMAX, 0.1);
+    if (t2.x !== before) draw2();
+  }
+  f2.addEventListener("pointerdown", function (ev) {
+    ev.preventDefault(); drag2 = ev.pointerId;
+    try { f2.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+    moveTo2(ev);
+  });
+  f2.addEventListener("pointermove", function (ev) { if (drag2 !== null && ev.pointerId === drag2) moveTo2(ev); });
+  f2.addEventListener("pointerup", function (ev) { if (drag2 !== null && ev.pointerId === drag2) { drag2 = null; log2("drag"); } });
+  f2.addEventListener("pointercancel", function () { drag2 = null; });
+  function reset2() { t2.a = DEF2.a; t2.b = DEF2.b; t2.x = DEF2.x; draw2(); }
+  document.getElementById("reset2").addEventListener("click", function () { reset2(); log2("reset"); });
+  reset2();
+  document.addEventListener("DOMContentLoaded", draw2);
+})();
+</script>
+</body></html>

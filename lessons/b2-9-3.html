@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9.3 统计分析案例 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  #dots text, #strata text { font-size: 20px; }
+  .flow { padding-left: 1.4em; }
+  .flow li { margin: 4px 0; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-9-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 9 章 统计</p>
+<h1>9.3 统计分析案例</h1>
+<p class="lead">一次统计调查不是算出一个平均数就完事：先把问题问清楚，再随机地收集数据，整理、分析，最后把「数据说了什么」和「我们建议做什么」分开写。这一节用一个自编的「高一睡眠调查」把整个过程走一遍。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>学校想知道：高一年级的同学，上学日一晚大概睡多久？全年级 \(1000\) 人，一个个问太费事，打算只问一部分人。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>下面哪种找人的办法，得到的数据最能代表全年级？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>晚自习结束后，问还留在教室的 \(20\) 个人</button>
+      <button class="opt" data-v="B"><b>B</b>从全年级名单里随机抽 \(50\) 个人，逐个问</button>
+      <button class="opt" data-v="C"><b>C</b>在年级群里发问卷，谁愿意谁填</button>
+      <button class="opt" data-v="D"><b>D</b>只问自己班的同学</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。A 里留到最后的人可能本来就睡得晚；C 是愿意填的人才填，他们未必像全年级；D 只有一个班。只有 B 让每个人被抽到的机会一样。</p>
+      <p>可这只是第一步。拿到 \(50\) 个数之后，还要整理成表和图，算平均数、方差、百分位数，最后写出结论和建议。这一节就把这一整套流程走一遍。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：9.1 的随机抽样、分层抽样（<a href="b2-9-1.html">回看 9.1</a>）；9.2 的平均数、方差、百分位数（<a href="b2-9-2.html">回看 9.2</a>）。下面每个词用一个小例子再过一遍。</p>
+
+  <div class="card">
+    <p><b>总体、样本、样本量</b>：想了解的全体叫总体，真正问到的那部分叫样本，样本里的个数叫样本量。</p>
+    <p>例：想了解全年级 \(1000\) 人的睡眠，总体是这 \(1000\) 人的睡眠时间；随机问了 \(50\) 人，样本量是 \(50\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>平均数</b> \(\bar x\)：所有数加起来除以个数，说的是「一般有多少」。</p>
+    <p>例：\(6,7,8\) 的平均数是 \(\dfrac{6+7+8}{3}=7\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>方差</b> \(s^2\) 和<b>标准差</b> \(s\)：每个数离平均数的距离平方，再取平均，说的是「散不散、稳不稳」。标准差是方差开平方，单位和原数据一样。本书的方差除以 \(n\)：</p>
+    \[s^2=\dfrac1n\left[(x_1-\bar x)^2+\cdots+(x_n-\bar x)^2\right]\]
+    <p>例：\(6,7,8\)，平均数 \(7\)，\(s^2=\dfrac{1+0+1}{3}=\dfrac23\)，\(s=\sqrt{\dfrac23}\approx0.82\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>第 \(p\) 百分位数</b>：大约有 \(p\%\) 的数不超过它。本书的算法：从小到大排好，算 \(i=n\times p\%\)。\(i\) 不是整数，取第「\(i\) 往上取整」个数；\(i\) 是整数，取第 \(i\) 个和第 \(i+1\) 个的平均。</p>
+    <p>例：\(2,4,5,8,10\) 的第 \(30\) 百分位数：\(i=5\times30\%=1.5\)，往上取整是 \(2\)，取第 \(2\) 个数 \(4\)。第 \(50\) 百分位数就是中位数。</p>
+  </div>
+
+  <div class="card">
+    <p><b>分层、按比例分配</b>：总体里有明显不同的几类人（层），就在每层里各自随机抽；各层抽多少，按它在总体里占的比例分。</p>
+    <p>例：一个年级男生 \(300\) 人、女生 \(200\) 人，抽 \(10\) 人：男生占 \(\dfrac{300}{500}=60\%\)，抽 \(6\) 人；女生抽 \(4\) 人。</p>
+  </div>
+
+  <h3>2. 一个完整的统计过程</h3>
+  <p>不管调查什么，大体都按这几步走。下面一直用同一个案例。</p>
+  <ol class="flow">
+    <li><b>提出问题</b>：高一同学上学日一晚睡多久？够不够 \(8\) 小时（假设这是学校定的目标）？走读生和住校生有没有差别？</li>
+    <li><b>收集数据</b>：定总体、定变量（一晚睡多少小时），设计随机抽样。</li>
+    <li><b>整理、表示</b>：排序、列表、画点图或直方图。</li>
+    <li><b>分析</b>：平均数看「一般多少」，方差看「稳不稳」，百分位数看「排在哪」，分层的还要合并。</li>
+    <li><b>结论和建议</b>：分清样本事实、对总体的估计、行动建议。</li>
+  </ol>
+  <p>为什么要分层：走读生要通勤，住校生按统一作息，两类人的睡眠可能差得多。分层抽，两类人都按比例出现在样本里，不会碰巧全抽到一类。</p>
+  <div class="card">
+    <p class="small">例 1（收集数据）</p>
+    <p>全年级走读生 \(600\) 人、住校生 \(400\) 人，按比例分层抽 \(50\) 人，每层各抽几人？</p>
+    <p>总体 \(1000\) 人，抽 \(50\) 人，抽样比是 \(\dfrac{50}{1000}=\dfrac1{20}\)。走读生抽 \(600\times\dfrac1{20}=30\) 人，住校生抽 \(400\times\dfrac1{20}=20\) 人。合计 \(50\)，对得上。</p>
+    <p>然后在走读生名单里随机抽 \(30\) 人、住校生名单里随机抽 \(20\) 人，请他们连续记一周上学日的睡眠，取平均作为这个人的数据。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：另一个年级走读生 \(450\) 人、住校生 \(270\) 人，按比例分层抽 \(40\) 人，走读生抽几人？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(25\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(20\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(24\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。总体 \(720\) 人，走读生占 \(\dfrac{450}{720}=\dfrac58\)，抽 \(40\times\dfrac58=25\) 人（住校生 \(15\) 人）。选 B 的同学把 \(40\) 平分给了两层，没按比例。</p></div>
+  </div>
+
+  <h3>3. 平均数和方差：「一般多少」和「稳不稳」</h3>
+  <p>平均数把一堆数压成一个「代表值」；方差补上它丢掉的信息：大家是挤在平均数附近，还是散得很开。两个班平均都是 \(7.5\) 小时，一个班人人 \(7\)～\(8\) 小时，另一个班有人 \(5\) 小时、有人 \(10\) 小时，情况很不一样。</p>
+  <div class="card">
+    <p class="small">例 2（分析）</p>
+    <p>住校生样本里 \(10\) 人的睡眠（小时）：\(7.5,8,8,8.5,7,8,8.5,9,7.5,8\)。求平均数、方差、标准差。</p>
+    <p>和是 \(80\)，\(\bar x=\dfrac{80}{10}=8\)。</p>
+    <p>离 \(8\) 的差：\(-0.5,0,0,0.5,-1,0,0.5,1,-0.5,0\)，平方：\(0.25,0,0,0.25,1,0,0.25,1,0.25,0\)，和是 \(3\)。</p>
+    <p>\(s^2=\dfrac3{10}=0.3\)，\(s=\sqrt{0.3}\approx0.55\)（小时）。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：\(5\) 个数 \(6,7,7,8,7\) 的方差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(7\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\bar x=7\)，差的平方 \(1,0,0,1,0\)，和 \(2\)，除以 \(n=5\) 得 \(0.4\)。选 A 是除以了 \(n-1=4\)，那是别的书的约定，本书除以 \(n\)；选 C 是忘了除。</p></div>
+  </div>
+
+  <h3>4. 百分位数：「排在哪里」</h3>
+  <p>平均数会被个别特别大、特别小的数拉走；百分位数只看排位，不怕极端值。「第 \(25\) 百分位数是 \(6.5\) 小时」意思是：大约四分之一的人睡得不超过 \(6.5\) 小时。</p>
+  <div class="card">
+    <p class="small">例 3（整理和分析）</p>
+    <p>走读生样本里 \(10\) 人的睡眠，排好序：\(6,6,6.5,7,7,7,7,7.5,7.5,8.5\)。求第 \(25\) 百分位数和中位数。</p>
+    <p>第 \(25\) 百分位数：\(i=10\times25\%=2.5\)，不是整数，往上取整为 \(3\)，取第 \(3\) 个数 \(6.5\)。</p>
+    <p>中位数（第 \(50\) 百分位数）：\(i=10\times50\%=5\)，是整数，取第 \(5\)、\(6\) 个数的平均 \(\dfrac{7+7}{2}=7\)。</p>
+    <p>顺便看一眼：这 \(10\) 人里 \(9\) 人不到 \(8\) 小时。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：还是这 \(10\) 个数，第 \(90\) 百分位数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(7.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(8.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(8\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(9\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(i=10\times90\%=9\) 是整数，取第 \(9\)、\(10\) 个的平均 \(\dfrac{7.5+8.5}{2}=8\)。选 A 是只取了第 \(9\) 个，忘了「整数要和下一个平均」。</p></div>
+  </div>
+
+  <h3>5. 分层的数据合起来</h3>
+  <p>两层分别算好以后，想要全年级的估计。人多的层分量大，所以平均数要<b>按人数加权</b>。方差更要小心：每个人离总平均的远近，一部分是离本层平均的距离，一部分是本层平均离总平均的距离，两部分都要算上。</p>
+  <div class="key">两层，人数 \(n_1,n_2\)，\(n=n_1+n_2\)：<br>\(\bar x=\dfrac{n_1\bar x_1+n_2\bar x_2}{n}\)\[\begin{aligned}s^2=\dfrac1n\Big\{&n_1\left[s_1^2+(\bar x_1-\bar x)^2\right]\\&+n_2\left[s_2^2+(\bar x_2-\bar x)^2\right]\Big\}\end{aligned}\]</div>
+  <div class="card">
+    <p class="small">例 4（合并）</p>
+    <p>整理全部样本：走读生 \(30\) 人，\(\bar x_1=7\)，\(s_1^2=0.5\)；住校生 \(20\) 人，\(\bar x_2=8\)，\(s_2^2=0.3\)。求 \(50\) 人的平均数和方差。</p>
+    <p>\(\bar x=\dfrac{30\times7+20\times8}{50}=\dfrac{370}{50}=7.4\)。</p>
+    <p>\(\bar x_1-\bar x=-0.4\)，平方 \(0.16\)；\(\bar x_2-\bar x=0.6\)，平方 \(0.36\)。</p>
+    \[\begin{aligned}s^2&=\dfrac1{50}\left[30\times(0.5+0.16)+20\times(0.3+0.36)\right]\\&=\dfrac{33}{50}=0.66\end{aligned}\]
+    <p>如果偷懒把两个方差直接平均，得 \(\dfrac{0.5+0.3}2=0.4\)，比真的 \(0.66\) 小了一大截：漏掉了「两层平均数不一样」带来的分散。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="B">
+    <p>自己试试：A 层 \(20\) 人，平均 \(7\) 小时；B 层 \(30\) 人，平均 \(8\) 小时。合起来 \(50\) 人的平均数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(7.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(7.6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(7.4\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac{20\times7+30\times8}{50}=\dfrac{380}{50}=7.6\)。选 A 是把两个平均数直接平均，只在两层人数一样时才对；选 C 是把人数配反了。</p></div>
+  </div>
+
+  <h3>6. 得出结论和建议</h3>
+  <p>写结论时把三种话分开：<b>样本事实</b>（数据里确实有的）、<b>对总体的估计</b>（从样本推出来的，可能有误差）、<b>行动建议</b>（要结合背景判断，数据本身不会直接告诉你该做什么）。</p>
+  <div class="card">
+    <p class="small">例 5（案例报告的最后一段）</p>
+    <ul>
+      <li>样本事实：抽到的 \(30\) 名走读生平均睡 \(7\) 小时，\(20\) 名住校生平均睡 \(8\) 小时。</li>
+      <li>总体估计：估计全年级上学日平均每晚约睡 \(7.4\) 小时，低于 \(8\) 小时的目标；走读生大约比住校生少睡 \(1\) 小时。换一次抽样，这些数会有些变化。</li>
+      <li>建议：先找一些走读生了解睡得少的原因（通勤？作业？手机？），再考虑是否调整早读时间。数据只说明「少睡」，没说明「为什么」。</li>
+    </ul>
+  </div>
+  <div class="card predict" data-id="try-5" data-answer="C">
+    <p>自己试试：下面哪一句是「行动建议」？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>样本中 \(20\) 名住校生平均睡 \(8\) 小时</button>
+      <button class="opt" data-v="B"><b>B</b>估计全年级平均每晚约睡 \(7.4\) 小时</button>
+      <button class="opt" data-v="C"><b>C</b>学校可以先了解走读生晚睡的原因，再决定是否推迟早读</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。A 是样本里的事实，B 是用样本推出的总体估计，C 才是建议。把 B 写成「全年级平均睡 \(7.4\) 小时」就说过头了：那是估计，不是量出来的。</p></div>
+  </div>
+
+  <h3>7. 用之前要注意</h3>
+  <ol>
+    <li><b>样本要有代表性</b>：「随手抓」「自愿填」不是随机抽样。<br><span class="small">反例：年级群问卷收回 \(500\) 份，可愿意填的多是常看手机、睡得晚的人；份数再多也修不好这个偏差。样本量大不能弥补抽样方式的毛病。</span></li>
+    <li><b>方差除以 \(n\)</b>：本书约定 \(s^2=\dfrac1n\sum(x_i-\bar x)^2\)，不要无说明地换成除以 \(n-1\)。<br><span class="small">反例：\(6,7,8\) 除以 \(n\) 是 \(\dfrac23\)，除以 \(n-1\) 是 \(1\)，两种答案不一样。</span></li>
+    <li><b>合并时平均数按人数加权，方差不能只平均各层方差</b>。<br><span class="small">反例：A 层 \(10\) 人都睡 \(6\) 小时，B 层 \(10\) 人都睡 \(8\) 小时，两层方差都是 \(0\)；合起来平均 \(7\)，每人都离 \(7\) 差 \(1\)，方差是 \(1\)，不是 \(0\)。</span></li>
+    <li><b>有极端值，平均数和中位数一起看</b>。<br><span class="small">反例：\(9\) 人睡 \(7\) 小时，\(1\) 人周末补觉记成 \(12\) 小时，平均 \(7.5\)，中位数 \(7\)；说「一般人睡 \(7.5\) 小时」就偏高了。</span></li>
+    <li><b>「更稳定」不等于「更好」</b>：方差只说波动，好坏还要看平均数和背景。<br><span class="small">反例：甲每晚都睡 \(6\) 小时，方差 \(0\)，非常稳定，但稳定地睡不够。</span></li>
+    <li><b>看图先看清是什么图</b>：频率分布直方图里，矩形<b>面积</b>才是频率，高度是「频率 ÷ 组距」。<br><span class="small">反例：\([5,7)\) 组距 \(2\)、\([7,8)\) 组距 \(1\)，两组频率都是 \(0.2\)，高度却是 \(0.1\) 和 \(0.2\)；只比高度会以为第二组人多一倍。</span></li>
+  </ol>
+  <div class="key">统计结论有或然性：样本换一批，数就会变。写结论时说「估计」「大约」，把样本事实、总体估计、行动建议分开写。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>百分位数的算法不止一种</b>：满足「大约 \(p\%\) 不超过它」的数可能不唯一，本书选了上面那种算法。电子表格软件里的函数常用别的约定（会在两个数之间按比例取值），算出来可能不一样。做本书的题用本书的算法；用软件要说明用的是哪种。</p>
+    <p><b>方差的单位</b>：睡眠以小时计，方差的单位是「小时的平方」，不好直接解释；所以报告里常写标准差，例如「住校生睡眠的标准差约 \(0.55\) 小时」。</p>
+    <p><b>不按比例分层时</b>：如果故意多抽了住校生（比如两层各抽 \(25\) 人），合并样本的普通平均数会偏向住校生。这时要按<b>总体里</b>各层的比例加权：\(\dfrac{600}{1000}\bar x_1+\dfrac{400}{1000}\bar x_2\)。</p>
+    <p><b>只有分组表时</b>：如果只拿到频率分布表，没有原始数据，算出的平均数、百分位数是按「组内均匀分布」近似的估计值，不能说成准确值。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖一拖：平均数、方差、百分位数</h3>
+  <p class="small">点图里是例 3 那 \(10\) 名走读生的睡眠。拖动任一个点（或选中后按方向键，每次 \(0.5\) 小时），看平均数（绿线）、标准差范围（浅色带）和第 \(p\) 百分位数（棕色虚线）怎么变。试试把一个点拖到 \(12\)：平均数动了，中位数呢？</p>
+  <div class="card">
+    <svg class="fig" id="dots" viewBox="0 0 560 340" role="img" aria-label="10 名同学睡眠时间的点图，标出平均数、标准差范围和百分位数"></svg>
+    <div class="ctrl"><label for="pin">\(p\)</label><input type="range" id="pin" min="5" max="95" step="5"><output id="pout"></output></div>
+    <div class="result" id="dotsout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="dotsreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：两层合起来</h3>
+  <p class="small">绿块是走读生、棕块是住校生：块的宽是「平均数 \(\pm\) 标准差」，高表示人数。拖动轴上的两个圆点改各层平均数（方向键每次 \(0.1\)），滑块改走读生人数（共 \(50\) 人）。看金色的合并平均数和红色虚线「直接平均」差多少，再看合并方差里的「层间」部分怎么随两层拉开而变大。</p>
+  <div class="card">
+    <svg class="fig" id="strata" viewBox="0 0 560 320" role="img" aria-label="两层数据合并：各层平均数、人数与合并平均数、合并方差"></svg>
+    <div class="ctrl"><label for="nin">走读人数</label><input type="range" id="nin" min="5" max="45" step="5"><output id="nout"></output></div>
+    <div class="result" id="strataout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="stratareset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 某校高一 \(800\) 人、高二 \(600\) 人、高三 \(600\) 人，按比例分层随机抽 \(100\) 人，高二抽几人？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(30\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(33\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(40\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(34\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。总体 \(2000\) 人，抽样比 \(\dfrac{100}{2000}=\dfrac1{20}\)，高二抽 \(600\times\dfrac1{20}=30\) 人（高一 \(40\)、高三 \(30\)）。选 B、D 是把 \(100\) 平分成三份，没按比例；选 C 是高一的人数。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. \(8\) 名同学一周的课外运动次数排好序：\(3,5,6,6,7,8,9,10\)。第 \(75\) 百分位数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(8.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(9\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(7.5\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(i=8\times75\%=6\) 是整数，取第 \(6\)、\(7\) 个的平均 \(\dfrac{8+9}{2}=8.5\)。选 A 是只取了第 \(6\) 个；选 C 是只取了第 \(7\) 个。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-sample" data-answer="B">
+    <p>3. 学校想了解学生每天用手机多久。方案甲：在学校公众号发问卷，三天收回 \(1500\) 份；方案乙：从各年级名单里按比例随机抽 \(120\) 人当面填写。哪个方案的结果更可信？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>甲，份数是乙的十几倍</button>
+      <button class="opt" data-v="B"><b>B</b>乙，因为它是随机抽的</button>
+      <button class="opt" data-v="C"><b>C</b>差不多，都是调查</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。甲是自愿作答：会看公众号、愿意填的人，本身可能就更常用手机，样本偏了。份数再多，偏差也还在，增大样本量修不了抽样方式的毛病。乙虽然人少，但每个人被抽到的机会一样，更有代表性。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-merge" data-answer="B">
+    <p>4. 甲组 \(10\) 人测验平均 \(70\) 分、方差 \(4\)；乙组 \(10\) 人平均 \(80\) 分、方差 \(4\)。两组合起来 \(20\) 人，方差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(29\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(8\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。合并平均 \(75\)，两组平均都离它 \(5\)。\(s^2=\dfrac1{20}\left[10\times(4+25)+10\times(4+25)\right]=29\)。选 A 是只平均了两组方差，漏了两组平均分差 \(10\) 分带来的分散；选 C 是把两个方差加了起来。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-stable" data-answer="B">
+    <p>5. 记录一周睡眠：甲平均 \(6.5\) 小时、方差 \(0.05\)；乙平均 \(8\) 小时、方差 \(0.4\)。有人说「甲的方差小，更稳定，所以甲的睡眠情况更好」。对吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>对，方差小就是更好</button>
+      <button class="opt" data-v="B"><b>B</b>不对，甲是稳定地睡不够</button>
+      <button class="opt" data-v="C"><b>C</b>不对，方差大的乙更稳定</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。方差只说波动大小：甲每晚都差不多，但都在 \(6.5\) 小时左右，离 \(8\) 小时差得远。「睡得够不够」先看平均数，「规不规律」才看方差。C 把方差的意思说反了。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 某小组 \(10\) 人每周课外阅读时间：\(9\) 人各 \(2\) 小时，\(1\) 人 \(20\) 小时。报告写：「平均每人每周读 \(3.8\) 小时，超过 \(3\) 小时的目标，说明大部分同学阅读时间达标。」这个结论哪里有问题？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>没问题，平均数算对了</button>
+      <button class="opt" data-v="B"><b>B</b>平均数被一个极端值拉高；中位数只有 \(2\)，大部分人没达标</button>
+      <button class="opt" data-v="C"><b>C</b>平均数算错了，应该是 \(2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。平均数 \(\dfrac{9\times2+20}{10}=3.8\) 没算错，可 \(10\) 人里 \(9\) 人只有 \(2\) 小时，中位数是 \(2\)，达标的只有 \(1\) 人。「平均数超过目标」推不出「大部分人达标」。</p>
+      <p>有极端值时，平均数、中位数要一起看；想说「大部分人」，最好直接数达标的人数，或者看百分位数。C 把平均数和中位数弄混了。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  // 精确时写「=」，四舍五入过才写「≈」
+  function eqv(x) { return (Math.abs(Math.round(x * 100) / 100 - x) < 1e-9 ? "=" : "\\approx ") + f2(x); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { onMove(toSvg(fig, e).x); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  var KEYS = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 };
+
+  /* ================= ① 点图 ================= */
+  var dots = document.getElementById("dots"), pin = document.getElementById("pin");
+  var START = [12, 12, 13, 14, 14, 14, 14, 15, 15, 17]; // 睡眠时间的 2 倍（每格 0.5 小时）
+  var H0 = 8, H1 = 24, DX0 = 40, DX1 = 520, AY = 250; // 4～12 小时
+  var vals, p;
+  function hx(h2) { return DX0 + (h2 - H0) / (H1 - H0) * (DX1 - DX0); }
+  function stats(arr) {
+    var n = arr.length, s = 0, i;
+    for (i = 0; i < n; i++) s += arr[i] / 2;
+    var mean = s / n, v = 0;
+    for (i = 0; i < n; i++) v += Math.pow(arr[i] / 2 - mean, 2);
+    var sorted = arr.map(function (x) { return x / 2; }).sort(function (a, b) { return a - b; });
+    return { mean: mean, v: v / n, sorted: sorted };
+  }
+  function pct(sorted, pp) {
+    var n = sorted.length, i10 = n * pp; // i 的 100 倍
+    if (i10 % 100 === 0) { var i = i10 / 100; return { i: i, int: true, val: (sorted[i - 1] + sorted[i]) / 2 }; }
+    var c = Math.ceil(i10 / 100); return { i: i10 / 100, int: false, c: c, val: sorted[c - 1] };
+  }
+  function dotsReset() { vals = START.slice(); p = 50; pin.value = p; dotsDraw(); }
+  function dotsDraw(focusIdx) {
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), line = css("--line"), card = css("--card");
+    var st = stats(vals), sd = Math.sqrt(st.v), pc = pct(st.sorted, p);
+    dots.innerHTML = "";
+    // 平均数 ± 标准差
+    var lo = clamp(st.mean - sd, 4, 12), hi = clamp(st.mean + sd, 4, 12);
+    svg("rect", { x: hx(lo * 2), y: 20, width: Math.max(hx(hi * 2) - hx(lo * 2), 0), height: AY - 20, fill: line, opacity: 0.6 }, dots);
+    // 轴
+    svg("line", { x1: DX0 - 10, y1: AY, x2: DX1 + 10, y2: AY, stroke: fg, "stroke-width": 1.5 }, dots);
+    for (var t = 4; t <= 12; t++) {
+      svg("line", { x1: hx(2 * t), y1: AY, x2: hx(2 * t), y2: AY + 6, stroke: fg }, dots);
+      svg("text", { x: hx(2 * t), y: AY + 28, "text-anchor": "middle" }, dots).textContent = t;
+    }
+    svg("text", { x: DX1 + 18, y: AY + 54, "text-anchor": "end" }, dots).textContent = "小时";
+    // 平均数线、百分位数线
+    svg("line", { x1: hx(st.mean * 2), y1: 20, x2: hx(st.mean * 2), y2: AY + 36, stroke: ca, "stroke-width": 3 }, dots);
+    svg("line", { x1: hx(pc.val * 2), y1: 20, x2: hx(pc.val * 2), y2: AY + 62, stroke: cb, "stroke-width": 3, "stroke-dasharray": "7 5" }, dots);
+    function lab(x, y, txt, col) {
+      var anchor = x < 70 ? "start" : (x > 490 ? "end" : "middle");
+      svg("text", { x: x, y: y, "text-anchor": anchor, fill: col, "font-weight": 700 }, dots).textContent = txt;
+    }
+    lab(hx(st.mean * 2), AY + 54, "平均", ca);
+    lab(hx(pc.val * 2), AY + 82, "P" + p, cb);
+    // 点：同一个值往上叠
+    var count = {};
+    for (var i = 0; i < vals.length; i++) {
+      var h = vals[i], k = count[h] || 0; count[h] = k + 1;
+      var c = svg("circle", { cx: hx(h), cy: AY - 14 - k * 23, r: 10, fill: ca, "fill-opacity": 0.85, stroke: card, "stroke-width": 2,
+        tabindex: 0, role: "slider", "data-idx": i, "aria-label": "第 " + (i + 1) + " 个同学的睡眠小时数",
+        "aria-valuemin": 4, "aria-valuemax": 12, "aria-valuenow": h / 2, style: "cursor:grab" }, dots);
+      (function (idx, el) {
+        el.addEventListener("keydown", function (ev) {
+          var d = KEYS[ev.key];
+          if (!d) return;
+          ev.preventDefault(); d = clamp(d, -2, 2); // PageUp/PageDown 一次 1 小时
+          vals[idx] = clamp(vals[idx] + d, H0, H1); dotsDraw(idx);
+        });
+        draggable(dots, el, function (x) {
+          var v = clamp(Math.round(H0 + (x - DX0) / (DX1 - DX0) * (H1 - H0)), H0, H1);
+          if (v !== vals[idx]) { vals[idx] = v; dotsDraw(idx); }
+        }, function () { Peiyu.log("interact", { id: "dots", vals: vals.map(function (x) { return x / 2; }) }); });
+      })(i, c);
+    }
+    if (focusIdx !== undefined) { var fe = dots.querySelector('[data-idx="' + focusIdx + '"]'); if (fe) fe.focus(); }
+
+    document.getElementById("pout").textContent = p;
+    var lines = [];
+    lines.push("排序：" + st.sorted.map(f2).join(", "));
+    lines.push("平均数 \\(\\bar x" + eqv(st.mean) + "\\)，方差 \\(s^2" + eqv(st.v) + "\\)，标准差 \\(s" + eqv(sd) + "\\)");
+    if (pc.int) lines.push("第 " + p + " 百分位数：\\(i=10\\times" + p + "\\%=" + pc.i + "\\) 是整数，取第 " + pc.i + "、" + (pc.i + 1) + " 个的平均 \\(" + eqv(pc.val) + "\\)");
+    else lines.push("第 " + p + " 百分位数：\\(i=10\\times" + p + "\\%=" + f2(pc.i) + "\\) 不是整数，取第 " + pc.c + " 个 \\(=" + f2(pc.val) + "\\)");
+    var short = 0; for (var j = 0; j < vals.length; j++) if (vals[j] < 16) short++;
+    lines.push("不到 \\(8\\) 小时的有 " + short + " 人。");
+    var out = document.getElementById("dotsout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  pin.addEventListener("input", function () { p = clamp(Math.round((parseInt(pin.value, 10) || 50) / 5) * 5, 5, 95); dotsDraw(); });
+  pin.addEventListener("change", function () { Peiyu.log("interact", { id: "dots-p", p: p }); });
+  document.getElementById("dotsreset").onclick = dotsReset;
+
+  /* ================= ② 两层合并 ================= */
+  var st2 = document.getElementById("strata"), nin = document.getElementById("nin");
+  var N = 50, V1 = 0.5, V2 = 0.3, M0 = 45, M1 = 105, SX0 = 40, SX1 = 520, BY = 222; // 平均数存 10 倍：4.5～10.5
+  var n1, m1, m2; // m1、m2：平均数的 10 倍
+  function mx(m10) { return SX0 + (m10 - M0) / (M1 - M0) * (SX1 - SX0); }
+  function strataReset() { n1 = 30; m1 = 70; m2 = 80; nin.value = n1; strataDraw(); }
+  function strataDraw(focusWhich) {
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), no = css("--no"), card = css("--card");
+    var n2 = N - n1, a = m1 / 10, b = m2 / 10;
+    var mean = (n1 * a + n2 * b) / N, naive = (a + b) / 2;
+    var within = (n1 * V1 + n2 * V2) / N, between = (n1 * Math.pow(a - mean, 2) + n2 * Math.pow(b - mean, 2)) / N;
+    var total = within + between, naiveV = (V1 + V2) / 2;
+    st2.innerHTML = "";
+    // 两层的块：宽 = 平均数 ± 标准差，高 ∝ 人数
+    [[m1, V1, n1, ca], [m2, V2, n2, cb]].forEach(function (L) {
+      var s10 = Math.sqrt(L[1]) * 10, h = L[2] * 3;
+      var x0 = Math.max(mx(L[0] - s10), SX0 - 10), x1 = Math.min(mx(L[0] + s10), SX1 + 10);
+      svg("rect", { x: x0, y: BY - h, width: x1 - x0, height: h, fill: L[3], opacity: 0.35, stroke: L[3], "stroke-width": 2 }, st2);
+    });
+    // 轴
+    svg("line", { x1: SX0 - 10, y1: BY, x2: SX1 + 10, y2: BY, stroke: fg, "stroke-width": 1.5 }, st2);
+    for (var t = 5; t <= 10; t++) {
+      svg("line", { x1: mx(t * 10), y1: BY, x2: mx(t * 10), y2: BY + 6, stroke: fg }, st2);
+      svg("text", { x: mx(t * 10), y: BY + 28, "text-anchor": "middle" }, st2).textContent = t;
+    }
+    // 合并平均、直接平均
+    function vlab(x, y, txt, col) {
+      var anchor = x < 110 ? "start" : (x > 450 ? "end" : "middle");
+      svg("text", { x: x, y: y, "text-anchor": anchor, fill: col, "font-weight": 700 }, st2).textContent = txt;
+    }
+    svg("line", { x1: mx(naive * 10), y1: 40, x2: mx(naive * 10), y2: BY, stroke: no, "stroke-width": 2, "stroke-dasharray": "6 5" }, st2);
+    svg("line", { x1: mx(mean * 10), y1: 70, x2: mx(mean * 10), y2: BY, stroke: hl, "stroke-width": 3.5 }, st2);
+    vlab(mx(naive * 10), 32, "直接平均 " + f2(naive), no);
+    vlab(mx(mean * 10), 62, "合并 " + f2(mean), hl);
+    // 两个可拖的圆点 + 层名
+    [["m1", m1, ca, "走读 " + n1 + " 人", BY + 56], ["m2", m2, cb, "住校 " + n2 + " 人", BY + 84]].forEach(function (L) {
+      var c = svg("circle", { cx: mx(L[1]), cy: BY, r: 11, fill: card, stroke: L[2], "stroke-width": 3.5, tabindex: 0, role: "slider", "data-w": L[0],
+        "aria-label": (L[0] === "m1" ? "走读生" : "住校生") + "的平均睡眠小时数", "aria-valuemin": 4.5, "aria-valuemax": 10.5, "aria-valuenow": L[1] / 10, style: "cursor:grab" }, st2);
+      vlab(mx(L[1]), L[4], L[3], L[2]);
+      function set(v) { v = clamp(v, M0, M1); if (L[0] === "m1") m1 = v; else m2 = v; }
+      c.addEventListener("keydown", function (ev) {
+        var d = KEYS[ev.key];
+        if (!d) return;
+        ev.preventDefault(); set((L[0] === "m1" ? m1 : m2) + d); strataDraw(L[0]);
+      });
+      draggable(st2, c, function (x) {
+        var v = clamp(Math.round(M0 + (x - SX0) / (SX1 - SX0) * (M1 - M0)), M0, M1);
+        if (v !== (L[0] === "m1" ? m1 : m2)) { set(v); strataDraw(L[0]); }
+      }, function () { Peiyu.log("interact", { id: "strata-mean", n1: n1, m1: m1 / 10, m2: m2 / 10 }); });
+    });
+    if (focusWhich) { var fe = st2.querySelector('[data-w="' + focusWhich + '"]'); if (fe) fe.focus(); }
+
+    document.getElementById("nout").textContent = n1;
+    var lines = [];
+    lines.push("走读 \\(n_1=" + n1 + "\\)，\\(\\bar x_1=" + f2(a) + "\\)，\\(s_1^2=0.5\\)；住校 \\(n_2=" + n2 + "\\)，\\(\\bar x_2=" + f2(b) + "\\)，\\(s_2^2=0.3\\)。");
+    lines.push("合并平均数 \\(\\bar x=\\dfrac{" + n1 + "\\times" + f2(a) + "+" + n2 + "\\times" + f2(b) + "}{50}" + eqv(mean) + "\\)；"
+      + (Math.abs(mean - naive) < 1e-9 ? '<span class="eq">和直接平均 ' + f2(naive) + " 一样</span>（人数相等，或两层平均数相同）。"
+        : '<span class="bad">直接平均得 ' + f2(naive) + "，不对</span>：人多的层分量大。"));
+    lines.push("合并方差 \\(s^2=\\) 层内 \\(" + f2(within) + "\\) \\(+\\) 层间 \\(" + f2(between) + "\\) \\(" + eqv(total) + "\\)；"
+      + (between < 1e-9 ? '<span class="eq">两层平均数相同，层间为 0</span>。' : '只平均两层方差得 \\(' + f2(naiveV) + "\\)，少算了层间那部分。"));
+    var out = document.getElementById("strataout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  nin.addEventListener("input", function () { n1 = clamp(Math.round((parseInt(nin.value, 10) || 30) / 5) * 5, 5, 45); strataDraw(); });
+  nin.addEventListener("change", function () { Peiyu.log("interact", { id: "strata-n", n1: n1 }); });
+  document.getElementById("stratareset").onclick = strataReset;
+
+  document.addEventListener("DOMContentLoaded", function () { dotsReset(); strataReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { dotsDraw(); strataDraw(); });
+})();
+</script>
+</body></html>

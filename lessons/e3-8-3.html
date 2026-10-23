@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8.3 列联表与独立性检验 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig text { font-size: 20px; } /* 375 px 宽时仍 ≥ 11 px（GOAL 第 5 条） */
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  table.ct { border-collapse: collapse; margin: 8px auto; font-size: 15px; }
+  table.ct th, table.ct td { border: 1px solid var(--line); padding: 4px 8px; text-align: center; }
+  table.ct th { font-weight: 600; background: var(--bg); }
+  table.ct td.sum { color: var(--muted); }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .cell input { font: inherit; width: 4em; text-align: center; padding: 2px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+  .cell .pm { min-width: 40px; min-height: 30px; padding: 0 8px; }
+  .cell .lb { font-size: 13px; color: var(--muted); }
+  .btn.ghost[aria-pressed="true"] { background: var(--a); color: var(--bg); }
+</style>
+</head>
+<body data-sec="e3-8-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 8 章 成对数据的统计分析</p>
+<h1>8.3 列联表与独立性检验</h1>
+<p class="lead">两件「是 / 否」类的事有没有关系？把人数填进一张四格的表，算一个数 \(\chi^2\)，再和事先定好的标准比。先从一次篮球调查开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>年级里调查了 \(80\) 名男生、\(50\) 名女生，问「每周打不打篮球」。男生有 \(48\) 人打，女生有 \(10\) 人打。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>按<b>比例</b>看，男生和女生谁更常打篮球？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>男生</button>
+      <button class="opt" data-v="B"><b>B</b>女生</button>
+      <button class="opt" data-v="C"><b>C</b>差不多</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。男生 \(\dfrac{48}{80}=60\%\)，女生 \(\dfrac{10}{50}=20\%\)，差得很多。看起来「性别」和「打不打篮球」有关联。</p>
+      <p>可要是比例是 \(52\%\) 对 \(48\%\) 呢？差一点点，可能只是这次碰巧问到的人不一样。</p>
+      <p>这一节就讲：把数据整理成一张四格的表，用一个数 \(\chi^2\) 量「差得够不够多」，再和事先定好的标准比，决定能不能说「有关联」，以及这句话该怎么说才不过头。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：事件的相互独立 \(P(AB)=P(A)P(B)\)（<a href="b2-10-2.html">回看必修二 10.2</a>）；频率和比例；成对数据、两个变量之间的关系（<a href="e3-8-1.html">回看 8.1</a>）。</p>
+
+  <div class="card">
+    <p><b>分类变量</b>：取值是几个类别，不是能加减的数。</p>
+    <p>例：「性别」取男、女；「打不打篮球」取打、不打。就算把「打」记成 \(1\)、「不打」记成 \(0\)，这两个数也只是名字。本节的两个分类变量都只取两类。</p>
+  </div>
+
+  <div class="card">
+    <p><b>\(2\times2\) 列联表</b>：把两个分类变量的四种组合各有多少人填进四个格子，再写上合计。</p>
+    <div class="wide-x"><table class="ct">
+      <tr><th></th><th>打</th><th>不打</th><th>合计</th></tr>
+      <tr><th>男</th><td>\(a=48\)</td><td>\(b=32\)</td><td class="sum">\(80\)</td></tr>
+      <tr><th>女</th><td>\(c=10\)</td><td>\(d=40\)</td><td class="sum">\(50\)</td></tr>
+      <tr><th>合计</th><td class="sum">\(58\)</td><td class="sum">\(72\)</td><td class="sum">\(n=130\)</td></tr>
+    </table></div>
+    <p class="small">一般写法：第一行 \(a,b\)，第二行 \(c,d\)，\(n=a+b+c+d\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>零假设 \(H_0\)：两个变量独立</b>。用到必修二的独立：如果「性别」和「打不打」独立，那么男生里打的比例、女生里打的比例应该一样，都等于全体里打的比例。</p>
+    <p>例：全体里打的比例是 \(\dfrac{58}{130}\approx44.6\%\)。若独立，\(80\) 个男生里应该约有 \(80\times\dfrac{58}{130}\approx35.7\) 人打，实际是 \(48\) 人。差了 \(12\) 人左右，这个「差」就是要量的东西。</p>
+  </div>
+
+  <div class="card">
+    <p><b>小概率值 \(\alpha\) 和临界值 \(x_\alpha\)</b>：事先定一个很小的概率 \(\alpha\)，比如 \(0.05\)。临界值 \(x_\alpha\) 的意思是：<b>如果 \(H_0\) 成立</b>，算出来的 \(\chi^2\ge x_\alpha\) 的概率约为 \(\alpha\)。常用的五组：</p>
+    <div class="wide-x"><table class="ct">
+      <tr><th>\(\alpha\)</th><td>\(0.1\)</td><td>\(0.05\)</td><td>\(0.01\)</td><td>\(0.005\)</td><td>\(0.001\)</td></tr>
+      <tr><th>\(x_\alpha\)</th><td>\(2.706\)</td><td>\(3.841\)</td><td>\(6.635\)</td><td>\(7.879\)</td><td>\(10.828\)</td></tr>
+    </table></div>
+    <p>例：\(\alpha=0.05\) 时 \(x_\alpha=3.841\)：两个变量真的独立时，\(\chi^2\) 达到 \(3.841\) 的情形大约 \(20\) 次里只有 \(1\) 次。\(\alpha\) 越小，临界值越大，要求越严。</p>
+  </div>
+
+  <h3>2. 先看比例：等高堆积条形图</h3>
+  <p>人数多少不能直接比，两行的总人数可能不同。把每一行都换成比例，画成一样高的条，每条按比例分成两段，这叫<b>等高堆积条形图</b>。两条的分界线高度差不多，说明两行比例差不多；差得多，说明可能有关联。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么做）</p>
+    <p>问了 \(100\) 名同学「是否常吃早餐」和「上午是否犯困」：常吃早餐的 \(50\) 人中 \(15\) 人犯困，不常吃的 \(50\) 人中 \(30\) 人犯困。</p>
+    <p>常吃早餐一行：犯困比例 \(\dfrac{15}{50}=30\%\)；不常吃一行：\(\dfrac{30}{50}=60\%\)。两条的分界线一个在 \(30\%\)、一个在 \(60\%\)，差得明显，所以怀疑「吃早餐」和「犯困」有关联。到底差得够不够多，下一块用 \(\chi^2\) 判断。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：甲组 \(50\) 人中 \(30\) 人选「是」，乙组 \(30\) 人中 \(18\) 人选「是」。按比例看两组？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>甲组更高</button>
+      <button class="opt" data-v="B"><b>B</b>一样</button>
+      <button class="opt" data-v="C"><b>C</b>乙组更高</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac{30}{50}=60\%\)，\(\dfrac{18}{30}=60\%\)，比例一样，等高条形图里两条的分界线一样高（这时 \(\chi^2=0\)）。选 A 的同学比的是人数 \(30>18\)，没看两组总人数不同。</p></div>
+  </div>
+
+  <h3>3. 算 \(\chi^2\)</h3>
+  <p>\(\chi^2\) 把「每个格子实际人数和独立时应有人数差多少」合成一个数。对 \(2\times2\) 表，它化简成</p>
+  <div class="key" style="text-align:center">\(\chi^2=\dfrac{n(ad-bc)^2}{(a+b)(c+d)(a+c)(b+d)}\)，其中 \(n=a+b+c+d\)。</div>
+  <p>分母是两个行合计、两个列合计的乘积。\(ad-bc=0\) 正好是两行比例相等（\(\dfrac{a}{a+b}=\dfrac{c}{c+d}\) 交叉相乘就是 \(ad=bc\)），这时 \(\chi^2=0\)；两行比例差得越多，\(\chi^2\) 越大。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>接例 1：\(a=15\)，\(b=35\)，\(c=30\)，\(d=20\)，\(n=100\)。</p>
+    <p>\(ad-bc=15\times20-35\times30=300-1050=-750\)，平方得 \(562500\)。</p>
+    <p>行合计 \(50,50\)，列合计 \(45,55\)，分母 \(50\times50\times45\times55=6187500\)。</p>
+    <p>\(\chi^2=\dfrac{100\times562500}{6187500}\approx9.091\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(a=20\)，\(b=30\)，\(c=30\)，\(d=20\)。\(\chi^2=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.04\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-4\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(n=100\)，\(ad-bc=400-900=-500\)，平方 \(250000\)；四个合计都是 \(50\)，分母 \(50^4=6250000\)。\(\chi^2=\dfrac{100\times250000}{6250000}=4\)。选 B 是漏乘了 \(n\)；C 不可能，分子是平方，\(\chi^2\) 不会是负数。</p></div>
+  </div>
+
+  <h3>4. 检验三步，结论怎么说</h3>
+  <ol>
+    <li>提出 \(H_0\)：两个变量独立；<b>事先</b>选好 \(\alpha\)，查出 \(x_\alpha\)。</li>
+    <li>由列联表算 \(\chi^2\)。</li>
+    <li>比较：\(\chi^2\ge x_\alpha\) 就拒绝 \(H_0\)，认为两个变量<b>有关联</b>，这样推断犯错的概率不超过 \(\alpha\)；\(\chi^2&lt;x_\alpha\) 就说<b>没有充分证据</b>认为两个变量有关联。</li>
+  </ol>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>接例 2，\(\chi^2\approx9.091\)。</p>
+    <p>取 \(\alpha=0.01\)：\(9.091\ge6.635\)，拒绝 \(H_0\)。在 \(\alpha=0.01\) 下认为「是否常吃早餐」和「上午是否犯困」有关联，这个推断犯错的概率不超过 \(0.01\)。</p>
+    <p>若事先取的是 \(\alpha=0.001\)：\(9.091&lt;10.828\)，不能拒绝 \(H_0\)，结论是「没有充分证据认为两者有关联」。同一组数据，规则定得越严，越难下「有关联」的结论；所以 \(\alpha\) 要算之前定，不能算完再挑一个合心意的。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B">
+    <p>自己试试：取 \(\alpha=0.05\)，算得 \(\chi^2=3.2\)。结论应该写？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>认为两个变量有关联，犯错概率不超过 \(0.05\)</button>
+      <button class="opt" data-v="B"><b>B</b>没有充分证据认为两个变量有关联</button>
+      <button class="opt" data-v="C"><b>C</b>证明了两个变量独立</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(3.2&lt;3.841\)，没到临界值，不能拒绝 \(H_0\)。选 A 是比反了方向；选 C 说过头了：没拒绝只是证据不够，不是证明独立（下一块有反例）。</p></div>
+  </div>
+  <div class="key">\(\chi^2\ge x_\alpha\)：认为有关联，犯错概率不超过 \(\alpha\)。<br>\(\chi^2&lt;x_\alpha\)：没有充分证据认为有关联（不是「证明独立」）。</div>
+
+  <h3>5. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>行、列合计都要是正数</b>。<br><span class="small">反例：只调查了男生，女生一行 \(c=d=0\)，分母里 \(c+d=0\)，公式算不了；本来也没有第二组可比。</span></li>
+    <li><b>样本要随机抽，人数不能太少</b>。临界值是 \(n\) 较大时的近似，教师用书建议四个格子都不小于 \(5\)（这是让近似够准的经验做法，不是「独立」的定义）。<br><span class="small">反例：\(a=2,b=0,c=0,d=2\)，只有 \(4\) 个人，算出 \(\chi^2=4>3.841\)。凭 \(4\) 个人就说「有关联」显然靠不住。</span></li>
+    <li><b>没超过临界值，不等于证明了独立</b>。<br><span class="small">反例：\(a=6,b=4,c=4,d=6\)，两组比例 \(60\%\) 对 \(40\%\)，\(\chi^2=0.8\)；比例不变、每格都乘 \(10\)，\(\chi^2=8>7.879\)。差别一直在，只是样本小时看不出。</span></li>
+    <li><b>\(\alpha\) 说的是规则会犯错的概率</b>：\(H_0\) 真成立时，按这个规则误判「有关联」的概率不超过 \(\alpha\)。<br><span class="small">反例：\(\alpha=0.05\) 下拒绝了 \(H_0\)，<b>不能</b>说「\(H_0\) 为真的概率是 \(0.05\)」，也<b>不能</b>说「结论正确的概率是 \(0.95\)」。</span></li>
+    <li><b>有关联，不等于有因果</b>。<br><span class="small">反例：「不常吃早餐」和「上午犯困」有关联，也可能是睡得晚的同学既来不及吃早餐、又犯困，晚睡才是共同的原因。</span></li>
+  </ol>
+  <div class="key">独立性检验是<b>统计推断</b>，不是证明：结论连同 \(H_0\)、\(\alpha\) 一起说，并且有犯错的可能。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>公式从哪来</b>：独立时每个格子「应有」的人数是 \(\dfrac{\text{行合计}\times\text{列合计}}{n}\)。把四个格子的 \(\dfrac{(\text{实际}-\text{应有})^2}{\text{应有}}\) 加起来，对 \(2\times2\) 表化简后正好是上面的公式。例 2 里，常吃早餐且犯困应有 \(\dfrac{50\times45}{100}=22.5\) 人，实际 \(15\) 人。</p>
+    <p><b>和反证法比</b>：反证法是「假设 \(\Rightarrow\) 推出矛盾 \(\Rightarrow\) 假设一定不对」。独立性检验是「假设 \(H_0\) \(\Rightarrow\) 这么大的 \(\chi^2\) 很少见 \(\Rightarrow\) 不太相信 \(H_0\)」。很少见不是不可能，所以结论可能错，错的概率由 \(\alpha\) 控制。</p>
+    <p><b>临界值从哪来</b>：\(H_0\) 成立、\(n\) 较大时，\(\chi^2\) 近似服从一种叫「自由度为 \(1\) 的 \(\chi^2\) 分布」的分布，表里的数就是它右侧概率为 \(\alpha\) 的位置。「动手」③ 可以亲手抽样看到这一点。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 列联表：改人数，看条形图和 \(\chi^2\)</h3>
+  <p class="small">点 \(+\)、\(-\)，或在格子里输入人数（选中后方向键也能改）。上面是等高堆积条形图，虚线是「若独立」时的比例；下面的刻度上，圆点是 \(\chi^2\)，竖线是所选 \(\alpha\) 的临界值。试试把一行清成 \(0\)。</p>
+  <div class="card">
+    <div class="wide-x"><table class="ct" id="ct">
+      <tr><th></th><th>犯困</th><th>不犯困</th><th>合计</th></tr>
+      <tr><th>常吃早餐</th><td><div class="cell" data-k="a"></div></td><td><div class="cell" data-k="b"></div></td><td class="sum" id="r1"></td></tr>
+      <tr><th>不常吃</th><td><div class="cell" data-k="c"></div></td><td><div class="cell" data-k="d"></div></td><td class="sum" id="r2"></td></tr>
+      <tr><th>合计</th><td class="sum" id="c1"></td><td class="sum" id="c2"></td><td class="sum" id="nn"></td></tr>
+    </table></div>
+    <div class="ctrl" id="alphas" role="group" aria-label="选择小概率值 α"><span>\(\alpha\)：</span></div>
+    <svg class="fig" id="bars" viewBox="0 0 560 392" role="img" aria-label="等高堆积条形图和卡方值刻度"></svg>
+    <div class="result" id="barsout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="barsreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：比例不变，人数变多</h3>
+  <p class="small">表固定是 \(6m,4m;4m,6m\)：两组比例一直是 \(60\%\) 对 \(40\%\)。拖滑块改 \(m\)（选中后方向键也行），看 \(\chi^2\) 怎么跟着 \(n\) 变。</p>
+  <div class="card">
+    <svg class="fig" id="grow" viewBox="0 0 560 300" role="img" aria-label="样本扩大倍数与卡方值"></svg>
+    <div class="ctrl"><label for="mIn">\(m\)</label><input type="range" id="mIn" min="1" max="20" step="1"><output id="mOut"></output></div>
+    <div class="result" id="growout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="growreset" type="button">重置</button></div>
+  </div>
+
+  <h3>③ 进阶：\(H_0\) 真成立时，会误判多少次</h3>
+  <p class="small">这里两组各 \(50\) 人，每人选「是」的概率<b>都是</b> \(0.3\)，两个变量真的独立。每抽一次就得到一张表、一个 \(\chi^2\)。用 \(\alpha=0.05\) 的规则，看误判「有关联」（\(\chi^2\ge3.841\)，红色）的比例。</p>
+  <div class="card">
+    <svg class="fig" id="sim" viewBox="0 0 560 306" role="img" aria-label="独立时卡方值的分布直方图"></svg>
+    <div class="ctrl"><button class="btn" id="sim1" type="button">抽 1 次</button><button class="btn" id="sim100" type="button">抽 100 次</button><button class="btn ghost" id="simreset" type="button">重置</button></div>
+    <div class="result" id="simout" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 一张列联表 \(a=40,b=10,c=30,d=20\)。下面哪个结论对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\alpha=0.05\) 下认为有关联；\(\alpha=0.01\) 下没有充分证据</button>
+      <button class="opt" data-v="B"><b>B</b>两个 \(\alpha\) 下都认为有关联</button>
+      <button class="opt" data-v="C"><b>C</b>两个 \(\alpha\) 下都没有充分证据</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(n=100\)，\(ad-bc=800-300=500\)；行合计 \(50,50\)，列合计 \(70,30\)。\(\chi^2=\dfrac{100\times250000}{50\times50\times70\times30}=\dfrac{25000000}{5250000}\approx4.762\)。\(4.762\ge3.841\)，但 \(4.762&lt;6.635\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(60\) 名男生中 \(45\) 人喜欢某游戏，\(40\) 名女生中 \(18\) 人喜欢。若「性别」与「喜不喜欢」独立，男生中喜欢的人数应约为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(37.8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(45\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(31.5\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。全体喜欢的比例 \(\dfrac{45+18}{100}=63\%\)，独立时男生里也该是 \(63\%\)：\(60\times0.63=37.8\)。B 是实际人数；C 是把 \(63\) 人平分给两组，没考虑男生更多。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-indep" data-answer="C">
+    <p>3. 取 \(\alpha=0.1\)，算得 \(\chi^2=1.5\)。下面哪句话合适？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>两个变量独立，这已被证明</button>
+      <button class="opt" data-v="B"><b>B</b>两个变量独立的概率是 \(0.9\)</button>
+      <button class="opt" data-v="C"><b>C</b>没有充分证据认为两个变量有关联</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(1.5&lt;2.706\)，不能拒绝 \(H_0\)。这只是证据不够：样本再大一些，同样的比例差也可能超过临界值（「动手」②）。A、B 都把「没拒绝」说成了「独立」。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-alpha" data-answer="B">
+    <p>4. 取 \(\alpha=0.01\)，算得 \(\chi^2=8.2\)，拒绝了 \(H_0\)。哪种说法对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>这个结论正确的概率是 \(99\%\)</button>
+      <button class="opt" data-v="B"><b>B</b>若两个变量其实独立，按这个规则误判为「有关联」的概率不超过 \(0.01\)</button>
+      <button class="opt" data-v="C"><b>C</b>证明了一个变量是另一个的原因</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\alpha\) 控制的是「\(H_0\) 为真时误拒」的概率，是规则的性质，不是这次结论对不对的概率，所以 A 不对（「动手」③ 里能看到这个比例）。C 混淆了关联和因果。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-size" data-answer="B">
+    <p>5. 一次 \(50\) 人的调查算得 \(\chi^2=1.2\)。若再调查一次，人数变成 \(500\)，四个格子都正好是原来的 \(10\) 倍，\(\chi^2=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1.2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(120\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(n\) 乘 \(10\)，\((ad-bc)^2\) 乘 \(10^4\)，分母四个合计的乘积也乘 \(10^4\)，合起来 \(\chi^2\) 乘 \(10\)。\(12>10.828\)，连 \(\alpha=0.001\) 都能拒绝。原来「没有充分证据」，只是人太少。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 两组各 \(50\) 人，选「是」的一共 \(40\) 人。第一组选「是」的比第二组多。第一组至少有几人选「是」，才能在 \(\alpha=0.05\) 下认为有关联？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(23\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(25\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(30\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。设第一组 \(a\) 人选「是」，则 \(b=50-a\)，\(c=40-a\)，\(d=10+a\)。\(ad-bc=a(10+a)-(50-a)(40-a)=100a-2000\)。</p>
+      <p>\(\chi^2=\dfrac{100\times(100a-2000)^2}{50\times50\times40\times60}=\dfrac{(a-20)^2}{6}\)。要 \(\dfrac{(a-20)^2}{6}\ge3.841\)，即 \((a-20)^2\ge23.05\)。\(a=24\) 时 \(\dfrac{16}{6}\approx2.67\) 不够，\(a=25\) 时 \(\dfrac{25}{6}\approx4.17\) 够了。也就是 \(50\%\) 对 \(30\%\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(parent, x, y, s, attrs) {
+    var a = { x: x, y: y }; for (var k in attrs || {}) a[k] = attrs[k];
+    svg("text", a, parent).textContent = s; return parent;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function fx(x, d) { var s = (Math.round(x * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d); return +s === 0 ? (0).toFixed(d) : s; }
+  function pct(x) { return fx(x * 100, 1).replace(/\.0$/, "") + "\\%"; }
+  // 公式后面紧跟的标点不单独换行
+  function nb(h) { return h.replace(/(\\\((?:(?!\\\))[^])*\\\)[。，）]+)/g, '<span style="white-space:nowrap">$1</span>'); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  // χ²；任一行或列合计为 0 时返回 null
+  function chi2(a, b, c, d) {
+    var n = a + b + c + d, r1 = a + b, r2 = c + d, c1 = a + c, c2 = b + d;
+    if (!(r1 > 0 && r2 > 0 && c1 > 0 && c2 > 0)) return null;
+    var k = a * d - b * c;
+    return n * k * k / (r1 * r2 * c1 * c2);
+  }
+  var ALPHAS = [["0.1", 2.706], ["0.05", 3.841], ["0.01", 6.635], ["0.005", 7.879], ["0.001", 10.828]];
+  var MAXV = 500;
+
+  /* ================= ① 列联表 ================= */
+  var T = {}, inputs = {}, ai = 1;
+  var DEF = { a: 15, b: 35, c: 30, d: 20 };
+  var barsSvg = document.getElementById("bars");
+  [].forEach.call(document.querySelectorAll("#ct .cell"), function (cell) {
+    var k = cell.getAttribute("data-k");
+    var plus = document.createElement("button"), minus = document.createElement("button"), inp = document.createElement("input"), lb = document.createElement("span");
+    plus.type = minus.type = "button"; plus.className = minus.className = "btn ghost pm";
+    plus.textContent = "+"; minus.textContent = "−";
+    plus.setAttribute("aria-label", k + " 加 1"); minus.setAttribute("aria-label", k + " 减 1");
+    inp.type = "number"; inp.min = 0; inp.max = MAXV; inp.step = 1; inp.setAttribute("inputmode", "numeric");
+    inp.setAttribute("aria-label", "格子 " + k + " 的人数");
+    lb.className = "lb"; lb.textContent = k;
+    cell.appendChild(lb); cell.appendChild(plus); cell.appendChild(inp); cell.appendChild(minus);
+    inputs[k] = inp;
+    plus.addEventListener("click", function () { setCell(k, T[k] + 1); });
+    minus.addEventListener("click", function () { setCell(k, T[k] - 1); });
+    inp.addEventListener("input", function () {
+      var v = parseInt(inp.value, 10);
+      if (isNaN(v)) return;            // 正在输入（空）时先不动
+      T[k] = clamp(v, 0, MAXV); draw1(false);
+    });
+    inp.addEventListener("change", function () { setCell(k, parseInt(inp.value, 10) || 0); });
+    inp.addEventListener("keydown", function (ev) {
+      var d = { PageUp: 10, PageDown: -10 }[ev.key];
+      if (!d) return; ev.preventDefault(); setCell(k, T[k] + d);
+    });
+  });
+  function setCell(k, v) { T[k] = clamp(isFinite(v) ? Math.round(v) : 0, 0, MAXV); draw1(true); Peiyu.log("interact", { id: "table", t: [T.a, T.b, T.c, T.d], alpha: ALPHAS[ai][0] }); }
+  var abox = document.getElementById("alphas"), abtns = [];
+  ALPHAS.forEach(function (p, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "btn ghost"; b.textContent = p[0];
+    b.addEventListener("click", function () { ai = i; draw1(false); Peiyu.log("interact", { id: "alpha", alpha: p[0] }); });
+    abox.appendChild(b); abtns.push(b);
+  });
+  function reset1() { T = { a: DEF.a, b: DEF.b, c: DEF.c, d: DEF.d }; ai = 1; draw1(true); }
+
+  function draw1(syncInputs) {
+    var a = T.a, b = T.b, c = T.c, d = T.d, n = a + b + c + d, r1 = a + b, r2 = c + d, c1 = a + c, c2 = b + d;
+    if (syncInputs) for (var k in inputs) inputs[k].value = T[k];
+    abtns.forEach(function (bt, i) { bt.setAttribute("aria-pressed", i === ai ? "true" : "false"); });
+    document.getElementById("r1").textContent = r1; document.getElementById("r2").textContent = r2;
+    document.getElementById("c1").textContent = c1; document.getElementById("c2").textContent = c2;
+    document.getElementById("nn").textContent = n;
+    var X = chi2(a, b, c, d), crit = ALPHAS[ai][1], al = ALPHAS[ai][0];
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line"), no = css("--no"), soft = css("--no-soft");
+    var s = barsSvg; s.innerHTML = "";
+    // 等高堆积条形图：两条，下段 = 犯困比例
+    var TOP = 40, BOT = 220, H = BOT - TOP, BW = 120, xs = [70, 250];
+    [[a, r1, "常吃早餐"], [c, r2, "不常吃"]].forEach(function (row, i) {
+      var x = xs[i], tot = row[1];
+      txt(s, x + BW / 2, BOT + 28, row[2], { "text-anchor": "middle" });
+      if (!tot) {
+        svg("rect", { x: x, y: TOP, width: BW, height: H, fill: "none", stroke: muted, "stroke-dasharray": "5 4" }, s);
+        txt(s, x + BW / 2, TOP + H / 2 + 6, "没有人", { "text-anchor": "middle", fill: no });
+        return;
+      }
+      var p = row[0] / tot, h1 = H * p;
+      svg("rect", { x: x, y: BOT - h1, width: BW, height: h1, fill: ca }, s);
+      svg("rect", { x: x, y: TOP, width: BW, height: H - h1, fill: cb, opacity: 0.55 }, s);
+      svg("rect", { x: x, y: TOP, width: BW, height: H, fill: "none", stroke: fg, "stroke-width": 1.2 }, s);
+      var ly = BOT - h1 - 8; if (ly < TOP + 24) ly = BOT - h1 + 26;
+      txt(s, x + BW / 2, ly, fx(p * 100, 0) + "%", { "text-anchor": "middle", "font-weight": 700 });
+    });
+    if (n > 0 && r1 > 0 && r2 > 0) {
+      var y0 = BOT - H * (c1 / n);
+      svg("line", { x1: xs[0] - 14, y1: y0, x2: xs[1] + BW + 14, y2: y0, stroke: hl, "stroke-width": 2.5, "stroke-dasharray": "7 5" }, s);
+      txt(s, xs[1] + BW + 18, y0 + 6, "若独立 " + fx(c1 / n * 100, 0) + "%", { fill: fg });
+    }
+    svg("rect", { x: 70, y: TOP - 32, width: 16, height: 16, fill: ca }, s); txt(s, 92, TOP - 18, "犯困");
+    svg("rect", { x: 180, y: TOP - 32, width: 16, height: 16, fill: cb, opacity: 0.55 }, s); txt(s, 202, TOP - 18, "不犯困");
+    // χ² 刻度 0..12
+    var GX0 = 30, GX1 = 530, GY = 322, GM = 12;
+    function gx(v) { return GX0 + Math.min(v, GM) / GM * (GX1 - GX0); }
+    svg("rect", { x: gx(crit), y: GY - 14, width: GX1 - gx(crit), height: 14, fill: soft }, s);
+    svg("line", { x1: GX0, y1: GY, x2: GX1, y2: GY, stroke: fg, "stroke-width": 1.5 }, s);
+    for (var t = 0; t <= GM; t += 2) {
+      svg("line", { x1: gx(t), y1: GY, x2: gx(t), y2: GY + 5, stroke: fg }, s);
+      txt(s, gx(t), GY + 26, t, { "text-anchor": "middle" });
+    }
+    svg("line", { x1: gx(crit), y1: GY - 34, x2: gx(crit), y2: GY + 6, stroke: no, "stroke-width": 2.5 }, s);
+    txt(s, gx(crit) + (crit > 9 ? -6 : 6), GY - 38, "临界值 " + crit, { fill: no, "text-anchor": crit > 9 ? "end" : "start" });
+    if (X !== null) {
+      var mx = gx(X);
+      svg("circle", { cx: mx, cy: GY, r: 8, fill: X >= crit ? no : cc, stroke: fg, "stroke-width": 1.5 }, s);
+      txt(s, X > GM ? GX1 : mx, GY + 48, X > GM ? "χ² 超出刻度 →" : "χ²", { "text-anchor": X > GM ? "end" : "middle", fill: cc, "font-weight": 700 });
+    } else {
+      txt(s, (GX0 + GX1) / 2, GY + 48, "有合计为 0，算不了 χ²", { "text-anchor": "middle", fill: no });
+    }
+
+    var out = document.getElementById("barsout"), L = [];
+    if (X === null) {
+      var which = [r1 ? "" : "第一行", r2 ? "" : "第二行", c1 ? "" : "「犯困」列", c2 ? "" : "「不犯困」列"].filter(Boolean).join("、");
+      L.push('<span class="bad">' + which + "合计为 \\(0\\)</span>：公式分母是 \\(0\\)，不能算。没有两组可比（或所有人都在同一类），也就谈不上检验。");
+    } else {
+      L.push("犯困比例：常吃早餐 \\(" + pct(a / r1) + "\\)，不常吃 \\(" + pct(c / r2) + "\\)。");
+      L.push("\\(\\chi^2=\\dfrac{" + n + "\\times(" + a + "\\times" + d + "-" + b + "\\times" + c + ")^2}{" + r1 + "\\times" + r2 + "\\times" + c1 + "\\times" + c2 + "}\\approx " + fx(X, 3) + "\\)");
+      if (X >= crit) L.push('<span class="bad">\\(' + fx(X, 3) + "\\ge " + crit + "\\)，拒绝 \\(H_0\\)</span>：在 \\(\\alpha=" + al + "\\) 下认为「吃早餐」和「犯困」有关联，这样推断犯错的概率不超过 \\(" + al + "\\)。");
+      else L.push('<span class="eq">\\(' + fx(X, 3) + "\\lt " + crit + "\\)，不能拒绝 \\(H_0\\)</span>：在 \\(\\alpha=" + al + "\\) 下没有充分证据认为两者有关联（这不等于证明了独立）。");
+      if (Math.min(a, b, c, d) < 5) L.push('<span class="small">有格子不到 \\(5\\) 人，临界值的近似不太准，结论要谨慎。</span>');
+    }
+    out.innerHTML = nb(L.join("<br>"));
+    Peiyu.math(out);
+  }
+  document.getElementById("barsreset").onclick = reset1;
+
+  /* ================= ② 样本扩大 ================= */
+  var gs = document.getElementById("grow"), mIn = document.getElementById("mIn"), m = 1;
+  var X0 = 60, X1 = 450, Yb = 260, Yt = 20, YM = 17;
+  function px(v) { return X0 + (v - 1) / 19 * (X1 - X0); }
+  function py(v) { return Yb - v / YM * (Yb - Yt); }
+  function draw2() {
+    var fg = css("--fg"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), no = css("--no"), cb = css("--b"), ca = css("--a");
+    var s = gs; s.innerHTML = "";
+    svg("line", { x1: X0, y1: Yb, x2: X1 + 10, y2: Yb, stroke: fg, "stroke-width": 1.5 }, s);
+    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt - 6, stroke: fg, "stroke-width": 1.5 }, s);
+    [1, 5, 10, 15, 20].forEach(function (t) { svg("line", { x1: px(t), y1: Yb, x2: px(t), y2: Yb + 5, stroke: fg }, s); txt(s, px(t), Yb + 26, t, { "text-anchor": "middle" }); });
+    [0, 4, 8, 12, 16].forEach(function (t) { txt(s, X0 - 8, py(t) + 6, t, { "text-anchor": "end" }); });
+    txt(s, X1 + 14, Yb - 8, "m", { "text-anchor": "end" });
+    txt(s, X0 + 8, Yt + 4, "χ²", { fill: cc, "font-weight": 700 });
+    [[3.841, "0.05", ca], [6.635, "0.01", cb], [10.828, "0.001", no]].forEach(function (q) {
+      svg("line", { x1: X0, y1: py(q[0]), x2: X1, y2: py(q[0]), stroke: q[2], "stroke-width": 1.5, "stroke-dasharray": "6 5" }, s);
+      txt(s, X1 + 4, py(q[0]) + 6, "α=" + q[1], { fill: q[2] });
+    });
+    for (var i = 1; i <= 20; i++) svg("circle", { cx: px(i), cy: py(0.8 * i), r: i === m ? 9 : 4, fill: i === m ? hl : muted, stroke: i === m ? fg : "none", "stroke-width": 1.5 }, s);
+    document.getElementById("mOut").textContent = m;
+    var X = chi2(6 * m, 4 * m, 4 * m, 6 * m), L = [];
+    L.push("表：\\(" + 6 * m + "," + 4 * m + ";\\ " + 4 * m + "," + 6 * m + "\\)，\\(n=" + 20 * m + "\\)，两组比例始终 \\(60\\%\\) 对 \\(40\\%\\)。\\(\\chi^2=0.8m\\approx " + fx(X, 3) + "\\)。");
+    var r = ALPHAS.filter(function (p) { return X >= p[1]; });
+    L.push(r.length ? '<span class="bad">' + (r.length === 1 ? "只在 \\(\\alpha=0.1\\) 下" : "从 \\(\\alpha=0.1\\) 到 \\(\\alpha=" + r[r.length - 1][0] + "\\) 都") + "能拒绝 \\(H_0\\)</span>，认为有关联。" : '<span class="eq">在 \\(\\alpha=0.1\\) 下也不能拒绝</span>：没有充分证据，但两组比例明明不一样——只是人太少。');
+    if (m === 1) L.push('<span class="small">\\(m=1\\) 时有格子只有 \\(4\\) 人，不到 \\(5\\)，近似本来就不太准。</span>');
+    var out = document.getElementById("growout"); out.innerHTML = nb(L.join("<br>")); Peiyu.math(out);
+  }
+  function reset2() { m = 1; mIn.value = m; draw2(); }
+  mIn.addEventListener("input", function () { m = clamp(parseInt(mIn.value, 10) || 1, 1, 20); draw2(); });
+  mIn.addEventListener("change", function () { Peiyu.log("interact", { id: "grow", m: m }); });
+  document.getElementById("growreset").onclick = reset2;
+
+  /* ================= ③ 模拟 ================= */
+  var ss = document.getElementById("sim"), BIN = 0.5, NB = 16, CRIT = 3.841, P = 0.3, G = 50;
+  var lo, hi, total, rej, skipped, last;
+  function binom() { var k = 0; for (var i = 0; i < G; i++) if (Math.random() < P) k++; return k; }
+  function simOnce() {
+    var a = binom(), c = binom(), X = chi2(a, G - a, c, G - c);
+    last = [a, G - a, c, G - c, X];
+    if (X === null) { skipped++; return; }
+    var i = Math.min(Math.floor(X / BIN), NB - 1);
+    total++; if (X >= CRIT) { rej++; hi[i]++; } else lo[i]++;
+  }
+  function simReset() { lo = []; hi = []; for (var i = 0; i < NB; i++) { lo.push(0); hi.push(0); } total = rej = skipped = 0; last = null; draw3(); }
+  function draw3() {
+    var fg = css("--fg"), cc = css("--c"), no = css("--no"), muted = css("--muted");
+    var s = ss; s.innerHTML = "";
+    var X0s = 50, X1s = 530, Yb3 = 240, Yt3 = 30;
+    function sx(v) { return X0s + v / (NB * BIN) * (X1s - X0s); }
+    var mx = 1; for (var i = 0; i < NB; i++) mx = Math.max(mx, lo[i] + hi[i]);
+    var bw = sx(BIN) - sx(0);
+    for (i = 0; i < NB; i++) {
+      var h1 = lo[i] / mx * (Yb3 - Yt3), h2 = hi[i] / mx * (Yb3 - Yt3), x = sx(i * BIN);
+      if (h1 > 0) svg("rect", { x: x + 1, y: Yb3 - h1, width: bw - 2, height: h1, fill: cc }, s);
+      if (h2 > 0) svg("rect", { x: x + 1, y: Yb3 - h1 - h2, width: bw - 2, height: h2, fill: no }, s);
+    }
+    svg("line", { x1: X0s, y1: Yb3, x2: X1s, y2: Yb3, stroke: fg, "stroke-width": 1.5 }, s);
+    for (var t = 0; t <= 8; t += 2) { svg("line", { x1: sx(t), y1: Yb3, x2: sx(t), y2: Yb3 + 5, stroke: fg }, s); txt(s, sx(t), Yb3 + 26, t === 8 ? "8+" : t, { "text-anchor": "middle" }); }
+    svg("line", { x1: sx(CRIT), y1: Yt3 - 10, x2: sx(CRIT), y2: Yb3, stroke: no, "stroke-width": 2, "stroke-dasharray": "6 4" }, s);
+    txt(s, sx(CRIT) + 6, Yt3 + 4, "3.841", { fill: no });
+    txt(s, X1s, Yb3 + 56, "χ²", { "text-anchor": "end", fill: muted });
+    if (!total) txt(s, (X0s + X1s) / 2, (Yt3 + Yb3) / 2, "还没抽，点「抽 100 次」", { "text-anchor": "middle", fill: muted });
+    var out = document.getElementById("simout"), L = [];
+    if (last) L.push("最近一次：\\(" + last[0] + "," + last[1] + ";\\ " + last[2] + "," + last[3] + "\\)，" + (last[4] === null ? "有合计为 \\(0\\)，不计入" : "\\(\\chi^2\\approx " + fx(last[4], 3) + "\\)") + "。");
+    if (total) {
+      L.push("共 \\(" + total + "\\) 次，误判「有关联」\\(" + rej + "\\) 次，占 \\(" + fx(rej / total * 100, 1) + "\\%\\)。" + (skipped ? "（另有 \\(" + skipped + "\\) 次有合计为 \\(0\\)，没算。）" : ""));
+      L.push(total >= 500 ? "次数越多，这个比例越接近 \\(5\\%\\)：这就是 \\(\\alpha=0.05\\) 的意思——规则长期的误判率，而不是某一次结论对的概率。" : "多抽几百次，看这个比例会靠近多少。");
+    } else L.push("两组的真实比例一样，这时任何「有关联」的判断都是误判。");
+    out.innerHTML = nb(L.join("<br>")); Peiyu.math(out);
+  }
+  document.getElementById("sim1").onclick = function () { simOnce(); draw3(); };
+  document.getElementById("sim100").onclick = function () { for (var i = 0; i < 100; i++) simOnce(); draw3(); Peiyu.log("interact", { id: "sim", n: total, rej: rej }); };
+  document.getElementById("simreset").onclick = simReset;
+
+  document.addEventListener("DOMContentLoaded", function () { reset1(); reset2(); simReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw1(false); draw2(); draw3(); });
+})();
+</script>
+</body></html>

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.3 对数 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .tick { stroke: var(--muted); stroke-width: 1; }
+  .fig text.num { font-size: 20px; fill: var(--muted); text-anchor: middle; }
+  .fig .curve { fill: none; stroke: var(--a); stroke-width: 3; }
+  .fig .nline { stroke: var(--b); stroke-width: 2; stroke-dasharray: 6 5; }
+  .fig .bline { stroke: var(--b); stroke-width: 1.5; stroke-dasharray: 3 4; }
+  .fig .pt { fill: var(--b); }
+  .fig .bmark { fill: var(--hl); }
+  .fig text.lab { font-size: 22px; font-weight: 700; }
+  .fig text.msg { font-size: 20px; fill: var(--no); text-anchor: middle; font-weight: 600; }
+  .fig .h { fill: var(--b); stroke: var(--card); stroke-width: 2; cursor: grab; outline: none; }
+  .fig .h:focus-visible { stroke: var(--hl); stroke-width: 5; }
+  .fig .hit { fill: transparent; cursor: grab; }
+  .rd { font-size: 16px; line-height: 1.75; overflow-x: auto; }
+  .rd .row { margin: 4px 0; }
+  .rd .yes { color: var(--a); font-weight: 600; }
+  .rd .nope { color: var(--no); font-weight: 600; }
+  .sl { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .sl output { min-width: 3em; font-weight: 600; }
+  table.cmp { border-collapse: collapse; font-size: 15px; width: 100%; }
+  table.cmp td { border-top: 1px solid var(--line); padding: 5px 4px; }
+  table.cmp td:last-child { text-align: right; white-space: nowrap; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-4-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 4 章 指数函数与对数函数</p>
+<h1>4.3 对数</h1>
+<p class="lead">已知底数和幂，反过来求指数——这就是对数。学会指对互化、三条运算性质和换底公式，并且每一步都先看「有没有意义」。先从一张纸开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一张纸对折一次变成 \(2\) 层，再折一次 \(4\) 层，每折一次层数翻一倍。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>要叠出 \(32\) 层，需要对折几次？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4\) 次</button>
+      <button class="opt" data-v="B"><b>B</b>\(5\) 次</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\) 次</button>
+      <button class="opt" data-v="D"><b>D</b>\(16\) 次</button>
+    </div>
+    <div class="reveal">
+      <p>数一数：\(2,4,8,16,32\)，第 \(5\) 次到 \(32\) 层。<b>B</b>。也就是 \(2^5=32\)。</p>
+      <p>这道题知道底数 \(2\)、知道结果 \(32\)，问的是<b>指数</b>：「\(2\) 的几次方等于 \(32\)」。这个「几次方」就叫对数，写成 \(\log_2 32=5\)。</p>
+      <p>这一节讲：对数怎么定义、什么时候有意义、怎么算（三条运算性质和换底公式）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：4.1 的指数幂运算，比如 \(a^p\cdot a^q=a^{p+q}\)、\((a^p)^r=a^{pr}\)（<a href="b1-4-1.html">回看 4.1</a>）；4.2 里 \(a&gt;0\) 时 \(a^x\) 总是正数（<a href="b1-4-2.html">回看 4.2</a>）。</p>
+
+  <div class="card">
+    <p><b>底数、指数、幂</b>：\(a^b=N\) 里，\(a\) 是底数，\(b\) 是指数，\(N\) 是幂（乘方的结果）。</p>
+    <p>例：\(2^5=32\)，底数 \(2\)，指数 \(5\)，幂 \(32\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>真数</b>：\(\log_a N\) 里，\(a\) 仍叫底数，\(N\) 叫<b>真数</b>，就是「要变成的那个数」。</p>
+    <p>例：\(\log_2 32\) 的底数是 \(2\)，真数是 \(32\)，值是 \(5\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>有意义</b>：一个式子在实数范围里能算出一个确定的数，就说它有意义。</p>
+    <p>例：\(\sqrt9=3\) 有意义；\(\sqrt{-4}\) 在实数里找不到，没有意义。对数也一样，下面会看到 \(\log_2(-4)\) 没有意义。</p>
+  </div>
+
+  <div class="card">
+    <p><b>常用对数、自然对数</b>：两个最常用的底有专门的写法。</p>
+    <ul>
+      <li>以 \(10\) 为底：\(\log_{10}N\) 记作 \(\lg N\)。例：\(\lg100=2\)，因为 \(10^2=100\)。</li>
+      <li>以 \(\e\approx2.718\) 为底：\(\log_\e N\) 记作 \(\ln N\)。例：\(\ln\e=1\)，因为 \(\e^1=\e\)。</li>
+    </ul>
+  </div>
+
+  <h3>2. 对数是在问「几次方」</h3>
+  <div class="key">\(a^b=N\iff b=\log_a N\)，其中底数 \(a&gt;0\) 且 \(a\ne1\)，真数 \(N&gt;0\)。</div>
+  <p>左边叫指数式，右边叫对数式，两种写法说的是同一件事，来回改写叫<b>指对互化</b>。条件为什么这样定：</p>
+  <ul>
+    <li><b>\(a\ne1\)</b>：\(1\) 的任何次方都是 \(1\)。问「\(1\) 的几次方是 \(5\)」没有答案；问「\(1\) 的几次方是 \(1\)」答案又太多。都定不出唯一的指数。</li>
+    <li><b>\(a&gt;0\)</b>：底数为负时，\(a^b\) 对很多 \(b\)（比如 \(\tfrac12\)）没有意义，所以只取正的底数。</li>
+    <li><b>\(N&gt;0\)</b>：\(a&gt;0\) 时 \(a^b\) 总是正数，永远等不到 \(0\) 或负数，所以 \(\log_2 0\)、\(\log_2(-4)\) 都没有意义。</li>
+  </ul>
+  <p>由定义马上得到：\(\log_a 1=0\)（因为 \(a^0=1\)），\(\log_a a=1\)，以及 \(a^{\log_a N}=N\)、\(\log_a a^b=b\)——先取对数再乘方，或者反过来，正好抵消。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>(1) 把 \(3^4=81\) 写成对数式；(2) 求 \(\log_3\dfrac19\)；(3) 求 \(\log_5 1\)。</p>
+    <p>(1) 底数 \(3\)，指数 \(4\)，幂 \(81\)：\(\log_3 81=4\)。</p>
+    <p>(2) 设 \(\log_3\dfrac19=b\)，即 \(3^b=\dfrac19\)。因为 \(\dfrac19=3^{-2}\)，所以 \(b=-2\)。</p>
+    <p>(3) \(5^0=1\)，所以 \(\log_5 1=0\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：\(\log_2\dfrac18=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac13\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac18=2^{-3}\)，所以 \(\log_2\dfrac18=-3\)。选 A 的同学丢了负号（\(2^3=8\)，不是 \(\dfrac18\)）；选 C、D 的同学把「取倒数」和「指数变负」弄混了。</p></div>
+  </div>
+
+  <h3>3. 运算性质：从指数法则「翻译」过来</h3>
+  <p>设 \(\log_a M=p\)，\(\log_a N=q\)，也就是 \(M=a^p\)，\(N=a^q\)。那么 \(MN=a^p\cdot a^q=a^{p+q}\)，换回对数就是 \(\log_a(MN)=p+q\)。同样，\(\dfrac MN=a^{p-q}\)，\(M^r=a^{pr}\)：</p>
+  <div class="key">当 \(a&gt;0,\ a\ne1,\ M&gt;0,\ N&gt;0\) 时：<br>
+  ① \(\log_a(MN)=\log_a M+\log_a N\)<br>
+  ② \(\log_a\dfrac MN=\log_a M-\log_a N\)<br>
+  ③ \(\log_a M^r=r\log_a M\)（\(r\) 是任意实数）</div>
+  <p>一句话：对数把<b>乘</b>变成<b>加</b>，把<b>除</b>变成<b>减</b>，把<b>乘方</b>变成<b>乘</b>。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>(1) \(\lg2+\lg5=\lg(2\times5)=\lg10=1\)。</p>
+    <p>(2) \(\log_3 18-\log_3 2=\log_3\dfrac{18}{2}=\log_3 9=2\)。</p>
+    <p>(3) \(\log_2 8^5=5\log_2 8=5\times3=15\)。</p>
+    <p>每一步里的真数 \(2,5,18,8\) 都是正数，法则可以用。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(\log_6 4+\log_6 9=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\log_6 13\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(13\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。对数相加，真数相<b>乘</b>：\(\log_6(4\times9)=\log_6 36=2\)。选 B 的同学把真数加了起来——对数没有这条法则。</p></div>
+  </div>
+
+  <h3>4. 换底公式</h3>
+  <p>计算器只有 \(\lg\) 和 \(\ln\)，怎么算 \(\log_2 5\)？设 \(b=\log_2 5\)，即 \(2^b=5\)。两边取常用对数：\(\lg2^b=\lg5\)，即 \(b\lg2=\lg5\)，所以 \(b=\dfrac{\lg5}{\lg2}\approx2.32\)。换成 \(\ln\) 结果也一样。</p>
+  <div class="key">\(\log_a N=\dfrac{\log_c N}{\log_c a}\)，要求 \(a&gt;0,a\ne1\)，\(N&gt;0\)，新底 \(c&gt;0,c\ne1\)。</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>(1) \(\log_4 8=\dfrac{\lg8}{\lg4}=\dfrac{3\lg2}{2\lg2}=\dfrac32\)。验一下：\(4^{\frac32}=(\sqrt4)^3=8\)。</p>
+    <p>(2) \(\log_2 3\cdot\log_3 4=\dfrac{\lg3}{\lg2}\cdot\dfrac{\lg4}{\lg3}=\dfrac{\lg4}{\lg2}=\dfrac{2\lg2}{\lg2}=2\)。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B">
+    <p>自己试试：\(\log_9 27=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac32\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac13\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac{\lg27}{\lg9}=\dfrac{3\lg3}{2\lg3}=\dfrac32\)。选 A 的同学算了 \(27\div9\)——换底后是两个<b>对数</b>相除，不是真数相除；选 C 的同学分子分母放反了。</p></div>
+  </div>
+
+  <h3>5. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>底数</b>：\(a&gt;0\) 且 \(a\ne1\)，底数是未知数时也要查。<br><span class="small">反例：\(\log_x 9=2\)，得 \(x^2=9\)，\(x=\pm3\)；可底数不能是负数，只有 \(x=3\)。</span></li>
+    <li><b>每个真数分别为正</b>：用积、商法则要 \(M&gt;0\)、\(N&gt;0\) 都成立，\(MN&gt;0\) 不够。<br><span class="small">反例：\(M=N=-2\)，\(\log_2(MN)=\log_2 4=2\) 有意义，可 \(\log_2(-2)\) 没有意义，拆不开。</span></li>
+    <li><b>幂法则要 \(M&gt;0\)</b>：\(M^r\) 有意义不代表 \(M&gt;0\)。<br><span class="small">反例：\(x=-10\)，\(\lg x^2=\lg100=2\)，但 \(2\lg(-10)\) 没有意义。\(x\ne0\) 时只能写 \(\lg x^2=2\lg|x|\)。</span></li>
+    <li><b>没有「和」的拆法</b>：\(\log_a(M+N)\) 不等于 \(\log_a M+\log_a N\)。<br><span class="small">反例：\(\log_2(1+1)=\log_2 2=1\)，而 \(\log_2 1+\log_2 1=0\)。</span></li>
+    <li><b>解对数方程：先列条件，最后验解</b>。<br><span class="small">反例：\(\log_2 x+\log_2(x-1)=1\)。合并得 \(x(x-1)=2\)，\(x=2\) 或 \(x=-1\)。原方程要 \(x&gt;1\)，\(x=-1\) 代回去 \(\log_2(-1)\) 没有意义，舍去，只有 \(x=2\)。</span></li>
+    <li><b>换底的新底</b> \(c\) 也要 \(c&gt;0\)、\(c\ne1\)。常用的 \(\lg\)、\(\ln\) 都满足。</li>
+  </ol>
+  <div class="key">每用一次法则，先问一句：每个对数原来有没有意义？合并以后范围可能变宽，多出来的解要靠检验删掉。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>两个推论</b>（都可以用换底公式推）：\(\log_a b\cdot\log_b a=1\)；\(\log_{a^m}b^n=\dfrac nm\log_a b\)（\(m\ne0\)）。例如 \(\log_8 3=\log_{2^3}3=\dfrac13\log_2 3\)。</p>
+    <p><b>为什么幂法则对任意实数 \(r\) 都成立</b>：\(M=a^p\) 时 \(M^r=(a^p)^r=a^{pr}\)，这条指数法则在 4.1 里对实数指数都成立，所以 \(\log_a M^r=pr=r\log_a M\)。</p>
+    <p><b>数位数</b>：\(\lg2\approx0.301\)，所以 \(\lg2^{10}=10\lg2\approx3.01\)，\(2^{10}\) 在 \(10^3\) 和 \(10^4\) 之间，是 \(4\) 位数（确实 \(2^{10}=1024\)）。高考真题里估算大数，用的就是这个办法。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 在指数曲线上读出对数</h3>
+  <p class="small">绿色曲线是 \(y=a^x\)。开始时 \(a=2\)、\(N=4\)，虚线和曲线的交点横坐标是 \(2\)，就是 \(\log_2 4=2\)。用滑块改底数 \(a\)；拖动 y 轴上的蓝点改 \(N\)（也可以 Tab 选中后按上下方向键）。看懂以后再试边界：把 \(N\) 拖到 \(0\) 以下，再把 \(a\) 调到 \(1\)。</p>
+  <div class="card">
+    <div class="ctrl"><label class="sl"><span>底数 \(a\)</span><input type="range" id="base" min="0.1" max="4" step="0.1" aria-label="底数 a"><output id="oa"></output></label></div>
+    <svg class="fig" id="fig" viewBox="0 0 560 360" role="group" aria-label="指数曲线 y 等于 a 的 x 次方与水平线 y 等于 N 的交点"></svg>
+    <div class="rd" id="readout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset" type="button">重置</button><span class="small">挑战：让 \(b\) 恰好等于 \(-1\)。</span></div>
+  </div>
+
+  <h3>② 进阶：对数会拆积，不会拆和</h3>
+  <p class="small">用上面同一个底 \(a\)，改 \(M\)、\(N\)，比一比「积的对数」「和的对数」和「对数的和」。</p>
+  <div class="card">
+    <div class="ctrl">
+      <label class="sl"><span>\(M\)</span><input type="range" id="sm" min="0.5" max="16" step="0.5" aria-label="M"><output id="om"></output></label>
+      <label class="sl"><span>\(N\)</span><input type="range" id="sn" min="0.5" max="16" step="0.5" aria-label="N"><output id="on"></output></label>
+    </div>
+    <div class="rd" id="cmp"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. \(\lg25+\lg4=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\lg29\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(100\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\lg25+\lg4=\lg(25\times4)=\lg100=2\)。选 C 的同学算到真数 \(100\) 就停了，还差最后一步「\(10\) 的几次方是 \(100\)」；选 B 是把真数加了起来。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(\log_2 3\cdot\log_3 8=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(8\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(24\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。换成常用对数：\(\dfrac{\lg3}{\lg2}\cdot\dfrac{\lg8}{\lg3}=\dfrac{\lg8}{\lg2}=\dfrac{3\lg2}{\lg2}=3\)。选 B 的同学约掉 \(3\) 后把 \(\log_2 8\) 当成了 \(8\)；选 D 的同学以为两个对数「互为倒数」，可 \(\log_2 3\) 的倒数是 \(\log_3 2\)，不是 \(\log_3 8\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>3. \(\log_2(4+4)\) 等于多少？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(4\)，因为 \(\log_2 4+\log_2 4=2+2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(16\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(8\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>：\(4+4=8=2^3\)，所以 \(\log_2 8=3\)。</p>
+      <p>选 A 的同学把 \(\log\) 当成了括号，往加号里面「分配」。对数<b>没有</b>「和的对数等于对数的和」这条法则；真正的法则是<b>积</b>的对数等于对数的<b>和</b>：\(\log_2(4\times4)=\log_2 4+\log_2 4=4\)。拿不准时，先把真数算出来，再问「\(2\) 的几次方」。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-square" data-answer="B">
+    <p>4. 等式 \(\lg x^2=2\lg x\) 什么时候成立？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>只要 \(x\ne0\) 就成立（幂的法则）</button>
+      <button class="opt" data-v="B"><b>B</b>只在 \(x&gt;0\) 时成立</button>
+      <button class="opt" data-v="C"><b>C</b>对所有实数 \(x\) 都成立</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。左边 \(\lg x^2\) 在 \(x\ne0\) 时都有意义，比如 \(x=-10\)：\(\lg100=2\)。但右边 \(2\lg(-10)\) 没有意义，等式不成立。</p>
+      <p>幂的法则 \(\log_a M^r=r\log_a M\) 要求 \(M&gt;0\)，不能因为 \(M^r\) 有意义就跳过它。\(x\ne0\) 时正确的写法是 \(\lg x^2=2\lg|x|\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-check" data-answer="B">
+    <p>5. 解方程 \(\lg x+\lg(x-3)=1\)。</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x=5\) 或 \(x=-2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(x=5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(x=-2\)</button>
+      <button class="opt" data-v="D"><b>D</b>无解</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。合并成 \(\lg[x(x-3)]=1\)，得 \(x^2-3x=10\)，\(x=5\) 或 \(x=-2\)。</p>
+      <p>可原方程要 \(x&gt;0\) 且 \(x-3&gt;0\)，即 \(x&gt;3\)。\(x=-2\) 代回去，\(\lg(-2)\) 没有意义，舍去。</p>
+      <p>问题出在合并那一步：\(\lg[x(x-3)]\) 只要求乘积为正，比原来两个真数各自为正<b>宽</b>，多出来的解要靠检验删掉。所以先写条件、最后验解。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. 已知 \(\lg2=a\)，\(\lg3=b\)。用 \(a\)、\(b\) 表示 \(\log_{12}5\)。</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1-a}{2a+b}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{1-a}{a+b}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{1+a}{2a+b}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{5}{12}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。换成常用对数：\(\log_{12}5=\dfrac{\lg5}{\lg12}\)。</p>
+      <p>分子：\(5=\dfrac{10}{2}\)，\(\lg5=\lg10-\lg2=1-a\)。分母：\(12=2^2\times3\)，\(\lg12=2\lg2+\lg3=2a+b\)。</p>
+      <p>选 B 的同学把 \(12\) 拆成了 \(2\times3\)（那是 \(6\)）；选 C 的同学把 \(\lg\dfrac{10}{2}\) 写成了加；D 是把真数直接相除。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var svg = document.getElementById("fig"), out = document.getElementById("readout");
+  var baseIn = document.getElementById("base"), oa = document.getElementById("oa");
+  var smIn = document.getElementById("sm"), snIn = document.getElementById("sn");
+  var om = document.getElementById("om"), on = document.getElementById("on"), cmp = document.getElementById("cmp");
+  var XMIN = -4, XMAX = 4, YMIN = -1.5, YMAX = 8.5, NMIN = -1, NMAX = 8;
+  var PX0 = 40, PX1 = 540, PY0 = 18, PY1 = 330;
+  var DEF = { a: 2, N: 4, M2: 2, N2: 8 };
+  var st = { a: DEF.a, N: DEF.N, M2: DEF.M2, N2: DEF.N2 };
+  var g = {};
+
+  function sx(x) { return PX0 + (x - XMIN) / (XMAX - XMIN) * (PX1 - PX0); }
+  function sy(y) { return PY1 - (y - YMIN) / (YMAX - YMIN) * (PY1 - PY0); }
+  function vy(py) { return YMIN + (PY1 - py) / (PY1 - PY0) * (YMAX - YMIN); }
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function fmt(v, d) {
+    var p = Math.pow(10, d === undefined ? 3 : d);
+    var s = (Math.round(v * p) / p).toString();
+    return s === "-0" ? "0" : s;
+  }
+  function rel(v) { return Math.abs(v - Math.round(v * 1000) / 1000) < 1e-9 ? "=" : "\\approx"; }
+  function isOne(a) { return Math.abs(a - 1) < 1e-9; }
+  function lg(v) { return Math.log(v) / Math.LN10; }
+
+  function build() {
+    svg.innerHTML = "";
+    var cp = mk("clipPath", { id: "plotclip" }, mk("defs", {}));
+    mk("rect", { x: PX0, y: PY0, width: PX1 - PX0, height: PY1 - PY0 }, cp);
+    mk("line", { x1: PX0, y1: sy(0), x2: PX1 + 6, y2: sy(0), "class": "axis" });
+    mk("line", { x1: sx(0), y1: PY1, x2: sx(0), y2: PY0 - 6, "class": "axis" });
+    for (var x = XMIN; x <= XMAX; x++) {
+      mk("line", { x1: sx(x), y1: sy(0) - 4, x2: sx(x), y2: sy(0) + 4, "class": "tick" });
+      if (x !== 0) mk("text", { x: sx(x), y: sy(0) + 24, "class": "num" }).textContent = x;
+    }
+    for (var y = 2; y <= 8; y += 2) {
+      mk("line", { x1: sx(0) - 4, y1: sy(y), x2: sx(0) + 4, y2: sy(y), "class": "tick" });
+      mk("text", { x: sx(0) - 16, y: sy(y) + 7, "class": "num" }).textContent = y;
+    }
+    mk("text", { x: sx(0) - 14, y: sy(0) + 24, "class": "num" }).textContent = "O";
+    g.curve = mk("path", { "class": "curve", "clip-path": "url(#plotclip)" });
+    g.curveLab = mk("text", { "class": "lab", fill: "var(--a)" });
+    g.lines = mk("g", { "clip-path": "url(#plotclip)" });
+    g.msg = mk("g", {});
+    var hg = mk("g", {});
+    g.hit = mk("circle", { r: 22, "class": "hit" }, hg);
+    g.h = mk("circle", { r: 9, "class": "h", tabindex: "0", role: "slider", "aria-label": "真数 N",
+      "aria-valuemin": NMIN, "aria-valuemax": NMAX }, hg);
+    g.hLab = mk("text", { "class": "lab", fill: "var(--b)" });
+    g.hg = hg;
+    bindHandle();
+  }
+
+  function drawFig() {
+    var a = st.a, N = st.N;
+    // 曲线 y = a^x，超出画面的部分用 clipPath 裁掉；y 过大时截断，避免 Infinity
+    var d = "", first = true;
+    for (var i = 0; i <= 400; i++) {
+      var x = XMIN + (XMAX - XMIN) * i / 400, y = Math.pow(a, x);
+      if (!isFinite(y) || y > YMAX + 2) { first = true; continue; }
+      d += (first ? "M" : "L") + sx(x).toFixed(1) + " " + sy(y).toFixed(1);
+      first = false;
+    }
+    g.curve.setAttribute("d", d);
+    // 标签放在曲线高度约 6 的地方（a=1 时放在 x=2）
+    var lx = isOne(a) ? 2 : Math.min(Math.max(Math.log(6) / Math.log(a), -3.4), 3.4), ly = Math.pow(a, lx);
+    g.curveLab.setAttribute("x", sx(lx) + (a >= 1 ? 12 : -12)); g.curveLab.setAttribute("y", sy(ly) - (isOne(a) ? 10 : 0));
+    g.curveLab.setAttribute("text-anchor", a >= 1 ? "start" : "end");
+    g.curveLab.textContent = isOne(a) ? "y=1ˣ" : "y=aˣ";
+
+    g.lines.innerHTML = ""; g.msg.innerHTML = "";
+    mk("line", { x1: PX0, y1: sy(N), x2: PX1, y2: sy(N), "class": "nline" }, g.lines);
+    var ok = N > 0 && !isOne(a);
+    if (ok) {
+      var b = Math.log(N) / Math.log(a);
+      if (b >= XMIN && b <= XMAX) {
+        mk("line", { x1: sx(b), y1: sy(N), x2: sx(b), y2: sy(0), "class": "bline" }, g.lines);
+        mk("circle", { cx: sx(b), cy: sy(N), r: 6, "class": "pt" }, g.lines);
+        mk("circle", { cx: sx(b), cy: sy(0), r: 6, "class": "bmark" }, g.lines);
+        var tx = Math.min(Math.max(sx(b), PX0 + 40), PX1 - 40);
+        mk("text", { x: tx, y: sy(0) + (N > 1.5 ? 48 : -14), "class": "lab", fill: "var(--hl)", "text-anchor": "middle" }, g.msg).textContent = "b=" + fmt(b, 2);
+      } else {
+        mk("text", { x: 290, y: sy(YMAX) + 50, "class": "msg" }, g.msg).textContent = "交点在画面" + (b > XMAX ? "右" : "左") + "边外，b=" + fmt(b, 2);
+      }
+    } else if (isOne(a)) {
+      mk("text", { x: 290, y: sy(YMAX) + 50, "class": "msg" }, g.msg).textContent = Math.abs(N - 1) < 1e-9 ? "处处相交：b 不唯一" : "永不相交：底数不能是 1";
+    } else {
+      mk("text", { x: 290, y: sy(YMAX) + 50, "class": "msg" }, g.msg).textContent = "aˣ 总大于 0，碰不到这条线";
+    }
+    g.h.setAttribute("cx", sx(0)); g.h.setAttribute("cy", sy(N));
+    g.hit.setAttribute("cx", sx(0)); g.hit.setAttribute("cy", sy(N));
+    g.hLab.setAttribute("x", sx(0) + 14); g.hLab.setAttribute("y", sy(N) - 12);
+    g.hLab.setAttribute("text-anchor", "start");
+    g.hLab.textContent = "N=" + fmt(N, 2);
+    g.h.setAttribute("aria-valuenow", N);
+    g.h.setAttribute("aria-valuetext", "N 等于 " + fmt(N, 2));
+  }
+
+  function drawReadout() {
+    var a = st.a, N = st.N, A = fmt(a, 1), NN = fmt(N, 2), h = "";
+    h += '<div class="row">\\(a=' + A + '\\)，\\(N=' + NN + '\\)</div>';
+    if (isOne(a)) {
+      h += '<div class="row"><span class="nope">底数是 1</span>：\\(1^b\\) 永远等于 1，' +
+        (Math.abs(N - 1) < 1e-9 ? '任何 \\(b\\) 都满足 \\(1^b=1\\)，定不出唯一的 \\(b\\)。' : '没有 \\(b\\) 能让 \\(1^b=' + NN + '\\)。') +
+        '所以规定 \\(a\\ne1\\)。</div>';
+    } else if (N <= 0) {
+      h += '<div class="row"><span class="nope">\\(\\log_{' + A + '}(' + NN + ')\\) 没有意义</span>：\\(' + A + '^b\\) 对任何 \\(b\\) 都是正数，等不到 \\(' + NN + '\\)。真数必须大于 0。</div>';
+    } else {
+      var b = Math.log(N) / Math.log(a);
+      h += '<div class="row">\\(' + A + '^{b}=' + NN + '\\iff b=\\log_{' + A + '}' + NN + rel(b) + fmt(b) + '\\)</div>';
+      var lnN = Math.log(N), lnA = Math.log(a), lgN = lg(N), lgA = lg(a);
+      h += '<div class="row">换底：\\(\\dfrac{\\ln ' + NN + '}{\\ln ' + A + '}' + rel(b) + fmt(b) + '\\)（\\(\\ln ' + NN + rel(lnN) + fmt(lnN) + '\\)，\\(\\ln ' + A + rel(lnA) + fmt(lnA) + '\\)）</div>';
+      h += '<div class="row">\\(\\dfrac{\\lg ' + NN + '}{\\lg ' + A + '}' + rel(b) + fmt(b) + '\\)（\\(\\lg ' + NN + rel(lgN) + fmt(lgN) + '\\)，\\(\\lg ' + A + rel(lgA) + fmt(lgA) + '\\)）</div>';
+      if (Math.abs(N - 1) < 1e-9) h += '<div class="small">\\(N=1\\) 时 \\(b=0\\)：任何底数的 0 次方都是 1。</div>';
+      else if (Math.abs(N - a) < 1e-9) h += '<div class="small">\\(N=a\\) 时 \\(b=1\\)。</div>';
+      else if (Math.abs(b + 1) < 5e-4) h += '<div class="small"><span class="yes">挑战完成</span>：\\(b=-1\\) 就是 \\(N=\\dfrac1a\\)。</div>';
+    }
+    out.innerHTML = h;
+    if (window.Peiyu) Peiyu.math(out);
+  }
+
+  function row(label, val) { return "<tr><td>" + label + "</td><td>" + val + "</td></tr>"; }
+  function drawCmp() {
+    var a = st.a, M = st.M2, N = st.N2, A = fmt(a, 1);
+    om.textContent = fmt(M, 1); on.textContent = fmt(N, 1);
+    if (isOne(a)) { cmp.innerHTML = '<p class="small">底数 \\(a=1\\) 时对数没有定义，先把上面的 \\(a\\) 调开 1。</p>'; if (window.Peiyu) Peiyu.math(cmp); return; }
+    var L = function (v) { return Math.log(v) / Math.log(a); };
+    var sum = L(M) + L(N), prod = L(M * N), plus = L(M + N), diff = L(M) - L(N);
+    var t = '<table class="cmp">';
+    var la = "\\log_{" + A + "}";
+    t += row("\\(" + la + "M+" + la + "N\\)", "\\(" + rel(sum) + fmt(sum) + "\\)");
+    t += row("\\(" + la + "(MN)=" + la + fmt(M * N, 2) + "\\)", "\\(" + rel(prod) + fmt(prod) + "\\) " + (Math.abs(sum - prod) < 1e-9 ? '<span class="yes">相等</span>' : ""));
+    t += row("\\(" + la + "(M+N)=" + la + fmt(M + N, 2) + "\\)", "\\(" + rel(plus) + fmt(plus) + "\\) " + (Math.abs(sum - plus) < 5e-4 ? '<span class="yes">这次碰巧相等</span>' : '<span class="nope">不等</span>'));
+    t += row("\\(" + la + "M-" + la + "N\\)", "\\(" + rel(diff) + fmt(diff) + "\\)");
+    t += row("\\(" + la + "\\dfrac MN\\)", "\\(" + rel(L(M / N)) + fmt(L(M / N)) + "\\) " + '<span class="yes">相等</span>');
+    var dmn = M - N;
+    t += row("\\(" + la + "(M-N)\\)", dmn > 0 ? "\\(" + rel(L(dmn)) + fmt(L(dmn)) + "\\) " + (Math.abs(diff - L(dmn)) < 5e-4 ? '<span class="yes">碰巧相等</span>' : '<span class="nope">不等</span>')
+      : '<span class="nope">\\(M-N=' + fmt(dmn, 1) + '\\)，没有意义</span>');
+    t += "</table>";
+    t += '<p class="small">只有 \\(M=N=2\\) 这类特例里 \\(MN=M+N\\)，「碰巧相等」不是法则。</p>';
+    cmp.innerHTML = t;
+    if (window.Peiyu) Peiyu.math(cmp);
+  }
+
+  function draw() {
+    baseIn.value = st.a; oa.textContent = fmt(st.a, 1);
+    smIn.value = st.M2; snIn.value = st.N2;
+    drawFig(); drawReadout(); drawCmp();
+  }
+  function setN(v) {
+    v = Math.round(v * 20) / 20;
+    st.N = Math.min(Math.max(v, NMIN), NMAX);
+  }
+  function logState(how) {
+    if (window.Peiyu) Peiyu.log("interact", { how: how, a: st.a, N: st.N, M: st.M2, N2: st.N2 });
+  }
+
+  function bindHandle() {
+    var drag = null;
+    function svgY(ev) {
+      var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+      var m = svg.getScreenCTM(); if (!m) return null;
+      return pt.matrixTransform(m.inverse()).y;
+    }
+    g.hg.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault(); drag = ev.pointerId;
+      try { g.hg.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+      g.h.focus({ preventScroll: true });
+    });
+    g.hg.addEventListener("pointermove", function (ev) {
+      if (drag === null || ev.pointerId !== drag) return;
+      var y = svgY(ev); if (y === null) return;
+      var before = st.N; setN(vy(y));
+      if (st.N !== before) { drawFig(); drawReadout(); }
+    });
+    g.hg.addEventListener("pointerup", function (ev) {
+      if (drag === null || ev.pointerId !== drag) return;
+      drag = null; logState("drag");
+    });
+    g.hg.addEventListener("pointercancel", function () { drag = null; });
+    g.h.addEventListener("keydown", function (ev) {
+      var k = ev.key;
+      if (k === "ArrowUp" || k === "ArrowRight") setN(st.N + 0.05);
+      else if (k === "ArrowDown" || k === "ArrowLeft") setN(st.N - 0.05);
+      else if (k === "PageUp") setN(st.N + 1);
+      else if (k === "PageDown") setN(st.N - 1);
+      else if (k === "Home") setN(NMIN);
+      else if (k === "End") setN(NMAX);
+      else return;
+      ev.preventDefault(); drawFig(); drawReadout(); logState("key");
+    });
+  }
+
+  baseIn.addEventListener("input", function () { st.a = Math.round(parseFloat(baseIn.value) * 10) / 10; draw(); });
+  baseIn.addEventListener("change", function () { logState("base"); });
+  smIn.addEventListener("input", function () { st.M2 = parseFloat(smIn.value); drawCmp(); });
+  snIn.addEventListener("input", function () { st.N2 = parseFloat(snIn.value); drawCmp(); });
+  smIn.addEventListener("change", function () { logState("cmp"); });
+  snIn.addEventListener("change", function () { logState("cmp"); });
+  function reset() { st = { a: DEF.a, N: DEF.N, M2: DEF.M2, N2: DEF.N2 }; draw(); }
+  document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  build();
+  document.addEventListener("DOMContentLoaded", function () { reset(); });
+  if (document.readyState !== "loading") reset();
+})();
+</script>
+</body></html>

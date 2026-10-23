@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1.3 空间向量及其运算的坐标表示 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig { width: 100%; height: auto; touch-action: none; user-select: none; display: block; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); }
+  .fig .axis { stroke-width: 1.5; stroke-linecap: round; }
+  .fig .axis-dash { stroke-dasharray: 4 3; opacity: 0.45; }
+  .fig text.axis-lab { font-size: 14px; font-weight: 700; font-family: -apple-system, sans-serif; font-style: italic; }
+  .fig text.point-lab { font-size: 13px; font-weight: 600; font-family: -apple-system, sans-serif; }
+  .fig .box-edge { stroke: var(--dim); stroke-width: 1.2; stroke-dasharray: 4 3; fill: none; }
+  .fig .plane-fill { fill: var(--line); fill-opacity: 0.18; }
+  .fig .vec-a { stroke: var(--a); stroke-width: 3.5; stroke-linecap: round; }
+  .fig .vec-b { stroke: var(--b); stroke-width: 3.5; stroke-linecap: round; }
+  .fig .seg-dist { stroke: var(--c); stroke-width: 2; stroke-dasharray: 5 3; }
+  .fig .dot-a { fill: var(--a); }
+  .fig .dot-b { fill: var(--b); }
+  .fig .dot-proj { fill: var(--muted); }
+
+  .ctrl-panel { margin: 12px 0 6px; }
+  .ctrl-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; align-items: center; }
+  .ctrl-bar .btn { font-size: 13px; padding: 5px 11px; }
+  .slider-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 10px 0; }
+  .slider-group { background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; }
+  .slider-group h4 { margin: 0 0 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+  .slider-row { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; }
+  .slider-row label { width: 44px; color: var(--muted); }
+  .slider-row input[type="range"] { flex: 1; accent-color: var(--a); cursor: pointer; }
+  .slider-row.b-row input[type="range"] { accent-color: var(--b); }
+  .slider-row output { width: 28px; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }
+  .stat-card { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: var(--bg); }
+  .stat-card .title { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .stat-card .val { font-size: 15px; font-weight: 700; line-height: 1.5; word-break: break-all; }
+
+  .badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px; }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; border: 1px solid var(--line); color: var(--muted); background: var(--card); }
+  .badge.on-perp { border-color: var(--a); color: var(--a); background: var(--ok-soft); }
+  .badge.on-para { border-color: var(--b); color: var(--b); background: var(--hl-soft); }
+  .badge.on-info { border-color: var(--c); color: var(--c); background: var(--bg); }
+  .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+  .calc-detail { font-size: 14px; line-height: 1.8; margin-top: 8px; padding: 10px 14px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--line); }
+  .calc-detail.hit-perp { border-left-color: var(--a); }
+  .calc-detail.hit-para { border-left-color: var(--b); }
+
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e1-1-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第一册 · 第 1 章 空间向量与立体几何</p>
+<h1>1.3 空间向量及其运算的坐标表示</h1>
+<p class="lead">建好空间直角坐标系，点和向量都写成三个数。求长度、夹角，判断垂直、平行，就变成按公式算这几个数。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一艘货运飞船正向空间站核心舱实施无人自主交会对接。在激光雷达建立的三维导航坐标系中，空间站接口为原点 \(O(0,0,0)\)，传感器测得飞船对接机构相对于 \(O\) 的空间位置为：向前（\(x\) 轴）\(2\,\text{m}\)、向右（\(y\) 轴）\(3\,\text{m}\)、向上（\(z\) 轴）\(6\,\text{m}\)，即空间点 \(P(2, 3, 6)\)。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>从原点 \(O\) 直线连接到对接靶心 \(P\)，位移向量 \(\overrightarrow{OP}\) 的空间直线距离（即向量模长 \(|\overrightarrow{OP}|\)）是多少米？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2 + 3 + 6 = 11\,\text{m}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt{2^2 + 3^2 + 6^2} = 7\,\text{m}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{2^2 + 3^2} = \sqrt{13}\,\text{m}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\sqrt{2\times 3\times 6} = 6\,\text{m}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。答案是 \(7\,\text{m}\)。</p>
+      <p>在空间长方体中，以 \(O\) 为一个顶点、\(P(x,y,z)\) 为对角顶点的体对角线长，由两次勾股定理可得：底面长宽构成投影对角线长 \(\sqrt{x^2+y^2}\)，再与竖直高 \(z\) 做勾股定理，体对角线长即为：</p>
+      <p>$$|\overrightarrow{OP}| = \sqrt{(\sqrt{x^2+y^2})^2 + z^2} = \sqrt{x^2+y^2+z^2} = \sqrt{4+9+36} = \sqrt{49} = 7\,\text{m}$$</p>
+      <p>通过建立<b>空间直角坐标系</b>，立体几何中点的位置、线段的长度、异面直线的夹角与垂直关系，都可以完全转化为代数算式一样精准可靠的坐标运算！</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：<a href="e1-1-2.html">1.2 空间向量基本定理</a>（单位正交基底）；<a href="b2-6-3.html">必修二 6.3 平面向量的坐标表示</a>。</p>
+
+  <div class="card">
+    <p><b>空间直角坐标系 \(O\text{-}xyz\)</b>：选一点 \(O\) 当原点，过 \(O\) 作三条<b>两两垂直</b>、单位长度相同的数轴：\(x\) 轴、\(y\) 轴、\(z\) 轴。高中默认用<b>右手系</b>：右手四指从 \(x\) 轴正向握向 \(y\) 轴正向，大拇指指的就是 \(z\) 轴正向。</p>
+    <p>例：教室的一个墙角当原点，地面上沿两面墙的墙根分别是 \(x\) 轴、\(y\) 轴，竖直向上的墙缝是 \(z\) 轴。</p>
+  </div>
+
+  <div class="card">
+    <p><b>单位正交基底 \(\{\boldsymbol{i}, \boldsymbol{j}, \boldsymbol{k}\}\)</b>：沿 \(x, y, z\) 轴正向、长度为 \(1\) 的三个向量。它们两两垂直，所以 \(\boldsymbol{i}\cdot\boldsymbol{j} = \boldsymbol{j}\cdot\boldsymbol{k} = \boldsymbol{k}\cdot\boldsymbol{i} = 0\)，而 \(\boldsymbol{i}\cdot\boldsymbol{i} = \boldsymbol{j}\cdot\boldsymbol{j} = \boldsymbol{k}\cdot\boldsymbol{k} = 1\)。</p>
+    <p>例：\(\boldsymbol{a} = 2\boldsymbol{i} - \boldsymbol{j} + 3\boldsymbol{k}\)，它的坐标就是 \((2, -1, 3)\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>投影点、对称点</b>：对点 \(P(x, y, z)\)，</p>
+    <ul>
+      <li>投影：在谁上面就留谁，别的变 \(0\)。投到 \(xOy\) 面是 \((x, y, 0)\)，投到 \(x\) 轴是 \((x, 0, 0)\)。</li>
+      <li>对称：关于谁对称谁不变，别的变相反数。关于 \(xOy\) 面是 \((x, y, -z)\)，关于 \(z\) 轴是 \((-x, -y, z)\)，关于原点是 \((-x, -y, -z)\)。</li>
+    </ul>
+    <p>例：\(P(2, -3, 4)\) 投到 \(xOy\) 面得 \((2, -3, 0)\)；关于 \(z\) 轴的对称点是 \((-2, 3, 4)\)；关于原点的对称点是 \((-2, 3, -4)\)。</p>
+  </div>
+
+  <h3>2. 建系，写出点和向量的坐标</h3>
+  <p><b>点的坐标</b>：若 \(\overrightarrow{OP} = x\boldsymbol{i} + y\boldsymbol{j} + z\boldsymbol{k}\)，就说点 \(P\) 的坐标是 \((x, y, z)\)，它表示一个确定的位置。<b>向量的坐标</b>：若 \(\boldsymbol{a} = x\boldsymbol{i} + y\boldsymbol{j} + z\boldsymbol{k}\)，就记 \(\boldsymbol{a} = (x, y, z)\)；向量平移后坐标不变。</p>
+  <p>两者的联系：\(\overrightarrow{AB} = \overrightarrow{OB} - \overrightarrow{OA}\)，所以</p>
+  <div class="key">\(A(x_1, y_1, z_1)\)，\(B(x_2, y_2, z_2)\)：
+    $$\overrightarrow{AB} = (x_2 - x_1,\ y_2 - y_1,\ z_2 - z_1)$$
+    终点减起点。</div>
+  <p>建系前先找三条两两垂直、交于一点的线（长方体、正方体的一个顶点处最常见），说明它们垂直，再标原点、方向和单位。</p>
+
+  <div class="card">
+    <p class="small">例 1（长方体里写坐标）</p>
+    <p>长方体 \(ABCD-A_1B_1C_1D_1\) 中，\(AB = 4\)，\(AD = 2\)，\(AA_1 = 3\)，\(M\) 是棱 \(C_1D_1\) 的中点。建立坐标系，写出 \(C_1\)、\(M\) 的坐标和 \(\overrightarrow{BM}\) 的坐标。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：长方体的棱 \(AB, AD, AA_1\) 交于 \(A\) 且两两垂直。以 \(A\) 为原点，\(AB, AD, AA_1\) 方向分别为 \(x, y, z\) 轴正向，单位长度为 \(1\)。</p>
+      <p>\(B(4, 0, 0)\)，\(C_1(4, 2, 3)\)，\(D_1(0, 2, 3)\)。</p>
+      <p>\(M\) 是 \(C_1D_1\) 中点，坐标取平均：\(M\left(\dfrac{4+0}{2}, \dfrac{2+2}{2}, \dfrac{3+3}{2}\right) = (2, 2, 3)\)。</p>
+      <p>终点减起点：\(\overrightarrow{BM} = (2-4,\ 2-0,\ 3-0) = (-2, 2, 3)\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-coord" data-answer="A">
+    <p><b>自己试试</b>：棱长为 \(2\) 的正方体 \(ABCD-A_1B_1C_1D_1\)，以 \(D\) 为原点，\(DA, DC, DD_1\) 为 \(x, y, z\) 轴。\(E\) 是棱 \(BB_1\) 的中点，\(\overrightarrow{D_1E}\) 的坐标是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((2, 2, -1)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((-2, -2, 1)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((2, 2, 1)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((2, 2, 3)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(B(2, 2, 0)\)，\(B_1(2, 2, 2)\)，所以 \(E(2, 2, 1)\)；\(D_1(0, 0, 2)\)。</p>
+      <p>\(\overrightarrow{D_1E} = (2-0,\ 2-0,\ 1-2) = (2, 2, -1)\)。</p>
+      <p class="small">常见算错：B 是用起点减终点，得到的是 \(\overrightarrow{ED_1}\)；C 是把点 \(E\) 的坐标直接当成了向量坐标，只有起点在原点时才可以这样；D 是把减号写成了加号。</p>
+    </div>
+  </div>
+
+  <h3>3. 坐标运算：加减、数乘、数量积</h3>
+  <p>设 \(\boldsymbol{a} = (x_1, y_1, z_1)\)，\(\boldsymbol{b} = (x_2, y_2, z_2)\)，\(\lambda \in \mathbf{R}\)。加减和数乘都是逐个分量做：</p>
+  <p>$$\boldsymbol{a} \pm \boldsymbol{b} = (x_1 \pm x_2,\ y_1 \pm y_2,\ z_1 \pm z_2)$$</p>
+  <p>$$\lambda\boldsymbol{a} = (\lambda x_1,\ \lambda y_1,\ \lambda z_1)$$</p>
+  <p><b>数量积为什么是「对应相乘再相加」</b>：把 \(\boldsymbol{a} = x_1\boldsymbol{i} + y_1\boldsymbol{j} + z_1\boldsymbol{k}\) 和 \(\boldsymbol{b}\) 展开相乘，共 9 项。\(\boldsymbol{i}\cdot\boldsymbol{j}\) 这类交叉项都是 \(0\)，\(\boldsymbol{i}\cdot\boldsymbol{i}\) 这类都是 \(1\)，只剩三项：</p>
+  <div class="key" style="text-align:center">$$\boldsymbol{a}\cdot\boldsymbol{b} = x_1x_2 + y_1y_2 + z_1z_2$$</div>
+  <p>注意：数量积的结果是一个<b>数</b>，不是向量。</p>
+
+  <div class="card">
+    <p class="small">例 2（坐标运算）</p>
+    <p>已知 \(\boldsymbol{a} = (2, -1, 3)\)，\(\boldsymbol{b} = (1, 4, -2)\)。求 (1) \(2\boldsymbol{a} - 3\boldsymbol{b}\)；(2) \(\boldsymbol{a}\cdot\boldsymbol{b}\)；(3) \((\boldsymbol{a} + \boldsymbol{b})\cdot(\boldsymbol{a} - \boldsymbol{b})\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) \(2\boldsymbol{a} = (4, -2, 6)\)，\(3\boldsymbol{b} = (3, 12, -6)\)，</p>
+      <p>$$2\boldsymbol{a} - 3\boldsymbol{b} = (4-3,\ -2-12,\ 6-(-6)) = (1, -14, 12)$$</p>
+      <p>(2) \(\boldsymbol{a}\cdot\boldsymbol{b} = 2\times 1 + (-1)\times 4 + 3\times(-2) = 2 - 4 - 6 = -8\)。</p>
+      <p>(3) \(\boldsymbol{a} + \boldsymbol{b} = (3, 3, 1)\)，\(\boldsymbol{a} - \boldsymbol{b} = (1, -5, 5)\)，</p>
+      <p>$$(\boldsymbol{a} + \boldsymbol{b})\cdot(\boldsymbol{a} - \boldsymbol{b}) = 3 - 15 + 5 = -7$$</p>
+      <p class="small">验算：它也等于 \(|\boldsymbol{a}|^2 - |\boldsymbol{b}|^2 = 14 - 21 = -7\)，两种算法一致。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-dot" data-answer="A">
+    <p><b>自己试试</b>：\(\boldsymbol{a} = (1, -2, 3)\)，\(\boldsymbol{b} = (2, -1, -1)\)，\(\boldsymbol{a}\cdot\boldsymbol{b}\) 等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((2, 2, -3)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(7\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(1\times 2 + (-2)\times(-1) + 3\times(-1) = 2 + 2 - 3 = 1\)。</p>
+      <p class="small">常见算错：B 是把 \((-2)\times(-1)\) 算成了 \(-2\)，负负没得正；C 把三个乘积写成了向量，数量积是一个数；D 是把三项都当正数加了。</p>
+    </div>
+  </div>
+
+  <h3>4. 模长、两点距离、夹角</h3>
+  <p>模长就是「自己和自己的数量积」开根号，两点距离就是 \(\overrightarrow{AB}\) 的模：</p>
+  <div class="key">
+    $$|\boldsymbol{a}| = \sqrt{\boldsymbol{a}\cdot\boldsymbol{a}} = \sqrt{x_1^2 + y_1^2 + z_1^2}$$
+    $$|AB| = \sqrt{(x_2-x_1)^2 + (y_2-y_1)^2 + (z_2-z_1)^2}$$
+  </div>
+  <p>这和开头的题一样：长方体体对角线，用两次勾股定理就得到三个平方和。两个非零向量的夹角，用数量积除以两个模长：</p>
+  <div class="key">
+    $$\cos\langle\boldsymbol{a}, \boldsymbol{b}\rangle = \frac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{a}|\,|\boldsymbol{b}|}$$
+    $$= \frac{x_1x_2 + y_1y_2 + z_1z_2}{\sqrt{x_1^2+y_1^2+z_1^2}\,\sqrt{x_2^2+y_2^2+z_2^2}}$$
+  </div>
+  <p>余弦为正是锐角，为负是钝角，为 \(0\) 是直角。</p>
+
+  <div class="card">
+    <p class="small">例 3（距离与夹角）</p>
+    <p>已知空间三点 \(A(1, 1, 0)\)、\(B(0, 2, 1)\)、\(C(2, 0, 1)\)。</p>
+    <p>(1) 求 \(\overrightarrow{AB}\)、\(\overrightarrow{AC}\) 的坐标；(2) 求 \(|\overrightarrow{AB}|\) 和 \(\overrightarrow{AB}\cdot\overrightarrow{AC}\)；(3) 求 \(\langle\overrightarrow{AB}, \overrightarrow{AC}\rangle\)；(4) 求 \(B, C\) 两点间的距离。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) 终点减起点：\(\overrightarrow{AB} = (0 - 1, 2 - 1, 1 - 0) = (-1, 1, 1)\)；\(\overrightarrow{AC} = (2 - 1, 0 - 1, 1 - 0) = (1, -1, 1)\)。</p>
+      <p>(2) \(|\overrightarrow{AB}| = \sqrt{(-1)^2 + 1^2 + 1^2} = \sqrt{3}\)，同理 \(|\overrightarrow{AC}| = \sqrt{3}\)；</p>
+      <p>\(\overrightarrow{AB}\cdot\overrightarrow{AC} = (-1)\times 1 + 1\times(-1) + 1\times 1 = -1\)。</p>
+      <p>(3) $$\cos\langle\overrightarrow{AB}, \overrightarrow{AC}\rangle = \frac{-1}{\sqrt{3}\times\sqrt{3}} = -\frac{1}{3}$$</p>
+      <p>余弦为负，夹角是钝角：\(\langle\overrightarrow{AB}, \overrightarrow{AC}\rangle = \pi - \arccos\dfrac{1}{3}\)。</p>
+      <p>(4) \(\overrightarrow{BC} = (2, -2, 0)\)，\(|BC| = \sqrt{4 + 4 + 0} = 2\sqrt{2}\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p><b>自己试试</b>：已知空间点 \(A(2, 1, -1)\)，\(B(1, 3, 1)\)，则 \(|\overrightarrow{AB}|\) 等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt{5}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(9\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\sqrt{13}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(\overrightarrow{AB} = (1-2, 3-1, 1-(-1)) = (-1, 2, 2)\)，\(|\overrightarrow{AB}| = \sqrt{1 + 4 + 4} = 3\)。</p>
+      <p class="small">常见算错：C 是忘了开根号；B 是漏了竖坐标的变化，只算了前两个分量；竖坐标 \(1-(-1)\) 算成 \(0\) 也会得到 B。</p>
+    </div>
+  </div>
+
+  <h3>5. 垂直与平行的坐标条件</h3>
+  <p>夹角为直角 \(\iff\) 余弦为 \(0\) \(\iff\) 数量积为 \(0\)；平行就是一个向量是另一个的倍数。设 \(\boldsymbol{a}, \boldsymbol{b}\) 都不是零向量：</p>
+  <div class="key">
+    垂直：\(\boldsymbol{a} \perp \boldsymbol{b} \iff x_1x_2 + y_1y_2 + z_1z_2 = 0\)<br>
+    平行：\(\boldsymbol{a} \parallel \boldsymbol{b} \iff\) 有实数 \(\lambda\) 使 \(\boldsymbol{b} = \lambda\boldsymbol{a}\)，即
+    $$x_2 = \lambda x_1,\quad y_2 = \lambda y_1,\quad z_2 = \lambda z_1$$
+  </div>
+  <p>分量都不为 \(0\) 时，平行也可以写成 \(\dfrac{x_2}{x_1} = \dfrac{y_2}{y_1} = \dfrac{z_2}{z_1}\)；有分量为 \(0\) 时只能用 \(\boldsymbol{b} = \lambda\boldsymbol{a}\)，不能除以 \(0\)。</p>
+
+  <div class="card">
+    <p class="small">例 4（由平行、垂直求参数）</p>
+    <p>已知 \(\boldsymbol{a} = (2, -1, 3)\)，\(\boldsymbol{b} = (-4, 2, t)\)。(1) 若 \(\boldsymbol{a} \parallel \boldsymbol{b}\)，求 \(t\)；(2) 若 \(\boldsymbol{a} \perp \boldsymbol{b}\)，求 \(t\)。(3) 另有 \(\boldsymbol{c} = (1, 0, -2)\)，\(\boldsymbol{d} = (3, y, z)\)，且 \(\boldsymbol{c} \parallel \boldsymbol{d}\)，求 \(y, z\)。</p>
+    <div style="border-top:1px dashed var(--line);margin-top:8px;padding-top:8px">
+      <p><b>解</b>：</p>
+      <p>(1) 设 \(\boldsymbol{b} = \lambda\boldsymbol{a}\)：\(-4 = 2\lambda\)，\(2 = -\lambda\)，\(t = 3\lambda\)。前两式都给出 \(\lambda = -2\)，所以 \(t = -6\)。</p>
+      <p>(2) \(\boldsymbol{a}\cdot\boldsymbol{b} = 2\times(-4) + (-1)\times 2 + 3t = -10 + 3t = 0\)，所以 \(t = \dfrac{10}{3}\)。</p>
+      <p>(3) \(\boldsymbol{c}\) 的 \(y\) 分量是 \(0\)，不能写比例式。设 \(\boldsymbol{d} = \lambda\boldsymbol{c}\)：\(3 = \lambda\)，\(y = 0\cdot\lambda = 0\)，\(z = -2\lambda = -6\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="try-2" data-answer="C">
+    <p><b>自己试试</b>：已知 \(\boldsymbol{a} = (1, 2, -1)\)，\(\boldsymbol{b} = (m, 1, 4)\)。若 \(\boldsymbol{a} \perp \boldsymbol{b}\)，则 \(m\) 等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(\boldsymbol{a}\cdot\boldsymbol{b} = m + 2 - 4 = m - 2 = 0\)，所以 \(m = 2\)。</p>
+      <p class="small">常见算错：A 是移项时符号弄反；D 是把 \(2\times 1\) 也当成减项，得 \(m - 6 = 0\)。也有人把垂直和平行记混，去列比例式。</p>
+    </div>
+  </div>
+
+  <h3>6. 用之前要注意（专题卡边界）</h3>
+  <div class="card">
+    <ol>
+      <li><b>三条轴必须两两垂直</b>：坐标公式都靠 \(\boldsymbol{i}\cdot\boldsymbol{j} = 0\) 这些式子。斜三棱柱、斜四棱锥的棱不一定互相垂直，建系前要先证明垂直。<br>
+        <span class="small">反例：两条轴夹角是 \(60^\circ\)，单位向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\) 之和的长度是 \(\sqrt{1 + 1 + 2\cos 60^\circ} = \sqrt{3}\)；硬套公式算 \(\sqrt{1^2 + 1^2} = \sqrt{2}\)，就错了。</span>
+      </li>
+      <li><b>点和向量不一样，向量是终点减起点</b>：点坐标是一个位置，向量坐标是一次位移。只有起点在原点时，向量坐标才等于终点坐标。<br>
+        <span class="small">反例：\(A(1, 2, 3)\)，\(B(4, 0, 5)\)，\(\overrightarrow{AB} = (3, -2, 2)\)，减反了得 \((-3, 2, -2)\)，是 \(\overrightarrow{BA}\)，方向正好相反；而 \(\overrightarrow{AB}\) 也不等于 \(B\) 的坐标 \((4, 0, 5)\)。</span>
+      </li>
+      <li><b>判平行有 \(0\) 分量时不能写比例式</b>：要用 \(\boldsymbol{b} = \lambda\boldsymbol{a}\) 逐个分量对。<br>
+        <span class="small">反例：\(\boldsymbol{a} = (1, 0, 2)\)，\(\boldsymbol{b} = (2, 0, 4)\)，\(\boldsymbol{b} = 2\boldsymbol{a}\)，平行；写成 \(\dfrac{2}{1} = \dfrac{0}{0} = \dfrac{4}{2}\) 就出现了 \(\dfrac{0}{0}\)，没法判断。</span>
+      </li>
+      <li><b>夹角公式要求两个向量都不是零向量</b>：零向量的模为 \(0\)，分母为 \(0\)，没有夹角可言。</li>
+    </ol>
+  </div>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>空间直角坐标系 3D 投影微实验室</h3>
+  <p class="small">支持斜二测 3D 投影展示：滑动调节或键盘方向键微调向量 \(\boldsymbol{a}=(x_1, y_1, z_1)\) 与 \(\boldsymbol{b}=(x_2, y_2, z_2)\) 的坐标分量，实时观察空间点投影虚线盒、模长、数量积与两向量空间夹角 \(\theta\) 的动态代数推演：</p>
+
+  <div class="card" style="padding:12px;">
+    <svg class="fig" id="coord3dSvg" viewBox="0 0 560 360" role="img" aria-label="空间直角坐标系与空间向量 3D 投影微实验室">
+      <defs>
+        <marker id="arr-axis" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#5E6B64"/></marker>
+        <marker id="arr-a" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2F7A56"/></marker>
+        <marker id="arr-b" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#966524"/></marker>
+      </defs>
+    </svg>
+
+    <div class="ctrl-panel">
+      <div class="ctrl-bar">
+        <button type="button" class="btn ghost btn-pre" data-pre="p1">点 P(2,3,4) 投影盒</button>
+        <button type="button" class="btn ghost btn-pre" data-pre="perp">正交垂直 a ⊥ b</button>
+        <button type="button" class="btn ghost btn-pre" data-pre="collinear">平行同向 a ∥ b</button>
+        <button type="button" class="btn ghost btn-pre" data-pre="zero-para">含零分量平行 (1,0,2)</button>
+        <button type="button" class="btn ghost btn-pre" data-pre="opp">反向共线 a ∥ -b</button>
+        <button type="button" class="btn ghost" id="resetBtn">重置</button>
+      </div>
+
+      <div style="margin: 6px 0;">
+        <label style="font-size:13px; cursor:pointer;"><input type="checkbox" id="showBoxCheck" checked> 显示空间长方体投影虚线盒（展示坐标三维分解）</label>
+      </div>
+
+      <div class="slider-grid">
+        <div class="slider-group">
+          <h4 style="color:var(--a);">向量 \(\boldsymbol{a} = (x_1, y_1, z_1)\)（绿色）</h4>
+          <div class="slider-row">
+            <label for="ax">x₁ =</label>
+            <input type="range" id="ax" min="-4" max="4" step="1" value="2">
+            <output id="axOut">2</output>
+          </div>
+          <div class="slider-row">
+            <label for="ay">y₁ =</label>
+            <input type="range" id="ay" min="-4" max="4" step="1" value="3">
+            <output id="ayOut">3</output>
+          </div>
+          <div class="slider-row">
+            <label for="az">z₁ =</label>
+            <input type="range" id="az" min="-4" max="4" step="1" value="4">
+            <output id="azOut">4</output>
+          </div>
+        </div>
+
+        <div class="slider-group">
+          <h4 style="color:var(--b);">向量 \(\boldsymbol{b} = (x_2, y_2, z_2)\)（金色）</h4>
+          <div class="slider-row b-row">
+            <label for="bx">x₂ =</label>
+            <input type="range" id="bx" min="-4" max="4" step="1" value="-2">
+            <output id="bxOut">-2</output>
+          </div>
+          <div class="slider-row b-row">
+            <label for="by">y₂ =</label>
+            <input type="range" id="by" min="-4" max="4" step="1" value="2">
+            <output id="byOut">2</output>
+          </div>
+          <div class="slider-row b-row">
+            <label for="bz">z₂ =</label>
+            <input type="range" id="bz" min="-4" max="4" step="1" value="1">
+            <output id="bzOut">1</output>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge-row">
+        <span class="badge" id="badgePerp"><span class="dot"></span>垂直判定：未垂直</span>
+        <span class="badge" id="badgePara"><span class="dot"></span>平行判定：不共线</span>
+        <span class="badge on-info" id="badgeAngle"><span class="dot"></span>空间夹角 θ = 90.0°</span>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="title">模长 |a|</div>
+          <div class="val" id="magAVal" style="color:var(--a);">5.385</div>
+        </div>
+        <div class="stat-card">
+          <div class="title">模长 |b|</div>
+          <div class="val" id="magBVal" style="color:var(--b);">3.000</div>
+        </div>
+        <div class="stat-card">
+          <div class="title">数量积 a·b</div>
+          <div class="val" id="dotVal">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="title">终点距离 |AB|</div>
+          <div class="val" id="distVal" style="color:var(--c);">5.100</div>
+        </div>
+      </div>
+
+      <div class="calc-detail" id="calcDetail" aria-live="polite">
+        计算推演区
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。紧扣空间向量坐标运算与 E1-01-B 关键边界。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A">
+    <p>1. 已知空间向量 \(\boldsymbol{a} = (1, 2, -2)\)，\(\boldsymbol{b} = (-2, 0, 1)\)，则向量 \(2\boldsymbol{a} + \boldsymbol{b}\) 的模长等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\sqrt{13}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(7\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(25\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。先算坐标线性组合：\(2\boldsymbol{a} = (2, 4, -4)\)，\(2\boldsymbol{a} + \boldsymbol{b} = (2 + (-2), 4 + 0, -4 + 1) = (0, 4, -3)\)。再利用模长公式：\(|2\boldsymbol{a} + \boldsymbol{b}| = \sqrt{0^2 + 4^2 + (-3)^2} = \sqrt{16 + 9} = \sqrt{25} = 5\)。注意模长不能直接把各向量模长相加。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="A">
+    <p>2. 已知空间两点 \(A(1, 2, 3)\)、\(B(3, -2, 1)\)，点 \(M\) 是线段 \(AB\) 的中点，则中点 \(M\) 的坐标以及线段 \(AB\) 的长度 \(|AB|\) 分别为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(M(2, 0, 2)\)，\(|AB| = 2\sqrt{6}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(M(2, 0, 2)\)，\(|AB| = 6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(M(1, -2, -1)\)，\(|AB| = 2\sqrt{6}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(M(4, 0, 4)\)，\(|AB| = 24\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。中点坐标为各对应坐标算术平均数：\(M\left(\dfrac{1+3}{2}, \dfrac{2+(-2)}{2}, \dfrac{3+1}{2}\right) = (2, 0, 2)\)。两点间距离为两点式向量模长：\(|AB| = \sqrt{(3-1)^2 + (-2-2)^2 + (1-3)^2} = \sqrt{4 + 16 + 4} = \sqrt{24} = 2\sqrt{6}\)。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="A">
+    <p>3. 【边界 5：含 0 分量共线判定】已知空间向量 \(\boldsymbol{a} = (2, 0, -4)\)，\(\boldsymbol{b} = (-1, y, z)\)。若 \(\boldsymbol{a} \parallel \boldsymbol{b}\)，则实数对 \((y, z)\) 的值为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((0, 2)\)</button>
+      <button class="opt" data-v="B"><b>B</b>无法确定，因为分母含 0 不能成比例</button>
+      <button class="opt" data-v="C"><b>C</b>\((0, -2)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((1, 2)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。根据空间向量平行的充要条件：存在实数 \(\lambda\) 使得 \(\boldsymbol{b} = \lambda\boldsymbol{a}\)。</p>
+      <p>即 \((-1, y, z) = \lambda(2, 0, -4) \implies -1 = 2\lambda \implies \lambda = -\dfrac{1}{2}\)。</p>
+      <p>代入其余分量：\(y = -\dfrac{1}{2}\times 0 = 0\)，\(z = -\dfrac{1}{2}\times(-4) = 2\)。</p>
+      <p><b>警示</b>：很多同学误以为分量含 0 时“不能平行”或“比例无意义”，其实分母为 0 只是提醒我们不能写成坐标相除，而必须严格用数乘方程 \(\boldsymbol{b}=\lambda\boldsymbol{a}\) 求解！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p4" data-answer="C">
+    <p>4. 【边界 1：直角坐标轴必须正交】在空间几何体中建立空间直角坐标系，下列选轴做法中<b>合规且正确</b>的是：</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>在任意底面为平行四边形、侧棱倾斜的四棱柱中，直接以共顶点的三条侧棱所在直线分别为 \(x, y, z\) 轴</button>
+      <button class="opt" data-v="B"><b>B</b>在正三棱柱 \(ABC-A_1B_1C_1\) 中，直接以棱 \(AB, AC, AA_1\) 所在直线分别为 \(x, y, z\) 轴</button>
+      <button class="opt" data-v="C"><b>C</b>在长方体 \(ABCD-A_1B_1C_1D_1\) 中，以顶点 \(D\) 为原点，射线 \(DA, DC, DD_1\) 所在直线分别为 \(x, y, z\) 轴</button>
+      <button class="opt" data-v="D"><b>D</b>在正四面体 \(ABCD\) 中，直接以共顶点的三条侧棱 \(AB, AC, AD\) 所在直线分别为 \(x, y, z\) 轴</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。空间直角坐标系必须依赖「单位正交基底」（三条坐标轴必须两两垂直）。</p>
+      <p>长方体从同一顶点出发的三条棱两两互相垂直，符合建系条件；而正三棱柱底面是正三角形，\(\angle BAC = 60^\circ \ne 90^\circ\)；正四面体各面都是等边三角形，侧棱两两夹角也为 \(60^\circ\)；斜四棱柱的棱更不是直角。绝不能随意把斜棱当作坐标轴，建系前必须先证明轴的两两垂直！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p5" data-answer="A">
+    <p>5. 【边界 2：终点减起点与垂直判定】已知空间三点 \(A(1, 0, 2)\)、\(B(2, 1, 3)\)、\(C(x, 2, 1)\)。若向量 \(\overrightarrow{AB} \perp \overrightarrow{AC}\)，则实数 \(x\) 的值为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。两点式向量必须用「终点坐标减去起点坐标」：</p>
+      <p>\(\overrightarrow{AB} = (2-1, 1-0, 3-2) = (1, 1, 1)\)；</p>
+      <p>\(\overrightarrow{AC} = (x-1, 2-0, 1-2) = (x-1, 2, -1)\)。</p>
+      <p>两非零向量垂直充要条件是数量积为 0：</p>
+      <p>\(\overrightarrow{AB}\cdot\overrightarrow{AC} = 1\times(x-1) + 1\times 2 + 1\times(-1) = x - 1 + 2 - 1 = x = 0\)。</p>
+      <p>若误用起点减终点或把常数项加错，容易误选 B 或 C。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="A">
+    <p>6. 已知非零向量 \(\boldsymbol{a} = (1, 1, 0)\)，\(\boldsymbol{b} = (0, 1, 1)\)。若空间非零向量 \(\boldsymbol{n} = (x, y, 1)\) 同时垂直于 \(\boldsymbol{a}\) 和 \(\boldsymbol{b}\)，则向量 \(\boldsymbol{n}\) 的模长 \(|\boldsymbol{n}|\) 等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\sqrt{3}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt{2}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。这正是立体几何中求「平面法向量」的经典代数方程组：</p>
+      <p>\(\boldsymbol{n}\perp\boldsymbol{a} \iff x\times 1 + y\times 1 + 1\times 0 = 0 \implies x + y = 0\)；</p>
+      <p>\(\boldsymbol{n}\perp\boldsymbol{b} \iff x\times 0 + y\times 1 + 1\times 1 = 0 \implies y + 1 = 0 \implies y = -1\)。</p>
+      <p>解得 \(y = -1\)，代入得 \(x = -y = 1\)。因此公垂向量为 \(\boldsymbol{n} = (1, -1, 1)\)。</p>
+      <p>其模长为 \(|\boldsymbol{n}| = \sqrt{1^2 + (-1)^2 + 1^2} = \sqrt{3}\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 获取 DOM 元素
+  var svg = document.getElementById("coord3dSvg");
+  var axIn = document.getElementById("ax");
+  var ayIn = document.getElementById("ay");
+  var azIn = document.getElementById("az");
+  var bxIn = document.getElementById("bx");
+  var byIn = document.getElementById("by");
+  var bzIn = document.getElementById("bz");
+
+  var axOut = document.getElementById("axOut");
+  var ayOut = document.getElementById("ayOut");
+  var azOut = document.getElementById("azOut");
+  var bxOut = document.getElementById("bxOut");
+  var byOut = document.getElementById("byOut");
+  var bzOut = document.getElementById("bzOut");
+
+  var showBox = document.getElementById("showBoxCheck");
+  var resetBtn = document.getElementById("resetBtn");
+  var badgePerp = document.getElementById("badgePerp");
+  var badgePara = document.getElementById("badgePara");
+  var badgeAngle = document.getElementById("badgeAngle");
+
+  var magAVal = document.getElementById("magAVal");
+  var magBVal = document.getElementById("magBVal");
+  var dotVal = document.getElementById("dotVal");
+  var distVal = document.getElementById("distVal");
+  var calcDetail = document.getElementById("calcDetail");
+
+  // 3D 投影投影中心与比例参数 (右手系斜二测投影)
+  // X = Ox - x * sx + y * sy
+  // Y = Oy + x * dx - z * sz
+  var Ox = 240, Oy = 205;
+  var scale = 26;
+  var xCos = 0.65, xSin = 0.55;
+
+  function to2D(x, y, z) {
+    var X = Ox - x * (scale * xCos) + y * scale;
+    var Y = Oy + x * (scale * xSin) - z * scale;
+    return [X, Y];
+  }
+
+  function el(name, attrs) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", name);
+    for (var k in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
+        node.setAttribute(k, attrs[k]);
+      }
+    }
+    return node;
+  }
+
+  function render() {
+    var ax = parseFloat(axIn ? axIn.value : 2) || 0;
+    var ay = parseFloat(ayIn ? ayIn.value : 3) || 0;
+    var az = parseFloat(azIn ? azIn.value : 4) || 0;
+    var bx = parseFloat(bxIn ? bxIn.value : -2) || 0;
+    var by = parseFloat(byIn ? byIn.value : 2) || 0;
+    var bz = parseFloat(bzIn ? bzIn.value : 1) || 0;
+
+    if (axOut) axOut.textContent = ax;
+    if (ayOut) ayOut.textContent = ay;
+    if (azOut) azOut.textContent = az;
+    if (bxOut) bxOut.textContent = bx;
+    if (byOut) byOut.textContent = by;
+    if (bzOut) bzOut.textContent = bz;
+
+    // 清理 SVG（保留 defs 标记）
+    var defs = svg.querySelector("defs");
+    svg.innerHTML = "";
+    if (defs) svg.appendChild(defs);
+
+    // 绘制坐标平面半透明网格底板 (xOy 平面, z=0)
+    var p00 = to2D(-3.5, -3.5, 0);
+    var p01 = to2D(-3.5, 4.5, 0);
+    var p11 = to2D(4.2, 4.5, 0);
+    var p10 = to2D(4.2, -3.5, 0);
+    svg.appendChild(el("polygon", {
+      points: p00[0] + "," + p00[1] + " " + p01[0] + "," + p01[1] + " " + p11[0] + "," + p11[1] + " " + p10[0] + "," + p10[1],
+      class: "plane-fill"
+    }));
+
+    // 绘制三条坐标轴 (负向虚线，正向实线带箭头)
+    // x 轴 (前左下方)
+    var xNeg = to2D(-3.5, 0, 0), xPos = to2D(4.5, 0, 0);
+    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: xNeg[0], y2: xNeg[1], class: "axis axis-dash", stroke: "#5E6B64" }));
+    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: xPos[0], y2: xPos[1], class: "axis", stroke: "#5E6B64", "marker-end": "url(#arr-axis)" }));
+    var tX = el("text", { x: xPos[0] - 12, y: xPos[1] + 16, class: "axis-lab", fill: "#1A2822" });
+    tX.textContent = "x (横轴)";
+    svg.appendChild(tX);
+
+    // y 轴 (水平向右)
+    var yNeg = to2D(0, -3.5, 0), yPos = to2D(0, 4.8, 0);
+    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: yNeg[0], y2: yNeg[1], class: "axis axis-dash", stroke: "#5E6B64" }));
+    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: yPos[0], y2: yPos[1], class: "axis", stroke: "#5E6B64", "marker-end": "url(#arr-axis)" }));
+    var tY = el("text", { x: yPos[0] + 6, y: yPos[1] + 4, class: "axis-lab", fill: "#1A2822" });
+    tY.textContent = "y (纵轴)";
+    svg.appendChild(tY);
+
+    // z 轴 (竖直向上)
+    var zNeg = to2D(0, 0, -3.2), zPos = to2D(0, 0, 4.6);
+    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: zNeg[0], y2: zNeg[1], class: "axis axis-dash", stroke: "#5E6B64" }));
+    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: zPos[0], y2: zPos[1], class: "axis", stroke: "#5E6B64", "marker-end": "url(#arr-axis)" }));
+    var tZ = el("text", { x: zPos[0] - 10, y: zPos[1] - 8, class: "axis-lab", fill: "#1A2822" });
+    tZ.textContent = "z (竖轴)";
+    svg.appendChild(tZ);
+
+    // 原点 O 标号
+    var tO = el("text", { x: Ox - 14, y: Oy + 14, class: "point-lab", fill: "#5E6B64" });
+    tO.textContent = "O";
+    svg.appendChild(tO);
+
+    // 空间长方体投影虚线盒 (展示向量 a 的空间位置分解)
+    var isShowBox = showBox ? showBox.checked : true;
+    var Pa = to2D(ax, ay, az);
+    if (isShowBox && (ax !== 0 || ay !== 0 || az !== 0)) {
+      var P_x = to2D(ax, 0, 0);
+      var P_y = to2D(0, ay, 0);
+      var P_z = to2D(0, 0, az);
+      var P_xy = to2D(ax, ay, 0);
+      var P_yz = to2D(0, ay, az);
+      var P_zx = to2D(ax, 0, az);
+
+      // 长方体 12 条边缘（除与轴重合部分外画虚线）
+      var edges = [
+        [P_x, P_xy], [P_y, P_xy],
+        [P_y, P_yz], [P_z, P_yz],
+        [P_x, P_zx], [P_z, P_zx],
+        [P_xy, Pa], [P_yz, Pa], [P_zx, Pa]
+      ];
+      for (var i = 0; i < edges.length; i++) {
+        svg.appendChild(el("line", {
+          x1: edges[i][0][0], y1: edges[i][0][1],
+          x2: edges[i][1][0], y2: edges[i][1][1],
+          class: "box-edge"
+        }));
+      }
+
+      // 投影点标记
+      var projs = [
+        { pt: P_xy, lab: "(" + ax + "," + ay + ",0)" },
+        { pt: P_x, lab: "" },
+        { pt: P_y, lab: "" },
+        { pt: P_z, lab: "" }
+      ];
+      for (var j = 0; j < projs.length; j++) {
+        svg.appendChild(el("circle", { cx: projs[j].pt[0], cy: projs[j].pt[1], r: 3, class: "dot-proj" }));
+      }
+    }
+
+    // 绘制向量 a (松绿主色)
+    if (ax !== 0 || ay !== 0 || az !== 0) {
+      svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: Pa[0], y2: Pa[1], class: "vec-a", "marker-end": "url(#arr-a)" }));
+    }
+    svg.appendChild(el("circle", { cx: Pa[0], cy: Pa[1], r: 4.5, class: "dot-a" }));
+    var tPa = el("text", { x: Pa[0] + 6, y: Pa[1] - 6, class: "point-lab", fill: "#2F7A56" });
+    tPa.textContent = "a(" + ax + "," + ay + "," + az + ")";
+    svg.appendChild(tPa);
+
+    // 绘制向量 b (赤金次色)
+    var Pb = to2D(bx, by, bz);
+    if (bx !== 0 || by !== 0 || bz !== 0) {
+      svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: Pb[0], y2: Pb[1], class: "vec-b", "marker-end": "url(#arr-b)" }));
+    }
+    svg.appendChild(el("circle", { cx: Pb[0], cy: Pb[1], r: 4.5, class: "dot-b" }));
+    var tPb = el("text", { x: Pb[0] + 6, y: Pb[1] - 6, class: "point-lab", fill: "#966524" });
+    tPb.textContent = "b(" + bx + "," + by + "," + bz + ")";
+    svg.appendChild(tPb);
+
+    // 终点连线 (距离线段 AB)
+    svg.appendChild(el("line", { x1: Pa[0], y1: Pa[1], x2: Pb[0], y2: Pb[1], class: "seg-dist" }));
+
+    // 数学运算推演
+    var magA = Math.sqrt(ax * ax + ay * ay + az * az);
+    var magB = Math.sqrt(bx * bx + by * by + bz * bz);
+    var dot = ax * bx + ay * by + az * bz;
+    var dist = Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay) + (bz - az) * (bz - az));
+
+    if (magAVal) magAVal.textContent = magA.toFixed(3);
+    if (magBVal) magBVal.textContent = magB.toFixed(3);
+    if (dotVal) dotVal.textContent = dot;
+    if (distVal) distVal.textContent = dist.toFixed(3);
+
+    // 叉积判共线 (cross product)
+    var cx = ay * bz - az * by;
+    var cy = az * bx - ax * bz;
+    var cz = ax * by - ay * bx;
+    var crossMag = Math.sqrt(cx * cx + cy * cy + cz * cz);
+
+    var isZeroA = (magA === 0);
+    var isZeroB = (magB === 0);
+    var isPerp = (!isZeroA && !isZeroB && Math.abs(dot) === 0);
+    var isPara = (!isZeroA && !isZeroB && crossMag < 1e-5);
+
+    var angleDeg = null;
+    if (!isZeroA && !isZeroB) {
+      var cosTheta = dot / (magA * magB);
+      if (cosTheta > 1) cosTheta = 1;
+      if (cosTheta < -1) cosTheta = -1;
+      angleDeg = (Math.acos(cosTheta) * 180 / Math.PI);
+    }
+
+    // 状态标签
+    if (badgePerp) {
+      badgePerp.classList.toggle("on-perp", isPerp);
+      badgePerp.textContent = isPerp ? "两向量垂直 a ⊥ b (数量积为 0)" : "垂直判定：未垂直";
+    }
+    if (badgePara) {
+      badgePara.classList.toggle("on-para", isPara);
+      if (isPara) {
+        badgePara.textContent = (dot > 0) ? "两向量平行 a ∥ b (同向共线)" : "两向量平行 a ∥ b (反向共线)";
+      } else {
+        badgePara.textContent = "平行判定：不共线";
+      }
+    }
+    if (badgeAngle) {
+      if (angleDeg !== null) {
+        badgeAngle.textContent = "空间夹角 θ = " + angleDeg.toFixed(1) + "°";
+      } else {
+        badgeAngle.textContent = "零向量无确定方向";
+      }
+    }
+
+    // 详细推演文本
+    if (calcDetail) {
+      calcDetail.className = "calc-detail" + (isPerp ? " hit-perp" : (isPara ? " hit-para" : ""));
+      var htmlStr = "";
+      htmlStr += "<b>坐标与模长</b>：\\(\\boldsymbol{a} = (" + ax + ", " + ay + ", " + az + ")\\)，\\(|\\boldsymbol{a}| = \\sqrt{" + ax + "^2 + " + ay + "^2 + " + az + "^2} = " + magA.toFixed(3) + "\\)；";
+      htmlStr += "<br>\\(\\boldsymbol{b} = (" + bx + ", " + by + ", " + bz + ")\\)，\\(|\\boldsymbol{b}| = \\sqrt{" + bx + "^2 + " + by + "^2 + " + bz + "^2} = " + magB.toFixed(3) + "\\)。";
+      htmlStr += "<br><b>数量积展开</b>：\\(\\boldsymbol{a}\\cdot\\boldsymbol{b} = (" + ax + ")\\times(" + bx + ") + (" + ay + ")\\times(" + by + ") + (" + az + ")\\times(" + bz + ") = " + (ax * bx) + " + " + (ay * by) + " + " + (az * bz) + " = " + dot + "\\)。";
+
+      if (isPerp) {
+        htmlStr += "<br><span style='color:var(--a); font-weight:700;'>★ 充要判定成立：数量积为 0，故空间向量 \\(\\boldsymbol{a} \\perp \\boldsymbol{b}\\)（空间直线互相垂直）。</span>";
+      } else if (isPara) {
+        var ratioStr = (ax !== 0) ? (bx / ax).toFixed(2) : ((ay !== 0) ? (by / ay).toFixed(2) : (bz / az).toFixed(2));
+        htmlStr += "<br><span style='color:var(--b); font-weight:700;'>★ 充要判定成立：存在实数 \\(\\lambda = " + ratioStr + "\\) 满足 \\(\\boldsymbol{b} = \\lambda\\boldsymbol{a}\\)，故两向量共线平行（若分量含 0，用数乘判定，避免除以零）。</span>";
+      } else if (angleDeg !== null) {
+        htmlStr += "<br><b>夹角余弦</b>：\\(\\cos\\theta = \\dfrac{" + dot + "}{" + magA.toFixed(3) + " \\times " + magB.toFixed(3) + "} \\approx " + (dot / (magA * magB)).toFixed(4) + "\\)，对应空间夹角 \\(\\theta \\approx " + angleDeg.toFixed(1) + "^\\circ\\)。";
+      }
+      calcDetail.innerHTML = htmlStr;
+      if (window.Peiyu && window.Peiyu.math) {
+        window.Peiyu.math(calcDetail);
+      }
+    }
+  }
+
+  // 事件监听绑定
+  var inputs = [axIn, ayIn, azIn, bxIn, byIn, bzIn];
+  inputs.forEach(function (inp) {
+    if (inp) {
+      inp.addEventListener("input", function () {
+        render();
+        if (window.Peiyu && window.Peiyu.log) {
+          window.Peiyu.log("interact", { type: "slider", id: inp.id, val: inp.value });
+        }
+      });
+    }
+  });
+
+  if (showBox) {
+    showBox.addEventListener("change", function () {
+      render();
+    });
+  }
+
+  // 预设按钮
+  var presetBtns = document.querySelectorAll(".btn-pre");
+  presetBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var pre = btn.getAttribute("data-pre");
+      if (pre === "p1") {
+        axIn.value = 2; ayIn.value = 3; azIn.value = 4;
+        bxIn.value = 0; byIn.value = 0; bzIn.value = 0;
+        if (showBox) showBox.checked = true;
+      } else if (pre === "perp") {
+        axIn.value = 2; ayIn.value = 1; azIn.value = -1;
+        bxIn.value = 1; byIn.value = 1; bzIn.value = 3;
+      } else if (pre === "collinear") {
+        axIn.value = 1; ayIn.value = -2; azIn.value = 2;
+        bxIn.value = 2; byIn.value = -4; bzIn.value = 4;
+      } else if (pre === "zero-para") {
+        axIn.value = 1; ayIn.value = 0; azIn.value = 2;
+        bxIn.value = 2; byIn.value = 0; bzIn.value = 4;
+      } else if (pre === "opp") {
+        axIn.value = 2; ayIn.value = -1; azIn.value = 1;
+        bxIn.value = -2; byIn.value = 1; bzIn.value = -1;
+      }
+      render();
+      if (window.Peiyu && window.Peiyu.log) {
+        window.Peiyu.log("interact", { type: "preset", pre: pre });
+      }
+    });
+  });
+
+  // 重置按钮
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      axIn.value = 2; ayIn.value = 3; azIn.value = 4;
+      bxIn.value = -2; byIn.value = 2; bzIn.value = 1;
+      if (showBox) showBox.checked = true;
+      render();
+      if (window.Peiyu && window.Peiyu.log) {
+        window.Peiyu.log("interact", { type: "reset" });
+      }
+    });
+  }
+
+  // 键盘方向键无障碍调节
+  document.addEventListener("keydown", function (e) {
+    if (e.target && e.target.tagName === "INPUT" && e.target.type === "range") {
+      // 浏览器已原生处理滑块方向键，触发 input 事件
+      render();
+    }
+  });
+
+  // 初始渲染
+  render();
+})();
+</script>
+</body></html>

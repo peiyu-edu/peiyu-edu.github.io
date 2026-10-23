@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.2 平面向量的运算 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig text { font-size: 20px; fill: var(--fg); user-select: none; }
+  .fig .subtext { font-size: 16px; fill: var(--muted); }
+  .fig .handle { cursor: grab; stroke-width: 3; }
+  .fig .handle:focus-visible { outline: none; stroke: var(--hl); stroke-width: 4; }
+  .fig .handle:active { cursor: grabbing; }
+  .readout-box { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 16px; margin: 12px 0; font-size: 15px; line-height: 1.8; }
+  .readout-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: baseline; margin: 4px 0; }
+  .readout-val { font-weight: 700; color: var(--fg); }
+  .tag-status { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+  .tag-acute { background: var(--ok-soft); color: var(--a); }
+  .tag-right { background: var(--hl-soft); color: var(--b); }
+  .tag-obtuse { background: var(--no-soft); color: var(--no); }
+  .toggles { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+  .toggles button.active { background: var(--a); color: #fff; border-color: var(--a); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-6-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 6 章 平面向量及其应用</p>
+<h1>6.2 平面向量的运算</h1>
+<p class="lead">从位移合成到力的做功：向量不仅有大小，更有方向。加法首尾相接、减法指向被减、数乘拉伸反转、数量积投影视角。几何直观与代数运算在这里交融。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>小船在平直的河道中渡河。船头垂直指向对岸（正北方向），自身的动力让船以 \(4\text{ m/s}\) 的速度行驶；同时河水由西向东以 \(3\text{ m/s}\) 的流速冲刷小船。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>站在岸上看，小船实际前进的速度大小是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(7\text{ m/s}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(5\text{ m/s}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1\text{ m/s}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\text{ m/s}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。小船实际的位移既向北又向东，实际运动是船速与水速的合成。</p>
+      <p>因为正北与正东互相垂直，两个速度构成了直角三角形的两条直角边，根据勾股定理，合速度大小为 \(\sqrt{4^2+3^2}=\sqrt{25}=5\text{ m/s}\)。</p>
+      <p>如果水流也是正北方向，速度才是 \(4+3=7\text{ m/s}\)；如果水流正南顺流反冲，速度是 \(4-3=1\text{ m/s}\)。这说明：<b>两个有方向的量相加，绝不能只把数字加在一起，而要由方向决定几何法则</b>。</p>
+      <p>这一节我们就来系统搞清平面向量的四种核心运算：加法、减法、数乘以及数量积（内积）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <p class="small">要用到：向量的模与方向（<a href="b2-6-1.html">回看 6.1</a>）；初中平面几何勾股定理；三角函数余弦（<a href="b1-5-2.html">回看 5.2</a>）。</p>
+  <h3>1. 先认识几个词</h3>
+
+  <div class="card">
+    <p><b>向量的模与方向</b>：向量既有大小又有方向。模 \(|\boldsymbol{a}|\) 是长度，是一个非负实数。<b>向量不能比较大小</b>，但模可以比较大小。</p>
+    <p>例：\(|\boldsymbol{a}|=3\)，\(|\boldsymbol{b}|=4\)，可以说 \(|\boldsymbol{a}|&lt;|\boldsymbol{b}|\)，但绝不能写 \(\boldsymbol{a}&lt;\boldsymbol{b}\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>零向量与相反向量</b>：模为 \(0\) 的向量叫零向量 \(\boldsymbol{0}\)，方向任意，教材规定它与任意向量平行；与 \(\boldsymbol{a}\) 长度相等且方向相反的向量叫相反向量 \(-\boldsymbol{a}\)。</p>
+    <p>例：\(\boldsymbol{a}+(-\boldsymbol{a})=\boldsymbol{0}\)。注意结果是零向量 \(\boldsymbol{0}\)，不是实数 \(0\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>两向量的夹角</b>：将非零向量 \(\boldsymbol{a},\boldsymbol{b}\) 的起点移到同一点 \(O\)，两射线所成的非负较小角 \(\theta\) 叫夹角，规定 \(\theta\in[0,\pi]\)（即 \(0^\circ\le\theta\le 180^\circ\)）。</p>
+    <p>例：同向夹角为 \(0\)，反向夹角为 \(\pi\)（\(180^\circ\)），互相垂直时夹角为 \(\dfrac{\pi}{2}\)（\(90^\circ\)）。注意：零向量不参与夹角讨论。</p>
+  </div>
+
+  <div class="card">
+    <p><b>数量积（内积）与标量</b>：两个向量的乘积叫数量积，记作 \(\boldsymbol{a}\cdot\boldsymbol{b}\)，<b>它的结果是一个实数（标量），绝不是向量</b>！</p>
+    <p>例：若 \(|\boldsymbol{a}|=2,|\boldsymbol{b}|=3\)，夹角 \(60^\circ\)，则 \(\boldsymbol{a}\cdot\boldsymbol{b}=2\times 3\times\cos 60^\circ=3\)。注意中间的点乘号「\(\cdot\)」绝不能省略，也不能写成叉乘「\(\times\)」。</p>
+  </div>
+
+  <h3>2. 向量加法与减法</h3>
+  <p>向量的加法和减法本质上就是位移的连续合成与逆向寻找：</p>
+  <ul>
+    <li><b>三角形法则（首尾相接）</b>：第二个向量的起点接在第一个向量的终点，从第一个向量的起点指向最后一个向量的终点。\(\overrightarrow{AB}+\overrightarrow{BC}=\overrightarrow{AC}\)。首尾相连绕回原点就是零向量：\(\overrightarrow{AB}+\overrightarrow{BC}+\overrightarrow{CA}=\boldsymbol{0}\)。</li>
+    <li><b>平行四边形法则（共起点）</b>：从同一点 \(O\) 出发的两个向量 \(\overrightarrow{OA}\) 和 \(\overrightarrow{OB}\)，以它们为邻边作平行四边形 \(OACB\)，对角线 \(\overrightarrow{OC}=\overrightarrow{OA}+\overrightarrow{OB}\)。</li>
+    <li><b>向量减法（共起点，指向被减向量）</b>：减去一个向量等于加上它的相反向量：\(\boldsymbol{a}-\boldsymbol{b}=\boldsymbol{a}+(-\boldsymbol{b})\)。当两个向量起点相同时，差向量由减数的终点指向被减数的终点：\(\overrightarrow{OA}-\overrightarrow{OB}=\overrightarrow{BA}\)（起点相同，指向前面的 \(A\)）。</li>
+  </ul>
+  <div class="key">加法口诀：首尾相连首指尾（或平行四边形对角线）；<br>减法口诀：共起点，终点连线指向被减向量。</div>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>在平行四边形 \(ABCD\) 中，对角线交于点 \(O\)。已知 \(\overrightarrow{AB}=\boldsymbol{a}\)，\(\overrightarrow{AD}=\boldsymbol{b}\)。用 \(\boldsymbol{a},\boldsymbol{b}\) 表示 \(\overrightarrow{AC}\) 和 \(\overrightarrow{DB}\)。</p>
+    <p>由平行四边形法则，对角线 \(\overrightarrow{AC}=\overrightarrow{AB}+\overrightarrow{AD}=\boldsymbol{a}+\boldsymbol{b}\)。</p>
+    <p>由减法三角形法则（共起点 \(A\)），\(\overrightarrow{DB}=\overrightarrow{AB}-\overrightarrow{AD}=\boldsymbol{a}-\boldsymbol{b}\)。</p>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：化简 \(\overrightarrow{AB}-\overrightarrow{AC}+\overrightarrow{BD}\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\overrightarrow{CD}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\overrightarrow{DC}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\overrightarrow{AD}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\overrightarrow{BC}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。先看前两项：共起点 \(A\)，指向被减向量，\(\overrightarrow{AB}-\overrightarrow{AC}=\overrightarrow{CB}\)。</p>
+      <p>再与第三项相加：\(\overrightarrow{CB}+\overrightarrow{BD}\)，首尾相接，直接合并为 \(\overrightarrow{CD}\)。选 B 的同学在减法时把方向指反了；选 C 的同学把减号误当成了加号。</p>
+    </div>
+  </div>
+
+  <h3>3. 数乘向量与共线定理</h3>
+  <p>实数 \(\lambda\) 与向量 \(\boldsymbol{a}\) 相乘，结果仍是一个向量，记作 \(\lambda\boldsymbol{a}\)：</p>
+  <ul>
+    <li><b>模长变化</b>：\(|\lambda\boldsymbol{a}|=|\lambda||\boldsymbol{a}|\)，即长度放大或缩小到 \(|\lambda|\) 倍；</li>
+    <li><b>方向变化</b>：当 \(\lambda &gt; 0\) 时，与 \(\boldsymbol{a}\) 同向；当 \(\lambda &lt; 0\) 时，与 \(\boldsymbol{a}\) 反向；当 \(\lambda = 0\) 时，结果是零向量 \(\boldsymbol{0}\)。</li>
+  </ul>
+  <div class="key">负数数乘的核心是「反转方向」，绝不能把负号仅仅当成单纯的数值运算。</div>
+  <p><b>向量共线（平行）定理</b>：</p>
+  <div class="key">对于非零向量 \(\boldsymbol{a}\)，向量 \(\boldsymbol{b}\) 与 \(\boldsymbol{a}\) 共线（平行）当且仅当存在唯一实数 \(\lambda\)，使得 \(\boldsymbol{b}=\lambda\boldsymbol{a}\)。</div>
+  <p>为什么必须强调 \(\boldsymbol{a}\ne\boldsymbol{0}\)？若 \(\boldsymbol{a}=\boldsymbol{0}\)：当 \(\boldsymbol{b}=\boldsymbol{0}\) 时，任何实数 \(\lambda\) 都有 \(\boldsymbol{b}=\lambda\boldsymbol{0}\)，\(\lambda\) 根本不唯一；当 \(\boldsymbol{b}\ne\boldsymbol{0}\) 时，根本找不到任何实数 \(\lambda\) 能满足。所以基准向量必须是非零向量！</p>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>已知非零不共线向量 \(\boldsymbol{e}_1,\boldsymbol{e}_2\)。若 \(\boldsymbol{a}=2\boldsymbol{e}_1-\boldsymbol{e}_2\)，\(\boldsymbol{b}=k\boldsymbol{e}_1+2\boldsymbol{e}_2\)，且 \(\boldsymbol{a}\parallel\boldsymbol{b}\)，求实数 \(k\)。</p>
+    <p>因为 \(\boldsymbol{a}\parallel\boldsymbol{b}\) 且 \(\boldsymbol{a}\ne\boldsymbol{0}\)，由共线定理存在实数 \(\lambda\) 使得 \(\boldsymbol{b}=\lambda\boldsymbol{a}\)：</p>
+    <p style="text-align:center">\(k\boldsymbol{e}_1+2\boldsymbol{e}_2 = \lambda(2\boldsymbol{e}_1-\boldsymbol{e}_2) = 2\lambda\boldsymbol{e}_1-\lambda\boldsymbol{e}_2\)。</p>
+    <p>因为 \(\boldsymbol{e}_1,\boldsymbol{e}_2\) 不共线，对应系数必相等：\(2=-\lambda \implies \lambda=-2\)，从而 \(k=2\lambda=2\times(-2)=-4\)。</p>
+  </div>
+
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：点 \(C\) 在线段 \(AB\) 上，且 \(AC=2CB\)。以任意点 \(O\) 为起点，\(\overrightarrow{OC}=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac13\overrightarrow{OA}+\dfrac23\overrightarrow{OB}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac23\overrightarrow{OA}+\dfrac13\overrightarrow{OB}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\overrightarrow{OA}+\overrightarrow{OB}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac12\overrightarrow{OA}+\dfrac12\overrightarrow{OB}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。因为 \(C\) 在线段 \(AB\) 上且 \(AC=2CB\)，所以 \(\overrightarrow{AC}=\dfrac23\overrightarrow{AB}=\dfrac23(\overrightarrow{OB}-\overrightarrow{OA})\)。</p>
+      <p>代入 \(\overrightarrow{OC}=\overrightarrow{OA}+\overrightarrow{AC}=\overrightarrow{OA}+\dfrac23\overrightarrow{OB}-\dfrac23\overrightarrow{OA}=\dfrac13\overrightarrow{OA}+\dfrac23\overrightarrow{OB}\)。</p>
+      <p>直观技巧：点 \(C\) 更靠近 \(B\)，所以 \(\overrightarrow{OB}\) 所占的权重更大（\(\dfrac23\)）。选 B 的同学把两边的分比记混了。</p>
+    </div>
+  </div>
+
+  <h3>4. 向量数量积与垂直</h3>
+  <p>两个非零向量 \(\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 的数量积（内积）定义为：</p>
+  <div class="key" style="text-align:center">\(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}||\boldsymbol{b}|\cos\theta\quad (\theta\in[0,\pi])\)</div>
+  <p>规定零向量与任意向量的数量积为 \(0\)：\(\boldsymbol{0}\cdot\boldsymbol{a}=0\)。</p>
+  <ul>
+    <li><b>物理意义</b>：恒力做功 \(W = |\boldsymbol{F}||\boldsymbol{s}|\cos\theta = \boldsymbol{F}\cdot\boldsymbol{s}\)。</li>
+    <li><b>垂直条件</b>：<b>两个非零向量互相垂直，当且仅当数量积为 0</b>（因为 \(\cos 90^\circ=0\)）：\(\boldsymbol{a}\perp\boldsymbol{b}\iff\boldsymbol{a}\cdot\boldsymbol{b}=0\)。</li>
+    <li><b>模长平方</b>：\(\boldsymbol{a}\cdot\boldsymbol{a}=|\boldsymbol{a}||\boldsymbol{a}|\cos 0^\circ = |\boldsymbol{a}|^2\)，常简写为 \(\boldsymbol{a}^2=|\boldsymbol{a}|^2\)；求模长经常用 \(|\boldsymbol{a}|=\sqrt{\boldsymbol{a}^2}\)。</li>
+  </ul>
+  <div class="warn"><b>运算律致命陷阱（和数乘完全不同）：</b><br>
+  ① <b>数量积不满足结合律</b>：\((\boldsymbol{a}\cdot\boldsymbol{b})\boldsymbol{c}\ne\boldsymbol{a}(\boldsymbol{b}\cdot\boldsymbol{c})\)。左边括号是数，整体是与 \(\boldsymbol{c}\) 共线的向量；右边是与 \(\boldsymbol{a}\) 共线的向量，两者方向完全不同！<br>
+  ② <b>没有除法，也不能任意消去</b>：若 \(\boldsymbol{a}\cdot\boldsymbol{b}=\boldsymbol{a}\cdot\boldsymbol{c}\)（\(\boldsymbol{a}\ne\boldsymbol{0}\)），绝不能推导出 \(\boldsymbol{b}=\boldsymbol{c}\)！移项得到的是 \(\boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{c})=0\)，说明 \(\boldsymbol{a}\perp(\boldsymbol{b}-\boldsymbol{c})\)。</div>
+
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>已知 \(|\boldsymbol{a}|=2\)，\(|\boldsymbol{b}|=3\)，\(\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 的夹角为 \(120^\circ\)，求：(1) \(\boldsymbol{a}\cdot\boldsymbol{b}\)；(2) \(|\boldsymbol{a}+\boldsymbol{b}|\)。</p>
+    <p>(1) 直接套公式：\(\boldsymbol{a}\cdot\boldsymbol{b}=|\boldsymbol{a}||\boldsymbol{b}|\cos 120^\circ=2\times 3\times\left(-\dfrac12\right)=-3\)。</p>
+    <p>(2) 将模长转化为平方计算：</p>
+    <p style="text-align:center">\(|\boldsymbol{a}+\boldsymbol{b}|^2 = (\boldsymbol{a}+\boldsymbol{b})^2 = \boldsymbol{a}^2+2\boldsymbol{a}\cdot\boldsymbol{b}+\boldsymbol{b}^2 = 2^2+2(-3)+3^2 = 4-6+9=7\)。</p>
+    <p>开方取正值，得 \(|\boldsymbol{a}+\boldsymbol{b}|=\sqrt{7}\)。</p>
+  </div>
+
+  <div class="card predict" data-id="try-3" data-answer="B">
+    <p>自己试试：已知 \(|\boldsymbol{a}|=1\)，\(|\boldsymbol{b}|=2\)，且 \(\boldsymbol{a}\cdot\boldsymbol{b}=-1\)，则两向量的夹角 \(\theta=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(60^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(120^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(150^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(135^\circ\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。由夹角公式：\(\cos\theta = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{a}||\boldsymbol{b}|} = \dfrac{-1}{1\times 2} = -\dfrac12\)。</p>
+      <p>因为向量夹角 \(\theta\in[0^\circ,180^\circ]\)，余弦为 \(-\dfrac12\) 的角只有 \(120^\circ\)。选 A 的同学算丢了负号，把钝角当成了锐角。</p>
+    </div>
+  </div>
+
+  <h3>5. 投影向量与投影长度</h3>
+  <p>设 \(\boldsymbol{e}\) 是与非零向量 \(\boldsymbol{b}\) 同方向的单位向量（即 \(\boldsymbol{e}=\dfrac{\boldsymbol{b}}{|\boldsymbol{b}|}\)）。从 \(\boldsymbol{a}\) 的终点向 \(\boldsymbol{b}\) 所在直线作垂线，垂足与起点的有向线段就是投影：</p>
+  <div class="key">
+    ① <b>投影向量</b>：\((\boldsymbol{a}\cdot\boldsymbol{e})\boldsymbol{e} = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{b}|^2}\boldsymbol{b}\)。它是一个<b>向量</b>，落在 \(\boldsymbol{b}\) 所在的直线上。<br>
+    ② <b>有向投影（投影值）</b>：\(|\boldsymbol{a}|\cos\theta = \boldsymbol{a}\cdot\boldsymbol{e}\)。它是一个<b>实数</b>：锐角时为正，垂直时为 \(0\)，<b>钝角时为负</b>。<br>
+    ③ <b>投影长度（投影模长）</b>：\(||\boldsymbol{a}|\cos\theta| = |\boldsymbol{a}\cdot\boldsymbol{e}|\)。它是几何线段的长度，<b>绝不能为负</b>！
+  </div>
+  <p class="small">用投影看数量积：\(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{b}|\times (|\boldsymbol{a}|\cos\theta)\)，即「基底向量的模」乘以「有向投影值」。下一步的互动图里可以直观看到这点。</p>
+
+  <h3>6. 用之前，查这五件事</h3>
+  <ol>
+    <li><b>向量不能比较大小。</b><br><span class="small">反例：写出 \(\boldsymbol{a}&gt;\boldsymbol{b}\) 或 \(\boldsymbol{a}&gt;0\) 毫无意义，只有模长 \(|\boldsymbol{a}|&gt;|\boldsymbol{b}|\) 能比。</span></li>
+    <li><b>共线定理必须强调 \(\boldsymbol{a}\ne\boldsymbol{0}\)。</b><br><span class="small">反例：若 \(\boldsymbol{a}=\boldsymbol{0}\)，当 \(\boldsymbol{b}=\boldsymbol{0}\) 时任何 \(\lambda\) 都满足，系数不唯一；当 \(\boldsymbol{b}\ne\boldsymbol{0}\) 时不存在 \(\lambda\)。</span></li>
+    <li><b>数量积没有结合律，也不能两边消去向量。</b><br><span class="small">反例：\(\boldsymbol{a}\perp\boldsymbol{b}\) 且 \(\boldsymbol{a}\perp\boldsymbol{c}\)，则 \(\boldsymbol{a}\cdot\boldsymbol{b}=0=\boldsymbol{a}\cdot\boldsymbol{c}\)，但 \(\boldsymbol{b}\) 与 \(\boldsymbol{c}\) 完全可以互不相等。</span></li>
+    <li><b>非零垂直条件：零向量不参与夹角讨论。</b><br><span class="small">反例：虽然 \(\boldsymbol{0}\cdot\boldsymbol{a}=0\)，但不能由数量积为 \(0\) 就说零向量与 \(\boldsymbol{a}\) 互相垂直；垂直关系只在两非零向量间成立。</span></li>
+    <li><b>分清投影向量、有向投影值与投影长度。</b><br><span class="small">反例：问「投影向量」写成了数字，或问「投影长度」写出了负数（钝角时有向投影为负，但长度必须取绝对值）。</span></li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>向量回路法</b>：在任意封闭多边形 \(A_1A_2\cdots A_n\) 中，\(\overrightarrow{A_1A_2}+\overrightarrow{A_2A_3}+\cdots+\overrightarrow{A_nA_1}=\boldsymbol{0}\)。求几何中多段线段向量和时，把它们首尾连成环，往往一步出答案。</p>
+    <p><b>分配律的几何直观</b>：为什么 \((\boldsymbol{a}+\boldsymbol{b})\cdot\boldsymbol{c}=\boldsymbol{a}\cdot\boldsymbol{c}+\boldsymbol{b}\cdot\boldsymbol{c}\)？从投影看，\(\boldsymbol{a}+\boldsymbol{b}\) 在 \(\boldsymbol{c}\) 上的有向投影，正好等于 \(\boldsymbol{a}\) 和 \(\boldsymbol{b}\) 在 \(\boldsymbol{c}\) 上各自有向投影的代数和，两边乘 \(|\boldsymbol{c}|\) 自然相等。</p>
+    <p><b>极化恒等式（秒杀利器）</b>：\(\boldsymbol{a}\cdot\boldsymbol{b}=\dfrac14(|\boldsymbol{a}+\boldsymbol{b}|^2-|\boldsymbol{a}-\boldsymbol{b}|^2)\)。设平行四边形邻边为 \(\boldsymbol{a},\boldsymbol{b}\)，两条对角线分别为 \(\boldsymbol{a}+\boldsymbol{b}\) 和 \(\boldsymbol{a}-\boldsymbol{b}\)，数量积直接等于两对角线平方差的 \(\dfrac14\)，在解析几何与极值题中极为常用。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>拖动向量终点，观察线性运算、夹角与数量积</h3>
+  <p class="small">拖动<span class="ca">绿点 A</span> 或<span class="cb">金点 B</span> 改变向量 \(\boldsymbol{a}\) 与 \(\boldsymbol{b}\)。图上实时画出平行四边形法则（和向量）、差向量、夹角弧度与正交投影。键盘支持：Tab 键聚焦手柄，方向键移动。</p>
+  <div class="card">
+    <div class="toggles">
+      <button class="btn ghost active" type="button" id="btn-sum" aria-pressed="true">和向量 a+b</button>
+      <button class="btn ghost active" type="button" id="btn-diff" aria-pressed="true">差向量 a-b</button>
+      <button class="btn ghost active" type="button" id="btn-proj" aria-pressed="true">投影与垂线</button>
+      <button class="btn ghost" id="reset" type="button">重置</button>
+    </div>
+    <svg class="fig" id="fig" viewBox="0 0 560 380" role="img" aria-label="平面向量运算交互图：拖动向量 a 和 b，实时展示和、差、夹角与数量积"></svg>
+    <div class="readout-box" id="readout" aria-live="polite">
+      <div class="readout-row">
+        <div>\(|\boldsymbol{a}| = \)<span class="readout-val" id="val-a">3.91</span></div>
+        <div>\(|\boldsymbol{b}| = \)<span class="readout-val" id="val-b">4.00</span></div>
+        <div>夹角 \(\theta = \)<span class="readout-val" id="val-theta">39.8°</span></div>
+        <div id="val-status"><span class="tag-status tag-acute">锐角（数量积 &gt; 0）</span></div>
+      </div>
+      <div class="readout-row">
+        <div>数量积 \(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}||\boldsymbol{b}|\cos\theta = \)<span class="readout-val" id="val-dot">12.00</span></div>
+      </div>
+      <div class="readout-row">
+        <div>有向投影值 \(= |\boldsymbol{a}|\cos\theta = \)<span class="readout-val" id="val-proj-val">3.00</span></div>
+        <div>投影长度 \(= \)<span class="readout-val" id="val-proj-len">3.00</span></div>
+      </div>
+    </div>
+    <p class="small">试一试：① 把 \(\boldsymbol{a}\) 转到与 \(\boldsymbol{b}\) 垂直，观察数量积是否变为 \(0\)；② 转成钝角（\(\theta&gt;90^\circ\)），看数量积与有向投影值的正负号；③ 拖成共线同向或反向，看投影向量与差向量的变化。</p>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道紧扣专题卡边界，最后一道是综合挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. 化简 \(\overrightarrow{AB}+\overrightarrow{BC}+\overrightarrow{CA}\) 的结果是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\boldsymbol{0}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\overrightarrow{AB}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\overrightarrow{AC}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。由三角形加法法则，\(\overrightarrow{AB}+\overrightarrow{BC}=\overrightarrow{AC}\)，再加上 \(\overrightarrow{CA}\)，首尾相接绕回起点 \(A\)，位移为零向量 \(\boldsymbol{0}\)。</p>
+      <p>注意：向量运算的结果依然是向量，必须写成零向量 \(\boldsymbol{0}\)，而不能写成实数 \(0\)！选 A 的同学混淆了向量与标量。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 已知 \(|\boldsymbol{a}|=3\)，\(|\boldsymbol{b}|=4\)，向量 \(\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 的夹角为 \(60^\circ\)，则 \(\boldsymbol{a}\cdot\boldsymbol{b}=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\sqrt{3}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(12\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(3\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。直接代入数量积定义：\(\boldsymbol{a}\cdot\boldsymbol{b}=|\boldsymbol{a}||\boldsymbol{b}|\cos 60^\circ=3\times 4\times\dfrac12=6\)。</p>
+      <p>选 B 的同学错用了正弦 \(\sin 60^\circ\)（把数量积当成了三角形面积公式）；选 C 的同学漏乘了余弦值 \(\cos 60^\circ\)。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-err-1" data-answer="B">
+    <p>3. 已知非零向量 \(\boldsymbol{a},\boldsymbol{b},\boldsymbol{c}\)，若 \(\boldsymbol{a}\cdot\boldsymbol{b}=\boldsymbol{a}\cdot\boldsymbol{c}\)，则下列结论必定成立的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\boldsymbol{b}=\boldsymbol{c}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\boldsymbol{a}\perp(\boldsymbol{b}-\boldsymbol{c})\) 或 \(\boldsymbol{b}=\boldsymbol{c}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\boldsymbol{b}\parallel\boldsymbol{c}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\boldsymbol{a}\parallel\boldsymbol{b}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。将等式移项：\(\boldsymbol{a}\cdot\boldsymbol{b}-\boldsymbol{a}\cdot\boldsymbol{c}=0 \implies \boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{c})=0\)。</p>
+      <p>由数量积为 \(0\) 的充要条件，说明 \(\boldsymbol{a}\perp(\boldsymbol{b}-\boldsymbol{c})\)（或者 \(\boldsymbol{b}-\boldsymbol{c}=\boldsymbol{0}\) 即 \(\boldsymbol{b}=\boldsymbol{c}\)）。</p>
+      <p><b>边界提醒</b>：向量数量积<b>没有消去律</b>，绝不能像实数乘法一样两边除以 \(\boldsymbol{a}\) 得出 \(\boldsymbol{b}=\boldsymbol{c}\)！只要 \(\boldsymbol{b}-\boldsymbol{c}\) 与 \(\boldsymbol{a}\) 垂直，\(\boldsymbol{b}\) 和 \(\boldsymbol{c}\) 就可以完全不相等。选 A 是把向量当成了实数。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-err-2" data-answer="B">
+    <p>4. 设 \(\boldsymbol{a},\boldsymbol{b}\) 为平面向量。命题甲：「存在唯一实数 \(\lambda\)，使得 \(\boldsymbol{b}=\lambda\boldsymbol{a}\)」；命题乙：「\(\boldsymbol{a}\parallel\boldsymbol{b}\)」。则甲是乙的什么条件？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>充要条件</button>
+      <button class="opt" data-v="B"><b>B</b>充分不必要条件</button>
+      <button class="opt" data-v="C"><b>C</b>必要不充分条件</button>
+      <button class="opt" data-v="D"><b>D</b>既不充分也不必要条件</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。充分性：若存在实数 \(\lambda\) 使得 \(\boldsymbol{b}=\lambda\boldsymbol{a}\)，则两向量必定共线平行，甲能推出乙。</p>
+      <p>必要性：若 \(\boldsymbol{a}\parallel\boldsymbol{b}\)，当 \(\boldsymbol{a}=\boldsymbol{0}\) 且 \(\boldsymbol{b}\ne\boldsymbol{0}\) 时（零向量与任何向量平行），不存在任何实数 \(\lambda\) 能满足 \(\boldsymbol{b}=\lambda\boldsymbol{0}=\boldsymbol{0}\)！因此乙推不出甲。</p>
+      <p><b>边界提醒</b>：向量共线定理充要成立的红线是<b>基准向量非零（\(\boldsymbol{a}\ne\boldsymbol{0}\)）</b>。忽略零向量就会误选 A。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-err-3" data-answer="A">
+    <p>5. 已知 \(|\boldsymbol{a}|=4\)，\(|\boldsymbol{b}|=2\)，\(\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 的夹角为 \(120^\circ\)。则 \(\boldsymbol{a}\) 在 \(\boldsymbol{b}\) 上的「投影长度」和「有向投影值」分别为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>投影长度为 \(2\)，有向投影值为 \(-2\)</button>
+      <button class="opt" data-v="B"><b>B</b>投影长度为 \(-2\)，有向投影值为 \(-2\)</button>
+      <button class="opt" data-v="C"><b>C</b>投影长度为 \(2\)，有向投影值为 \(2\)</button>
+      <button class="opt" data-v="D"><b>D</b>投影长度为 \(2\sqrt{3}\)，有向投影值为 \(-2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。有向投影值（投影值）为 \(|\boldsymbol{a}|\cos 120^\circ = 4\times\left(-\dfrac12\right) = -2\)。</p>
+      <p>而投影长度是投影向量的模长（几何上线段的长度），<b>绝不能为负</b>，必须取绝对值：\(|-2|=2\)。</p>
+      <p><b>边界提醒</b>：长度必非负，有向投影钝角为负。选 B 错在把长度写成了负数；选 C 错在把有向投影的符号丢了。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="C">
+    <p>6. 已知非零向量 \(\boldsymbol{a},\boldsymbol{b}\) 满足 \(|\boldsymbol{a}|=1\)，\(|\boldsymbol{b}|=2\)，且 \(\boldsymbol{a}\perp(\boldsymbol{b}-\boldsymbol{a})\)，则向量 \(\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 的夹角 \(\theta=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(30^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(45^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(60^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(120^\circ\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。垂直即数量积为 \(0\)：\(\boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{a}) = \boldsymbol{a}\cdot\boldsymbol{b}-|\boldsymbol{a}|^2 = 0\)，所以 \(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}|^2 = 1^2 = 1\)。</p>
+      <p>代入夹角公式：\(\cos\theta = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{a}||\boldsymbol{b}|} = \dfrac{1}{1\times 2} = \dfrac12\)。因为 \(\theta\in[0^\circ,180^\circ]\)，所以 \(\theta=60^\circ\)。</p>
+      <p>几何直观：\(\boldsymbol{a}\)、\(\boldsymbol{b}-\boldsymbol{a}\) 与 \(\boldsymbol{b}\) 构成以 \(\boldsymbol{b}\) 为斜边的直角三角形，直角边 \(|\boldsymbol{a}|=1\)，斜边 \(|\boldsymbol{b}|=2\)，夹角正是 \(60^\circ\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var svg = document.getElementById("fig");
+  if (!svg) return;
+
+  var NS = "http://www.w3.org/2000/svg";
+  var OX = 160, OY = 240, SCALE = 40; // 40px = 1 单位
+  var DEF_A = { x: 280, y: 140 }; // a = (3.0, 2.5)
+  var DEF_B = { x: 320, y: 240 }; // b = (4.0, 0.0)
+
+  var posA = { x: DEF_A.x, y: DEF_A.y };
+  var posB = { x: DEF_B.x, y: DEF_B.y };
+
+  var showSum = true;
+  var showDiff = true;
+  var showProj = true;
+
+  // DOM 缓存
+  var valA = document.getElementById("val-a");
+  var valB = document.getElementById("val-b");
+  var valTheta = document.getElementById("val-theta");
+  var valStatus = document.getElementById("val-status");
+  var valDot = document.getElementById("val-dot");
+  var valProjVal = document.getElementById("val-proj-val");
+  var valProjLen = document.getElementById("val-proj-len");
+
+  var btnSum = document.getElementById("btn-sum");
+  var btnDiff = document.getElementById("btn-diff");
+  var btnProj = document.getElementById("btn-proj");
+  var btnReset = document.getElementById("reset");
+
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function f2(v) {
+    if (Math.abs(v) < 1e-4) return "0.00";
+    var s = (Math.round(v * 100) / 100).toFixed(2);
+    return s === "-0.00" ? "0.00" : s;
+  }
+
+  function mk(tag, attrs, parent) {
+    var el = document.createElementNS(NS, tag);
+    for (var k in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
+        el.setAttribute(k, attrs[k]);
+      }
+    }
+    (parent || svg).appendChild(el);
+    return el;
+  }
+
+  // 绘制箭头线段与箭头头部
+  function drawArrow(x1, y1, x2, y2, color, strokeWidth, dashed) {
+    var dx = x2 - x1, dy = y2 - y1;
+    var len = Math.hypot(dx, dy);
+    var lineAttrs = {
+      x1: x1, y1: y1, x2: x2, y2: y2,
+      stroke: color, "stroke-width": strokeWidth || 2.5
+    };
+    if (dashed) lineAttrs["stroke-dasharray"] = dashed;
+    mk("line", lineAttrs);
+
+    if (len > 8) {
+      var ux = dx / len, uy = dy / len;
+      var headLen = Math.min(12, len * 0.4);
+      var headWidth = headLen * 0.55;
+      var bx = x2 - headLen * ux, by = y2 - headLen * uy;
+      var p1x = bx - headWidth * uy, p1y = by + headWidth * ux;
+      var p2x = bx + headWidth * uy, p2y = by - headWidth * ux;
+      var d = "M " + x2.toFixed(1) + " " + y2.toFixed(1) +
+              " L " + p1x.toFixed(1) + " " + p1y.toFixed(1) +
+              " L " + p2x.toFixed(1) + " " + p2y.toFixed(1) + " Z";
+      mk("path", { d: d, fill: color, stroke: color, "stroke-width": 1 });
+    }
+  }
+
+  function redraw() {
+    svg.innerHTML = "";
+
+    // 1. 坐标轴与背景网格
+    var axisColor = "var(--line)";
+    var axisLabelColor = "var(--muted)";
+    mk("line", { x1: 30, y1: OY, x2: 530, y2: OY, stroke: axisColor, "stroke-width": 1.5 });
+    mk("line", { x1: OX, y1: 30, x2: OX, y2: 350, stroke: axisColor, "stroke-width": 1.5 });
+    // 轴端小箭头
+    mk("path", { d: "M 530 " + (OY - 4) + " L 538 " + OY + " L 530 " + (OY + 4) + " Z", fill: axisLabelColor });
+    mk("path", { d: "M " + (OX - 4) + " 30 L " + OX + " 22 L " + (OX + 4) + " 30 Z", fill: axisLabelColor });
+    var tx = mk("text", { x: 532, y: OY + 22, class: "subtext" });
+    tx.textContent = "x";
+    var ty = mk("text", { x: OX - 18, y: 26, class: "subtext" });
+    ty.textContent = "y";
+
+    // 原点 O 标注
+    var to = mk("text", { x: OX - 18, y: OY + 22, "font-weight": "700" });
+    to.textContent = "O";
+    mk("circle", { cx: OX, cy: OY, r: 4, fill: "var(--fg)" });
+
+    var ax = (posA.x - OX) / SCALE, ay = -(posA.y - OY) / SCALE;
+    var bx = (posB.x - OX) / SCALE, by = -(posB.y - OY) / SCALE;
+
+    var lenA = Math.hypot(ax, ay);
+    var lenB = Math.hypot(bx, by);
+
+    var dot = ax * bx + ay * by;
+    var cosTheta = 0;
+    var thetaDeg = 0;
+    var hasAngle = (lenA > 1e-3 && lenB > 1e-3);
+    if (hasAngle) {
+      cosTheta = clamp(dot / (lenA * lenB), -1, 1);
+      thetaDeg = Math.acos(cosTheta) * 180 / Math.PI;
+    }
+
+    var projVal = lenB > 1e-3 ? dot / lenB : 0;
+    var projLen = Math.abs(projVal);
+
+    // 2. 差向量 a - b (从 B 指向 A)
+    if (showDiff) {
+      drawArrow(posB.x, posB.y, posA.x, posA.y, "var(--no)", 2.5);
+      var midDx = (posA.x + posB.x) / 2;
+      var midDy = (posA.y + posB.y) / 2;
+      var td = mk("text", {
+        x: midDx - 12, y: midDy - 8,
+        fill: "var(--no)", "font-weight": "700"
+      });
+      td.textContent = "a - b";
+    }
+
+    // 3. 和向量 a + b (平行四边形法则)
+    var posC = { x: posA.x + posB.x - OX, y: posA.y + posB.y - OY };
+    if (showSum) {
+      // 虚线邻边 AC 与 BC
+      mk("line", { x1: posA.x, y1: posA.y, x2: posC.x, y2: posC.y, stroke: "var(--dim)", "stroke-width": 1.5, "stroke-dasharray": "5 4" });
+      mk("line", { x1: posB.x, y1: posB.y, x2: posC.x, y2: posC.y, stroke: "var(--dim)", "stroke-width": 1.5, "stroke-dasharray": "5 4" });
+      // 和向量 OC
+      drawArrow(OX, OY, posC.x, posC.y, "var(--c)", 3);
+      var tc = mk("text", {
+        x: posC.x + (posC.x >= OX ? 8 : -48),
+        y: posC.y + (posC.y >= OY ? 20 : -10),
+        fill: "var(--c)", "font-weight": "700"
+      });
+      tc.textContent = "a + b";
+      mk("circle", { cx: posC.x, cy: posC.y, r: 4, fill: "var(--c)" });
+    }
+
+    // 4. 投影向量与正交垂线
+    if (showProj && lenB > 1e-3) {
+      var ubx = (posB.x - OX) / (lenB * SCALE);
+      var uby = (posB.y - OY) / (lenB * SCALE);
+      var hx = OX + projVal * SCALE * ubx;
+      var hy = OY + projVal * SCALE * uby;
+
+      // b 所在直线的延伸虚线
+      var lineExt = 280;
+      mk("line", {
+        x1: OX - ubx * lineExt, y1: OY - uby * lineExt,
+        x2: OX + ubx * lineExt, y2: OY + uby * lineExt,
+        stroke: "var(--line)", "stroke-width": 1.5, "stroke-dasharray": "3 3"
+      });
+
+      // 从 A 向 b 作的垂线 AH
+      mk("line", {
+        x1: posA.x, y1: posA.y, x2: hx, y2: hy,
+        stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "4 4"
+      });
+
+      // 投影向量 OH
+      if (projLen > 0.05) {
+        drawArrow(OX, OY, hx, hy, "var(--hl)", 4);
+      }
+      mk("circle", { cx: hx, cy: hy, r: 4, fill: "var(--hl)" });
+      var th = mk("text", { x: hx + 6, y: hy + 20, fill: "var(--b)", "font-weight": "600", class: "subtext" });
+      th.textContent = "H(投影)";
+    }
+
+    // 5. 夹角弧线 θ
+    if (hasAngle && thetaDeg > 4) {
+      var rArc = 36;
+      var angB = Math.atan2(posB.y - OY, posB.x - OX);
+      var angA = Math.atan2(posA.y - OY, posA.x - OX);
+      var diffAng = angA - angB;
+      while (diffAng > Math.PI) diffAng -= 2 * Math.PI;
+      while (diffAng < -Math.PI) diffAng += 2 * Math.PI;
+      var sweep = diffAng > 0 ? 1 : 0;
+      var xArcB = OX + rArc * Math.cos(angB);
+      var yArcB = OY + rArc * Math.sin(angB);
+      var xArcA = OX + rArc * Math.cos(angA);
+      var yArcA = OY + rArc * Math.sin(angA);
+      var arcD = "M " + xArcB.toFixed(1) + " " + yArcB.toFixed(1) +
+                 " A " + rArc + " " + rArc + " 0 0 " + sweep + " " +
+                 xArcA.toFixed(1) + " " + yArcA.toFixed(1);
+      mk("path", { d: arcD, fill: "none", stroke: "var(--muted)", "stroke-width": 2 });
+
+      var midAng = angB + diffAng * 0.5;
+      var midX = OX + (rArc + 16) * Math.cos(midAng);
+      var midY = OY + (rArc + 16) * Math.sin(midAng);
+      var tt = mk("text", { x: midX - 6, y: midY + 6, fill: "var(--muted)", class: "subtext" });
+      tt.textContent = Math.round(thetaDeg) + "°";
+    }
+
+    // 6. 基础向量 a 和 b
+    drawArrow(OX, OY, posA.x, posA.y, "var(--a)", 3.5);
+    drawArrow(OX, OY, posB.x, posB.y, "var(--b)", 3.5);
+
+    var labelA = mk("text", {
+      x: posA.x + (posA.x >= OX ? 12 : -28),
+      y: posA.y + (posA.y >= OY ? 22 : -12),
+      fill: "var(--a)", "font-weight": "700"
+    });
+    labelA.textContent = "a";
+
+    var labelB = mk("text", {
+      x: posB.x + (posB.x >= OX ? 12 : -28),
+      y: posB.y + (posB.y >= OY ? 22 : -12),
+      fill: "var(--b)", "font-weight": "700"
+    });
+    labelB.textContent = "b";
+
+    // 7. 终点可拖拽手柄
+    createHandle(posA, "a", "var(--a)", "向量 a 的终点 A");
+    createHandle(posB, "b", "var(--b)", "向量 b 的终点 B");
+
+    // 8. 实时更新数值显示
+    updateReadout(lenA, lenB, dot, hasAngle, thetaDeg, projVal, projLen);
+  }
+
+  function createHandle(pos, name, color, label) {
+    var h = mk("circle", {
+      cx: pos.x, cy: pos.y, r: 10,
+      fill: "#fff", stroke: color, "stroke-width": 3,
+      class: "handle", tabindex: 0, role: "slider",
+      "aria-label": label
+    });
+
+    h.addEventListener("keydown", function (ev) {
+      var step = ev.shiftKey ? 20 : 5;
+      var dx = 0, dy = 0;
+      if (ev.key === "ArrowLeft") dx = -step;
+      else if (ev.key === "ArrowRight") dx = step;
+      else if (ev.key === "ArrowUp") dy = -step;
+      else if (ev.key === "ArrowDown") dy = step;
+      else return;
+
+      ev.preventDefault();
+      pos.x = clamp(pos.x + dx, 30, 530);
+      pos.y = clamp(pos.y + dy, 30, 350);
+      redraw();
+      if (window.Peiyu && window.Peiyu.log) {
+        window.Peiyu.log("interact", { handle: name, x: pos.x, y: pos.y });
+      }
+    });
+
+    h.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      if (h.setPointerCapture && ev.pointerId) {
+        try { h.setPointerCapture(ev.pointerId); } catch (e) {}
+      }
+
+      function onMove(e) {
+        var rect = svg.getBoundingClientRect();
+        if (!rect || rect.width <= 0) return;
+        var scaleX = 560 / rect.width;
+        var scaleY = 380 / rect.height;
+        var svgX = (e.clientX - rect.left) * scaleX;
+        var svgY = (e.clientY - rect.top) * scaleY;
+        pos.x = clamp(svgX, 30, 530);
+        pos.y = clamp(svgY, 30, 350);
+        redraw();
+      }
+
+      function onUp(e) {
+        window.removeEventListener("pointermove", onMove);
+        window.removeEventListener("pointerup", onUp);
+        if (window.Peiyu && window.Peiyu.log) {
+          window.Peiyu.log("interact", { handle: name, x: pos.x, y: pos.y });
+        }
+      }
+
+      window.addEventListener("pointermove", onMove);
+      window.addEventListener("pointerup", onUp);
+    });
+  }
+
+  function updateReadout(lenA, lenB, dot, hasAngle, thetaDeg, projVal, projLen) {
+    if (valA) valA.textContent = f2(lenA);
+    if (valB) valB.textContent = f2(lenB);
+
+    if (valTheta) {
+      valTheta.textContent = hasAngle ? (Math.round(thetaDeg * 10) / 10).toFixed(1) + "°" : "未定义（含零向量）";
+    }
+
+    if (valDot) valDot.textContent = f2(dot);
+    if (valProjVal) valProjVal.textContent = f2(projVal);
+    if (valProjLen) valProjLen.textContent = f2(projLen);
+
+    if (valStatus) {
+      if (!hasAngle) {
+        valStatus.innerHTML = '<span class="tag-status" style="background:var(--line);color:var(--muted)">含零向量（数量积为 0）</span>';
+      } else if (Math.abs(thetaDeg - 90) < 1.0) {
+        valStatus.innerHTML = '<span class="tag-status tag-right">互相垂直（数量积为 0！）</span>';
+      } else if (thetaDeg < 1.0) {
+        valStatus.innerHTML = '<span class="tag-status tag-acute">同向共线（夹角 0°，数量积取最大正值）</span>';
+      } else if (Math.abs(thetaDeg - 180) < 1.0) {
+        valStatus.innerHTML = '<span class="tag-status tag-obtuse">反向共线（夹角 180°，数量积为负）</span>';
+      } else if (thetaDeg < 90) {
+        valStatus.innerHTML = '<span class="tag-status tag-acute">锐角（数量积 &gt; 0，投影值 &gt; 0）</span>';
+      } else {
+        valStatus.innerHTML = '<span class="tag-status tag-obtuse">钝角（数量积 &lt; 0，有向投影值为负！）</span>';
+      }
+    }
+  }
+
+  // 按钮交互
+  if (btnSum) {
+    btnSum.onclick = function () {
+      showSum = !showSum;
+      btnSum.classList.toggle("active", showSum);
+      btnSum.setAttribute("aria-pressed", showSum ? "true" : "false");
+      redraw();
+    };
+  }
+
+  if (btnDiff) {
+    btnDiff.onclick = function () {
+      showDiff = !showDiff;
+      btnDiff.classList.toggle("active", showDiff);
+      btnDiff.setAttribute("aria-pressed", showDiff ? "true" : "false");
+      redraw();
+    };
+  }
+
+  if (btnProj) {
+    btnProj.onclick = function () {
+      showProj = !showProj;
+      btnProj.classList.toggle("active", showProj);
+      btnProj.setAttribute("aria-pressed", showProj ? "true" : "false");
+      redraw();
+    };
+  }
+
+  if (btnReset) {
+    btnReset.onclick = function () {
+      posA.x = DEF_A.x; posA.y = DEF_A.y;
+      posB.x = DEF_B.x; posB.y = DEF_B.y;
+      showSum = true; showDiff = true; showProj = true;
+      if (btnSum) { btnSum.classList.add("active"); btnSum.setAttribute("aria-pressed", "true"); }
+      if (btnDiff) { btnDiff.classList.add("active"); btnDiff.setAttribute("aria-pressed", "true"); }
+      if (btnProj) { btnProj.classList.add("active"); btnProj.setAttribute("aria-pressed", "true"); }
+      redraw();
+      if (window.Peiyu && window.Peiyu.log) {
+        window.Peiyu.log("interact", { action: "reset" });
+      }
+    };
+  }
+
+  // 初始化绘制
+  redraw();
+})();
+</script>
+</body></html>

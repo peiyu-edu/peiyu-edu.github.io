@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.4 数学归纳法（选学） · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 2em; font-weight: 600; }
+  #domino text, #ind text { font-size: 22px; }
+  #domino [role=switch] { cursor: pointer; outline: none; }
+  #domino [role=switch]:focus-visible circle { stroke: var(--hl); stroke-width: 4; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e2-4-4">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第二册 · 第 4 章 数列</p>
+<h1>4.4 数学归纳法（选学）</h1>
+<p class="lead">一句话要对所有正整数 \(n\) 都成立，不可能一个一个去验证。数学归纳法只用两步，就管住了无穷多个 \(n\)。（这一节在教材里带星号，是选学内容。）</p>
+
+<section class="step" data-title="从例子进入">
+  <p>桌上立着一长排多米诺骨牌，一共 \(100\) 块。摆的时候已经检查过：<b>每一块倒下时，都一定会碰倒紧挨着它的下一块</b>。现在把第 \(1\) 块推倒。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>第 \(100\) 块会倒吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>会倒</button>
+      <button class="opt" data-v="B"><b>B</b>不会倒</button>
+      <button class="opt" data-v="C"><b>C</b>得一块一块看过去才知道</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。第 \(1\) 块倒了，碰倒第 \(2\) 块；第 \(2\) 块倒了，碰倒第 \(3\) 块……一直传到第 \(100\) 块。不用一块一块看，因为两件事已经够了：</p>
+      <ul><li>第一块倒了（有人推）；</li><li>任何一块倒了，下一块一定倒（摆得够近）。</li></ul>
+      <p>少了哪一件都不行：没人推，一块也不倒；中间有两块离得太远，后面的就都立着。这一节就把这个想法变成证明方法：<b>数学归纳法</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：数列的通项和递推公式（<a href="e2-4-1.html">回看 4.1</a>）、等差数列求和（<a href="e2-4-2.html">回看 4.2</a>）、等比数列求和（<a href="e2-4-3.html">回看 4.3</a>）。</p>
+
+  <div class="card">
+    <p><b>关于 \(n\) 的命题 \(P(n)\)</b>：一句里面带着正整数 \(n\) 的话，每代一个 \(n\)，就得到一句具体的话，可能对也可能错。</p>
+    <p>例：\(P(n)\)：「\(1+3+\cdots+(2n-1)=n^2\)」。\(P(3)\) 就是「\(1+3+5=3^2\)」，\(9=9\)，对；\(P(4)\) 是「\(1+3+5+7=4^2\)」，\(16=16\)，也对。</p>
+  </div>
+
+  <div class="card">
+    <p><b>「若……则……」（条件命题）</b>：只说「前面成立的话，后面一定成立」，<b>不说前面到底成立没有</b>。</p>
+    <p>例：「若 \(k\) 是偶数，则 \(k+2\) 是偶数」是一句对的话。\(k=4\)：\(4\) 是偶数，\(6\) 也是；\(k=3\)：前提不成立，这句话对 \(3\) 什么也没断言，它并没说 \(3\) 是偶数。</p>
+  </div>
+
+  <div class="card">
+    <p><b>归纳假设</b>：证明「若 \(P(k)\)，则 \(P(k+1)\)」时，先<b>假设</b>的那个 \(P(k)\)。它只是这一步推理的前提，不是已经证好的结论。</p>
+    <p>例：要证 \(P(k+1)\)：「\(1+3+\cdots+(2k+1)=(k+1)^2\)」，可以拿来用的是 \(P(k)\)：「\(1+3+\cdots+(2k-1)=k^2\)」。</p>
+  </div>
+
+  <div class="card">
+    <p><b>起点 \(n_0\)</b>：命题从哪个正整数开始说。很多命题从 \(n_0=1\) 开始，也有从别的数开始的。</p>
+    <p>例：「\(2^n>n^2\)」：\(n=4\) 时 \(16>16\) 不对，\(n=5\) 时 \(32>25\) 对，以后一直对。它的起点是 \(n_0=5\)。</p>
+  </div>
+
+  <h3>2. 两步：奠基和传递</h3>
+  <p>要证明「对所有整数 \(n\ge n_0\)，\(P(n)\) 成立」，只要做两件事：</p>
+  <div class="key">① <b>奠基</b>：证明 \(P(n_0)\) 成立。<br>② <b>传递</b>（归纳步）：对<b>任意</b>整数 \(k\ge n_0\)，证明「若 \(P(k)\) 成立，则 \(P(k+1)\) 成立」。<br>两步都做完，就能断定：对所有整数 \(n\ge n_0\)，\(P(n)\) 都成立。两步缺一不可。</div>
+  <p>为什么够：任给一个 \(n\)，从 \(P(n_0)\) 出发，用 ② 推一次得 \(P(n_0+1)\)，再推一次得 \(P(n_0+2)\)……推有限次就到 \(P(n)\)。② 是对<b>任意</b> \(k\) 证明的，所以每一次都能推。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>证明：对任意正整数 \(n\)，\(1+3+5+\cdots+(2n-1)=n^2\)。</p>
+    <p>(1) 奠基：\(n=1\) 时，左边 \(=1\)，右边 \(=1^2=1\)，成立。</p>
+    <p>(2) 传递：设 \(k\) 是正整数，假设 \(n=k\) 时成立，即 \(1+3+\cdots+(2k-1)=k^2\)（归纳假设）。看 \(n=k+1\)：左边比 \(n=k\) 时多了一项 \(2(k+1)-1=2k+1\)，</p>
+    <p style="text-align:center">\(1+3+\cdots+(2k-1)+(2k+1)=k^2+(2k+1)=(k+1)^2\)，</p>
+    <p>其中第一个等号<b>用了归纳假设</b>。结果正是 \(n=k+1\) 时的右边，所以 \(n=k+1\) 时也成立。</p>
+    <p>由 (1)(2)，等式对任意正整数 \(n\) 成立。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：用归纳法证明 \(1+2+3+\cdots+n=\dfrac{n(n+1)}{2}\)。从 \(n=k\) 到 \(n=k+1\)，左边多了哪一项？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(k\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(k+1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(k+2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2k+1\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(n=k\) 时最后一项是 \(k\)，\(n=k+1\) 时最后一项是 \(k+1\)，只多这一项。选 D 的同学照搬了例 1，那里每项是 \(2n-1\)，这里每项就是 \(n\)。先写清楚「第 \(n\) 项是什么」，再看多了哪一项。</p></div>
+  </div>
+
+  <h3>3. 归纳步：写清楚哪里用了归纳假设</h3>
+  <p>归纳步的套路：先写出要证的 \(P(k+1)\)（目标式）；再从 \(P(k+1)\) 的一边出发，想办法把 \(P(k)\) 里的式子「露出来」，<b>用归纳假设替换</b>；最后变形到目标式的另一边。数列的递推公式特别适合这样做。</p>
+  <div class="card">
+    <p class="small">例 2（递推数列）</p>
+    <p>数列 \(\{a_n\}\) 满足 \(a_1=1\)，\(a_{n+1}=2a_n+1\)。先算几项：\(a_2=3\)，\(a_3=7\)，\(a_4=15\)，猜 \(a_n=2^n-1\)。只算几项是<b>猜</b>，下面才是<b>证</b>。</p>
+    <p>(1) \(n=1\)：\(a_1=1=2^1-1\)，成立。</p>
+    <p>(2) 设 \(k\) 是正整数，假设 \(a_k=2^k-1\)（归纳假设）。那么 \(a_{k+1}=2a_k+1=2(2^k-1)+1=2^{k+1}-1\)，第二个等号用了归纳假设。所以 \(n=k+1\) 时也成立。</p>
+    <p>由 (1)(2)，对任意正整数 \(n\)，\(a_n=2^n-1\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(a_1=1\)，\(a_{n+1}=\dfrac{a_n}{1+a_n}\)，猜 \(a_n=\dfrac1n\)。归纳步里假设 \(a_k=\dfrac1k\)，代入得 \(a_{k+1}=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{k+1}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{k+1}{k^2}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac1k+1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(a_{k+1}=\dfrac{\frac1k}{1+\frac1k}=\dfrac{\frac1k}{\frac{k+1}{k}}=\dfrac1k\cdot\dfrac{k}{k+1}=\dfrac1{k+1}\)，正是猜的式子在 \(n=k+1\) 时的样子。选 B 是把「除以 \(\frac{k+1}{k}\)」做成了「乘 \(\frac{k+1}{k}\)」。</p></div>
+  </div>
+
+  <h3>4. 起点不一定是 1</h3>
+  <p>命题从 \(n_0\) 开始说，奠基就验证 \(P(n_0)\)，传递就对任意 \(k\ge n_0\) 证明。归纳步里常常要用到 \(k\) 不太小。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>证明：对任意整数 \(n\ge5\)，\(2^n>n^2\)。</p>
+    <p>(1) \(n=5\)：\(2^5=32>25=5^2\)，成立。</p>
+    <p>(2) 设整数 \(k\ge5\)，假设 \(2^k>k^2\)。那么 \(2^{k+1}=2\cdot2^k>2k^2\)（用了归纳假设）。还要 \(2k^2\ge(k+1)^2\)：</p>
+    <p style="text-align:center">\(2k^2-(k+1)^2=k^2-2k-1=(k-1)^2-2\ge 4^2-2>0\)（因为 \(k\ge5\)）。</p>
+    <p>所以 \(2^{k+1}>2k^2>(k+1)^2\)，\(n=k+1\) 时也成立。由 (1)(2)，对任意 \(n\ge5\) 成立。</p>
+    <p class="small">\(n=1\) 时 \(2>1\) 也对，可从 \(1\) 推不到 \(2\)（\(4>4\) 不对）：\((k-1)^2-2>0\) 要 \(k\ge3\) 才成立。所以这个命题只能从 \(5\) 起。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：\(n!=1\times2\times\cdots\times n\)（如 \(4!=24\)）。不等式 \(n!>2^n\) 从哪个正整数起成立，并且以后一直成立？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(5\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(1!=1&lt;2\)，\(2!=2&lt;4\)，\(3!=6&lt;8\)，\(4!=24>16\)。以后一直成立：\(k\ge4\) 时 \((k+1)!=(k+1)\cdot k!>(k+1)\cdot2^k\ge2\cdot2^k=2^{k+1}\)。选 B 的同学多半把 \(3!\) 和 \(2^3\) 比反了。</p></div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <ol>
+    <li><b>只有传递、没有奠基，不行。</b><br><span class="small">反例：「\(n^2+n+1\) 是偶数」。传递是对的：若 \(k^2+k+1\) 是偶数，则 \((k+1)^2+(k+1)+1=(k^2+k+1)+2(k+1)\) 也是偶数。可 \(n=1\) 时是 \(3\)，奇数。其实 \(n^2+n=n(n+1)\) 总是偶数，所以 \(n^2+n+1\) 对每个 \(n\) 都是奇数。没人推第一块，一块也不倒。</span></li>
+    <li><b>只有奠基、没有传递，也不行。</b><br><span class="small">反例：「\(2^n>n^2\) 对所有正整数成立」：\(n=1\) 时 \(2>1\) 成立，但 \(n=2\) 时 \(4>4\) 就错了。从 \(1\) 到 \(2\) 这一处断了。</span></li>
+    <li><b>验证了许多项、写「由此类推」，都不是证明。</b><br><span class="small">反例：\(n^2+n+41\) 在 \(n=1,2,\ldots,39\) 时都是质数，可 \(n=40\) 时等于 \(1681=41\times41\)。验证再多项，也只是有限个。</span></li>
+    <li><b>归纳步证的是「若 \(P(k)\) 则 \(P(k+1)\)」，不是先假设结论。</b><br><span class="small">错的写法：「假设对所有 \(n\) 都成立，那么 \(n=k+1\) 时当然成立」，这是把要证的东西当成了已知。能假设的只是「某一个 \(k\) 时成立」。</span></li>
+    <li><b>要看得出哪一步用了归纳假设。</b><br><span class="small">如果归纳步里根本没用 \(P(k)\)，直接就写出了 \(P(k+1)\)，那多半是把结论照抄了一遍，并没有证明（「练一练」第 5 题）。</span></li>
+    <li><b>能直接变形证明的，不必硬用归纳。</b><br><span class="small">例：\(1+2+\cdots+n=\dfrac{n(n+1)}{2}\) 用 4.2 的倒序相加一行就证完；归纳法也行，但不是唯一办法。</span></li>
+  </ol>
+  <div class="key">多米诺骨牌只是帮助理解。图里摆 \(12\) 块、\(100\) 块，看完了也只是有限块；证明靠的是对<b>任意</b> \(k\) 都成立的那一步推理。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么两步就够（另一种说法）</b>：假如有某个 \(n\ge n_0\) 让 \(P(n)\) 不成立，取其中最小的一个，记作 \(m\)。奠基说 \(m\ne n_0\)，所以 \(m-1\ge n_0\)，而且 \(P(m-1)\) 成立（\(m\) 是最小的坏的）。传递又给出 \(P(m)\) 成立，矛盾。</p>
+    <p><b>多假设几项</b>：有的数列每一项由前两项决定，比如 \(a_1=a_2=1\)，\(a_{n+2}=a_{n+1}+a_n\)。这时可以假设「\(n\le k\) 时都成立」再证 \(n=k+1\)，奠基也要验证前两项。道理一样：每一次推理用到的都是已经推到的项。</p>
+    <p><b>背景</b>：「从 \(1\) 出发，每次加 \(1\)，能走到每一个正整数」是正整数最基本的性质之一，数学里把它写成了公理（皮亚诺公理里的一条）。数学归纳法就建在它上面。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 多米诺：奠基和传递少一个会怎样</h3>
+  <p class="small">勾掉「推倒起点那一块」看看；点两块之间的小圆（或选中后按回车、空格）把间距拉开，红色表示「太远，碰不到下一块」。左右方向键在小圆之间移动。也可以改起点 \(n_0\)。</p>
+  <div class="card">
+    <svg class="fig" id="domino" viewBox="0 0 560 270" role="group" aria-label="12 块多米诺骨牌，小圆表示相邻两块是否够近"></svg>
+    <div class="ctrl"><label><input type="checkbox" id="dpush"> 推倒起点那一块（奠基）</label></div>
+    <div class="ctrl"><label for="dn0">起点 \(n_0\)</label><input type="range" id="dn0" min="1" max="6" step="1"><output id="dn0out"></output></div>
+    <div class="result" id="domout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="dnear" type="button">间距全部调近</button><button class="btn ghost" id="domreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：拖 n，看从 k 到 k+1 多了什么</h3>
+  <p class="small">选一个命题，拖滑块（或按方向键）改 \(n\)，也可以在下面那排圆点上点或拖。圆点绿色是这个 \(n\) 成立，红色是不成立。看看哪个命题能用归纳法证，哪个不能。</p>
+  <div class="card">
+    <div class="ctrl"><button class="btn" id="pOdd" type="button" aria-pressed="true">奇数和 \(=n^2\)</button><button class="btn ghost" id="pPow" type="button" aria-pressed="false">\(2^n>n^2\)</button><button class="btn ghost" id="pPrime" type="button" aria-pressed="false">\(n^2+n+41\) 是质数</button></div>
+    <svg class="fig" id="ind" viewBox="0 0 560 340" role="img" aria-label="所选命题在 n 处左右两边的数值，以及 n 从 1 起哪些成立"></svg>
+    <div class="ctrl"><label for="nin">\(n\)</label><input type="range" id="nin" min="1" max="30" step="1"><output id="nout"></output></div>
+    <div class="result" id="indout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="indreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 用归纳法证明 \(1+2+2^2+\cdots+2^{n-1}=2^n-1\)。从 \(n=k\) 到 \(n=k+1\)，左边要加上哪一项？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2^k\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2^{k+1}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2^{k-1}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。第 \(n\) 项是 \(2^{n-1}\)，\(n=k+1\) 时最后一项是 \(2^{(k+1)-1}=2^k\)。加上后：\((2^k-1)+2^k=2^{k+1}-1\)，正是 \(n=k+1\) 时的右边。选 B 是把「第 \(k+1\) 项」当成了 \(2^{k+1}\)，忘了指数是 \(n-1\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 用归纳法证明 \(1^2+2^2+\cdots+n^2=\dfrac{n(n+1)(2n+1)}{6}\)。归纳步要证的目标式是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(1^2+\cdots+k^2+(k+1)^2=\dfrac{(k+1)(k+2)(2k+3)}{6}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1^2+\cdots+k^2+(k+1)^2=\dfrac{k(k+1)(2k+1)}{6}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1^2+\cdots+k^2+(k+1)^2=\dfrac{(k+1)(k+2)(2k+2)}{6}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。把右边的 \(n\) 全换成 \(k+1\)：\(n+1\to k+2\)，\(2n+1\to2(k+1)+1=2k+3\)。B 是 \(P(k)\) 的右边（那是归纳假设，不是目标）；C 把 \(2n+1\) 换成了 \(2k+2\)，少加了 \(1\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-base" data-answer="B">
+    <p>3. 小明「证明」\(n^2+n+1\) 是偶数：「假设 \(k^2+k+1\) 是偶数，则 \((k+1)^2+(k+1)+1=(k^2+k+1)+2(k+1)\) 也是偶数，所以对所有正整数 \(n\) 成立。」这个证明——</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>对，传递那步没问题</button>
+      <button class="opt" data-v="B"><b>B</b>不对，缺奠基；\(n=1\) 时是 \(3\)，结论本身就错</button>
+      <button class="opt" data-v="C"><b>C</b>不对，传递那步算错了</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。传递确实没算错（所以 C 不对），可只有传递不够：没有验证 \(P(1)\)。一验就露馅：\(1+1+1=3\) 是奇数。实际上 \(n(n+1)\) 是偶数，\(n^2+n+1\) 永远是奇数。两步缺一不可，这里缺的是奠基。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-many" data-answer="C">
+    <p>4. 有人算出 \(n^2+n+41\) 在 \(n=1,2,\ldots,39\) 时都是质数，于是写：「由此类推，对所有正整数 \(n\)，\(n^2+n+41\) 都是质数。」</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>验证了 39 项，已经证明了</button>
+      <button class="opt" data-v="B"><b>B</b>没证明，但结论是对的</button>
+      <button class="opt" data-v="C"><b>C</b>没证明，而且结论是错的</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(n=40\) 时 \(40^2+40+41=1681=41\times41\)，不是质数。只验证有限项、写「由此类推」都不是证明，相当于只看了前 39 块骨牌，没有「任意一块倒、下一块就倒」这一步。在「动手」②里选第三个命题，拖到 \(40\) 看看。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-step" data-answer="B">
+    <p>5. 一份证明 \(1+3+\cdots+(2n-1)=n^2\) 的作业：「(1) \(n=1\) 时 \(1=1^2\)，成立。(2) 假设 \(n=k\) 时成立。\(n=k+1\) 时，\(1+3+\cdots+(2k+1)=(k+1)^2\)，所以也成立。」问题出在哪？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>没有问题</button>
+      <button class="opt" data-v="B"><b>B</b>(2) 直接写出了要证的式子，没用归纳假设推出它</button>
+      <button class="opt" data-v="C"><b>C</b>奠基应该从 \(n=0\) 开始</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。(2) 里「\(=(k+1)^2\)」正是要证的结论，这里直接写上去，等于先假设了最终结论。要像例 1 那样：把左边拆成 \(\bigl[1+3+\cdots+(2k-1)\bigr]+(2k+1)\)，用归纳假设换成 \(k^2+(2k+1)\)，再算出 \((k+1)^2\)。C 不对：命题从 \(n=1\) 说起，奠基就验证 \(n=1\)。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. \(\dfrac{1}{1\times2}+\dfrac{1}{2\times3}+\cdots+\dfrac{1}{99\times100}=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{99}{100}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{100}{99}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{1}{9900}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。每一项都能拆开：\(\dfrac{1}{k(k+1)}=\dfrac1k-\dfrac1{k+1}\)。加起来中间全部抵消：\(\left(1-\dfrac12\right)+\left(\dfrac12-\dfrac13\right)+\cdots+\left(\dfrac1{99}-\dfrac1{100}\right)=1-\dfrac1{100}=\dfrac{99}{100}\)。</p>
+      <p>同样的拆法对任意 \(n\) 直接证明了 \(\dfrac{1}{1\times2}+\cdots+\dfrac{1}{n(n+1)}=\dfrac{n}{n+1}\)，不用归纳法。（用归纳法也能证，归纳步要算 \(\dfrac{k}{k+1}+\dfrac{1}{(k+1)(k+2)}=\dfrac{k+1}{k+2}\)。）能直接变形的，不必硬用归纳。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function $(id) { return document.getElementById(id); }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+
+  /* ================= ① 多米诺 ================= */
+  var dom = $("domino"), dpush = $("dpush"), dn0 = $("dn0"), N = 12;
+  var push = true, n0 = 1, wide = [], stage = N, timer = null;
+  var D = [], LAB = [], GAP = [], ground, startLab;
+  for (var i0 = 0; i0 <= N; i0++) wide[i0] = false;
+  // 推倒后最后倒下的是第几块（n0-1 表示一块也没倒）
+  function lastFallen() {
+    if (!push) return n0 - 1;
+    var j = n0; while (j < N && !wide[j]) j++;
+    return j;
+  }
+  function stopAnim() { if (timer !== null) { clearTimeout(timer); timer = null; } }
+  function animate() {
+    stopAnim();
+    var L = lastFallen();
+    stage = n0 - 1; domDraw();
+    (function tick() {
+      if (stage >= L) { timer = null; return; }
+      timer = setTimeout(function () { stage++; domDraw(); tick(); }, 110);
+    })();
+  }
+  function toggleGap(g) {
+    wide[g] = !wide[g]; animate();
+    Peiyu.log("interact", { id: "domino-gap", gap: g, wide: wide[g] });
+  }
+  function domBuild() {
+    ground = svg("line", { x1: 20, y1: 175, x2: 540, y2: 175, "stroke-width": 2 }, dom);
+    startLab = svg("text", { "text-anchor": "middle" }, dom);
+    for (var i = 1; i <= N; i++) {
+      D[i] = svg("rect", { rx: 2 }, dom);
+      LAB[i] = svg("text", { y: 204, "text-anchor": "middle" }, dom);
+      LAB[i].textContent = i;
+    }
+    for (var g = 1; g < N; g++) (function (g) {
+      var el = svg("g", { tabindex: 0, role: "switch", "data-gap": g }, dom);
+      svg("rect", { x: -17, y: -20, width: 34, height: 40, fill: "transparent" }, el);
+      svg("circle", { r: 11, "stroke-width": 2.5 }, el);
+      svg("line", { x1: -5, y1: -5, x2: 5, y2: 5, "stroke-width": 2.5 }, el);
+      svg("line", { x1: -5, y1: 5, x2: 5, y2: -5, "stroke-width": 2.5 }, el);
+      el.addEventListener("click", function () { toggleGap(g); });
+      el.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); toggleGap(g); }
+        else if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") {
+          ev.preventDefault();
+          var t = GAP[clamp(g + (ev.key === "ArrowLeft" ? -1 : 1), 1, N - 1)];
+          if (t && t.focus) t.focus();
+        }
+      });
+      GAP[g] = el;
+    })(g);
+  }
+  function domDraw() {
+    var fg = css("--fg"), ca = css("--a"), hl = css("--hl"), dim = css("--dim"), no = css("--no"), okS = css("--ok-soft"), noS = css("--no-soft");
+    var units = 0, g, i;
+    for (g = 1; g < N; g++) units += wide[g] ? 2.6 : 1;
+    var u = 470 / units, w = 0.28 * u, h = 1.5 * u, base = 175, x = [], L = lastFallen(), shown = Math.min(stage, L);
+    x[1] = 45;
+    for (i = 2; i <= N; i++) x[i] = x[i - 1] + (wide[i - 1] ? 2.6 : 1) * u;
+    ground.setAttribute("stroke", fg);
+    for (i = 1; i <= N; i++) {
+      var fallen = i >= n0 && i <= shown, ang = 0;
+      if (fallen) ang = (i < N && wide[i]) ? 86 : 62;
+      D[i].setAttribute("x", (x[i] - w / 2).toFixed(1));
+      D[i].setAttribute("y", (base - h).toFixed(1));
+      D[i].setAttribute("width", w.toFixed(1));
+      D[i].setAttribute("height", h.toFixed(1));
+      D[i].setAttribute("transform", "rotate(" + ang + " " + (x[i] + w / 2).toFixed(1) + " " + base + ")");
+      D[i].setAttribute("fill", i < n0 ? dim : (fallen ? hl : ca));
+      LAB[i].setAttribute("x", x[i].toFixed(1));
+      LAB[i].setAttribute("fill", i < n0 ? dim : fg);
+    }
+    startLab.setAttribute("x", x[n0].toFixed(1));
+    startLab.setAttribute("y", (base - h - 12).toFixed(1));
+    startLab.setAttribute("fill", push ? fg : no);
+    startLab.textContent = push ? "推" : "没推";
+    for (g = 1; g < N; g++) {
+      var el = GAP[g], wd = wide[g], kids = el.childNodes;
+      el.setAttribute("transform", "translate(" + ((x[g] + x[g + 1]) / 2).toFixed(1) + " 238)");
+      el.setAttribute("aria-checked", wd ? "false" : "true");
+      el.setAttribute("aria-label", "第 " + g + " 块和第 " + (g + 1) + " 块之间：" + (wd ? "太远" : "够近"));
+      if (kids && kids.length >= 4) {
+        kids[1].setAttribute("fill", wd ? noS : okS);
+        kids[1].setAttribute("stroke", wd ? no : ca);
+        kids[2].setAttribute("stroke", wd ? no : "none");
+        kids[3].setAttribute("stroke", wd ? no : "none");
+      }
+    }
+    dn0.value = n0; $("dn0out").textContent = n0;
+
+    var out = $("domout"), lines = [], firstWide = 0;
+    for (g = n0; g < N; g++) if (wide[g]) { firstWide = g; break; }
+    if (!push) {
+      lines.push('<span class="bad">起点第 ' + n0 + " 块没推：一块也不倒。</span>间距再近也没用，这就是<b>缺奠基</b>（像「\\(n^2+n+1\\) 是偶数」：传递对，可 \\(P(1)\\) 不成立）。");
+    } else if (firstWide) {
+      lines.push('<span class="bad">' + (firstWide === n0 ? "只有第 " + n0 + " 块" : "第 " + n0 + "–" + firstWide + " 块") + "倒了，第 " + (firstWide + 1) + " 块起都立着。</span>第 " + firstWide + " 和第 " + (firstWide + 1) + " 块离得太远：「第 " + firstWide + " 块倒 ⇒ 第 " + (firstWide + 1) + " 块倒」不成立。传递要对<b>每一个</b> \\(k\\ge n_0\\) 都成立，断一处就不行。");
+    } else {
+      lines.push('<span class="eq">从第 ' + n0 + " 块起全部倒下。</span>奠基（推倒第 " + n0 + " 块）和传递（每一处都够近）都有了。");
+    }
+    if (n0 > 1) lines.push("第 1–" + (n0 - 1) + " 块（灰色）不在命题里，就像「\\(2^n>n^2\\)」只说 \\(n\\ge5\\)；它们前面的间距也不影响结果。");
+    lines.push('<span class="small">图里只有 12 块，看得完；命题有无穷多个 \\(n\\)，所以要用一句对任意 \\(k\\) 都成立的推理，代替一块一块地看。</span>');
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  function domReset() {
+    stopAnim(); push = true; n0 = 1;
+    for (var i = 0; i <= N; i++) wide[i] = false;
+    dpush.checked = true; stage = lastFallen(); domDraw();
+  }
+  dpush.addEventListener("change", function () { push = !!dpush.checked; animate(); Peiyu.log("interact", { id: "domino-push", push: push }); });
+  dn0.addEventListener("input", function () { n0 = clamp(parseInt(dn0.value, 10) || 1, 1, 6); animate(); });
+  dn0.addEventListener("change", function () { Peiyu.log("interact", { id: "domino-n0", n0: n0 }); });
+  $("dnear").onclick = function () { for (var i = 0; i <= N; i++) wide[i] = false; animate(); };
+  $("domreset").onclick = domReset;
+
+  /* ================= ② 拖 n ================= */
+  var ind = $("ind"), nin = $("nin");
+  var PROPS = {
+    odd: { btn: "pOdd", max: 30, def: 4 },
+    pow: { btn: "pPow", max: 40, def: 1 },
+    prime: { btn: "pPrime", max: 45, def: 39 }
+  };
+  var prop = "odd", n = 4, dragging = false;
+  function smallestFactor(v) { // 0 表示质数
+    if (v < 2) return 1;
+    for (var d = 2; d * d <= v; d++) if (v % d === 0) return d;
+    return 0;
+  }
+  function holds(p, m) {
+    if (p === "odd") { var s = 0; for (var i = 1; i <= m; i++) s += 2 * i - 1; return s === m * m; }
+    if (p === "pow") return Math.pow(2, m) > m * m;
+    return smallestFactor(m * m + m + 41) === 0;
+  }
+  function oddTex(m) {
+    if (m <= 5) { var t = []; for (var i = 1; i <= m; i++) t.push(2 * i - 1); return t.join("+"); }
+    return "1+3+5+\\cdots+" + (2 * m - 1);
+  }
+  function T(x, y, s, attrs) { var a = attrs || {}; a.x = x; a.y = y; var e = svg("text", a, ind); e.textContent = s; return e; }
+  function sx(m) { var mx = PROPS[prop].max; return 40 + (m - 1) * 480 / (mx - 1); }
+  function indDraw() {
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), no = css("--no"), card = css("--card"), muted = css("--muted");
+    var mx = PROPS[prop].max, i, lines = [];
+    n = clamp(n, 1, mx);
+    ind.innerHTML = "";
+    if (prop === "odd") {
+      var S = 200, c = S / n, x0 = 40, y0 = 20;
+      svg("rect", { x: x0, y: y0, width: ((n - 1) * c).toFixed(2), height: ((n - 1) * c).toFixed(2), fill: ca, opacity: 0.45 }, ind);
+      svg("rect", { x: (x0 + (n - 1) * c).toFixed(2), y: y0, width: c.toFixed(2), height: S, fill: hl }, ind);
+      svg("rect", { x: x0, y: (y0 + (n - 1) * c).toFixed(2), width: ((n - 1) * c).toFixed(2), height: c.toFixed(2), fill: hl }, ind);
+      for (i = 1; i < n; i++) {
+        svg("line", { x1: (x0 + i * c).toFixed(2), y1: y0, x2: (x0 + i * c).toFixed(2), y2: y0 + S, stroke: card, "stroke-width": 1 }, ind);
+        svg("line", { x1: x0, y1: (y0 + i * c).toFixed(2), x2: x0 + S, y2: (y0 + i * c).toFixed(2), stroke: card, "stroke-width": 1 }, ind);
+      }
+      svg("rect", { x: x0, y: y0, width: S, height: S, fill: "none", stroke: fg, "stroke-width": 1.5 }, ind);
+      T(270, 60, "n = " + n);
+      T(270, 105, "整块：n² = " + n * n + " 格");
+      T(270, 150, "金色 L：2n−1 = " + (2 * n - 1) + " 格", { fill: hl, "font-weight": 700 });
+      T(270, 195, "去掉 L：(n−1)² = " + (n - 1) * (n - 1) + " 格");
+      var sum = 0; for (i = 1; i <= n; i++) sum += 2 * i - 1;
+      lines.push("\\(n=" + n + "\\)：左边 \\(" + oddTex(n) + "=" + sum + "\\)，右边 \\(" + n + "^2=" + n * n + "\\)，" + (sum === n * n ? '<span class="eq">相等</span>。' : '<span class="bad">不相等</span>。'));
+      if (n >= 2) lines.push("从 \\(n=" + (n - 1) + "\\) 到 \\(n=" + n + "\\)，左边多了一项 \\(2\\times" + n + "-1=" + (2 * n - 1) + "\\)：\\(" + (n - 1) + "^2+" + (2 * n - 1) + "=" + n * n + "=" + n + "^2\\)。金色 L 形就是这一项。");
+      else lines.push("\\(n=1\\)：\\(1=1^2\\)，这就是奠基。");
+      lines.push('<span class="small">图只画到 30。对任意 \\(k\\) 都有 \\(k^2+(2k+1)=(k+1)^2\\)，这一句才是证明里的传递。</span>');
+    } else if (prop === "pow") {
+      var V = Math.pow(2, n), W = n * n, base = 220;
+      var h1 = Math.max(2, n / 40 * 190), h2 = Math.max(2, Math.log(W) / Math.LN2 / 40 * 190);
+      svg("line", { x1: 40, y1: base, x2: 250, y2: base, stroke: fg, "stroke-width": 1.5 }, ind);
+      svg("rect", { x: 60, y: (base - h1).toFixed(1), width: 70, height: h1.toFixed(1), fill: ca }, ind);
+      svg("rect", { x: 160, y: (base - h2).toFixed(1), width: 70, height: h2.toFixed(1), fill: cb }, ind);
+      T(95, (base - h1 - 8).toFixed(1), "2ⁿ", { "text-anchor": "middle", fill: ca, "font-weight": 700 });
+      T(195, (base - h2 - 8).toFixed(1), "n²", { "text-anchor": "middle", fill: cb, "font-weight": 700 });
+      T(270, 50, "n = " + n);
+      T(270, 90, "2ⁿ = " + V, { fill: ca });
+      T(270, 130, "n² = " + W, { fill: cb });
+      T(270, 170, V > W ? "2ⁿ > n²，成立" : (V === W ? "2ⁿ = n²，不成立" : "2ⁿ < n²，不成立"), { fill: V > W ? ca : no, "font-weight": 700 });
+      T(270, 210, "柱高按「翻了几倍」画", { fill: muted });
+      lines.push("\\(2^{" + n + "}=" + V + "\\)，\\(" + n + "^2=" + W + "\\)：" + (V > W ? '<span class="eq">\\(2^n>n^2\\) 成立</span>。' : '<span class="bad">不成立</span>（\\(2^n\\le n^2\\)）。'));
+      if (n >= 2) lines.push("从 \\(n=" + (n - 1) + "\\) 到 \\(n=" + n + "\\)：左边乘 \\(2\\)，多了 \\(2^{" + (n - 1) + "}=" + V / 2 + "\\)；右边加 \\(2n-1=" + (2 * n - 1) + "\\)。");
+      lines.push(n < 5 ? "\\(n=1\\) 成立，\\(n=2,3,4\\) 不成立：从 \\(1\\) 推不到 \\(2\\)，传递断了，所以起点只能取 \\(5\\)。"
+        : "\\(n\\ge5\\) 起左边每次翻倍，比右边涨得快，一直成立。归纳步（例 3）证明的正是这件事。");
+    } else {
+      var v = n * n + n + 41, f = smallestFactor(v), allBefore = true;
+      for (i = 1; i <= n; i++) if (!holds("prime", i)) { allBefore = false; break; }
+      T(140, 120, String(v), { "text-anchor": "middle", style: "font-size:48px", "font-weight": 700, fill: f ? no : ca });
+      T(140, 170, "n² + n + 41", { "text-anchor": "middle", fill: muted });
+      T(270, 70, "n = " + n);
+      T(270, 115, f ? "= " + f + " × " + v / f + "，不是质数" : "是质数", { fill: f ? no : ca, "font-weight": 700 });
+      if (n >= 2) T(270, 160, "比上一个多 2n = " + 2 * n);
+      lines.push("\\(" + n + "^2+" + n + "+41=" + v + "\\)，" + (f ? '<span class="bad">不是质数：\\(' + v + "=" + f + "\\times " + v / f + "\\)</span>。" : '<span class="eq">是质数</span>。'));
+      if (allBefore && n === 1) lines.push("先看一个，再往后拖。");
+      else if (allBefore) lines.push("\\(n=1\\) 到 \\(" + n + "\\) 全是质数。可验证再多项也只是有限个，不是证明；往后拖到 \\(40\\) 看看。");
+      else if (n === 40) lines.push("前 \\(39\\) 个都是质数，第 \\(40\\) 个就破了：「由此类推」靠不住。");
+      else lines.push("前面已经出现过不是质数的 \\(n\\)（红点）。");
+      if (n >= 2) lines.push('<span class="small">从 \\(n-1\\) 到 \\(n\\) 多了 \\(2n\\)，可「加了一个偶数」推不出「还是质数」：这个命题没有传递。</span>');
+    }
+    // 下面一排：n = 1..max 哪些成立
+    T(40, 262, "绿：成立　红：不成立", { fill: muted });
+    var step = 480 / (mx - 1), r = Math.min(6, step / 2.4);
+    for (i = 1; i <= mx; i++) {
+      svg("circle", { cx: sx(i).toFixed(1), cy: 290, r: r.toFixed(1), fill: holds(prop, i) ? ca : no }, ind);
+      if (i === 1 || i % 10 === 0 || (prop === "pow" && i === 5)) T(sx(i).toFixed(1), 325, String(i), { "text-anchor": "middle", fill: muted });
+    }
+    svg("circle", { cx: sx(n).toFixed(1), cy: 290, r: (r + 4).toFixed(1), fill: "none", stroke: hl, "stroke-width": 3 }, ind);
+    var hit = svg("rect", { x: 25, y: 272, width: 510, height: 36, fill: "transparent", style: "cursor:pointer" }, ind);
+    hit.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault(); dragging = true; fromX(toSvg(ind, ev).x);
+      function mv(e) { if (dragging) fromX(toSvg(ind, e).x); }
+      function up() { dragging = false; window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); Peiyu.log("interact", { id: "induct-n", prop: prop, n: n }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    nin.max = mx; nin.value = n; $("nout").textContent = n;
+    var out = $("indout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  function fromX(xx) {
+    var mx = PROPS[prop].max, v = clamp(Math.round((xx - 40) / (480 / (mx - 1))) + 1, 1, mx);
+    if (isFinite(v) && v !== n) { n = v; indDraw(); }
+  }
+  function setProp(p) {
+    prop = p; n = PROPS[p].def;
+    for (var k in PROPS) {
+      var b = $(PROPS[k].btn);
+      b.className = k === p ? "btn" : "btn ghost";
+      b.setAttribute("aria-pressed", k === p ? "true" : "false");
+    }
+    indDraw();
+  }
+  Object.keys(PROPS).forEach(function (k) {
+    $(PROPS[k].btn).addEventListener("click", function () { setProp(k); Peiyu.log("interact", { id: "induct-prop", prop: k }); });
+  });
+  nin.addEventListener("input", function () { n = clamp(parseInt(nin.value, 10) || 1, 1, PROPS[prop].max); indDraw(); });
+  nin.addEventListener("change", function () { Peiyu.log("interact", { id: "induct-n", prop: prop, n: n }); });
+  $("indreset").onclick = function () { setProp("odd"); };
+
+  document.addEventListener("DOMContentLoaded", function () { domBuild(); domReset(); setProp("odd"); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { domDraw(); indDraw(); });
+})();
+</script>
+</body></html>

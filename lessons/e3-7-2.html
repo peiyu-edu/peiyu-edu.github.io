@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.2 离散型随机变量及其分布列 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl .btn[aria-pressed="true"] { background: var(--a); color: var(--card); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .tbl { overflow-x: auto; }
+  .tbl table { border-collapse: collapse; margin: 8px auto; font-size: 15px; }
+  .tbl th, .tbl td { border: 1px solid var(--line); padding: 4px 12px; text-align: center; }
+  .tbl th { color: var(--muted); font-weight: 600; }
+  #grid text, #bars text, #map text { font-size: 20px; }
+  #grid text[font-size="22"] { font-size: 22px; }
+</style>
+</head>
+<body data-sec="e3-7-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 7 章 随机变量及其分布</p>
+<h1>7.2 离散型随机变量及其分布列</h1>
+<p class="lead">给试验的每个结果配上一个数，再把「每个数出现的概率」列成一张表。从此研究随机现象，就是研究这张表。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>同时掷两枚骰子，把两个点数加起来。玩过大富翁的同学可能有感觉：有的和经常出现，有的很少见。</p>
+  <div class="card predict" data-id="entry" data-answer="C">
+    <p>两个点数的和，下面哪个最容易出现？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(7\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。两枚骰子一共 \(6\times6=36\) 种结果，等可能。和为 \(7\) 的有 \((1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\) 共 \(6\) 种；和为 \(6\) 的有 \(5\) 种；和为 \(2\) 只有 \((1,1)\)，和为 \(12\) 只有 \((6,6)\)。</p>
+      <p>刚才做了两件事：给 \(36\) 个结果<b>每个配上一个数</b>（点数和），再数出<b>每个数的概率</b>。前一件叫「随机变量」，后一件列成表叫「分布列」。这一节就讲这两样。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：样本空间、古典概型、互斥事件（<a href="b2-10-1.html">回看必修第二册 10.1</a>）；组合数 \(C_n^m\)（<a href="e3-6-2.html">回看 6.2</a>）；概率的乘法（<a href="e3-7-1.html">回看 7.1</a>）；「一个输入对应唯一一个输出」（<a href="b1-3-1.html">回看函数 3.1</a>）。</p>
+
+  <div class="card">
+    <p><b>样本点、样本空间</b>：试验每一个可能的结果叫样本点，全部样本点放在一起叫样本空间 \(\Omega\)。</p>
+    <p>例：抛两枚硬币，\(\Omega=\{\text{正正},\text{正反},\text{反正},\text{反反}\}\)，\(4\) 个样本点，每个概率 \(\dfrac14\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>互斥</b>：两个事件在一次试验里不能同时发生。</p>
+    <p>例：掷一枚骰子，「点数是 \(1\)」和「点数是 \(2\)」互斥；「点数是偶数」和「点数大于 \(3\)」不互斥，掷出 \(6\) 时两个都发生了。互斥事件的概率可以直接相加。</p>
+  </div>
+
+  <div class="card">
+    <p><b>唯一对应</b>：像函数那样，每个输入只对应<b>一个</b>输出；不同的输入可以对应同一个输出。</p>
+    <p>例：\(f(x)=x^2\) 里 \(2\) 和 \(-2\) 都对应 \(4\)，没问题；但一个 \(x\) 不能同时对应 \(4\) 和 \(5\)。</p>
+  </div>
+
+  <h3>2. 随机变量：给每个样本点配一个数</h3>
+  <p>很多试验的结果本来不是数（正面、反面），就算是数，我们关心的也常是另一个数（两个点数的和）。规定一条规则，<b>对每个样本点，唯一地指定一个实数</b>，这条规则就叫<b>随机变量</b>，常用 \(X,Y,\xi\) 表示。</p>
+  <p>它能取的值如果可以一个一个列出来，就叫<b>离散型随机变量</b>。这一章研究的都是取值只有有限个的情形。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>抛两枚硬币，\(X\) 表示正面朝上的枚数。写出每个样本点对应的值。</p>
+    <div class="tbl"><table>
+      <tr><th>样本点</th><td>正正</td><td>正反</td><td>反正</td><td>反反</td></tr>
+      <tr><th>\(X\)</th><td>\(2\)</td><td>\(1\)</td><td>\(1\)</td><td>\(0\)</td></tr>
+    </table></div>
+    <p>每个样本点都只有一个值，所以 \(X\) 是随机变量，可能取值是 \(0,1,2\)。注意「正反」和「反正」<b>两个</b>样本点都对应 \(X=1\)：事件 \(\{X=1\}\) 就是 \(\{\text{正反},\text{反正}\}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：掷一枚骰子，点数是奇数时记 \(X=1\)，是偶数时记 \(X=0\)。\(X\) 有几个可能的取值？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\) 个</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\) 个</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\) 个</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。取值只有 \(0\) 和 \(1\)：\(1,3,5\) 三个样本点都对应 \(1\)，\(2,4,6\) 都对应 \(0\)。选 C 的同学数的是样本点，不是取值。</p></div>
+  </div>
+
+  <h3>3. 分布列：每个取值的概率列成表</h3>
+  <p>\(X\) 的取值是 \(x_1,x_2,\dots,x_n\)，记 \(P(X=x_i)=p_i\)，列成下表，就是 \(X\) 的<b>分布列</b>：</p>
+  <div class="tbl"><table>
+    <tr><th>\(X\)</th><td>\(x_1\)</td><td>\(x_2\)</td><td>\(\cdots\)</td><td>\(x_n\)</td></tr>
+    <tr><th>\(P\)</th><td>\(p_1\)</td><td>\(p_2\)</td><td>\(\cdots\)</td><td>\(p_n\)</td></tr>
+  </table></div>
+  <p>为什么一定有下面两条：每个 \(p_i\) 是概率，不会是负数；\(\{X=x_1\},\dots,\{X=x_n\}\) 两两互斥（一次试验 \(X\) 只取一个值），合起来又是整个样本空间，所以概率加起来正好是 \(1\)。</p>
+  <div class="key">分布列的两条性质：① \(p_i\ge 0\)；② \(p_1+p_2+\cdots+p_n=1\)。<br>求某个范围的概率，把范围里各取值的 \(p_i\) 相加，如 \(P(X\ge x_2)=p_2+\cdots+p_n\)。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>接例 1，写出 \(X\) 的分布列。</p>
+    <p>\(P(X=0)=P(\text{反反})=\dfrac14\)，\(P(X=1)=P(\{\text{正反},\text{反正}\})=\dfrac24=\dfrac12\)，\(P(X=2)=\dfrac14\)。</p>
+    <div class="tbl"><table>
+      <tr><th>\(X\)</th><td>\(0\)</td><td>\(1\)</td><td>\(2\)</td></tr>
+      <tr><th>\(P\)</th><td>\(\dfrac14\)</td><td>\(\dfrac12\)</td><td>\(\dfrac14\)</td></tr>
+    </table></div>
+    <p>核查：都非负，\(\dfrac14+\dfrac12+\dfrac14=1\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：\(X\) 的分布列中，\(X\) 取 \(-1,0,1\) 的概率分别是 \(0.2,\ a,\ 0.5\)。\(a=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.7\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(0.2+a+0.5=1\)，\(a=0.3\)。选 C 的同学只用 \(1\) 减了 \(0.5\)，漏了 \(0.2\)。</p></div>
+  </div>
+
+  <h3>4. 求分布列的三步</h3>
+  <div class="key">① 说清 \(X\) 是什么，<b>列全</b>它的所有取值；② 对每个取值，找出对应的样本点，求概率；③ 核查：每项非负，总和为 \(1\)。</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>袋里有 \(3\) 个红球、\(2\) 个白球，一次摸出 \(2\) 个。\(X\) 表示摸到的红球个数，求 \(X\) 的分布列。</p>
+    <p>① 摸 \(2\) 个，红球可能有 \(0,1,2\) 个，所以 \(X\) 的取值是 \(0,1,2\)。</p>
+    <p>② 从 \(5\) 个里摸 \(2\) 个，共 \(C_5^2=10\) 种，等可能。</p>
+    <p style="text-align:center">\(P(X=0)=\dfrac{C_2^2}{10}=\dfrac1{10}\)，\(P(X=1)=\dfrac{C_3^1C_2^1}{10}=\dfrac6{10}\)，\(P(X=2)=\dfrac{C_3^2}{10}=\dfrac3{10}\)。</p>
+    <div class="tbl"><table>
+      <tr><th>\(X\)</th><td>\(0\)</td><td>\(1\)</td><td>\(2\)</td></tr>
+      <tr><th>\(P\)</th><td>\(\dfrac1{10}\)</td><td>\(\dfrac35\)</td><td>\(\dfrac3{10}\)</td></tr>
+    </table></div>
+    <p>③ 核查：\(\dfrac1{10}+\dfrac6{10}+\dfrac3{10}=1\)。加起来不是 \(1\)，就说明漏了取值或算错了。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：掷两枚骰子，\(X\) 表示两个点数中较大的那个（相同就取它）。\(P(X=2)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{36}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac1{18}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac1{12}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac16\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。较大点数是 \(2\) 的样本点：\((1,2),(2,1),(2,2)\)，共 \(3\) 个，\(P=\dfrac3{36}=\dfrac1{12}\)。选 B 的同学漏了 \((2,2)\)；选 A 的只想到了 \((2,2)\)。</p></div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <ol>
+    <li><b>每个样本点只能对应一个数。</b><br><span class="small">反例：掷一枚骰子，规定「点数 \(\le4\) 记 \(1\)，点数 \(\ge3\) 记 \(0\)」。掷出 \(3\) 时既该记 \(1\) 又该记 \(0\)，这条规则不是随机变量。</span></li>
+    <li><b>取值个数不等于样本点个数，各取值一般不等可能。</b><br><span class="small">反例：两枚骰子的点数和有 \(11\) 个取值，但 \(P(X=2)=\dfrac1{36}\)，不是 \(\dfrac1{11}\)。概率要回到 \(36\) 个等可能的样本点去数。</span></li>
+    <li><b>非负、总和为 \(1\)，缺一不可。</b><br><span class="small">反例：概率 \(0.6,\ -0.1,\ 0.5\) 加起来是 \(1\)，但有负数，不是分布列；\(0.2,0.3,0.4\) 都非负，加起来只有 \(0.9\)，也不是，多半漏了一个取值。</span></li>
+    <li><b>变换后相同的取值要合并。</b><br><span class="small">反例：\(X\) 取 \(-1,0,1\) 的概率是 \(0.2,0.3,0.5\)，\(Y=X^2\)。\(Y\) 只有 \(0,1\) 两个取值，\(P(Y=1)=P(X=-1)+P(X=1)=0.7\)。把表写成「\(Y\)：\(1,0,1\)」是错的，同一个值出现两次。</span></li>
+  </ol>
+  <div class="key">写分布列时：表的第一行不能有重复的数，第二行全是非负数、加起来是 \(1\)。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>取值无限、但能一一列出</b>：一直投篮，直到投中为止，投篮次数可以是 \(1,2,3,\dots\)，没有上限。它也是离散型随机变量。这一章只算取值有限的情形，无限的情形不展开。</p>
+    <p><b>两点分布</b>：只有 \(0,1\) 两个取值的随机变量，分布列是 \(P(X=1)=p\)，\(P(X=0)=1-p\)。「是否命中」「是否合格」都能这样记，后面的二项分布就是由它搭起来的。</p>
+    <p><b>不是离散型的</b>：灯泡的寿命、一个人的身高，可以取一段区间里的任何数，没法一个个列出，这类变量 7.5 节的正态分布会碰到，求概率的办法不同。</p>
+    <p><b>分布列的三种样子</b>：表格、公式（如 \(P(X=k)=\dfrac{k}{10}\)，\(k=1,2,3,4\)）、柱状图。「动手」里的柱子就是分布列的图。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 两枚骰子：选一个随机变量，看分布列</h3>
+  <p class="small">先选 \(X\) 是什么。方格是 \(36\) 个样本点，格里的数是这个样本点对应的 \(X\) 值。点一个格子（或拖着走，或选中方格后按方向键），同一个取值的格子会一起亮起来，下面对应的柱子也亮。柱子也能点。</p>
+  <div class="card">
+    <div class="ctrl" id="varbtns">
+      <button class="btn ghost" type="button" data-v="sum">点数和</button>
+      <button class="btn ghost" type="button" data-v="max">较大点数</button>
+      <button class="btn ghost" type="button" data-v="min">较小点数</button>
+      <button class="btn ghost" type="button" data-v="diff">差的绝对值</button>
+    </div>
+    <svg class="fig" id="grid" viewBox="0 0 560 450" tabindex="0" role="img" aria-label="六乘六的样本点方格，按方向键移动选中的样本点"></svg>
+    <svg class="fig" id="bars" viewBox="0 0 560 300" tabindex="0" role="img" aria-label="分布列柱状图，按左右方向键换取值"></svg>
+    <div class="result" id="gridout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="gridreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：对 \(X\) 做变换，相同取值合并</h3>
+  <p class="small">\(X\) 还是两枚骰子的点数和，上排是它的 \(11\) 个取值，下排是 \(Y\) 的取值，连线表示「这个 \(X\) 变成这个 \(Y\)」。数字是样本点个数（除以 \(36\) 就是概率）。点下排的点（或选中图后按左右键），看哪几个 \(X\) 合并到了一起。</p>
+  <div class="card">
+    <div class="ctrl" id="tfbtns">
+      <button class="btn ghost" type="button" data-v="sq">\(Y=(X-7)^2\)</button>
+      <button class="btn ghost" type="button" data-v="abs">\(Y=|X-7|\)</button>
+      <button class="btn ghost" type="button" data-v="lin">\(Y=X-7\)</button>
+    </div>
+    <svg class="fig" id="map" viewBox="0 0 560 340" tabindex="0" role="img" aria-label="X 的取值到 Y 的取值的连线图，按左右方向键换 Y 的取值"></svg>
+    <div class="result" id="mapout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="mapreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="C">
+    <p>1. \(X\) 取 \(1,2,3,4\) 的概率分别是 \(0.1,\ 0.3,\ m,\ 0.2\)。\(P(X\ge3)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。先由总和为 \(1\)：\(m=1-0.1-0.3-0.2=0.4\)。\(\{X=3\}\) 与 \(\{X=4\}\) 互斥，\(P(X\ge3)=0.4+0.2=0.6\)。选 B 的同学只算了 \(P(X=3)\)；选 A 的只算了 \(P(X=4)\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="D">
+    <p>2. 抛三枚硬币，\(X\) 表示正面朝上的枚数。\(P(X\ge1)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac38\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac34\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac78\)</button>
+    </div>
+    <div class="reveal"><p><b>D</b>。共 \(8\) 个等可能样本点，\(X=0\) 只有「反反反」一个，\(P(X=0)=\dfrac18\)。\(P(X\ge1)=1-\dfrac18=\dfrac78\)。选 C 的同学把 \(0,1,2,3\) 四个取值当成等可能，算成了 \(\dfrac34\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-count" data-answer="C">
+    <p>3. 盒里有标着 \(1,2,3,4\) 的四张卡片，一次抽两张，\(X\) 是两数之和。\(P(X=5)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac16\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac15\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac12\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。样本点是 \(C_4^2=6\) 种抽法：\(\{1,2\},\{1,3\},\{1,4\},\{2,3\},\{2,4\},\{3,4\}\)，和分别是 \(3,4,5,5,6,7\)。和为 \(5\) 的有 \(2\) 个，\(P(X=5)=\dfrac26=\dfrac13\)。</p>
+      <p>选 B 的同学看到 \(X\) 有 \(3,4,5,6,7\) 五个取值，就当每个 \(\dfrac15\)：取值个数不是等可能样本点的个数。选 A 的同学只数到了一种抽法。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-merge" data-answer="B">
+    <p>4. \(X\) 取 \(-2,-1,0,1,2\) 的概率分别是 \(0.1,\ 0.2,\ 0.4,\ 0.2,\ 0.1\)，\(Y=X^2\)。\(P(Y=1)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.6\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(Y=1\) 来自 \(X=-1\) 和 \(X=1\) 两个取值，要合并：\(P(Y=1)=0.2+0.2=0.4\)。\(Y\) 的分布列只有三列：\(P(Y=0)=0.4\)，\(P(Y=1)=0.4\)，\(P(Y=4)=0.2\)，和为 \(1\)。选 A 的同学只抄了一个 \(0.2\)，没合并。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-check" data-answer="C">
+    <p>5. 下面四组数分别作为 \(X\) 取 \(1,2,3\) 的概率，哪一组能构成分布列？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(0.5,\ 0.3,\ 0.3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.6,\ -0.1,\ 0.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac12,\ \dfrac13,\ \dfrac16\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.2,\ 0.3,\ 0.4\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。两条都要查。A 加起来是 \(1.1\)；B 加起来是 \(1\)，但有负数 \(-0.1\)，只查总和就会误选它；D 都非负，但和只有 \(0.9\)。C：\(\dfrac36+\dfrac26+\dfrac16=1\)，都非负。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 小林投篮，每次命中的概率都是 \(0.6\)，各次互不影响。投中就停，最多投 \(3\) 次。\(X\) 表示投篮的次数，\(P(X=3)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.096\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.16\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.24\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.064\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。先列全取值：\(X=1,2,3\)。\(P(X=1)=0.6\)；\(P(X=2)=0.4\times0.6=0.24\)；投到第 \(3\) 次，只要前两次都没中，第 \(3\) 次中不中都停，所以 \(P(X=3)=0.4\times0.4=0.16\)。</p>
+      <p>核查：\(0.6+0.24+0.16=1\)。选 A 的同学算的是「第 3 次才投中」\(0.4^2\times0.6\)，漏了第 3 次没中的情形，那样三项加起来只有 \(0.936\)，核查就能发现。选 D 是 \(0.4^3\)，那是「三次都没中」，只是 \(X=3\) 的一部分。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  // n/36 的 TeX：先写 n/36，能约分再写约分后的
+  function frac(n) {
+    var raw = "\\dfrac{" + n + "}{36}", g = gcd(n, 36), a = n / g, b = 36 / g;
+    if (g === 1) return raw;
+    return raw + "=" + (b === 1 ? String(a) : "\\dfrac{" + a + "}{" + b + "}");
+  }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function onDrag(fig, cb, onEnd) {
+    fig.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault(); cb(toSvg(fig, ev));
+      function mv(e) { cb(toSvg(fig, e)); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  function pressBtns(box, v) {
+    [].forEach.call(box.querySelectorAll("button"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-v") === v ? "true" : "false"); });
+  }
+
+  /* ================= ① 两枚骰子 ================= */
+  var VARS = {
+    sum: { tex: "X=a+b", f: function (a, b) { return a + b; } },
+    max: { tex: "X=\\max\\{a,b\\}", f: function (a, b) { return Math.max(a, b); } },
+    min: { tex: "X=\\min\\{a,b\\}", f: function (a, b) { return Math.min(a, b); } },
+    diff: { tex: "X=|a-b|", f: function (a, b) { return Math.abs(a - b); } }
+  };
+  var grid = document.getElementById("grid"), bars = document.getElementById("bars"), varbox = document.getElementById("varbtns");
+  var GX = 128, GY = 62, CS = 62; // 方格左上角、格子边长
+  var vkey, ca, cb; // 当前变量、选中的样本点 (a,b)，1..6
+  function table() { // 取值 → 样本点个数
+    var f = VARS[vkey].f, cnt = {}, vals = [];
+    for (var a = 1; a <= 6; a++) for (var b = 1; b <= 6; b++) {
+      var x = f(a, b); if (!(x in cnt)) { cnt[x] = 0; vals.push(x); } cnt[x]++;
+    }
+    vals.sort(function (p, q) { return p - q; });
+    return { vals: vals, cnt: cnt };
+  }
+  function gridReset() { vkey = "sum"; ca = 3; cb = 4; gridDraw(); }
+  function gridDraw() {
+    var T = table(), f = VARS[vkey].f, cur = f(ca, cb), n = T.vals.length;
+    var fg = css("--fg"), cA = css("--a"), hl = css("--hl"), cc = css("--c"), muted = css("--muted"), line = css("--line");
+    pressBtns(varbox, vkey);
+    grid.innerHTML = "";
+    svg("text", { x: GX + 3 * CS, y: 24, "text-anchor": "middle", fill: muted, "font-size": 20 }, grid).textContent = "第二枚 b";
+    svg("text", { x: GX - 50, y: GY + 3 * CS, "text-anchor": "middle", fill: muted, "font-size": 20, transform: "rotate(-90 " + (GX - 50) + " " + (GY + 3 * CS) + ")" }, grid).textContent = "第一枚 a";
+    for (var i = 1; i <= 6; i++) {
+      svg("text", { x: GX + (i - 0.5) * CS, y: GY - 10, "text-anchor": "middle", "font-size": 20, fill: muted }, grid).textContent = i;
+      svg("text", { x: GX - 14, y: GY + (i - 0.5) * CS + 7, "text-anchor": "end", "font-size": 20, fill: muted }, grid).textContent = i;
+    }
+    for (var a = 1; a <= 6; a++) for (var b = 1; b <= 6; b++) {
+      var x = f(a, b), on = x === cur, rank = n > 1 ? T.vals.indexOf(x) / (n - 1) : 0;
+      var rx = GX + (b - 1) * CS, ry = GY + (a - 1) * CS;
+      svg("rect", { x: rx + 2, y: ry + 2, width: CS - 4, height: CS - 4, rx: 6,
+        fill: on ? hl : cA, "fill-opacity": on ? 0.85 : (0.08 + 0.42 * rank).toFixed(2), stroke: line }, grid);
+      svg("text", { x: rx + CS / 2, y: ry + CS / 2 + 8, "text-anchor": "middle", "font-size": 22, "font-weight": on ? 700 : 400, fill: fg }, grid).textContent = x;
+    }
+    svg("rect", { x: GX + (cb - 1) * CS + 1, y: GY + (ca - 1) * CS + 1, width: CS - 2, height: CS - 2, rx: 7, fill: "none", stroke: cc, "stroke-width": 4 }, grid);
+
+    // 柱状图
+    bars.innerHTML = "";
+    var B0 = 40, B1 = 540, BY = 230, BH = 170, slot = (B1 - B0) / n, bw = Math.min(40, slot * 0.7);
+    svg("line", { x1: B0, y1: BY, x2: B1, y2: BY, stroke: fg, "stroke-width": 1.5 }, bars);
+    T.vals.forEach(function (v, j) {
+      var c = T.cnt[v], h = c / 11 * BH, xm = B0 + (j + 0.5) * slot, on = v === cur;
+      svg("rect", { x: xm - bw / 2, y: BY - h, width: bw, height: h, fill: on ? hl : cA, "fill-opacity": on ? 1 : 0.55, rx: 3 }, bars);
+      svg("text", { x: xm, y: BY - h - 8, "text-anchor": "middle", "font-size": 20, "font-weight": on ? 700 : 400 }, bars).textContent = c;
+      svg("text", { x: xm, y: BY + 26, "text-anchor": "middle", "font-size": 20, "font-weight": on ? 700 : 400 }, bars).textContent = v;
+    });
+    svg("text", { x: B0, y: BY + 60, "font-size": 20, fill: muted }, bars).textContent = "下：X 的取值　柱上：样本点个数（÷36 = 概率）";
+
+    // 文字
+    var pts = [];
+    for (a = 1; a <= 6; a++) for (b = 1; b <= 6; b++) if (f(a, b) === cur) pts.push("(" + a + "," + b + ")");
+    var total = T.vals.map(function (v) { return T.cnt[v]; });
+    var sum = total.reduce(function (s, t) { return s + t; }, 0);
+    var lines = [];
+    lines.push("\\(" + VARS[vkey].tex + "\\)。样本点 \\((a,b)=(" + ca + "," + cb + ")\\) 对应 \\(X=" + cur + "\\)。");
+    lines.push("\\(X=" + cur + "\\) 的样本点有 \\(" + pts.length + "\\) 个：" + pts.join("、") + "，所以 \\(P(X=" + cur + ")=" + frac(T.cnt[cur]) + "\\)。");
+    lines.push("\\(X\\) 有 <b>" + n + "</b> 个取值，样本点有 <b>36</b> 个。全部概率相加：\\((" + total.join("+") + ")\\div 36=\\dfrac{" + sum + "}{36}" + (sum === 36 ? "=1" : "") + "\\)" +
+      (sum === 36 ? ' <span class="eq">✓ 总和为 1，每项都 \\(\\ge 0\\)</span>' : ' <span class="bad">总和不是 1</span>'));
+    var out = document.getElementById("gridout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  function selectValue(v) { // 选中某个取值：光标跳到第一个取这个值的样本点
+    var f = VARS[vkey].f;
+    for (var a = 1; a <= 6; a++) for (var b = 1; b <= 6; b++) if (f(a, b) === v) { ca = a; cb = b; return; }
+  }
+  onDrag(grid, function (p) {
+    var b = clamp(Math.floor((p.x - GX) / CS) + 1, 1, 6), a = clamp(Math.floor((p.y - GY) / CS) + 1, 1, 6);
+    if (isNaN(a) || isNaN(b)) return;
+    if (a !== ca || b !== cb) { ca = a; cb = b; gridDraw(); }
+  }, function () { Peiyu.log("interact", { id: "dice-cell", v: vkey, a: ca, b: cb }); });
+  grid.addEventListener("keydown", function (ev) {
+    var d = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] }[ev.key];
+    if (!d) return;
+    ev.preventDefault(); ca = clamp(ca + d[0], 1, 6); cb = clamp(cb + d[1], 1, 6); gridDraw();
+  });
+  onDrag(bars, function (p) {
+    var T = table(), j = clamp(Math.floor((p.x - 40) / (500 / T.vals.length)), 0, T.vals.length - 1);
+    if (isNaN(j)) return;
+    var v = T.vals[j];
+    if (v !== VARS[vkey].f(ca, cb)) { selectValue(v); gridDraw(); }
+  }, function () { Peiyu.log("interact", { id: "dice-bar", v: vkey, x: VARS[vkey].f(ca, cb) }); });
+  bars.addEventListener("keydown", function (ev) {
+    var d = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[ev.key];
+    if (!d) return;
+    ev.preventDefault();
+    var T = table(), j = clamp(T.vals.indexOf(VARS[vkey].f(ca, cb)) + d, 0, T.vals.length - 1);
+    selectValue(T.vals[j]); gridDraw();
+  });
+  [].forEach.call(varbox.querySelectorAll("button"), function (btn) {
+    btn.addEventListener("click", function () {
+      vkey = btn.getAttribute("data-v"); if (!VARS[vkey]) vkey = "sum";
+      gridDraw(); Peiyu.log("interact", { id: "dice-var", v: vkey });
+    });
+  });
+  document.getElementById("gridreset").onclick = gridReset;
+
+  /* ================= ② 变换合并 ================= */
+  var TF = {
+    sq: { tex: "Y=(X-7)^2", f: function (x) { return (x - 7) * (x - 7); } },
+    abs: { tex: "Y=|X-7|", f: function (x) { return Math.abs(x - 7); } },
+    lin: { tex: "Y=X-7", f: function (x) { return x - 7; } }
+  };
+  var map = document.getElementById("map"), tfbox = document.getElementById("tfbtns");
+  var XS = [], XC = {}; // 点数和的取值与个数
+  for (var s = 2; s <= 12; s++) { XS.push(s); XC[s] = 6 - Math.abs(s - 7); }
+  var tkey, yi; // 当前变换、选中的 Y 的序号
+  function ylist() {
+    var g = TF[tkey].f, ys = [], yc = {};
+    XS.forEach(function (x) { var y = g(x); if (!(y in yc)) { yc[y] = 0; ys.push(y); } yc[y] += XC[x]; });
+    ys.sort(function (p, q) { return p - q; });
+    return { ys: ys, yc: yc };
+  }
+  var MX0 = 40, MX1 = 520, TY = 80, BYY = 250;
+  function xpos(i) { return MX0 + i * (MX1 - MX0) / 10; }
+  function ypos(j, m) { return MX0 + (j + 0.5) * (MX1 - MX0 + 48) / m - 24; }
+  function mapReset() { tkey = "sq"; yi = ylist().ys.length - 1; mapDraw(); }
+  function mapDraw() {
+    var L = ylist(), m = L.ys.length, g = TF[tkey].f;
+    yi = clamp(yi, 0, m - 1);
+    var ysel = L.ys[yi];
+    var fg = css("--fg"), cA = css("--a"), cB = css("--b"), hl = css("--hl"), muted = css("--muted"), line = css("--line");
+    pressBtns(tfbox, tkey);
+    map.innerHTML = "";
+    svg("text", { x: 4, y: 30, "font-size": 20, fill: muted }, map).textContent = "X";
+    svg("text", { x: 4, y: BYY + 70, "font-size": 20, fill: muted }, map).textContent = "Y";
+    XS.forEach(function (x, i) {
+      var y = g(x), j = L.ys.indexOf(y), on = y === ysel;
+      svg("line", { x1: xpos(i), y1: TY, x2: ypos(j, m), y2: BYY, stroke: on ? hl : line, "stroke-width": on ? 4 : 2 }, map);
+    });
+    XS.forEach(function (x, i) {
+      var on = g(x) === ysel;
+      svg("text", { x: xpos(i), y: 30, "text-anchor": "middle", "font-size": 20, "font-weight": on ? 700 : 400 }, map).textContent = x;
+      svg("circle", { cx: xpos(i), cy: TY, r: 15, fill: on ? hl : cA, "fill-opacity": on ? 1 : 0.35 }, map);
+      svg("text", { x: xpos(i), y: TY + 7, "text-anchor": "middle", "font-size": 20, "font-weight": 700, fill: fg }, map).textContent = XC[x];
+    });
+    L.ys.forEach(function (y, j) {
+      var on = y === ysel, xp = ypos(j, m);
+      svg("circle", { cx: xp, cy: BYY, r: on ? 19 : 16, fill: on ? hl : cB, "fill-opacity": on ? 1 : 0.35 }, map);
+      svg("text", { x: xp, y: BYY + 7, "text-anchor": "middle", "font-size": 20, "font-weight": 700, fill: fg }, map).textContent = L.yc[y];
+      svg("text", { x: xp, y: BYY + 48, "text-anchor": "middle", "font-size": 20, "font-weight": on ? 700 : 400 }, map).textContent = y;
+    });
+
+    var from = XS.filter(function (x) { return g(x) === ysel; });
+    var lines = [];
+    lines.push("\\(" + TF[tkey].tex + "\\)：\\(X\\) 有 \\(11\\) 个取值，\\(Y\\) 有 \\(" + m + "\\) 个。" +
+      (m < 11 ? '<span class="bad">相同取值合并后少了 ' + (11 - m) + " 个</span>" : '<span class="eq">一一对应，不用合并</span>'));
+    if (from.length > 1) {
+      lines.push("\\(Y=" + ysel + "\\) 来自 " + from.map(function (x) { return "\\(X=" + x + "\\)"; }).join(" 和 ") + "，要合并：\\(P(Y=" + ysel + ")=" +
+        from.map(function (x) { return "P(X=" + x + ")"; }).join("+") + "=" + from.map(function (x) { return "\\dfrac{" + XC[x] + "}{36}"; }).join("+") + "=" + frac(L.yc[ysel]) + "\\)。");
+    } else {
+      lines.push("\\(Y=" + ysel + "\\) 只来自 \\(X=" + from[0] + "\\)：\\(P(Y=" + ysel + ")=P(X=" + from[0] + ")=" + frac(L.yc[ysel]) + "\\)。");
+    }
+    var tot = L.ys.reduce(function (t, y) { return t + L.yc[y]; }, 0);
+    lines.push("\\(Y\\) 的分布列（每格是个数，÷36）：" + L.ys.map(function (y) { return "\\(" + y + "\\!:\\," + L.yc[y] + "\\)"; }).join("，") +
+      "；合计 \\(\\dfrac{" + tot + "}{36}" + (tot === 36 ? "=1" : "") + "\\)" + (tot === 36 ? ' <span class="eq">✓</span>' : ""));
+    var out = document.getElementById("mapout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  onDrag(map, function (p) {
+    var L = ylist(), m = L.ys.length, j;
+    if (p.y < (TY + BYY) / 2) { // 点上排：选它对应的 Y
+      var i = clamp(Math.round((p.x - MX0) / ((MX1 - MX0) / 10)), 0, 10);
+      if (isNaN(i)) return;
+      j = L.ys.indexOf(TF[tkey].f(XS[i]));
+    } else {
+      j = clamp(Math.floor((p.x - (MX0 - 24)) / ((MX1 - MX0 + 48) / m)), 0, m - 1);
+    }
+    if (isNaN(j) || j < 0) return;
+    if (j !== yi) { yi = j; mapDraw(); }
+  }, function () { Peiyu.log("interact", { id: "map-y", t: tkey, y: ylist().ys[yi] }); });
+  map.addEventListener("keydown", function (ev) {
+    var d = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[ev.key];
+    if (!d) return;
+    ev.preventDefault(); yi = clamp(yi + d, 0, ylist().ys.length - 1); mapDraw();
+  });
+  [].forEach.call(tfbox.querySelectorAll("button"), function (btn) {
+    btn.addEventListener("click", function () {
+      tkey = btn.getAttribute("data-v"); if (!TF[tkey]) tkey = "sq";
+      yi = ylist().ys.length - 1; mapDraw(); Peiyu.log("interact", { id: "map-t", t: tkey });
+    });
+  });
+  document.getElementById("mapreset").onclick = mapReset;
+
+  document.addEventListener("DOMContentLoaded", function () { gridReset(); mapReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { gridDraw(); mapDraw(); });
+})();
+</script>
+</body></html>

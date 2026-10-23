@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.1 条件概率与全概率公式 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  .ctrl input[type=range] { flex: 1 1 140px; min-width: 120px; }
+  .ctrl label { min-width: 5.2em; }
+  .seg .btn[aria-pressed="true"] { background: var(--a); color: #fff; border-color: var(--a); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 14px; color: var(--muted); }
+  .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+  table.tw { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+  table.tw td, table.tw th { border: 1px solid var(--line); padding: 4px 10px; text-align: center; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e3-7-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 7 章 随机变量及其分布</p>
+<h1>7.1 条件概率与全概率公式</h1>
+<p class="lead">知道了一点消息，概率就要重新算：只在「已经发生的那部分」里看。再把几种情况的概率按比重加起来，就能算出一件事的总概率。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一个兴趣小组有 \(50\) 人：男生 \(20\) 人，女生 \(30\) 人。会游泳的男生 \(15\) 人，会游泳的女生 \(18\) 人。</p>
+  <table class="tw">
+    <tr><th></th><th>会游泳</th><th>不会游泳</th><th>合计</th></tr>
+    <tr><th>男生</th><td>15</td><td>5</td><td>20</td></tr>
+    <tr><th>女生</th><td>18</td><td>12</td><td>30</td></tr>
+  </table>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>从小组里随机叫一个人，<b>已知叫到的是男生</b>，他会游泳的概率是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{15}{50}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{15}{20}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{15}{33}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{33}{50}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。已经知道是男生，那就只在 \(20\) 个男生里看，其中 \(15\) 个会游泳，概率 \(\dfrac{15}{20}=\dfrac34\)。</p>
+      <p>另外几个数也有意思：\(\dfrac{15}{50}\) 是「是男生<b>并且</b>会游泳」的概率；\(\dfrac{15}{33}\) 是反过来「已知会游泳，是男生」的概率；\(\dfrac{33}{50}\) 是不管男女、会游泳的概率。四个数四个意思。</p>
+      <p>「已知……」让我们只看样本空间的一部分，这就是这一节的<b>条件概率</b>。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：样本空间、古典概型、事件的交与对立（<a href="b2-10-1.html">回看 10.1</a>）；事件的相互独立（<a href="b2-10-2.html">回看 10.2</a>）。</p>
+
+  <div class="card">
+    <p><b>事件的交 \(A\cap B\)</b>：\(A\) 和 \(B\) <b>同时</b>发生，也写成 \(AB\)。</p>
+    <p>例：掷一颗骰子，\(A=\)「点数是偶数」\(=\{2,4,6\}\)，\(B=\)「点数大于 \(3\)」\(=\{4,5,6\}\)。\(A\cap B=\{4,6\}\)，\(P(A\cap B)=\dfrac26=\dfrac13\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>对立事件 \(\overline A\)</b>：\(A\) 不发生。\(P(\overline A)=1-P(A)\)。</p>
+    <p>例：上面的 \(A\) 是偶数，\(\overline A=\{1,3,5\}\)，\(P(\overline A)=1-\dfrac12=\dfrac12\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>缩小样本空间</b>：「已知 \(A\) 发生了」，不在 \(A\) 里的结果就不可能了，只剩 \(A\) 里的结果。</p>
+    <p>例：掷骰子，已知点数是偶数，剩下 \(\{2,4,6\}\) 三个结果，还是等可能的。其中大于 \(3\) 的是 \(4,6\)，所以这时「大于 \(3\)」的概率变成 \(\dfrac23\)，不再是原来的 \(\dfrac36=\dfrac12\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>划分</b>：几个事件 \(A_1,A_2,\dots,A_n\) <b>两两互斥</b>（没有公共结果），<b>合起来是整个样本空间</b> \(\Omega\)。一次试验，正好有其中一个发生。</p>
+    <p>例：掷骰子，\(\{1,2\}\)、\(\{3,4\}\)、\(\{5,6\}\) 是一个划分。\(\{1,2,3\}\)、\(\{3,4,5,6\}\) 不是（\(3\) 重复了）；\(\{1,2\}\)、\(\{3,4\}\) 也不是（漏了 \(5,6\)）。最常用的划分是 \(A\) 和 \(\overline A\) 两块。</p>
+  </div>
+
+  <h3>2. 条件概率</h3>
+  <p>「已知 \(A\) 发生」时 \(B\) 发生的概率，记作 \(P(B\mid A)\)，读作「\(A\) 发生的条件下 \(B\) 发生的概率」。只看 \(A\) 这一块，问 \(B\) 占了其中多少，占的部分正是 \(A\cap B\)：</p>
+  <div class="key" style="text-align:center">\(P(B\mid A)=\dfrac{P(A\cap B)}{P(A)}\)，要求 \(P(A)>0\)。</div>
+  <p>在古典概型（每个结果等可能）里，分子分母同乘样本点总数，就是数个数：\(P(B\mid A)=\dfrac{n(A\cap B)}{n(A)}\)。开头那题：\(\dfrac{15}{20}\)，和 \(\dfrac{15/50}{20/50}\) 一样。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>从写着 \(1\sim20\) 的 \(20\) 张卡片中随机抽一张。已知抽到偶数，求它是 \(3\) 的倍数的概率。</p>
+    <p>设 \(A=\)「抽到偶数」，\(B=\)「抽到 \(3\) 的倍数」。\(A\) 有 \(10\) 个数；\(A\cap B=\{6,12,18\}\)，有 \(3\) 个。</p>
+    <p>用定义：\(P(A)=\dfrac{10}{20}\)，\(P(A\cap B)=\dfrac3{20}\)，\(P(B\mid A)=\dfrac{3/20}{10/20}=\dfrac3{10}\)。</p>
+    <p>用计数（抽卡等可能，可以这样做）：\(P(B\mid A)=\dfrac{n(A\cap B)}{n(A)}=\dfrac3{10}\)。两种方法一样。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：掷一颗均匀的骰子，已知点数大于 \(2\)，点数是偶数的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac14\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。已知大于 \(2\)，只剩 \(\{3,4,5,6\}\)，其中偶数 \(4,6\)，概率 \(\dfrac24=\dfrac12\)。选 B 的同学用了 \(\dfrac26\)，那是「大于 \(2\) 并且是偶数」的概率，分母没换成 \(4\)。</p></div>
+  </div>
+
+  <h3>3. 乘法公式</h3>
+  <p>把定义两边乘 \(P(A)\)，就得到「两件事同时发生」的算法：先发生 \(A\)，再在 \(A\) 发生的条件下发生 \(B\)。</p>
+  <div class="key" style="text-align:center">\(P(A\cap B)=P(A)\,P(B\mid A)\)（\(P(A)>0\)）</div>
+  <p>分步做、后一步受前一步影响的事（比如不放回地摸球），用它最顺。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>盒子里 \(3\) 个红球、\(2\) 个白球，不放回地连摸两次，每次摸一个。两次都是红球的概率？</p>
+    <p>设 \(A_1=\)「第一次红」，\(A_2=\)「第二次红」。\(P(A_1)=\dfrac35\)；第一次摸走一个红球后，盒里剩 \(2\) 红 \(2\) 白，所以 \(P(A_2\mid A_1)=\dfrac24\)。</p>
+    <p>\(P(A_1\cap A_2)=\dfrac35\times\dfrac24=\dfrac3{10}\)。</p>
+    <p class="small">核对：从 \(5\) 个球里取 \(2\) 个有 \(10\) 种取法，两个都红有 \(3\) 种，也是 \(\dfrac3{10}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(10\) 张奖券里有 \(2\) 张中奖。甲先抽一张，乙再抽一张（不放回）。两人都中奖的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{45}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac1{25}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac2{45}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac15\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac2{10}\times\dfrac19=\dfrac1{45}\)：甲中奖后只剩 \(9\) 张、其中 \(1\) 张中奖。选 B 的同学算成 \(\dfrac2{10}\times\dfrac2{10}\)，那是抽完放回去的情形。</p></div>
+  </div>
+
+  <h3>4. 全概率公式</h3>
+  <p>有时 \(B\) 的概率不好直接算，但「分几种情况」后每种情况都好算。用一个划分 \(A_1,\dots,A_n\) 把 \(B\) 切成互不重叠的几块 \(A_i\cap B\)，每块用乘法公式，再加起来：</p>
+  <div class="key" style="text-align:center">\(P(B)=\displaystyle\sum_{i=1}^{n}P(A_i)\,P(B\mid A_i)\)<br><span class="small">要求：\(A_1,\dots,A_n\) 两两互斥，并起来是 \(\Omega\)，每个 \(P(A_i)>0\)。</span></div>
+  <p>最常用的是两块：\(P(B)=P(A)P(B\mid A)+P(\overline A)P(B\mid\overline A)\)。可以把它看成<b>按比重的平均</b>：各种情况下的 \(B\) 的概率，以每种情况的概率为权重加起来。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>一种零件由甲、乙两个车间生产，甲占 \(60\%\)，次品率 \(2\%\)；乙占 \(40\%\)，次品率 \(5\%\)。随机拿一个零件，是次品的概率？</p>
+    <p>设 \(A=\)「来自甲」，\(\overline A=\)「来自乙」，两块是划分；\(B=\)「是次品」。</p>
+    <p>\(P(B)=0.6\times0.02+0.4\times0.05=0.012+0.02=0.032\)。</p>
+    <p class="small">答案 \(3.2\%\) 夹在 \(2\%\) 和 \(5\%\) 之间，又因为甲的比重大，更靠近 \(2\%\)。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：回到例 2 的盒子（\(3\) 红 \(2\) 白，不放回摸两次）。<b>第二次</b>摸到红球的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac3{10}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac35\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac34\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。按第一次的颜色分两种情况：\(\dfrac35\times\dfrac24+\dfrac25\times\dfrac34=\dfrac6{20}+\dfrac6{20}=\dfrac35\)，和第一次一样。选 A 的同学只算了「第一次红」那一块，漏了「第一次白、第二次红」。</p></div>
+  </div>
+
+  <h3>5. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>条件的概率不能是 \(0\)</b>：\(P(B\mid A)\) 要 \(P(A)>0\)。<br><span class="small">反例：掷骰子，\(A=\)「点数是 \(7\)」，\(P(A)=0\)，\(\dfrac{P(A\cap B)}{P(A)}=\dfrac00\)，没有意义。</span></li>
+    <li><b>「且」不是「在……条件下」</b>：\(P(A\cap B)\) 在整个 \(\Omega\) 里看，\(P(B\mid A)\) 只在 \(A\) 里看。<br><span class="small">反例：掷骰子，\(A=\)偶数，\(B=\)大于 \(3\)。\(P(A\cap B)=\dfrac13\)，\(P(B\mid A)=\dfrac23\)。</span></li>
+    <li><b>\(P(B\mid A)\) 一般不等于 \(P(A\mid B)\)</b>：分母不一样。<br><span class="small">反例：\(A=\)「掷出 \(6\)」，\(B=\)「掷出偶数」。\(P(B\mid A)=1\)（\(6\) 一定是偶数），\(P(A\mid B)=\dfrac13\)。</span></li>
+    <li><b>全概率公式要一个真正的划分</b>：两两互斥、并起来是 \(\Omega\)、每块概率大于 \(0\)。<br><span class="small">反例：\(A_1=\{1,2,3\}\)，\(A_2=\{3,4,5,6\}\)（\(3\) 重复），\(B=\{3\}\)。硬套：\(\dfrac12\times\dfrac13+\dfrac23\times\dfrac14=\dfrac13\)，可真实的 \(P(B)=\dfrac16\)，重叠的部分算了两次。</span></li>
+    <li><b>数个数只在等可能时能用</b>：\(\dfrac{n(A\cap B)}{n(A)}\) 要求 \(A\) 里的结果等可能；定义 \(\dfrac{P(A\cap B)}{P(A)}\) 总能用。<br><span class="small">反例：掷两枚均匀硬币，已知至少一枚正面，两枚都正面的概率。按「正面数是 \(1\) 或 \(2\)」数，得 \(\dfrac12\)，错：正面数是 \(1\) 的可能性比 \(2\) 大。按等可能的「正正、正反、反正」数，是 \(\dfrac13\)。</span></li>
+  </ol>
+  <div class="key">先说清「已知的是哪件事」，它就是分母；再问要求的事在其中占多少。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>和独立的关系</b>：\(P(A)>0\) 时，「\(A\)、\(B\) 相互独立」等价于 \(P(B\mid A)=P(B)\)：知道 \(A\) 发生，对 \(B\) 的概率没有影响。由 \(P(A\cap B)=P(A)P(B\mid A)\) 一换就得到 \(P(A\cap B)=P(A)P(B)\)。用这个式子判断独立时，也要先确认 \(P(A)>0\)。</p>
+    <p><b>条件概率也是概率</b>：固定 \(A\)，\(P(\,\cdot\mid A)\) 满足概率的性质，比如 \(P(\overline B\mid A)=1-P(B\mid A)\)；\(B\)、\(C\) 互斥时 \(P(B\cup C\mid A)=P(B\mid A)+P(C\mid A)\)。</p>
+    <p><b>反过来求：已知结果，问原因</b>。例 3 里，已知拿到的是次品，它来自甲车间的概率？还是用定义：\(P(A\mid B)=\dfrac{P(A\cap B)}{P(B)}=\dfrac{0.6\times0.02}{0.032}=\dfrac{0.012}{0.032}=0.375\)。分子用乘法公式，分母用全概率公式，没有新东西。这类算法叫<b>贝叶斯公式</b>，课本标为选学，会用定义推出来就够了。「动手」② 的检测阳性就是这种题。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 面积图：整块面积是 \(1\)</h3>
+  <p class="small">左列是 \(A\)，宽 \(=P(A)\)；右列是 \(\overline A\)。每列里涂色的高度是这一列里 \(B\) 的比例：左列 \(P(B\mid A)\)，右列 \(P(B\mid\overline A)\)。涂色的面积就是 \(P(A\cap B)\)、\(P(\overline A\cap B)\)。拖三个圆点（或选中后按方向键），也可以用下面的滑块。点「已知 A」「已知 B」看样本空间怎么缩小。</p>
+  <div class="card">
+    <svg class="fig" id="area" viewBox="0 0 560 390" role="img" aria-label="单位正方形面积图：宽表示 P(A)，两列中的高度表示 P(B|A) 和 P(B|非A)"></svg>
+    <div class="ctrl"><label for="sa">\(P(A)\)</label><input type="range" id="sa" min="0" max="100" step="1"><output id="oa"></output></div>
+    <div class="ctrl"><label for="sb1">\(P(B\mid A)\)</label><input type="range" id="sb1" min="0" max="100" step="1"><output id="ob1"></output></div>
+    <div class="ctrl"><label for="sb2">\(P(B\mid\overline A)\)</label><input type="range" id="sb2" min="0" max="100" step="1"><output id="ob2"></output></div>
+    <div class="ctrl seg" id="given">
+      <span class="small">已知：</span>
+      <button class="btn ghost" type="button" data-g="none">不限</button>
+      <button class="btn ghost" type="button" data-g="A">已知 A</button>
+      <button class="btn ghost" type="button" data-g="B">已知 B</button>
+    </div>
+    <div class="result" id="areaout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="areareset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：检测结果是阳性，真得病的可能有多大</h3>
+  <p class="small">\(1000\) 个人，每个点是一个人。设 \(D=\)「得病」，\(T=\)「检测阳性」。调三个数：得病的比例 \(P(D)\)、病人测出阳性的比例 \(P(T\mid D)\)、没病的人误报阳性的比例 \(P(T\mid\overline D)\)。看阳性的人里，真得病的占多少，也就是 \(P(D\mid T)\)。</p>
+  <div class="card">
+    <svg class="fig" id="dots" viewBox="0 0 560 350" role="img" aria-label="1000 个点，按是否得病、是否阳性着色"></svg>
+    <p class="legend"><span><i style="background:var(--no)"></i>得病、阳性</span><span><i style="background:var(--no);opacity:.3"></i>得病、阴性</span><span><i style="background:var(--hl)"></i>没病、阳性（误报）</span><span><i style="background:var(--line)"></i>没病、阴性</span></p>
+    <div class="ctrl"><label for="sd">\(P(D)\)</label><input type="range" id="sd" min="1" max="200" step="1"><output id="od"></output></div>
+    <div class="ctrl"><label for="ss">\(P(T\mid D)\)</label><input type="range" id="ss" min="50" max="100" step="1"><output id="os"></output></div>
+    <div class="ctrl"><label for="sf">\(P(T\mid\overline D)\)</label><input type="range" id="sf" min="0" max="30" step="1"><output id="of"></output></div>
+    <div class="result" id="dotsout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="dotsreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 已知 \(P(A)=0.6\)，\(P(A\cap B)=0.15\)，那么 \(P(B\mid A)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.25\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.09\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.4\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(P(B\mid A)=\dfrac{0.15}{0.6}=0.25\)。选 B 的同学把两数乘起来了；条件概率是「除以条件的概率」。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 小明早上遇到下雨的概率是 \(0.3\)。下雨时他迟到的概率是 \(0.2\)，不下雨时是 \(0.05\)。某天他迟到的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.095\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.25\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.125\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.06\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。「下雨」「不下雨」是划分：\(0.3\times0.2+0.7\times0.05=0.06+0.035=0.095\)。选 C 是把 \(0.2\) 和 \(0.05\) 直接平均，没按 \(0.3\)、\(0.7\) 的比重；选 D 漏了不下雨那一块。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-and" data-answer="B">
+    <p>3. 一批产品的合格率是 \(90\%\)，合格品中一等品占 \(60\%\)（一等品都是合格品）。随机抽一件，是一等品的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.54\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.9\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac23\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(60\%\) 是「<b>在合格的条件下</b>是一等品」，即 \(P(B\mid A)=0.6\)；题目问的是在全部产品里看，一等品就是「合格<b>且</b>一等」：\(P(A\cap B)=0.9\times0.6=0.54\)。选 A 把「在……条件下」当成了「且」。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-reverse" data-answer="B">
+    <p>4. 一个班 \(50\) 人，身高超过 \(175\) 厘米的有 \(20\) 人；校篮球队的 \(10\) 名本班队员个个都超过 \(175\) 厘米。从班里随机选一人，已知他身高超过 \(175\) 厘米，他是篮球队员的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac25\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。已知「高」，分母是 \(20\) 个高个子，其中篮球队员 \(10\) 人：\(\dfrac{10}{20}=\dfrac12\)。\(1\) 是反过来的 \(P(\text{高}\mid\text{篮球队员})\)：队员一定高，高的不一定是队员。\(P(B\mid A)\) 和 \(P(A\mid B)\) 分母不同，不能互换。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-equal" data-answer="C">
+    <p>5. 同时掷两枚均匀硬币，已知<b>至少有一枚</b>正面朝上，两枚都正面朝上的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac14\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac34\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。等可能的结果是「正正、正反、反正、反反」。已知至少一枚正面，剩「正正、正反、反正」三个，等可能，其中两枚都正面的 \(1\) 个：\(\dfrac13\)。选 A 的同学数的是「一枚正面」「两枚正面」两种情况，可这两种不是等可能的（前者 \(\dfrac12\)，后者 \(\dfrac14\)），不能直接数个数。用定义核对：\(\dfrac{1/4}{3/4}=\dfrac13\)。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 甲袋有 \(2\) 红 \(2\) 白，乙袋有 \(1\) 红 \(3\) 白。先从甲袋随机取一个球放进乙袋，再从乙袋随机取一个球。这个球是红球的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac14\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac3{10}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac35\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac15\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。按「从甲袋取出的颜色」划分，两块各占 \(\dfrac12\)：</p>
+      <p>取出红：乙袋变成 \(2\) 红 \(3\) 白，再取红的概率 \(\dfrac25\)；取出白：乙袋变成 \(1\) 红 \(4\) 白，概率 \(\dfrac15\)。</p>
+      <p>\(P=\dfrac12\times\dfrac25+\dfrac12\times\dfrac15=\dfrac15+\dfrac1{10}=\dfrac3{10}\)。选 A 是忘了乙袋多了一个球；选 C 是把两种情况的概率直接相加，没乘各自的权重 \(\dfrac12\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function set(e, attrs) { for (var k in attrs) e.setAttribute(k, attrs[k]); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  // 最多 4 位小数，去掉末尾 0
+  function f4(x) { var s = (Math.round(x * 10000) / 10000).toFixed(4).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function eq4(x) { return Math.abs(x * 10000 - Math.round(x * 10000)) < 1e-6 ? "=" : "\\approx"; }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      if (handle.focus) handle.focus();
+      function mv(e) { onMove(toSvg(fig, e)); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  var KEYS = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 };
+
+  /* ================= ① 面积图 ================= */
+  var area = document.getElementById("area");
+  var X0 = 40, X1 = 520, Y0 = 50, Y1 = 330, W = X1 - X0, H = Y1 - Y0;
+  var sa = document.getElementById("sa"), sb1 = document.getElementById("sb1"), sb2 = document.getElementById("sb2");
+  var st = { a: 40, b1: 75, b2: 60, g: "none" }; // 百分数，整数
+  var el = {};
+  function buildArea() {
+    el.colA = svg("rect", { y: Y0, height: H, style: "fill:var(--a);opacity:.14" }, area);
+    el.colN = svg("rect", { y: Y0, height: H, style: "fill:var(--line);opacity:.6" }, area);
+    el.ab = svg("rect", { style: "fill:var(--b);opacity:.75" }, area);
+    el.nab = svg("rect", { style: "fill:var(--b);opacity:.45" }, area);
+    svg("rect", { x: X0, y: Y0, width: W, height: H, style: "fill:none;stroke:var(--fg);stroke-width:2" }, area);
+    el.cut = svg("line", { y1: Y0, y2: Y1 + 18, style: "stroke:var(--fg);stroke-width:2.5" }, area);
+    el.l1 = svg("line", { style: "stroke:var(--b);stroke-width:3" }, area);
+    el.l2 = svg("line", { style: "stroke:var(--b);stroke-width:3" }, area);
+    el.tA = svg("text", { y: Y0 - 14, "text-anchor": "middle", style: "font-size:20px;font-weight:700;fill:var(--a)" }, area);
+    el.tN = svg("text", { y: Y0 - 14, "text-anchor": "middle", style: "font-size:20px;font-weight:700" }, area);
+    el.tAB = svg("text", { "text-anchor": "middle", style: "font-size:20px;font-weight:700" }, area);
+    el.tNAB = svg("text", { "text-anchor": "middle", style: "font-size:20px;font-weight:700" }, area);
+    el.hA = svg("circle", { cy: Y1 + 22, r: 12, tabindex: 0, role: "slider", "aria-label": "P(A)，左右拖", style: "fill:var(--card);stroke:var(--fg);stroke-width:3;cursor:ew-resize" }, area);
+    el.h1 = svg("circle", { r: 11, tabindex: 0, role: "slider", "aria-label": "P(B|A)，上下拖", style: "fill:var(--card);stroke:var(--b);stroke-width:3.5;cursor:ns-resize" }, area);
+    el.h2 = svg("circle", { r: 11, tabindex: 0, role: "slider", "aria-label": "P(B|非A)，上下拖", style: "fill:var(--card);stroke:var(--b);stroke-width:3.5;cursor:ns-resize" }, area);
+    function keyer(name, sign) {
+      return function (ev) {
+        var d = KEYS[ev.key];
+        if (ev.key === "Home") d = -100; else if (ev.key === "End") d = 100;
+        if (!d) return;
+        ev.preventDefault(); st[name] = clamp(st[name] + d * sign, 0, 100); drawArea(); logArea();
+      };
+    }
+    el.hA.addEventListener("keydown", keyer("a", 1));
+    el.h1.addEventListener("keydown", keyer("b1", 1));
+    el.h2.addEventListener("keydown", keyer("b2", 1));
+    draggable(area, el.hA, function (p) {
+      var v = clamp(Math.round((p.x - X0) / W * 100), 0, 100);
+      if (v !== st.a) { st.a = v; drawArea(); }
+    }, logArea);
+    draggable(area, el.h1, function (p) {
+      var v = clamp(Math.round((Y1 - p.y) / H * 100), 0, 100);
+      if (v !== st.b1) { st.b1 = v; drawArea(); }
+    }, logArea);
+    draggable(area, el.h2, function (p) {
+      var v = clamp(Math.round((Y1 - p.y) / H * 100), 0, 100);
+      if (v !== st.b2) { st.b2 = v; drawArea(); }
+    }, logArea);
+    sa.addEventListener("input", function () { st.a = clamp(parseInt(sa.value, 10) || 0, 0, 100); drawArea(); });
+    sb1.addEventListener("input", function () { st.b1 = clamp(parseInt(sb1.value, 10) || 0, 0, 100); drawArea(); });
+    sb2.addEventListener("input", function () { st.b2 = clamp(parseInt(sb2.value, 10) || 0, 0, 100); drawArea(); });
+    [sa, sb1, sb2].forEach(function (s) { s.addEventListener("change", logArea); });
+    [].forEach.call(document.getElementById("given").querySelectorAll("button"), function (b) {
+      b.addEventListener("click", function () {
+        st.g = b.getAttribute("data-g") || "none"; drawArea();
+        Peiyu.log("interact", { id: "area-given", g: st.g });
+      });
+    });
+  }
+  function logArea() { Peiyu.log("interact", { id: "area", a: st.a, b1: st.b1, b2: st.b2 }); }
+  function drawArea() {
+    var a = st.a, b1 = st.b1, b2 = st.b2, g = st.g;
+    var xa = X0 + a / 100 * W, h1 = b1 / 100 * H, h2 = b2 / 100 * H;
+    set(el.colA, { x: X0, width: xa - X0 });
+    set(el.colN, { x: xa, width: X1 - xa });
+    set(el.ab, { x: X0, y: Y1 - h1, width: xa - X0, height: h1 });
+    set(el.nab, { x: xa, y: Y1 - h2, width: X1 - xa, height: h2 });
+    set(el.cut, { x1: xa, x2: xa });
+    set(el.l1, { x1: X0, x2: xa, y1: Y1 - h1, y2: Y1 - h1 });
+    set(el.l2, { x1: xa, x2: X1, y1: Y1 - h2, y2: Y1 - h2 });
+    // 「已知」：不在已知事件里的部分变淡
+    el.colA.setAttribute("style", "fill:var(--a);opacity:" + (g === "B" ? ".05" : ".14"));
+    el.colN.setAttribute("style", "fill:var(--line);opacity:" + (g === "none" ? ".6" : ".2"));
+    el.nab.setAttribute("style", "fill:var(--b);opacity:" + (g === "A" ? ".12" : ".45"));
+    var cx1 = clamp((X0 + xa) / 2, X0 + 13, X1 - 13), cx2 = clamp((xa + X1) / 2, X0 + 13, X1 - 13);
+    set(el.hA, { cx: xa, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": a });
+    set(el.h1, { cx: cx1, cy: Y1 - h1, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": b1 });
+    set(el.h2, { cx: cx2, cy: Y1 - h2, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": b2 });
+    // 列标题：太窄就不写
+    el.tA.textContent = xa - X0 >= 70 ? "A" : "";
+    set(el.tA, { x: (X0 + xa) / 2 });
+    el.tN.textContent = X1 - xa >= 70 ? "Ā" : "";
+    set(el.tN, { x: (xa + X1) / 2 });
+    // 块内标签：放在涂色块里、圆点左边一点的位置；放不下就不写
+    var ok1 = xa - X0 >= 100 && h1 >= 60, ok2 = X1 - xa >= 100 && h2 >= 60;
+    el.tAB.textContent = ok1 ? "A∩B" : "";
+    set(el.tAB, { x: (X0 + xa) / 2, y: Y1 - h1 / 2 + 7 });
+    el.tNAB.textContent = ok2 ? "Ā∩B" : "";
+    set(el.tNAB, { x: (xa + X1) / 2, y: Y1 - h2 / 2 + 7 });
+    sa.value = a; sb1.value = b1; sb2.value = b2;
+    document.getElementById("oa").textContent = f4(a / 100);
+    document.getElementById("ob1").textContent = f4(b1 / 100);
+    document.getElementById("ob2").textContent = f4(b2 / 100);
+    [].forEach.call(document.getElementById("given").querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-g") === g ? "true" : "false");
+    });
+
+    // 数：都用整数百分数算，最后再除
+    var pA = a / 100, pN = 1 - pA, q1 = b1 / 100, q2 = b2 / 100;
+    var AB = a * b1, NAB = (100 - a) * b2, B = AB + NAB; // 以 1/10000 为单位
+    var pAB = AB / 10000, pNAB = NAB / 10000, pB = B / 10000;
+    var L = [];
+    L.push("\\(P(A)=" + f4(pA) + "\\)，\\(P(\\overline A)=" + f4(pN) + "\\)，\\(P(B\\mid A)=" + f4(q1) + "\\)，\\(P(B\\mid\\overline A)=" + f4(q2) + "\\)");
+    if (a === 0) {
+      L.push('<span class="bad">\\(P(A)=0\\)：\\(P(B\\mid A)\\) 没有定义</span>（不能除以 \\(0\\)），左列宽度是 \\(0\\)，\\(P(A\\cap B)=0\\)。');
+    } else {
+      L.push("乘法公式：\\(P(A\\cap B)=P(A)P(B\\mid A)=" + f4(pA) + "\\times" + f4(q1) + "=" + f4(pAB) + "\\)");
+    }
+    if (a === 0 || a === 100) {
+      L.push("这时划分里有一块概率是 \\(0\\)，只剩一列：\\(P(B)=" + f4(pB) + "\\)。");
+    } else {
+      L.push("全概率：\\(P(B)=P(A)P(B\\mid A)+P(\\overline A)P(B\\mid\\overline A)=" + f4(pAB) + "+" + f4(pNAB) + "=" + f4(pB) + "\\)");
+    }
+    if (B === 0) {
+      L.push('<span class="bad">\\(P(B)=0\\)：\\(P(A\\mid B)\\) 没有定义</span>。');
+    } else {
+      var pAgB = AB / B;
+      var line = "反过来：\\(P(A\\mid B)=\\dfrac{P(A\\cap B)}{P(B)}=\\dfrac{" + f4(pAB) + "}{" + f4(pB) + "}" + ((AB * 10000) % B === 0 ? "=" : "\\approx") + f4(pAgB) + "\\)";
+      if (a > 0 && AB === 0) line += "，和 \\(P(B\\mid A)\\) 一样是 \\(0\\)：\\(A\\)、\\(B\\) 不会同时发生。";
+      else if (a > 0) line += AB * 100 === b1 * B ? '，<span class="eq">正好等于 \\(P(B\\mid A)\\)</span>（这时 \\(P(A)=P(B)\\)）。' : "，和 \\(P(B\\mid A)=" + f4(q1) + "\\) 不一样。";
+      L.push(line);
+    }
+    if (a > 0 && a < 100 && b1 === b2) L.push('<span class="eq">\\(P(B\\mid A)=P(B\\mid\\overline A)\\)</span>：这时 \\(P(B)=P(B\\mid A)\\)，知道 \\(A\\) 对 \\(B\\) 没影响，\\(A\\)、\\(B\\) 相互独立。');
+    if (g === "A") L.push(a === 0 ? "已知 \\(A\\)：可 \\(P(A)=0\\)，没法以它为条件。" : "已知 \\(A\\)：只看左列。\\(B\\) 占左列的 \\(" + f4(q1) + "\\)，这就是 \\(P(B\\mid A)\\)。");
+    if (g === "B") L.push(B === 0 ? "已知 \\(B\\)：可 \\(P(B)=0\\)，没法以它为条件。" : "已知 \\(B\\)：只看两块涂色。左边那块占涂色总面积的 \\(" + f4(AB / B) + "\\)，这就是 \\(P(A\\mid B)\\)。");
+    var out = document.getElementById("areaout");
+    out.innerHTML = L.join("<br>");
+    Peiyu.math(out);
+  }
+  function areaReset() { st.a = 40; st.b1 = 75; st.b2 = 60; st.g = "none"; drawArea(); }
+  document.getElementById("areareset").onclick = function () { areaReset(); logArea(); };
+
+  /* ================= ② 检测阳性 ================= */
+  var dots = document.getElementById("dots");
+  var sd = document.getElementById("sd"), ss = document.getElementById("ss"), sf = document.getElementById("sf");
+  var COLS = 40, ROWS = 25, CELL = 13, DX = 20, DY = 12;
+  var ds = { d: 10, s: 90, f: 5 }; // d 是千分数，s、f 是百分数
+  var cells = [];
+  function buildDots() {
+    for (var i = 0; i < COLS * ROWS; i++) {
+      var r = Math.floor(i / COLS), c = i % COLS;
+      cells.push(svg("circle", { cx: DX + c * CELL + CELL / 2, cy: DY + r * CELL + CELL / 2, r: 5 }, dots));
+    }
+    sd.addEventListener("input", function () { ds.d = clamp(parseInt(sd.value, 10) || 1, 1, 200); drawDots(); });
+    ss.addEventListener("input", function () { ds.s = clamp(parseInt(ss.value, 10) || 50, 50, 100); drawDots(); });
+    sf.addEventListener("input", function () { ds.f = clamp(parseInt(sf.value, 10) || 0, 0, 30); drawDots(); });
+    [sd, ss, sf].forEach(function (s) { s.addEventListener("change", function () { Peiyu.log("interact", { id: "test", d: ds.d, s: ds.s, f: ds.f }); }); });
+  }
+  function drawDots() {
+    var sick = ds.d, healthy = 1000 - sick;
+    var tp = Math.round(sick * ds.s / 100), fp = Math.round(healthy * ds.f / 100);
+    var n = cells.length;
+    for (var i = 0; i < n; i++) {
+      var st2;
+      if (i < tp) st2 = "fill:var(--no)";
+      else if (i < sick) st2 = "fill:var(--no);opacity:.3";
+      else if (i < sick + fp) st2 = "fill:var(--hl)";
+      else st2 = "fill:var(--line)";
+      cells[i].setAttribute("style", st2);
+    }
+    sd.value = ds.d; ss.value = ds.s; sf.value = ds.f;
+    var pD = ds.d / 1000, pS = ds.s / 100, pF = ds.f / 100;
+    document.getElementById("od").textContent = f4(pD * 100) + "%";
+    document.getElementById("os").textContent = ds.s + "%";
+    document.getElementById("of").textContent = ds.f + "%";
+    var num = pD * pS, den = num + (1 - pD) * pF; // num > 0，因为 pD ≥ 0.001、pS ≥ 0.5
+    var post = den > 0 ? num / den : 0;
+    var L = [];
+    L.push("全概率：\\(P(T)=" + f4(pD) + "\\times" + f4(pS) + "+" + f4(1 - pD) + "\\times" + f4(pF) + eq4(den) + f4(den) + "\\)");
+    L.push("定义：\\(P(D\\mid T)=\\dfrac{P(D)P(T\\mid D)}{P(T)}=\\dfrac{" + f4(num) + "}{" + f4(den) + "}" + eq4(post) + f4(post) + "\\)，约 <b>" + (Math.round(post * 1000) / 10) + "%</b>");
+    L.push("图上 \\(1000\\) 人（取整）：阳性 \\(" + (tp + fp) + "\\) 人，其中真得病 \\(" + tp + "\\) 人" + (tp + fp > 0 ? "，占 \\(" + f4(tp / (tp + fp)) + "\\)" : "") + "。");
+    if (post < 0.5) L.push('<span class="bad">阳性的人里，没病的反而更多</span>：病人太少，没病的人哪怕只有一小部分误报，人数也比病人多。');
+    else L.push('<span class="eq">阳性的人里，得病的占多数</span>。试试把 \\(P(D)\\) 调小，看会怎样。');
+    var out = document.getElementById("dotsout");
+    out.innerHTML = L.join("<br>");
+    Peiyu.math(out);
+  }
+  function dotsReset() { ds.d = 10; ds.s = 90; ds.f = 5; drawDots(); }
+  document.getElementById("dotsreset").onclick = function () { dotsReset(); Peiyu.log("interact", { id: "test-reset" }); };
+
+  document.addEventListener("DOMContentLoaded", function () { buildArea(); areaReset(); buildDots(); dotsReset(); });
+})();
+</script>
+</body></html>

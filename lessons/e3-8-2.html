@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8.2 一元线性回归模型及其应用 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig text { font-size: 20px; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  .seg .btn[aria-pressed="true"] { background: var(--a); color: var(--card); border-color: var(--a); }
+  .tbl { overflow-x: auto; }
+  .tbl td, .tbl th { white-space: nowrap; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e3-8-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 8 章 成对数据的统计分析</p>
+<h1>8.2 一元线性回归模型及其应用</h1>
+<p class="lead">散点大致排成一条斜线时，画一条「最贴近」它们的直线，就能用 \(x\) 估计 \(y\)。这一节讲：哪条线算最贴近、怎么算出来、用它预测时要小心什么。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>小卖部记下了 \(5\) 天的最高气温和卖出的冰棍数：</p>
+  <div class="tbl"><table class="rec">
+    <tr><th>气温 / ℃</th><td>\(20\)</td><td>\(22\)</td><td>\(24\)</td><td>\(26\)</td><td>\(28\)</td></tr>
+    <tr><th>冰棍 / 根</th><td>\(40\)</td><td>\(46\)</td><td>\(50\)</td><td>\(55\)</td><td>\(59\)</td></tr>
+  </table></div>
+  <div class="card predict" data-id="entry" data-answer="C">
+    <p>按这个势头，明天预报 \(30\) ℃，大约能卖多少根？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(30\) 根左右</button>
+      <button class="opt" data-v="B"><b>B</b>\(45\) 根左右</button>
+      <button class="opt" data-v="C"><b>C</b>\(64\) 根左右</button>
+      <button class="opt" data-v="D"><b>D</b>\(120\) 根左右</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。气温每高 \(2\) ℃，大约多卖 \(5\) 根，从 \(28\) ℃ 的 \(59\) 根再往上走一步，约 \(64\) 根。</p>
+      <p>你其实在心里画了一条直线：五个点并不正好在一条线上（每一步多卖 \(6,4,5,4\) 根），但大致沿着一条斜线往上走。</p>
+      <p>这一节把这件事做准：在所有直线里，按一个明确的标准挑出<b>最贴近</b>这些点的那一条（最小二乘法），再用它估计。也要讲清楚：这样的估计是「平均来说大约多少」，不是「一定是多少」。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：平均数（<a href="b2-9-2.html">回看 9.2</a>）；散点图和相关系数（<a href="e3-8-1.html">回看 8.1</a>）；二次函数在顶点处取最小值（必修一）。</p>
+
+  <div class="card">
+    <p><b>解释变量和响应变量</b>：用 \(x\) 去估计 \(y\)，\(x\) 叫解释变量（自变量），\(y\) 叫响应变量（因变量）。</p>
+    <p>例：用气温估计冰棍销量，气温是 \(x\)，销量是 \(y\)。谁当 \(x\) 要看你想用什么估计什么，不是随便换的。</p>
+  </div>
+
+  <div class="card">
+    <p><b>样本中心</b>：\(n\) 对数据 \((x_i,y_i)\)，把 \(x\) 的平均数和 \(y\) 的平均数配成一个点 \((\bar x,\bar y)\)。</p>
+    <p>例：五对数据 \((1,2),(2,4),(3,5),(4,6),(5,8)\)。\(\bar x=\dfrac{1+2+3+4+5}{5}=3\)，\(\bar y=\dfrac{2+4+5+6+8}{5}=5\)，样本中心是 \((3,5)\)。下面一直用这五对数据。</p>
+  </div>
+
+  <div class="card">
+    <p><b>预测值和残差</b>：画了一条直线后，把 \(x_i\) 代进去得到的 \(\hat y_i\) 叫预测值（\(y\) 上的「帽子」表示「由直线算出来的」）。真实值减预测值，\(y_i-\hat y_i\)，叫<b>残差</b>，就是点和直线在<b>竖直方向</b>上差多少。</p>
+    <p>例：随手画一条 \(y=x+2\)。\(x=5\) 时预测 \(7\)，真实是 \(8\)，残差 \(8-7=1\)（点在线上方，残差为正）；\(x=1\) 时预测 \(3\)，真实是 \(2\)，残差 \(-1\)（点在线下方）。</p>
+  </div>
+
+  <div class="card">
+    <p><b>残差平方和</b>：每个残差平方后加起来，记作 \(Q\)。它越小，直线离点越近。平方是为了让正负不抵消，也让大的偏差更「显眼」。</p>
+    <p>例：直线 \(y=x+2\) 在五个点处的残差是 \(-1,0,0,0,1\)，\(Q=1+0+0+0+1=2\)。直接相加是 \(0\)，看不出线画得好不好。</p>
+  </div>
+
+  <h3>2. 回归模型：\(y\) 由两部分组成</h3>
+  <p>同样身高的人，体重并不一样：还受饮食、运动、遗传、测量误差等影响。所以 \(y\) 不是 \(x\) 的函数，一元线性回归模型这样写：</p>
+  <div class="key" style="text-align:center">\(Y=bx+a+e\)，\(E(e)=0\)，\(D(e)=\sigma^2\)。</div>
+  <ul>
+    <li>\(bx+a\)：由 \(x\) 决定的「平均部分」；</li>
+    <li>\(e\)：随机误差，装着其他所有因素。它平均是 \(0\)，波动大小 \(\sigma^2\) 不随 \(x\) 变。</li>
+  </ul>
+  <p>\(b\)、\(a\) 是总体里的数，我们不知道。手里只有一组样本，用它算出的 \(\hat b\)、\(\hat a\) 是对 \(b\)、\(a\) 的<b>估计</b>，得到的 \(\hat y=\hat bx+\hat a\) 叫<b>经验回归方程</b>（它的图象叫经验回归直线）。模型是对总体的假设，经验回归方程是从样本算出来的，换一批样本，\(\hat b\)、\(\hat a\) 会变。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么说）</p>
+    <p>抽了 \(50\) 名男生，由身高 \(x\)（cm）算得体重的经验回归方程 \(\hat y=0.8x-80\)（kg）。</p>
+    <p>\(\hat b=0.8\) 的意思：身高每多 \(1\) cm，体重<b>平均</b>多约 \(0.8\) kg。\(x=170\) 时 \(\hat y=0.8\times170-80=56\)：身高 \(170\) cm 的男生，平均体重估计约 \(56\) kg。某个 \(170\) cm 的男生是 \(52\) kg 还是 \(61\) kg 都正常，那是 \(e\) 的部分。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：关于例 1 里的 \(0.8\)，哪句对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>它就是模型里的 \(b\)，换一批男生算出来也是 \(0.8\)</button>
+      <button class="opt" data-v="B"><b>B</b>它是用这 \(50\) 人估计出的 \(b\)，换一批男生可能略有不同</button>
+      <button class="opt" data-v="C"><b>C</b>身高多 \(1\) cm 的人，体重一定多 \(0.8\) kg</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\hat b\) 带帽子，是样本算出的估计值，样本一变它就变。A 把估计当成了总体参数；C 漏了「平均」：具体两个人之间，体重差多少还受 \(e\) 影响。</p></div>
+  </div>
+
+  <h3>3. 最小二乘法：让 \(Q\) 最小</h3>
+  <p>直线 \(y=bx+a\) 的残差平方和是</p>
+  <div class="key" style="text-align:center">\(Q=\sum\limits_{i=1}^{n}(y_i-bx_i-a)^2\)</div>
+  <p>它随 \(b\)、\(a\) 变。让 \(Q\) 最小的那组 \(\hat b,\hat a\) 叫最小二乘估计。注意加的是<b>竖直方向</b>的差的平方，不是点到直线的距离。</p>
+  <p>为什么是下面的公式（只用二次函数）：</p>
+  <ul>
+    <li>先固定 \(b\)，\(Q\) 是 \(a\) 的二次函数，顶点在 \(a=\bar y-b\bar x\)。也就是说，最好的直线一定过样本中心 \((\bar x,\bar y)\)。</li>
+    <li>代回去，记 \(x_i-\bar x\)、\(y_i-\bar y\) 为每个数离平均的偏差，\(Q=b^2\sum(x_i-\bar x)^2-2b\sum(x_i-\bar x)(y_i-\bar y)+\sum(y_i-\bar y)^2\)，又是 \(b\) 的二次函数，顶点就是下面的 \(\hat b\)。</li>
+  </ul>
+  <div class="key">\(\hat b=\dfrac{\sum\limits_{i=1}^{n}(x_i-\bar x)(y_i-\bar y)}{\sum\limits_{i=1}^{n}(x_i-\bar x)^2}\)，\(\hat a=\bar y-\hat b\bar x\)。<br>要求 \(x_i\) 不全相同（否则分母是 \(0\)）。经验回归直线一定过 \((\bar x,\bar y)\)。</div>
+  <div class="card">
+    <p class="small">例 2（写全过程）</p>
+    <p>求五对数据 \((1,2),(2,4),(3,5),(4,6),(5,8)\) 的经验回归方程。</p>
+    <p>\(\bar x=3\)，\(\bar y=5\)。列表算偏差：</p>
+    <div class="tbl"><table class="rec">
+      <tr><th>\(x_i-\bar x\)</th><td>\(-2\)</td><td>\(-1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(2\)</td></tr>
+      <tr><th>\(y_i-\bar y\)</th><td>\(-3\)</td><td>\(-1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(3\)</td></tr>
+      <tr><th>乘积</th><td>\(6\)</td><td>\(1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(6\)</td></tr>
+      <tr><th>\((x_i-\bar x)^2\)</th><td>\(4\)</td><td>\(1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(4\)</td></tr>
+    </table></div>
+    <p>\(\hat b=\dfrac{14}{10}=1.4\)，\(\hat a=5-1.4\times3=0.8\)，所以 \(\hat y=1.4x+0.8\)。</p>
+    <p>检查：五个残差是 \(-0.2,\ 0.4,\ 0,\ -0.4,\ 0.2\)，\(Q=0.04+0.16+0+0.16+0.04=0.4\)，比随手画的 \(y=x+2\) 的 \(Q=2\) 小得多。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：一组数据 \(\bar x=4\)，\(\bar y=10\)，算得 \(\hat b=2\)。\(\hat a\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(18\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(10\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\hat a=\bar y-\hat b\bar x=10-2\times4=2\)。可以验：\(x=4\) 时 \(\hat y=2\times4+2=10=\bar y\)，直线过样本中心。选 B 的同学把减号写成了加号；选 C 的同学忘了乘 \(\hat b\)。</p></div>
+  </div>
+
+  <h3>4. 用来预测，再看残差</h3>
+  <p>有了 \(\hat y=\hat bx+\hat a\)，把 \(x\) 代进去就是估计。算完还要回头看残差：如果残差在 \(0\) 上下乱跳、没有规律，说明直线模型还行；如果残差呈现明显的规律（比如先正后负再正），说明数据其实是弯的，直线不合适。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>用例 2 的 \(\hat y=1.4x+0.8\) 估计 \(x=3.5\) 时的 \(y\)，并看残差。</p>
+    <p>\(\hat y=1.4\times3.5+0.8=5.7\)：\(x=3.5\) 时，\(y\) 平均约 \(5.7\)。\(3.5\) 在数据的 \(x\) 范围 \([1,5]\) 里面，这个估计比较放心。</p>
+    <p>残差依次 \(-0.2,\ 0.4,\ 0,\ -0.4,\ 0.2\)：有正有负、大小都小，看不出规律，直线合适。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：经验回归方程 \(\hat y=0.5x+3\)，数据点 \((4,6)\) 的残差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\hat y=0.5\times4+3=5\)，残差 \(=y-\hat y=6-5=1\)，点在直线上方。选 B 是减反了（残差是「真实减预测」）；选 C 只算了预测值。</p></div>
+  </div>
+
+  <h3>5. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>\(x\) 不能全相同</b>：\(\hat b\) 的分母 \(\sum(x_i-\bar x)^2\) 会是 \(0\)。<br><span class="small">反例：\((2,1),(2,3),(2,5)\)，\(x\) 一直是 \(2\)，看不出 \(y\) 怎样随 \(x\) 变，算不出经验回归方程。</span></li>
+    <li><b>\(Q\) 量的是竖直偏差</b>，不是点到直线的距离。<br><span class="small">反例：点 \((0,1)\) 和直线 \(y=x\)：竖直方向差 \(1\)，到直线的距离是 \(\dfrac{1}{\sqrt2}\approx0.71\)。两种标准挑出的直线一般不一样。</span></li>
+    <li><b>先看散点图，算完看残差</b>：数据弯的时候，硬拟合直线也能算出数来。<br><span class="small">反例：\((1,1),(2,4),(3,9),(4,16),(5,25)\) 算得 \(\hat y=6x-7\)，残差 \(2,-1,-2,-1,2\)：两头正、中间负，规律明显，直线不合适。</span></li>
+    <li><b>预测是平均趋势，也不能随便外推</b>。<br><span class="small">反例：用 \(7\)～\(12\) 岁孩子的数据得到身高 \(\hat y=6x+76\)（cm）。代 \(x=25\) 得 \(226\) cm，荒唐：成年后身高不再这样涨，数据范围外直线规律不一定还在。</span></li>
+    <li><b>反过来估计要重新拟合</b>：想用 \(y\) 估计 \(x\)，要把 \(y\) 当解释变量重新做最小二乘，不能把原方程反解。<br><span class="small">反例：\((1,1),(2,3),(3,2)\) 的 \(\hat y=0.5x+1\)，反解得 \(x=2y-2\)；重新拟合得 \(\hat x=0.5y+1\)。两条线差很多。</span></li>
+  </ol>
+  <div class="key">经验回归方程给的是「平均来说大约多少」：只在数据范围附近、散点和残差都支持直线时才可信。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>决定系数 \(R^2\)</b>：\(R^2=1-\dfrac{\sum(y_i-\hat y_i)^2}{\sum(y_i-\bar y)^2}\)。分母是 \(y\) 本身的总波动，分子是直线解释不了的部分，\(R^2\) 越接近 \(1\)，拟合越好。例 2 里 \(\sum(y_i-\bar y)^2=20\)，\(R^2=1-\dfrac{0.4}{20}=0.98\)。但 \(R^2\) 高不等于直线合适：上面 \(y=x^2\) 那组的 \(R^2\) 也有约 \(0.96\)，残差却有明显规律。</p>
+    <p><b>\(\hat b\) 和相关系数 \(r\) 同号</b>：两者分子都是 \(\sum(x_i-\bar x)(y_i-\bar y)\)，分母都是正数。\(r>0\) 时直线向上，\(r&lt;0\) 时向下。</p>
+    <p><b>两条回归直线</b>：\(y\) 对 \(x\) 的斜率乘 \(x\) 对 \(y\) 的斜率等于 \(r^2\)。只有所有点都在一条直线上（\(|r|=1\)）时，反解才和重新拟合一样。</p>
+    <p><b>弯的数据怎么办</b>：比如散点像指数增长，可以先对 \(y\) 取对数，令 \(z=\ln y\)，看 \((x,z)\) 是否接近直线，再对 \(z\) 用最小二乘。要说明为什么这样变换、注意 \(y>0\) 才能取对数，最后照样看残差。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 自己画一条线，和最小二乘比一比</h3>
+  <p class="small">拖动绿线两端的空心圆（或选中后按 ↑↓）改变直线；金色竖线是残差。黑点也能拖（选中后按方向键移动）。菱形是样本中心 \((\bar x,\bar y)\)。试着让 \(Q\) 尽量小，再点「显示最小二乘直线」对答案。</p>
+  <div class="card">
+    <svg class="fig" id="reg" viewBox="0 0 560 400" role="img" aria-label="散点图和一条可拖动的直线，竖线是残差"></svg>
+    <div class="result" id="regout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn" id="regls" type="button">显示最小二乘直线</button>
+      <button class="btn ghost" id="regsq" type="button">画出残差的平方</button>
+      <button class="btn ghost" id="regreset" type="button">重置</button>
+    </div>
+  </div>
+
+  <h3>② 进阶：残差图、\(R^2\) 和外推</h3>
+  <p class="small">选一组数据。上图是散点和经验回归直线（虚线部分在数据范围之外），下图是残差图：横轴 \(x\)，纵轴残差。拖滑块改变要预测的 \(x_0\)，看它跑出数据范围会怎样。</p>
+  <div class="card">
+    <div class="ctrl seg" id="dsbtns">
+      <button class="btn ghost" type="button" data-ds="0">接近直线</button>
+      <button class="btn ghost" type="button" data-ds="1">弯曲</button>
+      <button class="btn ghost" type="button" data-ds="2">\(x\) 全相同</button>
+    </div>
+    <svg class="fig" id="res" viewBox="0 0 560 520" role="img" aria-label="上方散点和经验回归直线，下方残差图"></svg>
+    <div class="ctrl"><label for="x0in">\(x_0\)</label><input type="range" id="x0in" min="0" max="28" step="1"><output id="x0out"></output></div>
+    <div class="result" id="resout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="resreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，后三道是最常见的错。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 一组成对数据算得 \(\bar x=2\)，\(\bar y=5\)，\(\sum(x_i-\bar x)(y_i-\bar y)=12\)，\(\sum(x_i-\bar x)^2=4\)。经验回归方程是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\hat y=3x-1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\hat y=3x+11\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\hat y=\dfrac13x+\dfrac{13}{3}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\hat y=3x+5\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\hat b=\dfrac{12}{4}=3\)，\(\hat a=5-3\times2=-1\)。验：\(x=2\) 时 \(\hat y=5\)，过样本中心。B 是 \(\hat a\) 的减号写成了加号；C 是把分子分母颠倒了；D 是把 \(\bar y\) 直接当成了 \(\hat a\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 某店广告费 \(x\)（万元，数据在 \(2\)～\(8\) 之间）与销售额 \(y\)（万元）的经验回归方程是 \(\hat y=2.5x+4\)。广告费 \(6\) 万元时，销售额估计约多少万元？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(15\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(19\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(39\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(2.5\times6+4=19\)，\(6\) 在数据范围里。意思是「广告费 \(6\) 万元时，销售额平均约 \(19\) 万元」，某一次具体是多少会上下浮动。A 漏加了 \(4\)；D 是把 \(6\) 当成了 \(y\) 去反解。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-vert" data-answer="C">
+    <p>3. 最小二乘法求经验回归直线，是让哪个量最小？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>各点到直线的距离之和</button>
+      <button class="opt" data-v="B"><b>B</b>各点到直线的距离的平方和</button>
+      <button class="opt" data-v="C"><b>C</b>各点的 \(y_i\) 与 \(bx_i+a\) 之差的平方和</button>
+      <button class="opt" data-v="D"><b>D</b>各个残差之和</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。最小二乘量的是<b>竖直方向</b>的偏差：同一个 \(x_i\)，真实 \(y_i\) 和直线上的 \(bx_i+a\) 差多少，再平方相加。「点到直线的距离」是垂直于直线量的，是另一回事，A、B 都不对。</p>
+      <p>D 也不行：只要直线过样本中心，不管斜率多少，残差之和都是 \(0\)，挑不出最好的那条。在「动手」①里点「画出残差的平方」，看到的金色方块就是要压小的东西。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-extra" data-answer="C">
+    <p>4. 调查 \(7\)～\(12\) 岁的孩子，得到身高 \(y\)（cm）对年龄 \(x\)（岁）的经验回归方程 \(\hat y=6x+76\)。哪句话对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>一个 \(10\) 岁的孩子，身高一定是 \(136\) cm</button>
+      <button class="opt" data-v="B"><b>B</b>可以估计 \(25\) 岁的人平均身高约 \(226\) cm</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\) 岁孩子的平均身高估计约 \(136\) cm</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。经验回归方程给的是平均趋势的估计。A 错在「一定」：个体有随机误差 \(e\)，同岁孩子高矮不一。B 错在外推：\(25\) 岁远在 \(7\)～\(12\) 岁的数据范围外，那里身高早已不按每年 \(6\) cm 涨了。「动手」②里把 \(x_0\) 拖出数据范围，可以看到弯曲数据的直线预测差得多远。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-swap" data-answer="B">
+    <p>5. 三对数据 \((1,1),(2,3),(3,2)\)，\(y\) 对 \(x\) 的经验回归方程是 \(\hat y=0.5x+1\)。现在知道 \(y=3\)，想估计 \(x\)，应该用哪个结果？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(4\)：由 \(3=0.5x+1\) 解出 \(x\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2.5\)：把 \(y\) 当解释变量重新拟合，\(\hat x=0.5y+1\)</button>
+      <button class="opt" data-v="C"><b>C</b>两种做法一样，都可以</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。最小二乘压的是 \(y\) 方向的偏差；要估计 \(x\)，该压的是 \(x\) 方向的偏差，得重新拟合：\(\bar x=\bar y=2\)，\(\sum(x_i-\bar x)(y_i-\bar y)=1\)，\(\sum(y_i-\bar y)^2=2\)，所以 \(\hat x=\dfrac12(y-2)+2=0.5y+1\)，\(y=3\) 时 \(\hat x=2.5\)。</p>
+      <p>反解得 \(4\)，差得很远（数据都在 \(1\)～\(3\) 之间）。只有点全在一条直线上时，两种做法才一样。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function $(id) { return document.getElementById(id); }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { if (!isFinite(x)) return "?"; var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { var p = toSvg(fig, e); onMove(p.x, p.y); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  // 线性方程的 TeX：y = bx + a
+  function eqTex(lhs, b, a) {
+    var bs = f2(b), as = f2(Math.abs(a));
+    var s = lhs + "=" + (bs === "0" ? "" : (bs === "1" ? "" : bs === "-1" ? "-" : bs) + "x");
+    if (bs === "0") return s + f2(a);
+    if (as !== "0") s += (a < 0 ? "-" : "+") + as;
+    return s;
+  }
+  // 最小二乘：x 全相同时 ok=false，不出 NaN
+  function fit(xs, ys) {
+    var n = xs.length, mx = 0, my = 0, sxx = 0, sxy = 0, syy = 0, i;
+    for (i = 0; i < n; i++) { mx += xs[i]; my += ys[i]; }
+    mx /= n; my /= n;
+    for (i = 0; i < n; i++) {
+      var dx = xs[i] - mx, dy = ys[i] - my;
+      sxx += dx * dx; sxy += dx * dy; syy += dy * dy;
+    }
+    var r = { n: n, mx: mx, my: my, sxx: sxx, sxy: sxy, syy: syy, ok: sxx > 1e-9 };
+    if (!r.ok) return r;
+    r.b = sxy / sxx; r.a = my - r.b * mx;
+    r.res = []; r.Q = 0;
+    for (i = 0; i < n; i++) { var e = ys[i] - (r.b * xs[i] + r.a); r.res.push(e); r.Q += e * e; }
+    r.R2 = syy > 1e-9 ? 1 - r.Q / syy : null;
+    return r;
+  }
+  function Qof(xs, ys, b, a) { var q = 0; for (var i = 0; i < xs.length; i++) { var e = ys[i] - b * xs[i] - a; q += e * e; } return q; }
+  var STEP = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 };
+
+  /* ================= ① 自己画线 ================= */
+  var reg = $("reg");
+  var U = 34, X0 = 54, YB = 360, XMAX = 14, YMAX = 10, HX = [1, 13];
+  function gx(x) { return X0 + x * U; }
+  function gy(y) { return YB - y * U; }
+  var DEF = [[2, 4], [6, 7], [10, 8], [14, 12], [18, 12], [24, 17]]; // 以 0.5 为单位
+  var pts, hl, hr, showLS, showSq; // hl、hr：两端点的高度，以 0.05 为单位
+  function regReset() { pts = DEF.map(function (p) { return p.slice(); }); hl = 20; hr = 100; showLS = false; showSq = false; regDraw(); }
+  function userLine() { var yl = hl / 20, yr = hr / 20, b = (yr - yl) / (HX[1] - HX[0]); return { b: b, a: yl - b * HX[0] }; }
+  function regDraw(focusKey) {
+    var xs = pts.map(function (p) { return p[0] / 2; }), ys = pts.map(function (p) { return p[1] / 2; });
+    var F = fit(xs, ys), L = userLine();
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hlc = css("--hl"), muted = css("--muted"), line = css("--line"), card = css("--card");
+    reg.innerHTML = "";
+    var clip = svg("clipPath", { id: "regclip" }, svg("defs", {}, reg));
+    svg("rect", { x: gx(0), y: gy(YMAX), width: XMAX * U, height: YMAX * U }, clip);
+    for (var t = 0; t <= XMAX; t += 2) {
+      svg("line", { x1: gx(t), y1: gy(0), x2: gx(t), y2: gy(YMAX), stroke: line }, reg);
+      svg("text", { x: gx(t), y: YB + 26, "text-anchor": "middle" }, reg).textContent = t;
+    }
+    for (var s = 2; s <= YMAX; s += 2) {
+      svg("line", { x1: gx(0), y1: gy(s), x2: gx(XMAX), y2: gy(s), stroke: line }, reg);
+      svg("text", { x: X0 - 8, y: gy(s) + 7, "text-anchor": "end" }, reg).textContent = s;
+    }
+    svg("line", { x1: gx(0), y1: YB, x2: gx(XMAX), y2: YB, stroke: fg, "stroke-width": 1.5 }, reg);
+    svg("line", { x1: gx(0), y1: YB, x2: gx(0), y2: gy(YMAX), stroke: fg, "stroke-width": 1.5 }, reg);
+    var g = svg("g", { "clip-path": "url(#regclip)" }, reg);
+    var i, yh;
+    if (showSq) for (i = 0; i < xs.length; i++) {
+      yh = L.b * xs[i] + L.a;
+      var side = Math.abs(ys[i] - yh) * U, left = gx(xs[i]) + side > gx(XMAX) ? gx(xs[i]) - side : gx(xs[i]);
+      svg("rect", { x: left, y: Math.min(gy(ys[i]), gy(yh)), width: side, height: side, fill: hlc, opacity: 0.28 }, g);
+    }
+    for (i = 0; i < xs.length; i++) {
+      yh = L.b * xs[i] + L.a;
+      svg("line", { x1: gx(xs[i]), y1: gy(ys[i]), x2: gx(xs[i]), y2: gy(yh), stroke: hlc, "stroke-width": 3 }, g);
+    }
+    if (showLS && F.ok) svg("line", { x1: gx(0), y1: gy(F.a), x2: gx(XMAX), y2: gy(F.b * XMAX + F.a), stroke: cc, "stroke-width": 3, "stroke-dasharray": "9 6" }, g);
+    svg("line", { x1: gx(0), y1: gy(L.a), x2: gx(XMAX), y2: gy(L.b * XMAX + L.a), stroke: ca, "stroke-width": 3 }, g);
+    // 样本中心
+    var cx = gx(F.mx), cy = gy(F.my);
+    svg("path", { d: "M" + cx + " " + (cy - 10) + "L" + (cx + 10) + " " + cy + "L" + cx + " " + (cy + 10) + "L" + (cx - 10) + " " + cy + "Z", fill: cb, stroke: card, "stroke-width": 2 }, reg);
+    svg("text", { x: cx + 12, y: cy + (F.my > 8 ? 30 : -12), fill: cb, "font-weight": 700 }, reg).textContent = "样本中心";
+    // 数据点（可拖）
+    pts.forEach(function (p, k) {
+      var c = svg("circle", { cx: gx(p[0] / 2), cy: gy(p[1] / 2), r: 9, fill: fg, stroke: card, "stroke-width": 2, tabindex: 0, role: "slider", "data-k": "p" + k,
+        "aria-label": "数据点 " + (k + 1) + "：x=" + f2(p[0] / 2) + "，y=" + f2(p[1] / 2), "aria-valuenow": p[1] / 2, style: "cursor:grab" }, reg);
+      c.addEventListener("keydown", function (ev) {
+        var d = STEP[ev.key]; if (!d) return;
+        ev.preventDefault(); d = clamp(d, -1, 1);
+        if (ev.key === "ArrowLeft" || ev.key === "ArrowRight") p[0] = clamp(p[0] + d, 0, 2 * XMAX);
+        else p[1] = clamp(p[1] + d, 0, 2 * YMAX);
+        regDraw("p" + k);
+      });
+      draggable(reg, c, function (x, y) {
+        var nx = clamp(Math.round((x - X0) / U * 2), 0, 2 * XMAX), ny = clamp(Math.round((YB - y) / U * 2), 0, 2 * YMAX);
+        if (nx !== p[0] || ny !== p[1]) { p[0] = nx; p[1] = ny; regDraw("p" + k); }
+      }, function () { Peiyu.log("interact", { id: "reg-point", k: k, x: p[0] / 2, y: p[1] / 2 }); });
+    });
+    // 直线两端的把手
+    [0, 1].forEach(function (j) {
+      var v = j ? hr : hl;
+      var h = svg("circle", { cx: gx(HX[j]), cy: gy(v / 20), r: 12, fill: card, stroke: ca, "stroke-width": 3.5, tabindex: 0, role: "slider", "data-k": "h" + j,
+        "aria-label": (j ? "右" : "左") + "端点的高度", "aria-valuemin": 0, "aria-valuemax": YMAX, "aria-valuenow": v / 20, style: "cursor:grab" }, reg);
+      h.addEventListener("keydown", function (ev) {
+        var d = STEP[ev.key]; if (!d) return;
+        ev.preventDefault(); d *= 2;
+        if (j) hr = clamp(hr + d, 0, 20 * YMAX); else hl = clamp(hl + d, 0, 20 * YMAX);
+        regDraw("h" + j);
+      });
+      draggable(reg, h, function (x, y) {
+        var nv = clamp(Math.round((YB - y) / U * 20), 0, 20 * YMAX);
+        if (nv !== (j ? hr : hl)) { if (j) hr = nv; else hl = nv; regDraw("h" + j); }
+      }, function () { Peiyu.log("interact", { id: "reg-line", b: userLine().b, a: userLine().a, Q: Qof(xs, ys, userLine().b, userLine().a) }); });
+    });
+    if (focusKey) { var el = reg.querySelector('[data-k="' + focusKey + '"]'); if (el) el.focus(); }
+
+    // 文字
+    var Q = Qof(xs, ys, L.b, L.a), atC = L.b * F.mx + L.a;
+    var lines = [];
+    lines.push("你的线：\\(" + eqTex("y", L.b, L.a) + "\\)，残差平方和 \\(Q\\approx " + f2(Q) + "\\)。");
+    lines.push("样本中心 \\((" + f2(F.mx) + ",\\ " + f2(F.my) + ")\\)；你的线在 \\(x=" + f2(F.mx) + "\\) 处高 \\(" + f2(atC) + "\\)，" +
+      (Math.abs(atC - F.my) < 0.05 ? '<span class="eq">正好过样本中心</span>。' : "没过样本中心（差 \\(" + f2(Math.abs(atC - F.my)) + "\\)）。"));
+    if (showLS) {
+      if (!F.ok) {
+        lines.push('<span class="bad">所有 \\(x\\) 都一样</span>：\\(\\sum(x_i-\\bar x)^2=0\\)，\\(\\hat b\\) 的分母是 \\(0\\)，算不出经验回归直线。把某个点左右挪一挪。');
+      } else {
+        var more = Q - F.Q;
+        lines.push("最小二乘直线（蓝虚线）：\\(" + eqTex("\\hat y", F.b, F.a) + "\\)，\\(Q_{\\min}\\approx " + f2(F.Q) + "\\)。" +
+          (more < 0.02 ? '<span class="eq">你的线已经和它几乎重合了！</span>' : "你的 \\(Q\\) 比它多 \\(" + f2(more) + "\\)：怎么拖都不会比它小。"));
+      }
+    } else if (!F.ok) {
+      lines.push('<span class="bad">所有 \\(x\\) 都一样</span>，这时没有最小二乘直线。');
+    }
+    var out = $("regout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+    $("regls").textContent = showLS ? "隐藏最小二乘直线" : "显示最小二乘直线";
+    $("regsq").textContent = showSq ? "不画平方" : "画出残差的平方";
+  }
+  $("regls").onclick = function () { showLS = !showLS; regDraw(); Peiyu.log("interact", { id: "reg-showls", on: showLS }); };
+  $("regsq").onclick = function () { showSq = !showSq; regDraw(); };
+  $("regreset").onclick = regReset;
+
+  /* ================= ② 残差图与外推 ================= */
+  var res = $("res"), x0in = $("x0in");
+  var NA = [0.3, -0.4, 0.2, 0.5, -0.3, -0.2, 0.4, -0.5], NB = [0.1, -0.1, 0.15, -0.05, 0.1, -0.1, 0.05, 0];
+  var DS = [
+    { name: "接近直线", xs: [1, 2, 3, 4, 5, 6, 7, 8], ys: NA.map(function (n, i) { return 1.2 * (i + 1) + 1 + n; }) },
+    { name: "弯曲", xs: [1, 2, 3, 4, 5, 6, 7, 8], ys: NB.map(function (n, i) { return 0.15 * (i + 1) * (i + 1) + 1 + n; }), curve: function (x) { return 0.15 * x * x + 1; } },
+    { name: "x 全相同", xs: [5, 5, 5, 5, 5, 5], ys: [2, 3.5, 4, 5, 6.5, 7] }
+  ];
+  var R0 = 60, R1 = 540, RT = 20, RB = 290, ET = 345, EB = 490, RX = 14;
+  var ds, x02;
+  function resReset() { ds = 0; x02 = 9; x0in.value = x02; resDraw(); }
+  function niceStep(span) { return span <= 12 ? 2 : span <= 30 ? 5 : 10; }
+  function resDraw() {
+    var D = DS[ds], F = fit(D.xs, D.ys), x0 = x02 / 2;
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hlc = css("--hl"), muted = css("--muted"), line = css("--line"), no = css("--no");
+    var xmin = Math.min.apply(null, D.xs), xmax = Math.max.apply(null, D.xs);
+    // 上图纵轴范围：数据、直线两端、曲线都放得下
+    var cand = D.ys.slice();
+    if (F.ok) cand.push(F.a, F.b * RX + F.a);
+    if (D.curve) cand.push(D.curve(RX));
+    var lo = Math.min(0, Math.min.apply(null, cand)), hi = Math.max.apply(null, cand);
+    var st = niceStep(hi - lo); lo = Math.floor(lo / st) * st; hi = Math.ceil(hi / st) * st; if (hi - lo < st) hi = lo + st;
+    function px(x) { return R0 + x / RX * (R1 - R0); }
+    function py(y) { return RB - (y - lo) / (hi - lo) * (RB - RT); }
+    res.innerHTML = "";
+    var defs = svg("defs", {}, res), clip = svg("clipPath", { id: "resclip" }, defs);
+    svg("rect", { x: R0, y: RT, width: R1 - R0, height: RB - RT }, clip);
+    // 数据范围底色
+    svg("rect", { x: px(xmin) - 6, y: RT, width: px(xmax) - px(xmin) + 12, height: RB - RT, fill: line, opacity: 0.55 }, res);
+    svg("text", { x: (px(xmin) + px(xmax)) / 2, y: RT + 22, "text-anchor": "middle", fill: muted }, res).textContent = "数据范围";
+    for (var t = 0; t <= RX; t += 2) svg("text", { x: px(t), y: RB + 24, "text-anchor": "middle" }, res).textContent = t;
+    for (var s = lo; s <= hi + 1e-9; s += st) {
+      svg("line", { x1: R0 - 5, y1: py(s), x2: R0, y2: py(s), stroke: fg }, res);
+      svg("text", { x: R0 - 9, y: py(s) + 7, "text-anchor": "end" }, res).textContent = s;
+    }
+    svg("line", { x1: R0, y1: py(Math.max(lo, 0)), x2: R1, y2: py(Math.max(lo, 0)), stroke: fg, "stroke-width": 1.5 }, res);
+    svg("line", { x1: R0, y1: RB, x2: R0, y2: RT, stroke: fg, "stroke-width": 1.5 }, res);
+    var g = svg("g", { "clip-path": "url(#resclip)" }, res);
+    if (D.curve) {
+      var d = "";
+      for (var k = 0; k <= 70; k++) { var xx = RX * k / 70; d += (k ? "L" : "M") + px(xx).toFixed(1) + " " + py(D.curve(xx)).toFixed(1); }
+      svg("path", { d: d, fill: "none", stroke: muted, "stroke-width": 2, "stroke-dasharray": "3 5" }, g);
+    }
+    var x0y = null;
+    if (F.ok) {
+      svg("line", { x1: px(0), y1: py(F.a), x2: px(RX), y2: py(F.b * RX + F.a), stroke: cc, "stroke-width": 2, "stroke-dasharray": "8 6" }, g);
+      svg("line", { x1: px(xmin), y1: py(F.b * xmin + F.a), x2: px(xmax), y2: py(F.b * xmax + F.a), stroke: cc, "stroke-width": 3.5 }, g);
+      x0y = F.b * x0 + F.a;
+      svg("line", { x1: px(x0), y1: RB, x2: px(x0), y2: py(x0y), stroke: hlc, "stroke-width": 2, "stroke-dasharray": "3 3" }, g);
+      if (D.curve) svg("circle", { cx: px(x0), cy: py(D.curve(x0)), r: 6, fill: "none", stroke: muted, "stroke-width": 2.5 }, g);
+      svg("circle", { cx: px(x0), cy: py(x0y), r: 8, fill: hlc }, g);
+    }
+    D.xs.forEach(function (x, i) { svg("circle", { cx: px(x), cy: py(D.ys[i]), r: 6, fill: ca }, g); });
+    // 下图：残差
+    svg("text", { x: R0 + 10, y: ET - 4 }, res).textContent = "残差";
+    svg("line", { x1: R0, y1: ET, x2: R0, y2: EB, stroke: fg, "stroke-width": 1.5 }, res);
+    var em = 0.5;
+    if (F.ok) F.res.forEach(function (e) { em = Math.max(em, Math.abs(e) * 1.25); });
+    function ey(e) { return (ET + EB) / 2 - e / em * (EB - ET) / 2; }
+    svg("line", { x1: R0, y1: ey(0), x2: R1, y2: ey(0), stroke: fg, "stroke-width": 1.5 }, res);
+    svg("text", { x: R0 - 9, y: ey(0) + 7, "text-anchor": "end" }, res).textContent = "0";
+    svg("text", { x: R1, y: EB + 24, "text-anchor": "end" }, res).textContent = "x";
+    if (F.ok) {
+      F.res.forEach(function (e, i) {
+        var c = e >= 0 ? ca : no;
+        svg("line", { x1: px(D.xs[i]), y1: ey(0), x2: px(D.xs[i]), y2: ey(e), stroke: c, "stroke-width": 2.5 }, res);
+        svg("circle", { cx: px(D.xs[i]), cy: ey(e), r: 6, fill: c }, res);
+      });
+    } else {
+      svg("text", { x: (R0 + R1) / 2, y: ey(0) - 14, "text-anchor": "middle", fill: no }, res).textContent = "没有回归直线，就没有残差";
+    }
+
+    $("x0out").textContent = f2(x0);
+    document.querySelectorAll("#dsbtns .btn").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-ds") === String(ds) ? "true" : "false");
+    });
+    var L = [];
+    if (!F.ok) {
+      L.push('<span class="bad">所有 \\(x\\) 都是 \\(' + f2(xmin) + "\\)</span>：\\(\\sum(x_i-\\bar x)^2=0\\)，\\(\\hat b\\) 的分母为 \\(0\\)，算不出经验回归方程，也就谈不上残差、\\(R^2\\) 和预测。\\(x\\) 没有变化，就看不出 \\(y\\) 怎样随 \\(x\\) 变。");
+    } else {
+      var signs = F.res.map(function (e) { return e > 1e-9 ? "+" : e < -1e-9 ? "−" : "0"; }).join(" ");
+      var runs = 1; for (var i = 1; i < F.res.length; i++) if ((F.res[i] >= 0) !== (F.res[i - 1] >= 0)) runs++;
+      L.push("\\(" + eqTex("\\hat y", F.b, F.a) + "\\)，\\(R^2\\approx " + (F.R2 === null ? "?" : f2(F.R2)) + "\\)，残差之和 \\(\\approx " + f2(F.res.reduce(function (p, q) { return p + q; }, 0)) + "\\)。");
+      L.push("残差符号（从左到右）：" + signs + "。" + (runs <= 3
+        ? '<span class="bad">成段地正、成段地负，有规律</span>：数据是弯的，直线没抓住形状。' + (F.R2 > 0.9 ? "注意 \\(R^2\\) 照样很高：\\(R^2\\) 高不等于直线合适。" : "")
+        : '<span class="eq">正负交替、没有明显规律</span>：直线模型说得过去。'));
+      var inside = x0 >= xmin && x0 <= xmax;
+      var p = "\\(x_0=" + f2(x0) + "\\) 时 \\(\\hat y\\approx " + f2(x0y) + "\\)。";
+      if (inside) p += "在数据范围 \\([" + xmin + "," + xmax + "]\\) 内，是对平均值的估计。";
+      else p += '<span class="bad">超出数据范围 \\([' + xmin + "," + xmax + "]\\)</span>：这是外推，直线规律在那里不一定还成立。";
+      if (D.curve) p += "数据背后的弯曲趋势（灰虚线）在这里约 \\(" + f2(D.curve(x0)) + "\\)，相差 \\(" + f2(Math.abs(D.curve(x0) - x0y)) + "\\)。";
+      L.push(p);
+    }
+    var out = $("resout");
+    out.innerHTML = L.join("<br>");
+    Peiyu.math(out);
+  }
+  x0in.addEventListener("input", function () { x02 = clamp(parseInt(x0in.value, 10) || 0, 0, 2 * RX); resDraw(); });
+  x0in.addEventListener("change", function () { Peiyu.log("interact", { id: "res-x0", ds: ds, x0: x02 / 2 }); });
+  document.querySelectorAll("#dsbtns .btn").forEach(function (b) {
+    b.addEventListener("click", function () { ds = clamp(parseInt(b.getAttribute("data-ds"), 10) || 0, 0, DS.length - 1); resDraw(); Peiyu.log("interact", { id: "res-ds", ds: ds }); });
+  });
+  $("resreset").onclick = resReset;
+
+  document.addEventListener("DOMContentLoaded", function () { regReset(); resReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { regDraw(); resDraw(); });
+})();
+</script>
+</body></html>

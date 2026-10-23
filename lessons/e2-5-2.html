@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.2 导数的运算 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .tbl { overflow-x: auto; }
+  .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
+</style>
+</head>
+<body data-sec="e2-5-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第二册 · 第 5 章 一元函数的导数及其应用</p>
+<h1>5.2 导数的运算</h1>
+<p class="lead">按定义求导数每次都要算极限，太慢。这一节记住几个基本函数的导数，再学加减乘除和 \(f(ax+b)\) 的求导规则，大多数函数就能直接写出导数。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>两个函数的和，求导只需各自求导再相加：\((u+v)' = u' + v'\)。那么遇到两个函数的乘积 \((uv)'\) 时：</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>乘积的导数 \([u(x)v(x)]'\) 是否等于它们导数的乘积 \(u'(x)v'(x)\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>等于，直接逐个求导相乘即可：\((uv)' = u'v'\)</button>
+      <button class="opt" data-v="B"><b>B</b>绝不等于！乘积的导数必须交叉相乘再相加：\((uv)' = u'v + uv'\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。反例一目了然：</p>
+      <p>设 \(u(x) = x, v(x) = x\)，它们的乘积是 \(f(x) = x^2\)。根据定义已知 \((x^2)' = 2x\)。</p>
+      <p>若按 A 选项的算法：\(u'(x)v'(x) = 1 \times 1 = 1\)。显然 \(2x \ne 1\)！</p>
+      <p>而按 B 选项公式：\(u'v + uv' = 1 \cdot x + x \cdot 1 = 2x\)，完全吻合！</p>
+      <p>这一节我们就来系统建立基本初等函数的导数公式表、四则运算律以及简单复合函数的求导规则。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：5.1 导数的概念和几何意义（<a href="e2-5-1.html">回看 5.1</a>）；必修一的幂、指数、对数函数，弧度制和三角函数。</p>
+
+  <div class="card">
+    <p><b>导函数</b>：每个 \(x\) 处的导数 \(f'(x)\) 本身又是 \(x\) 的函数，叫导函数，简称导数。求出导函数，任意一点的切线斜率代进去就有。</p>
+    <p>例：\(f(x)=x^2\)，按 5.1 的定义算得 \(f'(x)=2x\)。于是 \(f'(3)=6\)，\(f'(-1)=-2\)，不用每个点重算一次极限。</p>
+  </div>
+
+  <div class="card">
+    <p><b>把根式、分式写成幂</b>：幂函数公式只认 \(x^\alpha\) 的样子，用之前先改写。</p>
+    <p>例：\(\dfrac1x=x^{-1}\)，\(\sqrt x=x^{\frac12}\)，\(\dfrac{1}{\sqrt x}=x^{-\frac12}\)，\(x^2\sqrt x=x^{\frac52}\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>内层、外层</b>：\(y=\sin(3x+1)\) 可以看成两步：先算 \(u=3x+1\)（内层），再算 \(y=\sin u\)（外层）。本节只处理内层是一次式 \(ax+b\) 的情形。</p>
+    <p>例：\(e^{2x-5}\) 的内层是 \(2x-5\)（\(a=2\)），外层是 \(e^u\)；\(\ln(4-x)\) 的内层是 \(4-x\)（\(a=-1\)），外层是 \(\ln u\)。</p>
+  </div>
+
+  <h3>2. 基本初等函数的导数</h3>
+  <p>常用函数的导数用 5.1 的定义都能算出来，算一次记成表，以后直接查。表里的公式有条件：对数要 \(x&gt;0\)，指数、对数的底 \(a&gt;0\) 且 \(a\ne1\)，三角函数的 \(x\) 用弧度。</p>
+  <div class="tbl"><table class="rec">
+    <tr><th>\(f(x)\)</th><th>\(f'(x)\)</th></tr>
+    <tr><td>\(C\)（常数）</td><td>\(0\)</td></tr>
+    <tr><td>\(x^\alpha\)</td><td>\(\alpha x^{\alpha-1}\)</td></tr>
+    <tr><td>\(\sin x\)</td><td>\(\cos x\)</td></tr>
+    <tr><td>\(\cos x\)</td><td>\(-\sin x\)（带负号）</td></tr>
+    <tr><td>\(a^x\)</td><td>\(a^x\ln a\)；特别地 \((e^x)'=e^x\)</td></tr>
+    <tr><td>\(\log_a x\)</td><td>\(\dfrac{1}{x\ln a}\)；特别地 \((\ln x)'=\dfrac1x\)</td></tr>
+  </table></div>
+  <p>为什么常数是 \(0\)：函数值不变，图像是水平直线，切线斜率处处是 \(0\)。幂函数「指数拿下来，指数减 \(1\)」，例如 \((x^2)'=2x\)、\((x^3)'=3x^2\)，和 5.1 用定义算出的一致。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>求导：① \(y=\dfrac{1}{x^3}\)；② \(y=x\sqrt x\)；③ \(y=2^x\)；④ \(y=\log_3 x\)；⑤ \(f(x)=\sin x\)，求 \(f'\!\left(\dfrac\pi3\right)\)。</p>
+    <p>① 改写 \(y=x^{-3}\)，\(y'=-3x^{-4}=-\dfrac{3}{x^4}\)。</p>
+    <p>② 改写 \(y=x^{\frac32}\)，\(y'=\dfrac32x^{\frac12}=\dfrac32\sqrt x\)。</p>
+    <p>③ \(y'=2^x\ln2\)。（\(\ln2\) 是常数，不要丢。）</p>
+    <p>④ \(y'=\dfrac{1}{x\ln3}\)（\(x&gt;0\)）。</p>
+    <p>⑤ \(f'(x)=\cos x\)，\(f'\!\left(\dfrac\pi3\right)=\cos\dfrac\pi3=\dfrac12\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：\(y=\dfrac{1}{x^2}\) 的导数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-\dfrac{2}{x^3}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{1}{2x}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{2}{x^3}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac{2}{x}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(y=x^{-2}\)，\(y'=-2x^{-3}=-\dfrac{2}{x^3}\)。选 B 是把分母 \(x^2\) 直接换成了它的导数 \(2x\)；选 C 丢了指数 \(-2\) 的负号；选 D 是指数没减 \(1\)（\(-2-1=-3\)，不是 \(-1\)）。</p></div>
+  </div>
+
+  <h3>3. 导数的四则运算法则</h3>
+  <p>函数加减乘除拼起来以后，导数怎么算：</p>
+  <ul>
+    <li><b>和、差</b>：各自求导再加减，\([f(x)\pm g(x)]'=f'(x)\pm g'(x)\)。常数因子可以提出来：\([cf(x)]'=cf'(x)\)。</li>
+    <li><b>积</b>：轮流求导再相加，不是导数相乘：</li>
+  </ul>
+  <div class="key">$$[u(x)v(x)]'=u'(x)v(x)+u(x)v'(x)$$</div>
+  <ul>
+    <li><b>商</b>：分母不为 \(0\) 时，</li>
+  </ul>
+  <div class="key">$$\left[\frac{u(x)}{v(x)}\right]'=\frac{u'(x)v(x)-u(x)v'(x)}{[v(x)]^2}$$<p class="small" style="text-align:center">\(v(x)\ne0\)；分子是减号，先「分子的导数乘分母」</p></div>
+  <p>为什么积要「轮流」：长 \(u\)、宽 \(v\) 的长方形面积 \(uv\)。\(u\) 变一点、\(v\) 变一点，面积多出来的主要是两条长边 \(v\cdot\Delta u\) 和 \(u\cdot\Delta v\)，角上那一小块 \(\Delta u\Delta v\) 小得可以忽略。开头 \(x\cdot x\) 的例子就是这样：\(1\cdot x+x\cdot1=2x\)。</p>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>求导：① \(f(x)=x^3-4x+\dfrac1x\)；② \(g(x)=x^2e^x\)；③ \(h(x)=\dfrac{\ln x}{x}\)。</p>
+    <p>① 逐项求导：\(f'(x)=3x^2-4-\dfrac{1}{x^2}\)。</p>
+    <p>② 积的法则，\(u=x^2\)，\(v=e^x\)：</p>
+    <p>$$g'(x)=2x\cdot e^x+x^2\cdot e^x=(x^2+2x)e^x$$</p>
+    <p class="small">含 \(e^x\) 的乘积，把 \(e^x\) 提到外面，以后判断导数正负更方便。</p>
+    <p>③ 定义域 \(x&gt;0\)。商的法则，\(u=\ln x\)，\(v=x\)：</p>
+    <p>$$h'(x)=\frac{\frac1x\cdot x-\ln x\cdot1}{x^2}$$</p>
+    <p>$$=\frac{1-\ln x}{x^2}$$</p>
+  </div>
+  <div class="card predict" data-id="chk1" data-answer="D">
+    <p>自己试试：求 \(y=\dfrac{x}{\cos x}\) 的导数，分子化简后是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\cos x - x\sin x\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\cos x - x\sin x\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\cos x + x\sin x\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。分子 \(=(x)'\cos x-x(\cos x)'=\cos x-x(-\sin x)=\cos x+x\sin x\)，所以 \(y'=\dfrac{\cos x+x\sin x}{\cos^2x}\)（\(\cos x\ne0\)）。</p>
+      <p>选 A 忘了 \((\cos x)'=-\sin x\) 的负号；选 B 是分子、分母各自求导再相除；选 C 是分子的减法顺序颠倒，正负号整个反了。</p>
+    </div>
+  </div>
+
+  <h3>4. 简单复合函数 \(f(ax+b)\) 的导数</h3>
+  <p>内层是一次式 \(ax+b\) 时，先按外层求导（括号里原样不动），再乘内层的系数 \(a\)：</p>
+  <div class="key">$$[f(ax+b)]'=a\,f'(ax+b)$$</div>
+  <p>为什么乘 \(a\)：\(x\) 走一小步 \(\Delta x\)，内层 \(ax+b\) 走了 \(a\Delta x\)，是 \(x\) 的 \(a\) 倍，外层跟着变化的量也就放大到 \(a\) 倍。</p>
+
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>求导：① \(y=e^{3x-1}\)；② \(y=\cos\left(2x+\dfrac\pi3\right)\)；③ \(y=\ln(1-2x)\)；④ \(y=(2x+1)^3\)。</p>
+    <p>① \(a=3\)：\(y'=3e^{3x-1}\)。</p>
+    <p>② \(a=2\)，外层 \((\cos u)'=-\sin u\)：\(y'=-2\sin\left(2x+\dfrac\pi3\right)\)。</p>
+    <p>③ 定义域 \(1-2x&gt;0\)，即 \(x&lt;\dfrac12\)。\(a=-2\)：\(y'=-2\cdot\dfrac{1}{1-2x}=\dfrac{2}{2x-1}\)。</p>
+    <p>④ \(a=2\)，外层 \((u^3)'=3u^2\)：\(y'=2\cdot3(2x+1)^2=6(2x+1)^2\)。</p>
+    <p class="small">验算④：展开 \(y=8x^3+12x^2+6x+1\)，\(y'=24x^2+24x+6=6(2x+1)^2\)，一样。多项式展开后逐项求导也完全可以。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：\(f(x)=e^{-2x}\)，\(f'(0)\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-2e\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(a=-2\)，\(f'(x)=-2e^{-2x}\)，\(f'(0)=-2e^0=-2\)。选 A 是以为 \(e\) 的指数函数求导不变、忘了乘内层系数；选 C 丢了系数的负号；选 D 是把 \(e^0\) 当成了 \(e\)。</p></div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <ol>
+    <li><b>积的导数不是导数的积</b>。<br><span class="small">反例：\(x\cdot x=x^2\)，导数是 \(2x\)；导数相乘得 \(1\times1=1\)。</span></li>
+    <li><b>商的法则：分母 \(v\ne0\)，分子顺序是 \(u'v-uv'\)</b>，颠倒了正负号全反。<br><span class="small">反例：\(\left(\dfrac{\ln x}{x}\right)'\) 写成 \(\dfrac{\ln x-1}{x^2}\)，在 \(0&lt;x&lt;e\) 上本来为正，算出来却为负。</span></li>
+    <li><b>复合 \(f(ax+b)\) 一定乘内层系数 \(a\)</b>，\(a\) 是负数时连负号一起乘。<br><span class="small">反例：\((e^{3x})'=3e^{3x}\)，不是 \(e^{3x}\)；\([\ln(4-x)]'=\dfrac{-1}{4-x}\)，不是 \(\dfrac{1}{4-x}\)。</span></li>
+    <li><b>先查定义域，端点处公式不一定能用</b>。<br><span class="small">反例：\(\sqrt x\) 在 \(x=0\) 有定义，但 \((\sqrt x)'=\dfrac{1}{2\sqrt x}\) 在 \(x=0\) 没有意义，\(\sqrt x\) 在 \(0\) 处没有导数；\(\ln x\) 和它的导数都只在 \(x&gt;0\) 上谈。</span></li>
+    <li><b>三角函数按弧度求导</b>。<br><span class="small">反例：如果 \(x\) 用度，\(x^\circ=\dfrac{\pi x}{180}\)，那么 \((\sin x^\circ)'=\dfrac{\pi}{180}\cos x^\circ\)，不再是 \(\cos x^\circ\)。</span></li>
+    <li><b>本节的复合只到 \(f(ax+b)\)</b>；多项式形式的可以展开再求导（例 3 ④）。内层不是一次式的（如 \(\ln(x^2+1)\)），不当作本节已学的方法，见下面「再深一点」。</li>
+  </ol>
+  <div class="key">先写定义域 → 认清结构（和差、积、商，还是 \(f(ax+b)\)）→ 查表、套法则 → 化简。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>内层不是一次式怎么办</b>：一般的复合函数 \(y=f(g(x))\) 有更一般的规则 \(y'=f'(g(x))\cdot g'(x)\)，\(f(ax+b)\) 是它在 \(g(x)=ax+b\) 时的特例。例如 \([\ln(x^2+1)]'=\dfrac{2x}{x^2+1}\)。教材展示过这种关系，但课程要求只到 \(f(ax+b)\)，考试中遇到更复杂的内层，题目一般会另给条件或换别的路子。</p>
+    <p><b>商的法则可以从积的法则推</b>：\(\dfrac uv=u\cdot\dfrac1v\)，而 \(\left(\dfrac1v\right)'=-\dfrac{v'}{v^2}\)，代进积的法则：\(\dfrac{u'}{v}-\dfrac{uv'}{v^2}=\dfrac{u'v-uv'}{v^2}\)。记不住顺序时，可以这样推一遍。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>导数运算与切线斜率双屏联动台</h3>
+  <p class="small">上图为原函数 \(f(x) = x e^{-x}\)，下图为其导函数 \(f'(x) = (1-x)e^{-x}\)。滑动 \(x_0\)，实时观察原函数上的切线姿态与导函数曲线高度的绝对对应关系：</p>
+
+  <div class="ctrl">
+    <label for="posValX">自变量位置 \(x_0\) = </label>
+    <input type="range" id="posValX" min="-5" max="35" step="1" value="10">
+    <output id="posValXOut" style="font-weight:700">1.0</output>
+
+    <button type="button" class="btn ghost" id="resetBtn">重置位置</button>
+  </div>
+
+  <svg class="fig" id="dualDerivSvg" viewBox="0 0 560 300" role="img" aria-label="原函数与导函数联动演示"></svg>
+
+  <div class="result" id="dualDesc" aria-live="polite"></div>
+</section>
+
+<section class="step" data-title="练一练">
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="B">
+    <p>1. 已知函数 \(f(x) = x^2 - 3x + \ln x\)，则导数值 \(f'(1)\) 的值为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。求导函数：\(f'(x) = 2x - 3 + \dfrac{1}{x}\)。代入 \(x = 1\)：\(f'(1) = 2(1) - 3 + \dfrac{1}{1} = 2 - 3 + 1 = 0\)。此时曲线在点 \((1, f(1))\) 处的切线为水平切线！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="A">
+    <p>2. 函数 \(f(x) = \sin(2x - 1)\) 的导函数 \(f'(x)\) 等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\cos(2x - 1)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\cos(2x - 1)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-2\cos(2x - 1)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\sin(2x - 1)\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。根据线性内层复合函数求导法则 \([f(ax+b)]' = a f'(ax+b)\)：内层 \(u = 2x-1\) 的导数为 2，外层正弦导数为余弦。因此 \(f'(x) = 2\cos(2x - 1)\)。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="C">
+    <p>3. 函数 \(f(x) = \dfrac{x}{e^x}\) 的导函数 \(f'(x)\) 化简后的形式为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{e^x}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{x - 1}{e^x}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{1 - x}{e^x}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{1 + x}{e^x}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。商的法则：\(f'(x) = \dfrac{(x)'e^x - x(e^x)'}{(e^x)^2} = \dfrac{1\cdot e^x - x e^x}{e^{2x}} = \dfrac{e^x(1 - x)}{e^{2x}} = \dfrac{1 - x}{e^x}\)。严防分子减法次序颠倒写成 \(x - 1\)！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p4" data-answer="D">
+    <p>4. 曲线 \(y = e^x + x\) 在点 \((0, 1)\) 处的切线方程为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(y = x + 1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y = x - 1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y = 2x - 1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(y = 2x + 1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。求导 \(y' = e^x + 1\)。在点 \((0, 1)\) 处的导数值（切线斜率）为 \(k = y'|_{x=0} = e^0 + 1 = 1 + 1 = 2\)。由点斜式：\(y - 1 = 2(x - 0) \implies y = 2x + 1\)。</p>
+    </div>
+  </div>
+
+  <h3>挑战进阶</h3>
+  <div class="card predict" data-id="p5" data-answer="B">
+    <p>5. 若直线 \(y = kx\) 是曲线 \(y = \ln x\) 的一条切线，则斜率 \(k\) 的值为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{1}{e}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(e\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{1}{2e}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。直线 \(y = kx\) 过原点 \((0, 0)\)，这是典型的「过原点切线」问题！设切点为 \((t, \ln t)\)。求导 \(y' = \dfrac{1}{x} \implies\) 切线斜率 \(k = \dfrac{1}{t}\)。切线方程为 \(y - \ln t = \dfrac{1}{t}(x - t)\)。代入原点 \((0, 0)\)：\(-\ln t = -1 \implies \ln t = 1 \implies t = e\)。因此斜率 \(k = \dfrac{1}{t} = \dfrac{1}{e}\)（极度经典的对数过原点切线结论！）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var xIn = document.getElementById("posValX");
+  var xOut = document.getElementById("posValXOut");
+  var resetBtn = document.getElementById("resetBtn");
+  var svg = document.getElementById("dualDerivSvg");
+  var desc = document.getElementById("dualDesc");
+
+  // 原函数 f(x) = x * e^(-x) 在上半屏，高度 130px (中心线 Y1 = 100)
+  // 导函数 f'(x) = (1-x) * e^(-x) 在下半屏，高度 130px (中心线 Y2 = 230)
+  var oX = 140;
+  var oY1 = 110;
+  var oY2 = 240;
+  var scaleX = 90;
+  var scaleY = 160;
+
+  function f(x) { return x * Math.exp(-x); }
+  function df(x) { return (1 - x) * Math.exp(-x); }
+
+  function render() {
+    var rawX = (parseInt(xIn.value, 10) || 10) / 10; // -0.5 到 3.5
+    xOut.textContent = rawX.toFixed(1);
+
+    var curY1 = f(rawX);
+    var curSlope = df(rawX);
+
+    var pt1 = { x: oX + rawX * scaleX, y: oY1 - curY1 * scaleY };
+    var pt2 = { x: oX + rawX * scaleX, y: oY2 - curSlope * scaleY };
+
+    var h = [];
+
+    // 分割背景线
+    h.push('<line x1="20" y1="150" x2="540" y2="150" stroke="var(--line)" stroke-dasharray="3 3"/>');
+
+    // === 上半屏：原函数 f(x) ===
+    h.push('<line x1="30" y1="' + oY1 + '" x2="520" y2="' + oY1 + '" stroke="var(--line)" stroke-width="1.2"/>');
+    h.push('<line x1="' + oX + '" y1="20" x2="' + oX + '" y2="140" stroke="var(--line)" stroke-width="1.2"/>');
+    h.push('<text x="525" y="' + (oY1 + 4) + '" font-size="11" fill="var(--muted)">x</text>');
+    h.push('<text x="' + (oX + 6) + '" y="30" font-size="11" fill="var(--muted)">y</text>');
+    h.push('<text x="' + (oX + 8) + '" y="55" font-size="12" font-weight="700" fill="#2563eb">原函数 f(x) = x e⁻ˣ</text>');
+
+    // 绘制 f(x) 曲线
+    var pts1 = [];
+    for (var x = -0.5; x <= 4.0; x += 0.05) {
+      var y = f(x);
+      pts1.push((pts1.length === 0 ? "M" : "L") + (oX + x * scaleX).toFixed(1) + "," + (oY1 - y * scaleY).toFixed(1));
+    }
+    h.push('<path d="' + pts1.join(" ") + '" fill="none" stroke="#2563eb" stroke-width="2.2"/>');
+
+    // 切线 (红色实线，在点 pt1 处)
+    var tanDx = 1.0;
+    var tX1 = rawX - tanDx, tY1 = curY1 - tanDx * curSlope;
+    var tX2 = rawX + tanDx, tY2 = curY1 + tanDx * curSlope;
+    h.push('<line x1="' + (oX + tX1 * scaleX) + '" y1="' + (oY1 - tY1 * scaleY) + '" x2="' + (oX + tX2 * scaleX) + '" y2="' + (oY1 - tY2 * scaleY) + '" stroke="#ef4444" stroke-width="2.2"/>');
+    h.push('<circle cx="' + pt1.x + '" cy="' + pt1.y + '" r="5" fill="#ef4444"/>');
+    h.push('<text x="' + (pt1.x + 8) + '" y="' + (pt1.y - 8) + '" font-size="11" font-weight="700" fill="#ef4444">切线斜率 k = ' + curSlope.toFixed(2) + '</text>');
+
+    // === 下半屏：导函数 f'(x) ===
+    h.push('<line x1="30" y1="' + oY2 + '" x2="520" y2="' + oY2 + '" stroke="var(--line)" stroke-width="1.2"/>');
+    h.push('<line x1="' + oX + '" y1="160" x2="' + oX + '" y2="280" stroke="var(--line)" stroke-width="1.2"/>');
+    h.push('<text x="525" y="' + (oY2 + 4) + '" font-size="11" fill="var(--muted)">x</text>');
+    h.push('<text x="' + (oX + 6) + '" y="170" font-size="11" fill="var(--muted)">y\'</text>');
+    h.push('<text x="' + (oX + 8) + '" y="195" font-size="12" font-weight="700" fill="#10b981">导函数 f\'(x) = (1 - x)e⁻ˣ</text>');
+
+    // 绘制 f'(x) 曲线
+    var pts2 = [];
+    for (var sx = -0.5; sx <= 4.0; sx += 0.05) {
+      var sy = df(sx);
+      pts2.push((pts2.length === 0 ? "M" : "L") + (oX + sx * scaleX).toFixed(1) + "," + (oY2 - sy * scaleY).toFixed(1));
+    }
+    h.push('<path d="' + pts2.join(" ") + '" fill="none" stroke="#10b981" stroke-width="2.2"/>');
+
+    // 对应导数值点 pt2 与垂直虚线联动
+    h.push('<line x1="' + pt1.x + '" y1="' + pt1.y + '" x2="' + pt2.x + '" y2="' + pt2.y + '" stroke="var(--muted)" stroke-dasharray="3 3"/>');
+    h.push('<circle cx="' + pt2.x + '" cy="' + pt2.y + '" r="5" fill="#10b981"/>');
+    h.push('<text x="' + (pt2.x + 8) + '" y="' + (pt2.y + 4) + '" font-size="11" font-weight="700" fill="#10b981">导数值 = ' + curSlope.toFixed(2) + '</text>');
+
+    svg.innerHTML = h.join("");
+
+    var slopeStatus = Math.abs(curSlope) < 0.03 ? '水平切线（k=0，极值点！）' : curSlope > 0 ? '斜率为正（原函数严格递增 ↗）' : '斜率为负（原函数严格递减 ↘）';
+    desc.innerHTML = '<b>微积分核心对应关系</b>：当前 x₀ = <b>' + rawX.toFixed(1) + '</b>。上屏原函数的切线斜率 <b>k = ' + curSlope.toFixed(3) + '</b>，下屏导函数的纵坐标高度恰为 <b>f\'(x₀) = ' + curSlope.toFixed(3) + '</b>（' + slopeStatus + '）。当 x₀ = 1 时，导函数穿过横轴为 0，原函数正好到达最高峰！';
+  }
+
+  resetBtn.addEventListener("click", function () {
+    xIn.value = 10;
+    render();
+  });
+
+  xIn.addEventListener("input", render);
+
+  render();
+})();
+</script>
+</body>
+</html>

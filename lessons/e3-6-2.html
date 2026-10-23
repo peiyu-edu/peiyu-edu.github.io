@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.2 排列与组合 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
+  .pool-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0; }
+  .pool-box { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; min-height: 140px; }
+  .pool-tit { font-weight: 700; margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .badge-tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+</style>
+</head>
+<body data-sec="e3-6-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 6 章 计数原理</p>
+<h1>6.2 排列与组合</h1>
+<p class="lead">从 \(5\) 个人里选 \(3\) 个人，要不要管顺序？当正副班长要管，组值日小组不用管。管顺序叫排列，不管叫组合，这一节学怎么数它们。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>班级里有 4 位优秀的同学 \(A, B, C, D\) 竞选班委：</p>
+  <p>情境 1：推选 2 人，分别担任「正班长」和「副班长」；<br>
+  情境 2：推选 2 人，共同组成「图书整理小组」。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>情境 1 和情境 2 最终选出的方案总数是否一样？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一样多，都是从 4 人中挑选出 2 个人</button>
+      <button class="opt" data-v="B"><b>B</b>完全不一样！情境 1 计较顺序（AB 与 BA 不同，有 12 种）；情境 2 与顺序无关（AB 与 BA 是同一组，有 6 种）</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。情境 1 中，选出 A 和 B 时，「A 当正班长、B 当副班长」与「B 当正班长、A 当副班长」是两码事！分先后顺序，属于<b>排列</b>，共有 \(4 \times 3 = 12\) 种；</p>
+      <p>而在情境 2 中，无论谁先被抽中，A 和 B 组合在一起都是同一个小组，颠倒顺序毫无影响！不计顺序，属于<b>组合</b>，共有 \(\dfrac{12}{2!} = 6\) 种。</p>
+      <p>这一节就来数清楚：讲顺序的叫排列，不讲顺序的叫组合，两者差多少倍；再看有条件的排队（特殊优先、捆绑、插空）怎么数。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：6.1 的分类加法和分步乘法计数原理（<a href="e3-6-1.html">回看 6.1</a>）。本节的公式都是用「分步乘法」一步步数出来的。</p>
+
+  <div class="card">
+    <p><b>不同元素</b>：参加排队、被挑选的对象两两能区分开。本节的公式只管这种情况，而且<b>每个元素最多用一次</b>（不重复取）。</p>
+    <p>例：\(A,B,C,D\) 四个人是 4 个不同元素；三张一模一样的电影票就不是不同元素，谁拿哪张没有区别。</p>
+  </div>
+
+  <div class="card">
+    <p><b>阶乘</b>：\(n!=n\times(n-1)\times\cdots\times2\times1\)，从 \(n\) 一直乘到 \(1\)。规定 \(0!=1\)。</p>
+    <p>例：\(3!=6\)，\(4!=24\)，\(5!=120\)。还有个好用的写法：\(\dfrac{6!}{4!}=6\times5=30\)，后面相同的部分约掉了。</p>
+  </div>
+
+  <div class="card">
+    <p><b>交换检验</b>：选出的东西里，随便挑两个<b>互换一下</b>，看结果变没变。变了，说明讲顺序；没变，说明不讲顺序。</p>
+    <p>例：甲当正班长、乙当副班长，换成乙正甲副，是另一个方案（变了）；甲乙两人一起去整理图书，换一下还是这两个人（没变）。</p>
+  </div>
+
+  <h3>2. 排列与排列数（讲顺序）</h3>
+  <p>从 \(n\) 个不同元素中取出 \(m\) 个（\(1\le m\le n\)），<b>按顺序排成一列</b>，叫一个<b>排列</b>；所有排列的个数叫<b>排列数</b>，记作 \(A_n^m\)。</p>
+  <p>为什么是下面这个式子：排第 1 个位置有 \(n\) 种选法；第 1 个用掉了，第 2 个位置剩 \(n-1\) 种；……第 \(m\) 个位置剩 \(n-m+1\) 种。分步相乘：</p>
+  <div class="key">$$A_n^m=n(n-1)\cdots(n-m+1)$$ 用阶乘写：$$A_n^m=\frac{n!}{(n-m)!}$$</div>
+  <p>乘了 \(m\) 个数，从 \(n\) 往下数。\(m=n\) 时是<b>全排列</b>：\(A_n^n=n!\)。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>6 名同学中选 3 人，分别当语文、数学、英语课代表，有多少种安排？</p>
+    <p>交换检验：甲当语文、乙当数学，和乙当语文、甲当数学是两种安排，讲顺序，是排列。</p>
+    <p>语文课代表 6 种选法，数学剩 5 种，英语剩 4 种：</p>
+    <p style="text-align:center">\(A_6^3=6\times5\times4=120\)（种）。</p>
+    <p>也可以用阶乘式：\(\dfrac{6!}{3!}=\dfrac{720}{6}=120\)，一样。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：用 5 种不同颜色给一面旗上从左到右的 3 条竖条涂色，每条一种颜色，颜色互不相同。有几种涂法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(125\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(60\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(15\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。左、中、右三条位置不同，换颜色就是另一面旗，是排列：\(A_5^3=5\times4\times3=60\)。选 A 是 \(5^3\)，允许了颜色重复，题目说互不相同；选 C 是 \(C_5^3\)，只选了颜色没排位置；选 D 是把 \(5\times3\) 当成了排列数。</p></div>
+  </div>
+
+  <h3>3. 组合与组合数（不讲顺序）</h3>
+  <p>从 \(n\) 个不同元素中取出 \(m\) 个（\(1\le m\le n\)）<b>合成一组</b>，不管先后，叫一个<b>组合</b>；所有组合的个数叫<b>组合数</b>，记作 \(C_n^m\)。</p>
+  <p>为什么要除以 \(m!\)：把「排一列」拆成两步——先选出一组（\(C_n^m\) 种），再把这 \(m\) 个排好（\(m!\) 种）。所以 \(A_n^m=C_n^m\cdot m!\)，也就是每一组恰好被排列重复数了 \(m!\) 次：</p>
+  <div class="key">$$C_n^m=\frac{A_n^m}{m!}$$ 用阶乘写：$$C_n^m=\frac{n!}{m!\,(n-m)!}$$</div>
+  <p>规定 \(C_n^0=1\)（什么都不选，只有一种情况）。</p>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>平面上有 6 个点，任意三点不共线。① 以其中两点为端点的线段有几条？② 有向线段（分起点、终点）有几条？</p>
+    <p>① 线段 \(PQ\) 和 \(QP\) 是同一条，交换后没变，是组合：</p>
+    <p style="text-align:center">\(C_6^2=\dfrac{6\times5}{2\times1}=15\)（条）。</p>
+    <p>② 有向线段 \(\overrightarrow{PQ}\) 和 \(\overrightarrow{QP}\) 方向相反，是两条，交换后变了，是排列：</p>
+    <p style="text-align:center">\(A_6^2=6\times5=30\)（条）。</p>
+    <p>对比：\(30=15\times2!\)，每条线段对应两条有向线段，正好是 \(A=C\cdot m!\)。</p>
+  </div>
+  <div class="card predict" data-id="chk1" data-answer="B">
+    <p><b>自己试试</b>：判断下列两个情境属于排列还是组合？<br>
+    情境 1：10 个人见面，每两个人之间握一次手，共握手多少次？<br>
+    情境 2：一条铁路线路上有 10 个车站，铁路局需要准备多少种不同的硬座火车票（区分起点与终点）？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">情境 1 是排列；情境 2 是组合</button>
+      <button class="opt" data-v="B">情境 1 是组合；情境 2 是排列</button>
+      <button class="opt" data-v="C">两个情境全都是排列</button>
+      <button class="opt" data-v="D">两个情境全都是组合</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。情境 1 中，甲与乙握手就是乙与甲握手，交换后没变，是组合（共 \(C_{10}^2 = 45\) 次）；情境 2 中，「甲站到乙站」和「乙站到甲站」是两种票，交换后变了，是排列（共 \(A_{10}^2 = 90\) 种）。常见错：看到「两个两个」就都当组合，忘了做交换检验。</p>
+    </div>
+  </div>
+
+  <h3>4. 组合数的两个性质（会推就行，不用死记）</h3>
+  <p>两个性质都能用「组合数在数什么」现场讲出来：</p>
+  <ul>
+    <li><b>对称</b>：\(C_n^m=C_n^{n-m}\)。从 \(n\) 个里选 \(m\) 个留下，等于选 \(n-m\) 个不要，两种说法一一对应。\(m\) 比 \(\dfrac n2\) 大时，换成小的算更快。</li>
+    <li><b>递推</b>：\(C_{n+1}^m=C_n^m+C_n^{m-1}\)。从 \(n+1\) 个里选 \(m\) 个，盯住其中某一个元素：不选它，从其余 \(n\) 个里选 \(m\) 个；选它，再从其余 \(n\) 个里选 \(m-1\) 个。分两类相加。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>① 求 \(C_{12}^{10}\)。② 验证 \(C_5^2+C_5^3=C_6^3\)。</p>
+    <p>① 直接算要乘 10 个数。用对称：</p>
+    <p style="text-align:center">\(C_{12}^{10}=C_{12}^{2}=\dfrac{12\times11}{2}=66\)。</p>
+    <p>② \(C_5^2=\dfrac{5\times4}{2}=10\)，\(C_5^3=C_5^2=10\)，和是 \(20\)；\(C_6^3=\dfrac{6\times5\times4}{3\times2\times1}=20\)。相等。</p>
+    <p>用递推的说法：6 人里选 3 人，按「甲去不去」分两类：甲不去，从另 5 人选 3 人（\(C_5^3\)）；甲去，再从另 5 人选 2 人（\(C_5^2\)）。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="C">
+    <p>自己试试：\(C_{20}^{18}\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(380\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(20\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(190\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(360\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(C_{20}^{18}=C_{20}^{2}=\dfrac{20\times19}{2\times1}=190\)。选 A 是只算了 \(20\times19\)，忘了除以 \(2!\)（那是 \(A_{20}^2\)）；选 B 是把 \(C_{20}^{18}\) 当成了 \(C_{20}^{1}\)。</p></div>
+  </div>
+
+  <h3>5. 有条件的排队：特殊优先、捆绑、插空</h3>
+  <p>这些方法不是新公式，只是把分步乘法安排得聪明一点。每种都有适用条件：</p>
+  <ul>
+    <li><b>特殊元素（位置）优先</b>：某个人只能站某些位置、某个位置只能放某些人时，先安排它，再排其余的。先排没限制的，后面就可能没法排了。</li>
+    <li><b>捆绑（必须相邻）</b>：把要相邻的几个看成一个整体，和其余的一起排；<b>再乘上整体内部的排法</b>。</li>
+    <li><b>插空（互不相邻）</b>：先排没限制的 \(k\) 个，它们之间和两端共有 \(k+1\) 个空；再把不能相邻的插进<b>不同的空</b>里，这样它们中间一定隔着人。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>5 名男生和 2 名女生站成一排合影（共 7 人）：① 2 名女生相邻；② 2 名女生不相邻；③ 2 名女生站在两端。各有多少种站法？</p>
+    <p>① <b>捆绑</b>：2 名女生看成一个整体，和 5 名男生共 6 个单位，排法 \(A_6^6=720\)；整体内部两人可以换位，\(A_2^2=2\)。共 \(720\times2=1440\)（种）。</p>
+    <p>② <b>插空</b>：先排 5 名男生，\(A_5^5=120\)；5 人之间和两端共 \(5+1=6\) 个空（_男_男_男_男_男_）；2 名女生插进其中 2 个不同的空，\(A_6^2=30\)。共 \(120\times30=3600\)（种）。</p>
+    <p>检查：不加限制共 \(7!=5040\) 种，相邻和不相邻正好分完：\(1440+3600=5040\)。</p>
+    <p>③ <b>特殊位置优先</b>：两端两个位置先给 2 名女生，\(A_2^2=2\)；中间 5 个位置排男生，\(A_5^5=120\)。共 \(2\times120=240\)（种）。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：甲、乙、丙、丁、戊 5 人排成一排，甲既不站排头也不站排尾。有几种排法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(72\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(96\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(48\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(120\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。甲是特殊元素，先排：中间 3 个位置任选一个，3 种；其余 4 人排剩下 4 个位置，\(4!=24\)。共 \(3\times24=72\)。也可以从反面算：\(120-2\times24=72\)。选 B 是只去掉了「甲站排头」的 24 种，忘了排尾；选 D 是没管限制。</p></div>
+  </div>
+
+  <h3>6. 用之前要注意</h3>
+  <ol>
+    <li><b>先做交换检验，再决定用 \(A\) 还是 \(C\)</b>。<br><span class="small">反例：「从 10 人中选 3 人组成代表队」是 \(C_{10}^3=120\)；写成 \(A_{10}^3=720\)，就把同一支队伍数了 \(3!=6\) 遍。</span></li>
+    <li><b>公式只管「不同元素、不重复取、\(1\le m\le n\) 的整数」</b>。<br><span class="small">反例：3 位数字密码，每位 \(0\sim9\) 可以重复，是 \(10^3=1000\) 种，不是 \(A_{10}^3=720\)。\(m>n\) 时（5 人选 6 人）根本没法选，不能硬套公式。</span></li>
+    <li><b>有相同元素，不能直接用全排列</b>。<br><span class="small">反例：把字母 \(A,A,B\) 排成一列，只有 \(AAB,ABA,BAA\) 3 种，不是 \(3!=6\) 种：两个 \(A\) 互换看不出区别。</span></li>
+    <li><b>插空法的空数是 \(k+1\)，两端也算</b>。<br><span class="small">反例：3 人站好后有 _人_人_人_ 共 4 个空；只数中间的 2 个，就漏掉了站在最左、最右的情况。</span></li>
+    <li><b>捆绑后别忘了乘内部的排法</b>，用这些方法时要说清楚「每种排法只数了一次」。<br><span class="small">反例：例 4 ① 只写 \(A_6^6=720\)，就把「女甲在左」「女乙在左」当成了一种。</span></li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>定序问题</b>：\(n\) 个人排队，其中 \(k\) 个人的先后顺序已经定死（不一定相邻）。每一种「这 \(k\) 人的顺序」在全排列里出现的次数一样多，一共 \(k!\) 种顺序，只保留其中一种：</p>
+    <p style="text-align:center">排法数 \(=\dfrac{n!}{k!}\)。</p>
+    <p>例：4 人排队，甲在乙前面。\(\dfrac{4!}{2!}=12\)。</p>
+    <p><b>先选后排</b>：「从 6 人中选 3 人，排成一排，其中甲必须入选」：先把甲选上，再从另 5 人选 2 人，\(C_5^2=10\)；选好的 3 人排一排，\(3!=6\)。共 \(10\times6=60\)。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>排列 vs 组合解构天平实验室</h3>
+  <p class="small">从 4 个小球 {A, B, C, D} 中抽取小球。观察左侧排列池与右侧组合池的映射关系，直观见证组合如何通过除以 \(m!\) 将具有相同元素的排列聚类打包：</p>
+
+  <div class="ctrl">
+    <label for="selM">选取球数 \(m\) = </label>
+    <select id="selM" style="padding:4px 8px;border-radius:4px;border:1px solid var(--line);background:var(--card)">
+      <option value="2" selected>抽取 2 个球 (m = 2)</option>
+      <option value="3">抽取 3 个球 (m = 3)</option>
+    </select>
+    <button type="button" class="btn ghost" id="resetBtn">重置实验台</button>
+  </div>
+
+  <svg class="fig" id="scaleSvg" viewBox="0 0 560 160" role="img" aria-label="排列组合天平对比图"></svg>
+
+  <div class="pool-grid">
+    <div class="pool-box" id="permBox">
+      <div class="pool-tit"><span style="color:#2563eb">排列池（有顺序，A₄ᵐ）</span><span class="badge-tag" style="background:#dbeafe;color:#1e40af" id="permCount">12 种</span></div>
+      <div id="permList" style="line-height:1.7;color:var(--fg)"></div>
+    </div>
+    <div class="pool-box" id="combBox">
+      <div class="pool-tit"><span style="color:#10b981">组合池（无顺序，C₄ᵐ = A₄ᵐ / m!）</span><span class="badge-tag" style="background:#d1fae5;color:#065f46" id="combCount">6 组</span></div>
+      <div id="combList" style="line-height:1.7;color:var(--fg)"></div>
+    </div>
+  </div>
+
+  <div class="result" id="labDesc" aria-live="polite"></div>
+</section>
+
+<section class="step" data-title="练一练">
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="C">
+    <p>1. 计算组合数 \(C_7^3\) 的值等于：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(210\)</button>
+      <button class="opt" data-v="B">\(21\)</button>
+      <button class="opt" data-v="C">\(35\)</button>
+      <button class="opt" data-v="D">\(42\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。代入组合数计算公式：\(C_7^3 = \dfrac{7 \times 6 \times 5}{3 \times 2 \times 1} = \dfrac{210}{6} = 35\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="A">
+    <p>2. 某小组共有 6 名同学排成一排，其中甲、乙两人必须相邻，则不同的排队方法共有多少种？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(240\) 种</button>
+      <button class="opt" data-v="B">\(120\) 种</button>
+      <button class="opt" data-v="C">\(720\) 种</button>
+      <button class="opt" data-v="D">\(480\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。相邻用捆绑法：将甲、乙捆绑为一个整体，与其余 4 人共计 5 个元素进行全排列，排法有 \(A_5^5 = 120\) 种；甲、乙两人内部位置互换有 \(A_2^2 = 2\) 种。总数 \(N = 120 \times 2 = 240\) 种。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="D">
+    <p>3. 某次小型会议有 8 位专家参会，会议结束时每两位专家之间握手一次，则全体专家总共握手多少次？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(64\) 次</button>
+      <button class="opt" data-v="B">\(56\) 次</button>
+      <button class="opt" data-v="C">\(16\) 次</button>
+      <button class="opt" data-v="D">\(28\) 次</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。握手属于典型的无序组合问题（甲与乙握手等同于乙与甲握手，不区分先后）。总握手次数为从 8 人中任取 2 人的组合数：\(C_8^2 = \dfrac{8 \times 7}{2 \times 1} = 28\) 次。切忌错用排列数算成 56！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p4" data-answer="B">
+    <p>4. 某班级排练节目，4 名男生和 3 名女生排成一排，要求任意两名女生不能相邻排在一起，则不同的排法种数共有：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(720\) 种</button>
+      <button class="opt" data-v="B">\(1440\) 种</button>
+      <button class="opt" data-v="C">\(2880\) 种</button>
+      <button class="opt" data-v="D">\(576\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。不相邻用插空法：</p>
+      <p>第一步：先排 4 名男生，有 \(A_4^4 = 24\) 种；</p>
+      <p>第二步：4 名男生排好后产生 <b>\(4 + 1 = 5\) 个空位</b>（含两端外侧）；</p>
+      <p>第三步：将 3 名女生插入这 5 个空位中，有 \(A_5^3 = 5 \times 4 \times 3 = 60\) 种；</p>
+      <p>根据分步乘法原理：\(N = 24 \times 60 = 1440\) 种。</p>
+    </div>
+  </div>
+
+  <h3>挑战进阶</h3>
+  <div class="card predict" data-id="p5" data-answer="C">
+    <p>5. 6 个人排成一排，其中甲必须排在乙的前面（不一定相邻），则不同的排法共有多少种？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(120\) 种</button>
+      <button class="opt" data-v="B">\(240\) 种</button>
+      <button class="opt" data-v="C">\(360\) 种</button>
+      <button class="opt" data-v="D">\(720\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。<b>定序问题除法消序法</b>！6 个人全排列总共有 \(A_6^6 = 720\) 种排法。在所有这些排法中，由对称性可知，「甲在乙前」与「乙在甲前」的机会完全均等，各占一半！因此排法数直接为 \(\dfrac{720}{2!} = 360\) 种。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var selM = document.getElementById("selM");
+  var resetBtn = document.getElementById("resetBtn");
+  var permCount = document.getElementById("permCount");
+  var combCount = document.getElementById("combCount");
+  var permList = document.getElementById("permList");
+  var combList = document.getElementById("combList");
+  var desc = document.getElementById("labDesc");
+
+  var balls = ["A", "B", "C", "D"];
+
+  function getCombinations(arr, k) {
+    var res = [];
+    function helper(start, cur) {
+      if (cur.length === k) {
+        res.push(cur.slice());
+        return;
+      }
+      for (var i = start; i < arr.length; i++) {
+        cur.push(arr[i]);
+        helper(i + 1, cur);
+        cur.pop();
+      }
+    }
+    helper(0, []);
+    return res;
+  }
+
+  function getPermutations(arr) {
+    var res = [];
+    function perm(cur, left) {
+      if (left.length === 0) {
+        res.push(cur.join(""));
+        return;
+      }
+      for (var i = 0; i < left.length; i++) {
+        var nextLeft = left.slice(0, i).concat(left.slice(i + 1));
+        perm(cur.concat([left[i]]), nextLeft);
+      }
+    }
+    perm([], arr);
+    return res;
+  }
+
+  function render() {
+    var m = parseInt(selM.value, 10) || 2;
+    var combs = getCombinations(balls, m);
+
+    var permTotal = [];
+    var combHtml = [];
+    var permHtml = [];
+
+    combs.forEach(function (c, idx) {
+      var permsOfC = getPermutations(c);
+      permTotal = permTotal.concat(permsOfC);
+
+      combHtml.push('<b>第 ' + (idx + 1) + ' 组：{' + c.join(", ") + '}</b> <span style="color:var(--muted)">包含 ' + permsOfC.length + ' 种排列 (' + permsOfC.join(", ") + ')</span>');
+    });
+
+    permHtml.push(permTotal.map(function (p, i) {
+      return '<span style="display:inline-block;width:48px;font-family:monospace;font-weight:700">' + p + '</span>';
+    }).join(" "));
+
+    permCount.textContent = permTotal.length + " 种";
+    combCount.textContent = combs.length + " 组";
+
+    permList.innerHTML = permHtml.join("");
+    combList.innerHTML = combHtml.join("<br>");
+
+    // 绘制天平示意图
+    var svg = document.getElementById("scaleSvg");
+    var factM = m === 2 ? 2 : 6;
+    var svgh = [];
+    svgh.push('<line x1="120" y1="90" x2="440" y2="90" stroke="var(--line)" stroke-width="3"/>');
+    svgh.push('<polygon points="280,40 270,90 290,90" fill="var(--muted)"/>');
+    svgh.push('<rect x="250" y="90" width="60" height="10" fill="var(--fg)"/>');
+    // 左托盘 (排列)
+    svgh.push('<line x1="160" y1="90" x2="160" y2="120" stroke="#2563eb" stroke-width="2"/>');
+    svgh.push('<rect x="100" y="120" width="120" height="24" rx="4" fill="rgba(37, 99, 235, 0.15)" stroke="#2563eb"/>');
+    svgh.push('<text x="160" y="136" font-size="12" font-weight="700" fill="#2563eb" text-anchor="middle">排列 A₄ᵐ = ' + permTotal.length + ' 种</text>');
+    // 右托盘 (组合 × m!)
+    svgh.push('<line x1="400" y1="90" x2="400" y2="120" stroke="#10b981" stroke-width="2"/>');
+    svgh.push('<rect x="340" y="120" width="120" height="24" rx="4" fill="rgba(16, 185, 129, 0.15)" stroke="#10b981"/>');
+    svgh.push('<text x="400" y="136" font-size="12" font-weight="700" fill="#10b981" text-anchor="middle">组合 C₄ᵐ = ' + combs.length + ' 组</text>');
+    // 中间等式桥梁
+    svgh.push('<text x="280" y="30" font-size="13" font-weight="700" fill="var(--fg)" text-anchor="middle">A₄ᵐ = C₄ᵐ × ' + factM + ' (' + m + '!)</text>');
+    svg.innerHTML = svgh.join("");
+    desc.innerHTML = '<b>数学原理显微镜</b>：从 4 个元素中抽取 ' + m + ' 个，排列数 <b>A₄' + (m === 2 ? '²' : '³') + ' = ' + permTotal.length + '</b>。每一组相同的被选元素，内部全排列都有 <b>' + m + '! = ' + factM + '</b> 种不同次序。组合为了消除顺序，直接除以 ' + factM + '，得到组合数 <b>C₄' + (m === 2 ? '²' : '³') + ' = ' + permTotal.length + ' ÷ ' + factM + ' = ' + combs.length + '</b> 组！';
+  }
+
+  resetBtn.addEventListener("click", function () {
+    selM.value = "2";
+    render();
+  });
+
+  selM.addEventListener("change", render);
+
+  render();
+})();
+</script>
+</body>
+</html>

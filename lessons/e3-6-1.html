@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6.1 分类加法计数原理与分步乘法计数原理 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
+</style>
+</head>
+<body data-sec="e3-6-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 6 章 计数原理</p>
+<h1>6.1 分类加法计数原理与分步乘法计数原理</h1>
+<p class="lead">从生活中的出行方案、穿搭组合到计算机算法的穷举设计，解决「一共有多少种可能」的底层基石只有两条：能独立做成的用分类相加，缺一不可的用分步相乘。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>小明从学校出发前往位于海岛的研学基地。第一阶段：从学校到码头中转站，可以乘大巴（有 3 趟班车），也可以乘轻轨（有 2 趟列车）；第二阶段：从中转码头到海岛，必须换乘渡轮（有 4 艘渡轮）：</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>小明从学校出发顺利抵达海岛研学基地，共有多少种不同的路线走法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3 + 2 + 4 = 9\) 种</button>
+      <button class="opt" data-v="B"><b>B</b>\((3 + 2) \times 4 = 20\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。第一阶段到码头，乘大巴或乘轻轨都能到达码头，属于二选一的<b>分类</b>，共有 \(3 + 2 = 5\) 种方法；</p>
+      <p>但是到了码头任务并没有结束！小明还必须搭乘渡轮，缺少第二阶段就到不了海岛。两阶段是连续必须完成的<b>分步</b>关系，所以用乘法：\(5 \times 4 = 20\) 种。</p>
+      <p>区分「分类」还是「分步」，关键在于：<b>单独这一类能不能独立完成整件事</b>！这一节我们就来系统建立两大基本计数原理。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：1.1 集合与元素（<a href="b1-1-1.html">回看 1.1</a>）；1.3 交集、并集（<a href="b1-1-3.html">回看 1.3</a>），分类时「不重不漏」说的就是各类没有交集、并起来是全部。</p>
+
+  <div class="card">
+    <p><b>完成一件事</b>：数之前先说清楚，做到哪一步才算「事情办完了」。</p>
+    <p>例：「从学校到码头」，坐 \(3\) 趟大巴中的任一趟都算办完；「从学校到海岛」，坐完大巴还得坐渡轮，坐大巴只是办了一半。同样坐大巴，标准不同，它的角色就不同。</p>
+  </div>
+
+  <div class="card">
+    <p><b>方法数</b>：完成这件事的结果有几种不同的样子。</p>
+    <p>例：渡轮有 \(4\) 艘，坐哪一艘结果都不一样，就是 \(4\) 种方法；要是 \(4\) 艘船只算「坐船」一种，问题就变了。所以先想清楚，什么样的两种做法算「不同」。</p>
+  </div>
+
+  <div class="card">
+    <p><b>不重不漏</b>：把所有做法分成几类，每种做法<b>恰好</b>落在一类里：不在两类里重复出现（不重），也没有哪种做法哪一类都不属于（不漏）。</p>
+    <p>例：\(1\) 到 \(10\) 按「奇数」「偶数」分，\(5+5=10\)，不重不漏。改按「\(2\) 的倍数」「\(3\) 的倍数」分：\(6\) 两类都有（重了），\(1,5,7\) 哪类都不在（漏了），\(5+3=8\) 就不等于这几类要数的东西了。</p>
+  </div>
+
+  <h3>2. 分类加法：每一类都能单独办完</h3>
+  <p>完成一件事有 \(k\) 类办法，第 \(1\) 类有 \(m_1\) 种方法，第 \(2\) 类有 \(m_2\) 种……第 \(k\) 类有 \(m_k\) 种，那么完成这件事一共有</p>
+  <div class="key">$$N=m_1+m_2+\cdots+m_k$$</div>
+  <p>为什么是加：每一类里的任何一种方法，<b>单独用就把事办完了</b>。所有方法摆成一排，按类分堆再数，总数就是各堆个数之和。前提是分堆<b>不重不漏</b>，否则会多数或少数。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>从 \(1\) 到 \(20\) 中选一个数，要求它是 \(3\) 的倍数或 \(7\) 的倍数，有几种选法？</p>
+    <p>事情：选出一个合要求的数，选一个就办完了，所以按「是谁的倍数」分类。</p>
+    <p>第 \(1\) 类，\(3\) 的倍数：\(3,6,9,12,15,18\)，\(6\) 种；</p>
+    <p>第 \(2\) 类，\(7\) 的倍数：\(7,14\)，\(2\) 种。</p>
+    <p>检查不重：\(3\) 和 \(7\) 的公倍数最小是 \(21\)，超过 \(20\)，两类没有共同的数。不漏：合要求的数一定在某一类里。</p>
+    <p>所以共有 \(6+2=8\) 种选法。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：从 \(1\) 到 \(30\) 中选一个数，要求它是 \(2\) 的倍数或 \(5\) 的倍数，有几种选法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(21\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(18\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(90\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。分成不重的两类：偶数 \(15\) 个；是 \(5\) 的倍数的奇数 \(5,15,25\)，\(3\) 个。共 \(15+3=18\)。选 A 是直接 \(15+6\)：\(10,20,30\) 两类都算了一次，重了；选 D 是把「选一个数」当成了两步相乘。</p></div>
+  </div>
+
+  <h3>3. 分步乘法：每一步都做完才算办完</h3>
+  <p>完成一件事要依次做 \(k\) 步，第 \(1\) 步有 \(m_1\) 种方法，第 \(2\) 步有 \(m_2\) 种……第 \(k\) 步有 \(m_k\) 种，那么完成这件事一共有</p>
+  <div class="key">$$N=m_1\times m_2\times\cdots\times m_k$$</div>
+  <p>为什么是乘：哪一步单独都办不完，要每步各选一种方法，<b>拼成一串</b>才是一种完整的做法。第 \(1\) 步的每一种，后面都能接上第 \(2\) 步的 \(m_2\) 种，像树枝一样一层层分叉，末梢的个数就是乘积。前提是：不管前面选了什么，<b>后一步可选的个数都一样</b>。</p>
+
+  <div class="card">
+    <p class="small">例 2（看一遍怎么写）</p>
+    <p>用数字 \(0,1,2,3,4,5\) 能组成多少个没有重复数字的三位数？</p>
+    <p>事情：写出一个三位数。只定百位还不是三位数，要百位、十位、个位都定了才办完，所以分三步。<b>有限制的位置先排</b>：</p>
+    <p>第 \(1\) 步，百位：不能是 \(0\)，从 \(1,2,3,4,5\) 里选，\(5\) 种；</p>
+    <p>第 \(2\) 步，十位：可以是 \(0\)，但不能和百位相同，剩下 \(5\) 个数里选，\(5\) 种；</p>
+    <p>第 \(3\) 步，个位：不能和前两位相同，剩下 \(4\) 个数里选，\(4\) 种。</p>
+    <p>不管前两步选了哪两个数，十位总有 \(5\) 种、个位总有 \(4\) 种，可以直接乘：\(N=5\times5\times4=100\) 个。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="C">
+    <p>自己试试：\(3\) 名同学各报名参加 \(4\) 个兴趣小组中的一个（可以报同一个组），一共有几种报名结果？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(81\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(64\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(24\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。三个人都报完才算办完，一人一步：每人都有 \(4\) 个组可选，\(4\times4\times4=64\)。选 B 是把「组」当成了步骤，算成 \(3^4\)：可每个组并不是非选一个人不可；选 D 是以为不能报同一个组；选 A 是把乘法做成了 \(3\times4\)。</p></div>
+  </div>
+
+  <h3>4. 先分清类和步，再一起用</h3>
+  <p>判断的问题只有一个：<b>这一类（这一步）做完，整件事办完了没有？</b>办完了，是分类，相加；还没办完，是分步，相乘。</p>
+  <div class="tbl"><table class="rec">
+    <tr><th></th><th>分类加法</th><th>分步乘法</th></tr>
+    <tr><td>单独一部分</td><td>能办完整件事</td><td>办不完</td></tr>
+    <tr><td>各部分之间</td><td>不重不漏</td><td>一步接一步</td></tr>
+    <tr><td>算法</td><td>相加</td><td>相乘</td></tr>
+  </table></div>
+
+  <div class="card predict" data-id="chk1" data-answer="C">
+    <p>先分一分：书架上有 \(4\) 本不同的数学书，\(3\) 本不同的物理书，\(2\) 本不同的化学书。从中<b>只取一本书</b>，或者<b>数理化各取一本</b>，取法种数分别是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(24\) 种；\(9\) 种</button>
+      <button class="opt" data-v="B">\(9\) 种；\(9\) 种</button>
+      <button class="opt" data-v="C">\(9\) 种；\(24\) 种</button>
+      <button class="opt" data-v="D">\(12\) 种；\(24\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。① 只取一本：取数学书、物理书或化学书都能单独办完，属于<b>分类加法</b>：\(4+3+2=9\) 种；② 三科各取一本：取完数学书还没办完，要三科都取，属于<b>分步乘法</b>：\(4\times3\times2=24\) 种。</p>
+    </div>
+  </div>
+
+  <p>复杂一点的题里两个原理一起用：如果某一步可选的个数<b>随前面的选择而变</b>，就按前面的选择<b>先分类</b>，让每一类里各步的个数都固定，类内分步相乘，最后各类相加。</p>
+
+  <div class="card">
+    <p class="small">例 3（看一遍怎么写）</p>
+    <p>还是用 \(0,1,2,3,4,5\)，能组成多少个没有重复数字的三位<b>偶数</b>？</p>
+    <p>个位只能是 \(0,2,4\)。先排个位的话，百位有几种要看个位是不是 \(0\)：个位是 \(0\)，百位有 \(5\) 种；个位是 \(2\) 或 \(4\)，百位既不能是 \(0\) 也不能和个位相同，只剩 \(4\) 种。个数不固定，所以按「个位是不是 \(0\)」分类：</p>
+    <p><b>第 \(1\) 类，个位是 \(0\)</b>：个位 \(1\) 种，百位从 \(1\)~\(5\) 选 \(5\) 种，十位从剩下 \(4\) 个数选 \(4\) 种，共 \(1\times5\times4=20\) 个；</p>
+    <p><b>第 \(2\) 类，个位是 \(2\) 或 \(4\)</b>：个位 \(2\) 种，百位 \(4\) 种，十位从剩下 \(4\) 个数选 \(4\) 种，共 \(2\times4\times4=32\) 个。</p>
+    <p>两类不重不漏，合起来 \(N=20+32=52\) 个。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B">
+    <p>自己试试：用 \(0,1,2,3\) 能组成多少个没有重复数字的三位偶数？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(10\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(8\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(18\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。个位是 \(0\)：百位 \(3\) 种、十位 \(2\) 种，\(6\) 个；个位是 \(2\)：百位只能是 \(1\) 或 \(3\)，\(2\) 种，十位 \(2\) 种，\(4\) 个。共 \(6+4=10\)。选 A 是不分类、直接按个位 \(2\) 种 × 百位 \(3\) 种 × 十位 \(2\) 种，把 \(0\) 打头的 \(2\) 个（\(012\)、\(032\)）也数进去了。</p></div>
+  </div>
+
+  <h3>5. 用之前要注意</h3>
+  <ol>
+    <li><b>不要凭「或就加、且就乘」这类字面口诀</b>，要看做完这一部分事情办完没有。<br><span class="small">反例：「从男生和女生中选 \(1\) 人」和「选 \(1\) 名男生和 \(1\) 名女生」都有「和」字，前者选一人就办完，是相加；后者要选两人，是相乘。</span></li>
+    <li><b>分类必须不重不漏</b>；有重叠就先拆开，或减去重复的部分（1.3 的集合计数）。<br><span class="small">反例：会唱歌的 \(5\) 人，会跳舞的 \(4\) 人，其中 \(2\) 人两样都会，选 \(1\) 人表演，不是 \(5+4=9\) 种，而是 \(5+4-2=7\) 种。</span></li>
+    <li><b>后一步的可选个数随前一步变化时，不能乘一个固定的数</b>，要先分类再相加。<br><span class="small">反例：例 3 若写成「个位 \(3\) 种 × 百位 \(4\) 种 × 十位 \(4\) 种 \(=48\)」，个位是 \(0\) 时百位其实有 \(5\) 种，正确答案是 \(52\)。</span></li>
+    <li><b>正面情况太多时可以用间接法</b>：合要求的个数 \(=\) 总数 \(-\) 不合要求的个数。但减掉的必须<b>正好是</b>「合要求」的反面。<br><span class="small">反例：用 \(0\)~\(5\) 组成的无重复三位数里，「至少有一位是偶数」的反面是「三位全是奇数」（\(3\times2\times1=6\) 个），答案 \(100-6=94\)；减成「三位全是偶数」（\(4\) 个）得 \(96\)，就错了。</span></li>
+  </ol>
+  <div class="key">先说清楚「完成一件事」的标准，再看结构：能单独办完的分类相加，缺一不可的分步相乘，个数不固定时先分类。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>和集合的关系</b>：分类加法就是「两两没有交集的有限集合，并集的元素个数等于各自个数之和」；分步乘法就是「从 \(A\) 里取一个、从 \(B\) 里取一个，组成的有序对共有 \(\mathrm{card}(A)\times\mathrm{card}(B)\) 个」。</p>
+    <p><b>拿不准就列举小情况核对</b>：例如「自己试试」里 \(0,1,2,3\) 的三位偶数，可以把个位是 \(0\) 的写出来：\(120,130,210,230,310,320\)，正好 \(6\) 个，和算出来的对得上。后面学排列、组合，都是在这两个原理上搭起来的。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>计数决策树与搭配全景生成器</h3>
+  <p class="small">切换「分类加法模式」与「分步乘法模式」，动态观察树状图的分支形态。分类模式下分支并列独立直达终点，分步模式下分支逐级展开相乘：</p>
+
+  <div class="ctrl">
+    <button type="button" class="btn active" id="btnModeAdd">模式 1：分类加法（出行方案）</button>
+    <button type="button" class="btn" id="btnModeMul">模式 2：分步乘法（组装搭配）</button>
+    <button type="button" class="btn ghost" id="resetBtn">重置决策树</button>
+  </div>
+
+  <svg class="fig" id="treeSvg" viewBox="0 0 560 300" role="img" aria-label="计数原理决策树演示"></svg>
+
+  <div class="result" id="treeDesc" aria-live="polite"></div>
+</section>
+
+<section class="step" data-title="练一练">
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A">
+    <p>1. 某班级有男生 20 人，女生 18 人。从中推选一人担任班长，有几种推选方法？若推选男、女班长各一人，又有几种推选方法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(38\) 种；\(360\) 种</button>
+      <button class="opt" data-v="B">\(360\) 种；\(38\) 种</button>
+      <button class="opt" data-v="C">\(38\) 种；\(38\) 种</button>
+      <button class="opt" data-v="D">\(19\) 种；\(360\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。推选一人：选男生或选女生都能完成，分类加法：\(20 + 18 = 38\) 种；推选男女各一人：必须先选男生再选女生才完成，分步乘法：\(20 \times 18 = 360\) 种。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="D">
+    <p>2. 某密码锁的密码是由 2 个不同的大写英文字母后跟 3 个不同的数字（0~9）组成的。这样的密码总共有多少个？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(26 \times 25 + 10 \times 9 \times 8\)</button>
+      <button class="opt" data-v="B">\(26^2 \times 10^3\)</button>
+      <button class="opt" data-v="C">\(26 \times 10 \times 25 \times 9 \times 8\)</button>
+      <button class="opt" data-v="D">\(26 \times 25 \times 10 \times 9 \times 8\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。形成密码必须完成 5 个步骤：第 1 位字母有 26 种，第 2 位不同字母有 25 种；第 3 位数字有 10 种，第 4 位不同数字有 9 种，第 5 位不同数字有 8 种。分步相乘：\(26 \times 25 \times 10 \times 9 \times 8 = 468,000\) 个。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="B">
+    <p>3. 由数字 \(1, 2, 3, 4, 5\) 组成没有重复数字的五位数，其中奇数必须排在两端（首位和末位）的五位数共有：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(24\) 个</button>
+      <button class="opt" data-v="B">\(36\) 个</button>
+      <button class="opt" data-v="C">\(18\) 个</button>
+      <button class="opt" data-v="D">\(12\) 个</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。分步解决优先限制位置：奇数有 \(1, 3, 5\)（共 3 个），偶数有 \(2, 4\)（共 2 个）。</p>
+      <p>① 首位排奇数：3 种；</p>
+      <p>② 末位排奇数：剩 2 个奇数可选，2 种；</p>
+      <p>③ 中间三个位置排剩下的 3 个数字（1 个奇数和 2 个偶数）：\(3 \times 2 \times 1 = 6\) 种。</p>
+      <p>根据分步乘法原理：\(N = 3 \times 2 \times 6 = 36\) 个。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p4" data-answer="A">
+    <p>4. 一张地图分成 \(A, B, C, D\) 四块：\(A\) 与 \(B, C, D\) 都相邻，\(B\) 与 \(C\) 相邻，\(C\) 与 \(D\) 相邻，\(B\) 与 \(D\) 不相邻。用红、黄、蓝、绿 4 种颜色涂色，相邻两块颜色不同（颜色可以不用完），共有多少种涂法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(48\) 种</button>
+      <button class="opt" data-v="B">\(72\) 种</button>
+      <button class="opt" data-v="C">\(84\) 种</button>
+      <button class="opt" data-v="D">\(96\) 种</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。按「相邻最多的先涂」分步：</p>
+      <p>先涂 \(A\)：\(4\) 种；再涂 \(C\)（与 \(A\) 相邻）：\(3\) 种；\(B\) 只要和 \(A, C\) 不同：\(2\) 种；\(D\) 也只要和 \(A, C\) 不同：\(2\) 种（\(B, D\) 不相邻，可以同色）。共 \(4\times3\times2\times2=48\) 种。</p>
+      <p>也可以按 \(B, D\) 同色、异色分类核对：同色 \(4\times3\times2\times1=24\)，异色 \(4\times3\times2\times1=24\)，合计 \(48\)。选 \(84\) 的同学套了「四块围成一圈」的经典题，可这里 \(A\) 和其余三块都相邻，不是环形。</p>
+    </div>
+  </div>
+
+  <h3>挑战进阶</h3>
+  <div class="card predict" data-id="p5" data-answer="B">
+    <p>5. 在 \(1\) 到 \(1000\) 的正整数中，数字中<b>含有数字 3</b> 的正整数共有多少个？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">\(280\) 个</button>
+      <button class="opt" data-v="B">\(271\) 个</button>
+      <button class="opt" data-v="C">\(300\) 个</button>
+      <button class="opt" data-v="D">\(256\) 个</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。<b>正难则反（间接计数法）</b>！</p>
+      <p>考察从 000 到 999 这一千个三位编码（对应 0 到 999，其中 1000 不含 3）。</p>
+      <p>不含数字 3 的每一位只能从余下的 9 个数字（0,1,2,4,5,6,7,8,9）中任选：</p>
+      <p>不含 3 的编码数：\(9 \times 9 \times 9 = 729\) 个（包含了 000）。</p>
+      <p>除去 000 本身，在 1 到 999 中不含 3 的数有 \(729 - 1 = 728\) 个；加上 1000（不含 3），1 到 1000 中不含 3 的数共有 \(728 + 1 = 729\) 个。</p>
+      <p>因此含有数字 3 的正整数总数：\(1000 - 729 = 271\) 个！</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var btnAdd = document.getElementById("btnModeAdd");
+  var btnMul = document.getElementById("btnModeMul");
+  var resetBtn = document.getElementById("resetBtn");
+  var svg = document.getElementById("treeSvg");
+  var desc = document.getElementById("treeDesc");
+
+  var currentMode = "add"; // "add" or "mul"
+
+  function renderAdd() {
+    var h = [];
+    var oX = 80, oY = 150;
+
+    // 起点
+    h.push('<circle cx="' + oX + '" cy="' + oY + '" r="6" fill="var(--fg)"/>');
+    h.push('<text x="' + (oX - 12) + '" y="' + (oY + 4) + '" font-size="12" font-weight="700" fill="var(--fg)" text-anchor="end">出发点</text>');
+
+    // 三类独立方案：
+    // 第 1 类：高铁 3 班 (高处)
+    // 第 2 类：飞机 2 班 (中间)
+    // 第 3 类：大巴 2 班 (低处)
+    var categories = [
+      { name: "第1类：高铁 (3班)", y: 70, count: 3, color: "#2563eb", items: ["G1次 08:00", "G3次 11:30", "G7次 14:00"] },
+      { name: "第2类：飞机 (2班)", y: 150, count: 2, color: "#10b981", items: ["CA1201 09:15", "MU5103 16:40"] },
+      { name: "第3类：大巴 (2班)", y: 230, count: 2, color: "#f59e0b", items: ["大巴A线 07:30", "大巴B线 13:00"] }
+    ];
+
+    categories.forEach(function (cat) {
+      // 从起点连向各类中间节点
+      var midX = 220;
+      h.push('<line x1="' + oX + '" y1="' + oY + '" x2="' + midX + '" y2="' + cat.y + '" stroke="' + cat.color + '" stroke-width="2"/>');
+      h.push('<circle cx="' + midX + '" cy="' + cat.y + '" r="5" fill="' + cat.color + '"/>');
+      h.push('<text x="' + (midX + 8) + '" y="' + (cat.y - 8) + '" font-size="12" font-weight="700" fill="' + cat.color + '">' + cat.name + '</text>');
+
+      // 从中间节点向目的地分出各班次
+      var destX = 450;
+      cat.items.forEach(function (itm, i) {
+        var subY = cat.y - (cat.items.length - 1) * 16 + i * 32;
+        h.push('<line x1="' + midX + '" y1="' + cat.y + '" x2="' + destX + '" y2="' + subY + '" stroke="' + cat.color + '" stroke-width="1.5" stroke-dasharray="3 2"/>');
+        h.push('<circle cx="' + destX + '" cy="' + subY + '" r="4" fill="' + cat.color + '"/>');
+        h.push('<text x="' + (destX + 10) + '" y="' + (subY + 4) + '" font-size="11" fill="var(--fg)">' + itm + '</text>');
+      });
+    });
+
+    svg.innerHTML = h.join("");
+    desc.innerHTML = '<b>分类加法决策树</b>：每一类方案都能<b>独立、直接抵达终点</b>！高铁 3 班 + 飞机 2 班 + 大巴 2 班。总方案数 <b>N = 3 + 2 + 2 = 7 种</b>。各大类互斥并列，方法数直接相加。';
+  }
+
+  function renderMul() {
+    var h = [];
+    var oX = 60, oY = 150;
+
+    // 起点
+    h.push('<circle cx="' + oX + '" cy="' + oY + '" r="6" fill="var(--fg)"/>');
+    h.push('<text x="' + (oX - 10) + '" y="' + (oY + 4) + '" font-size="12" font-weight="700" fill="var(--fg)" text-anchor="end">工件开始</text>');
+
+    // 分步：第 1 步底座(2种) -> 第 2 步立柱(3种) -> 第 3 步涂色(2种) = 12 种
+    var step1Y = [90, 210];
+    var step1Names = ["圆形底座", "方形底座"];
+
+    step1Y.forEach(function (s1Y, idx1) {
+      var s1X = 180;
+      h.push('<line x1="' + oX + '" y1="' + oY + '" x2="' + s1X + '" y2="' + s1Y + '" stroke="#2563eb" stroke-width="2"/>');
+      h.push('<circle cx="' + s1X + '" cy="' + s1Y + '" r="5" fill="#2563eb"/>');
+      h.push('<text x="' + (s1X - 8) + '" y="' + (s1Y - 10) + '" font-size="11" font-weight="700" fill="#2563eb">' + step1Names[idx1] + '</text>');
+
+      // 第 2 步 (3 种立柱)
+      [-35, 0, 35].forEach(function (offsetY, idx2) {
+        var s2X = 320;
+        var s2Y = s1Y + offsetY;
+        h.push('<line x1="' + s1X + '" y1="' + s1Y + '" x2="' + s2X + '" y2="' + s2Y + '" stroke="#10b981" stroke-width="1.8"/>');
+        h.push('<circle cx="' + s2X + '" cy="' + s2Y + '" r="4" fill="#10b981"/>');
+
+        // 第 3 步 (2 种涂装)
+        [-10, 10].forEach(function (subOff, idx3) {
+          var s3X = 460;
+          var s3Y = s2Y + subOff;
+          h.push('<line x1="' + s2X + '" y1="' + s2Y + '" x2="' + s3X + '" y2="' + s3Y + '" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="2 2"/>');
+          h.push('<circle cx="' + s3X + '" cy="' + s3Y + '" r="3" fill="#f59e0b"/>');
+        });
+      });
+    });
+
+    h.push('<text x="180" y="30" font-size="12" font-weight="700" fill="#2563eb" text-anchor="middle">第1步：选底座(2种)</text>');
+    h.push('<text x="320" y="30" font-size="12" font-weight="700" fill="#10b981" text-anchor="middle">第2步：选立柱(3种)</text>');
+    h.push('<text x="460" y="30" font-size="12" font-weight="700" fill="#f59e0b" text-anchor="middle">第3步：选涂装(2种)</text>');
+
+    svg.innerHTML = h.join("");
+    desc.innerHTML = '<b>分步乘法树状展开</b>：缺少任何一步，工件都无法组装完毕！必须连续走完 3 个步骤：第 1 步 2 种 × 第 2 步 3 种 × 第 3 步 2 种。最终终点分支总数 <b>N = 2 × 3 × 2 = 12 种不同搭配</b>！';
+  }
+
+  function render() {
+    if (currentMode === "add") renderAdd();
+    else renderMul();
+  }
+
+  btnAdd.addEventListener("click", function () {
+    currentMode = "add";
+    btnAdd.className = "btn active";
+    btnMul.className = "btn";
+    render();
+  });
+
+  btnMul.addEventListener("click", function () {
+    currentMode = "mul";
+    btnMul.className = "btn active";
+    btnAdd.className = "btn";
+    render();
+  });
+
+  resetBtn.addEventListener("click", function () {
+    currentMode = "add";
+    btnAdd.className = "btn active";
+    btnMul.className = "btn";
+    render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

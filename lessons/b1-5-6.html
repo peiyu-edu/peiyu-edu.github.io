@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.6 函数 y=Asin(ωx+φ) · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig .grid { stroke: var(--line); stroke-width: 1; }
+  .fig text.num { font-size: 20px; fill: var(--muted); text-anchor: middle; }
+  .fig text.ynum { font-size: 20px; fill: var(--muted); text-anchor: end; }
+  .fig .ref { fill: none; stroke: var(--dim); stroke-width: 2; stroke-dasharray: 6 5; }
+  .fig .mid { fill: none; stroke: var(--c); stroke-width: 2; stroke-dasharray: 3 4; }
+  .fig .curve { fill: none; stroke: var(--a); stroke-width: 3.5; }
+  .fig .stage { fill: none; stroke: var(--b); stroke-width: 3.5; }
+  .fig .prev { fill: none; stroke: var(--dim); stroke-width: 2; stroke-dasharray: 6 5; }
+  .fig .goal { fill: none; stroke: var(--a); stroke-width: 6; opacity: .18; }
+  .fig .shift { stroke: var(--hl); stroke-width: 4; }
+  .fig .shiftHead { fill: var(--hl); }
+  .fig .kp { fill: var(--hl); stroke: var(--card); stroke-width: 2; }
+  .fig .kp0 { fill: var(--c); stroke: var(--card); stroke-width: 2; }
+  .fig text.lab { font-size: 20px; font-weight: 700; fill: var(--fg); text-anchor: middle; }
+  .fig text.warnl { font-size: 20px; font-weight: 700; fill: var(--no); text-anchor: middle; }
+  .sl { display: grid; grid-template-columns: 6.5em 1fr; gap: 6px 10px; align-items: center; margin: 8px 0; }
+  .sl label { font-size: 16px; }
+  .sl input[type=range] { width: 100%; }
+  .rd { font-size: 16px; line-height: 1.8; min-height: 3.6em; }
+  .lg { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px; color: var(--muted); }
+  .lg i { display: inline-block; width: 22px; height: 0; vertical-align: middle; margin-right: 4px; border-top: 3px solid var(--a); }
+  .lg i.r { border-top: 2px dashed var(--dim); }
+  .lg i.m { border-top: 2px dotted var(--c); }
+  .lg i.s { border-top: 3px solid var(--b); }
+  .lg i.h { border-top: 4px solid var(--hl); }
+  .route button.on { background: var(--a); color: #fff; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-5-6">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 5 章 三角函数</p>
+<h1>5.6 函数 y=Asin(ωx+φ)</h1>
+<p class="lead">弹簧上的小球、秋千、交流电，都在「一上一下、周而复始」。它们的图象就是把 \(y=\sin x\) 拉高、压扁、左右挪一挪得到的 \(y=A\sin(\omega x+\varphi)\)。这一节先把 \(A\)、\(\omega\)、\(\varphi\) 一个一个看清，再合起来。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>两个小球各挂在一根弹簧下，上下振动。以静止时的位置为 \(0\)，向上为正，单位厘米。</p>
+  <ul>
+    <li>甲球：最高到 \(3\)，最低到 \(-3\)，每 \(2\) 秒完整地上下一次。</li>
+    <li>乙球：最高到 \(5\)，最低到 \(-5\)，每 \(1\) 秒完整地上下一次。</li>
+  </ul>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>和甲比，乙的振动是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>幅度更大，节奏更快</button>
+      <button class="opt" data-v="B"><b>B</b>幅度更大，节奏更慢</button>
+      <button class="opt" data-v="C"><b>C</b>幅度更小，节奏更快</button>
+      <button class="opt" data-v="D"><b>D</b>幅度更小，节奏更慢</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。\(5\) 比 \(3\) 高，幅度大；\(1\) 秒一次比 \(2\) 秒一次快。</p>
+      <p>写成函数（都从 \(0\) 往上出发，\(t\) 是秒）：甲 \(y=3\sin(\pi t)\)，乙 \(y=5\sin(2\pi t)\)。前面的 \(3\)、\(5\) 管「多高」；\(t\) 前面乘的 \(\pi\)、\(2\pi\) 管「多快」，乘得越大，上下一次用的时间越短。</p>
+      <p>要是乙比甲晚一点出发，括号里还会多加一个数。这一节就讲 \(y=A\sin(\omega x+\varphi)\) 里的这三个数：<span class="ca">\(A\)</span> 管多高，<span class="cc">\(\omega\)</span> 管多快（多密），<span class="cb">\(\varphi\)</span> 管从哪儿出发。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：5.4 的正弦函数图象、周期和五点法（<a href="b1-5-4.html">回看 5.4</a>）；化掉负号时用 5.3 的诱导公式（<a href="b1-5-3.html">回看 5.3</a>）。</p>
+
+  <div class="card">
+    <p><b>振幅</b>：最高点离平衡位置（这里是 \(x\) 轴）有多远。</p>
+    <p>例：\(y=3\sin x\) 最大 \(3\)、最小 \(-3\)，振幅 \(3\)；\(y=\sin x\) 振幅 \(1\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>周期和频率</b>：图象重复一次所需的横向长度叫<b>最小正周期</b> \(T\)；\(\dfrac1T\) 叫<b>频率</b>，是单位长度里重复几次。</p>
+    <p>例：\(y=\sin x\) 的 \(T=2\pi\)。上面的甲球 \(T=2\) 秒，频率 \(\dfrac12\)，每秒半次；乙球 \(T=1\) 秒，频率 \(1\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>相位和初相</b>：\(y=A\sin(\omega x+\varphi)\) 括号里的整个 \(\omega x+\varphi\) 叫<b>相位</b>，\(x=0\) 时的相位 \(\varphi\) 叫<b>初相</b>。</p>
+    <p>例：\(y=\sin\left(2x+\dfrac\pi3\right)\)，初相 \(\dfrac\pi3\)；\(x=\dfrac{\pi}{12}\) 时相位是 \(\dfrac\pi6+\dfrac\pi3=\dfrac\pi2\)，正好到最高点。</p>
+  </div>
+
+  <div class="card">
+    <p><b>平移时 \(x\) 换成什么</b>：图象向左平移 \(a\)（\(a>0\)），式子里的 \(x\) 换成 \(x+a\)；向右平移，换成 \(x-a\)。</p>
+    <p>例：\(y=x^2\) 的顶点在 \((0,0)\)，\(y=(x+1)^2\) 的顶点在 \((-1,0)\)：向左移了 \(1\)。新图在 \(x=-1\) 处的值，就是旧图在 \(x=0\) 处的值，所以每个点都往左挪了 \(1\)。</p>
+  </div>
+
+  <p>下面都从 \(y=\sin x\) 出发，\(A>0\)，\(\omega>0\)。先一次只改一个数：只改 \(A\)、只改 \(\omega\)、只改 \(\varphi\)，最后再合起来。</p>
+
+  <h3>2. 只改 A：\(y=A\sin x\)</h3>
+  <p>每个点横坐标不动，<b>纵坐标乘 \(A\)</b>。最高点从 \(1\) 变成 \(A\)，最低点从 \(-1\) 变成 \(-A\)；零点不动，周期也不变。\(A>1\) 拉高，\(0&lt;A&lt;1\) 压扁。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>画 \(y=2\sin x\) 的一个周期。</p>
+    <p>还用 \(\sin x\) 的五个点 \(x=0,\dfrac\pi2,\pi,\dfrac{3\pi}2,2\pi\)，纵坐标 \(0,1,0,-1,0\) 各乘 \(2\)，得 \(0,2,0,-2,0\)。值域 \([-2,2]\)，最小正周期还是 \(2\pi\)。</p>
+  </div>
+  <div class="card predict" data-id="try-A" data-answer="B">
+    <p>自己试试：\(y=\dfrac12\sin x\) 的值域和最小正周期是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(\left[-\dfrac12,\dfrac12\right]\)，\(\pi\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\left[-\dfrac12,\dfrac12\right]\)，\(2\pi\)</button>
+      <button class="opt" data-v="C"><b>C</b>\([-2,2]\)，\(2\pi\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(A\) 只管上下，不碰横向，周期还是 \(2\pi\)。选 A 的同学以为压扁了周期也会变；选 C 是把「乘 \(\dfrac12\)」当成了「除以 \(\dfrac12\)」。</p></div>
+  </div>
+
+  <h3>3. 只改 ω：\(y=\sin\omega x\)</h3>
+  <p>每个点纵坐标不动，<b>横坐标变为原来的 \(\dfrac1\omega\)</b>。为什么：\(y=\sin 2x\) 在 \(x=\dfrac\pi4\) 时已经是 \(\sin\dfrac\pi2=1\)，而 \(\sin x\) 要到 \(x=\dfrac\pi2\) 才到 \(1\)。\(\sin x\) 的每个值，\(\sin 2x\) 都在一半的横坐标处就到了。</p>
+  <div class="key">\(y=\sin\omega x\)（\(\omega>0\)）的最小正周期 \(T=\dfrac{2\pi}{\omega}\)。\(\omega\) 越大，波越密。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>说出 \(y=\sin 2x\) 的周期、一个最高点和一个零点。</p>
+    <p>\(T=\dfrac{2\pi}{2}=\pi\)。令 \(2x=\dfrac\pi2\)，得最高点 \(\left(\dfrac\pi4,1\right)\)；令 \(2x=\pi\)，得零点 \(\left(\dfrac\pi2,0\right)\)。和 \(\sin x\) 的最高点 \(\left(\dfrac\pi2,1\right)\)、零点 \((\pi,0)\) 比，横坐标都减半了。</p>
+  </div>
+  <div class="card predict" data-id="try-W" data-answer="C">
+    <p>自己试试：\(y=\sin\dfrac x2\) 的最小正周期是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\pi\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2\pi\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\pi\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(\omega=\dfrac12\)，\(T=2\pi\div\dfrac12=4\pi\)。\(\omega\) 小于 \(1\)，图象被横向拉长。选 A 的同学拿 \(2\pi\) 乘了 \(\dfrac12\)：周期是<b>除以</b> \(\omega\)。</p></div>
+  </div>
+
+  <h3>4. 只改 φ：\(y=\sin(x+\varphi)\)</h3>
+  <p>照「平移时 \(x\) 换成什么」那一条：\(x\) 换成 \(x+\varphi\)，就是<b>向左平移 \(\varphi\)</b>（\(\varphi>0\)）；\(\varphi&lt;0\) 时向右平移 \(|\varphi|\)。形状、振幅、周期都不变。</p>
+  <p>看一个点：\(y=\sin\left(x+\dfrac\pi3\right)\) 在 \(x=-\dfrac\pi3\) 时是 \(\sin0=0\)，并从这里往上走。\(\sin x\) 从原点出发的那一点，挪到了 \(-\dfrac\pi3\)。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>\(y=\sin\left(x-\dfrac\pi4\right)\) 由 \(y=\sin x\) 怎样得到？它往上经过 \(x\) 轴的点和最高点在哪？</p>
+    <p>\(x\) 换成了 \(x-\dfrac\pi4\)，是向右平移 \(\dfrac\pi4\)。令 \(x-\dfrac\pi4=0\)，得 \(x=\dfrac\pi4\)；令 \(x-\dfrac\pi4=\dfrac\pi2\)，得最高点 \(\left(\dfrac{3\pi}4,1\right)\)。</p>
+  </div>
+  <div class="card predict" data-id="try-P" data-answer="B">
+    <p>自己试试：\(y=\sin\left(x+\dfrac\pi6\right)\) 的图象由 \(y=\sin x\) 怎样得到？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>向右平移 \(\dfrac\pi6\)</button>
+      <button class="opt" data-v="B"><b>B</b>向左平移 \(\dfrac\pi6\)</button>
+      <button class="opt" data-v="C"><b>C</b>向上平移 \(\dfrac\pi6\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(x\) 加正数，向左。选 A 是记反了：新图在 \(x=-\dfrac\pi6\) 处才是 \(\sin0\)，起点挪到了左边。选 C 的同学把括号里加的数当成了加在外面。</p></div>
+  </div>
+
+  <h3>5. 合起来：先后顺序</h3>
+  <p>三件事一起做时，\(A\) 只管纵向，放在哪一步都行；\(\omega\) 和 \(\varphi\) 都改 \(x\)，谁先谁后，平移的量不一样。</p>
+  <div class="key">\(y=A\sin(\omega x+\varphi)=A\sin\omega\left(x+\dfrac{\varphi}{\omega}\right)\)：振幅 \(A\)，值域 \([-A,A]\)，周期 \(\dfrac{2\pi}{\omega}\)。和 \(y=A\sin\omega x\) 比，图象<b>平移了 \(\left|\dfrac{\varphi}{\omega}\right|\)</b>：\(\varphi>0\) 向左，\(\varphi&lt;0\) 向右。</div>
+  <p><b>路线一：先平移，后伸缩。</b>\(y=\sin x\) 向左移 \(\varphi\) 得 \(y=\sin(x+\varphi)\)；再把横坐标变为原来的 \(\dfrac1\omega\)，得 \(y=\sin(\omega x+\varphi)\)。</p>
+  <p><b>路线二：先伸缩，后平移。</b>\(y=\sin x\) 横坐标变为原来的 \(\dfrac1\omega\) 得 \(y=\sin\omega x\)；再向左移 \(\dfrac{\varphi}{\omega}\)，得 \(y=\sin\omega\left(x+\dfrac{\varphi}{\omega}\right)=\sin(\omega x+\varphi)\)。</p>
+  <p>为什么不一样：每一步都只改 \(x\)。路线一里，伸缩把 \(\sin(x+\varphi)\) 的 \(x\) 换成 \(\omega x\)，\(\varphi\) 不动；路线二里，平移把 \(\sin\omega x\) 的 \(x\) 换成 \(x+a\)，变成 \(\sin(\omega x+\omega a)\)，要 \(\omega a=\varphi\)，即 \(a=\dfrac{\varphi}{\omega}\)。</p>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>由 \(y=\sin x\) 得到 \(y=3\sin\left(2x-\dfrac\pi3\right)\)，两条路线各怎么走？</p>
+    <p><b>路线一</b>：向右平移 \(\dfrac\pi3\) → \(y=\sin\left(x-\dfrac\pi3\right)\)；横坐标变为原来的 \(\dfrac12\) → \(y=\sin\left(2x-\dfrac\pi3\right)\)；纵坐标变为原来的 \(3\) 倍 → \(y=3\sin\left(2x-\dfrac\pi3\right)\)。</p>
+    <p><b>路线二</b>：横坐标变为原来的 \(\dfrac12\) → \(y=\sin2x\)；向右平移 \(\dfrac\pi6\) → \(y=\sin2\left(x-\dfrac\pi6\right)=\sin\left(2x-\dfrac\pi3\right)\)；纵坐标变为 \(3\) 倍。</p>
+    <p>终点一样，平移量差了 \(\omega=2\) 倍：先伸缩过了，再平移只要 \(\dfrac\pi6\)。</p>
+    <p><b>五点法画它</b>：令相位 \(2x-\dfrac\pi3\) 分别等于 \(0,\dfrac\pi2,\pi,\dfrac{3\pi}2,2\pi\)，<b>先解出 \(x\)</b>：\(\dfrac\pi6,\dfrac{5\pi}{12},\dfrac{2\pi}3,\dfrac{11\pi}{12},\dfrac{7\pi}6\)，对应 \(y=0,3,0,-3,0\)，再描点连线。别直接拿 \(x=0,\dfrac\pi2,\dots\) 去描。</p>
+  </div>
+  <div class="card predict" data-id="e-order" data-answer="C">
+    <p>自己试试：把 \(y=\sin x\) 图象上所有点的横坐标缩短到原来的 \(\dfrac12\)（纵坐标不变），<b>再</b>向右平移 \(\dfrac{\pi}{4}\)，得到的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(y=\sin\left(2x-\dfrac{\pi}{4}\right)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y=\sin\left(2x-\dfrac{\pi}{8}\right)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y=\sin\left(2x-\dfrac{\pi}{2}\right)\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。第一步得 \(y=\sin 2x\)；第二步把 \(x\) 换成 \(x-\dfrac\pi4\)，得 \(\sin 2\left(x-\dfrac\pi4\right)=\sin\left(2x-\dfrac\pi2\right)\)。选 A 是把平移量直接写进括号，没有乘 \(\omega=2\)，那是「先平移后伸缩」的结果。在「动手」② 里选路线二，看金点移了多少。</p></div>
+  </div>
+
+  <h3>6. 从图象或性质反推解析式</h3>
+  <ol>
+    <li><b>定 \(A\)</b>：\(A=\dfrac{\text{最大值}-\text{最小值}}{2}\)。</li>
+    <li><b>定 \(\omega\)</b>：先读周期。相邻两个最高点相距 \(T\)，相邻的最高点和最低点相距 \(\dfrac T2\)，最高点到相邻零点相距 \(\dfrac T4\)。再用 \(\omega=\dfrac{2\pi}{T}\)。</li>
+    <li><b>定 \(\varphi\)</b>：代一个已知点，最好是最高点（令 \(\omega x+\varphi=\dfrac\pi2+2k\pi\)）或最低点，按题目给的范围选 \(k\)。</li>
+    <li><b>检验</b>：再拿另一个点验一下。</li>
+  </ol>
+  <div class="card">
+    <p class="small">例 5</p>
+    <p>\(y=A\sin(\omega x+\varphi)\)（\(A>0\)，\(\omega>0\)，\(|\varphi|&lt;\dfrac\pi2\)）的图象有一个最高点 \(\left(\dfrac\pi{12},2\right)\)，它右边相邻的零点是 \(\left(\dfrac\pi3,0\right)\)。求解析式。</p>
+    <p>最大值 \(2\)，最小值 \(-2\)，所以 \(A=2\)。最高点到相邻零点是 \(\dfrac T4\)：\(\dfrac\pi3-\dfrac\pi{12}=\dfrac\pi4\)，所以 \(T=\pi\)，\(\omega=2\)。</p>
+    <p>代最高点：\(2\cdot\dfrac\pi{12}+\varphi=\dfrac\pi2+2k\pi\)，\(\varphi=\dfrac\pi3+2k\pi\)；由 \(|\varphi|&lt;\dfrac\pi2\) 取 \(k=0\)，\(\varphi=\dfrac\pi3\)。</p>
+    <p>检验：\(x=\dfrac\pi3\) 时相位 \(\dfrac{2\pi}3+\dfrac\pi3=\pi\)，\(\sin\pi=0\)，对。所以 \(y=2\sin\left(2x+\dfrac\pi3\right)\)。</p>
+  </div>
+  <div class="card predict" data-id="try-fit" data-answer="B">
+    <p>自己试试：\(y=A\sin(\omega x+\varphi)\)（\(\omega>0\)）的图象上，相邻的一个最高点和一个最低点，横坐标相差 \(\dfrac\pi2\)。\(\omega=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。最高点到相邻最低点是半个周期：\(\dfrac T2=\dfrac\pi2\)，\(T=\pi\)，\(\omega=\dfrac{2\pi}{\pi}=2\)。选 C 的同学把 \(\dfrac\pi2\) 当成了整个周期。</p></div>
+  </div>
+
+  <h3>7. 这几种情况要小心</h3>
+  <ol>
+    <li><b>\(A=0\) 或 \(\omega=0\)：成了常数函数。</b>常数函数每个正数都是周期，但没有<b>最小</b>的，不能套 \(T=\dfrac{2\pi}{\omega}\)。<br><span class="small">反例：\(y=2\sin\left(0\cdot x+\dfrac\pi6\right)\) 恒等于 \(1\)，没有最小正周期；\(\dfrac{2\pi}{0}\) 也没有意义。</span></li>
+    <li><b>参数是负的：先用诱导公式化成 \(A>0\)，\(\omega>0\)。</b>振幅是 \(|A|\)，最小正周期是 \(\dfrac{2\pi}{|\omega|}\)。<br><span class="small">反例：\(y=-2\sin x\) 的振幅不是 \(-2\)：\(-2\sin x=2\sin(x+\pi)\)，振幅 \(2\)。\(y=\sin\left(\dfrac\pi3-2x\right)\) 由 \(\sin\theta=\sin(\pi-\theta)\) 化成 \(\sin\left(2x+\dfrac{2\pi}3\right)\)，周期 \(\pi\)。</span></li>
+    <li><b>平移量不能笼统说成 \(\varphi\)。</b>只有先平移时才移 \(\varphi\)；伸缩做过了，再平移就是 \(\dfrac{\varphi}{\omega}\)。<br><span class="small">反例：把 \(y=\sin2x\) 向左平移 \(\dfrac\pi3\)，得 \(\sin2\left(x+\dfrac\pi3\right)=\sin\left(2x+\dfrac{2\pi}3\right)\)，不是 \(\sin\left(2x+\dfrac\pi3\right)\)。</span></li>
+    <li><b>代零点求 \(\varphi\)，一定要检验。</b>\(\sin\theta=0\) 有「往上经过」和「往下经过」两种，代错一种，\(\varphi\) 差 \(\pi\)。<br><span class="small">反例：\(y=\sin(2x+\varphi)\)，\(0\le\varphi&lt;2\pi\)，过原点。\(\sin\varphi=0\) 给出 \(\varphi=0\) 或 \(\pi\)：前者在原点往上走，后者往下走，是两个不同的函数，还要别的条件才能定。</span></li>
+  </ol>
+  <div class="warn">做变换题，先写清「对谁、先做哪一步」；求出参数，再拿另一个点验一下。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>平衡位置不在 \(x\) 轴</b>：最高 \(5\)、最低 \(1\) 的波，平衡位置在 \(3\)。写成 \(y=A\sin(\omega x+\varphi)+B\)，\(A=\dfrac{5-1}2=2\)，\(B=\dfrac{5+1}2=3\)。\(B\) 只把整条波上下挪，不改振幅和周期。<a href="b1-5-7.html">5.7</a> 的实际模型常常这样。</p>
+    <p><b>实际模型</b>：用正弦型函数描述潮汐、气温、摩天轮时，要写清时间范围和单位；它是近似，只在给定的范围里好用。</p>
+    <p><b>外面直接，里面反着</b>：纵向乘 \(A\)，就是在 \(\sin\) 外面乘 \(A\)；横向缩成 \(\dfrac1\omega\)，却是在里面把 \(x\) 乘 \(\omega\)。向左平移 \(a\)，里面却是 \(+a\)。凡是改 \(x\) 的变换，写进式子都「反着来」。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖三个滑块，看 A、ω、φ 各管什么</h3>
+  <p class="small">先一次只动一个滑块，看它改了什么，再一起动。滑块可以拖，也可以点一下后用方向键调。灰虚线是 \(y=\sin x\)，蓝点线是 \(y=A\sin\omega x\)，绿线是 \(y=A\sin(\omega x+\varphi)\)；金色箭头是从 \(y=A\sin\omega x\) 到绿线的平移。</p>
+  <div class="card">
+    <svg class="fig" id="f1" viewBox="0 0 560 330" role="img" aria-label="y=A sin(ωx+φ) 的图象，和 y=sin x、y=A sin ωx 叠在一起"></svg>
+    <div class="lg"><span><i class="r"></i>y=sin x</span><span><i class="m"></i>y=A sin ωx</span><span><i></i>y=A sin(ωx+φ)</span><span><i class="h"></i>平移 φ/ω</span></div>
+    <div class="sl">
+      <label for="sA">A = <b id="vA"></b></label><input type="range" id="sA" min="0" max="6" step="1" value="4">
+      <label for="sW">ω = <b id="vW"></b></label><input type="range" id="sW" min="0" max="12" step="1" value="8">
+      <label for="sP">φ = <b id="vP"></b></label><input type="range" id="sP" min="-12" max="12" step="1" value="4">
+    </div>
+    <div class="rd" id="o1" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset1" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：两条路线，先平移还是先伸缩？</h3>
+  <p class="small">用上面滑块的 \(A,\omega,\varphi\)。选一条路线，点「下一步」一步步变。橙线是这一步的结果，灰虚线是上一步，淡绿粗线是终点。金点盯住一个「关键点」（往上经过平衡位置的那个点），看它每一步挪到哪。</p>
+  <div class="card">
+    <div class="ctrl route" id="route">
+      <button class="btn ghost" type="button" data-r="1">路线一：先平移后伸缩</button>
+      <button class="btn ghost" type="button" data-r="2">路线二：先伸缩后平移</button>
+    </div>
+    <svg class="fig" id="f2" viewBox="0 0 560 330" role="img" aria-label="从 y=sin x 一步步变到 y=A sin(ωx+φ) 的图象"></svg>
+    <div class="rd" id="o2" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="prev2" type="button">上一步</button>
+      <button class="btn" id="next2" type="button">下一步</button>
+      <button class="btn ghost" id="reset2" type="button">重置</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. \(y=3\sin\left(2x-\dfrac\pi4\right)\) 的振幅和最小正周期是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>振幅 \(3\)，周期 \(\pi\)</button>
+      <button class="opt" data-v="B"><b>B</b>振幅 \(3\)，周期 \(4\pi\)</button>
+      <button class="opt" data-v="C"><b>C</b>振幅 \(6\)，周期 \(\pi\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(A=3\)，\(\omega=2\)，\(T=\dfrac{2\pi}2=\pi\)。选 B 是拿 \(2\pi\) 乘了 \(2\)；选 C 是把最高到最低的距离 \(6\) 当成了振幅。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. \(y=\sin\left(2x-\dfrac\pi3\right)\) 在 \([0,\pi]\) 上取到最大值 \(1\) 时，\(x=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac\pi4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{5\pi}{12}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{5\pi}6\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。令相位 \(2x-\dfrac\pi3=\dfrac\pi2\)，\(2x=\dfrac{5\pi}6\)，\(x=\dfrac{5\pi}{12}\)，在 \([0,\pi]\) 里。选 A 是只解了 \(2x=\dfrac\pi2\)，丢了 \(-\dfrac\pi3\)；选 C 是忘了除以 \(2\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>3. 要得到 \(y=\sin\left(2x+\dfrac{\pi}{3}\right)\) 的图象，应该把 \(y=\sin 2x\) 的图象怎样平移？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>向左平移 \(\dfrac{\pi}{3}\) 个单位</button>
+      <button class="opt" data-v="B"><b>B</b>向左平移 \(\dfrac{\pi}{6}\) 个单位</button>
+      <button class="opt" data-v="C"><b>C</b>向右平移 \(\dfrac{\pi}{3}\) 个单位</button>
+      <button class="opt" data-v="D"><b>D</b>向右平移 \(\dfrac{\pi}{6}\) 个单位</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。把 \(x\) 提出来：\(\sin\left(2x+\dfrac{\pi}{3}\right)=\sin 2\left(x+\dfrac{\pi}{6}\right)\)。平移只看 <b>\(x\) 本身</b>加了多少，这里加了 \(\dfrac{\pi}{6}\)，向左移 \(\dfrac{\pi}{6}\)。</p>
+      <p>选 A 是看到括号里 \(+\dfrac{\pi}{3}\) 就移 \(\dfrac{\pi}{3}\)。真把 \(y=\sin 2x\) 向左移 \(\dfrac{\pi}{3}\)，得到的是 \(\sin\left(2x+\dfrac{2\pi}{3}\right)\)，多移了一倍。选 C、D 是方向反了。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="e-check" data-answer="A">
+    <p>4. \(y=2\sin(2x+\varphi)\)，\(|\varphi|&lt;\pi\)。它的图象过点 \((0,1)\)，并且在 \(x=0\) 附近，\(x\) 增大时 \(y\) 也增大。\(\varphi=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{\pi}{6}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{5\pi}{6}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{\pi}{6}\) 或 \(\dfrac{5\pi}{6}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。代点只得到 \(\sin\varphi=\dfrac12\)，在 \(|\varphi|&lt;\pi\) 内有 \(\dfrac\pi6\) 和 \(\dfrac{5\pi}6\) 两个解，光代一个点定不下来，还得检验。\(x=0\) 时相位就是 \(\varphi\)；要在这里上升，相位得落在 \(\left(-\dfrac\pi2,\dfrac\pi2\right)\) 里，所以只能是 \(\dfrac\pi6\)。\(\varphi=\dfrac{5\pi}6\) 时图象也过 \((0,1)\)，但在那里是下降的。</p></div>
+  </div>
+  <div class="card predict" data-id="e-normal" data-answer="B">
+    <p>5. \(y=-3\sin\left(\dfrac{\pi}{4}-2x\right)\) 的振幅和最小正周期是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>振幅 \(-3\)，周期 \(-\pi\)</button>
+      <button class="opt" data-v="B"><b>B</b>振幅 \(3\)，周期 \(\pi\)</button>
+      <button class="opt" data-v="C"><b>C</b>振幅 \(-3\)，周期 \(\pi\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。振幅是距离、周期是正数，都不会是负的。先规范化：\(-3\sin\left(\dfrac\pi4-2x\right)=3\sin\left(2x-\dfrac\pi4\right)\)，现在 \(A=3>0\)，\(\omega=2>0\)，周期 \(\dfrac{2\pi}{2}=\pi\)。另外，在「动手」① 里把 \(\omega\) 拖到 \(0\)，函数成了常数，就没有最小正周期了。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. \(y=\sin\left(\omega x+\dfrac\pi6\right)\)（\(\omega>0\)）的图象向右平移 \(\dfrac\pi3\) 后，和原来的图象重合。\(\omega\) 最小是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(12\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。平移后重合，平移量得是周期的整数倍：\(\dfrac\pi3=k\cdot\dfrac{2\pi}{\omega}\)（\(k\) 是正整数），\(\omega=6k\)，最小是 \(6\)。选 A 是以为移半个周期也重合：可 \(\sin(\theta-\pi)=-\sin\theta\)，移半个周期图象上下翻了过来，不重合。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg", PI = Math.PI;
+  function el(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function $(id) { return document.getElementById(id); }
+  function math(node) { if (window.Peiyu) window.Peiyu.math(node); }
+  function log(d) { if (window.Peiyu) window.Peiyu.log("interact", d); }
+
+  /* ---------- 分数和 π 的写法（全部由整数算出） ---------- */
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function red(p, q) { if (q < 0) { p = -p; q = -q; } var g = gcd(p, q); return [p / g, q / g]; }
+  function numTex(p, q) { // p/q
+    var f = red(p, q); if (f[0] === 0) return "0";
+    var s = f[0] < 0 ? "-" : "", a = Math.abs(f[0]);
+    return s + (f[1] === 1 ? String(a) : "\\frac{" + a + "}{" + f[1] + "}");
+  }
+  function piTex(p, q) { // (p/q)π
+    var f = red(p, q); if (f[0] === 0) return "0";
+    var s = f[0] < 0 ? "-" : "", a = Math.abs(f[0]), c = a === 1 ? "" : String(a);
+    return s + (f[1] === 1 ? c + "\\pi" : "\\frac{" + c + "\\pi}{" + f[1] + "}");
+  }
+  function piTxt(p, q) { // 图上和滑块旁的纯文字
+    var f = red(p, q); if (f[0] === 0) return "0";
+    var s = f[0] < 0 ? "−" : "", a = Math.abs(f[0]), c = a === 1 ? "" : String(a);
+    return s + c + "π" + (f[1] === 1 ? "" : "/" + f[1]);
+  }
+  function numTxt(p, q) { var f = red(p, q); return (f[0] < 0 ? "−" : "") + Math.abs(f[0]) + (f[1] === 1 || f[0] === 0 ? "" : "/" + f[1]); }
+
+  /* ---------- 状态：A = m/2，ω = n/4，φ = kπ/12 ---------- */
+  var S = { m: 4, n: 8, k: 4 };
+  function Av() { return S.m / 2; }
+  function Wv() { return S.n / 4; }
+  function Pv() { return S.k * PI / 12; }
+  // y = A sin(ωx+φ) 的写法
+  function fTex(m, n, k) {
+    if (m === 0) return "y=0";
+    var a = m === 2 ? "" : numTex(m, 2);
+    if (n === 0) return "y=" + a + "\\sin" + (k === 0 ? " 0" : "\\left(" + piTex(k, 12) + "\\right)");
+    var w = n === 4 ? "" : numTex(n, 4);
+    var inner = w + "x";
+    if (k === 0) return "y=" + a + "\\sin " + inner;
+    return "y=" + a + "\\sin\\left(" + inner + (k > 0 ? "+" : "") + piTex(k, 12) + "\\right)";
+  }
+
+  /* ---------- 坐标系 ---------- */
+  var XL = -PI, XR = 2 * PI, L = 56, R = 544, YC = 160, SY = 40;
+  function px(x) { return L + (x - XL) / (XR - XL) * (R - L); }
+  function py(y) { return YC - y * SY; }
+  function axes(svg) {
+    for (var i = -2; i <= 4; i++) {
+      var x = px(i * PI / 2);
+      el("line", { x1: x, y1: 26, x2: x, y2: 294, "class": "grid" }, svg);
+      el("text", { x: x, y: 320, "class": "num" }, svg).textContent = piTxt(i, 2);
+    }
+    [-3, 3].forEach(function (v) {
+      el("line", { x1: L, y1: py(v), x2: R, y2: py(v), "class": "grid" }, svg);
+      el("text", { x: L - 6, y: py(v) + 7, "class": "ynum" }, svg).textContent = String(v).replace("-", "−");
+    });
+    el("line", { x1: L, y1: YC, x2: R, y2: YC, "class": "axis" }, svg);
+    el("line", { x1: px(0), y1: 24, x2: px(0), y2: 296, "class": "axis" }, svg);
+  }
+  function curve(svg, a, w, p, cls) {
+    var d = "", N = 420;
+    for (var i = 0; i <= N; i++) {
+      var x = XL + (XR - XL) * i / N, y = a * Math.sin(w * x + p);
+      if (!isFinite(y)) y = 0;
+      y = Math.max(-3.4, Math.min(3.4, y));
+      d += (i ? "L" : "M") + px(x).toFixed(1) + " " + py(y).toFixed(1);
+    }
+    return el("path", { d: d, "class": cls }, svg);
+  }
+  function clampX(x) { return Math.max(XL, Math.min(XR, x)); }
+  // 水平箭头：从 x0 到 x1，画在高度 y 处
+  function arrow(svg, x0, x1, y, label) {
+    var a = px(clampX(x0)), b = px(clampX(x1));
+    if (Math.abs(b - a) < 2) return;
+    el("line", { x1: a, y1: y, x2: b, y2: y, "class": "shift" }, svg);
+    var dir = b > a ? 1 : -1;
+    el("path", { d: "M" + b + " " + y + " l" + (-12 * dir) + " -7 v14 z", "class": "shiftHead" }, svg);
+    if (label) {
+      var mx = Math.max(L + 30, Math.min(R - 30, (a + b) / 2));
+      el("text", { x: mx, y: y - 10, "class": "lab" }, svg).textContent = label;
+    }
+  }
+
+  /* ---------- ① 滑块图 ---------- */
+  var f1 = $("f1");
+  function draw1() {
+    f1.innerHTML = "";
+    axes(f1);
+    var A = Av(), W = Wv(), P = Pv();
+    curve(f1, 1, 1, 0, "ref");
+    if (S.n > 0) curve(f1, A, W, 0, "mid");
+    curve(f1, A, W, P, "curve");
+    var out = $("o1"), t = "\\(" + fTex(S.m, S.n, S.k) + "\\)<br>";
+    if (S.m === 0) {
+      t += "\\(A=0\\)：所有点的纵坐标都成了 0，是常数函数，没有最小正周期。";
+    } else if (S.n === 0) {
+      t += "\\(\\omega=0\\)：\\(x\\) 不起作用了，函数是常数 \\(y\\approx" + (A * Math.sin(P)).toFixed(3).replace("-0.000", "0.000") + "\\)，没有最小正周期，不能套 \\(T=\\frac{2\\pi}{\\omega}\\)。";
+    } else {
+      t += "振幅 \\(" + numTex(S.m, 2) + "\\)，值域 \\(\\left[-" + numTex(S.m, 2) + "," + numTex(S.m, 2) + "\\right]\\)，最小正周期 \\(T=\\frac{2\\pi}{\\omega}=" + piTex(8, S.n) + "\\)。<br>";
+      if (S.k === 0) t += "\\(\\varphi=0\\)：和 \\(y=" + (S.m === 2 ? "" : numTex(S.m, 2)) + "\\sin " + (S.n === 4 ? "" : numTex(S.n, 4)) + "x\\) 重合，不平移。";
+      else {
+        // 平移量 φ/ω = (kπ/12)/(n/4) = kπ/(3n)
+        var x0 = -P / W;
+        t += "相对 \\(y=" + (S.m === 2 ? "" : numTex(S.m, 2)) + "\\sin " + (S.n === 4 ? "" : numTex(S.n, 4)) + "x\\)：向" + (S.k > 0 ? "左" : "右") + "平移 \\(\\left|\\frac{\\varphi}{\\omega}\\right|=" + piTex(Math.abs(S.k), 3 * S.n) + "\\)";
+        t += S.n === 4 ? "（\\(\\omega=1\\)，正好等于 \\(|\\varphi|\\)）。" : "，不是 \\(|\\varphi|=" + piTex(Math.abs(S.k), 12) + "\\)。";
+        var yA = py(0) - 22;
+        arrow(f1, 0, x0, yA, "φ/ω");
+        if (x0 >= XL && x0 <= XR) el("circle", { cx: px(x0), cy: py(0), r: 7, "class": "kp" }, f1);
+        else el("text", { x: x0 < XL ? L + 40 : R - 40, y: py(0) + 34, "class": "warnl" }, f1).textContent = "移出图外";
+        el("circle", { cx: px(0), cy: py(0), r: 6, "class": "kp0" }, f1);
+      }
+    }
+    out.innerHTML = t;
+    math(out);
+    $("vA").textContent = numTxt(S.m, 2);
+    $("vW").textContent = numTxt(S.n, 4);
+    $("vP").textContent = piTxt(S.k, 12);
+  }
+  function readSliders() {
+    S.m = parseInt($("sA").value, 10) || 0;
+    S.n = parseInt($("sW").value, 10) || 0;
+    S.k = parseInt($("sP").value, 10) || 0;
+  }
+  ["sA", "sW", "sP"].forEach(function (id) {
+    var s = $(id);
+    s.addEventListener("input", function () { readSliders(); draw1(); show2(false); });
+    s.addEventListener("change", function () { log({ id: "sliders", A: Av(), w: Wv(), phi: S.k + "π/12" }); });
+  });
+  function reset1() {
+    S = { m: 4, n: 8, k: 4 };
+    $("sA").value = 4; $("sW").value = 8; $("sP").value = 4;
+    draw1(); show2(false);
+  }
+  $("reset1").onclick = reset1;
+
+  /* ---------- ② 变换路线 ---------- */
+  var f2 = $("f2"), route = 1, step = 0, cur = null, anim = 0;
+  // 每一步的 (a, w, p)：y = a·sin(w x + p)
+  function stages() {
+    var A = Av(), W = Wv(), P = Pv();
+    return route === 1
+      ? [[1, 1, 0], [1, 1, P], [1, W, P], [A, W, P]]
+      : [[1, 1, 0], [1, W, 0], [1, W, P], [A, W, P]];
+  }
+  function stageText() {
+    var m = S.m, n = S.n, k = S.k, ak = Math.abs(k), dir = k > 0 ? "左" : "右";
+    var scale = n === 4 ? "（\\(\\omega=1\\)，图象不变）" : "";
+    var sx = "横坐标变为原来的 \\(" + numTex(4, n) + "\\) 倍（纵坐标不变）" + scale;
+    var shiftP = k === 0 ? "\\(\\varphi=0\\)，这一步不用移" : "向" + dir + "平移 \\(" + piTex(ak, 12) + "\\) 个单位";
+    var shiftPW = k === 0 ? "\\(\\varphi=0\\)，这一步不用移" : "向" + dir + "平移 \\(\\frac{|\\varphi|}{\\omega}=" + piTex(ak, 3 * n) + "\\) 个单位";
+    var r1 = [
+      "起点：\\(y=\\sin x\\)。金点在原点。",
+      "第 1 步：" + shiftP + " → \\(" + fTex(2, 4, k) + "\\)。金点到了 \\(x=" + piTex(-k, 12) + "\\)。",
+      "第 2 步：" + sx + " → \\(" + fTex(2, n, k) + "\\)。伸缩把金点也带着挪了：从 \\(" + piTex(-k, 12) + "\\) 到 \\(" + piTex(-k, 3 * n) + "\\)。",
+      "第 3 步：纵坐标变为原来的 \\(" + numTex(m, 2) + "\\) 倍 → \\(" + fTex(m, n, k) + "\\)。"
+    ];
+    var r2 = [
+      r1[0],
+      "第 1 步：" + sx + " → \\(" + fTex(2, n, 0) + "\\)。金点还在原点。",
+      "第 2 步：" + shiftPW + " → \\(" + fTex(2, n, k) + "\\)。金点直接到 \\(x=" + piTex(-k, 3 * n) + "\\)。",
+      r1[3]
+    ];
+    return (route === 1 ? r1 : r2)[step];
+  }
+  function render2(c, prev, goal) {
+    f2.innerHTML = "";
+    axes(f2);
+    curve(f2, goal[0], goal[1], goal[2], "goal");
+    if (prev) curve(f2, prev[0], prev[1], prev[2], "prev");
+    curve(f2, c[0], c[1], c[2], "stage");
+    var kx = c[1] > 0 ? -c[2] / c[1] : 0;
+    if (kx !== 0) arrow(f2, 0, kx, py(0) - 22, "");
+    if (kx >= XL && kx <= XR) el("circle", { cx: px(kx), cy: py(0), r: 7, "class": "kp" }, f2);
+    else el("text", { x: kx < XL ? L + 40 : R - 40, y: py(0) + 34, "class": "warnl" }, f2).textContent = "金点移出图外";
+  }
+  function show2(animate) {
+    [].forEach.call(document.querySelectorAll("#route button"), function (b) { b.classList.toggle("on", b.getAttribute("data-r") === String(route)); });
+    $("prev2").disabled = step === 0; $("next2").disabled = step === 3;
+    var out = $("o2");
+    if (S.n === 0) {
+      f2.innerHTML = ""; axes(f2);
+      el("text", { x: 300, y: 120, "class": "warnl" }, f2).textContent = "ω=0 时没有横向伸缩这回事";
+      out.innerHTML = "先把上面的 \\(\\omega\\) 调成大于 0，再看两条路线。";
+      math(out); cur = null; return;
+    }
+    var st = stages(), target = st[step], prev = step > 0 ? st[step - 1] : null, goal = st[3];
+    out.innerHTML = stageText(); math(out);
+    if (anim) { cancelAnimationFrame(anim); anim = 0; }
+    var from = cur;
+    if (!animate || !from || !window.requestAnimationFrame) { cur = target.slice(); render2(cur, prev, goal); return; }
+    var t0 = null, DUR = 500;
+    function tick(ts) {
+      if (t0 === null) t0 = ts;
+      var u = Math.min(1, (ts - t0) / DUR), e = u * u * (3 - 2 * u);
+      cur = [0, 1, 2].map(function (i) { return from[i] + (target[i] - from[i]) * e; });
+      render2(cur, prev, goal);
+      anim = u < 1 ? requestAnimationFrame(tick) : 0;
+    }
+    anim = requestAnimationFrame(tick);
+  }
+  [].forEach.call(document.querySelectorAll("#route button"), function (b) {
+    b.onclick = function () { route = b.getAttribute("data-r") === "2" ? 2 : 1; step = 0; cur = null; show2(false); log({ id: "route", route: route }); };
+  });
+  $("next2").onclick = function () { if (step < 3) { step++; show2(true); log({ id: "route-step", route: route, step: step }); } };
+  $("prev2").onclick = function () { if (step > 0) { step--; show2(true); } };
+  $("reset2").onclick = function () { route = 1; step = 0; cur = null; show2(false); };
+
+  document.addEventListener("DOMContentLoaded", function () { readSliders(); draw1(); show2(false); });
+  if (window.matchMedia) {
+    var mq = window.matchMedia("(prefers-color-scheme: dark)");
+    if (mq && mq.addEventListener) mq.addEventListener("change", function () { draw1(); show2(false); });
+  }
+})();
+</script>
+</body></html>

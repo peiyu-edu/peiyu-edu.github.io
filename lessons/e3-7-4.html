@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.4 二项分布与超几何分布 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  .fig:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+  #bin text, #hyp text { font-size: 20px; }
+  table.dist { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+  table.dist th, table.dist td { border: 1px solid var(--line); padding: 4px 10px; text-align: center; }
+  .tblwrap { overflow-x: auto; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e3-7-4">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 7 章 随机变量及其分布</p>
+<h1>7.4 二项分布与超几何分布</h1>
+<p class="lead">同一件事重复做几次，数「成功」了几次；从一堆东西里抽几个，数「有特征的」有几个。这是两种最常见的分布，关键是分清什么时候用哪一个。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>抛一枚均匀的硬币，连抛 \(3\) 次。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>恰好有 \(2\) 次正面朝上的概率是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac18\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac38\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac23\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。把结果全列出来：正正正、正正反、正反正、反正正、正反反、反正反、反反正、反反反，共 \(8\) 种，一样可能。恰好 \(2\) 次正面的是「正正反、正反正、反正正」\(3\) 种，概率 \(\dfrac38\)。</p>
+      <p>换个看法：每一种排法的概率都是 \(\left(\dfrac12\right)^3=\dfrac18\)；「\(2\) 次正面」放在 \(3\) 次里的哪两次，有 \(C_3^2=3\) 种选法。所以 \(P=C_3^2\cdot\left(\dfrac12\right)^2\cdot\dfrac12=\dfrac38\)。</p>
+      <p>这一节就把它推广：做 \(n\) 次、每次成功的概率是 \(p\)，成功 \(k\) 次的概率是多少（二项分布）；如果换成「从袋子里摸了不放回」，又该怎么算（超几何分布）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：组合数 \(C_n^k\)（<a href="e3-6-2.html">回看 6.2</a>）、二项式定理（<a href="e3-6-3.html">回看 6.3</a>）、分布列（<a href="e3-7-2.html">回看 7.2</a>）、均值和方差（<a href="e3-7-3.html">回看 7.3</a>）、事件相互独立时概率相乘（<a href="b2-10-2.html">回看必修二 10.2</a>）。</p>
+
+  <div class="card">
+    <p><b>伯努利试验</b>：只关心两种结果的试验，一种叫「成功」，另一种叫「失败」。成功的概率记作 \(p\)，失败就是 \(1-p\)。</p>
+    <p>例：掷一颗骰子，只看「是不是 \(6\) 点」。成功概率 \(p=\dfrac16\)，失败概率 \(\dfrac56\)。骰子有 \(6\) 种点数，但我们只分两类。</p>
+  </div>
+
+  <div class="card">
+    <p><b>\(n\) 重伯努利试验</b>：把同一个伯努利试验<b>独立</b>地重复做 \(n\) 次。次数事先定好，每次成功概率都是 \(p\)，前一次的结果不影响后一次。</p>
+    <p>例：掷骰子 \(4\) 次，每次看是不是 \(6\) 点。第 \(1\) 次掷出 \(6\)，第 \(2\) 次掷出 \(6\) 的概率还是 \(\dfrac16\)。「\(4\) 次都是 \(6\)」的概率是 \(\left(\dfrac16\right)^4=\dfrac{1}{1296}\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>放回与不放回</b>：从袋子里摸球，看完放回去再摸，叫放回；拿走不放回，叫不放回。</p>
+    <p>例：袋中 \(3\) 红 \(2\) 白，第一次摸到红球。放回的话，第二次摸到红的概率还是 \(\dfrac35\)；不放回的话，袋里只剩 \(2\) 红 \(2\) 白，变成 \(\dfrac24=\dfrac12\)。<b>不放回时，每次的概率会变，前后也不独立了。</b></p>
+  </div>
+
+  <div class="card">
+    <p><b>组合数</b>：\(C_n^k\) 是从 \(n\) 个里选 \(k\) 个的选法数（不管顺序），\(C_n^k=\dfrac{n!}{k!\,(n-k)!}\)。</p>
+    <p>例：\(C_4^2=\dfrac{4\times3}{2\times1}=6\)，\(C_5^0=1\)，\(C_5^5=1\)。</p>
+  </div>
+
+  <h3>2. 二项分布：做 \(n\) 次，成功几次</h3>
+  <p>在 \(n\) 重伯努利试验中，设成功次数为 \(X\)。「恰好成功 \(k\) 次」怎么算？</p>
+  <ul>
+    <li><b>一种具体排法</b>，比如「前 \(k\) 次成功、后 \(n-k\) 次失败」：各次独立，概率相乘，是 \(p^k(1-p)^{n-k}\)。别的排法也一样，只是乘的顺序不同。</li>
+    <li><b>有几种排法</b>：在 \(n\) 次里选出哪 \(k\) 次成功，有 \(C_n^k\) 种。</li>
+  </ul>
+  <div class="key">\(P(X=k)=C_n^k\,p^k(1-p)^{n-k}\)，\(k=0,1,2,\dots,n\)。<br>这时称 \(X\) 服从<b>二项分布</b>，记作 \(X\sim B(n,p)\)。</div>
+  <p>叫「二项」，是因为这些概率正好是 \(\big[(1-p)+p\big]^n\) 按二项式定理展开的各项，所以它们加起来是 \(1^n=1\)。课本主要研究 \(0&lt;p&lt;1\) 的情形。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>某人射击一次命中的概率是 \(0.8\)，各次之间互不影响。他射击 \(3\) 次，求命中次数 \(X\) 的分布列。</p>
+    <p>次数固定为 \(3\)，每次只分「中 / 不中」，各次独立，命中概率都是 \(0.8\)，所以 \(X\sim B(3,0.8)\)。</p>
+    <p>\(P(X=0)=C_3^0\cdot0.2^3=0.008\)，\(P(X=1)=C_3^1\cdot0.8\cdot0.2^2=0.096\)，</p>
+    <p>\(P(X=2)=C_3^2\cdot0.8^2\cdot0.2=0.384\)，\(P(X=3)=C_3^3\cdot0.8^3=0.512\)。</p>
+    <div class="tblwrap"><table class="dist"><tr><th>\(X\)</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>\(P\)</th><td>0.008</td><td>0.096</td><td>0.384</td><td>0.512</td></tr></table></div>
+    <p>检查：\(0.008+0.096+0.384+0.512=1\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="C">
+    <p>自己试试：掷一颗均匀的骰子 \(3\) 次，恰好有 \(1\) 次是 \(6\) 点的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac16\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{25}{216}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{25}{72}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac12\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(X\sim B\left(3,\dfrac16\right)\)，\(P(X=1)=C_3^1\cdot\dfrac16\cdot\left(\dfrac56\right)^2=3\times\dfrac{25}{216}=\dfrac{25}{72}\)。选 B 的同学只算了一种排法「第 \(1\) 次是 \(6\)、后两次不是」，漏乘了 \(C_3^1=3\)：那个 \(6\) 点可以出现在第 \(1\)、\(2\)、\(3\) 次。</p></div>
+  </div>
+
+  <h3>3. 二项分布的均值和方差</h3>
+  <div class="key">若 \(X\sim B(n,p)\)，则 \(E(X)=np\)，\(D(X)=np(1-p)\)。</div>
+  <p>均值好理解：每做一次，平均贡献 \(p\) 次成功，做 \(n\) 次，平均就是 \(np\) 次。方差的一般推导课本不要求，会用公式就行；\(p\) 越靠近 \(\dfrac12\)，\(p(1-p)\) 越大，结果越「散」。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>接例 1，\(X\sim B(3,0.8)\)。用公式：\(E(X)=3\times0.8=2.4\)，\(D(X)=3\times0.8\times0.2=0.48\)。</p>
+    <p>用分布列直接算均值核对：\(0\times0.008+1\times0.096+2\times0.384+3\times0.512=0.096+0.768+1.536=2.4\)，一样。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：一批灯泡的合格率是 \(0.9\)，从中随机抽 \(10\) 个（看作 \(10\) 次独立试验）。不合格的个数 \(Y\) 的均值和方差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(E=9\)，\(D=0.9\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(E=1\)，\(D=0.9\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(E=1\)，\(D=0.09\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(E=1\)，\(D=1\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。数的是不合格的，「成功」就是「不合格」，\(p=0.1\)，\(Y\sim B(10,0.1)\)。\(E=10\times0.1=1\)，\(D=10\times0.1\times0.9=0.9\)。选 A 的同学把 \(0.9\) 当成了 \(p\)，算出的是合格个数的均值；选 C 的同学漏乘了 \(n\)。</p></div>
+  </div>
+
+  <h3>4. 超几何分布：抽了不放回</h3>
+  <p>\(N\) 个东西里有 \(M\) 个带某种特征（比如次品），<b>不放回</b>地随机抽 \(n\) 个，带特征的个数记为 \(X\)。</p>
+  <ul>
+    <li>从 \(N\) 个里抽 \(n\) 个，共 \(C_N^n\) 种，一样可能。</li>
+    <li>「恰好 \(k\) 个带特征」：从 \(M\) 个里选 \(k\) 个，再从其余 \(N-M\) 个里选 \(n-k\) 个，共 \(C_M^k\,C_{N-M}^{n-k}\) 种。</li>
+  </ul>
+  <div class="key">\(P(X=k)=\dfrac{C_M^k\,C_{N-M}^{n-k}}{C_N^n}\)，这时称 \(X\) 服从<b>超几何分布</b>。<br>\(k\) 是整数，\(\max(0,\,n-N+M)\le k\le\min(n,\,M)\)。均值 \(E(X)=\dfrac{nM}{N}\)。</div>
+  <p>\(k\) 的范围为什么这样：带特征的最多抽到 \(n\) 个，也最多只有 \(M\) 个，所以 \(k\le\min(n,M)\)；不带特征的只有 \(N-M\) 个，抽 \(n\) 个时至少有 \(n-(N-M)\) 个带特征，所以 \(k\ge n-N+M\)（这个数是负的就从 \(0\) 起）。</p>
+  <p>均值和放回时一样是 \(n\cdot\dfrac MN\)：每抽一个，平均有 \(\dfrac MN\) 个带特征。超几何分布的方差课本不要求。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>袋中 \(10\) 个球，\(4\) 红 \(6\) 白，不放回摸 \(3\) 个，求红球个数 \(X\) 的分布列和均值。</p>
+    <p>\(N=10\)，\(M=4\)，\(n=3\)，\(k\) 从 \(\max(0,3-6)=0\) 到 \(\min(3,4)=3\)。\(C_{10}^3=120\)。</p>
+    <p>\(P(X=0)=\dfrac{C_6^3}{120}=\dfrac{20}{120}=\dfrac16\)，\(P(X=1)=\dfrac{C_4^1C_6^2}{120}=\dfrac{60}{120}=\dfrac12\)，</p>
+    <p>\(P(X=2)=\dfrac{C_4^2C_6^1}{120}=\dfrac{36}{120}=\dfrac3{10}\)，\(P(X=3)=\dfrac{C_4^3}{120}=\dfrac{4}{120}=\dfrac1{30}\)。</p>
+    <p>检查：\(20+60+36+4=120\)。均值 \(E(X)=\dfrac{3\times4}{10}=1.2\)；用分布列算 \(\dfrac{60+72+12}{120}=1.2\)，一样。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C">
+    <p>自己试试：\(7\) 名同学里有 \(5\) 名男生、\(2\) 名女生，随机选 \(4\) 人。选中的男生人数 \(X\) 可能取哪些值？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0,1,2,3,4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1,2,3,4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2,3,4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2,3,4,5\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。女生只有 \(2\) 名，选 \(4\) 人至少有 \(2\) 名男生：\(\max(0,4-7+5)=2\)；最多 \(\min(4,5)=4\)。选 A 的同学忘了女生不够；选 D 的同学忘了一共只选 \(4\) 人。</p></div>
+  </div>
+
+  <h3>5. 用哪一个？先查四件事</h3>
+  <p>想用二项分布，四件事都要满足：<b>次数固定</b>、<b>每次只分两类结果</b>、<b>各次独立</b>、<b>每次成功概率相同</b>。有一件不满足，就不能直接用。</p>
+  <ol>
+    <li><b>不放回，不能默认是二项分布。</b><br><span class="small">反例：\(5\) 个球 \(2\) 红，不放回摸 \(2\) 个，两个都红的概率是 \(\dfrac{C_2^2}{C_5^2}=\dfrac1{10}\)。若误当成 \(B\left(2,\dfrac25\right)\)，算出 \(\left(\dfrac25\right)^2=\dfrac4{25}\)，不对：第一次摸走一个红球后，第二次摸红的概率变成了 \(\dfrac14\)。</span></li>
+    <li><b>每次概率不同，不是二项分布。</b><br><span class="small">反例：甲、乙、丙各投一次篮，命中率分别是 \(0.5\)、\(0.6\)、\(0.7\)。命中总数不服从 \(B(3,p)\)，没有一个共同的 \(p\)，要按各人的概率分别相乘再相加。</span></li>
+    <li><b>中途会停下来的，不是固定次数。</b><br><span class="small">反例：投篮「一投中就停，最多投 \(3\) 次」，投的次数可能是 \(1\)、\(2\)、\(3\)，不是事先定好的 \(n\)，不能直接套 \(C_n^kp^k(1-p)^{n-k}\)。</span></li>
+    <li><b>用二项分布近似超几何分布，要说清是「近似」，并说明理由：总体 \(N\) 比样本 \(n\) 大得多。</b><br><span class="small">反例：\(1000\) 件里有 \(100\) 件次品，不放回抽 \(2\) 件，两件都是次品的概率是 \(\dfrac{100\times99}{1000\times999}\approx0.00991\)；当成 \(B(2,0.1)\) 算出 \(0.01\)。很接近，但<b>不相等</b>，不能写「\(=\)」。</span></li>
+  </ol>
+  <div class="key">先查放回不放回、独立不独立、概率变不变、次数定不定，再选模型。放回（或每次独立、概率不变）→ 二项；不放回抽取 → 超几何。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>中途停下的试验，什么时候能「补成」固定次数</b>：三局两胜的比赛，甲每局胜的概率是 \(p\)，各局独立。实际可能只打 \(2\) 局。但如果设想「不管怎样都打满 \(3\) 局」，谁先赢 \(2\) 局在补打后不会改变——甲赢比赛，正好就是「打满 \(3\) 局时甲至少赢 \(2\) 局」。所以 \(P(\text{甲胜})=P(Y\ge2)\)，\(Y\sim B(3,p)\)。这一步要先说明补打不改变要求的事件，才能这样换。</p>
+    <p><b>\(E(X)=np\) 的一种推导</b>：用 \(kC_n^k=nC_{n-1}^{k-1}\)，\(E(X)=\sum\limits_{k=1}^n kC_n^kp^kq^{n-k}=np\sum\limits_{k=1}^n C_{n-1}^{k-1}p^{k-1}q^{n-k}=np(p+q)^{n-1}=np\)（\(q=1-p\)）。</p>
+    <p><b>退化情形</b>：\(p=0\) 时永远不成功，\(X\) 恒为 \(0\)；\(p=1\) 时 \(X\) 恒为 \(n\)，公式照样给出这个结果，只是没什么好研究的。超几何里 \(M=0\)（一个带特征的都没有）时 \(X\) 恒为 \(0\)；\(n=N\)（全抽完）时 \(X\) 恒为 \(M\)。</p>
+    <p><b>只抽 \(1\) 个时</b>，放回不放回没有区别：两种算法都是 \(P(X=1)=\dfrac MN\)。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 二项分布的形状：拖 \(n\) 和 \(p\)</h3>
+  <p class="small">柱子高度是 \(P(X=k)\)，蓝色虚线是均值 \(np\)。点一根柱子（或点图后按左右方向键）选中一个 \(k\)，下面给出它的算式。</p>
+  <div class="card">
+    <svg class="fig" id="bin" viewBox="0 0 560 320" tabindex="0" role="img" aria-label="二项分布柱状图，按左右方向键选择 k"></svg>
+    <div class="ctrl"><label for="nin">\(n\)</label><input type="range" id="nin" min="1" max="20" step="1"><output id="nout"></output></div>
+    <div class="ctrl"><label for="pin">\(p\)</label><input type="range" id="pin" min="1" max="19" step="1"><output id="pout"></output></div>
+    <div class="result" id="binout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="binreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：同一个袋子，放回和不放回</h3>
+  <p class="small">\(N\) 个球里有 \(M\) 个红球（红球比例 \(\dfrac MN\)），摸 \(n\) 个，数红球。蓝柱：放回，\(B\left(n,\dfrac MN\right)\)；金柱：不放回，超几何分布。保持比例，把 \(N\) 调大，看两组柱子怎么靠近；红色三角标出差得最多的 \(k\)。</p>
+  <div class="card">
+    <svg class="fig" id="hyp" viewBox="0 0 560 340" role="img" aria-label="放回与不放回两种抽法的分布柱状图对比"></svg>
+    <div class="ctrl"><label for="Nin">\(N\)</label><input type="range" id="Nin" min="0" max="6" step="1"><output id="Nout"></output></div>
+    <div class="ctrl"><label for="rin">\(\dfrac MN\)</label><input type="range" id="rin" min="0" max="10" step="1"><output id="rout"></output></div>
+    <div class="ctrl"><label for="hnin">\(n\)</label><input type="range" id="hnin" min="1" max="10" step="1"><output id="hnout"></output></div>
+    <div class="result" id="hypout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="hypreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. 一份测验有 \(5\) 道判断题，小明每道都靠猜，猜对的概率是 \(\dfrac12\)，各题互不影响。他恰好猜对 \(4\) 道的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{32}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac5{32}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac45\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{5}{16}\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。猜对道数 \(X\sim B\left(5,\dfrac12\right)\)，\(P(X=4)=C_5^4\left(\dfrac12\right)^4\cdot\dfrac12=\dfrac5{32}\)。选 A 的同学漏乘了 \(C_5^4=5\)（只算了一种对错排法）；\(\dfrac45\) 是把「\(5\) 道里对 \(4\) 道」当成了概率。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(X\sim B(20,\,0.3)\)，\(E(X)\) 和 \(D(X)\) 分别是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(6\)，\(4.2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\)，\(1.8\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(14\)，\(4.2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)，\(6\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(E=np=20\times0.3=6\)，\(D=np(1-p)=6\times0.7=4.2\)。选 B 的同学乘成了 \(np\cdot p\)；选 C 的同学用了 \(1-p\) 算均值；D 把方差也写成了 \(np\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-noreplace" data-answer="B">
+    <p>3. 盒中 \(6\) 个零件，其中 \(2\) 个次品。<b>不放回</b>地取 \(3\) 个，取到的次品数为 \(X\)。\(P(X=2)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac29\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac15\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac49\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。不放回，\(X\) 服从超几何分布：\(P(X=2)=\dfrac{C_2^2\,C_4^1}{C_6^3}=\dfrac{4}{20}=\dfrac15\)。</p>
+      <p>选 A 的同学当成了 \(B\left(3,\dfrac13\right)\)：\(C_3^2\left(\dfrac13\right)^2\cdot\dfrac23=\dfrac29\)。可是取走一个次品后，下一次取到次品的概率就变了，各次也不独立，二项分布的条件不满足。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-approx" data-answer="B">
+    <p>4. 一批产品共 \(10000\) 件，其中 \(500\) 件次品，不放回地抽 \(5\) 件，次品数为 \(X\)。下面哪种说法对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(X\sim B(5,\,0.05)\)，两种算法得到的概率完全一样</button>
+      <button class="opt" data-v="B"><b>B</b>\(X\) 服从超几何分布；因为 \(10000\) 比 \(5\) 大得多，可以用 \(B(5,\,0.05)\) 近似计算，但结果只是近似值</button>
+      <button class="opt" data-v="C"><b>C</b>不放回，所以和二项分布毫无关系，不能拿来算</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。不放回抽取，准确的模型是超几何分布。总体比样本大得多时，抽走几件几乎不改变次品比例，所以二项分布是很好的<b>近似</b>，但两者并不相等（比如 \(P(X=0)\)：超几何约 \(0.77374\)，二项 \(0.95^5\approx0.77378\)）。A 把近似说成了相等；C 太绝对，近似计算是允许的，只要说明是近似、理由是总体足够大。</p>
+      <p>顺带一提：两种模型的均值都是 \(5\times0.05=0.25\)，一样。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-stop" data-answer="B">
+    <p>5. 小李投篮，每次命中的概率是 \(0.6\)，各次互不影响。他<b>一投中就停</b>，最多投 \(3\) 次。投篮次数 \(X=3\) 的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.216\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.16\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.096\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.064\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。投满 \(3\) 次，只要求前两次都没中（第 \(3\) 次中不中都停），\(P(X=3)=0.4\times0.4=0.16\)。</p>
+      <p>投篮次数不是固定的 \(n\)，\(X\) 也不是「成功次数」，不服从二项分布。选 A 的同学套了 \(C_3^3\cdot0.6^3\)；选 C 的同学要求第 \(3\) 次一定投中（\(0.4^2\times0.6\)），那是「第 \(3\) 次才投中」，比「投了 \(3\) 次」少了第 \(3\) 次也没中的情况；D 是三次都不中。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 甲、乙进行三局两胜的比赛，甲每局获胜的概率是 \(0.6\)，各局互不影响。甲赢得比赛的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.36\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.648\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.432\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.6\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。直接分情况：甲 \(2:0\) 胜，\(0.6^2=0.36\)；甲 \(2:1\) 胜，前两局一胜一负、第三局胜，\(C_2^1\cdot0.6\cdot0.4\cdot0.6=0.288\)。合计 \(0.648\)。</p>
+      <p>另一种想法（见「再深一点」）：设想总是打满 \(3\) 局，补打不改变谁先赢 \(2\) 局，所以甲胜 \(\iff\) 打满 \(3\) 局时甲至少胜 \(2\) 局：\(C_3^2\cdot0.6^2\cdot0.4+0.6^3=0.432+0.216=0.648\)。选 C 的同学只算了「恰好胜 \(2\) 局」，漏了 \(3\) 局全胜；选 A 的只算了 \(2:0\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function fx(x, d) { var s = (+x).toFixed(d).replace(/\.?0+$/, ""); return s === "-0" || s === "" ? "0" : s; }
+  function fp(x) { // 概率：小的数多留几位，不会把非零显示成 0
+    if (x === 0) return "0";
+    if (Math.abs(x) < 0.0001) return x.toExponential(1).replace("e-", "\\times10^{-") + "}";
+    return fx(x, Math.abs(x) < 0.01 ? 5 : 4);
+  }
+  // 组合数（浮点，n ≤ 1000、k ≤ 10 时足够准）
+  function comb(n, k) {
+    if (k < 0 || k > n) return 0;
+    k = Math.min(k, n - k);
+    var r = 1;
+    for (var i = 1; i <= k; i++) r = r * (n - k + i) / i;
+    return r < 1e15 ? Math.round(r) : r;
+  }
+  function binom(n, p, k) { return comb(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k); }
+  function hyper(N, M, n, k) {
+    if (k < Math.max(0, n - N + M) || k > Math.min(n, M)) return 0;
+    return comb(M, k) * comb(N - M, n - k) / comb(N, n);
+  }
+  function niceMax(m) { var s = m <= 0.5 ? 0.1 : 0.2; return Math.min(1, Math.max(s, Math.ceil(m / s - 1e-9) * s)); }
+  // 画坐标轴与纵向刻度，返回 y 映射
+  function axes(fig, X0, X1, Yt, Yb, ymax) {
+    var fg = css("--fg"), line = css("--line");
+    var step = ymax <= 0.5 ? 0.1 : 0.2;
+    function y(v) { return Yb - v / ymax * (Yb - Yt); }
+    for (var t = step; t <= ymax + 1e-9; t += step) {
+      svg("line", { x1: X0, y1: y(t), x2: X1, y2: y(t), stroke: line }, fig);
+      svg("text", { x: X0 - 8, y: y(t) + 7, "text-anchor": "end", "font-size": 20 }, fig).textContent = fx(t, 1);
+    }
+    svg("line", { x1: X0, y1: Yb, x2: X1, y2: Yb, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt - 6, stroke: fg, "stroke-width": 1.5 }, fig);
+    return y;
+  }
+
+  /* ================= ① 二项分布 ================= */
+  var bin = document.getElementById("bin"), nin = document.getElementById("nin"), pin = document.getElementById("pin");
+  var bn, bp20, bk; // n；p 的 20 倍（整数 1..19）；选中的 k
+  function binReset() { bn = 5; bp20 = 10; bk = 2; nin.value = bn; pin.value = bp20; binDraw(); }
+  function binDraw() {
+    var p = bp20 / 20, q = 1 - p, X0 = 62, X1 = 545, Yt = 56, Yb = 272;
+    bk = clamp(bk, 0, bn);
+    var P = [], mx = 0;
+    for (var k = 0; k <= bn; k++) { P.push(binom(bn, p, k)); mx = Math.max(mx, P[k]); }
+    var ymax = niceMax(mx);
+    var ca = css("--a"), cc = css("--c"), hl = css("--hl"), fg = css("--fg");
+    bin.innerHTML = "";
+    var y = axes(bin, X0, X1, Yt, Yb, ymax);
+    var w = (X1 - X0) / (bn + 1);
+    function xc(k) { return X0 + w * (k + 0.5); }
+    P.forEach(function (v, k) {
+      var r = svg("rect", { x: xc(k) - w * 0.36, y: y(v), width: w * 0.72, height: Math.max(0, Yb - y(v)), fill: k === bk ? hl : ca, style: "cursor:pointer" }, bin);
+      // 透明的点击区，矮柱子也好点
+      var hit = svg("rect", { x: xc(k) - w / 2, y: Yt, width: w, height: Yb - Yt + 30, fill: "transparent", style: "cursor:pointer" }, bin);
+      hit.addEventListener("click", function () { bk = k; binDraw(); Peiyu.log("interact", { id: "binom-k", n: bn, p: p, k: k }); });
+      r.addEventListener("click", function () { bk = k; binDraw(); });
+      if (bn <= 10 || k % 2 === 0) svg("text", { x: xc(k), y: Yb + 24, "text-anchor": "middle", "font-size": 20, "font-weight": k === bk ? 700 : 400 }, bin).textContent = k;
+    });
+    svg("text", { x: X1, y: Yb + 48, "text-anchor": "end", "font-size": 20 }, bin).textContent = "k";
+    // 选中柱的值
+    svg("text", { x: clamp(xc(bk), X0 + 40, X1 - 40), y: y(P[bk]) - 8, "text-anchor": "middle", "font-size": 20, fill: fg, "font-weight": 700 }, bin).textContent = fx(P[bk], 3);
+    // 均值线
+    var mu = bn * p, xm = X0 + w * (mu + 0.5);
+    svg("line", { x1: xm, y1: Yt - 10, x2: xm, y2: Yb, stroke: cc, "stroke-width": 2.5, "stroke-dasharray": "6 5" }, bin);
+    svg("text", { x: clamp(xm, X0 + 70, X1 - 70), y: Yt - 30, "text-anchor": "middle", "font-size": 20, fill: cc, "font-weight": 700 }, bin).textContent = "np = " + fx(mu, 2);
+
+    document.getElementById("nout").textContent = bn;
+    document.getElementById("pout").textContent = fx(p, 2);
+    var best = 0; P.forEach(function (v, k) { if (v > P[best] + 1e-12) best = k; });
+    var modes = P.map(function (v, k) { return Math.abs(v - P[best]) < 1e-12 ? k : -1; }).filter(function (k) { return k >= 0; });
+    var ps = fx(p, 2), qs = fx(q, 2);
+    var out = document.getElementById("binout");
+    out.innerHTML = "\\(X\\sim B(" + bn + "," + ps + ")\\)：\\(P(X=" + bk + ")=C_{" + bn + "}^{" + bk + "}\\cdot" + ps + "^{" + bk + "}\\cdot" + qs + "^{" + (bn - bk) + "}\\approx " + fp(P[bk]) + "\\)<br>" +
+      "\\(E(X)=np=" + fx(mu, 2) + "\\)，\\(D(X)=np(1-p)=" + fx(mu * q, 4) + "\\)。概率最大的 \\(k=" + modes.join("\\text{ 和 }") + "\\)" +
+      (modes.length > 1 ? "（两个一样大）" : "") + "，在 \\(np\\) 附近。" + (bp20 === 10 ? "\\(p=0.5\\)：左右对称。" : "");
+    Peiyu.math(out);
+  }
+  nin.addEventListener("input", function () { bn = clamp(parseInt(nin.value, 10) || 5, 1, 20); binDraw(); });
+  pin.addEventListener("input", function () { bp20 = clamp(parseInt(pin.value, 10) || 10, 1, 19); binDraw(); });
+  nin.addEventListener("change", function () { Peiyu.log("interact", { id: "binom-n", n: bn }); });
+  pin.addEventListener("change", function () { Peiyu.log("interact", { id: "binom-p", p: bp20 / 20 }); });
+  bin.addEventListener("keydown", function (ev) {
+    var d = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[ev.key];
+    if (ev.key === "Home") d = -bk; else if (ev.key === "End") d = bn - bk;
+    if (d === undefined) return;
+    ev.preventDefault(); bk = clamp(bk + d, 0, bn); binDraw();
+  });
+  document.getElementById("binreset").onclick = binReset;
+
+  /* ================= ② 放回 vs 不放回 ================= */
+  var hyp = document.getElementById("hyp"), Nin = document.getElementById("Nin"), rin = document.getElementById("rin"), hnin = document.getElementById("hnin");
+  var NS_ = [10, 20, 50, 100, 200, 500, 1000];
+  var hi, hr, hn; // N 的下标；红球比例的 10 倍；n
+  function hypReset() { hi = 0; hr = 4; hn = 5; Nin.value = hi; rin.value = hr; hnin.value = hn; hypDraw(); }
+  function hypDraw() {
+    var N = NS_[hi], M = N * hr / 10, n = hn, p = M / N; // N 都是 10 的倍数，M 是整数
+    var X0 = 62, X1 = 545, Yt = 70, Yb = 290;
+    var B = [], H = [], mx = 0, dmax = 0, kd = 0;
+    for (var k = 0; k <= n; k++) {
+      B.push(binom(n, p, k)); H.push(hyper(N, M, n, k));
+      mx = Math.max(mx, B[k], H[k]);
+      var d = Math.abs(B[k] - H[k]);
+      if (d > dmax + 1e-15) { dmax = d; kd = k; }
+    }
+    if (dmax < 1e-12) dmax = 0;
+    var ymax = niceMax(mx);
+    var cc = css("--c"), cb = css("--b"), no = css("--no"), muted = css("--muted");
+    hyp.innerHTML = "";
+    var y = axes(hyp, X0, X1, Yt, Yb, ymax);
+    var w = (X1 - X0) / (n + 1);
+    function xc(k) { return X0 + w * (k + 0.5); }
+    var lo = Math.max(0, n - N + M), up = Math.min(n, M);
+    for (k = 0; k <= n; k++) {
+      var bw = w * 0.36;
+      svg("rect", { x: xc(k) - bw, y: y(B[k]), width: bw, height: Math.max(0, Yb - y(B[k])), fill: cc }, hyp);
+      svg("rect", { x: xc(k), y: y(H[k]), width: bw, height: Math.max(0, Yb - y(H[k])), fill: cb }, hyp);
+      svg("text", { x: xc(k), y: Yb + 24, "text-anchor": "middle", "font-size": 20, fill: k < lo || k > up ? muted : css("--fg") }, hyp).textContent = k;
+    }
+    if (dmax > 0) {
+      var ty = y(Math.max(B[kd], H[kd])) - 6;
+      svg("path", { d: "M" + (xc(kd) - 9) + " " + (ty - 14) + " L" + (xc(kd) + 9) + " " + (ty - 14) + " L" + xc(kd) + " " + ty + " Z", fill: no }, hyp);
+    }
+    // 图例
+    svg("rect", { x: 70, y: 16, width: 18, height: 18, fill: cc }, hyp);
+    svg("text", { x: 94, y: 32, "font-size": 20 }, hyp).textContent = "放回（二项）";
+    svg("rect", { x: 270, y: 16, width: 18, height: 18, fill: cb }, hyp);
+    svg("text", { x: 294, y: 32, "font-size": 20 }, hyp).textContent = "不放回（超几何）";
+    svg("text", { x: X1, y: Yb + 46, "text-anchor": "end", "font-size": 20 }, hyp).textContent = "红球个数 k";
+
+    document.getElementById("Nout").textContent = N;
+    document.getElementById("rout").textContent = fx(p, 1) + "（M = " + M + "）";
+    document.getElementById("hnout").textContent = n;
+    var lines = [];
+    lines.push("\\(N=" + N + "\\)，\\(M=" + M + "\\)，\\(n=" + n + "\\)。放回：\\(X\\sim B(" + n + "," + fx(p, 1) + ")\\)，\\(k\\) 从 \\(0\\) 到 \\(" + n + "\\)；不放回：超几何分布，\\(k\\) 从 \\(" + lo + "\\) 到 \\(" + up + "\\)。");
+    lines.push("均值都是 \\(\\dfrac{nM}{N}=" + fx(n * p, 2) + "\\)。");
+    if (M === 0 || M === N) {
+      lines.push('<span class="eq">退化情形</span>：' + (M === 0 ? "一个红球都没有，两种抽法 \\(X\\) 都恒为 \\(0\\)。" : "全是红球，两种抽法 \\(X\\) 都恒为 \\(" + n + "\\)。"));
+    } else if (n === 1) {
+      lines.push('<span class="eq">只摸 \\(1\\) 个</span>：放回不放回没有区别，两组柱子完全一样。');
+    } else {
+      lines.push('两组柱子最多差 <span class="bad">\\(' + fp(dmax) + "\\)</span>（在 \\(k=" + kd + "\\) 处）。" +
+        (n === N ? "\\(n=N\\)：不放回就是全部摸完，\\(X\\) 恒为 \\(M=" + M + "\\)，和二项分布差得很远。" :
+          N >= 50 * n ? "\\(N\\) 比 \\(n\\) 大得多，二项分布是很好的近似——但差值仍不是 \\(0\\)，只能说「近似」。" :
+            "\\(N\\) 相对 \\(n\\) 还不够大，不放回明显改变了后面摸红的概率，差别看得出来，不宜用二项分布代替。"));
+    }
+    var out = document.getElementById("hypout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  function onH() {
+    hi = clamp(parseInt(Nin.value, 10) || 0, 0, NS_.length - 1);
+    hr = clamp(parseInt(rin.value, 10) || 0, 0, 10);
+    hn = clamp(parseInt(hnin.value, 10) || 1, 1, 10);
+    hypDraw();
+  }
+  [Nin, rin, hnin].forEach(function (el) {
+    el.addEventListener("input", onH);
+    el.addEventListener("change", function () { Peiyu.log("interact", { id: "hyper", N: NS_[hi], r: hr / 10, n: hn }); });
+  });
+  document.getElementById("hypreset").onclick = hypReset;
+
+  document.addEventListener("DOMContentLoaded", function () { binReset(); hypReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { binDraw(); hypDraw(); });
+})();
+</script>
+</body></html>

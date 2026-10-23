@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8.1 成对数据的统计相关性 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  .tblwrap { overflow-x: auto; }
+  table.tbl { border-collapse: collapse; font-size: 15px; margin: 8px 0; }
+  table.tbl th, table.tbl td { border: 1px solid var(--line); padding: 4px 9px; text-align: center; }
+  table.tbl th { background: var(--hl-soft); font-weight: 600; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e3-8-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 8 章 成对数据的统计分析</p>
+<h1>8.1 成对数据的统计相关性</h1>
+<p class="lead">两个量「有关系，但又不是一个公式能算死的」，怎么描述？先画散点图看趋势，再用一个数 \(r\) 量出这种关系有多「直」。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一家小店记了 6 天的最高气温和冰淇淋销量：</p>
+  <div class="tblwrap"><table class="tbl">
+    <tr><th>气温 / ℃</th><td>22</td><td>25</td><td>27</td><td>30</td><td>33</td><td>35</td></tr>
+    <tr><th>销量 / 支</th><td>41</td><td>50</td><td>48</td><td>62</td><td>70</td><td>76</td></tr>
+  </table></div>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>从这张表看，气温越高，销量一般会怎样？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>越多</button>
+      <button class="opt" data-v="B"><b>B</b>越少</button>
+      <button class="opt" data-v="C"><b>C</b>看不出规律</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。整体看，气温高的日子卖得多。</p>
+      <p>但它不是「气温定了，销量就定了」：\(27\) ℃那天反而比 \(25\) ℃那天少卖 \(2\) 支。销量还受周末、下雨、进货多少影响。</p>
+      <p>这种「有趋势、但不是确定的函数」的关系叫<b>相关关系</b>。这一节学两件事：用散点图看出趋势，用<b>样本相关系数</b> \(r\) 把「趋势有多明显」算成一个数（这组数据 \(r\approx0.98\)）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：平均数、方差和标准差（<a href="b2-9-2.html">回看 9.2</a>）；样本和总体的区别（<a href="b2-9-1.html">回看 9.1</a>）；统计数据怎么看（<a href="b2-9-3.html">回看 9.3</a>）。</p>
+
+  <div class="card">
+    <p><b>成对数据</b>：同一个对象身上量两个数，记成一对 \((x_i,y_i)\)。</p>
+    <p>例：同学甲身高 \(170\) cm、体重 \(60\) kg，记 \((170,60)\)；同学乙记 \((158,49)\)。甲的身高必须和甲的体重配在一起，<b>对子不能拆开重排</b>。</p>
+  </div>
+
+  <div class="card">
+    <p><b>散点图</b>：把每一对 \((x_i,y_i)\) 画成坐标系里的一个点。</p>
+    <p>例：\((1,2)\)、\((2,3)\)、\((3,5)\) 三对，画出来三个点从左下往右上排。看一眼就知道大致趋势。</p>
+  </div>
+
+  <div class="card">
+    <p><b>函数关系和相关关系</b>：</p>
+    <ul>
+      <li>函数关系：\(x\) 定了，\(y\) 就唯一定了。例：正方形边长 \(3\)，面积一定是 \(9\)。</li>
+      <li>相关关系：\(x\) 定了，\(y\) 还会在一定范围内变，但整体有趋势。例：身高 \(170\) cm 的人，体重可能 \(55\) kg，也可能 \(70\) kg，可整体上高个子偏重。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <p><b>正相关、负相关、线性相关</b>：</p>
+    <ul>
+      <li>\(x\) 大，\(y\) 也偏大：<b>正相关</b>。例：气温和冰淇淋销量。</li>
+      <li>\(x\) 大，\(y\) 反而偏小：<b>负相关</b>。例：汽车车龄和二手价格。</li>
+      <li>散点大致围着一条直线：<b>线性相关</b>。本节的 \(r\) 量的就是「多像一条直线」。</li>
+    </ul>
+  </div>
+
+  <h3>2. 样本相关系数 \(r\)</h3>
+  <p>有 \(n\) 对数据，平均数 \(\bar x\)、\(\bar y\)。看每个点「偏离平均」的方向：</p>
+  <ul>
+    <li>点在 \(\bar x\) 右边又在 \(\bar y\) 上面（或者左边又下面），\((x_i-\bar x)(y_i-\bar y)>0\)；</li>
+    <li>点在右下或左上，这个乘积 \(&lt;0\)。</li>
+  </ul>
+  <p>把乘积全加起来：正的多，说明「一起大、一起小」，是正相关；负的多是负相关。再除以一个数，把单位和数据的分散程度去掉，就是</p>
+  <div class="key" style="text-align:center">\(r=\dfrac{\sum\limits_{i=1}^{n}(x_i-\bar x)(y_i-\bar y)}{\sqrt{\sum\limits_{i=1}^{n}(x_i-\bar x)^2\cdot\sum\limits_{i=1}^{n}(y_i-\bar y)^2}}\)</div>
+  <p class="small">分母里两个和，就是两组数据各自方差的 \(n\) 倍。所以 \(x\) 的数据全一样，或者 \(y\) 的数据全一样，分母是 \(0\)，\(r\) 没法算。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么算）</p>
+    <p>\(5\) 对数据：\(x\)：\(1,2,3,4,5\)；\(y\)：\(2,4,5,4,5\)。求 \(r\)。</p>
+    <p>平均数：\(\bar x=3\)，\(\bar y=\dfrac{20}{5}=4\)。</p>
+    <p>偏离：\(x_i-\bar x\)：\(-2,-1,0,1,2\)；\(y_i-\bar y\)：\(-2,0,1,0,1\)。</p>
+    <p>乘积和：\(4+0+0+0+2=6\)。平方和：\(\sum(x_i-\bar x)^2=4+1+0+1+4=10\)，\(\sum(y_i-\bar y)^2=4+0+1+0+1=6\)。</p>
+    <p style="text-align:center">\(r=\dfrac{6}{\sqrt{10\times6}}=\dfrac{6}{\sqrt{60}}\approx0.77\)。</p>
+    <p>\(r>0\)，正相关；不是 \(1\)，说明点没有全在一条直线上。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：\(3\) 对数据 \((1,1)\)、\((2,3)\)、\((3,2)\)。\(r\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.25\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\bar x=\bar y=2\)；偏离 \(-1,0,1\) 和 \(-1,1,0\)；乘积和 \(1+0+0=1\)；两个平方和都是 \(2\)。\(r=\dfrac{1}{\sqrt{2\times2}}=0.5\)。选 B 的同学忘了开根号，算成 \(\dfrac{1}{2\times2}\)。</p></div>
+  </div>
+
+  <h3>3. 怎么读 \(r\)</h3>
+  <div class="key">\(-1\le r\le 1\)。<br>\(r>0\) 正相关，\(r&lt;0\) 负相关。<br>\(|r|\) 越接近 \(1\)，点越贴近一条直线，线性相关越强；\(|r|\) 越接近 \(0\)，线性相关越弱。<br>\(|r|=1\)：所有点正好在一条（不水平、不竖直的）直线上。</div>
+  <p>比较几组数据谁的线性相关更强，比的是 \(|r|\)，不看正负号。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>三组成对数据的相关系数：甲 \(r_1=0.92\)，乙 \(r_2=-0.95\)，丙 \(r_3=0.30\)。哪组线性相关最强？</p>
+    <p>比绝对值：\(0.92\)、\(0.95\)、\(0.30\)。乙最大，所以<b>乙</b>最强，它是负相关。丙最弱。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：\(r_1=0.8\)，\(r_2=-0.9\)。哪组数据的点更贴近一条直线？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>第 1 组</button>
+      <button class="opt" data-v="B"><b>B</b>第 2 组</button>
+      <button class="opt" data-v="C"><b>C</b>一样</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(|-0.9|=0.9>0.8\)。选 A 的同学按 \(-0.9&lt;0.8\) 比了大小。负号只说方向（一个大另一个小），不说强弱。</p></div>
+  </div>
+
+  <h3>4. 用之前要注意</h3>
+  <ol>
+    <li><b>数据要一一配对</b>。<br><span class="small">反例：\(x\)：\(1,2,3\)，\(y\)：\(1,2,3\)，\(r=1\)。把 \(y\) 列打乱成 \(3,1,2\) 再算，\(r=-0.5\)。数还是那些数，配错了对，结论就全变了。</span></li>
+    <li><b>两组数据都不能「全一样」</b>，否则分母为 \(0\)，\(r\) 没有定义。<br><span class="small">反例：\((2,1)\)、\((2,3)\)、\((2,5)\)，\(x\) 全是 \(2\)，\(\sum(x_i-\bar x)^2=0\)，算不出 \(r\)。</span></li>
+    <li><b>\(r\) 只量「直线」关系</b>。\(r=0\) 只说明没有线性相关，不说明没关系。<br><span class="small">反例：\(y=x^2\)，取 \(x=-2,-1,0,1,2\)，得 \(y=4,1,0,1,4\)。\(\bar x=0\)，\(\bar y=2\)，乘积和 \(-4+1+0-1+4=0\)，\(r=0\)。可 \(y\) 完全由 \(x\) 决定。</span></li>
+    <li><b>先看散点图，再算 \(r\)</b>。一个离得很远的点（异常点）就能把 \(r\) 拉大或拉小。<br><span class="small">反例：一团看不出趋势的点，\(r\) 接近 \(0\)；在右上角远处加一个点，\(r\) 可以变到 \(0.8\) 以上（「动手」②里拖着看）。</span></li>
+    <li><b>相关不等于因果</b>。<br><span class="small">反例：夏天冰淇淋销量和溺水人数都多，两者正相关；但不是吃冰淇淋导致溺水，而是气温高、游泳的人多，同时推高了两者。</span></li>
+  </ol>
+  <div class="key">\(r\) 是用这一组样本算出来的。换一组样本，\(r\) 会变；样本里的规律不能直接当成总体的确定结论。多大的 \(|r|\) 算「强」，没有一个通用的分界线，要看问题背景和数据量。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>\(r\) 是一个夹角的余弦</b>：把 \(n\) 个偏离值排成两串「向量」\(\vec u=(x_1-\bar x,\dots,x_n-\bar x)\)、\(\vec v=(y_1-\bar y,\dots,y_n-\bar y)\)。照平面向量的数量积（<a href="b2-6-2.html">回看 6.2</a>）推广到 \(n\) 个分量：分子是 \(\vec u\cdot\vec v\)，分母是 \(|\vec u|\,|\vec v|\)，所以 \(r=\cos\theta\)。余弦不会超出 \([-1,1]\)，这就是 \(r\) 的范围；两串同向（\(\theta=0\)）时 \(r=1\)，这时每个点都在一条直线上。</p>
+    <p><b>换单位不影响 \(r\)</b>：身高从米换成厘米，所有 \(x_i-\bar x\) 都乘 \(100\)，分子分母同乘 \(100\)，约掉了。这也是 \(r\) 比「乘积和」好用的地方。</p>
+    <p><b>另一种算法</b>：分子也可以写成 \(\sum x_iy_i-n\bar x\bar y\)，分母里的 \(\sum(x_i-\bar x)^2=\sum x_i^2-n\bar x^2\)。数据大时用计算器或软件算。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 散点图：拖点看 \(r\) 怎么变</h3>
+  <p class="small">拖动任意一个点；点空白处加一个点（最多 20 个）。点的颜色：绿色在右上或左下，乘积 \((x_i-\bar x)(y_i-\bar y)\) 为正；红色为负。选中一个点后可以按方向键移动，按 Delete 删掉它。</p>
+  <div class="card">
+    <svg class="fig" id="sc" viewBox="0 0 560 400" role="img" aria-label="散点图，可拖动、添加、删除点，实时显示样本相关系数 r"></svg>
+    <div class="result" id="scout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="scpos" type="button">正相关</button>
+      <button class="btn ghost" id="scneg" type="button">负相关</button>
+      <button class="btn ghost" id="scnone" type="button">一团</button>
+      <button class="btn ghost" id="scdel" type="button">删除选中的点</button>
+      <button class="btn ghost" id="screset" type="button">重置</button>
+    </div>
+  </div>
+
+  <h3>② 进阶：一个异常点能把 \(r\) 拉多大</h3>
+  <p class="small">灰色的 \(8\) 个点挤在左下角，看不出趋势。金色的点可以拖（或按方向键），把它拖到右上角远处看看。</p>
+  <div class="card">
+    <svg class="fig" id="ol" viewBox="0 0 560 400" role="img" aria-label="8 个固定点和 1 个可拖动的异常点，比较有无异常点时的 r"></svg>
+    <div class="result" id="olout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="olreset" type="button">重置</button></div>
+  </div>
+
+  <h3>③ 进阶：点都在一条曲线上，\(r\) 却可能是 \(0\)</h3>
+  <p class="small">\(9\) 个点都在抛物线 \(y=0.12(x-h)^2+0.5\) 上，\(y\) 完全由 \(x\) 决定。拖滑块改变顶点位置 \(h\)，看 \(r\) 怎么变；\(h=5\) 时左右对称。</p>
+  <div class="card">
+    <svg class="fig" id="pb" viewBox="0 0 560 400" role="img" aria-label="抛物线上的 9 个点，调整顶点位置看 r"></svg>
+    <div class="ctrl"><label for="hin">\(h\)</label><input type="range" id="hin" min="0" max="20" step="1"><output id="hout"></output></div>
+    <div class="result" id="pbout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="pbreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. \(x\)：\(1,2,3\)；\(y\)：\(6,4,2\)。样本相关系数 \(r\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\bar x=2\)，\(\bar y=4\)；偏离 \(-1,0,1\) 和 \(2,0,-2\)；乘积和 \(-2+0-2=-4\)；平方和 \(2\) 和 \(8\)。\(r=\dfrac{-4}{\sqrt{16}}=-1\)。三个点正好在直线 \(y=-2x+8\) 上。选 A 的同学把斜率 \(-2\) 当成了 \(r\)：\(r\) 不会超出 \([-1,1]\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="B">
+    <p>2. 四组成对数据的相关系数：\(0.3\)、\(-0.85\)、\(0.6\)、\(-0.1\)。线性相关最强的是哪一组？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-0.85\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-0.1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.3\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。比 \(|r|\)：\(0.85\) 最大。选 A 的同学只在正数里挑了最大的；选 C 的同学以为数小就「最负、最强」，可 \(|-0.1|\) 是最小的。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-zero" data-answer="C">
+    <p>3. 一组成对数据算出 \(r=0\)。下面哪句话对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(x\) 和 \(y\) 之间没有任何关系</button>
+      <button class="opt" data-v="B"><b>B</b>\(y\) 一定不是 \(x\) 的函数</button>
+      <button class="opt" data-v="C"><b>C</b>这组数据没有线性相关，但可能有曲线关系</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(r\) 只量直线关系。「讲清楚」里 \(y=x^2\) 取 \(x=-2,\dots,2\) 的 \(5\) 个点，\(r=0\)，可 \(y\) 是 \(x\) 的函数，A、B 都错。「动手」③里 \(h=5\) 就是这种情形。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-cause" data-answer="B">
+    <p>4. 某城市逐月统计，冰淇淋销量和溺水人数的相关系数接近 \(1\)。下面哪个结论合理？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>多吃冰淇淋会导致溺水</button>
+      <button class="opt" data-v="B"><b>B</b>两者正相关，但可能都受气温影响，不能推出因果</button>
+      <button class="opt" data-v="C"><b>C</b>禁止卖冰淇淋就能减少溺水</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。相关不等于因果。天热时买冰淇淋的人多，去游泳的人也多，气温同时推高两者。A、C 都把「一起变」当成了「一个导致另一个」。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-var" data-answer="C">
+    <p>5. 三对数据 \((5,1)\)、\((5,3)\)、\((5,8)\)。它们的样本相关系数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(1\)</button>
+      <button class="opt" data-v="C"><b>C</b>没法算</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(x\) 全是 \(5\)，\(\sum(x_i-\bar x)^2=0\)，分母是 \(0\)，\(r\) 没有定义。选 A 的同学看到分子也是 \(0\) 就写了 \(0\)，可 \(\dfrac00\) 不是 \(0\)。点都在竖线 \(x=5\) 上，竖线不是「\(y\) 随 \(x\) 变」的直线。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 一组成对数据 \((x_i,y_i)\) 的相关系数是 \(0.6\)。把每个 \(x_i\) 换成 \(-2x_i+1\)，每个 \(y_i\) 换成 \(3y_i\)，新数据的相关系数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-0.6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-3.6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-1.2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。新的 \(x\) 偏离值是原来的 \(-2\) 倍（加的 \(1\) 被平均数抵消），\(y\) 偏离值是 \(3\) 倍。</p>
+      <p>分子变成原来的 \((-2)\times3=-6\) 倍；分母 \(\sqrt{4\sum(x_i-\bar x)^2\cdot9\sum(y_i-\bar y)^2}\) 变成原来的 \(6\) 倍。所以 \(r\) 变成 \(-0.6\)：大小不变，方向反了。选 C、D 的同学只算了分子，\(-3.6\) 已超出 \([-1,1]\)，一看就不对。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function f3(x) { var s = (Math.round(x * 1000) / 1000).toFixed(3); return s === "-0.000" ? "0.000" : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function drag(fig, ev, onMove, onEnd) {
+    ev.preventDefault();
+    function mv(e) { onMove(toSvg(fig, e)); }
+    function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+    window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+  }
+  var KEYS = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] };
+
+  // 样本相关系数。点存成 0..100 的整数（十分之一单位），r 与单位无关
+  function corr(pts) {
+    var n = pts.length, res = { n: n, ok: false };
+    if (n === 0) { res.why = "还没有点。"; return res; }
+    var sx = 0, sy = 0, i;
+    for (i = 0; i < n; i++) { sx += pts[i][0]; sy += pts[i][1]; }
+    var mx = sx / n, my = sy / n, sxx = 0, syy = 0, sxy = 0;
+    for (i = 0; i < n; i++) {
+      var dx = pts[i][0] - mx, dy = pts[i][1] - my;
+      sxx += dx * dx; syy += dy * dy; sxy += dx * dy;
+    }
+    res.mx = mx; res.my = my; res.sxx = sxx; res.syy = syy; res.sxy = sxy;
+    var zx = sxx < 1e-9, zy = syy < 1e-9;
+    if (n < 2) res.why = "只有 1 个点，至少要 2 个点。";
+    else if (zx && zy) res.why = "所有点重合，\\(x\\)、\\(y\\) 的方差都是 \\(0\\)。";
+    else if (zx) res.why = "所有点的 \\(x\\) 都一样，\\(\\sum(x_i-\\bar x)^2=0\\)，分母是 \\(0\\)。";
+    else if (zy) res.why = "所有点的 \\(y\\) 都一样，\\(\\sum(y_i-\\bar y)^2=0\\)，分母是 \\(0\\)。";
+    else { res.ok = true; res.r = clamp(sxy / Math.sqrt(sxx * syy), -1, 1); }
+    return res;
+  }
+  function describe(r) {
+    var a = Math.abs(r), s;
+    if (a < 0.1) return "\\(r\\) 很接近 \\(0\\)：几乎看不出直线趋势（但不代表没有关系）。";
+    s = r > 0 ? '<span class="eq">正相关</span>' : '<span class="bad">负相关</span>';
+    if (a > 0.9995) return s + "：所有点几乎正好在一条直线上，\\(|r|\\approx1\\)。";
+    return s + "。\\(|r|\\) 越接近 \\(1\\)，点越贴近一条直线。";
+  }
+
+  // 坐标系：数据 0..10，SVG 里 x 60..540，y 350..20
+  var X0 = 60, X1 = 540, Yb = 350, Yt = 20;
+  function sx(v) { return X0 + v / 100 * (X1 - X0); }
+  function sy(v) { return Yb - v / 100 * (Yb - Yt); }
+  function ux(x) { return clamp(Math.round((x - X0) / (X1 - X0) * 100), 0, 100); }
+  function uy(y) { return clamp(Math.round((Yb - y) / (Yb - Yt) * 100), 0, 100); }
+  function axes(el) {
+    var fg = css("--fg"), line = css("--line");
+    for (var t = 0; t <= 10; t += 2) {
+      svg("line", { x1: sx(t * 10), y1: Yt, x2: sx(t * 10), y2: Yb, stroke: line }, el);
+      svg("line", { x1: X0, y1: sy(t * 10), x2: X1, y2: sy(t * 10), stroke: line }, el);
+      svg("text", { x: sx(t * 10), y: Yb + 26, "text-anchor": "middle", "font-size": 20 }, el).textContent = t;
+      if (t) svg("text", { x: X0 - 10, y: sy(t * 10) + 7, "text-anchor": "end", "font-size": 20 }, el).textContent = t;
+    }
+    svg("line", { x1: X0, y1: Yb, x2: X1, y2: Yb, stroke: fg, "stroke-width": 1.5 }, el);
+    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt, stroke: fg, "stroke-width": 1.5 }, el);
+    svg("text", { x: X1 + 6, y: Yb - 6, "font-size": 20 }, el).textContent = "x";
+    svg("text", { x: X0 - 34, y: Yt + 8, "font-size": 20 }, el).textContent = "y";
+  }
+  function moveKey(ev, p) {
+    var d = KEYS[ev.key]; if (!d) return false;
+    var step = ev.shiftKey ? 1 : 5;
+    p[0] = clamp(p[0] + d[0] * step, 0, 100); p[1] = clamp(p[1] + d[1] * step, 0, 100);
+    return true;
+  }
+
+  /* ================= ① 散点图 ================= */
+  var sc = document.getElementById("sc");
+  var PRESET = {
+    pos: [[10, 20], [20, 35], [30, 30], [40, 50], [50, 45], [60, 65], [70, 60], [80, 80]],
+    neg: [[10, 85], [20, 70], [30, 75], [45, 55], [55, 50], [65, 35], [80, 30], [90, 15]],
+    none: [[20, 30], [30, 70], [40, 50], [50, 20], [55, 80], [65, 40], [75, 65], [85, 30]]
+  };
+  var MAXN = 20, pts = [], sel = -1;
+  function copy(a) { return a.map(function (p) { return [p[0], p[1]]; }); }
+  function scLoad(name) { pts = copy(PRESET[name]); sel = -1; scDraw(); Peiyu.log("interact", { id: "scatter-preset", v: name }); }
+  function scReset() { pts = copy(PRESET.pos); sel = -1; scDraw(); }
+  function scDraw(keepFocus) {
+    var st = corr(pts), fg = css("--fg"), ca = css("--a"), no = css("--no"), muted = css("--muted"), hl = css("--hl"), cc = css("--c");
+    sc.innerHTML = "";
+    svg("rect", { x: X0, y: Yt, width: X1 - X0, height: Yb - Yt, fill: "transparent", "data-bg": 1 }, sc);
+    axes(sc);
+    if (pts.length) {
+      var mxs = sx(st.mx), mys = sy(st.my);
+      svg("line", { x1: mxs, y1: Yt, x2: mxs, y2: Yb, stroke: cc, "stroke-width": 2, "stroke-dasharray": "6 5" }, sc);
+      svg("line", { x1: X0, y1: mys, x2: X1, y2: mys, stroke: cc, "stroke-width": 2, "stroke-dasharray": "6 5" }, sc);
+      svg("text", { x: clamp(mxs + 6, X0, X1 - 24), y: Yt + 20, fill: cc, "font-size": 20 }, sc).innerHTML = '<tspan text-decoration="overline">x</tspan>';
+      svg("text", { x: X1 - 4, y: clamp(mys - 8, Yt + 20, Yb - 6), fill: cc, "font-size": 20, "text-anchor": "end" }, sc).innerHTML = '<tspan text-decoration="overline">y</tspan>';
+    }
+    pts.forEach(function (p, i) {
+      var pr = (p[0] - st.mx) * (p[1] - st.my), col = !st.ok || Math.abs(pr) < 1e-9 ? muted : pr > 0 ? ca : no;
+      var c = svg("circle", { cx: sx(p[0]), cy: sy(p[1]), r: 11, fill: col, stroke: i === sel ? hl : fg, "stroke-width": i === sel ? 4 : 1.5,
+        tabindex: 0, "data-i": i, role: "button", "aria-label": "点 " + (i + 1) + "：(" + f2(p[0] / 10) + ", " + f2(p[1] / 10) + ")", style: "cursor:grab" }, sc);
+      c.addEventListener("keydown", function (ev) {
+        if (ev.key === "Delete" || ev.key === "Backspace") { ev.preventDefault(); sel = i; scDel(); return; }
+        if (!moveKey(ev, pts[i])) return;
+        ev.preventDefault(); sel = i; scDraw(true);
+      });
+      c.addEventListener("focus", function () { if (sel !== i) { sel = i; c.setAttribute("stroke", hl); c.setAttribute("stroke-width", 4); document.getElementById("scdel").disabled = false; } });
+    });
+    if (keepFocus && sel >= 0) { var h = sc.querySelector('[data-i="' + sel + '"]'); if (h) h.focus(); }
+
+    var out = document.getElementById("scout"), s;
+    if (!st.ok) s = '<span class="bad">无法计算 \\(r\\)</span>：' + st.why + (pts.length ? "（\\(n=" + pts.length + "\\)）" : "点空白处加点。");
+    else s = "\\(n=" + st.n + "\\)，\\(\\bar x=" + f2(st.mx / 10) + "\\)，\\(\\bar y=" + f2(st.my / 10) + "\\)<br>" +
+      "\\(\\sum(x_i-\\bar x)(y_i-\\bar y)=" + f2(st.sxy / 100) + "\\)，\\(\\sum(x_i-\\bar x)^2=" + f2(st.sxx / 100) + "\\)，\\(\\sum(y_i-\\bar y)^2=" + f2(st.syy / 100) + "\\)<br>" +
+      "\\(r=" + f3(st.r) + "\\)　" + describe(st.r);
+    out.innerHTML = s;
+    Peiyu.math(out);
+    document.getElementById("scdel").disabled = sel < 0;
+  }
+  function scDel() {
+    if (sel < 0 || sel >= pts.length) return;
+    pts.splice(sel, 1);
+    sel = pts.length ? Math.min(sel, pts.length - 1) : -1;
+    scDraw(sel >= 0);
+    Peiyu.log("interact", { id: "scatter-del", n: pts.length });
+  }
+  sc.addEventListener("pointerdown", function (ev) {
+    var t = ev.target, a = t && t.getAttribute ? t.getAttribute("data-i") : null, i;
+    if (a !== null && a !== undefined && a !== "") i = parseInt(a, 10);
+    else {
+      if (pts.length >= MAXN) { var so = document.getElementById("scout"); if (so.innerHTML.indexOf("最多") < 0) so.insertAdjacentHTML("beforeend", "<br>最多 " + MAXN + " 个点，先删掉一个再加。"); return; }
+      var q = toSvg(sc, ev);
+      pts.push([ux(q.x), uy(q.y)]); i = pts.length - 1;
+    }
+    sel = i; scDraw(true);
+    drag(sc, ev, function (q) {
+      var p = pts[i]; if (!p) return;
+      var nx = ux(q.x), ny = uy(q.y);
+      if (nx !== p[0] || ny !== p[1]) { p[0] = nx; p[1] = ny; scDraw(); }
+    }, function () {
+      var st = corr(pts), hh = sc.querySelector('[data-i="' + sel + '"]');
+      if (hh) hh.focus();
+      Peiyu.log("interact", { id: "scatter", n: pts.length, r: st.ok ? Math.round(st.r * 1000) / 1000 : null });
+    });
+  });
+  document.getElementById("scpos").onclick = function () { scLoad("pos"); };
+  document.getElementById("scneg").onclick = function () { scLoad("neg"); };
+  document.getElementById("scnone").onclick = function () { scLoad("none"); };
+  document.getElementById("scdel").onclick = scDel;
+  document.getElementById("screset").onclick = scReset;
+
+  /* ================= ② 异常点 ================= */
+  var ol = document.getElementById("ol");
+  var BASE = [[10, 20], [15, 35], [20, 15], [25, 30], [30, 20], [35, 35], [40, 15], [25, 22]];
+  var out1;
+  function olReset() { out1 = [30, 25]; olDraw(); }
+  function olDraw(keepFocus) {
+    var muted = css("--muted"), fg = css("--fg"), hl = css("--hl");
+    ol.innerHTML = "";
+    axes(ol);
+    BASE.forEach(function (p) { svg("circle", { cx: sx(p[0]), cy: sy(p[1]), r: 9, fill: muted, stroke: fg, "stroke-width": 1 }, ol); });
+    var h = svg("circle", { cx: sx(out1[0]), cy: sy(out1[1]), r: 12, fill: hl, stroke: fg, "stroke-width": 2.5, tabindex: 0, role: "slider",
+      "aria-label": "异常点，位置 (" + f2(out1[0] / 10) + ", " + f2(out1[1] / 10) + ")", "aria-valuenow": out1[0] / 10, style: "cursor:grab" }, ol);
+    h.addEventListener("keydown", function (ev) { if (moveKey(ev, out1)) { ev.preventDefault(); olDraw(true); } });
+    h.addEventListener("pointerdown", function (ev) {
+      drag(ol, ev, function (q) {
+        var nx = ux(q.x), ny = uy(q.y);
+        if (nx !== out1[0] || ny !== out1[1]) { out1 = [nx, ny]; olDraw(); }
+      }, function () { Peiyu.log("interact", { id: "outlier", x: out1[0] / 10, y: out1[1] / 10 }); });
+    });
+    if (keepFocus) h.focus();
+    var a = corr(BASE), b = corr(BASE.concat([out1]));
+    var s = "没有金色点：\\(r=" + f3(a.r) + "\\)<br>加上金色点 \\((" + f2(out1[0] / 10) + "," + f2(out1[1] / 10) + ")\\)：" +
+      (b.ok ? "\\(r=" + f3(b.r) + "\\)，变化了 \\(" + f3(b.r - a.r) + "\\)" : "无法计算");
+    if (b.ok && Math.abs(b.r) > 0.6) s += '<br><span class="bad">只靠一个点，|r| 就变大了很多</span>。算 \\(r\\) 之前先看散点图，找一找有没有这种点。';
+    var o = document.getElementById("olout"); o.innerHTML = s; Peiyu.math(o);
+  }
+  document.getElementById("olreset").onclick = olReset;
+
+  /* ================= ③ 抛物线 ================= */
+  var pb = document.getElementById("pb"), hin = document.getElementById("hin");
+  var h2; // h 的 2 倍，整数 0..20
+  function py(x, h) { return 0.12 * (x - h) * (x - h) + 0.5; }
+  function pbReset() { h2 = 10; hin.value = h2; pbDraw(); }
+  function pbDraw() {
+    var h = h2 / 2, muted = css("--muted"), ca = css("--a"), fg = css("--fg");
+    pb.innerHTML = "";
+    axes(pb);
+    var d = "", first = true;
+    for (var i = 0; i <= 100; i++) {
+      var x = i / 10, y = py(x, h);
+      if (y > 10.3) { first = true; continue; }
+      d += (first ? "M" : "L") + sx(x * 10).toFixed(1) + " " + sy(y * 10).toFixed(1); first = false;
+    }
+    if (d) svg("path", { d: d, fill: "none", stroke: muted, "stroke-width": 2, "stroke-dasharray": "5 5" }, pb);
+    var P = [];
+    for (var k = 1; k <= 9; k++) {
+      var yy = py(k, h); P.push([k * 10, yy * 10]);
+      svg("circle", { cx: sx(k * 10), cy: sy(yy * 10), r: 9, fill: ca, stroke: fg, "stroke-width": 1.5 }, pb);
+    }
+    var st = corr(P);
+    document.getElementById("hout").textContent = f2(h);
+    var s = st.ok ? "\\(r=" + f3(st.r) + "\\)。" : "无法计算。";
+    if (st.ok && Math.abs(st.r) < 0.0005) s += '<br><span class="eq">r = 0</span>，可每个点的 \\(y\\) 都由 \\(x\\) 算出来。\\(r=0\\) 只说明「不像一条直线」，不说明没关系。';
+    else s += "<br>点仍然全在抛物线上，\\(r\\) 却不是 \\(\\pm1\\)：\\(|r|\\) 小于 \\(1\\) 不一定是数据「乱」，也可能是关系本来就是弯的。";
+    var o = document.getElementById("pbout"); o.innerHTML = s; Peiyu.math(o);
+  }
+  hin.addEventListener("input", function () { h2 = clamp(parseInt(hin.value, 10) || 0, 0, 20); pbDraw(); });
+  hin.addEventListener("change", function () { Peiyu.log("interact", { id: "parabola-h", h: h2 / 2 }); });
+  document.getElementById("pbreset").onclick = pbReset;
+
+  document.addEventListener("DOMContentLoaded", function () { scReset(); olReset(); pbReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { scDraw(); olDraw(); pbDraw(); });
+})();
+</script>
+</body></html>

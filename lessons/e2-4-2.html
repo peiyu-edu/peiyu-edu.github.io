@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4.2 等差数列 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  #seq text, #sumfig text { font-size: 22px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e2-4-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第二册 · 第 4 章 数列</p>
+<h1>4.2 等差数列</h1>
+<p class="lead">每一项都比前一项多同一个数，这样的数列最简单，也最常用。这一节讲它的第 \(n\) 项怎么写、前 \(n\) 项怎么加，以及加出来的和什么时候最大。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一个小礼堂，第 \(1\) 排有 \(20\) 个座位，往后每一排都比前一排多 \(2\) 个座位。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>第 \(6\) 排有几个座位？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(30\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(32\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(26\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\)</button>
+    </div>
+    <div class="reveal">
+      <p>一排一排数：\(20,\ 22,\ 24,\ 26,\ 28,\ 30\)。第 \(6\) 排是 \(30\)，选 <b>A</b>。</p>
+      <p>从第 \(1\) 排走到第 \(6\) 排，只多了 \(5\) 次，所以是 \(20+5\times2\)，不是 \(20+6\times2\)。</p>
+      <p>「每次多同一个数」的数列叫<b>等差数列</b>。这一节讲：第 \(n\) 排有几个座位（通项），前 \(n\) 排一共几个座位（前 \(n\) 项和）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：4.1 的数列、项、通项公式、前 \(n\) 项和 \(S_n\)（<a href="e2-4-1.html">回看 4.1</a>）；一次函数 \(y=kx+b\) 和二次函数的顶点（<a href="b1-3-1.html">函数 3.1</a>、<a href="b1-2-3.html">二次函数 2.3</a>）。</p>
+
+  <div class="card">
+    <p><b>相邻两项的差</b>：后一项减前一项，\(a_{n+1}-a_n\)。</p>
+    <p>例：\(3,7,11,15\) 的相邻差是 \(4,4,4\)，都一样；\(1,2,4,7\) 的相邻差是 \(1,2,3\)，不一样。</p>
+  </div>
+
+  <div class="card">
+    <p><b>公差</b>：相邻差<b>每一处都等于</b>同一个常数时，这个常数叫公差，记作 \(d\)。它可以是正数、负数，也可以是 \(0\)。</p>
+    <p>例：\(3,7,11,15,\dots\) 的 \(d=4\)；\(10,7,4,1,\dots\) 的 \(d=-3\)；\(5,5,5,\dots\) 的 \(d=0\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>前 \(n\) 项和 \(S_n\)</b>：从第 \(1\) 项加到第 \(n\) 项，\(S_n=a_1+a_2+\dots+a_n\)。</p>
+    <p>例：数列 \(2,5,8,11,\dots\)，\(S_1=2\)，\(S_3=2+5+8=15\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>一次函数的斜率</b>：\(y=kx+b\) 里，\(x\) 每加 \(1\)，\(y\) 就加 \(k\)；图象是直线。</p>
+    <p>例：\(y=2x+1\)，\(x=1,2,3\) 时 \(y=3,5,7\)，每次多 \(2\)。是不是很像等差数列？下面会用到。</p>
+  </div>
+
+  <h3>2. 定义和通项公式</h3>
+  <p>一个数列，<b>从第 \(2\) 项起</b>，每一项减它的前一项都等于<b>同一个常数</b> \(d\)，就叫<b>等差数列</b>：</p>
+  <div class="key" style="text-align:center">\(a_{n+1}-a_n=d\)（对每一个正整数 \(n\) 都成立）</div>
+  <p>为什么通项长这样：\(a_2=a_1+d\)，\(a_3=a_1+2d\)，\(a_4=a_1+3d\)……从第 \(1\) 项走到第 \(n\) 项，一共走 \(n-1\) 步，每步加 \(d\)：</p>
+  <div class="key" style="text-align:center">\(a_n=a_1+(n-1)d\)</div>
+  <p>把它整理成 \(a_n=dn+(a_1-d)\)：点 \((n,a_n)\) 都落在直线 \(y=dx+(a_1-d)\) 上，斜率就是公差 \(d\)。不过只取 \(n=1,2,3,\dots\)，图象是一个个分开的点，不是整条直线。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>等差数列中 \(a_3=7\)，\(a_7=19\)，求通项公式和 \(a_{20}\)。</p>
+    <p>从第 \(3\) 项到第 \(7\) 项走了 \(4\) 步：\(a_7-a_3=4d\)，即 \(12=4d\)，\(d=3\)。</p>
+    <p>再往回走 \(2\) 步：\(a_1=a_3-2d=7-6=1\)。</p>
+    <p>所以 \(a_n=1+3(n-1)=3n-2\)，\(a_{20}=3\times20-2=58\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A">
+    <p>自己试试：等差数列 \(a_1=2\)，\(d=3\)，\(a_{20}\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(59\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(62\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(60\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(23\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(a_{20}=2+(20-1)\times3=2+57=59\)。选 B 的同学用了 \(20\times3\)：从第 \(1\) 项到第 \(20\) 项只走 \(19\) 步。</p></div>
+  </div>
+
+  <h3>3. 等差中项</h3>
+  <p>三个数 \(a,A,b\) 排成等差数列，就要 \(A-a=b-A\)，整理得</p>
+  <div class="key" style="text-align:center">\(2A=a+b\)，即 \(A=\dfrac{a+b}{2}\)</div>
+  <p>\(A\) 叫 \(a\) 与 \(b\) 的<b>等差中项</b>，就是两数的平均数；任意两个数都有，而且只有一个。</p>
+  <p>放到整个数列里：\(a_m+a_n=2a_1+(m+n-2)d\) 只和 \(m+n\) 有关。所以<b>下标之和相等，两项之和就相等</b>：\(m+n=p+q\) 时 \(a_m+a_n=a_p+a_q\)。比如 \(a_1+a_n=a_2+a_{n-1}=a_3+a_{n-2}=\cdots\)，下面求和就靠这一条。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>(1) \(3\) 与 \(11\) 的等差中项：\(A=\dfrac{3+11}{2}=7\)。检验：\(3,7,11\) 的相邻差都是 \(4\)。</p>
+    <p>(2) 等差数列中 \(a_2+a_8=10\)，求 \(a_5\)。因为 \(2+8=5+5\)，所以 \(a_2+a_8=2a_5\)，\(a_5=5\)。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(-4\) 与 \(10\) 的等差中项是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(7\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-7\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{-4+10}{2}=3\)，检验 \(-4,3,10\) 的相邻差都是 \(7\)。选 B 的同学算的是 \(\dfrac{10-(-4)}{2}\)，那是公差，不是中项。</p></div>
+  </div>
+
+  <h3>4. 前 \(n\) 项和：倒过来再加一遍</h3>
+  <p>先算 \(1+2+\dots+100\)。把它正着写一遍、倒着写一遍，上下对齐相加：</p>
+  <div class="card">
+    <p>\(S=1+2+\dots+99+100\)</p>
+    <p>\(S=100+99+\dots+2+1\)</p>
+    <p>每一列都是 \(101\)，共 \(100\) 列：\(2S=100\times101\)，\(S=5050\)。</p>
+  </div>
+  <p>一般的等差数列也一样：\(S_n\) 正写、倒写，每一列是 \(a_1+a_n\)，\(a_2+a_{n-1}\)，……由上一块，这些都相等，共 \(n\) 列，于是 \(2S_n=n(a_1+a_n)\)。再把 \(a_n=a_1+(n-1)d\) 代进去，得到第二种写法：</p>
+  <div class="key" style="text-align:center">\(S_n=\dfrac{n(a_1+a_n)}{2}=na_1+\dfrac{n(n-1)}{2}d\)</div>
+  <p class="small">知道首项和末项用第一个，知道首项和公差用第二个。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>等差数列 \(a_1=2\)，\(d=3\)，求 \(S_{10}\)。</p>
+    <p>用第二个公式：\(S_{10}=10\times2+\dfrac{10\times9}{2}\times3=20+135=155\)。</p>
+    <p>用第一个公式验算：\(a_{10}=2+9\times3=29\)，\(S_{10}=\dfrac{10\times(2+29)}{2}=155\)。一样。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：\(1+3+5+\dots+19\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(100\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(200\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(190\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(81\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。先数项数：\(19=1+(n-1)\times2\)，\(n=10\)。\(S_{10}=\dfrac{10\times(1+19)}{2}=100\)。选 B 是忘了除以 \(2\)；选 C 是把项数当成了 \(19\)。</p></div>
+  </div>
+
+  <h3>5. 用之前，看清四件事</h3>
+  <ol>
+    <li><b>公差可以是 \(0\)。</b>\(5,5,5,\dots\) 的每个相邻差都是 \(0\)，是等差数列（常数数列）。<br><span class="small">反例：「等差数列的点都在一条斜着的直线上」不对。\(d=0\) 时 \(a_n=5\)，点排成一条水平线，\(a_n\) 是常数，不是非恒定的一次函数；这时 \(S_n=5n\) 也不是 \(n\) 的二次式。</span></li>
+    <li><b>判断是不是等差，用定义，不凭几项。</b>要说明 \(a_{n+1}-a_n\) 对<b>每一个</b> \(n\) 都是同一个常数。<br><span class="small">反例：\(1,2,3,5,8,\dots\) 前三项差都是 \(1\)，看着像，第四项就破了。正例：\(a_n=3n+1\)，\(a_{n+1}-a_n=3(n+1)+1-(3n+1)=3\)，对所有 \(n\) 都是 \(3\)，才能说它是等差数列。</span></li>
+    <li><b>求 \(S_n\) 的最值，\(n\) 只能取正整数。</b>\(d\ne0\) 时 \(S_n=\dfrac d2n^2+\left(a_1-\dfrac d2\right)n\) 是 \(n\) 的二次式，可它的实数顶点常常不是整数。<br><span class="small">反例：\(a_1=10\)，\(d=-3\)，\(S_n=-\dfrac32n^2+\dfrac{23}2n\)，实数顶点 \(n=\dfrac{23}{6}\approx3.83\)，没有「第 \(3.83\) 项」，那里的值 \(\approx22.04\) 也取不到。比较两边的整数：\(S_3=21\)，\(S_4=22\)，最大值是 \(S_4=22\)。从项看也对得上：\(10,7,4,1\) 是正的，\(a_5=-2\) 开始变负，加到第 \(4\) 项最大。如果 \(n\) 还有范围（比如只到 \(n\le3\)），还要比较范围端点。</span></li>
+    <li><b>解出 \(n\)，检验是不是正整数、在不在范围里。</b><br><span class="small">反例：\(2+4+6+\dots\)，\(S_n=n(n+1)=30\)，解得 \(n=5\) 或 \(n=-6\)，项数不能是负数，只留 \(n=5\)。\(1+3+5+\dots\)，\(S_n=n^2=50\)，\(n=\sqrt{50}\) 不是整数，说明和永远不会正好是 \(50\)。</span></li>
+  </ol>
+  <div class="key">实数顶点只是「找最值的地方大概在哪」：真正的答案要在它两边的正整数（以及范围端点）里比较出来。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>通项是 \(pn+q\) 的形式</b>（\(p,q\) 是常数）：一定是等差数列，公差是 \(p\)。因为 \(a_{n+1}-a_n=p\) 对所有 \(n\) 成立。\(p=0\) 也算，就是常数数列。</p>
+    <p><b>前 \(n\) 项和是 \(An^2+Bn\) 的形式</b>（没有常数项）：数列一定是等差数列，公差 \(d=2A\)。如果多了常数项，比如 \(S_n=n^2+1\)，第 \(1\) 项会「多出来」，就不是了。「练一练」有一道这样的题。</p>
+    <p><b>顶点正好在两个整数中间</b>：比如 \(a_1=8\)，\(d=-2\)，实数顶点 \(n=4.5\)，这时 \(S_4=S_5=20\)，两个 \(n\) 都取到最大值（因为 \(a_5=0\)，加不加它和一样）。在「动手」②里调出来看看。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖首项和公差：点落在一条直线上</h3>
+  <p class="small">画的是前 \(8\) 项 \((n,a_n)\)。拖第 \(1\) 个点改 \(a_1\)，拖第 \(2\) 个点改 \(a_2\)（也就改了 \(d=a_2-a_1\)）；选中圆点后按上下方向键也行。虚线是 \(y=dx+(a_1-d)\)。把 \(d\) 调成 \(0\) 看看。</p>
+  <div class="card">
+    <svg class="fig" id="seq" viewBox="0 0 560 340" role="img" aria-label="等差数列前 8 项的点和它们所在的直线"></svg>
+    <div class="ctrl"><label for="a1in">\(a_1\)</label><input type="range" id="a1in" min="-8" max="8" step="1"><output id="a1out"></output></div>
+    <div class="ctrl"><label for="din">\(d\)</label><input type="range" id="din" min="-2" max="2" step="0.5"><output id="dout"></output></div>
+    <div class="ctrl"><label for="nin">求和到第 \(n\) 项</label><input type="range" id="nin" min="1" max="8" step="1"><output id="nout"></output></div>
+    <div class="result" id="seqout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="seqreset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：\(S_n\) 什么时候最大（最小）</h3>
+  <p class="small">实心点是 \(S_1,S_2,\dots,S_{20}\)；虚线是把 \(n\) 当实数画出的抛物线。空心圈是实数顶点，金色点是真正取到最值的整数 \(n\)。拖圆点 \(P\)（或按左右方向键）读任意一个 \(S_n\)。</p>
+  <div class="card">
+    <svg class="fig" id="sumfig" viewBox="0 0 560 340" role="img" aria-label="前 n 项和 S_n 关于 n 的点和虚线抛物线"></svg>
+    <div class="ctrl"><label for="b1in">\(a_1\)</label><input type="range" id="b1in" min="-15" max="15" step="1"><output id="b1out"></output></div>
+    <div class="ctrl"><label for="bdin">\(d\)</label><input type="range" id="bdin" min="-4" max="4" step="1"><output id="bdout"></output></div>
+    <div class="result" id="sumout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="sumreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 等差数列中 \(a_3=7\)，\(a_9=25\)，\(a_1\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。第 \(3\) 项到第 \(9\) 项走 \(6\) 步：\(6d=25-7=18\)，\(d=3\)；再往回走 \(2\) 步：\(a_1=7-2\times3=1\)。选 C 的同学只往回走了 \(1\) 步。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 等差数列中 \(a_2+a_8=16\)，\(S_9\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(72\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(144\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(64\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(81\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(1+9=2+8\)，所以 \(a_1+a_9=a_2+a_8=16\)，\(S_9=\dfrac{9\times16}{2}=72\)。不用求出 \(a_1\) 和 \(d\)。选 B 是忘了除以 \(2\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-d0" data-answer="B">
+    <p>3. 数列 \(5,5,5,5,\dots\)（每一项都是 \(5\)）。下面说法对的是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>不是等差数列，因为公差不能是 \(0\)</button>
+      <button class="opt" data-v="B"><b>B</b>是等差数列，\(d=0\)；\(a_n=5\) 是常数，不是非恒定的一次函数</button>
+      <button class="opt" data-v="C"><b>C</b>是等差数列，它的点在一条斜着的直线上</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。每个相邻差都是 \(0\)，同一个常数，符合定义，\(d=0\) 完全可以。这时 \(a_n=5\)，点排成水平一行；「等差数列的通项是 \(n\) 的一次函数、图象斜着」只在 \(d\ne0\) 时成立。在「动手」①把 \(d\) 调到 \(0\) 就能看到。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-def" data-answer="B">
+    <p>4. 数列的前 \(n\) 项和 \(S_n=n^2+1\)。它是等差数列吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>是，\(a_n=S_n-S_{n-1}=2n-1\)，公差 \(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>不是，\(a_2-a_1\) 和后面的相邻差不一样</button>
+      <button class="opt" data-v="C"><b>C</b>是，公差 \(1\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(a_1=S_1=2\)。\(n\ge2\) 时 \(a_n=S_n-S_{n-1}=2n-1\)，得 \(a_2=3\)，\(a_3=5\)，\(a_4=7\)。数列是 \(2,3,5,7,\dots\)：\(a_2-a_1=1\)，后面都是 \(2\)，不是每一处都一样，不是等差数列。</p>
+      <p>A 错在 \(a_n=S_n-S_{n-1}\) 只对 \(n\ge2\) 成立，第 \(1\) 项要单独用 \(S_1\) 算；只看后面几项是 \(2\) 就下结论，正是「凭几项」。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-max" data-answer="B">
+    <p>5. 等差数列 \(a_1=13\)，\(d=-3\)。\(S_n\) 的最大值是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{841}{24}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(35\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(34\)</button>
+      <button class="opt" data-v="D"><b>D</b>没有最大值</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(S_n=13n-\dfrac{3n(n-1)}{2}=-\dfrac32n^2+\dfrac{29}{2}n\)。当实数看，顶点 \(n=\dfrac{29}{6}\approx4.83\)，那里的值是 \(\dfrac{841}{24}\approx35.04\)，但没有第 \(4.83\) 项，A 取不到。</p>
+      <p>比较两边的整数：\(S_4=52-18=34\)，\(S_5=65-30=35\)，最大值是 \(S_5=35\)。选 C 是把 \(4.83\) 直接截成了 \(4\)。从项看：\(13,10,7,4,1\) 都是正的，\(a_6=-2\)，加到第 \(5\) 项最大。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="C">
+    <p>6. 等差数列 \(a_1=20\)，\(d=-2\)，\(S_n=54\)。\(n\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>只有 \(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>只有 \(18\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(3\) 或 \(18\)</button>
+      <button class="opt" data-v="D"><b>D</b>没有这样的 \(n\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(S_n=20n-n(n-1)=21n-n^2=54\)，即 \(n^2-21n+54=0\)，\((n-3)(n-18)=0\)。检验：两个根都是正整数，都要。</p>
+      <p>\(n=18\) 为什么也行：\(a_4=14\)，\(a_{18}=-14\)，从第 \(4\) 项到第 \(18\) 项正负抵消，和是 \(0\)，所以 \(S_{18}=S_3=54\)。只留一个的同学没把每个根都检验。</p>
+      <p>对比：若 \(S_n=100\)，\(n^2-21n+100=0\) 的根是 \(\dfrac{21\pm\sqrt{41}}{2}\)，不是整数，这个和取不到。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) {
+    if (!isFinite(x)) return "0";
+    var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, "");
+    return s === "-0" ? "0" : s;
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function num(v, dflt) { var x = parseFloat(v); return isFinite(x) ? x : dflt; }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { var p = toSvg(fig, e); onMove(p.x, p.y); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  // 系数 c 乘 n 的写法：带符号，c=1 写 n，c=-1 写 -n
+  function term(c, v, first) {
+    if (c === 0) return "";
+    var a = Math.abs(c), body = (a === 1 && v) ? v : f2(a) + v;
+    if (first) return (c < 0 ? "-" : "") + body;
+    return (c < 0 ? "-" : "+") + body;
+  }
+  // 一次式 p·n + q
+  function lin(p, q) {
+    var s = term(p, "n", true);
+    var t = term(q, "", !s);
+    return (s + t) || "0";
+  }
+  function fracTex(x) { // 只会是 0.5 的倍数
+    if (Math.abs(x - Math.round(x)) < 1e-9) return f2(x);
+    var t = Math.round(x * 2);
+    return (t < 0 ? "-" : "") + "\\tfrac{" + Math.abs(t) + "}{2}";
+  }
+  function quad(A, B) { // A n^2 + B n，A、B 是 0.5 的倍数
+    var s = "";
+    if (A !== 0) s += (A < 0 ? "-" : "") + (Math.abs(A) === 1 ? "" : fracTex(Math.abs(A))) + "n^2";
+    if (B !== 0) s += (B < 0 ? "-" : (s ? "+" : "")) + (Math.abs(B) === 1 ? "" : fracTex(Math.abs(B))) + "n";
+    return s || "0";
+  }
+  var KEYS = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -4, PageUp: 4 };
+
+  /* ================= ① 前 8 项的点 ================= */
+  var seq = document.getElementById("seq");
+  var a1in = document.getElementById("a1in"), din = document.getElementById("din"), nin = document.getElementById("nin");
+  var N1 = 8, SX0 = 60, SX1 = 545, SYt = 16, SYb = 300, YR = 24;
+  var a1, d2, nk; // a1 整数；d2 = 2d，整数 -4..4；nk 求和项数
+  function sx(n) { return SX0 + n / (N1 + 0.6) * (SX1 - SX0); }
+  function sy(y) { return (SYt + SYb) / 2 - y / YR * (SYb - SYt) / 2; }
+  function syInv(py) { return ((SYt + SYb) / 2 - py) / ((SYb - SYt) / 2) * YR; }
+  function seqReset() { a1 = 2; d2 = 3; nk = 5; seqDraw(); }
+  function seqDraw(focusId) {
+    a1 = clamp(Math.round(a1), -8, 8); d2 = clamp(Math.round(d2), -4, 4); nk = clamp(Math.round(nk), 1, N1);
+    var d = d2 / 2;
+    a1in.value = a1; din.value = d; nin.value = nk;
+    document.getElementById("a1out").textContent = a1;
+    document.getElementById("dout").textContent = f2(d);
+    document.getElementById("nout").textContent = nk;
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line"), card = css("--card");
+    seq.innerHTML = "";
+    var defs = svg("defs", {}, seq), clip = svg("clipPath", { id: "seqclip" }, defs);
+    svg("rect", { x: SX0, y: SYt, width: SX1 - SX0, height: SYb - SYt }, clip);
+    // 网格与坐标轴
+    for (var g = -YR; g <= YR; g += 8) {
+      svg("line", { x1: SX0, y1: sy(g), x2: SX1, y2: sy(g), stroke: g === 0 ? fg : line, "stroke-width": g === 0 ? 1.5 : 1 }, seq);
+      svg("text", { x: SX0 - 8, y: sy(g) + 7, "text-anchor": "end" }, seq).textContent = g;
+    }
+    svg("line", { x1: SX0, y1: SYt, x2: SX0, y2: SYb, stroke: fg, "stroke-width": 1.5 }, seq);
+    for (var t = 1; t <= N1; t++) svg("text", { x: sx(t), y: SYb + 30, "text-anchor": "middle", fill: muted }, seq).textContent = t;
+    svg("text", { x: SX1, y: SYb + 30, "text-anchor": "end", fill: muted }, seq).textContent = "n";
+    // 直线 y = d x + (a1 - d)
+    var gl = svg("g", { "clip-path": "url(#seqclip)" }, seq);
+    svg("line", { x1: sx(0.3), y1: sy(d * 0.3 + a1 - d), x2: sx(N1 + 0.5), y2: sy(d * (N1 + 0.5) + a1 - d), stroke: cc, "stroke-width": 2, "stroke-dasharray": "7 6" }, gl);
+    // 求和区域底色
+    svg("rect", { x: sx(0.5), y: SYt, width: sx(nk + 0.5) - sx(0.5), height: SYb - SYt, fill: css("--hl-soft"), opacity: 0.6 }, seq);
+    // 点
+    var terms = [];
+    for (var n = 1; n <= N1; n++) {
+      var an = a1 + (n - 1) * d; terms.push(an);
+      svg("line", { x1: sx(n), y1: sy(0), x2: sx(n), y2: sy(an), stroke: n <= nk ? hl : muted, "stroke-width": n <= nk ? 4 : 2, opacity: 0.8 }, seq);
+      if (n > 2) svg("circle", { cx: sx(n), cy: sy(an), r: 7, fill: ca }, seq);
+    }
+    // 两个可拖的点
+    function handle(n, label, onKey, onDrag) {
+      var an = terms[n - 1];
+      var h = svg("circle", { cx: sx(n), cy: sy(an), r: 12, fill: card, stroke: ca, "stroke-width": 4, tabindex: 0, role: "slider",
+        id: "seqh" + n, "aria-label": label, "aria-valuenow": an, style: "cursor:grab" }, seq);
+      h.addEventListener("keydown", function (ev) {
+        var k = KEYS[ev.key]; if (!k) return;
+        ev.preventDefault(); onKey(k); seqDraw("seqh" + n);
+      });
+      draggable(seq, h, function (x, y) { if (onDrag(syInv(y))) seqDraw("seqh" + n); },
+        function () { Peiyu.log("interact", { id: "seq-drag", a1: a1, d: d2 / 2 }); });
+    }
+    handle(1, "第 1 项 a1", function (k) { a1 = clamp(a1 + k, -8, 8); }, function (v) {
+      var nv = clamp(Math.round(v), -8, 8); if (nv === a1) return false; a1 = nv; return true;
+    });
+    handle(2, "第 2 项，改变公差 d", function (k) { d2 = clamp(d2 + k, -4, 4); }, function (v) {
+      var nv = clamp(Math.round((v - a1) * 2), -4, 4); if (nv === d2) return false; d2 = nv; return true;
+    });
+    svg("text", { x: sx(1), y: sy(terms[0]) + (terms[0] >= 0 ? -20 : 36), "text-anchor": "middle", "font-weight": 700 }, seq).textContent = "a₁";
+    svg("text", { x: sx(2), y: sy(terms[1]) + (terms[1] >= 0 ? -20 : 36), "text-anchor": "middle", "font-weight": 700 }, seq).textContent = "a₂";
+    if (focusId) { var fh = document.getElementById(focusId); if (fh && fh.focus) fh.focus(); }
+
+    var an8 = terms.map(f2).join(",\\ ");
+    var ank = terms[nk - 1], sk = nk * (a1 + ank) / 2;
+    var lines = [];
+    lines.push("前 \\(8\\) 项：\\(" + an8 + "\\)");
+    lines.push("\\(a_n=a_1+(n-1)d=" + lin(d, a1 - d) + "\\)");
+    if (d === 0) lines.push('<span class="bad">\\(d=0\\)：常数数列</span>，点排成一条水平线，\\(a_n=' + f2(a1) + "\\) 是常数，不是非恒定的一次函数。");
+    else lines.push("点都在直线 \\(y=" + lin(d, a1 - d).replace(/n/g, "x") + "\\) 上，斜率 \\(=d=" + f2(d) + "\\)。");
+    lines.push("\\(S_{" + nk + "}=\\dfrac{" + nk + "\\times(" + f2(a1) + (ank < 0 ? "" : "+") + f2(ank) + ")}{2}\\)" + '<span class="eq">\\(=' + f2(sk) + "\\)</span>");
+    var out = document.getElementById("seqout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  a1in.addEventListener("input", function () { a1 = num(a1in.value, 2); seqDraw(); });
+  din.addEventListener("input", function () { d2 = num(din.value, 1.5) * 2; seqDraw(); });
+  nin.addEventListener("input", function () { nk = num(nin.value, 5); seqDraw(); });
+  [a1in, din, nin].forEach(function (el) {
+    el.addEventListener("change", function () { Peiyu.log("interact", { id: "seq-slider", a1: a1, d: d2 / 2, n: nk }); });
+  });
+  document.getElementById("seqreset").onclick = seqReset;
+
+  /* ================= ② S_n 的最值 ================= */
+  var sf = document.getElementById("sumfig");
+  var b1in = document.getElementById("b1in"), bdin = document.getElementById("bdin");
+  var N2 = 20, TX0 = 78, TX1 = 545, TYt = 20, TYb = 296;
+  var b1, bd, pn;
+  function S(n) { return n * b1 + n * (n - 1) / 2 * bd; }
+  function niceStep(span) {
+    var raw = span / 5, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), m = raw / p;
+    return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p;
+  }
+  function sumReset() { b1 = 10; bd = -3; pn = 2; sumDraw(); }
+  // 最值：返回 {kind, n:[...], v, xv}；d=0 时 kind 为 null
+  function best() {
+    if (bd === 0) return { kind: null, xv: NaN };
+    var A = bd / 2, B = b1 - bd / 2, xv = -B / (2 * A);
+    var c = [Math.floor(xv), Math.ceil(xv)].map(function (n) { return Math.max(1, n); });
+    var sign = bd < 0 ? 1 : -1, bv = -Infinity, ns = [];
+    c.forEach(function (n) {
+      var v = sign * S(n);
+      if (v > bv + 1e-9) { bv = v; ns = [n]; } else if (Math.abs(v - bv) < 1e-9 && ns.indexOf(n) < 0) ns.push(n);
+    });
+    return { kind: bd < 0 ? "最大值" : "最小值", n: ns, v: sign * bv, xv: xv, A: A, B: B };
+  }
+  function sumDraw(keepFocus) {
+    b1 = clamp(Math.round(b1), -15, 15); bd = clamp(Math.round(bd), -4, 4); pn = clamp(Math.round(pn), 1, N2);
+    b1in.value = b1; bdin.value = bd;
+    document.getElementById("b1out").textContent = b1;
+    document.getElementById("bdout").textContent = bd;
+    var info = best(), A = bd / 2, B = b1 - bd / 2;
+    var vals = [], lo = 0, hi = 0;
+    for (var n = 1; n <= N2; n++) { var v = S(n); vals.push(v); lo = Math.min(lo, v); hi = Math.max(hi, v); }
+    var showV = info.kind && info.xv > 0 && info.xv <= N2 + 0.5;
+    if (showV) { var vv = A * info.xv * info.xv + B * info.xv; lo = Math.min(lo, vv); hi = Math.max(hi, vv); }
+    if (hi - lo < 10) { hi = Math.max(hi, lo + 10); }
+    var st = niceStep(hi - lo), ylo = Math.floor(lo / st) * st, yhi = Math.ceil(hi / st) * st;
+    if (yhi === ylo) yhi = ylo + st;
+    function tx(n) { return TX0 + n / (N2 + 0.8) * (TX1 - TX0); }
+    function ty(y) { return TYb - (y - ylo) / (yhi - ylo) * (TYb - TYt); }
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line"), card = css("--card");
+    sf.innerHTML = "";
+    var defs = svg("defs", {}, sf), clip = svg("clipPath", { id: "sumclip" }, defs);
+    svg("rect", { x: TX0, y: TYt - 4, width: TX1 - TX0, height: TYb - TYt + 8 }, clip);
+    for (var g = ylo; g <= yhi + 1e-9; g += st) {
+      svg("line", { x1: TX0, y1: ty(g), x2: TX1, y2: ty(g), stroke: Math.abs(g) < 1e-9 ? fg : line, "stroke-width": Math.abs(g) < 1e-9 ? 1.5 : 1 }, sf);
+      svg("text", { x: TX0 - 8, y: ty(g) + 7, "text-anchor": "end" }, sf).textContent = f2(g);
+    }
+    svg("line", { x1: TX0, y1: TYt, x2: TX0, y2: TYb, stroke: fg, "stroke-width": 1.5 }, sf);
+    [1, 5, 10, 15, 20].forEach(function (t) {
+      svg("text", { x: tx(t), y: TYb + 30, "text-anchor": "middle", fill: muted }, sf).textContent = t;
+    });
+    svg("text", { x: TX1, y: TYb + 30, "text-anchor": "end", fill: muted }, sf).textContent = "n";
+    // 虚线抛物线（n 当实数）
+    var dpath = "", steps = 120, gg = svg("g", { "clip-path": "url(#sumclip)" }, sf);
+    for (var i = 0; i <= steps; i++) {
+      var x = (N2 + 0.5) * i / steps, y = A * x * x + B * x;
+      dpath += (i ? "L" : "M") + tx(x).toFixed(1) + " " + ty(y).toFixed(1);
+    }
+    svg("path", { d: dpath, fill: "none", stroke: muted, "stroke-width": 2, "stroke-dasharray": "5 5" }, gg);
+    // 实数顶点
+    if (showV) {
+      var vy = A * info.xv * info.xv + B * info.xv;
+      svg("line", { x1: tx(info.xv), y1: TYt, x2: tx(info.xv), y2: TYb, stroke: cc, "stroke-dasharray": "3 4" }, sf);
+      svg("circle", { cx: tx(info.xv), cy: ty(vy), r: 9, fill: "none", stroke: cc, "stroke-width": 3 }, sf);
+      var right = tx(info.xv) < (TX0 + TX1) / 2;
+      svg("text", { x: tx(info.xv) + (right ? 8 : -8), y: TYt + 18, "text-anchor": right ? "start" : "end", fill: cc }, sf).textContent = "实数顶点 " + f2(info.xv);
+    }
+    // 整数点
+    for (var m = 1; m <= N2; m++) {
+      var isBest = info.kind && info.n.indexOf(m) >= 0;
+      svg("circle", { cx: tx(m), cy: ty(vals[m - 1]), r: isBest ? 9 : 5, fill: isBest ? hl : ca }, sf);
+    }
+    // P
+    var pv = vals[pn - 1];
+    svg("line", { x1: tx(pn), y1: ty(pv), x2: tx(pn), y2: TYb, stroke: hl, "stroke-dasharray": "2 3" }, sf);
+    var P = svg("circle", { cx: tx(pn), cy: ty(pv), r: 12, fill: card, stroke: hl, "stroke-width": 3.5, tabindex: 0, role: "slider",
+      "aria-label": "点 P 的项数 n", "aria-valuemin": 1, "aria-valuemax": N2, "aria-valuenow": pn, style: "cursor:grab" }, sf);
+    var pUp = ty(pv) > TYt + 40;
+    svg("text", { x: tx(pn) + (pn > 15 ? -16 : 16), y: ty(pv) + (pUp ? -14 : 30), "text-anchor": pn > 15 ? "end" : "start", "font-weight": 700 }, sf).textContent = "P";
+    P.addEventListener("keydown", function (ev) {
+      var k = KEYS[ev.key];
+      if (ev.key === "Home") k = 1 - pn; else if (ev.key === "End") k = N2 - pn;
+      if (!k) return;
+      ev.preventDefault(); pn = clamp(pn + k, 1, N2); sumDraw(true);
+    });
+    draggable(sf, P, function (x) {
+      var nv = clamp(Math.round((x - TX0) / (TX1 - TX0) * (N2 + 0.8)), 1, N2);
+      if (nv !== pn) { pn = nv; sumDraw(true); }
+    }, function () { Peiyu.log("interact", { id: "sum-P", a1: b1, d: bd, n: pn }); });
+    if (keepFocus) { var pp = sf.querySelector("[role=slider]"); if (pp && pp.focus) pp.focus(); }
+
+    var lines = [];
+    lines.push("\\(S_n=na_1+\\dfrac{n(n-1)}{2}d=" + quad(A, B) + "\\)");
+    if (!info.kind) {
+      lines.push('<span class="bad">\\(d=0\\)</span>：\\(S_n=' + (b1 === 0 ? "0" : lin(b1, 0)) + "\\) 不是二次式，没有顶点。" +
+        (b1 > 0 ? "越加越大，没有最大值；最小值 \\(S_1=" + b1 + "\\)。" : b1 < 0 ? "越加越小，没有最小值；最大值 \\(S_1=" + b1 + "\\)。" : "每一项都是 \\(0\\)，\\(S_n\\) 恒为 \\(0\\)。"));
+    } else {
+      var xv = info.xv, isInt = Math.abs(xv - Math.round(xv)) < 1e-9;
+      var vtext = "把 \\(n\\) 当实数，顶点在 \\(n" + (Math.abs(xv * 100 - Math.round(xv * 100)) < 1e-9 ? "=" : "\\approx ") + f2(xv) + "\\)";
+      if (xv < 1) {
+        lines.push(vtext + "，比 \\(1\\) 还小：正整数里最靠近它的是端点 \\(n=1\\)。");
+      } else if (isInt) {
+        lines.push(vtext + "，正好是整数。");
+      } else {
+        var fl = Math.floor(xv), ce = Math.ceil(xv);
+        lines.push(vtext + '，<span class="bad">不是整数，没有这一项</span>。比较两边：\\(S_{' + fl + "}=" + f2(S(fl)) + "\\)，\\(S_{" + ce + "}=" + f2(S(ce)) + "\\)。");
+      }
+      var nsTex = info.n.map(function (k) { return "S_{" + k + "}"; }).join("=");
+      lines.push('<span class="eq">' + info.kind + " \\(" + nsTex + "=" + f2(info.v) + "\\)</span>" +
+        (info.n.length > 1 ? "（两个 \\(n\\) 都取到）" : "") + (bd < 0 ? "；没有最小值，越往后越小。" : "；没有最大值，越往后越大。"));
+    }
+    lines.push("点 \\(P\\)：\\(S_{" + pn + "}=" + f2(pv) + "\\)");
+    var out = document.getElementById("sumout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  b1in.addEventListener("input", function () { b1 = num(b1in.value, 10); sumDraw(); });
+  bdin.addEventListener("input", function () { bd = num(bdin.value, -3); sumDraw(); });
+  [b1in, bdin].forEach(function (el) {
+    el.addEventListener("change", function () { Peiyu.log("interact", { id: "sum-slider", a1: b1, d: bd }); });
+  });
+  document.getElementById("sumreset").onclick = sumReset;
+
+  document.addEventListener("DOMContentLoaded", function () { seqReset(); sumReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { seqDraw(); sumDraw(); });
+})();
+</script>
+</body></html>

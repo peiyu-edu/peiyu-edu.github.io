@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.1 椭圆 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 10px 0; min-height: 3.2em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--a); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .result .warn-box { background: var(--no-soft); border-left: 3px solid var(--no); padding: 6px 12px; border-radius: 6px; margin: 6px 0; }
+  .ctrl { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 8px 0; }
+  .ctrl label { font-size: 14.5px; font-weight: 600; min-width: 68px; }
+  .ctrl output { min-width: 2.5em; font-weight: 700; }
+  .ctrl-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px 16px; margin: 8px 0; }
+  .btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 6px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13.5px; color: var(--muted); margin: 6px 0 10px; justify-content: center; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-bar { width: 14px; height: 4px; border-radius: 2px; }
+  .fig text { font-family: -apple-system, "PingFang SC", "Noto Sans CJK SC", sans-serif; }
+</style>
+</head>
+<body data-sec="e1-3-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第一册 · 第 3 章 圆锥曲线的方程</p>
+<h1>3.1 椭圆</h1>
+<p class="lead">从圆的一个圆心，到椭圆的两个焦点：固定一根无弹性细绳的两端，用笔尖把绳子绷紧绕一圈，画出来的对称饱满曲线就是椭圆。到两焦点距离之和恒为定值 \(2a\)，这一几何核心决定了它的标准方程、扁平程度与全部性质。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>木工师傅或园艺工人要在大片板材或草地上画出一个优美对称的椭圆时，常常使用一个流传久远的木工妙法：找两根钉子作为定点钉在板上，取一条比两钉间距更长的无弹性细绳，将绳的两端分别系在两根钉子上。用笔尖套住绳子并向外拉直，在板面上贴紧滑动绕行一周，就能画出一个完美的椭圆。</p>
+  <p>假定两根图钉相距 \(6\text{ cm}\)。如果改变绳子的长度，会发生什么有趣的变化？</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>如果换用一根长度正好只有 \(6\text{ cm}\) 的无弹性绳子，两端依然固定在相距 \(6\text{ cm}\) 的两颗图钉上，笔尖拉直绳子尝试画图，最终能在纸上留下怎样的图形？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一个极扁的椭圆</button>
+      <button class="opt" data-v="B"><b>B</b>连接两颗图钉的一条线段</button>
+      <button class="opt" data-v="C"><b>C</b>一个以两图钉为直径的圆</button>
+      <button class="opt" data-v="D"><b>D</b>画不出任何痕迹</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。两颗图钉间的直线距离为 \(6\text{ cm}\)，绳长也恰好为 \(6\text{ cm}\)。</p>
+      <p>当笔尖把绳子绷直时，笔尖到两颗图钉的距离之和等于 \(6\text{ cm}\)。根据公理「两点之间线段最短」，平面内到两定点距离之和等于两定点间距的点，<b>只能位于两图钉连接的线段上</b>！只要笔尖稍微偏离这条线段，它与两图钉就会构成一个三角形，两边之和必然大于第三边（即大于 \(6\text{ cm}\)），长度为 \(6\text{ cm}\) 的绳子根本够不着。</p>
+      <p>因此轨迹退化成了<b>一条线段</b>，无法张开成椭圆。要想画出真正的、饱满的椭圆，绳长必须<b>严格大于</b>两定点间的距离（\(2a > 2c\)）！这正是本节要深入探讨的椭圆定义与几何本质。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：直角坐标系、两点间距离公式（<a href="e1-2-3.html">回看 2.3</a>）。</p>
+  <div class="card">
+    <p><b>焦点与焦距</b>：</p>
+    <ul>
+      <li><b>焦点</b>：确定椭圆位置的两个定点，记作 \(F_1, F_2\)。</li>
+      <li><b>焦距</b>：两焦点间的距离 \(|F_1F_2|\)，记作 \(2c\)（<b>特别提醒：焦距是 \(2c\)，不是 \(c\)</b>；\(c\) 叫半焦距）。</li>
+    </ul>
+    <p>例：焦点为 \(F_1(-4, 0), F_2(4, 0)\)，则半焦距 \(c = 4\)，焦距是 \(2c = 8\)。</p>
+  </div>
+  <div class="card">
+    <p><b>长轴与短轴</b>：</p>
+    <ul>
+      <li><b>长轴</b>：椭圆对称轴被椭圆截得的较长线段，长轴长为 \(2a\)（半长轴长为 \(a\)）。</li>
+      <li><b>短轴</b>：与长轴垂直平分的较短线段，短轴长为 \(2b\)（半短轴长为 \(b\)）。</li>
+    </ul>
+    <p>例：长轴长为 \(10\)，则 \(a = 5\)；短轴长为 \(6\)，则 \(b = 3\)。在椭圆中必有 \(a > b > 0\)。</p>
+  </div>
+  <div class="card">
+    <p><b>离心率 \(e\)</b>：</p>
+    <p>半焦距与半长轴的比值：\(e = \dfrac{c}{a}\)。因为 \(0 &lt; c &lt; a\)，所以 \(e \in (0, 1)\)。它刻画了椭圆的扁平程度：\(e\) 越接近 \(1\) 椭圆越扁；\(e\) 越接近 \(0\) 椭圆越圆。</p>
+  </div>
+
+  <h3>2. 定义：绳长要比两钉间距长</h3>
+  <p><b>椭圆</b>：平面内到两个定点 \(F_1, F_2\) 的距离之和等于常数 \(2a\)，并且 \(2a\) <b>大于</b> \(|F_1F_2|=2c\) 的点的轨迹。</p>
+  <p>为什么要加「大于」：三角形两边之和大于第三边，所以任何点都有 \(|PF_1|+|PF_2|\ge|F_1F_2|\)，等号只在 \(P\) 落在线段 \(F_1F_2\) 上时成立。常数 \(2a\) 和 \(2c\) 比一比，结果就分成三种：</p>
+  <div class="key">
+    ① \(2a > 2c\)：轨迹是<b>椭圆</b>；<br>
+    ② \(2a = 2c\)：轨迹是<b>线段 \(F_1F_2\)</b>；<br>
+    ③ \(2a &lt; 2c\)：<b>没有</b>这样的点。
+  </div>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>\(F_1(-3,0)\)，\(F_2(3,0)\)。动点 \(P\) 满足 \(|PF_1|+|PF_2|\) 分别等于 \(10\)、\(6\)、\(5\)，轨迹各是什么？在第一种情形里，若 \(|PF_1|=3\)，求 \(|PF_2|\)。</p>
+    <p>两定点距离 \(|F_1F_2|=3-(-3)=6\)，即 \(2c=6\)。</p>
+    <p>和为 \(10\)：\(10>6\)，是椭圆。验一个点：\(P(5,0)\) 到两点距离 \(8\) 和 \(2\)，和是 \(10\)，在轨迹上。</p>
+    <p>和为 \(6\)：\(6=6\)，是线段 \(F_1F_2\)，不是椭圆。</p>
+    <p>和为 \(5\)：\(5&lt;6\)，任何点到两点距离之和都至少是 \(6\)，没有轨迹。</p>
+    <p>第一种情形：\(|PF_1|+|PF_2|=10\)，所以 \(|PF_2|=10-3=7\)。</p>
+  </div>
+  <div class="card predict" data-id="try-def" data-answer="C">
+    <p>自己试试：\(F_1(0,-5)\)，\(F_2(0,5)\)，动点 \(P\) 满足 \(|PF_1|+|PF_2|=8\)。\(P\) 的轨迹是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>焦点在 \(y\) 轴上的椭圆</button>
+      <button class="opt" data-v="B"><b>B</b>线段 \(F_1F_2\)</button>
+      <button class="opt" data-v="C"><b>C</b>没有这样的点</button>
+      <button class="opt" data-v="D"><b>D</b>焦点在 \(x\) 轴上的椭圆</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(|F_1F_2|=5-(-5)=10\)，而和只有 \(8\)，\(8&lt;10\)，到两点距离之和不可能比两点间距还小。选 A 是一看到「距离之和为常数」就说椭圆，没先拿常数和 \(|F_1F_2|\) 比；常见的还有把 \(|F_1F_2|\) 算成 \(5\)（漏了它是 \(2c\)），误以为 \(8>5\)。</p></div>
+  </div>
+
+  <h3>3. 标准方程：焦点在哪条轴</h3>
+  <p>以两焦点连线为一条坐标轴、线段 \(F_1F_2\) 的中点为原点建系。焦点在 \(x\) 轴上时，定义写成</p>
+  <p style="text-align:center">\(\sqrt{(x+c)^2+y^2}+\sqrt{(x-c)^2+y^2}=2a\)，</p>
+  <p>移项、平方两次整理，再令 \(b^2=a^2-c^2\)（因为 \(a>c>0\)，它是正数），得到标准方程：</p>
+  <div class="card">
+    <ul>
+      <li><b>焦点在 \(x\) 轴上</b>：\(\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1\)（\(a>b>0\)），焦点 \((\pm c,0)\)。</li>
+      <li><b>焦点在 \(y\) 轴上</b>：\(\dfrac{y^2}{a^2}+\dfrac{x^2}{b^2}=1\)（\(a>b>0\)），焦点 \((0,\pm c)\)。</li>
+    </ul>
+  </div>
+  <div class="key">先把方程化成「右边是 \(1\)、两项分母都为正」的样子，再比分母：<b>哪个分母大，焦点就在哪条轴上</b>，大分母是 \(a^2\)。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>椭圆的焦点在 \(y\) 轴上，焦距为 \(6\)，且经过点 \((4,0)\)。求它的标准方程。</p>
+    <p>焦点在 \(y\) 轴上，设 \(\dfrac{y^2}{a^2}+\dfrac{x^2}{b^2}=1\)（\(a>b>0\)）。</p>
+    <p>焦距 \(2c=6\)，所以 \(c=3\)。</p>
+    <p>点 \((4,0)\) 代入：\(0+\dfrac{16}{b^2}=1\)，得 \(b^2=16\)。</p>
+    <p>\(a^2=b^2+c^2=16+9=25\)。所以方程是 \(\dfrac{y^2}{25}+\dfrac{x^2}{16}=1\)。</p>
+    <p>检查：\(a=5>b=4\)，焦点 \((0,\pm3)\) 确实在 \(y\) 轴上。点 \((4,0)\) 在 \(x\) 轴上，这里是短轴端点，不能直接把 \(4\) 当成 \(a\)。</p>
+  </div>
+  <div class="card predict" data-id="try-eq" data-answer="B">
+    <p>自己试试：椭圆 \(4x^2+y^2=4\) 的焦点坐标是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((\pm\sqrt3,0)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((0,\pm\sqrt3)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((0,\pm\sqrt5)\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。两边除以 \(4\)：\(x^2+\dfrac{y^2}{4}=1\)，即 \(\dfrac{x^2}{1}+\dfrac{y^2}{4}=1\)。\(y^2\) 的分母 \(4\) 大，焦点在 \(y\) 轴上，\(a^2=4\)，\(b^2=1\)，\(c^2=4-1=3\)。选 A 是没化成标准形式，把系数 \(4\) 当成了 \(x^2\) 的分母；选 C 是把 \(c^2\) 算成了 \(a^2+b^2\)。</p></div>
+  </div>
+
+  <h3>4. 几何性质：\(a\)、\(b\)、\(c\) 和离心率</h3>
+  <p>从方程 \(\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1\)（\(a>b>0\)）直接读出：</p>
+  <ul>
+    <li><b>范围</b>：两项都不超过 \(1\)，所以 \(-a\le x\le a\)，\(-b\le y\le b\)。</li>
+    <li><b>对称</b>：把 \(x\) 换成 \(-x\)、\(y\) 换成 \(-y\)，方程不变，所以关于两条坐标轴和原点都对称。</li>
+    <li><b>顶点</b>：\((\pm a,0)\)、\((0,\pm b)\)，长轴长 \(2a\)，短轴长 \(2b\)。</li>
+  </ul>
+  <div class="key">
+    \(a^2=b^2+c^2\)，\(a\) 最大。原因：短轴端点到焦点的距离正好是 \(a\)（它到两焦点一样远，和是 \(2a\)），它和原点、焦点围成直角三角形，直角边 \(b\)、\(c\)，斜边 \(a\)。<br>
+    离心率 \(e=\dfrac{c}{a}\in(0,1)\)，而 \(\dfrac{b}{a}=\sqrt{1-e^2}\)：\(e\) 越大，\(b\) 比 \(a\) 小得越多，椭圆越扁。
+  </div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>椭圆 \(16x^2+25y^2=400\)，求范围、顶点、焦点、长轴长、短轴长、焦距和离心率。</p>
+    <p>两边除以 \(400\)：\(\dfrac{x^2}{25}+\dfrac{y^2}{16}=1\)。\(25>16\)，焦点在 \(x\) 轴上，\(a=5\)，\(b=4\)，\(c=\sqrt{25-16}=3\)。</p>
+    <ul>
+      <li>范围：\(-5\le x\le5\)，\(-4\le y\le4\)；顶点 \((\pm5,0)\)、\((0,\pm4)\)；</li>
+      <li>焦点 \((\pm3,0)\)；</li>
+      <li>长轴长 \(2a=10\)，短轴长 \(2b=8\)，焦距 \(2c=6\)（都是「2 倍」，不是 \(a,b,c\) 本身）；</li>
+      <li>离心率 \(e=\dfrac{c}{a}=\dfrac35\)。</li>
+    </ul>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：椭圆 \(\dfrac{x^2}{4}+\dfrac{y^2}{9}=1\) 的焦点坐标和离心率分别是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>焦点 \((\pm\sqrt5, 0)\)，\(e = \dfrac{\sqrt5}{2}\)</button>
+      <button class="opt" data-v="B"><b>B</b>焦点 \((0, \pm\sqrt5)\)，\(e = \dfrac{\sqrt5}{3}\)</button>
+      <button class="opt" data-v="C"><b>C</b>焦点 \((0, \pm\sqrt5)\)，\(e = \dfrac{5}{9}\)</button>
+      <button class="opt" data-v="D"><b>D</b>焦点 \((\pm\sqrt5, 0)\)，\(e = \dfrac{\sqrt5}{3}\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(9>4\)，焦点在 \(y\) 轴上，\(a=3\)，\(b=2\)，\(c=\sqrt{9-4}=\sqrt5\)，焦点 \((0,\pm\sqrt5)\)，\(e=\dfrac{c}{a}=\dfrac{\sqrt5}{3}\)。</p>
+      <p>选 A、D 是没比分母，把焦点放到了 \(x\) 轴上（A 还拿小分母当了 \(a\)）；选 C 是把 \(\dfrac{c^2}{a^2}\) 当成了离心率。</p>
+    </div>
+  </div>
+
+  <h3>5. 直线和椭圆：联立看交点</h3>
+  <p>直线和椭圆有几个公共点，就看联立方程组有几组解。把直线代入椭圆消去一个字母，得到一元二次方程，用判别式 \(\Delta\) 判断：\(\Delta>0\) 两个交点（相交），\(\Delta=0\) 一个（相切），\(\Delta&lt;0\) 没有（相离）。</p>
+  <p>两点要先想到：竖直的直线 \(x=t\) 没有斜率，不能设成 \(y=kx+m\)，要单独算；用 \(\Delta\) 之前先确认消元后真的是二次方程。</p>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>直线 \(y=x+m\) 与椭圆 \(\dfrac{x^2}{4}+y^2=1\)。\(m\) 取什么值时有两个交点？\(m=1\) 时求交点和弦长。</p>
+    <p>代入并两边乘 \(4\)：\(x^2+4(x+m)^2=4\)，整理得</p>
+    <p style="text-align:center">\(5x^2+8mx+4m^2-4=0\)。</p>
+    <p>\(x^2\) 系数是 \(5\neq0\)，是二次方程。</p>
+    <p style="text-align:center">\(\Delta=64m^2-20(4m^2-4)\)<br>\(=80-16m^2\)。</p>
+    <p>\(\Delta>0\iff m^2&lt;5\iff-\sqrt5&lt;m&lt;\sqrt5\)，这时有两个交点；\(m=\pm\sqrt5\) 时相切；\(|m|>\sqrt5\) 时没有交点。</p>
+    <p>\(m=1\)：方程变成 \(5x^2+8x=0\)，\(x=0\) 或 \(x=-\dfrac85\)。交点 \((0,1)\)、\(\left(-\dfrac85,-\dfrac35\right)\)。</p>
+    <p>验第二个点：\(\dfrac{64/25}{4}+\dfrac{9}{25}=\dfrac{16}{25}+\dfrac{9}{25}=1\)，在椭圆上。</p>
+    <p>弦长 \(=\sqrt{\left(\dfrac85\right)^2+\left(\dfrac85\right)^2}=\dfrac{8\sqrt2}{5}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-line" data-answer="B">
+    <p>自己试试：直线 \(x=1\) 被椭圆 \(\dfrac{x^2}{4}+\dfrac{y^2}{3}=1\) 截得的弦长是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac32\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\sqrt3\)</button>
+      <button class="opt" data-v="D"><b>D</b>没有斜率，算不了</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(x=1\) 直接代入：\(\dfrac{y^2}{3}=1-\dfrac14=\dfrac34\)，\(y^2=\dfrac94\)，\(y=\pm\dfrac32\)。两个交点 \(\left(1,\pm\dfrac32\right)\)，弦长 \(\dfrac32-\left(-\dfrac32\right)=3\)。选 A 是只取了正根；选 C 是漏乘了分母 \(3\)；选 D 是只会套 \(y=kx+m\)，竖直线直接代入反而最简单。</p></div>
+  </div>
+
+  <h3>6. 用之前要注意</h3>
+  <ol>
+    <li><b>常数要大于两焦点间距</b>，\(2a>2c\) 才是椭圆。<br><span class="small">反例：\(F_1(-3,0)\)、\(F_2(3,0)\)，和为 \(6\) 时只是线段 \(F_1F_2\)；和为 \(5\) 时没有点。</span></li>
+    <li><b>\(a=b\) 是圆，不按本节的椭圆处理</b>（这时 \(c=0\)，两焦点重合，没有离心率 \(e\in(0,1)\) 那一套）。<br><span class="small">反例：\(\dfrac{x^2}{4}+\dfrac{y^2}{4}=1\) 是半径 \(2\) 的圆，不能说「焦点在 \(x\) 轴上，\(e=0\) 的椭圆」。</span></li>
+    <li><b>先判长轴方向，再读 \(a,b,c\)</b>：大分母才是 \(a^2\)，不一定在 \(x^2\) 下面。<br><span class="small">反例：\(\dfrac{x^2}{4}+\dfrac{y^2}{9}=1\) 的 \(a=3\)，不是 \(2\)。</span></li>
+    <li><b>焦距是 \(2c\)、长轴长是 \(2a\)、短轴长是 \(2b\)</b>，不是 \(c,a,b\)。<br><span class="small">反例：「焦距为 \(8\)」说的是 \(c=4\)，不是 \(c=8\)。</span></li>
+    <li><b>含参数的方程要表示椭圆</b>：两个分母都为正、且不相等；要求焦点在某条轴，还要那条轴的分母更大。<br><span class="small">反例：\(\dfrac{x^2}{m}+\dfrac{y^2}{2}=1\) 中 \(m=2\) 是圆，\(m=-1\) 根本不是椭圆。</span></li>
+    <li><b>直线和椭圆联立</b>：竖直线单独算；用 \(\Delta\) 前确认是二次方程。<br><span class="small">反例：\(x=1\) 设成 \(y=kx+m\) 是设不出来的（例 4 后的「自己试试」）。</span></li>
+    <li><b>画图的绳子要一直拉紧</b>：绳子松了，笔尖落在椭圆里面，那些点到两钉距离之和小于绳长，不在椭圆上。</li>
+  </ol>
+
+  <details class="more">
+    <summary>再深一点：焦半径与焦点三角形（可以先跳过）</summary>
+    <p><b>① 焦半径公式</b>：对于焦点在 \(x\) 轴上的椭圆 \(\dfrac{x^2}{a^2} + \dfrac{y^2}{b^2} = 1\)，若椭圆上有点 \(P(x_0, y_0)\)，则点 \(P\) 到左、右焦点的距离分别为：</p>
+    <p style="text-align:center">\(|PF_1| = a + ex_0, \quad |PF_2| = a - ex_0\)</p>
+    <p>两式直接相加恒为 \(2a\)。椭圆上的点到焦点的最小距离为 \(a - c\)（长轴近端点），最大距离为 \(a + c\)（长轴远端点）。</p>
+    <p><b>② 焦点三角形面积公式</b>：若 \(P\) 是椭圆上不与长轴端点重合的动点，\(\angle F_1PF_2 = \theta\)，则 \(\triangle F_1PF_2\) 的面积为：</p>
+    <p style="text-align:center">\(S_{\triangle F_1PF_2} = b^2 \tan\dfrac{\theta}{2}\)</p>
+    <p>推导巧妙运用了余弦定理与椭圆定义：\(|PF_1|^2 + |PF_2|^2 - 2|PF_1||PF_2|\cos\theta = 4c^2\)，展开并代入 \(|PF_1|+|PF_2|=2a\)，即可消去未知焦半径，得到这一简洁漂亮的结论。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>双焦点拉线与椭圆微实验室</h3>
+  <p class="small">拖动椭圆上的动点 \(P\)（或按键盘方向键），观察双焦半径 \(PF_1\)（绿线）与 \(PF_2\)（金线）的变化；下方实时展示「拉直绳线对比条」，直观验证无论 \(P\) 滑到哪里，两段距离之和恒等于 \(2a\)。调节滑块观察离心率 \(e\) 和扁平度；点击预设反例查看 \(2a = 2c\) 时椭圆如何退化为线段。</p>
+  <div class="card">
+    <div class="legend">
+      <span class="legend-item"><span class="legend-bar" style="background:var(--a)"></span>焦半径 \(|PF_1|\)</span>
+      <span class="legend-item"><span class="legend-bar" style="background:var(--b)"></span>焦半径 \(|PF_2|\)</span>
+      <span class="legend-item"><span class="legend-bar" style="background:var(--c)"></span>总绳长 \(2a\)</span>
+    </div>
+    <svg class="fig" id="fig" viewBox="0 0 560 340" role="img" aria-label="椭圆与双焦半径拉线微实验室"></svg>
+    <div class="ctrl-group">
+      <div class="ctrl"><label for="ain">半长轴 \(a\)</label><input type="range" id="ain" min="4" max="7.5" step="0.5" value="6"><output id="aout">6</output></div>
+      <div class="ctrl"><label for="cin">半焦距 \(c\)</label><input type="range" id="cin" min="0" max="7.5" step="0.5" value="4"><output id="cout">4</output></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="btn-degen" type="button">预设反例：2a = 2c 退化为线段</button>
+      <button class="btn ghost" id="btn-circle" type="button">圆极限：c = 0</button>
+      <button class="btn ghost" id="reset" type="button">重置</button>
+    </div>
+    <div class="result" id="lab-out" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两题检验标准方程与基本量计算，后三题针对高考与诊断中最常踩的五大陷阱。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-calc" data-answer="A">
+    <p>1. 已知椭圆方程为 \(\dfrac{x^2}{16} + \dfrac{y^2}{25} = 1\)，则该椭圆的长轴长、焦距和离心率分别为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>长轴长 \(10\)，焦距 \(6\)，\(e = 0.6\)</button>
+      <button class="opt" data-v="B"><b>B</b>长轴长 \(5\)，焦距 \(3\)，\(e = 0.6\)</button>
+      <button class="opt" data-v="C"><b>C</b>长轴长 \(8\)，焦距 \(6\)，\(e = 0.75\)</button>
+      <button class="opt" data-v="D"><b>D</b>长轴长 \(10\)，焦距 \(8\)，\(e = 0.8\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。比较分母：\(25 > 16\)，所以 \(a^2 = 25 \implies a = 5\)，\(b^2 = 16 \implies b = 4\)。</p>
+      <p>由 \(a^2 = b^2 + c^2\) 得 \(c^2 = 25 - 16 = 9 \implies c = 3\)。</p>
+      <p>因此长轴长为 \(2a = 10\)（不是 \(a=5\)）；焦距为 \(2c = 6\)（不是 \(c=3\)）；离心率 \(e = \dfrac{c}{a} = \dfrac{3}{5} = 0.6\)。</p>
+      <p>选 B 的同学错把半长轴和半焦距当成了长轴长与焦距；选 C 的同学误把小分母当成了长半轴。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-def" data-answer="B">
+    <p>2. 已知点 \(F_1(-4, 0), F_2(4, 0)\) 是椭圆 \(\dfrac{x^2}{25} + \dfrac{y^2}{9} = 1\) 的两个焦点，点 \(P\) 在该椭圆上运动。若 \(|PF_1| = 7\)，则 \(|PF_2|\) 的长度为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(7\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。直接用定义：方程中 \(a^2 = 25 \implies a = 5\)，因此定值 \(2a = 10\)。</p>
+      <p>验证焦距：\(c = \sqrt{25 - 9} = 4\)，两焦点恰为 \(F_1(-4, 0), F_2(4, 0)\)。根据椭圆的第一定义，椭圆上的任意点 \(P\) 到两焦点距离之和恒等于 \(2a\)：</p>
+      <p style="text-align:center">\(|PF_1| + |PF_2| = 2a = 10\)</p>
+      <p>代入已知 \(|PF_1| = 7\)，解得 \(|PF_2| = 10 - 7 = 3\)。选 A 的同学误以为焦半径之差为定值（混淆了双曲线）。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-seg" data-answer="B">
+    <p>3. （边界 1：定义退化）平面内动点 \(P\) 到两定点 \(F_1(-3, 0), F_2(3, 0)\) 的距离之和满足 \(|PF_1| + |PF_2| = 6\)，则点 \(P\) 的轨迹是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>以 \(F_1, F_2\) 为焦点的椭圆</button>
+      <button class="opt" data-v="B"><b>B</b>线段 \(F_1F_2\)</button>
+      <button class="opt" data-v="C"><b>C</b>以原点为圆心、半径为 \(3\) 的圆</button>
+      <button class="opt" data-v="D"><b>D</b>不存在任何轨迹</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。计算两定点间距离：\(|F_1F_2| = 3 - (-3) = 6\)。</p>
+      <p>条件中距离之和 \(2a = 6\)，此时恰好满足 <b>\(2a = 2c = 6\)</b>！</p>
+      <p>根据公理「两点之间线段最短」，当且仅当点 \(P\) 在线段 \(F_1F_2\) 上时，才满足 \(|PF_1| + |PF_2| = |F_1F_2| = 6\)。若 \(P\) 不在连线段上，由三角形两边之和大于第三边，距离之和必定严格大于 \(6\)。</p>
+      <p>因此轨迹退化成了<b>线段 \(F_1F_2\)</b>，不是椭圆！只有满足 \(2a > 2c\) 时，轨迹才是真正的椭圆。如果 \(2a &lt; 2c\)，则无轨迹。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-param" data-answer="C">
+    <p>4. （边界 3：含参方程与焦点轴向）方程 \(\dfrac{x^2}{m+2} + \dfrac{y^2}{5-m} = 1\) 表示焦点在 \(y\) 轴上的椭圆，则实数 \(m\) 的取值范围是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-2 &lt; m &lt; 5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(m &lt; 1.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-2 &lt; m &lt; 1.5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1.5 &lt; m &lt; 5\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。表示椭圆且焦点在 \(y\) 轴上，必须同时满足三个硬性条件：</p>
+      <ol>
+        <li>\(x^2\) 项的分母必须大于 \(0\)：\(m + 2 > 0 \implies m > -2\)；</li>
+        <li>\(y^2\) 项的分母必须大于 \(0\)：\(5 - m > 0 \implies m &lt; 5\)；</li>
+        <li>焦点在 \(y\) 轴要求 \(y^2\) 项分母严格大于 \(x^2\) 项分母：\(5 - m > m + 2 \implies 2m &lt; 3 \implies m &lt; 1.5\)。</li>
+      </ol>
+      <p>取三者交集，解得 \(-2 &lt; m &lt; 1.5\)。</p>
+      <p>选 A 的同学忽略了焦点必须在 \(y\) 轴（只列了分母为正）；选 B 的同学漏掉了 \(m + 2 > 0\)（当 \(m \le -2\) 时分母非正，根本不是椭圆）；选 D 的同学把焦点算到 \(x\) 轴上了。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p-trap-axis" data-answer="B">
+    <p>5. （边界 2 &amp; 4 &amp; 5：几何量混淆与短轴长）已知椭圆的两个焦点间的距离是 \(8\)，椭圆的离心率 \(e = \dfrac{4}{5}\)，则该椭圆的短轴长为？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。抓住词条的核心定义：</p>
+      <ul>
+        <li>两焦点间的距离是焦距 \(2c = 8 \implies c = 4\)（警惕：不能误记为 \(c=8\)！）；</li>
+        <li>由 \(e = \dfrac{c}{a} = \dfrac{4}{5}\)，得半长轴 \(a = \dfrac{c}{e} = \dfrac{4}{4/5} = 5\)；</li>
+        <li>由椭圆几何量关系 \(a^2 = b^2 + c^2\)（\(a\) 是老大！），得 \(b^2 = a^2 - c^2 = 25 - 16 = 9 \implies b = 3\)；</li>
+        <li>题目问的是<b>短轴长</b>，短轴长是 \(2b = 2 \times 3 = 6\)（易错陷阱：\(b=3\) 是半短轴长，不是短轴长！）。</li>
+      </ul>
+      <p>选 A 的同学在最后一步把半短轴长 \(b=3\) 当作了短轴长；选 C 的同学算出了长轴长 \(2a=10\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function f2(x) { var s = (Math.round(x * 100) / 100).toFixed(2).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint ? el.createSVGPoint() : { x: 0, y: 0 };
+    pt.x = ev.clientX || 0; pt.y = ev.clientY || 0;
+    var m = el.getScreenCTM ? el.getScreenCTM() : null;
+    return m && m.inverse ? pt.matrixTransform(m.inverse()) : { x: pt.x, y: pt.y };
+  }
+
+  var fig = document.getElementById("fig");
+  var ain = document.getElementById("ain");
+  var cin = document.getElementById("cin");
+  var aout = document.getElementById("aout");
+  var cout = document.getElementById("cout");
+  var labOut = document.getElementById("lab-out");
+  var btnReset = document.getElementById("reset");
+  var btnDegen = document.getElementById("btn-degen");
+  var btnCircle = document.getElementById("btn-circle");
+
+  var OX = 280, OY = 135, SCALE = 18;
+  var a = 6, c = 4, theta = Math.PI / 3;
+
+  function labReset() {
+    a = 6; c = 4; theta = Math.PI / 3;
+    if (ain) ain.value = "6";
+    if (cin) cin.value = "4";
+    draw();
+  }
+
+  function labDegen() {
+    c = a;
+    if (cin) cin.value = String(c);
+    draw();
+    Peiyu.log("interact", { id: "degen", a: a, c: c });
+  }
+
+  function labCircle() {
+    c = 0;
+    if (cin) cin.value = "0";
+    draw();
+    Peiyu.log("interact", { id: "circle", a: a, c: c });
+  }
+
+  function draw(keepFocus) {
+    if (c > a) c = a;
+    if (aout) aout.textContent = f2(a);
+    if (cout) cout.textContent = f2(c);
+
+    var isDegen = (c === a);
+    var isCircle = (c === 0);
+    var b = isDegen ? 0 : Math.sqrt(Math.max(0, a * a - c * c));
+    var e = a > 0 ? c / a : 0;
+
+    var px = a * Math.cos(theta);
+    var py = isDegen ? 0 : b * Math.sin(theta);
+    var svgPx = OX + px * SCALE;
+    var svgPy = OY - py * SCALE;
+
+    var f1x = OX - c * SCALE, f2x = OX + c * SCALE;
+    var f1y = OY, f2y = OY;
+
+    var d1 = Math.sqrt((px - (-c)) * (px - (-c)) + py * py);
+    var d2 = Math.sqrt((px - c) * (px - c) + py * py);
+    var sumD = d1 + d2;
+
+    var fg = css("--fg") || "#1A2822";
+    var ca = css("--a") || "#2F7A56";
+    var cb = css("--b") || "#966524";
+    var cc = css("--c") || "#3E5C76";
+    var hl = css("--hl") || "#D9A441";
+    var no = css("--no") || "#B5452F";
+    var muted = css("--muted") || "#5E6B64";
+    var line = css("--line") || "#E2DCD0";
+    var card = css("--card") || "#FFFFFF";
+
+    fig.innerHTML = "";
+
+    // 坐标系背景网格轴线
+    svg("line", { x1: 30, y1: OY, x2: 530, y2: OY, stroke: line, "stroke-width": 1.5 }, fig);
+    svg("line", { x1: OX, y1: 15, x2: OX, y2: 245, stroke: line, "stroke-width": 1.5 }, fig);
+    svg("polygon", { points: "530," + OY + " 522," + (OY - 4) + " 522," + (OY + 4), fill: line }, fig);
+    svg("polygon", { points: OX + ",15 " + (OX - 4) + ",23 " + (OX + 4) + ",23", fill: line }, fig);
+    svg("text", { x: 532, y: OY - 6, "font-size": 13, fill: muted }, fig).textContent = "x";
+    svg("text", { x: OX + 8, y: 22, "font-size": 13, fill: muted }, fig).textContent = "y";
+    svg("text", { x: OX - 14, y: OY + 16, "font-size": 13, fill: muted }, fig).textContent = "O";
+
+    // 绘制椭圆轮廓或退化线段
+    if (isDegen) {
+      svg("line", { x1: f1x, y1: OY, x2: f2x, y2: OY, stroke: no, "stroke-width": 5, "stroke-linecap": "round" }, fig);
+      svg("text", { x: OX, y: OY - 14, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 14 }, fig).textContent = "2a = 2c：退化为线段 F1F2";
+    } else {
+      svg("ellipse", { cx: OX, cy: OY, rx: a * SCALE, ry: b * SCALE, fill: "none", stroke: cc, "stroke-width": 2.5 }, fig);
+      // 顶点提示
+      svg("circle", { cx: OX - a * SCALE, cy: OY, r: 2.5, fill: muted }, fig);
+      svg("circle", { cx: OX + a * SCALE, cy: OY, r: 2.5, fill: muted }, fig);
+      svg("circle", { cx: OX, cy: OY - b * SCALE, r: 2.5, fill: muted }, fig);
+      svg("circle", { cx: OX, cy: OY + b * SCALE, r: 2.5, fill: muted }, fig);
+      svg("text", { x: OX + a * SCALE + 6, y: OY + 14, "font-size": 12, fill: muted }, fig).textContent = "A2(" + f2(a) + ",0)";
+      svg("text", { x: OX - a * SCALE - 6, y: OY + 14, "text-anchor": "end", "font-size": 12, fill: muted }, fig).textContent = "A1(-" + f2(a) + ",0)";
+    }
+
+    // 焦半径拉线 PF1 (绿) 与 PF2 (金)
+    svg("line", { x1: f1x, y1: f1y, x2: svgPx, y2: svgPy, stroke: ca, "stroke-width": 2.5, "stroke-dasharray": isDegen ? "4 3" : "none" }, fig);
+    svg("line", { x1: f2x, y1: f2y, x2: svgPx, y2: svgPy, stroke: cb, "stroke-width": 2.5, "stroke-dasharray": isDegen ? "4 3" : "none" }, fig);
+
+    // 焦点 F1, F2
+    svg("circle", { cx: f1x, cy: f1y, r: 4.5, fill: ca, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("circle", { cx: f2x, cy: f2y, r: 4.5, fill: cb, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("text", { x: f1x, y: OY + 18, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13 }, fig).textContent = "F1(-c,0)";
+    svg("text", { x: f2x, y: OY + 18, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13 }, fig).textContent = "F2(c,0)";
+
+    // 动点 P 句柄（支持键盘聚焦与拖动）
+    var handleP = svg("circle", {
+      cx: svgPx, cy: svgPy, r: 9, fill: card, stroke: hl, "stroke-width": 3,
+      tabindex: 0, role: "slider",
+      "aria-label": "椭圆动点 P", "aria-valuenow": Math.round(theta * 180 / Math.PI),
+      style: "cursor:grab"
+    }, fig);
+    svg("text", { x: svgPx + (px >= 0 ? 12 : -12), y: svgPy - 10, "text-anchor": px >= 0 ? "start" : "end", "font-weight": 700, fill: hl, "font-size": 14 }, fig).textContent = "P(" + f2(px) + "," + f2(py) + ")";
+
+    // 下方拉直绳线对比条
+    var rulerY = 285;
+    var totalBarW = 2 * a * SCALE;
+    var barStartX = OX - a * SCALE;
+    var splitW = clamp(d1 * SCALE, 0, totalBarW);
+
+    svg("text", { x: 30, y: rulerY - 10, fill: muted, "font-size": 13 }, fig).textContent = "拉直双焦半径对比条：";
+    // 绳线底衬与两段实线
+    svg("rect", { x: barStartX, y: rulerY, width: totalBarW, height: 16, fill: line, rx: 4 }, fig);
+    svg("rect", { x: barStartX, y: rulerY, width: splitW, height: 16, fill: ca, rx: 4 }, fig);
+    svg("rect", { x: barStartX + splitW, y: rulerY, width: Math.max(0, totalBarW - splitW), height: 16, fill: cb, rx: 4 }, fig);
+    // 分割界标
+    svg("circle", { cx: barStartX + splitW, cy: rulerY + 8, r: 5, fill: hl, stroke: card, "stroke-width": 1.5 }, fig);
+
+    // 刻度标注
+    svg("text", { x: barStartX + splitW / 2, y: rulerY + 12, "text-anchor": "middle", fill: "#FFFFFF", "font-size": 11, "font-weight": 700 }, fig).textContent = "|PF1|=" + f2(d1);
+    svg("text", { x: barStartX + splitW + (totalBarW - splitW) / 2, y: rulerY + 12, "text-anchor": "middle", fill: "#FFFFFF", "font-size": 11, "font-weight": 700 }, fig).textContent = "|PF2|=" + f2(d2);
+
+    svg("line", { x1: barStartX, y1: rulerY + 23, x2: barStartX + totalBarW, y2: rulerY + 23, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("line", { x1: barStartX, y1: rulerY + 20, x2: barStartX, y2: rulerY + 26, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("line", { x1: barStartX + totalBarW, y1: rulerY + 20, x2: barStartX + totalBarW, y2: rulerY + 26, stroke: fg, "stroke-width": 1.5 }, fig);
+    svg("text", { x: OX, y: rulerY + 36, "text-anchor": "middle", fill: fg, "font-size": 13, "font-weight": 700 }, fig).textContent = "总长 |PF1| + |PF2| = 2a = " + f2(2 * a) + "（恒定不变）";
+
+    // 动点键盘交互
+    handleP.addEventListener("keydown", function (ev) {
+      var step = 0.05;
+      if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") { theta += step; ev.preventDefault(); draw(true); }
+      else if (ev.key === "ArrowRight" || ev.key === "ArrowDown") { theta -= step; ev.preventDefault(); draw(true); }
+      else if (ev.key === "PageUp") { theta += step * 5; ev.preventDefault(); draw(true); }
+      else if (ev.key === "PageDown") { theta -= step * 5; ev.preventDefault(); draw(true); }
+    });
+
+    // 动点拖动交互
+    function onMovePt(clientX, clientY) {
+      var pt = toSvg(fig, { clientX: clientX, clientY: clientY });
+      var dx = (pt.x - OX) / SCALE;
+      var dy = -(pt.y - OY) / SCALE;
+      if (isDegen) {
+        var clampedX = clamp(dx, -a, a);
+        theta = Math.acos(clamp(clampedX / a, -1, 1));
+      } else {
+        theta = Math.atan2(dy / (b || 1e-5), dx / a);
+      }
+      draw(true);
+    }
+
+    handleP.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { onMovePt(e.clientX, e.clientY); }
+      function up() {
+        window.removeEventListener("pointermove", mv);
+        window.removeEventListener("pointerup", up);
+        Peiyu.log("interact", { id: "drag-P", a: a, c: c, theta: theta });
+      }
+      window.addEventListener("pointermove", mv);
+      window.addEventListener("pointerup", up);
+    });
+
+    if (keepFocus) {
+      var h = fig.querySelector("[role=slider]");
+      if (h) h.focus();
+    }
+
+    // 状态与数学公式输出
+    var lines = [];
+    lines.push("<b>当前几何量</b>：半长轴 \\(a = " + f2(a) + "\\)，半短轴 \\(b = " + f2(b) + "\\)，半焦距 \\(c = " + f2(c) + "\\)，离心率 \\(e = \\dfrac{c}{a} = " + f2(e) + "\\)。");
+    if (!isDegen) {
+      lines.push("<b>标准方程</b>：\\(\\dfrac{x^2}{" + f2(a * a) + "} + \\dfrac{y^2}{" + f2(b * b) + "} = 1\\)（长轴长 \\(2a = " + f2(2 * a) + "\\)，短轴长 \\(2b = " + f2(2 * b) + "\\)，焦距 \\(2c = " + f2(2 * c) + "\\)）。");
+    }
+    lines.push("<b>距离度量</b>：\\(|PF_1| = " + f2(d1) + "\\)，\\(|PF_2| = " + f2(d2) + "\\)，\\(|PF_1| + |PF_2| = 2a = " + f2(sumD) + "\\)。");
+
+    if (isDegen) {
+      lines.push('<div class="warn-box"><b>预设反例诊断</b>：\\(2a = 2c\\)，此时 \\(b = 0\\)，离心率 \\(e = 1\\)。椭圆被彻底压平，轨迹<b>退化为线段 \\(F_1F_2\\)</b>！动点 \\(P\\) 只能在两焦点连线段上滑动。</div>');
+    } else if (isCircle) {
+      lines.push('<span class="eq">极限特例诊断</span>：\\(c = 0\\)，两焦点重合于原点，\\(a = b = ' + f2(a) + '\\)，\\(e = 0\\)。椭圆成为正圆（圆是离心率为 \\(0\\) 的特殊圆锥曲线）。');
+    } else {
+      var flatDesc = e >= 0.8 ? "离心率较大（靠近 1），椭圆极其扁平。" : (e <= 0.4 ? "离心率较小（靠近 0），椭圆饱满圆润。" : "标准椭圆，形状适中。");
+      lines.push('<span class="eq">形态诊断</span>：\\(0 &lt; e &lt; 1\\)，' + flatDesc + '无论点 \\(P\\) 怎样滑动，两焦半径之和恒等于 \\(2a\\)。');
+    }
+
+    if (labOut) {
+      labOut.innerHTML = lines.join("<br>");
+      Peiyu.math(labOut);
+    }
+  }
+
+  if (ain) {
+    ain.addEventListener("input", function () {
+      a = parseFloat(ain.value) || 6;
+      if (c > a) { c = a; if (cin) cin.value = String(c); }
+      draw();
+    });
+    ain.addEventListener("change", function () { Peiyu.log("interact", { id: "slider-a", a: a }); });
+  }
+
+  if (cin) {
+    cin.addEventListener("input", function () {
+      c = parseFloat(cin.value) || 4;
+      if (c > a) { a = c; if (ain) ain.value = String(a); }
+      draw();
+    });
+    cin.addEventListener("change", function () { Peiyu.log("interact", { id: "slider-c", c: c }); });
+  }
+
+  if (btnReset) btnReset.onclick = labReset;
+  if (btnDegen) btnDegen.onclick = labDegen;
+  if (btnCircle) btnCircle.onclick = labCircle;
+
+  document.addEventListener("DOMContentLoaded", function () { labReset(); });
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw(); });
+  }
+})();
+</script>
+</body></html>

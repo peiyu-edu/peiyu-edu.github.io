@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10.1 随机事件与概率 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
+  #dice text, #coins text { font-size: 20px; }
+  #dice:focus { outline: none; }
+  #dice:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-10-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 10 章 概率</p>
+<h1>10.1 随机事件与概率</h1>
+<p class="lead">掷一颗骰子，结果说不准；可「哪件事更容易发生」能算出来。办法是：先把所有可能的结果列全，再数一数。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>掷一颗普通的骰子，\(1\) 到 \(6\) 点朝上的机会一样。</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>「点数是偶数」和「点数大于 \(4\)」，哪件事更容易发生？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>点数是偶数</button>
+      <button class="opt" data-v="B"><b>B</b>点数大于 \(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>一样容易</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。偶数有 \(2,4,6\) 三种结果，大于 \(4\) 只有 \(5,6\) 两种。六种结果机会一样，包含的结果多的那件事更容易发生。</p>
+      <p>按这个想法，「点数是偶数」的可能性是 \(\dfrac36=\dfrac12\)，「点数大于 \(4\)」是 \(\dfrac26=\dfrac13\)。</p>
+      <p>这一节就把这件事说清楚：怎样列出全部结果（样本空间），怎样用结果的集合表示一件事（事件），什么时候可以「数个数、做除法」（古典概型）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：集合、子集、交集、并集、补集（<a href="b1-1-1.html">回看 1.1</a>、<a href="b1-1-2.html">1.2</a>、<a href="b1-1-3.html">1.3</a>）。这一节的事件就是集合，运算也是集合运算。</p>
+
+  <div class="card">
+    <p><b>随机试验</b>：条件相同、可以重复做，所有可能的结果事先知道，但每次出哪个说不准。</p>
+    <p>例：抛一枚硬币，结果只有「正面」「反面」两种，抛之前不知道是哪个。</p>
+  </div>
+
+  <div class="card">
+    <p><b>样本点、样本空间</b>：试验的每一个可能结果叫一个<b>样本点</b>；全部样本点组成的集合叫<b>样本空间</b>，记作 \(\Omega\)。</p>
+    <p>例：先后抛两枚硬币，\(\Omega=\{\text{正正},\text{正反},\text{反正},\text{反反}\}\)，有 \(4\) 个样本点。「正反」和「反正」是两个不同的结果：第一枚正、第二枚反，和反过来，不是一回事。</p>
+  </div>
+
+  <div class="card">
+    <p><b>随机事件</b>：样本空间的一个子集，简称<b>事件</b>，用 \(A\)、\(B\) 等表示。试验的结果落在 \(A\) 里，就说「\(A\) 发生了」。</p>
+    <p>例：还是抛两枚硬币，「至少一枚正面」\(=\{\text{正正},\text{正反},\text{反正}\}\)。抛出「正反」，这件事就发生了。</p>
+    <p>两个特别的事件：\(\Omega\) 本身每次都发生，叫<b>必然事件</b>；空集 \(\varnothing\) 从不发生，叫<b>不可能事件</b>。只含一个样本点的事件叫<b>基本事件</b>。</p>
+  </div>
+
+  <div class="card">
+    <p><b>等可能</b>：每个样本点出现的机会一样大。</p>
+    <p>例：质地均匀的骰子，\(6\) 个点数机会一样，每个是 \(\dfrac16\)。如果骰子被做了手脚，\(6\) 点更容易出现，就不再等可能了。</p>
+  </div>
+
+  <h3>2. 先写对样本空间</h3>
+  <p>算概率之前，先说清楚做的是什么试验、结果怎么记，再把样本点一个不漏、一个不重地列出来。列表或画树状图最不容易漏。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>一颗红骰子、一颗蓝骰子一起掷。写出样本空间，并写出事件 \(A\)「点数和为 \(5\)」。</p>
+    <p>记结果为 \((i,j)\)：\(i\) 是红骰子点数，\(j\) 是蓝骰子点数。\(i\)、\(j\) 各有 \(6\) 种，所以 \(\Omega\) 有 \(6\times6=36\) 个样本点，排成 \(6\times6\) 的表（「动手」① 就是这张表）。</p>
+    <p>和为 \(5\)：\(A=\{(1,4),(2,3),(3,2),(4,1)\}\)，有 \(4\) 个样本点。\((1,4)\) 和 \((4,1)\) 是红蓝颠倒的两个结果，都要算。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="C">
+    <p>自己试试：先后抛三枚硬币，样本空间有几个样本点？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(8\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。每枚 \(2\) 种，\(2\times2\times2=8\)：正正正、正正反、正反正、反正正、正反反、反正反、反反正、反反反。选 B 的同学数的是「正面有 \(0,1,2,3\) 枚」四种情况，那是把结果合成了类别，不是样本点。</p></div>
+  </div>
+
+  <h3>3. 事件的关系和运算</h3>
+  <p>事件是集合，所以集合的关系和运算都能用，只是要读成「事情」：</p>
+  <ul>
+    <li><b>包含</b> \(A\subseteq B\)：\(A\) 发生，\(B\) 一定发生。</li>
+    <li><b>并事件</b> \(A\cup B\)（也写 \(A+B\)）：\(A\)、\(B\) <b>至少一个</b>发生。</li>
+    <li><b>交事件</b> \(A\cap B\)（也写 \(AB\)）：\(A\)、\(B\) <b>同时</b>发生。</li>
+    <li><b>互斥</b>：\(A\cap B=\varnothing\)，两件事不能同时发生。</li>
+    <li><b>对立</b>：\(A\cap B=\varnothing\) <b>并且</b> \(A\cup B=\Omega\)，每次<b>恰好</b>发生一个。\(A\) 的对立事件记作 \(\overline{A}\)。</li>
+  </ul>
+  <div class="key">对立一定互斥；互斥不一定对立。对立比互斥多一个条件：两件事合起来是整个样本空间。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>掷一颗骰子，\(\Omega=\{1,2,3,4,5,6\}\)。\(A\)「偶数」\(=\{2,4,6\}\)，\(B\)「大于 \(3\)」\(=\{4,5,6\}\)，\(C\)「点数为 \(1\)」\(=\{1\}\)，\(D\)「奇数」\(=\{1,3,5\}\)。</p>
+    <ul>
+      <li>\(A\cup B=\{2,4,5,6\}\)，\(A\cap B=\{4,6\}\)：交集不空，\(A\)、\(B\) 不互斥（掷出 \(4\) 时两件都发生）。</li>
+      <li>\(C\subseteq D\)：掷出 \(1\)，一定是奇数。</li>
+      <li>\(A\cap C=\varnothing\)，互斥；但 \(A\cup C=\{1,2,4,6\}\ne\Omega\)，不对立（掷出 \(3\) 时两件都没发生）。</li>
+      <li>\(A\cap D=\varnothing\)，\(A\cup D=\Omega\)：对立，\(D=\overline{A}\)。</li>
+    </ul>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：掷一颗骰子，\(E\)「点数是 \(1\) 或 \(2\)」，\(F\)「点数是 \(5\) 或 \(6\)」。\(E\) 和 \(F\)：</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>对立</button>
+      <button class="opt" data-v="B"><b>B</b>互斥，但不对立</button>
+      <button class="opt" data-v="C"><b>C</b>不互斥</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(E\cap F=\varnothing\)，互斥；\(E\cup F=\{1,2,5,6\}\)，少了 \(3,4\)，掷出 \(3\) 时两件都没发生，所以不对立。选 A 的同学看「一小一大」像是相反，没检查并集是不是 \(\Omega\)。</p></div>
+  </div>
+
+  <h3>4. 古典概型：数个数，做除法</h3>
+  <p>一个试验如果满足两条：</p>
+  <ol>
+    <li><b>有限</b>：样本点只有有限个；</li>
+    <li><b>等可能</b>：每个样本点出现的机会一样大，</li>
+  </ol>
+  <p>就叫<b>古典概型</b>。这时 \(\Omega\) 有 \(n\) 个样本点、事件 \(A\) 含 \(k\) 个，那么</p>
+  <div class="key" style="text-align:center">\(P(A)=\dfrac{k}{n}=\dfrac{A\text{ 含的样本点个数}}{\Omega\text{ 的样本点个数}}\)</div>
+  <p>为什么：\(n\) 个结果机会一样，每个分到 \(\dfrac1n\)，\(A\) 占了 \(k\) 个，就是 \(\dfrac kn\)。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>掷红、蓝两颗骰子，求「点数和为 \(7\)」的概率。</p>
+    <p>样本点 \(36\) 个，有限；骰子均匀，等可能。和为 \(7\)：\((1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\)，共 \(6\) 个。</p>
+    <p style="text-align:center">\(P=\dfrac{6}{36}=\dfrac16\)。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A">
+    <p>自己试试：掷红、蓝两颗骰子，「点数和为 \(4\)」的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac1{12}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac1{18}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac1{11}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。和为 \(4\)：\((1,3),(2,2),(3,1)\)，\(3\) 个，\(\dfrac3{36}=\dfrac1{12}\)。选 B 的同学把 \((1,3)\)、\((3,1)\) 当成一个，只数了 \(2\) 个；选 C 的同学以为和有 \(2\) 到 \(12\) 共 \(11\) 种、各占一份，可这 \(11\) 种和并不等可能。</p></div>
+  </div>
+
+  <h3>5. 概率的基本性质</h3>
+  <p>从「数个数」马上能看出这几条：</p>
+  <ul>
+    <li>\(0\le P(A)\le 1\)；\(P(\Omega)=1\)，\(P(\varnothing)=0\)。</li>
+    <li>\(A\subseteq B\) 时 \(P(A)\le P(B)\)：\(A\) 的样本点都在 \(B\) 里，个数不会更多。</li>
+    <li><b>互斥</b>时 \(P(A\cup B)=P(A)+P(B)\)：没有公共样本点，个数直接相加。</li>
+    <li><b>对立</b>时 \(P(\overline{A})=1-P(A)\)。</li>
+    <li><b>一般</b>情形：\(P(A\cup B)=P(A)+P(B)-P(A\cap B)\)。公共部分在 \(P(A)\)、\(P(B)\) 里各算了一次，多算了一次，要减掉。</li>
+  </ul>
+  <div class="key">只有互斥时才能直接相加；不确定互斥，就用 \(P(A\cup B)=P(A)+P(B)-P(A\cap B)\)。</div>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>(1) 掷一颗骰子，\(A\)「偶数」，\(B\)「大于 \(3\)」，求 \(P(A\cup B)\)。</p>
+    <p>\(P(A)=\dfrac36\)，\(P(B)=\dfrac36\)，\(A\cap B=\{4,6\}\)，\(P(A\cap B)=\dfrac26\)。所以 \(P(A\cup B)=\dfrac36+\dfrac36-\dfrac26=\dfrac46=\dfrac23\)。直接数：\(A\cup B=\{2,4,5,6\}\)，也是 \(\dfrac46\)。</p>
+    <p>(2) 掷红、蓝两颗骰子，求「至少一颗是 \(6\)」的概率。</p>
+    <p>对立事件是「两颗都不是 \(6\)」：每颗 \(5\) 种，共 \(25\) 个样本点。所以 \(P=1-\dfrac{25}{36}=\dfrac{11}{36}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="A">
+    <p>自己试试：掷红、蓝两颗骰子，「两颗点数不同」的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac56\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac16\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac12\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。对立事件「两颗相同」有 \((1,1)\) 到 \((6,6)\) 共 \(6\) 个，概率 \(\dfrac6{36}=\dfrac16\)，所以「不同」是 \(1-\dfrac16=\dfrac56\)。选 B 的同学算出了对立事件，忘了用 \(1\) 减。</p></div>
+  </div>
+
+  <h3>6. 用之前要注意</h3>
+  <ol>
+    <li><b>先查等可能，再用 \(\dfrac kn\)</b>：「有两种结果」不等于「各 \(\dfrac12\)」。<br><span class="small">反例：抛两枚硬币，正面的枚数有 \(0,1,2\) 三种，但不是各 \(\dfrac13\)：「\(1\) 枚」包含正反、反正两个样本点，概率 \(\dfrac24=\dfrac12\)。</span></li>
+    <li><b>把结果合成类别后，要重查等可能</b>：按无序的「一个 \(1\) 一个 \(2\)」记，和按有序的 \((1,2)\) 记，样本点不一样。<br><span class="small">反例：两颗骰子，「\(\{1,2\}\)」包含 \((1,2)\)、\((2,1)\) 两个结果，「\(\{1,1\}\)」只有 \((1,1)\) 一个，两类机会不同，不能当成等可能再 \(\dfrac kn\)。</span></li>
+    <li><b>互斥才能直接相加</b>。<br><span class="small">反例：例 4(1) 里如果直接 \(\dfrac36+\dfrac36=1\)，就成了「一定发生」，可掷出 \(1\) 或 \(3\) 时两件都没发生。</span></li>
+    <li><b>对立还要并集是 \(\Omega\)</b>。<br><span class="small">反例：例 2 里 \(A\)「偶数」和 \(C\)「点数为 \(1\)」互斥，但掷出 \(3\) 时都没发生，不对立，\(P(C)=\dfrac16\ne 1-P(A)\)。</span></li>
+  </ol>
+  <div class="key">古典概型三步：说清试验和记法 → 写出（或数出）\(\Omega\) 并确认有限、等可能 → 数 \(A\) 的样本点，算 \(\dfrac kn\)，约成最简。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>「有限」这一条</b>：在 \(0\) 到 \(1\) 之间随便取一个实数，可能的结果有无穷多个，没法「数个数」，古典概型的公式用不了。这类问题以后另有办法。</p>
+    <p><b>概率为 \(0\) 和不可能事件</b>：在本节这种有限、等可能的模型里，\(P(A)=0\) 就说明 \(A\) 一个样本点都没有，也就是 \(A=\varnothing\)。到了样本点无穷多的模型里，「概率是 \(0\)」和「不可能发生」不一定是一回事，现在先只在给定的有限模型里说。</p>
+    <p><b>三个事件的并</b>：\(P(A\cup B\cup C)=P(A)+P(B)+P(C)-P(A\cap B)-P(A\cap C)-P(B\cap C)+P(A\cap B\cap C)\)。道理一样：多算的减掉，减多了的再加回来。</p>
+    <p><b>两种写法</b>：教材里 \(A\cup B\) 也写成 \(A+B\)，\(A\cap B\) 也写成 \(AB\)，意思相同。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 两颗骰子：点出事件，数出概率</h3>
+  <p class="small">每个格子是一个样本点 \((i,j)\)：行是红骰子 \(i\)，列是蓝骰子 \(j\)。先选「编辑 A」或「编辑 B」，再点格子把它加进或移出这个事件；也可以点下面的现成事件。键盘：选中图后用方向键移动方框，空格或回车切换。</p>
+  <div class="card">
+    <div class="ctrl">
+      <button class="btn active" id="edA" type="button">编辑 A</button>
+      <button class="btn ghost" id="edB" type="button">编辑 B</button>
+    </div>
+    <div class="ctrl" id="presets">
+      <button class="btn ghost" data-p="sum7" type="button">和为 7</button>
+      <button class="btn ghost" data-p="six" type="button">有一颗是 6</button>
+      <button class="btn ghost" data-p="same" type="button">两颗相同</button>
+      <button class="btn ghost" data-p="even1" type="button">红骰子是偶数</button>
+      <button class="btn ghost" data-p="big" type="button">和 ≥ 10</button>
+      <button class="btn ghost" data-p="comp" type="button">取另一个的对立</button>
+      <button class="btn ghost" data-p="none" type="button">清空</button>
+    </div>
+    <svg class="fig" id="dice" viewBox="0 0 560 500" tabindex="0" role="application" aria-label="两颗骰子的 36 个样本点，点格子选事件 A 和 B"></svg>
+    <div class="result" id="diceout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="dicereset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：合成类别后，还等可能吗</h3>
+  <p class="small">抛 \(n\) 枚硬币，样本点有 \(2^n\) 个，按「正面有几枚」合成 \(n+1\) 类。柱子高度是每类含的样本点个数。选一类，比较真实概率和「每类一样」的错误算法。</p>
+  <div class="card">
+    <svg class="fig" id="coins" viewBox="0 0 560 330" role="img" aria-label="抛 n 枚硬币，正面枚数每一类含的样本点个数"></svg>
+    <div class="ctrl"><label for="nin">硬币枚数 \(n\)</label><input type="range" id="nin" min="1" max="6" step="1"><output id="nout"></output></div>
+    <div class="ctrl"><label for="kin">正面枚数 \(k\)</label><input type="range" id="kin" min="0" max="6" step="1"><output id="kout"></output></div>
+    <div class="result" id="coinout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="coinreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. 袋子里有 \(3\) 个红球、\(2\) 个白球，除颜色外都一样。随手摸出 \(1\) 个，是红球的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac35\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。给 \(5\) 个球编号，摸到每个球机会一样，\(\Omega\) 有 \(5\) 个样本点，红球占 \(3\) 个，\(P=\dfrac35\)。选 B 是把「红、白」两种颜色当成了等可能；选 C 是拿红球数比白球数。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 掷红、蓝两颗骰子，点数和不小于 \(10\) 的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac16\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac19\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac14\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。和为 \(10\)：\((4,6),(5,5),(6,4)\)；和为 \(11\)：\((5,6),(6,5)\)；和为 \(12\)：\((6,6)\)。共 \(6\) 个，\(\dfrac6{36}=\dfrac16\)。选 B 的同学把 \((4,6)\)、\((6,4)\) 这样的当成一个，只数了 \(4\) 个。可以在「动手」① 点「和 ≥ 10」核对。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-equal" data-answer="B">
+    <p>3. 先后抛两枚均匀硬币，「一正一反」的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac14\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。样本点是正正、正反、反正、反反，等可能；「一正一反」含正反、反正两个，\(\dfrac24=\dfrac12\)。选 A 的同学把结果合成了「两正、一正一反、两反」三类，又当成等可能——合成类别后没有重查等可能（「动手」② 取 \(n=2\) 可以看到中间那根柱子是两边的两倍）。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-add" data-answer="B">
+    <p>4. 掷一颗骰子，\(A\)「点数是 \(3\) 的倍数」，\(B\)「点数是偶数」。\(P(A\cup B)=\)？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac56\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac23\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac12\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(A=\{3,6\}\)，\(B=\{2,4,6\}\)，有公共的 \(6\)，不互斥。\(P(A\cup B)=\dfrac26+\dfrac36-\dfrac16=\dfrac46=\dfrac23\)；直接数 \(A\cup B=\{2,3,4,6\}\) 也是 \(4\) 个。选 A 是直接相加，把 \(6\) 算了两次。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-opp" data-answer="B">
+    <p>5. 甲、乙、丙三人抽签选一位组长。\(A\)「甲当选」，\(B\)「乙当选」。\(A\) 和 \(B\)：</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>对立，所以 \(P(B)=1-P(A)\)</button>
+      <button class="opt" data-v="B"><b>B</b>互斥，但不对立</button>
+      <button class="opt" data-v="C"><b>C</b>不互斥</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。只选一位，甲、乙不会同时当选，互斥；可丙当选时两件都没发生，\(A\cup B\ne\Omega\)，不对立。\(P(A)=P(B)=\dfrac13\)，\(1-P(A)=\dfrac23\ne P(B)\)。\(A\) 的对立事件是「甲没当选」，即「乙或丙当选」。</p></div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 从 \(1,2,3,4,5\) 中一次取出两个不同的数，两数之和是偶数的概率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac12\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac25\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac35\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。一次取两个，结果按无序记：\(\{1,2\},\{1,3\},\{1,4\},\{1,5\},\{2,3\},\{2,4\},\{2,5\},\{3,4\},\{3,5\},\{4,5\}\)，共 \(10\) 个，每一对机会一样。</p>
+      <p>和为偶数要两数同奇或同偶：两奇 \(\{1,3\},\{1,5\},\{3,5\}\)，两偶 \(\{2,4\}\)，共 \(4\) 个，\(P=\dfrac4{10}=\dfrac25\)。</p>
+      <p>选 A 的同学想的是「和不是奇就是偶，各一半」，没数；选 C 是算成了「和为奇数」的 \(\dfrac6{10}\)。这里两数是一起取的，按无序记、每对一次，就是等可能的；改成有序记 \(20\) 个，答案也一样。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a; }
+  // k/n 约成最简分数的 TeX；0 和 1 写整数
+  function frac(k, n) {
+    if (k === 0) return "0";
+    var g = gcd(k, n), p = k / g, q = n / g;
+    return q === 1 ? String(p) : "\\dfrac{" + p + "}{" + q + "}";
+  }
+  // 「k/n=最简」：约过分时写出约分过程
+  function fracEq(k, n) {
+    var r = frac(k, n), raw = "\\dfrac{" + k + "}{" + n + "}";
+    return (k === 0 || r === raw) ? r : raw + "=" + r;
+  }
+
+  /* ================= ① 两颗骰子 ================= */
+  var dice = document.getElementById("dice");
+  var GX = 110, GY = 80, CELL = 62;
+  var A, B, cur, cr, cc; // A、B：长度 36 的布尔数组；cur：正在编辑哪个；cr、cc：键盘方框位置
+  var PRE = {
+    sum7: function (i, j) { return i + j === 7; },
+    six: function (i, j) { return i === 6 || j === 6; },
+    same: function (i, j) { return i === j; },
+    even1: function (i) { return i % 2 === 0; },
+    big: function (i, j) { return i + j >= 10; },
+    none: function () { return false; }
+  };
+  var NAMES = { sum7: "和为 7", six: "有一颗是 6", same: "两颗相同", even1: "红骰子是偶数", big: "和 ≥ 10", none: "空", comp: "对立" };
+  function fill(pred) { var s = []; for (var t = 0; t < 36; t++) s.push(!!pred(Math.floor(t / 6) + 1, t % 6 + 1)); return s; }
+  function diceReset() { A = fill(PRE.sum7); B = fill(PRE.six); cr = 0; cc = 0; setCur("A"); diceDraw(); }
+  function setCur(w) {
+    cur = w;
+    document.getElementById("edA").className = "btn " + (w === "A" ? "active" : "ghost");
+    document.getElementById("edB").className = "btn " + (w === "B" ? "active" : "ghost");
+  }
+  function toggle(t) { var s = cur === "A" ? A : B; s[t] = !s[t]; diceDraw(); }
+  function diceDraw() {
+    dice.innerHTML = "";
+    svg("text", { x: GX + 3 * CELL, y: 30, "text-anchor": "middle", style: "fill:var(--b);font-weight:700" }, dice).textContent = "蓝骰子 j";
+    svg("text", { x: 34, y: GY + 3 * CELL, "text-anchor": "middle", transform: "rotate(-90 34 " + (GY + 3 * CELL) + ")", style: "fill:var(--no);font-weight:700" }, dice).textContent = "红骰子 i";
+    for (var d = 0; d < 6; d++) {
+      svg("text", { x: GX + d * CELL + CELL / 2, y: GY - 12, "text-anchor": "middle" }, dice).textContent = d + 1;
+      svg("text", { x: GX - 16, y: GY + d * CELL + CELL / 2 + 7, "text-anchor": "end" }, dice).textContent = d + 1;
+    }
+    for (var t = 0; t < 36; t++) {
+      var r = Math.floor(t / 6), c = t % 6, x = GX + c * CELL, y = GY + r * CELL;
+      var inA = A[t], inB = B[t];
+      var col = inA && inB ? "var(--hl)" : inA ? "var(--a)" : inB ? "var(--b)" : "var(--card)";
+      var g = svg("g", { "data-t": t, style: "cursor:pointer" }, dice);
+      svg("rect", { x: x + 2, y: y + 2, width: CELL - 4, height: CELL - 4, rx: 6,
+        style: "fill:" + col + ";fill-opacity:" + (inA || inB ? 0.35 : 1) + ";stroke:var(--line);stroke-width:1.5" }, g);
+      var lab = (inA ? "A" : "") + (inB ? "B" : "");
+      if (lab) svg("text", { x: x + CELL / 2, y: y + CELL / 2 + 7, "text-anchor": "middle", style: "font-weight:700" }, g).textContent = lab;
+      g.addEventListener("click", (function (tt) { return function () {
+        cr = Math.floor(tt / 6); cc = tt % 6; toggle(tt); Peiyu.log("interact", { id: "dice-cell", ev: cur, i: cr + 1, j: cc + 1 });
+      }; })(t));
+    }
+    // 键盘方框
+    svg("rect", { x: GX + cc * CELL, y: GY + cr * CELL, width: CELL, height: CELL, rx: 8, fill: "none",
+      style: "stroke:var(--fg);stroke-width:3;stroke-dasharray:6 4", "pointer-events": "none" }, dice);
+    // 图例
+    var ly = GY + 6 * CELL + 36, items = [["var(--a)", "只在 A"], ["var(--b)", "只在 B"], ["var(--hl)", "A∩B"]];
+    for (var q = 0; q < 3; q++) {
+      var lx = 40 + q * 175;
+      svg("rect", { x: lx, y: ly - 18, width: 24, height: 24, rx: 4, style: "fill:" + items[q][0] + ";fill-opacity:0.35;stroke:var(--line)" }, dice);
+      svg("text", { x: lx + 32, y: ly + 1 }, dice).textContent = items[q][1];
+    }
+    diceText();
+  }
+  function count(s) { var n = 0; for (var t = 0; t < 36; t++) if (s[t]) n++; return n; }
+  function diceText() {
+    var nA = count(A), nB = count(B), nI = 0, nU = 0;
+    for (var t = 0; t < 36; t++) { if (A[t] && B[t]) nI++; if (A[t] || B[t]) nU++; }
+    var lines = [];
+    lines.push("\\(A\\) 含 \\(" + nA + "\\) 个样本点，\\(P(A)=" + fracEq(nA, 36) + "\\)；\\(B\\) 含 \\(" + nB + "\\) 个，\\(P(B)=" + fracEq(nB, 36) + "\\)。");
+    lines.push("\\(A\\cap B\\) 含 \\(" + nI + "\\) 个，\\(P(A\\cap B)=" + fracEq(nI, 36) + "\\)；\\(A\\cup B\\) 含 \\(" + nU + "\\) 个，\\(P(A\\cup B)=" + fracEq(nU, 36) + "\\)。");
+    lines.push("核对：\\(P(A)+P(B)-P(A\\cap B)=\\dfrac{" + nA + "+" + nB + "-" + nI + "}{36}=" + frac(nA + nB - nI, 36) + "\\)，和 \\(P(A\\cup B)\\) 一样。");
+    if (nI > 0) {
+      lines.push('<span class="bad">不互斥</span>：有 \\(' + nI + "\\) 个样本点两件事同时发生，不能直接相加（直接加得 \\(" + frac(nA + nB, 36) + "\\)" + (nA + nB > 36 ? "，比 \\(1\\) 还大" : "") + "）。");
+    } else if (nU === 36) {
+      lines.push('<span class="eq">对立</span>：交集是空集，并集是整个 \\(\\Omega\\)，\\(P(B)=1-P(A)=' + frac(36 - nA, 36) + "\\)。");
+    } else {
+      lines.push('<span class="eq">互斥</span>，但不对立：交集是空集，可还有 \\(' + (36 - nU) + "\\) 个样本点两件都不发生。互斥可以直接相加：\\(P(A\\cup B)=P(A)+P(B)=" + frac(nU, 36) + "\\)。");
+    }
+    if (nA > 0 && nA < 36 && nB > 0) {
+      if (nI === nA && nA < nB) lines.push("而且 \\(A\\subseteq B\\)：\\(A\\) 发生，\\(B\\) 一定发生，\\(P(A)\\le P(B)\\)。");
+      else if (nI === nB && nB < nA) lines.push("而且 \\(B\\subseteq A\\)：\\(B\\) 发生，\\(A\\) 一定发生，\\(P(B)\\le P(A)\\)。");
+    }
+    var out = document.getElementById("diceout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  document.getElementById("edA").onclick = function () { setCur("A"); };
+  document.getElementById("edB").onclick = function () { setCur("B"); };
+  var pbtn = document.querySelectorAll("#presets button");
+  for (var pi = 0; pi < pbtn.length; pi++) {
+    pbtn[pi].addEventListener("click", function () {
+      var p = this.getAttribute("data-p"), s;
+      if (p === "comp") { var o = cur === "A" ? B : A; s = []; for (var t = 0; t < 36; t++) s.push(!o[t]); }
+      else s = fill(PRE[p] || PRE.none);
+      if (cur === "A") A = s; else B = s;
+      diceDraw();
+      Peiyu.log("interact", { id: "dice-preset", ev: cur, preset: NAMES[p] || p });
+    });
+  }
+  dice.addEventListener("keydown", function (ev) {
+    var mv = { ArrowLeft: [0, -1], ArrowRight: [0, 1], ArrowUp: [-1, 0], ArrowDown: [1, 0] }[ev.key];
+    if (mv) { ev.preventDefault(); cr = clamp(cr + mv[0], 0, 5); cc = clamp(cc + mv[1], 0, 5); diceDraw(); return; }
+    if (ev.key === " " || ev.key === "Enter") { ev.preventDefault(); toggle(cr * 6 + cc); }
+  });
+  document.getElementById("dicereset").onclick = diceReset;
+
+  /* ================= ② 硬币 ================= */
+  var coins = document.getElementById("coins"), nin = document.getElementById("nin"), kin = document.getElementById("kin");
+  var n, k;
+  function comb(a, b) { var r = 1; for (var i = 1; i <= b; i++) r = r * (a - b + i) / i; return Math.round(r); }
+  function coinReset() { n = 2; k = 1; nin.value = n; kin.value = k; coinDraw(); }
+  function coinDraw() {
+    k = clamp(k, 0, n); kin.max = n; kin.value = k;
+    var total = Math.pow(2, n), maxc = comb(n, Math.floor(n / 2));
+    var X0 = 30, X1 = 530, Yb = 270, Ht = 200, slot = (X1 - X0) / (n + 1), bw = Math.min(56, slot * 0.7);
+    coins.innerHTML = "";
+    svg("line", { x1: X0, y1: Yb, x2: X1, y2: Yb, style: "stroke:var(--fg);stroke-width:1.5" }, coins);
+    for (var j = 0; j <= n; j++) {
+      var c = comb(n, j), h = c / maxc * Ht, xm = X0 + slot * (j + 0.5), sel = j === k;
+      svg("rect", { x: xm - bw / 2, y: Yb - h, width: bw, height: h, rx: 4,
+        style: "fill:" + (sel ? "var(--hl)" : "var(--a)") + ";fill-opacity:" + (sel ? 0.8 : 0.45) }, coins);
+      svg("text", { x: xm, y: Yb - h - 8, "text-anchor": "middle", style: "font-weight:700" }, coins).textContent = c;
+      svg("text", { x: xm, y: Yb + 26, "text-anchor": "middle" }, coins).textContent = j;
+    }
+    // 「每类一样」时的高度：total/(n+1)
+    var ye = Yb - total / (n + 1) / maxc * Ht;
+    svg("line", { x1: X0, y1: ye, x2: X1, y2: ye, style: "stroke:var(--no);stroke-width:2;stroke-dasharray:6 5" }, coins);
+    svg("text", { x: X1, y: Yb + 52, "text-anchor": "end", style: "fill:var(--muted)" }, coins).textContent = "正面枚数（共 " + total + " 个样本点）";
+    document.getElementById("nout").textContent = n;
+    document.getElementById("kout").textContent = k;
+    var c2 = comb(n, k), same = c2 * (n + 1) === total;
+    var lines = [];
+    lines.push("抛 \\(" + n + "\\) 枚，\\(\\Omega\\) 有 \\(2^{" + n + "}=" + total + "\\) 个等可能的样本点；正面 \\(" + k + "\\) 枚的有 \\(" + c2 + "\\) 个。");
+    lines.push("真实概率 \\(P=" + fracEq(c2, total) + "\\)；当成 \\(" + (n + 1) + "\\) 类等可能会算成 \\(" + frac(1, n + 1) + "\\)" +
+      (same ? '，<span class="eq">这里恰好相等</span>（只有 \\(n=1\\) 时每类都一样）。' : '，<span class="bad">不对</span>。红虚线是「每类一样」时的高度。'));
+    var out = document.getElementById("coinout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  nin.addEventListener("input", function () { n = clamp(parseInt(nin.value, 10) || 2, 1, 6); coinDraw(); });
+  kin.addEventListener("input", function () { k = clamp(parseInt(kin.value, 10) || 0, 0, n); coinDraw(); });
+  nin.addEventListener("change", function () { Peiyu.log("interact", { id: "coins-n", n: n }); });
+  kin.addEventListener("change", function () { Peiyu.log("interact", { id: "coins-k", n: n, k: k }); });
+  document.getElementById("coinreset").onclick = coinReset;
+
+  document.addEventListener("DOMContentLoaded", function () { diceReset(); coinReset(); });
+})();
+</script>
+</body></html>

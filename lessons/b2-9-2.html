@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9.2 用样本估计总体 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .hi { color: var(--b); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  .fig text { font-size: 20px; }
+  .tbl { overflow-x: auto; }
+  .tbl td, .tbl th { white-space: nowrap; }
+  h2.part { border-bottom: 2px solid var(--line); padding-bottom: 4px; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b2-9-2">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 9 章 统计</p>
+<h1>9.2 用样本估计总体</h1>
+<p class="lead">抽到一组数据以后，怎么看出它的「样子」：画图看分布，用百分位数看位置，用平均数、中位数看中间在哪，用方差看波动有多大。再用这些去估计总体。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>甲、乙两位同学最近 5 次小测（满分 \(10\) 分）：</p>
+  <p>甲：\(7,\ 8,\ 8,\ 8,\ 9\)　　乙：\(6,\ 7,\ 8,\ 9,\ 10\)</p>
+  <div class="card predict" data-id="entry" data-answer="A">
+    <p>两人的平均分都是 \(8\) 分。谁的成绩更稳定？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>甲</button>
+      <button class="opt" data-v="B"><b>B</b>乙</button>
+      <button class="opt" data-v="C"><b>C</b>一样稳定</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。甲的分数都挤在 \(8\) 附近，最多差 \(1\) 分；乙从 \(6\) 到 \(10\)，上下差得多。</p>
+      <p>平均数一样，数据的「样子」却不一样。只看一个数不够：要看<b>中间在哪</b>（平均数、中位数、众数），也要看<b>散得多开</b>（方差、标准差），还可以画图看整体分布。这一节就讲这些工具，以及怎样用一份样本去估计总体。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：9.1 的样本和总体（<a href="b2-9-1.html">回看 9.1</a>）；初中学过的平均数、中位数、众数。</p>
+
+  <div class="card">
+    <p><b>频数、频率</b>：数据分成几组，落在某一组里的个数叫<b>频数</b>；频数除以数据总个数（样本量）叫<b>频率</b>。</p>
+    <p>例：抽了 \(20\) 名同学的身高，在 \([160,165)\) 这一组的有 \(5\) 人。频数 \(5\)，频率 \(\dfrac{5}{20}=0.25\)。所有组的频率加起来是 \(1\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>组距</b>：每一组区间的长度。</p>
+    <p>例：\([160,165)\) 的组距是 \(165-160=5\)；\([0,10)\) 的组距是 \(10\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>极差</b>：最大值减最小值，最粗略地看数据散得多开。</p>
+    <p>例：甲 \(9-7=2\)，乙 \(10-6=4\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>估计</b>：样本只是总体的一部分。用样本算出来的数，只能说是对总体的<b>估计</b>，换一份样本可能就不一样。</p>
+    <p>例：抽 \(50\) 名同学，平均身高 \(165\) 厘米。能说的是「估计全校平均身高约 \(165\) 厘米」，不能说「全校平均身高就是 \(165\) 厘米」。</p>
+  </div>
+
+  <h2 class="part">一、图表和百分位数</h2>
+
+  <h3>2. 频率分布表和直方图</h3>
+  <p>数据多了，一个个看不过来。先<b>分组</b>，数每组几个（频数），算频率，列成<b>频率分布表</b>；再画<b>频率分布直方图</b>：横轴是数据，每组画一个矩形，</p>
+  <div class="key" style="text-align:center">矩形的高 \(=\dfrac{\text{频率}}{\text{组距}}\)，矩形的面积 \(=\) 频率，所有矩形面积加起来 \(=1\)。</div>
+  <p>为什么高不直接画频率：要让<b>面积</b>代表这一组占多少。组距不一样时，宽的组本来就容易装下更多数据，只有比面积才公平。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>调查 \(20\) 名同学每周运动时间（小时），按组距 \(2\) 分组，数出：\([0,2)\) 有 \(2\) 人，\([2,4)\) 有 \(6\) 人，\([4,6)\) 有 \(8\) 人，\([6,8]\) 有 \(4\) 人。</p>
+    <div class="tbl"><table class="rec">
+      <tr><th>分组</th><th>频数</th><th>频率</th><th>频率÷组距（高）</th></tr>
+      <tr><td>\([0,2)\)</td><td>\(2\)</td><td>\(0.1\)</td><td>\(0.05\)</td></tr>
+      <tr><td>\([2,4)\)</td><td>\(6\)</td><td>\(0.3\)</td><td>\(0.15\)</td></tr>
+      <tr><td>\([4,6)\)</td><td>\(8\)</td><td>\(0.4\)</td><td>\(0.2\)</td></tr>
+      <tr><td>\([6,8]\)</td><td>\(4\)</td><td>\(0.2\)</td><td>\(0.1\)</td></tr>
+    </table></div>
+    <p>检查：频率加起来 \(0.1+0.3+0.4+0.2=1\)。画直方图时，四个矩形的高依次是 \(0.05,\ 0.15,\ 0.2,\ 0.1\)。</p>
+    <p>读图：每周运动不少于 \(4\) 小时的频率是 \(0.4+0.2=0.6\)，可以估计全校大约 \(60\%\) 的同学每周运动不少于 \(4\) 小时。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：频率分布直方图的组距是 \(5\)，某一组矩形的高是 \(0.04\)。这一组的频率是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.04\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.008\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。频率 \(=\) 面积 \(=\) 高 \(\times\) 组距 \(=0.04\times5=0.2\)。选 A 的同学把纵轴的高直接当成了频率；选 C 是除了组距，方向反了。</p></div>
+  </div>
+
+  <h3>3. 百分位数</h3>
+  <p>想知道「考多少分能进前 \(20\%\)」「身高排在中间的是多少」，要看某个位置上的数。<b>第 \(p\) 百分位数</b>（\(0&lt;p&lt;100\)）是这样一个数：把数据从小到大排好，至少有 \(p\%\) 的数据不超过它，至少有 \((100-p)\%\) 的数据不小于它。</p>
+  <p>满足这句话的数有时不止一个，教材统一用下面的算法定一个：</p>
+  <div class="key">① 把 \(n\) 个数据从小到大排好；② 算 \(i=n\times p\%\)；<br>③ \(i\) 不是整数：取排在第 \(\lceil i\rceil\) 位的数（\(i\) 往上取整，如 \(2.5\to3\)）；<br>　 \(i\) 是整数：取第 \(i\) 位和第 \(i+1\) 位两个数的平均数。</div>
+  <p>常用的几个：第 \(50\) 百分位数就是<b>中位数</b>；第 \(25\)、第 \(75\) 百分位数叫<b>四分位数</b>。</p>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>\(10\) 个数据：\(13,15,8,20,11,17,9,14,18,12\)。求第 \(25\) 百分位数和第 \(80\) 百分位数。</p>
+    <p>先排序：\(8,9,11,12,13,14,15,17,18,20\)。</p>
+    <p>第 \(25\)：\(i=10\times25\%=2.5\)，不是整数，取第 \(3\) 位，是 \(11\)。</p>
+    <p>第 \(80\)：\(i=10\times80\%=8\)，是整数，取第 \(8\)、第 \(9\) 位的平均：\(\dfrac{17+18}{2}=17.5\)。</p>
+    <p>验一下：不超过 \(11\) 的有 \(3\) 个，占 \(30\%\)，至少 \(25\%\)；不小于 \(11\) 的有 \(8\) 个，占 \(80\%\)，至少 \(75\%\)。对得上。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B">
+    <p>自己试试：数据 \(9,2,15,5,12,4,10,7\) 的第 \(75\) 百分位数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(10\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(11\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(12\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(4\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。排序 \(2,4,5,7,9,10,12,15\)，\(i=8\times75\%=6\) 是整数，取第 \(6\)、第 \(7\) 位的平均 \(\dfrac{10+12}{2}=11\)。选 A 是 \(i\) 为整数时只取了第 \(6\) 位；选 D 是没排序，直接数了原来的第 \(6\) 个。</p></div>
+  </div>
+
+  <h2 class="part">二、集中趋势和离散程度</h2>
+
+  <h3>4. 平均数、中位数、众数</h3>
+  <p>三个数都在说「数据的中间大概在哪」，但看法不同：</p>
+  <ul>
+    <li><b>平均数</b> \(\bar x=\dfrac{x_1+x_2+\cdots+x_n}{n}\)：每个数据都参与，所以一个特别大或特别小的数（极端值）会把它拉过去。</li>
+    <li><b>中位数</b>：排序后正中间的数（偶数个取中间两个的平均）。只看位置，极端值再大也拉不动它。</li>
+    <li><b>众数</b>：出现次数最多的数，可以不止一个。</li>
+  </ul>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>一家小店 5 个人的月收入（千元）：\(4,4,5,6,31\)，其中 \(31\) 是店主。</p>
+    <p>平均数 \(\dfrac{4+4+5+6+31}{5}=\dfrac{50}{5}=10\)；中位数是排在第 \(3\) 位的 \(5\)；众数 \(4\)。</p>
+    <p>\(5\) 个人里有 \(4\) 个人的收入不超过 \(6\)，平均数 \(10\) 却被 \(31\) 拉高了。说「一般员工挣多少」，中位数 \(5\) 更贴切。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B">
+    <p>自己试试：数据 \(6,2,9,4,4\) 的中位数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(9\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。先排序：\(2,4,4,6,9\)，正中间是 \(4\)。选 A 是没排序就取了正中间的那个；\(5\) 是平均数，不是中位数。</p></div>
+  </div>
+
+  <h3>5. 方差和标准差</h3>
+  <p>想量「散得多开」，自然想看每个数离平均数多远：\(x_i-\bar x\)。可这些差有正有负，加起来正好是 \(0\)，抵消了。所以先<b>平方</b>再平均：</p>
+  <div class="key" style="text-align:center">方差 \[s^2=\dfrac1n\left[(x_1-\bar x)^2+\cdots+(x_n-\bar x)^2\right]\] 标准差 \(s=\sqrt{s^2}\)。</div>
+  <p>方差、标准差越大，数据越分散；越小越集中。平方后单位也平方了（分\(^2\)），开方回来的标准差和数据<b>单位相同</b>，更好解释。注意本书的分母是 \(n\)。</p>
+  <div class="card">
+    <p class="small">例 4（回到开头）</p>
+    <p>甲：\(7,8,8,8,9\)，\(\bar x=8\)。离平均数的差：\(-1,0,0,0,1\)。</p>
+    <p>\(s_{\text{甲}}^2=\dfrac{1+0+0+0+1}{5}=0.4\)，\(s_{\text{甲}}=\sqrt{0.4}\approx0.63\)（分）。</p>
+    <p>乙：\(6,7,8,9,10\)，\(\bar x=8\)。差：\(-2,-1,0,1,2\)。</p>
+    <p>\(s_{\text{乙}}^2=\dfrac{4+1+0+1+4}{5}=2\)，\(s_{\text{乙}}=\sqrt2\approx1.41\)（分）。</p>
+    <p>\(s_{\text{甲}}&lt;s_{\text{乙}}\)，甲的成绩更稳定，和开头的直觉一致。</p>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="A">
+    <p>自己试试：数据 \(2,4,6\) 的方差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac83\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(8\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\bar x=4\)，差的平方 \(4,0,4\)，和是 \(8\)，除以 \(n=3\) 得 \(\dfrac83\)。选 C 是忘了除；选 B 是除以了 \(n-1=2\)，那是别的书或软件的约定，本书用 \(n\)。</p></div>
+  </div>
+
+  <h3>6. 用之前要注意</h3>
+  <ol>
+    <li><b>直方图的纵轴是「频率÷组距」，比的是面积</b>。<br><span class="small">反例：\([0,2)\) 和 \([2,6)\) 两组的高都是 \(0.1\)，看着一样高，频率却是 \(0.1\times2=0.2\) 和 \(0.1\times4=0.4\)，差一倍。</span></li>
+    <li><b>百分位数用教材那一种算法</b>，不要把软件的结果不加说明地混进来。<br><span class="small">反例：\(1,2,3,4\) 的第 \(25\) 百分位数，按教材 \(i=4\times25\%=1\)，取 \(\dfrac{1+2}{2}=1.5\)；有的表格软件默认给 \(1.75\)。两种都满足定义，但本书只用前一种。</span></li>
+    <li><b>只有分组的图表时，算出来的是估计</b>。<br><span class="small">反例：例 1 只给了分组，中位数只能假定组内数据均匀分布来估：前两组频率 \(0.4\)，还差 \(0.1\)，在 \([4,6)\) 组里占 \(\dfrac{0.1}{0.4}\)，估计中位数 \(=4+2\times\dfrac{0.1}{0.4}=4.5\)。真实的 \(20\) 个数并不知道，不能说「中位数就是 \(4.5\)」。这个数是在「组内均匀」的假定下算出的估计值，原始数据的真实中位数可能不同。</span></li>
+    <li><b>方差的分母是 \(n\)</b>，不要换成 \(n-1\)。<br><span class="small">反例：\(2,4,6\) 的方差本书是 \(\dfrac83\)，除以 \(n-1\) 会得到 \(4\)。</span></li>
+    <li><b>两组数据合在一起：平均数按人数加权；方差不能只平均两组的方差</b>。<br><span class="small">反例：一组 \(0,0\)，一组 \(10,10\)，各自方差都是 \(0\)；合起来 \(0,0,10,10\)，平均数 \(5\)，方差 \(\dfrac{25\times4}{4}=25\)。两组平均数之间的差也是波动。</span></li>
+    <li><b>有极端值或分布偏向一边时，平均数和中位数会差很多</b>，两个都看，再决定用哪个说话（例 3）。</li>
+    <li><b>「更稳定」不等于「更好」</b>。<br><span class="small">反例：丙 5 次都是 \(5\) 分，方差 \(0\)，比乙稳定得多，但每次都比乙的平均分低 \(3\) 分。稳定要和平均水平、实际要求一起看。</span></li>
+    <li><b>样本的分布不等于总体的分布</b>：样本算出的一切都是估计，写结论时说「估计」「大约」。</li>
+  </ol>
+  <div class="key">图表看整体形状，百分位数看位置，平均数、中位数看中间，方差、标准差看波动。它们互相补充，而且都只是对总体的估计。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>用直方图估计平均数</b>：每组用中点代表，乘频率再相加。例 1：\(1\times0.1+3\times0.3+5\times0.4+7\times0.2=4.4\)。同样是估计。</p>
+    <p><b>方差的另一种算法</b>：\(s^2=\dfrac1n(x_1^2+\cdots+x_n^2)-\bar x^2\)，即「平方的平均减平均的平方」。甲：\(\dfrac{49+64+64+64+81}{5}-64=64.4-64=0.4\)，和例 4 一样。</p>
+    <p><b>数据整体变一变</b>：每个数都加 \(b\)，平均数加 \(b\)，方差不变（只是平移）；每个数都乘 \(a\)，平均数乘 \(a\)，方差乘 \(a^2\)，标准差乘 \(|a|\)。</p>
+    <p><b>合并两组的方差</b>：一组 \(m\) 个，平均数 \(\bar x_1\)、方差 \(s_1^2\)；另一组 \(k\) 个，\(\bar x_2\)、\(s_2^2\)；合并后平均数 \(\bar x=\dfrac{m\bar x_1+k\bar x_2}{m+k}\)，方差</p>
+    <p style="text-align:center">\(s^2=\dfrac{m}{m+k}\left[s_1^2+(\bar x_1-\bar x)^2\right]+\dfrac{k}{m+k}\left[s_2^2+(\bar x_2-\bar x)^2\right]\)。</p>
+    <p>方括号里第二项就是「组和组之间的差」带来的波动，「练一练」第 5 题会用到。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖数据点：直方图和几个数一起变</h3>
+  <p class="small">下面每个圆点是一个数据（\(0\) 到 \(10\) 的整数）。拖动圆点（或选中后按方向键，Delete 删掉它），上面的频率分布直方图（组距 \(2\)，最后一组含 \(10\)）、平均数、中位数、方差跟着变。试试把最右边的点一路拖到 \(10\)：平均数线动了，中位数线呢？</p>
+  <div class="card">
+    <svg class="fig" id="dots" viewBox="0 0 560 410" role="img" aria-label="上方是频率分布直方图，下方是数轴上的数据点，竖线标出平均数和中位数"></svg>
+    <div class="result" id="dotout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="addpt" type="button">加一个数</button>
+      <button class="btn ghost" id="delpt" type="button">去掉一个数</button>
+      <button class="btn ghost" id="dotreset" type="button">重置</button>
+    </div>
+  </div>
+
+  <h3>② 进阶：第 \(p\) 百分位数，按教材的算法</h3>
+  <p class="small">用的是上面 ① 里的数据，已经排好序，格子下面是位次。拖滑块改 \(p\)，看 \(i=n\times p\%\) 是不是整数、取的是哪一位（或哪两位）。在 ① 里加减数据，这里也跟着变。</p>
+  <div class="card">
+    <svg class="fig" id="pct" viewBox="0 0 560 120" role="img" aria-label="排好序的数据，标出第 p 百分位数取的位置"></svg>
+    <div class="ctrl"><label for="pin">\(p\)</label><input type="range" id="pin" min="1" max="99" step="1"><output id="pout"></output></div>
+    <div class="result" id="pctout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="pctreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="C">
+    <p>1. 样本量是 \(200\)，频率分布直方图中 \([20,30)\) 这一组矩形的高是 \(0.025\)。这一组的频数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(25\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(50\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(0.25\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。频率 \(=0.025\times10=0.25\)，频数 \(=200\times0.25=50\)。选 A 是把高 \(0.025\) 当频率直接乘了 \(200\)；选 D 只算到频率，没乘样本量。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="C">
+    <p>2. \(12\) 名同学一分钟跳绳（次），已排好序：120，125，130，132，135，138，140，142，145，150，155，160。第 \(70\) 百分位数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(142\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(143.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(145\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(150\)</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(i=12\times70\%=8.4\)，不是整数，往上取整，取第 \(9\) 位：\(145\)。选 A 是往下取了第 \(8\) 位；选 B 是把「取两位平均」用在了 \(i\) 不是整数的时候。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-width" data-answer="C">
+    <p>3. 一张直方图的分组不等宽：\([0,10)\) 这一组的高是 \(0.02\)，\([10,30)\) 这一组的高也是 \(0.02\)。哪一组的频率大？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>一样大，因为一样高</button>
+      <button class="opt" data-v="B"><b>B</b>\([0,10)\) 大</button>
+      <button class="opt" data-v="C"><b>C</b>\([10,30)\) 大</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。比的是面积：\(0.02\times10=0.2\)，\(0.02\times20=0.4\)，后者是前者的 \(2\) 倍。纵轴是「频率÷组距」，组距不同时只看高度会看错。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-n" data-answer="A">
+    <p>4. 按本书的定义，数据 \(1,3,5,7\) 的方差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{20}{3}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(20\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\sqrt5\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\bar x=4\)，差的平方 \(9,1,1,9\)，和 \(20\)，除以 \(n=4\) 得 \(5\)。B 是除以 \(n-1=3\)，本书不用这个分母；C 忘了除；D 是标准差，不是方差。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-merge" data-answer="C">
+    <p>5. 甲组 \(20\) 人，平均分 \(70\)，方差 \(4\)；乙组 \(30\) 人，平均分 \(80\)，方差 \(4\)。两组合起来 \(50\) 人的平均分和方差是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>平均 \(75\)，方差 \(4\)</button>
+      <button class="opt" data-v="B"><b>B</b>平均 \(76\)，方差 \(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>平均 \(76\)，方差 \(28\)</button>
+      <button class="opt" data-v="D"><b>D</b>平均 \(75\)，方差 \(28\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。平均数按人数加权：\(\dfrac{20\times70+30\times80}{50}=\dfrac{3800}{50}=76\)，不是 \(\dfrac{70+80}{2}=75\)。</p>
+      <p>方差不能只看两组各自的 \(4\)：两组平均数不一样，本身就是波动。甲组每人离 \(76\) 的平方，平均是 \(4+(70-76)^2=40\)；乙组是 \(4+(80-76)^2=20\)。再按人数加权：\(\dfrac{20\times40+30\times20}{50}=\dfrac{1400}{50}=28\)。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 抽查 \(100\) 户居民的月用水量（吨），只给了分组频率：\([0,2)\) \(0.1\)，\([2,4)\) \(0.3\)，\([4,6)\) \(0.35\)，\([6,8]\) \(0.25\)。假定组内数据均匀分布，估计中位数约是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(4.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4+\dfrac47\approx4.57\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。前两组频率 \(0.1+0.3=0.4\)，到 \(0.5\) 还差 \(0.1\)。\([4,6)\) 组频率 \(0.35\)、组距 \(2\)，要走 \(2\times\dfrac{0.1}{0.35}=\dfrac47\)，所以中位数约 \(4+\dfrac47\approx4.57\)。</p>
+      <p>A 的 \(4.5\) 是用组中点估计的<b>平均数</b>：\(1\times0.1+3\times0.3+5\times0.35+7\times0.25=4.5\)；C 只取了中位数所在组的中点。这些都是估计：只有分组时，原来的 \(100\) 个数已经找不回来了。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      function mv(e) { onMove(toSvg(fig, e).x); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function trim(s) { return s.indexOf(".") < 0 ? s : s.replace(/0+$/, "").replace(/\.$/, ""); }
+  // 数值 v：小数位不超过 3 位就是精确值「=」，否则保留两位写「≈」
+  function num(v) {
+    if (!isFinite(v)) return { s: "0", exact: true };
+    var r3 = Math.round(v * 1000);
+    if (Math.abs(r3 - v * 1000) < 1e-7) return { s: trim((r3 / 1000).toFixed(3)), exact: true };
+    return { s: trim(v.toFixed(2)), exact: false };
+  }
+  function pctS(v) { var r = num(v); return (r.exact ? "" : "\\approx ") + r.s; }
+  function eqs(v) { var r = num(v); return (r.exact ? "=" : "\\approx ") + r.s; }
+  // 有理数 p/q：写成最简分数（分母为 1 时只写整数）
+  function frac(p, q) {
+    var g = gcd(p, q); p /= g; q /= g;
+    return q === 1 ? String(p) : "\\dfrac{" + p + "}{" + q + "}";
+  }
+
+  /* ================= ① 数据点 + 直方图 ================= */
+  var dots = document.getElementById("dots");
+  var X0 = 40, U = 48, AX = 370, HB = 185, HT = 60, MAXN = 20;
+  var INIT = [2, 4, 5, 5, 6, 6, 6, 7, 8, 9];
+  var data;
+  function X(v) { return X0 + v * U; }
+  function sorted() { return data.slice().sort(function (a, b) { return a - b; }); }
+  function stats() {
+    var n = data.length, s = sorted(), S = 0, Q = 0, cnt = {};
+    data.forEach(function (v) { S += v; Q += v * v; cnt[v] = (cnt[v] || 0) + 1; });
+    var med = n % 2 ? s[(n - 1) / 2] : (s[n / 2 - 1] + s[n / 2]) / 2;
+    var mc = 0, modes = [];
+    for (var v = 0; v <= 10; v++) if ((cnt[v] || 0) > mc) mc = cnt[v];
+    for (v = 0; v <= 10; v++) if (cnt[v] === mc) modes.push(v);
+    var vn = n * Q - S * S; // 方差 = vn / n²
+    return { n: n, s: s, S: S, Q: Q, mean: S / n, med: med, mc: mc, modes: modes, vn: vn, vr: vn / (n * n) };
+  }
+  function dotReset() { data = INIT.slice(); dotDraw(); }
+  function dotDraw(focusI) {
+    var st = stats(), n = st.n;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), muted = css("--muted"), card = css("--card"), line = css("--line");
+    dots.innerHTML = "";
+    // 直方图：组距 2，5 组，最后一组 [8,10]
+    var g = [0, 0, 0, 0, 0];
+    data.forEach(function (v) { g[Math.min(4, Math.floor(v / 2))]++; });
+    var h = g.map(function (c) { return c / n / 2; });
+    var hm = Math.max.apply(null, h), top = Math.max(0.05, Math.ceil(hm * 20 - 1e-9) / 20);
+    function HY(v) { return HB - v / top * (HB - HT); }
+    svg("text", { x: X0 - 4, y: 26, fill: muted }, dots).textContent = "频率/组距";
+    svg("line", { x1: X0, y1: HB, x2: X(10), y2: HB, stroke: fg, "stroke-width": 1.5 }, dots);
+    for (var k = 0; k < 5; k++) {
+      if (!g[k]) continue;
+      var y = HY(h[k]);
+      svg("rect", { x: X(2 * k), y: y, width: 2 * U, height: HB - y, fill: ca, "fill-opacity": 0.35, stroke: ca, "stroke-width": 2 }, dots);
+      svg("text", { x: X(2 * k + 1), y: y - 8, "text-anchor": "middle" }, dots).textContent = num(h[k]).s;
+    }
+    // 数轴
+    svg("line", { x1: X0 - 10, y1: AX, x2: X(10) + 14, y2: AX, stroke: fg, "stroke-width": 1.5 }, dots);
+    for (var t = 0; t <= 10; t++) {
+      svg("line", { x1: X(t), y1: AX, x2: X(t), y2: AX + (t % 2 ? 5 : 9), stroke: fg }, dots);
+      svg("text", { x: X(t), y: AX + 30, "text-anchor": "middle", fill: t % 2 ? muted : fg }, dots).textContent = t;
+    }
+    for (t = 0; t <= 10; t += 2) svg("line", { x1: X(t), y1: HB, x2: X(t), y2: AX, stroke: line, "stroke-dasharray": "2 5" }, dots);
+    // 平均数线、中位数线
+    var xm = X(st.mean), xd = X(st.med), close = Math.abs(xm - xd) < 70;
+    svg("line", { x1: xm, y1: 200, x2: xm, y2: AX, stroke: cb, "stroke-width": 3, "stroke-dasharray": "7 4" }, dots);
+    svg("line", { x1: xd, y1: 200, x2: xd, y2: AX, stroke: cc, "stroke-width": 3 }, dots);
+    function side(x, pref) { return x + 70 > 556 ? "end" : x - 70 < 4 ? "start" : pref; }
+    var la = side(xm, xm >= xd ? "start" : "end"), lb = side(xd, xm >= xd ? "end" : "start");
+    svg("text", { x: xm + (la === "start" ? 6 : -6), y: 218, "text-anchor": la, fill: cb, "font-weight": 700 }, dots).textContent = "平均数";
+    svg("text", { x: xd + (lb === "start" ? 6 : -6), y: close ? 244 : 218, "text-anchor": lb, fill: cc, "font-weight": 700 }, dots).textContent = "中位数";
+    // 数据点：同值往上叠
+    var stack = {}, maxs = 0;
+    data.forEach(function (v) { stack[v] = (stack[v] || 0) + 1; if (stack[v] > maxs) maxs = stack[v]; });
+    var sp = Math.min(20, 110 / Math.max(1, maxs - 1)), seen = {};
+    data.forEach(function (v, i) {
+      var j = seen[v] = (seen[v] || 0) + 1;
+      var c = svg("circle", { cx: X(v), cy: AX - 14 - (j - 1) * sp, r: 10, fill: card, stroke: ca, "stroke-width": 3.5, tabindex: 0, role: "slider",
+        "data-i": i, "aria-label": "第 " + (i + 1) + " 个数据", "aria-valuemin": 0, "aria-valuemax": 10, "aria-valuenow": v, style: "cursor:grab" }, dots);
+      c.addEventListener("keydown", function (ev) {
+        if ((ev.key === "Delete" || ev.key === "Backspace") && data.length > 1) {
+          ev.preventDefault(); data.splice(i, 1); dotDraw(Math.min(i, data.length - 1)); return;
+        }
+        var d = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1 }[ev.key];
+        if (ev.key === "Home") d = -data[i]; else if (ev.key === "End") d = 10 - data[i];
+        if (d === undefined) return;
+        ev.preventDefault(); data[i] = clamp(data[i] + d, 0, 10); dotDraw(i);
+      });
+      draggable(dots, c, function (x) {
+        var nv = clamp(Math.round((x - X0) / U), 0, 10);
+        if (nv !== data[i]) { data[i] = nv; dotDraw(i); }
+      }, function () { Peiyu.log("interact", { id: "dots", data: data.join(",") }); });
+    });
+    if (focusI !== undefined) { var f = dots.querySelector('[data-i="' + focusI + '"]'); if (f) f.focus(); }
+
+    // 文字
+    var L = [];
+    L.push("排好序：\\(" + st.s.join(",\\ ") + "\\)，共 \\(n=" + n + "\\) 个。");
+    var meanT = n === 1 ? String(st.S) : "\\dfrac{" + st.S + "}{" + n + "}" + eqs(st.mean);
+    var modeT = st.mc === 1 && n > 1 ? "没有（每个数只出现一次）" : "\\(" + st.modes.join("\\)和\\(") + "\\)（出现 \\(" + st.mc + "\\) 次）";
+    L.push('<span class="hi">平均数</span> \\(\\bar x=' + meanT + "\\)；" + '<span class="eq">中位数</span> \\(' + num(st.med).s + "\\)；众数 " + modeT + "；极差 \\(" + st.s[n - 1] + "-" + st.s[0] + "=" + (st.s[n - 1] - st.s[0]) + "\\)。");
+    var vT = st.vn === 0 ? "0" : frac(st.vn, n * n) + (n * n / gcd(st.vn, n * n) === 1 ? "" : eqs(st.vr));
+    L.push("方差 \\(s^2=" + vT + "\\)，标准差 \\(s" + eqs(Math.sqrt(st.vr)) + "\\)。");
+    var out = document.getElementById("dotout");
+    out.innerHTML = L.join("<br>");
+    Peiyu.math(out);
+    document.getElementById("addpt").disabled = n >= MAXN;
+    document.getElementById("delpt").disabled = n <= 1;
+    pctDraw();
+  }
+  document.getElementById("addpt").onclick = function () {
+    if (data.length >= MAXN) return;
+    data.push(5); dotDraw(); Peiyu.log("interact", { id: "dots-add", n: data.length });
+  };
+  document.getElementById("delpt").onclick = function () {
+    if (data.length <= 1) return;
+    data.pop(); dotDraw(); Peiyu.log("interact", { id: "dots-del", n: data.length });
+  };
+  document.getElementById("dotreset").onclick = dotReset;
+
+  /* ================= ② 百分位数 ================= */
+  var pct = document.getElementById("pct"), pin = document.getElementById("pin");
+  var p = 25;
+  function pctReset() { p = 25; pin.value = p; pctDraw(); }
+  function pctDraw() {
+    if (!data) return;
+    var s = sorted(), n = s.length;
+    var fg = css("--fg"), cb = css("--b"), muted = css("--muted"), card = css("--card"), line = css("--line"), hls = css("--hl-soft");
+    var np = n * p, isInt = np % 100 === 0, i = np / 100, pick, val;
+    if (isInt) { pick = [i, i + 1]; val = (s[i - 1] + s[i]) / 2; } else { pick = [Math.ceil(i)]; val = s[pick[0] - 1]; }
+    var rows = Math.ceil(n / 10), W = 48, H = 44;
+    pct.setAttribute("viewBox", "0 0 560 " + (rows * 100 + 8));
+    pct.innerHTML = "";
+    for (var k = 0; k < n; k++) {
+      var r = Math.floor(k / 10), c = k % 10, inRow = Math.min(10, n - r * 10);
+      var x = 40 + (480 - inRow * W) / 2 + c * W, y = 14 + r * 100;
+      var on = pick.indexOf(k + 1) >= 0;
+      svg("rect", { x: x + 2, y: y, width: W - 4, height: H, rx: 6, fill: on ? hls : card, stroke: on ? cb : line, "stroke-width": on ? 3.5 : 1.5 }, pct);
+      svg("text", { x: x + W / 2, y: y + 30, "text-anchor": "middle", "font-weight": on ? 700 : 400, fill: on ? cb : fg }, pct).textContent = s[k];
+      svg("text", { x: x + W / 2, y: y + H + 26, "text-anchor": "middle", fill: muted }, pct).textContent = k + 1;
+    }
+    document.getElementById("pout").textContent = p;
+    var le = 0, ge = 0;
+    s.forEach(function (v) { if (v <= val) le++; if (v >= val) ge++; });
+    var iT = num(i).s;
+    var L = ["\\(n=" + n + "\\)，\\(p=" + p + "\\)：\\(i=" + n + "\\times" + p + "\\%=" + iT + "\\)，"];
+    if (isInt) L[0] += "是整数，取第 \\(" + i + "\\)、第 \\(" + (i + 1) + "\\) 位的平均：\\(\\dfrac{" + s[i - 1] + "+" + s[i] + "}{2}=" + num(val).s + "\\)。";
+    else L[0] += "不是整数，往上取整，取第 \\(" + pick[0] + "\\) 位：\\(" + val + "\\)。";
+    L.push('第 \\(' + p + '\\) 百分位数 <span class="hi">\\(=' + num(val).s + "\\)</span>。验一下：不超过它的有 \\(" + le + "\\) 个（\\(" + pctS(le / n * 100) + "\\%\\ge " + p + "\\%\\)），不小于它的有 \\(" + ge + "\\) 个（\\(" + pctS(ge / n * 100) + "\\%\\ge " + (100 - p) + "\\%\\)）。");
+    var out = document.getElementById("pctout");
+    out.innerHTML = L.join("<br>");
+    Peiyu.math(out);
+  }
+  pin.addEventListener("input", function () { p = clamp(parseInt(pin.value, 10) || 25, 1, 99); pctDraw(); });
+  pin.addEventListener("change", function () { Peiyu.log("interact", { id: "percentile-p", p: p, n: data.length }); });
+  document.getElementById("pctreset").onclick = pctReset;
+
+  document.addEventListener("DOMContentLoaded", function () { pin.value = p; dotReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { dotDraw(); });
+})();
+</script>
+</body></html>

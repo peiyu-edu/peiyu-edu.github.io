@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3.4 函数的应用（一） · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  #plan text, #sg text, #bg text { font-size: 20px; }
+  .sl { display: grid; grid-template-columns: 4.6em 1fr 3.6em; gap: 8px; align-items: center; margin: 6px 0; font-size: 16px; }
+  .sl input[type=range] { width: 100%; }
+  .sl output { text-align: right; font-variant-numeric: tabular-nums; }
+  .info { font-size: 16px; margin: 8px 0; line-height: 1.9; overflow-wrap: anywhere; }
+  .info .bad { color: var(--no); font-weight: 600; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-3-4">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 3 章 函数的概念与性质</p>
+<h1>3.4 函数的应用（一）</h1>
+<p class="lead">把实际问题写成一次函数、二次函数、分段函数或 \(y=\dfrac kx\) 这样的函数，再用学过的性质求答案。难点往往不在计算，而在定义域、单位，以及算完后回到实际里看一眼。先从打车开始。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>某城市打车：起步价 \(10\) 元，包含前 \(3\) 千米；超过 \(3\) 千米的部分，每千米 \(2\) 元。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>坐了 \(8\) 千米，要付多少钱？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(16\) 元</button>
+      <button class="opt" data-v="B"><b>B</b>\(20\) 元</button>
+      <button class="opt" data-v="C"><b>C</b>\(26\) 元</button>
+      <button class="opt" data-v="D"><b>D</b>\(13\) 元</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。前 \(3\) 千米包在 \(10\) 元里，多出来 \(8-3=5\) 千米，每千米 \(2\) 元，是 \(10\) 元。合计 \(10+10=20\) 元。</p>
+      <p>你刚才其实写了一个函数：路程 \(x\) 千米（\(x>3\)）时，车费 \(y=10+2(x-3)\) 元。不到 \(3\) 千米时 \(y=10\)。路程一变，车费跟着变，规则分两段。</p>
+      <p>这一节就讲这件事：把生活里的规则写成函数，再用函数的性质回答「要付多少」「什么时候最省」「最大能到多少」。写的时候要多想一步：\(x\) 能取哪些值、单位是什么、算出来的数合不合实际。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：函数和定义域（<a href="b1-3-1.html">回看 3.1</a>）；单调性和最大值、最小值（<a href="b1-3-2.html">回看 3.2</a>）；二次函数的顶点（<a href="b1-2-3.html">回看 2.3</a>）；基本不等式（<a href="b1-2-2.html">回看 2.2</a>）。</p>
+
+  <div class="card">
+    <p><b>自变量和因变量</b>：实际问题里，先看清「谁随谁变」。我们能改的、先定下来的量做自变量 \(x\)，跟着它变的量做 \(y\)。</p>
+    <p>例：打车时路程是 \(x\)，车费是 \(y\)。\(x=5\) 时 \(y=10+2\times2=14\)；\(x=8\) 时 \(y=20\)。反过来说「车费决定路程」就不顺了。</p>
+  </div>
+
+  <div class="card">
+    <p><b>实际定义域</b>：式子有意义还不够，\(x\) 还要在实际里做得到：长度为正、不超过墙长、件数是整数……</p>
+    <p>例：\(24\) 米篱笆靠墙围矩形（靠墙一边不用篱笆），垂直于墙的两边各 \(x\) 米，平行于墙的一边 \(24-2x\) 米。要 \(x>0\) 且 \(24-2x>0\)，所以 \(0&lt;x&lt;12\)。如果墙只有 \(10\) 米，还要 \(24-2x\le10\)，定义域缩成 \(7\le x&lt;12\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>单位</b>：每个量都带单位，列式前先统一。</p>
+    <p>例：\(1\) 千米 \(=1000\) 米，\(1\) 小时 \(=3600\) 秒，所以 \(36\) km/h \(=\dfrac{36000}{3600}=10\) 米/秒。速度用 km/h、时间用秒，直接相乘得到的数没有意义。</p>
+  </div>
+
+  <div class="card">
+    <p><b>分段和分界点</b>：不同范围按不同规则算的函数叫分段函数。每段写清自己的区间，分界点只归其中一段。</p>
+    <p>例：打车的分界点是 \(x=3\)，归第一段：\(x=3\) 时 \(y=10\)；\(x=3.5\) 时在第二段，\(y=10+2\times0.5=11\)。</p>
+  </div>
+
+  <h3>2. 建模五步，先看一次函数</h3>
+  <div class="key">
+    <b>设</b>：\(x\) 表示什么、单位是什么。<b>列</b>：写出 \(y\) 关于 \(x\) 的式子。<b>定域</b>：按实际写定义域。<b>求</b>：在这个定义域上用函数性质求值、求最值、解不等式。<b>验</b>：放回实际看一眼，写上单位作答。
+  </div>
+  <p><b>一次函数</b> \(y=kx+b\)：每多一个单位，增加的量都一样，比如「固定费用 \(+\) 单价 \(\times\) 数量」。它在区间上单调，最值在端点。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>手机套餐：月租 \(20\) 元，通话每分钟 \(0.1\) 元。某月话费 \(50\) 元，这个月通话多少分钟？</p>
+    <p><b>设</b>：通话 \(x\) 分钟，话费 \(y\) 元。<b>列</b>：\(y=20+0.1x\)。<b>定域</b>：\(x\ge0\)。</p>
+    <p><b>求</b>：\(20+0.1x=50\)，\(0.1x=30\)，\(x=300\)。<b>验</b>：\(300\ge0\)，代回 \(20+0.1\times300=50\)。答：通话 \(300\) 分钟。</p>
+  </div>
+  <div class="card predict" data-id="e-unit" data-answer="B">
+    <p>自己试试：一辆车以 \(72\) km/h 匀速行驶。它行驶的路程 \(s\)（单位：米）关于时间 \(t\)（单位：秒）的函数是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(s=72t\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(s=20t\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(s=1.2t\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(s=259.2t\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(72\) km/h \(=\dfrac{72000\text{ 米}}{3600\text{ 秒}}=20\) 米/秒，所以 \(s=20t\)（\(t\ge0\)）。选 A 的同学没换算单位；C 是「千米/分钟」的数；D 把除以 \(3.6\) 做成了乘以 \(3.6\)。</p>
+    </div>
+  </div>
+
+  <h3>3. 二次函数：看顶点在不在定义域里</h3>
+  <p>面积、「涨价销量就降」的利润，常写成二次函数。求最值时先配方找顶点，再看<b>顶点在不在定义域里</b>：在，最值就在顶点；不在，就用单调性看端点。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>用 \(24\) 米篱笆靠墙围矩形菜园（靠墙一边不用篱笆），墙长 \(15\) 米。面积最大是多少？</p>
+    <p><b>设</b>：垂直于墙的两边各 \(x\) 米，面积 \(S\) 平方米。<b>列</b>：平行于墙的边 \(24-2x\) 米，\(S=x(24-2x)=-2x^2+24x=-2(x-6)^2+72\)。</p>
+    <p><b>定域</b>：\(0&lt;24-2x\le15\)，得 \(4.5\le x&lt;12\)。</p>
+    <p><b>求</b>：顶点 \(x=6\) 在 \([4.5,12)\) 里，最大值 \(S=72\)。<b>验</b>：这时平行于墙的边 \(12\) 米，不超过墙长 \(15\) 米，围得出来。答：最大 \(72\) 平方米。</p>
+  </div>
+  <div class="card predict" data-id="try-quad" data-answer="A">
+    <p>自己试试：某商品进价 \(40\) 元。售价定为 \(x\) 元（\(50\le x\le80\)）时，每天能卖 \((100-x)\) 件。每天的利润最大是多少元？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(900\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2500\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(70\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1000\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。每件赚 \(x-40\) 元，利润 \(y=(x-40)(100-x)=-(x-70)^2+900\)。顶点 \(x=70\) 在 \([50,80]\) 里，最大利润 \(900\) 元，售价 \(70\) 元。选 B 的同学用了「售价 \(\times\) 销量」，那是收入，忘了减进价；选 C 答的是售价，不是利润。</p></div>
+  </div>
+  <div class="key">二次函数求最值：顶点在定义域里，就是顶点；不在，看单调性，最值在离顶点近的端点。</div>
+
+  <h3>4. 分段函数：先判断在哪一段</h3>
+  <p>阶梯电价、水价、打车计价都是分段函数。正着算：先看 \(x\) 在哪段，再用那段的式子。反着算（知道 \(y\) 求 \(x\)）：先用分界点的函数值判断 \(y\) 落在哪一段，再列方程，最后检验解在不在这段里。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>还是开头的打车规则。某人付了 \(24\) 元，坐了多少千米？</p>
+    <p><b>列</b>：\(y=\begin{cases}10, &amp; 0&lt;x\le3\\ 10+2(x-3), &amp; x>3\end{cases}\)</p>
+    <p><b>定段</b>：第一段车费都是 \(10\) 元，\(24>10\)，所以在第二段。</p>
+    <p><b>求</b>：\(10+2(x-3)=24\)，\(x-3=7\)，\(x=10\)。<b>验</b>：\(10>3\)，确实在第二段。答：坐了 \(10\) 千米。</p>
+  </div>
+  <div class="card predict" data-id="try-piece" data-answer="B">
+    <p>自己试试：某地水费，每月用水 \(10\) 吨以内（含 \(10\) 吨）每吨 \(3\) 元；超过 \(10\) 吨的部分每吨 \(5\) 元。用水 \(14\) 吨交多少钱？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(42\) 元</button>
+      <button class="opt" data-v="B"><b>B</b>\(50\) 元</button>
+      <button class="opt" data-v="C"><b>C</b>\(70\) 元</button>
+      <button class="opt" data-v="D"><b>D</b>\(62\) 元</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。前 \(10\) 吨 \(10\times3=30\) 元，多出的 \(4\) 吨 \(4\times5=20\) 元，合计 \(50\) 元。选 A 全按 \(3\) 元算，选 C 全按 \(5\) 元算，都没分段；选 D 是 \(14\times3+4\times5\)，把多出的 \(4\) 吨算了两次。</p></div>
+  </div>
+
+  <h3>5. 反比例型：总量一定，平均分摊</h3>
+  <p>\(y=\dfrac kx\)（\(k>0\)）：总量 \(k\) 一定，每份 \(x\) 越大，份数 \(\dfrac kx\) 越少。实际问题里 \(x>0\)，这时 \(\dfrac kx\) 随 \(x\) 增大而减小。它常和一个随 \(x\) 增大的量加在一起，比如「运费 \(+\) 存储费」，求总费用最小。现阶段用 2.2 的基本不等式。</p>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>某公司一年要买 \(200\) 吨原料，每次买 \(x\) 吨。每次运费 \(2\) 万元，一年的存储费是 \(x\) 万元。每次买多少吨，一年运费与存储费之和最小？</p>
+    <p><b>列</b>：一年买 \(\dfrac{200}{x}\) 次，运费 \(\dfrac{200}{x}\times2=\dfrac{400}{x}\) 万元。总费用 \(y=x+\dfrac{400}{x}\)，定义域 \(0&lt;x\le200\)。</p>
+    <p><b>求</b>：\(x\) 和 \(\dfrac{400}{x}\) 都是正数，积是定值 \(400\)，所以 \(y\ge2\sqrt{400}=40\)，等号在 \(x=\dfrac{400}{x}\)，即 \(x=20\) 时取到。</p>
+    <p><b>验</b>：\(20\) 在定义域里；一年买 \(\dfrac{200}{20}=10\) 次，是整数，做得到。答：每次买 \(20\) 吨，最少 \(40\) 万元。</p>
+  </div>
+  <div class="card predict" data-id="try-inv" data-answer="B">
+    <p>自己试试：要围一块面积 \(16\) 平方米的矩形，一边长 \(x\) 米。周长最小是多少米？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(16\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(32\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(4\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。另一边 \(\dfrac{16}{x}\) 米，周长 \(L=2\left(x+\dfrac{16}{x}\right)\ge2\times2\sqrt{16}=16\)，\(x=4\)（正方形）时取到。选 A 的同学算的是 \(x+\dfrac{16}x\) 的最小值，忘了周长要乘 \(2\)；选 D 答的是边长。</p></div>
+  </div>
+
+  <h3>6. 算完回到实际：四件事</h3>
+  <p>上面的例子都顺利，是因为下面几件事都满足了。换一道题，常常有一件出问题：</p>
+  <ol>
+    <li><b>定义域按实际定</b>。<br><span class="small">反例：例 2 的墙换成 \(10\) 米，定义域变成 \(7\le x&lt;12\)，顶点 \(x=6\) 不在里面，\(72\) 就围不出来（「练一练」第 3 题）。</span></li>
+    <li><b>该是整数的回到整数</b>。<br><span class="small">反例：台数、车辆数、人数算出 \(6.75\)，不能直接作答，要比较附近的整数（「练一练」第 4 题）。</span></li>
+    <li><b>写出单位，先统一</b>。<br><span class="small">反例：\(72\) km/h 直接写 \(s=72t\)，\(s\) 用米、\(t\) 用秒时差了 \(3.6\) 倍。</span></li>
+    <li><b>分段反求先定段，再检验</b>。<br><span class="small">反例：例 3 若不定段，直接用第一段 \(y=10\) 解不出来；用错段解出的 \(x\) 不在那段的区间里，就要舍掉（「练一练」第 5 题）。</span></li>
+  </ol>
+  <div class="key">答案要写上单位；需要整数的回到整数比较或取整，说清为什么这样取；最值要说明在哪里取到、这个 \(x\) 在实际里做得到。</div>
+  <div class="warn">这一章还没学指数、对数和导数，建模时不拿它们当默认工具。题目给了指数式、对数式的，学完第 4 章再回来做。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>\(y=\dfrac1x\) 不能跨过 \(0\) 连成一段说</b>：它在 \(x&lt;0\) 和 \(x>0\) 上各自递减，可 \(f(-1)=-1&lt;f(1)=1\)，所以不能说「在定义域上递减」。实际问题里 \(x\) 一般是正的，只用右边那一支。</p>
+    <p><b>分段函数的图象可以断开</b>：上面的阶梯电价在分界点两边算出的钱一样，图象连成折线。真实的打车计价常把不足 \(1\) 千米按 \(1\) 千米算，车费会一格一格地跳，图象是一级一级的台阶。</p>
+    <p><b>整数解怎么比</b>：二次函数顶点在 \(6.75\) 时，离它最近的整数是 \(7\)，但要稳妥，就把 \(6\) 和 \(7\) 都代进去比，因为开口向下的抛物线左右对称，离顶点越近值越大，\(|7-6.75|&lt;|6-6.75|\)，所以 \(7\) 大。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 阶梯电价</h3>
+  <p class="small">每月用电 \(x\) 度：前 \(200\) 度每度 \(0.5\) 元；\(200\) 到 \(400\) 度之间的部分每度 \(0.6\) 元；超过 \(400\) 度的部分每度 \(0.8\) 元。拖滑块或图上的点（或选中后按方向键），看电费落在哪一段。</p>
+  <div class="card">
+    <svg class="fig" id="bg" viewBox="0 0 560 320" role="img" aria-label="电费 y 关于用电量 x 的分段函数图象，可拖动"></svg>
+    <label class="sl"><span>用电 \(x\)</span><input type="range" id="sx" min="0" max="500" step="5" aria-label="用电量 x（度）"><output id="ox"></output></label>
+    <div class="info" id="info2" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset" type="button">重置</button></div>
+  </div>
+
+  <h3>② 进阶：靠墙围菜园，墙长变了最大值在哪</h3>
+  <p class="small">篱笆共 \(24\) 米。拉滑块改墙长 \(a\)；拖下面曲线上的圆点（或 Tab 选中后用左右方向键）改 \(x\)。灰色虚线是整条抛物线，实线才是实际能取的部分。先点「墙长 20 米」，看最大值在顶点；再点「墙长 10 米」，看顶点取不到时最大值跑到哪。</p>
+  <div class="card">
+    <svg class="fig" id="plan" viewBox="0 0 560 270" role="img" aria-label="菜园俯视图：墙和用篱笆围成的矩形"></svg>
+    <svg class="fig" id="sg" viewBox="0 0 560 330" role="img" aria-label="面积 S 关于 x 的图象，可拖动圆点"></svg>
+    <label class="sl"><span>墙长 \(a\)</span><input type="range" id="sa" min="4" max="24" step="1" aria-label="墙长 a（米）"><output id="oa"></output></label>
+    <div class="info" id="info1" aria-live="polite"></div>
+    <div class="ctrl">
+      <span class="small">试试：</span>
+      <button class="btn ghost" type="button" data-a="10">墙长 10 米</button>
+      <button class="btn ghost" type="button" data-a="12">墙长 12 米</button>
+      <button class="btn ghost" type="button" data-a="20">墙长 20 米</button>
+      <button class="btn ghost" type="button" id="toMax">跳到最大值</button>
+      <button class="btn ghost" type="button" id="reset1">重置</button>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，后三道是建模时最常见的错。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="B">
+    <p>1. 健身房：年卡 \(600\) 元，不限次数；不办卡每次 \(30\) 元。一年至少去多少次，办年卡更省钱？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(20\) 次</button>
+      <button class="opt" data-v="B"><b>B</b>\(21\) 次</button>
+      <button class="opt" data-v="C"><b>C</b>\(19\) 次</button>
+      <button class="opt" data-v="D"><b>D</b>\(30\) 次</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。去 \(x\) 次，不办卡花 \(y=30x\) 元。办卡更省要 \(30x>600\)，\(x>20\)；次数是整数，至少 \(21\) 次。去 \(20\) 次时两种一样都是 \(600\) 元，谈不上「更省」，所以不选 A。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 用 \(40\) 米栅栏沿河岸围一块矩形场地，靠河一边不用栅栏，河岸足够长。场地面积最大是多少平方米？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(200\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(400\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(100\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(160\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。垂直于河岸的两边各 \(x\) 米，另一边 \(40-2x\) 米，\(0&lt;x&lt;20\)。\(S=x(40-2x)=-2(x-10)^2+200\)，顶点 \(x=10\) 在定义域里，最大 \(200\) 平方米（这时平行河岸的一边 \(20\) 米）。选 B 的同学把三边当成两边，写成了 \(x(40-x)\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>3. 用 \(24\) 米长的篱笆，靠着一面墙围一块矩形菜园（靠墙那边不用篱笆）。墙长 \(10\) 米。菜园面积最大是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(72\) 平方米</button>
+      <button class="opt" data-v="B"><b>B</b>\(70\) 平方米</button>
+      <button class="opt" data-v="C"><b>C</b>\(144\) 平方米</button>
+      <button class="opt" data-v="D"><b>D</b>\(60\) 平方米</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。设垂直于墙的两边各长 \(x\) 米，平行于墙的一边长 \(24-2x\) 米，面积 \(S=x(24-2x)=-2x^2+24x\)。</p>
+      <p>选 A 的同学直接取了顶点 \(x=6\)：这时平行于墙的边长 \(24-12=12\) 米，可墙只有 \(10\) 米，<b>围不出来</b>。实际要求 \(0&lt;24-2x\le 10\)，也就是 \(7\le x&lt;12\)。在这一段上抛物线一直往下走，所以最大值在 \(x=7\) 处：\(S=7\times10=70\)。在「动手」②里点「墙长 10 米」看看。</p>
+      <p>对应边界：<b>定义域按实际定</b>。顶点不在定义域里，最大值就不在顶点。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="e-int" data-answer="B">
+    <p>4. 某厂每月生产 \(x\) 台机器（\(x\) 为正整数），月利润 \(y=-2x^2+27x-30\)（万元）。利润最大时每月生产多少台？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(6.75\) 台</button>
+      <button class="opt" data-v="B"><b>B</b>\(7\) 台</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\) 台</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\) 台或 \(7\) 台</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。顶点横坐标 \(x=\dfrac{27}{4}=6.75\)，可台数只能是整数，A 不合实际意义。离顶点最近的两个整数是 \(6\) 和 \(7\)，都代进去算：\(x=6\) 时 \(y=60\)，\(x=7\) 时 \(y=61\)。所以 \(7\) 台，最大月利润 \(61\) 万元。</p>
+      <p>对应边界：<b>该是整数的回到整数</b>。定义域是正整数，不是一段区间。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="e-piece" data-answer="C">
+    <p>5. 按「动手」①的阶梯电价（前 \(200\) 度每度 \(0.5\) 元，\(200\) 到 \(400\) 度的部分每度 \(0.6\) 元，超过 \(400\) 度的部分每度 \(0.8\) 元），小王家这个月交了 \(148\) 元电费。他家用电多少度？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(296\) 度</button>
+      <button class="opt" data-v="B"><b>B</b>约 \(247\) 度</button>
+      <button class="opt" data-v="C"><b>C</b>\(280\) 度</button>
+      <button class="opt" data-v="D"><b>D</b>\(260\) 度</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。先判断在哪一段：用满 \(200\) 度是 \(100\) 元，用满 \(400\) 度是 \(220\) 元，\(100&lt;148\le220\)，所以在第二段。\(100+0.6(x-200)=148\)，得 \(x=280\)。</p>
+      <p>A 是全按 \(0.5\) 元算（\(148\div0.5\)），B 是全按 \(0.6\) 元算，都忘了分段。拿 A 验一下：\(296\) 度应交 \(100+0.6\times96=157.6\) 元，不是 \(148\) 元。在「动手」①里把点拖到 \(280\) 看看。</p>
+      <p>对应边界：<b>分段反求先定段，再检验</b>。解出的 \(x\) 要落在这一段里。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function txt(s, attrs, parent) { var t = svg("text", attrs, parent); t.textContent = s; return t; }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function num(v) { var s = String(Math.round(v * 100) / 100); return s === "-0" ? "0" : s; }
+  function pt(fig, ev) {
+    var p = fig.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY;
+    return p.matrixTransform(fig.getScreenCTM().inverse());
+  }
+  function C() { return { fg: css("--fg"), muted: css("--muted"), line: css("--line"), a: css("--a"), hl: css("--hl"), card: css("--card"), no: css("--no"), noSoft: css("--no-soft"), b: css("--b") }; }
+
+  /* ================= 一：靠墙围菜园 ================= */
+  var L = 24, A0 = 10, X0 = 8;  // 开始在能围出来的状态（平行于墙的边 8 米 ≤ 墙长 10 米）
+  var s1 = { a: A0, x: X0 };
+  var plan = document.getElementById("plan"), sg = document.getElementById("sg"), sa = document.getElementById("sa");
+  function S(x) { return x * (L - 2 * x); }
+  // 实际定义域：0 < 24-2x <= a，即 max((24-a)/2, 0) <= x < 12（a>=24 时左端开）
+  function dom(a) { return { lo: Math.max((L - a) / 2, 0), loOpen: a >= L }; }
+  function okX(x, a) { var y = L - 2 * x; return x > 0 && y > 0 && y <= a; }
+  function best(a) {
+    var d = dom(a);
+    if (d.lo <= L / 4) return { x: L / 4, s: S(L / 4), at: "v" };
+    return { x: d.lo, s: S(d.lo), at: "e" };
+  }
+
+  // 面积图坐标
+  var GX0 = 70, GX1 = 530, GY0 = 20, GY1 = 280, XM = 12, SM = 80;
+  function gx(x) { return GX0 + x / XM * (GX1 - GX0); }
+  function gy(s) { return GY1 - s / SM * (GY1 - GY0); }
+  function ugx(p) { return (p - GX0) / (GX1 - GX0) * XM; }
+
+  function draw1() {
+    var c = C(), a = s1.a, x = s1.x, y = L - 2 * x, ok = okX(x, a), d = dom(a), bst = best(a);
+    sa.value = a; document.getElementById("oa").textContent = a + " 米";
+
+    /* 俯视图：每米 15 像素 */
+    plan.innerHTML = "";
+    var K = 15, OX = 40, WY = 56;
+    svg("line", { x1: OX, y1: WY, x2: OX + K * a, y2: WY, stroke: c.muted, "stroke-width": 9, "stroke-linecap": "butt" }, plan);
+    txt("墙  a = " + a + " m", { x: OX, y: WY - 16 }, plan);
+    var rw = K * y, rh = K * x, inW = Math.min(rw, K * a);
+    svg("rect", { x: OX, y: WY + 5, width: inW, height: rh, fill: c.a, opacity: 0.16 }, plan);
+    if (rw > K * a) svg("rect", { x: OX + K * a, y: WY + 5, width: rw - K * a, height: rh, fill: c.noSoft }, plan);
+    // 篱笆三边
+    svg("path", { d: "M" + OX + " " + (WY + 5) + " V" + (WY + 5 + rh) + " H" + (OX + rw) + " V" + (WY + 5), fill: "none", stroke: ok ? c.a : c.no, "stroke-width": 4 }, plan);
+    if (rw > K * a) svg("line", { x1: OX + K * a, y1: WY + 5, x2: OX + rw, y2: WY + 5, stroke: c.no, "stroke-width": 3, "stroke-dasharray": "6 5" }, plan);
+    txt("24 − 2x = " + num(y) + " m", { x: OX, y: WY + 5 + rh + 26 }, plan);
+    var lx = OX + rw + 10;
+    txt("x = " + num(x) + " m", { x: Math.min(lx, 548), y: WY + 5 + rh / 2 + 7, "text-anchor": lx > 450 ? "end" : "start" }, plan);
+
+    /* 面积图 */
+    sg.innerHTML = "";
+    var defs = svg("defs", {}, sg), cp = svg("clipPath", { id: "sgclip" }, defs);
+    svg("rect", { x: GX0, y: GY0 - 4, width: GX1 - GX0, height: GY1 - GY0 + 4 }, cp);
+    // 不能取的 x：左边 [0, lo)
+    if (d.lo > 0) {
+      svg("rect", { x: gx(0), y: GY0, width: gx(d.lo) - gx(0), height: GY1 - GY0, fill: c.noSoft }, sg);
+    }
+    for (var t = 0; t <= SM; t += 20) {
+      svg("line", { x1: GX0, y1: gy(t), x2: GX1, y2: gy(t), stroke: c.line, "stroke-width": 1 }, sg);
+      txt(String(t), { x: GX0 - 8, y: gy(t) + 7, "text-anchor": "end", fill: c.muted }, sg);
+    }
+    for (var u = 0; u <= XM; u += 2) {
+      svg("line", { x1: gx(u), y1: GY0, x2: gx(u), y2: GY1, stroke: c.line, "stroke-width": 1 }, sg);
+      if (u > 0) txt(String(u), { x: gx(u), y: GY1 + 24, "text-anchor": "middle", fill: c.muted }, sg);
+    }
+    svg("line", { x1: GX0, y1: GY1, x2: GX1, y2: GY1, stroke: c.fg, "stroke-width": 1.5 }, sg);
+    svg("line", { x1: GX0, y1: GY1, x2: GX0, y2: GY0 - 4, stroke: c.fg, "stroke-width": 1.5 }, sg);
+    txt("x/m", { x: GX1, y: GY1 + 46, "text-anchor": "end" }, sg);
+    txt("S/m²", { x: GX0 + 8, y: GY0 + 18 }, sg);
+    txt("0", { x: GX0 - 8, y: GY1 + 24, "text-anchor": "end", fill: c.muted }, sg);
+    var g = svg("g", { "clip-path": "url(#sgclip)" }, sg);
+    function path(x0, x1) {
+      var p = "", N = 120;
+      for (var i = 0; i <= N; i++) { var xx = x0 + (x1 - x0) * i / N; p += (i ? "L" : "M") + gx(xx).toFixed(1) + " " + gy(S(xx)).toFixed(1); }
+      return p;
+    }
+    svg("path", { d: path(0, XM), fill: "none", stroke: c.muted, "stroke-width": 2, "stroke-dasharray": "7 6" }, g);
+    svg("path", { d: path(d.lo, XM), fill: "none", stroke: c.a, "stroke-width": 4 }, g);
+    // 定义域端点：左端闭（a<24）实心，右端 x=12 开
+    svg("circle", { cx: gx(d.lo), cy: gy(S(d.lo)), r: 6, fill: d.loOpen ? c.card : c.a, stroke: c.a, "stroke-width": 2.5 }, sg);
+    svg("circle", { cx: gx(XM), cy: gy(0), r: 6, fill: c.card, stroke: c.a, "stroke-width": 2.5 }, sg);
+    // 最大值
+    svg("circle", { cx: gx(bst.x), cy: gy(bst.s), r: 13, fill: "none", stroke: c.hl, "stroke-width": 4 }, sg);
+    // 当前点
+    var h = svg("circle", { cx: gx(x), cy: gy(S(x)), r: 11, fill: ok ? c.a : c.no, stroke: c.card, "stroke-width": 3, tabindex: 0, role: "slider",
+      "aria-label": "x，垂直于墙的边长（米）", "aria-valuemin": 0.5, "aria-valuemax": 11.5, "aria-valuenow": x, style: "cursor:grab" }, sg);
+    h.id = "sgh";
+    h.addEventListener("pointerdown", start1);
+    h.addEventListener("keydown", key1);
+
+    var info = document.getElementById("info1");
+    var domTex = (d.loOpen ? "(0," : "[" + num(d.lo) + ",") + "12)";
+    var html = "\\(S=x(24-2x)\\)，实际定义域 \\(" + domTex + "\\)（要 \\(0<24-2x\\le " + a + "\\)）<br>";
+    html += "现在 \\(x=" + num(x) + "\\)，平行于墙的边 \\(24-2x=" + num(y) + "\\)，\\(S=" + num(S(x)) + "\\) 平方米";
+    if (!ok) html += "<br><span class=\"bad\">这个 \\(x\\) 不行：" + num(y) + " 米比墙长 " + a + " 米还长，围不出来。</span>";
+    html += "<br>最大值：" + (bst.at === "v"
+      ? "顶点 \\(x=6\\) 在定义域里，\\(S_{\\max}=72\\) 平方米"
+      : "顶点 \\(x=6\\) 不在定义域里，在 \\([" + num(d.lo) + ",12)\\) 上 \\(S\\) 递减，最大值在左端点 \\(x=" + num(bst.x) + "\\)，\\(S_{\\max}=" + num(bst.s) + "\\) 平方米");
+    info.innerHTML = html;
+    Peiyu.math(info);
+  }
+  function setX(x) { s1.x = clamp(Math.round(x * 2) / 2, 0.5, 11.5); }
+  function key1(ev) {
+    var dx = ev.key === "ArrowLeft" || ev.key === "ArrowDown" ? -0.5 : ev.key === "ArrowRight" || ev.key === "ArrowUp" ? 0.5 : 0;
+    if (!dx) return;
+    ev.preventDefault(); setX(s1.x + dx); draw1(); log1();
+    var again = document.getElementById("sgh"); if (again) again.focus();
+  }
+  var drag1 = false;
+  function start1(ev) { drag1 = true; ev.preventDefault(); window.addEventListener("pointermove", move1); window.addEventListener("pointerup", end1); }
+  function move1(ev) {
+    if (!drag1) return;
+    var old = s1.x; setX(ugx(pt(sg, ev).x));
+    if (s1.x !== old) draw1();
+  }
+  function end1() { if (drag1) log1(); drag1 = false; window.removeEventListener("pointermove", move1); window.removeEventListener("pointerup", end1); }
+  function log1() { Peiyu.log("interact", { id: "fence", a: s1.a, x: s1.x, ok: okX(s1.x, s1.a) }); }
+  sa.addEventListener("input", function () { var v = parseInt(sa.value, 10); if (isFinite(v)) { s1.a = clamp(v, 4, 24); draw1(); } });
+  sa.addEventListener("change", log1);
+  [].forEach.call(document.querySelectorAll("[data-a]"), function (bt) {
+    bt.onclick = function () { s1.a = Number(bt.getAttribute("data-a")); draw1(); log1(); };
+  });
+  document.getElementById("toMax").onclick = function () { setX(best(s1.a).x); draw1(); log1(); };
+
+  /* ================= 二：阶梯电价 ================= */
+  var s2 = { x: 150 };
+  var bg = document.getElementById("bg"), sx = document.getElementById("sx");
+  function bill(x) { return x <= 200 ? 0.5 * x : x <= 400 ? 100 + 0.6 * (x - 200) : 220 + 0.8 * (x - 400); }
+  var BX0 = 80, BX1 = 530, BY0 = 20, BY1 = 270, BXM = 500, BYM = 300;
+  function bx(x) { return BX0 + x / BXM * (BX1 - BX0); }
+  function by(v) { return BY1 - v / BYM * (BY1 - BY0); }
+  function ubx(p) { return (p - BX0) / (BX1 - BX0) * BXM; }
+  function draw2() {
+    var c = C(), x = s2.x, v = bill(x);
+    sx.value = x; document.getElementById("ox").textContent = x + " 度";
+    bg.innerHTML = "";
+    var seg = x <= 200 ? 0 : x <= 400 ? 1 : 2, bands = [[0, 200], [200, 400], [400, 500]];
+    svg("rect", { x: bx(bands[seg][0]), y: BY0, width: bx(bands[seg][1]) - bx(bands[seg][0]), height: BY1 - BY0, fill: c.hl, opacity: 0.12 }, bg);
+    for (var t = 0; t <= BYM; t += 100) {
+      svg("line", { x1: BX0, y1: by(t), x2: BX1, y2: by(t), stroke: c.line, "stroke-width": 1 }, bg);
+      txt(String(t), { x: BX0 - 8, y: by(t) + 7, "text-anchor": "end", fill: c.muted }, bg);
+    }
+    for (var u = 100; u <= BXM; u += 100) txt(String(u), { x: bx(u), y: BY1 + 24, "text-anchor": "middle", fill: c.muted }, bg);
+    [200, 400].forEach(function (k) { svg("line", { x1: bx(k), y1: BY0, x2: bx(k), y2: BY1, stroke: c.muted, "stroke-width": 1.5, "stroke-dasharray": "6 5" }, bg); });
+    svg("line", { x1: BX0, y1: BY1, x2: BX1, y2: BY1, stroke: c.fg, "stroke-width": 1.5 }, bg);
+    svg("line", { x1: BX0, y1: BY1, x2: BX0, y2: BY0 - 4, stroke: c.fg, "stroke-width": 1.5 }, bg);
+    txt("x/度", { x: BX1, y: BY1 + 46, "text-anchor": "end" }, bg);
+    txt("y/元", { x: BX0 + 8, y: BY0 + 18 }, bg);
+    txt("0", { x: BX0 - 8, y: BY1 + 24, "text-anchor": "end", fill: c.muted }, bg);
+    var p = "M" + bx(0) + " " + by(0) + "L" + bx(200) + " " + by(100) + "L" + bx(400) + " " + by(220) + "L" + bx(500) + " " + by(300);
+    svg("path", { d: p, fill: "none", stroke: c.a, "stroke-width": 4, "stroke-linejoin": "round" }, bg);
+    svg("path", { d: "M" + bx(x) + " " + BY1 + "V" + by(v) + "H" + BX0, fill: "none", stroke: c.b, "stroke-width": 2, "stroke-dasharray": "5 4" }, bg);
+    var h = svg("circle", { cx: bx(x), cy: by(v), r: 11, fill: c.a, stroke: c.card, "stroke-width": 3, tabindex: 0, role: "slider",
+      "aria-label": "用电量（度）", "aria-valuemin": 0, "aria-valuemax": 500, "aria-valuenow": x, style: "cursor:grab" }, bg);
+    h.id = "bgh";
+    h.addEventListener("pointerdown", start2);
+    h.addEventListener("keydown", key2);
+
+    var info = document.getElementById("info2"), rows = [
+      "\\(0\\le x\\le 200\\)：\\(y=0.5x\\)",
+      "\\(200&lt;x\\le 400\\)：\\(y=100+0.6(x-200)\\)",
+      "\\(x>400\\)：\\(y=220+0.8(x-400)\\)"
+    ];
+    var calc = seg === 0 ? "0.5\\times" + x : seg === 1 ? "100+0.6\\times(" + x + "-200)" : "220+0.8\\times(" + x + "-400)";
+    info.innerHTML = "用了 \\(" + x + "\\) 度，落在第 " + (seg + 1) + " 段 " + rows[seg] + "<br>电费 \\(y=" + calc + "=" + num(v) + "\\) 元" +
+      "<br><span class=\"small\">分界点 \\(x=200\\) 归第一段、\\(x=400\\) 归第二段；两边算出来相同（\\(100\\) 元、\\(220\\) 元），所以图象连成一条折线。</span>";
+    Peiyu.math(info);
+  }
+  function setB(x) { s2.x = clamp(Math.round(x / 5) * 5, 0, 500); }
+  function key2(ev) {
+    var dx = ev.key === "ArrowLeft" || ev.key === "ArrowDown" ? -5 : ev.key === "ArrowRight" || ev.key === "ArrowUp" ? 5 : 0;
+    if (!dx) return;
+    ev.preventDefault(); setB(s2.x + dx); draw2(); log2();
+    var again = document.getElementById("bgh"); if (again) again.focus();
+  }
+  var drag2 = false;
+  function start2(ev) { drag2 = true; ev.preventDefault(); window.addEventListener("pointermove", move2); window.addEventListener("pointerup", end2); }
+  function move2(ev) {
+    if (!drag2) return;
+    var old = s2.x; setB(ubx(pt(bg, ev).x));
+    if (s2.x !== old) draw2();
+  }
+  function end2() { if (drag2) log2(); drag2 = false; window.removeEventListener("pointermove", move2); window.removeEventListener("pointerup", end2); }
+  function log2() { Peiyu.log("interact", { id: "bill", x: s2.x, y: bill(s2.x) }); }
+  sx.addEventListener("input", function () { var v = parseInt(sx.value, 10); if (isFinite(v)) { setB(v); draw2(); } });
+  sx.addEventListener("change", log2);
+
+  document.getElementById("reset1").onclick = function () { s1 = { a: A0, x: X0 }; draw1(); };
+  document.getElementById("reset").onclick = function () { s2 = { x: 150 }; draw2(); };
+  function all() { draw1(); draw2(); }
+  document.addEventListener("DOMContentLoaded", all);
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
+})();
+</script>
+</body></html>

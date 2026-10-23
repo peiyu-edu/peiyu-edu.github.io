@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5.1 任意角和弧度制 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
+  .fig text.ax { font-size: 20px; fill: var(--muted); font-style: italic; }
+  .fig text.qd { font-size: 22px; fill: var(--dim); text-anchor: middle; }
+  .fig text.qd.on { fill: var(--a); font-weight: 700; }
+  .fig .circ { fill: none; stroke: var(--line); stroke-width: 1.5; }
+  .fig .sector { fill: var(--hl-soft); stroke: none; }
+  .fig .arc { fill: none; stroke: var(--hl); stroke-width: 5; stroke-linecap: round; }
+  .fig .spiral { fill: none; stroke: var(--c); stroke-width: 2.5; }
+  .fig .spiralHead { fill: var(--c); }
+  .fig .init { stroke: var(--b); stroke-width: 4; stroke-linecap: round; }
+  .fig .term { stroke: var(--a); stroke-width: 4; stroke-linecap: round; }
+  .fig .h { fill: var(--a); stroke: var(--card); stroke-width: 3; cursor: grab; outline: none; }
+  .fig .h:focus-visible { stroke: var(--hl); stroke-width: 5; }
+  .fig .hit { fill: transparent; cursor: grab; }
+  .fig text.lab { font-size: 20px; }
+  .fig text.big { font-size: 26px; font-weight: 700; fill: var(--fg); }
+  .fig text.side { font-size: 20px; fill: var(--muted); }
+  .rd { font-size: 16px; line-height: 1.75; }
+  .rd .row { margin: 4px 0; }
+  .rd .nope { color: var(--no); font-weight: 600; }
+  .ctrl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 8px; }
+  .ctrl .btn { padding: 6px 12px; }
+  .rv { font-weight: 700; min-width: 3.5em; text-align: center; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="b1-5-1">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第一册 · 第 5 章 三角函数</p>
+<h1>5.1 任意角和弧度制</h1>
+<p class="lead">角不只是「两条边夹出来的那块」，而是一条射线<b>转</b>出来的：可以反着转、可以转好几圈。再换一把以半径为单位的尺子去量它——弧度。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>一座摩天轮匀速转动，转一整圈要 \(30\) 分钟。小明坐上去，坐了 \(45\) 分钟。</p>
+  <div class="card predict" data-id="entry" data-answer="D">
+    <p>这 \(45\) 分钟里，摩天轮一共转过了多少度？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(90^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(270^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(360^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(540^\circ\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。\(45\) 分钟是 \(30\) 分钟的 \(1.5\) 倍，转了一圈半：\(360^\circ+180^\circ=540^\circ\)。</p>
+      <p>这时座舱停的位置，和只转半圈（\(180^\circ\)）时一样。可它实际转了一圈半，这一圈不能丢。</p>
+      <p>初中的角都在 \(0^\circ\) 到 \(360^\circ\) 之间，装不下 \(540^\circ\)。这一节把角看成射线<b>转</b>出来的：说清往哪边转、转了多少、停在哪。再换一把用半径量角的尺子——弧度，用它算弧长和扇形面积。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：初中的角和度、圆周长 \(2\pi r\)、坐标系的四个象限；1.1 集合的写法 \(\{x\mid\cdots\}\)（<a href="b1-1-1.html">回看 1.1</a>）。</p>
+
+  <div class="card">
+    <p><b>顶点、始边、终边</b>：一条射线绕它的端点转。端点叫<b>顶点</b>，开始的位置叫<b>始边</b>，停下的位置叫<b>终边</b>。</p>
+    <p>例：钟面上分针从指着 \(12\) 走到指着 \(3\)。顶点是表盘中心，始边指向 \(12\)，终边指向 \(3\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>逆时针、顺时针</b>：钟表指针走的方向是顺时针，反过来是逆时针。</p>
+    <p>例：从「指向东」转到「指向北」，最短的转法是逆时针转 \(90^\circ\)；顺时针也能到，要转 \(270^\circ\)。终点一样，转法不同。</p>
+  </div>
+
+  <div class="card">
+    <p><b>象限</b>：两条坐标轴把平面分成四块，从右上开始逆时针依次是第一、二、三、四象限。<b>坐标轴上的点不属于任何象限。</b></p>
+    <p>例：\((3,2)\) 在第一象限，\((-1,2)\) 在第二象限，\((-2,-1)\) 在第三象限，\((2,-5)\) 在第四象限；\((0,4)\) 在 \(y\) 轴上，哪个象限都不算。</p>
+  </div>
+
+  <div class="card">
+    <p><b>\(k\in\Z\)</b>：\(\Z\) 是全体整数组成的集合，\(k\in\Z\) 就是「\(k\) 取任意整数」，正的、负的、\(0\) 都行，但不能是 \(\dfrac12\) 这样的分数。</p>
+    <p>例：\(k\cdot360^\circ\) 在 \(k=-1,0,1,2\) 时分别是 \(-360^\circ\)、\(0^\circ\)、\(360^\circ\)、\(720^\circ\)：转整数圈。</p>
+  </div>
+
+  <div class="card">
+    <p><b>弧长</b>：圆上一段弧的长度。初中公式：圆心角 \(n^\circ\)、半径 \(r\) 的弧长是 \(\dfrac{n\pi r}{180}\)。</p>
+    <p>例：半径 \(3\) 的圆，周长 \(6\pi\)；\(90^\circ\) 的弧是四分之一圈，长 \(\dfrac{6\pi}{4}=\dfrac{3\pi}{2}\)；\(60^\circ\) 的弧长 \(\dfrac{60\pi\times3}{180}=\pi\)。</p>
+  </div>
+
+  <h3>2. 角是「转」出来的：任意角</h3>
+  <p>描述一个角要说清三件事：往哪边转、转了多少、终边停在哪。方向用正负来记：</p>
+  <div class="key">逆时针旋转形成<b>正角</b>，顺时针旋转形成<b>负角</b>，一点没转叫<b>零角</b>。<br>转的量可以超过一圈，所以角可以是 \(720^\circ\)、\(-1000^\circ\)……这就是<b>任意角</b>。</div>
+  <p>有了正负，角的加减也顺了：先转 \(\alpha\) 再转 \(\beta\)，一共转了 \(\alpha+\beta\)；\(\alpha-\beta\) 就是 \(\alpha+(-\beta)\)。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>分针走了 \(40\) 分钟，转过的角是多少？把分针往回拨 \(10\) 分钟呢？</p>
+    <p>分针 \(60\) 分钟转一圈 \(360^\circ\)，每分钟 \(6^\circ\)。走 \(40\) 分钟转了 \(40\times6^\circ=240^\circ\)，方向是顺时针，所以是 \(-240^\circ\)。</p>
+    <p>往回拨是逆时针，转了 \(10\times6^\circ=60^\circ\)，所以是 \(+60^\circ\)。</p>
+  </div>
+  <div class="card predict" data-id="warmup" data-answer="B">
+    <p>自己试试：把钟表的分针拨快 1 小时 15 分钟，分针转过的角是多少？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(450^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-450^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(90^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-90^\circ\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。1 小时转一整圈 \(360^\circ\)，再加 15 分钟的 \(90^\circ\)，一共转了 \(450^\circ\) 这么多；分针是<b>顺时针</b>转的，所以是 \(-450^\circ\)。</p>
+      <p>选 A 的同学忘了方向。选 C、D 的同学只看了分针最后停在哪（从 12 指到 3），把转过的那一整圈丢了。</p>
+    </div>
+  </div>
+
+  <h3>3. 放进坐标系：象限角和终边相同的角</h3>
+  <p>让顶点在原点、始边和 \(x\) 轴的非负半轴重合。终边落在第几象限，就叫第几<b>象限角</b>；终边落在坐标轴上的叫轴线角，不属于任何象限。</p>
+  <p>在一个角上再多转（或倒转）整数圈，终边回到原处。所以和 \(\alpha\) 终边相同的角组成集合</p>
+  <div class="key">\(S=\{\beta\mid \beta=\alpha+k\cdot 360^\circ,\ k\in\Z\}\)<br>判断一个大角在哪个象限：加减 \(360^\circ\) 的整数倍，化到 \(0^\circ\) 到 \(360^\circ\) 之间再看。</div>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>写出与 \(-1000^\circ\) 终边相同的角的集合，并判断 \(-1000^\circ\) 是第几象限角。</p>
+    <p>\(-1000^\circ\) 加 \(3\) 圈：\(-1000^\circ+3\times360^\circ=80^\circ\)，所以 \(-1000^\circ=80^\circ+(-3)\times360^\circ\)。</p>
+    <p>集合是 \(\{\beta\mid\beta=80^\circ+k\cdot360^\circ,\ k\in\Z\}\)。\(80^\circ\) 在 \(0^\circ\) 和 \(90^\circ\) 之间，所以 \(-1000^\circ\) 是第一象限角。</p>
+  </div>
+  <div class="card predict" data-id="try-quad" data-answer="C">
+    <p>自己试试：\(1290^\circ\) 是第几象限角？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>第一象限</button>
+      <button class="opt" data-v="B"><b>B</b>第二象限</button>
+      <button class="opt" data-v="C"><b>C</b>第三象限</button>
+      <button class="opt" data-v="D"><b>D</b>第四象限</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。\(1290^\circ-3\times360^\circ=1290^\circ-1080^\circ=210^\circ\)，\(210^\circ\) 在 \(180^\circ\) 和 \(270^\circ\) 之间，第三象限。选 B 的同学常是把「过了 \(180^\circ\)」当成第二象限；第二象限是 \(90^\circ\) 到 \(180^\circ\)。</p></div>
+  </div>
+
+  <h3>4. 弧度：用半径当尺子</h3>
+  <p>把一圈分成 \(360\) 份是古人选的分法，没有非这样不可的道理。换一种量法：</p>
+  <div class="key">长度等于半径的弧所对的圆心角，叫 <b>1 弧度</b>（1 rad）。<br>圆心角 \(\alpha\) 对的弧长为 \(l\)、半径为 \(r\)，那么 \(|\alpha|=\dfrac{l}{r}\)。</div>
+  <p><b>为什么这个比值靠得住？</b>同一个圆心角，半径放大几倍，弧长也放大几倍，\(\dfrac lr\) 不变，只取决于角本身。正角的弧度数是正数，负角是负数，零角是 \(0\)。</p>
+  <p>一整圈弧长 \(2\pi r\)，除以 \(r\) 得 \(2\pi\)，所以 \(360^\circ=2\pi\) rad：</p>
+  <div class="key">\(180^\circ=\pi\ \text{rad}\)。度化弧度乘 \(\dfrac{\pi}{180}\)，弧度化度乘 \(\dfrac{180}{\pi}\)。\(1\ \text{rad}\approx57.30^\circ\)。</div>
+  <p>用弧度时单位 rad 通常省略：说「角 \(\dfrac{\pi}{3}\)」就是 \(60^\circ\)。终边相同的角写成 \(\alpha+2k\pi\ (k\in\Z)\)。</p>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>把 \(150^\circ\) 化成弧度，把 \(\dfrac{3\pi}{4}\) 化成度。</p>
+    <p>\(150\times\dfrac{\pi}{180}=\dfrac{150\pi}{180}=\dfrac{5\pi}{6}\)。</p>
+    <p>\(\dfrac{3\pi}{4}\times\dfrac{180}{\pi}=\dfrac{3\times180}{4}=135\)，即 \(135^\circ\)。</p>
+  </div>
+  <div class="card predict" data-id="try-rad" data-answer="A">
+    <p>自己试试：\(210^\circ\) 化成弧度是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{7\pi}{6}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{6\pi}{7}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{7\pi}{3}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(210\pi\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(210\times\dfrac{\pi}{180}=\dfrac{7\pi}{6}\)。检查一下：\(210^\circ\) 比 \(180^\circ\) 大一点，弧度应比 \(\pi\) 大一点，\(\dfrac76\pi\) 对得上。B 是分子分母倒了，D 是忘了除以 \(180\)。</p></div>
+  </div>
+
+  <h3>5. 弧长和扇形面积</h3>
+  <p>由 \(|\alpha|=\dfrac lr\) 直接得到弧长。面积：整圆 \(\pi r^2\) 对应 \(2\pi\)，扇形占 \(\dfrac{|\alpha|}{2\pi}\)，乘起来就是 \(\dfrac12r^2|\alpha|\)。</p>
+  <div class="key">半径 \(r\)、圆心角 \(\alpha\) 的扇形：弧长 \(l=r|\alpha|\)，面积 \(S=\dfrac12 r^2|\alpha|=\dfrac12 lr\)。<b>\(\alpha\) 必须用弧度。</b></div>
+  <p class="small">\(S=\dfrac12lr\) 和三角形面积「\(\dfrac12\) 底 × 高」很像：把弧当底、半径当高。比初中的 \(\dfrac{n\pi r^2}{360}\) 简洁，这是弧度的好处。</p>
+  <div class="card">
+    <p class="small">例 4</p>
+    <p>半径 \(3\)、圆心角 \(120^\circ\) 的扇形，求弧长和面积。</p>
+    <p>先化弧度：\(120^\circ=\dfrac{2\pi}{3}\)。弧长 \(l=3\times\dfrac{2\pi}{3}=2\pi\)。</p>
+    <p>面积 \(S=\dfrac12\times3^2\times\dfrac{2\pi}{3}=3\pi\)；用 \(\dfrac12lr=\dfrac12\times2\pi\times3=3\pi\) 验算，一样。</p>
+  </div>
+  <div class="card predict" data-id="try-arc" data-answer="A">
+    <p>自己试试：半径 \(4\)、圆心角 \(45^\circ\) 的扇形，弧长是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\pi\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(180\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2\pi\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{\pi}{4}\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(45^\circ=\dfrac{\pi}{4}\)，\(l=4\times\dfrac{\pi}{4}=\pi\)。选 B 是把 \(45\) 直接代进了 \(l=r|\alpha|\)；选 D 是化完弧度忘了乘半径。</p></div>
+  </div>
+
+  <h3>6. 用之前，查这几件事</h3>
+  <ol>
+    <li><b>终边相同不等于角相等</b>，而且 \(k\) 只能是整数。<br><span class="small">反例：\(390^\circ\) 和 \(30^\circ\) 终边重合，一个转了一圈多，一个没转满一圈，是两个不同的角。\(30^\circ+180^\circ\) 相当于 \(k=\dfrac12\)，终边转到了反方向，不算终边相同。</span></li>
+    <li><b>象限角只看终边</b>；终边在坐标轴上的角不属于任何象限。<br><span class="small">反例：\(-330^\circ\) 是第一象限角，但不是锐角（锐角要在 \(0^\circ\) 到 \(90^\circ\) 之间）；\(-270^\circ\) 的终边在 \(y\) 轴正半轴上，不是第一也不是第二象限角。</span></li>
+    <li><b>扇形公式里的角先化弧度。</b><br><span class="small">反例：半径 \(2\)、圆心角 \(60^\circ\)，写成 \(l=2\times60=120\) 是错的；\(60\) 弧度差不多转了九圈半。应是 \(l=2\times\dfrac{\pi}{3}=\dfrac{2\pi}{3}\)。</span></li>
+    <li><b>长度和面积不带负号</b>，公式里是 \(|\alpha|\)。<br><span class="small">反例：半径 \(2\)、圆心角 \(-60^\circ\) 的扇形，面积是 \(\dfrac12\times4\times\dfrac{\pi}{3}=\dfrac{2\pi}{3}\)，不是 \(-\dfrac{2\pi}{3}\)。负号只说明转的方向。</span></li>
+    <li><b>一个式子里不混用两种单位。</b><br><span class="small">反例：\(2k\pi+30^\circ\) 是错的写法，要写 \(2k\pi+\dfrac{\pi}{6}\) 或 \(k\cdot360^\circ+30^\circ\)。</span></li>
+  </ol>
+  <div class="key">算弧长、面积前问两句：角化成弧度了吗？用的是 \(|\alpha|\) 吗？</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>象限角的范围</b>：第一象限角是 \(\{\alpha\mid k\cdot360^\circ&lt;\alpha&lt;90^\circ+k\cdot360^\circ,\ k\in\Z\}\)，其他象限照样写。</p>
+    <p><b>\(2\alpha\)、\(\dfrac{\alpha}{2}\) 在哪</b>：\(\alpha\) 是第二象限角，\(90^\circ+k\cdot360^\circ&lt;\alpha&lt;180^\circ+k\cdot360^\circ\)，除以 \(2\) 得 \(45^\circ+k\cdot180^\circ&lt;\dfrac{\alpha}{2}&lt;90^\circ+k\cdot180^\circ\)。\(k\) 是偶数时落在第一象限，奇数时落在第三象限。\(k\cdot360^\circ\) 要跟着一起除，别丢。</p>
+    <p><b>角和实数一一对应</b>：用弧度后，每个角对应一个实数，每个实数也对应一个角。下一节把角当成函数的自变量，靠的就是这一点。</p>
+    <p><b>超过一圈</b>：转过超过 \(2\pi\)，扫过的区域会重叠，不再是一个扇形。这时 \(r|\alpha|\) 表示终边上离顶点 \(r\) 的点一共走过的路程。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 转一转：任意角、终边和扇形</h3>
+  <p>拖动绿色圆点让终边转起来——可以转好几圈、也可以顺时针转成负角。<span class="cc">蓝色螺线</span>记下转过的全过程，<span class="ca">绿色</span>是终边，<span class="cb">赤金色</span>是始边。键盘：Tab 选中圆点，左右方向键转 \(15^\circ\)，PageUp / PageDown 转一整圈。</p>
+  <div class="card">
+    <svg class="fig" id="fig" viewBox="0 0 560 340" role="group" aria-label="坐标系里的任意角，终边上的圆点可拖动"></svg>
+    <div class="rd" id="readout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="m15" type="button">−15°</button>
+      <button class="btn ghost" id="p15" type="button">+15°</button>
+      <button class="btn ghost" id="mturn" type="button">倒转一圈</button>
+      <button class="btn ghost" id="pturn" type="button">多转一圈</button>
+    </div>
+    <div class="ctrl">
+      <span>半径 \(r\)：</span>
+      <button class="btn ghost" id="rm" type="button" aria-label="半径减 1">−</button>
+      <span class="rv" id="rv">2</span>
+      <button class="btn ghost" id="rp" type="button" aria-label="半径加 1">+</button>
+      <button class="btn ghost" id="reset" type="button">重置</button>
+    </div>
+    <p class="small">试试：把角调到 \(-300^\circ\)，再调到 \(420^\circ\)，终边一样吗？扇形的弧长和面积一样吗？</p>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. \(\dfrac{5\pi}{12}\) 化成度是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(75^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(150^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(37.5^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(15^\circ\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{5\pi}{12}\times\dfrac{180}{\pi}=\dfrac{5\times180}{12}=75\)。也可以记 \(\dfrac{\pi}{12}=15^\circ\)，再乘 \(5\)。选 D 的同学只算了 \(\dfrac{\pi}{12}\)，忘了乘 \(5\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. 一个扇形的半径是 \(2\)，弧长是 \(3\)。它的面积是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(1.5\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(12\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。已知弧长，用 \(S=\dfrac12lr=\dfrac12\times3\times2=3\)。也可以先求角：\(|\alpha|=\dfrac lr=\dfrac32\)，\(S=\dfrac12\times2^2\times\dfrac32=3\)。选 B 的同学忘了 \(\dfrac12\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="trap-same-side" data-answer="C">
+    <p>3. 下面哪句话是<b>对</b>的？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>第一象限角都是锐角</button>
+      <button class="opt" data-v="B"><b>B</b>终边相同的角一定相等</button>
+      <button class="opt" data-v="C"><b>C</b>\(390^\circ\) 和 \(30^\circ\) 终边相同，但它们不相等</button>
+      <button class="opt" data-v="D"><b>D</b>小于 \(90^\circ\) 的角都是锐角</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>C</b>。\(390^\circ=30^\circ+1\times360^\circ\)，终边重合；但一个转了一圈多，一个没转满一圈，是两个不同的角。</p>
+      <p>A 错：\(-330^\circ\)、\(390^\circ\) 都是第一象限角，都不是锐角。B 错：终边相同的角相差 \(360^\circ\) 的整数倍，只有 \(k=0\) 时才相等。D 错：\(-30^\circ\)、\(0^\circ\) 都小于 \(90^\circ\)，都不是锐角。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-axis" data-answer="D">
+    <p>4. 角 \(-270^\circ\) 是第几象限角？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>第一象限角</button>
+      <button class="opt" data-v="B"><b>B</b>第二象限角</button>
+      <button class="opt" data-v="C"><b>C</b>第三象限角</button>
+      <button class="opt" data-v="D"><b>D</b>不属于任何象限</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>D</b>。\(-270^\circ=90^\circ-360^\circ\)，和 \(90^\circ\) 终边相同，终边落在 \(y\) 轴的正半轴上。</p>
+      <p>有的同学想「顺时针转过了第四、第三象限，停在第二象限边上」，于是选 B 或 C。可象限角只看<b>终边</b>停在哪；终边在坐标轴上，就不属于任何象限。在「动手」的图里把角拖到 \(-270^\circ\) 看看。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="trap-sector" data-answer="D">
+    <p>5. 半径为 2 的圆中，一条射线从始边顺时针转过 \(60^\circ\)，扫出一个扇形（圆心角为 \(-60^\circ\)）。这个扇形的面积是多少？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(-120\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(120\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{2\pi}{3}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{2\pi}{3}\)</button>
+    </div>
+    <div class="reveal">
+      <p>答案 <b>D</b>。先化弧度：\(|-60^\circ|=\dfrac{\pi}{3}\)，再算 \(S=\dfrac12\times2^2\times\dfrac{\pi}{3}=\dfrac{2\pi}{3}\)。</p>
+      <p>A、B 是把 \(60\) 直接当弧度代进去了——\(60\) 弧度差不多转了 9 圈半，跟 \(60^\circ\) 差得远。A、C 还把负号带进了面积。角的正负只说明转的方向，扇形的大小看 \(|\alpha|\)。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="B">
+    <p>6. 用一根长 \(8\) 的铁丝围成一个扇形（两条半径加一段弧，周长 \(8\)）。面积最大时，圆心角是多少弧度？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{\pi}{2}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\pi\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。设半径 \(r\)，弧长 \(l=8-2r\)。面积 \(S=\dfrac12lr=\dfrac12(8-2r)r=r(4-r)\)。</p>
+      <p>\(r\) 和 \(4-r\) 的和是定值 \(4\)，用基本不等式（<a href="b1-2-2.html">2.2</a>）：\(r(4-r)\le\left(\dfrac{r+4-r}{2}\right)^2=4\)，等号在 \(r=4-r\)，即 \(r=2\) 时取到。这时 \(l=4\)，圆心角 \(|\alpha|=\dfrac lr=2\)。</p>
+      <p>选 D 的同学以为半圆最大；半圆时 \(r(\pi+2)=8\)，\(r\approx1.56\)，面积约 \(3.8\)，比 \(4\) 小。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var svg = document.getElementById("fig"), out = document.getElementById("readout"), rvEl = document.getElementById("rv");
+  var NS = "http://www.w3.org/2000/svg";
+  var CX = 190, CY = 170, R = 115, SNAP = 5, LIM = 1080, RMIN = 1, RMAX = 6;
+  var DEF = { deg: 60, r: 2 };
+  var st = { deg: DEF.deg, r: DEF.r }, acc = DEF.deg, G = {};
+
+  function mk(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e); return e;
+  }
+  function px(deg, rr) { var t = deg * Math.PI / 180; return [CX + rr * Math.cos(t), CY - rr * Math.sin(t)]; }
+  function f2(v) { var s = (Math.round(v * 100) / 100).toFixed(2); return s === "-0.00" ? "0.00" : s; }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  // n/d · π 写成 LaTeX，n、d 为整数，d>0
+  function piFrac(n, d) {
+    if (n === 0) return "0";
+    var g = gcd(n, d); n /= g; d /= g;
+    var sg = n < 0 ? "-" : ""; n = Math.abs(n);
+    var top = (n === 1 ? "" : n) + "\\pi";
+    return d === 1 ? sg + top : sg + "\\dfrac{" + top + "}{" + d + "}";
+  }
+  function mod360(d) { return ((d % 360) + 360) % 360; }
+  function where(deg) {
+    var a0 = mod360(deg);
+    var axis = { 0: "\\(x\\) 轴的正半轴", 90: "\\(y\\) 轴的正半轴", 180: "\\(x\\) 轴的负半轴", 270: "\\(y\\) 轴的负半轴" };
+    if (a0 % 90 === 0) return { q: 0, text: "终边在" + axis[a0] + "上，是<b>轴线角</b>，不属于任何象限" };
+    var q = Math.floor(a0 / 90) + 1;
+    return { q: q, text: "终边在第" + ["一", "二", "三", "四"][q - 1] + "象限，是<b>第" + ["一", "二", "三", "四"][q - 1] + "象限角</b>" };
+  }
+
+  function build() {
+    svg.innerHTML = "";
+    mk("circle", { cx: CX, cy: CY, r: R, "class": "circ" });
+    G.sector = mk("path", { "class": "sector", d: "" });
+    G.arc = mk("path", { "class": "arc", d: "" });
+    mk("line", { x1: CX - R - 30, y1: CY, x2: CX + R + 34, y2: CY, "class": "axis" });
+    mk("line", { x1: CX, y1: CY + R + 22, x2: CX, y2: CY - R - 26, "class": "axis" });
+    mk("text", { x: CX + R + 30, y: CY + 26, "class": "ax" }).textContent = "x";
+    mk("text", { x: CX + 10, y: CY - R - 8, "class": "ax" }).textContent = "y";
+    G.qd = [[1, 62, 62], [2, -62, 62], [3, -62, -62], [4, 62, -62]].map(function (z) {
+      var t = mk("text", { x: CX + z[1], y: CY - z[2] + 8, "class": "qd" });
+      t.textContent = ["Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ"][z[0] - 1]; return t;
+    });
+    mk("line", { x1: CX, y1: CY, x2: CX + R + 18, y2: CY, "class": "init" });
+    G.spiral = mk("path", { "class": "spiral", d: "" });
+    G.head = mk("path", { "class": "spiralHead", d: "" });
+    G.term = mk("line", { "class": "term", x1: CX, y1: CY, x2: CX, y2: CY });
+    G.big = mk("text", { x: 352, y: 70, "class": "big" });
+    G.s1 = mk("text", { x: 352, y: 110, "class": "side" });
+    G.s2 = mk("text", { x: 352, y: 142, "class": "side" });
+    G.s3 = mk("text", { x: 352, y: 250, "class": "side" });
+    G.s4 = mk("text", { x: 352, y: 282, "class": "side" });
+    G.hg = mk("g", {});
+    G.hit = mk("circle", { r: 24, "class": "hit" }, G.hg);
+    G.h = mk("circle", { r: 11, "class": "h", tabindex: "0", role: "slider", "aria-label": "终边位置（角的大小）",
+      "aria-valuemin": -LIM, "aria-valuemax": LIM }, G.hg);
+    bind();
+  }
+
+  function draw() {
+    var deg = st.deg, r = st.r, ad = Math.abs(deg);
+    // 终边与圆点
+    var e = px(deg, R + 18), h = px(deg, R);
+    G.term.setAttribute("x2", e[0]); G.term.setAttribute("y2", e[1]);
+    G.h.setAttribute("cx", h[0]); G.h.setAttribute("cy", h[1]);
+    G.hit.setAttribute("cx", h[0]); G.hit.setAttribute("cy", h[1]);
+    G.h.setAttribute("aria-valuenow", deg);
+    G.h.setAttribute("aria-valuetext", deg + " 度");
+    // 扇形（只在转不满一圈时画）
+    var sd = "", ad2 = "";
+    if (deg !== 0 && ad < 360) {
+      var p1 = px(deg, R), large = ad > 180 ? 1 : 0, sweep = deg > 0 ? 0 : 1;
+      var arcPart = "M" + (CX + R) + " " + CY + " A" + R + " " + R + " 0 " + large + " " + sweep + " " + p1[0] + " " + p1[1];
+      ad2 = arcPart;
+      sd = "M" + CX + " " + CY + " L" + (CX + R) + " " + CY + " A" + R + " " + R + " 0 " + large + " " + sweep + " " + p1[0] + " " + p1[1] + " Z";
+    } else if (ad === 360) {
+      sd = "M" + (CX + R) + " " + CY + " A" + R + " " + R + " 0 1 0 " + (CX - R) + " " + CY + " A" + R + " " + R + " 0 1 0 " + (CX + R) + " " + CY + " Z";
+      ad2 = sd;
+    }
+    G.sector.setAttribute("d", sd); G.arc.setAttribute("d", ad2);
+    // 螺线：记下转过的全过程，每转一圈半径变大一点
+    var n = Math.max(2, Math.ceil(ad / 4)), pts = [];
+    for (var i = 0; i <= n; i++) {
+      var t = deg * i / n, rr = 30 + 14 * Math.abs(t) / 360, p = px(t, rr);
+      pts.push(p[0].toFixed(1) + " " + p[1].toFixed(1));
+    }
+    G.spiral.setAttribute("d", deg === 0 ? "" : "M" + pts.join(" L"));
+    if (deg !== 0) {
+      var rEnd = 30 + 14 * ad / 360, tip = px(deg, rEnd), sgn = deg > 0 ? 1 : -1;
+      var dir = (deg + sgn * 90) * Math.PI / 180, ux = Math.cos(dir), uy = -Math.sin(dir), nx = -uy, ny = ux;
+      var bx = tip[0] - 10 * ux, by = tip[1] - 10 * uy;
+      G.head.setAttribute("d", "M" + (tip[0] + 2 * ux).toFixed(1) + " " + (tip[1] + 2 * uy).toFixed(1) + " L" + (bx + 6 * nx).toFixed(1) + " " + (by + 6 * ny).toFixed(1) + " L" + (bx - 6 * nx).toFixed(1) + " " + (by - 6 * ny).toFixed(1) + "Z");
+    } else G.head.setAttribute("d", "");
+    // 象限高亮
+    var w = where(deg);
+    G.qd.forEach(function (t, k) { t.setAttribute("class", "qd" + (w.q === k + 1 ? " on" : "")); });
+    // 右侧文字
+    var k = Math.floor(deg / 360), a0 = deg - k * 360, turns = Math.floor(ad / 360);
+    G.big.textContent = "α = " + deg + "°";
+    G.s1.textContent = deg === 0 ? "没有转：零角" : (deg > 0 ? "逆时针转" : "顺时针转") + (turns ? "，满 " + turns + " 圈" : "，不满一圈");
+    G.s2.textContent = "= " + a0 + "° + " + (k < 0 ? "(" + k + ")" : k) + "×360°";
+    G.s3.textContent = "r = " + r;
+    G.s4.textContent = ad <= 360 && deg !== 0 ? "扇形：已涂色" : (deg === 0 ? "扇形：无" : "超过一圈，无扇形");
+    rvEl.textContent = r;
+
+    // 公式区
+    var rad = piFrac(deg, 180), rad0 = piFrac(a0, 180);
+    var html = '<div class="row">\\(\\alpha=' + deg + '^\\circ=' + rad + '\\)' + (deg !== 0 ? '（约 \\(' + f2(deg * Math.PI / 180) + '\\) rad）' : '') + '</div>';
+    html += '<div class="row">终边相同：\\(' + deg + '^\\circ=' + a0 + '^\\circ' + (k < 0 ? '' : '+') + k + '\\times360^\\circ\\)，即 \\(' + rad + '=' + rad0 + (k < 0 ? '' : '+') + k + '\\times2\\pi\\)（\\(k=' + k + '\\)）</div>';
+    html += '<div class="row">' + w.text + '。</div>';
+    var lx = piFrac(r * ad, 180), sx = piFrac(r * r * ad, 360);
+    var lv = f2(r * ad * Math.PI / 180), sv = f2(r * r * ad * Math.PI / 360);
+    if (deg === 0) {
+      html += '<div class="row">零角扫不出扇形：弧长和面积都是 0。</div>';
+    } else if (ad <= 360) {
+      html += '<div class="row">扇形（\\(r=' + r + '\\)）：\\(|\\alpha|=' + piFrac(ad, 180) + '\\)，弧长 \\(l=r|\\alpha|=' + lx + '\\approx' + lv + '\\)，面积 \\(S=\\dfrac12r^2|\\alpha|=' + sx + '\\approx' + sv + '\\)</div>';
+      if (deg < 0) html += '<div class="row small">角是负的，但弧长、面积用 \\(|\\alpha|\\)，都是正数。</div>';
+    } else {
+      html += '<div class="row"><span class="nope">转过超过一圈</span>，扫过的区域重叠了，不再是一个扇形。\\(r|\\alpha|=' + lx + '\\approx' + lv + '\\) 只表示终边上离顶点 \\(' + r + '\\) 的点一共走过的路程。</div>';
+    }
+    out.innerHTML = html;
+    if (window.Peiyu) Peiyu.math(out);
+  }
+
+  function setDeg(d) {
+    if (!isFinite(d)) return;
+    d = Math.round(d / SNAP) * SNAP;
+    st.deg = Math.max(-LIM, Math.min(LIM, d));
+    if (st.deg === 0) st.deg = 0; // 去掉 -0
+    acc = st.deg;
+  }
+  function logState(how) { if (window.Peiyu) Peiyu.log("interact", { how: how, deg: st.deg, r: st.r }); }
+
+  function bind() {
+    var drag = null;
+    function rawAngle(ev) {
+      var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+      var m = svg.getScreenCTM(); if (!m) return null;
+      var q = pt.matrixTransform(m.inverse()), dx = q.x - CX, dy = CY - q.y;
+      if (dx * dx + dy * dy < 25) return null; // 太靠近圆心，方向不稳
+      return Math.atan2(dy, dx) * 180 / Math.PI;
+    }
+    G.hg.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault();
+      var a = rawAngle(ev);
+      drag = { id: ev.pointerId, last: a === null ? mod360(st.deg) : a };
+      acc = st.deg;
+      try { G.hg.setPointerCapture(ev.pointerId); } catch (e) { /* ignore */ }
+      G.h.focus({ preventScroll: true });
+    });
+    G.hg.addEventListener("pointermove", function (ev) {
+      if (!drag || ev.pointerId !== drag.id) return;
+      var a = rawAngle(ev); if (a === null) return;
+      var d = a - drag.last;
+      while (d > 180) d -= 360;
+      while (d <= -180) d += 360;
+      drag.last = a;
+      acc = Math.max(-LIM, Math.min(LIM, acc + d));
+      var snapped = Math.round(acc / SNAP) * SNAP;
+      if (snapped === 0) snapped = 0;
+      if (snapped !== st.deg) { st.deg = snapped; draw(); }
+    });
+    function end(ev) { if (drag && ev.pointerId === drag.id) { drag = null; acc = st.deg; logState("drag"); } }
+    G.hg.addEventListener("pointerup", end);
+    G.hg.addEventListener("pointercancel", end);
+    G.h.addEventListener("keydown", function (ev) {
+      var k = ev.key, d = st.deg;
+      if (k === "ArrowRight" || k === "ArrowUp") setDeg(d + 15);
+      else if (k === "ArrowLeft" || k === "ArrowDown") setDeg(d - 15);
+      else if (k === "PageUp") setDeg(d + 360);
+      else if (k === "PageDown") setDeg(d - 360);
+      else if (k === "Home") setDeg(0);
+      else return;
+      ev.preventDefault(); draw(); logState("key");
+    });
+  }
+
+  function btn(id, f, how) {
+    document.getElementById(id).addEventListener("click", function () { f(); draw(); logState(how); });
+  }
+  btn("m15", function () { setDeg(st.deg - 15); }, "-15");
+  btn("p15", function () { setDeg(st.deg + 15); }, "+15");
+  btn("mturn", function () { setDeg(st.deg - 360); }, "-turn");
+  btn("pturn", function () { setDeg(st.deg + 360); }, "+turn");
+  btn("rm", function () { st.r = Math.max(RMIN, st.r - 1); }, "r-");
+  btn("rp", function () { st.r = Math.min(RMAX, st.r + 1); }, "r+");
+  btn("reset", function () { st.deg = DEF.deg; st.r = DEF.r; acc = DEF.deg; }, "reset");
+
+  build();
+  draw();
+  document.addEventListener("DOMContentLoaded", draw);
+})();
+</script>
+</body></html>

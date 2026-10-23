@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7.3 离散型随机变量的数字特征 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .eq { color: var(--c); font-weight: 700; }
+  .result .bad { color: var(--no); font-weight: 700; }
+  .ctrl output { min-width: 3em; font-weight: 600; }
+  #dist text, #lin text { font-size: 20px; }
+  table.dl { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+  table.dl td, table.dl th { border: 1px solid var(--line); padding: 4px 10px; text-align: center; font-weight: 400; }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+</style>
+</head>
+<body data-sec="e3-7-3">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">选择性必修第三册 · 第 7 章 随机变量及其分布</p>
+<h1>7.3 离散型随机变量的数字特征</h1>
+<p class="lead">分布列把一个随机变量的情况全列出来了，可表太长时，我们想用一两个数说清楚：平均能得多少？结果稳不稳？这就是均值和方差。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>小店门口有个转盘：转一次，有 \(\dfrac1{10}\) 的机会得 \(10\) 元，\(\dfrac3{10}\) 的机会得 \(2\) 元，其余什么也没有。</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>转 \(100\) 次，大约 \(10\) 次得 \(10\) 元、\(30\) 次得 \(2\) 元、\(60\) 次没得。这 \(100\) 次一共大约得多少元？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(120\) 元</button>
+      <button class="opt" data-v="B"><b>B</b>\(160\) 元</button>
+      <button class="opt" data-v="C"><b>C</b>\(400\) 元</button>
+      <button class="opt" data-v="D"><b>D</b>\(1200\) 元</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(10\times10+2\times30+0\times60=160\) 元。</p>
+      <p>平均每次大约 \(160\div100=1.6\) 元，也就是 \(10\times\dfrac1{10}+2\times\dfrac3{10}+0\times\dfrac6{10}=1.6\)：每个取值乘上它的概率再加起来。</p>
+      <p>这个「按概率加权的平均」就是本节的<b>均值</b>。注意 \(1.6\) 元一次也转不出来，它说的是转很多次之后的平均。光有平均还不够，每次得多得少差得大不大，要用<b>方差</b>来量。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：分布列（<a href="e3-7-2.html">回看 7.2</a>）；样本的平均数和方差（<a href="b2-9-2.html">回看必修二 9.2</a>）。这一节就是把它们从「一组数据」搬到「一个随机变量」上。</p>
+
+  <div class="card">
+    <p><b>分布列</b>：随机变量 \(X\) 能取哪些值、各取到的概率是多少，列成一张表；概率都不是负数，加起来是 \(1\)。</p>
+    <p>例：上面的转盘，得到的钱 \(X\)：</p>
+    <table class="dl"><tr><th>\(X\)</th><td>\(0\)</td><td>\(2\)</td><td>\(10\)</td></tr><tr><th>\(P\)</th><td>\(0.6\)</td><td>\(0.3\)</td><td>\(0.1\)</td></tr></table>
+    <p>\(0.6+0.3+0.1=1\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>加权平均</b>：每个数乘上自己的「分量」（权重），再加起来；权重加起来是 \(1\)。</p>
+    <p>例：平时成绩 \(80\) 分占 \(40\%\)，期末 \(90\) 分占 \(60\%\)，总评 \(80\times0.4+90\times0.6=86\) 分，不是 \(\dfrac{80+90}2=85\)。期末分量重，总评就偏向 \(90\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>偏离</b>：一个值离平均值有多远，写成 \(x-\mu\)（\(\mu\) 是平均值）。有正有负，所以要先平方再平均，正负才不会抵消。</p>
+    <p>例：平均值 \(\mu=3\)，取值 \(1\) 的偏离是 \(-2\)，平方是 \(4\)；取值 \(5\) 的偏离是 \(2\)，平方也是 \(4\)。不平方的话 \(-2+2=0\)，像是「没有偏离」。</p>
+  </div>
+
+  <div class="card">
+    <p><b>单位</b>：平方之后单位也跟着平方。\(X\) 以「元」计，偏离的平方就是「元²」；开平方才回到「元」。</p>
+    <p>例：偏离平方的平均是 \(4\) 元²，开方得 \(2\) 元，这才能和「平均 \(1.6\) 元」放在一起比。</p>
+  </div>
+
+  <h3>2. 均值：按概率加权的平均</h3>
+  <p>\(X\) 的分布列是 \(P(X=x_i)=p_i\)（\(i=1,2,\dots,n\)），定义</p>
+  <div class="key" style="text-align:center">\(E(X)=x_1p_1+x_2p_2+\cdots+x_np_n=\displaystyle\sum_{i=1}^n x_ip_i\)</div>
+  <p>叫 \(X\) 的<b>均值</b>（也叫<b>数学期望</b>）。为什么这样算：做很多次试验，\(x_i\) 大约出现「次数 \(\times p_i\)」次，总和除以次数，就剩下 \(\sum x_ip_i\)。所以<b>概率就是权重</b>。</p>
+  <p>把分布列想成一根杆上挂的砝码：在 \(x_i\) 处挂 \(p_i\) 那么重，\(E(X)\) 就是杆能平衡的支点（「动手」①可以拖着看）。</p>
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>小明投一次篮的得分 \(X\)：没进得 \(0\) 分，概率 \(0.3\)；两分球进得 \(2\) 分，概率 \(0.5\)；三分球进得 \(3\) 分，概率 \(0.2\)。求 \(E(X)\)。</p>
+    <p>先查概率和：\(0.3+0.5+0.2=1\)，表没问题。</p>
+    <p style="text-align:center">\(E(X)=0\times0.3+2\times0.5+3\times0.2=0+1+0.6=1.6\)（分）。</p>
+    <p>意思：投很多次，平均每次约得 \(1.6\) 分。一次投篮得不了 \(1.6\) 分，这没关系，均值本来就不一定是能取到的值。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：\(X\) 取 \(1,2,3\) 的概率分别是 \(0.2,0.5,0.3\)。\(E(X)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2.1\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(1\times0.2+2\times0.5+3\times0.3=0.2+1+0.9=2.1\)。选 A 的同学把 \(1,2,3\) 直接平均了，等于把三个概率都当成 \(\dfrac13\)；可 \(3\) 的概率 \(0.3\) 比 \(1\) 的 \(0.2\) 大，均值要往 \(3\) 那边偏一点。选 C 是只把取值加起来、没乘概率。</p></div>
+  </div>
+
+  <h3>3. 方差和标准差：量波动</h3>
+  <p>均值一样，结果可以很不一样：一个人每次都得 \(2\) 分，另一个人一半得 \(0\) 一半得 \(4\)，均值都是 \(2\)。区别在每次离均值远不远。把偏离平方，再按概率加权平均：</p>
+  <div class="key" style="text-align:center">\(D(X)=\displaystyle\sum_{i=1}^n\big(x_i-E(X)\big)^2p_i=E(X^2)-\big(E(X)\big)^2\)<br>\(\sigma(X)=\sqrt{D(X)}\)</div>
+  <p>\(D(X)\) 叫<b>方差</b>，\(\sigma(X)\) 叫<b>标准差</b>，是方差的<b>非负</b>平方根，单位和 \(X\) 一样。方差、标准差越大，取值越分散，结果越不稳定。右边的 \(E(X^2)=\sum x_i^2p_i\)，用它算常常更省事。</p>
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>接着例 1，求 \(D(X)\) 和 \(\sigma(X)\)。</p>
+    <p>按定义：\(E(X)=1.6\)，</p>
+    <p style="text-align:center">\(D(X)=(0-1.6)^2\times0.3+(2-1.6)^2\times0.5+(3-1.6)^2\times0.2\)<br>\(=0.768+0.08+0.392=1.24\)（分²）。</p>
+    <p>换一种算：\(E(X^2)=0^2\times0.3+2^2\times0.5+3^2\times0.2=3.8\)，\(D(X)=3.8-1.6^2=3.8-2.56=1.24\)。两种一样。</p>
+    <p>\(\sigma(X)=\sqrt{1.24}\approx1.11\)（分）。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：\(X\) 取 \(1\) 和 \(3\)，概率各 \(0.5\)。\(D(X)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(3\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(5\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(E(X)=2\)，两个值离 \(2\) 都是 \(1\)，\(D(X)=1^2\times0.5+1^2\times0.5=1\)。或者 \(E(X^2)=\dfrac{1+9}2=5\)，\(D(X)=5-2^2=1\)。选 B 是偏离平方后忘了乘概率；选 C 是算成了 \(E(X^2)-E(X)\)，均值忘了平方；选 D 只算了 \(E(X^2)\)。</p></div>
+  </div>
+
+  <h3>4. 把 \(X\) 变成 \(aX+b\)</h3>
+  <p>常见情形：得分 \(X\) 换算成奖金，每分 \(a\) 元，再加（或减）固定的 \(b\) 元，得 \(Y=aX+b\)。</p>
+  <ul>
+    <li><b>加 \(b\)</b>：每个取值都挪 \(b\)，支点跟着挪 \(b\)；可每个值离支点的距离没变，所以方差不变。</li>
+    <li><b>乘 \(a\)</b>：每个取值、连同支点都乘 \(a\)；离支点的距离变成 \(|a|\) 倍，平方后是 \(a^2\) 倍。</li>
+  </ul>
+  <div class="key" style="text-align:center">\(E(aX+b)=aE(X)+b\)，\(D(aX+b)=a^2D(X)\)，\(\sigma(aX+b)=|a|\,\sigma(X)\)</div>
+  <div class="card">
+    <p class="small">例 3</p>
+    <p>接着例 1：每得 \(1\) 分奖 \(5\) 元，每次投篮先交 \(2\) 元。一次的净收入 \(Y=5X-2\)（元）。求 \(E(Y)\)、\(D(Y)\)、\(\sigma(Y)\)。</p>
+    <p>\(E(Y)=5E(X)-2=5\times1.6-2=6\)（元）。</p>
+    <p>\(D(Y)=5^2D(X)=25\times1.24=31\)（元²）；\(-2\) 不影响方差。</p>
+    <p>\(\sigma(Y)=5\,\sigma(X)=5\sqrt{1.24}\approx5.57\)（元），也等于 \(\sqrt{31}\)。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B">
+    <p>自己试试：\(E(X)=3\)，\(D(X)=4\)，\(Y=-2X+1\)。\(\sigma(Y)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(-4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(16\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-7\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。\(\sigma(X)=\sqrt4=2\)，\(\sigma(Y)=|-2|\times2=4\)；或 \(D(Y)=(-2)^2\times4=16\)，开方得 \(4\)。选 A 把 \(-2\) 直接乘上去了，可标准差是非负平方根，不会是负数。C 是 \(D(Y)\)，还没开方。D 是把 \(E\) 的公式套到了 \(D\) 上：\(-2\times4+1\)。</p></div>
+  </div>
+
+  <h3>5. 用均值、方差做判断时，记住五件事</h3>
+  <ol>
+    <li><b>概率是权重，不能把取值简单平均。</b><br><span class="small">反例：转盘的 \(0,2,10\) 简单平均是 \(4\) 元，可真实的长期平均只有 \(1.6\) 元——\(10\) 元只有 \(\dfrac1{10}\) 的机会。</span></li>
+    <li><b>均值不一定是能取到的值。</b><br><span class="small">反例：掷一个均匀骰子，点数的均值 \(\dfrac{1+2+\cdots+6}{6}=3.5\)，可没有哪次能掷出 \(3.5\)。</span></li>
+    <li><b>算「划不划算」要扣成本；均值是长期平均，不保证某一次。</b><br><span class="small">反例：花 \(2\) 元抽一次，\(0.01\) 的机会中 \(100\) 元。奖金均值 \(100\times0.01=1\) 元，扣掉成本，平均每次净亏 \(1\) 元。可某一次的结果只能是赚 \(98\) 元或亏 \(2\) 元，不会正好亏 \(1\) 元。</span></li>
+    <li><b>比较方案，均值和风险一起看。</b><br><span class="small">反例：方案甲每次稳得 \(2\) 万；方案乙一半机会得 \(6\) 万、一半机会亏 \(2\) 万。均值都是 \(2\) 万，乙的方差是 \(16\)，甲是 \(0\)。亏不起的人该选甲；先看清目标，再定标准。</span></li>
+    <li><b>标准差是非负平方根，单位和 \(X\) 相同；方差的单位是平方。</b><br><span class="small">反例：\(D(-3X)=9D(X)\)，\(\sigma(-3X)=3\sigma(X)\)，写成 \(-3\sigma(X)\) 就错了。</span></li>
+  </ol>
+  <div class="key">「均值大就选它」不一定对：先扣成本，再看方差（风险），最后看题目要的是什么。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么 \(D(X)=E(X^2)-\big(E(X)\big)^2\)</b>：记 \(\mu=E(X)\)，展开 \(\sum(x_i-\mu)^2p_i=\sum x_i^2p_i-2\mu\sum x_ip_i+\mu^2\sum p_i=E(X^2)-2\mu^2+\mu^2\)。用到了 \(\sum p_i=1\)。</p>
+    <p><b>两点分布</b>：\(X\) 只取 \(1\)（概率 \(p\)）和 \(0\)（概率 \(1-p\)）。\(E(X)=p\)，\(E(X^2)=p\)，所以 \(D(X)=p-p^2=p(1-p)\)。\(p=0.5\) 时最大，是 \(0.25\)：成败各半时最难预测。</p>
+    <p><b>方差为 \(0\)</b>：每一项 \((x_i-\mu)^2p_i\) 都不小于 \(0\)，加起来是 \(0\) 只能每项都是 \(0\)，也就是 \(X\) 其实只取一个值，没有波动。</p>
+    <p><b>两个随机变量相加</b>：均值、方差的公式这里只讲了 \(aX+b\)。两个随机变量的和，方差一般<b>不能</b>直接把两个方差相加；什么情况下可以，要另有理由，以后用到再说。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 分布列跷跷板：拖柱子改概率</h3>
+  <p class="small">\(X\) 取 \(1,2,3,4,5\)。上下拖某根柱子（或选中后按方向键）改它的概率，其余柱子按原来的比例自动让出，总和始终是 \(1\)。三角是支点 \(E(X)\)，金色带是 \(E(X)\pm\sigma\)。试试：把概率堆到两头，支点不动，方差却变大。</p>
+  <div class="card">
+    <svg class="fig" id="dist" viewBox="0 0 560 350" role="img" aria-label="分布列柱状图，柱高是概率，下方三角是均值支点"></svg>
+    <div class="result" id="distout" aria-live="polite"></div>
+    <div class="ctrl">
+      <button class="btn ghost" id="pre-flat" type="button">均匀</button>
+      <button class="btn ghost" id="pre-mid" type="button">集中在中间</button>
+      <button class="btn ghost" id="pre-ends" type="button">堆到两头</button>
+      <button class="btn ghost" id="pre-one" type="button">只取 3</button>
+      <button class="btn ghost" id="distreset" type="button">重置</button>
+    </div>
+  </div>
+
+  <h3>② 进阶：\(Y=aX+b\)，均值、方差怎么变</h3>
+  <p class="small">用的是①里现在的分布。上面一行是 \(X\)，下面一行是 \(Y=aX+b\)。动 \(b\)：整排柱子平移，波动带宽度不变；动 \(a\)：柱子拉开或挤拢，\(a\) 为负时左右翻过来，方差按 \(a^2\) 变。</p>
+  <div class="card">
+    <svg class="fig" id="lin" viewBox="0 0 560 300" role="img" aria-label="X 和 Y 等于 aX 加 b 的分布在同一数轴上对比"></svg>
+    <div class="ctrl"><label for="ain">\(a\)</label><input type="range" id="ain" min="-6" max="6" step="1"><output id="aout"></output></div>
+    <div class="ctrl"><label for="bin">\(b\)</label><input type="range" id="bin" min="-5" max="5" step="1"><output id="bout"></output></div>
+    <div class="result" id="linout" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="linreset" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p-basic-1" data-answer="A">
+    <p>1. \(X\) 取 \(-1,0,2\) 的概率分别是 \(0.2,0.5,0.3\)。\(E(X)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(0.4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac13\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(1\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((-1)\times0.2+0\times0.5+2\times0.3=-0.2+0+0.6=0.4\)。选 B 是把三个取值简单平均了；选 C 是漏了 \(-1\) 那一项的负号贡献。</p></div>
+  </div>
+  <div class="card predict" data-id="p-basic-2" data-answer="A">
+    <p>2. \(E(X)=2\)，\(D(X)=3\)，\(Y=3X-1\)。\(E(Y)\) 和 \(D(Y)\) 分别是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)，\(27\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(5\)，\(9\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\)，\(26\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(6\)，\(27\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(E(Y)=3\times2-1=5\)，\(D(Y)=3^2\times3=27\)。B 是 \(a\) 没平方；C 是把 \(-1\) 也减到了方差上，可平移不改变方差；D 是均值忘了 \(-1\)。</p></div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p-trap-mean" data-answer="B">
+    <p>3. 掷一个均匀骰子，点数为 \(X\)，\(E(X)=3.5\)。下面哪句话对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>多掷几次，总会有一次掷出 \(3.5\)</button>
+      <button class="opt" data-v="B"><b>B</b>掷很多次，点数的平均值会接近 \(3.5\)</button>
+      <button class="opt" data-v="C"><b>C</b>点数只能是整数，均值 \(3.5\) 一定算错了</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。均值是按概率加权的平均，说的是很多次的平均水平，它不一定是 \(X\) 能取到的值。A、C 都把「均值」当成了「某一次的结果」。</p></div>
+  </div>
+  <div class="card predict" data-id="p-trap-cost" data-answer="B">
+    <p>4. 一张刮刮卡卖 \(5\) 元：\(0.03\) 的机会中 \(100\) 元，\(0.1\) 的机会中 \(10\) 元，其余不中。买一张，净收益（奖金减去 \(5\) 元）的均值是？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>\(4\) 元，买了平均赚</button>
+      <button class="opt" data-v="B"><b>B</b>\(-1\) 元，长期看平均每张亏 \(1\) 元</button>
+      <button class="opt" data-v="C"><b>C</b>\(-1\) 元，所以每买一张都正好亏 \(1\) 元</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。净收益可能是 \(95\)、\(5\)、\(-5\) 元，概率 \(0.03\)、\(0.1\)、\(0.87\)：</p>
+      <p style="text-align:center">\(95\times0.03+5\times0.1+(-5)\times0.87=2.85+0.5-4.35=-1\)。</p>
+      <p>也可以先算奖金均值 \(100\times0.03+10\times0.1=4\)，再减成本 \(5\)。A 忘了扣成本。C 把长期平均当成了每一次的结果：单买一张只会是 \(95\)、\(5\) 或 \(-5\)，不会正好是 \(-1\)。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="p-trap-risk" data-answer="A">
+    <p>5. 两个方案的收益（万元）：甲取 \(1\) 和 \(3\)，概率各 \(0.5\)；乙取 \(-2\) 的概率 \(0.2\)、取 \(3\) 的概率 \(0.8\)。小王的要求是「不能亏钱」。他该选？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>甲</button>
+      <button class="opt" data-v="B"><b>B</b>乙，拿到 \(3\) 万的机会更大</button>
+      <button class="opt" data-v="C"><b>C</b>都一样，均值都是 \(2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。均值确实都是 \(2\)：甲 \(1\times0.5+3\times0.5=2\)，乙 \(-2\times0.2+3\times0.8=2\)。可方差甲是 \(1\)，乙是 \(4\times0.2+9\times0.8-2^2=4\)，乙波动大，而且有 \(0.2\) 的机会亏 \(2\) 万。</p>
+      <p>小王的目标是不亏，甲最少也赚 \(1\) 万，选甲。C 只看了均值；B 只看了最好的结果。均值一样时，要看风险和目标。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p-challenge" data-answer="A">
+    <p>6. \(E(X)=2\)，\(E(X^2)=5\)，\(Y=2X+3\)。\(E(Y^2)\) 是？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(53\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(49\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(29\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(23\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。先求 \(D(X)=5-2^2=1\)。于是 \(E(Y)=2\times2+3=7\)，\(D(Y)=2^2\times1=4\)。再把 \(D(Y)=E(Y^2)-\big(E(Y)\big)^2\) 倒过来：\(E(Y^2)=4+7^2=53\)。</p>
+      <p>B 是把 \(E(Y^2)\) 当成了 \(\big(E(Y)\big)^2\)，差的正是方差。C 是把 \((2X+3)^2\) 展开成 \(4X^2+9\)，漏了中间项 \(12X\)：正确是 \(4\times5+12\times2+9=53\)。D 是把 \(E(aX+b)\) 的公式直接套到 \(X^2\) 上：\(4\times5+3\)。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <div id="practice" data-fold-later></div>
+</section>
+
+<nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  // 定点数显示：num/den（整数），最多 d 位小数；不是整好时前面加 ≈
+  function fx(num, den, d) {
+    var v = num / den, p = Math.pow(10, d), r = Math.round(v * p) / p;
+    var s = r.toFixed(d).replace(/\.?0+$/, ""); if (s === "-0") s = "0";
+    return (Math.abs(r * den - num) > 1e-9 * Math.max(1, Math.abs(num)) ? "\\approx " : "=") + s;
+  }
+  function nm(v, d) { var p = Math.pow(10, d); var s = (Math.round(v * p) / p).toFixed(d).replace(/\.?0+$/, ""); return s === "-0" ? "0" : s; }
+  function toSvg(el, ev) {
+    var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+  }
+  function draggable(fig, handle, onDown, onMove, onEnd) {
+    handle.addEventListener("pointerdown", function (ev) {
+      ev.preventDefault(); onDown(toSvg(fig, ev));
+      function mv(e) { onMove(toSvg(fig, e)); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); onEnd(); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+  }
+
+  /* ================= 分布：概率用百分之几的整数存，和恒为 100 ================= */
+  var XS = [1, 2, 3, 4, 5], N = 5, START = [10, 20, 30, 25, 15];
+  var P = START.slice();
+  // 把第 i 个改成 v，其余按原比例分剩下的 100-v（最大余数法，保证整数且和为 100）
+  function setP(i, v) {
+    v = clamp(Math.round(v), 0, 100);
+    var rest = 100 - v, S = 0, j, others = [];
+    for (j = 0; j < N; j++) if (j !== i) { others.push(j); S += P[j]; }
+    var q = [], used = 0;
+    others.forEach(function (j) {
+      var raw = S > 0 ? P[j] * rest / S : rest / others.length, f = Math.floor(raw);
+      q.push({ j: j, f: f, r: raw - f }); used += f;
+    });
+    q.sort(function (u, w) { return w.r - u.r || u.j - w.j; });
+    for (var t = 0; t < rest - used; t++) q[t % q.length].f += 1;
+    q.forEach(function (o) { P[o.j] = o.f; });
+    P[i] = v;
+  }
+  function stats() { // 返回 100·E、100·E(X²)、10000·D 都是整数
+    var e = 0, e2 = 0;
+    for (var i = 0; i < N; i++) { e += XS[i] * P[i]; e2 += XS[i] * XS[i] * P[i]; }
+    return { e100: e, e2100: e2, d10000: 100 * e2 - e * e };
+  }
+
+  /* ================= ① 跷跷板 ================= */
+  var dist = document.getElementById("dist");
+  var DL = 40, DR = 520, DY = 250, DH = 190, DU = (DR - DL) / 6;
+  function dx(x) { return DL + x * DU; }
+  var focusI = -1;
+  function distDraw(keep) {
+    var st = stats(), E = st.e100 / 100, D = Math.max(0, st.d10000) / 10000, sg = Math.sqrt(D);
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), hs = css("--hl-soft"), muted = css("--muted"), card = css("--card"), line = css("--line");
+    dist.innerHTML = "";
+    // E±σ 带
+    var bl = clamp(dx(E - sg), DL, DR), br = clamp(dx(E + sg), DL, DR);
+    svg("rect", { x: bl, y: DY - DH - 10, width: Math.max(0, br - bl), height: DH + 10, fill: hs, opacity: 0.9 }, dist);
+    if (sg > 0.005) {
+      svg("line", { x1: bl, y1: DY - DH - 10, x2: bl, y2: DY, stroke: hl, "stroke-dasharray": "4 4" }, dist);
+      svg("line", { x1: br, y1: DY - DH - 10, x2: br, y2: DY, stroke: hl, "stroke-dasharray": "4 4" }, dist);
+    }
+    // 0.5 和 1 的参考线
+    [0.5, 1].forEach(function (h) {
+      svg("line", { x1: DL, y1: DY - h * DH, x2: DR, y2: DY - h * DH, stroke: line, "stroke-dasharray": "2 5" }, dist);
+      svg("text", { x: DL - 4, y: DY - h * DH + 7, "text-anchor": "end", fill: muted }, dist).textContent = h;
+    });
+    // 柱子
+    for (var i = 0; i < N; i++) {
+      var p = P[i] / 100, x = dx(XS[i]), h = p * DH;
+      svg("rect", { x: x - 22, y: DY - h, width: 44, height: h, fill: ca, opacity: 0.85, rx: 3 }, dist);
+      svg("text", { x: x, y: DY - h - 26, "text-anchor": "middle" }, dist).textContent = nm(p, 2);
+      svg("text", { x: x, y: DY + 24, "text-anchor": "middle", "font-weight": 700 }, dist).textContent = XS[i];
+      var hit = svg("rect", { x: x - 34, y: DY - DH - 20, width: 68, height: DH + 20, fill: "transparent", style: "cursor:ns-resize" }, dist);
+      var hd = svg("circle", { cx: x, cy: DY - h, r: 10, fill: card, stroke: fg, "stroke-width": 3, tabindex: 0, role: "slider", "data-i": i,
+        "aria-label": "X=" + XS[i] + " 的概率", "aria-valuemin": 0, "aria-valuemax": 1, "aria-valuenow": p, style: "cursor:ns-resize" }, dist);
+      bindBar(hit, i); bindBar(hd, i);
+      hd.addEventListener("keydown", keyFor(i));
+    }
+    // 杆（数轴）与支点
+    svg("line", { x1: DL - 10, y1: DY, x2: DR + 10, y2: DY, stroke: fg, "stroke-width": 4 }, dist);
+    var ex = dx(E);
+    svg("line", { x1: ex, y1: DY, x2: ex, y2: DY + 34, stroke: cc, "stroke-dasharray": "3 3" }, dist);
+    svg("path", { d: "M" + ex + " " + (DY + 34) + " L" + (ex - 16) + " " + (DY + 62) + " L" + (ex + 16) + " " + (DY + 62) + " Z", fill: cc }, dist);
+    var lab = "E(X) = " + nm(E, 2);
+    svg("text", { x: clamp(ex, 90, 470), y: DY + 86, "text-anchor": "middle", fill: cc, "font-weight": 700 }, dist).textContent = lab;
+    if (keep && focusI >= 0) { var f = dist.querySelector('[data-i="' + focusI + '"]'); if (f) f.focus(); }
+
+    // 文字
+    var terms = [], terms2 = [];
+    for (var k = 0; k < N; k++) { terms.push(XS[k] + "\\times" + nm(P[k] / 100, 2)); terms2.push(XS[k] * XS[k] + "\\times" + nm(P[k] / 100, 2)); }
+    var lines = [];
+    lines.push("\\(E(X)=" + terms.join("+") + "=" + nm(E, 2) + "\\)");
+    lines.push("\\(E(X^2)=" + terms2.join("+") + "=" + nm(st.e2100 / 100, 2) + "\\)");
+    lines.push("\\(D(X)=" + nm(st.e2100 / 100, 2) + "-" + nm(E, 2) + "^2=" + nm(D, 4) + "\\)，\\(\\sigma=\\sqrt{D(X)}" + fx(Math.sqrt(D) * 1e6, 1e6, 2) + "\\)");
+    var note;
+    if (st.d10000 <= 0) note = '<span class="eq">方差为 0</span>：\\(X\\) 只取一个值，没有波动，支点就在那根柱子下。';
+    else if (st.e100 % 100 !== 0) note = "支点在 \\(" + nm(E, 2) + "\\)，\\(X\\) 取不到这个值：均值不一定是能取到的值。";
+    else note = "支点正好落在 \\(" + nm(E, 2) + "\\) 上。换一种分布让支点不动，看看方差变不变。";
+    lines.push(note);
+    var out = document.getElementById("distout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+    linDraw();
+  }
+  function pFromY(y) { return clamp(Math.round((DY - y) / DH * 100), 0, 100); }
+  var dragI = -1;
+  function bindBar(el, i) {
+    draggable(dist, el, function (pt) { dragI = i; focusI = i; setP(i, pFromY(pt.y)); distDraw(true); },
+      function (pt) { var v = pFromY(pt.y); if (dragI >= 0 && v !== P[dragI]) { setP(dragI, v); distDraw(true); } },
+      function () { if (dragI >= 0) Peiyu.log("interact", { id: "dist", p: P.join(",") }); dragI = -1; });
+  }
+  function keyFor(i) {
+    return function (ev) {
+      var d = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 }[ev.key];
+      if (ev.key === "Home") d = -P[i]; else if (ev.key === "End") d = 100 - P[i];
+      if (!d) return;
+      ev.preventDefault(); focusI = i; setP(i, P[i] + d); distDraw(true);
+    };
+  }
+  function preset(arr, name) { return function () { P = arr.slice(); focusI = -1; distDraw(); Peiyu.log("interact", { id: "dist-preset", v: name }); }; }
+  document.getElementById("pre-flat").onclick = preset([20, 20, 20, 20, 20], "flat");
+  document.getElementById("pre-mid").onclick = preset([5, 20, 50, 20, 5], "mid");
+  document.getElementById("pre-ends").onclick = preset([45, 5, 0, 5, 45], "ends");
+  document.getElementById("pre-one").onclick = preset([0, 0, 100, 0, 0], "one");
+  document.getElementById("distreset").onclick = preset(START, "reset");
+
+  /* ================= ② Y=aX+b ================= */
+  var lin = document.getElementById("lin"), ain = document.getElementById("ain"), bin = document.getElementById("bin");
+  var LL = 30, LR = 530, LU = (LR - LL) / 40, ROWX = 105, ROWY = 245, RH = 70;
+  var a2 = 4, bb = -3; // a = a2/2
+  function lx(v) { return LL + (v + 20) * LU; }
+  function row(base, pts, E, sg, color, label) {
+    var fg = css("--fg"), cc = css("--c"), hs = css("--hl-soft"), hl = css("--hl");
+    var bl = clamp(lx(E - sg), LL, LR), br = clamp(lx(E + sg), LL, LR);
+    svg("rect", { x: bl, y: base - RH - 6, width: Math.max(0, br - bl), height: RH + 6, fill: hs }, lin);
+    if (sg > 1e-9) {
+      svg("line", { x1: bl, y1: base - RH - 6, x2: bl, y2: base, stroke: hl, "stroke-dasharray": "3 3" }, lin);
+      svg("line", { x1: br, y1: base - RH - 6, x2: br, y2: base, stroke: hl, "stroke-dasharray": "3 3" }, lin);
+    }
+    pts.forEach(function (o) {
+      var h = o.p * RH, w = o.w;
+      svg("rect", { x: lx(o.v) - w / 2, y: base - h, width: w, height: h, fill: color }, lin);
+    });
+    svg("line", { x1: LL, y1: base, x2: LR, y2: base, stroke: fg, "stroke-width": 2.5 }, lin);
+    for (var t = -20; t <= 20; t += 10) {
+      svg("line", { x1: lx(t), y1: base, x2: lx(t), y2: base + 5, stroke: fg }, lin);
+      svg("text", { x: lx(t), y: base + 24, "text-anchor": "middle" }, lin).textContent = t;
+    }
+    var ex = lx(E);
+    svg("path", { d: "M" + ex + " " + (base + 2) + " L" + (ex - 9) + " " + (base + 16) + " L" + (ex + 9) + " " + (base + 16) + " Z", fill: cc }, lin);
+    svg("text", { x: LL, y: base - RH - 12, "font-weight": 700, fill: color }, lin).textContent = label;
+  }
+  function linDraw() {
+    if (!lin) return;
+    var a = a2 / 2, st = stats(), E = st.e100 / 100, D = Math.max(0, st.d10000) / 10000;
+    // Y 的分布：取值相同的合并
+    var map = {}, keys = [];
+    for (var i = 0; i < N; i++) {
+      var y2 = a2 * XS[i] + 2 * bb; // 2y，整数
+      if (!(y2 in map)) { map[y2] = 0; keys.push(y2); }
+      map[y2] += P[i];
+    }
+    var ey = 0, ey2 = 0; // 100·E(2Y)、100·E((2Y)^2)
+    keys.forEach(function (k) { ey += k * map[k]; ey2 += k * k * map[k]; });
+    var dY40000 = 100 * ey2 - ey * ey; // 40000·D(Y)
+    var EY = ey / 200, DY_ = Math.max(0, dY40000) / 40000;
+    lin.innerHTML = "";
+    var ca = css("--a"), cb = css("--b");
+    row(ROWX, XS.map(function (x, j) { return { v: x, p: P[j] / 100, w: 8 }; }), E, Math.sqrt(D), ca, "X");
+    var w = a2 === 0 ? 10 : clamp(Math.abs(a) * LU * 0.6, 4, 10);
+    row(ROWY, keys.map(function (k) { return { v: k / 2, p: map[k] / 100, w: w }; }), EY, Math.sqrt(DY_), cb, "Y = aX + b");
+    document.getElementById("aout").textContent = nm(a, 1);
+    document.getElementById("bout").textContent = bb;
+    var at = nm(a, 1), atp = a < 0 ? "(" + at + ")" : at, bt = bb < 0 ? String(bb) : "+" + bb;
+    var lines = [];
+    var yt = a2 === 0 ? String(bb) : (a2 === 2 ? "" : a2 === -2 ? "-" : at) + "X" + (bb === 0 ? "" : bt);
+    lines.push("\\(Y=" + yt + "\\)。直接按 \\(Y\\) 的分布列算：\\(E(Y)=" + nm(EY, 3) + "\\)，\\(D(Y)" + fx(dY40000, 40000, 4) + "\\)。");
+    lines.push('用公式：<span class="eq">\\(aE(X)+b=' + atp + "\\times" + nm(E, 2) + bt + "=" + nm(a * E + bb, 3) + "\\)</span>，" +
+      '<span class="eq">\\(a^2D(X)=' + atp + "^2\\times" + nm(D, 4) + fx(a2 * a2 * Math.max(0, st.d10000), 40000, 4) + "\\)</span>，一样。");
+    var tip;
+    if (a2 === 0) tip = "\\(a=0\\)：\\(Y\\) 恒等于 \\(" + bb + "\\)，所有柱子并成一根，方差是 \\(0\\)。";
+    else if (a2 < 0) tip = "\\(a\\) 为负：分布左右翻转，可 \\(\\sigma(Y)=|a|\\sigma(X)" + fx(Math.abs(a) * Math.sqrt(D) * 1e6, 1e6, 2) + "\\)，标准差不会是负的。";
+    else tip = "\\(\\sigma(Y)=|a|\\sigma(X)" + fx(Math.abs(a) * Math.sqrt(D) * 1e6, 1e6, 2) + "\\)。\\(b\\) 只平移，不改变波动。";
+    lines.push(tip);
+    var out = document.getElementById("linout");
+    out.innerHTML = lines.join("<br>");
+    Peiyu.math(out);
+  }
+  function linReset() { a2 = 4; bb = -3; ain.value = a2; bin.value = bb; linDraw(); }
+  ain.addEventListener("input", function () { var v = parseInt(ain.value, 10); a2 = clamp(isNaN(v) ? 4 : v, -6, 6); linDraw(); });
+  bin.addEventListener("input", function () { var v = parseInt(bin.value, 10); bb = clamp(isNaN(v) ? -3 : v, -5, 5); linDraw(); });
+  ain.addEventListener("change", function () { Peiyu.log("interact", { id: "lin-a", a: a2 / 2 }); });
+  bin.addEventListener("change", function () { Peiyu.log("interact", { id: "lin-b", b: bb }); });
+  document.getElementById("linreset").onclick = linReset;
+
+  document.addEventListener("DOMContentLoaded", function () { ain.value = a2; bin.value = bb; P = START.slice(); distDraw(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { distDraw(); });
+})();
+</script>
+</body></html>

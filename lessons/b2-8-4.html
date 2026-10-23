@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8.4 空间点、直线、平面之间的位置关系 · 培玉高中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<style>
+  .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result b { color: var(--fg); }
+  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .tabs button { font: inherit; font-size: 13.5px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; transition: all 0.15s; }
+  .tabs button.on { background: var(--a); color: #fff; border-color: var(--a); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); margin: 6px 0 10px; justify-content: center; }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 12px; height: 3px; border-radius: 2px; }
+</style>
+</head>
+<body data-sec="b2-8-4">
+<div class="wrap">
+<header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
+<p class="crumb">必修第二册 · 第 8 章 立体几何初步</p>
+<h1>8.4 空间点、直线、平面之间的位置关系</h1>
+<p class="lead">从二维平面走向三维空间：四大基本事实构建几何大厦，两直线不相交不一定是平行（异面直线），等角定理谨记互补，平移化异面为共面求夹角。</p>
+
+<section class="step" data-title="从例子进入">
+  <p>在初中平面几何里，我们熟悉一个经验：“在同一个平面内，两条直线如果不相交，就一定互相平行”。</p>
+  <p>但抬头观察真实的三维世界：高架桥上一辆汽车自西向东飞驰，桥下地面上一列地铁自北向南穿行；或者教室天花板上的日光灯管，与地面上一条斜穿的瓷砖拼缝——</p>
+  <div class="card predict" data-id="entry" data-answer="B">
+    <p>高架桥上的公路与地面上的铁轨，这两条直线既永远不会相交，也显然不平行。在空间中，它们属于什么位置关系？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>仍然属于平行，因为它们没有公共点</button>
+      <button class="opt" data-v="B"><b>B</b>属于异面直线，不同在任何一个平面内</button>
+      <button class="opt" data-v="C"><b>C</b>属于相交直线，在无限远处相交</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。这两条直线既不相交，也不平行，它们分别处于不同的高度和方向，<b>不同在任何一个平面内</b>，数学上称之为<b>异面直线</b>。</p>
+      <p>初中的“不相交即平行”有一个至关重要的前提——“<b>在同一平面内</b>”。迈入三维空间，无公共点的两条直线完全可能是异面直线。这一节我们就来系统建立空间点、线、面的位置关系体系，掌握确定平面的四大基本事实。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <h3>1. 先认识几个词</h3>
+  <p class="small">要用到：8.1 基本立体图形里的正方体、棱和面（<a href="b2-8-1.html">回看 8.1</a>），8.2 怎么画直观图（<a href="b2-8-2.html">回看 8.2</a>）；初中的「同一平面内，两直线不相交就平行」。</p>
+
+  <div class="card">
+    <p><b>平面</b>：平的、没有厚度、向四周无限伸展。画的时候用一个平行四边形代表它，记作平面 \(\alpha\)、平面 \(ABCD\) 等。</p>
+    <p>例：正方体 \(ABCD-A_1B_1C_1D_1\) 的底面画出来只是一块正方形，但「平面 \(ABCD\)」指的是把这块正方形无限延展开的那整张平面。</p>
+  </div>
+
+  <div class="card">
+    <p><b>属于、在……内</b>：点在平面内写 \(A\in\alpha\)；直线在平面内写 \(l\subset\alpha\)（直线是点的集合，所以用「包含」）。</p>
+    <p>例：在正方体里，\(A\in\) 平面 \(ABCD\)，\(A_1\notin\) 平面 \(ABCD\)，直线 \(AB\subset\) 平面 \(ABCD\)。</p>
+  </div>
+
+  <div class="card">
+    <p><b>共线、共面</b>：几个点在同一条直线上叫共线；几个点（或几条线）在同一个平面内叫共面。</p>
+    <p>例：正方体的 \(A,B,C,D\) 四点共面；\(A,B,C_1,D_1\) 也共面（它们组成一个长方形截面）；而 \(A,B,C,C_1\) 不共面。</p>
+  </div>
+
+  <div class="card">
+    <p><b>异面直线</b>：不同在任何一个平面内的两条直线。它们没有公共点，但也不平行。</p>
+    <p>例：正方体里棱 \(AB\) 是「前后」方向，棱 \(CC_1\) 是「上下」方向，两条棱没有公共点，也找不到一个平面同时装下它们。</p>
+  </div>
+
+  <h3>2. 三条基本事实：平面怎么定、线怎么放、面怎么交</h3>
+  <p>立体几何的推理从下面三条出发，它们是大家公认、不再证明的事实：</p>
+  <div class="key">
+    <b>基本事实 1</b>：过不在一条直线上的三个点，有且只有一个平面。<br>
+    <b>基本事实 2</b>：一条直线上有两个点在一个平面内，这条直线就在这个平面内。<br>
+    <b>基本事实 3</b>：两个不重合的平面有一个公共点，就有且只有一条过这个点的公共直线（交线）。
+  </div>
+  <p>为什么这样说：三脚架放在不平的地上也不晃，三个脚尖总能定下一个面；拿直尺贴在桌面，两端都贴住了，整条边就都贴住了；翻开的书，两页只在书脊那条线上相交。</p>
+  <p>由基本事实 1 还能推出三种定平面的方式：一条直线和直线外一点；两条相交直线；两条平行直线。</p>
+  <p>怎么用：要证几个点<b>共线</b>，常说明它们都是两个平面的公共点——两个平面的公共点都落在唯一的交线上。要证<b>共面</b>，先用其中几个元素定一个平面，再说明其余的也在里面。</p>
+
+  <div class="card">
+    <p class="small">例 1（看一遍怎么写）</p>
+    <p>\(\triangle ABC\) 不在平面 \(\alpha\) 内，直线 \(AB,\ BC,\ CA\) 延长后分别与平面 \(\alpha\) 交于点 \(P,\ Q,\ R\)。证明 \(P,Q,R\) 三点共线。</p>
+    <p>证：\(A,B,C\) 不共线，由基本事实 1，它们确定一个平面，记作平面 \(ABC\)。</p>
+    <p>\(P\) 在直线 \(AB\) 上，而 \(AB\subset\) 平面 \(ABC\)，所以 \(P\in\) 平面 \(ABC\)；又 \(P\in\alpha\)。所以 \(P\) 是两个平面的公共点。同理 \(Q,\ R\) 也是公共点。</p>
+    <p>平面 \(ABC\) 与 \(\alpha\) 不重合（\(\triangle ABC\) 不在 \(\alpha\) 内），又有公共点，由基本事实 3，它们交于一条直线 \(l\)，并且所有公共点都在 \(l\) 上。</p>
+    <p>所以 \(P,Q,R\) 都在 \(l\) 上，三点共线。</p>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A">
+    <p>自己试试：空间中有四个点，其中三个点在同一条直线上。这四个点：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一定共面</button>
+      <button class="opt" data-v="B"><b>B</b>一定不共面</button>
+      <button class="opt" data-v="C"><b>C</b>不一定共面</button>
+      <button class="opt" data-v="D"><b>D</b>一定共线</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。设 \(A,B,C\) 在直线 \(l\) 上。第四点 \(D\) 若不在 \(l\) 上，「直线和直线外一点」定一个平面，四点都在里面；若 \(D\) 也在 \(l\) 上，四点共线，当然也共面。选 C 的同学把它和「四点中任意三点不共线」弄混了，那种情况才可能不共面。</p></div>
+  </div>
+
+  <h3>3. 空间两条直线的三种位置</h3>
+  <p>在平面里，两条直线不是相交就是平行。到了空间，多出一种：异面。</p>
+  <table class="rec">
+    <tr><th>关系</th><th>在同一平面内？</th><th>公共点</th></tr>
+    <tr><td>相交</td><td>是</td><td>恰 1 个</td></tr>
+    <tr><td>平行</td><td>是</td><td>0 个</td></tr>
+    <tr><td>异面</td><td>否</td><td>0 个</td></tr>
+  </table>
+  <div class="key">没有公共点，可能平行也可能异面。先确认两条线在同一平面内，才能说「不相交就平行」。</div>
+  <p>空间里平行仍能传递（<b>基本事实 4</b>）：平行于同一条直线的两条直线平行，即 \(a\parallel b,\ b\parallel c\Rightarrow a\parallel c\)。但「异面」不能传递，下面就看到。</p>
+
+  <div class="card">
+    <p class="small">例 2</p>
+    <p>在正方体 \(ABCD-A_1B_1C_1D_1\) 中，判断：① \(AD_1\) 与 \(BC_1\)；② \(AB\) 与 \(C_1D_1\)；③ \(AB\) 与 \(CC_1\) 的位置关系。</p>
+    <p>① \(AB\parallel D_1C_1\) 且 \(AB=D_1C_1\)（都和 \(DC\) 平行且相等），所以 \(ABC_1D_1\) 是平行四边形，对边 \(AD_1\parallel BC_1\)：<b>平行</b>。</p>
+    <p>② \(AB\parallel DC\)，\(DC\parallel D_1C_1\)，由基本事实 4，\(AB\parallel C_1D_1\)：<b>平行</b>。（它们不在同一个面上，但仍平行。）</p>
+    <p>③ 平面 \(BCC_1B_1\) 包含 \(CC_1\)，\(B\) 在这个平面内但不在 \(CC_1\) 上，\(A\) 不在这个平面内。如果 \(AB\) 与 \(CC_1\) 共面，这个平面就含有 \(CC_1\) 和 \(B\)，只能是平面 \(BCC_1B_1\)，可 \(A\) 不在其中，矛盾。所以是<b>异面</b>。</p>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="D">
+    <p>自己试试：直线 \(a\) 与 \(b\) 异面，\(b\) 与 \(c\) 异面。那么 \(a\) 与 \(c\)：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一定异面</button>
+      <button class="opt" data-v="B"><b>B</b>一定平行</button>
+      <button class="opt" data-v="C"><b>C</b>一定相交</button>
+      <button class="opt" data-v="D"><b>D</b>三种都可能</button>
+    </div>
+    <div class="reveal"><p><b>D</b>。在正方体里取 \(b=AB\)：\(a=CC_1\)、\(c=DD_1\) 时 \(a\parallel c\)；\(a=CC_1\)、\(c=B_1C_1\) 时相交于 \(C_1\)；\(a=CC_1\)、\(c=A_1D_1\) 时异面。选 A 的同学把「异面」当成像平行一样能传递，其实只有平行能传递。</p></div>
+  </div>
+
+  <h3>4. 等角定理与异面直线所成的角</h3>
+  <p><b>等角定理</b>：空间中两个角的两边分别对应平行，这两个角<b>相等或互补</b>。两组边方向都相同（或都相反）时相等，一组同向、一组反向时互补。</p>
+  <p>有了它，就能给异面直线定一个「夹角」：过空间任一点 \(O\) 作 \(a'\parallel a,\ b'\parallel b\)，\(a'\) 与 \(b'\) 相交，所成的<b>锐角或直角</b>叫异面直线 \(a,b\) 所成的角。由等角定理，换一个点 \(O\) 角也不变，所以通常把 \(O\) 取在其中一条直线上，只平移另一条。</p>
+  <div class="key">异面直线所成角 \(\theta\) 的范围：\(0^\circ&lt;\theta\le90^\circ\)。等于 \(90^\circ\) 时称两直线互相垂直，记 \(a\perp b\)（异面也可以垂直）。<br>求法三步：平移成相交 → 在三角形里算角 → 若算出钝角，取它的补角。</div>
+
+  <div class="card">
+    <p class="small">例 3（看一遍怎么写）</p>
+    <p>正方体 \(ABCD-A_1B_1C_1D_1\) 的棱长为 \(1\)。求：① \(A_1B\) 与 \(CC_1\) 所成的角；② \(A_1B\) 与 \(B_1C\) 所成的角。</p>
+    <p>① \(CC_1\parallel BB_1\)，所以所求角就是 \(A_1B\) 与 \(BB_1\) 的夹角 \(\angle A_1BB_1\)。在正方形 \(ABB_1A_1\) 中，对角线平分直角，\(\angle A_1BB_1=45^\circ\)。所求角为 \(45^\circ\)。</p>
+    <p>② 平移 \(A_1B\)：\(A_1D_1\parallel BC\) 且 \(A_1D_1=BC\)，所以 \(A_1BCD_1\) 是平行四边形，\(A_1B\parallel D_1C\)。所求角就是 \(D_1C\) 与 \(B_1C\) 的夹角 \(\angle B_1CD_1\)。</p>
+    <p>连 \(B_1D_1\)。\(\triangle B_1CD_1\) 的三边 \(B_1C,\ D_1C,\ B_1D_1\) 都是面对角线，长都是 \(\sqrt2\)，是等边三角形，\(\angle B_1CD_1=60^\circ\)。所求角为 \(60^\circ\)。</p>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="C">
+    <p>自己试试：在正方体 \(ABCD-A_1B_1C_1D_1\) 中，异面直线 \(A_1B_1\) 与 \(BC_1\) 所成的角是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(30^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(45^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(90^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(60^\circ\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(A_1B_1\parallel AB\)，所以所求角就是 \(AB\) 与 \(BC_1\) 的夹角 \(\angle ABC_1\)。设棱长为 \(1\)，在 \(\triangle ABC_1\) 中，\(AB=1\)，\(BC_1=\sqrt2\)（面对角线），\(AC_1=\sqrt3\)（体对角线），\(1^2+(\sqrt2)^2=(\sqrt3)^2\)，由勾股定理的逆定理，\(\angle ABC_1=90^\circ\)。</p>
+      <p>选 B 的同学看到 \(BC_1\) 是面对角线，就以为和棱成 \(45^\circ\)；可 \(45^\circ\) 是它和同一面里的棱 \(BC\) 的夹角，\(AB\) 不在那个面里。</p>
+    </div>
+  </div>
+
+  <h3>5. 边界条件：各配一个反例</h3>
+  <div class="card">
+    <p><b>① 三点必须不共线</b>。反例：三点在一条直线上时，过它们的平面有无数个，像翻开的书，每一页都过书脊。</p>
+    <p><b>② 两个平面必须不重合，才谈得上交线</b>。反例：平面 \(ABCD\) 与它自己有无数公共点，却说不上「交线」。</p>
+    <p><b>③ 「不相交就平行」只在同一平面内成立</b>。反例：正方体的 \(AB\) 与 \(CC_1\) 不相交，但不平行，是异面。</p>
+    <p><b>④ 图上相交不等于空间相交</b>。反例：从上往下看立交桥，两条路在图上交叉，实际上一上一下，是异面直线。画出的图只是投影，相交要靠推理确认。</p>
+    <p><b>⑤ 等角定理是「相等或互补」</b>。反例：\(\angle AOB=50^\circ\)，把 \(OB\) 反向延长成射线 \(OB'\)，\(\angle AOB'\) 的两边与 \(\angle AOB\) 的两边分别平行（同一直线），但它等于 \(130^\circ\)。</p>
+    <p><b>⑥ 异面直线所成角不取钝角</b>。反例：平移后在三角形里算出的内角是 \(120^\circ\)，所成角应写 \(180^\circ-120^\circ=60^\circ\)，不能写 \(120^\circ\)。另外它也不能是 \(0^\circ\)：夹角为 \(0^\circ\) 意味着平行，就不是异面了。</p>
+  </div>
+
+  <details class="more"><summary>再深一点（可以先跳过）</summary>
+    <p><b>三线共点</b>：要证三条直线交于一点，先说明其中两条交于点 \(P\)，再说明 \(P\) 在第三条线上——常常第三条线是两个平面的交线，而 \(P\) 正好是这两个平面的公共点。</p>
+    <p><b>判断异面的常用说法</b>（例 2 ③ 就是这样）：平面外一点和平面内一点连成的直线，与平面内不过后一点的直线异面。</p>
+    <p><b>这一章用什么工具</b>：本章只用基本事实和平面几何推理。平面向量只能在已经确认的同一个平面里用；平面方程、法向量这些后面选必一才学，这里不用。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>正方体两直线位置关系与平移求角实验室</h3>
+  <p class="small">点击切换下方典型棱对，观察正方体透视投影中的相对空间位置；拖动滑块或按键盘左右方向键平移直线，直观体验“化异面为共面”求角过程：</p>
+
+  <div class="tabs" id="presetTabs" role="tablist">
+    <button type="button" class="on" data-idx="0">A1B1 与 CD（平行）</button>
+    <button type="button" data-idx="1">A1B 与 AB1（相交 90°）</button>
+    <button type="button" data-idx="2">AB 与 CC1（异面垂直 90°）</button>
+    <button type="button" data-idx="3">A1B 与 CC1（异面 45°）</button>
+    <button type="button" data-idx="4">A1B 与 B1C（异面 60°）</button>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:var(--a);"></span>第一条直线（松绿）</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--c);"></span>第二条直线（黛蓝）</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--hl);"></span>平移后位置（金黄）</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--dim);border-top:1px dashed var(--dim);"></span>被遮挡内棱（虚线）</span>
+  </div>
+
+  <svg class="fig" id="cubeSvg" viewBox="0 0 560 330" role="img" aria-label="正方体两直线空间位置关系透视图"></svg>
+
+  <div class="ctrl">
+    <button type="button" class="btn" id="animBtn">平移求异面角</button>
+    <label for="tSlider" style="margin-left:8px;">平移进度 \(t = \)</label>
+    <input type="range" id="tSlider" min="0" max="100" step="2" value="0">
+    <output id="tOut" style="font-weight:700;min-width:3.2em;">0%</output>
+    <button type="button" class="btn ghost" id="resetBtn">重置</button>
+  </div>
+  <div class="result" id="cubeDesc" aria-live="polite"></div>
+</section>
+
+<section class="step" data-title="练一练">
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="B">
+    <p>1. 在正方体 \(ABCD-A_1B_1C_1D_1\) 的 12 条棱中，与棱 \(AB\) 既不相交也不平行的棱（即异面棱）共有几条？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>2 条</button>
+      <button class="opt" data-v="B"><b>B</b>4 条</button>
+      <button class="opt" data-v="C"><b>C</b>6 条</button>
+      <button class="opt" data-v="D"><b>D</b>8 条</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。正方体共有 12 条棱。与棱 \(AB\) 的关系分类如下：</p>
+      <ul>
+        <li>与 \(AB\) 平行的棱有 3 条：\(A_1B_1, CD, C_1D_1\)；</li>
+        <li>与 \(AB\) 相交的棱有 4 条：\(AA_1, BB_1, AD, BC\)；</li>
+        <li>排除 \(AB\) 本身及上述 7 条棱，剩下的 <b>4 条棱</b>与 \(AB\) 既不相交也不平行，全部是异面直线，它们是：\(CC_1, DD_1, A_1D_1, B_1C_1\)。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="A">
+    <p>2. 空间中三条直线 \(a, b, c\)。若 \(a \parallel b\) 且 \(b \parallel c\)，则直线 \(a\) 与 \(c\) 的位置关系是：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一定平行</button>
+      <button class="opt" data-v="B"><b>B</b>一定相交</button>
+      <button class="opt" data-v="C"><b>C</b>可能异面</button>
+      <button class="opt" data-v="D"><b>D</b>平行或异面</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。由立体几何<b>基本事实 4（平行公理）</b>：平行于同一条直线的两条直线互相平行。该性质在三维空间中依然具有严格的传递性，因此只要 \(a \parallel b\) 且 \(b \parallel c\)，必有 \(a \parallel c\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p3" data-answer="D">
+    <p>3. 在正四面体（四个面均为正三角形的三棱锥）\(P-ABC\) 中，棱 \(PA\) 与对棱 \(BC\) 所成的角的大小为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(30^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(45^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(60^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(90^\circ\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。取 \(BC\) 的中点 \(D\)，连结 \(PD, AD\)。</p>
+      <p>因为 \(\triangle PBC\) 与 \(\triangle ABC\) 都是等边三角形，所以中线也是高：\(PD \perp BC\) 且 \(AD \perp BC\)。</p>
+      <p>因为 \(PD \cap AD = D\)，所以 \(BC \perp\) 平面 \(PAD\)。</p>
+      <p>又因为 \(PA \subset\) 平面 \(PAD\)，所以 \(BC \perp PA\)，即异面直线 \(PA\) 与 \(BC\) 所成的角是 \(90^\circ\)（互相异面垂直）。</p>
+      <p>结论推广：正四面体的任意一组对棱都互相垂直，这是高考的高频几何特征！</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p4" data-answer="C">
+    <p>4. 空间中两个角 \(\angle A\) 和 \(\angle B\) 的两边分别对应平行。已知 \(\angle A = 55^\circ\)，则 \(\angle B\) 的度数为：</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>只有 \(55^\circ\)</button>
+      <button class="opt" data-v="B"><b>B</b>只有 \(125^\circ\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(55^\circ\) 或 \(125^\circ\)</button>
+      <button class="opt" data-v="D"><b>D</b>大小无法确定</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。易错警示：根据<b>等角定理</b>，空间中如果两个角的两边分别对应平行，那么这两个角<b>相等或互补</b>！</p>
+      <p>当两组对应边方向均相同或均相反时，\(\angle B = \angle A = 55^\circ\)；当一组方向相同、另一组方向相反时，\(\angle B = 180^\circ - 55^\circ = 125^\circ\)。未给定图形时必须保留两解，切莫漏掉“互补”！</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p5" data-answer="C">
+    <p>5. 下列关于空间点、线、面位置关系的命题中，<b>正确</b>的是：</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>经过空间任意三点有且只有一个平面</button>
+      <button class="opt" data-v="B"><b>B</b>空间中没有公共点的两条直线一定是平行直线</button>
+      <button class="opt" data-v="C"><b>C</b>若一个四边形的两条对角线相交，则这个四边形一定是平面图形</button>
+      <button class="opt" data-v="D"><b>D</b>空间中四个点任意三点不共线，则这四个点一定不共面</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。逐项剖析：</p>
+      <ul>
+        <li><b>A 错误</b>：基本事实 1 明确要求“<b>不共线的三点</b>”。若三点在同一直线上，经过它们的平面有无数个；</li>
+        <li><b>B 错误</b>：空间中没有公共点的两直线可能是平行直线，也可能是<b>异面直线</b>；</li>
+        <li><b>C 正确</b>：设对角线相交于点 \(O\)，两对角线是两条相交直线，由基本事实 1 的推论“两条相交直线确定一个平面”，该平面的四个顶点必同在这一平面内；</li>
+        <li><b>D 错误</b>：反例为普通平面凸四边形（如矩形），四个顶点任意三点不共线，但它们完全共面。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="高考真题">
+  <div id="practice" data-fold-later></div>
+</section>
+
+<footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 正方体 3D 斜测投影顶点坐标（长宽高 L=170，深度倾角 35°，缩放比 0.55）
+  // A(前左下), B(前右下), C(后右下), D(后左下[遮挡点])
+  // A1(前左上), B1(前右上), C1(后右上), D1(后左上)
+  var V = {
+    A:  [150, 270],
+    B:  [320, 270],
+    C:  [400, 215],
+    D:  [230, 215],
+    A1: [150, 100],
+    B1: [320, 100],
+    C1: [400, 45],
+    D1: [230, 45]
+  };
+
+  // 12 条棱定义：连接点及是否被遮挡（虚线）
+  var EDGES = [
+    { from: "A", to: "B", hidden: false },
+    { from: "B", to: "B1", hidden: false },
+    { from: "B1", to: "A1", hidden: false },
+    { from: "A1", to: "A", hidden: false },
+    { from: "B", to: "C", hidden: false },
+    { from: "C", to: "C1", hidden: false },
+    { from: "C1", to: "B1", hidden: false },
+    { from: "A1", to: "D1", hidden: false },
+    { from: "D1", to: "C1", hidden: false },
+    { from: "A", to: "D", hidden: true },
+    { from: "C", to: "D", hidden: true },
+    { from: "D", to: "D1", hidden: true }
+  ];
+
+  // 顶点文字标注偏移量
+  var V_LABELS = {
+    A:  { dx: -18, dy: 16, text: "A" },
+    B:  { dx: 8,  dy: 16, text: "B" },
+    C:  { dx: 12, dy: 6,  text: "C" },
+    D:  { dx: -18, dy: -6, text: "D" },
+    A1: { dx: -20, dy: -6, text: "A₁" },
+    B1: { dx: 8,  dy: -6, text: "B₁" },
+    C1: { dx: 10, dy: -6, text: "C₁" },
+    D1: { dx: -20, dy: -6, text: "D₁" }
+  };
+
+  var PRESETS = [
+    {
+      name: "A₁B₁ 与 CD（平行）",
+      type: "parallel",
+      line1: { name: "A₁B₁", from: "A1", to: "B1" },
+      line2: { name: "CD", from: "C", to: "D" },
+      target: { from: "C", to: "D" },
+      transLine: 1,
+      targetFrom: "D", targetTo: "C",
+      angle: "0°",
+      relation: "平行（共面，无公共点）",
+      desc: "<b>位置关系：平行</b>。<br>由基本事实 4（平行传递性），因为 \\(A_1B_1 \\parallel AB\\) 且 \\(CD \\parallel AB\\)，所以 \\(A_1B_1 \\parallel CD\\)。<br>两条平行直线确定一个平面 \\(A_1B_1CD\\)，两直线在同一平面内且没有公共点，方向相同，夹角为 \\(0^\\circ\\)。"
+    },
+    {
+      name: "A₁B 与 AB₁（相交 90°）",
+      type: "intersect",
+      line1: { name: "A₁B", from: "A1", to: "B" },
+      line2: { name: "AB₁", from: "A", to: "B1" },
+      target: null,
+      angle: "90°",
+      relation: "相交垂直（共面，有 1 个公共点）",
+      desc: "<b>位置关系：相交垂直</b>。<br>\\(A_1B\\) 与 \\(AB_1\\) 同在正方体的前侧面 \\(ABB_1A_1\\) 内，是该正方形的两条对角线。<br>它们相交于正方形的中心点 \\(O\\)，由于正方形对角线互相垂直，两直线所成角为 \\(90^\\circ\\)。"
+    },
+    {
+      name: "AB 与 CC₁（异面垂直 90°）",
+      type: "skew",
+      line1: { name: "AB", from: "A", to: "B" },
+      line2: { name: "CC₁", from: "C", to: "C1" },
+      target: { from: "B", to: "B1" },
+      transLine: 2,
+      angle: "90°",
+      relation: "异面垂直（不同在任何平面内）",
+      desc: "<b>位置关系：异面垂直</b>。<br>直线 \\(AB\\) 在底面，\\(CC_1\\) 穿过顶底两面，不同在任何一个平面内。<br><b>平移求角</b>：将 \\(CC_1\\) 沿底面平移到棱 \\(BB_1\\)，与 \\(AB\\) 相交于顶点 \\(B\\)。在正方形 \\(ABB_1A_1\\) 中，\\(AB \\perp BB_1\\)，所以 \\(\\angle ABB_1 = 90^\\circ\\)，两异面直线互相垂直。"
+    },
+    {
+      name: "A₁B 与 CC₁（异面 45°）",
+      type: "skew",
+      line1: { name: "A₁B", from: "A1", to: "B" },
+      line2: { name: "CC₁", from: "C", to: "C1" },
+      target: { from: "B", to: "B1" },
+      transLine: 2,
+      angle: "45°",
+      relation: "异面（不同在任何平面内）",
+      desc: "<b>位置关系：异面成 45°</b>。<br><b>平移求角</b>：将 \\(CC_1\\) 平移到棱 \\(BB_1\\)，与 \\(A_1B\\) 相交于端点 \\(B\\)，所求角即为 \\(\\angle A_1BB_1\\)。<br>在正方形 \\(ABB_1A_1\\) 中，对角线 \\(A_1B\\) 平分直角，因此 \\(\\angle A_1BB_1 = 45^\\circ\\)，即异面直线 \\(A_1B\\) 与 \\(CC_1\\) 所成的角为 \\(45^\\circ\\)。"
+    },
+    {
+      name: "A₁B 与 B₁C（异面 60°）",
+      type: "skew",
+      line1: { name: "A₁B", from: "A1", to: "B" },
+      line2: { name: "B₁C", from: "B1", to: "C" },
+      target: { from: "D1", to: "C" },
+      transLine: 1,
+      aux: ["B1", "D1"],
+      angle: "60°",
+      relation: "异面（不同在任何平面内）",
+      desc: "<b>位置关系：异面成 60°</b>。<br><b>平移求角</b>：因为 \\(A_1D_1 \\parallel BC\\) 且 \\(A_1D_1 = BC\\)，所以四边形 \\(A_1BCD_1\\) 是平行四边形，\\(A_1B \\parallel D_1C\\)。<br>将 \\(A_1B\\) 平移至 \\(D_1C\\)，与 \\(B_1C\\) 相交于顶点 \\(C\\)，所求角为 \\(\\angle B_1CD_1\\)。<br>连结 \\(B_1D_1\\)，\\(B_1C, D_1C, B_1D_1\\) 均为正方体的面对角线，长度全等，\\(\\triangle B_1CD_1\\) 为正三角形，因此 \\(\\angle B_1CD_1 = 60^\\circ\\)！"
+    }
+  ];
+
+  var currentIdx = 2; // 默认展示：AB 与 CC1 (异面垂直)
+  var tProgress = 0;   // 0.0 ~ 1.0
+  var animTimer = null;
+
+  var svg = document.getElementById("cubeSvg");
+  var desc = document.getElementById("cubeDesc");
+  var tSlider = document.getElementById("tSlider");
+  var tOut = document.getElementById("tOut");
+  var animBtn = document.getElementById("animBtn");
+  var resetBtn = document.getElementById("resetBtn");
+  var tabButtons = document.querySelectorAll("#presetTabs button");
+
+  function createSvgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) {
+      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
+        el.setAttribute(k, attrs[k]);
+      }
+    }
+    return el;
+  }
+
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function render() {
+    while (svg.firstChild) {
+      svg.removeChild(svg.firstChild);
+    }
+
+    var preset = PRESETS[currentIdx];
+    var t = Math.max(0, Math.min(1, tProgress));
+
+    // 1. 绘制正方体 12 条基础骨架棱
+    EDGES.forEach(function (e) {
+      var p1 = V[e.from], p2 = V[e.to];
+      var line = createSvgEl("line", {
+        x1: p1[0], y1: p1[1],
+        x2: p2[0], y2: p2[1],
+        stroke: e.hidden ? "var(--dim)" : "var(--fg)",
+        "stroke-width": e.hidden ? "1.4" : "1.8",
+        "stroke-dasharray": e.hidden ? "4 4" : "none",
+        opacity: e.hidden ? "0.6" : "0.75"
+      });
+      svg.appendChild(line);
+    });
+
+    // 2. 绘制辅助线（如异面 60° 时的三角形底边 B1D1）
+    if (preset.aux && t > 0.1) {
+      var ap1 = V[preset.aux[0]], ap2 = V[preset.aux[1]];
+      var auxLine = createSvgEl("line", {
+        x1: ap1[0], y1: ap1[1],
+        x2: ap2[0], y2: ap2[1],
+        stroke: "var(--hl)",
+        "stroke-width": "1.8",
+        "stroke-dasharray": "3 3",
+        opacity: (t * 0.85).toFixed(2)
+      });
+      svg.appendChild(auxLine);
+    }
+
+    // 3. 高亮 Line 1（松绿）
+    var l1p1 = V[preset.line1.from], l1p2 = V[preset.line1.to];
+    var hl1 = createSvgEl("line", {
+      x1: l1p1[0], y1: l1p1[1],
+      x2: l1p2[0], y2: l1p2[1],
+      stroke: "var(--a)",
+      "stroke-width": "3.8",
+      "stroke-linecap": "round"
+    });
+    svg.appendChild(hl1);
+
+    // 4. 高亮 Line 2（黛蓝）
+    var l2p1 = V[preset.line2.from], l2p2 = V[preset.line2.to];
+    var hl2 = createSvgEl("line", {
+      x1: l2p1[0], y1: l2p1[1],
+      x2: l2p2[0], y2: l2p2[1],
+      stroke: "var(--c)",
+      "stroke-width": "3.8",
+      "stroke-linecap": "round"
+    });
+    svg.appendChild(hl2);
+
+    // 5. 平移轨迹与平移后线段（金黄）
+    if (preset.target) {
+      var origP1 = preset.transLine === 1 ? l1p1 : l2p1;
+      var origP2 = preset.transLine === 1 ? l1p2 : l2p2;
+      var tgtP1 = V[preset.target.from];
+      var tgtP2 = V[preset.target.to];
+
+      // 平移虚线轨迹
+      if (t > 0 && t < 1) {
+        var track1 = createSvgEl("line", {
+          x1: origP1[0], y1: origP1[1],
+          x2: tgtP1[0], y2: tgtP1[1],
+          stroke: "var(--dim)",
+          "stroke-width": "1.2",
+          "stroke-dasharray": "2 2"
+        });
+        var track2 = createSvgEl("line", {
+          x1: origP2[0], y1: origP2[1],
+          x2: tgtP2[0], y2: tgtP2[1],
+          stroke: "var(--dim)",
+          "stroke-width": "1.2",
+          "stroke-dasharray": "2 2"
+        });
+        svg.appendChild(track1);
+        svg.appendChild(track2);
+      }
+
+      // 平移中的动态线段
+      if (t > 0) {
+        var curP1x = lerp(origP1[0], tgtP1[0], t);
+        var curP1y = lerp(origP1[1], tgtP1[1], t);
+        var curP2x = lerp(origP2[0], tgtP2[0], t);
+        var curP2y = lerp(origP2[1], tgtP2[1], t);
+
+        var transLineEl = createSvgEl("line", {
+          x1: curP1x.toFixed(1), y1: curP1y.toFixed(1),
+          x2: curP2x.toFixed(1), y2: curP2y.toFixed(1),
+          stroke: "var(--hl)",
+          "stroke-width": "4.2",
+          "stroke-linecap": "round"
+        });
+        svg.appendChild(transLineEl);
+      }
+    }
+
+    // 6. 相交公共点或相交角弧度标注
+    if (preset.type === "intersect") {
+      // 对角线交点 O
+      var ox = (l1p1[0] + l1p2[0]) / 2;
+      var oy = (l1p1[1] + l1p2[1]) / 2;
+      var ptO = createSvgEl("circle", {
+        cx: ox, cy: oy, r: "5", fill: "var(--hl)", stroke: "#fff", "stroke-width": "2"
+      });
+      var txtO = createSvgEl("text", {
+        x: ox + 8, y: oy - 6, fill: "var(--hl)", "font-size": "13", "font-weight": "700"
+      });
+      txtO.textContent = "O (90°)";
+      svg.appendChild(ptO);
+      svg.appendChild(txtO);
+    } else if (t >= 0.85 && preset.target) {
+      // 标注平移后的夹角弧度
+      var meetPt = null;
+      var fixedPt = null;
+      var movPt = null;
+
+      if (preset.name.indexOf("AB 与 CC₁") >= 0) {
+        meetPt = V.B; fixedPt = V.A; movPt = V.B1;
+      } else if (preset.name.indexOf("A₁B 与 CC₁") >= 0) {
+        meetPt = V.B; fixedPt = V.A1; movPt = V.B1;
+      } else if (preset.name.indexOf("A₁B 与 B₁C") >= 0) {
+        meetPt = V.C; fixedPt = V.B1; movPt = V.D1;
+      }
+
+      if (meetPt && fixedPt && movPt) {
+        var ptMeet = createSvgEl("circle", {
+          cx: meetPt[0], cy: meetPt[1], r: "5.5", fill: "var(--hl)", stroke: "#fff", "stroke-width": "2"
+        });
+        svg.appendChild(ptMeet);
+
+        var txtAngle = createSvgEl("text", {
+          x: meetPt[0] - 18, y: meetPt[1] - 12, fill: "var(--hl)", "font-size": "14", "font-weight": "700"
+        });
+        txtAngle.textContent = "θ = " + preset.angle;
+        svg.appendChild(txtAngle);
+      }
+    }
+
+    // 7. 绘制 8 个顶点的文字标签
+    for (var vk in V_LABELS) {
+      if (Object.prototype.hasOwnProperty.call(V_LABELS, vk)) {
+        var info = V_LABELS[vk];
+        var pos = V[vk];
+        var txt = createSvgEl("text", {
+          x: pos[0] + info.dx,
+          y: pos[1] + info.dy,
+          fill: "var(--fg)",
+          "font-size": "13.5",
+          "font-weight": "600",
+          "font-family": "system-ui, sans-serif"
+        });
+        txt.textContent = info.text;
+        svg.appendChild(txt);
+      }
+    }
+
+    // 8. 实时更新文字说明
+    desc.innerHTML = preset.desc;
+    if (window.renderMathInElement) {
+      window.renderMathInElement(desc, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ],
+        throwOnError: false
+      });
+    }
+
+    tOut.textContent = Math.round(t * 100) + "%";
+    tSlider.value = Math.round(t * 100);
+
+    if (preset.type === "intersect") {
+      animBtn.disabled = true;
+      animBtn.textContent = "两线已相交";
+    } else {
+      animBtn.disabled = false;
+      animBtn.textContent = t >= 1 ? "重播平移" : "平移求异面角";
+    }
+  }
+
+  function setPreset(idx) {
+    if (animTimer) {
+      clearInterval(animTimer);
+      animTimer = null;
+    }
+    currentIdx = idx;
+    tProgress = 0;
+    tabButtons.forEach(function (b, i) {
+      b.classList.toggle("on", i === idx);
+    });
+    render();
+  }
+
+  function animateTranslation() {
+    if (animTimer) {
+      clearInterval(animTimer);
+      animTimer = null;
+    }
+    if (tProgress >= 1) {
+      tProgress = 0;
+    }
+    var step = 0.04;
+    animTimer = setInterval(function () {
+      tProgress += step;
+      if (tProgress >= 1) {
+        tProgress = 1;
+        clearInterval(animTimer);
+        animTimer = null;
+      }
+      render();
+    }, 25);
+  }
+
+  tabButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var idx = parseInt(btn.getAttribute("data-idx"), 10);
+      setPreset(idx);
+    });
+  });
+
+  tSlider.addEventListener("input", function () {
+    if (animTimer) {
+      clearInterval(animTimer);
+      animTimer = null;
+    }
+    tProgress = parseInt(tSlider.value, 10) / 100;
+    render();
+  });
+
+  animBtn.addEventListener("click", function () {
+    animateTranslation();
+  });
+
+  resetBtn.addEventListener("click", function () {
+    if (animTimer) {
+      clearInterval(animTimer);
+      animTimer = null;
+    }
+    setPreset(2); // 恢复默认预设：AB 与 CC1 异面垂直
+  });
+
+  // 键盘左右方向键支持
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") {
+      tProgress = Math.min(1, tProgress + 0.05);
+      render();
+    } else if (e.key === "ArrowLeft") {
+      tProgress = Math.max(0, tProgress - 0.05);
+      render();
+    }
+  });
+
+  setPreset(2);
+})();
+</script>
+</body>
+</html>

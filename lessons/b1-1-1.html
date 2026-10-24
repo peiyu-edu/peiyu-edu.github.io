@@ -8,6 +8,7 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
 .seg { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 8px; }
@@ -35,9 +36,29 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 <h1>1.1 集合的概念</h1>
 <p class="lead">把一些对象「打包」成一个整体，并且能说清楚：谁在里面，谁不在。</p>
 
+<section class="concept-map card" id="concept-map" aria-labelledby="concept-map-title" style="border-left:4px solid var(--a); margin-bottom:18px;">
+  <p style="margin:0 0 6px"><span class="badge-pill badge-a">本节概念地图</span><b id="concept-map-title">先认词 → 再认关系 → 再看做法 → 自己用</b></p>
+  <p class="small" style="margin:0 0 8px"><b>核心概念：</b>集合是能明确判断成员、把若干对象看成一个整体的数学对象。</p>
+  <a class="btn" href="#step2-video" style="margin-bottom:8px">▶ 概念课视频｜先看这里</a>
+  <div class="concept-grid" style="margin:4px 0 10px">
+    <a class="card" href="#step2-definition" style="text-decoration:none;color:inherit"><span class="badge-pill badge-a">① 定义与符号</span><span class="small">集合、元素、\(\in\)、\(\notin\)</span></a>
+    <a class="card" href="#step2-intuition" style="text-decoration:none;color:inherit"><span class="badge-pill badge-b">② 直觉与关系</span><span class="small">收纳盒、常用数集嵌套</span></a>
+    <a class="card" href="#step2-method" style="text-decoration:none;color:inherit"><span class="badge-pill badge-a">③ 表示与方法</span><span class="small">列举法、描述法、代表元素</span></a>
+    <a class="card" href="#step2-boundary" style="text-decoration:none;color:inherit"><span class="badge-pill badge-no">④ 边界与反例</span><span class="small">确定性、互异性、无序性</span></a>
+  </div>
+  <p class="small" style="margin:0"><b>前置：</b>初中自然数、整数、有理数、实数　<b>解锁：</b>集合间的基本关系与集合运算</p>
+</section>
+
 <section class="step" data-title="从例子进入">
-  <p>班里学号 \(1\) 到 \(10\) 的十位同学，老师说：「学号是双数的同学，去搬新书。」</p>
+  <p>班里学号 \(1\) 到 \(10\) 的十位同学，老师说：「学号是双数的同学，去搬新书。」先点下面的按钮（或直接点学号圆章）试试：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-set" viewBox="0 0 520 195" role="img" aria-label="1到10号同学圆章，双数2、4、6、8、10进入右侧集合大圈"></svg>
+    <div class="entry-bar" id="entry-set-bar">
+      <button type="button" data-m="all">查看全部 1~10 号</button>
+      <button type="button" data-m="even" class="on">喊口令：双数出列</button>
+      <button type="button" data-m="check">点查 7 号与 8 号</button>
+    </div>
+    <div class="entry-note" id="entry-set-note"></div>
     <p>一共有几位同学去搬书？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(4\) 位</button>
@@ -54,38 +75,71 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="key" id="step2-video" style="margin-top:0"><b>概念课｜先把集合、元素和成员关系讲清楚</b>：看完视频，再用下面的定义卡和微图回看。</div>
   <div class="vid" data-video="concept"></div>
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中学过的自然数、整数、有理数、实数，和解简单的方程。这是全书第一节，没有要回看的前一节。</p>
+  <h3 id="step2-definition">1. 概念定义｜先认识几个词：集合与元素（从「收纳盒」到数学定义）</h3>
+  <p class="small">从初中进入高中，第一件事就是学习数学的「通用打包语言」。零散的研究对象叫元素，打包成的整体叫集合：</p>
 
-  <div class="card">
-    <p><b>元素和集合</b>：我们研究的对象叫<b>元素</b>；把一些元素放在一起、看成一个整体，叫<b>集合</b>。通常用大写字母 \(A, B, \dots\) 表示集合，小写字母 \(a, b, \dots\) 表示元素。</p>
-    <p>例：小于 \(5\) 的正整数是 \(1, 2, 3, 4\)，把它们放在一起，写成 \(A=\{1, 2, 3, 4\}\)。\(A\) 有 \(4\) 个元素。</p>
+  <div class="card" style="border-left: 4px solid var(--a); margin-bottom: 12px;">
+    <p style="margin:0 0 8px"><span class="badge-pill badge-a">核心概念 ①</span><b>集合（Set）与元素（Element）的数学定义</b></p>
+    <ul style="margin:0; padding-left:18px; line-height:1.75;">
+      <li><b>元素（element）</b>：我们把研究的每一个独立对象统称为<b>元素</b>。通常用<b>小写拉丁字母</b> \(a, b, c, \dots\) 表示。</li>
+      <li><b>集合（set，简称为集）</b>：把一些元素组成的总体叫做<b>集合</b>。通常用<b>大写拉丁字母</b> \(A, B, C, \dots\) 表示。</li>
+      <li><b>具身隐喻（数学收纳盒）</b>：零散的数字、点、图形是「物品」（元素）；用一套明确客观的标准把合格物品装进一个密封盒子，这个盒子整体就是「集合」。集合的核心在于：<b>能清楚判定谁在盒里，谁在盒外</b>。</li>
+    </ul>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">核心概念 ②</span><b>属于（\(\in\)）vs 不属于（\(\notin\)）</b></p>
+      <p class="small" style="margin:0">表示<b>元素与集合</b>之间的从属关系：若 \(a\) 是集合 \(A\) 的元素，记作 \(\color{#2F7A56}{a \in A}\)；若不是，记作 \(\color{#B5452F}{a \notin A}\)。<br>
+      <b>位置铁律</b>：小叉子左边是<b>单个元素</b>，右边是<b>大集合</b>！如 \(0 \in \mathbf{N}\)，但 \(0 \notin \mathbf{N}^*\)。绝不能颠倒写成 \(A \in a\)。</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">核心概念 ③</span><b>空集 \(\varnothing\) ≠ \(\{0\}\)！</b></p>
+      <p class="small" style="margin:0"><b>空集 \(\varnothing\)</b> 是不含任何元素的特殊集合（\(0\) 个元素，空书包）；<b>\(\{0\}\)</b> 是里面装着数字「\(0\)」的单元素集合（\(1\) 个元素，有球的书包）。两者有本质区别！</p>
+    </div>
+  </div>
+
+  <div class="micro-box" id="step2-intuition">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>五大常用数集的嵌套大包裹</b></p>
+    <p class="small" style="margin:0 0 6px">高中最常打交道的五大数集记号（从内层到外层层层嵌套，点击切换观察包含关系）：</p>
+    <div class="entry-bar" id="m-num-bar" role="group" aria-label="数集微图解切换">
+      <button type="button" class="on" data-k="N">① 自然数集 N（含 0！）</button>
+      <button type="button" data-k="Z">② 整数集 Z（含负整数）</button>
+      <button type="button" data-k="Q">③ 有理数集 Q（含分数）</button>
+      <button type="button" data-k="R">④ 实数集 R（数轴全部）</button>
+    </div>
+    <svg class="micro-fig" id="m-num-fig" viewBox="0 0 520 160" role="img" aria-label="常用数集嵌套微图解"></svg>
+    <p class="entry-note" id="m-num-note"></p>
+  </div>
+
+  <h3>2. 能当集合的三大铁律</h3>
+  <p class="small">并不是任何一群对象都能叫集合！课标与教材规定，集合里的元素必须满足三大特征：</p>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\text{确定性}}_{\text{谁在谁不在，标准唯一}}}\)</span>
+    <span style="display:inline-block; margin:0 14px">\(\color{#966524}{\underbrace{\text{互异性}}_{\text{同一个元素只写一次（绝不重复）}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\text{无序性}}_{\text{打乱书写顺序依然是同一集合}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>属于、不属于</b>：\(a\) 是 \(A\) 的元素，记作 \(a\in A\)，读「\(a\) 属于 \(A\)」；不是，记作 \(a\notin A\)。对一个确定的集合，二者必居其一。</p>
-    <p>例：\(A=\{1, 2, 3, 4\}\)。\(3\in A\)，\(5\notin A\)，\(0\notin A\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">方程 \(x^2-2x+1=0\) 的解组成的集合是什么？有几个元素？</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>解方程求集合，先算出方程所有的实数根。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步因式分解求根：</span>
+        原方程为 \((x-1)^2=0 \implies x_1=1, x_2=1\)，有两个相等的实数根。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步按「互异性」打包：</span>
+        集合里的元素<b>绝不能重复出现</b>，两个相同的根 \(1\) 只能记一次！所以解组成的集合是 \(\{1\}\)，只有 <b>\(1\) 个元素</b>！
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <p><b>常用数集的记号</b>：自然数集 \(\N\)（<b>含 \(0\)</b>），正整数集 \(\N^*\)（也写 \(\N_+\)），整数集 \(\Z\)，有理数集 \(\Q\)，实数集 \(\R\)。</p>
-    <p>例：\(0\in\N\)，但 \(0\notin\N^*\)；\(-3\in\Z\)；\(\dfrac12\in\Q\)，但 \(\dfrac12\notin\Z\)；\(\sqrt2\in\R\)，但 \(\sqrt2\notin\Q\)。</p>
-  </div>
-
-  <h3>2. 能当集合的三条规矩</h3>
-  <ul>
-    <li><b>确定</b>：给一个对象，必须能判断它在不在里面。「比较大的数」说不清多大算大，不能组成集合；「大于 \(10\) 的数」就可以。</li>
-    <li><b>互不相同</b>：同一个元素只算一次。</li>
-    <li><b>不讲顺序</b>：\(\{1, 2, 3\}\) 和 \(\{3, 1, 2\}\) 是同一个集合。两个集合只要元素完全一样，就<b>相等</b>。</li>
-  </ul>
-  <div class="key">集合只关心「谁在里面」：能判断在不在、重复的只算一次、顺序无所谓。</div>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>方程 \(x^2-2x+1=0\) 的解组成的集合是什么？有几个元素？</p>
-    <p>左边是 \((x-1)^2\)，所以 \((x-1)^2=0\)，两个根都是 \(1\)。集合里同一个元素只记一次，所以是 \(\{1\}\)，只有 \(1\) 个元素。</p>
-    <p>对比：方程 \((x-1)(x+2)=0\) 的解是 \(1\) 和 \(-2\)，集合是 \(\{1, -2\}\)；写成 \(\{-2, 1\}\) 也是同一个集合。</p>
-  </div>
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：下面哪一组对象能组成集合？</p>
     <div class="opts">
@@ -96,15 +150,41 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
     <div class="reveal"><p><b>B</b>，就是 \(\{1, 2, 3, 4\}\)。A 和 C 都说不清：多高算高？多近算近？\(0.001\) 算接近，\(0.1\) 算不算？给一个对象判断不了在不在，就不「确定」。常见的错是觉得 C 也行——「接近」听起来像数学词，其实没给标准。</p></div>
   </div>
 
-  <h3>3. 两种写法：列举法和描述法</h3>
-  <p><b>列举法</b>：把元素一个个写在大括号里，如 \(\{-1, 0, 1\}\)。元素少、能写完时最清楚。</p>
-  <p><b>描述法</b>：写成 \(\{\,x \in A \mid x \text{ 满足的条件}\,\}\)。竖线<b>左边</b>说「元素是什么、从哪里取」，<b>右边</b>说「要满足什么条件」。</p>
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>用列举法写出 \(B=\{x\in\Z\mid x^2&lt;5\}\)。</p>
-    <p>左边：\(x\) 是整数。右边：\(x^2&lt;5\)。从 \(0\) 往两边试：\(0^2=0\)，\((\pm1)^2=1\)，\((\pm2)^2=4\)，都小于 \(5\)；\((\pm3)^2=9\) 不行，再往外更大。</p>
-    <p>所以 \(B=\{-2, -1, 0, 1, 2\}\)，共 \(5\) 个元素。</p>
+  <h3 id="step2-method">3. 集合的两种表示方法：列举法与描述法</h3>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">表示法 ①</span><b>列举法：逐一开箱点名</b></p>
+      <p class="small" style="margin:0">把集合的元素一一列举在大括号内，用逗号隔开。如 \(A = \{1, 2, 3, 4, 5\}\)；有规律的无限集可用省略号表示，如自然数集 \(\{0, 1, 2, 3, \dots\}\)。</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">表示法 ②</span><b>描述法：立下准入规则</b></p>
+      <p class="small" style="margin:0">在大括号内写出元素的<b>代表符号</b>与<b>共同特征</b>。形如 \(\{x \in A \mid p(x)\}\)。最适合元素无限或范围连续的集合（如不等式解集、函数定义域）。</p>
+    </div>
   </div>
+
+  <p class="small" style="margin:8px 0 4px"><b>描述法破译秘籍：先看竖线前面的「代表元素」！</b></p>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    \(\{\; \color{#2F7A56}{\underbrace{x \in A}_{\text{看左边代表元：元素到底是什么？（数集还是点集？）}}} \;\mid\; \color{#966524}{\underbrace{p(x)}_{\text{看右边过滤条件：满足什么约束与范围？}}} \;\}\)
+  </div>
+
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">用列举法写出 \(B=\{x\in\Z\mid x^2&lt;5\}\)。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看竖线左边：</span>元素是 <b>整数 \(x \in \mathbf{Z}\)</b>，负整数、\(0\)、正整数都要检验！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步看右边过滤条件：</span>
+        要求平方小于 \(5\)：\(0^2=0&lt;5\)，\((\pm1)^2=1&lt;5\)，\((\pm2)^2=4&lt;5\)；而 \((\pm3)^2=9\ge5\) 超出。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步列举打包：</span>
+        满足条件的整数有 \(-2, -1, 0, 1, 2\)，列举法写出 \(B=\{-2, -1, 0, 1, 2\}\)，共 \(5\) 个元素。
+      </div>
+    </div>
+  </div>
+
   <div class="card predict" data-id="try-2" data-answer="B">
     <p>自己试试：集合 \(\{x\in\N\mid x&lt;4\}\) 有几个元素？</p>
     <div class="opts cols">
@@ -115,20 +195,13 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
     <div class="reveal"><p><b>B</b>，是 \(\{0, 1, 2, 3\}\)。选 A 的同学漏了 \(0\)：\(\N\) 含 \(0\)。选 C 是把 \(4\) 也算进去了，可条件是 \(x&lt;4\)，不含 \(4\)。</p></div>
   </div>
 
-  <h3>4. 先看竖线左边：数还是点</h3>
-  <div class="key">读描述法，先看竖线左边：元素是<b>数</b>还是<b>点</b>（或别的东西）？左边一变，集合就完全变了。</div>
-  <p>同一个等式 \(y = x^2\)：先想满足它的所有点 \((x, y)\)，也就是抛物线上的点；再看竖线左边要的是这些点的什么：</p>
-  <ul>
-    <li>\(\{x \mid y = x^2\}\)：要的是<b>横坐标</b>。对任意实数 \(x\)，都能取 \(y=x^2\) 让等式成立，所以横坐标能取所有实数，这个集合是 \(\R\)。</li>
-    <li>\(\{y \mid y = x^2\}\)：要的是<b>纵坐标</b>。\(y = x^2\) 只能取 \(\ge 0\) 的数，所以它是 \(\{y \mid y \ge 0\}\)。</li>
-    <li>\(\{(x, y) \mid y = x^2\}\)：元素是<b>点</b>，它是抛物线上所有点组成的<b>点集</b>。</li>
-  </ul>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>用列举法写出 \(C=\{(x, y)\mid x+y=3,\ x\in\N,\ y\in\N\}\)。</p>
-    <p>左边是 \((x, y)\)，元素是点。\(x\) 从 \(0\) 试到 \(3\)，\(y=3-x\) 也要是自然数：\((0, 3)\)，\((1, 2)\)，\((2, 1)\)，\((3, 0)\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（点集辨析）</b></p>
+    <p style="margin:0 0 8px">用列举法写出 \(C=\{(x, y)\mid x+y=3,\ x\in\N,\ y\in\N\}\)。</p>
+    <p>左边是 \((x, y)\)，元素是<b>平面上的点</b>。\(x\) 从 \(0\) 试到 \(3\)，\(y=3-x\) 也要是自然数：\((0, 3)\)，\((1, 2)\)，\((2, 1)\)，\((3, 0)\)。</p>
     <p>所以 \(C=\{(0, 3), (1, 2), (2, 1), (3, 0)\}\)，共 \(4\) 个元素。\((1, 2)\) 和 \((2, 1)\) 是两个不同的点，都要写。</p>
   </div>
+
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：集合 \(\{(1, 2), (3, 4)\}\) 有几个元素？</p>
     <div class="opts cols">
@@ -139,14 +212,50 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
   </div>
   <div class="vid" data-video="ex-rep"></div>
 
-  <h3>5. 带字母、可能为空：要回头检查</h3>
-  <p>集合里出现字母（参数），或者条件可能谁都满足不了时，有三件事要留心：</p>
-  <ol>
-    <li><b>求出参数，代回去查互不相同</b>。<br><span class="small">用列举法写出 \(\{1, a\}\)，就是在说「这里有 \(1\) 和 \(a\) 两个元素」，按约定它们互不相同，所以默认 \(a\ne1\)；\(a=1\) 时两个写法并成一个，和「两个元素」对不上，这样的 \(a\) 要舍去。（用描述法给的集合不一样：\(\{x\mid x^2-4x+4=0\}\) 的两个根都是 \(2\)，就只算一个元素 \(\{2\}\)，不用舍。）</span></li>
-    <li><b>别默认集合里一定有元素</b>。<br><span class="small">反例：\(\{x\mid x^2=-1\}\)：没有实数的平方是 \(-1\)，一个元素都没有。</span></li>
-    <li><b>「没有元素」不是 \(\{0\}\)</b>。<br><span class="small">反例：\(\{x\mid x^2=0\}=\{0\}\)，里面有一个元素 \(0\)；\(\{x\mid x^2=-1\}\) 才是一个元素都没有。</span></li>
-  </ol>
-  <div class="key">一个元素都没有的集合也是集合（下一节叫它<b>空集</b> \(\varnothing\)）。它和 \(\{0\}\) 不一样：\(\{0\}\) 里有一个元素 \(0\)。</div>
+  <h3 id="step2-boundary">4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>解出字母参数后，漏查「互异性」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：已知集合 \(A=\{1, a\}\)，若 \(a^2=1\) 解得 \(a=\pm1\)，直接写出 \(a=1\) 或 \(a=-1\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：代回原集合检验！若 \(a=1\)，集合变成 \(\{1, 1\}\)，严重违背了<b>互异性</b>！因此必须舍去 \(a=1\)，唯一正确解只有 \(a=-1\)。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>自然数集 \(\mathbf{N}\) 总是漏掉 \(0\)</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：把「小于 \(4\) 的自然数集」写成 \(\{1, 2, 3\}\)（误以为自然数从 \(1\) 开始）。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：高中数学国家标准：<b>\(0\) 属于自然数集 \(\mathbf{N}\)</b>（非负整数）！只有带星号的 \(\mathbf{N}^*\)（或 \(\mathbf{N}_+\)）才是正整数。正确集合是 \(\{0, 1, 2, 3\}\)。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（最高频！）</span><span>把空集写成 \(\{\varnothing\}\) 或 \(\{0\}\)</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：方程 \(x^2=-1\) 在实数范围内无解，写解集为 \(\{0\}\) 或 \(\{\varnothing\}\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：\(\{0\}\) 含有 \(1\) 个元素 \(0\)；\(\{\varnothing\}\) 含有 \(1\) 个元素 \(\varnothing\)；只有纯粹的 <b>\(\varnothing\)</b> 才是空空如也的空集（\(0\) 个元素）！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-empty-fig" viewBox="0 0 280 140" role="img" aria-label="空集书包对比微图解"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="vid" data-video="ex-param"></div>
 
   <details class="more">
@@ -449,7 +558,187 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
   });
   document.getElementById("reset2").addEventListener("click", function () { P = { x: 1.5, y: 1 }; draw2(); });
 
-  document.addEventListener("DOMContentLoaded", function () { setTpl(0); draw2(); });
+  /* ---------- 0 从例子进入：双数出列 ---------- */
+  var esSvg = document.getElementById("entry-set"), esBar = document.getElementById("entry-set-bar"), esNote = document.getElementById("entry-set-note");
+  var esMode = "even", esPick = 0;
+  function esDraw(mode, pickNum) {
+    esMode = mode; esPick = pickNum || 0;
+    esSvg.innerHTML = "";
+    // 左侧：1~10 号全班座位区
+    mk("rect", { x: 14, y: 12, width: 256, height: 170, rx: 12, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, esSvg);
+    mk("text", { x: 142, y: 34, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 14.5 }, esSvg).textContent = "班里 1 ~ 10 号同学";
+    // 右侧：搬新书集合 A
+    var activeSet = mode !== "all";
+    mk("rect", { x: 292, y: 12, width: 214, height: 170, rx: 18, fill: activeSet ? "var(--ok-soft)" : "var(--card)", stroke: activeSet ? "var(--a)" : "var(--line)", "stroke-width": activeSet ? 2.2 : 1.5, "stroke-dasharray": activeSet ? "" : "5 4" }, esSvg);
+    mk("text", { x: 399, y: 34, "text-anchor": "middle", "font-weight": 700, fill: activeSet ? "var(--a)" : "var(--muted)", "font-size": 14.5 }, esSvg).textContent = "搬新书集合 A（双数）";
+
+    for (var n = 1; n <= 10; n++) {
+      var colIdx = (n - 1) % 5, rowIdx = Math.floor((n - 1) / 5);
+      var lx = 44 + colIdx * 49, ly = 78 + rowIdx * 62;
+      var isEven = n % 2 === 0;
+      var isChk7 = (mode === "check" && n === 7) || esPick === n;
+      var isChk8 = (mode === "check" && n === 8) || esPick === n;
+      var g = mk("g", { style: "cursor:pointer" }, esSvg);
+      var moved = activeSet && isEven;
+      mk("circle", { cx: lx, cy: ly, r: 19, fill: moved ? "var(--bg)" : (isChk7 && !isEven ? "var(--no-soft)" : "var(--card)"), stroke: moved ? "var(--line)" : (isChk7 && !isEven ? "var(--no)" : "var(--muted)"), "stroke-width": isChk7 && !isEven ? 2.5 : 1.5, "stroke-dasharray": moved ? "3 3" : "" }, g);
+      var lt = mk("text", { x: lx, y: ly + 5, "text-anchor": "middle", "font-weight": 700, fill: moved ? "var(--muted)" : (isChk7 && !isEven ? "var(--no)" : "var(--fg)"), "font-size": 15, opacity: moved ? 0.45 : 1 }, g);
+      lt.textContent = n + "号";
+      if (isChk7 && !isEven) {
+        mk("text", { x: lx, y: ly + 32, "text-anchor": "middle", fill: "var(--no)", "font-weight": 700, "font-size": 12 }, g).textContent = "7∉A 不去";
+      }
+      (function (num) { g.onclick = function () { esDraw("check", num); }; })(n);
+    }
+
+    if (!activeSet) {
+      mk("text", { x: 399, y: 102, "text-anchor": "middle", fill: "var(--muted)", "font-size": 14 }, esSvg).textContent = "点「双数出列」看看谁进集合";
+    } else {
+      var evens = [2, 4, 6, 8, 10];
+      var pos = [[338, 76], [399, 76], [460, 76], [368, 128], [430, 128]];
+      evens.forEach(function (n, idx) {
+        var rx = pos[idx][0], ry = pos[idx][1];
+        var hi = (mode === "check" && n === 8) || esPick === n;
+        var g2 = mk("g", { style: "cursor:pointer" }, esSvg);
+        mk("circle", { cx: rx, cy: ry, r: 21, fill: hi ? "var(--a)" : "var(--card)", stroke: "var(--a)", "stroke-width": hi ? 3 : 2.2 }, g2);
+        mk("text", { x: rx, y: ry + 5, "text-anchor": "middle", "font-weight": 700, fill: hi ? "#fff" : "var(--a)", "font-size": 15 }, g2).textContent = n + "号";
+        (function (num) { g2.onclick = function () { esDraw("check", num); }; })(n);
+      });
+      mk("text", { x: 399, y: 168, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 14 }, esSvg).textContent = "A = {2, 4, 6, 8, 10}"; // 「共 5 位」下方说明里有；手机上字放大后整句会被右边裁掉
+    }
+
+    [].forEach.call(esBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (esPick) {
+      var okP = esPick % 2 === 0;
+      esNote.innerHTML = "点查 <b>" + esPick + " 号</b>：" + (okP ? "是双数 → <b>属于集合 A（" + esPick + " ∈ A，去搬书 ✓）</b>" : "是单数 → <b>不属于集合 A（" + esPick + " ∉ A，不去 ✗）</b>");
+    } else if (mode === "all") {
+      esNote.innerHTML = "全班 1~10 号共 10 位同学。老师喊「双数出列」，标准明确，谁去谁不去一清二楚。";
+    } else if (mode === "check") {
+      esNote.innerHTML = "随便报一个学号都能立刻判断：<b>7 ∉ A</b>（不去），<b>8 ∈ A</b>（去）——这就是集合元素的<b>确定性</b>。";
+    } else {
+      esNote.innerHTML = "双数出列：<b>2、4、6、8、10 号</b>进入右侧集合大圈，一共 <b>5 位</b>同学！";
+    }
+  }
+  [].forEach.call(esBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { esDraw(b.getAttribute("data-m"), 0); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") esDraw("even", 0);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") esDraw("even", 0);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { esDraw("even", 0); setTpl(0); draw2(); initStep2(); });
+
+  /* ---------- Step 2 讲清楚微图解 ---------- */
+  function initStep2() {
+    var nSvg = document.getElementById("m-num-fig"), nBar = document.getElementById("m-num-bar"), nNote = document.getElementById("m-num-note");
+    if (!nSvg || !nBar) return;
+
+    function drawNum(k) {
+      nSvg.innerHTML = "";
+      var cA = "var(--a)", cM = "var(--muted)", cFg = "var(--fg)", cCd = "var(--card)", cOk = "var(--ok-soft)", cLine = "var(--line)";
+      var rings = [
+        { k: "N", name: "自然数集 N", ex: "0, 1, 2, 3...", rx: 70, ry: 40, cx: 160, cy: 82 },
+        { k: "Z", name: "整数集 Z", ex: "拓展负整数 -1, -2...", rx: 120, ry: 58, cx: 205, cy: 82 },
+        { k: "Q", name: "有理数集 Q", ex: "拓展分数 1/2, -0.75...", rx: 175, ry: 72, cx: 250, cy: 82 },
+        { k: "R", name: "实数集 R", ex: "拓展无理数 √2, π...", rx: 240, ry: 76, cx: 260, cy: 82 }
+      ];
+
+      var order = { N: 0, Z: 1, Q: 2, R: 3 };
+      var actIdx = order[k] !== undefined ? order[k] : 0;
+
+      // 从外向内画同心包含环
+      for (var i = 3; i >= 0; i--) {
+        var ring = rings[i];
+        var isSel = i <= actIdx;
+        var strokeCol = i === actIdx ? cA : cLine;
+        var fillCol = i === actIdx ? cOk : (isSel ? cCd : "transparent");
+        mk("ellipse", { cx: ring.cx, cy: ring.cy, rx: ring.rx, ry: ring.ry, fill: fillCol, stroke: strokeCol, "stroke-width": i === actIdx ? 2.5 : 1.4 }, nSvg);
+      }
+
+      // 标注文字与典型元素
+      mk("text", { x: 160, y: 76, "text-anchor": "middle", "font-weight": 700, fill: actIdx === 0 ? cA : cFg, "font-size": 13.5 }, nSvg).textContent = "N: 0, 1, 2";
+      mk("text", { x: 160, y: 95, "text-anchor": "middle", fill: cM, "font-size": 11.5 }, nSvg).textContent = "(含 0！)";
+
+      mk("text", { x: 260, y: 84, "text-anchor": "middle", "font-weight": 700, fill: actIdx === 1 ? cA : cFg, "font-size": 13 }, nSvg).textContent = "Z: -1, -3";
+      mk("text", { x: 360, y: 84, "text-anchor": "middle", "font-weight": 700, fill: actIdx === 2 ? cA : cFg, "font-size": 13 }, nSvg).textContent = "Q: 1/2, 0.75";
+      mk("text", { x: 450, y: 84, "text-anchor": "middle", "font-weight": 700, fill: actIdx === 3 ? cA : cFg, "font-size": 13 }, nSvg).textContent = "R: √2, π";
+
+      [].forEach.call(nBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+
+      if (k === "N") {
+        nNote.innerHTML = "<b>自然数集 N</b>：包含 <b>0, 1, 2, 3...</b>（切记：<b>0 属于 N</b>！不含 0 的正整数写作 <b>N*</b> 或 <b>N₊</b>）。";
+      } else if (k === "Z") {
+        nNote.innerHTML = "<b>整数集 Z</b>：在自然数基础上加入负整数（<b>... -2, -1, 0, 1, 2...</b>）。";
+      } else if (k === "Q") {
+        nNote.innerHTML = "<b>有理数集 Q</b>：所有能写成分数 p/q 的数（包含有限小数、无限循环小数），<b>不含 √2 和 π</b>！";
+      } else {
+        nNote.innerHTML = "<b>实数集 R</b>：铺满整条数轴的所有数（有理数 + 无理数全包揽）。";
+      }
+    }
+
+    [].forEach.call(nBar.querySelectorAll("button"), function (b) {
+      b.onclick = function () { drawNum(b.getAttribute("data-k")); };
+    });
+    drawNum("N");
+
+    // 翻车现场 ③ 微图解：三书包
+    var eSvg = document.getElementById("m-empty-fig");
+    if (eSvg) {
+      eSvg.innerHTML = "";
+      var bags = [
+        { label: "空集 ∅", desc: "空书包：里面什么都没有", cnt: "0 个元素", col: "var(--a)" },
+        { label: "{0}", desc: "书包里装着数字 0 乒乓球", cnt: "1 个元素", col: "var(--no)" },
+        { label: "{∅}", desc: "书包里装着空集小卡片", cnt: "1 个元素", col: "var(--b)" }
+      ];
+      bags.forEach(function (b, idx) {
+        var bx = 16 + idx * 88;
+        mk("rect", { x: bx, y: 12, width: 80, height: 114, rx: 8, fill: "var(--bg)", stroke: b.col, "stroke-width": 1.6 }, eSvg);
+        mk("text", { x: bx + 40, y: 32, "text-anchor": "middle", "font-weight": 700, fill: b.col, "font-size": 13.5 }, eSvg).textContent = b.label;
+        mk("circle", { cx: bx + 40, cy: 64, r: 16, fill: idx === 0 ? "transparent" : (idx === 1 ? "var(--no-soft)" : "var(--hl-soft)"), stroke: b.col, "stroke-dasharray": idx === 0 ? "3 3" : "" }, eSvg);
+        if (idx === 1) mk("text", { x: bx + 40, y: 69, "text-anchor": "middle", "font-weight": 700, fill: "var(--no)", "font-size": 13 }, eSvg).textContent = "0";
+        if (idx === 2) mk("text", { x: bx + 40, y: 69, "text-anchor": "middle", "font-weight": 700, fill: "var(--b)", "font-size": 13 }, eSvg).textContent = "∅";
+        mk("text", { x: bx + 40, y: 106, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 12 }, eSvg).textContent = b.cnt;
+      });
+    }
+  }
+})();
+</script>
+<script>
+(function () {
+  function labelConceptStep() {
+    var tab = document.querySelector(".steps button:nth-child(2)");
+    if (tab) tab.textContent = "2 概念课";
+    document.querySelectorAll(".next .btn").forEach(function (button) {
+      if (button.textContent === "下一步：讲清楚") button.textContent = "下一步：概念课";
+    });
+  }
+  function openConceptHash() {
+    if (location.hash.indexOf("#step2-") !== 0) return;
+    var step2 = document.querySelector(".steps button:nth-child(2)");
+    var target = document.querySelector(location.hash);
+    labelConceptStep();
+    if (step2) step2.click();
+    if (target) window.setTimeout(function () { target.scrollIntoView({ block: "start" }); }, 0);
+  }
+  function wireConceptMap() {
+    document.querySelectorAll(".concept-map a[href^='#step2-']").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var step2 = document.querySelector(".steps button:nth-child(2)");
+        labelConceptStep();
+        if (step2) step2.click();
+        var target = document.querySelector(link.getAttribute("href"));
+        if (target) window.setTimeout(function () { target.scrollIntoView({ block: "start" }); }, 0);
+      });
+    });
+    window.setTimeout(function () { labelConceptStep(); openConceptHash(); }, 50);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wireConceptMap);
+  else wireConceptMap();
 })();
 </script>
 </body></html>

@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--a); font-weight: 700; }
@@ -28,8 +30,15 @@
 <p class="lead">两件事「互不影响」，在数学里用一个等式来说：\(P(AB)=P(A)P(B)\)。它和「互斥」是两回事，判断它要靠算或靠试验本身，不能凭感觉。先从一枚硬币和一颗骰子开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>先抛一枚硬币，再掷一颗骰子。硬币有正、反 \(2\) 种结果，骰子有 \(1\sim6\) 共 \(6\) 种，合起来 \(2\times6=12\) 种，每种可能性一样。</p>
+  <p>先抛一枚硬币，再掷一颗骰子。硬币有正、反 \(2\) 种结果，骰子有 \(1\sim6\) 共 \(6\) 种，合起来 \(2\times6=12\) 种等可能结果。点下面的按钮在 \(2\times6\) 棋盘上看看：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-indep" viewBox="0 0 520 205" role="img" aria-label="2乘6共12格样本空间棋盘：硬币正反乘骰子1到6，高亮(正,6)占1/12"></svg>
+    <div class="entry-bar" id="entry-indep-bar">
+      <button type="button" data-m="0">硬币正面 (6/12 = 1/2)</button>
+      <button type="button" data-m="1">骰子掷出 6 (2/12 = 1/6)</button>
+      <button type="button" data-m="2" class="on">同时发生：(正, 6) 仅 1 格 (1/12)</button>
+    </div>
+    <div class="entry-note" id="entry-indep-note"></div>
     <p>「硬币正面朝上，并且骰子掷出 \(6\)」的概率是多少？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(\dfrac1{12}\)</button>
@@ -46,8 +55,20 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：10.1 的样本空间、古典概型、事件的关系和运算（<a href="b2-10-1.html">回看 10.1</a>）。</p>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：相互独立乘法本质与互斥辨析</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="mult">① 乘法面积正交</button>
+      <button type="button" class="micro-tab" data-mode="vs">② 独立 vs 互斥</button>
+      <button type="button" class="micro-tab" data-mode="opp">③ 对立独立传递</button>
+    </div>
+    <svg id="m-indep-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="事件相互独立性直观图解"></svg>
+    <div class="micro-caption" id="m-indep-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>积事件 \(AB\)</b>：\(A\) 和 \(B\) <b>同时</b>发生，也写成 \(A\cap B\)。</p>
@@ -65,21 +86,42 @@
   </div>
 
   <div class="card">
-    <p><b>两步试验的样本空间</b>：掷两颗骰子，结果记成 \((i,j)\)，\(i\) 是第一颗、\(j\) 是第二颗的点数。一共 \(6\times6=36\) 种，可能性一样，可以排成一张 \(6\times6\) 的格子。</p>
+    <p><b>两步试验的样本空间</b>：掷两颗骰子，结果记成 \((i,j)\)，\(i\) 是第一颗、\(j\) 是第二颗的点数。一共 \(6\times 6=36\) 种，可能性一样，可以排成一张 \(6\times 6\) 的格子。</p>
     <p>例：「点数和为 \(3\)」\(=\{(1,2),(2,1)\}\)，占 \(2\) 格，概率 \(\dfrac2{36}=\dfrac1{18}\)。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">核心对决</span> 相互独立 vs 互斥事件</div>
+      <p><b>相互独立</b>：\(A\) 的发生与否<b>对 \(B\) 的概率毫无影响</b>，充要条件为 \(P(AB) = P(A)P(B)\)。两事件可同时发生，交集非空。</p>
+      <p><b>互斥事件</b>：两事件<b>绝不可能同时发生</b>，\(AB = \varnothing \implies P(AB) = 0\)。若 \(A\) 发生，\(B\) 概率直接归零（极端依赖）！</p>
+      <p class="small">金律：<b>若 \(P(A)>0, P(B)>0\)，互斥必不独立，独立必不互斥！</b>两者水火不容，不可混淆。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">抽样对比</span> 放回抽样 vs 不放回抽样</div>
+      <p><b>有放回抽样</b>：每次抽取后样本恢复原状，各次试验条件恒定，前后事件<b>严格相互独立</b>，各步概率直接相乘。</p>
+      <p><b>不放回抽样</b>：后次抽样总数与分布因前次结果而变，属于<b>条件依存</b>，事件不独立，不可直接相乘！</p>
+      <p class="small">提醒：大样本抽样（如数万件中抽数件）虽不放回，但因基数极大，可近似看作相互独立处理。</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    相互独立定义公式：\(P(AB) = \color{#2563eb}{P(A)}\times  \color{#059669}{P(B)}\)<br>
+    对立独立传递性：\(A, B\text{ 独立} \iff \overline{A}, \overline{B}\text{ 独立} \iff P(\overline{A}\,\overline{B}) = \color{#dc2626}{P(\overline{A})}\times  \color{#059669}{P(\overline{B})}\)<br>
+    “至少发生一个”求逆：\(P(A \cup B) = 1 - P(\overline{A}\,\overline{B}) = 1 - [1 - \color{#2563eb}{P(A)}][1 - \color{#059669}{P(B)}]\)
   </div>
 
   <h3>2. 什么叫相互独立</h3>
   <p>入门题里，「硬币正面」和「骰子是 \(6\)」同时发生的概率，正好等于两个概率相乘。我们就用这个等式来定义「互不影响」：</p>
   <div class="key">如果 \(P(AB)=P(A)P(B)\)，就说事件 \(A\) 与 \(B\) <b>相互独立</b>（简称独立）。</div>
-  <p>为什么是相乘：两步各自进行时，样本点是「第一步的结果 \(\times\) 第二步的结果」。\(A\) 只看第一步、\(B\) 只看第二步，那么 \(AB\) 的个数 \(=\) \(A\) 的个数 \(\times\) \(B\) 的个数，除以总数，就是概率相乘。</p>
+  <p>为什么是相乘：两步各自进行时，样本点是「第一步的结果 \(\times \) 第二步的结果」。\(A\) 只看第一步、\(B\) 只看第二步，那么 \(AB\) 的个数 \(=\) \(A\) 的个数 \(\times \) \(B\) 的个数，除以总数，就是概率相乘。</p>
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>掷两颗骰子，\(A=\)「第一颗是偶数」，\(B=\)「点数和为 \(7\)」。\(A\) 与 \(B\) 独立吗？</p>
-    <p>\(A\)：第一颗是 \(2,4,6\)，第二颗随便，\(3\times6=18\) 格，\(P(A)=\dfrac{18}{36}=\dfrac12\)。</p>
+    <p>\(A\)：第一颗是 \(2,4,6\)，第二颗随便，\(3\times 6=18\) 格，\(P(A)=\dfrac{18}{36}=\dfrac12\)。</p>
     <p>\(B\)：\((1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\)，\(6\) 格，\(P(B)=\dfrac6{36}=\dfrac16\)。</p>
     <p>\(AB\)：上面第一颗是偶数的 \((2,5),(4,3),(6,1)\)，\(3\) 格，\(P(AB)=\dfrac3{36}=\dfrac1{12}\)。</p>
-    <p>\(P(A)P(B)=\dfrac12\times\dfrac16=\dfrac1{12}=P(AB)\)，所以 \(A\) 与 \(B\) 独立。</p>
+    <p>\(P(A)P(B)=\dfrac12\times \dfrac16=\dfrac1{12}=P(AB)\)，所以 \(A\) 与 \(B\) 独立。</p>
     <p class="small">「和」明明跟第一颗有关，算出来却是独立的。所以判断独立要算，不能看着像就下结论。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="B">
@@ -88,46 +130,108 @@
       <button class="opt" data-v="A"><b>A</b>独立</button>
       <button class="opt" data-v="B"><b>B</b>不独立</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(B=\{(2,6),(3,5),(4,4),(5,3),(6,2)\}\)，只有 \(5\) 格，\(P(B)=\dfrac5{36}\)；\(AB=\{(2,6),(4,4),(6,2)\}\)，\(P(AB)=\dfrac3{36}=\dfrac1{12}\)。而 \(P(A)P(B)=\dfrac12\times\dfrac5{36}=\dfrac5{72}\)，\(\dfrac1{12}=\dfrac6{72}\ne\dfrac5{72}\)，不独立。和为 \(7\) 独立，不等于和为 \(8\) 也独立；常见的错是照例 1 类推，或者把和为 \(8\) 也数成 \(6\) 格。</p></div>
+    <div class="reveal"><p><b>B</b>。\(B=\{(2,6),(3,5),(4,4),(5,3),(6,2)\}\)，只有 \(5\) 格，\(P(B)=\dfrac5{36}\)；\(AB=\{(2,6),(4,4),(6,2)\}\)，\(P(AB)=\dfrac3{36}=\dfrac1{12}\)。而 \(P(A)P(B)=\dfrac12\times \dfrac5{36}=\dfrac5{72}\)，\(\dfrac1{12}=\dfrac6{72}\ne\dfrac5{72}\)，不独立。和为 \(7\) 独立，不等于和为 \(8\) 也独立；常见的错是照例 1 类推，或者把和为 \(8\) 也数成 \(6\) 格。</p></div>
   </div>
+  <div class="vid" data-video="ex-rel"></div>
 
   <h3>3. 已知独立，就用乘法</h3>
   <p>实际问题里，独立通常来自试验本身：两个人各自射击、两台机器各自运转、摸球后放回再摸……一次的结果碰不到另一次。题目说「相互独立」也算。这时直接用 \(P(AB)=P(A)P(B)\)。</p>
   <p>还有一条常用：\(A\) 与 \(B\) 独立，那么 \(A\) 与 \(\overline B\)、\(\overline A\) 与 \(B\)、\(\overline A\) 与 \(\overline B\) 也都独立（「甲没中」和「乙没中」照样互不影响），「都不发生」也能用乘法。</p>
   <div class="card">
     <p class="small">例 2</p>
-    <p>甲、乙各自射击一次，甲命中的概率是 \(0.8\)，乙是 \(0.6\)，两人互不影响。求：(1) 都命中；(2) 恰有一人命中；(3) 至少一人命中。</p>
-    <p>记 \(A=\)「甲中」，\(B=\)「乙中」，相互独立，\(P(\overline A)=0.2\)，\(P(\overline B)=0.4\)。</p>
-    <p>(1) \(P(AB)=0.8\times0.6=0.48\)。</p>
-    <p>(2) 恰一人中是「甲中乙不中」或「甲不中乙中」，这两种互斥，可以相加：\(0.8\times0.4+0.2\times0.6=0.32+0.12=0.44\)。</p>
-    <p>(3) 「至少一人中」的对立是「两人都没中」：\(1-P(\overline A\,\overline B)=1-0.2\times0.4=0.92\)。</p>
-    <p class="small">核对：\(0.48+0.44=0.92\)，和 (3) 一样。</p>
+    <p>甲、乙两人各自射击一次，甲命中的概率是 \(0.8\)，乙是 \(0.6\)，互不影响。求：(1) 两人都中；(2) 都不中；(3) 至少一人中。</p>
+    <p>(1) 两人都中：\(P=0.8\times 0.6=0.48\)。</p>
+    <p>(2) 都不中：甲不中是 \(1-0.8=0.2\)，乙不中是 \(1-0.6=0.4\)。因为独立，都不中也是相乘：\(P=0.2\times 0.4=0.08\)。</p>
+    <p>(3) 至少一人中：对立事件是「都不中」，所以 \(P=1-0.08=0.92\)。</p>
+    <p class="small">第 (3) 问也可以把「甲中乙不中」「甲不中乙中」「两个都中」加起来：\(0.8\times 0.4+0.2\times 0.6+0.8\times 0.6=0.32+0.12+0.48=0.92\)。但用对立事件算一次乘法就够了。「至少一个」优先想对立。</p>
   </div>
   <div class="card predict" data-id="try-2" data-answer="B">
     <p>自己试试：两个开关各自工作，正常的概率分别是 \(0.9\) 和 \(0.7\)，互不影响。至少一个正常的概率是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(0.63\)</button>
       <button class="opt" data-v="B"><b>B</b>\(0.97\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(1.6\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.93\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。两个都坏的概率 \(0.1\times0.3=0.03\)，所以至少一个正常是 \(1-0.03=0.97\)。A 算的是「两个都正常」；C 直接把 \(0.9+0.7\) 相加，超过了 \(1\)。概率直接相加只对互斥事件成立，这两个事件能同时发生。</p></div>
+    <div class="reveal"><p><b>B</b>。对立事件是「两个都不正常」，概率 \((1-0.9)\times (1-0.7)=0.1\times 0.3=0.03\)，所以至少一个正常是 \(1-0.03=0.97\)。选 A 的同学算的是「两个都正常」；选 C 的同学以为是 \(0.9\) 加上剩下的部分，没走乘法。</p></div>
   </div>
-  <div class="key">都发生：\(P(AB)=P(A)P(B)\)（要先有独立）。<br>至少一个发生：\(1-P(\overline A)P(\overline B)\)。</div>
 
-  <h3>4. 用之前要注意</h3>
-  <ol>
-    <li><b>独立不是互斥。</b>互斥是「不能同时发生」，\(P(AB)=0\)；独立是 \(P(AB)=P(A)P(B)\)。如果 \(P(A)>0\)、\(P(B)>0\) 又互斥，那 \(P(AB)=0\)，\(P(A)P(B)>0\)，<b>一定不独立</b>。<br><span class="small">反例：掷一颗骰子，\(A=\)「偶数」，\(B=\)「奇数」。互斥，\(P(AB)=0\)，可 \(P(A)P(B)=\dfrac14\)，不独立。其实互斥是「影响很大」：\(A\) 一发生，\(B\) 就一定不发生。</span></li>
-    <li><b>独立要有根据。</b>根据只有三种：试验本身各自进行、题目给出、或者算出 \(P(AB)=P(A)P(B)\)。「看起来无关」不算数。<br><span class="small">反例：同一颗骰子，\(A=\)「偶数」，\(B=\)「点数 \(\le3\)」。\(AB=\{2\}\)，\(P(AB)=\dfrac16\)，\(P(A)P(B)=\dfrac12\times\dfrac12=\dfrac14\)，不独立；把 \(B\) 换成「点数 \(\le4\)」，又独立了（练一练第 4 题）。看不出来，只能算。</span></li>
-    <li><b>不放回抽取，一般不独立。</b>先摸走一个，后面剩下的就变了。<br><span class="small">反例：袋里 \(2\) 红 \(1\) 白，不放回依次摸两个，\(A=\)「第一个红」，\(B=\)「第二个红」。按顺序数有 \(3\times2=6\) 种，\(P(A)=P(B)=\dfrac46=\dfrac23\)，\(P(AB)=\dfrac26=\dfrac13\)，而 \(\dfrac23\times\dfrac23=\dfrac49\ne\dfrac13\)。要是摸完放回，\(9\) 种里两红占 \(4\) 种，\(\dfrac49\)，就独立了。</span></li>
-  </ol>
-  <div class="key">判断独立：看试验是不是各自进行，或者算 \(P(AB)\) 和 \(P(A)P(B)\) 比一比。<br>两个概率都是正的事件，互斥就一定不独立。</div>
+  <div class="vid" data-video="ex-opp"></div>
 
-  <details class="more">
+  <h3>4. 三步破题思维链：独立事件解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>寻找题目中的独立源泉（“各自射击/相互独立/有放回抽样”），理清涉及的各基本事件 \(A, B, C\)。分清所求目标是“全部发生”（积事件）、“至少发生一个”（对立求逆）还是“恰有一件发生”（互斥拆分）。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 求全发生：直接相乘 \(P(AB) = P(A)P(B)\)；<br>
+        ② 求“至少一人/台发生”：正难则反，套用逆向对立公式 \(P = 1 - P(\overline{A}\,\overline{B}) = 1 - (1-P(A))(1-P(B))\)；<br>
+        ③ 求“恰好一人发生”：按互斥分类写成 \(A\overline{B} + \overline{A}B\)，分别相乘后求和。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>核查独立性前提（不放回抽样绝不能直接相乘）；核查加法对象是否互斥（独立事件不可盲目直接相加）；最终算出的概率值必须落在 \([0,1]\) 闭区间内。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>5. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：把「互斥」当「独立」套乘法公式</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>抛骰子 \(A=\)「点数是偶数」，\(B=\)「点数是奇数」，互斥，却套公式算 \(P(AB)=\frac12\times  \frac12 = \frac14\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>互斥表示两事件绝不同时发生，必然有 \(P(AB) = 0\)；正概率互斥事件必然不独立！</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：不放回抽样误套独立乘法</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>袋内 2 红 1 白，不放回抽两次，误以为两次摸出红球独立，算出 \(P = \frac23\times  \frac23 = \frac49\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>第一步不放回直接影响第二步总体容量与红球数，两步不独立，正确概率为 \(\frac23\times  \frac12 = \frac13\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：凭生活直觉主观臆断“无关即独立”</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>掷骰子觉得「点数和为 8」与「第一颗是偶数」有关，便主观断定和为 7 也必然不独立</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>独立是严格的代数检验 \(P(AB)=P(A)P(B)\)；和为 7 恰好满足等式而独立，和为 8 则不满足</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：互斥 vs 独立文氏图（为什么正概率互斥事件一定不独立）</div>
+    <svg id="m-indep-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="互斥与相互独立反例图解"></svg>
+    <div class="micro-caption">互斥要求交集面积严格为 0；而当 \(P(A)>0, P(B)>0\) 时，独立要求交集面积严格为 \(P(A)P(B)>0\)，两者在几何上完全互斥！</div>
+  </div>
+
+  <details class="more" style="margin-top:14px;">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>为什么换成对立事件还独立</b>：\(AB\) 和 \(A\overline B\) 互斥，合起来是 \(A\)，所以 \(P(A\overline B)=P(A)-P(AB)=P(A)-P(A)P(B)=P(A)\big(1-P(B)\big)=P(A)P(\overline B)\)。另外两种同理。</p>
-    <p><b>两两独立，不等于三个一起独立</b>：抛两枚硬币，\(A=\)「第一枚正」，\(B=\)「第二枚正」，\(C=\)「两枚一样」。三个概率都是 \(\dfrac12\)，\(AB\)、\(AC\)、\(BC\) 都只有「正正」一种，概率 \(\dfrac14=\dfrac12\times\dfrac12\)，两两独立。可 \(ABC\) 也只有「正正」，\(P(ABC)=\dfrac14\ne\dfrac18\)。三个事件「相互独立」要求两两独立，并且 \(P(ABC)=P(A)P(B)P(C)\)。像几个人各自射击、各自破译这类，从试验本身就能确定相互独立。</p>
-    <p><b>概率为 \(0\) 的事件</b>：比如不可能事件 \(\varnothing\)，\(P(\varnothing\,B)=0=0\times P(B)\)，它和任何事件都独立，同时也和任何事件互斥。所以「互斥就不独立」一定要带上「两个概率都是正的」。</p>
+    <p><b>两两独立，不等于三个一起独立</b>：抛两枚硬币，\(A=\)「第一枚正」，\(B=\)「第二枚正」，\(C=\)「两枚一样」。三个概率都是 \(\dfrac12\)，\(AB\)、\(AC\)、\(BC\) 都只有「正正」一种，概率 \(\dfrac14=\dfrac12\times \dfrac12\)，两两独立。可 \(ABC\) 也只有「正正」，\(P(ABC)=\dfrac14\ne\dfrac18\)。三个事件「相互独立」要求两两独立，并且 \(P(ABC)=P(A)P(B)P(C)\)。像几个人各自射击、各自破译这类，从试验本身就能确定相互独立。</p>
+    <p><b>概率为 \(0\) 的事件</b>：比如不可能事件 \(\varnothing\)，\(P(\varnothing\,B)=0=0\times  P(B)\)，它和任何事件都独立，同时也和任何事件互斥。所以「互斥就不独立」一定要带上「两个概率都是正的」。</p>
   </details>
 </section>
 
@@ -401,8 +505,226 @@
   document.getElementById("paintclear").onclick = function () { for (var i = 0; i < 6; i++) for (var j = 0; j < 6; j++) B[i][j] = false; paintDraw(); };
   document.getElementById("paintreset").onclick = paintReset;
 
-  document.addEventListener("DOMContentLoaded", function () { diceReset(); paintReset(); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { diceDraw(); paintDraw(); });
+  /* ================= 0 从例子进入：硬币×骰子 12 格棋盘 ================= */
+  var eiSvg = document.getElementById("entry-indep"), eiBar = document.getElementById("entry-indep-bar"), eiNote = document.getElementById("entry-indep-note");
+  var eiMode = 2;
+  function eiDraw(m) {
+    eiMode = m;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    eiSvg.innerHTML = "";
+    var gx = 68, gy = 40, cw = 48, ch = 56, gap = 6;
+    svg("text", { x: gx + 3 * (cw + gap) - 3, y: 24, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14 }, eiSvg).textContent = "骰子点数（1 ~ 6）";
+
+    for (var r = 0; r < 2; r++) {
+      var rLab = r === 0 ? "硬币正" : "硬币反";
+      svg("text", { x: gx - 10, y: gy + r * (ch + gap) + ch / 2 + 5, "text-anchor": "end", fill: r === 0 ? ca : mu, "font-weight": 700, "font-size": 14 }, eiSvg).textContent = rLab;
+      for (var c = 0; c < 6; c++) {
+        var x = gx + c * (cw + gap), y = gy + r * (ch + gap);
+        var inRow = r === 0, inCol = c === 5, inBoth = inRow && inCol;
+        var active = (m === 0 && inRow) || (m === 1 && inCol) || (m === 2 && inBoth);
+        var sub = m === 2 && (inRow || inCol) && !inBoth;
+        var col = m === 0 ? ca : (m === 1 ? cb : (inBoth ? cc : (inRow ? ca : cb)));
+        svg("rect", { x: x, y: y, width: cw, height: ch, rx: 8, fill: active ? okS : card, stroke: active ? col : (sub ? col : ln), "stroke-width": active ? 2.8 : (sub ? 1.6 : 1.2), "stroke-dasharray": sub ? "4 3" : "" }, eiSvg);
+        svg("text", { x: x + cw / 2, y: y + ch / 2 + 5, "text-anchor": "middle", fill: active ? col : (sub ? fg : mu), "font-weight": active ? 700 : 400, "font-size": 13.5 }, eiSvg).textContent = "(" + (r === 0 ? "正" : "反") + "," + (c + 1) + ")";
+      }
+    }
+
+    // 右侧概率乘法看板
+    var rx = 398;
+    svg("rect", { x: rx, y: 34, width: 108, height: 132, rx: 10, fill: card, stroke: cc, "stroke-width": 1.6 }, eiSvg);
+    svg("text", { x: rx + 54, y: 60, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13.5 }, eiSvg).textContent = "P(正) = 1/2";
+    svg("text", { x: rx + 54, y: 88, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13.5 }, eiSvg).textContent = "P(6点) = 1/6";
+    svg("line", { x1: rx + 14, y1: 104, x2: rx + 94, y2: 104, stroke: ln }, eiSvg);
+    svg("text", { x: rx + 54, y: 128, "text-anchor": "middle", fill: cc, "font-weight": 700, "font-size": 14 }, eiSvg).textContent = "P(正且6)";
+    svg("text", { x: rx + 54, y: 150, "text-anchor": "middle", fill: cc, "font-weight": 700, "font-size": 14.5 }, eiSvg).textContent = "= 1/12";
+
+    [].forEach.call(eiBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    eiNote.innerHTML = m === 0
+      ? "事件 A「硬币正面」：占第一整行 <b>6 格</b>，概率 <b>P(A) = 6/12 = 1/2</b>。"
+      : (m === 1 ? "事件 B「骰子掷出 6」：占最右一整列 <b>2 格</b>，概率 <b>P(B) = 2/12 = 1/6</b>。" : "两事件同时发生 AB：行与列交叉于右上角唯一一格 <b>(正, 6)</b>，概率 <b>P(AB) = 1/12 = (1/2) × (1/6)</b>！");
+  }
+  [].forEach.call(eiBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { eiDraw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") eiDraw(2);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") eiDraw(2);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { eiDraw(2); diceReset(); paintReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { eiDraw(eiMode); diceDraw(); paintDraw(); });
+
+  // --- Micro-fig: Independence concepts ---
+  function initMIndepFig() {
+    var svgEl = document.getElementById("m-indep-fig");
+    var capEl = document.getElementById("m-indep-cap");
+    if (!svgEl) return;
+    var mode = "mult";
+
+    var caps = {
+      mult: "相互独立事件交集概率满足横纵正交分解：\\(P(AB) = P(A) \\times P(B)\\)。全概率矩形面积被精准切分为四块。",
+      vs: "互斥强调交集为空（\\(P(AB)=0\\)，极端依赖）；独立强调互不影响（\\(P(AB)=P(A)P(B)>0\\)）。两者水火不容。",
+      opp: "独立具有对立传递性：若 \\(A\\) 与 \\(B\\) 相互独立，则 \\(A\\) 与 \\(\\overline{B}\\)、\\(\\overline{A}\\) 与 \\(B\\)、\\(\\overline{A}\\) 与 \\(\\overline{B}\\) 全体全部独立！"
+    };
+
+    function draw() {
+      svgEl.innerHTML = "";
+      var NS = "http://www.w3.org/2000/svg";
+      function s(tag, attrs, txt) {
+        var el = document.createElementNS(NS, tag);
+        for (var k in attrs) el.setAttribute(k, attrs[k]);
+        if (txt) el.textContent = txt;
+        svgEl.appendChild(el);
+        return el;
+      }
+
+      if (mode === "mult") {
+        // Unit Square 1x1 partition: left x: 60, y: 35, width: 280, height: 140
+        // P(A) = 0.6 -> w = 168, P(A_bar) = 0.4 -> w = 112
+        // P(B) = 0.5 -> h = 70, P(B_bar) = 0.5 -> h = 70
+
+        // P(AB) = 0.30
+        s("rect", { x: 60, y: 35, width: 168, height: 70, fill: "rgba(37,99,235,0.25)", stroke: "#2563eb", "stroke-width": 1.5 });
+        s("text", { x: 144, y: 72, fill: "#1d4ed8", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0.6 × 0.5 = 0.30");
+
+        // P(A B_bar) = 0.30
+        s("rect", { x: 60, y: 105, width: 168, height: 70, fill: "rgba(37,99,235,0.08)", stroke: "#93c5fd", "stroke-width": 1.5 });
+        s("text", { x: 144, y: 145, fill: "#2563eb", "font-size": "11", "text-anchor": "middle" }, "P(A B̄) = 0.6 × 0.5 = 0.30");
+
+        // P(A_bar B) = 0.20
+        s("rect", { x: 228, y: 35, width: 112, height: 70, fill: "rgba(5,150,105,0.12)", stroke: "#86efac", "stroke-width": 1.5 });
+        s("text", { x: 284, y: 72, fill: "#047857", "font-size": "11", "text-anchor": "middle" }, "P(Ā B) = 0.20");
+
+        // P(A_bar B_bar) = 0.20
+        s("rect", { x: 228, y: 105, width: 112, height: 70, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1.5 });
+        s("text", { x: 284, y: 145, fill: "#64748b", "font-size": "11", "text-anchor": "middle" }, "P(Ā B̄) = 0.20");
+
+        // Dimension brackets
+        s("text", { x: 144, y: 24, fill: "#2563eb", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "P(A) = 0.6");
+        s("text", { x: 284, y: 24, fill: "#64748b", "font-size": "11", "text-anchor": "middle" }, "P(Ā) = 0.4");
+        s("text", { x: 50, y: 75, fill: "#059669", "font-size": "11", "font-weight": "bold", "text-anchor": "end" }, "P(B)=0.5");
+        s("text", { x: 50, y: 145, fill: "#64748b", "font-size": "11", "text-anchor": "end" }, "P(B̄)=0.5");
+
+        // Right side info card
+        s("rect", { x: 365, y: 35, width: 155, height: 140, rx: 6, fill: "#f1f5f9", stroke: "#cbd5e1", "stroke-width": 1.5 });
+        s("text", { x: 442, y: 62, fill: "#0f172a", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "正交面积模型");
+        s("text", { x: 442, y: 88, fill: "#2563eb", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "独立 ⟺ 横纵直积");
+        s("text", { x: 442, y: 112, fill: "#475569", "font-size": "10.5", "text-anchor": "middle" }, "面积 = 边长之积");
+        s("text", { x: 442, y: 135, fill: "#059669", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "四块总面积恒为 1");
+        s("text", { x: 442, y: 155, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "无任何耦合畸变");
+
+      } else if (mode === "vs") {
+        // Left side: Mutex
+        s("rect", { x: 25, y: 20, width: 235, height: 165, rx: 8, fill: "#fef2f2", stroke: "#fca5a5", "stroke-width": 1.5 });
+        s("text", { x: 142, y: 45, fill: "#dc2626", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "互斥事件 (极端排斥)");
+
+        s("circle", { cx: 85, cy: 95, r: 35, fill: "#ffffff", stroke: "#dc2626", "stroke-width": 1.5 });
+        s("text", { x: 85, y: 100, fill: "#dc2626", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "A");
+
+        s("circle", { cx: 195, cy: 95, r: 35, fill: "#ffffff", stroke: "#dc2626", "stroke-width": 1.5 });
+        s("text", { x: 195, y: 100, fill: "#dc2626", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "B");
+
+        s("text", { x: 142, y: 148, fill: "#b91c1c", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0");
+        s("text", { x: 142, y: 168, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "A 发生则 B 必不发生（强相关）");
+
+        // Right side: Independent
+        s("rect", { x: 280, y: 20, width: 235, height: 165, rx: 8, fill: "#f0fdf4", stroke: "#86efac", "stroke-width": 1.5 });
+        s("text", { x: 397, y: 45, fill: "#15803d", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "相互独立事件 (互不干扰)");
+
+        s("circle", { cx: 365, cy: 95, r: 38, fill: "rgba(37,99,235,0.15)", stroke: "#2563eb", "stroke-width": 1.5 });
+        s("circle", { cx: 430, cy: 95, r: 38, fill: "rgba(5,150,105,0.15)", stroke: "#059669", "stroke-width": 1.5 });
+        s("text", { x: 345, y: 99, fill: "#1d4ed8", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "A");
+        s("text", { x: 450, y: 99, fill: "#047857", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "B");
+
+        s("text", { x: 397, y: 99, fill: "#0f172a", "font-size": "9", "font-weight": "bold", "text-anchor": "middle" }, "AB");
+        s("text", { x: 397, y: 148, fill: "#15803d", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = P(A) · P(B) > 0");
+        s("text", { x: 397, y: 168, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "各自概率毫无影响");
+
+      } else if (mode === "opp") {
+        // Transmission of Independence
+        s("rect", { x: 40, y: 25, width: 460, height: 155, rx: 8, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1.5 });
+        s("text", { x: 270, y: 52, fill: "#0f172a", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "对立独立全息四等价群");
+
+        // 4 nodes in a 2x2 grid
+        var nodes = [
+          { x: 130, y: 85, t: "A 与 B 独立", c: "#2563eb", bg: "rgba(37,99,235,0.1)" },
+          { x: 410, y: 85, t: "A 与 B̄ 独立", c: "#059669", bg: "rgba(5,150,105,0.1)" },
+          { x: 130, y: 140, t: "Ā 与 B 独立", c: "#059669", bg: "rgba(5,150,105,0.1)" },
+          { x: 410, y: 140, t: "Ā 与 B̄ 独立", c: "#d97706", bg: "rgba(217,119,6,0.1)" }
+        ];
+
+        nodes.forEach(function(n) {
+          s("rect", { x: n.x - 75, y: n.y - 16, width: 150, height: 32, rx: 6, fill: n.bg, stroke: n.c, "stroke-width": 1.5 });
+          s("text", { x: n.x, y: n.y + 4, fill: n.c, "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, n.t);
+        });
+
+        // Double arrows between them
+        s("line", { x1: 215, y1: 85, x2: 325, y2: 85, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 215, y1: 140, x2: 325, y2: 140, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 130, y1: 106, x2: 130, y2: 119, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 410, y1: 106, x2: 410, y2: 119, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+
+        s("text", { x: 270, y: 115, fill: "#dc2626", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "一真俱真，一假俱假！");
+      }
+
+      if (capEl) capEl.textContent = caps[mode];
+      if (window.renderMathInElement) window.renderMathInElement(capEl);
+    }
+
+    var tabs = document.querySelectorAll(".micro-box .micro-tab");
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        tabs.forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        mode = tab.getAttribute("data-mode");
+        draw();
+      });
+    });
+
+    draw();
+  }
+
+  // --- Micro-fig: Trap Mutex vs Independent ---
+  function initMIndepTrapFig() {
+    var svgEl = document.getElementById("m-indep-trap-fig");
+    if (!svgEl) return;
+    svgEl.innerHTML = "";
+    var NS = "http://www.w3.org/2000/svg";
+    function s(tag, attrs, txt) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      if (txt) el.textContent = txt;
+      svgEl.appendChild(el);
+      return el;
+    }
+
+    // Left block: Mutex
+    s("rect", { x: 30, y: 20, width: 220, height: 130, rx: 6, fill: "#ffffff", stroke: "#e2e8f0", "stroke-width": 1.5 });
+    s("text", { x: 140, y: 42, fill: "#dc2626", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "互斥：交集强制为 0");
+    s("circle", { cx: 90, cy: 80, r: 28, fill: "rgba(220,38,38,0.1)", stroke: "#dc2626" });
+    s("text", { x: 90, y: 84, fill: "#dc2626", "font-size": "11", "text-anchor": "middle" }, "A");
+    s("circle", { cx: 190, cy: 80, r: 28, fill: "rgba(220,38,38,0.1)", stroke: "#dc2626" });
+    s("text", { x: 190, y: 84, fill: "#dc2626", "font-size": "11", "text-anchor": "middle" }, "B");
+    s("text", { x: 140, y: 125, fill: "#b91c1c", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0 ≠ P(A)P(B)");
+    s("text", { x: 140, y: 140, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "正概率互斥，一定不独立！");
+
+    // Right block: Independent
+    s("rect", { x: 290, y: 20, width: 220, height: 130, rx: 6, fill: "#ffffff", stroke: "#e2e8f0", "stroke-width": 1.5 });
+    s("text", { x: 400, y: 42, fill: "#059669", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "独立：交集恰好等于乘积");
+    s("circle", { cx: 375, cy: 80, r: 30, fill: "rgba(37,99,235,0.15)", stroke: "#2563eb" });
+    s("circle", { cx: 425, cy: 80, r: 30, fill: "rgba(5,150,105,0.15)", stroke: "#059669" });
+    s("text", { x: 355, y: 84, fill: "#1d4ed8", "font-size": "10.5", "text-anchor": "middle" }, "A");
+    s("text", { x: 445, y: 84, fill: "#047857", "font-size": "10.5", "text-anchor": "middle" }, "B");
+    s("text", { x: 400, y: 125, fill: "#047857", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = P(A) · P(B) > 0");
+    s("text", { x: 400, y: 140, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "正概率独立，交集绝对非空！");
+  }
+
+  initMIndepFig();
+  initMIndepTrapFig();
 })();
 </script>
 </body></html>

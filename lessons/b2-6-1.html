@@ -8,11 +8,11 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
-  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
-  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
   .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
 </style>
 </head>
@@ -24,9 +24,16 @@
 <p class="lead">既有大小又有方向的量叫向量。不仅起点不同的两个有向线段可以表示同一个向量，零向量和平行向量里也有不少初学容易踩坑的约定。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>在海战演习中，指挥部收到侦察雷达报告：「距我方舰艇 \(20\text{ km}\) 处发现不明快艇！」</p>
+  <p>在海战演习中，指挥部收到侦察雷达报告：「距我方舰艇 \(20\text{ km}\) 处发现不明快艇！」先点下面的雷达按钮试一试：</p>
   <div class="card predict" data-id="entry" data-answer="B">
-    <p>仅凭这一句话，拦截舰能立刻直奔目标去拦截吗？</p>
+    <svg class="entry-fig" id="entry-radar" viewBox="0 0 520 210" role="img" aria-label="海战雷达屏幕：舰艇O为中心，半径20km圆周与方向向量对比"></svg>
+    <div class="entry-bar" id="entry-radar-bar">
+      <button type="button" data-m="0" class="on">只报距离 20 km（全圆周都可能！）</button>
+      <button type="button" data-m="1">加上方向：东偏北 30°（唯一锁定！）</button>
+      <button type="button" data-m="2">加上方向：正西 180°</button>
+    </div>
+    <div class="entry-note" id="entry-radar-note"></div>
+    <p>仅凭「距我方舰艇 \(20\text{ km}\)」这一句话，拦截舰能立刻直奔目标去拦截吗？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>能，只要全速航行 \(20\text{ km}\) 就能找到</button>
       <button class="opt" data-v="B"><b>B</b>不能，只知道距离（大小），还必须知道具体在哪个方向（比如东偏北 \(30^\circ\)）</button>
@@ -40,40 +47,58 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：这是第 6 章第一节，不需要前面的高中章节，只用初中的勾股定理和平行四边形的性质；这里的词从 <a href="b2-6-2.html">6.2 向量的运算</a> 起天天用。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「温度计」到「带箭头的位移指令」</h3>
+  <p class="small">前置知识：初中勾股定理、平行四边形性质；本节词条从 <a href="b2-6-2.html">6.2 向量的运算</a> 起天天用。先看下面这幅解剖图：</p>
 
   <div class="card">
-    <p><b>数量与向量</b>：只有大小、用一个实数就能说清的量叫<b>数量</b>；既有大小、又有方向的量叫<b>向量</b>。</p>
-    <p>例：气温 \(-5^\circ\text{C}\)、质量 \(60\text{ kg}\)、路程 \(100\text{ m}\) 是数量；「向东走 \(100\text{ m}\)」（位移）、「竖直向下 \(10\text{ N}\)」（重力）是向量。</p>
-  </div>
-
-  <div class="card">
-    <p><b>有向线段与记号</b>：线段加一个箭头就有了方向，叫<b>有向线段</b>，它有起点、方向、长度。以 \(A\) 为起点、\(B\) 为终点的有向线段表示的向量记作 \(\overrightarrow{AB}\)；也可以用小写黑体 \(\boldsymbol{a}\)、\(\boldsymbol{b}\) 表示（手写 \(\vec{a}\)）。</p>
-    <p>例：\(A(1,1)\)、\(B(4,5)\)，\(\overrightarrow{AB}\) 就是「从 \(A\) 出发，向右走 \(3\)、向上走 \(4\)」；\(\overrightarrow{BA}\) 是反过来走，方向不同。</p>
-  </div>
-
-  <div class="card">
-    <p><b>模</b>：向量的大小（长度），记作 \(|\boldsymbol{a}|\) 或 \(|\overrightarrow{AB}|\)，是一个非负实数。</p>
-    <p>例：上面的 \(\overrightarrow{AB}\)，\(|\overrightarrow{AB}|=\sqrt{3^2+4^2}=5\)；\(|\overrightarrow{BA}|\) 也是 \(5\)。模相同，方向可以不同。</p>
-  </div>
-
-  <h3>2. 向量只看模和方向，不看起点</h3>
-  <p>一个向量由<b>模</b>和<b>方向</b>两样决定。有向线段只是把它画出来的一种方式：同一个向量，可以画在平面上任何位置。所以把一条有向线段平移，表示的还是同一个向量——高中研究的就是这种「<b>自由向量</b>」。</p>
-  <p>由此，模相等且方向相同的两个向量叫<b>相等向量</b>，记作 \(\boldsymbol{a}=\boldsymbol{b}\)。起点在哪不管。两样里有一样不同就不相等：向东 \(3\text{ km}\) 和向北 \(3\text{ km}\) 模相同、方向不同；向东 \(3\text{ km}\) 和向东 \(5\text{ km}\) 方向相同、模不同。</p>
-  <div class="key">\(\boldsymbol{a}=\boldsymbol{b}\) ⇔ \(|\boldsymbol{a}|=|\boldsymbol{b}|\) 且方向相同。起点可以不同。</div>
-
-  <div class="card">
-    <p class="small">例 1（看一遍怎么判断）</p>
-    <p>已知 \(A(1,2)\)、\(B(4,6)\)、\(C(-2,0)\)、\(D(1,4)\)、\(E(0,0)\)、\(F(4,-3)\)、\(G(5,8)\)、\(H(2,4)\)。\(\overrightarrow{CD}\)、\(\overrightarrow{EF}\)、\(\overrightarrow{GH}\) 中哪个与 \(\overrightarrow{AB}\) 相等？</p>
-    <p><b>解：</b>先把每个向量写成「横着走多少、竖着走多少」：</p>
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>数量 vs 向量 &amp; 有向线段的三要素解剖</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m-anat-bar" style="margin-top:2px;">
+        <button type="button" data-dir="ab" class="on">看向量 AB：从 A(1,1) 走向 B(4,5)</button>
+        <button type="button" data-dir="ba">掉头看向量 BA：从 B(4,5) 走回 A(1,1)（模不变，方向反了！）</button>
+      </div>
+      <svg class="micro-fig" id="m-anat-fig" viewBox="0 0 520 175" role="img" aria-label="数量与向量对比及有向线段AB的起点终点方向与模长解剖图"></svg>
+    </div>
     <ul>
-      <li>\(\overrightarrow{AB}\)：右 \(3\)、上 \(4\)，模 \(\sqrt{9+16}=5\)；</li>
-      <li>\(\overrightarrow{CD}\)：右 \(1-(-2)=3\)、上 \(4-0=4\)，模 \(5\)，方向也一样；</li>
-      <li>\(\overrightarrow{EF}\)：右 \(4\)、下 \(3\)，模 \(\sqrt{16+9}=5\)，但方向不同；</li>
-      <li>\(\overrightarrow{GH}\)：左 \(3\)、下 \(4\)，模 \(5\)，方向正好相反。</li>
+      <li><b>数量 vs 向量</b>：像气温 \(-5^\circ\text{C}\)、质量 \(60\text{ kg}\)、路程 \(5\text{ m}\) 这样<b>只有大小（一个实数就能说清）</b>的量叫<b>数量</b>；像位移、速度、力这样<b>既有大小又有方向</b>的量叫<b>向量</b>（Vector）。</li>
+      <li><b>有向线段与记号</b>：在线段终点画上箭头就成了<b>有向线段</b>（含<b>起点、方向、长度</b>三要素）。从起点 \(A\) 指向终点 \(B\) 记作 \(\color{#2F7A56}{\overrightarrow{AB}}\)（顶上箭头永远向右，<b>起点在前、终点在后</b>），也可印成黑体 \(\boldsymbol{a}\)（手写必须带箭头 \(\vec{a}\)）。</li>
+      <li><b class="cb">向量的模（长度）</b>：向量 \(\overrightarrow{AB}\) 的大小（即线段长度）叫<b>模</b>，记作 \(\color{#966524}{|\overrightarrow{AB}|}\) 或 \(\color{#966524}{|\boldsymbol{a}|}\)。模是一个<b>非负实数</b>（如上图勾股定理算出 \(|\overrightarrow{AB}|=|\overrightarrow{BA}|=\sqrt{3^2+4^2}=5\)）。</li>
     </ul>
-    <p>只有 \(\overrightarrow{CD}=\overrightarrow{AB}\)。\(C\) 和 \(A\) 不是同一个点，不影响相等。\(\overrightarrow{EF}\)、\(\overrightarrow{GH}\) 模都是 \(5\)，但方向不对。</p>
+  </div>
+
+  <h3>2. 自由向量与相等向量：一张「与起点无关」的通用位移指令</h3>
+  <p><b>核心直觉（藏宝图指令）</b>：如果一张指令卡写着「<b class="ca">向东走 3 步，向北走 4 步</b>」，无论你是从老槐树 \(A\) 出发，还是从枯井 \(C\) 出发，执行的都是<b>同一张位移指令</b>！因此，数学中的向量像一张能随便拎着走的透明胶片，<b>平移到平面任何位置，表示的都是同一个「自由向量」</b>。</p>
+  <div class="key" style="text-align:center;font-size:16px;overflow-x:auto;">
+    <b>相等向量</b>：\(\color{#2F7A56}{\boldsymbol{a} = \boldsymbol{b}} \;\iff\; \color{#966524}{\underbrace{|\boldsymbol{a}| = |\boldsymbol{b}|}_{\text{模相等}}} \;\text{且}\; \color{#2F7A56}{\underbrace{\text{方向相同}}_{\text{步数一致}}}\) <span style="display:inline-block;">（<b>起点在哪里完全不管！</b>）</span>
+  </div>
+
+  <div class="card">
+    <p class="small" style="margin:0 0 6px;"><b>例 1（示范：网格里一眼认出相等向量）</b></p>
+    <p style="margin:0 0 8px;">已知 \(A(1,2)\)、\(B(4,6)\)、\(C(-2,0)\)、\(D(1,4)\)、\(E(0,0)\)、\(F(4,-3)\)、\(G(5,8)\)、\(H(2,4)\)。\(\overrightarrow{CD}\)、\(\overrightarrow{EF}\)、\(\overrightarrow{GH}\) 中哪个与 \(\overrightarrow{AB}\) 相等？</p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m-ex1-bar" style="margin-top:2px;">
+        <button type="button" data-shift="0" class="on">原位置对比四条向量</button>
+        <button type="button" data-shift="1">✨ 点我把 CD 平移叠到 AB 上验明正身！</button>
+      </div>
+      <svg class="micro-fig" id="m-ex1-fig" viewBox="0 0 520 175" role="img" aria-label="坐标系中四条模长都为5的向量AB、CD、EF、GH对比及平移重合演示"></svg>
+    </div>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>
+        判断两个向量相不相等，千万别只算长度！最快、最稳的办法是看<b>「从起点到终点，横着走几步、竖着走几步」</b>。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步逐个拆解「横纵位移指令」：</span>
+        • \(\color{#2F7A56}{\overrightarrow{AB}}\)：从 \((1,2)\) 到 \((4,6)\) → <b>右 \(3\)、上 \(4\)</b>（模 \(=5\)）；<br>
+        • \(\color{#2F7A56}{\overrightarrow{CD}}\)：从 \((-2,0)\) 到 \((1,4)\) → 也是 <b>右 \(3\)、上 \(4\)</b>（模与方向全同✓）；<br>
+        • \(\color{#966524}{\overrightarrow{EF}}\)：右 \(4\)、下 \(3\)（模虽为 \(5\)，但方向偏了✗）；\(\color{#B5452F}{\overrightarrow{GH}}\)：左 \(3\)、下 \(4\)（方向刚好相反✗）。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步防坑结论：</span>
+        只有 \(\mathbf{\overrightarrow{CD} = \overrightarrow{AB}}\)。虽然起点 \(C\) 和 \(A\) 不同，但平移后完全重合！
+      </div>
+    </div>
   </div>
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：\(A(0,0)\)、\(B(2,1)\)。下面哪个向量与 \(\overrightarrow{AB}\) <b>相等</b>？</p>
@@ -83,29 +108,39 @@
       <button class="opt" data-v="C"><b>C</b>\(P(0,0)\) 到 \(Q(1,2)\)</button>
       <button class="opt" data-v="D"><b>D</b>\(P(0,0)\) 到 \(Q(4,2)\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(\overrightarrow{AB}\) 是右 \(2\)、上 \(1\)；A 也是右 \(2\)、上 \(1\)，起点不同照样相等。B 是左 \(2\)、下 \(1\)，长度一样但方向相反；C 的模也是 \(\sqrt5\)，可方向不同——只看长度就会错选；D 方向相同，但模是 \(2\sqrt5\)，长了一倍。</p></div>
+    <div class="reveal"><p><b>A</b>。\(\overrightarrow{AB}\) 的指令是「右 \(2\)、上 \(1\)」；A 从 \((3,3)\) 到 \((5,4)\) 也是「右 \(2\)、上 \(1\)」，起点不同照样相等！B 是「左 \(2\)、下 \(1\)」（相反向量）；C 模也是 \(\sqrt5\)，但变成「右 \(1\)、上 \(2\)」方向不同；D 方向相同但模长翻倍了。</p></div>
   </div>
 
-  <h3>3. 零向量与单位向量</h3>
-  <p>两种模特殊的向量：</p>
-  <ul>
-    <li><b>零向量</b>：模为 \(0\) 的向量，记作 \(\boldsymbol{0}\)，起点和终点重合，如 \(\overrightarrow{AA}\)。它的方向是<b>任意的</b>（指不出一个确定方向）。注意数 \(0\) 是数量，\(\boldsymbol{0}\) 是向量，\(|\boldsymbol{0}|=0\)。</li>
-    <li><b>单位向量</b>：模为 \(1\) 的向量。方向不限，所以单位向量有无数个，彼此<b>不一定相等</b>。</li>
-  </ul>
-  <div class="key">\(|\boldsymbol{0}|=0\)，方向任意；\(|\boldsymbol{e}|=1\) 的 \(\boldsymbol{e}\) 叫单位向量，方向不同的单位向量不相等。</div>
+  <h3>3. 零向量与单位向量：「原地踏步」与「单位圆上的指针」</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-b">直觉微图解 ②</span><b>为什么 \(Q(1,1)\) 不是单位向量？单位向量都在哪？</b></p>
+    <svg class="micro-fig" id="m-unit-fig" viewBox="0 0 520 175" role="img" aria-label="单位圆上的单位向量OP与圆外的OQ及零向量MM对比图"></svg>
+    <ul>
+      <li><b>零向量 \(\boldsymbol{0}\)（原地踏步）</b>：模为 \(0\) 的向量（起点终点重合，如 \(\overrightarrow{MM}=\boldsymbol{0}\)）。因为站在原地没动，无法指出朝向哪个特定方向，所以规定<b>零向量的方向是任意的</b>！注意书写区分：数字 \(0\) 是数量，粗体 \(\boldsymbol{0}\) 是向量，且 \(|\boldsymbol{0}|=0\)。</li>
+      <li><b class="ca">单位向量（长度为 \(1\) 的指针）</b>：模等于 \(1\) 的向量。把所有单位向量的起点都移到原点 \(O\)，它们的终点刚好铺满<b>半径为 \(1\) 的单位圆</b>！因此单位向量有<b>无数个</b>，方向各不相同，彼此<b>不一定相等</b>。</li>
+    </ul>
+  </div>
 
   <div class="card">
-    <p class="small">例 2</p>
-    <p>\(O(0,0)\)、\(P(0.6,0.8)\)、\(Q(1,1)\)、\(M(2,3)\)、\(N(2,4)\)。判断 \(\overrightarrow{OP}\)、\(\overrightarrow{OQ}\)、\(\overrightarrow{MN}\)、\(\overrightarrow{MM}\) 中哪些是单位向量、哪个是零向量；再找出与 \(\overrightarrow{OQ}\) 方向相同的单位向量的终点（起点放在 \(O\)）。</p>
-    <p><b>解：</b>算模：</p>
-    <ul>
-      <li>\(|\overrightarrow{OP}|=\sqrt{0.36+0.64}=1\)，是单位向量；</li>
-      <li>\(|\overrightarrow{OQ}|=\sqrt{1+1}=\sqrt2\)，不是；</li>
-      <li>\(\overrightarrow{MN}\)：向上 \(1\)，模 \(1\)，是单位向量（起点不在原点也行）；</li>
-      <li>\(\overrightarrow{MM}\)：起点终点重合，是零向量。</li>
-    </ul>
-    <p>\(\overrightarrow{OQ}\) 长 \(\sqrt2\)，沿同一方向把长度缩成 \(1\)，横、纵都按比例除以 \(\sqrt2\)：终点 \(\left(\dfrac{\sqrt2}{2},\dfrac{\sqrt2}{2}\right)\)。验一下：\(\dfrac12+\dfrac12=1\)，模是 \(1\)。</p>
-    <p>\(\overrightarrow{OP}\) 和 \(\overrightarrow{MN}\) 都是单位向量，但方向不同，所以不相等。</p>
+    <p class="small" style="margin:0 0 6px;"><b>例 2（示范：判别单位向量与零向量）</b></p>
+    <p style="margin:0 0 8px;">\(O(0,0)\)、\(P(0.6,0.8)\)、\(Q(1,1)\)、\(M(2,3)\)、\(N(2,4)\)。判断 \(\overrightarrow{OP}\)、\(\overrightarrow{OQ}\)、\(\overrightarrow{MN}\)、\(\overrightarrow{MM}\) 中哪些是单位向量、哪个是零向量；再求与 \(\overrightarrow{OQ}\) 同向的单位向量终点。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>
+        认单位向量和零向量，<b>唯一标准就是算模长 \(|\boldsymbol{a}|\)</b>：模 \(=1\) 是单位向量，模 \(=0\) 是零向量。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步逐个算模（对照上方单位圆图）：</span>
+        • \(|\overrightarrow{OP}|=\sqrt{0.6^2+0.8^2}=\sqrt{1}=1\) → <b>是单位向量</b>✓（终点恰在单位圆上）；<br>
+        • \(|\overrightarrow{OQ}|=\sqrt{1^2+1^2}=\sqrt{2}\approx 1.41\ne 1\) → <b>不是单位向量</b>✗（桶破了单位圆！）；<br>
+        • \(|\overrightarrow{MN}|=1\) → <b>是单位向量</b>✓（起点不在原点也算，但与 \(\overrightarrow{OP}\) 方向不同故不相等）；<br>
+        • \(\overrightarrow{MM}\) 起点终点重合，模 \(=0\) → <b>是零向量 \(\boldsymbol{0}\)</b>✓。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步把 \(\overrightarrow{OQ}\) 缩放成单位向量（归一化）：</span>
+        \(\overrightarrow{OQ}\) 原长 \(\sqrt{2}\)，保持方向不变把长度缩成 \(1\)，横纵坐标同除以模长 \(\sqrt{2}\)，得终点 \(\left(\dfrac{\sqrt{2}}{2},\dfrac{\sqrt{2}}{2}\right)\)。
+      </div>
+    </div>
   </div>
   <div class="card predict" data-id="try-2" data-answer="B">
     <p>自己试试：起点是原点 \(O\)，终点 \(P\) 取下面哪个点时，\(\overrightarrow{OP}\) 是单位向量？</p>
@@ -115,29 +150,38 @@
       <button class="opt" data-v="C"><b>C</b>\(P(0.5,0.5)\)</button>
       <button class="opt" data-v="D"><b>D</b>\(P(0,0)\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(\sqrt{0.36+0.64}=1\)，纵坐标是负的不影响模。A 的模是 \(\sqrt2\)，不是 \(1\)；C 是把 \(0.5+0.5=1\) 当成了模，其实模是 \(\sqrt{0.5}\approx0.71\)；D 是零向量，模为 \(0\)。</p></div>
+    <div class="reveal"><p><b>B</b>。\(|\overrightarrow{OP}|=\sqrt{0.6^2+(-0.8)^2}=\sqrt{0.36+0.64}=1\)。A 的模是 \(\sqrt2\)；C 把坐标相加 \(0.5+0.5=1\) 误当成了勾股模长；D 是零向量（模为 \(0\)）。</p></div>
   </div>
+  <div class="vid" data-video="ex-prop"></div>
 
-  <h3>4. 平行（共线）向量与相反向量</h3>
-  <p>方向<b>相同或相反</b>的非零向量叫<b>平行向量</b>，记作 \(\boldsymbol{a}\parallel\boldsymbol{b}\)。因为向量能自由平移，一组平行向量总能平移到同一条直线上，所以平行向量也叫<b>共线向量</b>。这里的「共线」只看方向，原来所在的直线平行或重合都算。</p>
-  <p>零向量方向任意，所以规定：<b>零向量与任意向量平行</b>。</p>
-  <p>模相等、方向相反的两个向量叫<b>相反向量</b>：\(\boldsymbol{a}\) 的相反向量记作 \(-\boldsymbol{a}\)，\(-\overrightarrow{AB}=\overrightarrow{BA}\)；规定 \(-\boldsymbol{0}=\boldsymbol{0}\)。相反向量一定共线，但不相等（零向量除外）。</p>
-  <div class="key">平行 = 共线：方向相同或相反即可，所在直线平行或重合都算；\(\boldsymbol{0}\) 与任意向量平行。相反向量：模相等、方向相反。</div>
+  <h3>4. 平行（共线）向量与相反向量：为什么「平行」就叫「共线」？</h3>
+  <p>方向<b>相同或相反</b>的非零向量叫<b>平行向量</b>（记作 \(\boldsymbol{a}\parallel\boldsymbol{b}\)）。为什么课本又把平行向量直接叫作<b>共线向量</b>？因为<b>向量可以自由平移</b>——任何两条平行的向量，一平移就能叠到同一条直线上！此外规定：<b>零向量 \(\boldsymbol{0}\) 与任意向量平行</b>。模相等且方向相反的两个向量互为<b>相反向量</b>（记作 \(-\overrightarrow{AB}=\overrightarrow{BA}\)）。</p>
 
   <div class="card">
-    <p class="small">例 3（几何图形里认向量）</p>
-    <p>平行四边形 \(ABCD\) 中，对角线 \(AC\) 与 \(BD\) 交于点 \(O\)，\(E, F\) 分别是边 \(AB, CD\) 的中点。</p>
-    <ol>
-      <li>写出与 \(\overrightarrow{AE}\) 相等的向量；</li>
-      <li>\(\overrightarrow{AO}\) 与 \(\overrightarrow{CO}\) 相等吗？是什么关系？</li>
-      <li>\(\overrightarrow{AD}\) 与 \(\overrightarrow{CB}\) 是平行向量吗？</li>
-    </ol>
-    <p><b>解：</b></p>
-    <ol>
-      <li>\(AB\parallel DC\) 且 \(AB=DC\)，\(E, F\) 是中点，所以 \(AE=EB=DF=FC\)。从 \(A\) 到 \(E\)、\(E\) 到 \(B\)、\(D\) 到 \(F\)、\(F\) 到 \(C\) 方向都相同，所以 \(\overrightarrow{AE}=\overrightarrow{EB}=\overrightarrow{DF}=\overrightarrow{FC}\)。</li>
-      <li>不相等。对角线互相平分，\(AO=OC\)，模相等；但一个从 \(A\) 指向 \(O\)，一个从 \(C\) 指向 \(O\)，方向相反，它们互为相反向量：\(\overrightarrow{AO}=-\overrightarrow{CO}=\overrightarrow{OC}\)。</li>
-      <li>是。\(AD\parallel BC\)，两向量方向相反，平行向量只要求方向相同或相反，所以 \(\overrightarrow{AD}\parallel\overrightarrow{CB}\)（还互为相反向量）。它们不在同一条直线上，照样叫共线向量。</li>
-    </ol>
+    <p class="small" style="margin:0 0 6px;"><b>例 3（几何图形里认向量 —— 点按钮边看图边判别！）</b></p>
+    <p style="margin:0 0 8px;">平行四边形 \(ABCD\) 中，对角线 \(AC\) 与 \(BD\) 交于点 \(O\)，\(E, F\) 分别是边 \(AB, CD\) 的中点。点下方按钮切换三问图解：</p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m-para-bar" style="margin-top:2px;">
+        <button type="button" data-q="1" class="on">问(1)：找与 AE 相等的向量</button>
+        <button type="button" data-q="2">问(2)：AO 与 CO 是什么关系？</button>
+        <button type="button" data-q="3">问(3)：AD 与 CB 共线吗？（平移看！）</button>
+      </div>
+      <svg class="micro-fig" id="m-para-fig" viewBox="0 0 520 185" role="img" aria-label="平行四边形ABCD中点E、F与对角线交点O的向量关系交互图解"></svg>
+    </div>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">① 问(1) 与 \(\overrightarrow{AE}\) 相等的向量（看绿色箭头）：</span>
+        \(AB\parallel DC\) 且 \(AB=DC\)，中点分出的四段长度相等；注意箭头<b>必须全都朝右</b>，故 \(\mathbf{\overrightarrow{AE}=\overrightarrow{EB}=\overrightarrow{DF}=\overrightarrow{FC}}\)。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">② 问(2) \(\overrightarrow{AO}\) 与 \(\overrightarrow{CO}\) 的关系（看针锋相对的两箭头）：</span>
+        对角线互相平分故 \(|\overrightarrow{AO}|=|\overrightarrow{CO}|\)，但两箭头<b>面对面往 \(O\) 点顶（方向相反）</b>！所以它们<b>不相等，而是互为相反向量</b>（\(\overrightarrow{AO}=-\overrightarrow{CO}=\overrightarrow{OC}\)）。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">③ 问(3) \(\overrightarrow{AD}\) 与 \(\overrightarrow{CB}\) 是共线向量吗？</span>
+        <b>是！</b>\(AD\parallel BC\)，\(\overrightarrow{AD}\) 与 \(\overrightarrow{CB}\) 方向相反，平移后完全落在同一条直线上。<b>共线向量不要求原本就在同一直线上！</b>
+      </div>
+    </div>
   </div>
   <div class="card predict" data-id="try-3" data-answer="D">
     <p>自己试试：\(A(0,0)\)、\(B(2,1)\)。下面哪个向量与 \(\overrightarrow{AB}\) <b>不</b>共线？</p>
@@ -147,24 +191,57 @@
       <button class="opt" data-v="C"><b>C</b>\(\overrightarrow{GG}\)，\(G(3,3)\)</button>
       <button class="opt" data-v="D"><b>D</b>\(O(0,0)\) 到 \(H(1,2)\)</button>
     </div>
-    <div class="reveal"><p><b>D</b>。\(\overrightarrow{AB}\) 是右 \(2\)、上 \(1\)。A 是右 \(4\)、上 \(2\)，方向相同——它不在直线 \(AB\) 上，但共线只看方向；B 是左 \(4\)、下 \(2\)，方向相反，也共线；C 是零向量，与任意向量平行。D 是右 \(1\)、上 \(2\)，方向既不相同也不相反。以为「共线就得在同一条直线上」或「反向就不平行」，会把 A、B 当成答案。</p></div>
+    <div class="reveal"><p><b>D</b>。\(\overrightarrow{AB}\) 是「右 \(2\)、上 \(1\)」。A 是「右 \(4\)、上 \(2\)」（同向共线）；B 是「左 \(4\)、下 \(2\)」（反向共线）；C 是零向量 \(\boldsymbol{0}\)，规定与任意向量平行（共线）。只有 D「右 \(1\)、上 \(2\)」方向斜率变了，不共线。</p></div>
   </div>
+  <div class="vid" data-video="ex-hex"></div>
 
-  <h3>5. 用之前要注意</h3>
-  <ol>
-    <li><b>向量不能比大小，只能比模</b>；也没有「向量除以向量」。<br><span class="small">反例：\(|\boldsymbol{a}|=5\)，\(|\boldsymbol{b}|=3\)，可以写 \(|\boldsymbol{a}|>|\boldsymbol{b}|\)，不能写 \(\boldsymbol{a}>\boldsymbol{b}\)；「向东 \(5\text{ m}\)」和「向北 \(3\text{ m}\)」谁大，问题本身没有意义。</span></li>
-    <li><b>有向线段只是表示方式，相等向量不要求起点相同</b>。<br><span class="small">反例：例 1 里 \(\overrightarrow{CD}\) 和 \(\overrightarrow{AB}\) 起点不同，却是同一个向量。</span></li>
-    <li><b>零向量：模为 \(0\)，方向任意，规定与任意向量平行</b>。「平行」因此不能随便传递。<br><span class="small">反例：\(\boldsymbol{a}\) 向东，\(\boldsymbol{c}\) 向北，\(\boldsymbol{b}=\boldsymbol{0}\)。\(\boldsymbol{a}\parallel\boldsymbol{b}\)、\(\boldsymbol{b}\parallel\boldsymbol{c}\)，但 \(\boldsymbol{a}\) 不平行于 \(\boldsymbol{c}\)。要加上 \(\boldsymbol{b}\ne\boldsymbol{0}\) 才能推出 \(\boldsymbol{a}\parallel\boldsymbol{c}\)。</span></li>
-    <li><b>共线向量不要求在同一条直线上</b>。<br><span class="small">反例：例 3 的 \(\overrightarrow{AD}\) 与 \(\overrightarrow{CB}\) 在平行四边形的两条对边上，是共线向量。（几何里说「三点共线」才真要在同一直线上。）</span></li>
-    <li><b>模相等又共线，不一定相等</b>。<br><span class="small">反例：\(\overrightarrow{AO}\) 与 \(\overrightarrow{CO}\) 模相等、共线，却是相反向量。</span></li>
-    <li><b>位置和位移、距离和位移的模，分开说</b>。<br><span class="small">反例：从 \(A\) 走到 \(B\) 再走回 \(A\)，走过的路程是 \(2|\overrightarrow{AB}|\)，位移却是 \(\overrightarrow{AA}=\boldsymbol{0}\)。点 \(P(3,4)\) 是一个位置；\(\overrightarrow{OP}\) 是从 \(O\) 到 \(P\) 的位移，它的模 \(5\) 才是距离。</span></li>
-  </ol>
+  <h3>5. 用之前必查：平面向量三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><b>把向量当实数：写出 \(\boldsymbol{a} &gt; \boldsymbol{b}\) 比大小</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错觉</b>：因为 \(|\boldsymbol{a}|=5\)，\(|\boldsymbol{b}|=3\)，甚至两向量方向还相同，就写出 \(\boldsymbol{a} &gt; \boldsymbol{b}\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：「向东走 \(5\text{ m}\)」和「向北走 \(3\text{ m}\)」谁更大？方向不同根本没法比！<b>向量永远不能比大小（即使同向也不能写 \(\boldsymbol{a}&gt;\boldsymbol{b}\)）</b>，只有它们的<b>模长（实数）</b>才能比：\(|\boldsymbol{a}| &gt; |\boldsymbol{b}|\)。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>字面望文生义：以为「共线向量」必须在同一条直线上</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错觉</b>：平行四边形两条对边上的向量 \(\overrightarrow{AB}\) 和 \(\overrightarrow{DC}\) 分开在两条平行线上，所以不共线。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：向量是自由向量！<b>「平行向量」和「共线向量」是 100% 同义词</b>——原来所在的直线<b>平行或重合都算共线向量</b>。（只有说「\(A,B,C\) 三点共线」时，点才不能平移，必须在同一直线上。）
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（高考最爱考！）</span><b>零向量设下的「平行传递性」陷阱！</b></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错觉</b>：初中平面几何里「\(l_1\parallel l_2\) 且 \(l_2\parallel l_3 \implies l_1\parallel l_3\)」，所以向量也是「若 \(\boldsymbol{a}\parallel\boldsymbol{b}\) 且 \(\boldsymbol{b}\parallel\boldsymbol{c}\)，则必有 \(\boldsymbol{a}\parallel\boldsymbol{c}\)」。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂反例</b>：当中间的桥梁是<b>零向量 \(\boldsymbol{b}=\boldsymbol{0}\)</b> 时，因为规定 \(\boldsymbol{0}\) 与任何向量都平行，向东的 \(\boldsymbol{a}\parallel\boldsymbol{0}\)，向北的 \(\boldsymbol{c}\parallel\boldsymbol{0}\)，但 \(\boldsymbol{a}\) 与 \(\boldsymbol{c}\) 互相垂直！<b>必须加上条件「\(\boldsymbol{b}\ne\boldsymbol{0}\)」，平行才能传递！</b>
+          </div>
+        </div>
+        <svg class="micro-fig" id="m-trap0-fig" viewBox="0 0 340 165" role="img" aria-label="零向量b=0与向东向量a和向北向量c都平行但a与c不平行的反例图"></svg>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>物理中的「矢量」与数学中的「自由向量」</b>：力学里，力的作用点常常不能随便移（推门把手和推门轴，效果不同）。数学里的向量只留下「大小」和「方向」，可以任意平移，叫自由向量。</p>
-    <p><b>单位向量有多少个？</b>平面上方向有无数个，单位向量也有无数个。把起点都放在原点，终点正好铺满半径为 \(1\) 的圆。</p>
-    <p><b>共线的代数判定</b>（<a href="b2-6-2.html">6.2</a> 会学）：若 \(\boldsymbol{a}\ne\boldsymbol{0}\)，则 \(\boldsymbol{b}\) 与 \(\boldsymbol{a}\) 共线当且仅当存在唯一实数 \(\lambda\)，使 \(\boldsymbol{b}=\lambda\boldsymbol{a}\)。\(\lambda>0\) 同向，\(\lambda&lt;0\) 反向，\(\lambda=0\) 时 \(\boldsymbol{b}=\boldsymbol{0}\)。</p>
+    <p><b>物理中的「矢量」与数学中的「自由向量」</b>：力学里，力的作用点常常不能随便移（推门把手和推门轴，效果不同）。数学里的向量只抽取出「大小」和「方向」，可以任意平移，叫自由向量。</p>
+    <p><b>位置和位移、路程和位移的模</b>：从 \(A\) 走到 \(B\) 再走回 \(A\)，走过的路程是 \(2|\overrightarrow{AB}|\)，合位移却是 \(\overrightarrow{AA}=\boldsymbol{0}\)。</p>
+    <p><b>共线的代数判定</b>（<a href="b2-6-2.html">6.2</a> 会学）：若 \(\boldsymbol{a}\ne\boldsymbol{0}\)，则 \(\boldsymbol{b}\) 与 \(\boldsymbol{a}\) 共线当且仅当存在唯一实数 \(\lambda\)，使 \(\boldsymbol{b}=\lambda\boldsymbol{a}\)。</p>
   </details>
 </section>
 
@@ -595,8 +672,195 @@
     };
   }
 
+  /* ================= 0 从例子进入：海战雷达 ================= */
+  var erSvg = document.getElementById("entry-radar"), erBar = document.getElementById("entry-radar-bar"), erNote = document.getElementById("entry-radar-note");
+  var erMode = 0;
+  function erDraw(m) {
+    erMode = m;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), noS = css("--no-soft");
+    erSvg.innerHTML = "";
+    var ox = 165, oy = 110, R = 70;
+    // 雷达背景与十字轴
+    svg("circle", { cx: ox, cy: oy, r: R + 16, fill: okS, stroke: ln, "stroke-width": 1.2 }, erSvg);
+    svg("circle", { cx: ox, cy: oy, r: R / 2, fill: "none", stroke: ln, "stroke-dasharray": "3 3" }, erSvg);
+    svg("line", { x1: ox - R - 18, y1: oy, x2: ox + R + 18, y2: oy, stroke: ln, "stroke-width": 1.2 }, erSvg);
+    svg("line", { x1: ox, y1: oy - R - 18, x2: ox, y2: oy + R + 18, stroke: ln, "stroke-width": 1.2 }, erSvg);
+    svg("text", { x: ox + R + 22, y: oy + 5, fill: mu, "font-size": 13, "font-weight": 700 }, erSvg).textContent = "东";
+    svg("text", { x: ox - R - 22, y: oy + 5, "text-anchor": "end", fill: mu, "font-size": 13, "font-weight": 700 }, erSvg).textContent = "西";
+    svg("text", { x: ox, y: oy - R - 18, "text-anchor": "middle", fill: mu, "font-size": 13, "font-weight": 700 }, erSvg).textContent = "北";
+    // 20km 扫描圆
+    svg("circle", { cx: ox, cy: oy, r: R, fill: "none", stroke: m === 0 ? no : ca, "stroke-width": 2.2, "stroke-dasharray": "6 4" }, erSvg);
+    svg("circle", { cx: ox, cy: oy, r: 5, fill: fg }, erSvg);
+    svg("text", { x: ox + 8, y: oy + 16, fill: fg, "font-weight": 700, "font-size": 13.5 }, erSvg).textContent = "舰艇 O";
+
+    if (m === 0) {
+      for (var k = 0; k < 8; k++) {
+        var ang = k * Math.PI / 4, px = ox + R * Math.cos(ang), py = oy - R * Math.sin(ang);
+        svg("circle", { cx: px, cy: py, r: 5.5, fill: noS, stroke: no, "stroke-width": 2 }, erSvg);
+        svg("text", { x: px, y: py + 4, "text-anchor": "middle", fill: no, "font-size": 11, "font-weight": 700 }, erSvg).textContent = "?";
+      }
+    } else {
+      var deg = m === 1 ? 30 : 180, rad = deg * Math.PI / 180;
+      var tx = ox + R * Math.cos(rad), ty = oy - R * Math.sin(rad);
+      var col = m === 1 ? ca : cb;
+      if (m === 1) {
+        svg("path", { d: "M " + (ox + 28) + " " + oy + " A 28 28 0 0 0 " + (ox + 28 * Math.cos(rad)) + " " + (oy - 28 * Math.sin(rad)), fill: "none", stroke: hl, "stroke-width": 2 }, erSvg);
+        svg("text", { x: ox + 42, y: oy - 6, fill: hl, "font-size": 13, "font-weight": 700 }, erSvg).textContent = "30°";
+      }
+      drawArrow({ X: ox, Y: oy }, { X: tx, Y: ty }, col, 3.2, erSvg);
+      svg("circle", { cx: tx, cy: ty, r: 6, fill: col, stroke: card, "stroke-width": 2 }, erSvg);
+      svg("text", { x: tx + (m === 1 ? 10 : -10), y: ty - 8, "text-anchor": m === 1 ? "start" : "end", fill: col, "font-weight": 700, "font-size": 14 }, erSvg).textContent = m === 1 ? "目标 P (锁定!)" : "正西目标 Q";
+    }
+
+    // 右侧信息面板
+    var rx = 310;
+    svg("rect", { x: rx, y: 24, width: 192, height: 162, rx: 10, fill: card, stroke: m === 0 ? no : ca, "stroke-width": 1.6 }, erSvg);
+    svg("text", { x: rx + 96, y: 52, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 15 }, erSvg).textContent = m === 0 ? "只有大小（数量）" : "大小 + 方向（向量）";
+    svg("text", { x: rx + 16, y: 84, fill: fg, "font-size": 14 }, erSvg).textContent = "• 距离大小：20 km";
+    svg("text", { x: rx + 16, y: 114, fill: m === 0 ? no : ca, "font-weight": 700, "font-size": 14 }, erSvg).textContent = m === 0 ? "• 方向：未知（？°）" : (m === 1 ? "• 方向：东偏北 30°" : "• 方向：正西 180°");
+    svg("text", { x: rx + 16, y: 148, fill: m === 0 ? no : ca, "font-weight": 700, "font-size": 14 }, erSvg).textContent = m === 0 ? "→ 圆周上处处有可能！" : "→ 终点位置唯一确定！";
+
+    [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    erNote.innerHTML = m === 0
+      ? "只报距离 <b>20 km</b>：快艇可能在半径 20 km 圆周上的<b>任意一点</b>，无法拦截！"
+      : (m === 1 ? "同时给出<b>大小（20 km）</b>和<b>方向（东偏北 30°）</b>：有向线段 <b>OP</b> 唯一锁定目标！" : "同样是 <b>20 km</b>，方向改成<b>正西 180°</b>，终点就跑到完全相反的 <b>Q</b> 点。");
+  }
+  [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { erDraw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erDraw(ev.detail.choice === "A" ? 0 : 1);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erDraw(0);
+  });
+
+  /* ================= 讲清楚微图解 ①~⑤ ================= */
+  function txt(p, x, y, s, col, fw, sz, anc) {
+    var a = { x: x, y: y, fill: col, "font-size": sz || 13.5 };
+    if (fw) a["font-weight"] = fw;
+    if (anc) a["text-anchor"] = anc;
+    svg("text", a, p).textContent = s;
+  }
+  var anatFig = document.getElementById("m-anat-fig"), anatBar = document.getElementById("m-anat-bar"), curDir = "ab";
+  function drawAnat(dir) {
+    curDir = dir; if (!anatFig) return; anatFig.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card");
+    svg("rect", { x: 8, y: 10, width: 162, height: 154, rx: 8, fill: card, stroke: ln }, anatFig);
+    txt(anatFig, 89, 32, "数量：只有大小", mu, 700, 14, "middle");
+    svg("rect", { x: 28, y: 50, width: 14, height: 74, rx: 7, fill: ln }, anatFig);
+    svg("rect", { x: 30, y: 80, width: 10, height: 42, rx: 5, fill: cb }, anatFig);
+    svg("circle", { cx: 35, cy: 124, r: 11, fill: cb }, anatFig);
+    txt(anatFig, 52, 78, "• 气温 25°C", fg, 0, 13); txt(anatFig, 52, 104, "• 质量 60 kg", fg, 0, 13); txt(anatFig, 52, 130, "• 路程 5 m", fg, 0, 13);
+    svg("rect", { x: 180, y: 10, width: 332, height: 154, rx: 8, fill: card, stroke: ln }, anatFig);
+    var A = { X: 252, Y: 132 }, B = { X: 342, Y: 44 }, C = { X: 342, Y: 132 };
+    svg("line", { x1: A.X, y1: A.Y, x2: C.X, y2: C.Y, stroke: ca, "stroke-dasharray": "4 3", "stroke-width": 1.8 }, anatFig);
+    svg("line", { x1: C.X, y1: C.Y, x2: B.X, y2: B.Y, stroke: cb, "stroke-dasharray": "4 3", "stroke-width": 1.8 }, anatFig);
+    txt(anatFig, 297, 150, dir === "ab" ? "横向 +3" : "横向 -3", ca, 700, 13, "middle");
+    txt(anatFig, 348, 94, dir === "ab" ? "纵向 +4" : "纵向 -4", cb, 700, 13);
+    if (dir === "ab") drawArrow(A, B, ca, 3.6, anatFig); else drawArrow(B, A, no, 3.6, anatFig);
+    svg("circle", { cx: A.X, cy: A.Y, r: 4.5, fill: fg }, anatFig); svg("circle", { cx: B.X, cy: B.Y, r: 4.5, fill: fg }, anatFig);
+    txt(anatFig, A.X - 6, A.Y + 4, dir === "ab" ? "起点A(1,1)" : "终点A(1,1)", fg, 700, 13, "end");
+    txt(anatFig, B.X, B.Y - 10, dir === "ab" ? "终点B(4,5)" : "起点B(4,5)", fg, 700, 13, "middle");
+    txt(anatFig, 402, 58, dir === "ab" ? "向量 AB" : "向量 BA=-AB", dir === "ab" ? ca : no, 700, 14);
+    txt(anatFig, 402, 86, "模 |AB| = 5", cb, 700, 13.5);
+    txt(anatFig, 402, 114, dir === "ab" ? "方向: 右3上4" : "方向: 左3下4", mu, 0, 13);
+    [].forEach.call(anatBar.querySelectorAll("button"), function (b) { b.classList.toggle("on", b.getAttribute("data-dir") === dir); });
+  }
+  if (anatBar) [].forEach.call(anatBar.querySelectorAll("button"), function (b) { b.onclick = function () { drawAnat(b.getAttribute("data-dir")); }; });
+
+  var ex1Fig = document.getElementById("m-ex1-fig"), ex1Bar = document.getElementById("m-ex1-bar"), curShift = 0;
+  function drawEx1(sh) {
+    curShift = sh; if (!ex1Fig) return; ex1Fig.innerHTML = "";
+    var ca = css("--a"), cb = css("--b"), no = css("--no"), mu = css("--muted"), ln = css("--line"), ox = 105, oy = 122, u = 14;
+    function pt(x, y) { return { X: ox + x * u, Y: oy - y * u }; }
+    for (var gx = -4; gx <= 12; gx += 2) svg("line", { x1: ox + gx * u, y1: 10, x2: ox + gx * u, y2: 165, stroke: ln, opacity: 0.55 }, ex1Fig);
+    for (var gy = -3; gy <= 8; gy += 2) svg("line", { x1: 35, y1: oy - gy * u, x2: 295, y2: oy - gy * u, stroke: ln, opacity: 0.55 }, ex1Fig);
+    svg("line", { x1: 35, y1: oy, x2: 295, y2: oy, stroke: mu }, ex1Fig);
+    svg("line", { x1: ox, y1: 10, x2: ox, y2: 165, stroke: mu }, ex1Fig);
+    drawArrow(pt(1, 2), pt(4, 6), ca, 3.4, ex1Fig);
+    txt(ex1Fig, pt(4, 6).X, pt(4, 6).Y - 8, sh ? "AB ≡ CD (重合!)" : "AB(右3上4)", ca, 700, 12.5, "end");
+    if (sh) {
+      drawArrow(pt(-2, 0), pt(1, 4), ca, 1.8, ex1Fig);
+      svg("line", { x1: pt(-2, 0).X, y1: pt(-2, 0).Y, x2: pt(1, 2).X, y2: pt(1, 2).Y, stroke: ca, "stroke-dasharray": "4 3" }, ex1Fig);
+      svg("line", { x1: pt(1, 4).X, y1: pt(1, 4).Y, x2: pt(4, 6).X, y2: pt(4, 6).Y, stroke: ca, "stroke-dasharray": "4 3" }, ex1Fig);
+    } else {
+      drawArrow(pt(-2, 0), pt(1, 4), ca, 3.4, ex1Fig);
+      txt(ex1Fig, pt(-2, 0).X - 4, pt(-2, 0).Y + 15, "CD(右3上4)", ca, 700, 12.5);
+    }
+    drawArrow(pt(0, 0), pt(4, -3), cb, 2.8, ex1Fig); txt(ex1Fig, pt(4, -3).X + 6, pt(4, -3).Y + 4, "EF(右4下3≠)", cb, 700, 12.5);
+    drawArrow(pt(9, 7), pt(6, 3), no, 2.8, ex1Fig); txt(ex1Fig, pt(9, 7).X, pt(9, 7).Y - 6, "GH(反向)", no, 700, 12.5, "middle");
+    txt(ex1Fig, 320, 55, "✓ CD = AB（模5，同向）", ca, 700, 13.5);
+    txt(ex1Fig, 320, 90, "✗ EF：模虽为5，方向不同", cb, 0, 13);
+    txt(ex1Fig, 320, 125, "✗ GH：模虽为5，方向相反", no, 0, 13);
+    [].forEach.call(ex1Bar.querySelectorAll("button"), function (b) { b.classList.toggle("on", parseInt(b.getAttribute("data-shift"), 10) === sh); });
+  }
+  if (ex1Bar) [].forEach.call(ex1Bar.querySelectorAll("button"), function (b) { b.onclick = function () { drawEx1(parseInt(b.getAttribute("data-shift"), 10)); }; });
+
+  var unitFig = document.getElementById("m-unit-fig");
+  function drawUnit() {
+    if (!unitFig) return; unitFig.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), no = css("--no"), ln = css("--line"), okS = css("--ok-soft"), ox = 90, oy = 112, R = 54;
+    svg("circle", { cx: ox, cy: oy, r: R, fill: okS, stroke: ca, "stroke-width": 2, "stroke-dasharray": "5 3" }, unitFig);
+    svg("line", { x1: ox - R - 14, y1: oy, x2: 280, y2: oy, stroke: ln }, unitFig);
+    svg("line", { x1: ox, y1: oy - R - 26, x2: ox, y2: oy + R + 12, stroke: ln }, unitFig);
+    var P = { X: ox + 0.6 * R, Y: oy - 0.8 * R }, Q = { X: ox + R, Y: oy - R }, M = { X: 252, Y: 112 }, N = { X: 252, Y: 58 };
+    drawArrow({ X: ox, Y: oy }, P, ca, 3.2, unitFig); txt(unitFig, P.X - 8, P.Y - 8, "P(0.6,0.8) 模=1✓", ca, 700, 12, "end");
+    drawArrow({ X: ox, Y: oy }, Q, no, 2.6, unitFig); txt(unitFig, Q.X + 5, Q.Y + 14, "Q(1,1) 模=√2✗", no, 700, 12);
+    drawArrow(M, N, cb, 3.2, unitFig); svg("circle", { cx: M.X, cy: M.Y, r: 4, fill: fg }, unitFig);
+    txt(unitFig, N.X, N.Y - 8, "MN(模=1✓)", cb, 700, 12, "middle"); txt(unitFig, M.X, M.Y + 18, "MM=0(零向量)", fg, 700, 12, "middle");
+    txt(unitFig, 304, 48, "• 单位圆半径 = 1", ca, 700, 13.5);
+    txt(unitFig, 304, 78, "• OP、MN 模为 1 (单位向量)", ca, 0, 13);
+    txt(unitFig, 304, 108, "• OQ(1,1) 模为 √2 (捅出圆外!)", no, 0, 13);
+    txt(unitFig, 304, 138, "• MM 缩成一点 = 零向量 0", fg, 0, 13);
+  }
+
+  var paraFig = document.getElementById("m-para-fig"), paraBar = document.getElementById("m-para-bar"), curQ = 1;
+  function drawPara(q) {
+    curQ = q; if (!paraFig) return; paraFig.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), no = css("--no"), mu = css("--muted"), ln = css("--line");
+    var A = { X: 48, Y: 142 }, B = { X: 248, Y: 142 }, D = { X: 98, Y: 38 }, C = { X: 298, Y: 38 }, E = { X: 148, Y: 142 }, F = { X: 198, Y: 38 }, O = { X: 173, Y: 90 };
+    svg("polygon", { points: "48,142 248,142 298,38 98,38", fill: "none", stroke: ln, "stroke-width": 2 }, paraFig);
+    svg("line", { x1: 48, y1: 142, x2: 298, y2: 38, stroke: ln, "stroke-dasharray": "4 3" }, paraFig);
+    svg("line", { x1: 248, y1: 142, x2: 98, y2: 38, stroke: ln, "stroke-dasharray": "4 3" }, paraFig);
+    [["A", A, -10, 16], ["B", B, 8, 16], ["C", C, 10, -4], ["D", D, -10, -4], ["E", E, 0, 18], ["F", F, 0, -8], ["O", O, 0, -10]].forEach(function (it) {
+      svg("circle", { cx: it[1].X, cy: it[1].Y, r: 3.5, fill: fg }, paraFig);
+      txt(paraFig, it[1].X + it[2], it[1].Y + it[3], it[0], fg, 700, 13.5, "middle");
+    });
+    if (q === 1) {
+      drawArrow(A, E, ca, 3.6, paraFig); drawArrow(E, B, cb, 3.6, paraFig); drawArrow(D, F, cb, 3.6, paraFig); drawArrow(F, C, cb, 3.6, paraFig);
+      txt(paraFig, 316, 72, "问(1)：四条向量全同向等长！", ca, 700, 13); txt(paraFig, 316, 102, "AE = EB = DF = FC", cb, 700, 13.5);
+    } else if (q === 2) {
+      drawArrow(A, O, ca, 3.6, paraFig); drawArrow(C, O, no, 3.6, paraFig);
+      txt(paraFig, 316, 72, "问(2)：AO 与 CO 面对面死顶！", no, 700, 13); txt(paraFig, 316, 102, "模相等、方向相反 → 相反向量", fg, 0, 12.5); txt(paraFig, 316, 128, "AO = -CO = OC", ca, 700, 13);
+    } else {
+      drawArrow(A, D, ca, 3.6, paraFig); drawArrow(C, B, cb, 3.6, paraFig);
+      txt(paraFig, 316, 72, "问(3)：AD 朝右上，CB 朝左下", ca, 700, 13); txt(paraFig, 316, 102, "方向相反 ⇒ 平行(共线)向量！", cb, 700, 13); txt(paraFig, 316, 128, "（不在同一直线上也叫共线）", mu, 0, 12.5);
+    }
+    [].forEach.call(paraBar.querySelectorAll("button"), function (b) { b.classList.toggle("on", parseInt(b.getAttribute("data-q"), 10) === q); });
+  }
+  if (paraBar) [].forEach.call(paraBar.querySelectorAll("button"), function (b) { b.onclick = function () { drawPara(parseInt(b.getAttribute("data-q"), 10)); }; });
+
+  var trap0Fig = document.getElementById("m-trap0-fig");
+  function drawTrap0() {
+    if (!trap0Fig) return; trap0Fig.innerHTML = "";
+    var ca = css("--a"), cb = css("--b"), no = css("--no"), card = css("--card"), noS = css("--no-soft");
+    svg("rect", { x: 8, y: 8, width: 324, height: 149, rx: 8, fill: card, stroke: no }, trap0Fig);
+    drawArrow({ X: 28, Y: 108 }, { X: 112, Y: 108 }, ca, 3.4, trap0Fig); txt(trap0Fig, 70, 92, "a (向东)", ca, 700, 13.5, "middle");
+    svg("circle", { cx: 175, cy: 86, r: 17, fill: noS, stroke: no, "stroke-dasharray": "3 2", "stroke-width": 1.8 }, trap0Fig);
+    svg("circle", { cx: 175, cy: 86, r: 4.5, fill: no }, trap0Fig); txt(trap0Fig, 175, 125, "b = 0 (任意方向)", no, 700, 13, "middle");
+    drawArrow({ X: 272, Y: 124 }, { X: 272, Y: 42 }, cb, 3.4, trap0Fig); txt(trap0Fig, 272, 144, "c (向北)", cb, 700, 13.5, "middle");
+    txt(trap0Fig, 170, 30, "a∥0 且 0∥c，但 a ⊥ c (不平行！)", no, 700, 13.5, "middle");
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    erDraw(0); drawAnat("ab"); drawEx1(0); drawUnit(); drawPara(1); drawTrap0();
     draw();
+  });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
+    erDraw(erMode); drawAnat(curDir); drawEx1(curShift); drawUnit(); drawPara(curQ); drawTrap0(); draw();
   });
 })();
 </script>

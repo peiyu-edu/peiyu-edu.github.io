@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .tick { stroke: var(--muted); stroke-width: 1; }
@@ -45,8 +47,14 @@
 <p class="lead">等式两边做同样的事，还相等；不等式两边做同样的事，方向却可能反过来。这一节弄清楚：哪些操作随便做，哪些要先看正、负、零。先从两个人比身高开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>小明身高 \(165\) 厘米，小红身高 \(160\) 厘米。拍合照时，两人一起站上一级 \(20\) 厘米高的台阶。</p>
+  <p>小明身高 \(165\) 厘米，小红身高 \(160\) 厘米。拍合照时，两人一起站上一级 \(20\) 厘米高的台阶。点下面按钮切换看看：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-step" viewBox="0 0 520 200" role="img" aria-label="小明165厘米和小红160厘米站在平地与站上20厘米台阶时的身高对比标尺"></svg>
+    <div class="entry-bar" id="entry-step-bar">
+      <button type="button" data-st="0">站在平地上 (165 vs 160)</button>
+      <button type="button" data-st="20" class="on">一起站上 20cm 台阶 (185 vs 180)</button>
+    </div>
+    <div class="entry-note" id="entry-step-note"></div>
     <p>站上台阶以后，谁的头顶更高？高多少？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>小明，高 \(5\) 厘米</button>
@@ -62,42 +70,58 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中解一元一次不等式（乘负数要变号）；1.4 的「\(\Rightarrow\)」和「\(\iff\)」（<a href="b1-1-4.html">回看 1.4</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「数轴位移」建立直觉</h3>
+  <p class="small">要用到：初中解一元一次不等式（乘负数要变号）；1.4 的「\(\Rightarrow\)」和「\(\iff\)」（<a href="b1-1-4.html">回看 1.4</a>）。不用死背规则，先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>作差</b>：把两个数（或两个式子）相减，看结果。</p>
-    <p>例：\(7\) 和 \(4\)，\(7-4=3\)，是正的，所以 \(7&gt;4\)；\(-2\) 和 \(1\)，\(-2-1=-3\)，是负的，所以 \(-2&lt;1\)。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>作差的本质：数轴上从 \(b\) 走向 \(a\) 的位移向量</b></p>
+    <div class="entry-bar" id="m-diff-bar" role="group" aria-label="作差微图解切换">
+      <button type="button" class="on" data-k="pos">A: 7 和 4（正向差 a-b = +3 &gt; 0）</button>
+      <button type="button" data-k="neg">B: -2 和 1（负向差 a-b = -3 &lt; 0）</button>
+      <button type="button" data-k="zero">C: 3 和 3（重合 a-b = 0）</button>
+    </div>
+    <svg class="micro-fig" id="m-diff-fig" viewBox="0 0 520 150" role="img" aria-label="数轴作差位移微图解"></svg>
+    <p class="entry-note" id="m-diff-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">核心概念 ②</span><b>等价（\(\iff\)）vs 单向（\(\Rightarrow\)）</b></p>
+      <p class="small" style="margin:0"><b>\(\iff\)</b>：双向互推、步步可逆（如 \(x+2&gt;5 \iff x&gt;3\)）。<br><b>\(\Rightarrow\)</b>：单向滑梯、倒不回去（如 \(x&gt;3 \Rightarrow x&gt;1\)，但 \(x=2\) 不满足 \(x&gt;3\)）。</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">核心概念 ③</span><b>非负（\(\ge 0\)）≠ 严格正数（\(&gt;0\)）</b></p>
+      <p class="small" style="margin:0"><b>非负</b>是「正数或 \(0\)」。任何实数的平方 \(x^2 \ge 0\)，当 \(x=0\) 时等于 \(0\)，绝不能擅自写成 \(x^2&gt;0\)（漏掉 \(0\) 是高考常客）！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心大招：比大小首选「作差法」</h3>
+  <p>两个式子谁大？不用猜，作差看符号：</p>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{a - b &gt; 0}_{\text{从 } b \text{ 往右走到 } a}} \;\iff\; \color{#2F7A56}{a} &gt; \color{#966524}{b}\)</span>
+    <span style="display:inline-block; margin:0 12px">\(\color{#3E5C76}{\underbrace{a - b = 0}_{\text{两点重合}}} \;\iff\; a = b\)</span>
+    <span style="display:inline-block">\(\color{#B5452F}{\underbrace{a - b &lt; 0}_{\text{从 } b \text{ 往左走到 } a}} \;\iff\; \color{#2F7A56}{a} &lt; \color{#966524}{b}\)</span>
   </div>
 
   <div class="card">
-    <p><b>符号</b>：一个数是正、负还是零。<b>非负</b>就是「正数或 \(0\)」。</p>
-    <p>例：\(3\) 是正的，\(-0.5\) 是负的，\(0\) 既不正也不负。\(x^2\) 总是非负：\(x=2\) 时是 \(4\)，\(x=-2\) 时也是 \(4\)，\(x=0\) 时是 \(0\)——非负不等于正。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">对任意实数 \(x\)，比较 \(x^2+3\) 和 \(2x+1\) 的大小。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>比较两未知代数式大小，直接看不出谁大，立刻启动<b>作差法</b>！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步套公式变形（配方）：</span>
+        作差：\((x^2+3) - (2x+1) = x^2 - 2x + 2 = (x-1)^2 + 1\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步必查符号下结论：</span>
+        对任意实数 \(x\)，完全平方 \((x-1)^2 \ge 0\)，再加 \(1\) 恒有 \((x-1)^2 + 1 \ge 1 &gt; 0\)！差恒为正，所以恒有 \(x^2+3 &gt; 2x+1\)。
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <p><b>同号、异号</b>：两个数都正或都负叫同号，乘积是正的；一正一负叫异号，乘积是负的。</p>
-    <p>例：\((-2)\times(-3)=6&gt;0\)，同号；\(2\times(-3)=-6&lt;0\)，异号。</p>
-  </div>
-
-  <div class="card">
-    <p><b>等价（\(\iff\)）和单向（\(\Rightarrow\)）</b>：一步推理倒得回去，写 \(\iff\)；只能往前推、倒不回去，只写 \(\Rightarrow\)。</p>
-    <p>例：\(x+2&gt;5\iff x&gt;3\)（两边减 \(2\)、加 \(2\) 都行）。\(x&gt;3\Rightarrow x&gt;1\)，可倒不回去：\(x=2\) 满足 \(x&gt;1\)，不满足 \(x&gt;3\)。</p>
-  </div>
-
-  <h3>2. 比大小，就看差的符号</h3>
-  <p>在数轴上，\(a-b\) 是从 \(b\) 走到 \(a\) 的「带方向的距离」：往右走是正，往左走是负，没动是零。所以</p>
-  <div class="key">\(a&gt;b \iff a-b&gt;0\)　　\(a=b \iff a-b=0\)　　\(a&lt;b \iff a-b&lt;0\)</div>
-  <p>两个式子谁大，不用猜：算差，再把差变形成一眼看得出符号的样子。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>对任意实数 \(x\)，比较 \(x^2+3\) 和 \(2x+1\) 的大小。</p>
-    <p>作差：\((x^2+3)-(2x+1)=x^2-2x+2\)。</p>
-    <p>配方：\(x^2-2x+2=(x-1)^2+1\)。</p>
-    <p>判断：\((x-1)^2\ge0\)，再加 \(1\)，一定 \(&gt;0\)。</p>
-    <p>结论：对任意 \(x\)，都有 \(x^2+3&gt;2x+1\)。</p>
-  </div>
-  <div class="key"><b>作差法</b>：作差 → 变形（因式分解、配方、通分）→ 判断符号 → 下结论。</div>
   <div class="card predict" data-id="try-diff" data-answer="B">
     <p>自己试试：对任意实数 \(a\)，\(a^2+1\) 和 \(2a\) 的大小关系是？</p>
     <div class="opts">
@@ -108,40 +132,50 @@
     <div class="reveal"><p><b>B</b>。作差：\(a^2+1-2a=(a-1)^2\ge0\)，\(a=1\) 时差是 \(0\)。选 A 的同学把「平方 \(\ge0\)」当成了「平方 \(&gt;0\)」：\(a=1\) 时 \(2=2\)，不是严格大于。</p></div>
   </div>
 
-  <h3>3. 等式：两边做同样的事</h3>
-  <p>等式的性质大家熟：\(a=b\) 时 \(b=a\)；\(a=b\)，\(b=c\) 推出 \(a=c\)；两边同加、同减、同乘同一个数，还相等；两边同除以同一个<b>不为 \(0\)</b> 的数，还相等。</p>
-  <p>要小心的只有除法：由 \(ac=bc\) 推不出 \(a=b\)。\(3\times0=5\times0\)，可 \(3\ne5\)。确定 \(c\ne0\) 才能两边除以 \(c\)。</p>
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>解方程 \(x^2=3x\)。</p>
-    <p>不能两边直接除以 \(x\)：\(x\) 可能是 \(0\)。移项：\(x^2-3x=0\)，分解：\(x(x-3)=0\)，所以 \(x=0\) 或 \(x=3\)。</p>
-    <p>要是两边除以 \(x\)，只剩 \(x=3\)，丢了 \(x=0\)。</p>
-  </div>
-  <div class="card predict" data-id="try-eq" data-answer="B">
-    <p>自己试试：方程 \(x(x+1)=2(x+1)\) 的解是？</p>
-    <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(x=2\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(x=2\) 或 \(x=-1\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(x=-1\)</button>
+  <h3>3. 不等式变形的三大铁律</h3>
+  <p>不等式两边同做运算，方向会怎么变？先看这幅微图解：</p>
+
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ②</span><b>乘负数为什么一定要变向？（原点镜像翻转）</b></p>
+    <div class="entry-bar" id="m-prop-bar" role="group" aria-label="不等式变形微图解切换">
+      <button type="button" class="on" data-m="add">① 两边同加 2（数轴整体平移，方向不变）</button>
+      <button type="button" data-m="mulpos">② 两边同乘 2（正比例拉伸，方向不变）</button>
+      <button type="button" data-m="mulneg">③ 两边同乘 -1（关于原点翻转，必须变向！）</button>
     </div>
-    <div class="reveal"><p><b>B</b>。移项：\(x(x+1)-2(x+1)=0\)，提公因式：\((x+1)(x-2)=0\)。选 A 的同学两边除以了 \(x+1\)，可 \(x+1\) 可能是 \(0\)，丢了 \(x=-1\)。</p></div>
+    <svg class="micro-fig" id="m-prop-fig" viewBox="0 0 520 160" role="img" aria-label="不等式性质微图解"></svg>
+    <p class="entry-note" id="m-prop-note"></p>
   </div>
 
-  <h3>4. 不等式：同加不变，同乘看符号</h3>
-  <p>把等式的性质换成「\(&gt;\)」，用作差一条条检验：</p>
-  <ul>
-    <li><b>传递</b>：\(a&gt;b\)，\(b&gt;c\Rightarrow a&gt;c\)。因为 \(a-c=(a-b)+(b-c)&gt;0\)。</li>
-    <li><b>同加</b>：\(a&gt;b\iff a+c&gt;b+c\)。差还是 \(a-b\)。</li>
-    <li><b>同乘</b>：\(ac-bc=c(a-b)\)，\(a-b&gt;0\)，所以符号跟着 \(c\) 走：\(c&gt;0\) 时 \(ac&gt;bc\)；\(c&lt;0\) 时 \(ac&lt;bc\)；\(c=0\) 时两边相等。</li>
-  </ul>
-  <div class="key">同加、同减：方向不变。<br>同乘、同除：先看这个数<b>正、负还是零</b>——正数不变向，负数要变向，零会把不等号变成等号；除数不能是 \(0\)。</div>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>已知 \(a&gt;b\)，比较 \(1-3a\) 和 \(1-3b\)。</p>
-    <p>两边乘 \(-3\)，是负数，方向反过来：\(-3a&lt;-3b\)。</p>
-    <p>两边加 \(1\)，方向不变：\(1-3a&lt;1-3b\)。</p>
-    <p>作差核对：\((1-3a)-(1-3b)=-3(a-b)&lt;0\)，一样。</p>
+  <div class="key" style="padding:10px 14px">
+    <b>不等式三大黄金法则：</b><br>
+    • <b>同加、同减</b>：\(\color{#2F7A56}{\text{方向永远不变}}\)（两边加任何正数、负数或零，相对距离一点不变）。<br>
+    • <b>同乘、同除</b>：必须先看这个数的符号！
+    <span style="display:block; margin:4px 0 0 16px">
+      - 乘正数（\(c&gt;0\)）：\(\color{#2F7A56}{\text{方向不变}}\)；<br>
+      - 乘负数（\(c&lt;0\)）：\(\color{#B5452F}{\text{方向必须反过来！}}\)<br>
+      - 乘零（\(c=0\)）：不等式直接失效，两边都变成 \(0\) 相等；除数绝不能为 \(0\)。
+    </span>
   </div>
+
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">已知 \(a&gt;b\)，比较 \(1-3a\) 和 \(1-3b\) 的大小。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>式子中未知数乘了 \(-3\)，这是负数！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步套公式变形：</span>
+        ① 两边同乘 \(-3\)：因为 \(-3&lt;0\)，方向反过来，得 \(-3a &lt; -3b\)；<br>
+        ② 两边同加 \(1\)：同加不改变不等号方向，得 \(1-3a &lt; 1-3b\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步作差核验：</span>
+        \((1-3a) - (1-3b) = -3(a-b)\)。已知 \(a&gt;b \Rightarrow a-b&gt;0\)，负数乘正数必为负（\(&lt;0\)），结论 \(1-3a &lt; 1-3b\) 绝对可靠！
+      </div>
+    </div>
+  </div>
+
   <div class="card predict" data-id="try-mul" data-answer="B">
     <p>自己试试：已知 \(a&gt;b\)，那么 \(5-2a\) ___ \(5-2b\)。</p>
     <div class="opts cols">
@@ -153,15 +187,28 @@
     <div class="reveal"><p><b>B</b>。乘 \(-2\) 要变向：\(-2a&lt;-2b\)，再加 \(5\)：\(5-2a&lt;5-2b\)。选 A 的同学乘了负数却忘了变向。</p></div>
   </div>
 
-  <h3>5. 两个不等式合起来：同向相加</h3>
-  <p>\(a&gt;b\)，\(c&gt;d\Rightarrow a+c&gt;b+d\)，因为 \((a+c)-(b+d)=(a-b)+(c-d)&gt;0\)。这一步是单向的（倒不回去），但求范围够用了。</p>
-  <p>要求「差」的范围，<b>不能两个不等式直接相减</b>：先把减数变成「加它的相反数」，乘 \(-1\) 时变向，再相加。</p>
+  <h3>4. 两个不等式合起来：同向相加与区间范围</h3>
+  <p>\(a&gt;b\) 且 \(c&gt;d \Longrightarrow a+c&gt;b+d\)。求差的范围时，<b>绝对不能直接相减</b>（大坑），必须转为「加上它的相反数」：</p>
+
   <div class="card">
-    <p class="small">例 4</p>
-    <p>已知 \(1&lt;a&lt;3\)，\(2&lt;b&lt;5\)，求 \(a+b\) 和 \(a-b\) 的范围。</p>
-    <p>同向相加：\(1+2&lt;a+b&lt;3+5\)，即 \(3&lt;a+b&lt;8\)。</p>
-    <p>求 \(a-b\)：先由 \(2&lt;b&lt;5\) 乘 \(-1\)，变向得 \(-5&lt;-b&lt;-2\)；再和 \(1&lt;a&lt;3\) 相加：\(-4&lt;a-b&lt;1\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">已知 \(1&lt;a&lt;3\)，\(2&lt;b&lt;5\)，求 \(a+b\) 和 \(a-b\) 的范围。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>求 \(a-b\) 必须拆成 \(a + (-b)\)，绝不能上下直接相减！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步套公式变形：</span>
+        • 同向相加求 \(a+b\)：\(1+2 &lt; a+b &lt; 3+5 \implies 3 &lt; a+b &lt; 8\)；<br>
+        • 求 \(-b\) 的范围：由 \(2&lt;b&lt;5\) 两边同乘 \(-1\)，变向得 \(-5 &lt; -b &lt; -2\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步同向相加出结果：</span>
+        将 \(1&lt;a&lt;3\) 与 \(-5&lt;-b&lt;-2\) 同向相加：\((1)+(-5) &lt; a+(-b) &lt; (3)+(-2) \implies -4 &lt; a-b &lt; 1\)。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-range" data-answer="A">
     <p>自己试试：已知 \(3&lt;a&lt;6\)，\(1&lt;b&lt;2\)，\(a-b\) 的范围是？</p>
     <div class="opts cols">
@@ -172,18 +219,6 @@
     <div class="reveal"><p><b>A</b>。\(-2&lt;-b&lt;-1\)，加上 \(3&lt;a&lt;6\)：\(1&lt;a-b&lt;5\)。选 B 的同学「下限减下限、上限减上限」：\(3-1=2\)，\(6-2=4\)。可 \(a=5.9\)，\(b=1.1\) 时 \(a-b=4.8\)，已经超过 \(4\)。</p></div>
   </div>
 
-  <h3>6. 平方和取倒数：看符号</h3>
-  <p>还是作差：</p>
-  <ul>
-    <li><b>平方</b>：\(a^2-b^2=(a+b)(a-b)\)。\(a&gt;b\) 时方向看 \(a+b\)：两边都非负，平方不变向。</li>
-    <li><b>取倒数</b>：\(\dfrac1a-\dfrac1b=\dfrac{b-a}{ab}\)。\(a&gt;b\) 时分子是负的，方向看 \(ab\)：同号时 \(\dfrac1a&lt;\dfrac1b\)，异号时反而 \(\dfrac1a&gt;\dfrac1b\)。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 5</p>
-    <p>已知 \(a&lt;b&lt;0\)，比较 \(a^2\) 和 \(b^2\)。</p>
-    <p>作差：\(a^2-b^2=(a+b)(a-b)\)。两个都是负数，\(a+b&lt;0\)；\(a&lt;b\)，\(a-b&lt;0\)。负乘负是正，所以 \(a^2&gt;b^2\)。</p>
-    <p>代数字核对：\(a=-3\)，\(b=-1\)，\(9&gt;1\)。小的数平方后反而大了。</p>
-  </div>
   <div class="card predict" data-id="trap-reciprocal" data-answer="C">
     <p>自己试试：已知 \(a&gt;b\)，且 \(a,b\) 都不为 \(0\)。什么时候一定有 \(\dfrac1a&lt;\dfrac1b\)？</p>
     <div class="opts">
@@ -198,26 +233,49 @@
     </div>
   </div>
 
-  <h3>7. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>乘、除的那个数：正、负，还是零？</b>零会把「\(&gt;\)」变成「\(=\)」，除数不能是零。<br><span class="small">反例：\(a&gt;b\) 推不出 \(ac^2&gt;bc^2\)：\(c=0\) 时两边都是 \(0\)。</span></li>
-    <li><b>取倒数：两边同号、都不为 \(0\)。</b><br><span class="small">反例：\(2&gt;-1\)，可 \(\tfrac12&gt;-1\)，方向没反。</span></li>
-    <li><b>平方、开方：两边都非负。</b><br><span class="small">反例：\(1&gt;-2\)，可 \(1^2=1&lt;4=(-2)^2\)。</span></li>
-    <li><b>两个不等式：只能同向相加；相乘要四个数都正；不能直接相减、相除。</b><br><span class="small">反例：\(1&gt;-2\)，\(1&gt;-3\)，可 \(1\times1=1&lt;6=(-2)\times(-3)\)。\(5&gt;4\)，\(3&gt;0\)，相减 \(5-3=2&lt;4=4-0\)。</span></li>
-    <li><b>每一步标上 \(\iff\) 还是 \(\Rightarrow\)。</b><br><span class="small">反例：同向相加只是单向：\(0+5&gt;1+0\) 成立，可 \(0&gt;1\) 不成立。</span></li>
-  </ol>
-  <p>题里带字母参数时，符号不知道，就分 正、零、负 三种情况讨论：</p>
-  <div class="card">
-    <p class="small">例 6</p>
-    <p>解关于 \(x\) 的不等式 \(mx&gt;2m\)。</p>
-    <p>两边要除以 \(m\)，先看 \(m\) 的符号：</p>
-    <ul>
-      <li>\(m&gt;0\)：除以正数，不变向，\(x&gt;2\)；</li>
-      <li>\(m=0\)：变成 \(0&gt;0\)，不成立，无解；</li>
-      <li>\(m&lt;0\)：除以负数，要变向，\(x&lt;2\)。</li>
-    </ul>
+  <h3>5. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>同向不等式直接相减（大忌！）</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：已知 \(3&lt;a&lt;6, 1&lt;b&lt;2\)，直接两式上下相减：\((3-1) &lt; a-b &lt; (6-2) \implies 2 &lt; a-b &lt; 4\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：代入极端值 \(a=5.9, b=1.1\)，\(a-b=4.8 &gt; 4\) 瞬间穿帮！不等式<b>绝不能直接相减</b>，必须先乘 \(-1\) 变向成 \(-2 &lt; -b &lt; -1\)，再同向相加得到正确范围 \(1 &lt; a-b &lt; 5\)。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>两边乘含未知数的式子（未讨论符号）</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：解不等式 \(mx &gt; 2m\)，两边直接约掉 \(m\)，写出解集 \(x &gt; 2\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：未知数 \(m\) 正负未定！若 \(m=-1\)，原式是 \(-x &gt; -2 \implies x &lt; 2\)；若 \(m=0\)，原式是 \(0&gt;0\) 无解！必须分 \(m&gt;0, m=0, m&lt;0\) 三类严密讨论。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（最高频！）</span><span>盲目认为「两边取倒数一定变向」</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：因为 \(2 &gt; -1\)，两边直接取倒数写出 \(\dfrac{1}{2} &lt; -1\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：正数倒数依然是正数，负数倒数依然是负数，正数永远大于负数！只有当两数<b>同号</b>（\(ab&gt;0\)）时取倒数才会反向！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-recip-fig" viewBox="0 0 280 140" role="img" aria-label="异号取倒数反例图"></svg>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="warn">符号不知道的时候，<b>不能直接两边相乘、不能取倒数、不能平方</b>：先分情况。</div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
@@ -233,8 +291,7 @@
       <tr><td>乘方</td><td>\(a&gt;b&gt;0\Rightarrow a^n&gt;b^n\)（\(n\ge2\) 为整数）</td><td>同正相乘反复用</td></tr>
     </table></div>
     <p><b>开方</b>：\(a&gt;b\ge0\Rightarrow\sqrt a&gt;\sqrt b\)。反过来想：要是 \(\sqrt a\le\sqrt b\)，两边非负，平方得 \(a\le b\)，矛盾。负数没有平方根，所以要求非负。</p>
-    <p><b>等式和不等式哪里一样、哪里不同</b>：对称、传递、同加，两者一样；同乘时，等式乘什么都行，不等式要看符号。等式两边可以随便平方（得到的还相等），不等式不行。</p>
-    <p><b>作商</b>：两个<b>正数</b>比大小，也可以看 \(\dfrac ab\) 和 \(1\) 谁大。比如 \(\dfrac{2^{10}}{3^{6}}=\dfrac{1024}{729}&gt;1\)，所以 \(2^{10}&gt;3^6\)。前提是 \(b&gt;0\)，否则除完方向会变。</p>
+    <p><b>作商法</b>：两个<b>正数</b>比大小，也可以看 \(\dfrac ab\) 和 \(1\) 谁大。比如 \(\dfrac{2^{10}}{3^{6}}=\dfrac{1024}{729}&gt;1\)，所以 \(2^{10}&gt;3^6\)。前提是 \(b&gt;0\)，否则除完方向会变。</p>
   </details>
 </section>
 
@@ -277,6 +334,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。乘 \(-2\) 变向：\(-4&lt;-2x&lt;2\)；再加 \(3\)：\(-1&lt;3-2x&lt;5\)。核对端点：\(x\) 接近 \(-1\) 时 \(3-2x\) 接近 \(5\)，\(x\) 接近 \(2\) 时接近 \(-1\)。B 是把 \(-2x\) 当成了 \(2x\)；C 是忘了加 \(3\)。</p></div>
   </div>
+  <div class="vid" data-video="ex-prop"></div>
 
   <h3>易错</h3>
   <div class="card predict" data-id="warmup" data-answer="D">
@@ -311,6 +369,7 @@
       <p>同一对式子，一个方向对、一个方向错——这就是「单向推论」。乘一个带字母的数之前，正、负、零三种情况都要想到。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-diff"></div>
 
   <div class="card predict" data-id="trap-multiply" data-answer="B">
     <p>5. 已知 \(a&gt;b\)，\(c&gt;d\)。能推出 \(ac&gt;bd\) 吗？</p>
@@ -596,8 +655,207 @@
   function reset() { st = JSON.parse(JSON.stringify(DEF)); draw(); }
   document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
   build();
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", reset);
-  else reset();
+
+  /* ---------- 0 从例子进入：站台阶比身高 ---------- */
+  var esSvg = document.getElementById("entry-step"), esBar = document.getElementById("entry-step-bar"), esNote = document.getElementById("entry-step-note");
+  function esDraw(stepCm) {
+    esSvg.innerHTML = "";
+    var onStep = stepCm === 20;
+    var gy = 172, dy = onStep ? 28 : 0;
+    var footY = gy - dy;
+    var mingTop = 58 - dy, hongTop = 76 - dy;
+    var mingH = 165 + stepCm, hongH = 160 + stepCm;
+
+    // 地面线与身高标尺
+    mk("line", { x1: 24, y1: gy, x2: 496, y2: gy, stroke: "var(--muted)", "stroke-width": 2 }, esSvg);
+    mk("line", { x1: 68, y1: 14, x2: 68, y2: gy, stroke: "var(--muted)", "stroke-width": 1.5 }, esSvg);
+    mk("text", { x: 60, y: gy - 4, "text-anchor": "end", fill: "var(--muted)", "font-size": 12.5 }, esSvg).textContent = "地面 0";
+
+    // 台阶
+    if (onStep) {
+      mk("rect", { x: 108, y: footY, width: 228, height: dy, rx: 4, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": 2 }, esSvg);
+      mk("text", { x: 222, y: gy - 8, "text-anchor": "middle", "font-weight": 700, fill: "var(--a)", "font-size": 13.5 }, esSvg).textContent = "同加 +20 cm 台阶";
+    }
+
+    // 小明与小红身高柱 + 小人头像
+    var people = [
+      { name: "小明", x: 162, top: mingTop, h: mingH, col: "var(--a)" },
+      { name: "小红", x: 276, top: hongTop, h: hongH, col: "var(--b)" }
+    ];
+    people.forEach(function (p) {
+      mk("rect", { x: p.x - 22, y: p.top + 22, width: 44, height: footY - (p.top + 22), rx: 8, fill: p.col, opacity: 0.85 }, esSvg);
+      mk("circle", { cx: p.x, cy: p.top + 11, r: 11, fill: p.col }, esSvg);
+      mk("text", { x: p.x, y: p.top - 5, "text-anchor": "middle", "font-weight": 700, fill: p.col, "font-size": 14 }, esSvg).textContent = p.name + " " + p.h + "cm";
+    });
+
+    // 头顶水平延长虚线与差值标尺（5cm 恒定）
+    mk("line", { x1: 162, y1: mingTop, x2: 430, y2: mingTop, stroke: "var(--a)", "stroke-width": 1.5, "stroke-dasharray": "4 3" }, esSvg);
+    mk("line", { x1: 276, y1: hongTop, x2: 430, y2: hongTop, stroke: "var(--b)", "stroke-width": 1.5, "stroke-dasharray": "4 3" }, esSvg);
+    mk("line", { x1: 416, y1: mingTop, x2: 416, y2: hongTop, stroke: "var(--no)", "stroke-width": 3 }, esSvg);
+    mk("rect", { x: 356, y: (mingTop + hongTop) / 2 - 6, width: 146, height: 52, rx: 8, fill: "var(--no-soft)", stroke: "var(--no)", "stroke-width": 1.6 }, esSvg);
+    mk("text", { x: 429, y: (mingTop + hongTop) / 2 + 14, "text-anchor": "middle", "font-weight": 700, fill: "var(--no)", "font-size": 14.5 }, esSvg).textContent = "头顶相差 5 cm";
+    mk("text", { x: 429, y: (mingTop + hongTop) / 2 + 34, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, esSvg).textContent = mingH + " − " + hongH + " = 5 (不变)";
+
+    [].forEach.call(esBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-st"), 10) === stepCm);
+    });
+    if (onStep) {
+      esNote.innerHTML = "站上 20cm 台阶后：小明 <b>165 + 20 = 185 cm</b>，小红 <b>160 + 20 = 180 cm</b>，头顶差值仍是 <b>185 − 180 = 5 cm</b>（同加不改差和方向）！";
+    } else {
+      esNote.innerHTML = "平地上：小明 <b>165 cm</b>，小红 <b>160 cm</b>，小明比小红高 <b>165 − 160 = 5 cm</b>。点「站上 20cm 台阶」看看差变不变！";
+    }
+  }
+  [].forEach.call(esBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { esDraw(parseInt(b.getAttribute("data-st"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") esDraw(20);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") esDraw(20);
+  });
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { esDraw(20); reset(); initStep2(); });
+  else { esDraw(20); reset(); initStep2(); }
+
+  /* ---------- Step 2 讲清楚微图解 ---------- */
+  function initStep2() {
+    // ① 作差位移微图解
+    var dSvg = document.getElementById("m-diff-fig"), dBar = document.getElementById("m-diff-bar"), dNote = document.getElementById("m-diff-note");
+    if (!dSvg || !dBar) return;
+    function dX(v) { return 260 + v * 24; }
+    function drawDiff(k) {
+      dSvg.innerHTML = "";
+      var a = 7, b = 4;
+      if (k === "neg") { a = -2; b = 1; }
+      else if (k === "zero") { a = 3; b = 3; }
+      var diff = a - b;
+      var yAx = 95;
+
+      // 数轴主线与箭头
+      mk("line", { x1: 20, y1: yAx, x2: 500, y2: yAx, stroke: "var(--fg)", "stroke-width": 1.6 }, dSvg);
+      mk("polygon", { points: "500," + (yAx - 4) + " 510," + yAx + " 500," + (yAx + 4), fill: "var(--fg)" }, dSvg);
+
+      // 刻度线
+      for (var v = -5; v <= 9; v++) {
+        var vx = dX(v);
+        var isZero = v === 0;
+        mk("line", { x1: vx, y1: yAx - (isZero ? 7 : 4), x2: vx, y2: yAx + (isZero ? 7 : 4), stroke: isZero ? "var(--fg)" : "var(--muted)", "stroke-width": isZero ? 2 : 1 }, dSvg);
+        if (v % 2 === 0 || v === -5 || v === 9 || isZero) {
+          mk("text", { x: vx, y: yAx + 22, "text-anchor": "middle", fill: isZero ? "var(--fg)" : "var(--muted)", "font-size": 12, "font-weight": isZero ? 700 : 400 }, dSvg).textContent = v;
+        }
+      }
+
+      var bx = dX(b), ax = dX(a);
+      var isPos = diff > 0, isZeroDiff = diff === 0;
+      var col = isZeroDiff ? "var(--c)" : (isPos ? "var(--a)" : "var(--no)");
+
+      if (!isZeroDiff) {
+        // 从 b 到 a 的位移弧线箭头
+        var midX = (bx + ax) / 2;
+        var pathD = "M " + bx + " " + (yAx - 12) + " Q " + midX + " 28 " + ax + " " + (yAx - 12);
+        mk("path", { d: pathD, fill: "none", stroke: col, "stroke-width": 2.5 }, dSvg);
+        // 箭头头部
+        var arrX = ax + (isPos ? -4 : 4);
+        var pPts = isPos ? (arrX - 6) + ",48 " + ax + ",68 " + (arrX - 10) + ",62" : (arrX + 6) + ",48 " + ax + ",68 " + (arrX + 10) + ",62";
+        mk("polygon", { points: pPts, fill: col }, dSvg);
+        // 弧线上的文字标签
+        mk("rect", { x: midX - 74, y: 16, width: 148, height: 26, rx: 6, fill: "var(--card)", stroke: col, "stroke-width": 1.4 }, dSvg);
+        mk("text", { x: midX, y: 34, "text-anchor": "middle", "font-weight": 700, fill: col, "font-size": 13 }, dSvg).textContent = "位移 a - b = " + (isPos ? "+" : "") + diff + (isPos ? " > 0 (向右)" : " < 0 (向左)");
+      } else {
+        mk("rect", { x: bx - 70, y: 22, width: 140, height: 26, rx: 6, fill: "var(--card)", stroke: col, "stroke-width": 1.4 }, dSvg);
+        mk("text", { x: bx, y: 40, "text-anchor": "middle", "font-weight": 700, fill: col, "font-size": 13 }, dSvg).textContent = "两点重合，差 a - b = 0";
+      }
+
+      // 点 b (起点) 与 点 a (终点)
+      mk("circle", { cx: bx, cy: yAx, r: 6, fill: "var(--b)" }, dSvg);
+      mk("text", { x: bx, y: yAx - 14, "text-anchor": "middle", "font-weight": 700, fill: "var(--b)", "font-size": 14 }, dSvg).textContent = "b=" + b + " (起点)";
+
+      if (a !== b) {
+        mk("circle", { cx: ax, cy: yAx, r: 6, fill: "var(--a)" }, dSvg);
+        mk("text", { x: ax, y: yAx - 14, "text-anchor": "middle", "font-weight": 700, fill: "var(--a)", "font-size": 14 }, dSvg).textContent = "a=" + a + " (终点)";
+      }
+
+      [].forEach.call(dBar.querySelectorAll("button"), function (btn) {
+        btn.classList.toggle("on", btn.getAttribute("data-k") === k);
+      });
+      if (k === "pos") {
+        dNote.innerHTML = "从 <b>b=4</b> 往右走向 <b>a=7</b>：位移 <b>a − b = 7 − 4 = +3 &gt; 0</b>，正数代表 <b>a &gt; b</b>！";
+      } else if (k === "neg") {
+        dNote.innerHTML = "从 <b>b=1</b> 往左走向 <b>a=−2</b>：位移 <b>a − b = (−2) − 1 = −3 &lt; 0</b>，负数代表 <b>a &lt; b</b>！";
+      } else {
+        dNote.innerHTML = "<b>a=3</b> 与 <b>b=3</b> 落在同一位置：位移 <b>a − b = 0</b>，零代表 <b>a = b</b>！";
+      }
+    }
+    [].forEach.call(dBar.querySelectorAll("button"), function (btn) {
+      btn.onclick = function () { drawDiff(btn.getAttribute("data-k")); };
+    });
+    drawDiff("pos");
+
+    // ② 不等式变形三大铁律微图解
+    var pSvg = document.getElementById("m-prop-fig"), pBar = document.getElementById("m-prop-bar"), pNote = document.getElementById("m-prop-note");
+    if (!pSvg || !pBar) return;
+    function pX(v) { return 260 + v * 32; }
+    function drawProp(m) {
+      pSvg.innerHTML = "";
+      var a0 = 3, b0 = 1;
+      var a1 = 3, b1 = 1, opDesc = "";
+      var isFlip = false;
+      if (m === "add") { a1 = 5; b1 = 3; opDesc = "同加 2：数轴向右整体平移 2 格，相对距离保持 2，方向不变 (5 > 3)！"; }
+      else if (m === "mulpos") { a1 = 6; b1 = 2; opDesc = "同乘 2：以原点为中心向右拉伸 2 倍，间距扩大，方向不变 (6 > 2)！"; }
+      else { a1 = -3; b1 = -1; isFlip = true; opDesc = "同乘 -1：关于原点镜像翻折！原本靠右的大数 a=3 摔到了最左边 a'=-3，所以 -3 < -1 必须变向！"; }
+
+      // 上轴：初始 a=3, b=1
+      var y1 = 44, y2 = 120;
+      mk("text", { x: 22, y: y1 - 10, fill: "var(--muted)", "font-size": 12.5, "font-weight": 700 }, pSvg).textContent = "原状态：a=3 > b=1";
+      mk("line", { x1: 20, y1: y1, x2: 495, y2: y1, stroke: "var(--muted)", "stroke-width": 1.4 }, pSvg);
+      mk("line", { x1: pX(0), y1: y1 - 5, x2: pX(0), y2: y1 + 5, stroke: "var(--fg)", "stroke-width": 2 }, pSvg);
+      mk("circle", { cx: pX(b0), cy: y1, r: 5, fill: "var(--b)" }, pSvg);
+      mk("text", { x: pX(b0), y: y1 - 8, "text-anchor": "middle", fill: "var(--b)", "font-weight": 700, "font-size": 13 }, pSvg).textContent = "b=1";
+      mk("circle", { cx: pX(a0), cy: y1, r: 5, fill: "var(--a)" }, pSvg);
+      mk("text", { x: pX(a0), y: y1 - 8, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 13 }, pSvg).textContent = "a=3";
+
+      // 下轴：变形后状态
+      mk("text", { x: 22, y: y2 - 10, fill: isFlip ? "var(--no)" : "var(--a)", "font-size": 12.5, "font-weight": 700 }, pSvg).textContent = isFlip ? "变向后：a'=-3 < b'=-1 (逆转！)" : "操作后：a'=" + a1 + " > b'=" + b1;
+      mk("line", { x1: 20, y1: y2, x2: 495, y2: y2, stroke: "var(--muted)", "stroke-width": 1.4 }, pSvg);
+      mk("line", { x1: pX(0), y1: y2 - 5, x2: pX(0), y2: y2 + 5, stroke: "var(--fg)", "stroke-width": 2 }, pSvg);
+      mk("text", { x: pX(0) + (isFlip ? 14 : 0), y: y2 + 18, "text-anchor": isFlip ? "start" : "middle", fill: "var(--muted)", "font-size": 12 }, pSvg).textContent = "0 (原点)";
+
+      // 连接虚线与位移箭头
+      var col = isFlip ? "var(--no)" : "var(--a)";
+      mk("line", { x1: pX(a0), y1: y1 + 5, x2: pX(a1), y2: y2 - 5, stroke: col, "stroke-width": 1.8, "stroke-dasharray": "4 3" }, pSvg);
+      mk("line", { x1: pX(b0), y1: y1 + 5, x2: pX(b1), y2: y2 - 5, stroke: "var(--b)", "stroke-width": 1.8, "stroke-dasharray": "4 3" }, pSvg);
+
+      mk("circle", { cx: pX(b1), cy: y2, r: 5.5, fill: "var(--b)" }, pSvg);
+      mk("text", { x: pX(b1), y: y2 + 18, "text-anchor": "middle", fill: "var(--b)", "font-weight": 700, "font-size": 13 }, pSvg).textContent = "b'=" + b1;
+      mk("circle", { cx: pX(a1), cy: y2, r: 5.5, fill: col }, pSvg);
+      mk("text", { x: pX(a1), y: y2 + 18, "text-anchor": "middle", fill: col, "font-weight": 700, "font-size": 13 }, pSvg).textContent = "a'=" + a1;
+
+      [].forEach.call(pBar.querySelectorAll("button"), function (btn) {
+        btn.classList.toggle("on", btn.getAttribute("data-m") === m);
+      });
+      pNote.innerHTML = opDesc;
+    }
+    [].forEach.call(pBar.querySelectorAll("button"), function (btn) {
+      btn.onclick = function () { drawProp(btn.getAttribute("data-m")); };
+    });
+    drawProp("add");
+
+    // ③ 翻车现场 ③ 取倒数反例微图解
+    var rSvg = document.getElementById("m-recip-fig");
+    if (rSvg) {
+      rSvg.innerHTML = "";
+      // 上排：原数 a=2, b=-1
+      mk("rect", { x: 10, y: 12, width: 260, height: 48, rx: 8, fill: "var(--bg)", stroke: "var(--line)", "stroke-width": 1.4 }, rSvg);
+      mk("text", { x: 24, y: 32, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, rSvg).textContent = "原数：a = 2,  b = -1";
+      mk("text", { x: 24, y: 50, fill: "var(--a)", "font-size": 13, "font-weight": 700 }, rSvg).textContent = "显然 2 > -1 (正数 > 负数)";
+
+      // 下排：倒数 1/a = 0.5, 1/b = -1
+      mk("rect", { x: 10, y: 72, width: 260, height: 56, rx: 8, fill: "var(--no-soft)", stroke: "var(--no)", "stroke-width": 1.4 }, rSvg);
+      mk("text", { x: 24, y: 94, fill: "var(--no)", "font-size": 13, "font-weight": 700 }, rSvg).textContent = "取倒数：1/a = 0.5,  1/b = -1";
+      mk("text", { x: 24, y: 116, fill: "var(--no)", "font-size": 13, "font-weight": 700 }, rSvg).textContent = "结果 0.5 > -1  (方向根本没变！)";
+    }
+  }
 })();
 </script>
 </body></html>

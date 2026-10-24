@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .ops button.on { background: var(--a); color: #fff; }
   .sl { display: grid; grid-template-columns: 2.2em 1fr 3.2em; gap: 8px; align-items: center; margin: 6px 0; font-size: 16px; }
@@ -33,8 +35,17 @@
 <p class="lead">一条抛物线，同时回答三个问题：方程 \(ax^2+bx+c=0\) 有哪些根，不等式 \(ax^2+bx+c>0\)（或 \(&lt;0\)）在哪里成立。看图读答案，比背表格可靠。先从抛一个球开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>把一个球往上抛，\(t\) 秒后它离地面的高度是 \(h=4t-t^2\)（米）。</p>
+  <p>把一个球往上抛，\(t\) 秒后它离地面的高度是 \(h=4t-t^2\)（米）。点下面不同时刻 \(t\)（或直接点图上的圆点），看小球高度和抛物线怎么对应：</p>
   <div class="card predict" data-id="entry" data-answer="D">
+    <svg class="entry-fig" id="entry-ball" viewBox="0 0 520 200" role="img" aria-label="竖直抛球高度标尺与右侧抛物线轨迹h=4t-t平方同步演示"></svg>
+    <div class="entry-bar" id="entry-ball-bar">
+      <button type="button" data-t="0">t=0 刚抛出</button>
+      <button type="button" data-t="1">A t=1 (3m)</button>
+      <button type="button" data-t="2">B t=2 最高(4m)</button>
+      <button type="button" data-t="3">C t=3 (3m)</button>
+      <button type="button" data-t="4" class="on">D t=4 落地(0m)</button>
+    </div>
+    <div class="entry-note" id="entry-ball-note"></div>
     <p>下面哪一刻，球正好落回地面？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(t=1\)</button>
@@ -51,41 +62,47 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中的二次函数图象（开口方向、和 \(x\) 轴的交点）和因式分解；集合的写法（<a href="b1-1-1.html">回看 1.1</a>）；2.1 的不等式性质，两边乘负数要反向（<a href="b1-2-1.html">回看 2.1</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「抛物线浮沉」建立直觉</h3>
+  <p class="small">要用到：初中的二次函数图象（开口方向、与 \(x\) 轴交点）和因式分解；集合的写法（<a href="b1-1-1.html">回看 1.1</a>）；2.1 的不等式性质，两边乘负数要反向（<a href="b1-2-1.html">回看 2.1</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>二次式、一元二次不等式</b>：形如 \(ax^2+bx+c\) 并且 \(a\neq0\) 的式子叫二次式。只含一个未知数、最高是 \(2\) 次的不等式，叫一元二次不等式。</p>
-    <p>例：\(2x^2-3x+1\) 是二次式，\(a=2\)，\(b=-3\)，\(c=1\)；\(x^2-4\) 也是（\(b=0\)）；\(3x-1\) 不是，它没有 \(x^2\) 项。\(x^2-4>0\) 是一元二次不等式。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>抛物线浮沉与判别式 \(\Delta\)：水上大于 0，水下小于 0</b></p>
+    <div class="entry-bar" id="m-float-bar" role="group" aria-label="抛物线浮沉微图解切换">
+      <button type="button" class="on" data-k="gt">① \(\Delta &gt; 0\)（穿过水面：两交点，中间没入水下）</button>
+      <button type="button" data-k="eq">② \(\Delta = 0\)（贴水面：切于一点重根，全在水上）</button>
+      <button type="button" data-k="lt">③ \(\Delta &lt; 0\)（浮水上：无交点，处处恒正）</button>
+    </div>
+    <svg class="micro-fig" id="m-float-fig" viewBox="0 0 520 170" role="img" aria-label="抛物线浮沉与判别式微图解"></svg>
+    <p class="entry-note" id="m-float-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">核心概念 ②</span><b>零点是实数，不是坐标点！</b></p>
+      <p class="small" style="margin:0">让函数值 \(y=0\) 的那个自变量 \(x\) 叫<b>零点</b>，它是一个<b>实数</b>（如 \(x=-1\) 和 \(x=2\)）；图象经过的 \((-1,0)\) 和 \((2,0)\) 叫与 \(x\) 轴的<b>交点</b>，零点是交点的横坐标！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">核心概念 ③</span><b>口诀「大于取两边、小于取中间」前提是 \(a &gt; 0\)</b></p>
+      <p class="small" style="margin:0">只有开口向上时，水上部分才在两边展翅、水下部分才在谷底凹槽。若 \(a&lt;0\)，必须先两边同乘 \(-1\) 变号转为标准型，绝不能盲套口诀！</p>
+    </div>
+  </div>
+
+  <h3>2. 一个二次三项式，三种角色合一</h3>
+  <p>设 \(a &gt; 0\)，抛物线开口向上，三个问题一张图看清：</p>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{ax^2+bx+c = 0}_{\text{找水面交点（实根 / 零点）}}}\)</span>
+    <span style="display:inline-block; margin:0 10px">\(\color{#966524}{\underbrace{ax^2+bx+c &gt; 0}_{\text{水上两侧：} x &lt; x_1 \text{ 或 } x &gt; x_2}}\)</span>
+    <span style="display:inline-block">\(\color{#B5452F}{\underbrace{ax^2+bx+c &lt; 0}_{\text{水下凹槽：} x_1 &lt; x &lt; x_2}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>判别式</b> \(\Delta=b^2-4ac\)：不用解方程，就能知道 \(ax^2+bx+c=0\) 有几个实根。\(\Delta>0\) 两个不同实根，\(\Delta=0\) 两根相等（叫<b>重根</b>），\(\Delta&lt;0\) 没有实根。</p>
-    <p>例：\(x^2-2x-3\)，\(\Delta=4+12=16>0\)，根 \(-1\) 和 \(3\)；\(x^2-2x+1\)，\(\Delta=4-4=0\)，重根 \(1\)；\(x^2-2x+2\)，\(\Delta=4-8=-4&lt;0\)，没有实根。</p>
-  </div>
-
-  <div class="card">
-    <p><b>零点</b>：让函数值等于 \(0\) 的那个 \(x\)。它是一个<b>实数</b>，不是一个点。</p>
-    <p>例：\(y=x^2-x-2=(x+1)(x-2)\)，\(x=-1\) 和 \(x=2\) 时 \(y=0\)，所以零点是 \(-1\) 和 \(2\)。图象经过的 \((-1,0)\)、\((2,0)\) 是和 \(x\) 轴的交点，零点是它们的横坐标。</p>
-  </div>
-
-  <div class="card">
-    <p><b>解集和区间</b>：不等式所有的解组成的集合叫解集，可以写成集合，也可以写成区间。</p>
-    <p>例：\(\{x\mid -1&lt;x&lt;3\}\) 写成 \((-1,3)\)，圆括号表示端点不要；\(\{x\mid -1\le x\le 3\}\) 写成 \([-1,3]\)，方括号表示端点要；「\(x\le-1\) 或 \(x>3\)」写成 \((-\infty,-1]\cup(3,+\infty)\)。所有实数是 \(\mathbf R\)，一个解也没有是 \(\varnothing\)。</p>
-  </div>
-
-  <h3>2. 一个式子，三种问法</h3>
-  <p>设 \(a\neq0\)，把 \(ax^2+bx+c\) 看成函数 \(y=ax^2+bx+c\)，图象是抛物线。</p>
-  <ul>
-    <li>方程 \(ax^2+bx+c=0\) 的实根 = 函数的零点 = 抛物线和 \(x\) 轴交点的横坐标。</li>
-    <li>不等式 \(ax^2+bx+c>0\) 的解，是抛物线在 \(x\) 轴<b>上方</b>那部分对应的 \(x\)；\(&lt;0\) 看<b>下方</b>。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>求方程 \(2x^2-3x-2=0\) 的实根、函数 \(y=2x^2-3x-2\) 的零点，以及图象和 \(x\) 轴的交点。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（看一遍怎么写）</b></p>
+    <p style="margin:0 0 8px">求方程 \(2x^2-3x-2=0\) 的实根、函数 \(y=2x^2-3x-2\) 的零点，以及图象和 \(x\) 轴的交点。</p>
     <p>因式分解：\(2x^2-3x-2=(2x+1)(x-2)\)。令它等于 \(0\)，得 \(x=-\dfrac12\) 或 \(x=2\)。</p>
     <p>所以方程的实根是 \(-\dfrac12\) 和 \(2\)；函数的零点也是 \(-\dfrac12\) 和 \(2\)；图象和 \(x\) 轴交于 \(\left(-\dfrac12,0\right)\) 和 \((2,0)\)。</p>
   </div>
+
   <div class="card predict" data-id="e-zero" data-answer="B">
     <p>自己试试：函数 \(y=x^2-4x+3\) 的零点是？</p>
     <div class="opts cols">
@@ -97,18 +114,25 @@
     <div class="reveal"><p><b>B</b>。\(x^2-4x+3=(x-1)(x-3)\)，\(x=1\) 和 \(x=3\) 时函数值是 \(0\)。选 A 的同学写成了交点，零点是交点的<b>横坐标</b>，是实数。C 是和 \(y\) 轴的交点；D 是 \(y&lt;0\) 的解集。</p></div>
   </div>
 
-  <h3>3. 开口向上：三步解不等式</h3>
-  <ol>
-    <li><b>标准化</b>：移项让右边是 \(0\)，\(x^2\) 的系数是正的。</li>
-    <li><b>找根</b>：能因式分解就分解；不能就算 \(\Delta\)、用求根公式。</li>
-    <li><b>读图</b>：开口向上、两根 \(x_1&lt;x_2\) 时，<b>两边在上、中间在下</b>。\(>0\) 取两边，\(&lt;0\) 取中间；带「\(=\)」的把两根也算进去。</li>
-  </ol>
+  <h3>3. 开口向上标准解法：三步破题思维链</h3>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>解不等式 \(x^2-x-6\ge0\)。</p>
-    <p>\(x^2-x-6=(x+2)(x-3)\)，两根 \(-2\) 和 \(3\)。开口向上，两边在 \(x\) 轴上方，中间在下方。要「\(\ge0\)」，取两边，并且两根本身（值是 \(0\)）也要。</p>
-    <p>解集是 \(\{x\mid x\le-2\text{ 或 }x\ge3\}\)，即 \((-\infty,-2]\cup[3,+\infty)\)。验一下：中间的 \(x=0\) 代进去是 \(-6\)，确实不满足。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">解不等式 \(x^2-x-6\ge0\)。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>二次项系数 \(a=1&gt;0\) 开口向上已就绪，不等号是「\(\ge 0\)」，对应水上两侧且包含端点！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步因式分解求根：</span>
+        \(x^2-x-6=(x+2)(x-3)=0 \implies\) 两根为 \(x_1=-2, x_2=3\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步读图写出解集（带等号）：</span>
+        开口向上，「\(\ge0\)」取两端闭区间，解集为 \(\{x\mid x\le-2\text{ 或 }x\ge3\}\)，即 \((-\infty,-2]\cup[3,+\infty)\)。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-up" data-answer="A">
     <p>自己试试：不等式 \(x^2-5x+4&lt;0\) 的解集是？</p>
     <div class="opts cols">
@@ -120,14 +144,25 @@
     <div class="reveal"><p><b>A</b>。\(x^2-5x+4=(x-1)(x-4)\)，两根 \(1\) 和 \(4\)，「\(&lt;0\)」取中间，根不要。选 D 的同学把根的符号弄反了：\(x-1=0\) 得 \(x=1\)，不是 \(-1\)。选 B 是读成了「\(>0\)」，选 C 是多要了端点。</p></div>
   </div>
 
-  <h3>4. 开口向下：先乘 \(-1\)</h3>
-  <p>\(x^2\) 的系数是负的，抛物线开口向下，「两边在上」就反过来了。最稳的办法：两边同乘 \(-1\)，<b>不等号反向</b>，变成开口向上，再按第 3 块读。</p>
+  <h3>4. 开口向下：两步化归法则</h3>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>解不等式 \(-2x^2+x+1\ge0\)。</p>
-    <p>两边乘 \(-1\)，不等号反向：\(2x^2-x-1\le0\)。因式分解 \((2x+1)(x-1)\le0\)，两根 \(-\dfrac12\) 和 \(1\)。开口向上，「\(\le0\)」取中间，根也要。</p>
-    <p>解集是 \(\left[-\dfrac12,1\right]\)。验一下：\(x=0\) 代进原式是 \(1\ge0\)，成立。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">解不等式 \(-2x^2+x+1\ge0\)。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>二次项系数是负数 \(-2\)，开口向下！绝不能直接套「大于取两边」！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步同乘 -1 变向（化归为标准型）：</span>
+        两边同乘 \(-1\)，不等号反向：\(2x^2-x-1\le0\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步因式分解取中间：</span>
+        \((2x+1)(x-1)\le0\)，两根 \(-\dfrac12\) 和 \(1\)。标准型开口向上，「\(\le0\)」取中间，解集为 \(\left[-\dfrac12,1\right]\)。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-down" data-answer="A">
     <p>自己试试：不等式 \(-x^2+2x+8>0\) 的解集是？</p>
     <div class="opts cols">
@@ -139,17 +174,6 @@
     <div class="reveal"><p><b>A</b>。乘 \(-1\) 得 \(x^2-2x-8&lt;0\)，即 \((x+2)(x-4)&lt;0\)，取中间 \(-2&lt;x&lt;4\)。选 B 的同学乘了 \(-1\) 却忘了把「\(>\)」改成「\(&lt;\)」。代 \(x=0\) 检查：\(8>0\)，\(0\) 应该在解集里，B 里没有它。</p></div>
   </div>
 
-  <h3>5. \(\Delta=0\) 和 \(\Delta&lt;0\)：碰一下、碰不到</h3>
-  <p>开口向上时：</p>
-  <ul>
-    <li><b>\(\Delta=0\)</b>，重根 \(x_0\)：抛物线在 \(x_0\) 处碰一下 \(x\) 轴又回到上方，<b>不穿过去</b>。除了 \(x_0\) 处值是 \(0\)，别处都 \(>0\)。</li>
-    <li><b>\(\Delta&lt;0\)</b>：整条抛物线都在 \(x\) 轴上方，值处处 \(>0\)。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 4</p>
-    <p>（1）解 \(x^2-6x+9\le0\)。\(x^2-6x+9=(x-3)^2\)，平方不会是负数，只有 \(x=3\) 时等于 \(0\)。所以解集是 \(\{3\}\)。</p>
-    <p>（2）解 \(x^2+x+1>0\)。\(\Delta=1-4=-3&lt;0\)，没有实根，开口向上，整条在 \(x\) 轴上方。所以解集是 \(\mathbf R\)。</p>
-  </div>
   <div class="card predict" data-id="try-touch" data-answer="A">
     <p>自己试试：不等式 \(x^2+2x+1&lt;0\) 的解集是？</p>
     <div class="opts cols">
@@ -160,17 +184,50 @@
     </div>
     <div class="reveal"><p><b>A</b>。\(x^2+2x+1=(x+1)^2\ge0\)，永远不会小于 \(0\)。选 B 的同学把「\(&lt;0\)」当成了「\(\le0\)」：\(x=-1\) 时值是 \(0\)，不满足「小于」。D 是「\(>0\)」的答案。</p></div>
   </div>
-  <div class="key">这些情形不用背。画个草图：开口朝哪、和 \(x\) 轴交在哪，答案就在图上。<b>重根处不变号</b>；根本身要不要，只看不等号带不带「\(=\)」。</div>
 
-  <h3>6. 用之前，查五件事</h3>
-  <ol>
-    <li><b>真是二次吗</b>：\(x^2\) 的系数是参数时，先单独看它等于 \(0\) 的情形。<br><span class="small">反例：\(mx^2+x-2>0\)，\(m=0\) 时变成 \(x-2>0\)，解集是 \((2,+\infty)\)，图象是直线，不能用 \(\Delta\) 和「两边、中间」。</span></li>
-    <li><b>开口朝哪</b>：系数为负，先乘 \(-1\) 并反向。<br><span class="small">反例：\(-x^2+1>0\) 照背「大于取两边」写 \(x&lt;-1\) 或 \(x>1\)；代 \(x=2\) 得 \(-3\)，并不大于 \(0\)。正确是 \(-1&lt;x&lt;1\)。</span></li>
-    <li><b>根要不要</b>：带「\(=\)」要，不带不要；重根处不变号。<br><span class="small">反例：\((x-1)^2>0\) 的解集不是 \(\mathbf R\)，\(x=1\) 时值是 \(0\)，要去掉。</span></li>
-    <li><b>零点是数</b>：写 \(1\)，不写 \((1,0)\)。<br><span class="small">反例：「\(y=x^2-1\) 的零点是 \((\pm1,0)\)」是错的，零点是 \(-1\) 和 \(1\)。</span></li>
-    <li><b>实际问题取交集</b>：算出的解集还要和问题允许的范围取交集。<br><span class="small">反例：\(x\) 是一段长度，由 \(x^2-x-6&lt;0\) 得 \(-2&lt;x&lt;3\)；可长度要 \(x>0\)，答案是 \(0&lt;x&lt;3\)。</span></li>
-  </ol>
-  <div class="key">解集写成集合或区间：\(\{x\mid -1&lt;x&lt;3\}\) 或 \((-1,3)\)；两段用「或」/ \(\cup\) 连起来；没有解写 \(\varnothing\)。</div>
+  <h3>5. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>二次项系数含字母，漏查 \(a=0\)</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：解不等式 \(mx^2+x-2&gt;0\)，直接当成二次不等式计算判别式 \(\Delta\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：\(m\) 正负与是否为零未知！若 \(m=0\)，方程退化为一次不等式 \(x-2&gt;0 \implies x&gt;2\)，图象是一条直线而非抛物线，必须单独拉出 \(m=0\) 讨论！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>开口向下盲目套「大于取两边」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：解 \(-x^2+1&gt;0\)，不看系数直接背口诀写成 \(x&lt;-1\text{ 或 }x&gt;1\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：代入 \(x=2\) 得 \(-3&gt;0\) 当场穿帮！开口向下时中间拱在水上，必须先两边同乘 \(-1\) 变号化成 \(x^2-1&lt;0\)，解得 \((-1,1)\)。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（高考最高频！）</span><span>恒成立问题把 \(\Delta\) 符号弄反</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：以为「\(ax^2+bx+c &gt; 0\) 对一切 \(x\) 恒成立」要求判别式 \(\Delta &gt; 0\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：恒大于零意味着整条抛物线高悬在水面上方，<b>和水面一个交点都不能有</b>！所以必须严格是 <b>\(\Delta &lt; 0\)</b>！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-always-fig" viewBox="0 0 280 145" role="img" aria-label="恒成立判别式反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
@@ -243,6 +300,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。没有实根就是 \(\Delta&lt;0\)：\((-2)^2-4k=4-4k&lt;0\)，得 \(k>1\)。选 C 的同学把 \(k=1\) 也算进来了：那时 \(\Delta=0\)，方程是 \((x-1)^2=0\)，有一个重根 \(1\)。B、D 是有实根的情形。</p></div>
   </div>
+  <div class="vid" data-video="ex-param"></div>
 
   <h3>易错</h3>
   <div class="card predict" data-id="warmup" data-answer="B">
@@ -268,6 +326,7 @@
     </div>
     <div class="reveal"><p><b>C</b>。卡在「根要不要」：\(x^2-4x+4=(x-2)^2\)，\(\Delta=0\)，抛物线在 \(x=2\) 处碰到 \(x\) 轴又回到上方——重根处<b>不变号</b>。除了 \(x=2\) 那一点值是 0，其余地方都大于 0。B 是「\(\ge 0\)」的答案；D 是「\(\le0\)」的答案。在「动手」①里点「重根」，再把四个不等号点一遍。</p></div>
   </div>
+  <div class="vid" data-video="ex-dist"></div>
   <div class="card predict" data-id="p-trap-range" data-answer="A">
     <p>5. 一块长方形菜地，长比宽多 \(2\) 米，面积至少 \(8\) 平方米。设宽为 \(x\) 米，\(x\) 的取值范围是？</p>
     <div class="opts">
@@ -643,8 +702,180 @@
   ms.addEventListener("change", function () { Peiyu.log("interact", { id: "param-m", m: M }); });
   document.getElementById("pmreset").onclick = mReset;
 
-  document.addEventListener("DOMContentLoaded", function () { draw(); mReset(); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw(); mDraw(); });
+  /* ---------- 0 从例子进入：竖直抛球与抛物线 ---------- */
+  var ebSvg = document.getElementById("entry-ball"), ebBar = document.getElementById("entry-ball-bar"), ebNote = document.getElementById("entry-ball-note");
+  var ebT = 2;
+  function ebDraw(tVal) {
+    ebT = tVal;
+    var hVal = 4 * tVal - tVal * tVal;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card");
+    ebSvg.innerHTML = "";
+    var gy = 162, topY = 34, uH = (gy - topY) / 4; // 每米 32px
+    var bx = 92, gx0 = 210, gx1 = 482, uT = (gx1 - gx0) / 4;
+    function Y(h) { return gy - h * uH; }
+    function X(t) { return gx0 + t * uT; }
+
+    // 左侧：竖直抛球标尺
+    svg("text", { x: 82, y: 18, "text-anchor": "middle", "font-weight": 700, fill: fg, "font-size": 14 }, ebSvg).textContent = "小球离地高度 h";
+    svg("line", { x1: 48, y1: topY, x2: 48, y2: gy, stroke: mu, "stroke-width": 1.5 }, ebSvg);
+    for (var m = 0; m <= 4; m++) {
+      svg("line", { x1: 43, y1: Y(m), x2: 53, y2: Y(m), stroke: mu }, ebSvg);
+      svg("text", { x: 38, y: Y(m) + 5, "text-anchor": "end", fill: mu, "font-size": 13 }, ebSvg).textContent = m + "m";
+    }
+    svg("line", { x1: 24, y1: gy, x2: 146, y2: gy, stroke: fg, "stroke-width": 2 }, ebSvg);
+    svg("line", { x1: bx, y1: topY, x2: bx, y2: gy, stroke: ln, "stroke-dasharray": "3 3" }, ebSvg);
+
+    // 右侧：h(t) = 4t - t^2 抛物线坐标系
+    svg("text", { x: 346, y: 18, "text-anchor": "middle", "font-weight": 700, fill: fg, "font-size": 14 }, ebSvg).textContent = "高度随时间变化：h = 4t − t²";
+    for (var hm = 1; hm <= 4; hm++) svg("line", { x1: gx0, y1: Y(hm), x2: gx1, y2: Y(hm), stroke: ln }, ebSvg);
+    svg("line", { x1: gx0 - 10, y1: gy, x2: gx1 + 14, y2: gy, stroke: fg, "stroke-width": 1.8 }, ebSvg);
+    svg("line", { x1: gx0, y1: gy, x2: gx0, y2: topY - 8, stroke: fg, "stroke-width": 1.5 }, ebSvg);
+
+    var d = "";
+    for (var i = 0; i <= 80; i++) {
+      var tt = 4 * i / 80, hh = 4 * tt - tt * tt;
+      d += (i ? "L" : "M") + X(tt).toFixed(1) + " " + Y(hh).toFixed(1);
+    }
+    svg("path", { d: d, fill: "none", stroke: ca, "stroke-width": 3 }, ebSvg);
+
+    // 水平联动虚线：左球 -> 右抛物线点
+    var by = Y(hVal), px = X(tVal);
+    svg("line", { x1: bx, y1: by, x2: px, y2: by, stroke: hl, "stroke-width": 1.8, "stroke-dasharray": "5 4" }, ebSvg);
+    svg("line", { x1: px, y1: by, x2: px, y2: gy, stroke: hl, "stroke-width": 1.6, "stroke-dasharray": "3 3" }, ebSvg);
+
+    // 5个整数时刻点
+    [0, 1, 2, 3, 4].forEach(function (t) {
+      var h = 4 * t - t * t, act = t === tVal, isGround = h === 0;
+      var g = svg("g", { style: "cursor:pointer" }, ebSvg);
+      svg("circle", { cx: X(t), cy: Y(h), r: act ? 8.5 : 5.5, fill: act ? (isGround ? no : hl) : (isGround ? card : ca), stroke: isGround ? no : (act ? card : ca), "stroke-width": 2.2 }, g);
+      svg("text", { x: X(t), y: gy + 22, "text-anchor": "middle", "font-weight": act ? 700 : 400, fill: act ? fg : mu, "font-size": 13.5 }, g).textContent = "t=" + t + "s";
+      g.onclick = function () { ebDraw(t); };
+    });
+
+    // 左侧小球实体
+    svg("circle", { cx: bx, cy: by, r: 12, fill: hVal === 0 ? no : hl, stroke: card, "stroke-width": 2.5 }, ebSvg);
+    svg("text", { x: bx, y: gy + 22, "text-anchor": "middle", "font-weight": 700, fill: hVal === 0 ? no : ca, "font-size": 13.5 }, ebSvg).textContent = "h = " + hVal + " m";
+
+    [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-t"), 10) === tVal);
+    });
+    if (tVal === 4) {
+      ebNote.innerHTML = "当 <b>t = 4 秒</b> 时：<b>h = 4×4 − 4² = 16 − 16 = 0 米</b>，小球<b>正好落回地面</b>（对应抛物线与横轴交点）！";
+    } else if (tVal === 0) {
+      ebNote.innerHTML = "当 <b>t = 0 秒</b> 时：<b>h = 0 米</b>，小球刚从地面抛出。";
+    } else if (tVal === 2) {
+      ebNote.innerHTML = "当 <b>t = 2 秒</b> 时：<b>h = 4×2 − 2² = 4 米</b>，小球到达抛物线<b>最高点（顶点）</b>，还在空中！";
+    } else {
+      ebNote.innerHTML = "当 <b>t = " + tVal + " 秒</b> 时：<b>h = 4×" + tVal + " − " + tVal + "² = 3 米 > 0</b>，小球还在空中 3 米处。";
+    }
+  }
+  [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ebDraw(parseInt(b.getAttribute("data-t"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: 1, B: 2, C: 3, D: 4 };
+      if (map[ev.detail.choice]) ebDraw(map[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ebDraw(2);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { ebDraw(2); draw(); mReset(); initStep2(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ebDraw(ebT); draw(); mDraw(); initStep2(); });
+
+  /* ---------- Step 2 讲清楚微图解 ---------- */
+  function initStep2() {
+    var flSvg = document.getElementById("m-float-fig"), flBar = document.getElementById("m-float-bar"), flNote = document.getElementById("m-float-note");
+    if (!flSvg || !flBar) return;
+
+    function drawFloat(k) {
+      flSvg.innerHTML = "";
+      var yAx = 100;
+      var cA = "var(--a)", cB = "var(--b)", cNo = "var(--no)", cM = "var(--muted)", cFg = "var(--fg)", cCd = "var(--card)", cBg = "var(--bg)";
+
+      // 水下浅蓝背景色块 (y > yAx)
+      svg("rect", { x: 16, y: yAx, width: 488, height: 60, rx: 4, fill: cBg, opacity: 0.8 }, flSvg);
+      svg("line", { x1: 16, y1: yAx, x2: 495, y2: yAx, stroke: cFg, "stroke-width": 1.8 }, flSvg);
+      svg("polygon", { points: "495," + (yAx - 4) + " 505," + yAx + " 495," + (yAx + 4), fill: cFg }, flSvg);
+      svg("text", { x: 492, y: yAx - 8, "text-anchor": "end", fill: cM, "font-size": 12 }, flSvg).textContent = "x 轴 (水面 y=0)";
+      svg("text", { x: 26, y: yAx + 22, fill: cM, "font-size": 12 }, flSvg).textContent = "水下区域 y < 0";
+
+      function fX(v) { return 260 + (v - 3) * 65; }
+      function fY(v, kind) {
+        var yVal = 0;
+        if (kind === "gt") yVal = 0.5 * (v - 1.5) * (v - 4.5); // 两根 1.5, 4.5, 顶点 y = -1.125
+        else if (kind === "eq") yVal = 0.5 * (v - 3) * (v - 3); // 重根 3, 顶点 y = 0
+        else yVal = 0.5 * (v - 3) * (v - 3) + 0.75; // 无根, 顶点 y = 0.75
+        return yAx - yVal * 32;
+      }
+
+      var d = "";
+      for (var i = 0; i <= 60; i++) {
+        var vx = 0.5 + 5.0 * i / 60;
+        var px = fX(vx), py = fY(vx, k);
+        d += (i ? " L " : "M ") + px.toFixed(1) + " " + py.toFixed(1);
+      }
+      svg("path", { d: d, fill: "none", stroke: k === "lt" ? cA : cB, "stroke-width": 3 }, flSvg);
+
+      if (k === "gt") {
+        var r1 = fX(1.5), r2 = fX(4.5);
+        svg("circle", { cx: r1, cy: yAx, r: 5.5, fill: cA }, flSvg);
+        svg("circle", { cx: r2, cy: yAx, r: 5.5, fill: cA }, flSvg);
+        svg("text", { x: r1, y: yAx + 20, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 13 }, flSvg).textContent = "x1";
+        svg("text", { x: r2, y: yAx + 20, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 13 }, flSvg).textContent = "x2";
+
+        svg("text", { x: r1 - 35, y: 55, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 13 }, flSvg).textContent = "水上两翼 y>0";
+        svg("text", { x: r2 + 35, y: 55, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 13 }, flSvg).textContent = "水上两翼 y>0";
+        svg("text", { x: 260, y: yAx + 32, "text-anchor": "middle", "font-weight": 700, fill: cNo, "font-size": 13 }, flSvg).textContent = "水下凹槽 y<0 (两根中间)";
+
+        flNote.innerHTML = "<b>Δ &gt; 0</b>：抛物线穿透水面产生 <b>2 个不同交点</b>。水上两翼 <b>y &gt; 0</b> 取两边（x &lt; x₁ 或 x &gt; x₂），水下凹槽 <b>y &lt; 0</b> 取中间（x₁ &lt; x &lt; x₂）！";
+      } else if (k === "eq") {
+        var r0 = fX(3);
+        svg("circle", { cx: r0, cy: yAx, r: 5.5, fill: cB }, flSvg);
+        svg("text", { x: r0, y: yAx + 22, "text-anchor": "middle", "font-weight": 700, fill: cB, "font-size": 13 }, flSvg).textContent = "切点 x0 (重根)";
+        svg("text", { x: 260, y: 45, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 13.5 }, flSvg).textContent = "除切点 x0 外，全在水面上方 y > 0";
+        flNote.innerHTML = "<b>Δ = 0</b>：抛物线顶点<b>刚好贴在水面上</b>，只有 <b>1 个切点（重根 x₀）</b>。水下部分空空如也，除 x₀ 外处处 <b>y &gt; 0</b>！";
+      } else {
+        svg("text", { x: 260, y: 50, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 14 }, flSvg).textContent = "整条抛物线高悬在水面之上，处处 y > 0 (无交点！)";
+        flNote.innerHTML = "<b>Δ &lt; 0</b>：抛物线<b>完全漂浮在水面上方</b>，与 x 轴没有交点。对任意 x 恒有 <b>y &gt; 0</b>（解集为 <b>R</b>），y &lt; 0 解集为 <b>∅</b>！";
+      }
+
+      [].forEach.call(flBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+    }
+    [].forEach.call(flBar.querySelectorAll("button"), function (b) {
+      b.onclick = function () { drawFloat(b.getAttribute("data-k")); };
+    });
+    drawFloat("gt");
+
+    // 翻车现场 ③ 微图解
+    var aSvg = document.getElementById("m-always-fig");
+    if (aSvg) {
+      aSvg.innerHTML = "";
+      var cA = "var(--a)", cNo = "var(--no)", cFg = "var(--fg)", cM = "var(--muted)", cCd = "var(--card)";
+      var yW = 95;
+      svg("line", { x1: 14, y1: yW, x2: 266, y2: yW, stroke: cFg, "stroke-width": 1.5 }, aSvg);
+      svg("text", { x: 262, y: yW - 6, "text-anchor": "end", fill: cM, "font-size": 11 }, aSvg).textContent = "x 轴 (水面)";
+
+      // 高悬抛物线
+      var d2 = "";
+      for (var j = 0; j <= 40; j++) {
+        var xP = 30 + j * 5.5;
+        var yP = 42 + 0.016 * (xP - 140) * (xP - 140);
+        d2 += (j ? " L " : "M ") + xP.toFixed(1) + " " + yP.toFixed(1);
+      }
+      svg("path", { d: d2, fill: "none", stroke: cA, "stroke-width": 2.5 }, aSvg);
+
+      svg("rect", { x: 42, y: 12, width: 196, height: 26, rx: 6, fill: cCd, stroke: cA, "stroke-width": 1.4 }, aSvg);
+      svg("text", { x: 140, y: 29, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 12 }, aSvg).textContent = "恒大于 0 ⟺ 整条高悬在水上";
+
+      svg("rect", { x: 42, y: yW + 10, width: 196, height: 30, rx: 6, fill: "var(--ok-soft)", stroke: cA, "stroke-width": 1.4 }, aSvg);
+      svg("text", { x: 140, y: yW + 30, "text-anchor": "middle", "font-weight": 700, fill: cA, "font-size": 12 }, aSvg).textContent = "一个交点都没有 ⟹ Δ < 0 ！";
+    }
+  }
 })();
 </script>
 </body></html>

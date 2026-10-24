@@ -13,6 +13,40 @@
   var isLesson = /\/lessons\//.test(location.pathname);
   var ROOT = isLesson ? "../" : "";
 
+  /* ==================== 已搭载等距 3D 数学实验台的 30 节核心课程（5 册 15 章 100% 全章覆盖 + 立几/空向 100% 全节覆盖） ==================== */
+  var ISO_SECS = {
+    "b1-1-3": "Venn摩根光栅台",
+    "b1-2-2": "弦图均值链台",
+    "b1-3-2": "奇偶旋转折叠台",
+    "b1-4-4": "指对y=x反射镜",
+    "b1-5-4": "单位圆相位仪",
+    "b1-5-6": "三角双轨变速台",
+    "b2-6-2": "向量测功台",
+    "b2-6-4": "正余弦外接圆台",
+    "b2-7-2": "复平面旋转台",
+    "b2-8-1": "旋转体车削台",
+    "b2-8-2": "斜二测半倍夹具",
+    "b2-8-3": "祖暅截面台",
+    "b2-8-4": "异面平移造角台",
+    "b2-8-5": "线面平行激光台",
+    "b2-8-6": "二面角铰链台",
+    "b2-9-2": "箱线图分拣台",
+    "b2-10-1": "分流抽样机",
+    "e1-1-1": "平行六面体台",
+    "e1-1-2": "三维龙门基底",
+    "e1-1-3": "八卦限对称卡尺",
+    "e1-1-4": "法向激光测距",
+    "e1-2-5": "双圆公切线滑轨",
+    "e1-3-1": "双焦椭圆仪",
+    "e1-3-2": "双曲线渐近台",
+    "e1-3-3": "抛物线光学台",
+    "e2-4-2": "等差倒序阶梯台",
+    "e2-5-1": "割线千分表台",
+    "e3-6-3": "帕斯卡金字塔",
+    "e3-7-5": "高尔顿落球仪",
+    "e3-8-1": "残差弹簧平衡杆"
+  };
+
   /* ==================== 必修一全覆盖（24 节，28 张高密度原子卡片） ==================== */
     var CARDS = [
     {
@@ -21,13 +55,13 @@
       title: "集合互异性检验与描述法「看代表元」",
       keywords: ["互异性", "代表元", "点集", "数集", "列举法", "描述法"],
       trig: "含参集合求元素（如 \\(a\\in\\{1,a^2\\}\\)），或判断两个描述法集合的交集。",
-      key: "1. <b>互异性铁律</b>：算出含参集合的参数值后，<b>必须代回集合检验是否有重复元素</b>。<br>2. <b>描述法先看竖线前的代表元</b>：\\(\\{x\\mid y=f(x)\\}\\) 是定义域数集，\\(\\{y\\mid y=f(x)\\}\\) 是值域数集，\\(\\{(x,y)\\mid y=f(x)\\}\\) 是<b>坐标点集</b>。",
-      warn: "数集与点集属性不同，交集必为 \\(\\varnothing\\)；不要被竖线后面相同的方程迷惑。",
-      more: "例：若 \\(a\\in\\{2,4,a^2-a\\}\\)，由 \\(a=2\\) 得 \\(a^2-a=2\\)（与 \\(2\\) 重复，舍去）；由 \\(a=a^2-a\\) 得 \\(a=0\\)（集合为 \\(\\{2,4,0\\}\\)，成立）。",
+      key: "1. <b>重复元素怎么处理</b>：只问某个数在不在里面时，重复并成一个以后，这个数仍在集合里，不要因此舍掉。问「有几个元素」，或要求几个互不相同的数，才要代入看会不会并掉。<br>2. <b>描述法先看竖线前的代表元</b>：\\(\\{x\\mid y=f(x)\\}\\) 是定义域数集，\\(\\{y\\mid y=f(x)\\}\\) 是值域数集，\\(\\{(x,y)\\mid y=f(x)\\}\\) 是<b>坐标点集</b>。",
+      warn: "数集与点集属性不同，交集必为 \\(\\varnothing\\)；不要被竖线后面相同的方程迷惑。属于关系成立，不等于集合里有三个不同元素。",
+      more: "例：\\(2\\in\\{1,a,a^2-a\\}\\) 时，\\(a=2\\) 和 \\(a=-1\\) 都成立。\\(a=2\\) 时集合是 \\(\\{1,2\\}\\)，\\(2\\) 仍在里面。只有再要求恰好 3 个元素，才丢掉 \\(a=2\\)。",
       rel: ["set-empty-trap", "set-ops-demorgan"]
     },
     {
-      id: "set-empty-trap", ch: 1, sec: "b1-1-2", secName: "1.2 集合间的基本关系",
+      id: "set-empty-trap", lab: "set-empty-trap", ch: 1, sec: "b1-1-2", secName: "1.2 集合间的基本关系",
       kind: "pitfall", kindLabel: "🔴 易错红线",
       title: "含参子集分类讨论先查空集与子集计数",
       keywords: ["空集", "子集", "真子集", "包含", "端点", "参数"],
@@ -100,7 +134,7 @@
       rel: ["amgm-const-one", "amgm-shift", "amgm-hook"]
     },
     {
-      id: "amgm-hook", ch: 2, sec: "b1-2-2", secName: "2.2 基本不等式",
+      id: "amgm-hook", lab: "amgm-hook", ch: 2, sec: "b1-2-2", secName: "2.2 基本不等式",
       kind: "pitfall", kindLabel: "🔴 易错红线",
       title: "对勾函数 f(x)=x+k/x 性质与「等号取不到」急救",
       keywords: ["等号", "取不到", "对勾", "下界", "单调性"],
@@ -120,7 +154,7 @@
       rel: ["amgm-core", "amgm-hook"]
     },
     {
-      id: "quad-always-true", ch: 2, sec: "b1-2-3", secName: "2.3 二次函数与一元二次方程、不等式",
+      id: "quad-always-true", lab: "quad-always-true", ch: 2, sec: "b1-2-3", secName: "2.3 二次函数与一元二次方程、不等式",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "二次不等式在全实数域 vs 在闭区间上恒成立",
       keywords: ["恒成立", "分离参数", "闭区间", "零点"],
@@ -140,7 +174,7 @@
       rel: ["quad-always-true", "ineq-props-diff"]
     },
     {
-      id: "fn-dom-same", ch: 3, sec: "b1-3-1", secName: "3.1 函数的概念及其表示",
+      id: "fn-dom-same", lab: "fn-dom-same", ch: 3, sec: "b1-3-1", secName: "3.1 函数的概念及其表示",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "同一函数判定、具体定义域与抽象复合定义域",
       keywords: ["定义域", "同一函数", "复合", "分段函数"],
@@ -161,7 +195,7 @@
       rel: ["fn-mono-def", "fn-parity-core"]
     },
     {
-      id: "fn-mono-def", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
+      id: "fn-mono-def", lab: "fn-mono-def", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
       kind: "pitfall", kindLabel: "🔴 易错红线",
       title: "单调区间书写红线与分段函数全域单调条件",
       keywords: ["单调", "分段函数", "递增", "递减", "并集"],
@@ -182,7 +216,7 @@
       rel: ["fn-parity-core"]
     },
     {
-      id: "fn-parity-core", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
+      id: "fn-parity-core", lab: "fn-parity-core", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "奇偶性判别铁律与三大高频奇函数模型",
       keywords: ["奇函数", "偶函数", "奇偶性", "对称", "f(0)=0"],
@@ -202,7 +236,7 @@
       rel: ["exp-fn-prop", "explog-compare"]
     },
     {
-      id: "fn-model-app", ch: 3, sec: "b1-3-4", secName: "3.4 函数的应用（一）",
+      id: "fn-model-app", lab: "fn-model-app", ch: 3, sec: "b1-3-4", secName: "3.4 函数的应用（一）",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "实际应用建模：定义域实际约束与顶点/端点最值",
       keywords: ["应用", "分段", "建模", "最值"],
@@ -222,7 +256,7 @@
       rel: ["exp-fn-prop", "log-change-base"]
     },
     {
-      id: "exp-fn-prop", ch: 4, sec: "b1-4-2", secName: "4.2 指数函数",
+      id: "exp-fn-prop", lab: "exp-fn-prop", ch: 4, sec: "b1-4-2", secName: "4.2 指数函数",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "指数函数图象性质、定点与底数分类讨论",
       keywords: ["指数函数", "定点", "底数", "复合单调"],
@@ -252,7 +286,7 @@
       rel: ["exp-fn-prop", "log-change-base", "fn-power-five"]
     },
     {
-      id: "zero-theorem", ch: 4, sec: "b1-4-5", secName: "4.5 函数的应用（二）",
+      id: "zero-theorem", lab: "zero-theorem", ch: 4, sec: "b1-4-5", secName: "4.5 函数的应用（二）",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "零点存在定理、二分法与「图象交点转零点」",
       keywords: ["零点", "二分法", "交点", "实根个数"],
@@ -312,7 +346,7 @@
       rel: ["trig-know1get2", "trig-shift-scale"]
     },
     {
-      id: "trig-shift-scale", ch: 5, sec: "b1-5-6", secName: "5.6 函数 y=Asin(ωx+φ)",
+      id: "trig-shift-scale", lab: "trig-shift-scale", ch: 5, sec: "b1-5-6", secName: "5.6 函数 y=Asin(ωx+φ)",
       kind: "pitfall", kindLabel: "🔴 易错红线",
       title: "正弦型函数 y=Asin(ωx+φ) 伸缩平移铁律与由图求式",
       keywords: ["平移", "伸缩", "Asin", "初相", "五点法"],
@@ -422,7 +456,7 @@
       rel: ["complex-def-pure", "complex-plane-mod"]
     },
     {
-      id: "complex-trig-form", ch: 7, sec: "b2-7-3", secName: "7.3 复数的三角表示",
+      id: "complex-trig-form", ch: 7, sec: "b2-7-3", secName: "7.3 复数的三角表示（选学）",
       kind: "formula", kindLabel: "🔵 公式与结论",
       title: "复数的三角表示式与乘除法几何旋转（选学）",
       keywords: ["三角形式", "辐角", "旋转", "选学", "极坐标"],
@@ -457,7 +491,7 @@
       title: "柱、锥、台、球的表面积与体积公式全景",
       keywords: ["体积", "表面积", "母线", "祖暅原理", "球", "组合体"],
       trig: "计算空间几何体侧面积、表面积、体积，或计算组合体与内切外接球体积。",
-      key: "设高为 \\(h\\)，底面半径为 \\(r\\)，母线为 \\(l=\\sqrt{r^2+h^2}\\)：<br>• <b>柱体</b>：\\(V = Sh\\)；圆柱侧面积 \\(S_{侧} = 2\\pi rh\\)。<br>• <b>锥体</b>：\\(V = \\dfrac13 Sh\\)（等底等高圆柱体积的三分之一！）；圆锥侧面积 <b>\\(S_{侧} = \\pi rl\\)</b>（注意用母线 \\(l\\)，不是高 \\(h\\)！）。<br>• <b>台体</b>：\\(V = \\dfrac13 h(S_1 + \\sqrt{S_1 S_2} + S_2)\\)；圆台侧面积 \\(S_{侧} = \\pi(r_1+r_2)l\\)。<br>• <b>球体</b>：表面积 \\(S = 4\\pi R^2\\)，体积 <b>\\(V = \\dfrac43 \\pi R^3\\)</b>。<br>• <b>祖暅原理</b>：「幂势既同，则积不容异」（截面积处处相等则体积相等）。",
+      key: "设高为 \\(h\\)，底面半径为 \\(r\\)，母线为 \\(l=\\sqrt{r^2+h^2}\\)：<br>• <b>柱体</b>：\\(V = Sh\\)；圆柱侧面积 \\(S_{\\text{侧}} = 2\\pi rh\\)。<br>• <b>锥体</b>：\\(V = \\dfrac13 Sh\\)（等底等高圆柱体积的三分之一！）；圆锥侧面积 <b>\\(S_{\\text{侧}} = \\pi rl\\)</b>（注意用母线 \\(l\\)，不是高 \\(h\\)！）。<br>• <b>台体</b>：\\(V = \\dfrac13 h(S_1 + \\sqrt{S_1 S_2} + S_2)\\)；圆台侧面积 \\(S_{\\text{侧}} = \\pi(r_1+r_2)l\\)。<br>• <b>球体</b>：表面积 \\(S = 4\\pi R^2\\)，体积 <b>\\(V = \\dfrac43 \\pi R^3\\)</b>。<br>• <b>祖暅原理</b>：「幂势既同，则积不容异」（截面积处处相等则体积相等）。",
       warn: "组合体的表面积陷阱：接合面被封在几何体内部，计算表面积时<b>必须扣除接合面</b>，绝不能直接相加原几何体表面积！",
       rel: ["geo-polyhedron-rot"]
     },
@@ -592,7 +626,7 @@
       rel: ["vec3-coord-ops", "geo-perp-dihedral", "vec-dot-product"]
     },
     {
-      id: "geom-line-slope-eq", ch: 12, sec: "e1-2-1", secName: "2.1 直线的倾斜角与斜率",
+      id: "geom-line-slope-eq", lab: "geom-line-slope-eq", ch: 12, sec: "e1-2-1", secName: "2.1 直线的倾斜角与斜率",
       kind: "formula", kindLabel: "🔵 公式与结论",
       title: "直线的倾斜角、斜率定义与过两点斜率公式",
       keywords: ["倾斜角", "斜率", "两点斜率公式", "垂直x轴", "钝角锐角"],
@@ -642,7 +676,7 @@
       rel: ["geom-circle-line-rel", "geom-line-dist-intersect", "geom-line-five-forms"]
     },
     {
-      id: "conic-ellipse", ch: 13, sec: "e1-3-1", secName: "3.1 椭圆",
+      id: "conic-ellipse", lab: "conic-ellipse", ch: 13, sec: "e1-3-1", secName: "3.1 椭圆",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "椭圆严格几何定义、标准方程与几何量关系",
       keywords: ["椭圆", "2a>2c", "长轴", "短轴", "离心率", "a²=b²+c²"],
@@ -682,7 +716,7 @@
       rel: ["seq-arith-geom", "seq-sum-methods"]
     },
     {
-      id: "seq-arith-geom", ch: 14, sec: "e2-4-2", secName: "4.2-4.3 等差数列与等比数列全景",
+      id: "seq-arith-geom", lab: "seq-arith-geom", ch: 14, sec: "e2-4-2", secName: "4.2-4.3 等差数列与等比数列全景",
       kind: "formula", kindLabel: "🔵 公式与结论",
       title: "等差等比数列通项性质、前 n 项和与对称下标和",
       keywords: ["等差数列", "等比数列", "通项公式", "前n项和", "公差", "公比", "下标和性质"],
@@ -712,7 +746,7 @@
       rel: ["seq-arith-geom", "seq-sum-methods", "count-binomial"]
     },
     {
-      id: "calc-derivative-def", ch: 15, sec: "e2-5-1", secName: "5.1 导数的概念及其意义",
+      id: "calc-derivative-def", lab: "calc-derivative-def", ch: 15, sec: "e2-5-1", secName: "5.1 导数的概念及其意义",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "导数本质极限定义与曲线切线几何意义",
       keywords: ["瞬时变化率", "导数定义", "切线斜率", "割线极限", "在点处vs过点"],
@@ -724,15 +758,15 @@
     {
       id: "calc-rules-composite", ch: 15, sec: "e2-5-2", secName: "5.2 导数的运算",
       kind: "formula", kindLabel: "🔵 公式与结论",
-      title: "基本初等函数导数公式与复合函数链式法则",
-      keywords: ["导数公式", "乘除求导", "复合函数", "链式法则", "(uv)"],
-      trig: "对多项式、指对函数、分式或复合函数求导。",
-      key: "1. <b>常用基本公式</b>：\\((x^n)' = nx^{n-1}\\)，\\((\\mathrm{e}^x)' = \\mathrm{e}^x\\)，\\((\\ln x)' = \\dfrac{1}{x}\\)，\\((\\sin x)' = \\cos x\\)，\\((\\cos x)' = -\\sin x\\)。<br>2. <b>四则运算</b>：<br>• \\((uv)' = u'v + uv'\\)<br>• \\(\\left(\\dfrac{u}{v}\\right)' = \\dfrac{u'v - uv'}{v^2}\\)（注意分子是减号！）。<br>3. <b>复合函数求导（链式法则）</b>：$$[f(g(x))]' = f'(g(x))\\cdot g'(x)$$（外层对内层求导，再乘以内层对自变量求导）。",
-      warn: "除法求导分子是 \\(u'v - uv'\\)，切勿记成加号！复合函数求导切勿漏乘内层导数 \\(g'(x)\\)！",
+      title: "基本初等函数导数公式与 f(ax+b) 求导",
+      keywords: ["导数公式", "乘除求导", "f(ax+b)", "一次内层", "(uv)"],
+      trig: "对多项式、指对函数、分式，或内层为一次式 ax+b 的函数求导。",
+      key: "1. <b>常用基本公式</b>：\\((x^n)' = nx^{n-1}\\)，\\((\\mathrm{e}^x)' = \\mathrm{e}^x\\)，\\((\\ln x)' = \\dfrac{1}{x}\\)，\\((\\sin x)' = \\cos x\\)，\\((\\cos x)' = -\\sin x\\)。<br>2. <b>四则运算</b>：<br>• \\((uv)' = u'v + uv'\\)<br>• \\(\\left(\\dfrac{u}{v}\\right)' = \\dfrac{u'v - uv'}{v^2}\\)（注意分子是减号！）。<br>3. <b>简单复合，课程要求到 \\(f(ax+b)\\)</b>：$$[f(ax+b)]' = a\\, f'(ax+b)$$（外层导数再乘内层系数 \\(a\\)，负号一起乘）。一般形式 \\(f'(g(x))\\cdot g'(x)\\) 教材展示过，运用范围限于内层是一次式；像 \\(\\ln(x^2+1)\\) 不按已学方法直接套。多项式可以先展开再逐项求导。",
+      warn: "除法求导分子是 \\(u'v - uv'\\)，切勿记成加号！\\(f(ax+b)\\) 切勿漏乘系数 \\(a\\)。不要把一般链式法则当成本节已学方法。",
       rel: ["calc-derivative-def", "calc-monot-extrema"]
     },
     {
-      id: "calc-monot-extrema", ch: 15, sec: "e2-5-3", secName: "5.3 导数在研究函数中的应用",
+      id: "calc-monot-extrema", lab: "calc-monot-extrema", ch: 15, sec: "e2-5-3", secName: "5.3 导数在研究函数中的应用",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "导数判定函数单调性、极值点充分性与闭区间最值",
       keywords: ["单调性", "极值点", "最值", "变号", "f'(x)>=0", "候选池"],
@@ -757,7 +791,7 @@
       title: "排列数、组合数运算性质与捆绑法插空法",
       keywords: ["排列数", "组合数", "顺序", "捆绑法", "插空法", "隔板法", "A_n^m", "C_n^m"],
       trig: "求解元素排队、分组、选拔问题，以及相邻、不相邻等受限排队计数。",
-      key: "1. <b>核心辨析：是否有顺序</b>。选出并讲求顺序（排队、职务不同）为排列 \\(A_n^m = \\dfrac{n!}{(n-m)!}\\)；只选出不讲顺序（握手、结伴）为组合 \\(C_n^m = \\dfrac{n!}{m!(n-m)!} = \\dfrac{A_n^m}{m!}\\)。<br>2. <b>组合数性质</b>：对称性 \\(C_n^m = C_n^{n-m}\\)；递推性 \\(C_{n+1}^m = C_n^m + C_n^{m-1}\\)。<br>3. <b>受限排队两大杀招</b>：<br>• <b>相邻问题用「捆绑法」</b>：把相邻元素捆成一个大元素与其余元素一起排，<b>注意乘以捆内元素的内部全排列</b>！<br>• <b>不相邻问题用「插空法」</b>：先排其余无限制元素，再在形成的空中插入不相邻元素（首尾均有空位）。",
+      key: "1. <b>核心辨析：是否有顺序</b>。选出并讲求顺序（排队、职务不同）为排列 \\(A_n^m = \\dfrac{n!}{(n-m)!}\\)；只选出不讲顺序（握手、结伴）为组合 \\(C_n^m = \\dfrac{n!}{m!(n-m)!} = \\dfrac{A_n^m}{m!}\\)。<br>2. <b>两个可现场推出的关系（探究，不要求预记）</b>：对称 \\(C_n^m = C_n^{n-m}\\)（选走 \\(m\\) 个等于留下 \\(n-m\\) 个）；递推 \\(C_{n+1}^m = C_n^m + C_n^{m-1}\\)（按某一个元素选或不选分类）。用的时候从定义或计数推一步，不要当成必须背过的公式。<br>3. <b>受限排队的两种组织方式</b>：<br>• <b>相邻</b>：把相邻元素捆成一个大元素再排，<b>再乘捆内的内部排列</b>。<br>• <b>不相邻</b>：先排其余元素，再往空位里插（首尾都有空）。",
       warn: "捆绑法千万不要漏乘捆内元素的内部排列（如 \\(m!\\)）；插空法必须先排好其余元素，明确空位数等于无限制元素个数加 1！",
       rel: ["count-principles", "count-binomial", "prob-classical-events", "rv-binomial-hypergeom"]
     },
@@ -774,11 +808,11 @@
     {
       id: "rv-cond-bayes", ch: 17, sec: "e3-7-1", secName: "7.1 条件概率与全概率公式",
       kind: "formula", kindLabel: "🔵 公式与结论",
-      title: "条件概率乘法公式、全概率公式与贝叶斯逆概推断",
-      keywords: ["条件概率", "乘法公式", "全概率公式", "贝叶斯公式", "样本空间缩小"],
-      trig: "已知某前提事件已发生求另一事件概率，或已知综合结果求是由哪个原因引起的逆概分析。",
-      key: "1. <b>条件概率</b>：\\(P(B\\mid A) = \\dfrac{P(AB)}{P(A)}\\)（在 \\(A\\) 发生缩小的局部空间中看 \\(B\\)）。<br>2. <b>乘法公式</b>：\\(P(AB) = P(A)P(B\\mid A)\\)。<br>3. <b>全概率公式（化整为零）</b>：若 \\(A_1, \\dots, A_n\\) 构成完全事件群，则 \\(P(B) = \\sum_{i=1}^n P(A_i)P(B\\mid A_i)\\)。<br>4. <b>贝叶斯逆概公式（由果索因）</b>：\\(P(A_k\\mid B) = \\dfrac{P(A_k)P(B\\mid A_k)}{\\sum P(A_i)P(B\\mid A_i)}\\)。",
-      warn: "严格区分积事件概率 \\(P(AB)\\)（全空间中两者同时发生）与条件概率 \\(P(B\\mid A)\\)（局部空间中发生 \\(B\\) 的概率）。",
+      title: "条件概率、乘法公式与全概率公式",
+      keywords: ["条件概率", "乘法公式", "全概率公式", "后验", "贝叶斯选学"],
+      trig: "已知某前提事件已发生求另一事件概率，或已知结果后用定义求它来自哪个原因。",
+      key: "1. <b>条件概率</b>：\\(P(B\\mid A) = \\dfrac{P(AB)}{P(A)}\\)，须 \\(P(A)>0\\)。<br>2. <b>乘法公式</b>：\\(P(AB) = P(A)P(B\\mid A)\\)。<br>3. <b>全概率公式</b>：若 \\(A_1,\\dots,A_n\\) 两两互斥且并为全集，各 \\(P(A_i)>0\\)，则 \\(P(B) = \\sum P(A_i)P(B\\mid A_i)\\)。<br>4. <b>由结果求原因</b>：用定义 \\(P(A_k\\mid B)=\\dfrac{P(A_k\\cap B)}{P(B)}\\)，分子用乘法公式，分母用全概率公式。一般贝叶斯公式是选学，不作为考试要求；具体后验题用这个定义就能算，不必先背公式。",
+      warn: "严格区分积事件概率 \\(P(AB)\\) 与条件概率 \\(P(B\\mid A)\\)。一般贝叶斯公式带星号，是选学；乘法公式和全概率公式不是选学。",
       rel: ["prob-classical-events", "prob-independence", "rv-distrib-table"]
     },
     {
@@ -827,8 +861,8 @@
       title: "样本相关系数 r 判定线性相关方向与强弱",
       keywords: ["成对数据", "散点图", "相关系数r", "正相关", "负相关", "线性相关强弱"],
       trig: "由散点图或数据计算相关系数 \\(r\\)，定性或定量分析两变量的相关性与强弱。",
-      key: "1. <b>样本相关系数公式</b>：\\[r = \\dfrac{\\sum (x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum (x_i-\\bar{x})^2}\\sqrt{\\sum (y_i-\\bar{y})^2}}\\]<br>2. <b>数值意义</b>：\\(|r|\\le 1\\)。\\(r>0\\) 为正相关（点集斜向右上），\\(r<0\\) 为负相关（点集斜向右下）。<br>3. <b>强弱标准</b>：\\(|r|\\) 越接近 1，线性相关程度越强；\\(|r|\\) 越接近 0，线性相关越弱（通常 \\(|r|>0.75\\) 认为线性相关较强）。",
-      warn: "相关关系绝不等于因果关系！若散点图呈现明显抛物线等非线性趋势，不能机械硬套线性相关系数 \\(r\\)。",
+      key: "1. <b>样本相关系数公式</b>：\\[r = \\dfrac{\\sum (x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum (x_i-\\bar{x})^2}\\sqrt{\\sum (y_i-\\bar{y})^2}}\\]<br>2. <b>数值意义</b>：分母中两个平方和都须非零，且 \\(|r|\\le 1\\)。\\(r>0\\) 为正相关，\\(r<0\\) 为负相关。<br>3. <b>怎么比强弱</b>：\\(|r|\\) 越接近 1，线性相关越强；越接近 0，线性相关越弱。比较几组数据时比 \\(|r|\\) 的大小。没有一个统一的「强相关」门槛，\\(r=0\\) 也不排除非线性关系。",
+      warn: "相关关系绝不等于因果关系！不要用 \\(|r|>0.75\\) 这类无来源的阈值下结论。散点图呈抛物线等非线性趋势时，不能只拿线性相关系数 \\(r\\) 说话。",
       rel: ["bivar-regression-fit", "bivar-chi-square"]
     },
     {
@@ -912,7 +946,7 @@
     /* 必修二 第 7 章 复数 */
     "b2-7-1": { name: "7.1 复数的概念", ch: 7, strand: "prep", stage: 2, prev: "b1-2-3", next: "b2-7-2", prereqs: ["b1-2-3", "b2-6-3"] },
     "b2-7-2": { name: "7.2 复数的四则运算", ch: 7, strand: "prep", stage: 2, prev: "b2-7-1", next: "b2-7-3", prereqs: ["b2-7-1"], insight: "ep33 乘以 i 就是转 90°", comp: "FR017 复数运算与几何意义" },
-    "b2-7-3": { name: "7.3 复数的三角表示", ch: 7, strand: "prep", stage: 2, prev: "b2-7-2", next: "b2-8-1", prereqs: ["b1-5-5", "b2-7-2"], insight: "ep33 复数旋转与棣莫弗定理", comp: "FR017 单位根与复数三角式" },
+    "b2-7-3": { name: "7.3 复数的三角表示（选学）", ch: 7, strand: "prep", stage: 2, prev: "b2-7-2", next: "b2-8-1", prereqs: ["b1-5-5", "b2-7-2"], insight: "ep33 复数旋转与棣莫弗定理", comp: "FR017 单位根与复数三角式" },
 
     /* 必修二 第 8 章 立体几何初步 */
     "b2-8-1": { name: "8.1 基本立体图形", ch: 8, strand: "geom", stage: 2, prev: "b2-6-1", next: "b2-8-2", prereqs: [] },
@@ -1011,7 +1045,7 @@
     // 按 (sec + 题号 id) 取最新一次作答，避免重做后仍算错，同时记录历史错题数
     var latest = {};
     logs.forEach(function (ev) {
-      if ((ev.kind === "answer" || ev.kind === "predict") && ev.sec && stats[ev.sec]) {
+      if ((ev.kind === "answer" || ev.kind === "predict" || ev.kind === "cue" || ev.kind === "card" || ev.kind === "lab") && ev.sec && stats[ev.sec]) {
         var key = ev.sec + "::" + (ev.id || stats[ev.sec].total);
         latest[key] = ev;
       }
@@ -1039,15 +1073,15 @@
     var st = document.createElement("style");
     st.id = "peiyu-wiki-css";
     st.textContent = [
-      ".wk-topbtn{font-size:14px;font-weight:600;color:var(--a);text-decoration:none;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);}",
+      ".wk-topbtn{display:inline-flex;align-items:center;min-height:36px;font-size:14px;font-weight:600;color:var(--a);text-decoration:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);}",
       ".wk-topbtn:hover{border-color:var(--a);background:var(--ok-soft);}",
       ".wk-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:0 0 14px;}",
-      ".wk-chain a{color:var(--c);text-decoration:none;font-weight:600;}",
+      ".wk-chain a{display:inline-flex;align-items:center;min-height:28px;padding:2px 4px;color:var(--c);text-decoration:none;font-weight:600;}",
       ".wk-chain a:hover{text-decoration:underline;}",
       ".wk-box{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:14px 0;}",
       ".wk-box-hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14.5px;font-weight:600;margin-bottom:8px;}",
       ".wk-pills{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}",
-      ".wk-pill{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:4px 11px;font:inherit;font-size:13.5px;cursor:pointer;transition:all .15s;}",
+      ".wk-pill{display:inline-flex;align-items:center;gap:4px;min-height:34px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:13.5px;cursor:pointer;transition:all .15s;}",
       ".wk-pill:hover,.wk-pill.on{border-color:var(--a);background:var(--ok-soft);color:var(--a);font-weight:600;}",
       ".wk-pill.method:hover,.wk-pill.method.on{border-color:var(--c);}",
       ".wk-pill.pitfall:hover,.wk-pill.pitfall.on{border-color:var(--no);background:var(--no-soft);color:var(--no);}",
@@ -1061,7 +1095,11 @@
       ".wk-home-search{position:relative;margin:12px 0 18px;}",
       ".wk-home-search input{width:100%;font:inherit;font-size:15px;padding:10px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--card);color:var(--fg);}",
       ".wk-home-search input:focus{outline:3px solid var(--hl);border-color:var(--a);}",
-      ".wk-search-drop{margin-top:8px;background:var(--card);border:1.5px solid var(--a);border-radius:var(--radius);padding:10px 12px;}"
+      ".wk-search-drop{margin-top:8px;background:var(--card);border:1.5px solid var(--a);border-radius:var(--radius);padding:10px 12px;}",
+      ".wk-sec-pills{display:inline-flex;gap:5px;align-items:center;margin-left:6px;flex-wrap:wrap;vertical-align:middle;}",
+      ".wk-sec-pill{display:inline-flex;align-items:center;min-height:24px;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid var(--line);background:var(--bg);color:var(--muted);line-height:1.3;}",
+      ".wk-sec-pill.iso{color:var(--a);border-color:var(--a);background:var(--ok-soft);}",
+      ".wk-sec-pill:hover{border-color:var(--a);color:var(--a);text-decoration:none;}"
     ].join("\n");
     document.head.appendChild(st);
   }
@@ -1137,20 +1175,30 @@
     );
   }
 
-  /* ==================== 触点 0：顶栏常驻 Wiki 入口 ==================== */
+  /* ==================== 触点 0：顶栏常驻 Wiki 与 3D 实验台/讲义入口 ==================== */
   function setupTopBar() {
     var top = document.querySelector("header.top");
-    if (!top || top.querySelector(".wk-topbtn") || /wiki\.html/.test(location.pathname)) return;
-    var a = document.createElement("a");
-    a.className = "wk-topbtn";
-    a.href = ROOT + "wiki.html";
-    a.textContent = "⚡ 知识与方法 Wiki";
+    if (!top || top.querySelector(".wk-topbtn")) return;
     var rec = top.querySelector("a.rec");
-    if (rec) top.insertBefore(a, rec);
-    else top.appendChild(a);
+    if (!/anatomy\.html/.test(location.pathname)) {
+      var aIso = document.createElement("a");
+      aIso.className = "wk-topbtn";
+      aIso.href = ROOT + "anatomy.html";
+      aIso.textContent = "🔬 3D实验台与讲义";
+      if (rec) top.insertBefore(aIso, rec);
+      else top.appendChild(aIso);
+    }
+    if (!/wiki\.html/.test(location.pathname)) {
+      var a = document.createElement("a");
+      a.className = "wk-topbtn";
+      a.href = ROOT + "wiki.html";
+      a.textContent = "⚡ 知识与方法 Wiki";
+      if (rec) top.insertBefore(a, rec);
+      else top.appendChild(a);
+    }
   }
 
-  /* ==================== 触点 1：主页 (index.html) 秒搜框 + 章末方法胶囊 ==================== */
+  /* ==================== 触点 1：主页 (index.html) 秒搜框 + 3D实验台/A4讲义胶囊 + 章末方法胶囊 ==================== */
   function setupHomePage() {
     var lead = document.querySelector("p.lead");
     var firstBook = document.querySelector("h2.book");
@@ -1162,8 +1210,9 @@
     sBox.innerHTML =
       '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
         '<input type="search" id="wkHomeQ" placeholder="🔍 搜概念、公式、解题套路（如：乘1法、奇函数、空集、诱导公式、比大小、平移）" aria-label="搜索课程与知识卡片" style="flex:1 1 240px">' +
-        '<a class="btn" href="wiki.html#tab=map" style="border-radius:999px;white-space:nowrap">🗺️ 73节全景知识图谱 →</a>' +
-        '<a class="btn ghost" href="wiki.html" style="border-radius:999px;white-space:nowrap">⚡ 知识与方法 Wiki (' + CARDS.length + '卡) →</a>' +
+        '<a class="btn" href="anatomy.html" style="border-radius:999px;white-space:nowrap">🔬 3D实验台与A4讲义 (30台/73份) →</a>' +
+        '<a class="btn ghost" href="wiki.html#tab=map" style="border-radius:999px;white-space:nowrap">🗺️ 73节全景图谱 →</a>' +
+        '<a class="btn ghost" href="wiki.html" style="border-radius:999px;white-space:nowrap">⚡ 方法 Wiki (' + CARDS.length + '卡) →</a>' +
       "</div>" +
       '<div id="wkHomeDrop" class="wk-search-drop" hidden></div>';
     firstBook.parentNode.insertBefore(sBox, firstBook);
@@ -1221,6 +1270,24 @@
       det.appendChild(bar);
       ensureMath(bar);
     });
+
+    // 3. 在 73 节目录每一行后挂载「🔬 3D实验台」与「📄 A4讲义」直达徽章
+    var secItems = [].slice.call(document.querySelectorAll("ul.secs li"));
+    secItems.forEach(function (li) {
+      var dot = li.querySelector("[data-sec]");
+      if (!dot || li.querySelector(".wk-sec-pills")) return;
+      var sid = dot.getAttribute("data-sec");
+      if (!sid) return;
+      var wrap = document.createElement("span");
+      wrap.className = "wk-sec-pills";
+      var html = "";
+      if (ISO_SECS[sid]) {
+        html += '<a class="wk-sec-pill iso" href="lessons/' + sid + '.html#iso=1" title="直接打开本节等距 3D 数学实验台">🔬 ' + ISO_SECS[sid] + "</a>";
+      }
+      html += '<a class="wk-sec-pill sheet" href="out/sheets/' + sid + '-sheet.pdf" target="_blank" title="查看/打印本节同源 A4 矢量讲义 PDF">📄 A4讲义</a>';
+      wrap.innerHTML = html;
+      li.appendChild(wrap);
+    });
   }
 
   /* ==================== 触点 2 & 3：课程页 (lessons/*.html) ==================== */
@@ -1269,13 +1336,394 @@
     });
   }
 
+  function activateIsoBench() {
+    var stepBtns = [].slice.call(document.querySelectorAll(".steps button"));
+    if (stepBtns[2]) stepBtns[2].click();
+    setTimeout(function () {
+      var isoBtn = document.querySelector('button[data-iso-tab], button[data-tab="cavalieri"]');
+      if (isoBtn && !isoBtn.classList.contains("active")) isoBtn.click();
+      var fig = document.querySelector("svg.iso-fig") || (isoBtn && isoBtn.closest(".card"));
+      if (fig && fig.scrollIntoView) fig.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 60);
+  }
+
+  function ensureIsoBenchLoaded(cb) {
+    if (window.IsoBench) { cb(); return; }
+    var s = document.createElement("script");
+    s.src = ROOT + "assets/iso-bench.js";
+    s.onload = cb;
+    document.head.appendChild(s);
+  }
+
+  var DYN_BENCHES = {
+    "e1-3-3": {
+      title: "准线滑轨三角尺、焦点定长拉线与光学平行反射台", btn: "等距 3D 光学台", vb: "0 0 560 350",
+      sliders: [
+        { label: "焦准距 \\(p\\)", min: 1.0, max: 4.0, step: 0.5, val: 2.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "纵坐标 \\(y_0\\)", min: -3.0, max: 3.0, step: 0.2, val: 2.0, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderParabolaBench(svg, desc, vals[0], vals[1], true, cb); }
+    },
+    "b2-7-2": {
+      title: "复平面乘 \\(\\mathrm{i}\\) 逆时针旋转 \\(90^\\circ\\) 相位陀螺台", btn: "等距 3D 旋转陀螺台", vb: "0 0 560 350",
+      sliders: [
+        { label: "模长 \\(|z|\\)", min: 1.0, max: 3.5, step: 0.5, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "初始角 \\(\\theta\\)", min: 0, max: 330, step: 15, val: 30, fmt: function (v) { return v + "°"; } },
+        { label: "乘 \\(\\mathrm{i}^k\\)", min: 0, max: 4, step: 1, val: 1, fmt: function (v) { return "k=" + v; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderComplexRotorBench(svg, desc, vals[0], vals[1], vals[2], cb); }
+    },
+    "b1-5-4": {
+      title: "匀速单位圆飞轮与简谐卷纸相位投影仪", btn: "等距 3D 相位投影仪", vb: "0 0 560 340",
+      sliders: [
+        { label: "飞轮转角 \\(\\theta\\)", min: 0, max: 360, step: 15, val: 60, fmt: function (v) { return v + "°"; } },
+        { label: "函数 (0=sin, 1=cos)", min: 0, max: 1, step: 1, val: 0, fmt: function (v) { return v === 1 ? "cos" : "sin"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderTrigPhasorBench(svg, desc, vals[0], vals[1] === 1 ? "cos" : "sin", cb); }
+    },
+    "b2-8-2": {
+      title: "斜二测画法 \\(45^\\circ\\) 投影框与 \\(y'=y/2\\) 半倍压缩夹具台", btn: "等距 3D 斜二测台", vb: "0 0 560 340",
+      sliders: [
+        { label: "原图边长 \\(a\\)", min: 2.0, max: 5.0, step: 0.5, val: 4.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "坐标夹角 \\(\\alpha\\)", min: 30, max: 135, step: 15, val: 45, fmt: function (v) { return v + "°"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderObliqueBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b2-8-4": {
+      title: "异面直线平移造角与公垂线距离三维机架", btn: "等距 3D 异面直线台", vb: "0 0 560 340",
+      sliders: [
+        { label: "方向角 \\(\\varphi\\)", min: 15, max: 165, step: 15, val: 120, fmt: function (v) { return v + "°"; } },
+        { label: "公垂距 \\(d\\)", min: 1.0, max: 4.5, step: 0.5, val: 3.0, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderSkewLinesBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b2-8-5": {
+      title: "线面平行与面面平行「两条相交直线」双激光验证台", btn: "等距 3D 平行验证台", vb: "0 0 560 340",
+      sliders: [
+        { label: "面内两线夹角 \\(\\gamma\\)", min: 0, max: 90, step: 15, val: 60, fmt: function (v) { return v + "°"; } },
+        { label: "扰动倾角 \\(\\tau\\)", min: -20, max: 20, step: 5, val: 15, fmt: function (v) { return v + "°"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderParallelBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "e1-1-3": {
+      title: "空间直角坐标系右手八卦限与对称点/距离卡尺台", btn: "等距 3D 空间坐标台", vb: "0 0 560 340",
+      sliders: [
+        { label: "坐标 \\(x\\)", min: -3.0, max: 3.0, step: 0.5, val: 2.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "坐标 \\(y\\)", min: -3.0, max: 3.0, step: 0.5, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "坐标 \\(z\\)", min: -2.5, max: 2.5, step: 0.5, val: 2.0, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderOctantBench(svg, desc, vals[0], vals[1], vals[2], cb); }
+    },
+    "b1-1-3": {
+      title: "多层透明 Venn 布尔光栅叠合与摩根定律实验台", btn: "等距 3D Venn 光栅台", vb: "0 0 560 340",
+      sliders: [
+        { label: "圆心间距 \\(d\\)", min: 0, max: 52, step: 4, val: 20, fmt: function (v) { return String(v); } },
+        { label: "运算档位 (0=交,1=并,2=并之补,3=交之补)", min: 0, max: 3, step: 1, val: 0, fmt: function (v) { return ["A∩B", "A∪B", "∁(A∪B)", "∁(A∩B)"][v] || "A∩B"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderVennBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b1-2-2": {
+      title: "赵爽弦图三维升降块与均值不等式链（\\(H\\le G\\le A\\le Q\\)）测高台", btn: "等距 3D 弦图均值台", vb: "0 0 560 340",
+      sliders: [
+        { label: "正数 \\(a\\)", min: 1.0, max: 5.0, step: 0.5, val: 4.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "正数 \\(b\\)", min: 1.0, max: 5.0, step: 0.5, val: 1.5, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderAmGmBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b1-3-2": {
+      title: "奇函数 \\(180^\\circ\\) 中心旋转台与偶函数轴对称三维折叠镜台", btn: "等距 3D 奇偶检验台", vb: "0 0 560 340",
+      sliders: [
+        { label: "翻折/旋转角 \\(\\theta\\)", min: 0, max: 180, step: 15, val: 180, fmt: function (v) { return v + "°"; } },
+        { label: "模式 (0=偶函数翻折, 1=奇函数旋转)", min: 0, max: 1, step: 1, val: 0, fmt: function (v) { return v === 1 ? "奇函数" : "偶函数"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderParityBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b1-4-4": {
+      title: "指对互为反函数 \\(y=x\\) \\(45^\\circ\\) 半透反射镜对称台", btn: "等距 3D 反函数镜像台", vb: "0 0 560 340",
+      sliders: [
+        { label: "底数 \\(a\\)", min: 1.4, max: 3.0, step: 0.2, val: 2.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "采样点 \\(x_0\\)", min: -1.0, max: 1.6, step: 0.2, val: 1.0, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderExpLogBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b1-5-6": {
+      title: "「先平移后伸缩」vs「先伸缩后平移」双轨变速齿轮对比台", btn: "等距 3D 双轨相位台", vb: "0 0 560 340",
+      sliders: [
+        { label: "角频率 \\(\\omega\\)", min: 1.0, max: 3.0, step: 0.5, val: 2.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "初相 \\(\\varphi\\)", min: -90, max: 90, step: 15, val: 60, fmt: function (v) { return v + "°"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderAsinBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "b2-6-4": {
+      title: "余弦定理铰链臂与正弦定理外接圆 \\(2R\\) 定径卡尺台", btn: "等距 3D 解三角形台", vb: "0 0 560 340",
+      sliders: [
+        { label: "边长 \\(b\\)", min: 2.0, max: 4.5, step: 0.5, val: 3.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "边长 \\(c\\)", min: 2.0, max: 4.5, step: 0.5, val: 4.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "夹角 \\(A\\)", min: 30, max: 135, step: 15, val: 60, fmt: function (v) { return v + "°"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderCosineSineBench(svg, desc, vals[0], vals[1], vals[2], cb); }
+    },
+    "b2-9-2": {
+      title: "样本百分位数与五数箱线图游标分拣台", btn: "等距 3D 箱线图分拣台", vb: "0 0 560 340",
+      sliders: [
+        { label: "右端极值 \\(x_9\\)", min: 2.0, max: 8.0, step: 0.5, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "主体离散度 \\(s\\)", min: 0.6, max: 1.5, step: 0.1, val: 1.0, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderBoxplotBench(svg, desc, vals[0], vals[1], cb); }
+    },
+    "e1-2-5": {
+      title: "双圆心滑轨距 \\(|O_1O_2|\\) 与 \\(R\\pm r\\) 五档啮合及公切线实验台", btn: "等距 3D 双圆滑轨台", vb: "0 0 560 340",
+      sliders: [
+        { label: "圆心距 \\(d\\)", min: 0.0, max: 6.5, step: 0.5, val: 3.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "大圆半径 \\(R\\)", min: 2.0, max: 3.2, step: 0.2, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "小圆半径 \\(r\\)", min: 0.8, max: 1.8, step: 0.2, val: 1.5, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderTwoCirclesBench(svg, desc, vals[0], vals[1], vals[2], cb); }
+    },
+    "e2-4-2": {
+      title: "高斯倒序相加以高补低三维阶梯拼合台", btn: "等距 3D 倒序阶梯台", vb: "0 0 560 340",
+      sliders: [
+        { label: "项数 \\(n\\)", min: 3, max: 6, step: 1, val: 5, fmt: function (v) { return String(v); } },
+        { label: "公差 \\(d\\)", min: 0.5, max: 2.0, step: 0.5, val: 1.0, fmt: function (v) { return v.toFixed(1); } },
+        { label: "拼合度", min: 0.0, max: 1.0, step: 0.5, val: 1.0, fmt: function (v) { return Math.round(v * 100) + "%"; } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderArithmeticBench(svg, desc, vals[0], vals[1], vals[2], cb); }
+    },
+    "e3-6-3": {
+      title: "杨辉三角三维帕斯卡分流金字塔与系数和实验台", btn: "等距 3D 帕斯卡金字塔", vb: "0 0 560 340",
+      sliders: [
+        { label: "阶数 \\(n\\)", min: 2, max: 6, step: 1, val: 5, fmt: function (v) { return String(v); } },
+        { label: "项指标 \\(r\\)", min: 0, max: 6, step: 1, val: 2, fmt: function (v) { return String(v); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderPascalBench(svg, desc, vals[0], Math.min(vals[0], vals[1]), cb); }
+    },
+    "e3-8-1": {
+      title: "最小二乘回归「残差弹簧平方和」物理平衡杆实验台", btn: "等距 3D 残差平衡杆", vb: "0 0 560 340",
+      sliders: [
+        { label: "斜率 \\(b\\)", min: 0.0, max: 1.4, step: 0.05, val: 0.73, fmt: function (v) { return v.toFixed(2); } },
+        { label: "截距偏离 \\(\\Delta a\\)", min: -1.0, max: 1.0, step: 0.2, val: 0.0, fmt: function (v) { return v.toFixed(1); } }
+      ],
+      render: function (svg, desc, vals, cb) { window.IsoBench.renderRegressionBench(svg, desc, vals[0], vals[1], cb); }
+    }
+  };
+
+  function mountDynamicIsoBench(secId) {
+    var cfg = DYN_BENCHES[secId];
+    if (!cfg) return;
+    var step3 = document.querySelector('section.step[data-title="动手"]');
+    if (!step3 || step3.querySelector("[data-iso-tab]")) return;
+
+    ensureIsoBenchLoaded(function () {
+      if (!window.IsoBench || step3.querySelector("[data-iso-tab]")) return;
+      var card = document.createElement("div");
+      card.className = "card";
+      card.style.marginTop = "14px";
+      var svgId = "iso-dyn-svg-" + secId;
+      var descId = "iso-dyn-desc-" + secId;
+      var ctrlHtml = cfg.sliders.map(function (s, idx) {
+        var inId = "iso-dyn-in-" + secId + "-" + idx;
+        var outId = "iso-dyn-out-" + secId + "-" + idx;
+        return '<label for="' + inId + '" style="margin-left:' + (idx ? "8px" : "0") + '">' + s.label + '</label>' +
+          '<input type="range" id="' + inId + '" min="' + s.min + '" max="' + s.max + '" step="' + s.step + '" value="' + s.val + '">' +
+          '<output id="' + outId + '">' + s.fmt(s.val) + '</output>';
+      }).join("");
+
+      card.innerHTML =
+        '<div class="ctrl" style="justify-content:space-between"><b>🔬 等距 3D 实验台：' + cfg.title + '</b><button class="btn active" data-iso-tab="1" type="button">' + cfg.btn + '</button></div>' +
+        '<svg class="fig iso-fig" id="' + svgId + '" viewBox="' + cfg.vb + '" role="img" aria-label="' + cfg.btn + '"></svg>' +
+        '<div class="ctrl">' + ctrlHtml + '</div>' +
+        '<div class="result" id="' + descId + '" aria-live="polite"></div>';
+      step3.insertBefore(card, step3.firstChild);
+      ensureMath(card);
+
+      var svgEl = document.getElementById(svgId);
+      var descEl = document.getElementById(descId);
+      var inputs = cfg.sliders.map(function (_, idx) { return document.getElementById("iso-dyn-in-" + secId + "-" + idx); });
+      var outputs = cfg.sliders.map(function (_, idx) { return document.getElementById("iso-dyn-out-" + secId + "-" + idx); });
+      var update = function () {
+        var vals = inputs.map(function (el, idx) {
+          var v = parseFloat(el.value);
+          var num = Number.isFinite(v) ? v : cfg.sliders[idx].val;
+          outputs[idx].textContent = cfg.sliders[idx].fmt(num);
+          return num;
+        });
+        cfg.render(svgEl, descEl, vals, function () { ensureMath(descEl); });
+      };
+      inputs.forEach(function (el) { el.addEventListener("input", update); });
+      update();
+    });
+  }
+
+  /* ==================== 概念课全站模板 ==================== */
+  function conceptPlain(s) {
+    return String(s || "").replace(/\s+/g, " ").trim();
+  }
+
+  function conceptAnchor(el, id) {
+    if (!el) return null;
+    if (!el.id || el.id === id) el.id = id;
+    return el;
+  }
+
+  function labelConceptStep() {
+    var tab = document.querySelector(".steps button:nth-child(2)");
+    if (tab) tab.textContent = "2 概念课";
+    [].forEach.call(document.querySelectorAll(".next .btn"), function (button) {
+      if (button.textContent === "下一步：讲清楚") button.textContent = "下一步：概念课";
+    });
+  }
+
+  function openConceptTarget(hash) {
+    var step2 = document.querySelector(".steps button:nth-child(2)");
+    var target = hash ? document.querySelector(hash) : null;
+    labelConceptStep();
+    if (step2) step2.click();
+    if (target) window.setTimeout(function () { target.scrollIntoView({ block: "start" }); }, 0);
+  }
+
+  function wireConceptMap(map) {
+    if (!map || map.getAttribute("data-concept-wired")) return;
+    map.setAttribute("data-concept-wired", "1");
+    [].forEach.call(map.querySelectorAll("a[href^='#step2-']"), function (link) {
+      link.addEventListener("click", function () {
+        openConceptTarget(link.getAttribute("href"));
+      });
+    });
+    labelConceptStep();
+    if (location.hash.indexOf("#step2-") === 0) {
+      window.setTimeout(function () { openConceptTarget(location.hash); }, 50);
+    }
+  }
+
+  function conceptCard(parent, label, text, target) {
+    var a = document.createElement("a");
+    a.className = "card";
+    a.href = "#" + target.id;
+    a.style.textDecoration = "none";
+    a.style.color = "inherit";
+    var badge = document.createElement("span");
+    badge.className = "badge-pill " + (label.indexOf("边界") >= 0 ? "badge-no" : (label.indexOf("直觉") >= 0 ? "badge-b" : "badge-a"));
+    badge.textContent = label;
+    var desc = document.createElement("span");
+    desc.className = "small";
+    desc.textContent = text;
+    a.appendChild(badge);
+    a.appendChild(desc);
+    parent.appendChild(a);
+  }
+
+  function setupConceptMap(secId, meta) {
+    var talk = document.querySelector('section.step[data-title="讲清楚"]');
+    var firstStep = document.querySelector("section.step");
+    var lead = document.querySelector("p.lead");
+    if (!talk || !firstStep || !meta) return;
+
+    var headings = [].slice.call(talk.querySelectorAll("h3"));
+    var definition = conceptAnchor(headings[0] || talk, "step2-definition");
+    var intuition = conceptAnchor(talk.querySelector(".micro-box") || headings[1] || definition, "step2-intuition");
+    var method = conceptAnchor(headings[2] || headings[1] || definition, "step2-method");
+    var boundary = conceptAnchor(headings[headings.length - 1] || definition, "step2-boundary");
+    var video = talk.querySelector('.vid[data-video="concept"]');
+    var existingVideoAnchor = document.getElementById("step2-video");
+    if (video && !existingVideoAnchor) video.id = "step2-video";
+
+    var notice = talk.querySelector(".concept-entry-note");
+    if (!notice && !existingVideoAnchor) {
+      notice = document.createElement("div");
+      notice.className = "key concept-entry-note";
+      notice.id = "step2-video";
+      notice.style.marginTop = "0";
+      notice.innerHTML = "<b>概念课｜先把本节的对象、符号和边界讲清楚</b>：看完视频，再用下面的定义卡和微图回看。";
+      talk.insertBefore(notice, video || talk.firstChild);
+    }
+
+    var map = document.getElementById("concept-map");
+    if (!map) {
+      map = document.createElement("section");
+      map.className = "concept-map card";
+      map.id = "concept-map";
+      map.setAttribute("aria-labelledby", "concept-map-title");
+      map.style.borderLeft = "4px solid var(--a)";
+      map.style.marginBottom = "18px";
+
+      var title = document.createElement("p");
+      title.style.margin = "0 0 6px";
+      var badge = document.createElement("span");
+      badge.className = "badge-pill badge-a";
+      badge.textContent = "本节概念地图";
+      var titleText = document.createElement("b");
+      titleText.id = "concept-map-title";
+      titleText.textContent = "先认词 → 再认关系 → 再看做法 → 自己用";
+      title.appendChild(badge);
+      title.appendChild(titleText);
+      map.appendChild(title);
+
+      var core = document.createElement("p");
+      core.className = "small";
+      core.style.margin = "0 0 8px";
+      var coreLabel = document.createElement("b");
+      coreLabel.textContent = "核心概念：";
+      core.appendChild(coreLabel);
+      var leadText = conceptPlain(lead ? lead.textContent : "");
+      var sentence = leadText.split(/[。！？]/)[0] || meta.name;
+      if (sentence.length > 110) sentence = sentence.slice(0, 110) + "…";
+      core.appendChild(document.createTextNode(sentence + (/[。！？]$/.test(sentence) ? "" : "。")));
+      map.appendChild(core);
+
+      var videoLink = document.createElement("a");
+      videoLink.className = "btn";
+      videoLink.href = "#" + (document.getElementById("step2-video") || video || definition).id;
+      videoLink.style.marginBottom = "8px";
+      videoLink.textContent = "▶ 概念课视频｜先看这里";
+      map.appendChild(videoLink);
+
+      var cards = document.createElement("div");
+      cards.className = "concept-grid";
+      cards.style.margin = "4px 0 10px";
+      conceptCard(cards, "① 定义与符号", conceptPlain(definition.textContent || "本节核心定义与术语"), definition);
+      conceptCard(cards, "② 直觉与关系", "微图、生活模型和关键关系", intuition);
+      conceptCard(cards, "③ 方法与应用", conceptPlain(method.textContent || "示范题与解题方法"), method);
+      conceptCard(cards, "④ 边界与反例", conceptPlain(boundary.textContent || "易错边界与反例"), boundary);
+      map.appendChild(cards);
+
+      var relation = document.createElement("p");
+      relation.className = "small";
+      relation.style.margin = "0";
+      var prereq = (meta.prereqs || []).filter(function (id) { return SEC_META[id]; }).map(function (id) {
+        return SEC_META[id].name;
+      });
+      var unlock = (meta.unlocks || []).filter(function (id) { return SEC_META[id]; }).slice(0, 3).map(function (id) {
+        return SEC_META[id].name;
+      });
+      relation.innerHTML = "<b>前置：</b>" + (prereq.length ? prereq.join("、") : "无") + "　<b>解锁：</b>" + (unlock.length ? unlock.join("、") : "下一节方法与应用");
+      map.appendChild(relation);
+
+      firstStep.parentNode.insertBefore(map, firstStep);
+    }
+    wireConceptMap(map);
+
+    function relabelVideo() {
+      [].forEach.call(document.querySelectorAll('.vid[data-video="concept"] .vid-btn b'), function (b) {
+        var label = "🎯 概念课视频｜先把概念讲清楚";
+        if (b.textContent !== label) b.textContent = label;
+      });
+    }
+    relabelVideo();
+    if (video && window.MutationObserver && !video.getAttribute("data-concept-label-wired")) {
+      video.setAttribute("data-concept-label-wired", "1");
+      new MutationObserver(relabelVideo).observe(video, { childList: true, subtree: true });
+    }
+  }
+
   function setupLessonPage() {
     var secId = document.body.getAttribute("data-sec") || "";
     var meta = SEC_META[secId];
     var secCards = BY_SEC[secId] || [];
     if (!meta || !secCards.length) return;
+    setupConceptMap(secId, meta);
+    mountDynamicIsoBench(secId);
 
-    // 1. 标题下方注入真实「🕸️ 硬先修 → 当前节（含枢纽/洞察标识） → 学完解锁」脉络条
+    // 1. 标题下方注入真实「🕸️ 硬先修 → 当前节（含枢纽/洞察标识） → 学完解锁」脉络条 + 3D实验台与A4讲义直达
     var lead = document.querySelector("p.lead");
     if (lead) {
       var chain = document.createElement("div");
@@ -1297,17 +1745,33 @@
         : "";
 
       var hubBadge = meta.hub ? ' <span class="tag" style="background:var(--hl-soft);color:var(--b);margin:0 2px">★ 枢纽节</span>' : "";
+      var hasIso = Boolean(ISO_SECS[secId] || document.querySelector('button[data-iso-tab], button[data-tab="cavalieri"]'));
+      var isoLinkHtml = hasIso
+        ? '<a href="#iso=1" data-wk-iso-jump="1" style="color:var(--a)">🔬 ' + (ISO_SECS[secId] || "3D实验台") + "</a>"
+        : "";
       chain.innerHTML =
         "<span>🕸️ 知识脉络：</span>" +
         prevHtml +
         "<b>当前：" + meta.name + "</b>" + hubBadge +
         nextHtml +
         '<span style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">' +
-          '<a href="../wiki.html#map=' + secId + '">🗺️ 在图谱中定位</a>' +
+          isoLinkHtml +
+          '<a href="../out/sheets/' + secId + '-sheet.pdf" target="_blank">📄 本节A4讲义PDF</a>' +
+          '<a href="../wiki.html#map=' + secId + '">🗺️ 图谱定位</a>' +
           '<a href="../wiki.html#ch=' + secCards[0].ch + '">⚡ 本章方法卡 →</a>' +
         "</span>";
       lead.parentNode.insertBefore(chain, lead.nextSibling);
+      var isoJump = chain.querySelector("[data-wk-iso-jump]");
+      if (isoJump) {
+        isoJump.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          activateIsoBench();
+        });
+      }
       ensureMath(chain);
+    }
+    if (location.hash === "#iso=1") {
+      setTimeout(activateIsoBench, 120);
     }
 
     // 2. 在「讲清楚」末尾、「练一练」顶部和「高考真题」顶部挂载「🧰 本节解题方法与易错胶囊箱」
@@ -1360,7 +1824,7 @@
     try { logs = JSON.parse(localStorage.getItem("peiyu.hs.log") || "[]"); } catch (e) {}
     var weakSecs = {};
     logs.forEach(function (ev) {
-      if ((ev.kind === "answer" || ev.kind === "predict") && ev.correct === false && ev.sec) {
+      if ((ev.kind === "answer" || ev.kind === "predict" || ev.kind === "cue" || ev.kind === "card" || ev.kind === "lab") && ev.correct === false && ev.sec) {
         weakSecs[ev.sec] = (weakSecs[ev.sec] || 0) + 1;
       }
     });

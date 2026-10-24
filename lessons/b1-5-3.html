@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .circ { fill: none; stroke: var(--line); stroke-width: 2; }
@@ -43,9 +45,17 @@
 <p class="lead">\(\pi\pm\alpha\)、\(-\alpha\)、\(\dfrac{\pi}{2}\pm\alpha\) 的三角函数值，都能从单位圆上的一次对称读出来。看懂对称，公式就不用死背。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>把摩天轮的中心当作原点，半径算 \(1\)（单位：百米）。你坐的座舱在 \(30^\circ\) 的位置，坐标约是 \((0.87,\ 0.5)\)。</p>
+  <p>把圆形观景盘（或摩天轮）的中心当作原点，半径算 \(1\)。你的座舱在 \(30^\circ\) 的位置，坐标约是 \((0.87,\ 0.5)\)。先点下面的对称按钮，看看三个对称位置上的座舱坐标怎么变符号：</p>
   <div class="card predict" data-id="entry" data-answer="B">
-    <p>你的朋友坐在<b>正对面</b>的座舱（隔着中心，转过半圈）。他的坐标是？</p>
+    <svg class="entry-fig" id="entry-sym" viewBox="0 0 520 205" role="img" aria-label="单位圆上30度座舱与正对面210度、水平镜像150度、上下镜像负30度座舱的对称坐标对比"></svg>
+    <div class="entry-bar" id="entry-sym-bar">
+      <button type="button" data-d="30">原座舱 30° (0.87, 0.5)</button>
+      <button type="button" data-d="210" class="on">正对面 210° (-0.87, -0.5)</button>
+      <button type="button" data-d="150">水平镜像 150° (-0.87, 0.5)</button>
+      <button type="button" data-d="-30">上下镜像 -30° (0.87, -0.5)</button>
+    </div>
+    <div class="entry-note" id="entry-sym-note"></div>
+    <p>你的朋友坐在<b>正对面</b>的座舱（隔着中心，转过半圈到 \(210^\circ\)）。他的坐标是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\((0.87,\ 0.5)\)</button>
       <button class="opt" data-v="B"><b>B</b>\((-0.87,\ -0.5)\)</button>
@@ -62,79 +72,66 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：任意角和弧度（<a href="b1-5-1.html">回看 5.1</a>）；三角函数的单位圆定义、各象限的符号（<a href="b1-5-2.html">回看 5.2</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：对称几何本质与奇变偶不变口诀</h3>
+  <p class="small">要用到：5.1 的任意角与弧度制（<a href="b1-5-1.html">回看 5.1</a>）；5.2 的单位圆定义与四象限正负符号口诀（<a href="b1-5-2.html">回看 5.2</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>终边上的点</b>：角 \(\alpha\) 的终边和单位圆交于点 \(P\)，\(P\) 的坐标就是 \((\cos\alpha,\sin\alpha)\)，\(\tan\alpha=\dfrac yx\)（要 \(x\ne0\)）。</p>
-    <p>例：\(\alpha=60^\circ\)，\(P=\left(\dfrac12,\dfrac{\sqrt3}{2}\right)\)，所以 \(\cos60^\circ=\dfrac12\)，\(\sin60^\circ=\dfrac{\sqrt3}{2}\)，\(\tan60^\circ=\sqrt3\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>对称点</b>：点 \((x,y)\)</p>
-    <ul>
-      <li>关于原点对称 → \((-x,-y)\)；关于 \(x\) 轴 → \((x,-y)\)；关于 \(y\) 轴 → \((-x,y)\)；</li>
-      <li>关于直线 \(y=x\) → \((y,x)\)，横纵坐标<b>对调</b>。</li>
-    </ul>
-    <p>例：点 \((3,1)\) 的四个对称点依次是 \((-3,-1)\)、\((3,-1)\)、\((-3,1)\)、\((1,3)\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>终边相同的角</b>：差整数圈的角，终边一样，三个函数值都一样（公式一）：\(\sin(\alpha+2k\pi)=\sin\alpha\)，\(\cos(\alpha+2k\pi)=\cos\alpha\)，\(\tan(\alpha+2k\pi)=\tan\alpha\)，\(k\in\Z\)。</p>
-    <p>例：\(390^\circ=30^\circ+360^\circ\)，所以 \(\sin390^\circ=\sin30^\circ=\dfrac12\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>象限的符号</b>：\(\sin\) 看纵坐标 \(y\)，\(\cos\) 看横坐标 \(x\)，\(\tan\) 看 \(\dfrac yx\)。</p>
-    <p>例：\(150^\circ\) 在第二象限，点在左上方，\(x&lt;0\)，\(y>0\)：\(\sin150^\circ>0\)，\(\cos150^\circ&lt;0\)，\(\tan150^\circ&lt;0\)。</p>
-  </div>
-
-  <h3>2. \(\pi+\alpha\)、\(-\alpha\)、\(\pi-\alpha\)：函数名不变</h3>
-  <p>设 \(P(x,y)\) 是 \(\alpha\) 终边与单位圆的交点。</p>
-  <ul>
-    <li>\(\pi+\alpha\)：多转半圈，终边和 \(\alpha\) 的<b>关于原点对称</b>，点变成 \((-x,-y)\)。</li>
-    <li>\(-\alpha\)：往反方向转同样多，终边<b>关于 \(x\) 轴对称</b>，点变成 \((x,-y)\)。</li>
-    <li>\(\pi-\alpha\)：终边<b>关于 \(y\) 轴对称</b>，点变成 \((-x,y)\)。</li>
-  </ul>
-  <p>把坐标换回函数值（正切用 \(\dfrac yx\) 算）：</p>
-  <div class="tw"><table class="rec ind">
-    <tr><th>角</th><th>对称</th><th>sin</th><th>cos</th><th>tan</th></tr>
-    <tr><td>\(\pi+\alpha\)（公式二）</td><td>原点</td><td>\(-\sin\alpha\)</td><td>\(-\cos\alpha\)</td><td>\(\tan\alpha\)</td></tr>
-    <tr><td>\(-\alpha\)（公式三）</td><td>\(x\) 轴</td><td>\(-\sin\alpha\)</td><td>\(\cos\alpha\)</td><td>\(-\tan\alpha\)</td></tr>
-    <tr><td>\(\pi-\alpha\)（公式四）</td><td>\(y\) 轴</td><td>\(\sin\alpha\)</td><td>\(-\cos\alpha\)</td><td>\(-\tan\alpha\)</td></tr>
-  </table></div>
-  <p>坐标只是变号，没有对调，所以函数名不变，只是可能多一个负号。推导时没假设 \(\alpha\) 在哪个象限，所以公式对<b>任意角</b>都成立。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>求 \(\cos150^\circ\)、\(\sin225^\circ\)、\(\tan(-60^\circ)\)。</p>
-    <p>\(\cos150^\circ=\cos(180^\circ-30^\circ)=-\cos30^\circ=-\dfrac{\sqrt3}{2}\)（公式四）；</p>
-    <p>\(\sin225^\circ=\sin(180^\circ+45^\circ)=-\sin45^\circ=-\dfrac{\sqrt2}{2}\)（公式二）；</p>
-    <p>\(\tan(-60^\circ)=-\tan60^\circ=-\sqrt3\)（公式三）。</p>
-    <p>核对符号：\(150^\circ\) 在第二象限，cos 为负；\(225^\circ\) 在第三象限，sin 为负；\(-60^\circ\) 在第四象限，tan 为负。都对得上。</p>
-  </div>
-  <div class="card predict" data-id="try-1" data-answer="D">
-    <p>自己试试：\(\cos120^\circ\) 等于？</p>
-    <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(\dfrac12\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\dfrac{\sqrt3}{2}\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{\sqrt3}{2}\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(-\dfrac12\)</button>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>对称翻折几何本质与奇变偶不变法则</b></p>
+    <div class="entry-bar" id="m-ind-bar" role="group" aria-label="诱导公式微图解切换">
+      <button type="button" class="on" data-m="sym">① 原点与轴对称 (π±α, -α 坐标未对调，函数名绝对不变)</button>
+      <button type="button" data-m="rot">② 对角线对称 (π/2±α 翻折横纵对调 (x,y)↔(y,x)，sin与cos名互换)</button>
+      <button type="button" data-m="rule">③ 口诀总纲 (「奇变偶不变，符号看象限」实战判定全景)</button>
     </div>
-    <div class="reveal"><p><b>D</b>。\(\cos120^\circ=\cos(180^\circ-60^\circ)=-\cos60^\circ=-\dfrac12\)。选 A 的同学忘了负号（\(120^\circ\) 在第二象限，cos 为负）；选 C 的同学把 \(\cos60^\circ\) 记成了 \(\dfrac{\sqrt3}{2}\)，那是 \(\sin60^\circ\)。</p></div>
+    <svg class="micro-fig" id="m-ind-fig" viewBox="0 0 520 160" role="img" aria-label="诱导公式对称与口诀微图解"></svg>
+    <p class="entry-note" id="m-ind-note"></p>
   </div>
 
-  <h3>3. \(\dfrac{\pi}{2}\pm\alpha\)：sin、cos 换名</h3>
-  <p>\(\dfrac{\pi}{2}-\alpha\) 的终边和 \(\alpha\) 的终边<b>关于直线 \(y=x\) 对称</b>，点 \((x,y)\) 变成 \((y,x)\)：横、纵坐标对调了。于是</p>
-  <div class="key">\(\sin\left(\dfrac{\pi}{2}-\alpha\right)=\cos\alpha\)，\(\cos\left(\dfrac{\pi}{2}-\alpha\right)=\sin\alpha\)（公式五）</div>
-  <p>\(\dfrac{\pi}{2}+\alpha\) 可以写成 \(\pi-\left(\dfrac{\pi}{2}-\alpha\right)\)：先关于 \(y=x\) 对称，再关于 \(y\) 轴对称，\((x,y)\to(y,x)\to(-y,x)\)。于是</p>
-  <div class="key">\(\sin\left(\dfrac{\pi}{2}+\alpha\right)=\cos\alpha\)，\(\cos\left(\dfrac{\pi}{2}+\alpha\right)=-\sin\alpha\)（公式六）</div>
-  <p>坐标一对调，sin 和 cos 就互换名字。这就是「加减 \(\dfrac{\pi}{2}\) 要变名」的来历。</p>
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>化简 \(\cos\left(\dfrac{\pi}{2}+\alpha\right)+\sin(\pi-\alpha)\)。</p>
-    <p>由公式六，\(\cos\left(\dfrac{\pi}{2}+\alpha\right)=-\sin\alpha\)；由公式四，\(\sin(\pi-\alpha)=\sin\alpha\)。所以原式 \(=-\sin\alpha+\sin\alpha=0\)。</p>
-    <p>代一个角核对：\(\alpha=30^\circ\)，\(\cos120^\circ+\sin150^\circ=-\dfrac12+\dfrac12=0\)。对。</p>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">口诀心法</span><b>「符号看象限」看原函数，不看新函数</b></p>
+      <p class="small" style="margin:0">化简 \(\cos\left(\dfrac{\pi}{2}+\alpha\right)\) 时，视 \(\alpha\) 为锐角，角在第二象限。符号取决于<b>原本的余弦函数 \(\cos\)</b> 在第二象限为负，取负号得 \(-\sin\alpha\)！绝不能看新名字 \(\sin\) 误以为正！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">理解认知</span><b>「暂当锐角」仅为定号，公式实数全普适</b></p>
+      <p class="small" style="margin:0">把 \(\alpha\) 暂时当作锐角纯粹是为了快速排查正负符号；等式是基于单位圆几何对称推导出来的，对任意钝角、负角乃至任意实数完全普适有效！</p>
+    </div>
   </div>
+
+  <h3>2. 核心诱导公式全景矩阵</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\text{诱导公式总纲：} k\cdot\frac{\pi}{2}\pm\alpha \implies \begin{cases} k\text{ 为偶数：名不变} \\ k\text{ 为奇数：名互换} (\sin\leftrightarrow\cos) \end{cases}}_{\text{奇变偶不变，符号看象限（视 }\alpha\text{ 为锐角看原函数符号）}}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{\sin(\pi-\alpha) = \sin\alpha,\quad \cos(\pi-\alpha) = -\cos\alpha}_{\pi-\alpha\text{ 关于 } y \text{ 轴对称（补角正弦相等）}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\sin\left(\frac{\pi}{2}+\alpha\right) = \cos\alpha,\quad \cos\left(\frac{\pi}{2}+\alpha\right) = -\sin\alpha}_{\frac{\pi}{2}+\alpha\text{ 垂直翻折坐标对调}}}\)</span>
+  </div>
+
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 1（特殊角负角化锐角求值）</b></p>
+    <p>求 \(\cos 150^\circ\)、\(\sin 225^\circ\)、\(\tan(-60^\circ)\)。</p>
+    <p>\(\cos 150^\circ = \cos(180^\circ - 30^\circ) = -\cos 30^\circ = -\dfrac{\sqrt{3}}{2}\)；<br>
+    \(\sin 225^\circ = \sin(180^\circ + 45^\circ) = -\sin 45^\circ = -\dfrac{\sqrt{2}}{2}\)；<br>
+    \(\tan(-60^\circ) = -\tan 60^\circ = -\sqrt{3}\)（正切奇函数吐出负号）。</p>
+  </div>
+
+  <div class="card predict" data-id="try-1" data-answer="D">
+    <p>自己试试：\(\cos 120^\circ\) 等于？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{1}{2}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{\sqrt{3}}{2}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{\sqrt{3}}{2}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac{1}{2}\)</button>
+    </div>
+    <div class="reveal"><p><b>D</b>。\(\cos 120^\circ = \cos(180^\circ - 60^\circ) = -\cos 60^\circ = -\dfrac{1}{2}\)。选 A 的同学漏了第二象限余弦为负；选 C 的同学记混了 \(\cos 60^\circ\) 与 \(\sin 60^\circ\)。</p></div>
+  </div>
+
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 2（化简与正负抵消）</b></p>
+    <p>化简 \(\cos\left(\dfrac{\pi}{2}+\alpha\right) + \sin(\pi-\alpha)\)。</p>
+    <p>由奇变偶不变，\(\dfrac{\pi}{2}+\alpha\) 是奇数倍换名，二象限余弦为负，得 \(-\sin\alpha\)；<br>
+    \(\pi-\alpha\) 是偶数倍留名，二象限正弦为正，得 \(\sin\alpha\)；<br>
+    两项相加：原式 \(= -\sin\alpha + \sin\alpha = 0\)。</p>
+  </div>
+
   <div class="card predict" data-id="warmup" data-answer="B">
     <p>自己试试：\(\cos\left(\dfrac{\pi}{2}+\alpha\right)\) 等于什么？</p>
     <div class="opts cols">
@@ -143,51 +140,91 @@
       <button class="opt" data-v="C"><b>C</b>\(\cos\alpha\)</button>
       <button class="opt" data-v="D"><b>D</b>\(-\cos\alpha\)</button>
     </div>
-    <div class="reveal">
-      <p><b>B</b>，就是公式六。选 A 的同学记住了「要换成 sin」，却忘了符号；选 C、D 的同学没换名。</p>
-      <p>拿一个角核对：\(\alpha=30^\circ\) 时，\(\cos120^\circ=-\dfrac12\)，而 \(\sin30^\circ=\dfrac12\)，所以是 \(-\sin\alpha\)。</p>
+    <div class="reveal"><p><b>B</b>。奇变名：\(\cos \to \sin\)；视 \(\alpha\) 为锐角，\(\dfrac{\pi}{2}+\alpha\) 落在第二象限，原函数 \(\cos\) 在第二象限为负，取负号得 \(-\sin\alpha\)。选 A 的同学误看了新函数正弦在第二象限为正！</p></div>
+  </div>
+
+  <h3>3. 三步破题思维链：复杂代数式化简与负角整圈归化</h3>
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：多项诱导公式化简求值三步思维链）</b></p>
+    <p style="margin:0 0 8px">求值与化简：(1) 求 \(\cos(-1140^\circ)\)；(2) 化简 \(\dfrac{\sin(\pi+\alpha)\cos(2\pi-\alpha)\tan(\pi-\alpha)}{\cos\left(\dfrac{\pi}{2}+\alpha\right)\sin\left(\dfrac{3\pi}{2}-\alpha\right)}\)。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步大角去整圈与负角化正：</span>
+        对 (1)：\(\cos(-1140^\circ) = \cos(1140^\circ)\)（余弦偶函数吞负号）；<br>
+        剥离整数圈：\(1140^\circ = 3\times 360^\circ + 60^\circ\)，故 \(\cos 1140^\circ = \cos 60^\circ = \dfrac{1}{2}\)！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步逐项依「奇变偶不变，符号看原函数」精准定名定号：</span>
+        分子逐项：\(\sin(\pi+\alpha) = -\sin\alpha\)；\(\cos(2\pi-\alpha) = \cos(-\alpha) = \cos\alpha\)；\(\tan(\pi-\alpha) = -\tan\alpha\)；<br>
+        分母逐项：\(\cos\left(\dfrac{\pi}{2}+\alpha\right) = -\sin\alpha\)；\(\sin\left(\dfrac{3\pi}{2}-\alpha\right) = -\cos\alpha\)（奇倍变名，三象限原正弦为负）。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步符号总清点与弦切化简防丢负号：</span>
+        代回原分式：\(\dfrac{(-\sin\alpha)\cdot \cos\alpha \cdot (-\tan\alpha)}{(-\sin\alpha)\cdot (-\cos\alpha)} = \dfrac{\sin\alpha\cos\alpha\tan\alpha}{\sin\alpha\cos\alpha} = \tan\alpha\)！<br>
+        清点负号：分子含 2 个负号得正，分母含 2 个负号得正，正正相除得正，干脆利落！
+      </div>
     </div>
   </div>
 
-  <h3>4. 一句话记全部，和化简的路线</h3>
-  <p>上面的公式都是「\(k\cdot\dfrac{\pi}{2}\pm\alpha\)」的形状（\(-\alpha\) 是 \(k=0\)）。不必死背，分三样判断：</p>
-  <div class="key">① <b>函数名</b>：\(k\) 是偶数（\(\pi\)、\(2\pi\) 这类），名字不变；\(k\) 是奇数（\(\dfrac{\pi}{2}\)、\(\dfrac{3\pi}{2}\) 这类），sin、cos 互换。<br>② <b>符号</b>：把 \(\alpha\) <b>暂时当成锐角</b>，看 \(k\cdot\dfrac{\pi}{2}\pm\alpha\) 在第几象限，取<b>原来那个函数</b>在这个象限的符号。<br>③ 写出结果，它对任意 \(\alpha\) 都成立。</div>
-  <p>为什么能「暂时当成锐角」？等式已经由对称证明对所有 \(\alpha\) 成立，前面的正负号是固定的，用哪个 \(\alpha\) 去定它都一样，挑锐角最好判断。</p>
-  <p>求一个具体角的值，一般这样走：负角 \(\xrightarrow{\text{公式三}}\) 正角 \(\xrightarrow{\text{公式一}}\) \(0^\circ\) 到 \(360^\circ\) 的角 \(\xrightarrow{\text{公式二、四}}\) 锐角。</p>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>(1) 求 \(\cos(-600^\circ)\)。</p>
-    <p>\(\cos(-600^\circ)=\cos600^\circ\)（公式三）\(=\cos(240^\circ+360^\circ)=\cos240^\circ\)（公式一）\(=\cos(180^\circ+60^\circ)=-\cos60^\circ=-\dfrac12\)（公式二）。</p>
-    <p>(2) 化简 \(\sin\left(\dfrac{3\pi}{2}+\alpha\right)\)。</p>
-    <p>\(\dfrac{3\pi}{2}\) 是 \(\dfrac{\pi}{2}\) 的 \(3\) 倍，奇数，sin 换成 cos。把 \(\alpha\) 当锐角，\(\dfrac{3\pi}{2}+\alpha\) 在第四象限，原函数 sin 在第四象限为负。所以 \(\sin\left(\dfrac{3\pi}{2}+\alpha\right)=-\cos\alpha\)。</p>
-    <p>核对：\(\alpha=30^\circ\)，\(\sin300^\circ=-\dfrac{\sqrt3}{2}=-\cos30^\circ\)。对。</p>
-  </div>
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：\(\sin(-750^\circ)\) 等于？</p>
     <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(-\dfrac12\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{\sqrt3}{2}\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(\dfrac{\sqrt3}{2}\)</button>
+      <button class="opt" data-v="A"><b>A</b>\(-\dfrac{1}{2}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{1}{2}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{\sqrt{3}}{2}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(\dfrac{\sqrt{3}}{2}\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(\sin(-750^\circ)=-\sin750^\circ=-\sin(30^\circ+2\times360^\circ)=-\sin30^\circ=-\dfrac12\)。选 B 的同学第一步把负号丢了：\(\sin(-\alpha)=-\sin\alpha\)，sin 遇到负角要变号（cos 才不变）。</p></div>
+    <div class="reveal"><p><b>A</b>。\(\sin(-750^\circ) = -\sin 750^\circ = -\sin(30^\circ + 2\times 360^\circ) = -\sin 30^\circ = -\dfrac{1}{2}\)。选 B 的同学第一步丢了正弦吐出的负号！</p></div>
   </div>
 
-  <h3>5. 用之前，看清几件事</h3>
-  <ol>
-    <li><b>角、函数名、符号分开判</b>，符号看的是<b>原来那个函数</b>。<br><span class="small">反例：只换名不管号，会把 \(\cos\left(\dfrac{\pi}{2}+\alpha\right)\) 写成 \(\sin\alpha\)。\(\alpha=30^\circ\) 时左边是 \(-\dfrac12\)，右边是 \(\dfrac12\)。</span></li>
-    <li><b>公式对任意角成立</b>，「当成锐角」只是定符号的办法，\(\alpha\) 是钝角、负角时公式不会变号。<br><span class="small">例：\(\alpha=150^\circ\)，\(\sin(180^\circ-150^\circ)=\sin30^\circ=\dfrac12=\sin150^\circ\)，照样成立。</span></li>
-    <li><b>开平方要定正负</b>：由 \(\cos\alpha\) 求 \(\sin\alpha\) 要用 \(\sin^2\alpha+\cos^2\alpha=1\) 开平方，正负由 \(\alpha\) 的象限定；没给范围就两种都要。<br><span class="small">反例：\(\cos\alpha=\dfrac35\)，\(\alpha\) 可以在第四象限，那时 \(\sin\alpha=-\dfrac45\)，只写 \(\dfrac45\) 就漏了。</span></li>
-    <li><b>正切要有意义</b>：含 \(\tan\) 的公式，要两边都有意义才谈得上相等。<br><span class="small">反例：\(\alpha=90^\circ\) 时 \(\tan(\pi-\alpha)=\tan90^\circ\) 没有意义，\(\tan\alpha\) 也没有，这时不能写「\(=-\tan\alpha\)」去算数。</span></li>
-  </ol>
-  <div class="key">诱导公式只靠单位圆上的对称和三角函数的定义推出来，用的时候<b>不需要</b>、也不要去借后面才学的两角和差公式。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>「符号看象限」误看成新函数，符号全反</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：化简 \(\cos\left(\dfrac{\pi}{2}+\alpha\right)\)，看第二象限正弦为正，写出 \(+\sin\alpha\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：口诀必须看<b>原函数</b>！原本是 \(\cos\)，余弦在第二象限为负，铁定是 \(-\sin\alpha\)！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>负角任意吞负号，正弦正切负号凭空蒸发</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：\(\sin(-60^\circ) = \sin 60^\circ = \dfrac{\sqrt{3}}{2}\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：只有余弦是偶函数吞负号 \(\cos(-\alpha)=\cos\alpha\)；正弦和正切都是奇函数，负号必须吐出来：\(\sin(-\alpha)=-\sin\alpha\)！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-neg-trap-fig" viewBox="0 0 280 140" role="img" aria-label="正弦负角变号反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>π 与 π/2 混淆，函数名胡乱篡改</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：将 \(\sin(\pi-\alpha)\) 盲目换名为 \(\cos\alpha\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：含 \(\pi, 2\pi\) 是 \(\dfrac{\pi}{2}\) 的<b>偶数倍</b>，函数名绝对不变！只有含 \(\dfrac{\pi}{2}, \dfrac{3\pi}{2}\) 奇数倍才换名！\(\sin(\pi-\alpha) = \sin\alpha\)！
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>\(2\pi-\alpha\)</b>：它和 \(-\alpha\) 终边相同，所以 \(\sin(2\pi-\alpha)=-\sin\alpha\)，\(\cos(2\pi-\alpha)=\cos\alpha\)，\(\tan(2\pi-\alpha)=-\tan\alpha\)。不用另记，公式一加公式三就是。</p>
-    <p><b>\(\dfrac{\pi}{2}\pm\alpha\) 的正切</b>：坐标对调后 \(\tan\) 变成 \(\dfrac xy\)，是 \(\tan\alpha\) 的倒数：\(\tan\left(\dfrac{\pi}{2}-\alpha\right)=\dfrac{1}{\tan\alpha}\)，\(\tan\left(\dfrac{\pi}{2}+\alpha\right)=-\dfrac{1}{\tan\alpha}\)。要求 \(\tan\alpha\) 存在且不为 \(0\)。课本不要求记。</p>
-    <p><b>旋转的看法</b>：\(\dfrac{\pi}{2}+\alpha\) 就是把 \(P\) 绕原点逆时针转 \(90^\circ\)，\((x,y)\to(-y,x)\)。比如 \((1,0)\) 转到 \((0,1)\)，\((0,1)\) 转到 \((-1,0)\)，可以画一画核对。</p>
-    <p><b>约分前看一眼</b>：化简分式时如果约去 \(\sin\alpha\)、\(\cos\alpha\)，要先确认它不为 \(0\)，否则原式本身就没有意义。「练一练」最后一题会碰到。</p>
+    <p><b>为什么诱导公式不需要死记</b>：只要牢记单位圆上点的四种对称模式（关于原点、关于 \(x\) 轴、关于 \(y\) 轴、关于直线 \(y=x\)），任何诱导公式都在脑海中形成坐标映射，3 秒即可口算确认！</p>
+    <p><b>分式化简中的定义域红线</b>：约去公因式前必须声明 \(\cos\alpha\ne0\) 或 \(\sin\alpha\ne0\)，否则原式可能在某些角处无定义。</p>
   </details>
 </section>
 
@@ -272,6 +309,7 @@
       <p>如果题目再加一句「\(\alpha\) 是第四象限角」，答案才是 \(-\dfrac45\)。开平方的正负，一定要由角的范围来定。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-tan"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="B">
@@ -288,6 +326,7 @@
       <p>「式子有意义」说明分母不为 \(0\)，即 \(\sin\alpha\cos\alpha\ne0\)，才能约分，结果是 \(-1\)。常见错：\(\sin\left(\dfrac{3\pi}{2}+\alpha\right)\) 少了负号，得 A。代 \(\alpha=30^\circ\) 核对：\(\dfrac{(-\frac12)(-\frac{\sqrt3}{2})}{\frac12\cdot(-\frac{\sqrt3}{2})}=-1\)。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-induce"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -498,9 +537,199 @@
 
   function reset() { st.a = DEF_A; st.m = DEF_M; draw(); }
   document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  /* ---------- 0 从例子进入：单位圆对称座舱 ---------- */
+  var esySvg = document.getElementById("entry-sym"), esyBar = document.getElementById("entry-sym-bar"), esyNote = document.getElementById("entry-sym-note");
+  function esyDraw(d) {
+    esySvg.innerHTML = "";
+    var cx = 136, cy = 104, r = 74;
+    function pt(ang) { var rd = ang * Math.PI / 180; return [cx + r * Math.cos(rd), cy - r * Math.sin(rd)]; }
+    mk("circle", { cx: cx, cy: cy, r: r, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 2 }, esySvg);
+    mk("line", { x1: cx - r - 14, y1: cy, x2: cx + r + 14, y2: cy, stroke: "var(--muted)", "stroke-width": 1.4 }, esySvg);
+    mk("line", { x1: cx, y1: cy - r - 14, x2: cx, y2: cy + r + 14, stroke: "var(--muted)", "stroke-width": 1.4 }, esySvg);
+    var p0 = pt(30), pd = pt(d);
+    // 四个对称位置小点底图
+    [[30, "30°"], [210, "210°"], [150, "150°"], [-30, "-30°"]].forEach(function (item) {
+      var q = pt(item[0]);
+      mk("circle", { cx: q[0], cy: q[1], r: 4, fill: "var(--line)" }, esySvg);
+    });
+    // 对称连线
+    if (d !== 30) {
+      mk("line", { x1: p0[0], y1: p0[1], x2: pd[0], y2: pd[1], stroke: "var(--hl)", "stroke-width": 2.2, "stroke-dasharray": "5 4" }, esySvg);
+    }
+    // 原座舱 30°
+    mk("line", { x1: cx, y1: cy, x2: p0[0], y2: p0[1], stroke: "var(--a)", "stroke-width": 2.6 }, esySvg);
+    mk("line", { x1: p0[0], y1: p0[1], x2: p0[0], y2: cy, stroke: "var(--a)", "stroke-dasharray": "3 3" }, esySvg);
+    mk("circle", { cx: p0[0], cy: p0[1], r: 6.5, fill: "var(--a)", stroke: "var(--card)", "stroke-width": 2 }, esySvg);
+    // 目标对称座舱
+    if (d !== 30) {
+      mk("line", { x1: cx, y1: cy, x2: pd[0], y2: pd[1], stroke: "var(--b)", "stroke-width": 2.8 }, esySvg);
+      mk("line", { x1: pd[0], y1: pd[1], x2: pd[0], y2: cy, stroke: "var(--b)", "stroke-dasharray": "3 3" }, esySvg);
+      mk("circle", { cx: pd[0], cy: pd[1], r: 7, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, esySvg);
+    }
+    var infoMap = {
+      30: ["原座舱 30°", "(+0.87, +0.5)", "第一象限：横、纵坐标都为正", "基准位置 P(cos 30°, sin 30°)"],
+      210: ["正对面 210° (= 180°+30°)", "(−0.87, −0.5)", "关于原点对称：横、纵坐标全变反号！", "cos 210° = −cos 30°，sin 210° = −sin 30°"],
+      150: ["水平镜像 150° (= 180°−30°)", "(−0.87, +0.5)", "关于 y 轴左右对称：x 变负，y 不变", "cos 150° = −cos 30°，sin 150° = +sin 30°"],
+      "-30": ["上下镜像 −30°", "(+0.87, −0.5)", "关于 x 轴上下对称：x 不变，y 变负", "cos(−30°) = +cos 30°，sin(−30°) = −sin 30°"]
+    }[d];
+    mk("rect", { x: 234, y: 20, width: 278, height: 165, rx: 10, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, esySvg);
+    mk("text", { x: 246, y: 48, fill: "var(--fg)", "font-size": 15, "font-weight": 700 }, esySvg).textContent = infoMap[0];
+    mk("text", { x: 246, y: 82, fill: d === 30 ? "var(--a)" : "var(--hl)", "font-size": 17.5, "font-weight": 700 }, esySvg).textContent = "坐标：" + infoMap[1];
+    mk("text", { x: 246, y: 116, fill: "var(--b)", "font-size": 13, "font-weight": 600 }, esySvg).textContent = infoMap[2];
+    mk("text", { x: 246, y: 150, fill: "var(--muted)", "font-size": 12 }, esySvg).textContent = infoMap[3];
+    [].forEach.call(esyBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-d"), 10) === d);
+    });
+    esyNote.innerHTML = "当前查看：<b>" + infoMap[0] + "</b> → 坐标 <b>" + infoMap[1] + "</b>（" + infoMap[2] + "）";
+  }
+  [].forEach.call(esyBar.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () { esyDraw(parseInt(b.getAttribute("data-d"), 10)); });
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var m = { A: 30, B: 210, C: 150, D: -30 };
+      if (m[ev.detail.choice] !== undefined) esyDraw(m[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") esyDraw(210);
+  });
+
+  function initStep2() {
+    var indSvg = document.getElementById("m-ind-fig");
+    var indBar = document.getElementById("m-ind-bar");
+    var indNote = document.getElementById("m-ind-note");
+    var negTrap = document.getElementById("m-neg-trap-fig");
+    if (!indSvg || !indBar) return;
+
+    function drawInd(mode) {
+      indSvg.innerHTML = "";
+      var cx = 86, cy = 80, r = 46;
+      if (mode === "rule") {
+        mk("rect", { x: 10, y: 20, width: 140, height: 120, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
+        mk("text", { x: 22, y: 44, fill: "var(--a)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "第一步：看 k·π/2";
+        mk("text", { x: 22, y: 72, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• k 为奇数：正余互变";
+        mk("text", { x: 30, y: 92, fill: "var(--muted)", "font-size": 11 }, indSvg).textContent = "sin ↔ cos, tan ↔ cot";
+        mk("text", { x: 22, y: 114, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• k 为偶数：函数名不变";
+        mk("text", { x: 30, y: 130, fill: "var(--muted)", "font-size": 11 }, indSvg).textContent = "sin 保持 sin, cos 保持 cos";
+
+        mk("line", { x1: 155, y1: 80, x2: 180, y2: 80, stroke: "var(--a)", "stroke-width": 2 }, indSvg);
+        mk("polygon", { points: "180,76 186,80 180,84", fill: "var(--a)" }, indSvg);
+
+        mk("rect", { x: 190, y: 20, width: 140, height: 120, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
+        mk("text", { x: 202, y: 44, fill: "var(--b)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "第二步：看原函数";
+        mk("text", { x: 202, y: 72, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• 视 α 为第一象限锐角";
+        mk("text", { x: 202, y: 94, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• 判断角所在的新象限";
+        mk("text", { x: 202, y: 116, fill: "var(--hl)", "font-size": 12, "font-weight": 700 }, indSvg).textContent = "• 查原函数在该象限符号";
+        mk("text", { x: 202, y: 132, fill: "var(--muted)", "font-size": 11 }, indSvg).textContent = "（绝不看变出的新名！）";
+
+        mk("rect", { x: 345, y: 15, width: 165, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--hl)", "stroke-width": 1.5 }, indSvg);
+        mk("text", { x: 357, y: 38, fill: "var(--hl)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "⚡ 口诀判定全实战";
+        mk("text", { x: 357, y: 64, fill: "var(--fg)", "font-size": 11.5 }, indSvg).textContent = "例: cos(π/2 + α)";
+        mk("text", { x: 357, y: 84, fill: "var(--a)", "font-size": 11 }, indSvg).textContent = "① k=1 奇数 → 变名成 sin";
+        mk("text", { x: 357, y: 104, fill: "var(--b)", "font-size": 11 }, indSvg).textContent = "② 二象限原余弦 cos 为负";
+        mk("text", { x: 357, y: 128, fill: "var(--hl)", "font-size": 12.5, "font-weight": 700 }, indSvg).textContent = "→ 结论：-sin α";
+      } else {
+        mk("circle", { cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
+        mk("line", { x1: cx - r - 10, y1: cy, x2: cx + r + 10, y2: cy, stroke: "var(--muted)", "stroke-width": 1.2 }, indSvg);
+        mk("line", { x1: cx, y1: cy - r - 10, x2: cx, y2: cy + r + 10, stroke: "var(--muted)", "stroke-width": 1.2 }, indSvg);
+
+        var a = 35 * Math.PI / 180;
+        var p0x = cx + r * Math.cos(a), p0y = cy - r * Math.sin(a);
+        mk("line", { x1: cx, y1: cy, x2: p0x, y2: p0y, stroke: "var(--a)", "stroke-width": 2.2 }, indSvg);
+        mk("circle", { cx: p0x, cy: p0y, r: 4, fill: "var(--a)" }, indSvg);
+        mk("text", { x: p0x + 4, y: p0y - 3, fill: "var(--a)", "font-size": 10, "font-weight": 700 }, indSvg).textContent = "P(x,y)";
+
+        if (mode === "sym") {
+          var p1x = cx - r * Math.cos(a), p1y = cy - r * Math.sin(a);
+          var p2x = cx - r * Math.cos(a), p2y = cy + r * Math.sin(a);
+          mk("line", { x1: cx, y1: cy, x2: p1x, y2: p1y, stroke: "var(--b)", "stroke-width": 1.8, "stroke-dasharray": "3 2" }, indSvg);
+          mk("circle", { cx: p1x, cy: p1y, r: 3.5, fill: "var(--b)" }, indSvg);
+          mk("text", { x: 6, y: p1y - 4, fill: "var(--b)", "font-size": 9.5 }, indSvg).textContent = "π-α(-x,y)";
+
+          mk("line", { x1: cx, y1: cy, x2: p2x, y2: p2y, stroke: "var(--hl)", "stroke-width": 1.8, "stroke-dasharray": "3 2" }, indSvg);
+          mk("circle", { cx: p2x, cy: p2y, r: 3.5, fill: "var(--hl)" }, indSvg);
+          mk("text", { x: 6, y: p2y + 12, fill: "var(--hl)", "font-size": 9.5 }, indSvg).textContent = "π+α(-x,-y)";
+
+          mk("rect", { x: 164, y: 15, width: 348, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
+          mk("text", { x: 174, y: 40, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "偶数倍 π/2 (如 π±α, -α)：对称不换轴";
+          mk("text", { x: 174, y: 68, fill: "var(--a)", "font-size": 10.5, "font-weight": 600 }, indSvg).textContent = "• 几何翻折：关于原点/坐标轴对称，仅改符号，不换 x,y";
+          mk("text", { x: 174, y: 92, fill: "var(--b)", "font-size": 10.5 }, indSvg).textContent = "• 函数名：正弦仍对应纵标，余弦仍对应横标 → 名字不变";
+          mk("text", { x: 174, y: 116, fill: "var(--hl)", "font-size": 10.5 }, indSvg).textContent = "• 实例：sin(π-α)=+sin α，cos(π-α)=-cos α";
+        } else if (mode === "rot") {
+          mk("line", { x1: cx - 38, y1: cy + 38, x2: cx + 38, y2: cy - 38, stroke: "var(--muted)", "stroke-width": 1.2, "stroke-dasharray": "3 3" }, indSvg);
+          mk("text", { x: cx - 44, y: cy + 48, fill: "var(--muted)", "font-size": 9 }, indSvg).textContent = "y=x";
+
+          var rotA = (90 - 35) * Math.PI / 180;
+          var rx1 = cx + r * Math.cos(rotA), ry1 = cy - r * Math.sin(rotA);
+          mk("line", { x1: cx, y1: cy, x2: rx1, y2: ry1, stroke: "var(--b)", "stroke-width": 1.8, "stroke-dasharray": "3 2" }, indSvg);
+          mk("circle", { cx: rx1, cy: ry1, r: 3.5, fill: "var(--b)" }, indSvg);
+          mk("text", { x: rx1 - 4, y: ry1 - 6, fill: "var(--b)", "font-size": 9.5 }, indSvg).textContent = "π/2-α(y,x)";
+
+          var rotB = (90 + 35) * Math.PI / 180;
+          var rx2 = cx + r * Math.cos(rotB), ry2 = cy - r * Math.sin(rotB);
+          mk("line", { x1: cx, y1: cy, x2: rx2, y2: ry2, stroke: "var(--hl)", "stroke-width": 1.8, "stroke-dasharray": "3 2" }, indSvg);
+          mk("circle", { cx: rx2, cy: ry2, r: 3.5, fill: "var(--hl)" }, indSvg);
+          mk("text", { x: 6, y: ry2 - 4, fill: "var(--hl)", "font-size": 9.5 }, indSvg).textContent = "π/2+α(-y,x)";
+
+          mk("rect", { x: 164, y: 15, width: 348, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
+          mk("text", { x: 174, y: 40, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "奇数倍 π/2 (如 π/2±α)：翻折对调横纵轴";
+          mk("text", { x: 174, y: 68, fill: "var(--a)", "font-size": 10.5, "font-weight": 600 }, indSvg).textContent = "• 几何翻折：关于 y=x 对称，新横标=旧纵标，新纵标=旧横标";
+          mk("text", { x: 174, y: 92, fill: "var(--b)", "font-size": 10.5 }, indSvg).textContent = "• 函数名：新纵坐标(sin)来自旧横坐标(cos) → 正余互换！";
+          mk("text", { x: 174, y: 116, fill: "var(--hl)", "font-size": 10.5 }, indSvg).textContent = "• 实例：sin(π/2+α)=cos α，cos(π/2+α)=-sin α";
+        }
+      }
+
+      [].forEach.call(indBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-m") === mode);
+      });
+      var noteMap = {
+        sym: "偶数倍 π/2 对称不换轴：纵坐标依旧是纵坐标，横坐标依旧是横坐标，<b>函数名绝对不变</b>！",
+        rot: "奇数倍 π/2 绕对角线 y=x 翻折：横纵坐标互换，新正弦来自旧余弦，<b>函数名必须正余互换</b>！",
+        rule: "<b>实战八字真诀：</b>「奇变偶不变」看 π/2 奇偶定函数名；「符号看象限」视 α 为锐角由原函数定符号！"
+      };
+      if (indNote) indNote.innerHTML = noteMap[mode] || "";
+    }
+
+    [].forEach.call(indBar.querySelectorAll("button"), function (b) {
+      b.addEventListener("click", function () { drawInd(b.getAttribute("data-m")); });
+    });
+
+    if (negTrap) {
+      negTrap.innerHTML = "";
+      var tcx = 75, tcy = 70, tr = 46;
+      mk("circle", { cx: tcx, cy: tcy, r: tr, fill: "none", stroke: "var(--line)", "stroke-width": 1.2 }, negTrap);
+      mk("line", { x1: tcx - tr - 10, y1: tcy, x2: tcx + tr + 10, y2: tcy, stroke: "var(--muted)", "stroke-width": 1 }, negTrap);
+      mk("line", { x1: tcx, y1: tcy - tr - 10, x2: tcx, y2: tcy + tr + 10, stroke: "var(--muted)", "stroke-width": 1 }, negTrap);
+
+      var a60 = 60 * Math.PI / 180;
+      var q1x = tcx + tr * Math.cos(a60), q1y = tcy - tr * Math.sin(a60);
+      var q2x = tcx + tr * Math.cos(a60), q2y = tcy + tr * Math.sin(a60);
+
+      mk("line", { x1: tcx, y1: tcy, x2: q1x, y2: q1y, stroke: "var(--a)", "stroke-width": 1.8 }, negTrap);
+      mk("circle", { cx: q1x, cy: q1y, r: 3.5, fill: "var(--a)" }, negTrap);
+      mk("text", { x: q1x + 4, y: q1y, fill: "var(--a)", "font-size": 9.5 }, negTrap).textContent = "60°";
+
+      mk("line", { x1: tcx, y1: tcy, x2: q2x, y2: q2y, stroke: "var(--hl)", "stroke-width": 1.8 }, negTrap);
+      mk("circle", { cx: q2x, cy: q2y, r: 3.5, fill: "var(--hl)" }, negTrap);
+      mk("text", { x: q2x + 4, y: q2y + 8, fill: "var(--hl)", "font-size": 9.5 }, negTrap).textContent = "-60°";
+      mk("line", { x1: q1x, y1: q1y, x2: q2x, y2: q2y, stroke: "var(--muted)", "stroke-dasharray": "2 2", "stroke-width": 1 }, negTrap);
+
+      mk("text", { x: 135, y: 32, fill: "var(--hl)", "font-size": 11.5, "font-weight": 700 }, negTrap).textContent = "翻车点：负角一律添负号？";
+      mk("text", { x: 135, y: 56, fill: "var(--fg)", "font-size": 10.5 }, negTrap).textContent = "点在第 4 象限，横正纵负：";
+      mk("text", { x: 135, y: 78, fill: "var(--a)", "font-size": 10.5, "font-weight": 600 }, negTrap).textContent = "cos(-60°) = +1/2 (正值不变!)";
+      mk("text", { x: 135, y: 98, fill: "var(--hl)", "font-size": 10.5, "font-weight": 600 }, negTrap).textContent = "sin(-60°) = -√3/2 (纵标变负)";
+      mk("text", { x: 135, y: 122, fill: "var(--muted)", "font-size": 9.5 }, negTrap).textContent = "余弦是偶函数，负号自动吞掉";
+    }
+
+    drawInd("sym");
+  }
+
   build();
-  document.addEventListener("DOMContentLoaded", function () { reset(); });
-  if (document.readyState !== "loading") reset();
+  esyDraw(210);
+  initStep2();
+  document.addEventListener("DOMContentLoaded", function () { esyDraw(210); reset(); initStep2(); });
+  if (document.readyState !== "loading") { esyDraw(210); reset(); initStep2(); }
 })();
 </script>
 </body></html>

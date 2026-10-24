@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -29,8 +31,14 @@
 <p class="lead">从平面向量基本定理升维到三维空间，只需三个「不共面」的向量即可搭建起整个空间的基底框架。空间任意向量均可唯一线性分解，奠定了立体几何代数化与空间坐标法的理论基石。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>在平面向量中，只要在纸面上找出两个不共线的基向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\)，纸面上任意向量都能唯一写成 \(x\boldsymbol{e}_1 + y\boldsymbol{e}_2\)。现在想象我们站在一间教室的地板上。</p>
+  <p>在平面向量中，只要在纸面上找出两个不共线的基向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\)，纸面上任意向量都能唯一写成 \(x\boldsymbol{e}_1 + y\boldsymbol{e}_2\)。现在想象我们站在一间教室的地板上，抬头看天花板悬挂的吊灯 \(P\)。先点下面的两个按钮试试：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-room" viewBox="0 0 520 208" role="img" aria-label="教室地板两个基向量困在地面与补上第三个竖直基向量抵达天花板吊灯P的对比图"></svg>
+    <div class="entry-bar" id="entry-room-bar">
+      <button type="button" data-mode="floor" class="on">只用地板向量 x e₁ + y e₂（永远困在地面，够不着吊灯！）</button>
+      <button type="button" data-mode="3d">补上第3个竖直基向量 z e₃（成功升空抵达吊灯 P！）</button>
+    </div>
+    <div class="entry-note" id="entry-room-note"></div>
     <p>如果只在地板平面上画出两个不共线的向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\)，能否用它们线性表示出从地面原点指向天花板吊灯的向量 \(\overrightarrow{OP}\)？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>能，因为向量可以任意自由平移，平面向量的线性组合能覆盖整个三维空间</button>
@@ -39,14 +47,27 @@
     <div class="reveal">
       <p><b>B</b>。两个不共线的向量只能张成一个二维平面。</p>
       <p>吊灯位于教室上空，具有垂直于地板的「高度」分量。不论地板上的 \(x\boldsymbol{e}_1 + y\boldsymbol{e}_2\) 怎样伸缩合成，所得到的向量依然永远躺在地板平面内，绝不可能凭空翘起指向空中！</p>
-      <p>要抵达三维空间中的任意一点，我们必须跨出这个平面，引入第三个<b>不与前两个向量共面</b>的基向量 \(\boldsymbol{e}_3\)。这就是本节要建立的核心：<b>空间向量基本定理</b>。</p>
+      <p>要抵达三维空间中的任意一点（点上方第 2 个按钮），我们必须跨出这个平面，引入第三个<b>不与前两个向量共面</b>的基向量 \(\boldsymbol{e}_3\)。这就是本节要建立的核心：<b>空间向量基本定理</b>。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：<a href="b2-6-3.html">必修二 6.3 平面向量基本定理</a>、<a href="e1-1-1.html">1.1 空间向量及其运算</a>、<a href="b2-8-4.html">必修二 8.4 空间点线面位置关系</a>。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：空间基底需要三个不共面向量；唯一分解依赖这个条件，不能把共面三向量当成三维基底。</p></div>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：三维空间基底、唯一分解与四点共面</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="basis">① 三维基底分解</button>
+      <button type="button" class="micro-tab" data-mode="coplanar">② 共面向量判定</button>
+      <button type="button" class="micro-tab" data-mode="sum1">③ 四点共面系数和为1</button>
+    </div>
+    <svg id="m-basis-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="空间基底分解直观图解"></svg>
+    <div class="micro-caption" id="m-basis-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>共面向量与不共面</b>：</p>
@@ -67,6 +88,27 @@
     <p><b>唯一有序实数组</b>：</p>
     <p>基底一旦确定，空间中任何一个向量 \(\boldsymbol{p}\) 都有且只有一组实数 \((x, y, z)\)，使得 \(\boldsymbol{p} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3\)。</p>
     <p>例：若 \(\boldsymbol{p} = 2\boldsymbol{e}_1 - 3\boldsymbol{e}_2 + 5\boldsymbol{e}_3\)，对应唯一实数组 \((2, -3, 5)\)。若另有 \(\boldsymbol{p} = x'\boldsymbol{e}_1 + y'\boldsymbol{e}_2 + z'\boldsymbol{e}_3\)，必有 \(x'=2, y'=-3, z'=5\)。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">核心辨析</span> 两两不共线 vs 三个向量不共面</div>
+      <p><b>两两不共线</b>：向量间两两不平行。但若三个向量全被压在同一平面内（如等边三角形三边向量），<b>根本无法撑开立体空间</b>，绝不能作空间基底！</p>
+      <p><b>三个向量不共面</b>：第三个向量必须彻底脱离前两个向量张成的平面，才能覆盖空间全维度。</p>
+      <p class="small">口诀：<b>不共面必两两不共线，两两不共线绝不等于不共面</b>。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">定理对照</span> 空间基底分解 vs 四点共面条件</div>
+      <p><b>空间分解定理</b>：任意向量 \(\boldsymbol{p} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3\)，实数组 \((x, y, z)\) <b>唯一存在</b>，反映三维自由度。</p>
+      <p><b>四点共面充要条件</b>：同起点下 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)，点 \(P,A,B,C\) 共面当且仅当<b>系数和为 1</b>：\(x+y+z=1\)。</p>
+      <p class="small">提醒：若起点不同，必须先移项化为同一起点，再检验系数之和！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    空间向量基本定理：\(\boldsymbol{p} = \color{#2563eb}{x\boldsymbol{e}_1} + \color{#059669}{y\boldsymbol{e}_2} + \color{#d97706}{z\boldsymbol{e}_3}\) &nbsp;（实数组 \((x,y,z)\) 唯一存在）<br>
+    共面向量充要条件：\(\boldsymbol{p} = \color{#2563eb}{x\boldsymbol{a}} + \color{#059669}{y\boldsymbol{b}}\) &nbsp;（\(\boldsymbol{a}, \boldsymbol{b}\) 不共线）<br>
+    四点共面系数和公式：\(\overrightarrow{OP} = \color{#2563eb}{x}\overrightarrow{OA} + \color{#059669}{y}\overrightarrow{OB} + \color{#d97706}{z}\overrightarrow{OC} \iff \color{#dc2626}{x + y + z = 1}\)
   </div>
 
   <h3>2. 基底的条件：三个向量不共面</h3>
@@ -103,6 +145,7 @@
       <p class="small">常见算错：B、D 两组都两两不共线，看着「方向各不相同」就以为能做基底；要检查的是三个合起来共不共面。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 空间向量基本定理：分解存在，而且唯一</h3>
   <div class="key">
@@ -148,6 +191,7 @@
       <p class="small">常见算错：选 C 的同学误把 \(P\) 当成了体对角线中点，把竖直分量也乘了 \(\dfrac{1}{2}\)；选 B 的同学忘了给底面对角线乘 \(\dfrac{1}{2}\)。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 用基底判断四点共面：系数和等于 1</h3>
   <p>取平面 \(ABC\) 外一点 \(O\)（\(A, B, C\) 不共线），这时 \(\{\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\}\) 是基底，任一点 \(P\) 都能唯一写成 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)。点 \(P\) 在不在平面 \(ABC\) 上，只看三个系数的和：</p>
@@ -187,27 +231,78 @@
     </div>
   </div>
 
-  <h3>5. 用之前，先查三条红线</h3>
-  <div class="card">
-    <ol>
-      <li><b>红线 1：仅「两两不共线」不能保证三向量不共面</b><br>
-        三个向量可能两两不平行，却能平移到同一个平面内（比如三角形三条边向量）。<br>
-        <span class="small">反例：\(\boldsymbol{a}=(1,0,0), \boldsymbol{b}=(0,1,0), \boldsymbol{c}=(1,1,0)\) 两两不共线，但都在 \(xOy\) 平面内，合成不出 \((0,0,1)\)，不能做空间基底。</span>
-      </li>
-      <li><b>红线 2：零向量不能做基向量</b><br>
-        <span class="small">反例：\(\{\boldsymbol{0}, \boldsymbol{i}, \boldsymbol{j}\}\) 中 \(\boldsymbol{i}, \boldsymbol{j}\) 不共线，但 \(\boldsymbol{0}\) 和它们共面，合成不出 \(\boldsymbol{k}\)；而且 \(\boldsymbol{i} = 0\cdot\boldsymbol{0} + \boldsymbol{i}\) 和 \(\boldsymbol{i} = 5\cdot\boldsymbol{0} + \boldsymbol{i}\) 都成立，分解也不唯一。</span>
-      </li>
-      <li><b>红线 3：基向量不两两垂直时，求模长、数量积要保留交叉项</b><br>
-        只有在单位正交基底下，模长才是 \(\sqrt{x^2+y^2+z^2}\)。一般基底下展开 \(|\boldsymbol{p}|^2 = (x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3)^2\)，要把两两的数量积都留下：
-        <div class="warn">
-          $$\begin{aligned}|\boldsymbol{p}|^2 = {}&amp; x^2\boldsymbol{e}_1^2 + y^2\boldsymbol{e}_2^2 + z^2\boldsymbol{e}_3^2 \\ &amp;+ 2xy\,\boldsymbol{e}_1\cdot\boldsymbol{e}_2 + 2yz\,\boldsymbol{e}_2\cdot\boldsymbol{e}_3 + 2zx\,\boldsymbol{e}_3\cdot\boldsymbol{e}_1\end{aligned}$$
-          <span class="small">反例：\(|\boldsymbol{e}_1|=|\boldsymbol{e}_2|=|\boldsymbol{e}_3|=1\)，两两夹角都是 \(60^\circ\)，\(\boldsymbol{p}=\boldsymbol{e}_1+\boldsymbol{e}_2+\boldsymbol{e}_3\)。\(|\boldsymbol{p}|^2 = 3 + 2\times3\times\dfrac12 = 6\)，\(|\boldsymbol{p}|=\sqrt6\)，不是 \(\sqrt3\)。</span>
-        </div>
-      </li>
-    </ol>
+  
+  <h3>5. 三步破题思维链：空间基底解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>面对四面体、长方体或平行六面体中的线段向量分解、四点共面证明或求参数问题，迅速选定一个<b>公共顶点</b>，取出引出的三条不共面棱作为基底 \(\{\boldsymbol{e}_1, \boldsymbol{e}_2, \boldsymbol{e}_3\}\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 用中点公式 \(\overrightarrow{OM}=\frac12(\overrightarrow{OA}+\overrightarrow{OB})\) 或定比分点公式逐步降维；<br>
+        ② 沿几何体棱线折线回路拆分：\(\overrightarrow{MN}=\overrightarrow{ON}-\overrightarrow{OM}\)，化简为 \(x\boldsymbol{e}_1+y\boldsymbol{e}_2+z\boldsymbol{e}_3\)；<br>
+        ③ 四点共面问题：建立同起点关系，列出系数和方程 \(x+y+z=1\) 求解未知参数。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>基底分解系数具有<b>唯一性</b>，两边对应基向量系数可直接相等列方程；四点共面充要条件必须严格保证四个向量<b>同起点</b>；非正交基底求模平方时绝不可遗漏两两夹角交叉项！</p>
+      </div>
+    </div>
   </div>
 
-  <details class="more">
+  <h3>6. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：误把“两两不共线”当“三维基底”</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>正方形底面边向量 \(\boldsymbol{a}, \boldsymbol{b}\) 与对角线 \(\boldsymbol{c}=\boldsymbol{a}+\boldsymbol{b}\)，两两不平行，误以为可作空间基底</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>三向量都在同一底面内共面，无法表示竖直高方向上的向量，绝对不能作三维空间基底</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：四点共面误把不同起点系数直接求和</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>式子中起点有的是 \(O\) 有的是 \(A\)，直接把各未知数加起来等于 1</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>必须全部移项转化成共起点 \(\overrightarrow{OP}=x\overrightarrow{OA}+y\overrightarrow{OB}+z\overrightarrow{OC}\)，才能应用 \(x+y+z=1\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：一般基底下求模方丢失交叉项</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>基向量模为 1 且两两夹角 \(60^\circ\)，求 \(|\boldsymbol{e}_1+\boldsymbol{e}_2+\boldsymbol{e}_3|\) 误算为 \(\sqrt{1+1+1}=\sqrt{3}\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>必须展开 \(2\sum \boldsymbol{e}_i\cdot\boldsymbol{e}_j = 2\times 3\times\frac12 = 3\)，模方为 \(3+3=6\)，正确模长为 \(\sqrt{6}\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：两两不共线的三向量被压平在同一平面内</div>
+    <svg id="m-basis-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="两两不共线但共面反例图"></svg>
+    <div class="micro-caption">平面内互成 \(120^\circ\) 的三个向量两两不共线，但无法产生竖直向上的空间分量，无法构成三维基底！</div>
+  </div>
+
+  <details class="more" style="margin-top:14px;">
     <summary>再深一点（可以先跳过）：维数与重心坐标</summary>
     <p><b>空间的维数</b>：在大学线性代数中，三维空间中「任意三个不共面的向量构成一组基」，本质上反映了三维线性空间的维数是 3。空间中任意 4 个向量里，至少有一个能用另外三个表示出来。</p>
     <p><b>重心坐标</b>：四点共面条件 \(x+y+z=1\) 中，实数组 \((x, y, z)\) 正好是点 \(P\) 关于 \(\triangle ABC\) 的<b>重心坐标</b>。\(x, y, z\) 都大于 \(0\) 时，\(P\) 在 \(\triangle ABC\) 内部；某个系数为 \(0\)，落在三角形的边所在直线上；出现负数，落在三角形外、但仍在平面 \(ABC\) 上。</p>
@@ -239,6 +334,7 @@
     <div class="ctrl" style="margin-top:10px">
       <button class="btn" id="btnCoplanar" type="button">四点共面校验与对齐</button>
       <button class="btn ghost" id="btnCentroid" type="button">设为底面重心</button>
+      <button class="btn ghost" id="btnIsoGantry" data-iso-tab="1" type="button">三维龙门定位仪（等距 3D）</button>
       <button class="btn ghost" id="reset" type="button">重置</button>
     </div>
 
@@ -349,215 +445,391 @@
 <footer>培玉智能 · 自编讲解。</footer>
 </div>
 
+<script src="../assets/iso-bench.js"></script>
 <script>
-(function () {
-  "use strict";
-
-  var rangeX = document.getElementById("rangeX");
-  var rangeY = document.getElementById("rangeY");
-  var rangeZ = document.getElementById("rangeZ");
-  var outX = document.getElementById("outX");
-  var outY = document.getElementById("outY");
-  var outZ = document.getElementById("outZ");
-  var svg = document.getElementById("basisSvg");
-  var desc = document.getElementById("simDesc");
-
-  var btnCoplanar = document.getElementById("btnCoplanar");
-  var btnCentroid = document.getElementById("btnCentroid");
-  var btnReset = document.getElementById("reset");
-
-  function getVal(input, def) {
-    if (!input) return def;
-    var v = parseFloat(input.value);
-    return isNaN(v) ? def : v;
-  }
-
-  function render() {
-    var x = getVal(rangeX, 0.35);
-    var y = getVal(rangeY, 0.35);
-    var z = getVal(rangeZ, 0.30);
-
-    if (outX) outX.textContent = x.toFixed(2);
-    if (outY) outY.textContent = y.toFixed(2);
-    if (outZ) outZ.textContent = z.toFixed(2);
-
-    if (!svg) return;
-    svg.innerHTML = "";
-
-    // 定义箭头标记
-    var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    defs.innerHTML =
-      '<marker id="arrA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--b)" /></marker>' +
-      '<marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--c)" /></marker>' +
-      '<marker id="arrC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--a)" /></marker>' +
-      '<marker id="arrP" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="var(--no)" /></marker>';
-    svg.appendChild(defs);
-
-    // 三维投影原点 O 及三个基向量 e1, e2, e3 的二维投影增量
-    var oX = 180, oY = 235;
-    var v1x = -90, v1y = 55;   // e1 沿左下方斜向 (OA)
-    var v2x = 190, v2y = 0;    // e2 沿右侧水平 (OB)
-    var v3x = 60,  v3y = -165; // e3 沿右上方竖直倾斜 (OC)
-
-    var ptO = [oX, oY];
-    var ptA = [oX + v1x, oY + v1y];
-    var ptB = [oX + v2x, oY + v2y];
-    var ptC = [oX + v3x, oY + v3y];
-
-    // 折线分解点: O -> Px -> Pxy -> P
-    var ptPx  = [oX + x * v1x, oY + x * v1y];
-    var ptPxy = [ptPx[0] + y * v2x, ptPx[1] + y * v2y];
-    var ptP   = [ptPxy[0] + z * v3x, ptPxy[1] + z * v3y];
-
-    var sum = x + y + z;
-    var isCoplanar = Math.abs(sum - 1.0) <= 0.02;
-
-    function drawLine(p1, p2, color, isDash, w, marker) {
-      var l = document.createElementNS("http://www.w3.org/2000/svg", "line");
-      l.setAttribute("x1", p1[0].toFixed(1));
-      l.setAttribute("y1", p1[1].toFixed(1));
-      l.setAttribute("x2", p2[0].toFixed(1));
-      l.setAttribute("y2", p2[1].toFixed(1));
-      l.setAttribute("stroke", color);
-      l.setAttribute("stroke-width", w || "1.6");
-      if (isDash) l.setAttribute("stroke-dasharray", "4,3");
-      if (marker) l.setAttribute("marker-end", "url(#" + marker + ")");
-      svg.appendChild(l);
-    }
-
-    // 1. 底面三角形 ABC 面（四点共面参考面）
-    var poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-    poly.setAttribute("points", ptA[0].toFixed(1) + "," + ptA[1].toFixed(1) + " " +
-                                ptB[0].toFixed(1) + "," + ptB[1].toFixed(1) + " " +
-                                ptC[0].toFixed(1) + "," + ptC[1].toFixed(1));
-    if (isCoplanar) {
-      poly.setAttribute("fill", "rgba(47, 122, 86, 0.22)");
-      poly.setAttribute("stroke", "var(--a)");
-      poly.setAttribute("stroke-width", "2.2");
-    } else {
-      poly.setAttribute("fill", "rgba(163, 157, 144, 0.09)");
-      poly.setAttribute("stroke", "var(--line)");
-      poly.setAttribute("stroke-width", "1.4");
-      poly.setAttribute("stroke-dasharray", "4,3");
-    }
-    svg.appendChild(poly);
-
-    // 2. 空间三棱锥边框框架 (AB, BC, CA)
-    drawLine(ptA, ptB, isCoplanar ? "var(--a)" : "var(--line)", !isCoplanar, isCoplanar ? "2" : "1.2");
-    drawLine(ptB, ptC, isCoplanar ? "var(--a)" : "var(--line)", !isCoplanar, isCoplanar ? "2" : "1.2");
-    drawLine(ptC, ptA, isCoplanar ? "var(--a)" : "var(--line)", !isCoplanar, isCoplanar ? "2" : "1.2");
-
-    // 3. 三条基向量 OA, OB, OC
-    drawLine(ptO, ptA, "var(--b)", false, "2.6", "arrA");
-    drawLine(ptO, ptB, "var(--c)", false, "2.6", "arrB");
-    drawLine(ptO, ptC, "var(--a)", false, "2.6", "arrC");
-
-    // 4. 向量分解的阶梯折线 (Px, Pxy, P)
-    if (Math.abs(x) > 0.01 || Math.abs(y) > 0.01) {
-      drawLine(ptPx, ptPxy, "var(--c)", true, "1.8");
-    }
-    if (Math.abs(z) > 0.01) {
-      drawLine(ptPxy, ptP, "var(--a)", true, "1.8");
-    }
-
-    // 5. 空间合向量 OP
-    drawLine(ptO, ptP, "var(--no)", false, "3.4", "arrP");
-
-    // 绘制顶点标记
-    function drawPoint(pt, fill, label, tx, ty, r) {
-      var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-      c.setAttribute("cx", pt[0].toFixed(1));
-      c.setAttribute("cy", pt[1].toFixed(1));
-      c.setAttribute("r", r || "4.5");
-      c.setAttribute("fill", fill);
-      svg.appendChild(c);
-
-      if (label) {
-        var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        t.setAttribute("x", (pt[0] + tx).toFixed(1));
-        t.setAttribute("y", (pt[1] + ty).toFixed(1));
-        t.setAttribute("fill", fill);
-        t.setAttribute("font-weight", "700");
-        t.setAttribute("font-size", "14");
-        t.textContent = label;
-        svg.appendChild(t);
-      }
-    }
-
-    drawPoint(ptO, "var(--fg)", "O(原点)", -14, 18);
-    drawPoint(ptA, "var(--b)", "A (e₁)", -18, 18);
-    drawPoint(ptB, "var(--c)", "B (e₂)", 8, 16);
-    drawPoint(ptC, "var(--a)", "C (e₃)", -14, -8);
-
-    drawPoint(ptP, "var(--no)", "P(" + x.toFixed(2) + ", " + y.toFixed(2) + ", " + z.toFixed(2) + ")", 10, -6, "6");
-
-    // 动态文字说明与共面状态徽章
-    var badgeHtml = "";
-    if (isCoplanar) {
-      badgeHtml = '<span class="badge ok">✔ 四点共面：点 P 位于平面 ABC 内（x + y + z = ' + sum.toFixed(2) + ' = 1）</span>';
-    } else if (sum > 1.02) {
-      badgeHtml = '<span class="badge bad">● 不共面：点 P 悬浮在平面 ABC 外侧上方（x + y + z = ' + sum.toFixed(2) + ' &gt; 1）</span>';
-    } else {
-      badgeHtml = '<span class="badge bad">● 不共面：点 P 位于平面 ABC 与原点 O 之间（x + y + z = ' + sum.toFixed(2) + ' &lt; 1）</span>';
-    }
-
-    if (desc) {
-      desc.innerHTML =
-        "<b>向量合成</b>：\\(\\overrightarrow{OP} = " + x.toFixed(2) + "\\boldsymbol{e}_1 + " + y.toFixed(2) + "\\boldsymbol{e}_2 + " + z.toFixed(2) + "\\boldsymbol{e}_3\\)<br>" +
-        "<b>系数之和</b>：\\(x + y + z = " + sum.toFixed(2) + "\\) " + badgeHtml;
-
-      if (window.renderMathInElement) {
-        window.renderMathInElement(desc, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "\\(", right: "\\)", display: false }
-          ],
-          throwOnError: false
-        });
-      }
-    }
-  }
-
-  if (rangeX) rangeX.addEventListener("input", render);
-  if (rangeY) rangeY.addEventListener("input", render);
-  if (rangeZ) rangeZ.addEventListener("input", render);
-
-  if (btnCoplanar) {
-    btnCoplanar.addEventListener("click", function () {
-      var x = getVal(rangeX, 0.35);
-      var y = getVal(rangeY, 0.35);
-      var needZ = Math.round((1.0 - x - y) * 100) / 100;
-      if (needZ < -0.2 || needZ > 1.2) {
-        // 如果越界则重调为对称的底面点 (0.35, 0.35, 0.30)
-        rangeX.value = "0.35";
-        rangeY.value = "0.35";
-        rangeZ.value = "0.30";
-      } else {
-        rangeZ.value = needZ.toFixed(2);
-      }
-      render();
-    });
-  }
-
-  if (btnCentroid) {
-    btnCentroid.addEventListener("click", function () {
-      rangeX.value = "0.33";
-      rangeY.value = "0.33";
-      rangeZ.value = "0.34";
-      render();
-    });
-  }
-
-  if (btnReset) {
-    btnReset.addEventListener("click", function () {
-      if (rangeX) rangeX.value = "0.35";
-      if (rangeY) rangeY.value = "0.35";
-      if (rangeZ) rangeZ.value = "0.30";
-      render();
-    });
-  }
-
-  render();
+(function(){
+"use strict";
+var rangeX=document.getElementById("rangeX");
+var rangeY=document.getElementById("rangeY");
+var rangeZ=document.getElementById("rangeZ");
+var outX=document.getElementById("outX");
+var outY=document.getElementById("outY");
+var outZ=document.getElementById("outZ");
+var svg=document.getElementById("basisSvg");
+var desc=document.getElementById("simDesc");
+var btnCoplanar=document.getElementById("btnCoplanar");
+var btnCentroid=document.getElementById("btnCentroid");
+var btnIsoGantry=document.getElementById("btnIsoGantry");
+var btnReset=document.getElementById("reset");
+var showIsoGantry=false;
+function getVal(input,def){
+if(!input)return def;
+var v=parseFloat(input.value);
+return isNaN(v)?def:v;
+}
+function render(){
+var x=getVal(rangeX,0.35);
+var y=getVal(rangeY,0.35);
+var z=getVal(rangeZ,0.30);
+if(outX)outX.textContent=x.toFixed(2);
+if(outY)outY.textContent=y.toFixed(2);
+if(outZ)outZ.textContent=z.toFixed(2);
+if(!svg)return;
+svg.innerHTML="";
+if(showIsoGantry&&window.IsoBench&&window.IsoBench.isReal===true){
+window.IsoBench.renderGantryBench(svg,desc,x,y,z,function(){
+if(window.renderMathInElement){
+window.renderMathInElement(desc,{
+delimiters:[
+{left:"$",right:"$",display:true},
+{left:"\\(",right:"\\)",display:false}
+],
+throwOnError:false
+});
+}
+});
+return;
+}
+var defs=document.createElementNS("http://www.w3.org/2000/svg","defs");
+defs.innerHTML=
+'<marker id="arrA" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--b)" /></marker>'+
+'<marker id="arrB" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--c)" /></marker>'+
+'<marker id="arrC" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="var(--a)" /></marker>'+
+'<marker id="arrP" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 z" fill="var(--no)" /></marker>';
+svg.appendChild(defs);
+var oX=180,oY=235;
+var v1x=-90,v1y=55;//e1沿左下方斜向(OA)
+var v2x=190,v2y=0;//e2沿右侧水平(OB)
+var v3x=60,v3y=-165;//e3沿右上方竖直倾斜(OC)
+var ptO=[oX,oY];
+var ptA=[oX+v1x,oY+v1y];
+var ptB=[oX+v2x,oY+v2y];
+var ptC=[oX+v3x,oY+v3y];
+var ptPx=[oX+x*v1x,oY+x*v1y];
+var ptPxy=[ptPx[0]+y*v2x,ptPx[1]+y*v2y];
+var ptP=[ptPxy[0]+z*v3x,ptPxy[1]+z*v3y];
+var sum=x+y+z;
+var isCoplanar=Math.abs(sum-1.0)<=0.02;
+function drawLine(p1,p2,color,isDash,w,marker){
+var l=document.createElementNS("http://www.w3.org/2000/svg","line");
+l.setAttribute("x1",p1[0].toFixed(1));
+l.setAttribute("y1",p1[1].toFixed(1));
+l.setAttribute("x2",p2[0].toFixed(1));
+l.setAttribute("y2",p2[1].toFixed(1));
+l.setAttribute("stroke",color);
+l.setAttribute("stroke-width",w||"1.6");
+if(isDash)l.setAttribute("stroke-dasharray","4,3");
+if(marker)l.setAttribute("marker-end","url(#"+marker+")");
+svg.appendChild(l);
+}
+var poly=document.createElementNS("http://www.w3.org/2000/svg","polygon");
+poly.setAttribute("points",ptA[0].toFixed(1)+","+ptA[1].toFixed(1)+" "+
+ptB[0].toFixed(1)+","+ptB[1].toFixed(1)+" "+
+ptC[0].toFixed(1)+","+ptC[1].toFixed(1));
+if(isCoplanar){
+poly.setAttribute("fill","rgba(47, 122, 86, 0.22)");
+poly.setAttribute("stroke","var(--a)");
+poly.setAttribute("stroke-width","2.2");
+}else{
+poly.setAttribute("fill","rgba(163, 157, 144, 0.09)");
+poly.setAttribute("stroke","var(--line)");
+poly.setAttribute("stroke-width","1.4");
+poly.setAttribute("stroke-dasharray","4,3");
+}
+svg.appendChild(poly);
+drawLine(ptA,ptB,isCoplanar?"var(--a)":"var(--line)",!isCoplanar,isCoplanar?"2":"1.2");
+drawLine(ptB,ptC,isCoplanar?"var(--a)":"var(--line)",!isCoplanar,isCoplanar?"2":"1.2");
+drawLine(ptC,ptA,isCoplanar?"var(--a)":"var(--line)",!isCoplanar,isCoplanar?"2":"1.2");
+drawLine(ptO,ptA,"var(--b)",false,"2.6","arrA");
+drawLine(ptO,ptB,"var(--c)",false,"2.6","arrB");
+drawLine(ptO,ptC,"var(--a)",false,"2.6","arrC");
+if(Math.abs(x)>0.01||Math.abs(y)>0.01){
+drawLine(ptPx,ptPxy,"var(--c)",true,"1.8");
+}
+if(Math.abs(z)>0.01){
+drawLine(ptPxy,ptP,"var(--a)",true,"1.8");
+}
+drawLine(ptO,ptP,"var(--no)",false,"3.4","arrP");
+function drawPoint(pt,fill,label,tx,ty,r){
+var c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+c.setAttribute("cx",pt[0].toFixed(1));
+c.setAttribute("cy",pt[1].toFixed(1));
+c.setAttribute("r",r||"4.5");
+c.setAttribute("fill",fill);
+svg.appendChild(c);
+if(label){
+var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+t.setAttribute("x",(pt[0]+tx).toFixed(1));
+t.setAttribute("y",(pt[1]+ty).toFixed(1));
+t.setAttribute("fill",fill);
+t.setAttribute("font-weight","700");
+t.setAttribute("font-size","14");
+t.textContent=label;
+svg.appendChild(t);
+}
+}
+drawPoint(ptO,"var(--fg)","O(原点)",-62,-6);
+drawPoint(ptA,"var(--b)","A (e₁)",-18,18);
+drawPoint(ptB,"var(--c)","B (e₂)",8,16);
+drawPoint(ptC,"var(--a)","C (e₃)",-14,-8);
+var pDy=(ptP[1]>=ptO[1]-10)?22:-12;
+drawPoint(ptP,"var(--no)","P("+x.toFixed(2)+", "+y.toFixed(2)+", "+z.toFixed(2)+")",10,pDy,"6");
+var badgeHtml="";
+if(isCoplanar){
+badgeHtml='<span class="badge ok">✔ 四点共面：点 P 位于平面 ABC 内（x + y + z = '+sum.toFixed(2)+' = 1）</span>';
+}else if(sum>1.02){
+badgeHtml='<span class="badge bad">● 不共面：点 P 悬浮在平面 ABC 外侧上方（x + y + z = '+sum.toFixed(2)+' &gt; 1）</span>';
+}else{
+badgeHtml='<span class="badge bad">● 不共面：点 P 位于平面 ABC 与原点 O 之间（x + y + z = '+sum.toFixed(2)+' &lt; 1）</span>';
+}
+if(desc){
+desc.innerHTML=
+"<b>向量合成</b>：\\(\\overrightarrow{OP} = "+x.toFixed(2)+"\\boldsymbol{e}_1 + "+y.toFixed(2)+"\\boldsymbol{e}_2 + "+z.toFixed(2)+"\\boldsymbol{e}_3\\)<br>"+
+"<b>系数之和</b>：\\(x + y + z = "+sum.toFixed(2)+"\\) "+badgeHtml;
+if(window.renderMathInElement){
+window.renderMathInElement(desc,{
+delimiters:[
+{left:"$",right:"$",display:true},
+{left:"\\(",right:"\\)",display:false}
+],
+throwOnError:false
+});
+}
+}
+}
+if(rangeX)rangeX.addEventListener("input",render);
+if(rangeY)rangeY.addEventListener("input",render);
+if(rangeZ)rangeZ.addEventListener("input",render);
+if(btnCoplanar){
+btnCoplanar.addEventListener("click",function(){
+var x=getVal(rangeX,0.35);
+var y=getVal(rangeY,0.35);
+var needZ=Math.round((1.0-x-y)*100)/100;
+if(needZ<-0.2||needZ>1.2){
+rangeX.value="0.35";
+rangeY.value="0.35";
+rangeZ.value="0.30";
+}else{
+rangeZ.value=needZ.toFixed(2);
+}
+render();
+});
+}
+if(btnCentroid){
+btnCentroid.addEventListener("click",function(){
+rangeX.value="0.33";
+rangeY.value="0.33";
+rangeZ.value="0.34";
+render();
+});
+}
+if(btnIsoGantry){
+btnIsoGantry.addEventListener("click",function(){
+showIsoGantry=!showIsoGantry;
+btnIsoGantry.classList.toggle("on",showIsoGantry);
+render();
+});
+}
+if(btnReset){
+btnReset.addEventListener("click",function(){
+if(rangeX)rangeX.value="0.35";
+if(rangeY)rangeY.value="0.35";
+if(rangeZ)rangeZ.value="0.30";
+showIsoGantry=false;
+if(btnIsoGantry)btnIsoGantry.classList.remove("on");
+render();
+});
+}
+render();
+/*=================0从例子进入：教室地板基向量与天花板吊灯P=================*/
+var erSvg=document.getElementById("entry-room"),erBar=document.getElementById("entry-room-bar"),erNote=document.getElementById("entry-room-note");
+function erEl(tag,attrs,txt){
+var n=document.createElementNS("http://www.w3.org/2000/svg",tag);
+for(var k in attrs)n.setAttribute(k,attrs[k]);
+if(txt!==undefined)n.textContent=txt;
+erSvg.appendChild(n);
+return n;
+}
+function erDraw(mode){
+if(!erSvg)return;
+erSvg.innerHTML="";
+var is3d=mode==="3d";
+var O=[110,174],Ex=[290,174],Q=[350,140],Ey=[170,140],P=[350,50];
+erEl("polygon",{points:"44,190 420,190 484,124 108,124",fill:"var(--ok-soft)",stroke:"var(--a)","stroke-width":1.6});
+erEl("text",{x:335,y:185,fill:"var(--a)","font-size":13,"font-weight":700},"教室地板平面");
+erEl("polygon",{points:O[0]+","+O[1]+" "+Ex[0]+","+Ex[1]+" "+Q[0]+","+Q[1]+" "+Ey[0]+","+Ey[1],fill:"rgba(47,122,86,0.14)",stroke:"var(--a)","stroke-width":1.5,"stroke-dasharray":"4,3"});
+erEl("line",{x1:O[0],y1:O[1],x2:Ex[0],y2:Ex[1],stroke:"var(--a)","stroke-width":3});
+erEl("line",{x1:O[0],y1:O[1],x2:Ey[0],y2:Ey[1],stroke:"var(--c)","stroke-width":3});
+erEl("line",{x1:O[0],y1:O[1],x2:Q[0],y2:Q[1],stroke:"var(--b)","stroke-width":3});
+erEl("text",{x:205,y:192,"text-anchor":"middle",fill:"var(--a)","font-size":13.5,"font-weight":700},"x e₁ (沿地板向右)");
+erEl("text",{x:112,y:146,fill:"var(--c)","font-size":13.5,"font-weight":700},"y e₂");
+erEl("circle",{cx:Q[0],cy:Q[1],r:5,fill:"var(--b)"});
+erEl("text",{x:Q[0]+10,y:Q[1]+14,fill:"var(--b)","font-size":13,"font-weight":700},"地板合成点 Q (x e₁ + y e₂)");
+erEl("line",{x1:290,y1:22,x2:410,y2:22,stroke:"var(--muted)","stroke-width":3});
+erEl("line",{x1:P[0],y1:22,x2:P[0],y2:P[1]-8,stroke:"var(--muted)","stroke-width":2});
+erEl("circle",{cx:P[0],cy:P[1],r:8,fill:"var(--hl)",stroke:"var(--b)","stroke-width":2.2});
+erEl("text",{x:P[0]+14,y:P[1]+5,fill:"var(--fg)","font-size":14,"font-weight":700},"天花板吊灯 P");
+if(!is3d){
+erEl("line",{x1:Q[0],y1:Q[1],x2:P[0],y2:P[1]+9,stroke:"var(--no)","stroke-width":2.4,"stroke-dasharray":"5,4"});
+erEl("rect",{x:162,y:74,width:176,height:28,rx:6,fill:"var(--no-soft)",stroke:"var(--no)","stroke-width":1.5});
+erEl("text",{x:250,y:93,"text-anchor":"middle",fill:"var(--no)","font-size":13,"font-weight":700},"✗ 困在地板内，缺高度维度！");
+erNote.innerHTML="<b>只用 2 个地板向量（x e₁ + y e₂）</b>：不管 x, y 怎么变，合成出来的点 Q 永远<b>死死贴在地板平面上</b>，无法产生竖直高度，绝对够不着天花板上的吊灯 P！";
+}else{
+erEl("line",{x1:O[0],y1:O[1],x2:O[0],y2:O[1]-66,stroke:"var(--no)","stroke-width":3});
+erEl("text",{x:68,y:O[1]-74,"text-anchor":"middle",fill:"var(--no)","font-size":13,"font-weight":700},"竖直基向量 e₃ ↑");
+erEl("line",{x1:Q[0],y1:Q[1],x2:P[0],y2:P[1]+8,stroke:"var(--no)","stroke-width":3,"stroke-dasharray":"5,3"});
+erEl("text",{x:Q[0]+10,y:102,fill:"var(--no)","font-size":13.5,"font-weight":700},"+ z e₃ (升空高度)");
+erEl("line",{x1:O[0],y1:O[1],x2:P[0]-6,y2:P[1]+4,stroke:"var(--no)","stroke-width":3.8});
+erEl("text",{x:232,y:68,"text-anchor":"middle",fill:"var(--no)","font-size":14,"font-weight":700},"OP = x e₁ + y e₂ + z e₃ ✓");
+erNote.innerHTML="<b>补上第 3 个不共面基向量 e₃</b>：先在地板上走 <b>x e₁ + y e₂</b> 到吊灯正下方 Q，再沿竖直基向量向上走 <b>z e₃</b>，就能唯一表示出空中吊灯向量 <b>OP = x e₁ + y e₂ + z e₃</b>！";
+}
+erEl("circle",{cx:O[0],cy:O[1],r:4.5,fill:"var(--fg)"});
+erEl("text",{x:O[0]-10,y:O[1]+6,"text-anchor":"end",fill:"var(--fg)","font-size":13.5,"font-weight":700},"原点 O");
+[].forEach.call(erBar.querySelectorAll("button"),function(b){
+b.classList.toggle("on",b.getAttribute("data-mode")===mode);
+});
+}
+[].forEach.call(erBar.querySelectorAll("button"),function(b){
+b.onclick=function(){erDraw(b.getAttribute("data-mode"));};
+});
+document.addEventListener("predict:pick",function(ev){
+if(ev.detail&&ev.detail.id==="entry"){
+erDraw(ev.detail.choice==="A"?"floor":"3d");
+}
+});
+document.addEventListener("predict:reset",function(ev){
+if(ev.detail&&ev.detail.id==="entry")erDraw("floor");
+});
+erDraw("floor");
+function initMBasisFig(){
+var svgEl=document.getElementById("m-basis-fig");
+var capEl=document.getElementById("m-basis-cap");
+if(!svgEl)return;
+var mode="basis",NS="http://www.w3.org/2000/svg";
+var caps={
+basis:"三维基底分解定理：任意三个不共面的基向量撑起三维空间，空间任一向量对应唯一的平行六面体体对角线。",
+coplanar:"共面向量判定：底面两个不共线向量 a, b 线性组合生成的向量必落在该底面内；有纵向分量则戳出平面。",
+sum1:"四点共面系数和为 1：当且仅当 x + y + z = 1 时，由共同原点 O 出发的向量终点 P 恰好落在平面 ABC 上。"
+};
+function draw(){
+svgEl.innerHTML="";
+function s(tag,attrs,txt){
+var el=document.createElementNS(NS,tag);
+for(var k in attrs)el.setAttribute(k,attrs[k]);
+if(txt)el.textContent=txt;
+svgEl.appendChild(el);
+return el;
+}
+function ln(x1,y1,x2,y2,c,w,d){
+var a={x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5};
+if(d)a["stroke-dasharray"]=d;
+return s("line",a);
+}
+function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
+function tx(x,y,txt,c,sz,b,anch){
+var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+if(b)a["font-weight"]="bold";
+if(anch)a["text-anchor"]=anch;
+return s("text",a,txt);
+}
+if(mode==="basis"){
+tx(270,20,"平行六面体基底分解：p = x e1 + y e2 + z e3","#0f172a","12.5",true,"middle");
+ln(100,174,200,174,"#2563eb",2.5);tx(150,192,"x e1","#2563eb","11",true,"middle");
+ln(100,174,140,124,"#059669",2.5);tx(110,144,"y e2","#059669","11",true);
+ln(100,174,100,84,"#d97706",2.5);tx(82,124,"z e3","#d97706","11",true);
+ln(200,174,240,124,"#cbd5e1",1.5);ln(140,124,240,124,"#cbd5e1",1.5);
+ln(100,84,200,84,"#cbd5e1",1.5);ln(200,174,200,84,"#cbd5e1",1.5);
+ln(140,124,140,34,"#cbd5e1",1.5,"3 3");ln(100,84,140,34,"#cbd5e1",1.5);
+ln(240,124,240,34,"#cbd5e1",1.5);ln(200,84,240,34,"#cbd5e1",1.5);
+ln(100,174,240,34,"#dc2626",2.5);
+tx(180,99,"向量 p (体对角线)","#dc2626","12",true);
+s("circle",{cx:100,cy:174,r:4,fill:"#0f172a"});tx(90,184,"O","#0f172a","11",true);
+s("circle",{cx:240,cy:34,r:4,fill:"#dc2626"});tx(248,42,"P","#dc2626","11",true);
+rc(330,50,185,120,"#f8fafc","#cbd5e1",6);
+tx(345,78,"空间基底唯一性","#0f172a","12",true);
+tx(345,102,"• 三基向量必须不共面","#2563eb","11");
+tx(345,124,"• (x, y, z) 存在且唯一","#059669","11");
+tx(345,146,"• 空间维数 = 3","#dc2626","10.5",true);
+}else if(mode==="coplanar"){
+tx(270,24,"共面向量：p = x a + y b 必落在底面内","#0f172a","12.5",true,"middle");
+s("polygon",{points:"80,160 240,160 300,100 140,100",fill:"rgba(37,99,235,0.08)",stroke:"#93c5fd","stroke-width":1.5});
+tx(110,115,"平面 α","#1e3a8a","11",true);
+ln(120,145,200,145,"#2563eb",2);tx(165,160,"向量 a","#2563eb","10.5");
+ln(120,145,160,115,"#059669",2);tx(135,125,"向量 b","#059669","10.5");
+ln(120,145,240,125,"#2563eb",2.5);tx(250,130,"p (共面)","#2563eb","11",true);
+ln(120,145,180,45,"#dc2626",2.5);tx(190,50,"q (戳出平面，不共面)","#dc2626","11",true);
+rc(330,55,185,105,"#f1f5f9","#cbd5e1",6);
+tx(345,82,"共面向量充要条件","#0f172a","12",true);
+tx(345,106,"p = x a + y b ⟺ 共面","#2563eb","11",true);
+tx(345,128,"若无法线性表出","#dc2626","11");
+tx(345,148,"则 q 与 a, b 不共面","#64748b","10");
+}else if(mode==="sum1"){
+tx(270,24,"四点共面充要条件：OP = x OA + y OB + z OC ⟺ x + y + z = 1","#0f172a","12.5",true,"middle");
+s("polygon",{points:"100,140 240,150 170,60",fill:"rgba(5,150,105,0.1)",stroke:"#059669","stroke-width":1.5});
+tx(90,145,"A","#059669","11",true);tx(248,155,"B","#059669","11",true);tx(170,52,"C","#059669","11",true);
+s("circle",{cx:160,cy:120,r:4.5,fill:"#dc2626"});
+tx(170,124,"P (在平面 ABC 上)","#dc2626","11",true);
+s("circle",{cx:60,cy:175,r:4,fill:"#0f172a"});tx(50,185,"O (空间点)","#0f172a","11",true);
+ln(60,175,100,140,"#64748b",1.5,"2 2");
+ln(60,175,240,150,"#64748b",1.5,"2 2");
+ln(60,175,170,60,"#64748b",1.5,"2 2");
+ln(60,175,160,120,"#dc2626",2);
+rc(330,55,185,110,"#f8fafc","#cbd5e1",6);
+tx(345,82,"系数和恒等式","#0f172a","12",true);
+tx(345,106,"x + y + z = 1 ⟺ P 共面","#dc2626","11",true);
+tx(345,128,"• x,y,z>0 ⟹ P 在 △ABC 内","#059669","10.5");
+tx(345,148,"• 有负数 ⟹ P 在 △ABC 外","#2563eb","10.5");
+}
+if(capEl)capEl.textContent=caps[mode];
+if(window.renderMathInElement)window.renderMathInElement(capEl);
+}
+var tabs=document.querySelectorAll(".micro-box .micro-tab");
+tabs.forEach(function(tab){
+tab.addEventListener("click",function(){
+tabs.forEach(function(t){t.classList.remove("active");});
+tab.classList.add("active");
+mode=tab.getAttribute("data-mode");
+draw();
+});
+});
+draw();
+}
+function initMBasisTrapFig(){
+var svgEl=document.getElementById("m-basis-trap-fig");
+if(!svgEl)return;
+svgEl.innerHTML="";
+var NS="http://www.w3.org/2000/svg";
+function s(tag,attrs,txt){
+var el=document.createElementNS(NS,tag);
+for(var k in attrs)el.setAttribute(k,attrs[k]);
+if(txt)el.textContent=txt;
+svgEl.appendChild(el);
+return el;
+}
+function ln(x1,y1,x2,y2,c,w){return s("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5});}
+function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
+function tx(x,y,txt,c,sz,b,anch){
+var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+if(b)a["font-weight"]="bold";
+if(anch)a["text-anchor"]=anch;
+return s("text",a,txt);
+}
+rc(30,20,220,130,"#fef2f2","#fca5a5",6);
+tx(140,40,"❌ 错误直觉：两两不共线即基底","#dc2626","11.5",true,"middle");
+ln(140,95,90,118,"#dc2626",2);tx(76,120,"a","#dc2626","11",true);
+ln(140,95,190,118,"#dc2626",2);tx(198,120,"b","#dc2626","11",true);
+ln(140,95,140,64,"#dc2626",2);tx(152,68,"c","#dc2626","11",true);
+tx(140,143,"全被压在同一平面内，无法撑起空间！","#64748b","9.5",false,"middle");
+rc(290,20,220,130,"#f0fdf4","#86efac",6);
+tx(400,44,"✔ 空间真谛：第三向量必须戳出平面","#15803d","11.5",true,"middle");
+s("polygon",{points:"320,135 440,135 470,105 350,105",fill:"rgba(5,150,105,0.08)",stroke:"#86efac"});
+ln(370,120,430,120,"#2563eb",2);tx(438,124,"e1","#2563eb","10.5");
+ln(370,120,400,108,"#059669",2);tx(406,108,"e2","#059669","10.5");
+ln(370,120,370,55,"#d97706",2.5);tx(360,60,"e3 (脱离平面)","#d97706","10.5",true);
+tx(400,142,"三维立体张成，构成合法基底","#15803d","9.5",false,"middle");
+}
+initMBasisFig();
+initMBasisTrapFig();
 })();
 </script>
 </body>

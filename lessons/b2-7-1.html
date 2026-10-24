@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.2em; line-height: 1.8; overflow-wrap: anywhere; }
   .badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 14px; margin-right: 6px; }
@@ -37,6 +39,12 @@
   <p>在实数范围内，任何数的平方都不能是负数（\(x^2 \ge 0\)）。可如果解下面这个方程呢？</p>
 
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-cplx" viewBox="0 0 520 205" role="img" aria-label="抛物线y=x²-1与y=x²+1和实轴交点对比，以及实轴扩充为复平面"></svg>
+    <div class="entry-bar" id="entry-cplx-bar">
+      <button type="button" data-m="0">看 x² - 1 = 0（实轴上有 ±1）</button>
+      <button type="button" data-m="1" class="on">看 x² + 1 = 0（实轴无交点，扩充出 ±i）</button>
+    </div>
+    <div class="entry-note" id="entry-cplx-note"></div>
     <p>方程 \(x^2 + 1 = 0\) 在<b>实数范围</b>内有解吗？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>有两个实数解：\(x = \pm 1\)</button>
@@ -51,36 +59,53 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：实数与平方根（初中学过）；平面向量与坐标表示（必修第二册第 6 章）。</p>
 
-  <div class="card">
-    <p><b>虚数单位 \(i\)</b>：满足 \(i^2 = -1\) 的数。由此负数也可以开平方了，比如 \(\sqrt{-4} = 2i\)。</p>
-    <p><b>复数的代数形式 \(z = a + bi\)</b>：其中 \(a, b\) 都是实数。\(a\) 叫做<b>实部</b>，实数 \(b\) 叫做<b>虚部</b>。</p>
-    <p>例：\(z = 3 + 2i\)，实部是 \(3\)，虚部是 \(2\)（<b>特别注意：虚部是 \(2\)，不是 \(2i\)！</b>）。</p>
+  <div class="micro-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="badge-pill">直觉微图解</span>
+      <div class="toggles" id="m-comp-bar" style="margin:0" role="group" aria-label="复数直观模式切换">
+        <button class="btn ghost active" type="button" data-comp="axis">复平面与对应</button>
+        <button class="btn ghost" type="button" data-comp="rot">乘 i 的旋转本质</button>
+        <button class="btn ghost" type="button" data-comp="mod">模长与共轭镜像</button>
+      </div>
+    </div>
+    <svg class="micro-fig" id="m-comp-fig" viewBox="0 0 520 180" role="img" aria-label="复数复平面与几何意义图"></svg>
+    <p class="small" id="m-comp-status" style="margin:6px 0 0 0;min-height:20px;color:var(--text-dim)"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-ok">分类判定 ①</span><b>实数、虚数与纯虚数</b></div>
+      <p>设 \(z = a + bi\)（\(a, b \in \mathbf{R}\)）：<br>
+      • \(b = 0 \implies\) <b>实数</b>（包括 \(0 = 0 + 0i\)！）；<br>
+      • \(b \ne 0 \implies\) <b>虚数</b>；<br>
+      • \(a = 0\) 且 \(b \ne 0 \implies\) <b>纯虚数</b>（原点 \(0\) 是实数绝不是纯虚数！）。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-no">本质区别 ②</span><b>实数有一维全序，复数绝不能比大小</b></div>
+      <p><b>无大小顺序</b>：实数在数轴上能排大小；复数是二维平面的点，写出 \(2+3i &gt; 1+2i\) 毫无数学意义！但复数的<b>模长 \(|z|\) 是非负实数</b>，可以比较大小。</p>
+    </div>
   </div>
 
   <div class="card">
-    <p><b>复数的分类</b>：设 \(z = a + bi\)（\(a, b \in \mathbf{R}\)）：</p>
-    <ul>
-      <li>\(b = 0\) 时，\(z = a\) 是<b>实数</b>；</li>
-      <li>\(b \ne 0\) 时，\(z\) 叫做<b>虚数</b>；</li>
-      <li>\(a = 0\) 且 \(b \ne 0\) 时，\(z = bi\) 叫做<b>纯虚数</b>。</li>
-    </ul>
-    <p>例：\(5\) 是实数；\(3 + 2i\) 是虚数；\(2i\) 是纯虚数；\(0 = 0 + 0i\) 的虚部是 \(0\)，所以 <b>\(0\) 是实数，不是纯虚数</b>。</p>
+    <p><b>虚数单位 \(i\)</b>：规定 \(i^2 = -1\)。负数由此可以开平方，例如 \(\sqrt{-4} = 2i\)。</p>
+    <p><b>复数的代数形式 \(z = a + bi\)</b>：\(a, b \in \mathbf{R}\)。\(a\) 叫做<b>实部</b>，实数 \(b\) 叫做<b>虚部</b>（<b>特别注意：虚部是实数 \(b\)，绝不是 \(bi\)！</b>）。</p>
   </div>
 
   <div class="card">
-    <p><b>模长 \(|z|\)</b>：复数 \(z = a + bi\) 对应的点到原点的距离，公式为 \(|z| = \sqrt{a^2 + b^2}\)。模长是一个非负实数。</p>
-    <p>例：\(z = 3 + 4i\)，模长 \(|z| = \sqrt{3^2 + 4^2} = \sqrt{25} = 5\)。</p>
+    <p><b>复平面与向量对应</b>：横轴为<b>实轴</b>，纵轴为<b>虚轴</b>。复数 \(z = a + bi\) 一一对应复平面内的点 \(Z(a, b)\)，也一一对应平面向量 \(\overrightarrow{OZ} = (a, b)\)。</p>
   </div>
 
-  <h3>2. 复数相等与分类</h3>
-  <p>两个复数什么时候算「相等」？就像平面上的两个点坐标一样，必须实部对实部、虚部对虚部分别相等：</p>
-  <div class="key" style="text-align:center">
-    设 \(a, b, c, d \in \mathbf{R}\)，\(a + bi = c + di \iff a = c \text{ 且 } b = d\)。
+  <h3>2. 核心公式与复数相等定理</h3>
+  <div class="key">
+    ① <b>复数代数式</b>：\(z = a + bi\)（\(a, b \in \mathbf{R}\)，实部 \(a\)，虚部 \(b\) 为实数）；<br>
+    ② <b>复数相等充要条件</b>：\(a + bi = c + di \iff a = c \text{ 且 } b = d\)（实部对实部，虚部对虚部，一个等式拆两个方程）；<br>
+    ③ <b>模长公式</b>：\(|z| = \sqrt{a^2 + b^2} = |\overrightarrow{OZ}|\)（几何意义为点到原点的欧氏距离，非负实数）；<br>
+    ④ <b>共轭复数</b>：\(\bar{z} = a - bi\)（复平面关于实轴上下镜像，且 \(z\bar{z} = a^2 + b^2 = |z|^2\)）。
   </div>
-  <p>这个性质非常强大：<b>一个复数等式，能拆成实部、虚部两个独立的实数方程</b>。求待定字母时，先整理成 \((\dots) + (\dots)i = 0\) 的形式。</p>
 
   <div class="card">
     <p class="small">例 1（复数相等与方程）</p>
@@ -107,24 +132,42 @@
       <p>检验：将 \(x = 2\) 代入得虚部为 \(2 + 1 = 3 \ne 0\)，符合条件。选 C 的同学忽略了纯虚数的虚部不能为 \(0\)：若 \(x = -1\)，复数为 \(-6 + 0i = -6\)，是实数而不是纯虚数！</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-pure"></div>
 
-  <h3>3. 复数的几何意义与模长</h3>
-  <p>在数轴上，每一个实数对应数轴上的一个点；而复数包含两个实数分量（实部与虚部），正好一一对应二维平面直角坐标系中的点：</p>
-  <ul>
-    <li>横轴叫做<b>实轴</b>，纵轴叫做<b>虚轴</b>，建立的坐标系叫做<b>复平面</b>。</li>
-    <li>复数 \(z = a + bi\) 一一对应点 \(Z(a, b)\)，也一一对应向量 \(\vec{OZ} = (a, b)\)。</li>
-    <li>实轴上的点 \((a, 0)\) 表示实数 \(a\)；虚轴上除去原点的点 \((0, b)\) 表示纯虚数 \(bi\)；原点 \((0, 0)\) 表示实数 \(0\)。</li>
-  </ul>
-  <div class="key" style="text-align:center">
-    复数 \(z = a + bi\) 的模长就是向量 \(\vec{OZ}\) 的长度：\(|z| = \sqrt{a^2 + b^2}\)。
-  </div>
-
+  <h3>3. 典型例题：三步思维链精讲</h3>
   <div class="card">
-    <p class="small">例 2（几何点与模长计算）</p>
-    <p>求复数 \(z = -3 + 4i\) 在复平面内对应的点坐标、所在象限及模长 \(|z|\)。</p>
-    <p>解：实部 \(a = -3\)，虚部 \(b = 4\)。</p>
-    <p>① 对应的点坐标为 \(Z(-3, 4)\)，横负纵正，位于第二象限；</p>
-    <p>② 模长 \(|z| = \sqrt{(-3)^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = 5\)。</p>
+    <p class="small"><b>例 2（高频综合·参数分类与象限判定）</b></p>
+    <p>已知复数 \(z = (m^2 - m - 2) + (m^2 - 1)i\)（\(m \in \mathbf{R}\)）。<br>
+    ① 若 \(z\) 为实数，求 \(m\) 的值；<br>
+    ② 若 \(z\) 为纯虚数，求 \(m\) 的值；<br>
+    ③ 若 \(z\) 对应复平面上的点位于第二象限，求 \(m\) 的取值范围。</p>
+    <div class="think-steps">
+      <div class="step-card">
+        <div class="step-badge">👀 第一眼·破题信号</div>
+        <div class="step-text">看到「实数/纯虚数/象限」关键词 → <b>核心破题信号：必须先因式分解拆出实部 \(a(m)\) 与虚部 \(b(m)\)，列对应方程与不等式组</b>！</div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🔧 第二步·套公式拆解</div>
+        <div class="step-text">
+          拆分实部与虚部：实部 \(a = m^2 - m - 2 = (m-2)(m+1)\)，虚部 \(b = m^2 - 1 = (m-1)(m+1)\)；<br>
+          ① 若 \(z\) 为实数 \(\iff\) 虚部 \(b = 0 \implies (m-1)(m+1) = 0 \implies\) <b>\(m = 1\) 或 \(m = -1\)</b>；<br>
+          ② 若 \(z\) 为纯虚数 \(\iff\) 实部 \(a = 0\) 且 虚部 \(b \ne 0\)：<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;由 \(a = 0 \implies m = 2\) 或 \(m = -1\)；但 \(m = -1\) 会导致虚部 \(b = 0\)（\(z=0\) 成为实数），必须舍去！<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;故唯一解为 <b>\(m = 2\)</b>（此时 \(z = 3i\)）；<br>
+          ③ 位于第二象限 \(\iff\) 实部 \(a &lt; 0\) 且 虚部 \(b &gt; 0\)：<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;\((m-2)(m+1) &lt; 0 \implies -1 &lt; m &lt; 2\)；<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;\(m^2 - 1 &gt; 0 \implies m &gt; 1\) 或 \(m &lt; -1\)；<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;求交集得 <b>\(1 &lt; m &lt; 2\)</b>。
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🛡️ 第三步·必查防坑点</div>
+        <div class="step-text">
+          ① 纯虚数判定是「实部为零 <b>且</b> 虚部非零」双重条件，漏掉虚部非零检验必扣分；<br>
+          ② 象限点不含坐标轴，不等式严格取大于号或小于号，不能带等号。
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="card predict" data-id="try-2" data-answer="A">
@@ -137,28 +180,59 @@
     </div>
     <div class="reveal">
       <p><b>A</b>。由模长公式：\(|z| = \sqrt{a^2 + (-2)^2} = \sqrt{a^2 + 4} = \sqrt{13}\)，两边平方得 \(a^2 + 4 = 13 \implies a^2 = 9 \implies a = \pm 3\)。</p>
-      <p>因为点落在第四象限，横坐标（实部）必须为正，即 \(a > 0\)，因此 \(a = 3\)。选 C 的同学漏看了象限对符号的正负约束。</p>
+      <p>因为点落在第四象限，横坐标（实部）必须为正，即 \(a &gt; 0\)，因此 \(a = 3\)。选 C 的同学漏看了象限对符号的正负约束。</p>
+    </div>
+  </div>
+  <div class="vid" data-video="ex-eq"></div>
+
+  <h3>4. 这三种情况最容易翻车</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><b>把虚部错误写成带 i 的项</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>认为复数 \(z = 3 + 4i\) 的虚部是 \(4i\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>实部是实数 \(3\)，虚部是实数 \(4\)！实部和虚部本身都是实数，<b>绝不带字母 \(i\)</b>。</p>
+        </div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>虚数妄图比较大小</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>写出 \(3i &gt; 2i\) 或 \(2 + 3i &gt; 1 + 2i\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>复数集是二维点集，<b>虚数绝无大小顺序</b>！只有实数和模长 \(|3i| &gt; |2i|\) 才能比大小。</p>
+        </div>
+      </div>
+      <svg class="micro-fig" id="m-comp-trap-fig" viewBox="0 0 340 160" role="img" aria-label="虚数不可比较大小反例图" style="margin-top:8px"></svg>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><b>纯虚数漏检「虚部不为 0」</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>只令实部等于 \(0\)，误把 \(0 = 0 + 0i\) 当作纯虚数。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>\(0\) 的虚部也是 \(0\)，所以 \(0\) 是实数！纯虚数必须同时满足<b>实部为 \(0\) 且 虚部不为 \(0\)</b>。</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <h3>4. 用之前，记清这四条红线</h3>
-  <p>考试中最容易失分的，就是专题卡 M2-07-A 划出的这四条边界：</p>
-  <ol>
-    <li><b>虚部是实数 \(b\)，不是 \(bi\)</b>：<br>
-      <span class="small">反例：复数 \(z = 3 + 4i\) 的虚部是实数 \(4\)，回答「虚部是 \(4i\)」判错。实部和虚部本身都是实数。</span></li>
-    <li><b>纯虚数必须同时满足「实部为 \(0\) 且 虚部不为 \(0\)」</b>：<br>
-      <span class="small">反例：\(0 = 0 + 0i\) 的实部是 \(0\)，但虚部也是 \(0\)，所以 \(0\) 是实数，<b>绝不是纯虚数</b>！原点 \((0, 0)\) 在虚轴上，但它代表实数 \(0\)。</span></li>
-    <li><b>虚数不能比较大小</b>：<br>
-      <span class="small">反例：写出 \(2 + 3i > 1 + 2i\) 或 \(3i > 2i\) 是无意义的错误。复数集中虚数没有大小顺序，只有实数才能比大小；但它们的<b>模长</b>是实数，可以比较大小（如 \(|3i| > |2i|\)）。</span></li>
-    <li><b>用复数相等拆方程时，前提必须是实系数</b>：<br>
-      <span class="small">反例：若没有 \(a, b \in \mathbf{R}\) 的前提，由 \(a + bi = 0\) 不能推导出 \(a = 0, b = 0\)。例如当 \(a = i, b = -1\) 时，\(a + bi = i + (-1)i = 0\)，但 \(a, b\) 都不为 \(0\)。</span></li>
-  </ol>
-
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>共轭复数</b>：实部相等、虚部互为相反数的两个复数叫互为<b>共轭复数</b>，记作 \(\bar{z} = a - bi\)。它们在复平面上的点关于实轴对称，并且乘积是一个非负实数：\(z\bar{z} = (a + bi)(a - bi) = a^2 + b^2 = |z|^2\)。这是下一节复数除法分母实数化的核心工具。</p>
-    <p><b>向量三角不等式</b>：复数的加减在几何上对应向量的加减，因此模长满足 \(||z_1| - |z_2|| \le |z_1 \pm z_2| \le |z_1| + |z_2|\)。当两个向量共线同向时取右侧等号，反向时取左侧等号。</p>
-    <p><b>复数的三角形式（选学）</b>：设点 \(Z(a, b)\) 到原点的距离为 \(r = |z|\)，从正实轴到 \(\vec{OZ}\) 的角为 \(\theta\)，则 \(z = r(\cos\theta + i\sin\theta)\)。乘法对应「模长相乘、角相加」，在几何上对应一次平面旋转与拉伸。</p>
+    <p><b>共轭复数与模的联系</b>：实部相等、虚部互为相反数的两复数互为共轭，记作 \(\bar{z} = a - bi\)。它们在复平面上关于实轴对称，且乘积为实数：\(z\bar{z} = (a+bi)(a-bi) = a^2 + b^2 = |z|^2\)。这是下一节除法分母实数化的核心武器。</p>
+    <p><b>复数加减的向量本质</b>：复数加减对应平面向量加减，模长满足三角不等式：\(||z_1| - |z_2|| \le |z_1 \pm z_2| \le |z_1| + |z_2|\)。几何上反映三角形两边之和大于第三边、两边之差小于第三边。</p>
   </details>
 </section>
 
@@ -399,7 +473,7 @@
     svg("line", { x1: OX, y1: toY(MIN_B) + 20, x2: OX, y2: toY(MAX_B) - 24, stroke: fg, "stroke-width": 1.5, "marker-end": "url(#arrow-axis)" }, fig);
 
     // 轴端文字
-    svg("text", { x: toX(MAX_A) + 28, y: OY + 16, "font-size": 13, "font-weight": "700", fill: fg }, fig).textContent = "实轴 (Re)";
+    svg("text", { x: 552, y: OY - 8, "font-size": 13, "font-weight": "700", "text-anchor": "end", fill: fg }, fig).textContent = "实轴 (Re)";
     svg("text", { x: OX + 8, y: toY(MAX_B) - 16, "font-size": 13, "font-weight": "700", fill: fg }, fig).textContent = "虚轴 (Im)";
     svg("text", { x: OX - 14, y: OY + 18, "font-size": 14, fill: muted }, fig).textContent = "O";
 
@@ -407,12 +481,16 @@
     for (var ta = MIN_A; ta <= MAX_A; ta += 2) {
       if (ta === 0) continue;
       svg("line", { x1: toX(ta), y1: OY - 3, x2: toX(ta), y2: OY + 3, stroke: fg, "stroke-width": 1 }, fig);
-      svg("text", { x: toX(ta), y: OY + 16, "font-size": 12, "text-anchor": "middle", fill: muted }, fig).textContent = String(ta);
+      if (!(curB !== 0 && Math.abs(ta - curA) < 0.35)) {
+        svg("text", { x: toX(ta), y: OY + 16, "font-size": 12, "text-anchor": "middle", fill: muted }, fig).textContent = String(ta);
+      }
     }
     for (var tb = MIN_B; tb <= MAX_B; tb += 2) {
       if (tb === 0) continue;
       svg("line", { x1: OX - 3, y1: toY(tb), x2: OX + 3, y2: toY(tb), stroke: fg, "stroke-width": 1 }, fig);
-      svg("text", { x: OX - 8, y: toY(tb) + 4, "font-size": 12, "text-anchor": "end", fill: muted }, fig).textContent = String(tb);
+      if (!(curA !== 0 && Math.abs(tb - curB) < 0.35)) {
+        svg("text", { x: OX - 8, y: toY(tb) + 4, "font-size": 12, "text-anchor": "end", fill: muted }, fig).textContent = String(tb);
+      }
     }
 
     var zx = toX(curA), zy = toY(curB);
@@ -555,9 +633,261 @@
   bindBtn("btn-zero", 0, 0);
   bindBtn("btn-quad2", -3, 2);
 
-  document.addEventListener("DOMContentLoaded", function () { draw(); });
+  /* ================= 0 从例子进入：抛物线与复平面扩充 ================= */
+  var ecSvg = document.getElementById("entry-cplx"), ecBar = document.getElementById("entry-cplx-bar"), ecNote = document.getElementById("entry-cplx-note");
+  var ecMode = 1;
+  function ecDraw(m) {
+    ecMode = m;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), noS = css("--no-soft");
+    ecSvg.innerHTML = "";
+    // 左图：抛物线 y = x² - 1 vs y = x² + 1
+    var ox = 125, oy = 138, ux = 38, uy = 30;
+    svg("line", { x1: 28, y1: oy, x2: 222, y2: oy, stroke: fg, "stroke-width": 1.6 }, ecSvg);
+    svg("line", { x1: ox, y1: 188, x2: ox, y2: 18, stroke: fg, "stroke-width": 1.6 }, ecSvg);
+    svg("text", { x: 218, y: oy + 16, "text-anchor": "end", fill: mu, "font-size": 12.5 }, ecSvg).textContent = "实轴 x";
+    svg("text", { x: ox + 8, y: 28, fill: mu, "font-size": 12.5 }, ecSvg).textContent = "y";
+
+    var cShift = m === 0 ? -1 : 1, colL = m === 0 ? ca : no;
+    var d = "";
+    for (var i = -20; i <= 20; i++) {
+      var x = i / 10, y = x * x + cShift;
+      var sx = ox + x * ux, sy = oy - y * uy;
+      if (sy >= 16 && sy <= 190) d += (d ? "L" : "M") + sx.toFixed(1) + " " + sy.toFixed(1);
+    }
+    svg("path", { d: d, fill: "none", stroke: colL, "stroke-width": 2.8 }, ecSvg);
+    if (m === 0) {
+      [-1, 1].forEach(function (r) {
+        svg("circle", { cx: ox + r * ux, cy: oy, r: 5.5, fill: ca, stroke: card, "stroke-width": 1.8 }, ecSvg);
+        svg("text", { x: ox + r * ux, y: oy + 20, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13.5 }, ecSvg).textContent = r > 0 ? "+1" : "−1";
+      });
+      svg("text", { x: ox, y: 196, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13.5 }, ecSvg).textContent = "y = x² − 1 交实轴于 ±1";
+    } else {
+      svg("circle", { cx: ox, cy: oy - uy, r: 5, fill: no }, ecSvg);
+      svg("line", { x1: ox - 45, y1: oy - uy, x2: ox + 45, y2: oy - uy, stroke: no, "stroke-dasharray": "4 3" }, ecSvg);
+      svg("text", { x: ox + 10, y: oy - uy + 15, fill: no, "font-weight": 700, "font-size": 12.5 }, ecSvg).textContent = "最低 (0,1) > 0";
+      svg("text", { x: ox, y: 196, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 13.5 }, ecSvg).textContent = "y = x² + 1 悬空（0个实根）";
+    }
+
+    // 右图：数轴扩充到二维复平面
+    var rx = 380, ry = 112, ru = 44;
+    svg("rect", { x: 256, y: 16, width: 246, height: 176, rx: 10, fill: m === 0 ? okS : card, stroke: ln, "stroke-width": 1.4 }, ecSvg);
+    svg("line", { x1: 276, y1: ry, x2: 484, y2: ry, stroke: fg, "stroke-width": 1.8 }, ecSvg);
+    svg("text", { x: 482, y: ry + 18, "text-anchor": "end", fill: fg, "font-weight": 700, "font-size": 13 }, ecSvg).textContent = "实轴 R";
+    [-1, 1].forEach(function (r) {
+      svg("circle", { cx: rx + r * ru, cy: ry, r: m === 0 ? 6 : 4, fill: m === 0 ? ca : mu }, ecSvg);
+      svg("text", { x: rx + r * ru, y: ry + 20, "text-anchor": "middle", fill: m === 0 ? ca : mu, "font-weight": 700, "font-size": 13.5 }, ecSvg).textContent = r > 0 ? "1" : "−1";
+    });
+    if (m === 1) {
+      svg("line", { x1: rx, y1: 176, x2: rx, y2: 34, stroke: cb, "stroke-width": 2.2, "stroke-dasharray": "5 3" }, ecSvg);
+      svg("text", { x: rx + 10, y: 42, fill: cb, "font-weight": 700, "font-size": 13 }, ecSvg).textContent = "虚轴 Im";
+      [1, -1].forEach(function (im) {
+        var py = ry - im * ru;
+        svg("circle", { cx: rx, cy: py, r: 6.5, fill: cb, stroke: card, "stroke-width": 2 }, ecSvg);
+        svg("text", { x: rx - 12, y: py + 5, "text-anchor": "end", fill: cb, "font-weight": 700, "font-size": 14.5 }, ecSvg).textContent = im > 0 ? "+i" : "−i";
+      });
+      svg("text", { x: rx, y: 184, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13 }, ecSvg).textContent = "跳出实数轴 → 规定 i² = −1";
+    } else {
+      svg("text", { x: rx, y: 62, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 14 }, ecSvg).textContent = "一维实数轴已够用：";
+      svg("text", { x: rx, y: 86, "text-anchor": "middle", fill: fg, "font-size": 13.5 }, ecSvg).textContent = "(±1)² = 1";
+    }
+
+    [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    ecNote.innerHTML = m === 0
+      ? "方程 <b>x² − 1 = 0</b>：抛物线穿过实轴，在实数轴上直接找到两个实根 <b>x = ±1</b>。"
+      : "方程 <b>x² + 1 = 0</b>：实数平方总 ≥ 0，抛物线悬在实轴上方<b>无交点</b>！引入虚数单位 <b>i（i² = −1）</b>，数系扩充到二维复平面。";
+  }
+  [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ecDraw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecDraw(ev.detail.choice === "A" ? 0 : 1);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecDraw(1);
+  });
+
+  function initStep2() {
+    var fig = document.getElementById("m-comp-fig");
+    var bar = document.getElementById("m-comp-bar");
+    var status = document.getElementById("m-comp-status");
+    var trap = document.getElementById("m-comp-trap-fig");
+    if (!fig || !bar) return;
+
+    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var ca = isDark ? "#38bdf8" : "#0284c7";
+    var cb = isDark ? "#f59e0b" : "#d97706";
+    var cc = isDark ? "#10b981" : "#059669";
+    var cd = isDark ? "#ec4899" : "#db2777";
+    var mut = isDark ? "#94a3b8" : "#64748b";
+    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+    var border = isDark ? "#334155" : "#e2e8f0";
+
+    function sEl(parent, tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      parent.appendChild(el);
+      return el;
+    }
+
+    function sArr(parent, x1, y1, x2, y2, color, w, dashed) {
+      var dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+      var lineAttrs = { x1: x1, y1: y1, x2: x2, y2: y2, stroke: color, "stroke-width": w || 2.5 };
+      if (dashed) lineAttrs["stroke-dasharray"] = dashed;
+      sEl(parent, "line", lineAttrs);
+      if (len > 8) {
+        var ux = dx / len, uy = dy / len, hl = Math.min(10, len * 0.35), hw = hl * 0.5;
+        var bx = x2 - hl * ux, by = y2 - hl * uy;
+        var d = "M " + x2 + " " + y2 + " L " + (bx - hw * uy) + " " + (by + hw * ux) + " L " + (bx + hw * uy) + " " + (by - hw * ux) + " Z";
+        sEl(parent, "path", { d: d, fill: color });
+      }
+    }
+
+    function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+      var t = sEl(parent, "text", {
+        x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
+        "font-weight": fw || 400, "text-anchor": anchor || "start"
+      });
+      t.textContent = text;
+      return t;
+    }
+
+    function drawComp(mode) {
+      fig.innerHTML = "";
+      var cx = 105, cy = 110;
+      if (mode === "axis") {
+        sTxt(fig, 24, 22, "【复平面】实轴 x + 虚轴 y，一一对应点 Z(a, b)", ca, 12, 700);
+        // Axes
+        sArr(fig, cx - 75, cy, cx + 105, cy, mut, 1.5);
+        sTxt(fig, cx + 108, cy + 4, "实轴(Re)", ca, 10.5, 700);
+        sArr(fig, cx, cy + 52, cx, cy - 64, mut, 1.5);
+        sTxt(fig, cx - 6, cy - 56, "虚轴(Im)", cb, 10.5, 700, "end");
+
+        // Point Z(3, 2) -> (cx + 56, cy - 36)
+        sEl(fig, "line", { x1: cx + 56, y1: cy, x2: cx + 56, y2: cy - 36, stroke: mut, "stroke-dasharray": "2 2", "stroke-width": 1 });
+        sEl(fig, "line", { x1: cx, y1: cy - 36, x2: cx + 56, y2: cy - 36, stroke: mut, "stroke-dasharray": "2 2", "stroke-width": 1 });
+        sArr(fig, cx, cy, cx + 56, cy - 36, cc, 3);
+        sEl(fig, "circle", { cx: cx + 56, cy: cy - 36, r: 4.5, fill: cc });
+        sTxt(fig, cx + 56, cy - 44, "Z(a,b) ↔ a+bi", cc, 11.5, 700, "middle");
+        sTxt(fig, cx + 28, cy + 14, "实部 a", ca, 11, 700, "middle");
+        sTxt(fig, cx - 8, cy - 18, "虚部 b", cb, 11, 700, "end");
+
+        sTxt(fig, 268, 55, "• 实轴上的点 (a, 0) 代表实数 a", ca, 11.5, 700);
+        sTxt(fig, 268, 85, "• 虚轴点 (0, b) (b≠0) 代表纯虚数 bi", cb, 11.5, 700);
+        sTxt(fig, 268, 115, "• 原点 (0, 0) 代表实数 0，不是纯虚数！", cd, 11.5, 700);
+        sTxt(fig, 268, 145, "• 向量 OZ = (a, b)，模长 |z| = √(a²+b²)", cc, 11.5);
+
+        status.textContent = "复平面对应：代数形式 a + bi 与复平面上的点 (a, b) 及向量 OZ 一一对应。";
+      } else if (mode === "rot") {
+        sTxt(fig, 30, 24, "【几何乘法】乘 i 的本质：逆时针旋转 90°！", cb, 12.5, 700);
+        // Unit circle
+        var r = 55;
+        sEl(fig, "circle", { cx: cx, cy: cy, r: r, fill: "none", stroke: mut, "stroke-dasharray": "3 2", "stroke-width": 1 });
+        sArr(fig, cx - 75, cy, cx + 75, cy, mut, 1.2);
+        sArr(fig, cx, cy + 70, cx, cy - 70, mut, 1.2);
+
+        // 1 at (cx + r, cy)
+        sEl(fig, "circle", { cx: cx + r, cy: cy, r: 4, fill: ca });
+        sTxt(fig, cx + r + 8, cy + 4, "1", ca, 12, 700);
+
+        // i at (cx, cy - r)
+        sEl(fig, "circle", { cx: cx, cy: cy - r, r: 4, fill: cb });
+        sTxt(fig, cx - 8, cy - r - 6, "i", cb, 12, 700, "end");
+
+        // -1 at (cx - r, cy)
+        sEl(fig, "circle", { cx: cx - r, cy: cy, r: 4, fill: cd });
+        sTxt(fig, cx - r - 16, cy + 4, "-1", cd, 12, 700);
+
+        // curved arrows
+        sEl(fig, "path", { d: "M " + (cx + r - 5) + " " + (cy - 20) + " A " + r + " " + r + " 0 0 0 " + (cx + 20) + " " + (cy - r + 5), fill: "none", stroke: cb, "stroke-width": 2 });
+        sTxt(fig, cx + 45, cy - 45, "× i (+90°)", cb, 11, 700);
+
+        sEl(fig, "path", { d: "M " + (cx - 20) + " " + (cy - r + 5) + " A " + r + " " + r + " 0 0 0 " + (cx - r + 5) + " " + (cy - 20), fill: "none", stroke: cd, "stroke-width": 2 });
+        sTxt(fig, cx - 45, cy - 45, "再 × i (+90°)", cd, 11, 700, "end");
+
+        sTxt(fig, 260, 55, "• 1 × i = i (从正实轴逆时针转 90° 到虚轴)", cb, 12, 700);
+        sTxt(fig, 260, 85, "• i × i = i² = -1 (再转 90°，直接落到负实轴！)", cd, 12, 700);
+        sTxt(fig, 260, 115, "• (-1) × i = -i (转到负虚轴)", mut, 12);
+        sTxt(fig, 260, 145, "• (-i) × i = -i² = 1 (转四次 360° 回到原点 1)", cc, 12, 700);
+
+        status.textContent = "i 的几何意义：乘 i 就是逆时针旋转 90°。连乘两次旋转 180° 正好得到 -1，数系破壁！";
+      } else {
+        // mode === "mod"
+        sTxt(fig, 30, 24, "【模长与共轭】|z| = √(a² + b²)，共轭复数 z̄ = a - bi 关于实轴镜像", cc, 12.5, 700);
+        sArr(fig, cx - 60, cy, cx + 90, cy, mut, 1.2);
+        sArr(fig, cx, cy + 65, cx, cy - 65, mut, 1.2);
+
+        // z = 2 + 1.5i -> (cx + 50, cy - 35)
+        sArr(fig, cx, cy, cx + 50, cy - 35, cc, 2.5);
+        sEl(fig, "circle", { cx: cx + 50, cy: cy - 35, r: 4, fill: cc });
+        sTxt(fig, cx + 58, cy - 38, "z = a + bi", cc, 12, 700);
+
+        // z_bar = 2 - 1.5i -> (cx + 50, cy + 35)
+        sArr(fig, cx, cy, cx + 50, cy + 35, cd, 2.5);
+        sEl(fig, "circle", { cx: cx + 50, cy: cy + 35, r: 4, fill: cd });
+        sTxt(fig, cx + 58, cy + 42, "z̄ = a - bi (共轭镜像)", cd, 12, 700);
+
+        // mirror dashed line
+        sEl(fig, "line", { x1: cx + 50, y1: cy - 35, x2: cx + 50, y2: cy + 35, stroke: mut, "stroke-dasharray": "2 2", "stroke-width": 1.2 });
+
+        sTxt(fig, 270, 55, "• 模长 |z| = |z̄| = √(a² + b²) (非负实数)", cc, 12, 700);
+        sTxt(fig, 270, 85, "• 核心性质：z · z̄ = a² + b² = |z|²", cd, 12, 700);
+        sTxt(fig, 270, 115, "• 两共轭之和 2a 为实数，之差 2bi 为纯虚数", ca, 12);
+        sTxt(fig, 270, 145, "• 几何：上下关于实轴对称，模长相等辐角相反", mut, 12);
+
+        status.textContent = "共轭与模长：共轭复数关于实轴上下镜像对称，乘积 z·z̄ = |z|² 恒为非负实数。";
+      }
+    }
+
+    function drawTrap() {
+      if (!trap) return;
+      trap.innerHTML = "";
+      sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
+      sTxt(trap, 170, 26, "认知红线：复数（虚数）绝不能比大小！", cd, 12, 700, "middle");
+
+      var ox = 72, oy = 122;
+      sArr(trap, ox - 36, oy, ox + 56, oy, mut, 1);
+      sArr(trap, ox, oy + 20, ox, oy - 74, cb, 1.5);
+      sTxt(trap, ox - 6, oy - 64, "虚轴", cb, 10, 700, "end");
+
+      sEl(trap, "circle", { cx: ox, cy: oy - 32, r: 4, fill: cb });
+      sTxt(trap, ox + 8, oy - 28, "2i", cb, 11, 700);
+
+      sEl(trap, "circle", { cx: ox, cy: oy - 58, r: 4, fill: cb });
+      sTxt(trap, ox + 8, oy - 54, "3i", cb, 11, 700);
+
+      // Red cross and warning
+      sTxt(trap, 220, 60, "3i > 2i", cd, 14, 700, "middle");
+      sEl(trap, "line", { x1: 185, y1: 45, x2: 255, y2: 75, stroke: cd, "stroke-width": 3 });
+      sEl(trap, "line", { x1: 185, y1: 75, x2: 255, y2: 45, stroke: cd, "stroke-width": 3 });
+
+      sTxt(trap, 220, 95, "错误！虚数没有大小顺序", cd, 11, 700, "middle");
+      sTxt(trap, 220, 115, "只有模长 |3i| > |2i| 才能比！", cc, 11, 700, "middle");
+    }
+
+    var currMode = "axis";
+    [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.onclick = function () {
+        var m = b.getAttribute("data-comp");
+        if (m) {
+          currMode = m;
+          [].forEach.call(bar.querySelectorAll("button"), function (btn) {
+            btn.classList.toggle("active", btn === b);
+          });
+          drawComp(currMode);
+        }
+      };
+    });
+
+    drawComp("axis");
+    drawTrap();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () { ecDraw(1); draw(); initStep2(); });
+  if (document.readyState !== "loading") { initStep2(); }
   if (window.matchMedia) {
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw(); });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ecDraw(ecMode); draw(); initStep2(); });
   }
 })();
 </script>

@@ -81,7 +81,102 @@
   details.more summary { cursor: pointer; font-weight: 600; font-size: 14.5px; padding: 2px 0; }
   .lab-out { font-size: 15px; margin: 8px 0; line-height: 1.75; min-height: 3.2em; }
   .ctrl button.on { background: var(--a); border-color: var(--a); color: #fff; }
+
+  /* 全景知识图谱（73节 DAG + 四大主线泳道） */
+  .kg-dash {
+    display: flex; flex-direction: column; gap: 10px;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 12px 16px; margin: 12px 0; box-shadow: 0 2px 8px rgba(26,40,34,.04);
+  }
+  .kg-dash-row {
+    display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between;
+  }
+  .kg-legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px; }
+  .kg-leg-pill {
+    display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px;
+    border-radius: 999px; font-weight: 600; font-size: 12.5px; border: 1.5px solid transparent;
+  }
+  .kg-leg-pill.sel { background: var(--hl-soft); border-color: var(--b); color: var(--fg); }
+  .kg-leg-pill.pre { background: rgba(62,92,118,.12); border-color: var(--c); color: var(--c); }
+  .kg-leg-pill.unl { background: var(--ok-soft); border-color: var(--a); color: var(--a); }
+  .kg-leg-pill.weak { background: var(--no-soft); border-color: var(--no); color: var(--no); }
+  .kg-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; vertical-align: middle; }
+  .kg-quick-bar {
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+    padding-top: 8px; border-top: 1px dashed var(--line);
+  }
+  .kg-quick-bar .w-rel {
+    border-radius: 999px; padding: 3px 11px; font-size: 12.5px; font-weight: 600; transition: all .15s;
+  }
+  .kg-quick-bar .w-rel.on {
+    background: var(--hl-soft); border-color: var(--b); color: var(--fg); box-shadow: 0 0 0 1.5px var(--hl);
+  }
+  .kg-svg-wrap {
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 14px;
+    padding: 10px; margin: 12px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    box-shadow: 0 4px 16px rgba(26,40,34,.05);
+  }
+  .kg-svg-wrap svg { display: block; width: 100%; min-width: 820px; height: auto; user-select: none; }
+  .kg-svg-wrap svg g[data-map-pick] rect { transition: transform .12s ease, filter .12s ease; }
+  .kg-svg-wrap svg g[data-map-pick]:hover { opacity: 1 !important; }
+  .kg-inspector {
+    background: var(--card); border: 1.5px solid var(--a); border-radius: 14px;
+    padding: 16px 18px; margin: 14px 0; scroll-margin-top: 64px;
+    box-shadow: 0 4px 14px rgba(47,122,86,.07);
+  }
+  .kg-ins-hd {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    padding-bottom: 10px; margin-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .kg-ins-title { font-size: 19px; font-weight: 700; margin: 0; }
+  .kg-flow-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;
+  }
+  @media (max-width: 680px) {
+    .kg-flow-grid { grid-template-columns: 1fr; }
+  }
+  .kg-flow-box {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px;
+  }
+  .kg-flow-box.pre-box { border-left: 3.5px solid var(--c); }
+  .kg-flow-box.unl-box { border-left: 3.5px solid var(--a); }
+  .kg-flow-lbl {
+    font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 6px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .kg-chain-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13.5px; }
+  .kg-sec-btn {
+    border: 1px solid var(--line); background: var(--card); color: var(--fg);
+    border-radius: 7px; padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; transition: all .15s;
+  }
+  .kg-sec-btn:hover { border-color: var(--a); color: var(--a); font-weight: 600; transform: translateY(-1px); }
+  .kg-sec-btn.prereq { border-color: rgba(62,92,118,.4); color: var(--c); background: rgba(62,92,118,.08); font-weight: 600; }
+  .kg-sec-btn.unlock { border-color: rgba(47,122,86,.4); color: var(--a); background: var(--ok-soft); font-weight: 600; }
+  .kg-sec-btn.weak { border-color: var(--no); color: var(--no); background: var(--no-soft); }
+
+  .kg-lane {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 12px 14px; margin: 12px 0;
+  }
+  .kg-lane h3 { margin: 0 0 4px; font-size: 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .kg-lane-desc { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
+  .kg-stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .kg-stage-col { background: var(--bg); border: 1px dashed var(--line); border-radius: 8px; padding: 8px; }
+  .kg-stage-lbl { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
+  .kg-node-pill {
+    display: flex; align-items: center; justify-content: space-between; gap: 4px;
+    width: 100%; text-align: left; margin: 4px 0; padding: 5px 8px;
+    border: 1.5px solid var(--line); border-radius: 7px; background: var(--card); color: var(--fg);
+    font: inherit; font-size: 13px; cursor: pointer; transition: all .15s;
+  }
+  .kg-node-pill:hover { border-color: var(--a); }
+  .kg-node-pill.sel { border-color: var(--b); background: var(--hl-soft); font-weight: 700; box-shadow: 0 0 0 2px var(--hl); }
+  .kg-node-pill.is-prereq { border-color: var(--c); background: rgba(62,92,118,.12); font-weight: 600; }
+  .kg-node-pill.is-unlock { border-color: var(--a); background: var(--ok-soft); font-weight: 600; }
+  .kg-node-pill.st-mastered { border-left: 4px solid var(--a); }
+  .kg-node-pill.st-weak { border-left: 4px solid var(--no); background: var(--no-soft); }
 </style>
+<script defer src="assets/hci.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -89,17 +184,18 @@
   <img src="assets/logo.svg" alt="">
   <a class="brand" href="index.html">培玉 · 高中数学</a>
   <span class="sp"></span>
-  <a class="home" href="index.html">← 按章节学习</a>
+  <a class="home" href="index.html">← 返回主页</a>
   <a class="rec" href="record.html">我的记录</a>
 </header>
 
-<h1>高中数学 · 知识与解题方法 Wiki</h1>
-<p class="lead">按「概念定义 · 公式与二级结论 · 解题方法套路 · 易错红线」浓缩成一屏卡片。做题卡壳时搜一搜，或点进对应小节动手拖图。</p>
+<h1>高中数学 · 知识图谱与解题方法 Wiki</h1>
+<p class="lead">按「73 节跨章先修图谱 · 83 张概念公式方法红线卡 · 题干决策树 · 易错反例实验室」立体贯通。做题卡壳时可按卡片速查，也可在图谱中顺着硬先修边溯源。</p>
 
 <nav class="steps" role="tablist" id="mainTabs">
   <button type="button" role="tab" aria-selected="true" data-tab="cards">1 知识与方法卡片库</button>
-  <button type="button" role="tab" aria-selected="false" data-tab="tree">2 看到题目怎么想（决策树）</button>
-  <button type="button" role="tab" aria-selected="false" data-tab="labs">3 易错反例微实验室</button>
+  <button type="button" role="tab" aria-selected="false" data-tab="map">2 🗺️ 全景知识图谱（73节）</button>
+  <button type="button" role="tab" aria-selected="false" data-tab="tree">3 看到题目怎么想（决策树）</button>
+  <button type="button" role="tab" aria-selected="false" data-tab="labs">4 易错反例微实验室</button>
 </nav>
 
 <!-- ==================== TAB 1：卡片库 ==================== -->
@@ -172,448 +268,58 @@
   <div id="cardList"></div>
 </section>
 
-<!-- ==================== TAB 2：看到题目怎么想（决策树） ==================== -->
+<!-- ==================== TAB 2：全景知识图谱（73节） ==================== -->
+<section class="step" id="tab-map">
+  <div class="kg-dash">
+    <div class="kg-dash-row">
+      <div class="kg-legend" id="kgStatsBar">
+        <span class="kg-leg-pill sel"><i class="kg-dot" style="background:var(--b)"></i>当前选中</span>
+        <span class="kg-leg-pill pre"><i class="kg-dot" style="background:var(--c)"></i>⬅️ 硬先修溯源</span>
+        <span class="kg-leg-pill unl"><i class="kg-dot" style="background:var(--a)"></i>➡️ 后置解锁</span>
+        <span class="kg-leg-pill weak"><i class="kg-dot" style="background:var(--no)"></i>错题预警</span>
+      </div>
+      <span class="small" id="kgMasterySummary"></span>
+    </div>
+    <div class="kg-quick-bar" id="kgQuickPick">
+      <span class="small" style="font-weight:600">🌟 典型枢纽快速体验：</span>
+      <button type="button" class="w-rel" data-map-pick="b1-2-3">★ 2.3 二次不等式（全书地基）</button>
+      <button type="button" class="w-rel" data-map-pick="b1-3-2">★ 3.2 函数性质（函数中枢）</button>
+      <button type="button" class="w-rel" data-map-pick="b2-6-3">★ 6.3 向量坐标（几何枢纽）</button>
+      <button type="button" class="w-rel" data-map-pick="e1-3-1">★ 3.1 椭圆（解几综合）</button>
+      <button type="button" class="w-rel" data-map-pick="e2-5-3">★ 5.3 导数应用（函数压轴）</button>
+      <button type="button" class="w-rel" data-map-pick="e3-7-1">★ 7.1 条件概率与全概率</button>
+    </div>
+  </div>
+
+  <!-- 交互式 SVG 地铁拓扑图 -->
+  <div class="kg-svg-wrap">
+    <svg id="kgSvg" viewBox="0 0 1120 604" role="img" aria-label="高中数学 73 节四大主线与跨章先修拓扑图谱"></svg>
+  </div>
+
+  <!-- 选中节点深度诊断与方法卡抽屉 -->
+  <div class="kg-inspector wk-box" id="kgInspector" aria-live="polite"></div>
+
+  <!-- 四大主线筛选与移动端友好泳道矩阵 -->
+  <div class="w-bar" id="kgFilterBar" role="group" aria-label="筛选知识图谱节点">
+    <button type="button" class="w-pill on" data-kg-filter="all">全部 73 节（四大主线）</button>
+    <button type="button" class="w-pill" data-kg-filter="hub">★ 只看核心枢纽节 (21)</button>
+    <button type="button" class="w-pill" data-kg-filter="insight">🎬 含 3b1b 视觉洞察 (15)</button>
+    <button type="button" class="w-pill" data-kg-filter="comp">🏆 关联竞赛一试专题</button>
+    <button type="button" class="w-pill" data-kg-filter="weak">🔴 我的错题节与先修溯源</button>
+  </div>
+  <div id="kgLanes"></div>
+</section>
+
+<!-- ==================== TAB 3：看到题目怎么想（决策树） ==================== -->
 <section class="step" id="tab-tree">
-  <p class="small">做题卡壳往往是因为「看到了题干条件，却没激活对应的变形工具」。点右边胶囊可直接跳到对应的方法卡。</p>
-
-  <div class="tree-group">
-    <h3>一、集合与常用逻辑用语（第 1 章）</h3>
-    <div class="tree-row">
-      <div>题干出现 <b>\(A\subseteq B\)</b> 或 <b>\(A\cap B=\varnothing\)</b>，且集合含参数 \(a\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>先分 <b>\(A=\varnothing\)</b> 和 <b>\(A\ne\varnothing\)</b> 两类讨论，画数轴后再单独检验端点能否取等 <button type="button" class="w-rel" data-goto="set-empty-trap">查看：含参子集先查空集与子集计数</button></div>
-    </div>
-    <div class="tree-row">
-      <div>问「\(p\) 是 \(q\) 的什么条件」或「已知必要/充分条件求参数范围」</div>
-      <span class="tree-arr">⟶</span>
-      <div>化为解集包含关系：<b>小范围 \(\Rightarrow\) 大范围</b>（谁小谁充分，谁大谁必要） <button type="button" class="w-rel" data-goto="logic-subset">查看：充分必要条件判断法</button></div>
-    </div>
-    <div class="tree-row">
-      <div>对含 \(\forall x\in M\) 或 \(\exists x\in M\) 的命题写「否定」</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>论域 \(M\) 不变</b>，改量词（\(\forall\leftrightarrow\exists\)）+ 否定结论（\(\le\leftrightarrow >\)） <button type="button" class="w-rel" data-goto="logic-negation">查看：量词命题的否定</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>二、基本不等式与二次不等式（第 2 章）</h3>
-    <div class="tree-row">
-      <div>已知整式和 \(a+2b=1\)（定值），求分式和 \(\dfrac1a+\dfrac1b\) 的最小值</div>
-      <span class="tree-arr">⟶</span>
-      <div>把所求式<b>乘以「\(1\)」</b>（即乘 \(a+2b\)），展开消去分子分母再套一次均值 <button type="button" class="w-rel" data-goto="amgm-const-one">查看：常数代换（乘1法）</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求 \(x+\dfrac{4}{x-1}\)（\(x>1\)）或分母含一次式的最值</div>
-      <span class="tree-arr">⟶</span>
-      <div>先<b>配凑分母整体</b>：\((x-1)+\dfrac{4}{x-1}+1\)，使两项积为常数 <button type="button" class="w-rel" data-goto="amgm-shift">查看：配凑分母法</button></div>
-    </div>
-    <div class="tree-row">
-      <div>基本不等式算出的等号点 \(x=\sqrt{k}\) 不在题目给的区间 \([m,+\infty)\) 内</div>
-      <span class="tree-arr">⟶</span>
-      <div>均值下界取不到！改用<b>对勾函数 \(f(x)=x+\dfrac{k}{x}\) 的单调性</b>取区间端点值 <button type="button" class="w-rel" data-goto="amgm-hook">查看：对勾函数与等号失效</button></div>
-    </div>
-    <div class="tree-row">
-      <div>解含参不等式 \(ax^2+bx+c>0\) 或恒成立问题</div>
-      <span class="tree-arr">⟶</span>
-      <div>按 <b>① \(a=0\) 一次式 \(\to\) ② 开口方向 \(a\) 正负 \(\to\) ③ 判别式 \(\Delta\) 与两根大小</b>依次讨论 <button type="button" class="w-rel" data-goto="quad-param">查看：含参二次不等式三步曲</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>三、函数的概念与性质（第 3 章）</h3>
-    <div class="tree-row">
-      <div>抽象函数不给解析式，要求解 \(f(2x-1) < f(x+2)\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>先列<b>定义域</b>限制，再利用单调性脱去 \(f\)（若偶函数先变成 \(f(|2x-1|)\)） <button type="button" class="w-rel" data-goto="fn-abstract-ineq">查看：奇偶+单调解抽象不等式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>已知 \(f(x)\) 为奇函数（或奇函数 \(+\) 常数 \(c\)），给出 \(f(a)\) 求 \(f(-a)\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>提炼奇部 \(g(x)\)：利用 <b>\(f(x)+f(-x)=2c\)</b> 整体代换，无需硬解参数 <button type="button" class="w-rel" data-goto="fn-odd-plus-c">查看：奇函数加常数模型</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>四、指数、对数函数与零点（第 4 章）</h3>
-    <div class="tree-row">
-      <div>高考单选：比较 \(a=0.3^{0.2},\ b=2^{0.3},\ c=\log_3 0.2\) 三个数的大小</div>
-      <span class="tree-arr">⟶</span>
-      <div>先同底用单调性；不同底找<b>中间量 \(0\) 和 \(1\)</b> 分区，同区再找媒介值或换底 <button type="button" class="w-rel" data-goto="explog-compare">查看：指对幂比大小三板斧</button></div>
-    </div>
-    <div class="tree-row">
-      <div>对数式含不同底数相乘或求值（如 \(\log_2 3 \cdot \log_3 4\)）</div>
-      <span class="tree-arr">⟶</span>
-      <div>统一用<b>换底公式 \(\log_a b = \dfrac{\ln b}{\ln a}\)</b> 化为同底后约分消元 <button type="button" class="w-rel" data-goto="log-change-base">查看：换底公式与推论</button></div>
-    </div>
-    <div class="tree-row">
-      <div>判断方程 \(f(x)=g(x)\) 实根个数或零点所在区间 \((k,k+1)\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>小区间定位用<b>零点存在定理 \(f(a)f(b) < 0\)</b>；个数问题转化为两函数图象交点数 <button type="button" class="w-rel" data-goto="zero-theorem">查看：零点存在定理与数形结合</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>五、三角函数与恒等变换（第 5 章）</h3>
-    <div class="tree-row">
-      <div>已知 \(\sin\alpha+\cos\alpha\)、\(\sin\alpha-\cos\alpha\)、\(\sin\alpha\cos\alpha\) 中的一个，求其余两个</div>
-      <span class="tree-arr">⟶</span>
-      <div>利用平方桥梁 <b>\((\sin\alpha\pm\cos\alpha)^2 = 1 \pm 2\sin\alpha\cos\alpha\)</b>，再由象限判正负 <button type="button" class="w-rel" data-goto="trig-know1get2">查看：同角三角「知一求二」</button></div>
-    </div>
-    <div class="tree-row">
-      <div>已知 \(\tan\alpha = m\)，求关于 \(\sin\alpha,\cos\alpha\) 的齐次分式或二次齐次式的值</div>
-      <span class="tree-arr">⟶</span>
-      <div>二次式先除以 \(\cos^2\alpha+\sin^2\alpha=1\)，分子分母同除以 \(\cos\alpha\)（或 \(\cos^2\alpha\)）化为 \(\tan\alpha\) <button type="button" class="w-rel" data-goto="trig-know1get2">查看：同角三角与弦切互化</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求 \(f(x) = a\sin x + b\cos x\) 的最值、周期、单调区间或对称轴</div>
-      <span class="tree-arr">⟶</span>
-      <div>提取 \(\sqrt{a^2+b^2}\) 合一变形为 <b>\(\sqrt{a^2+b^2}\sin(x+\varphi)\)</b>，再整体代换相位 <button type="button" class="w-rel" data-goto="trig-aux-angle">查看：辅助角公式（合一变形）</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>六、平面向量及其应用（第 6 章）</h3>
-    <div class="tree-row">
-      <div>两向量给出坐标 \(\boldsymbol{a}=(x_1,y_1), \boldsymbol{b}=(x_2,y_2)\)，求平行（共线）或垂直条件</div>
-      <span class="tree-arr">⟶</span>
-      <div>垂直列 <b>\(x_1x_2+y_1y_2=0\)</b>；共线列交叉之差 <b>\(x_1y_2-x_2y_1=0\)</b>（切勿坐标相除防分母为 0） <button type="button" class="w-rel" data-goto="vec-coord-ops">查看：向量直角坐标运算与共线垂直</button></div>
-    </div>
-    <div class="tree-row">
-      <div>几何图形中求向量线性组合或点在线段上（\(A,B,P\) 三点共线）</div>
-      <span class="tree-arr">⟶</span>
-      <div>设基底分解，若 \(\vec{OP}=x\vec{OA}+y\vec{OB}\)，则三点共线充要条件为 <b>\(x+y=1\)</b> <button type="button" class="w-rel" data-goto="vec-base-theorem">查看：平面向量基本定理与三点共线</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求向量模长、夹角或投影向量</div>
-      <span class="tree-arr">⟶</span>
-      <div>求模平方利用 <b>\(|\boldsymbol{a}|^2=\boldsymbol{a}^2\)</b>，求夹角套 \(\cos\theta=\dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{a}||\boldsymbol{b}|}\)；投影向量为 \((\boldsymbol{a}\cdot\boldsymbol{e})\boldsymbol{e}\) <button type="button" class="w-rel" data-goto="vec-dot-product">查看：数量积、投影向量与垂直</button></div>
-    </div>
-    <div class="tree-row">
-      <div>解三角形中出现两边及一对角（SSA 条件，已知 \(a,b,A\)）</div>
-      <span class="tree-arr">⟶</span>
-      <div>正弦定理求 \(\sin B\)，若 \(A\) 锐角且 \(b\sin A &lt; a &lt; b\) 必有<b>两解</b>（大边对大角，一锐一钝），切忌漏掉钝角解 <button type="button" class="w-rel" data-goto="vec-sine-cosine-law">查看：正弦余弦定理与边角互化</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>七、复数（第 7 章）</h3>
-    <div class="tree-row">
-      <div>题干说明复数 \(z=a+bi\) 为「实数」或「纯虚数」求参数</div>
-      <span class="tree-arr">⟶</span>
-      <div>实数列 \(b=0\)；纯虚数必须同时列 <b>\(a=0\) 且 \(b\ne 0\)</b>（注意：0 是实数不是纯虚数！） <button type="button" class="w-rel" data-goto="complex-def-pure">查看：代数形式与纯虚数条件</button></div>
-    </div>
-    <div class="tree-row">
-      <div>复数计算中分母含有虚数（如 \(\dfrac{a+bi}{c+di}\)）或求共轭与模</div>
-      <span class="tree-arr">⟶</span>
-      <div>分母实数化：分子分母同乘分母共轭 \((c-di)\)，分母化为 \(c^2+d^2\)；\(i\) 的高次幂按 4 周期化简 <button type="button" class="w-rel" data-goto="complex-ops-conj">查看：复数四则运算与分母实数化</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求解复平面距离最值或乘法旋转伸缩（选学）</div>
-      <span class="tree-arr">⟶</span>
-      <div>\(|z_1-z_2|\) 转化为两点距离；复数乘法几何意义为模长相乘、辐角相加（逆时针旋转） <button type="button" class="w-rel" data-goto="complex-trig-form">查看：复数三角表示与几何旋转</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>八、立体几何初步（第 8 章）</h3>
-    <div class="tree-row">
-      <div>已知原平面多边形求斜二测直观图面积，或已知直观图面积逆求原图真实面积</div>
-      <span class="tree-arr">⟶</span>
-      <div>正向 \(S'=\dfrac{\sqrt{2}}{4}S\)；<b>逆向求原面积必用 \(S=2\sqrt{2}S'\)</b>（原图更大，切勿除以 \(2\sqrt{2}\)） <button type="button" class="w-rel" data-goto="geo-oblique-drawing">查看：斜二测画法与面积公式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求圆锥、圆台的表面积与侧面积，或求组合体表面积</div>
-      <span class="tree-arr">⟶</span>
-      <div>侧面积公式用母线 \(l=\sqrt{r^2+h^2}\) 代入 \(\pi rl\)（切勿误用高 \(h\)）；<b>组合体必须扣除封闭在内部的接合面</b> <button type="button" class="w-rel" data-goto="geo-surface-volume">查看：表面积与体积公式全景</button></div>
-    </div>
-    <div class="tree-row">
-      <div>立体几何中判断两直线位置关系或求异面直线所成的角</div>
-      <span class="tree-arr">⟶</span>
-      <div>平移一条线与另一条线相交，转化为同一三角形内求角；<b>异面夹角范围 \((0,90^\circ]\)</b>，若算得钝角必须取其补角 <button type="button" class="w-rel" data-goto="geo-basic-facts-skew">查看：基本事实与异面直线所成角</button></div>
-    </div>
-    <div class="tree-row">
-      <div>证明直线与平面平行（\(a\parallel\alpha\)）或两平面平行（\(\alpha\parallel\beta\)）</div>
-      <span class="tree-arr">⟶</span>
-      <div>线面平行必书写 <b>\(a\not\subset\alpha\)</b>、\(b\subset\alpha\)、\(a\parallel b\)；面面平行必须在一个面内找<b>两条相交直线</b>分别平行于另一平面 <button type="button" class="w-rel" data-goto="geo-parallel-circuits">查看：空间平行判定与转化回路</button></div>
-    </div>
-    <div class="tree-row">
-      <div>证明线面垂直，或求直线与平面所成角、二面角平面角</div>
-      <span class="tree-arr">⟶</span>
-      <div>线面垂直须垂直面内<b>两条相交直线</b>；线面角为斜线与正射影夹角（\([0,90^\circ]\)）；二面角须在棱上同一点作<b>两条垂直于棱的射线</b>（范围 \([0,180^\circ]\)） <button type="button" class="w-rel" data-goto="geo-perp-dihedral">查看：线面面面垂直与二面角</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>九、空间向量与立体几何（选择性必修第一册 第 1 章）</h3>
-    <div class="tree-row">
-      <div>利用基底表示空间向量，或证明空间四点共面（\(P,A,B,C\) 共面）</div>
-      <span class="tree-arr">⟶</span>
-      <div>选不共面三向量为基底；四点共面充要条件：<b>\(\vec{OP}=x\vec{OA}+y\vec{OB}+z\vec{OC}\) 且 \(x+y+z=1\)</b> <button type="button" class="w-rel" data-goto="vec3-base-theorem">查看：空间基底与四点共面</button></div>
-    </div>
-    <div class="tree-row">
-      <div>建立空间直角坐标系，求平面法向量 \(\boldsymbol{n}=(x,y,z)\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>找平面内两不共线向量 \(\boldsymbol{v}_1,\boldsymbol{v}_2\)，列方程组 \(\boldsymbol{n}\cdot\boldsymbol{v}_1=0,\ \boldsymbol{n}\cdot\boldsymbol{v}_2=0\)，令某一非零未知数为 1 求得非零解 <button type="button" class="w-rel" data-goto="vec3-coord-ops">查看：坐标运算与垂直判定</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求点 \(P\) 到平面 \(\alpha\) 的距离</div>
-      <span class="tree-arr">⟶</span>
-      <div>面内任取一点 \(A\)，套用点面距公式 <b>\(d = \dfrac{|\vec{AP}\cdot\boldsymbol{n}|}{|\boldsymbol{n}|}\)</b>（分子绝对值切勿漏掉） <button type="button" class="w-rel" data-goto="vec3-distance-angles">查看：三大夹角与点面距公式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求直线与平面所成的角 \(\theta\in[0,90^\circ]\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>方向向量 \(\boldsymbol{u}\) 与法向量 \(\boldsymbol{n}\)，利用互余关系必用 <b>\(\sin\theta = \dfrac{|\boldsymbol{u}\cdot\boldsymbol{n}|}{|\boldsymbol{u}||\boldsymbol{n}|}\)</b>（注意是正弦！） <button type="button" class="w-rel" data-goto="vec3-distance-angles">查看：三大夹角与点面距公式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求二面角的大小 \(\theta\in[0,180^\circ]\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>求两平面法向量 \(\boldsymbol{n}_1,\boldsymbol{n}_2\)，<b>先观察图形二面角是钝角还是锐角</b>：钝角取 \(\cos\theta&lt;0\)，锐角取 \(\cos\theta&gt;0\)（切勿机械只取绝对值） <button type="button" class="w-rel" data-goto="vec3-distance-angles">查看：三大夹角与点面距公式</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十、圆锥曲线的方程（选择性必修第一册 第 3 章）</h3>
-    <div class="tree-row">
-      <div>题干给出到两定点距离之和等于常数，求轨迹方程或离心率</div>
-      <span class="tree-arr">⟶</span>
-      <div>先检验 <b>\(2a &gt; 2c\)</b>，若满足则为椭圆；方程中<b>分母大者对应焦点所在轴</b>，几何量关系为 \(a^2=b^2+c^2\)（\(a\) 最大） <button type="button" class="w-rel" data-goto="conic-ellipse">查看：椭圆定义与几何量关系</button></div>
-    </div>
-    <div class="tree-row">
-      <div>题干给出双曲线方程求渐近线，或已知渐近线求双曲线方程</div>
-      <span class="tree-arr">⟶</span>
-      <div>将方程右侧的 1 换为 0 即可得渐近线 <b>\(y = \pm\dfrac{b}{a}x\)</b>；双曲线焦点所在轴<b>只由正项决定</b>（非分母大小） <button type="button" class="w-rel" data-goto="conic-hyperbola">查看：双曲线与渐近线方程</button></div>
-    </div>
-    <div class="tree-row">
-      <div>抛物线上动点 \(P\) 到焦点的距离求最值，或已知焦点准线求方程</div>
-      <span class="tree-arr">⟶</span>
-      <div>一次项系数除以 4 为焦点坐标；求最值第一直觉必用焦半径转准线：<b>\(|PF| = d = x_0 + \dfrac{p}{2}\)</b> <button type="button" class="w-rel" data-goto="conic-parabola">查看：抛物线焦半径与焦点准线转化</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十一、一元函数的导数及其应用（选择性必修第二册 第 5 章）</h3>
-    <div class="tree-row">
-      <div>求曲线 \(y=f(x)\) 在某点处的切线，或过某点向曲线引切线</div>
-      <span class="tree-arr">⟶</span>
-      <div>区分「在点处（已知切点）」与「过点（先设切点 \((x_0,f(x_0))\)）」；切线方程用点斜式 <b>\(y-f(x_0)=f'(x_0)(x-x_0)\)</b> <button type="button" class="w-rel" data-goto="calc-derivative-def">查看：导数概念与切线几何意义</button></div>
-    </div>
-    <div class="tree-row">
-      <div>对分式函数或复合函数求导数</div>
-      <span class="tree-arr">⟶</span>
-      <div>除法求导分子用 <b>\(u'v - uv'\)</b>（负号！分母平方）；复合函数按链式法则 <b>\(f'(g(x))\cdot g'(x)\)</b>（切勿漏乘内层导数） <button type="button" class="w-rel" data-goto="calc-rules-composite">查看：导数公式与链式法则</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求函数单调区间、极值或在闭区间 \([a,b]\) 上的最值</div>
-      <span class="tree-arr">⟶</span>
-      <div>令 \(f'(x)=0\) 解极值点；<b>极值点左右必须变号才成立</b>；闭区间最值必须把所有极值与<b>端点值 \(f(a),f(b)\) 一同比较</b> <button type="button" class="w-rel" data-goto="calc-monot-extrema">查看：单调性极值与闭区间最值</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十二、计数原理（选必三 第 6 章）</h3>
-    <div class="tree-row">
-      <div>做完一件事，各方案相互独立直接做完（或，独立直达）</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>分类加法计数原理</b>：各分类互斥，总数直接相加 \(N = m_1 + m_2 + \dots\) <button type="button" class="w-rel" data-goto="count-principles">查看：分类加法计数原理</button></div>
-    </div>
-    <div class="tree-row">
-      <div>做完一件事必须分步连续完成，缺一不可（且，步步为营）</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>分步乘法计数原理</b>：各步骤依次推进，总数连乘 \(N = n_1 \times n_2 \times \dots\) <button type="button" class="w-rel" data-goto="count-principles">查看：分步乘法计数原理</button></div>
-    </div>
-    <div class="tree-row">
-      <div>选出元素并讲求顺序（排队、不同职务、数字排列）</div>
-      <span class="tree-arr">⟶</span>
-      <div>套用<b>排列数</b> \(A_n^m = \dfrac{n!}{(n-m)!}\)（注意相邻用<b>捆绑法</b>且莫漏乘内部排列） <button type="button" class="w-rel" data-goto="count-perm-comb">查看：排列与捆绑法</button></div>
-    </div>
-    <div class="tree-row">
-      <div>选出元素只组合不讲顺序（结伴、握手、同岗、指定元素不相邻）</div>
-      <span class="tree-arr">⟶</span>
-      <div>套用<b>组合数</b> \(C_n^m = \dfrac{n!}{m!(n-m)!}\)；不相邻问题用<b>插空法</b>（先排其余再插空） <button type="button" class="w-rel" data-goto="count-perm-comb">查看：组合与插空法</button></div>
-    </div>
-    <div class="tree-row">
-      <div>二项式 \((a+b)^n\) 展开式求第 \(k\) 项或指定项系数、全系数和</div>
-      <span class="tree-arr">⟶</span>
-      <div>通项公式 <b>\(T_{r+1} = C_n^r a^{n-r} b^r\)</b>（第 \(k\) 项代 \(r=k-1\)）；全系数和令 \(x=1\)，二项式系数和恒为 \(2^n\) <button type="button" class="w-rel" data-goto="count-binomial">查看：二项式展开与赋值法</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十三、统计（第 9 章）</h3>
-    <div class="tree-row">
-      <div>不同层间特征差异明显（如不同年级、走读住校）抽样</div>
-      <span class="tree-arr">⟶</span>
-      <div>用<b>比例分层抽样</b>：每层抽取数 \(n_i = n\times \dfrac{N_i}{N}\) <button type="button" class="w-rel" data-goto="stat-sampling">查看：分层抽样模型</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求直方图频率、第 \(p\) 百分位数或样本方差</div>
-      <span class="tree-arr">⟶</span>
-      <div>直方图<b>面积代表频率</b>；百分位数算 \(i=n\cdot p\%\)（整数取两项平均，非整数上取整）；方差除以 \(n\) <button type="button" class="w-rel" data-goto="stat-percentile-var">查看：百分位数与方差公式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>两组或多组数据合并求总均值与总方差</div>
-      <span class="tree-arr">⟶</span>
-      <div>合并方差由<b>层内平均方差</b>与<b>层间均值波动</b>叠加而成，绝不可直接平均两组方差 <button type="button" class="w-rel" data-goto="stat-merge-var">查看：两层方差分解公式</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十四、概率（第 10 章）</h3>
-    <div class="tree-row">
-      <div>掷骰子/摸球等有限个等可能结果求概率</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>古典概型</b> \(P(A)=\dfrac{|A|}{|\Omega|}\)；对立事件转化 \(P(A)=1-P(\overline{A})\) <button type="button" class="w-rel" data-goto="prob-classical-events">查看：古典概型与互斥对立</button></div>
-    </div>
-    <div class="tree-row">
-      <div>多系统同时工作、独立射击或求「至少一个发生」</div>
-      <span class="tree-arr">⟶</span>
-      <div>独立充要条件 <b>\(P(AB)=P(A)P(B)\)</b>；至少一个发生套路：\(1-P(\overline{A})P(\overline{B})\)（互斥正概率事件必不独立） <button type="button" class="w-rel" data-goto="prob-independence">查看：事件独立性与乘法公式</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十五、直线和圆的方程（选必一 第 2 章）</h3>
-    <div class="tree-row">
-      <div>判断两条直线平行与垂直或求参数值</div>
-      <span class="tree-arr">⟶</span>
-      <div>一般式充要条件：<b>平行 \(A_1B_2-A_2B_1=0\) 且 \(A_1C_2-A_2C_1
-e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <button type="button" class="w-rel" data-goto="geom-line-five-forms">查看：直线方程与平行垂直充要条件</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求点到直线的垂直距离或两平行线间的夹层距离</div>
-      <span class="tree-arr">⟶</span>
-      <div>点线距 <b>\(d = \dfrac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}\)</b>；两平行线先配齐系数再套 \(d = \dfrac{|C_1-C_2|}{\sqrt{A^2+B^2}}\) <button type="button" class="w-rel" data-goto="geom-line-dist-intersect">查看：点线距与平行线距离</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求直线被圆截得的弦长或判断直线与圆相切/相交</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>首选几何法垂径定理</b>：弦心距 \(d\)、半弦长与半径构成直角三角形，弦长 \(|AB|=2\sqrt{r^2-d^2}\)；相切切线长 \(L=\sqrt{d^2-r^2}\) <button type="button" class="w-rel" data-goto="geom-circle-pos-rel">查看：几何法弦长与位置关系</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求圆的方程或由一般方程求圆心半径</div>
-      <span class="tree-arr">⟶</span>
-      <div>几何特征选<b>标准方程</b> \((x-a)^2+(y-b)^2=r^2\)；三点坐标选<b>一般方程</b>（核查 \(D^2+E^2-4F>0\)） <button type="button" class="w-rel" data-goto="geom-circle-line-rel">查看：圆的标准与一般方程</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十六、数列（选必二 第 4 章）</h3>
-    <div class="tree-row">
-      <div>已知前 \(n\) 项和 \(S_n\) 求通项公式 \(a_n\)</div>
-      <span class="tree-arr">⟶</span>
-      <div>必须分步：\(n=1\) 时 \(a_1=S_1\)；\(n\ge 2\) 时 \(a_n = S_n - S_{n-1}\)；<b>务必检验 \(n=1\) 是否吻合</b> <button type="button" class="w-rel" data-goto="seq-an-sn-relation">查看：S_n求a_n与n=1检验</button></div>
-    </div>
-    <div class="tree-row">
-      <div>等比数列求前 \(n\) 项和 \(S_n\)</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>首要步骤：讨论公比 \(q=1\) 与 \(q\ne 1\)</b>；\(q\ne 1\) 时套 \(S_n = \dfrac{a_1(1-q^n)}{1-q}\) <button type="button" class="w-rel" data-goto="seq-arith-geom">查看：等差等比性质全景</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求「等差 \(\times\) 等比」数列或分式相乘结构数列的和</div>
-      <span class="tree-arr">⟶</span>
-      <div>等差乘等比用<b>错位相减法</b>（同乘公比错位相减）；分母乘积分式用<b>裂项相消法</b> <button type="button" class="w-rel" data-goto="seq-sum-methods">查看：错位相减与裂项相消</button></div>
-    </div>
-    <div class="tree-row">
-      <div>证明与正整数 \(n\) 有关的恒等式或递推命题</div>
-      <span class="tree-arr">⟶</span>
-      <div><b>数学归纳法两步曲</b>：① 验证 \(n=n_0\) 成立；② <b>必须显式使用 \(n=k\) 假设</b>推导 \(n=k+1\) 成立 <button type="button" class="w-rel" data-goto="seq-math-induction">查看：数学归纳法两步规范</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十七、随机变量及其分布（选必三 第 7 章）</h3>
-    <div class="tree-row">
-      <div>已知条件概率、多原因综合结果或由结果推断原因</div>
-      <span class="tree-arr">⟶</span>
-      <div>前向推导套<b>全概率公式</b> \(P(B)=\sum P(A_i)P(B\mid A_i)\)；逆向归因套<b>贝叶斯公式</b> <button type="button" class="w-rel" data-goto="rv-cond-bayes">查看：全概率与贝叶斯公式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>写离散型随机变量分布列或求参数</div>
-      <span class="tree-arr">⟶</span>
-      <div>牢记两大基本性质：<b>非负性 \(p_i\ge 0\)</b> 与<b>归一性 \(\sum p_i=1\)</b>；相同变换取值合并相加 <button type="button" class="w-rel" data-goto="rv-distrib-table">查看：分布列表格与归一性自检</button></div>
-    </div>
-    <div class="tree-row">
-      <div>有放回与不放回抽样中次品件数或成功次数分布</div>
-      <span class="tree-arr">⟶</span>
-      <div>有放回服从<b>二项分布</b> \(B(n,p)\)（期望 \(np\)）；不放回服从<b>超几何分布</b>（期望 \(n\frac{M}{N}\)） <button type="button" class="w-rel" data-goto="rv-binomial-hypergeom">查看：二项分布与超几何分布</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求离散型随机变量线性变换后的均值与方差</div>
-      <span class="tree-arr">⟶</span>
-      <div>期望线性 <b>\(E(aX+b) = aE(X)+b\)</b>；方差二次方 <b>\(D(aX+b) = a^2 D(X)\)</b>（常数 \(b\) 在方差中消除） <button type="button" class="w-rel" data-goto="rv-expect-variance">查看：期望方差线性变换</button></div>
-    </div>
-    <div class="tree-row">
-      <div>正态分布 \(X\sim N(\mu,\sigma^2)\) 求对称区间概率</div>
-      <span class="tree-arr">⟶</span>
-      <div>利用<b>对称轴 \(x=\mu\)</b> 翻转求区间面积；识别标准差 \(\sigma\)（非方差）套 <b>\(3\sigma\) 原则</b>（68.27%, 95.45%, 99.73%） <button type="button" class="w-rel" data-goto="rv-normal-distribution">查看：正态分布对称性与3σ原则</button></div>
-    </div>
-  </div>
-
-  <div class="tree-group">
-    <h3>十八、成对数据的统计分析（选必三 第 8 章）</h3>
-    <div class="tree-row">
-      <div>分析两个变量之间的散点图线性相关方向与强弱</div>
-      <span class="tree-arr">⟶</span>
-      <div>计算<b>样本相关系数 \(r\)</b>：\(r>0\) 正相关，\(r<0\) 负相关；\(|r|\) 越近 1 相关性越强（相关不等于因果） <button type="button" class="w-rel" data-goto="bivar-corr-r">查看：相关系数 r 公式</button></div>
-    </div>
-    <div class="tree-row">
-      <div>求经验回归直线方程参数或利用方程预测</div>
-      <span class="tree-arr">⟶</span>
-      <div>最小二乘法求斜率 \(\hat{b}\) 与截距 \(\hat{a}\)；<b>经验回归直线必定经过样本中心点 \((\bar{x}, \bar{y})\)</b> <button type="button" class="w-rel" data-goto="bivar-regression-fit">查看：回归直线方程与样本中心</button></div>
-    </div>
-    <div class="tree-row">
-      <div>2×2 列联表分析两分类变量之间是否有关联</div>
-      <span class="tree-arr">⟶</span>
-      <div>计算<b>卡方检验统计量 \(\chi^2\)</b>，与临界值（3.841, 6.635）对比判定是否推翻独立零假设 <button type="button" class="w-rel" data-goto="bivar-chi-square">查看：2x2 列联表与卡方检验</button></div>
-    </div>
-  </div>
+  <p class="small">做题卡壳往往是因为「看到了题干条件，却没激活对应的变形工具」。这里先只给题干信号，你在心里说出第一步，再揭晓对照；卡壳时切到「查表模式」直接查。</p>
+  <div id="cueTrainer"><noscript>这一页需要开启 JavaScript。</noscript></div>
 </section>
 
 <!-- ==================== TAB 3：易错反例微实验室 ==================== -->
 <section class="step" id="tab-labs">
-  <p class="small">高中数学丢分最多的地方，是「不满足前提条件却硬套公式」。亲手拨动下面三个反例开关，把红线刻进肌肉记忆。</p>
-
-  <!-- 微实验 1 -->
-  <div class="card">
-    <h3>实验 ①：基本不等式「等号取不到」时，最小值怎么跑去了端点？</h3>
-    <p class="small">函数 \(f(x)=x+\dfrac{4}{x}\)（理论均值下界为 \(2\sqrt{4}=4\)，等号在 \(x=2\) 取到）。拖动下方滑块改变题目允许的定义域左界 \(x\ge m\)：</p>
-    <svg class="fig" id="lab1Svg" viewBox="0 0 560 250" role="img" aria-label="对勾函数 x+4/x 在 x>=m 上的最小值变化"></svg>
-    <div class="ctrl">
-      <label for="lab1M">定义域左端点 \(m = \)</label>
-      <input type="range" id="lab1M" min="5" max="45" step="5" value="10">
-      <output id="lab1MOut" style="font-weight:700">1.0</output>
-      <button type="button" class="btn ghost" id="lab1Trap">一键切到反例 \(m=3\)</button>
-      <button type="button" class="btn ghost" id="lab1Ok">恢复正例 \(m=1\)</button>
-    </div>
-    <div class="lab-out" id="lab1Info" aria-live="polite"></div>
-  </div>
-
-  <!-- 微实验 2 -->
-  <div class="card">
-    <h3>实验 ②：判断奇偶性，为什么「不先看定义域」一做就错？</h3>
-    <p class="small">解析式都是 \(f(x)=x^2\)（满足 \(f(-x)=(-x)^2=x^2=f(x)\)）。切换下面三种定义域，看图象关于 \(y\) 轴还对称吗：</p>
-    <div class="ctrl" id="lab2Btns">
-      <button type="button" class="btn ghost on" data-dom="sym">正例：\(x\in[-2,2]\)（对称）</button>
-      <button type="button" class="btn ghost" data-dom="asym">反例 1：\(x\in[-1,2.5]\)（区间不对称）</button>
-      <button type="button" class="btn ghost" data-dom="hole">反例 2：\(x\in[-2,2]\) 且 \(x\ne 1\)（挖点不对称）</button>
-    </div>
-    <svg class="fig" id="lab2Svg" viewBox="0 0 560 230" role="img" aria-label="y=x^2 在不同定义域下的对称性对比"></svg>
-    <div class="lab-out" id="lab2Info" aria-live="polite"></div>
-  </div>
-
-  <!-- 微实验 3 -->
-  <div class="card">
-    <h3>实验 ③：\(\sin x \to \sin\left(2x+\dfrac{\pi}{3}\right)\)，为什么水平平移量经常错成 \(\dfrac{\pi}{3}\)？</h3>
-    <p class="small">目标函数 \(y=\sin\left(2x+\dfrac{\pi}{3}\right)=\sin\left[2\left(x+\dfrac{\pi}{6}\right)\right]\)。对比下面三条变换路线，看哪条能与绿色目标曲线重合：</p>
-    <div class="ctrl" id="lab3Btns">
-      <button type="button" class="btn ghost on" data-mode="ok1">路线 A：先左移 \(\frac{\pi}{3}\)，再横坐标缩半（正确）</button>
-      <button type="button" class="btn ghost" data-mode="ok2">路线 B：先横坐标缩半，再左移 \(\frac{\pi}{6}\)（正确）</button>
-      <button type="button" class="btn ghost" data-mode="bad">常见错法：先横坐标缩半，再左移 \(\frac{\pi}{3}\)（错！）</button>
-    </div>
-    <svg class="fig" id="lab3Svg" viewBox="0 0 560 230" role="img" aria-label="正弦型函数先平移后伸缩与先伸缩后平移的对比"></svg>
-    <div class="lab-out" id="lab3Info" aria-live="polite"></div>
-  </div>
+  <p class="small">高中数学丢分最多的地方，是「不满足前提条件却硬套公式」。每个实验先猜一句，再亲手拨动反例开关，把红线刻进肌肉记忆。实验由 <code>assets/wiki-labs.js</code> 的三种模板（滑块 / 切换 / 路线对比）生成，卡片库里带 🧪 的卡也能原地打开同一个实验。</p>
+  <div id="labList"></div>
 </section>
 
 <nav class="back"><a class="home" href="index.html">← 返回章节目录，按课本顺序学习</a></nav>
@@ -621,6 +327,11 @@ e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <
 </div>
 
 <script src="assets/wiki.js"></script>
+<script src="assets/wiki-cues.js"></script>
+<script src="assets/wiki-trainer.js"></script>
+<script src="assets/wiki-cards.js"></script>
+<script src="assets/wiki-labs.js"></script>
+<script src="assets/wiki-map-actions.js"></script>
 <script>
 (function () {
   "use strict";
@@ -669,6 +380,7 @@ e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <
   var tabBtns = [].slice.call(document.querySelectorAll("#mainTabs button"));
   var tabSecs = {
     cards: document.getElementById("tab-cards"),
+    map: document.getElementById("tab-map"),
     tree: document.getElementById("tab-tree"),
     labs: document.getElementById("tab-labs")
   };
@@ -677,9 +389,10 @@ e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <
       b.setAttribute("aria-selected", b.getAttribute("data-tab") === name ? "true" : "false");
     });
     Object.keys(tabSecs).forEach(function (k) {
-      tabSecs[k].classList.toggle("on", k === name);
+      if (tabSecs[k]) tabSecs[k].classList.toggle("on", k === name);
     });
     if (name === "labs") { drawLab1(); drawLab2(); drawLab3(); }
+    if (name === "map") { renderKnowledgeMap(); }
   }
   tabBtns.forEach(function (b) {
     b.onclick = function () { switchTab(b.getAttribute("data-tab")); };
@@ -737,6 +450,10 @@ e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <
     }).join("");
     listEl.innerHTML = html;
     renderMath(listEl);
+    // 自测模式 / 今日待复习（assets/wiki-cards.js）：画完再加工；顺带把重画与清筛选暴露给它
+    window.PEIYU_WIKI_RENDER = renderCards;
+    window.PEIYU_WIKI_RESET = function () { curKind = "all"; curCh = "all"; curQ = ""; qInput.value = ""; qClear.hidden = true; syncPills(); };
+    if (window.PEIYU_CARD_MODE) window.PEIYU_CARD_MODE.decorate(listEl, matched);
   }
 
   function jumpToCard(id) {
@@ -814,163 +531,668 @@ e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <
 
   /* --- 实验 1：对勾函数 x + 4/x 在 x >= m 上的最值 --- */
   var lab1MIn = document.getElementById("lab1M");
-  function drawLab1() {
-    var s = document.getElementById("lab1Svg");
-    if (!s) return;
-    var m = (parseInt(lab1MIn.value, 10) || 10) / 10;
-    document.getElementById("lab1MOut").textContent = f2(m);
-    var X0 = 46, X1 = 530, Yb = 220, Yt = 18, XMAX = 6, YMAX = 10;
-    function cx(x) { return X0 + (x / XMAX) * (X1 - X0); }
-    function cy(y) { return Yb - (y / YMAX) * (Yb - Yt); }
-    function fn(x) { return x + 4 / x; }
-    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), no = css("--no"), muted = css("--muted"), line = css("--line");
-    s.innerHTML = "";
-    svg("rect", { x: X0, y: Yt, width: cx(m) - X0, height: Yb - Yt, fill: line, opacity: 0.45 }, s);
-    svg("line", { x1: X0, y1: Yb, x2: X1, y2: Yb, stroke: fg, "stroke-width": 1.5 }, s);
-    svg("line", { x1: X0, y1: Yb, x2: X0, y2: Yt, stroke: fg, "stroke-width": 1.5 }, s);
-    for (var i = 1; i <= 5; i++) {
-      svg("text", { x: cx(i), y: Yb + 18, "text-anchor": "middle" }, s).textContent = i;
-    }
-    svg("line", { x1: X0, y1: cy(4), x2: X1, y2: cy(4), stroke: cc, "stroke-dasharray": "5 4", "stroke-width": 1.5 }, s);
-    svg("text", { x: X1 - 4, y: cy(4) + 16, "text-anchor": "end", fill: cc }, s).textContent = "均值下界 2√4 = 4";
-    var dAll = "", dDom = "";
-    for (var k = 0; k <= 120; k++) {
-      var x = 0.45 + (XMAX - 0.45) * (k / 120), y = Math.min(fn(x), YMAX);
-      dAll += (k ? "L" : "M") + cx(x).toFixed(1) + " " + cy(y).toFixed(1);
-    }
-    for (var k2 = 0; k2 <= 100; k2++) {
-      var x2 = m + (XMAX - m) * (k2 / 100), y2 = Math.min(fn(x2), YMAX);
-      dDom += (k2 ? "L" : "M") + cx(x2).toFixed(1) + " " + cy(y2).toFixed(1);
-    }
-    svg("path", { d: dAll, fill: "none", stroke: muted, "stroke-dasharray": "3 3", "stroke-width": 1.5 }, s);
-    svg("path", { d: dDom, fill: "none", stroke: ca, "stroke-width": 3 }, s);
-    svg("line", { x1: cx(m), y1: Yt, x2: cx(m), y2: Yb, stroke: muted, "stroke-dasharray": "4 3" }, s);
-    svg("text", { x: cx(m) + 5, y: Yt + 14 }, s).textContent = "x=" + f2(m);
-    var reach = m <= 2.001;
-    var xmin = reach ? 2 : m, ymin = fn(xmin);
-    svg("circle", { cx: cx(2), cy: cy(4), r: 5.5, fill: reach ? ca : "#fff", stroke: reach ? ca : no, "stroke-width": 2.5 }, s);
-    if (!reach) {
-      svg("circle", { cx: cx(xmin), cy: cy(ymin), r: 6.5, fill: hl, stroke: fg, "stroke-width": 2 }, s);
-      svg("text", { x: cx(xmin) + 10, y: cy(ymin) - 6, fill: no, "font-weight": 700 }, s).textContent = "真实最低点 (" + f2(xmin) + ", " + f2(ymin) + ")";
-    } else {
-      svg("text", { x: cx(2) + 10, y: cy(4) - 8, fill: ca, "font-weight": 700 }, s).textContent = "等号点 (2, 4) 取得到";
-    }
-    var info = document.getElementById("lab1Info");
-    if (reach) {
-      info.innerHTML = '<span class="ca">✓ 等号成立</span>：等号要求的 \\(x=2\\) 在定义域 \\([' + f2(m) + ',+\\infty)\\) 内，因此最小值就是基本不等式给出的 <b>\\(4\\)</b>。';
-    } else {
-      info.innerHTML = '<span style="color:var(--no);font-weight:700">✗ 等号失效（反例）</span>：等号要求的 \\(x=2 < ' + f2(m) + '\\) 不在定义域内！函数在 \\([' + f2(m) + ',+\\infty)\\) 上单调递增，真实最小值在左端点 \\(x=' + f2(m) + '\\) 处，等于 <b>\\(' + f2(m) + '+\\dfrac{4}{' + f2(m) + '}\\approx ' + f2(ymin) + '\\)</b>（大于 \\(4\\)）。';
-    }
-    renderMath(info);
-  }
-  lab1MIn.addEventListener("input", drawLab1);
-  document.getElementById("lab1Trap").onclick = function () { lab1MIn.value = 30; drawLab1(); };
-  document.getElementById("lab1Ok").onclick = function () { lab1MIn.value = 10; drawLab1(); };
+  /* 旧的三个手写实验已抽成模板，移到 assets/wiki-labs.js（LABS 数组）。
+     switchTab 打开实验室标签页时仍会调用 drawLab1/2/3，这里保留名字：drawLab1 触发模板渲染（幂等），其余为空。 */
+  function drawLab1() { if (window.PEIYU_LABS_RENDER) window.PEIYU_LABS_RENDER(); }
+  function drawLab2() {}
+  function drawLab3() {}
 
-  /* --- 实验 2：奇偶性定义域对称 --- */
-  var lab2Dom = "sym";
-  function drawLab2() {
-    var s = document.getElementById("lab2Svg");
-    if (!s) return;
-    var X0 = 60, X1 = 500, Yb = 195, Yt = 20, Xm = (X0 + X1) / 2, U = 70;
-    function cx(x) { return Xm + x * U; }
-    function cy(y) { return Yb - y * 24; }
-    var fg = css("--fg"), ca = css("--a"), no = css("--no"), muted = css("--muted"), card = css("--card");
-    s.innerHTML = "";
-    svg("line", { x1: X0, y1: Yb, x2: X1, y2: Yb, stroke: fg, "stroke-width": 1.5 }, s);
-    svg("line", { x1: Xm, y1: Yb + 12, x2: Xm, y2: Yt, stroke: fg, "stroke-width": 1.5 }, s);
-    for (var t = -2; t <= 2; t++) {
-      svg("text", { x: cx(t), y: Yb + 18, "text-anchor": "middle" }, s).textContent = t;
-    }
-    var lo = lab2Dom === "asym" ? -1 : -2, hi = lab2Dom === "asym" ? 2.5 : 2;
-    var d = "";
-    for (var i = 0; i <= 80; i++) {
-      var x = lo + (hi - lo) * (i / 80), y = x * x;
-      d += (i ? "L" : "M") + cx(x).toFixed(1) + " " + cy(y).toFixed(1);
-    }
-    var col = lab2Dom === "sym" ? ca : no;
-    svg("path", { d: d, fill: "none", stroke: col, "stroke-width": 3.5 }, s);
-    svg("circle", { cx: cx(lo), cy: cy(lo * lo), r: 5, fill: col }, s);
-    svg("circle", { cx: cx(hi), cy: cy(hi * hi), r: 5, fill: col }, s);
-    if (lab2Dom === "asym") {
-      svg("circle", { cx: cx(-2), cy: cy(4), r: 5.5, fill: card, stroke: muted, "stroke-dasharray": "2 2", "stroke-width": 2 }, s);
-      svg("text", { x: cx(2) + 8, y: cy(4), fill: no, "font-weight": 700 }, s).textContent = "x=2 有点，x=-2 没定义！";
-    } else if (lab2Dom === "hole") {
-      svg("circle", { cx: cx(1), cy: cy(1), r: 6, fill: card, stroke: no, "stroke-width": 2.5 }, s);
-      svg("circle", { cx: cx(-1), cy: cy(1), r: 5.5, fill: no }, s);
-      svg("text", { x: cx(1) + 10, y: cy(1) + 4, fill: no, "font-weight": 700 }, s).textContent = "x=1 被挖空，x=-1 却实心！";
-    }
-    var info = document.getElementById("lab2Info");
-    if (lab2Dom === "sym") {
-      info.innerHTML = '<span class="ca">✓ 偶函数</span>：定义域 \\([-2,2]\\) 关于原点对称，且对任意 \\(x\\) 都有 \\(f(-x)=f(x)\\)，图象关于 \\(y\\) 轴完美对称。';
-    } else if (lab2Dom === "asym") {
-      info.innerHTML = '<span style="color:var(--no);font-weight:700">✗ 非奇非偶（反例 1）</span>：虽然式子满足 \\((-x)^2=x^2\\)，但 \\(2\\in[-1,2.5]\\) 而 \\(-2\\notin[-1,2.5]\\)，定义域不对称，一票否决！';
-    } else {
-      info.innerHTML = '<span style="color:var(--no);font-weight:700">✗ 非奇非偶（反例 2）</span>：分母或零次幂常挖掉单个点（如 \\(f(x)=\\dfrac{x^3-x^2}{x-1}=x^2\\ (x\\ne 1)\\)），\\(-1\\) 在定义域内而 \\(1\\) 不在，不对称！';
-    }
-    renderMath(info);
+  /* ==================== TAB 2：全景知识图谱（73节 DAG + 学情染色 + 跨章溯源） ==================== */
+  var SEC_META = window.PEIYU_SEC_META || {};
+  var STRANDS = window.PEIYU_STRANDS || {};
+  var curMapSec = "b1-2-3";
+  var curKgFilter = "all";
+
+  var SHORT_SEC_NAMES = {
+    "b1-1-1": "1.1 集合概念",
+    "b1-1-2": "1.2 集合关系",
+    "b1-1-3": "1.3 集合运算",
+    "b1-1-4": "1.4 充要条件",
+    "b1-1-5": "1.5 量词命题",
+    "b1-2-1": "2.1 不等性质",
+    "b1-2-2": "2.2 基本不等式",
+    "b1-2-3": "2.3 二次不等式",
+    "b1-3-1": "3.1 函数概念",
+    "b1-3-2": "3.2 函数性质",
+    "b1-3-3": "3.3 幂函数",
+    "b1-3-4": "3.4 函数应用",
+    "b1-4-1": "4.1 指数运算",
+    "b1-4-2": "4.2 指数函数",
+    "b1-4-3": "4.3 对数运算",
+    "b1-4-4": "4.4 对数函数",
+    "b1-4-5": "4.5 函数零点",
+    "b1-5-1": "5.1 弧度与角",
+    "b1-5-2": "5.2 三角概念",
+    "b1-5-3": "5.3 诱导公式",
+    "b1-5-4": "5.4 三角图象",
+    "b1-5-5": "5.5 恒等变换",
+    "b1-5-6": "5.6 Asin图象",
+    "b1-5-7": "5.7 三角应用",
+    "b2-6-1": "6.1 向量概念",
+    "b2-6-2": "6.2 向量运算",
+    "b2-6-3": "6.3 向量坐标",
+    "b2-6-4": "6.4 解三角形",
+    "b2-7-1": "7.1 复数概念",
+    "b2-7-2": "7.2 复数运算",
+    "b2-7-3": "7.3 复数三角",
+    "b2-8-1": "8.1 立体图形",
+    "b2-8-2": "8.2 直观图",
+    "b2-8-3": "8.3 面积体积",
+    "b2-8-4": "8.4 点线面位置",
+    "b2-8-5": "8.5 线面平行",
+    "b2-8-6": "8.6 线面垂直",
+    "b2-9-1": "9.1 随机抽样",
+    "b2-9-2": "9.2 样本估计",
+    "b2-9-3": "9.3 统计案例",
+    "b2-10-1": "10.1 随机概率",
+    "b2-10-2": "10.2 相互独立",
+    "b2-10-3": "10.3 频率概率",
+    "e1-1-1": "1.1 空间向量",
+    "e1-1-2": "1.2 空间基底",
+    "e1-1-3": "1.3 空间坐标",
+    "e1-1-4": "1.4 向量立体",
+    "e1-2-1": "2.1 倾斜角斜率",
+    "e1-2-2": "2.2 直线方程",
+    "e1-2-3": "2.3 交点距离",
+    "e1-2-4": "2.4 圆的方程",
+    "e1-2-5": "2.5 直线与圆",
+    "e1-3-1": "3.1 椭圆",
+    "e1-3-2": "3.2 双曲线",
+    "e1-3-3": "3.3 抛物线",
+    "e2-4-1": "4.1 数列概念",
+    "e2-4-2": "4.2 等差数列",
+    "e2-4-3": "4.3 等比数列",
+    "e2-4-4": "4.4 数学归纳法",
+    "e2-5-1": "5.1 导数概念",
+    "e2-5-2": "5.2 导数运算",
+    "e2-5-3": "5.3 导数应用",
+    "e3-6-1": "6.1 计数原理",
+    "e3-6-2": "6.2 排列组合",
+    "e3-6-3": "6.3 二项式定理",
+    "e3-7-1": "7.1 条件概率",
+    "e3-7-2": "7.2 随机变量",
+    "e3-7-3": "7.3 期望方差",
+    "e3-7-4": "7.4 二项分布",
+    "e3-7-5": "7.5 正态分布",
+    "e3-8-1": "8.1 相关系数",
+    "e3-8-2": "8.2 线性回归",
+    "e3-8-3": "8.3 独立性检验"
+  };
+
+  function shortSecTitle(name, sid) {
+    if (sid && SHORT_SEC_NAMES[sid]) return SHORT_SEC_NAMES[sid];
+    var parts = String(name || "").split(" ");
+    var code = parts[0] || "";
+    var rest = parts.slice(1).join("")
+      .replace(/的概念及其表示|的概念及其意义|的概念|的基本关系|的基本运算|的基本性质|基本定理及坐标表示|基本定理|及其运算的坐标表示|及其运算|及其分布列|及其应用|的图象与性质|在研究函数中的应用/g, "")
+      .replace(/（选学）/, "");
+    if (rest.length > 4) rest = rest.slice(0, 4);
+    return code + " " + rest;
   }
-  document.getElementById("lab2Btns").addEventListener("click", function (ev) {
-    var b = ev.target.closest("[data-dom]");
-    if (!b) return;
-    lab2Dom = b.getAttribute("data-dom");
-    [].forEach.call(document.querySelectorAll("#lab2Btns button"), function (x) {
-      x.classList.toggle("on", x === b);
+
+  function calcCapsuleWidth(label) {
+    var w = 0;
+    for (var i = 0; i < label.length; i++) {
+      w += label.charCodeAt(i) > 127 ? 10.2 : 5.8;
+    }
+    return Math.max(76, Math.ceil(w + 14));
+  }
+
+  function getAncestors(targetSid) {
+    var set = {};
+    function up(s) {
+      var m = SEC_META[s];
+      if (!m || !m.prereqs) return;
+      m.prereqs.forEach(function (p) {
+        if (!set[p] && SEC_META[p]) {
+          set[p] = true;
+          up(p);
+        }
+      });
+    }
+    up(targetSid);
+    return set;
+  }
+
+  function getDescendants(targetSid) {
+    var set = {};
+    function down(s) {
+      var m = SEC_META[s];
+      if (!m || !m.unlocks) return;
+      m.unlocks.forEach(function (u) {
+        if (!set[u] && SEC_META[u]) {
+          set[u] = true;
+          down(u);
+        }
+      });
+    }
+    down(targetSid);
+    return set;
+  }
+
+  function renderKnowledgeMap() {
+    var svgEl = document.getElementById("kgSvg");
+    var inspEl = document.getElementById("kgInspector");
+    var lanesEl = document.getElementById("kgLanes");
+    if (!svgEl || !inspEl || !lanesEl) return;
+
+    var mastery = window.PEIYU_COMPUTE_MASTERY ? window.PEIYU_COMPUTE_MASTERY() : {};
+    var cntMastered = 0, cntWeak = 0, cntHub = 0;
+    Object.keys(SEC_META).forEach(function (sid) {
+      if (SEC_META[sid].hub) cntHub++;
+      if (mastery[sid] && mastery[sid].status === "mastered") cntMastered++;
+      else if (mastery[sid] && mastery[sid].status === "weak") cntWeak++;
     });
-    drawLab2();
-  });
+    var sumEl = document.getElementById("kgMasterySummary");
+    if (sumEl) {
+      sumEl.innerHTML = "你的进度：<b>" + cntMastered + "</b> 节已点亮 · <b>" + cntWeak + "</b> 节待攻克 · 全书 <b>18</b> 章 <b>73</b> 节（<b>" + cntHub + "</b> 个★枢纽）";
+    }
 
-  /* --- 实验 3：正弦型函数平移伸缩顺序 --- */
-  var lab3Mode = "ok1";
-  function drawLab3() {
-    var s = document.getElementById("lab3Svg");
-    if (!s) return;
-    var X0 = 40, X1 = 530, Ym = 115, A = 72, XSPAN = 2 * Math.PI;
-    function cx(x) { return X0 + ((x + 1.2) / (XSPAN + 1.2)) * (X1 - X0); }
-    function cy(y) { return Ym - y * A; }
-    var fg = css("--fg"), ca = css("--a"), no = css("--no"), muted = css("--muted");
-    s.innerHTML = "";
-    svg("line", { x1: X0, y1: Ym, x2: X1, y2: Ym, stroke: fg, "stroke-width": 1.2 }, s);
-    svg("line", { x1: cx(0), y1: 20, x2: cx(0), y2: 210, stroke: fg, "stroke-width": 1.2 }, s);
-    function pathOf(fn) {
-      var d = "";
-      for (var i = 0; i <= 140; i++) {
-        var x = -1.1 + (XSPAN + 0.9) * (i / 140);
-        d += (i ? "L" : "M") + cx(x).toFixed(1) + " " + cy(fn(x)).toFixed(1);
+    if (!SEC_META[curMapSec]) curMapSec = "b1-2-3";
+    [].forEach.call(document.querySelectorAll("#kgQuickPick [data-map-pick]"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-map-pick") === curMapSec);
+    });
+
+    var ancestors = getAncestors(curMapSec);
+    var descendants = getDescendants(curMapSec);
+    var directPre = {};
+    (SEC_META[curMapSec].prereqs || []).forEach(function (p) { directPre[p] = true; });
+    var directUnl = {};
+    (SEC_META[curMapSec].unlocks || []).forEach(function (u) { directUnl[u] = true; });
+
+    // 1. 绘制 SVG 四主线拓扑图（按 18 章完整分组托盘 + 层次化有向先修曲线）
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), hlSoft = css("--hl-soft"), okSoft = css("--ok-soft"), noSoft = css("--no-soft"), no = css("--no"), muted = css("--muted"), line = css("--line"), cardBg = css("--card"), bg = css("--bg");
+    svgEl.innerHTML = "";
+
+    // 定义阴影与箭头标记
+    var defs = svg("defs", {}, svgEl);
+    var flt = svg("filter", { id: "kgShadow", x: "-10%", y: "-15%", width: "120%", height: "140%" }, defs);
+    svg("feDropShadow", { dx: 0, dy: 1.2, stdDeviation: 1.4, "flood-color": "#1A2822", "flood-opacity": 0.08 }, flt);
+    var fltSel = svg("filter", { id: "kgSelGlow", x: "-15%", y: "-25%", width: "130%", height: "150%" }, defs);
+    svg("feDropShadow", { dx: 0, dy: 2, stdDeviation: 3, "flood-color": cb, "flood-opacity": 0.32 }, fltSel);
+
+    function addArrowMarker(id, color) {
+      var mk = svg("marker", { id: id, viewBox: "0 0 10 10", refX: 7.5, refY: 5, markerWidth: 5.5, markerHeight: 5.5, orient: "auto-start-reverse" }, defs);
+      svg("path", { d: "M 0 1.5 L 8.5 5 L 0 8.5 z", fill: color }, mk);
+    }
+    addArrowMarker("kgArrPre", cc);
+    addArrowMarker("kgArrUnl", ca);
+
+    var laneOrder = ["prep", "func", "geom", "prob"];
+    var laneConfig = {
+      prep: {
+        title: "一、预备知识与代数地基",
+        sub: "必修一 第1–2章 · 必修二 第7章（11节）",
+        accent: cb,
+        top: 8, h: 140, r1: 68, r2: 120,
+        rows: [
+          [
+            { chTitle: "必修一·第1章 集合与常用逻辑用语", secs: ["b1-1-1", "b1-1-2", "b1-1-3", "b1-1-4", "b1-1-5"] }
+          ],
+          [
+            { chTitle: "必修一·第2章 一元二次函数、方程和不等式", secs: ["b1-2-1", "b1-2-2", "b1-2-3"] },
+            { chTitle: "必修二·第7章 复数", secs: ["b2-7-1", "b2-7-2", "b2-7-3"] }
+          ]
+        ]
+      },
+      func: {
+        title: "二、函数、数列与微积分初步",
+        sub: "必修一 第3–5章 · 选必二 第4–5章（23节）",
+        accent: ca,
+        top: 158, h: 140, r1: 218, r2: 270,
+        rows: [
+          [
+            { chTitle: "必修一·第3章 函数的概念与性质", secs: ["b1-3-1", "b1-3-2", "b1-3-3", "b1-3-4"] },
+            { chTitle: "必修一·第4章 指数函数与对数函数", secs: ["b1-4-1", "b1-4-2", "b1-4-3", "b1-4-4", "b1-4-5"] },
+            { chTitle: "选必二·第5章 一元函数导数及应用", secs: ["e2-5-1", "e2-5-2", "e2-5-3"] }
+          ],
+          [
+            { chTitle: "必修一·第5章 三角函数", secs: ["b1-5-1", "b1-5-2", "b1-5-3", "b1-5-4", "b1-5-5", "b1-5-6", "b1-5-7"] },
+            { chTitle: "选必二·第4章 数列", secs: ["e2-4-1", "e2-4-2", "e2-4-3", "e2-4-4"] }
+          ]
+        ]
+      },
+      geom: {
+        title: "三、几何与向量（平面解析 + 空间立体）",
+        sub: "必修二 第6、8章 · 选必一 第1–3章（22节）",
+        accent: cc,
+        top: 308, h: 140, r1: 368, r2: 420,
+        rows: [
+          [
+            { chTitle: "必修二·第6章 平面向量及其应用", secs: ["b2-6-1", "b2-6-2", "b2-6-3", "b2-6-4"] },
+            { chTitle: "选必一·第2章 直线和圆的方程", secs: ["e1-2-1", "e1-2-2", "e1-2-3", "e1-2-4", "e1-2-5"] },
+            { chTitle: "选必一·第3章 圆锥曲线的方程", secs: ["e1-3-1", "e1-3-2", "e1-3-3"] }
+          ],
+          [
+            { chTitle: "必修二·第8章 立体几何初步", secs: ["b2-8-1", "b2-8-2", "b2-8-3", "b2-8-4", "b2-8-5", "b2-8-6"] },
+            { chTitle: "选必一·第1章 空间向量与立体几何", secs: ["e1-1-1", "e1-1-2", "e1-1-3", "e1-1-4"] }
+          ]
+        ]
+      },
+      prob: {
+        title: "四、概率、计数与统计推断",
+        sub: "必修二 第9–10章 · 选必三 第6–8章（17节）",
+        accent: "#7A5C8F",
+        top: 458, h: 140, r1: 518, r2: 570,
+        rows: [
+          [
+            { chTitle: "必修二·第9章 统计", secs: ["b2-9-1", "b2-9-2", "b2-9-3"] },
+            { chTitle: "必修二·第10章 概率", secs: ["b2-10-1", "b2-10-2", "b2-10-3"] },
+            { chTitle: "选必三·第6章 计数原理", secs: ["e3-6-1", "e3-6-2", "e3-6-3"] }
+          ],
+          [
+            { chTitle: "选必三·第7章 随机变量及其分布", secs: ["e3-7-1", "e3-7-2", "e3-7-3", "e3-7-4", "e3-7-5"] },
+            { chTitle: "选必三·第8章 成对数据的统计分析", secs: ["e3-8-1", "e3-8-2", "e3-8-3"] }
+          ]
+        ]
       }
-      return d;
-    }
-    // 虚线画原函数 sin x
-    svg("path", { d: pathOf(function (x) { return Math.sin(x); }), fill: "none", stroke: muted, "stroke-dasharray": "4 4", "stroke-width": 1.5 }, s);
-    // 绿色实线画目标 sin(2x + pi/3)
-    svg("path", { d: pathOf(function (x) { return Math.sin(2 * x + Math.PI / 3); }), fill: "none", stroke: ca, "stroke-width": 3 }, s);
-    if (lab3Mode === "bad") {
-      // 错误曲线 sin(2(x + pi/3)) = sin(2x + 2pi/3)
-      svg("path", { d: pathOf(function (x) { return Math.sin(2 * (x + Math.PI / 3)); }), fill: "none", stroke: no, "stroke-width": 3 }, s);
-      svg("circle", { cx: cx(-Math.PI / 3), cy: Ym, r: 5.5, fill: no }, s);
-      svg("text", { x: cx(-Math.PI / 3), y: Ym + 22, "text-anchor": "middle", fill: no, "font-weight": 700 }, s).textContent = "-π/3 (移多了！)";
-    }
-    svg("circle", { cx: cx(-Math.PI / 6), cy: Ym, r: 5.5, fill: ca }, s);
-    svg("text", { x: cx(-Math.PI / 6), y: Ym - 12, "text-anchor": "middle", fill: ca, "font-weight": 700 }, s).textContent = "起点 -π/6";
+    };
 
-    var info = document.getElementById("lab3Info");
-    if (lab3Mode === "ok1") {
-      info.innerHTML = '<span class="ca">✓ 路线 A（先平移后伸缩）</span>：\\(\\sin x \\xrightarrow{\\text{左移 }\\pi/3} \\sin\\left(x+\\dfrac{\\pi}{3}\\right) \\xrightarrow{x\\text{ 缩半（换为 }2x\\text{）}} \\sin\\left(2x+\\dfrac{\\pi}{3}\\right)\\)。零点从 \\(-\\dfrac{\\pi}{3}\\) 跟着被压缩到了 \\(-\\dfrac{\\pi}{6}\\)。';
-    } else if (lab3Mode === "ok2") {
-      info.innerHTML = '<span class="ca">✓ 路线 B（先伸缩后平移）</span>：\\(\\sin x \\xrightarrow{x\\text{ 缩半}} \\sin 2x \\xrightarrow{\\text{左移 }\\pi/6} \\sin\\left[2\\left(x+\\dfrac{\\pi}{6}\\right)\\right]=\\sin\\left(2x+\\dfrac{\\pi}{3}\\right)\\)。因为先缩了周期，后续只需左移 \\(\\dfrac{\\pi/3}{2}=\\dfrac{\\pi}{6}\\)！';
-    } else {
-      info.innerHTML = '<span style="color:var(--no);font-weight:700">✗ 常见错法</span>：先缩成 \\(\\sin 2x\\) 后如果还左移 \\(\\dfrac{\\pi}{3}\\)，每个 \\(x\\) 都被换成了 \\(x+\\dfrac{\\pi}{3}\\)，得到红色曲线 \\(\\sin\\left[2\\left(x+\\dfrac{\\pi}{3}\\right)\\right]=\\sin\\left(2x+\\dfrac{2\\pi}{3}\\right)\\)，比目标绿线多移了一倍！';
-    }
-    renderMath(info);
-  }
-  document.getElementById("lab3Btns").addEventListener("click", function (ev) {
-    var b = ev.target.closest("[data-mode]");
-    if (!b) return;
-    lab3Mode = b.getAttribute("data-mode");
-    [].forEach.call(document.querySelectorAll("#lab3Btns button"), function (x) {
-      x.classList.toggle("on", x === b);
+    var laneLeft = 8, laneWidth = 1104, laneRight = laneLeft + laneWidth, padX = 16;
+    var trayLayer = svg("g", {}, svgEl);
+    var edgeLayerBg = svg("g", {}, svgEl);
+    var edgeLayerDirect = svg("g", {}, svgEl);
+    var headerLayer = svg("g", {}, svgEl);
+    var nodeLayer = svg("g", {}, svgEl);
+    var pos = {};
+    var sameRowNext = {};
+
+    // 绘制泳道底框、左侧主线色条、顶部标题栏与 18 个章节分组托盘
+    laneOrder.forEach(function (lid) {
+      var lc = laneConfig[lid];
+      // 泳道外框
+      svg("rect", {
+        x: laneLeft, y: lc.top, width: laneWidth, height: lc.h,
+        rx: 12, fill: bg, stroke: line, "stroke-width": 1.2
+      }, trayLayer);
+      // 左侧主题色条
+      svg("rect", {
+        x: laneLeft, y: lc.top + 8, width: 4.5, height: lc.h - 16,
+        rx: 2.2, fill: lc.accent
+      }, headerLayer);
+      // 泳道标题与副标题（置于连线上层并带底色衬垫，防止跨泳道连线压字）
+      var titleBgW = lc.title.length * 13 + 12;
+      svg("rect", {
+        x: laneLeft + 11, y: lc.top + 6, width: titleBgW, height: 19,
+        rx: 5, fill: bg, opacity: 0.92
+      }, headerLayer);
+      var titleEl = svg("text", {
+        x: laneLeft + 15, y: lc.top + 20,
+        fill: fg, "font-size": 13, "font-weight": 700
+      }, headerLayer);
+      titleEl.textContent = lc.title;
+
+      var subBgW = lc.sub.length * 9.5 + 12;
+      svg("rect", {
+        x: laneRight - 14 - subBgW, y: lc.top + 6, width: subBgW, height: 18,
+        rx: 5, fill: bg, opacity: 0.92
+      }, headerLayer);
+      var subEl = svg("text", {
+        x: laneRight - 14, y: lc.top + 19,
+        "text-anchor": "end", fill: muted, "font-size": 11
+      }, headerLayer);
+      subEl.textContent = lc.sub;
+
+      // 计算每行内各章托盘与胶囊坐标
+      lc.rows.forEach(function (groups, rIdx) {
+        var cy = rIdx === 0 ? lc.r1 : lc.r2;
+        var flatSecs = [];
+        groups.forEach(function (g) {
+          g.secs.forEach(function (s, idx) {
+            flatSecs.push({ sid: s, gIdx: groups.indexOf(g), isGroupStart: idx === 0 && groups.indexOf(g) > 0 });
+            if (idx + 1 < g.secs.length) sameRowNext[s + "->" + g.secs[idx + 1]] = true;
+          });
+        });
+
+        var widths = flatSecs.map(function (item) {
+          var m = SEC_META[item.sid];
+          var lbl = shortSecTitle(m.name, item.sid) + (m.hub ? "★" : "");
+          return calcCapsuleWidth(lbl);
+        });
+        var totalCapW = widths.reduce(function (a, b) { return a + b; }, 0);
+        var interGroupExtra = 18;
+        var totalExtra = (groups.length - 1) * interGroupExtra;
+        var innerW = laneWidth - padX * 2;
+        var baseGap = flatSecs.length > 1 ? (innerW - totalCapW - totalExtra) / (flatSecs.length - 1) : 0;
+
+        var curLeft = laneLeft + padX;
+        var groupBounds = groups.map(function () { return { left: Infinity, right: -Infinity }; });
+
+        flatSecs.forEach(function (item, i) {
+          if (item.isGroupStart) curLeft += interGroupExtra;
+          var w = widths[i];
+          var cx = curLeft + w / 2;
+          var m = SEC_META[item.sid];
+          pos[item.sid] = {
+            x: cx,
+            y: cy,
+            w: w,
+            row: rIdx,
+            strand: lid,
+            label: shortSecTitle(m.name, item.sid) + (m.hub ? "★" : "")
+          };
+          var gb = groupBounds[item.gIdx];
+          if (curLeft < gb.left) gb.left = curLeft;
+          if (curLeft + w > gb.right) gb.right = curLeft + w;
+          curLeft += w + baseGap;
+        });
+
+        // 绘制每个章节的柔和分组托盘与不透明章节名胶囊签
+        groups.forEach(function (g, gIdx) {
+          var gb = groupBounds[gIdx];
+          if (gb.left === Infinity) return;
+          svg("rect", {
+            x: (gb.left - 5).toFixed(1),
+            y: (cy - 24).toFixed(1),
+            width: (gb.right - gb.left + 10).toFixed(1),
+            height: 39,
+            rx: 8,
+            fill: cardBg,
+            "fill-opacity": 0.65,
+            stroke: line,
+            "stroke-width": 1
+          }, trayLayer);
+          var tagW = 0;
+          for (var ci = 0; ci < g.chTitle.length; ci++) {
+            tagW += g.chTitle.charCodeAt(ci) > 127 ? 9.5 : 5.5;
+          }
+          svg("rect", {
+            x: (gb.left + 2).toFixed(1),
+            y: (cy - 30.5).toFixed(1),
+            width: (tagW + 8).toFixed(1),
+            height: 13.5,
+            rx: 4,
+            fill: cardBg,
+            stroke: line,
+            "stroke-width": 0.7
+          }, headerLayer);
+          var gLbl = svg("text", {
+            x: (gb.left + 6).toFixed(1),
+            y: (cy - 20.5).toFixed(1),
+            fill: muted,
+            "font-size": 9.3,
+            "font-weight": 600
+          }, headerLayer);
+          gLbl.textContent = g.chTitle;
+        });
+      });
     });
-    drawLab3();
+
+    function buildEdgePath(p1, p2, isSameRow) {
+      if (isSameRow && Math.abs(p1.y - p2.y) < 4) {
+        var x1 = p1.x + (p2.x >= p1.x ? p1.w / 2 : -p1.w / 2);
+        var x2 = p2.x + (p2.x >= p1.x ? -p2.w / 2 : p2.w / 2);
+        if (Math.abs(p2.x - p1.x) < (p1.w + p2.w) * 1.15) {
+          return "M" + x1.toFixed(1) + " " + p1.y.toFixed(1) + " L" + x2.toFixed(1) + " " + p2.y.toFixed(1);
+        }
+        var midX = (p1.x + p2.x) / 2;
+        return "M" + p1.x.toFixed(1) + " " + (p1.y - 12).toFixed(1) + " Q" + midX.toFixed(1) + " " + (p1.y - 23).toFixed(1) + " " + p2.x.toFixed(1) + " " + (p2.y - 12).toFixed(1);
+      }
+      var goDown = p2.y >= p1.y;
+      var sy = p1.y + (goDown ? 12 : -12);
+      var ey = p2.y + (goDown ? -12 : 12);
+      var dy = ey - sy, dx = p2.x - p1.x;
+      var cy1 = sy + dy * 0.45;
+      var cy2 = sy + dy * 0.55;
+      var cx1 = p1.x + dx * 0.12;
+      var cx2 = p2.x - dx * 0.12;
+      return "M" + p1.x.toFixed(1) + " " + sy.toFixed(1) + " C" + cx1.toFixed(1) + " " + cy1.toFixed(1) + "," + cx2.toFixed(1) + " " + cy2.toFixed(1) + "," + p2.x.toFixed(1) + " " + ey.toFixed(1);
+    }
+
+    // 1) 章内顺承背景细线
+    Object.keys(sameRowNext).forEach(function (pair) {
+      var pts = pair.split("->");
+      var p1 = pos[pts[0]], p2 = pos[pts[1]];
+      if (!p1 || !p2) return;
+      var x1 = p1.x + p1.w / 2, x2 = p2.x - p2.w / 2;
+      svg("line", {
+        x1: x1.toFixed(1), y1: p1.y.toFixed(1),
+        x2: x2.toFixed(1), y2: p2.y.toFixed(1),
+        stroke: line, "stroke-width": 1.4
+      }, edgeLayerBg);
+    });
+
+    // 2) 选中节点的直接先修与直接解锁有向边（二阶先修/解锁通过胶囊虚线边框标识，避免跨层线条杂乱）
+    Object.keys(SEC_META).forEach(function (toId) {
+      var p2 = pos[toId];
+      if (!p2) return;
+      (SEC_META[toId].prereqs || []).forEach(function (fromId) {
+        var p1 = pos[fromId];
+        if (!p1) return;
+        var isDirectPre = (toId === curMapSec && directPre[fromId]);
+        var isDirectUnl = (fromId === curMapSec && directUnl[toId]);
+
+        if (isDirectPre || isDirectUnl) {
+          var d = buildEdgePath(p1, p2, p1.y === p2.y);
+          var col = isDirectPre ? cc : ca;
+          var marker = isDirectPre ? "url(#kgArrPre)" : "url(#kgArrUnl)";
+          svg("path", {
+            d: d, fill: "none", stroke: bg, "stroke-width": 4,
+            "stroke-linecap": "round", opacity: 0.85
+          }, edgeLayerDirect);
+          svg("path", {
+            d: d, fill: "none", stroke: col, "stroke-width": 2,
+            "stroke-linecap": "round", "marker-end": marker, opacity: 0.92
+          }, edgeLayerDirect);
+        }
+      });
+    });
+
+    // 绘制 73 个站点胶囊（使用 100% 不透明底色遮挡底层穿过线条，保证文字清晰锐利）
+    var isDark = document.documentElement.getAttribute("data-theme") === "dark" ||
+      (!document.documentElement.getAttribute("data-theme") && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var preSoft = isDark ? "#20303D" : "#E5EFF7";
+
+    Object.keys(SEC_META).forEach(function (sid) {
+      var m = SEC_META[sid];
+      var p = pos[sid];
+      if (!p) return;
+      var isSel = sid === curMapSec;
+      var isDirPre = !!directPre[sid];
+      var isDirUnl = !!directUnl[sid];
+      var isIndPre = !isDirPre && !!ancestors[sid];
+      var isIndUnl = !isDirUnl && !!descendants[sid];
+      var mst = mastery[sid] ? mastery[sid].status : "untouched";
+
+      var strokeCol = line, strokeW = 1.2, dash = "none", fillCol = cardBg, textCol = muted, fltAttr = "url(#kgShadow)";
+      if (isSel) {
+        strokeCol = cb; strokeW = 2.6; fillCol = hl; textCol = "#1A2822"; fltAttr = "url(#kgSelGlow)";
+      } else if (isDirPre) {
+        strokeCol = cc; strokeW = 2.2; fillCol = preSoft; textCol = fg;
+      } else if (isDirUnl) {
+        strokeCol = ca; strokeW = 2.2; fillCol = okSoft; textCol = fg;
+      } else if (isIndPre) {
+        strokeCol = cc; strokeW = 1.6; dash = "3.5 2"; fillCol = cardBg; textCol = fg;
+      } else if (isIndUnl) {
+        strokeCol = ca; strokeW = 1.6; dash = "3.5 2"; fillCol = cardBg; textCol = fg;
+      }
+      if (mst === "weak" && !isSel) {
+        strokeCol = no; strokeW = 2.2; fillCol = noSoft; textCol = fg;
+      }
+
+      var g = svg("g", { "data-map-pick": sid, style: "cursor:pointer" }, nodeLayer);
+      var w = p.w || 76, h = 24;
+      var rectAttrs = {
+        x: (p.x - w / 2).toFixed(1),
+        y: (p.y - h / 2).toFixed(1),
+        width: w,
+        height: h,
+        rx: 6.5,
+        fill: fillCol,
+        stroke: strokeCol,
+        "stroke-width": strokeW,
+        filter: fltAttr
+      };
+      if (dash !== "none") rectAttrs["stroke-dasharray"] = dash;
+      svg("rect", rectAttrs, g);
+
+      // 左上角学情小圆点
+      if (mst === "mastered" || mst === "weak") {
+        svg("circle", {
+          cx: (p.x - w / 2 + 5.5).toFixed(1),
+          cy: (p.y - h / 2 + 5.5).toFixed(1),
+          r: 3,
+          fill: mst === "mastered" ? ca : no
+        }, g);
+      }
+
+      var label = p.label || (shortSecTitle(m.name, sid) + (m.hub ? "★" : ""));
+      var t = svg("text", {
+        x: p.x.toFixed(1),
+        y: (p.y + 3.8).toFixed(1),
+        "text-anchor": "middle",
+        fill: textCol,
+        "font-size": 10.5,
+        "font-weight": (isSel || isDirPre || isDirUnl || m.hub) ? 700 : 500
+      }, g);
+      t.textContent = label;
+    });
+
+    // 2. 更新选中节点的深度诊断抽屉 (#kgInspector)
+    var selMeta = SEC_META[curMapSec];
+    var selCards = CARDS.filter(function (c) { return c.sec === curMapSec; });
+    var selMst = mastery[curMapSec] || { total: 0, right: 0, wrong: 0, status: "untouched" };
+    var mstBadge = selMst.status === "mastered"
+      ? '<span class="w-badge concept">🟢 已点亮（答对 ' + selMst.right + "/" + selMst.total + "）</span>"
+      : (selMst.status === "weak"
+          ? '<span class="w-badge pitfall">🔴 待攻克（做错 ' + selMst.wrong + " 题）</span>"
+          : '<span class="tag">⚪ 尚未做题</span>');
+
+    var preBtns = (selMeta.prereqs || []).map(function (pid) {
+      var pm = SEC_META[pid];
+      if (!pm) return "";
+      var isW = mastery[pid] && mastery[pid].status === "weak";
+      return '<button type="button" class="kg-sec-btn prereq' + (isW ? " weak" : "") + '" data-map-pick="' + pid + '">⬅️ ' + pm.name + (pm.hub ? " ★" : "") + "</button>";
+    }).join("");
+    if (!preBtns) preBtns = '<span class="small">本节是主线起点节，无前置章节依赖，可直接进入学习。</span>';
+
+    var unlBtns = (selMeta.unlocks || []).map(function (uid) {
+      var um = SEC_META[uid];
+      if (!um) return "";
+      return '<button type="button" class="kg-sec-btn unlock" data-map-pick="' + uid + '">➡️ ' + um.name + (um.hub ? " ★" : "") + "</button>";
+    }).join("");
+    if (!unlBtns) unlBtns = '<span class="small">本节为本主线终端综合应用节，直接面向高考压轴与综合实践。</span>';
+
+    var extraTags = "";
+    if (selMeta.insight) {
+      extraTags += '<span class="w-badge formula">🎬 3b1b 视觉洞察：' + selMeta.insight + "</span> ";
+    }
+    if (selMeta.comp) {
+      extraTags += '<span class="w-badge method">🏆 竞赛一试衔接：' + selMeta.comp + "</span>";
+    }
+
+    var cardsPills = selCards.map(function (c) {
+      return '<button type="button" class="wk-pill ' + c.kind + '" data-wk-card="' + c.id + '" data-jump="1">' + c.kindLabel + "：" + c.title + "</button>";
+    }).join("");
+
+    var totalPreCnt = Object.keys(ancestors).length;
+    var totalUnlCnt = Object.keys(descendants).length;
+
+    inspEl.innerHTML =
+      '<div class="kg-ins-hd">' +
+        '<span class="tag">' + (STRANDS[selMeta.strand] ? STRANDS[selMeta.strand].short : "") + "</span>" +
+        (selMeta.hub ? '<span class="w-badge formula">★ 核心换乘枢纽</span>' : "") +
+        mstBadge +
+        '<h3 class="kg-ins-title">🎯 ' + selMeta.name + "</h3>" +
+        '<div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">' +
+          '<a class="btn" href="lessons/' + curMapSec + '.html#step3" style="padding:5px 12px;font-size:13.5px">👉 去本节动手拖图</a>' +
+          '<a class="btn ghost" href="lessons/' + curMapSec + '.html#step1" style="padding:5px 12px;font-size:13.5px">📖 五步完整讲解</a>' +
+        "</div>" +
+      "</div>" +
+      (extraTags ? '<div style="margin:0 0 10px;display:flex;gap:6px;flex-wrap:wrap">' + extraTags + "</div>" : "") +
+      '<div class="kg-flow-grid">' +
+        '<div class="kg-flow-box pre-box">' +
+          '<div class="kg-flow-lbl"><span>⬅️ 硬先修溯源（本节卡壳时先查）</span><span>直接 ' + (selMeta.prereqs || []).length + ' 节 / 累计 ' + totalPreCnt + ' 节</span></div>' +
+          '<div class="kg-chain-row">' + preBtns + "</div>" +
+        "</div>" +
+        '<div class="kg-flow-box unl-box">' +
+          '<div class="kg-flow-lbl"><span>➡️ 学完本节解锁（后置综合应用）</span><span>直接 ' + (selMeta.unlocks || []).length + ' 节 / 累计 ' + totalUnlCnt + ' 节</span></div>' +
+          '<div class="kg-chain-row">' + unlBtns + "</div>" +
+        "</div>" +
+      "</div>" +
+      '<div style="margin-top:10px;border-top:1px dashed var(--line);padding-top:10px">' +
+        '<div class="small" style="margin-bottom:6px"><b>🧰 本节绑定的解题方法与易错红线卡（点击胶囊原地展开）：</b></div>' +
+        '<div class="wk-pills">' + cardsPills + "</div>" +
+        '<div class="wk-drawer" hidden></div>' +
+      "</div>";
+    renderMath(inspEl);
+
+    // 3. 渲染底部四大主线泳道矩阵（适配 375px 手机屏幕与分类筛选）
+    var stageNames = ["必修一(上)", "必修一(下)", "必修二", "选必一", "选必二", "选必三"];
+    var lanesHtml = laneOrder.map(function (lid) {
+      var stInfo = STRANDS[lid] || { name: lid, desc: "" };
+      var laneSecs = Object.keys(SEC_META).filter(function (sid) {
+        var m = SEC_META[sid];
+        if (m.strand !== lid) return false;
+        if (curKgFilter === "hub") return !!m.hub;
+        if (curKgFilter === "insight") return !!m.insight;
+        if (curKgFilter === "comp") return !!m.comp;
+        if (curKgFilter === "weak") {
+          var isW = mastery[sid] && mastery[sid].status === "weak";
+          return isW || !!ancestors[sid] || sid === curMapSec;
+        }
+        return true;
+      });
+      if (!laneSecs.length) return "";
+
+      // 按 stage 分组
+      var bySt = {};
+      laneSecs.forEach(function (sid) {
+        var st = SEC_META[sid].stage || 0;
+        (bySt[st] = bySt[st] || []).push(sid);
+      });
+      var colsHtml = Object.keys(bySt).map(function (stKey) {
+        var pills = bySt[stKey].map(function (sid) {
+          var m = SEC_META[sid];
+          var cls = "kg-node-pill";
+          if (sid === curMapSec) cls += " sel";
+          else if (ancestors[sid]) cls += " is-prereq";
+          else if (descendants[sid]) cls += " is-unlock";
+          var mst = mastery[sid] ? mastery[sid].status : "untouched";
+          if (mst === "mastered") cls += " st-mastered";
+          else if (mst === "weak") cls += " st-weak";
+          var badge = sid === curMapSec ? "🎯" : (directPre[sid] ? "⬅️先修" : (directUnl[sid] ? "➡️解锁" : (m.hub ? "★" : "")));
+          return (
+            '<button type="button" class="' + cls + '" data-map-pick="' + sid + '">' +
+              "<span>" + m.name + "</span>" +
+              (badge ? '<span class="small" style="font-weight:700;white-space:nowrap">' + badge + "</span>" : "") +
+            "</button>"
+          );
+        }).join("");
+        return (
+          '<div class="kg-stage-col">' +
+            '<div class="kg-stage-lbl">' + (stageNames[stKey] || "") + "</div>" +
+            pills +
+          "</div>"
+        );
+      }).join("");
+
+      return (
+        '<div class="kg-lane">' +
+          "<h3>" + stInfo.name + ' <span class="tag">' + laneSecs.length + " 节</span></h3>" +
+          '<p class="kg-lane-desc">' + stInfo.desc + "</p>" +
+          '<div class="kg-stages">' + colsHtml + "</div>" +
+        "</div>"
+      );
+    }).join("");
+    lanesEl.innerHTML = lanesHtml || '<div class="card"><p class="small">当前筛选条件下暂无节点，点「全部 73 节」查看完整图谱。</p></div>';
+  }
+
+  document.addEventListener("click", function (ev) {
+    var pickBtn = ev.target.closest("[data-map-pick]");
+    if (pickBtn) {
+      curMapSec = pickBtn.getAttribute("data-map-pick");
+      renderKnowledgeMap();
+      return;
+    }
+    var fltBtn = ev.target.closest("[data-kg-filter]");
+    if (fltBtn) {
+      curKgFilter = fltBtn.getAttribute("data-kg-filter");
+      [].forEach.call(document.querySelectorAll("#kgFilterBar .w-pill"), function (b) {
+        b.classList.toggle("on", b === fltBtn);
+      });
+      renderKnowledgeMap();
+    }
   });
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -978,6 +1200,13 @@ e 0\)</b>；<b>垂直 \(A_1A_2+B_1B_2=0\)</b>（防漏斜率不存在特例） <
     var chMatch = h.match(/ch=(\d+)/);
     if (chMatch) { curCh = chMatch[1]; syncPills(); }
     renderCards();
+    var mapSecMatch = h.match(/map=([a-z0-9-]+)/);
+    if (mapSecMatch && SEC_META[mapSecMatch[1]]) {
+      curMapSec = mapSecMatch[1];
+      switchTab("map");
+    } else if (/tab=map/.test(h)) {
+      switchTab("map");
+    }
     renderMath(document.body);
     var cardMatch = h.match(/card-([a-z0-9-]+)/);
     if (cardMatch) {

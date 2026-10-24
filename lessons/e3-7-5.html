@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
@@ -29,7 +31,7 @@
 <p class="lead">身高、零件尺寸、测量误差……很多量的直方图都是「中间高、两边低、左右对称」。这一节用一条钟形曲线描述它们：概率就是曲线下的面积。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一台机器往袋子里装大米，每袋标的是 \(500\) 克。抽了 \(100\) 袋称重，结果如下（每组含左端、不含右端）：</p>
+  <p>一台机器往袋子里装大米，每袋标的是 \(500\) 克。抽了 \(100\) 袋称重，结果如下（每组含左端、不含右端）。先点下面的按钮看这 \(100\) 袋大米的柱状分布与钟形轮廓：</p>
   <table class="tb">
     <tr><th>重量（克）</th><th>袋数</th></tr>
     <tr><td>低于 \(496\)</td><td>\(2\)</td></tr>
@@ -40,6 +42,13 @@
     <tr><td>\(504\) 及以上</td><td>\(2\)</td></tr>
   </table>
   <div class="card predict" data-id="entry" data-answer="C">
+    <svg class="entry-fig" id="entry-rice" viewBox="0 0 520 205" role="img" aria-label="100袋大米称重柱状图与钟形曲线：中间498到502克两根柱子共68袋"></svg>
+    <div class="entry-bar" id="entry-rice-bar">
+      <button type="button" data-m="all">看全部 100 袋分布</button>
+      <button type="button" data-m="mid" class="on">高亮中间 498~502 克（34 + 34 = 68 袋，占 68%！）</button>
+      <button type="button" data-m="tail">高亮两端极端偏差（仅 4 袋）</button>
+    </div>
+    <div class="entry-note" id="entry-rice-note"></div>
     <p>再随手拿一袋，重量在 \(498\sim502\) 克之间的可能性，用这组数据估计大约是多少？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(34\%\)</button>
@@ -56,40 +65,86 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：均值、方差、标准差（<a href="e3-7-3.html">回看 7.3</a>）；频率分布直方图（<a href="b2-9-2.html">回看必修二 9.2</a>）。</p>
+  <p class="small">要用到：必修二 9.2 频率分布直方图（<a href="b2-9-2.html">回看 9.2</a>）；7.3 均值与方差（<a href="e3-7-3.html">回看 7.3</a>）。正态分布是自然界中最普遍、最重要的连续型随机变量分布。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：正态曲线下的面积才是概率；标准化 \(Z=(X-\mu)/\sigma\) 要求 \(\sigma>0\)，区间端点要按同一方向变换。</p></div>
 
   <div class="card">
-    <p><b>均值和标准差</b>：均值说「中心在哪」；方差说「散得多开」，标准差是方差的算术平方根，和原数据同一个单位。</p>
-    <p>例：大米重量均值 \(500\) 克，方差 \(4\)，那么标准差是 \(\sqrt4=2\) 克，不是 \(4\) 克。</p>
+    <p><b>正态分布 \(X \sim N(\mu, \sigma^2)\)</b>：当样本量无限扩大、分组组距无限缩小时，直方图的折线逐渐光滑收敛为一条钟形对称曲线，称为<b>高斯正态分布曲线</b>。</p>
+    <p>两个核心参数：<br>
+    • \(\mu\)：<b>均值 / 位置参数</b>，决定曲线的对称轴位置（\(x = \mu\)）；<br>
+    • \(\sigma\)：<b>标准差 / 形状参数</b>，决定曲线的胖瘦分散度（\(\sigma\) 越小曲线越陡峭瘦高，\(\sigma\) 越大曲线越矮胖平坦）。<br>
+    <b>致命陷阱</b>：记号 \(N(\mu, \sigma^2)\) 中，<b>第二个参数是方差 \(\sigma^2\)</b>，做题必须先开方求出标准差 \(\sigma\)！</p>
   </div>
 
   <div class="card">
-    <p><b>直方图里，面积才是频率</b>：频率分布直方图的纵轴是「频率 ÷ 组距」，小长方形的<b>面积</b> \(=\) 组距 \(\times\) 高 \(=\) 这一组的频率，所有长方形面积加起来是 \(1\)。</p>
-    <p>例：上面 \(498\sim500\) 这组，组距 \(2\)，频率 \(0.34\)，长方形的高是 \(0.34\div2=0.17\)。高 \(0.17\) 不是频率，面积 \(2\times0.17=0.34\) 才是。</p>
+    <p><b>正态曲线三大几何特征</b>：</p>
+    <p>① <b>完美轴对称</b>：关于直线 \(x = \mu\) 镜像对称，在 \(x = \mu\) 处取得最高峰值；<br>
+    ② <b>全域总面积为 1</b>：曲线与 \(x\) 轴之间的全部面积恒等于 \(1\)；对称轴两侧面积各为 \(0.5\)：</p>
+    <p>$$P(X \le \mu) = P(X \ge \mu) = 0.5$$</p>
+    <p>③ <b>落在区间的概率就是曲线下面积</b>：连续型随机变量单点概率为 \(0\)（\(P(X = c) = 0\)），因此带不带等号概率完全相同：\(P(a \le X \le b) = P(a &lt; X &lt; b)\)。</p>
   </div>
 
   <div class="card">
-    <p><b>取值连成一片的量</b>：前几节的随机变量（次数、个数）只取 \(0,1,2,\dots\) 这样一个一个的值，能列分布列。重量、身高可以取一段里的任何数，列不完，只能问「落在某一段里」的概率。</p>
-    <p>例：问「一袋恰好重 \(500.000\cdots\) 克」没有意义，秤再准也碰不上；问「在 \(499.5\sim500.5\) 克之间」才有意义。</p>
+    <p><b>\(3\sigma\) 原则（高斯法则）</b>：对 \(X \sim N(\mu, \sigma^2)\)，数据落在中心附近的概率具有确定经验数值：</p>
+    <p>• \(P(\mu - \sigma \le X \le \mu + \sigma) \approx 68.27\%\)；<br>
+    • \(P(\mu - 2\sigma \le X \le \mu + 2\sigma) \approx 95.45\%\)；<br>
+    • \(P(\mu - 3\sigma \le X \le \mu + 3\sigma) \approx 99.73\%\)。<br>
+    落在 \(3\sigma\) 之外的概率仅有 \(0.27\%\)，属于几乎不可能发生的小概率事件。</p>
   </div>
 
-  <h3>2. 正态曲线和 \(N(\mu,\sigma^2)\)</h3>
-  <p>样本越来越多、组距越来越小，钟形直方图的上沿贴近一条光滑曲线。如果随机变量 \(X\) 落在任一区间 \([a,b]\) 的概率，都等于这条曲线在 \(a\) 到 \(b\) 之间、\(x\) 轴上方的面积，就说 \(X\) 服从<b>正态分布</b>，记作</p>
-  <div class="key" style="text-align:center">\(X\sim N(\mu,\sigma^2)\)，其中 \(\mu\) 是均值，\(\sigma^2\) 是方差，\(\sigma>0\) 是标准差。</div>
-  <p>曲线长这样（在「动手」里可以拖）：</p>
-  <ul>
-    <li>整条曲线在 \(x\) 轴上方，关于直线 \(x=\mu\) 对称，在 \(x=\mu\) 处最高；</li>
-    <li>曲线和 \(x\) 轴之间的总面积是 \(1\)；</li>
-    <li>\(\mu\) 管位置：\(\mu\) 变，曲线整条左右平移，形状不变；</li>
-    <li>\(\sigma\) 管胖瘦：\(\sigma\) 越小越「瘦高」，越大越「矮胖」——总面积要保持 \(1\)，变窄了就只能变高。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么读）</p>
-    <p>\(X\sim N(3,4)\)。说出均值、标准差，并比较 \(P(X>5)\) 和 \(P(X&lt;1)\)。</p>
-    <p>对照 \(N(\mu,\sigma^2)\)：\(\mu=3\)，\(\sigma^2=4\)，所以标准差 \(\sigma=2\)。</p>
-    <p>曲线关于 \(x=3\) 对称，\(5\) 和 \(1\) 离 \(3\) 都是 \(2\)，一个在右、一个在左，两块尾巴面积一样：\(P(X>5)=P(X&lt;1)\)。另外 \(P(X&lt;3)=P(X>3)=0.5\)。</p>
+  <!-- 伴读直觉微图解 -->
+  <div class="micro-box" id="micro-norm">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="font-weight:700; color:var(--primary); font-size:14px;">正态分布直觉微图解：高斯钟形曲线、3σ原则与轴对称割补计算</span>
+      <div class="micro-tabs" id="m-norm-tabs">
+        <button class="micro-tab active" data-tab="1">① 钟形曲线形态与参数意义</button>
+        <button class="micro-tab" data-tab="2">② 3σ 原则与区间概率分配</button>
+        <button class="micro-tab" data-tab="3">③ 轴对称割补几何算法</button>
+      </div>
+    </div>
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+      <svg class="micro-fig" id="m-norm-fig" viewBox="0 0 620 220" style="width:100%; max-width:620px; height:auto; display:block; margin:0 auto;"></svg>
+    </div>
+    <div class="micro-desc" id="m-norm-desc" style="margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.55;">
+      加载中...
+    </div>
   </div>
+
+  <div class="concept-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
+    <div class="card" style="border-top:3px solid #1976d2; margin:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:#1976d2;">位置参数 \(\mu\)</b>
+        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:11px; padding:2px 8px; border-radius:10px;">中心对称轴</span>
+      </div>
+      <p class="small" style="margin:0 0 4px 0;"><b>物理意义</b>：均值、期望、中位数三位一体。</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>几何表现</b>：决定整条曲线沿数轴左右平移的位置。</p>
+      <p class="small" style="margin:0;"><b>对称基石</b>：\(P(X &lt; \mu - c) = P(X &gt; \mu + c)\)。</p>
+    </div>
+    <div class="card" style="border-top:3px solid #2e7d32; margin:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:#2e7d32;">形状参数 \(\sigma\)</b>
+        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:2px 8px; border-radius:10px;">陡峭松散度</span>
+      </div>
+      <p class="small" style="margin:0 0 4px 0;"><b>物理意义</b>：标准差（方差 \(\sigma^2\) 的算术平方根）。</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>几何表现</b>：\(\sigma\) 小则峰高腰细；\(\sigma\) 大则峰低腰阔。</p>
+      <p class="small" style="margin:0;"><b>面积守恒</b>：曲线下总面积始终恒等于 1。</p>
+    </div>
+  </div>
+
+  <h3>2. 正态分布色彩语义主公式与 3σ 原则</h3>
+  <div class="key" style="background:var(--card); border-left:4px solid var(--primary); padding:12px 16px; margin:14px 0;">
+    <p style="margin:0 0 8px 0; font-weight:700;">核心参数与 \(3\sigma\) 黄金常数：</p>
+    <p style="margin:0 0 6px 0;">分布记号：\(X \sim N(\color{#1976d2}{\mu}, \color{#2e7d32}{\sigma^2})\quad (\color{#1976d2}{\mu \text{ 为均值}}, \color{#2e7d32}{\sigma \text{ 为标准差}})\)</p>
+    <p style="margin:0 0 6px 0;">\(3\sigma\) 原则区间概率：</p>
+    <p style="margin:0 0 4px 0;">• \(P(\color{#1976d2}{\mu}-\color{#2e7d32}{\sigma} \le X \le \color{#1976d2}{\mu}+\color{#2e7d32}{\sigma}) \approx \color{#1976d2}{68.27\%} \approx 0.683\)</p>
+    <p style="margin:0 0 4px 0;">• \(P(\color{#1976d2}{\mu}-2\color{#2e7d32}{\sigma} \le X \le \color{#1976d2}{\mu}+2\color{#2e7d32}{\sigma}) \approx \color{#2e7d32}{95.45\%} \approx 0.954\)</p>
+    <p style="margin:0 0 8px 0;">• \(P(\color{#1976d2}{\mu}-3\color{#2e7d32}{\sigma} \le X \le \color{#1976d2}{\mu}+3\color{#2e7d32}{\sigma}) \approx \color{#d97706}{99.73\%} \approx 0.997\)</p>
+    <p class="small" style="margin:0; color:var(--muted);"><b>对称割补口诀</b>：中轴平分各一半（0.5）；双侧对称算单侧，总面积 1 减中间再除以 2！</p>
+  </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：\(X\sim N(10,9)\)，\(X\) 的标准差是？</p>
     <div class="opts cols">
@@ -101,15 +156,6 @@
     <div class="reveal"><p><b>B</b>。括号里第二个数是<b>方差</b> \(\sigma^2=9\)，标准差 \(\sigma=\sqrt9=3\)。选 A 是把方差当成了标准差，这是最常见的错；\(10\) 是均值。</p></div>
   </div>
 
-  <h3>3. 区间概率 = 面积，用对称性求</h3>
-  <p>正态分布下，求 \(P(a&lt;X&lt;b)\) 就是求一块面积。高中不用积分算它，靠三样东西：<b>对称性</b>、<b>总面积 \(1\)</b>、<b>题目给的或下面要讲的几个数</b>。</p>
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>\(X\sim N(2,\sigma^2)\)，已知 \(P(X>4)=0.1\)。求 \(P(X&lt;0)\)、\(P(0&lt;X&lt;4)\)、\(P(2&lt;X&lt;4)\)。</p>
-    <p>对称轴是 \(x=2\)，\(0\) 和 \(4\) 关于它对称，所以 \(P(X&lt;0)=P(X>4)=0.1\)。</p>
-    <p>中间一块 \(=\) 总面积减两边：\(P(0&lt;X&lt;4)=1-0.1-0.1=0.8\)。</p>
-    <p>它被 \(x=2\) 平分：\(P(2&lt;X&lt;4)=0.8\div2=0.4\)。</p>
-  </div>
   <div class="card predict" data-id="try-2" data-answer="B">
     <p>自己试试：\(X\sim N(1,\sigma^2)\)，\(P(X&lt;-1)=0.2\)。\(P(1&lt;X&lt;3)\) 是？</p>
     <div class="opts cols">
@@ -118,26 +164,48 @@
       <button class="opt" data-v="C"><b>C</b>\(0.6\)</button>
       <button class="opt" data-v="D"><b>D</b>\(0.8\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(-1\) 和 \(3\) 关于 \(x=1\) 对称，\(P(X>3)=0.2\)；\(P(-1&lt;X&lt;3)=1-0.4=0.6\)；\(1\) 到 \(3\) 是它的一半，\(0.3\)。选 C 的同学停在了 \(0.6\)，忘了只要右半边。</p></div>
+    <div class="reveal"><p><b>B</b>。\(-1\) 和 \(3\) 关于 \(x=1\) 对称，\(P(X&gt;3)=0.2\)；\(P(-1&lt;X&lt;3)=1-0.4=0.6\)；\(1\) 到 \(3\) 是它的一半，\(0.3\)。选 C 的同学停在了 \(0.6\)，忘了只要右半边。</p></div>
   </div>
 
-  <h3>4. 三个要记的数</h3>
-  <p>不管 \(\mu\)、\(\sigma\) 是多少，离均值「几个标准差」以内的面积都一样：</p>
-  <div class="key">
-    \(P(\mu-\sigma\le X\le\mu+\sigma)\approx0.6827\)<br>
-    \(P(\mu-2\sigma\le X\le\mu+2\sigma)\approx0.9545\)<br>
-    \(P(\mu-3\sigma\le X\le\mu+3\sigma)\approx0.9973\)
+  <div class="vid" data-video="ex1"></div>
+
+  <h3>3. 三步破题思维链例题</h3>
+  <div class="card" style="border-left:4px solid #10b981;">
+    <p><b>典型例题</b>：某市高三年级一模数学考试成绩 \(X\) 服从正态分布 \(N(100, 100)\)。全市共有 10,000 名考生参加考试。<br>
+    ① 求数学成绩超过 110 分的考生占比及大约人数；<br>
+    ② 若已知 \(P(X &lt; 80) = 0.0228\)，求数学成绩在 \([100, 120]\) 分之间的考生人数。</p>
+    <div class="think-steps" style="margin-top:10px;">
+      <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #2563eb;">
+        <b style="color:#2563eb;">👀 第一眼破题信号</b>：
+        <span class="small">审读参数：\(X \sim N(100, 100) \Longrightarrow \mu = 100\)，方差 \(\sigma^2 = 100 \Longrightarrow\) <b>标准差 \(\sigma = \sqrt{100} = 10\)</b>！<br>
+        观察关键数字：\(110 = \mu + \sigma\)；\(80 = \mu - 2\sigma\)；\(120 = \mu + 2\sigma\)；\(100 = \mu\)。全部完美吻合对称轴与 \(k\sigma\) 格点！</span>
+      </div>
+      <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #10b981;">
+        <b style="color:#10b981;">🔧 第二步对称性割补求解</b>：
+        <div class="small" style="margin-top:4px;">
+          • <b>① 求 \(P(X &gt; 110)\)</b>：<br>
+          \(110 = \mu + \sigma\)。由 \(3\sigma\) 原则，\(P(90 \le X \le 110) \approx 0.6827\)；<br>
+          落在两边尾部的概率总和为 \(1 - 0.6827 = 0.3173\)；<br>
+          由轴对称性，右侧单尾概率为：<br>
+          $$P(X &gt; 110) = \dfrac{0.3173}{2} \approx 0.1587\quad (15.87\%)$$
+          超过 110 分的人数约为：\(10000 \times 0.1587 \approx 1587\text{ 人}\)。<br>
+          • <b>② 求 \(P(100 \le X \le 120)\)</b>：<br>
+          由对称性，\(P(X &gt; 120) = P(X &lt; 80) = 0.0228\)；<br>
+          而对称轴右半区总概率为 \(P(X \ge 100) = 0.5\)；<br>
+          因此：<br>
+          $$P(100 \le X \le 120) = P(X \ge 100) - P(X &gt; 120) = 0.5 - 0.0228 = 0.4772$$
+          考生人数为：\(10000 \times 0.4772 = 4772\text{ 人}\)。
+        </div>
+      </div>
+      <div class="think-step" style="padding-left:12px; border-left:2px solid #f59e0b;">
+        <b style="color:#f59e0b;">🛡️ 第三步防坑结论核查</b>：
+        <span class="small">防坑 1：标准差是 \(\sqrt{100}=10\)，切勿把 100 直接当 \(\sigma\)；防坑 2：问②求的是 \([100, 120]\)（半边对称区间），绝不能与整体对称区间 \([80, 120]\) 混淆（整体为 \(1 - 2\times 0.0228 = 0.9544\)，除以 2 正好为 0.4772）！</span>
+      </div>
+    </div>
   </div>
-  <p>开头大米那题的 \(68\%\) 就是第一个数：那批大米大约是 \(N(500,2^2)\)，\(498\sim502\) 正好是 \(\mu\pm\sigma\)。</p>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>袋装大米重量 \(X\sim N(500,2^2)\)（单位：克）。求 \(P(496\le X\le504)\) 和 \(P(X>504)\)；\(1000\) 袋里大约有几袋超过 \(504\) 克？</p>
-    <p>\(\mu=500\)，\(\sigma=2\)。\(496\sim504\) 是 \(\mu\pm2\sigma\)，所以 \(P(496\le X\le504)\approx0.9545\)。</p>
-    <p>两边尾巴合起来约 \(1-0.9545=0.0455\)，左右对称各一半：\(P(X>504)\approx0.0455\div2\approx0.0228\)。</p>
-    <p>\(1000\times0.0228\approx23\)，大约 \(23\) 袋。</p>
-  </div>
+
   <div class="card predict" data-id="try-3" data-answer="A">
-    <p>自己试试：\(X\sim N(80,25)\)，\(P(X>85)\) 约是？</p>
+    <p>自己试试：\(X\sim N(80,25)\)，\(P(X&gt;85)\) 约是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(0.1587\)</button>
       <button class="opt" data-v="B"><b>B</b>\(0.3173\)</button>
@@ -147,25 +215,36 @@
     <div class="reveal"><p><b>A</b>。\(\sigma=\sqrt{25}=5\)，\(85=\mu+\sigma\)。\(\mu\pm\sigma\) 外面一共约 \(1-0.6827=0.3173\)，右边一半约 \(0.1587\)。选 B 忘了除以 \(2\)；选 D 是错用了 \(2\sigma\) 那一行。</p></div>
   </div>
 
-  <h3>5. 用之前要注意</h3>
-  <ol>
-    <li><b>高度不是概率，面积才是。</b>曲线的高度可以比 \(1\) 还大：\(\sigma=0.2\) 时最高点约 \(2\)，概率不可能是 \(2\)。<br>
-      <span class="small">单独一个点没有宽度，面积是 \(0\)：\(P(X=\mu)=0\)，哪怕 \(\mu\) 处曲线最高。所以 \(P(a\le X\le b)=P(a&lt;X&lt;b)\)，端点带不带等号都一样。</span></li>
-    <li><b>先问：正态是题目给的，还是数据支持的假设？</b>题目写了「服从正态分布」才能直接用；拿真实数据，要先看直方图是不是单峰、大致对称，并说明这是一个近似的假设。<br>
-      <span class="small">反例：居民收入的直方图常常是左边一个高峰、右边拖着长尾巴，不对称，用正态去算会出错。大致对称的钟形，也不一定就是正态。</span></li>
-    <li><b>\(3\sigma\) 外很少，但不是 \(0\)。</b>\(\mu\pm3\sigma\) 外大约占 \(1-0.9973=0.0027\)，即 \(1000\) 次里平均约 \(2.7\) 次。<br>
-      <span class="small">反例：一台正常的机器生产 \(10000\) 个零件，平均约 \(27\) 个会落在 \(\mu\pm3\sigma\) 外。看到一个就断定「机器一定坏了」是错的；该说「这种情况很少见，值得停下来检查」。</span></li>
-    <li><b>别的区间</b>：靠对称性、题目给的数据、或者查表、用计算器，不用自己积分。</li>
-  </ol>
-  <div class="key">区间概率 \(=\) 曲线下面积；单点概率 \(=0\)。「几乎不可能」\(\ne\)「绝不会发生」。</div>
+  <div class="vid" data-video="ex2"></div>
 
-  <details class="more">
-    <summary>再深一点（可以先跳过）</summary>
-    <p><b>曲线的式子</b>：\(f(x)=\dfrac{1}{\sigma\sqrt{2\pi}}\,\mathrm{e}^{-\frac{(x-\mu)^2}{2\sigma^2}}\)。认得它就行，高中不拿它算面积。最高点在 \(x=\mu\)，高 \(\dfrac{1}{\sigma\sqrt{2\pi}}\)：\(\sigma\) 越小越高，\(\sigma=0.2\) 时约 \(1.99\)。</p>
-    <p><b>标准正态分布</b>：\(\mu=0\)，\(\sigma=1\) 的 \(N(0,1)\)。很多书后面的「正态分布表」就是按它列的。</p>
-    <p><b>为什么误差、身高常像正态</b>：大致说，它受很多个小因素共同影响、每个影响都不大时，常常接近正态。严格的说法要到大学学，这里不当作已知结论用。</p>
-    <p><b>质量控制里的「\(3\sigma\)」</b>：工厂常把 \(\mu\pm3\sigma\) 定为控制线，超出就报警、去查原因。报警是「值得查」，不是「已经证明出了问题」。</p>
-  </details>
+  <h3>4. 三大翻车现场红绿对比卡</h3>
+  <div class="trap-grid" style="display:grid; grid-template-columns:1fr; gap:12px; margin:14px 0;">
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 1：把方差 \(\sigma^2\) 误当成标准差 \(\sigma\)，未开方导致格点全盘移位</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：\(X \sim N(80, 25)\)，直接把 \(\sigma\) 当作 25，认为 \(\mu+\sigma = 105\)。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：正态分布的标准形式是 \(N(\mu, \sigma^2)\)，<b>第二项是方差</b>！必须先开方算出标准差 \(\sigma = \sqrt{25} = 5\)，故 \(\mu+\sigma = 85\)。不开方是高考考场最惨痛的送分失误。</p>
+    </div>
+
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 2：单侧尾部概率忘记除以 2，两头尾巴当一头</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：求 \(P(X &gt; \mu+\sigma)\)，直接用 \(1 - 0.6827 = 0.3173\) 交卷。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：\(1 - 0.6827 = 0.3173\) 是<b>左右两个单尾的面积总和</b>！因为曲线关于 \(\mu\) 严格对称，右单尾 \(P(X &gt; \mu+\sigma)\) 必须<b>除以 2</b>：\(\dfrac{0.3173}{2} \approx 0.1587\)。</p>
+    </div>
+
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 3：把曲线最高峰的高度 \(f(\mu)\) 当成发生概率</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：当 \(\sigma = 0.1\) 时，最高峰高度 \(f(\mu) = \dfrac{1}{\sqrt{2\pi}\times 0.1} \approx 3.99\)，误以为概率超过了 1 或这就是概率值。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：<b>曲线上点的纵坐标是概率密度，绝不是概率值</b>！连续型随机变量在任何单一点的概率都为 0（\(P(X=x_0) = 0\)），只有与 \(x\) 轴围成的<b>面积</b>才代表概率。面积恒等于 1，而高度完全可以大于 1。</p>
+    </div>
+  </div>
+
+  <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:12px 0;">
+    <div style="font-weight:700; font-size:12.5px; color:var(--fg); margin-bottom:6px;">反例微图解：单尾概率除以 2（左右双尾面积对半拆分）直觉对比</div>
+    <svg class="micro-fig" id="m-norm-trap-fig" viewBox="0 0 540 140" style="width:100%; max-width:540px; height:auto; display:block; margin:0 auto;"></svg>
+    <div style="font-size:11.5px; color:var(--muted); margin-top:4px; text-align:center;">
+      两翼总面积 1 - 0.6827 = 0.3173，由于对称轴平分秋色，每一侧尾部面积必须严格除以 2 得 0.1587。
+    </div>
+  </div>
 </section>
 
 <section class="step" data-title="动手">
@@ -179,6 +258,7 @@
       <button class="btn ghost" id="k1" type="button">\(\mu\pm\sigma\)</button>
       <button class="btn ghost" id="k2" type="button">\(\mu\pm2\sigma\)</button>
       <button class="btn ghost" id="k3" type="button">\(\mu\pm3\sigma\)</button>
+      <button class="btn ghost" id="niso" data-iso-tab="1" type="button">高尔顿钉板落球仪（等距 3D）</button>
     </div>
     <div class="result" id="nout" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="nreset" type="button">重置</button></div>
@@ -280,6 +360,7 @@
 <nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
 <footer>培玉智能 · 自编讲解。</footer>
 </div>
+<script src="../assets/iso-bench.js"></script>
 <script>
 (function () {
   "use strict";
@@ -324,18 +405,29 @@
   }
 
   /* ================= ① 正态曲线 ================= */
-  var nf = $("nfig"), muIn = $("muin"), sgIn = $("sgin");
+  var nf = $("nfig"), muIn = $("muin"), sgIn = $("sgin"), nIsoBtn = $("niso");
   var X0 = 58, X1 = 540, Yb = 262, Yt = 34, XL = -8, XR = 8;
-  var m10, s10, a10, b10, mode; // 都存成 10 倍整数；mode = 0 自由拖，1/2/3 跟着 μ±kσ
+  var m10, s10, a10, b10, mode, nIso = false; // 都存成 10 倍整数；mode = 0 自由拖，1/2/3 跟着 μ±kσ
   function nx(x) { return X0 + (x - XL) / (XR - XL) * (X1 - X0); }
   function follow() { if (mode) { a10 = clamp(m10 - mode * s10, -80, 80); b10 = clamp(m10 + mode * s10, -80, 80); } }
   function nReset() { m10 = 0; s10 = 10; mode = 1; follow(); muIn.value = m10; sgIn.value = s10; nDraw(); }
   function nDraw(focus) {
     var mu = m10 / 10, sg = s10 / 10, peak = 1 / (sg * Math.sqrt(2 * Math.PI));
+    var lo = Math.min(a10, b10) / 10, hi = Math.max(a10, b10) / 10;
+    $("muout").textContent = f2(mu); $("sgout").textContent = f2(sg);
+    if (nIsoBtn) {
+      nIsoBtn.classList.toggle("active", nIso);
+      nIsoBtn.classList.toggle("ghost", !nIso);
+    }
+    if (nIso && window.IsoBench && window.IsoBench.renderGaltonBench) {
+      var outEl = $("nout");
+      window.IsoBench.renderGaltonBench(nf, outEl, mu, sg, lo, hi, mode, function () { Peiyu.math(outEl); });
+      return;
+    }
+    nf.classList.remove("iso-fig");
     var ymax = Math.max(0.85, peak * 1.08), scaled = peak * 1.08 > 0.85;
     function ny(y) { return Yb - y / ymax * (Yb - Yt); }
     function dens(x) { var z = (x - mu) / sg; return peak * Math.exp(-z * z / 2); }
-    var lo = Math.min(a10, b10) / 10, hi = Math.max(a10, b10) / 10;
     var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), card = css("--card"), no = css("--no");
     nf.innerHTML = "";
     // 坐标轴
@@ -416,6 +508,7 @@
     $("k" + k).onclick = function () { mode = k; follow(); nDraw(); Peiyu.log("interact", { id: "normal-ksigma", k: k }); };
   });
   $("nreset").onclick = nReset;
+  if (nIsoBtn) nIsoBtn.onclick = function () { nIso = !nIso; nDraw(); Peiyu.log("interact", { id: "normal-iso", iso: nIso }); };
 
   /* ================= ② 模拟直方图 ================= */
   var hf = $("hfig"), nIn = $("nin");
@@ -500,8 +593,264 @@
   $("hnew").onclick = function () { seed++; gen(); hDraw(); Peiyu.log("interact", { id: "hist-new", seed: seed }); };
   $("hreset").onclick = hReset;
 
-  document.addEventListener("DOMContentLoaded", function () { nReset(); hReset(); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { nDraw(); hDraw(); });
+  /* ================= 0 从例子进入：100袋大米称重柱状图与钟形曲线 ================= */
+  var erSvg = $("entry-rice"), erBar = $("entry-rice-bar"), erNote = $("entry-rice-note");
+  var erMode = "mid";
+  var RICE_BINS = [
+    { lab: "<496", cnt: 2 },
+    { lab: "496~498", cnt: 14 },
+    { lab: "498~500", cnt: 34 },
+    { lab: "500~502", cnt: 34 },
+    { lab: "502~504", cnt: 14 },
+    { lab: "≥504", cnt: 2 }
+  ];
+  function erDraw(mode) {
+    erMode = mode;
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), noS = css("--no-soft");
+    erSvg.innerHTML = "";
+    var x0 = 44, bw = 72, base = 172, scale = 3.6;
+    RICE_BINS.forEach(function (b, idx) {
+      var x = x0 + idx * bw, h = b.cnt * scale, y = base - h;
+      var isMid = idx === 2 || idx === 3, isTail = idx === 0 || idx === 5;
+      var hit = mode === "all" || (mode === "mid" && isMid) || (mode === "tail" && isTail);
+      var fillC = mode === "mid" && isMid ? okS : (mode === "tail" && isTail ? noS : (mode === "all" ? okS : card));
+      var strokeC = mode === "mid" && isMid ? hl : (mode === "tail" && isTail ? no : (hit ? ca : ln));
+      var g = svg("g", { style: "cursor:pointer" }, erSvg);
+      svg("rect", { x: x + 2, y: y, width: bw - 4, height: h, rx: 4, fill: fillC, stroke: strokeC, "stroke-width": hit ? 2.2 : 1.2, opacity: hit ? 1 : 0.45 }, g);
+      svg("text", { x: x + bw / 2, y: y - 7, "text-anchor": "middle", fill: hit ? fg : mu, "font-size": 13.5, "font-weight": hit ? 700 : 400 }, g).textContent = b.cnt + "袋";
+      svg("text", { x: x + bw / 2, y: base + 20, "text-anchor": "middle", fill: hit ? fg : mu, "font-size": 12.5, "font-weight": hit ? 700 : 400 }, g).textContent = b.lab;
+      g.onclick = function () { erDraw(isMid ? "mid" : (isTail ? "tail" : "all")); };
+    });
+    svg("line", { x1: 28, y1: base, x2: 492, y2: base, stroke: fg, "stroke-width": 1.6 }, erSvg);
+    // 中心500g虚线与光滑钟形曲线
+    var cx = x0 + 3 * bw, sigPx = bw;
+    svg("line", { x1: cx, y1: 22, x2: cx, y2: base, stroke: cc, "stroke-width": 1.8, "stroke-dasharray": "5 4" }, erSvg);
+    svg("text", { x: cx, y: 16, "text-anchor": "middle", fill: cc, "font-size": 13, "font-weight": 700 }, erSvg).textContent = "标称中心 μ = 500g";
+    var d = "";
+    for (var i = 0; i <= 120; i++) {
+      var px = 34 + (486 - 34) * i / 120, z = (px - cx) / sigPx;
+      var py = base - 39.89 * scale * Math.exp(-0.5 * z * z);
+      d += (i ? "L" : "M") + px.toFixed(1) + " " + py.toFixed(1);
+    }
+    svg("path", { d: d, fill: "none", stroke: cc, "stroke-width": 2.6 }, erSvg);
+
+    [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (mode === "all") {
+      erNote.innerHTML = "全部 <b>100 袋</b>大米：紧挨着 500 克中心的两组最多，越往两边越少，轮廓贴合一条光滑的<b>钟形曲线</b>。";
+    } else if (mode === "mid") {
+      erNote.innerHTML = "中间 <b>498~502 克</b>：包含 498~500（<b>34 袋</b>）与 500~502（<b>34 袋</b>），合起来 <b>34 + 34 = 68 袋</b>，占总数的 <b>68%</b>！";
+    } else {
+      erNote.innerHTML = "两端极端偏差（低于 496 克或 ≥504 克）：加起来只有 <b>2 + 2 = 4 袋（4%）</b>，出现大的偏差很少见。";
+    }
+  }
+  [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { erDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: "all", B: "all", C: "mid", D: "tail" };
+      erDraw(map[ev.detail.choice] || "mid");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erDraw("mid");
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { erDraw("mid"); nReset(); hReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { erDraw(erMode); nDraw(); hDraw(); });
 })();
+
+  // === e3-7-5 Micro-box & Trap Interactive Script ===
+  (function () {
+    var fig = document.getElementById("m-norm-fig");
+    var desc = document.getElementById("m-norm-desc");
+    var trapFig = document.getElementById("m-norm-trap-fig");
+    var tabs = document.querySelectorAll("#m-norm-tabs .micro-tab");
+    if (!fig || !desc) return;
+
+    function el(t, a, txt) {
+      var e = document.createElementNS("http://www.w3.org/2000/svg", t);
+      for (var k in a) e.setAttribute(k, a[k]);
+      if (txt) e.textContent = txt;
+      return e;
+    }
+
+    function bellCurvePath(cx, cy, scaleX, scaleY) {
+      // Gaussian y = exp(-0.5 * (x/sigma)^2)
+      var pts = [];
+      for (var i = -40; i <= 40; i++) {
+        var x = i / 10;
+        var yVal = Math.exp(-0.5 * x * x);
+        var px = cx + x * scaleX;
+        var py = cy - yVal * scaleY;
+        pts.push(px.toFixed(1) + "," + py.toFixed(1));
+      }
+      return pts.join(" ");
+    }
+
+    function drawTab1() {
+      fig.innerHTML = "";
+      // Tab 1: 钟形曲线形态与参数意义
+      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "高斯钟形曲线：μ 决定对称中心，σ 决定高瘦/矮胖（面积守恒为 1）"));
+
+      // Base axis
+      fig.appendChild(el("line", {x1: 50, y1: 175, x2: 570, y2: 175, stroke: "var(--line)", "stroke-width": "1.5"}));
+
+      // Curve 1: Standard N(0, 1) -> center at 200 (Slim & tall)
+      var pSlim = bellCurvePath(200, 175, 28, 120);
+      fig.appendChild(el("polygon", {points: "88,175 " + pSlim + " 312,175", fill: "#e3f2fd", opacity: "0.6"}));
+      fig.appendChild(el("polyline", {points: pSlim, fill: "none", stroke: "#1976d2", "stroke-width": "2.5"}));
+      fig.appendChild(el("line", {x1: 200, y1: 50, x2: 200, y2: 175, stroke: "#1976d2", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
+      fig.appendChild(el("text", {x: 200, y: 45, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "σ 小：瘦高集中"));
+      fig.appendChild(el("text", {x: 200, y: 192, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "var(--fg)"}, "x = μ₁"));
+
+      // Curve 2: N(μ2, 2^2) -> center at 420 (Fat & short)
+      var pFat = bellCurvePath(420, 175, 45, 75);
+      fig.appendChild(el("polygon", {points: "240,175 " + pFat + " 600,175", fill: "#e8f5e9", opacity: "0.5"}));
+      fig.appendChild(el("polyline", {points: pFat, fill: "none", stroke: "#2e7d32", "stroke-width": "2.5"}));
+      fig.appendChild(el("line", {x1: 420, y1: 95, x2: 420, y2: 175, stroke: "#2e7d32", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
+      fig.appendChild(el("text", {x: 420, y: 90, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#2e7d32"}, "σ 大：矮胖分散"));
+      fig.appendChild(el("text", {x: 420, y: 192, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "var(--fg)"}, "x = μ₂"));
+
+      fig.appendChild(el("text", {x: 310, y: 210, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "两曲线下方总面积完全相等（恒等于 1）；峰高与腰宽呈反比例制约"));
+      desc.innerHTML = "<b>① 钟形曲线参数形态直觉</b>：中心对称轴由均值 \(\mu\) 决定（曲线沿轴左右平移）；分散程度由标准差 \(\sigma\) 决定。\(\sigma\) 越小，说明数据紧密团聚在均值周围，峰顶耸拔；\(\sigma\) 越大，数据大幅散开，波峰低伏。总面积始终恒定为 1。";
+    }
+
+    function drawTab2() {
+      fig.innerHTML = "";
+      // Tab 2: 3σ 原则与区间概率分配
+      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "3σ 原则：68.27% (1σ) ➔ 95.45% (2σ) ➔ 99.73% (3σ)"));
+
+      var cx = 310, cy = 160, sx = 40, sy = 104;
+      // Axis
+      fig.appendChild(el("line", {x1: 60, y1: cy, x2: 560, y2: cy, stroke: "var(--line)", "stroke-width": "1.5"}));
+
+      // Shaded 1σ region [-1, 1] -> [cx-40, cx+40]
+      var pts1 = [];
+      for (var i = -10; i <= 10; i++) {
+        var x = i / 10;
+        pts1.push((cx + x * sx).toFixed(1) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(1));
+      }
+      fig.appendChild(el("polygon", {points: (cx-sx) + "," + cy + " " + pts1.join(" ") + " " + (cx+sx) + "," + cy, fill: "#e3f2fd"}));
+
+      // Full curve
+      var pFull = bellCurvePath(cx, cy, sx, sy);
+      fig.appendChild(el("polyline", {points: pFull, fill: "none", stroke: "#1976d2", "stroke-width": "2.5"}));
+
+      // Mark ticks
+      var ticks = [
+        {off: -3, label: "μ-3σ"}, {off: -2, label: "μ-2σ"}, {off: -1, label: "μ-σ"},
+        {off: 0, label: "μ"},
+        {off: 1, label: "μ+σ"}, {off: 2, label: "μ+2σ"}, {off: 3, label: "μ+3σ"}
+      ];
+      ticks.forEach(function(tk) {
+        var px = cx + tk.off * sx;
+        fig.appendChild(el("line", {x1: px, y1: cy, x2: px, y2: cy + 6, stroke: "var(--fg)", "stroke-width": "1.5"}));
+        fig.appendChild(el("text", {x: px, y: cy + 16, "text-anchor": "middle", "font-size": "9.5", fill: tk.off === 0 ? "#ef4444" : "var(--muted)"}, tk.label));
+      });
+
+      // 1σ bracket
+      fig.appendChild(el("line", {x1: cx - sx, y1: 72, x2: cx + sx, y2: 72, stroke: "#1976d2", "stroke-width": "2"}));
+      fig.appendChild(el("text", {x: cx, y: 67, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "68.27% (1σ 内)"));
+
+      // 2σ label
+      fig.appendChild(el("text", {x: cx, y: 202, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#2e7d32"}, "2σ 内占 95.45%；3σ 内占 99.73%；3σ 之外仅占 0.27%（小概率事件）"));
+      desc.innerHTML = "<b>② 3σ 原则经验黄金率</b>：数据落在 \([\mu-\sigma, \mu+\sigma]\) 占约 68.3%；落在 \([\mu-2\sigma, \mu+2\sigma]\) 占约 95.5%；落在 \([\mu-3\sigma, \mu+3\sigma]\) 占高达 99.73%。落在 \(3\sigma\) 之外的概率几乎为零，是工业质量控制（六西格玛）与异常检测的核心依据。";
+    }
+
+    function drawTab3() {
+      fig.innerHTML = "";
+      // Tab 3: 轴对称几何切分割补算法
+      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "对称性割补算单侧：P(X > μ+c) = P(X < μ-c) = (1 - P(区间)) / 2"));
+
+      var cx = 310, cy = 165, sx = 40, sy = 105;
+      fig.appendChild(el("line", {x1: 60, y1: cy, x2: 560, y2: cy, stroke: "var(--line)", "stroke-width": "1.5"}));
+
+      // Shaded left tail (x < -1) -> [60, cx-40]
+      var ptsL = [];
+      for (var i = -40; i <= -10; i++) {
+        var x = i / 10;
+        ptsL.push((cx + x * sx).toFixed(1) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(1));
+      }
+      fig.appendChild(el("polygon", {points: "60," + cy + " " + ptsL.join(" ") + " " + (cx-sx) + "," + cy, fill: "#fee2e2"}));
+
+      // Shaded right tail (x > 1) -> [cx+40, 560]
+      var ptsR = [];
+      for (var j = 10; j <= 40; j++) {
+        var x = j / 10;
+        ptsR.push((cx + x * sx).toFixed(1) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(1));
+      }
+      fig.appendChild(el("polygon", {points: (cx+sx) + "," + cy + " " + ptsR.join(" ") + " 560," + cy, fill: "#fee2e2"}));
+
+      // Full curve
+      fig.appendChild(el("polyline", {points: bellCurvePath(cx, cy, sx, sy), fill: "none", stroke: "#1976d2", "stroke-width": "2.5"}));
+      fig.appendChild(el("line", {x1: cx, y1: 45, x2: cx, y2: cy, stroke: "#ef4444", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
+      fig.appendChild(el("text", {x: cx, y: 40, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "对称轴 x = μ"));
+
+      // Labels for tails
+      fig.appendChild(el("text", {x: cx - 2*sx, y: 135, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "左单尾 15.87%"));
+      fig.appendChild(el("text", {x: cx + 2*sx, y: 135, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "右单尾 15.87%"));
+
+      fig.appendChild(el("text", {x: 310, y: 198, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "求右单尾 P(X > μ+σ)：必须把双尾总和 (1-0.6827) 除以 2 得到 0.1587！"));
+      desc.innerHTML = "<b>③ 轴对称割补几何算法</b>：高斯钟形曲线关于对称轴平分秋色（左半 0.5、右半 0.5）。求单侧超过某格点的概率时，先求出对称中心区间的概率，用 1 减去它得到左右双尾的总面积，最后除以 2 得到单侧概率。";
+    }
+
+    function drawTrap() {
+      if (!trapFig) return;
+      trapFig.innerHTML = "";
+      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "正确：右单尾除以 2 ➔ 0.1587"));
+      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#ef4444"}, "翻车：忘了除以 2 算成 0.3173"));
+
+      // Left: 1 tail shaded
+      var cx1 = 140, cy1 = 100, sx1 = 25, sy1 = 55;
+      trapFig.appendChild(el("line", {x1: 40, y1: cy1, x2: 240, y2: cy1, stroke: "var(--line)", "stroke-width": "1"}));
+      var ptsR1 = [];
+      for (var j = 10; j <= 35; j++) {
+        var x = j / 10;
+        ptsR1.push((cx1 + x * sx1).toFixed(1) + "," + (cy1 - Math.exp(-0.5*x*x)*sy1).toFixed(1));
+      }
+      trapFig.appendChild(el("polygon", {points: (cx1+sx1) + "," + cy1 + " " + ptsR1.join(" ") + " 240," + cy1, fill: "#e8f5e9"}));
+      trapFig.appendChild(el("polyline", {points: bellCurvePath(cx1, cy1, sx1, sy1), fill: "none", stroke: "#10b981", "stroke-width": "1.8"}));
+      trapFig.appendChild(el("text", {x: 140, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "单侧面积 = 0.3173 ÷ 2 = 0.1587"));
+
+      // Separator
+      trapFig.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 135, stroke: "var(--line)", "stroke-width": "1"}));
+
+      // Right: Both tails shaded as one
+      var cx2 = 400, cy2 = 100, sx2 = 25, sy2 = 55;
+      trapFig.appendChild(el("line", {x1: 300, y1: cy2, x2: 500, y2: cy2, stroke: "var(--line)", "stroke-width": "1"}));
+      var ptsL2 = [];
+      for (var i = -35; i <= -10; i++) {
+        var x = i / 10;
+        ptsL2.push((cx2 + x * sx2).toFixed(1) + "," + (cy2 - Math.exp(-0.5*x*x)*sy2).toFixed(1));
+      }
+      trapFig.appendChild(el("polygon", {points: "300," + cy2 + " " + ptsL2.join(" ") + " " + (cx2-sx2) + "," + cy2, fill: "#fee2e2"}));
+      var ptsR2 = [];
+      for (var j2 = 10; j2 <= 35; j2++) {
+        var x2 = j2 / 10;
+        ptsR2.push((cx2 + x2 * sx2).toFixed(1) + "," + (cy2 - Math.exp(-0.5*x2*x2)*sy2).toFixed(1));
+      }
+      trapFig.appendChild(el("polygon", {points: (cx2+sx2) + "," + cy2 + " " + ptsR2.join(" ") + " 500," + cy2, fill: "#fee2e2"}));
+      trapFig.appendChild(el("polyline", {points: bellCurvePath(cx2, cy2, sx2, sy2), fill: "none", stroke: "#ef4444", "stroke-width": "1.8"}));
+      trapFig.appendChild(el("text", {x: 400, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "把左右两头都算进去了（翻倍错误！）"));
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        tabs.forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        var idx = tab.getAttribute("data-tab");
+        if (idx === "1") drawTab1();
+        else if (idx === "2") drawTab2();
+        else if (idx === "3") drawTab3();
+      });
+    });
+
+    drawTab1();
+    drawTrap();
+  })();
+
 </script>
 </body></html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>全册路线 · 培玉高中数学</title>
+<link rel="icon" href="assets/logo.svg">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.route-intro{margin:0 0 18px;padding:14px 16px;border:1px solid var(--line);border-left:4px solid var(--a);border-radius:var(--radius);background:var(--card)}
+.route-intro p{margin:6px 0;line-height:1.65}.route-intro a{color:var(--a)}
+.book-route{margin:16px 0;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:0 16px 12px}
+.book-route>h2{font-size:20px;margin:16px 0 4px}.book-note{color:var(--muted);font-size:14px;margin:0 0 10px}
+.chapter-route{margin:10px 0;border-top:1px solid var(--line);padding-top:8px}.chapter-route h3{font-size:17px;margin:0 0 5px}
+.chapter-route p{margin:4px 0;color:var(--muted);font-size:14px}.section-route{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 4px;padding:0;list-style:none}
+.section-route li{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:10px;padding:6px 9px;background:var(--bg);font-size:14px}
+.section-route a{color:var(--a);text-decoration:none}.section-route a:hover,.section-route a:focus-visible{text-decoration:underline}
+.section-route .num{color:var(--muted);font-variant-numeric:tabular-nums}.tag{border:1px solid var(--hl);border-radius:999px;color:var(--hl);font-size:12px;padding:1px 5px}
+.section-route .focus{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+@media (max-width:560px){.book-route{padding:0 12px 10px}.section-route{display:grid;grid-template-columns:minmax(0,1fr)}.section-route li{display:block}.section-route .num{margin-right:4px}}
+</style><script defer src="assets/hci.js"></script>
+</head>
+<body><div class="wrap">
+<header class="top"><img src="assets/logo.svg" alt=""><a class="brand" href="index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="index.html">← 返回主页</a><a class="rec" href="record.html">我的记录</a></header>
+<h1>全册路线</h1>
+<div class="route-intro">
+  <p>按人教 A 版课本的册、章、节排列，选学内容单独标出。点击节名进入学习页。</p>
+  <p class="small">页面内容是培玉自编释义、例题和互动。</p>
+</div>
+<div id="route" aria-live="polite"><p class="small">正在加载路线……</p></div>
+<footer>培玉智能 · 全册路线索引。</footer>
+</div>
+<script>
+(function(){
+  "use strict";
+  var out=document.getElementById("route");
+  function list(v){return Array.isArray(v)?v:[]}
+  function esc(v){return String(v==null?"":v).replace(/[&<>\"']/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]})}
+  function render(data){
+    var books=list(data.books);
+    if(!books.length && Array.isArray(data)){
+      var byBook={};
+      data.forEach(function(sec){
+        if(!sec || !sec.id)return;
+        var book=byBook[sec.book]||(byBook[sec.book]={name:sec.book,chapters:[]});
+        var chapterTitle=(sec.chapter||'').replace(/^第\d+章\s*/,''), chapterNo=(sec.chapter||'').replace(/^第(\d+)章.*$/,'$1');
+        var ch=book.chapters.filter(function(x){return x.title===chapterTitle})[0];
+        if(!ch){ch={no:chapterNo||'?',title:chapterTitle,sections:[]};book.chapters.push(ch)}
+        ch.sections.push(sec);
+      });
+      books=Object.keys(byBook).map(function(k){return byBook[k]});
+    }
+    if(!books.length){out.innerHTML='<p class="small">路线资料暂时不可用。</p>';return}
+    var html=[];
+    books.forEach(function(book){
+      html.push('<section class="book-route"><h2>'+esc(book.name)+'</h2>');
+      if(book.note)html.push('<p class="book-note">'+esc(book.note)+'</p>');
+      list(book.chapters).forEach(function(ch){
+        html.push('<div class="chapter-route"><h3>第 '+esc(ch.no)+' 章 '+esc(ch.title)+'</h3>');
+        if(ch.goal)html.push('<p>'+esc(ch.goal)+'</p>');
+        html.push('<ul class="section-route">');
+        list(ch.sections).forEach(function(sec){
+          html.push('<li id="'+esc(sec.id)+'"><a href="lessons/'+encodeURIComponent(sec.id)+'.html">'+esc(sec.section)+'</a>');
+          if(sec.optional || sec.level==='optional')html.push('<span class="tag">选学</span>');
+          if(list(sec.concepts).length)html.push('<span class="focus">抓住：'+esc(list(sec.concepts).slice(0,2).join('、'))+'</span>');
+          html.push('</li>');
+        });
+        html.push('</ul></div>');
+      });
+      html.push('</section>');
+    });
+    out.innerHTML=html.join('');
+  }
+  fetch('data/textbook-route.json').then(function(r){if(!r.ok)throw Error(r.status);return r.json()}).then(render).catch(function(){out.innerHTML='<p class="small">路线资料暂时不可用，请稍后再试。</p>'});
+}());
+</script></body></html>

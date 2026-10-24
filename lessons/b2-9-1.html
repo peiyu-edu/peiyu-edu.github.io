@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--a); font-weight: 700; }
@@ -26,8 +28,15 @@
 <p class="lead">想知道一大群人的情况，往往只能问其中一部分人。问谁、怎么挑，才能让这一部分「像」整体？先从一锅汤说起。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一大锅汤煮好了，想知道它咸不咸。</p>
+  <p>一大锅汤煮好了，想知道它咸不咸。先点下面的按钮试试三种尝汤办法：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-soup" viewBox="0 0 520 205" role="img" aria-label="一锅汤的截面图：对比整锅喝光、搅匀舀一勺、不搅只舀表层油花"></svg>
+    <div class="entry-bar" id="entry-soup-bar">
+      <button type="button" data-m="A">A 整锅喝光（汤没了！）</button>
+      <button type="button" data-m="B" class="on">B 先搅匀再舀一勺（均匀代表整锅）</button>
+      <button type="button" data-m="C">C 不搅只舀表层油花（有偏！）</button>
+    </div>
+    <div class="entry-note" id="entry-soup-note"></div>
     <p>下面哪种做法最合适？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>把整锅汤都喝完，再下结论</button>
@@ -42,66 +51,79 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中学过的平均数，以及「普查」「抽样调查」的说法。这是第 9 章第一节，不需要前面高中章节的结论。</p>
+  <p class="small">要用到：初中平均数、普查与抽样调查的现实意义。统计学第一课，核心在于「用局部样本科学推断总体」。</p>
 
-  <div class="card">
-    <p><b>总体和个体</b>：要研究的全部对象叫<b>总体</b>，其中每一个叫<b>个体</b>。</p>
-    <p>例：想知道全校 \(1200\) 名学生每周运动多少小时。这 \(1200\) 个人的运动时长合起来是总体，每个人的时长是一个个体。</p>
+  <div class="micro-box">
+    <div class="micro-head">
+      <span>直观微图解</span>
+      <div class="micro-bar" id="m-samp-bar">
+        <button class="on" data-m="srs">简单随机抽样（人人机会均等）</button>
+        <button data-m="strat">分层抽样（按比例天平）</button>
+        <button data-m="methods">获取数据四途径</button>
+      </div>
+    </div>
+    <svg id="m-samp-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <div class="micro-status" id="m-samp-status">简单随机抽样铁律：总体容量 N 中抽取样本量 n，每个个体入样概率恒为 n/N。</div>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">简单随机抽样</span> 总体均质无显著差异</div>
+      <p><b>适用条件</b>：总体中各对象个体差异不大、无明显分块类别。</p>
+      <p><b>核心机制</b>：不放回抽样中，每一次未被抽到的个体机会均等，全过程每个个体入样概率均为 <b>\(\frac{n}{N}\)</b>。</p>
+      <p><b>实施手段</b>：抽签法（编号、做签、搅匀）、随机数法（计算机/随机数表）。</p>
+    </div>
+    <div class="concept-card highlight">
+      <div class="concept-head"><span class="badge-pill accent">分层随机抽样</span> 总体类别差异显著</div>
+      <p><b>适用条件</b>：总体内部差异明显（如不同年级、城乡、年龄段对指标有显著区别）。</p>
+      <p><b>核心机制</b>：<b>按比例分配</b>（每层抽样比 \(\frac{n_i}{N_i} = \frac{n}{N}\) 恒定一致）。</p>
+      <p><b>估计优势</b>：样本结构严格等比复刻总体结构，大幅降低系统抽样方差与误差！</p>
+    </div>
   </div>
 
   <div class="card">
-    <p><b>样本和样本量</b>：从总体里抽出来的那一部分叫<b>样本</b>，样本里个体的个数叫<b>样本量</b>。</p>
-    <p>例：从全校抽了 \(4\) 个人，运动时长是 \(3,5,6,10\) 小时。这 \(4\) 个数是一个样本，样本量是 \(4\)。</p>
+    <p><b>总体与个体</b>：研究对象的全体叫<b>总体</b>（容量 \(N\)），其中每一个对象叫<b>个体</b>。</p>
+    <p><b>样本与样本量</b>：从总体抽出的子集叫<b>样本</b>，包含的个体数叫<b>样本量</b>（\(n\)）。</p>
+    <p><b>全面调查 vs 抽样调查</b>：破坏性检验（如测灯泡寿命、测导弹命中）或总体过大时<b>绝对只能抽样调查</b>！仅在关乎生命安全或个体量很小且必须全员覆盖时采用全面普查。</p>
   </div>
 
-  <div class="card">
-    <p><b>样本均值和总体均值</b>：样本里数据的平均数叫<b>样本均值</b>，记作 \(\bar y\)；总体里全部数据的平均数叫<b>总体均值</b>，记作 \(\bar Y\)。</p>
-    <p>例：上面的样本，\(\bar y=\dfrac{3+5+6+10}{4}=6\)。总体均值要把 \(1200\) 个人全问到才知道，通常不知道，就用 \(\bar y\) 去<b>估计</b>它。</p>
-  </div>
-
-  <div class="card">
-    <p><b>随机</b>：抽的时候，每个个体被抽到的<b>机会一样</b>，不由人挑。</p>
-    <p>例：全班 \(40\) 人各写一张签，放进箱子搅匀，摸一张：每个人被摸到的可能性都是 \(\dfrac1{40}\)。如果是「老师点一个看着精神的」，那就不随机。</p>
-  </div>
-
-  <h3>2. 全面调查还是抽样调查</h3>
-  <p>把总体里每个个体都调查一遍，叫<b>全面调查</b>（普查）；只调查一部分，再用它推断总体，叫<b>抽样调查</b>。</p>
-  <p>全面调查结果最全，但费时费钱；有时根本不能做——检查本身会毁掉东西（比如测灯泡能亮多久）。抽样调查省时省钱，代价是结果有误差，要靠「抽得好」把误差压小。</p>
+  <h3>2. 全面调查与抽样调查的决策</h3>
   <div class="card">
     <p class="small">例 1（看一遍怎么判断）</p>
     <p>下面四件事，各用哪种调查？</p>
     <ol>
-      <li>火箭发射前，检查每个关键零件。——<b>全面调查</b>：一个出问题就前功尽弃，必须个个查。</li>
-      <li>了解全国中学生的视力。——<b>抽样调查</b>：人太多，全查成本太高。</li>
-      <li>检测一批袋装牛奶是否合格。——<b>抽样调查</b>：检测要拆袋，拆了就不能卖。</li>
-      <li>统计班里 \(40\) 人要订的校服尺码。——<b>全面调查</b>：每个人都要发到合身的衣服，人也不多。</li>
+      <li>火箭发射前检查每个关键零件。——<b>全面调查</b>：零缺陷要求，必须个个查。</li>
+      <li>了解全国中学生的视力健康状况。——<b>抽样调查</b>：总人数过大，成本无法承受。</li>
+      <li>检测一批袋装牛奶的细菌指标。——<b>抽样调查</b>：破坏性检测，拆袋即损耗。</li>
+      <li>统计全班 40 人的校服尺码。——<b>全面调查</b>：一人一服，样本量小且需精确对齐。</li>
     </ol>
   </div>
+
   <div class="card predict" data-id="try-census" data-answer="B">
     <p>自己试试：工厂想知道一批 \(5000\) 只灯泡平均能亮多少小时。应该用哪种调查？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>全面调查</button>
       <button class="opt" data-v="B"><b>B</b>抽样调查</button>
     </div>
-    <div class="reveal"><p><b>B</b>。要知道一只灯泡能亮多久，得一直点到它坏。全面调查虽然「最准」，可测完 \(5000\) 只灯泡全坏了，没有东西可卖。选 A 的同学只想到了准，没想到代价。</p></div>
+    <div class="reveal"><p><b>B</b>。破坏性测试：测完 5000 只灯泡全部报废，无货可卖！选 A 的同学只想到了理论准确性，忽视了工程代价。</p></div>
+  </div>
+  <div class="vid" data-video="ex-sample"></div>
+
+  <h3>3. 简单随机抽样与等可能概率</h3>
+  <div class="key">
+    $$\color{#0284c7}{P(\text{任何个体被抽进样本}) = \frac{n}{N} \quad (\text{机会绝对均等})}$$
+    $$\color{#d97706}{\text{样本均值: } \bar{y} = \frac{y_1 + y_2 + \cdots + y_n}{n} \quad \implies \text{用于无偏估计总体均值 } \bar{Y}}$$
+    <div style="font-size:12.5px;color:var(--mut, #64748b);margin-top:6px;text-align:center">不放回抽样第 1 次被抽到的概率是 \(\frac{1}{N}\)，但累计被抽中概率仍是 \(\frac{n}{N}\)，人人平等！</div>
   </div>
 
-  <h3>3. 简单随机抽样</h3>
-  <p>从 \(N\) 个个体里一个一个地抽，抽 \(n\) 次：</p>
-  <ul>
-    <li><b>不放回</b>：抽到的不再放回去，每一次在<b>还没被抽到的</b>个体里，每个被抽到的机会都相等；</li>
-    <li><b>放回</b>：每次抽完放回去，每一次在<b>全部</b>个体里，每个被抽到的机会都相等（同一个人可能被抽到两次）。</li>
-  </ul>
-  <p>这两种都叫<b>简单随机抽样</b>。调查人时一般用不放回的。常用两种办法：<b>抽签法</b>（编号、做签、搅匀、摸签）和<b>随机数法</b>（编号后用计算器、软件或随机数表产生号码，重复的号码跳过）。关键在于<b>机会均等</b>：每一次抽取时，还没被抽到的每个个体被选中的可能性都一样，所以总体里每个个体最后被抽进样本的机会也都一样。</p>
-  <div class="key">抽出样本后，用样本均值 \(\bar y=\dfrac{y_1+y_2+\cdots+y_n}{n}\) 估计总体均值 \(\bar Y\)。</div>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>全班 \(40\) 人，用抽签法抽 \(5\) 人调查每周运动时长，并估计全班的平均值。</p>
-    <p>第一步，给 \(40\) 人编号 \(1\sim40\)，做 \(40\) 张一样的签写上号码。第二步，签放进箱子充分搅匀。第三步，不放回地摸 \(5\) 张，对应的 \(5\) 人就是样本。</p>
-    <p>问到 \(5\) 人的时长是 \(3,6,4,8,4\) 小时，样本均值 \(\bar y=\dfrac{3+6+4+8+4}{5}=\dfrac{25}{5}=5\)。估计全班平均每周运动约 \(5\) 小时。</p>
-    <p class="small">说「约」，是因为换一次抽签，样本就不同，\(\bar y\) 也会变。</p>
+    <p class="small">例 2（抽签法与均值估计）</p>
+    <p>全班 40 人，用抽签法抽取 5 人调查每周运动时长，样本数据为 \(3, 6, 4, 8, 4\) 小时。求样本均值并解释其统计意义。</p>
+    <p>解：样本均值 \(\bar{y} = \dfrac{3+6+4+8+4}{5} = \dfrac{25}{5} = 5\) 小时。以此估计全班平均每周运动约为 5 小时。注意：换一组抽签样本，\(\bar{y}\) 会围绕总体均值波动，这正是随机抽样的抽样误差本质。</p>
   </div>
+
   <div class="card predict" data-id="try-srs" data-answer="C">
     <p>自己试试：从 \(60\) 名同学中，不放回地简单随机抽取 \(6\) 人。小明被抽中的可能性是多少？</p>
     <div class="opts cols">
@@ -110,24 +132,54 @@
       <button class="opt" data-v="C"><b>C</b>\(\dfrac1{10}\)</button>
     </div>
     <div class="reveal">
-      <p><b>C</b>。\(6\) 次里每次都可能抽到他。反过来算「一直没抽到」：第 1 次没抽到的可能性 \(\dfrac{59}{60}\)，第 2 次在剩下 \(59\) 人里也没抽到 \(\dfrac{58}{59}\)……连乘下去是 \(\dfrac{59}{60}\cdot\dfrac{58}{59}\cdots\dfrac{54}{55}=\dfrac{54}{60}=\dfrac9{10}\)，所以被抽中的可能性是 \(\dfrac1{10}=\dfrac{6}{60}\)。</p>
-      <p>选 A 的同学只算了第 1 次。结论：不放回简单随机抽样，每个人被抽中的可能性都是 \(\dfrac nN\)，人人一样。</p>
+      <p><b>C</b>。第 1 次未抽到为 \(\frac{59}{60}\)，第 2 次在剩下 59 人中未抽到为 \(\frac{58}{59}\)……连乘得一直未被抽中概率为 \(\frac{54}{60} = \frac{9}{10}\)。因此小明被抽中的总概率为 \(1 - \frac{9}{10} = \frac{1}{10} = \frac{6}{60}\)！选 A 错在只算了第 1 次抽取。</p>
+    </div>
+  </div>
+  <div class="vid" data-video="ex-bias"></div>
+
+  <h3>4. 分层抽样与三步思维链</h3>
+  <div class="key" style="text-align:center">
+    $$\color{#d97706}{\text{按比例分配公式: } n_i = n \cdot \frac{N_i}{N} \iff \frac{n_i}{N_i} = \frac{n}{N} = k \quad (\text{抽样比恒定})}$$
+    $$\color{#059669}{\text{总体均值加权估计: } \bar{y} = \sum_{i=1}^k \frac{N_i}{N}\bar{y}_i = \frac{n_1\bar{y}_1 + n_2\bar{y}_2 + \cdots + n_k\bar{y}_k}{n}}$$
+  </div>
+
+  <div class="card think-steps">
+    <div class="small" style="font-weight:700;color:var(--key, #0284c7);margin-bottom:8px">典型题三步思维链：分层抽样配比与加权总均值计算</div>
+    <p><b>题目</b>：某高中共有学生 1500 人，其中高一 600 人、高二 500 人、高三 400 人。现采用分层随机抽样抽取 60 人调查每周运动时长。若三层样本均值分别为 6.5 小时、5.0 小时、3.5 小时，求各层抽样人数及全校平均时长的估计值。</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号：</b>
+        总体由高中三个年级构成（年级差异极大），总容量 \(N=1500\)，抽取样本总量 \(n=60\)。必须采用<b>按比例分层随机抽样</b>！
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法（配比与加权）：</b>
+        <p>① <b>统一抽样比</b>：\(k = \dfrac{n}{N} = \dfrac{60}{1500} = \dfrac{1}{25}\)。</p>
+        <p>② <b>各层样本量分配</b>：<br>
+        高一年级抽：\(n_1 = 600 \times \dfrac{1}{25} = 24\) 人；<br>
+        高二年级抽：\(n_2 = 500 \times \dfrac{1}{25} = 20\) 人；<br>
+        高三年级抽：\(n_3 = 400 \times \dfrac{1}{25} = 16\) 人。<br>
+        （校验：\(24 + 20 + 16 = 60\) 人，总数严格吻合！）</p>
+        <p>③ <b>加权平均数估计总体均值</b>：<br>
+        \(\bar{y} = \dfrac{24 \times 6.5 + 20 \times 5.0 + 16 \times 3.5}{60} = \dfrac{156 + 100 + 56}{60} = \dfrac{312}{60} = 5.2\) 小时。</p>
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论：</b>
+        ① 严禁直接简单平均各层样本均值（\(\frac{6.5+5.0+3.5}{3} = 5.0\)，这是大错！因为高一人数远多于高三，高一权重更高，真实均值为 5.2）；<br>
+        ② 核算各层抽取人数必须全为整数，且总和等于 60。
+      </div>
     </div>
   </div>
 
-  <h3>4. 分层随机抽样</h3>
-  <p>如果总体里有几类人，而且这几类在要研究的量上差别明显（比如高一、高三的运动时长差很多），简单随机抽样可能碰巧抽到的高三特别多，结果偏低。办法是：先按这个特征把总体分成几<b>层</b>，再<b>在每层里</b>简单随机抽样。这叫<b>分层随机抽样</b>。</p>
-  <p>各层抽多少人，最常用的是<b>按比例分配</b>：每层抽的人数占样本的比例，等于这层人数占总体的比例。这样样本里各类人的比例和总体一样。</p>
-  <div class="key">比例分配：第 \(i\) 层有 \(N_i\) 人，就抽 \(n\cdot\dfrac{N_i}{N}\) 人。<br>估计总体均值：\(\bar y=\dfrac{N_1}{N}\bar y_1+\dfrac{N_2}{N}\bar y_2+\cdots\)，每层的样本均值按这层在总体里的比例加权。</div>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>某校高一 \(600\) 人、高二 \(500\) 人、高三 \(400\) 人。按年级分层，按比例抽 \(60\) 人调查每周运动时长。各年级抽几人？若三层样本均值分别是 \(6.5\)、\(5\)、\(3.5\) 小时，估计全校平均值。</p>
-    <p>总人数 \(600+500+400=1500\)，抽样比例 \(\dfrac{60}{1500}=\dfrac1{25}\)。各抽 \(600\times\dfrac1{25}=24\) 人、\(500\times\dfrac1{25}=20\) 人、\(400\times\dfrac1{25}=16\) 人，合计 \(60\)。</p>
-    <p>估计全校平均值：</p>
-    <p style="text-align:center">\(\bar y=\dfrac{24\times6.5+20\times5+16\times3.5}{60}\)</p>
-    <p style="text-align:center">\(=\dfrac{156+100+56}{60}=\dfrac{312}{60}=5.2\)（小时）。</p>
-    <p class="small">按比例分配时，把 \(60\) 人的数据直接平均，和按 \(\dfrac{600}{1500},\dfrac{500}{1500},\dfrac{400}{1500}\) 加权，结果一样。</p>
-  </div>
   <div class="card predict" data-id="try-strat" data-answer="A">
     <p>自己试试：公司有男职工 \(120\) 人、女职工 \(80\) 人，按性别分层、按比例抽 \(30\) 人。女职工抽几人？</p>
     <div class="opts cols">
@@ -138,18 +190,17 @@
     <div class="reveal"><p><b>A</b>。女职工占 \(\dfrac{80}{200}=\dfrac25\)，抽 \(30\times\dfrac25=12\) 人（男职工 \(18\) 人）。选 B 是两层平分，不是按比例；选 C 是把男职工的人数当成了女职工的。</p></div>
   </div>
 
-  <h3>5. 获取数据的途径</h3>
-  <p>抽样调查只是拿数据的一种方式。按问题选途径：</p>
-  <ul>
-    <li><b>调查</b>：问人或查看现有对象，如问卷了解睡眠时长。</li>
-    <li><b>试验</b>：主动控制条件、比较结果，如一半田施新肥、一半不施，比产量。</li>
-    <li><b>观察</b>：不干预，只记录，如每天记录气温、观测鸟类迁徙。</li>
-    <li><b>查询</b>：用别人已经收集好的数据，如统计年鉴、权威网站。</li>
-  </ul>
+  <h3>5. 获取数据的四种途径</h3>
   <div class="card">
-    <p class="small">例 4</p>
-    <p>想知道本市近 \(10\) 年每年的降水量。——用<b>查询</b>：气象部门早就记下来了，不必自己重新测。想知道新药是否有效。——用<b>试验</b>：要把病人分成用药组和对照组，其他条件尽量相同，才能说清差别是药带来的。</p>
+    <p class="small">例 4（途径选择辨析）</p>
+    <ul>
+      <li><b>调查</b>：通过问卷、访谈直接收集对象信息（如中学生作息问卷）。</li>
+      <li><b>试验</b>：人工控制变量做对照比较（如农业双盲施肥增产对照试验）。</li>
+      <li><b>观察</b>：不干涉对象自然状态进行追踪记录（如每天记录气象雷达数据）。</li>
+      <li><b>查询</b>：检索官方或公开数据库（如查阅国家统计局年鉴）。</li>
+    </ul>
   </div>
+
   <div class="card predict" data-id="try-source" data-answer="A">
     <p>自己试试：想知道一种新肥料能不能让番茄增产，最合适的获取数据途径是？</p>
     <div class="opts cols">
@@ -157,26 +208,38 @@
       <button class="opt" data-v="B"><b>B</b>观察</button>
       <button class="opt" data-v="C"><b>C</b>查询</button>
     </div>
-    <div class="reveal"><p><b>A</b>。在土质、浇水相同的两块地里，一块施新肥、一块不施，比较产量。选 B 的同学想「看看用了新肥的人家收成好不好」，可那户人家的土和管理可能本来就好，分不清是不是肥料的功劳。新肥料也没有现成数据可查。</p></div>
+    <div class="reveal"><p><b>A</b>。必须人工设置单一变量对照（同土质同水肥对照组），方能排除土壤等干扰。选 B 无法确定收成好是否源自该肥料。</p></div>
   </div>
 
-  <h3>6. 用之前，查几件事</h3>
-  <p>抽样要「像」总体，下面几条缺一不可：</p>
-  <ol>
-    <li><b>真随机，不是「随便」</b>：在路口随便拉人、让愿意的人自己填问卷，都不是随机抽样。<br><span class="small">反例：在网上发问卷问「你每天上网几小时」，上网多的人更容易看到并回答，结果会偏高。</span></li>
-    <li><b>放回、不放回要分清</b>：不放回时，每次在「还没抽到的」里机会相等；放回时，每次在全部个体里机会相等。<br><span class="small">反例：\(40\) 人抽 \(5\) 人，摸到的签又放回去，可能同一个人被抽到两次，样本里实际只有 \(4\) 个不同的人。这是放回抽样，要说清楚。</span></li>
-    <li><b>按和研究的量有关的特征分层，层内还要随机</b>。<br><span class="small">反例：研究运动时长，按学号单双号分层，两层几乎一样，分了等于没分；按年级分才有用。每个年级只抽「离办公室最近的那个班」，层内就不随机了。</span></li>
-    <li><b>不按比例抽时，要按总体比例加权</b>，不能把各层样本直接合起来平均。<br><span class="small">反例：甲层 \(900\) 人、乙层 \(100\) 人，各抽 \(30\) 人，样本均值 \(2\) 和 \(10\)。直接平均得 \(6\)；正确估计是 \(0.9\times2+0.1\times10=2.8\)。乙层只占一成，却在样本里占了一半。</span></li>
-    <li><b>人多救不了抽法偏</b>：抽法有系统偏差时，样本量再大，偏差也还在。<br><span class="small">反例：在健身房门口问 \(2000\) 人每周运动多久，人很多，可问到的大多是爱运动的人，结果一定偏高。「动手」②可以看到这一点。</span></li>
-  </ol>
-  <div class="key">先想清楚三件事：总体是谁、要研究什么量、名单从哪来。然后让每个个体都有相同的机会被抽到；分层时按总体比例加权。</div>
+  <h3>6. 三大翻车现场与反例微图解</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 1</span> 分层抽样总均值胡乱简单平均</div>
+      <p class="wrong">❌ 各层样本均值分别为 \(a, b, c\)，总均值直接算 \(\frac{a+b+c}{3}\)。</p>
+      <p class="right">✔ <b>必须按比例加权</b>：各层人数不同权重不同！必须用 \(\sum \frac{N_i}{N}\bar{y}_i\)，否则大层被稀释、小层被虚夸！</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 2</span> 把“随意街采”当成“随机抽样”</div>
+      <p class="wrong">❌ 在商场门口、网吧门口随便拦人调查，声称是简单随机抽样。</p>
+      <p class="right">✔ <b>机会均等才是随机</b>：特定地点街采存在巨大自选择偏差，完全剥夺了不在场人群的入样概率，属于严重有偏样本！</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 3</span> 以为“样本量够大就能消除偏差”</div>
+      <p class="wrong">❌ 在网上发问卷收集了 10 万份数据，就认定结论必然代表全体国民。</p>
+      <p class="right">✔ <b>抽法偏，数据再多也白搭</b>：网民群体偏年轻、爱表达，10 万份自填问卷依然存在系统性幸存者偏差，无法代表全量总体！</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="small" style="font-weight:700;color:var(--no, #dc2626);margin-bottom:6px">反例微图解：简单平分 vs 加权平均（均值天平失衡陷阱）</div>
+    <svg id="m-samp-trap-fig" viewBox="0 0 520 150" class="micro-fig"></svg>
+    <p class="small" style="color:var(--mut, #64748b);margin-top:4px">大层（900人，均值2）与小层（100人，均值10），若错用简单平分算得均值 6.0，实际真值仅为 2.8！直接平均会导致天平严重失衡！</p>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>抽样框</b>：真正用来抽签的那份名单叫抽样框。名单本身漏了人，抽得再随机也补不回来。比如用电话簿抽样调查全市居民，没装座机的人就永远抽不到。</p>
-    <p><b>样本大一点通常更稳，但不保证这一次更准</b>：随机抽 \(50\) 人，多数时候比随机抽 \(10\) 人离总体均值近；可某一次抽 \(10\) 人碰巧比抽 \(50\) 人更准，也完全可能。「动手」①里把 \(n\) 调大调小，各抽 \(20\) 次比一比。</p>
-    <p><b>分层为什么更稳</b>：按比例分层后，样本里各年级的人数固定了，不会碰巧「高三抽多了」。各层差别越大，分层的好处越明显。</p>
-    <p><b>样本方差</b>：除了均值，还能用样本估计总体的波动大小（方差）。分层样本合起来的方差不只是各层方差的平均，还要算上各层均值之间的差别。这些在 9.2 讲。</p>
+    <p><b>抽样框偏差</b>：抽样名单本身若有遗漏（如用固定电话簿做民调，漏掉无座机年轻人），再完美的抽样算法也无法修正基础偏差。</p>
+    <p><b>分层抽样方差</b>：分层抽样不仅能保证结构代表性，且当各层间差异较大、层内方差较小时，分层估计量的抽样方差显著小于简单随机抽样。</p>
   </details>
 </section>
 
@@ -501,8 +564,232 @@
   document.getElementById("bagain").onclick = function () { bSeed += 1; bSimulate(); biasDraw(); Peiyu.log("interact", { id: "bias-again", seed: bSeed }); };
   document.getElementById("biasreset").onclick = biasReset;
 
-  document.addEventListener("DOMContentLoaded", function () { popReset(); biasReset(); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { popDraw(); biasDraw(); });
+  /* ================= 0 从例子进入：尝汤与随机抽样 ================= */
+  var esSvg = document.getElementById("entry-soup"), esBar = document.getElementById("entry-soup-bar"), esNote = document.getElementById("entry-soup-note");
+  var esMode = "B";
+  function esDraw(m) {
+    esMode = m;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), noS = css("--no-soft");
+    esSvg.innerHTML = "";
+    // 汤锅轮廓
+    var px = 44, py = 46, pw = 200, ph = 132;
+    svg("line", { x1: px - 16, y1: py + 24, x2: px, y2: py + 24, stroke: fg, "stroke-width": 4, "stroke-linecap": "round" }, esSvg);
+    svg("line", { x1: px + pw, y1: py + 24, x2: px + pw + 16, y2: py + 24, stroke: fg, "stroke-width": 4, "stroke-linecap": "round" }, esSvg);
+    svg("rect", { x: px, y: py, width: pw, height: ph, rx: 18, fill: card, stroke: fg, "stroke-width": 2.5 }, esSvg);
+
+    if (m === "A") {
+      svg("text", { x: px + pw / 2, y: py + 66, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 16 }, esSvg).textContent = "整锅汤喝光了！";
+      svg("text", { x: px + pw / 2, y: py + 94, "text-anchor": "middle", fill: mu, "font-size": 13.5 }, esSvg).textContent = "（锅空了，没法端上桌）";
+    } else if (m === "B") {
+      svg("rect", { x: px + 4, y: py + 22, width: pw - 8, height: ph - 26, rx: 14, fill: okS }, esSvg);
+      // 搅拌螺旋线与均匀分布的油滴/盐粒
+      svg("path", { d: "M 85 95 C 125 75, 165 115, 205 95 C 165 135, 125 115, 85 140", fill: "none", stroke: ca, "stroke-width": 2, "stroke-dasharray": "5 4" }, esSvg);
+      [[75, 82], [115, 130], [155, 88], [195, 136], [95, 152], [175, 112], [135, 78], [215, 92]].forEach(function (p, idx) {
+        svg("circle", { cx: p[0], cy: p[1], r: idx % 2 === 0 ? 4.5 : 3.5, fill: idx % 2 === 0 ? ca : hl }, esSvg);
+      });
+      svg("text", { x: px + pw / 2, y: py + 16, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13.5 }, esSvg).textContent = "先搅匀：油、汤、盐均匀混合";
+    } else {
+      // 未搅拌：上层红油、中层淡汤、底层盐粒沉底
+      svg("rect", { x: px + 4, y: py + 22, width: pw - 8, height: 24, fill: noS }, esSvg);
+      svg("rect", { x: px + 4, y: py + 46, width: pw - 8, height: 64, fill: card }, esSvg);
+      svg("rect", { x: px + 4, y: py + 110, width: pw - 8, height: 22, rx: 10, fill: okS }, esSvg);
+      svg("text", { x: px + pw / 2, y: py + 39, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 12.5 }, esSvg).textContent = "表层：全漂着油花（只舀这里！）";
+      svg("text", { x: px + pw / 2, y: py + 82, "text-anchor": "middle", fill: mu, "font-size": 12.5 }, esSvg).textContent = "中层：清汤";
+      svg("text", { x: px + pw / 2, y: py + 125, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 12.5 }, esSvg).textContent = "锅底：盐粒全沉在底下";
+    }
+
+    // 右侧结果对比卡
+    var rx = 278, col = m === "B" ? ca : no;
+    svg("rect", { x: rx, y: 28, width: 224, height: 152, rx: 10, fill: m === "B" ? okS : noS, stroke: col, "stroke-width": 1.6 }, esSvg);
+    var titles = { A: "A 全面调查（有破坏性）", B: "B 搅匀舀一勺（随机抽样）", C: "C 只舀表层（有偏抽样）" };
+    var line1 = { A: "• 把整锅汤全部喝完", B: "• 搅拌让每处进勺机会相等", C: "• 盐沉在锅底，表层全是油" };
+    var line2 = { A: "• 知道咸淡了，但汤也没了！", B: "• 一勺就能准确代表整锅咸淡", C: "• 尝完以为太淡，再加盐就咸坏了" };
+    svg("text", { x: rx + 112, y: 58, "text-anchor": "middle", fill: col, "font-weight": 700, "font-size": 15 }, esSvg).textContent = titles[m];
+    svg("text", { x: rx + 16, y: 94, fill: fg, "font-size": 13.5 }, esSvg).textContent = line1[m];
+    svg("text", { x: rx + 16, y: 126, fill: col, "font-weight": 700, "font-size": 13.5 }, esSvg).textContent = line2[m];
+    svg("text", { x: rx + 16, y: 158, fill: mu, "font-size": 12.5 }, esSvg).textContent = m === "B" ? "统计启示：搅匀 = 随机化！" : "统计启示：样本失去代表性或成本过高";
+
+    [].forEach.call(esBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === m);
+    });
+    esNote.innerHTML = m === "B"
+      ? "<b>B 最合适</b>：先<b>搅匀</b>（让锅里每一滴汤被舀到的机会一样），只尝一勺就能代表整锅汤！"
+      : (m === "A" ? "<b>A 不可取</b>：虽然尝遍了总体，但汤被喝光了（就像测火柴能不能划着，全划完就没得卖了）。" : "<b>C 有严重偏差</b>：不搅匀只舀表层，锅底的盐根本进不了勺子，样本代表不了总体！");
+  }
+  [].forEach.call(esBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { esDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry" && ev.detail.choice) esDraw(ev.detail.choice);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") esDraw("B");
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { esDraw("B"); popReset(); biasReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { esDraw(esMode); popDraw(); biasDraw(); });
 })();
 </script>
+
+<script>
+(function() {
+  "use strict";
+  var fig = document.getElementById("m-samp-fig");
+  var bar = document.getElementById("m-samp-bar");
+  var status = document.getElementById("m-samp-status");
+  var trap = document.getElementById("m-samp-trap-fig");
+  if (!fig || !bar) return;
+
+  var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var ca = isDark ? "#38bdf8" : "#0284c7";
+  var cb = isDark ? "#f59e0b" : "#d97706";
+  var cc = isDark ? "#10b981" : "#059669";
+  var cd = isDark ? "#ec4899" : "#db2777";
+  var mut = isDark ? "#94a3b8" : "#64748b";
+  var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+  var border = isDark ? "#334155" : "#e2e8f0";
+  var NS = "http://www.w3.org/2000/svg";
+
+  function sEl(parent, tag, attrs) {
+    var el = document.createElementNS(NS, tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    parent.appendChild(el);
+    return el;
+  }
+
+  function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+    var t = sEl(parent, "text", {
+      x: x, y: y, fill: col || mut, "font-size": sz || 11.5,
+      "font-weight": fw || 400, "text-anchor": anchor || "start"
+    });
+    t.textContent = text;
+    return t;
+  }
+
+  function drawSamp(mode) {
+    fig.innerHTML = "";
+    if (mode === "srs") {
+      // 简单随机抽样
+      sTxt(fig, 30, 24, "【简单随机抽样】摇号摇奖机：人人入样概率恒为 n/N", ca, 12, 700);
+
+      // 总体池
+      sEl(fig, "rect", { x: 35, y: 40, width: 140, height: 95, rx: 8, fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
+      sTxt(fig, 105, 58, "总体 N = 40", ca, 11, 700, "middle");
+      // 模拟圆点个体
+      var pts = [[55,80],[75,80],[95,80],[115,80],[135,80],[155,80],[65,105],[85,105],[105,105],[125,105],[145,105]];
+      pts.forEach(function(pt, idx) {
+        var isPicked = idx === 2 || idx === 7;
+        sEl(fig, "circle", { cx: pt[0], cy: pt[1], r: 5, fill: isPicked ? cd : ca, opacity: isPicked ? 1 : 0.4 });
+      });
+
+      // 抽取箭头
+      sEl(fig, "line", { x1: 185, y1: 85, x2: 235, y2: 85, stroke: cb, "stroke-width": 2, "marker-end": "url(#arr)" });
+      sTxt(fig, 210, 75, "随机抽 n=5", cb, 10.5, 700, "middle");
+
+      // 样本池
+      sEl(fig, "rect", { x: 245, y: 40, width: 100, height: 95, rx: 8, fill: "rgba(217,119,6,0.06)", stroke: cb, "stroke-width": 1.5 });
+      sTxt(fig, 295, 58, "样本 n = 5", cb, 11, 700, "middle");
+      [65, 80, 95, 110, 125].forEach(function(cy, i) {
+        sEl(fig, "circle", { cx: 295, cy: cy, r: 4.5, fill: cd });
+      });
+
+      // 右侧总结
+      sEl(fig, "rect", { x: 360, y: 25, width: 150, height: 125, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 372, 48, "简单随机核心：", cb, 11.5, 700);
+      sTxt(fig, 372, 70, "• 机会均等无偏见", ca, 10.5);
+      sTxt(fig, 372, 90, "• P(入样) = n / N", cd, 11, 700);
+      sTxt(fig, 372, 112, "• 抽签法 / 随机数法", mut, 10.5);
+      sTxt(fig, 372, 132, "★ 适用个体差异小", cc, 10.5, 600);
+    } else if (mode === "strat") {
+      // 分层抽样比例天平
+      sTxt(fig, 30, 24, "【分层随机抽样】按各层总体比例等比缩小", cb, 12, 700);
+
+      // 三层横条：高一(600), 高二(500), 高三(400)
+      sTxt(fig, 40, 52, "高一 600 人 (40%)", ca, 10.5, 600);
+      sEl(fig, "rect", { x: 140, y: 40, width: 120, height: 16, rx: 3, fill: "rgba(2,132,199,0.2)", stroke: ca, "stroke-width": 1 });
+      sTxt(fig, 270, 52, "➔ 抽 24 人 (40%)", ca, 10.5, 700);
+
+      sTxt(fig, 40, 80, "高二 500 人 (33%)", cb, 10.5, 600);
+      sEl(fig, "rect", { x: 140, y: 68, width: 100, height: 16, rx: 3, fill: "rgba(217,119,6,0.2)", stroke: cb, "stroke-width": 1 });
+      sTxt(fig, 270, 80, "➔ 抽 20 人 (33%)", cb, 10.5, 700);
+
+      sTxt(fig, 40, 108, "高三 400 人 (27%)", cc, 10.5, 600);
+      sEl(fig, "rect", { x: 140, y: 96, width: 80, height: 16, rx: 3, fill: "rgba(16,185,129,0.2)", stroke: cc, "stroke-width": 1 });
+      sTxt(fig, 270, 108, "➔ 抽 16 人 (27%)", cc, 10.5, 700);
+
+      sTxt(fig, 40, 140, "总体 N=1500人，抽样比 k = 60/1500 = 1/25 (恒定不变！)", cd, 11, 700);
+
+      // 右侧总结
+      sEl(fig, "rect", { x: 380, y: 25, width: 130, height: 125, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 390, 48, "分层两大定律：", cd, 11.5, 700);
+      sTxt(fig, 390, 72, "1. ni = n · (Ni / N)", cb, 11, 700);
+      sTxt(fig, 390, 94, "2. 总体均值加权算", ca, 10.5);
+      sTxt(fig, 390, 116, " ȳ = ∑ (Ni/N)·ȳi", cd, 10.5, 700);
+      sTxt(fig, 390, 134, "★ 严防简单算术平均！", "#ef4444", 9.5, 700);
+    } else if (mode === "methods") {
+      // 获取数据四途径
+      sTxt(fig, 30, 24, "【数据获取四途径】根据研究目标精准匹配工具", cc, 12, 700);
+
+      var cards = [
+        { t: "1. 调查 (问卷/访谈)", d: "了解公众现状观点", c: ca, x: 35 },
+        { t: "2. 试验 (控制变量)", d: "验证因果效应归因", c: cb, x: 155 },
+        { t: "3. 观察 (自然记录)", d: "不干涉客体生态", c: cc, x: 275 },
+        { t: "4. 查询 (权威年鉴)", d: "已有数据低成本拿", c: cd, x: 395 }
+      ];
+
+      cards.forEach(function(c) {
+        sEl(fig, "rect", { x: c.x, y: 45, width: 110, height: 95, rx: 6, fill: bgCard, stroke: c.c, "stroke-width": 1.5 });
+        sTxt(fig, c.x + 8, 70, c.t, c.c, 10.5, 700);
+        sTxt(fig, c.x + 8, 95, c.d, mut, 10);
+        sTxt(fig, c.x + 8, 122, "✓ 适用场景对齐", c.c, 9.5, 600);
+      });
+    }
+  }
+
+  [].forEach.call(bar.querySelectorAll("button"), function(b) {
+    b.onclick = function() {
+      [].forEach.call(bar.querySelectorAll("button"), function(x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var m = b.getAttribute("data-m");
+      drawSamp(m);
+      if (m === "srs") status.textContent = "简单随机抽样：不放回抽样中，总体中每个个体入样概率均为 n/N。";
+      else if (m === "strat") status.textContent = "分层抽样：按各层人数占总体比例分配样本量，总均值必须按各层比例加权！";
+      else if (m === "methods") status.textContent = "获取数据四途径：调查（问卷）、试验（控制变量）、观察（自然记录）、查询（官方年鉴）。";
+    };
+  });
+  drawSamp("srs");
+
+  // 绘制反例微图解
+  if (trap) {
+    sTxt(trap, 30, 20, "【均值天平失衡陷阱】大层均值 2 (900人) vs 小层均值 10 (100人)", ca, 12, 700);
+
+    // 天平支架
+    sEl(trap, "line", { x1: 150, y1: 65, x2: 150, y2: 120, stroke: mut, "stroke-width": 3 });
+    sEl(trap, "polygon", { points: "135,120 165,120 150,105", fill: mut });
+
+    // 错误简单平均杠杆 (居中 6.0)
+    sEl(trap, "line", { x1: 60, y1: 65, x2: 240, y2: 65, stroke: "#ef4444", "stroke-width": 2, "stroke-dasharray": "3 3" });
+    sTxt(trap, 150, 52, "错解: (2+10)/2 = 6.0 (严重虚高！)", "#ef4444", 10.5, 700, "middle");
+
+    // 正确加权杠杆 (大幅倾斜向大层 2.8)
+    sEl(trap, "line", { x1: 60, y1: 85, x2: 240, y2: 45, stroke: cc, "stroke-width": 2.5 });
+    sEl(trap, "circle", { cx: 75, cy: 82, r: 12, fill: "rgba(2,132,199,0.3)", stroke: ca, "stroke-width": 2 });
+    sTxt(trap, 75, 86, "900人", ca, 9, 700, "middle");
+
+    sEl(trap, "circle", { cx: 225, cy: 48, r: 5, fill: "rgba(217,119,6,0.3)", stroke: cb, "stroke-width": 2 });
+    sTxt(trap, 225, 36, "100人", cb, 9, 700, "middle");
+
+    sTxt(trap, 105, 115, "正解加权: 2.8 小时", cc, 11.5, 700);
+
+    // 右侧警示框
+    sEl(trap, "rect", { x: 265, y: 25, width: 245, height: 110, rx: 6, fill: bgCard, stroke: border });
+    sTxt(trap, 272, 48, "权重失衡代价警示：", cd, 11.5, 700);
+    sTxt(trap, 272, 70, "• 简单平均假设两层人数相等（各占50%）", mut, 10.5);
+    sTxt(trap, 272, 90, "• 实际大层占 90%，均值必贴近 2！", ca, 10.5, 600);
+    sTxt(trap, 272, 112, "• 错算 6.0 导致总体预测虚高超过 114%！", "#ef4444", 10.5, 700);
+    sTxt(trap, 272, 126, "★ 算分层均值务必严格乘以权重 Ni/N！", cd, 10, 700);
+  }
+})();
+</script>
+
 </body></html>

@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -42,6 +44,12 @@
   <p>它们不约而同采用了「抛物面」。这里的秘密究竟藏在哪里？</p>
 
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-dish" viewBox="0 0 520 200" role="img" aria-label="卫星天线抛物面截面将平行入射电磁波全部反射汇聚到焦点F的光路图"></svg>
+    <div class="entry-bar" id="entry-dish-bar">
+      <button type="button" data-pos="focus" class="on">平行电波入射 → 全部反射汇聚到焦点 F！</button>
+      <button type="button" data-pos="vertex">如果接收器装在顶点 O（收不到反射聚焦信号）</button>
+    </div>
+    <div class="entry-note" id="entry-dish-note"></div>
     <p>卫星接收天线（截面为抛物线）收集来自太空微弱的平行无线电波。高频接收器应该精准安装在哪个位置，才能接收到最集中的聚焦信号？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b> 锅底正中央（顶点）</button>
@@ -57,8 +65,10 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：两点间距离公式、点到直线的距离（<a href="e1-2-3.html">回看 2.3</a>）。下面几个词都拿同一组例子说：定点 \(F(1,0)\)，定直线 \(l:\ x=-1\)。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：正统抛物线要求焦点不在准线上；若焦点落在准线上，轨迹退化为一条直线，不能直接套用抛物线标准方程。</p></div>
 
   <div class="card">
     <p><b>焦点 \(F\)、准线 \(l\)</b>：抛物线定义里的那个定点叫焦点，那条定直线叫准线。焦点不在准线上。</p>
@@ -71,29 +81,72 @@
   </div>
 
   <div class="card">
-    <p><b>焦准距 \(p\)</b>：焦点到准线的距离，总是正数。顶点在焦点和准线正中间，到两边各 \(\dfrac p2\)。</p>
-    <p>例：\(F(1,0)\) 到 \(x=-1\) 的距离 \(p=2\)，顶点是原点，离焦点、离准线各 \(1\)。</p>
+    <p><b>焦准距 \(p\) 与焦半径 \(|PF|\)</b>：焦点到准线的距离为 \(p\)（\(p&gt;0\)）；顶点在正中间，离焦点、准线各 \(\dfrac{p}{2}\)。抛物线上一点 \(P\) 到焦点的距离叫焦半径，根据定义恒等于它到准线的距离。</p>
+    <p>例：\(F(1,0)\) 到 \(x=-1\) 的距离 \(p=2\)，点 \(P(4,4)\) 到准线距离 \(5\)，则焦半径 \(|PF|=5\)。</p>
   </div>
 
-  <div class="card">
-    <p><b>焦半径 \(|PF|\)</b>：抛物线上一点 \(P\) 到焦点的距离。</p>
-    <p>例：点 \(P(4,4)\) 在这条抛物线上，\(|PF|=\sqrt{(4-1)^2+4^2}=5\)，正好等于它到准线的距离 \(5\)。这不是巧合，下一块就讲。</p>
+  <!-- 组件一：伴读直觉微图解 -->
+  <div class="micro-box" style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:12px;padding:16px;margin:16px 0">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-weight:700;font-size:15px;color:var(--text,#1e293b);display:flex;align-items:center;gap:6px">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#0284c7"></span>抛物线核心几何特征与焦半径拉直
+      </div>
+      <div style="display:flex;gap:6px" id="m-parab-tabs">
+        <button class="btn btn-sm" onclick="setMParabTab(0)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid #0284c7;background:#0284c7;color:#fff;cursor:pointer">① 定义与等距</button>
+        <button class="btn btn-sm" onclick="setMParabTab(1)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">② 四种标准方程</button>
+        <button class="btn btn-sm" onclick="setMParabTab(2)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">③ 折线拉直最值</button>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;height:220px;background:var(--bg-subtle,#f8fafc);border-radius:8px;overflow:hidden">
+      <svg id="m-parab-fig" viewBox="0 0 540 220" style="width:100%;height:100%;display:block"></svg>
+    </div>
+    <div id="m-parab-desc" style="font-size:13px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
   </div>
 
-  <h3>2. 定义：到焦点的距离 = 到准线的距离</h3>
-  <p>平面内，到定点 \(F\) 和到定直线 \(l\)（\(F\) 不在 \(l\) 上）距离相等的点，组成的曲线叫<b>抛物线</b>。</p>
-  <div class="key" style="text-align:center">\(P\) 在抛物线上 \(\iff\) \(|PF|=d\)，\(d\) 是 \(P\) 到准线的距离。</div>
-  <p>为什么是这个形状：离准线越远的点，也要离焦点越远，所以曲线一边往外张开、一边远离准线，开口朝焦点那一侧；最靠近准线的点在焦点和准线正中间，就是顶点。</p>
-  <p>求方程就照定义列式：设 \(P(x,y)\)，把两个距离写出来，令它们相等，再化简。</p>
+  <!-- 组件二：概念对比双卡 -->
+  <div class="concept-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:16px 0">
+    <div class="concept-card" style="border:1px solid #bae6fd;background:#f0f9ff;border-radius:10px;padding:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="badge-pill" style="background:#0284c7;color:#fff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">定义临界</span>
+        <b style="color:#0369a1;font-size:14px">定点与定直线关系</b>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
+        <li><b>\(F \notin l\)（正统抛物线）</b>：到焦点距离等于到准线距离，离心率 \(e=1\)。</li>
+        <li><b>\(F \in l\)（临界退化）</b>：轨迹退化为过 \(F\) 垂直于 \(l\) 的<b>一条直线</b>。</li>
+        <li><b>顶点位置</b>：恒在焦点与准线的正中点，到焦点与到准线距离均为 \(\dfrac{p}{2}\)。</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border:1px solid #bbf7d0;background:#f0fdf4;border-radius:10px;padding:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="badge-pill" style="background:#16a34a;color:#fff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">方程定位</span>
+        <b style="color:#15803d;font-size:14px">一次项定轴与除以4定点</b>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
+        <li><b>一次项定轴</b>：一次项是 \(x\) 则轴为 \(x\) 轴；一次项是 \(y\) 则轴为 \(y\) 轴。</li>
+        <li><b>符号定开口</b>：正数开口向正半轴；负数开口向负半轴。</li>
+        <li><b>系数除以4定焦点</b>：一次项系数为 \(2p\)，焦点坐标非零项等于系数除以 4。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 组件三：色彩语义主公式 -->
+  <h3>2. 定义与色彩语义主公式</h3>
+  <p>平面内，到定点 \(F\) 和到定直线 \(l\)（\(F\) 不在 \(l\) 上）距离相等的点的轨迹叫<b>抛物线</b>。</p>
+  <div class="key" style="text-align:center;padding:12px;background:#f8fafc;border-left:4px solid #0284c7;border-radius:6px;margin:12px 0">
+    <div>\(P\) 在抛物线上 \(\iff |PF| = d(P, l)\)（焦半径等于准线距）</div>
+    <div style="margin-top:6px;font-size:15px">
+      \(y^2 = \color{#0284c7}{2p}x \iff F\left(\color{#0284c7}{\frac{p}{2}}, 0\right),\quad l:\ x = -\color{#0284c7}{\frac{p}{2}}\quad (|PF| = x_0 + \color{#0284c7}{\frac{p}{2}})\)
+    </div>
+    <div style="margin-top:4px;font-size:15px">
+      \(x^2 = \color{#16a34a}{2p}y \iff F\left(0, \color{#16a34a}{\frac{p}{2}}\right),\quad l:\ y = -\color{#16a34a}{\frac{p}{2}}\quad (|PF| = y_0 + \color{#16a34a}{\frac{p}{2}})\)
+    </div>
+  </div>
 
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>到点 \(F(0,2)\) 和到直线 \(y=-2\) 距离相等的点，轨迹方程是什么？</p>
-    <p>设 \(P(x,y)\)。到 \(F\) 的距离 \(\sqrt{x^2+(y-2)^2}\)；到直线 \(y=-2\) 的距离 \(|y+2|\)。令它们相等：</p>
-    <p style="text-align:center">\(\sqrt{x^2+(y-2)^2}=|y+2|\)。</p>
-    <p>两边都不是负数，平方不会多出解：</p>
-    <p style="text-align:center">\(x^2+y^2-4y+4=y^2+4y+4\)，</p>
-    <p>化简得 \(x^2=8y\)。焦点在准线上方，开口向上，和方程对得上。</p>
+    <p>设 \(P(x,y)\)。到 \(F\) 距离 \(\sqrt{x^2+(y-2)^2}\)；到直线 \(y=-2\) 距离 \(|y+2|\)。令两式相等并平方：</p>
+    <p style="text-align:center">\(x^2+y^2-4y+4=y^2+4y+4 \implies x^2=8y\)。焦点在上方，开口向上。</p>
   </div>
   <div class="card predict" data-id="try-def" data-answer="A">
     <p>自己试试：到点 \(F(0,1)\) 和到直线 \(y=-1\) 距离相等的点，轨迹方程是？</p>
@@ -103,63 +156,44 @@
       <button class="opt" data-v="C"><b>C</b>\(y^2=4x\)</button>
       <button class="opt" data-v="D"><b>D</b>\(x^2=-4y\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(\sqrt{x^2+(y-1)^2}=|y+1|\)，平方得 \(x^2-2y+1=2y+1\)，即 \(x^2=4y\)。选 B 是把焦点到原点的距离 \(1\) 当成了 \(p\)；\(p\) 是焦点到准线的距离 \(2\)，所以 \(2p=4\)。选 C 是轴搞反了；选 D 是开口方向反了，焦点在上方，开口向上。</p></div>
+    <div class="reveal"><p><b>A</b>。\(\sqrt{x^2+(y-1)^2}=|y+1|\)，平方得 \(x^2-2y+1=2y+1\)，即 \(x^2=4y\)。选 B 是把焦点到原点距离当成了 \(p\)；选 C 是轴搞反了；选 D 是开口方向反了。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
-  <h3>3. 四种标准方程：先定开口，再定 \(p\)</h3>
-  <p>让顶点在原点、对称轴是坐标轴，按开口方向有四种标准方程（\(p&gt;0\) 是焦准距）：</p>
-
-  <div class="card" style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;text-align:center;font-size:14.5px">
-      <thead>
-        <tr style="border-bottom:1.5px solid var(--line);background:var(--bg)">
-          <th style="padding:8px 6px">标准方程</th>
-          <th style="padding:8px 6px">开口</th>
-          <th style="padding:8px 6px">焦点</th>
-          <th style="padding:8px 6px">准线</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid var(--line)">
-          <td style="padding:8px 6px">\(y^2 = 2px\)</td>
-          <td>向右</td>
-          <td>\(\left(\dfrac{p}{2}, 0\right)\)</td>
-          <td>\(x = -\dfrac{p}{2}\)</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--line)">
-          <td style="padding:8px 6px">\(y^2 = -2px\)</td>
-          <td>向左</td>
-          <td>\(\left(-\dfrac{p}{2}, 0\right)\)</td>
-          <td>\(x = \dfrac{p}{2}\)</td>
-        </tr>
-        <tr style="border-bottom:1px solid var(--line)">
-          <td style="padding:8px 6px">\(x^2 = 2py\)</td>
-          <td>向上</td>
-          <td>\(\left(0, \dfrac{p}{2}\right)\)</td>
-          <td>\(y = -\dfrac{p}{2}\)</td>
-        </tr>
-        <tr>
-          <td style="padding:8px 6px">\(x^2 = -2py\)</td>
-          <td>向下</td>
-          <td>\(\left(0, -\dfrac{p}{2}\right)\)</td>
-          <td>\(y = \dfrac{p}{2}\)</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <p>为什么是 \(\dfrac p2\)：顶点在焦点和准线正中间，焦点和准线到顶点各占焦准距的一半。四种只是把坐标轴换了方向，道理都一样。</p>
-  <div class="key">
-    ① <b>看一次项定轴和开口</b>：一次项是 \(x\)，对称轴是 \(x\) 轴；一次项是 \(y\)，对称轴是 \(y\) 轴。系数正，开口朝正方向；系数负，朝负方向。<br>
-    ② <b>一次项系数是 \(\pm2p\)</b>：除以 \(2\) 得 \(p\)，除以 \(4\) 得焦点坐标里那个数 \(\pm\dfrac p2\)。<br>
-    ③ 先把平方项系数化成 \(1\) 再看。
+  <!-- 组件四：三步破题思维链例题 -->
+  <h3>3. 四种标准方程与三步破题链</h3>
+  <div class="think-steps" style="border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:16px;background:var(--card,#fff);margin:14px 0">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:10px;font-size:14px">🧩 典型例题：求抛物线焦点准线与标准方程</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">👀 信号</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          观察方程中<b>一次项是谁</b>（决定对称轴）以及<b>系数正负</b>（决定开口朝向）；已知焦点反推标准方程。
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#fef3c7;color:#d97706;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">🔧 步骤</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          1. <b>化二次项为 1</b>：确保标准形式；<br>
+          2. <b>除以 4 得焦点</b>：一次项系数绝对值是 \(2p\)，焦点坐标为系数除以 4；<br>
+          3. <b>准线与焦点反号</b>：如焦点为 \((0, \frac{p}{2})\) 则准线为 \(y = -\frac{p}{2}\)。
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#dcfce7;color:#16a34a;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">🛡️ 防坑</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          焦点坐标是系数除以 4，切忌误除以 2；平方项系数不为 1 时必须先移项化简。
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small">例 2（正反双向练习）</p>
     <p>（1）求 \(y^2 = 12x\) 的焦点和准线。</p>
-    <p>一次项是 \(x\)，系数 \(12&gt;0\)，开口向右。\(2p=12\)，\(p=6\)，\(\dfrac p2=3\)。焦点 \(F(3,0)\)，准线 \(x=-3\)。</p>
-    <p>（2）反过来：焦点是 \((0,-3)\)，求抛物线的标准方程。</p>
-    <p>焦点在 \(y\) 轴负半轴，开口向下，形如 \(x^2=-2py\)。\(\dfrac p2=3\)，\(p=6\)，所以 \(x^2=-12y\)。</p>
+    <p>一次项是 \(x\)，系数 \(12&gt;0\)，开口向右。\(2p=12 \implies \dfrac{p}{2}=3\)。故焦点 \(F(3,0)\)，准线 \(x=-3\)。</p>
+    <p>（2）焦点是 \((0,-3)\)，求抛物线的标准方程。</p>
+    <p>焦点在 \(y\) 轴负半轴，开口向下，设 \(x^2=-2py\)。由 \(\dfrac{p}{2}=3\) 得 \(2p=12\)，方程为 \(x^2=-12y\)。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：抛物线 \(x^2 = -8y\) 的焦点坐标是？</p>
@@ -170,25 +204,20 @@
       <button class="opt" data-v="D"><b>D</b> \((0, -8)\)</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。一次项是 \(y\)，对称轴是 \(y\) 轴；系数 \(-8&lt;0\)，开口向下。\(2p=8\)，\(\dfrac p2=2\)，焦点 \((0,-2)\)。</p>
-      <p>选 A 是轴搞错了；选 C 是只除了 \(2\)，把 \(p\) 当成了焦点坐标；选 D 是直接抄了一次项系数。</p>
+      <p><b>B</b>。一次项是 \(y\)，对称轴是 \(y\) 轴；系数 \(-8&lt;0\)，开口向下。\(2p=8 \implies \dfrac p2=2\)，焦点 \((0,-2)\)。</p>
+      <p>选 A 是轴搞错了；选 C 是只除了 \(2\)；选 D 是直接抄了一次项系数。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
-  <h3>4. 焦半径：到焦点的距离换成到准线的距离</h3>
-  <p>抛物线上的点，到焦点的距离要开根号算，到准线的距离只要坐标相减。定义说两者相等，所以<b>遇到 \(|PF|\)，先换成到准线的距离</b>。</p>
-  <div class="key">\(y^2=2px\) 上的点 \(P(x_0,y_0)\)：\(|PF|=x_0+\dfrac p2\)。<br>其余三种同理：\(P\) 到准线的距离就是 \(|PF|\)。</div>
-  <p>为什么：准线是 \(x=-\dfrac p2\)，抛物线上的点 \(x_0\ge0\)，到准线的距离是 \(x_0-\left(-\dfrac p2\right)=x_0+\dfrac p2\)。</p>
-  <p>求 \(|PA|+|PF|\) 这类最小值也靠它：换成「\(A\) 到 \(P\)，再到准线」，一条折线，拉直了最短。</p>
+  <h3>4. 焦半径转化与折线拉直</h3>
+  <p>抛物线上的点，到焦点的距离要开根号算，到准线的距离只需做减法。<b>把到焦点的距离换成到准线的距离</b>，常常能把复杂的折线求最值变成垂线段最短。</p>
 
   <div class="card">
-    <p class="small">例 3</p>
-    <p>\(y^2 = 4x\) 的焦点为 \(F\)，点 \(A(3, 2)\)，\(P\) 在抛物线上动。求 \(|PA| + |PF|\) 的最小值。</p>
-    <p>\(2p=4\)，\(p=2\)，焦点 \(F(1, 0)\)，准线 \(x=-1\)。设 \(P\) 到准线的垂足为 \(H\)，由定义 \(|PF|=|PH|\)，所以</p>
-    <p style="text-align:center">\(|PA| + |PF| = |PA| + |PH|\)。</p>
-    <p>先看 \(A\) 在哪：\(x=3\) 时抛物线上 \(y^2=12\)，而 \(2^2=4&lt;12\)，\(A\) 在抛物线里面（焦点那一侧）。</p>
-    <p>\(|PA|+|PH|\) 是从 \(A\) 经 \(P\) 走到准线的折线长，不会短于 \(A\) 到准线的距离 \(3-(-1)=4\)。过 \(A\) 作准线的垂线 \(y=2\)，交抛物线于 \(P(1,2)\)，这时 \(A,P,H\) 在一条直线上，\(|PA|+|PH|=2+2=4\)，取到了。</p>
-    <p>所以最小值是 \(4\)，在 \(P(1,2)\) 时取到。</p>
+    <p class="small">例 3（折线拉直经典题）</p>
+    <p>点 \(A(3,2)\)，抛物线 \(y^2=4x\)，焦点是 \(F(1,0)\)，准线 \(l:\ x=-1\)。抛物线上一点 \(P\)，求 \(|PA|+|PF|\) 的最小值。</p>
+    <p>依定义，\(|PF|\) 等于 \(P\) 到准线的距离 \(|PH|\)，故 \(|PA| + |PF| = |PA| + |PH|\)。</p>
+    <p>先看 \(A\) 在哪：\(y_A^2=4 &lt; 4\times 3=12\)，\(A\) 在抛物线内部。从 \(A\) 经 \(P\) 走到准线的折线长，不小于 \(A\) 到准线的垂直距离：\(3 - (-1) = 4\)。取等条件为 \(A, P, H\) 三点共线，此时 \(P(1,2)\)，故最小值为 \(4\)。</p>
   </div>
   <div class="card predict" data-id="try-focal" data-answer="A">
     <p>自己试试：抛物线 \(y^2 = 6x\) 上一点 \(P\) 到焦点的距离是 \(5\)，\(P\) 的横坐标是？</p>
@@ -198,25 +227,52 @@
       <button class="opt" data-v="C"><b>C</b>\(\dfrac{13}2\)</button>
       <button class="opt" data-v="D"><b>D</b>\(5\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(2p=6\)，\(p=3\)，准线 \(x=-\dfrac32\)。\(|PF|=x_0+\dfrac32=5\)，\(x_0=\dfrac72\)。选 B 是减了 \(p=3\)，该减的是 \(\dfrac p2\)；选 C 是加反了；选 D 是把到焦点的距离直接当成了横坐标。</p></div>
+    <div class="reveal"><p><b>A</b>。\(2p=6 \implies p=3\)，准线 \(x=-\dfrac32\)。焦半径 \(|PF|=x_0+\dfrac32=5 \implies x_0=\dfrac72\)。选 B 是减了 \(p=3\)；选 C 是加反了；选 D 是把距离直接当横坐标。</p></div>
   </div>
 
-  <h3>5. 用之前要注意</h3>
-  <ol>
-    <li><b>定点不能在定直线上</b>，否则得不到抛物线。<br><span class="small">反例：到 \(F(0,0)\) 和到直线 \(y=0\) 距离相等：\(\sqrt{x^2+y^2}=|y|\)，平方得 \(x^2=0\)，轨迹是直线 \(x=0\)（过 \(F\) 垂直于 \(l\) 的直线），不是抛物线。</span></li>
-    <li><b>\(2p\) 不是焦点坐标，\(p\) 也不是</b>，焦点离顶点 \(\dfrac p2\)。<br><span class="small">反例：\(y^2=12x\) 的焦点是 \((3,0)\)，不是 \((12,0)\)，也不是 \((6,0)\)。</span></li>
-    <li><b>平方项系数不是 \(1\) 时先化</b>。<br><span class="small">反例：\(y=\dfrac14x^2\)，直接拿 \(\dfrac14\) 除以 \(4\) 会得到 \(\dfrac1{16}\)；先化成 \(x^2=4y\)，焦点是 \((0,1)\)。</span></li>
-    <li><b>焦半径公式随开口变</b>，算出来必须是正数。<br><span class="small">反例：\(x^2=-8y\) 上 \(y_0=-3\) 的点，准线 \(y=2\)，\(|PF|=2-(-3)=5\)；照搬「\(y_0+\dfrac p2\)」得 \(-1\)，距离不会是负的。</span></li>
-    <li><b>求 \(|PA|+|PF|\) 的最小值，先看 \(A\) 在抛物线里面还是外面</b>。<br><span class="small">反例：\(y^2=4x\)，\(A(1,4)\)：\(4^2=16&gt;4\times1\)，\(A\) 在外面。从 \(A\) 到准线的垂线段碰不到抛物线，最小值不是 \(A\) 到准线的距离 \(2\)。这时直接用 \(|PA|+|PF|\ge|AF|=4\)，\(P\) 取线段 \(AF\) 与抛物线的交点 \((1,2)\) 时取到。</span></li>
-    <li><b>由距离列方程，平方前看两边是否都不是负数</b>。例 1 里两边都是距离，平方不会多出解；绝对值里的式子要保留，不能随手去掉。</li>
-  </ol>
+  <!-- 组件五：三大翻车现场红绿对比卡 + 反例微图解 -->
+  <h3>5. 三大翻车现场红绿对比卡</h3>
+  <div class="trap-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:16px 0">
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区一：系数除以2当焦点</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：\(y^2 = 12x\) 误得焦点 \((6, 0)\)</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：一次项系数为 \(2p\)，焦点坐标为一次项系数<b>除以 4</b>！焦点为 \((3,0)\)。
+      </div>
+    </div>
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区二：平方项系数非 1 未化简</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：\(y = \dfrac{1}{4}x^2\) 直接将 \(\dfrac{1}{4}\) 除以 4 得 \(\dfrac{1}{16}\)</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：标准方程二次项系数必为 1！必须先化为 \(x^2 = 4y\)，再定焦点 \((0, 1)\)。
+      </div>
+    </div>
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区三：折线拉直忽略点A在外部</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：求 \(|PA|+|PF|\) 最小值一律直接做准线垂线</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：若 \(A\) 在抛物线外部，垂线段交不到抛物线；此时由 \(|PA|+|PF| \ge |AF|\)，最小值为 \(|AF|\)！
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:14px;margin:12px 0">
+    <div style="font-weight:700;font-size:13px;color:var(--text,#1e293b);margin-bottom:8px">🔍 反例微图解：点 A 在内部 vs 外部的破题分流</div>
+    <div style="width:100%;height:150px;background:var(--bg-subtle,#f8fafc);border-radius:6px;overflow:hidden">
+      <svg id="m-parab-trap-fig" viewBox="0 0 540 150" style="width:100%;height:100%;display:block"></svg>
+    </div>
+    <div style="font-size:12px;color:var(--text-subtle,#64748b);margin-top:6px">
+      点 \(A\) 在内部时，折线 \(A 	o P 	o H\) 可拉直为垂直准线的线段（最小值 \(x_A + \frac{p}{2}\)）；点 \(A\) 在外部时，直线 \(AF\) 与抛物线相交取到最小值 \(|AF|\)。
+    </div>
+  </div>
+
   <div class="key">一句话：抛物线上点到焦点的距离，等于到准线的距离。定方程看开口和 \(p\)，算距离换成到准线。</div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>离心率</b>：椭圆、双曲线上的点到焦点的距离与到对应准线的距离之比是定值 \(e\)。抛物线这两个距离相等，所以 \(e=1\)。</p>
-    <p><b>通径</b>：过焦点、垂直于对称轴的弦。对 \(y^2=2px\)，把 \(x=\dfrac p2\) 代入得 \(y^2=p^2\)，\(y=\pm p\)，通径长 \(2p\)。\(p\) 越大，开口越宽。</p>
-    <p><b>光学性质（阅读）</b>：平行于对称轴射来的光，在抛物线上反射后都经过焦点；反过来，焦点处的光源反射出去是平行光。这就是开头卫星天线、车灯的道理。它的证明要用到切线，本节不要求。</p>
+    <p><b>离心率</b>：抛物线到焦点距离与到准线距离相等，故 \(e=1\)。</p>
+    <p><b>通径</b>：过焦点且垂直于对称轴的弦，长为 \(2p\)。\(p\) 越大，开口越宽。</p>
+    <p><b>光学性质（阅读）</b>：平行于对称轴射来的光，在抛物线上反射后都经过焦点；反之焦点光源反射后成平行光（探照灯原理）。</p>
   </details>
 </section>
 
@@ -438,16 +494,20 @@
     var dlx1, dly1, dlx2, dly2, dltx, dlty, dlAnchor = "start";
     if (curDir === "right") {
       dlx1 = X(-f); dly1 = 10; dlx2 = X(-f); dly2 = 370;
-      dltx = X(-f) - 8; dlty = 30; dlAnchor = "end";
+      dltx = X(-f) < 125 ? X(-f) + 8 : X(-f) - 8;
+      dlty = 354;
+      dlAnchor = X(-f) < 125 ? "start" : "end";
     } else if (curDir === "left") {
       dlx1 = X(f); dly1 = 10; dlx2 = X(f); dly2 = 370;
-      dltx = X(f) + 8; dlty = 30; dlAnchor = "start";
+      dltx = X(f) > 455 ? X(f) - 8 : X(f) + 8;
+      dlty = 354;
+      dlAnchor = X(f) > 455 ? "end" : "start";
     } else if (curDir === "up") {
       dlx1 = 10; dly1 = Y(-f); dlx2 = 570; dly2 = Y(-f);
-      dltx = 25; dlty = Y(-f) + 18; dlAnchor = "start";
+      dltx = 25; dlty = Math.min(358, Y(-f) + 18); dlAnchor = "start";
     } else {
       dlx1 = 10; dly1 = Y(f); dlx2 = 570; dly2 = Y(f);
-      dltx = 25; dlty = Y(f) - 10; dlAnchor = "start";
+      dltx = 25; dlty = Math.max(24, Y(f) - 10); dlAnchor = "start";
     }
     svg("line", { x1: dlx1, y1: dly1, x2: dlx2, y2: dly2, stroke: cc, "stroke-width": 2, "stroke-dasharray": "6 4" }, g);
     var dirEq = (curDir === "right") ? "准线 l: x = -" + f1(f) : (curDir === "left") ? "准线 l: x = " + f1(f) : (curDir === "up") ? "准线 l: y = -" + f1(f) : "准线 l: y = " + f1(f);
@@ -501,8 +561,8 @@
     // Distance labels
     var mxH = (sxP + sxH) / 2, myH = (syP + syH) / 2;
     var mxF = (sxP + sxF) / 2, myF = (syP + syF) / 2;
-    svg("text", { x: mxH, y: myH - 6, "text-anchor": "middle", fill: cb, "font-size": 13, "font-weight": 700 }, g).textContent = "|PH|=" + f2(dist);
-    svg("text", { x: mxF, y: myF + 16, "text-anchor": "middle", fill: ca, "font-size": 13, "font-weight": 700 }, g).textContent = "|PF|=" + f2(dist);
+    svg("text", { x: mxH, y: myH + (P.y >= 0 ? -10 : 18), "text-anchor": "middle", fill: cb, "font-size": 13, "font-weight": 700 }, g).textContent = "|PH|=" + f2(dist);
+    svg("text", { x: mxF + 10, y: myF + (P.y >= 0 ? 4 : -6), "text-anchor": "start", fill: ca, "font-size": 13, "font-weight": 700 }, g).textContent = "|PF|=" + f2(dist);
 
     // Optical mode rays
     if (showOpt) {
@@ -538,7 +598,7 @@
 
     // Dot F (focus)
     svg("circle", { cx: sxF, cy: syF, r: 5, fill: ca }, g);
-    svg("text", { x: sxF + 8, y: syF - 8, fill: ca, "font-size": 14, "font-weight": 700 }, g).textContent = "F(" + f1(F.x) + ", " + f1(F.y) + ")";
+    svg("text", { x: sxF + 8, y: syF + (P.y >= 0 ? 20 : -10), fill: ca, "font-size": 14, "font-weight": 700 }, g).textContent = "F(" + f1(F.x) + ", " + f1(F.y) + ")";
 
     // Dot H (foot)
     svg("circle", { cx: sxH, cy: syH, r: 4, fill: cb }, g);
@@ -582,7 +642,7 @@
       function up() {
         window.removeEventListener("pointermove", mv);
         window.removeEventListener("pointerup", up);
-        Peiyu.log("interact", { id: "drag_p", dir: curDir, t: tVal, p: pVal });
+        if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: "drag_p", dir: curDir, t: tVal, p: pVal });
       }
       window.addEventListener("pointermove", mv);
       window.addEventListener("pointerup", up);
@@ -602,7 +662,7 @@
       msg += '<br><span style="color:var(--hl);font-weight:600">💡 光学反射会聚：平行于对称轴的光线射入抛物面上的点 P，切线平分夹角外角，反射光线 100% 汇聚于焦点 F！</span>';
     }
     figOut.innerHTML = msg;
-    Peiyu.math(figOut);
+    if (window.Peiyu && Peiyu.math) Peiyu.math(figOut);
   }
 
   function render(keepFocus) {
@@ -621,7 +681,7 @@
       curDir = btn.getAttribute("data-dir") || "right";
       tVal = 2.5;
       render();
-      Peiyu.log("interact", { id: "switch_dir", dir: curDir });
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: "switch_dir", dir: curDir });
     });
   });
 
@@ -632,7 +692,7 @@
     render();
   });
   pIn.addEventListener("change", function () {
-    Peiyu.log("interact", { id: "change_p", p: pVal });
+    if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: "change_p", p: pVal });
   });
 
   // Optical mode toggle
@@ -640,7 +700,7 @@
     showOpt = !showOpt;
     optBtn.textContent = showOpt ? "光路演示：开" : "光路演示：关";
     render();
-    Peiyu.log("interact", { id: "toggle_opt", on: showOpt });
+    if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: "toggle_opt", on: showOpt });
   });
 
   // Reset button
@@ -657,11 +717,228 @@
       else b.classList.remove("on");
     });
     render();
-    Peiyu.log("interact", { id: "reset" });
+    if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: "reset" });
   });
 
   // Initial draw
   render();
+  document.addEventListener("DOMContentLoaded", function () { render(); });
+
+  /* ================= 0 从例子进入：卫星天线抛物面反射聚焦 ================= */
+  var edhSvg = document.getElementById("entry-dish"), edhBar = document.getElementById("entry-dish-bar"), edhNote = document.getElementById("entry-dish-note");
+  function edhDraw(pos) {
+    // 抛物线 y^2 = 160 * (x - ox), 顶点 O(90, 100), 焦点 F(90 + 40, 100) = (130, 100)
+    var ox = 86, oy = 100, fX = ox + 48, h = [];
+    // 对称轴
+    h.push('<line x1="40" y1="' + oy + '" x2="320" y2="' + oy + '" stroke="var(--line)" stroke-dasharray="4 3" stroke-width="1.5"/>');
+    // 抛物面锅体曲线 x = ox + y^2 / (4 * 48) = ox + y^2 / 192
+    var pts = [];
+    for (var dy = -80; dy <= 80; dy += 4) {
+      var px = ox + (dy * dy) / 192;
+      pts.push((pts.length ? "L" : "M") + px.toFixed(1) + "," + (oy + dy).toFixed(1));
+    }
+    h.push('<path d="' + pts.join(" ") + '" fill="none" stroke="var(--fg)" stroke-width="4" stroke-linecap="round"/>');
+    // 四条平行入射电波与反射光路
+    [-68, -36, 36, 68].forEach(function (ry) {
+      var hitX = ox + (ry * ry) / 192, hitY = oy + ry;
+      // 水平入射波（从右向左射入锅内）
+      h.push('<line x1="305" y1="' + hitY + '" x2="' + hitX.toFixed(1) + '" y2="' + hitY + '" stroke="var(--c)" stroke-width="2" stroke-dasharray="5 3"/>');
+      // 反射波汇聚到焦点 F(fX, oy)
+      h.push('<line x1="' + hitX.toFixed(1) + '" y1="' + hitY + '" x2="' + fX + '" y2="' + oy + '" stroke="var(--hl)" stroke-width="2.4"/>');
+      h.push('<circle cx="' + hitX.toFixed(1) + '" cy="' + hitY + '" r="3.5" fill="var(--c)"/>');
+    });
+    // 顶点 O 与焦点 F
+    var atF = pos === "focus";
+    h.push('<circle cx="' + ox + '" cy="' + oy + '" r="' + (atF ? 5 : 8) + '" fill="' + (atF ? 'var(--card)' : 'var(--no)') + '" stroke="' + (atF ? 'var(--fg)' : 'var(--no)') + '" stroke-width="2"/>');
+    h.push('<text x="' + (ox - 10) + '" y="' + (oy - 10) + '" text-anchor="end" font-weight="700" fill="' + (atF ? 'var(--muted)' : 'var(--no)') + '" font-size="13.5">锅底顶点 O</text>');
+    if (atF) {
+      h.push('<circle cx="' + fX + '" cy="' + oy + '" r="13" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="1.5"/>');
+    }
+    h.push('<circle cx="' + fX + '" cy="' + oy + '" r="6.5" fill="var(--a)" stroke="var(--card)" stroke-width="1.5"/>');
+    h.push('<text x="' + (fX + 10) + '" y="' + (oy + 22) + '" font-weight="700" fill="var(--a)" font-size="14">焦点 F（汇聚中心！）</text>');
+    // 右侧说明框
+    var rx = 322;
+    h.push('<rect x="' + rx + '" y="34" width="186" height="132" rx="10" fill="var(--card)" stroke="' + (atF ? 'var(--a)' : 'var(--no)') + '" stroke-width="1.8"/>');
+    h.push('<text x="' + (rx + 12) + '" y="60" font-weight="700" fill="var(--c)" font-size="14">── 太空平行电波入射</text>');
+    h.push('<text x="' + (rx + 12) + '" y="86" font-weight="700" fill="var(--b)" font-size="14">── 抛物面内壁反射</text>');
+    h.push('<text x="' + (rx + 12) + '" y="116" font-weight="700" fill="' + (atF ? 'var(--a)' : 'var(--no)') + '" font-size="14">' + (atF ? '接收器在焦点 F：' : '若误装在锅底顶点 O：') + '</text>');
+    h.push('<text x="' + (rx + 12) + '" y="142" fill="var(--fg)" font-size="13.5">' + (atF ? '所有反射波 100% 精准汇聚！' : '反射波全去了 F，O 处落空！') + '</text>');
+    edhSvg.innerHTML = h.join("");
+    [].forEach.call(edhBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-pos") === pos);
+    });
+    edhNote.innerHTML = atF
+      ? "平行于对称轴射入的电磁波，经抛物线内壁反射后，<b>全部精准汇聚到焦点 F</b>！"
+      : "如果把接收器装在锅底顶点 O，四周反射回来的信号全汇聚在前方的<b>焦点 F</b>，顶点 O 根本收不到聚焦信号！";
+  }
+  [].forEach.call(edhBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { edhDraw(b.getAttribute("data-pos")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      edhDraw(ev.detail.choice === "A" ? "vertex" : "focus");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") edhDraw("focus");
+  });
+  edhDraw("focus");
 })();
+
+/* --- 伴读微图解 JS: 抛物线 --- */
+(function(){
+  var curTab = 0;
+  function el(t, a, txt) {
+    var e = document.createElementNS("http://www.w3.org/2000/svg", t);
+    for (var k in a) e.setAttribute(k, a[k]);
+    if (txt) e.textContent = txt;
+    return e;
+  }
+  function drawTab0(svg) {
+    var ox = 220, oy = 110, p = 60, dx = ox - p/2, fx = ox + p/2;
+    svg.appendChild(el("line", {x1: 40, y1: oy, x2: 480, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 470, y: oy - 6, fill: "#94a3b8", "font-size": 12}, "x"));
+    svg.appendChild(el("text", {x: ox + 8, y: 30, fill: "#94a3b8", "font-size": 12}, "y"));
+    svg.appendChild(el("line", {x1: dx, y1: 20, x2: dx, y2: 200, stroke: "#dc2626", "stroke-width": 2, "stroke-dasharray": "5,3"}));
+    svg.appendChild(el("text", {x: dx - 48, y: 35, fill: "#dc2626", "font-size": 12, "font-weight": "bold"}, "l: x=-p/2"));
+    svg.appendChild(el("circle", {cx: fx, cy: oy, r: 4, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: fx + 6, y: oy + 16, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "F(p/2,0)"));
+    var d = "M " + (ox + 80*80/120) + " " + (oy - 80);
+    for (var y = -80; y <= 80; y += 4) d += " L " + (ox + (y*y)/120) + " " + (oy + y);
+    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2.5}));
+    var px = ox + 30, py = oy - 60;
+    svg.appendChild(el("circle", {cx: px, cy: py, r: 4, fill: "#16a34a"}));
+    svg.appendChild(el("text", {x: px + 8, y: py - 4, fill: "#16a34a", "font-size": 12, "font-weight": "bold"}, "P(x₀,y₀)"));
+    svg.appendChild(el("circle", {cx: dx, cy: py, r: 3, fill: "#dc2626"}));
+    svg.appendChild(el("text", {x: dx - 20, y: py - 4, fill: "#dc2626", "font-size": 11}, "H"));
+    svg.appendChild(el("line", {x1: px, y1: py, x2: dx, y2: py, stroke: "#16a34a", "stroke-width": 2}));
+    svg.appendChild(el("line", {x1: px, y1: py, x2: fx, y2: oy, stroke: "#0284c7", "stroke-width": 2, "stroke-dasharray": "4,3"}));
+    svg.appendChild(el("path", {d: "M " + (dx + 8) + " " + py + " L " + (dx + 8) + " " + (py + 8) + " L " + dx + " " + (py + 8), fill: "none", stroke: "#dc2626", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: (px + dx)/2 - 16, y: py - 8, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "|PH|=d"));
+    svg.appendChild(el("text", {x: (px + fx)/2 + 8, y: (py + oy)/2, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "|PF|=d"));
+  }
+
+  function drawTab1(svg) {
+    var cols = [
+      {t: "y²=2px", ox: 80, o: "r", eq: "F(p/2,0), x=-p/2"},
+      {t: "y²=-2px", ox: 200, o: "l", eq: "F(-p/2,0), x=p/2"},
+      {t: "x²=2py", ox: 325, o: "u", eq: "F(0,p/2), y=-p/2"},
+      {t: "x²=-2py", ox: 450, o: "d", eq: "F(0,-p/2), y=p/2"}
+    ];
+    cols.forEach(function(c){
+      svg.appendChild(el("text", {x: c.ox, y: 35, "text-anchor": "middle", fill: "#0f172a", "font-size": 12, "font-weight": "bold"}, c.t));
+      svg.appendChild(el("line", {x1: c.ox - 45, y1: 110, x2: c.ox + 45, y2: 110, stroke: "#e2e8f0", "stroke-width": 1}));
+      svg.appendChild(el("line", {x1: c.ox, y1: 60, x2: c.ox, y2: 160, stroke: "#e2e8f0", "stroke-width": 1}));
+      var p = 24, oy = 110;
+      if (c.o === "r") {
+        svg.appendChild(el("line", {x1: c.ox - p/2, y1: 65, x2: c.ox - p/2, y2: 155, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+        svg.appendChild(el("circle", {cx: c.ox + p/2, cy: oy, r: 3, fill: "#0284c7"}));
+        svg.appendChild(el("path", {d: "M " + (c.ox + 35) + " 70 Q " + (c.ox - 5) + " " + oy + " " + (c.ox + 35) + " 150", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
+      } else if (c.o === "l") {
+        svg.appendChild(el("line", {x1: c.ox + p/2, y1: 65, x2: c.ox + p/2, y2: 155, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+        svg.appendChild(el("circle", {cx: c.ox - p/2, cy: oy, r: 3, fill: "#0284c7"}));
+        svg.appendChild(el("path", {d: "M " + (c.ox - 35) + " 70 Q " + (c.ox + 5) + " " + oy + " " + (c.ox - 35) + " 150", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
+      } else if (c.o === "u") {
+        svg.appendChild(el("line", {x1: c.ox - 45, y1: oy + p/2, x2: c.ox + 45, y2: oy + p/2, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+        svg.appendChild(el("circle", {cx: c.ox, cy: oy - p/2, r: 3, fill: "#16a34a"}));
+        svg.appendChild(el("path", {d: "M " + (c.ox - 40) + " 75 Q " + c.ox + " " + (oy + 5) + " " + (c.ox + 40) + " 75", fill: "none", stroke: "#16a34a", "stroke-width": 2}));
+      } else {
+        svg.appendChild(el("line", {x1: c.ox - 45, y1: oy - p/2, x2: c.ox + 45, y2: oy - p/2, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+        svg.appendChild(el("circle", {cx: c.ox, cy: oy + p/2, r: 3, fill: "#16a34a"}));
+        svg.appendChild(el("path", {d: "M " + (c.ox - 40) + " 145 Q " + c.ox + " " + (oy - 5) + " " + (c.ox + 40) + " 145", fill: "none", stroke: "#16a34a", "stroke-width": 2}));
+      }
+      svg.appendChild(el("text", {x: c.ox, y: 185, "text-anchor": "middle", fill: "#64748b", "font-size": 10}, c.eq));
+    });
+  }
+
+  function drawTab2(svg) {
+    var ox = 200, oy = 110, p = 50, dx = ox - p/2, fx = ox + p/2;
+    svg.appendChild(el("line", {x1: 40, y1: oy, x2: 480, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: dx, y1: 20, x2: dx, y2: 200, stroke: "#dc2626", "stroke-width": 2, "stroke-dasharray": "5,3"}));
+    svg.appendChild(el("circle", {cx: fx, cy: oy, r: 4, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: fx + 6, y: oy + 16, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "F(p/2,0)"));
+    var d = "M " + (ox + 80*80/100) + " 30";
+    for (var y = -80; y <= 80; y += 4) d += " L " + (ox + (y*y)/100) + " " + (oy + y);
+    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2}));
+    var ax = ox + 90, ay = oy - 45, p0x = ox + (45*45)/100;
+    svg.appendChild(el("circle", {cx: ax, cy: ay, r: 4, fill: "#d97706"}));
+    svg.appendChild(el("text", {x: ax + 6, y: ay - 6, fill: "#d97706", "font-size": 12, "font-weight": "bold"}, "A(内部定点)"));
+    svg.appendChild(el("line", {x1: ax, y1: ay, x2: dx, y2: ay, stroke: "#16a34a", "stroke-width": 2.5}));
+    svg.appendChild(el("circle", {cx: p0x, cy: ay, r: 4, fill: "#16a34a"}));
+    svg.appendChild(el("text", {x: p0x - 8, y: ay + 18, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "P*(最优点)"));
+    svg.appendChild(el("line", {x1: p0x, y1: ay, x2: fx, y2: oy, stroke: "#0284c7", "stroke-width": 1.5, "stroke-dasharray": "3,3"}));
+    svg.appendChild(el("rect", {x: 270, y: 155, width: 230, height: 32, rx: 6, fill: "#ecfdf5", stroke: "#10b981", "stroke-width": 1}));
+    svg.appendChild(el("text", {x: 385, y: 175, "text-anchor": "middle", fill: "#065f46", "font-size": 12, "font-weight": "bold"}, "min(|PA|+|PF|) = x_A + p/2 (垂线最短)"));
+  }
+
+  function renderFig() {
+    var svg = document.getElementById("m-parab-fig");
+    var desc = document.getElementById("m-parab-desc");
+    if (!svg) return;
+    svg.innerHTML = "";
+    if (curTab === 0) {
+      drawTab0(svg);
+      if (desc) desc.innerHTML = "<b>① 抛物线定义与等距特征</b>：抛物线上任意点 P(x₀, y₀) 到焦点 F(p/2, 0) 的焦半径 |PF|，恒等于它到准线 l: x = -p/2 的垂线距离 |PH| = x₀ + p/2。";
+    } else if (curTab === 1) {
+      drawTab1(svg);
+      if (desc) desc.innerHTML = "<b>② 四种标准方程开口与定位</b>：由一次项定轴、符号定开口。焦点到准线距离恒为 p，焦点坐标为一次项系数除以 4。";
+    } else {
+      drawTab2(svg);
+      if (desc) desc.innerHTML = "<b>③ 折线拉直与最值定理</b>：求 |PA|+|PF| 的最小值，将焦半径 |PF| 换为垂线段 |PH|，拉直为垂直准线的线段，最小值为 x_A + p/2。";
+    }
+  }
+
+  window.setMParabTab = function(idx) {
+    curTab = idx;
+    var btns = document.querySelectorAll("#m-parab-tabs button");
+    btns.forEach(function(b, i){
+      b.style.borderColor = (i === idx) ? "#0284c7" : "var(--border,#cbd5e1)";
+      b.style.background = (i === idx) ? "#0284c7" : "transparent";
+      b.style.color = (i === idx) ? "#fff" : "var(--text,#475569)";
+    });
+    renderFig();
+  };
+
+  function drawTrapFig() {
+    var svg = document.getElementById("m-parab-trap-fig");
+    if (!svg) return;
+    svg.innerHTML = "";
+    svg.appendChild(el("text", {x: 135, y: 22, "text-anchor": "middle", fill: "#0369a1", "font-size": 12, "font-weight": "bold"}, "情况 A: 定点在内部 (向准线垂线)"));
+    svg.appendChild(el("line", {x1: 25, y1: 30, x2: 25, y2: 135, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+    svg.appendChild(el("path", {d: "M 180 40 Q 55 85 180 130", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
+    svg.appendChild(el("circle", {cx: 85, cy: 85, r: 3, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: 85, y: 100, "text-anchor": "middle", fill: "#0284c7", "font-size": 10}, "F"));
+    svg.appendChild(el("circle", {cx: 145, cy: 65, r: 3, fill: "#d97706"}));
+    svg.appendChild(el("text", {x: 155, y: 68, fill: "#d97706", "font-size": 10}, "A"));
+    svg.appendChild(el("line", {x1: 145, y1: 65, x2: 25, y2: 65, stroke: "#16a34a", "stroke-width": 2}));
+    svg.appendChild(el("circle", {cx: 88, cy: 65, r: 3, fill: "#16a34a"}));
+    svg.appendChild(el("text", {x: 95, y: 60, fill: "#16a34a", "font-size": 10}, "P*"));
+    svg.appendChild(el("text", {x: 135, y: 140, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "min = x_A + p/2"));
+
+    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 140, stroke: "#e2e8f0", "stroke-width": 1}));
+
+    svg.appendChild(el("text", {x: 405, y: 22, "text-anchor": "middle", fill: "#b91c1c", "font-size": 12, "font-weight": "bold"}, "情况 B: 定点在外部 (|PA|+|PF| >= |AF|)"));
+    svg.appendChild(el("line", {x1: 295, y1: 30, x2: 295, y2: 135, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+    svg.appendChild(el("path", {d: "M 450 40 Q 325 85 450 130", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
+    svg.appendChild(el("circle", {cx: 355, cy: 85, r: 3, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: 355, y: 100, "text-anchor": "middle", fill: "#0284c7", "font-size": 10}, "F"));
+    svg.appendChild(el("circle", {cx: 340, cy: 45, r: 3, fill: "#d97706"}));
+    svg.appendChild(el("text", {x: 335, y: 40, fill: "#d97706", "font-size": 10}, "A(外部)"));
+    svg.appendChild(el("line", {x1: 340, y1: 45, x2: 355, y2: 85, stroke: "#dc2626", "stroke-width": 2}));
+    svg.appendChild(el("circle", {cx: 344, cy: 56, r: 3, fill: "#dc2626"}));
+    svg.appendChild(el("text", {x: 352, y: 55, fill: "#dc2626", "font-size": 10}, "P*"));
+    svg.appendChild(el("text", {x: 405, y: 140, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "min = |AF| (直线最短)"));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){ renderFig(); drawTrapFig(); });
+  } else {
+    renderFig();
+    drawTrapFig();
+  }
+})();
+
 </script>
 </body></html>

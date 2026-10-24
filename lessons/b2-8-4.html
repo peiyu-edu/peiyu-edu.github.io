@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -31,8 +33,15 @@
 
 <section class="step" data-title="从例子进入">
   <p>在初中平面几何里，我们熟悉一个经验：“在同一个平面内，两条直线如果不相交，就一定互相平行”。</p>
-  <p>但抬头观察真实的三维世界：高架桥上一辆汽车自西向东飞驰，桥下地面上一列地铁自北向南穿行；或者教室天花板上的日光灯管，与地面上一条斜穿的瓷砖拼缝——</p>
+  <p>但抬头观察真实的三维世界：高架桥上一辆汽车自西向东飞驰，桥下地面上一列地铁自北向南穿行。先点下面的按钮切换视角看看：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-bridge" viewBox="0 0 520 208" role="img" aria-label="高架桥公路与地面地铁铁轨的空间异面位置关系演示"></svg>
+    <div class="entry-bar" id="entry-bridge-bar">
+      <button type="button" data-mode="3d" class="on">看空间立体视角（异面：一上一下永不相交）</button>
+      <button type="button" data-mode="top">看正上方俯视图（看起来交叉，其实隔着桥墩高度差！）</button>
+      <button type="button" data-mode="para">对比平行铁轨</button>
+    </div>
+    <div class="entry-note" id="entry-bridge-note"></div>
     <p>高架桥上的公路与地面上的铁轨，这两条直线既永远不会相交，也显然不平行。在空间中，它们属于什么位置关系？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>仍然属于平行，因为它们没有公共点</button>
@@ -47,48 +56,60 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：8.1 基本立体图形里的正方体、棱和面（<a href="b2-8-1.html">回看 8.1</a>），8.2 怎么画直观图（<a href="b2-8-2.html">回看 8.2</a>）；初中的「同一平面内，两直线不相交就平行」。</p>
+  <p class="small">要用到：8.1 正方体的棱与面（<a href="b2-8-1.html">回看 8.1</a>），8.2 直观图（<a href="b2-8-2.html">回看 8.2</a>）；初中平面内「两直线不相交就平行」。</p>
 
-  <div class="card">
-    <p><b>平面</b>：平的、没有厚度、向四周无限伸展。画的时候用一个平行四边形代表它，记作平面 \(\alpha\)、平面 \(ABCD\) 等。</p>
-    <p>例：正方体 \(ABCD-A_1B_1C_1D_1\) 的底面画出来只是一块正方形，但「平面 \(ABCD\)」指的是把这块正方形无限延展开的那整张平面。</p>
+  <div class="micro-box">
+    <div class="micro-head">
+      <span>直观微图解</span>
+      <div class="micro-bar" id="m-pos-bar">
+        <button class="on" data-m="lines">空间三类线线位置</button>
+        <button data-m="angle">异面角平移相交法</button>
+        <button data-m="axioms">四大基本事实图景</button>
+      </div>
+    </div>
+    <svg id="m-pos-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <div class="micro-status" id="m-pos-status">空间两直线位置：相交（共面有交点）、平行（共面无交点）、异面（不同在任一平面且无交点）。</div>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">平行直线</span> 共面无交点（传递律成立）</div>
+      <p><b>空间共面性</b>：一定存在某一个确定的平面 \(\alpha\)，使两条直线同时在该平面内。</p>
+      <p><b>传递性</b>：基本事实 4 明确保证：\(a \parallel b,\ b \parallel c \implies a \parallel c\) 严格成立。</p>
+      <p><b>夹角定义</b>：同向或反向平行，方向相同夹角为 \(0^\circ\)。</p>
+    </div>
+    <div class="concept-card highlight">
+      <div class="concept-head"><span class="badge-pill accent">异面直线</span> 不同面无交点（无传递律）</div>
+      <p><b>空间异面性</b>：<b>不同在任何一个平面内</b>，绝对找不到包含两线的平面。</p>
+      <p><b>无传递性</b>：\(a\) 与 \(b\) 异面、\(b\) 与 \(c\) 异面，\(a\) 与 \(c\) <b>完全可能平行或相交</b>！</p>
+      <p><b>夹角定义</b>：平移至同一公共点相交所成的<b>锐角或直角</b>：\(0^\circ &lt; \theta \le 90^\circ\)。</p>
+    </div>
   </div>
 
   <div class="card">
-    <p><b>属于、在……内</b>：点在平面内写 \(A\in\alpha\)；直线在平面内写 \(l\subset\alpha\)（直线是点的集合，所以用「包含」）。</p>
-    <p>例：在正方体里，\(A\in\) 平面 \(ABCD\)，\(A_1\notin\) 平面 \(ABCD\)，直线 \(AB\subset\) 平面 \(ABCD\)。</p>
+    <p><b>平面</b>：平的、无厚度、向四周无限延展。记作平面 \(\alpha\)、平面 \(ABCD\)。</p>
+    <p><b>共线与共面</b>：点落在同一直线上叫共线；点或直线落在同一平面内叫共面。</p>
+    <p><b>异面直线判定</b>：平面外一点与平面内一点连成的直线，与平面内不过该点的直线<b>必为异面直线</b>。</p>
   </div>
 
-  <div class="card">
-    <p><b>共线、共面</b>：几个点在同一条直线上叫共线；几个点（或几条线）在同一个平面内叫共面。</p>
-    <p>例：正方体的 \(A,B,C,D\) 四点共面；\(A,B,C_1,D_1\) 也共面（它们组成一个长方形截面）；而 \(A,B,C,C_1\) 不共面。</p>
-  </div>
-
-  <div class="card">
-    <p><b>异面直线</b>：不同在任何一个平面内的两条直线。它们没有公共点，但也不平行。</p>
-    <p>例：正方体里棱 \(AB\) 是「前后」方向，棱 \(CC_1\) 是「上下」方向，两条棱没有公共点，也找不到一个平面同时装下它们。</p>
-  </div>
-
-  <h3>2. 三条基本事实：平面怎么定、线怎么放、面怎么交</h3>
-  <p>立体几何的推理从下面三条出发，它们是大家公认、不再证明的事实：</p>
+  <h3>2. 四大基本事实：公理化推演基石</h3>
   <div class="key">
-    <b>基本事实 1</b>：过不在一条直线上的三个点，有且只有一个平面。<br>
-    <b>基本事实 2</b>：一条直线上有两个点在一个平面内，这条直线就在这个平面内。<br>
-    <b>基本事实 3</b>：两个不重合的平面有一个公共点，就有且只有一条过这个点的公共直线（交线）。
+    $$\color{#0284c7}{\text{事实 1：过不在同一直线上的三点，有且只有一个平面（三点定面）}}$$
+    $$\color{#d97706}{\text{事实 2：若直线上有两点在平面内，整条直线必全在该平面内}}$$
+    $$\color{#059669}{\text{事实 3：两不重合平面只要有一个公共点，必有且只有一条过该点的公共交线}}$$
+    $$\color{#ec4899}{\text{事实 4：平行于同一条直线的两条直线平行（空间平行传递性：} a\parallel b, b\parallel c \implies a\parallel c)}$$
   </div>
-  <p>为什么这样说：三脚架放在不平的地上也不晃，三个脚尖总能定下一个面；拿直尺贴在桌面，两端都贴住了，整条边就都贴住了；翻开的书，两页只在书脊那条线上相交。</p>
-  <p>由基本事实 1 还能推出三种定平面的方式：一条直线和直线外一点；两条相交直线；两条平行直线。</p>
-  <p>怎么用：要证几个点<b>共线</b>，常说明它们都是两个平面的公共点——两个平面的公共点都落在唯一的交线上。要证<b>共面</b>，先用其中几个元素定一个平面，再说明其余的也在里面。</p>
 
   <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>\(\triangle ABC\) 不在平面 \(\alpha\) 内，直线 \(AB,\ BC,\ CA\) 延长后分别与平面 \(\alpha\) 交于点 \(P,\ Q,\ R\)。证明 \(P,Q,R\) 三点共线。</p>
-    <p>证：\(A,B,C\) 不共线，由基本事实 1，它们确定一个平面，记作平面 \(ABC\)。</p>
-    <p>\(P\) 在直线 \(AB\) 上，而 \(AB\subset\) 平面 \(ABC\)，所以 \(P\in\) 平面 \(ABC\)；又 \(P\in\alpha\)。所以 \(P\) 是两个平面的公共点。同理 \(Q,\ R\) 也是公共点。</p>
-    <p>平面 \(ABC\) 与 \(\alpha\) 不重合（\(\triangle ABC\) 不在 \(\alpha\) 内），又有公共点，由基本事实 3，它们交于一条直线 \(l\)，并且所有公共点都在 \(l\) 上。</p>
-    <p>所以 \(P,Q,R\) 都在 \(l\) 上，三点共线。</p>
+    <p class="small">例 1（看一遍怎么写：共线判定）</p>
+    <p>\(\triangle ABC\) 不在平面 \(\alpha\) 内，直线 \(AB,\ BC,\ CA\) 分别交平面 \(\alpha\) 于点 \(P,\ Q,\ R\)。证明 \(P,Q,R\) 三点共线。</p>
+    <p>证：\(A,B,C\) 不共线，由基本事实 1 确定唯一平面 \(ABC\)。</p>
+    <p>\(P \in AB \subset\) 平面 \(ABC\)，故 \(P \in\) 平面 \(ABC\)；又 \(P \in \alpha\)，所以 \(P\) 是两平面的公共点。同理 \(Q,\ R\) 也是公共点。</p>
+    <p>由基本事实 3，两不重合平面相交必有一条唯一交线 \(l\)，所有公共点必在 \(l\) 上。因此 \(P,Q,R\) 都在 \(l\) 上，三点共线。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：空间中有四个点，其中三个点在同一条直线上。这四个点：</p>
     <div class="opts cols">
@@ -99,25 +120,16 @@
     </div>
     <div class="reveal"><p><b>A</b>。设 \(A,B,C\) 在直线 \(l\) 上。第四点 \(D\) 若不在 \(l\) 上，「直线和直线外一点」定一个平面，四点都在里面；若 \(D\) 也在 \(l\) 上，四点共线，当然也共面。选 C 的同学把它和「四点中任意三点不共线」弄混了，那种情况才可能不共面。</p></div>
   </div>
+  <div class="vid" data-video="ex-col"></div>
 
   <h3>3. 空间两条直线的三种位置</h3>
-  <p>在平面里，两条直线不是相交就是平行。到了空间，多出一种：异面。</p>
   <table class="rec">
-    <tr><th>关系</th><th>在同一平面内？</th><th>公共点</th></tr>
-    <tr><td>相交</td><td>是</td><td>恰 1 个</td></tr>
-    <tr><td>平行</td><td>是</td><td>0 个</td></tr>
-    <tr><td>异面</td><td>否</td><td>0 个</td></tr>
+    <tr><th>关系</th><th>是否共面</th><th>公共点个数</th><th>能否传递</th></tr>
+    <tr><td><b>相交</b></td><td>是</td><td>恰有 1 个</td><td>否</td></tr>
+    <tr><td><b>平行</b></td><td>是</td><td>0 个</td><td><b>是（事实 4）</b></td></tr>
+    <tr><td><b>异面</b></td><td><b>否</b></td><td>0 个</td><td><b>否（完全不能传递）</b></td></tr>
   </table>
-  <div class="key">没有公共点，可能平行也可能异面。先确认两条线在同一平面内，才能说「不相交就平行」。</div>
-  <p>空间里平行仍能传递（<b>基本事实 4</b>）：平行于同一条直线的两条直线平行，即 \(a\parallel b,\ b\parallel c\Rightarrow a\parallel c\)。但「异面」不能传递，下面就看到。</p>
 
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>在正方体 \(ABCD-A_1B_1C_1D_1\) 中，判断：① \(AD_1\) 与 \(BC_1\)；② \(AB\) 与 \(C_1D_1\)；③ \(AB\) 与 \(CC_1\) 的位置关系。</p>
-    <p>① \(AB\parallel D_1C_1\) 且 \(AB=D_1C_1\)（都和 \(DC\) 平行且相等），所以 \(ABC_1D_1\) 是平行四边形，对边 \(AD_1\parallel BC_1\)：<b>平行</b>。</p>
-    <p>② \(AB\parallel DC\)，\(DC\parallel D_1C_1\)，由基本事实 4，\(AB\parallel C_1D_1\)：<b>平行</b>。（它们不在同一个面上，但仍平行。）</p>
-    <p>③ 平面 \(BCC_1B_1\) 包含 \(CC_1\)，\(B\) 在这个平面内但不在 \(CC_1\) 上，\(A\) 不在这个平面内。如果 \(AB\) 与 \(CC_1\) 共面，这个平面就含有 \(CC_1\) 和 \(B\)，只能是平面 \(BCC_1B_1\)，可 \(A\) 不在其中，矛盾。所以是<b>异面</b>。</p>
-  </div>
   <div class="card predict" data-id="try-3" data-answer="D">
     <p>自己试试：直线 \(a\) 与 \(b\) 异面，\(b\) 与 \(c\) 异面。那么 \(a\) 与 \(c\)：</p>
     <div class="opts cols">
@@ -128,19 +140,49 @@
     </div>
     <div class="reveal"><p><b>D</b>。在正方体里取 \(b=AB\)：\(a=CC_1\)、\(c=DD_1\) 时 \(a\parallel c\)；\(a=CC_1\)、\(c=B_1C_1\) 时相交于 \(C_1\)；\(a=CC_1\)、\(c=A_1D_1\) 时异面。选 A 的同学把「异面」当成像平行一样能传递，其实只有平行能传递。</p></div>
   </div>
+  <div class="vid" data-video="ex-angle"></div>
 
-  <h3>4. 等角定理与异面直线所成的角</h3>
-  <p><b>等角定理</b>：空间中两个角的两边分别对应平行，这两个角<b>相等或互补</b>。两组边方向都相同（或都相反）时相等，一组同向、一组反向时互补。</p>
-  <p>有了它，就能给异面直线定一个「夹角」：过空间任一点 \(O\) 作 \(a'\parallel a,\ b'\parallel b\)，\(a'\) 与 \(b'\) 相交，所成的<b>锐角或直角</b>叫异面直线 \(a,b\) 所成的角。由等角定理，换一个点 \(O\) 角也不变，所以通常把 \(O\) 取在其中一条直线上，只平移另一条。</p>
-  <div class="key">异面直线所成角 \(\theta\) 的范围：\(0^\circ&lt;\theta\le90^\circ\)。等于 \(90^\circ\) 时称两直线互相垂直，记 \(a\perp b\)（异面也可以垂直）。<br>求法三步：平移成相交 → 在三角形里算角 → 若算出钝角，取它的补角。</div>
-
-  <div class="card">
-    <p class="small">例 3（看一遍怎么写）</p>
-    <p>正方体 \(ABCD-A_1B_1C_1D_1\) 的棱长为 \(1\)。求：① \(A_1B\) 与 \(CC_1\) 所成的角；② \(A_1B\) 与 \(B_1C\) 所成的角。</p>
-    <p>① \(CC_1\parallel BB_1\)，所以所求角就是 \(A_1B\) 与 \(BB_1\) 的夹角 \(\angle A_1BB_1\)。在正方形 \(ABB_1A_1\) 中，对角线平分直角，\(\angle A_1BB_1=45^\circ\)。所求角为 \(45^\circ\)。</p>
-    <p>② 平移 \(A_1B\)：\(A_1D_1\parallel BC\) 且 \(A_1D_1=BC\)，所以 \(A_1BCD_1\) 是平行四边形，\(A_1B\parallel D_1C\)。所求角就是 \(D_1C\) 与 \(B_1C\) 的夹角 \(\angle B_1CD_1\)。</p>
-    <p>连 \(B_1D_1\)。\(\triangle B_1CD_1\) 的三边 \(B_1C,\ D_1C,\ B_1D_1\) 都是面对角线，长都是 \(\sqrt2\)，是等边三角形，\(\angle B_1CD_1=60^\circ\)。所求角为 \(60^\circ\)。</p>
+  <h3>4. 异面直线所成的角与三步思维链</h3>
+  <div class="key" style="text-align:center">
+    $$\color{#0284c7}{\text{异面直线所成角定义：任意平移使其相交，两线所成的锐角或直角}}$$
+    $$\color{#ec4899}{\text{取值范围：} 0^\circ < \theta \le 90^\circ \quad (\text{垂直时 } \theta=90^\circ \iff a \perp b)}$$
   </div>
+
+  <div class="card think-steps">
+    <div class="small" style="font-weight:700;color:var(--key, #0284c7);margin-bottom:8px">典型题三步思维链：正方体中异面直线夹角求法</div>
+    <p><b>题目</b>：在棱长为 \(1\) 的正方体 \(ABCD-A_1B_1C_1D_1\) 中，求异面直线 \(A_1B\) 与 \(B_1C\) 所成的角。</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号：</b>
+        \(A_1B\) 在左正面，\(B_1C\) 在右侧面，两条线在空间互不相交且不平行，是典型<b>异面直线</b>！求异面直线角的第一步是<b>构造平行线将它们平移到同一个点相交</b>。
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法（平移构造法）：</b>
+        <p>① <b>寻找平行线平移</b>：在正方体中，后侧对角线 \(D_1C \parallel A_1B\) 且长度相等（因为 \(A_1D_1 \parallel BC\) 且相等，四边形 \(A_1BCD_1\) 是平行四边形）。</p>
+        <p>② <b>化异面为相交</b>：将 \(A_1B\) 平移为 \(D_1C\)，两条相交直线汇聚于点 \(C\)，所求夹角转化为 \(\angle B_1CD_1\)（或其补角）。</p>
+        <p>③ <b>放入三角形求解</b>：连结 \(B_1D_1\)，在 \(\triangle B_1CD_1\) 中：<br>
+        \(B_1C = \sqrt{2}\)（右侧面对角线），\(D_1C = \sqrt{2}\)（后侧面对角线），\(B_1D_1 = \sqrt{2}\)（顶面对角线）。<br>
+        三边长度完全相等，因此 \(\triangle B_1CD_1\) 是<b>等边三角形</b>！<br>
+        \(\angle B_1CD_1 = 60^\circ\)。</p>
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论：</b>
+        ① 异面直线夹角<b>绝对不能为钝角</b>！若平移后在三角形内解出的角是钝角（如 \(120^\circ\)），最终答案必须取其补角 \(180^\circ - 120^\circ = 60^\circ\)；<br>
+        ② 夹角范围是 \((0^\circ, 90^\circ]\)，不能是 \(0^\circ\)（若为 \(0^\circ\) 则两线平行，不是异面）。
+      </div>
+    </div>
+  </div>
+
   <div class="card predict" data-id="try-1" data-answer="C">
     <p>自己试试：在正方体 \(ABCD-A_1B_1C_1D_1\) 中，异面直线 \(A_1B_1\) 与 \(BC_1\) 所成的角是：</p>
     <div class="opts cols">
@@ -155,20 +197,34 @@
     </div>
   </div>
 
-  <h3>5. 边界条件：各配一个反例</h3>
-  <div class="card">
-    <p><b>① 三点必须不共线</b>。反例：三点在一条直线上时，过它们的平面有无数个，像翻开的书，每一页都过书脊。</p>
-    <p><b>② 两个平面必须不重合，才谈得上交线</b>。反例：平面 \(ABCD\) 与它自己有无数公共点，却说不上「交线」。</p>
-    <p><b>③ 「不相交就平行」只在同一平面内成立</b>。反例：正方体的 \(AB\) 与 \(CC_1\) 不相交，但不平行，是异面。</p>
-    <p><b>④ 图上相交不等于空间相交</b>。反例：从上往下看立交桥，两条路在图上交叉，实际上一上一下，是异面直线。画出的图只是投影，相交要靠推理确认。</p>
-    <p><b>⑤ 等角定理是「相等或互补」</b>。反例：\(\angle AOB=50^\circ\)，把 \(OB\) 反向延长成射线 \(OB'\)，\(\angle AOB'\) 的两边与 \(\angle AOB\) 的两边分别平行（同一直线），但它等于 \(130^\circ\)。</p>
-    <p><b>⑥ 异面直线所成角不取钝角</b>。反例：平移后在三角形里算出的内角是 \(120^\circ\)，所成角应写 \(180^\circ-120^\circ=60^\circ\)，不能写 \(120^\circ\)。另外它也不能是 \(0^\circ\)：夹角为 \(0^\circ\) 意味着平行，就不是异面了。</p>
+  <h3>5. 三大翻车现场与反例微图解</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 1</span> 误以为“异面”具有传递性</div>
+      <p class="wrong">❌ \(a\) 与 \(b\) 异面，\(b\) 与 \(c\) 异面，就认定 \(a\) 与 \(c\) 也是异面。</p>
+      <p class="right">✔ <b>平行才传递</b>：正方体里 \(CC_1\) 与 \(AB\) 异面，\(DD_1\) 与 \(AB\) 也异面，但 \(CC_1 \parallel DD_1\) 却互相平行！</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 2</span> 异面直线夹角写出钝角</div>
+      <p class="wrong">❌ 平移成相交后，算出三角形内角为 \(135^\circ\)，直接答 \(135^\circ\)。</p>
+      <p class="right">✔ <b>锐角或直角</b>：异面直线夹角范围严格为 \((0^\circ, 90^\circ]\)。算得钝角必须取其补角 \(180^\circ - 135^\circ = 45^\circ\)！</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 3</span> 空间中“不相交”就断定“平行”</div>
+      <p class="wrong">❌ 看到两条直线没有公共点，立刻下结论判定它们互相平行。</p>
+      <p class="right">✔ <b>必须先确认共面</b>：空间中无交点包含<b>平行</b>与<b>异面</b>两种截然不同的位置关系！只有在同一平面内，无交点才是平行。</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="small" style="font-weight:700;color:var(--no, #dc2626);margin-bottom:6px">反例微图解：立交桥投影相交 vs 空间异面</div>
+    <svg id="m-skew-trap-fig" viewBox="0 0 520 150" class="micro-fig"></svg>
+    <p class="small" style="color:var(--mut, #64748b);margin-top:4px">二维平面俯视投影显示两条道路交叉相交，但空间实际一上一下具有垂直间隙 \(h\)，毫无公共点，是标准的异面直线！</p>
   </div>
 
   <details class="more"><summary>再深一点（可以先跳过）</summary>
     <p><b>三线共点</b>：要证三条直线交于一点，先说明其中两条交于点 \(P\)，再说明 \(P\) 在第三条线上——常常第三条线是两个平面的交线，而 \(P\) 正好是这两个平面的公共点。</p>
-    <p><b>判断异面的常用说法</b>（例 2 ③ 就是这样）：平面外一点和平面内一点连成的直线，与平面内不过后一点的直线异面。</p>
-    <p><b>这一章用什么工具</b>：本章只用基本事实和平面几何推理。平面向量只能在已经确认的同一个平面里用；平面方程、法向量这些后面选必一才学，这里不用。</p>
+    <p><b>判断异面的常用说法</b>：平面外一点和平面内一点连成的直线，与平面内不过后一点的直线异面。</p>
   </details>
 </section>
 
@@ -687,7 +743,256 @@
   });
 
   setPreset(2);
+
+  /* ================= 0 从例子进入：高架桥与地面铁轨（异面直线） ================= */
+  var ebSvg = document.getElementById("entry-bridge"), ebBar = document.getElementById("entry-bridge-bar"), ebNote = document.getElementById("entry-bridge-note");
+  function ebDraw(mode) {
+    if (!ebSvg) return;
+    ebSvg.innerHTML = "";
+    function add(tag, attrs, txt) {
+      var n = createSvgEl(tag, attrs);
+      if (txt !== undefined) n.textContent = txt;
+      ebSvg.appendChild(n);
+      return n;
+    }
+    if (mode === "3d") {
+      // 地面平面 α
+      add("polygon", { points: "48,184 418,184 476,112 106,112", fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": 1.8 });
+      add("text", { x: 82, y: 175, fill: "var(--a)", "font-size": 14, "font-weight": 700 }, "地面平面 α");
+      // 地面南北向地铁轨 l2
+      add("line", { x1: 294, y1: 112, x2: 236, y2: 184, stroke: "var(--c)", "stroke-width": 4, "stroke-linecap": "round" });
+      add("line", { x1: 294, y1: 112, x2: 236, y2: 184, stroke: "var(--card)", "stroke-width": 1.6, "stroke-dasharray": "5,4" });
+      add("text", { x: 252, y: 201, "text-anchor": "middle", fill: "var(--c)", "font-size": 13.5, "font-weight": 700 }, "地面南北地铁轨 l₂ (在 α 内)");
+      // 左右桥墩
+      add("rect", { x: 132, y: 74, width: 12, height: 74, rx: 2, fill: "var(--line)", stroke: "var(--muted)", "stroke-width": 1.3 });
+      add("rect", { x: 378, y: 74, width: 12, height: 74, rx: 2, fill: "var(--line)", stroke: "var(--muted)", "stroke-width": 1.3 });
+      // 中间高度差标尺 (x=265, y=148 -> y=74)
+      add("line", { x1: 265, y1: 74, x2: 265, y2: 148, stroke: "var(--no)", "stroke-width": 2.4, "stroke-dasharray": "4,3" });
+      add("circle", { cx: 265, cy: 148, r: 4.5, fill: "var(--c)" });
+      add("circle", { cx: 265, cy: 74, r: 4.5, fill: "var(--b)" });
+      add("rect", { x: 274, y: 98, width: 142, height: 26, rx: 6, fill: "var(--no-soft)", stroke: "var(--no)", "stroke-width": 1.4 });
+      add("text", { x: 345, y: 116, "text-anchor": "middle", fill: "var(--no)", "font-size": 13, "font-weight": 700 }, "↕ 隔着桥墩高差 h (不相交)");
+      // 上层东西向高架公路 l1
+      add("rect", { x: 56, y: 66, width: 410, height: 14, rx: 4, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 2.2 });
+      add("line", { x1: 62, y1: 73, x2: 460, y2: 73, stroke: "var(--b)", "stroke-width": 3, "stroke-dasharray": "10,6" });
+      add("text", { x: 260, y: 52, "text-anchor": "middle", fill: "var(--b)", "font-size": 14, "font-weight": 700 }, "上层东西向高架桥公路 l₁ (悬空高度 h)");
+      add("text", { x: 260, y: 25, "text-anchor": "middle", fill: "var(--fg)", "font-size": 14, "font-weight": 700 }, "空间立体视角：l₁ 与 l₂ 既不平行、也永不相交（异面直线）");
+      ebNote.innerHTML = "<b>空间立体视角</b>：高架桥公路 <b>l₁（东西向，悬空高 h）</b> 与地面地铁轨 <b>l₂（南北向，在地面 α 内）</b> 方向不同且一上一下，找不到任何一个平面能同时装下它们——这就是<b>异面直线</b>！";
+    } else if (mode === "top") {
+      add("rect", { x: 64, y: 28, width: 392, height: 156, rx: 8, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": 1.8 });
+      add("text", { x: 112, y: 50, fill: "var(--a)", "font-size": 13.5, "font-weight": 700 }, "正上方俯视地面 α");
+      // 南北向 l2
+      add("line", { x1: 260, y1: 32, x2: 260, y2: 180, stroke: "var(--c)", "stroke-width": 5 });
+      add("text", { x: 260, y: 200, "text-anchor": "middle", fill: "var(--c)", "font-size": 13.5, "font-weight": 700 }, "地面南北地铁轨 l₂ (在下层)");
+      // 东西向 l1 (跨在上方)
+      add("rect", { x: 76, y: 98, width: 368, height: 16, rx: 4, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 2.4 });
+      add("line", { x1: 82, y1: 106, x2: 438, y2: 106, stroke: "var(--b)", "stroke-width": 2.6, "stroke-dasharray": "8,5" });
+      add("circle", { cx: 260, cy: 106, r: 13, fill: "var(--no-soft)", stroke: "var(--no)", "stroke-width": 2, "stroke-dasharray": "3,2" });
+      add("text", { x: 362, y: 86, "text-anchor": "middle", fill: "var(--no)", "font-size": 13, "font-weight": 700 }, "⚠ 俯视重叠 ≠ 空间相交（上下差着高度 h！）");
+      add("text", { x: 152, y: 90, "text-anchor": "middle", fill: "var(--b)", "font-size": 13.5, "font-weight": 700 }, "高架公路 l₁ (在上层)");
+      ebNote.innerHTML = "<b>正上方俯视图陷阱</b>：从天上往下垂直看，两条线投影似乎叠在一点；但实际上<b>一上一下隔着桥墩高度差 h</b>，在三维空间中没有公共点，绝不是相交直线！";
+    } else {
+      add("polygon", { points: "48,176 418,176 476,84 106,84", fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": 1.8 });
+      add("text", { x: 260, y: 36, "text-anchor": "middle", fill: "var(--a)", "font-size": 14, "font-weight": 700 }, "对比：同一地面 α 内的两条平行铁轨（共面 + 无公共点 = 平行）");
+      add("line", { x1: 96, y1: 118, x2: 438, y2: 118, stroke: "var(--a)", "stroke-width": 3.5 });
+      add("line", { x1: 76, y1: 152, x2: 418, y2: 152, stroke: "var(--c)", "stroke-width": 3.5 });
+      add("text", { x: 265, y: 110, "text-anchor": "middle", fill: "var(--a)", "font-size": 13.5, "font-weight": 700 }, "铁轨 a (东西向，在平面 α 内)");
+      add("text", { x: 248, y: 170, "text-anchor": "middle", fill: "var(--c)", "font-size": 13.5, "font-weight": 700 }, "铁轨 b (东西向，也在同一平面 α 内，a ∥ b)");
+      ebNote.innerHTML = "<b>对比平行直线</b>：必须同时满足<b>① 在同一个平面内</b>、<b>② 没有公共点（方向相同）</b>才叫平行！高架桥与地铁方向一东一北、不在同一平面，所以不是平行，而是<b>异面</b>。";
+    }
+    [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-mode") === mode);
+    });
+  }
+  [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ebDraw(b.getAttribute("data-mode")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var m = ev.detail.choice === "A" ? "para" : (ev.detail.choice === "C" ? "top" : "3d");
+      ebDraw(m);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ebDraw("3d");
+  });
+  ebDraw("3d");
 })();
 </script>
+
+<script>
+(function() {
+  "use strict";
+  var fig = document.getElementById("m-pos-fig");
+  var bar = document.getElementById("m-pos-bar");
+  var status = document.getElementById("m-pos-status");
+  var trap = document.getElementById("m-skew-trap-fig");
+  if (!fig || !bar) return;
+
+  var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var ca = isDark ? "#38bdf8" : "#0284c7";
+  var cb = isDark ? "#f59e0b" : "#d97706";
+  var cc = isDark ? "#10b981" : "#059669";
+  var cd = isDark ? "#ec4899" : "#db2777";
+  var mut = isDark ? "#94a3b8" : "#64748b";
+  var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+  var border = isDark ? "#334155" : "#e2e8f0";
+  var NS = "http://www.w3.org/2000/svg";
+
+  function sEl(parent, tag, attrs) {
+    var el = document.createElementNS(NS, tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    parent.appendChild(el);
+    return el;
+  }
+
+  function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+    var t = sEl(parent, "text", {
+      x: x, y: y, fill: col || mut, "font-size": sz || 11.5,
+      "font-weight": fw || 400, "text-anchor": anchor || "start"
+    });
+    t.textContent = text;
+    return t;
+  }
+
+  function drawPos(mode) {
+    fig.innerHTML = "";
+    if (mode === "lines") {
+      // 空间三类线线位置：相交、平行、异面
+      // 1. 相交 (共面)
+      sTxt(fig, 65, 24, "相交（共面 1 点）", ca, 12, 700, "middle");
+      sEl(fig, "polygon", { points: "20,135 110,135 130,55 40,55", fill: "rgba(2,132,199,0.06)", stroke: border, "stroke-width": 1.2 });
+      sEl(fig, "line", { x1: 35, y1: 120, x2: 115, y2: 70, stroke: ca, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 45, y1: 70, x2: 105, y2: 120, stroke: ca, "stroke-width": 2 });
+      sEl(fig, "circle", { cx: 75, y1: 95, cy: 95, r: 3.5, fill: cd });
+      sTxt(fig, 75, 152, "同一平面内唯一交点", ca, 10.5, 400, "middle");
+
+      // 2. 平行 (共面)
+      sTxt(fig, 195, 24, "平行（共面 0 点）", cb, 12, 700, "middle");
+      sEl(fig, "polygon", { points: "150,135 240,135 260,55 170,55", fill: "rgba(217,119,6,0.06)", stroke: border, "stroke-width": 1.2 });
+      sEl(fig, "line", { x1: 165, y1: 110, x2: 245, y2: 110, stroke: cb, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 180, y1: 80, x2: 260, y2: 80, stroke: cb, "stroke-width": 2 });
+      sTxt(fig, 195, 152, "同一平面内永不相交", cb, 10.5, 400, "middle");
+
+      // 3. 异面 (不同面)
+      sTxt(fig, 325, 24, "异面（不同面 0 点）", cc, 12, 700, "middle");
+      sEl(fig, "polygon", { points: "280,135 370,135 390,55 300,55", fill: "rgba(16,185,129,0.06)", stroke: border, "stroke-width": 1.2 });
+      // 平面内一条线
+      sEl(fig, "line", { x1: 295, y1: 105, x2: 375, y2: 105, stroke: cc, "stroke-width": 2 });
+      // 平面外竖穿一条线 (交于面内某点但不过平面内那条线)
+      sEl(fig, "line", { x1: 340, y1: 40, x2: 340, y2: 80, stroke: cd, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 340, y1: 80, x2: 340, y2: 125, stroke: cd, "stroke-width": 2, "stroke-dasharray": "3 3" });
+      sEl(fig, "line", { x1: 340, y1: 125, x2: 340, y2: 145, stroke: cd, "stroke-width": 2 });
+      sTxt(fig, 325, 152, "无交点且不同在任一平面", cc, 10.5, 700, "middle");
+
+      // 右侧总结
+      sEl(fig, "rect", { x: 400, y: 25, width: 110, height: 125, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 410, 48, "线线核心分类：", cb, 11.5, 700);
+      sTxt(fig, 410, 72, "• 共面: 相交/平行", ca, 10.5, 600);
+      sTxt(fig, 410, 94, "• 异面: 空间独有", cc, 10.5, 600);
+      sTxt(fig, 410, 118, "• 平行有传递性", mut, 10.5);
+      sTxt(fig, 410, 136, "• 异面绝不传递！", cd, 10, 700);
+    } else if (mode === "angle") {
+      // 异面角平移法
+      sTxt(fig, 30, 24, "【异面直线夹角】任意平移至同一点相交取锐角/直角", ca, 12, 700);
+
+      // 原空间两异面直线 a 和 b
+      sTxt(fig, 60, 50, "空间直线 a", ca, 11, 700);
+      sEl(fig, "line", { x1: 40, y1: 110, x2: 120, y2: 60, stroke: ca, "stroke-width": 2 });
+      sTxt(fig, 180, 50, "空间直线 b", cb, 11, 700);
+      sEl(fig, "line", { x1: 150, y1: 50, x2: 210, y2: 120, stroke: cb, "stroke-width": 2 });
+
+      sEl(fig, "line", { x1: 225, y1: 85, x2: 260, y2: 85, stroke: mut, "stroke-width": 1.5, "marker-end": "url(#arr)" });
+      sTxt(fig, 242, 78, "平移", mut, 10.5, 400, "middle");
+
+      // 平移后汇聚于点 O
+      sTxt(fig, 310, 50, "汇交于点 O", cd, 11.5, 700);
+      sEl(fig, "circle", { cx: 330, cy: 95, r: 3.5, fill: cd });
+      sEl(fig, "line", { x1: 290, y1: 120, x2: 370, y2: 70, stroke: ca, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 305, y1: 65, x2: 355, y2: 125, stroke: cb, "stroke-width": 2 });
+      sTxt(fig, 345, 92, "θ", cd, 12, 700);
+
+      // 右侧总结
+      sEl(fig, "rect", { x: 395, y: 25, width: 115, height: 125, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 405, 48, "异面角范围：", cd, 11.5, 700);
+      sTxt(fig, 405, 72, "0° < θ ≤ 90°", cd, 12, 700);
+      sTxt(fig, 405, 96, "• 平移至相交", mut, 10.5);
+      sTxt(fig, 405, 116, "• 三角形求角", mut, 10.5);
+      sTxt(fig, 405, 136, "• 钝角取补角！", ca, 10.5, 700);
+    } else if (mode === "axioms") {
+      // 四大基本事实图景
+      sTxt(fig, 30, 24, "【四大基本事实】立体几何公理体系", cb, 12, 700);
+
+      sTxt(fig, 50, 55, "事实 1: 三点定面", ca, 11, 700);
+      sEl(fig, "polygon", { points: "30,125 110,125 125,75 45,75", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.2 });
+      sEl(fig, "circle", { cx: 55, cy: 110, r: 3, fill: ca });
+      sEl(fig, "circle", { cx: 95, cy: 115, r: 3, fill: ca });
+      sEl(fig, "circle", { cx: 80, cy: 85, r: 3, fill: ca });
+      sTxt(fig, 80, 142, "不共线三点定一平面", ca, 10, 400, "middle");
+
+      sTxt(fig, 185, 55, "事实 3: 两面唯一交线", cc, 11, 700);
+      sEl(fig, "polygon", { points: "150,125 230,125 250,75 170,75", fill: "rgba(16,185,129,0.06)", stroke: cc, "stroke-width": 1.2 });
+      sEl(fig, "polygon", { points: "185,140 265,140 245,60 165,60", fill: "rgba(217,119,6,0.06)", stroke: cb, "stroke-width": 1.2 });
+      sEl(fig, "line", { x1: 175, y1: 95, x2: 240, y2: 95, stroke: cd, "stroke-width": 2 });
+      sTxt(fig, 205, 154, "公共点必在交线上", cc, 10, 400, "middle");
+
+      // 右侧事实 4
+      sEl(fig, "rect", { x: 285, y: 25, width: 225, height: 125, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 298, 48, "事实 4：平行传递律", cb, 11.5, 700);
+      sTxt(fig, 298, 72, "a ∥ b 且 b ∥ c  ⟹  a ∥ c", ca, 12, 700);
+      sTxt(fig, 298, 96, "• 空间中唯有平行具有严格传递性", mut, 11);
+      sTxt(fig, 298, 118, "• 证明线线平行最核心的中间桥梁", cc, 11, 600);
+      sTxt(fig, 298, 136, "★ 异面关系绝不能传递！", cd, 10.5, 700);
+    }
+  }
+
+  [].forEach.call(bar.querySelectorAll("button"), function(b) {
+    b.onclick = function() {
+      [].forEach.call(bar.querySelectorAll("button"), function(x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var m = b.getAttribute("data-m");
+      drawPos(m);
+      if (m === "lines") status.textContent = "空间两直线位置：相交（共面有交点）、平行（共面无交点）、异面（不同在任一平面且无交点）。";
+      else if (m === "angle") status.textContent = "异面角求法：任意平移至同一点相交，所成的锐角或直角即异面直线夹角。";
+      else if (m === "axioms") status.textContent = "四大公理：三点定面、线在面内、两面交线唯一、平行空间传递。";
+    };
+  });
+  drawPos("lines");
+
+  // 绘制反例微图解
+  if (trap) {
+    sTxt(trap, 30, 20, "【立交桥模型】平面投影相交 vs 空间异面", ca, 12, 700);
+    // 二维俯视
+    sTxt(trap, 60, 42, "平面俯视投影（看似相交）", mut, 10.5);
+    sEl(trap, "line", { x1: 40, y1: 95, x2: 140, y2: 95, stroke: ca, "stroke-width": 2 });
+    sEl(trap, "line", { x1: 90, y1: 50, x2: 90, y2: 130, stroke: cb, "stroke-width": 2 });
+    sEl(trap, "circle", { cx: 90, cy: 95, r: 3.5, fill: "#ef4444" });
+    sTxt(trap, 90, 142, "假交点 (投影重叠)", "#ef4444", 10.5, 600, "middle");
+
+    sEl(trap, "line", { x1: 170, y1: 95, x2: 210, y2: 95, stroke: mut, "stroke-width": 1.5, "marker-end": "url(#arr)" });
+
+    // 空间三维透视
+    sTxt(trap, 215, 40, "空间透视（一上一下无交点）", cc, 10.5, 700);
+    // 下层路
+    sEl(trap, "line", { x1: 230, y1: 115, x2: 340, y2: 115, stroke: ca, "stroke-width": 2.2 });
+    sTxt(trap, 230, 130, "下层地面道路 a", ca, 10.5);
+    // 上层高架桥
+    sEl(trap, "line", { x1: 275, y1: 55, x2: 295, y2: 105, stroke: cb, "stroke-width": 2.2 });
+    sTxt(trap, 296, 66, "上层高架桥 b", cb, 10.5);
+    // 垂距虚线 h
+    sEl(trap, "line", { x1: 285, y1: 80, x2: 285, y2: 115, stroke: cd, "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+    sTxt(trap, 292, 100, "垂距 h > 0", cd, 10.5, 700);
+
+    // 右侧总结
+    sEl(trap, "rect", { x: 365, y: 25, width: 145, height: 110, rx: 6, fill: bgCard, stroke: border });
+    sTxt(trap, 375, 48, "异面本质警示：", cd, 11.5, 700);
+    sTxt(trap, 375, 70, "• 空间无公共点", ca, 10.5);
+    sTxt(trap, 375, 90, "• 不同在任何平面", cb, 10.5);
+    sTxt(trap, 375, 110, "• 图上交点纯属假象", "#ef4444", 10.5, 700);
+    sTxt(trap, 375, 126, "★ 严防假相交！", cd, 10, 700);
+  }
+})();
+</script>
+
 </body>
 </html>

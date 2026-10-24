@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
   .chip { min-width: 44px; min-height: 40px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: inherit; cursor: pointer; }
@@ -30,8 +32,16 @@
 <p class="lead">两个集合放在一起，能「取公共的」「全放一起」，也能「从全集里去掉」。这一节把这三种运算弄清楚，尤其是数轴上的端点。先从两张名单开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>班里有两个兴趣小组。篮球组：小明、小红、小刚、小丽；合唱组：小红、小丽、小强。</p>
+  <p>班里有两个兴趣小组。篮球组：小明、小红、小刚、小丽；合唱组：小红、小丽、小强。点下面的按钮切换查看不同集合：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-club" viewBox="0 0 520 195" role="img" aria-label="篮球组与合唱组双圈人员名牌韦恩图"></svg>
+    <div class="entry-bar" id="entry-club-bar">
+      <button type="button" data-m="inter" class="on">都参加（交集 A∩B）</button>
+      <button type="button" data-m="union">至少参加一个（并集 A∪B）</button>
+      <button type="button" data-m="onlyA">只参加篮球组</button>
+      <button type="button" data-m="onlyB">只参加合唱组</button>
+    </div>
+    <div class="entry-note" id="entry-club-note"></div>
     <p>两个组<b>都</b>参加了的是谁？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>小红和小丽</button>
@@ -48,39 +58,46 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：集合、元素、\(\in\)（<a href="b1-1-1.html">回看 1.1</a>）；子集 \(\subseteq\)、空集 \(\varnothing\)（<a href="b1-1-2.html">回看 1.2</a>）；初中在数轴上表示不等式。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「文氏图三色彩灯」建立直觉</h3>
+  <p class="small">要用到：集合、元素、\(\in\)（<a href="b1-1-1.html">回看 1.1</a>）；子集 \(\subseteq\)、空集 \(\varnothing\)（<a href="b1-1-2.html">回看 1.2</a>）；初中在数轴上表示不等式。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>「同时」和「至少一个」</b>：「同时满足」是两个条件都要满足；「至少满足一个」是满足一个就行，两个都满足也算。</p>
-    <p>例：在 \(1\) 到 \(10\) 里，「是偶数，同时大于 \(5\)」的有 \(6,8,10\)；「是偶数，或大于 \(5\)（至少一个）」的有 \(2,4,6,7,8,9,10\)。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>集合三大运算的视觉光影</b></p>
+    <div class="entry-bar" id="m-op-bar" role="group" aria-label="集合运算微图解切换">
+      <button type="button" class="on" data-k="cap">① 交集 A ∩ B（双重重叠杏仁区：两边都有）</button>
+      <button type="button" data-k="cup">② 并集 A ∪ B（双圈点亮大版图：去重合并）</button>
+      <button type="button" data-k="com">③ 补集 ∁_U A（全集大矩形中，挖掉 A 剩下的外围）</button>
+    </div>
+    <svg class="micro-fig" id="m-op-fig" viewBox="0 0 520 160" role="img" aria-label="交集并集补集文氏图微图解"></svg>
+    <p class="entry-note" id="m-op-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">核心概念 ②</span><b>交集（\(\cap\) 门扣）vs 并集（\(\cup\) 水杯）</b></p>
+      <p class="small" style="margin:0"><b>\(\cap\)</b> 口朝下像一道窄门扣，只有两家同时满足的「共同贵客」才能挤进来；<b>\(\cup\)</b> 口朝上像一只大水杯，把两家的水全部倒在一起（但重复水分子融合，不重复计数）！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">核心概念 ③</span><b>补集必须先看全集 \(U\)！</b></p>
+      <p class="small" style="margin:0">脱离了全集谈补集是无源之水。同一个集合 \(A=\{1,2\}\)，在 \(U=\{1,2,3\}\) 里补集是 \(\{3\}\)；在全体自然数 \(\mathbf{N}\) 里补集则是无穷无尽的整数！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心三大运算定义与等价包含链</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{A \cap B = \{x \mid x \in A \text{ 且 } x \in B\}}_{\text{交集：同时满足两个条件}}}\)</span>
+    <span style="display:inline-block; margin:0 10px">\(\color{#966524}{\underbrace{A \cup B = \{x \mid x \in A \text{ 或 } x \in B\}}_{\text{并集：至少满足一个条件}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\complement_U A = \{x \in U \mid x \notin A\}}_{\text{补集：在 U 中彻底挖掉 A}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>全集</b>：讨论一个问题时，所有对象都在里面的那个大集合，记作 \(U\)。</p>
-    <p>例：说「不是偶数的数」。在 \(U=\{1,2,3,4,5,6\}\) 里，是 \(1,3,5\)；在全体整数里，还有 \(-1\)、\(7\)、\(9\)……范围一换，答案就换了。</p>
-  </div>
-
-  <div class="card">
-    <p><b>端点「取到」和「取不到」</b>：\(x\le 3\) 取到 \(3\)，数轴上画实心点 ●；\(x&lt;3\) 取不到 \(3\)，画空心点 ○。</p>
-    <p>例：\(\{x\mid 1\le x&lt;3\}\) 里，\(1\) 在，\(3\) 不在，\(2.5\)、\(2.99\) 都在（没说是整数，就是一整段实数）。</p>
-    <p class="small">「动手」② 里会用简写：\([1,3)\) 就是 \(\{x\mid 1\le x&lt;3\}\)，方括号表示端点取到，圆括号表示取不到；\(+\infty\)、\(-\infty\) 表示一直往右、往左。这叫区间，3.1 会正式讲。</p>
-  </div>
-
-  <div class="card">
-    <p><b>空集 \(\varnothing\)</b>：一个元素也没有的集合。</p>
-    <p>例：「小于 \(0\) 的正整数」组成的集合是 \(\varnothing\)。注意 \(\{0\}\) 不是空集，它里面有一个元素 \(0\)。</p>
-  </div>
-
-  <h3>2. 交集和并集</h3>
-  <p><span class="ca">交集</span> \(A\cap B\)（读「\(A\) 交 \(B\)」）：<b>同时</b>属于 \(A\) 和 \(B\) 的元素。<span class="cb">并集</span> \(A\cup B\)（读「\(A\) 并 \(B\)」）：<b>至少属于其中一个</b>的元素。</p>
-  <p>为什么并集里两边都有的元素只写一次：集合里的元素不重复，就像入口的例子里，小红只算一个人。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（交集与并集计算）</b></p>
     <p>\(A=\{1,2,3,4\}\)，\(B=\{3,4,5,6\}\)，求 \(A\cap B\) 和 \(A\cup B\)。</p>
     <p>两边都有的是 \(3\) 和 \(4\)，所以 \(A\cap B=\{3,4\}\)。</p>
     <p>把两边的元素放在一起：\(1,2,3,4\) 和 \(3,4,5,6\)，重复的 \(3,4\) 只写一次，\(A\cup B=\{1,2,3,4,5,6\}\)。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：\(A=\{1,3,5,7\}\)，\(B=\{2,3,5,8\}\)。\(A\cup B\) 有几个元素？</p>
     <div class="opts cols">
@@ -92,15 +109,12 @@
     <div class="reveal"><p><b>B</b>。\(A\cup B=\{1,2,3,5,7,8\}\)，\(6\) 个。选 C 的同学把 \(3\)、\(5\) 数了两次；选 D 的同学数的是交集 \(\{3,5\}\)。</p></div>
   </div>
 
-  <h3>3. 补集</h3>
-  <p><span class="cc">补集</span> \(\complement_U A\)：在全集 \(U\) 里、但<b>不属于</b> \(A\) 的元素（这里 \(A\subseteq U\)）。</p>
-  <div class="key">补集一定要先知道全集 \(U\) 是什么。同一个 \(A\)，换一个 \(U\)，补集就变了。</div>
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（补集与全集）</b></p>
     <p>\(U=\{1,2,3,4,5,6\}\)，\(A=\{1,3,5\}\)，求 \(\complement_U A\)。</p>
     <p>从 \(U\) 里把 \(A\) 的元素 \(1,3,5\) 去掉，剩下 \(2,4,6\)，所以 \(\complement_U A=\{2,4,6\}\)。</p>
-    <p>再看换全集：\(A=\{1,2\}\)，在 \(U=\{1,2,3\}\) 里 \(\complement_U A=\{3\}\)；在 \(U=\{1,2,3,4,5\}\) 里 \(\complement_U A=\{3,4,5\}\)。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：\(U=\{1,2,3,4,5,6,7\}\)，\(A=\{2,4,6\}\)，\(B=\{1,2,3\}\)。\((\complement_U A)\cap B=\)？</p>
     <div class="opts cols">
@@ -112,20 +126,26 @@
     <div class="reveal"><p><b>A</b>。先算 \(\complement_U A=\{1,3,5,7\}\)，再和 \(B=\{1,2,3\}\) 取公共的：\(\{1,3\}\)。选 B 的同学算完补集就停了，忘了「\(\cap B\)」；选 C 算成了 \(A\cap B\)。</p></div>
   </div>
 
-  <h3>4. 数轴上的交、并、补：盯住端点</h3>
-  <p>元素是一段一段的实数时，列不出来，就画数轴：交集看「两段重叠的地方」，并集看「被盖住的地方」，补集看「没被盖住的地方」。最容易错的是<b>端点</b>：</p>
-  <ul>
-    <li>端点在两个集合里都取到，交集才取到它；</li>
-    <li>端点只要在一个集合里取到，并集就取到它；</li>
-    <li>\(A\) 取到的端点，\(\complement_U A\) 就取不到；\(A\) 取不到的，补集就取到（前提是它在 \(U\) 里）。</li>
-  </ul>
+  <h3>3. 数轴上的交、并、补：端点实心空心穿透法则</h3>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>\(A=\{x\mid -1\le x&lt;3\}\)，\(B=\{x\mid 1&lt;x\le 5\}\)，全集 \(\mathbf R\)。求 \(A\cap B\)、\(A\cup B\)、\(\complement_{\mathbf R}A\)。</p>
-    <p>重叠部分从 \(1\) 到 \(3\)。端点 \(1\)：\(B\) 取不到，交集就取不到；端点 \(3\)：\(A\) 取不到，交集也取不到。\(A\cap B=\{x\mid 1&lt;x&lt;3\}\)。</p>
-    <p>盖住的部分从 \(-1\) 到 \(5\)。\(-1\) 在 \(A\) 里，\(5\) 在 \(B\) 里，都取到；中间的 \(3\) 虽然 \(A\) 取不到，但 \(B\) 盖住了它。\(A\cup B=\{x\mid -1\le x\le 5\}\)。</p>
-    <p>\(A\) 没盖住的：\(-1\) 左边（\(-1\) 本身在 \(A\) 里，不要）和 \(3\) 右边（\(3\) 不在 \(A\) 里，要）。\(\complement_{\mathbf R}A=\{x\mid x&lt;-1\text{ 或 }x\ge 3\}\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">设全集为 \(\mathbf R\)，\(A=\{x\mid -1\le x&lt;3\}\)，\(B=\{x\mid 1&lt;x\le 5\}\)。求 \(A\cap B\)、\(A\cup B\) 和 \(\complement_{\mathbf R}A\)。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看交集重叠区：</span>
+        重叠段在 \(1\) 到 \(3\) 之间。看两端：端点 \(1\) 在 \(B\) 中是<b>空心</b>，交集直接判空心；端点 \(3\) 在 \(A\) 中也是<b>空心</b>。故 \(A\cap B=\{x\mid 1&lt;x&lt;3\}\)。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步看并集覆盖区：</span>
+        从最左端 \(-1\)（实心）一路连通覆盖到最右端 \(5\)（实心）。虽然 \(3\) 不在 \(A\) 中，但 \(B\) 包含它（\(3 \in B\)），直接填补铺满！故 \(A\cup B=\{x\mid -1\le x\le 5\}\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步挖洞算补集（实变空、空变实）：</span>
+        全集 \(\mathbf R\) 挖去 \(A\)：左侧从 \(-1\) 往左，因为 \(-1\in A\) 被挖走，补集变成<b>空心</b>（\(x&lt;-1\)）；右侧从 \(3\) 往右，因为 \(3\notin A\) 未被挖走，留在补集里变成<b>实心</b>（\(x\ge 3\)）！故 \(\complement_{\mathbf R}A=\{x\mid x&lt;-1\text{ 或 }x\ge 3\}\)。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：\(A=\{x\mid x\le 2\}\)，全集 \(\mathbf R\)。\(\complement_{\mathbf R}A=\)？</p>
     <div class="opts cols">
@@ -135,14 +155,8 @@
     </div>
     <div class="reveal"><p><b>A</b>。\(2\) 在 \(A\) 里，补集就不能再要它。选 B 的同学把「反过来」只改了方向，没管端点：那样 \(2\) 同时在 \(A\) 和补集里，不可能。</p></div>
   </div>
+  <div class="vid" data-video="ex-axis"></div>
 
-  <h3>5. 几条一看就懂的关系</h3>
-  <p>\(A\cap B\subseteq A\subseteq A\cup B\)：取公共的只会变少，全放一起只会变多。</p>
-  <div class="key">\(A\cap B=A\)、\(A\cup B=B\)、\(A\subseteq B\)，三句说的是同一件事。高考里常把「\(A\subseteq B\)」藏成前两种写法。</div>
-  <div class="card">
-    <p class="small">例 4</p>
-    <p>\(A=\{1,2\}\)，\(B=\{1,2,3\}\)，\(A\subseteq B\)。算一算：\(A\cap B=\{1,2\}=A\)，\(A\cup B=\{1,2,3\}=B\)。\(A\) 整个在 \(B\) 里，所以「公共部分」就是 \(A\) 自己，「放一起」也没多出东西。</p>
-  </div>
   <div class="card predict" data-id="e-subset" data-answer="B">
     <p>自己试试：已知 \(A\cup B=B\)。下面哪句一定对？</p>
     <div class="opts">
@@ -153,20 +167,57 @@
     <div class="reveal"><p><b>B</b>。把 \(A\) 并进来，\(B\) 一点没变，说明 \(A\) 的元素本来就都在 \(B\) 里。不一定相等：上面的 \(A=\{1,2\}\)，\(B=\{1,2,3\}\) 就满足。在「动手」① 的 Venn 图里，把所有 A 的数都改成「两个都在」，再看 \(A\cup B\) 和 \(B\)。</p></div>
   </div>
 
-  <h3>6. 用之前，查四件事</h3>
-  <ol>
-    <li><b>全集</b>：求补集先看 \(U\) 是什么。<br><span class="small">反例：\(A=\{x\mid x&lt;2\}\)，\(U=\mathbf R\) 时 \(\complement_U A=\{x\mid x\ge 2\}\)；\(U\) 换成全体整数，补集就只剩 \(2,3,4,\dots\) 这些整数。</span></li>
-    <li><b>端点</b>：数轴上每个端点单独判断取不取到。<br><span class="small">反例：\(A=\{x\mid x&lt;1\}\)，\(B=\{x\mid x\ge 1\}\)，\(A\cap B=\varnothing\)；把 \(A\) 改成 \(x\le 1\)，交集就成了 \(\{1\}\)。只差一个端点，答案就不一样。</span></li>
-    <li><b>空集不是 \(\{0\}\)</b>：没有公共元素写 \(\varnothing\)。<br><span class="small">反例：\(\{1\}\cap\{2\}=\varnothing\)，写成 \(\{0\}\) 就错了——\(\{0\}\) 里有一个元素 \(0\)，可 \(0\) 并不在两个集合里。</span></li>
-    <li><b>带字母时，先想空集</b>：集合里有参数，不能默认它一定有元素。<br><span class="small">反例：\(A=\{x\mid a&lt;x&lt;1\}\)，要 \(A\subseteq B\)。\(a\ge 1\) 时 \(A=\varnothing\)，空集是任何集合的子集，这些 \(a\) 不管 \(B\) 是什么都满足，漏了就错。</span></li>
-  </ol>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>求补集时，端点等号未按「实变空、空变实」翻转</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：全集为 \(\mathbf R\)，已知 \(A=\{x\mid x\le 2\}\)，随手写出 \(\complement_{\mathbf R}A=\{x\mid x\ge 2\}\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：\(x=2\) 本来属于 \(A\)！如果补集也带等号，就会导致 \(2\) 既在集合中又在补集中，产生悖论！原集合有等号（实心），补集绝对<b>不能带等号（空心）</b>，必须是 \(x&gt;2\)！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>求并集时重复元素未去重</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：\(A=\{1,3,5\}, B=\{3,5,8\}\)，计算并集元素个数写成 \(3+3=6\) 个。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：集合具有<b>互异性</b>，两边都有的元素 \(3,5\) 并入集合后只能保留一份！实际并集为 \(\{1,2,3,5,8\}\)（容斥公式：\(n(A\cup B)=n(A)+n(B)-n(A\cap B)=3+3-2=4\) 个非重元素）。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（高考最高频！）</span><span>看到 \(A \cup B = B\) 误判为 \(B \subseteq A\)</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：以为「\(A \cup B = B\)」意味着 \(B\) 包含于 \(A\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：\(A\) 并入 \(B\) 后，\(B\) 毫发未变，说明 \(A\) 原本就是 \(B\) 的一部分，其实是小在大肚子里（<b>\(A \subseteq B\)</b>）！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-cup-fig" viewBox="0 0 280 140" role="img" aria-label="包含关系微图解"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vid" data-video="ex-param"></div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>补集和交、并换着用</b>：\(\complement_U(A\cup B)=\complement_U A\cap\complement_U B\)，\(\complement_U(A\cap B)=\complement_U A\cup\complement_U B\)。例：\(U=\{1,\dots,6\}\)，\(A=\{1,2\}\)，\(B=\{2,3\}\)，\(\complement_U(A\cup B)=\{4,5,6\}\)，\(\complement_U A\cap\complement_U B=\{3,4,5,6\}\cap\{1,4,5,6\}=\{4,5,6\}\)，一样。「动手」① 可以随手验证。</p>
-    <p><b>「\(A\) 去掉 \(B\)」</b>：属于 \(A\) 但不属于 \(B\) 的元素，就是 \(A\cap\complement_U B\)。例：\(U=\{1,\dots,5\}\)，\(A=\{1,2,3,4\}\)，\(B=\{3,4,5\}\)，\(A\cap\complement_U B=\{1,2\}\)。有的书叫它「差集」，课本不专门讲，用交和补就能写出来。</p>
+    <p><b>德·摩根定律（反演律）</b>：\(\complement_U(A\cup B)=\complement_U A\cap\complement_U B\)，\(\complement_U(A\cap B)=\complement_U A\cup\complement_U B\)。</p>
+    <p><b>容斥原理</b>：有限集合中，\(n(A\cup B) = n(A) + n(B) - n(A\cap B)\)。入口的例子：\(4+3-2=5\) 人。</p>
     <p><b>先看元素是什么</b>：\(\{(x,y)\mid y=x\}\cap\{(x,y)\mid y=2-x\}\) 的元素是点，交集是 \(\{(1,1)\}\)，不能写成 \(\{1\}\)。</p>
-    <p><b>数一数元素个数</b>：有限集合里，\(A\cup B\) 的元素个数 \(=\) \(A\) 的个数 \(+\) \(B\) 的个数 \(-\) \(A\cap B\) 的个数。入口的例子：\(4+3-2=5\) 人。</p>
   </details>
 </section>
 
@@ -537,9 +588,138 @@
   document.getElementById("vreset").onclick = function () { vReset(""); };
   document.getElementById("v23").onclick = function () { vReset("23"); };
 
-  document.addEventListener("DOMContentLoaded", function () { nlReset(); vReset(""); });
+  /* ================= 0 从例子进入：兴趣小组双圈 ================= */
+  var ecSvg = document.getElementById("entry-club"), ecBar = document.getElementById("entry-club-bar"), ecNote = document.getElementById("entry-club-note");
+  var ecMode = "inter";
+  function ecDraw(mode) {
+    ecMode = mode;
+    ecSvg.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    // 两个大椭圆
+    svg("ellipse", { cx: 196, cy: 104, rx: 146, ry: 78, fill: mode === "union" || mode === "onlyA" ? okS : "none", "fill-opacity": 0.55, stroke: ca, "stroke-width": 2.4 }, ecSvg);
+    svg("ellipse", { cx: 334, cy: 104, rx: 136, ry: 78, fill: mode === "union" || mode === "onlyB" ? okS : "none", "fill-opacity": 0.55, stroke: cb, "stroke-width": 2.4 }, ecSvg);
+    svg("text", { x: 118, y: 44, "text-anchor": "middle", "font-weight": 700, fill: ca, "font-size": 14.5 }, ecSvg).textContent = "篮球组 A (4人)";
+    svg("text", { x: 406, y: 44, "text-anchor": "middle", "font-weight": 700, fill: cb, "font-size": 14.5 }, ecSvg).textContent = "合唱组 B (3人)";
+    svg("text", { x: 268, y: 52, "text-anchor": "middle", "font-weight": 700, fill: hl, "font-size": 13 }, ecSvg).textContent = "重叠区 A∩B";
+
+    var members = [
+      { name: "小明", x: 120, y: 86, grp: "onlyA" },
+      { name: "小刚", x: 120, y: 130, grp: "onlyA" },
+      { name: "小红", x: 268, y: 86, grp: "inter" },
+      { name: "小丽", x: 268, y: 130, grp: "inter" },
+      { name: "小强", x: 408, y: 108, grp: "onlyB" }
+    ];
+    members.forEach(function (m) {
+      var hit = mode === "union" || mode === m.grp;
+      var col = m.grp === "inter" ? hl : (m.grp === "onlyA" ? ca : cb);
+      var g = svg("g", { style: "cursor:pointer" }, ecSvg);
+      svg("rect", { x: m.x - 36, y: m.y - 16, width: 72, height: 32, rx: 16, fill: hit ? col : card, stroke: hit ? col : ln, "stroke-width": hit ? 2.2 : 1.3 }, g);
+      svg("text", { x: m.x, y: m.y + 5, "text-anchor": "middle", "font-weight": hit ? 700 : 400, fill: hit ? "#fff" : mu, "font-size": 14.5 }, g).textContent = m.name;
+      g.onclick = function () { ecDraw(m.grp); };
+    });
+
+    [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (mode === "inter") {
+      ecNote.innerHTML = "<b>两个组都参加（交集 A ∩ B）</b>：处在两圈重叠区的 <b>小红、小丽</b>（共 2 人）。";
+    } else if (mode === "union") {
+      ecNote.innerHTML = "<b>至少参加一个组（并集 A ∪ B）</b>：<b>小明、小刚、小红、小丽、小强</b>（共 4 + 3 − 2 = <b>5 人</b>，重叠只算一次）。";
+    } else if (mode === "onlyA") {
+      ecNote.innerHTML = "<b>只参加篮球组</b>：在左圈但不在右圈的 <b>小明、小刚</b>（2 人）。";
+    } else {
+      ecNote.innerHTML = "<b>只参加合唱组</b>：在右圈但不在左圈的 <b>小强</b>（1 人）。";
+    }
+  }
+  [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ecDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: "inter", B: "onlyA", C: "onlyB", D: "inter" };
+      ecDraw(map[ev.detail.choice] || "inter");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecDraw("inter");
+  });
+
+  /* ================= ② 讲清楚微图解 ================= */
+  var mOpSvg = document.getElementById("m-op-fig");
+  var mOpBar = document.getElementById("m-op-bar");
+  var mOpNote = document.getElementById("m-op-note");
+  var mCupSvg = document.getElementById("m-cup-fig");
+  var mOpKey = "cap";
+
+  function drawOp(k) {
+    mOpKey = k;
+    if (!mOpSvg) return;
+    mOpSvg.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), mu = css("--muted"), card = css("--card"), okS = css("--ok-soft");
+
+    var defs = svg("defs", {}, mOpSvg);
+    var cpA = svg("clipPath", { id: "mCpA" }, defs); svg("circle", { cx: 200, cy: 80, r: 60 }, cpA);
+    var cpB = svg("clipPath", { id: "mCpB" }, defs); svg("circle", { cx: 320, cy: 80, r: 60 }, cpB);
+    var mkU = svg("mask", { id: "mMkU" }, defs);
+    svg("rect", { x: 0, y: 0, width: 520, height: 160, fill: "#fff" }, mkU);
+    svg("circle", { cx: 260, cy: 80, r: 52, fill: "#000" }, mkU);
+
+    if (k === "cap") {
+      svg("circle", { cx: 200, cy: 80, r: 60, fill: "none", stroke: ca, "stroke-width": 2.5 }, mOpSvg);
+      svg("circle", { cx: 320, cy: 80, r: 60, fill: "none", stroke: cb, "stroke-width": 2.5 }, mOpSvg);
+      svg("circle", { cx: 200, cy: 80, r: 60, fill: hl, "fill-opacity": 0.35, "clip-path": "url(#mCpB)" }, mOpSvg);
+      svg("text", { x: 160, y: 85, fill: ca, "font-weight": 700, "font-size": 15 }, mOpSvg).textContent = "A";
+      svg("text", { x: 350, y: 85, fill: cb, "font-weight": 700, "font-size": 15 }, mOpSvg).textContent = "B";
+      svg("text", { x: 260, y: 85, fill: hl, "font-weight": 700, "font-size": 14, "text-anchor": "middle" }, mOpSvg).textContent = "A ∩ B";
+      if (mOpNote) mOpNote.innerHTML = "<b>交集 A ∩ B（双圈重叠杏仁区）</b>：只有既属于 A 又属于 B 的公共元素才能进入。门槛最高，'两边都得认'。";
+    } else if (k === "cup") {
+      svg("circle", { cx: 200, cy: 80, r: 60, fill: hl, "fill-opacity": 0.25, stroke: ca, "stroke-width": 2.5 }, mOpSvg);
+      svg("circle", { cx: 320, cy: 80, r: 60, fill: hl, "fill-opacity": 0.25, stroke: cb, "stroke-width": 2.5 }, mOpSvg);
+      svg("text", { x: 160, y: 85, fill: ca, "font-weight": 700, "font-size": 15 }, mOpSvg).textContent = "A";
+      svg("text", { x: 350, y: 85, fill: cb, "font-weight": 700, "font-size": 15 }, mOpSvg).textContent = "B";
+      svg("text", { x: 260, y: 85, fill: hl, "font-weight": 700, "font-size": 15, "text-anchor": "middle" }, mOpSvg).textContent = "A ∪ B 大合体";
+      if (mOpNote) mOpNote.innerHTML = "<b>并集 A ∪ B（双圈大版图）</b>：只要属于 A 或属于 B 就全部囊括！去重合并，'只要有一家认就收'。";
+    } else if (k === "com") {
+      svg("rect", { x: 40, y: 15, width: 440, height: 130, rx: 12, fill: hl, "fill-opacity": 0.25, stroke: fg, "stroke-width": 1.6, mask: "url(#mMkU)" }, mOpSvg);
+      svg("rect", { x: 40, y: 15, width: 440, height: 130, rx: 12, fill: "none", stroke: fg, "stroke-width": 1.6 }, mOpSvg);
+      svg("circle", { cx: 260, cy: 80, r: 52, fill: card, stroke: ca, "stroke-width": 2.5 }, mOpSvg);
+      svg("text", { x: 60, y: 40, fill: fg, "font-weight": 700, "font-size": 14 }, mOpSvg).textContent = "全集 U";
+      svg("text", { x: 260, y: 85, fill: ca, "font-weight": 700, "font-size": 15, "text-anchor": "middle" }, mOpSvg).textContent = "集合 A";
+      svg("text", { x: 400, y: 85, fill: hl, "font-weight": 700, "font-size": 14, "text-anchor": "middle" }, mOpSvg).textContent = "∁_U A (外围阴影)";
+      if (mOpNote) mOpNote.innerHTML = "<b>补集 ∁_U A（全集打洞）</b>：在整个全集 U 的大池子里，把属于 A 的部分整个挖掉，剩下所有的外围空间。";
+    }
+
+    if (mOpBar) {
+      [].forEach.call(mOpBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+    }
+  }
+
+  function drawCupTrap() {
+    if (!mCupSvg) return;
+    mCupSvg.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), okS = css("--ok-soft"), mu = css("--muted");
+    svg("circle", { cx: 140, cy: 70, r: 58, fill: okS, "fill-opacity": 0.35, stroke: cb, "stroke-width": 2 }, mCupSvg);
+    svg("circle", { cx: 115, cy: 70, r: 28, fill: "#fff", stroke: ca, "stroke-width": 2.2 }, mCupSvg);
+    svg("text", { x: 115, y: 75, "text-anchor": "middle", fill: ca, "font-size": 13, "font-weight": 700 }, mCupSvg).textContent = "A (小)";
+    svg("text", { x: 165, y: 75, "text-anchor": "middle", fill: cb, "font-size": 14, "font-weight": 700 }, mCupSvg).textContent = "B (大)";
+    svg("text", { x: 140, y: 22, "text-anchor": "middle", fill: hl, "font-size": 12, "font-weight": 700 }, mCupSvg).textContent = "A ∪ B = B 意味着 A ⊆ B";
+  }
+
+  function initStep2() {
+    if (mOpBar) {
+      [].forEach.call(mOpBar.querySelectorAll("button"), function (b) {
+        b.onclick = function () { drawOp(b.getAttribute("data-k")); };
+      });
+    }
+    drawOp("cap");
+    drawCupTrap();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () { ecDraw("inter"); nlReset(); vReset(""); initStep2(); });
   // 深浅色切换时重画
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { nlDraw(); vDraw(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ecDraw(ecMode); nlDraw(); vDraw(); drawOp(mOpKey); drawCupTrap(); });
 })();
 </script>
 </body></html>

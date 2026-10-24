@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .fig { width: 100%; height: auto; touch-action: none; user-select: none; display: block; background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); }
   .fig .axis { stroke-width: 1.5; stroke-linecap: round; }
@@ -63,8 +65,14 @@
 <p class="lead">建好空间直角坐标系，点和向量都写成三个数。求长度、夹角，判断垂直、平行，就变成按公式算这几个数。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一艘货运飞船正向空间站核心舱实施无人自主交会对接。在激光雷达建立的三维导航坐标系中，空间站接口为原点 \(O(0,0,0)\)，传感器测得飞船对接机构相对于 \(O\) 的空间位置为：向前（\(x\) 轴）\(2\,\text{m}\)、向右（\(y\) 轴）\(3\,\text{m}\)、向上（\(z\) 轴）\(6\,\text{m}\)，即空间点 \(P(2, 3, 6)\)。</p>
+  <p>一艘货运飞船正向空间站核心舱实施无人自主交会对接。在激光雷达建立的三维导航坐标系中，空间站接口为原点 \(O(0,0,0)\)，传感器测得飞船对接机构相对于 \(O\) 的空间位置为：向前（\(x\) 轴）\(2\,\text{m}\)、向右（\(y\) 轴）\(3\,\text{m}\)、向上（\(z\) 轴）\(6\,\text{m}\)，即空间点 \(P(2, 3, 6)\)。先点下面的按钮查看三维坐标盒与体对角线：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-dock" viewBox="0 0 520 208" role="img" aria-label="货运飞船交会对接三维坐标盒(2,3,6)与空间直线距离7米示意图"></svg>
+    <div class="entry-bar" id="entry-dock-bar">
+      <button type="button" data-mode="steps">看三轴坐标步进 (2, 3, 6)</button>
+      <button type="button" data-mode="dist" class="on">看空间直线距离 |OP| = √(4+9+36) = 7m</button>
+    </div>
+    <div class="entry-note" id="entry-dock-note"></div>
     <p>从原点 \(O\) 直线连接到对接靶心 \(P\)，位移向量 \(\overrightarrow{OP}\) 的空间直线距离（即向量模长 \(|\overrightarrow{OP}|\)）是多少米？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(2 + 3 + 6 = 11\,\text{m}\)</button>
@@ -82,8 +90,21 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：<a href="e1-1-2.html">1.2 空间向量基本定理</a>（单位正交基底）；<a href="b2-6-3.html">必修二 6.3 平面向量的坐标表示</a>。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：建立空间直角坐标系要保证三轴两两垂直；坐标向量按终点减起点，平行判定不能在分量为零时乱用比例式。</p></div>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：空间右手直角坐标系、投影盒与正交数量积</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="coord">① 右手系点与向量</button>
+      <button type="button" class="micro-tab" data-mode="dot">② 正交分解数量积</button>
+      <button type="button" class="micro-tab" data-mode="dist">③ 两点距离立体勾股</button>
+    </div>
+    <svg id="m-coord-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="空间直角坐标系与向量坐标运算直观图解"></svg>
+    <div class="micro-caption" id="m-coord-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>空间直角坐标系 \(O\text{-}xyz\)</b>：选一点 \(O\) 当原点，过 \(O\) 作三条<b>两两垂直</b>、单位长度相同的数轴：\(x\) 轴、\(y\) 轴、\(z\) 轴。高中默认用<b>右手系</b>：右手四指从 \(x\) 轴正向握向 \(y\) 轴正向，大拇指指的就是 \(z\) 轴正向。</p>
@@ -102,6 +123,27 @@
       <li>对称：关于谁对称谁不变，别的变相反数。关于 \(xOy\) 面是 \((x, y, -z)\)，关于 \(z\) 轴是 \((-x, -y, z)\)，关于原点是 \((-x, -y, -z)\)。</li>
     </ul>
     <p>例：\(P(2, -3, 4)\) 投到 \(xOy\) 面得 \((2, -3, 0)\)；关于 \(z\) 轴的对称点是 \((-2, 3, 4)\)；关于原点的对称点是 \((-2, 3, -4)\)。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">本质区别</span> 点的坐标（绝对位置） vs 向量的坐标（相对位移）</div>
+      <p><b>点的坐标 \(P(x,y,z)\)</b>：固定的空间空间点位置，起点在原点，平移后坐标改变。</p>
+      <p><b>向量坐标 \(\overrightarrow{AB}\)</b>：终点减起点，表示位移增量。自由平移后向量坐标<b>恒定不变</b>！</p>
+      <p class="small">提醒：只有当向量起点位于原点 \(O\) 时，向量坐标才恰好等于终点坐标！</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">判定陷阱</span> 平行判定比例式 vs 实数倍充要式</div>
+      <p><b>分式比例式</b>：\(\frac{x_2}{x_1} = \frac{y_2}{y_1} = \frac{z_2}{z_1}\) 仅在<b>分母全不为 0</b> 时有效，遇 0 分母直接崩溃！</p>
+      <p><b>实数倍充要式</b>：\(\boldsymbol{b} = \lambda\boldsymbol{a}\)（分量逐一对应），遇到 0 分量时对应分量必同为 0，普适无盲区。</p>
+      <p class="small">铁律：有分量为 0 时严禁写比例式，务必写成方程组 \(\boldsymbol{b} = \lambda\boldsymbol{a}\)！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    向量坐标定义：\(\overrightarrow{AB} = (x_2 - x_1, y_2 - y_1, z_2 - z_1) = \color{#2563eb}{\text{终点}} - \color{#059669}{\text{起点}}\)<br>
+    数量积坐标公式：\(\boldsymbol{a}\cdot\boldsymbol{b} = \color{#2563eb}{x_1x_2} + \color{#059669}{y_1y_2} + \color{#d97706}{z_1z_2}\) &nbsp;（垂直充要条件为该式 \(= 0\)）<br>
+    空间两点距离公式：\(d = |\overrightarrow{AB}| = \sqrt{\color{#2563eb}{(x_2-x_1)^2} + \color{#059669}{(y_2-y_1)^2} + \color{#d97706}{(z_2-z_1)^2}}\)
   </div>
 
   <h3>2. 建系，写出点和向量的坐标</h3>
@@ -137,6 +179,7 @@
       <p class="small">常见算错：B 是用起点减终点，得到的是 \(\overrightarrow{ED_1}\)；C 是把点 \(E\) 的坐标直接当成了向量坐标，只有起点在原点时才可以这样；D 是把减号写成了加号。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 坐标运算：加减、数乘、数量积</h3>
   <p>设 \(\boldsymbol{a} = (x_1, y_1, z_1)\)，\(\boldsymbol{b} = (x_2, y_2, z_2)\)，\(\lambda \in \mathbf{R}\)。加减和数乘都是逐个分量做：</p>
@@ -173,6 +216,7 @@
       <p class="small">常见算错：B 是把 \((-2)\times(-1)\) 算成了 \(-2\)，负负没得正；C 把三个乘积写成了向量，数量积是一个数；D 是把三项都当正数加了。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 模长、两点距离、夹角</h3>
   <p>模长就是「自己和自己的数量积」开根号，两点距离就是 \(\overrightarrow{AB}\) 的模：</p>
@@ -250,20 +294,75 @@
     </div>
   </div>
 
-  <h3>6. 用之前要注意（专题卡边界）</h3>
-  <div class="card">
-    <ol>
-      <li><b>三条轴必须两两垂直</b>：坐标公式都靠 \(\boldsymbol{i}\cdot\boldsymbol{j} = 0\) 这些式子。斜三棱柱、斜四棱锥的棱不一定互相垂直，建系前要先证明垂直。<br>
-        <span class="small">反例：两条轴夹角是 \(60^\circ\)，单位向量 \(\boldsymbol{e}_1, \boldsymbol{e}_2\) 之和的长度是 \(\sqrt{1 + 1 + 2\cos 60^\circ} = \sqrt{3}\)；硬套公式算 \(\sqrt{1^2 + 1^2} = \sqrt{2}\)，就错了。</span>
-      </li>
-      <li><b>点和向量不一样，向量是终点减起点</b>：点坐标是一个位置，向量坐标是一次位移。只有起点在原点时，向量坐标才等于终点坐标。<br>
-        <span class="small">反例：\(A(1, 2, 3)\)，\(B(4, 0, 5)\)，\(\overrightarrow{AB} = (3, -2, 2)\)，减反了得 \((-3, 2, -2)\)，是 \(\overrightarrow{BA}\)，方向正好相反；而 \(\overrightarrow{AB}\) 也不等于 \(B\) 的坐标 \((4, 0, 5)\)。</span>
-      </li>
-      <li><b>判平行有 \(0\) 分量时不能写比例式</b>：要用 \(\boldsymbol{b} = \lambda\boldsymbol{a}\) 逐个分量对。<br>
-        <span class="small">反例：\(\boldsymbol{a} = (1, 0, 2)\)，\(\boldsymbol{b} = (2, 0, 4)\)，\(\boldsymbol{b} = 2\boldsymbol{a}\)，平行；写成 \(\dfrac{2}{1} = \dfrac{0}{0} = \dfrac{4}{2}\) 就出现了 \(\dfrac{0}{0}\)，没法判断。</span>
-      </li>
-      <li><b>夹角公式要求两个向量都不是零向量</b>：零向量的模为 \(0\)，分母为 \(0\)，没有夹角可言。</li>
-    </ol>
+  
+  <h3>6. 三步破题思维链：空间向量坐标解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>立体几何问题中存在显然或易证的<b>三条两两垂直棱线</b>（如正方体、长方体、直棱柱或底面含直角的四棱锥），果断建立空间直角坐标系 \(O\text{-}xyz\)，选定原点并标明轴向与单位长。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 写出关键点坐标，遇中点用加和除以 2；<br>
+        ② 终点减起点求向量坐标：\(\overrightarrow{AB} = (x_B-x_A, y_B-y_A, z_B-z_A)\)；<br>
+        ③ 判定垂直算数量积 \(x_1x_2+y_1y_2+z_1z_2 = 0\)；求夹角套余弦公式 \(\cos\theta = \frac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{a}||\boldsymbol{b}|}\)；求距离套三维勾股公式。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>严格检查建系三轴是否<b>两两垂直</b>；向量坐标计算必须严格为<b>终点减起点</b>；判平行含 0 分量时绝不写除法比例式；异面直线夹角必取锐角或直角（\(\cos\theta \ge 0\) 取绝对值）。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：终点减起点颠倒成起点减终点</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>\(A(1,2,3), B(4,0,5)\)，误求 \(\overrightarrow{AB} = (1-4, 2-0, 3-5) = (-3, 2, -2)\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>终点减起点：\(\overrightarrow{AB} = (4-1, 0-2, 5-3) = (3, -2, 2)\)，减反方向完全相反！</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：未证三轴两两垂直便强行套公式</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>斜三棱柱棱间夹角 \(60^\circ\)，强行建系套模长公式 \(\sqrt{x^2+y^2+z^2}\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>坐标公式成立的基础是单位正交基底（\(\boldsymbol{i}\cdot\boldsymbol{j}=0\)），非直角系必须走基底展开式</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：含 0 分量时强行写比例式导致分母为 0</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>\(\boldsymbol{a}=(1,0,2), \boldsymbol{b}=(2,0,4)\)，写成 \(\frac{2}{1} = \frac{0}{0} = \frac{4}{2}\) 出现 \(0/0\) 无效分式</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>应设 \(\boldsymbol{b} = \lambda\boldsymbol{a}\)，得 \(2=1\lambda, 0=0\lambda, 4=2\lambda \implies \lambda=2\)，严格判定平行</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：空间点坐标与向量坐标位移平移对比</div>
+    <svg id="m-coord-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="点坐标与向量坐标对比反例图"></svg>
+    <div class="micro-caption">点 A, B 是空间固定位置，向量 AB 是终点减起点的相对位移；平移至原点后其终点坐标才等于向量坐标！</div>
   </div>
 </section>
 
@@ -473,325 +572,456 @@
 </div>
 
 <script>
-(function () {
-  "use strict";
-
-  // 获取 DOM 元素
-  var svg = document.getElementById("coord3dSvg");
-  var axIn = document.getElementById("ax");
-  var ayIn = document.getElementById("ay");
-  var azIn = document.getElementById("az");
-  var bxIn = document.getElementById("bx");
-  var byIn = document.getElementById("by");
-  var bzIn = document.getElementById("bz");
-
-  var axOut = document.getElementById("axOut");
-  var ayOut = document.getElementById("ayOut");
-  var azOut = document.getElementById("azOut");
-  var bxOut = document.getElementById("bxOut");
-  var byOut = document.getElementById("byOut");
-  var bzOut = document.getElementById("bzOut");
-
-  var showBox = document.getElementById("showBoxCheck");
-  var resetBtn = document.getElementById("resetBtn");
-  var badgePerp = document.getElementById("badgePerp");
-  var badgePara = document.getElementById("badgePara");
-  var badgeAngle = document.getElementById("badgeAngle");
-
-  var magAVal = document.getElementById("magAVal");
-  var magBVal = document.getElementById("magBVal");
-  var dotVal = document.getElementById("dotVal");
-  var distVal = document.getElementById("distVal");
-  var calcDetail = document.getElementById("calcDetail");
-
-  // 3D 投影投影中心与比例参数 (右手系斜二测投影)
-  // X = Ox - x * sx + y * sy
-  // Y = Oy + x * dx - z * sz
-  var Ox = 240, Oy = 205;
-  var scale = 26;
-  var xCos = 0.65, xSin = 0.55;
-
-  function to2D(x, y, z) {
-    var X = Ox - x * (scale * xCos) + y * scale;
-    var Y = Oy + x * (scale * xSin) - z * scale;
-    return [X, Y];
-  }
-
-  function el(name, attrs) {
-    var node = document.createElementNS("http://www.w3.org/2000/svg", name);
-    for (var k in attrs) {
-      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
-        node.setAttribute(k, attrs[k]);
-      }
-    }
-    return node;
-  }
-
-  function render() {
-    var ax = parseFloat(axIn ? axIn.value : 2) || 0;
-    var ay = parseFloat(ayIn ? ayIn.value : 3) || 0;
-    var az = parseFloat(azIn ? azIn.value : 4) || 0;
-    var bx = parseFloat(bxIn ? bxIn.value : -2) || 0;
-    var by = parseFloat(byIn ? byIn.value : 2) || 0;
-    var bz = parseFloat(bzIn ? bzIn.value : 1) || 0;
-
-    if (axOut) axOut.textContent = ax;
-    if (ayOut) ayOut.textContent = ay;
-    if (azOut) azOut.textContent = az;
-    if (bxOut) bxOut.textContent = bx;
-    if (byOut) byOut.textContent = by;
-    if (bzOut) bzOut.textContent = bz;
-
-    // 清理 SVG（保留 defs 标记）
-    var defs = svg.querySelector("defs");
-    svg.innerHTML = "";
-    if (defs) svg.appendChild(defs);
-
-    // 绘制坐标平面半透明网格底板 (xOy 平面, z=0)
-    var p00 = to2D(-3.5, -3.5, 0);
-    var p01 = to2D(-3.5, 4.5, 0);
-    var p11 = to2D(4.2, 4.5, 0);
-    var p10 = to2D(4.2, -3.5, 0);
-    svg.appendChild(el("polygon", {
-      points: p00[0] + "," + p00[1] + " " + p01[0] + "," + p01[1] + " " + p11[0] + "," + p11[1] + " " + p10[0] + "," + p10[1],
-      class: "plane-fill"
-    }));
-
-    // 绘制三条坐标轴 (负向虚线，正向实线带箭头)
-    // x 轴 (前左下方)
-    var xNeg = to2D(-3.5, 0, 0), xPos = to2D(4.5, 0, 0);
-    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: xNeg[0], y2: xNeg[1], class: "axis axis-dash", stroke: "#5E6B64" }));
-    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: xPos[0], y2: xPos[1], class: "axis", stroke: "#5E6B64", "marker-end": "url(#arr-axis)" }));
-    var tX = el("text", { x: xPos[0] - 12, y: xPos[1] + 16, class: "axis-lab", fill: "#1A2822" });
-    tX.textContent = "x (横轴)";
-    svg.appendChild(tX);
-
-    // y 轴 (水平向右)
-    var yNeg = to2D(0, -3.5, 0), yPos = to2D(0, 4.8, 0);
-    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: yNeg[0], y2: yNeg[1], class: "axis axis-dash", stroke: "#5E6B64" }));
-    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: yPos[0], y2: yPos[1], class: "axis", stroke: "#5E6B64", "marker-end": "url(#arr-axis)" }));
-    var tY = el("text", { x: yPos[0] + 6, y: yPos[1] + 4, class: "axis-lab", fill: "#1A2822" });
-    tY.textContent = "y (纵轴)";
-    svg.appendChild(tY);
-
-    // z 轴 (竖直向上)
-    var zNeg = to2D(0, 0, -3.2), zPos = to2D(0, 0, 4.6);
-    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: zNeg[0], y2: zNeg[1], class: "axis axis-dash", stroke: "#5E6B64" }));
-    svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: zPos[0], y2: zPos[1], class: "axis", stroke: "#5E6B64", "marker-end": "url(#arr-axis)" }));
-    var tZ = el("text", { x: zPos[0] - 10, y: zPos[1] - 8, class: "axis-lab", fill: "#1A2822" });
-    tZ.textContent = "z (竖轴)";
-    svg.appendChild(tZ);
-
-    // 原点 O 标号
-    var tO = el("text", { x: Ox - 14, y: Oy + 14, class: "point-lab", fill: "#5E6B64" });
-    tO.textContent = "O";
-    svg.appendChild(tO);
-
-    // 空间长方体投影虚线盒 (展示向量 a 的空间位置分解)
-    var isShowBox = showBox ? showBox.checked : true;
-    var Pa = to2D(ax, ay, az);
-    if (isShowBox && (ax !== 0 || ay !== 0 || az !== 0)) {
-      var P_x = to2D(ax, 0, 0);
-      var P_y = to2D(0, ay, 0);
-      var P_z = to2D(0, 0, az);
-      var P_xy = to2D(ax, ay, 0);
-      var P_yz = to2D(0, ay, az);
-      var P_zx = to2D(ax, 0, az);
-
-      // 长方体 12 条边缘（除与轴重合部分外画虚线）
-      var edges = [
-        [P_x, P_xy], [P_y, P_xy],
-        [P_y, P_yz], [P_z, P_yz],
-        [P_x, P_zx], [P_z, P_zx],
-        [P_xy, Pa], [P_yz, Pa], [P_zx, Pa]
-      ];
-      for (var i = 0; i < edges.length; i++) {
-        svg.appendChild(el("line", {
-          x1: edges[i][0][0], y1: edges[i][0][1],
-          x2: edges[i][1][0], y2: edges[i][1][1],
-          class: "box-edge"
-        }));
-      }
-
-      // 投影点标记
-      var projs = [
-        { pt: P_xy, lab: "(" + ax + "," + ay + ",0)" },
-        { pt: P_x, lab: "" },
-        { pt: P_y, lab: "" },
-        { pt: P_z, lab: "" }
-      ];
-      for (var j = 0; j < projs.length; j++) {
-        svg.appendChild(el("circle", { cx: projs[j].pt[0], cy: projs[j].pt[1], r: 3, class: "dot-proj" }));
-      }
-    }
-
-    // 绘制向量 a (松绿主色)
-    if (ax !== 0 || ay !== 0 || az !== 0) {
-      svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: Pa[0], y2: Pa[1], class: "vec-a", "marker-end": "url(#arr-a)" }));
-    }
-    svg.appendChild(el("circle", { cx: Pa[0], cy: Pa[1], r: 4.5, class: "dot-a" }));
-    var tPa = el("text", { x: Pa[0] + 6, y: Pa[1] - 6, class: "point-lab", fill: "#2F7A56" });
-    tPa.textContent = "a(" + ax + "," + ay + "," + az + ")";
-    svg.appendChild(tPa);
-
-    // 绘制向量 b (赤金次色)
-    var Pb = to2D(bx, by, bz);
-    if (bx !== 0 || by !== 0 || bz !== 0) {
-      svg.appendChild(el("line", { x1: Ox, y1: Oy, x2: Pb[0], y2: Pb[1], class: "vec-b", "marker-end": "url(#arr-b)" }));
-    }
-    svg.appendChild(el("circle", { cx: Pb[0], cy: Pb[1], r: 4.5, class: "dot-b" }));
-    var tPb = el("text", { x: Pb[0] + 6, y: Pb[1] - 6, class: "point-lab", fill: "#966524" });
-    tPb.textContent = "b(" + bx + "," + by + "," + bz + ")";
-    svg.appendChild(tPb);
-
-    // 终点连线 (距离线段 AB)
-    svg.appendChild(el("line", { x1: Pa[0], y1: Pa[1], x2: Pb[0], y2: Pb[1], class: "seg-dist" }));
-
-    // 数学运算推演
-    var magA = Math.sqrt(ax * ax + ay * ay + az * az);
-    var magB = Math.sqrt(bx * bx + by * by + bz * bz);
-    var dot = ax * bx + ay * by + az * bz;
-    var dist = Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay) + (bz - az) * (bz - az));
-
-    if (magAVal) magAVal.textContent = magA.toFixed(3);
-    if (magBVal) magBVal.textContent = magB.toFixed(3);
-    if (dotVal) dotVal.textContent = dot;
-    if (distVal) distVal.textContent = dist.toFixed(3);
-
-    // 叉积判共线 (cross product)
-    var cx = ay * bz - az * by;
-    var cy = az * bx - ax * bz;
-    var cz = ax * by - ay * bx;
-    var crossMag = Math.sqrt(cx * cx + cy * cy + cz * cz);
-
-    var isZeroA = (magA === 0);
-    var isZeroB = (magB === 0);
-    var isPerp = (!isZeroA && !isZeroB && Math.abs(dot) === 0);
-    var isPara = (!isZeroA && !isZeroB && crossMag < 1e-5);
-
-    var angleDeg = null;
-    if (!isZeroA && !isZeroB) {
-      var cosTheta = dot / (magA * magB);
-      if (cosTheta > 1) cosTheta = 1;
-      if (cosTheta < -1) cosTheta = -1;
-      angleDeg = (Math.acos(cosTheta) * 180 / Math.PI);
-    }
-
-    // 状态标签
-    if (badgePerp) {
-      badgePerp.classList.toggle("on-perp", isPerp);
-      badgePerp.textContent = isPerp ? "两向量垂直 a ⊥ b (数量积为 0)" : "垂直判定：未垂直";
-    }
-    if (badgePara) {
-      badgePara.classList.toggle("on-para", isPara);
-      if (isPara) {
-        badgePara.textContent = (dot > 0) ? "两向量平行 a ∥ b (同向共线)" : "两向量平行 a ∥ b (反向共线)";
-      } else {
-        badgePara.textContent = "平行判定：不共线";
-      }
-    }
-    if (badgeAngle) {
-      if (angleDeg !== null) {
-        badgeAngle.textContent = "空间夹角 θ = " + angleDeg.toFixed(1) + "°";
-      } else {
-        badgeAngle.textContent = "零向量无确定方向";
-      }
-    }
-
-    // 详细推演文本
-    if (calcDetail) {
-      calcDetail.className = "calc-detail" + (isPerp ? " hit-perp" : (isPara ? " hit-para" : ""));
-      var htmlStr = "";
-      htmlStr += "<b>坐标与模长</b>：\\(\\boldsymbol{a} = (" + ax + ", " + ay + ", " + az + ")\\)，\\(|\\boldsymbol{a}| = \\sqrt{" + ax + "^2 + " + ay + "^2 + " + az + "^2} = " + magA.toFixed(3) + "\\)；";
-      htmlStr += "<br>\\(\\boldsymbol{b} = (" + bx + ", " + by + ", " + bz + ")\\)，\\(|\\boldsymbol{b}| = \\sqrt{" + bx + "^2 + " + by + "^2 + " + bz + "^2} = " + magB.toFixed(3) + "\\)。";
-      htmlStr += "<br><b>数量积展开</b>：\\(\\boldsymbol{a}\\cdot\\boldsymbol{b} = (" + ax + ")\\times(" + bx + ") + (" + ay + ")\\times(" + by + ") + (" + az + ")\\times(" + bz + ") = " + (ax * bx) + " + " + (ay * by) + " + " + (az * bz) + " = " + dot + "\\)。";
-
-      if (isPerp) {
-        htmlStr += "<br><span style='color:var(--a); font-weight:700;'>★ 充要判定成立：数量积为 0，故空间向量 \\(\\boldsymbol{a} \\perp \\boldsymbol{b}\\)（空间直线互相垂直）。</span>";
-      } else if (isPara) {
-        var ratioStr = (ax !== 0) ? (bx / ax).toFixed(2) : ((ay !== 0) ? (by / ay).toFixed(2) : (bz / az).toFixed(2));
-        htmlStr += "<br><span style='color:var(--b); font-weight:700;'>★ 充要判定成立：存在实数 \\(\\lambda = " + ratioStr + "\\) 满足 \\(\\boldsymbol{b} = \\lambda\\boldsymbol{a}\\)，故两向量共线平行（若分量含 0，用数乘判定，避免除以零）。</span>";
-      } else if (angleDeg !== null) {
-        htmlStr += "<br><b>夹角余弦</b>：\\(\\cos\\theta = \\dfrac{" + dot + "}{" + magA.toFixed(3) + " \\times " + magB.toFixed(3) + "} \\approx " + (dot / (magA * magB)).toFixed(4) + "\\)，对应空间夹角 \\(\\theta \\approx " + angleDeg.toFixed(1) + "^\\circ\\)。";
-      }
-      calcDetail.innerHTML = htmlStr;
-      if (window.Peiyu && window.Peiyu.math) {
-        window.Peiyu.math(calcDetail);
-      }
-    }
-  }
-
-  // 事件监听绑定
-  var inputs = [axIn, ayIn, azIn, bxIn, byIn, bzIn];
-  inputs.forEach(function (inp) {
-    if (inp) {
-      inp.addEventListener("input", function () {
-        render();
-        if (window.Peiyu && window.Peiyu.log) {
-          window.Peiyu.log("interact", { type: "slider", id: inp.id, val: inp.value });
-        }
-      });
-    }
-  });
-
-  if (showBox) {
-    showBox.addEventListener("change", function () {
-      render();
-    });
-  }
-
-  // 预设按钮
-  var presetBtns = document.querySelectorAll(".btn-pre");
-  presetBtns.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var pre = btn.getAttribute("data-pre");
-      if (pre === "p1") {
-        axIn.value = 2; ayIn.value = 3; azIn.value = 4;
-        bxIn.value = 0; byIn.value = 0; bzIn.value = 0;
-        if (showBox) showBox.checked = true;
-      } else if (pre === "perp") {
-        axIn.value = 2; ayIn.value = 1; azIn.value = -1;
-        bxIn.value = 1; byIn.value = 1; bzIn.value = 3;
-      } else if (pre === "collinear") {
-        axIn.value = 1; ayIn.value = -2; azIn.value = 2;
-        bxIn.value = 2; byIn.value = -4; bzIn.value = 4;
-      } else if (pre === "zero-para") {
-        axIn.value = 1; ayIn.value = 0; azIn.value = 2;
-        bxIn.value = 2; byIn.value = 0; bzIn.value = 4;
-      } else if (pre === "opp") {
-        axIn.value = 2; ayIn.value = -1; azIn.value = 1;
-        bxIn.value = -2; byIn.value = 1; bzIn.value = -1;
-      }
-      render();
-      if (window.Peiyu && window.Peiyu.log) {
-        window.Peiyu.log("interact", { type: "preset", pre: pre });
-      }
-    });
-  });
-
-  // 重置按钮
-  if (resetBtn) {
-    resetBtn.addEventListener("click", function () {
-      axIn.value = 2; ayIn.value = 3; azIn.value = 4;
-      bxIn.value = -2; byIn.value = 2; bzIn.value = 1;
-      if (showBox) showBox.checked = true;
-      render();
-      if (window.Peiyu && window.Peiyu.log) {
-        window.Peiyu.log("interact", { type: "reset" });
-      }
-    });
-  }
-
-  // 键盘方向键无障碍调节
-  document.addEventListener("keydown", function (e) {
-    if (e.target && e.target.tagName === "INPUT" && e.target.type === "range") {
-      // 浏览器已原生处理滑块方向键，触发 input 事件
-      render();
-    }
-  });
-
-  // 初始渲染
-  render();
+(function(){
+"use strict";
+var svg=document.getElementById("coord3dSvg");
+var axIn=document.getElementById("ax");
+var ayIn=document.getElementById("ay");
+var azIn=document.getElementById("az");
+var bxIn=document.getElementById("bx");
+var byIn=document.getElementById("by");
+var bzIn=document.getElementById("bz");
+var axOut=document.getElementById("axOut");
+var ayOut=document.getElementById("ayOut");
+var azOut=document.getElementById("azOut");
+var bxOut=document.getElementById("bxOut");
+var byOut=document.getElementById("byOut");
+var bzOut=document.getElementById("bzOut");
+var showBox=document.getElementById("showBoxCheck");
+var resetBtn=document.getElementById("resetBtn");
+var badgePerp=document.getElementById("badgePerp");
+var badgePara=document.getElementById("badgePara");
+var badgeAngle=document.getElementById("badgeAngle");
+var magAVal=document.getElementById("magAVal");
+var magBVal=document.getElementById("magBVal");
+var dotVal=document.getElementById("dotVal");
+var distVal=document.getElementById("distVal");
+var calcDetail=document.getElementById("calcDetail");
+var Ox=240,Oy=205;
+var scale=26;
+var xCos=0.65,xSin=0.55;
+function to2D(x,y,z){
+var X=Ox-x*(scale*xCos)+y*scale;
+var Y=Oy+x*(scale*xSin)-z*scale;
+return[X,Y];
+}
+function el(name,attrs){
+var node=document.createElementNS("http://www.w3.org/2000/svg",name);
+for(var k in attrs){
+if(Object.prototype.hasOwnProperty.call(attrs,k)){
+node.setAttribute(k,attrs[k]);
+}
+}
+return node;
+}
+function render(){
+var ax=parseFloat(axIn?axIn.value:2)||0;
+var ay=parseFloat(ayIn?ayIn.value:3)||0;
+var az=parseFloat(azIn?azIn.value:4)||0;
+var bx=parseFloat(bxIn?bxIn.value:-2)||0;
+var by=parseFloat(byIn?byIn.value:2)||0;
+var bz=parseFloat(bzIn?bzIn.value:1)||0;
+if(axOut)axOut.textContent=ax;
+if(ayOut)ayOut.textContent=ay;
+if(azOut)azOut.textContent=az;
+if(bxOut)bxOut.textContent=bx;
+if(byOut)byOut.textContent=by;
+if(bzOut)bzOut.textContent=bz;
+var defs=svg.querySelector("defs");
+svg.innerHTML="";
+if(defs)svg.appendChild(defs);
+var p00=to2D(-3.5,-3.5,0);
+var p01=to2D(-3.5,4.5,0);
+var p11=to2D(4.2,4.5,0);
+var p10=to2D(4.2,-3.5,0);
+svg.appendChild(el("polygon",{
+points:p00[0]+","+p00[1]+" "+p01[0]+","+p01[1]+" "+p11[0]+","+p11[1]+" "+p10[0]+","+p10[1],
+class:"plane-fill"
+}));
+var xNeg=to2D(-3.5,0,0),xPos=to2D(4.5,0,0);
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:xNeg[0],y2:xNeg[1],class:"axis axis-dash",stroke:"#5E6B64"}));
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:xPos[0],y2:xPos[1],class:"axis",stroke:"#5E6B64","marker-end":"url(#arr-axis)"}));
+var tX=el("text",{x:xPos[0]-12,y:xPos[1]+16,class:"axis-lab",fill:"#1A2822"});
+tX.textContent="x (横轴)";
+svg.appendChild(tX);
+var yNeg=to2D(0,-3.5,0),yPos=to2D(0,4.8,0);
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:yNeg[0],y2:yNeg[1],class:"axis axis-dash",stroke:"#5E6B64"}));
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:yPos[0],y2:yPos[1],class:"axis",stroke:"#5E6B64","marker-end":"url(#arr-axis)"}));
+var tY=el("text",{x:yPos[0]+6,y:yPos[1]+4,class:"axis-lab",fill:"#1A2822"});
+tY.textContent="y (纵轴)";
+svg.appendChild(tY);
+var zNeg=to2D(0,0,-3.2),zPos=to2D(0,0,4.6);
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:zNeg[0],y2:zNeg[1],class:"axis axis-dash",stroke:"#5E6B64"}));
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:zPos[0],y2:zPos[1],class:"axis",stroke:"#5E6B64","marker-end":"url(#arr-axis)"}));
+var tZ=el("text",{x:zPos[0]-10,y:zPos[1]-8,class:"axis-lab",fill:"#1A2822"});
+tZ.textContent="z (竖轴)";
+svg.appendChild(tZ);
+var tO=el("text",{x:Ox-18,y:Oy-8,class:"point-lab",fill:"#5E6B64"});
+tO.textContent="O";
+svg.appendChild(tO);
+var isShowBox=showBox?showBox.checked:true;
+var Pa=to2D(ax,ay,az);
+if(isShowBox&&(ax!==0||ay!==0||az!==0)){
+var P_x=to2D(ax,0,0);
+var P_y=to2D(0,ay,0);
+var P_z=to2D(0,0,az);
+var P_xy=to2D(ax,ay,0);
+var P_yz=to2D(0,ay,az);
+var P_zx=to2D(ax,0,az);
+var edges=[
+[P_x,P_xy],[P_y,P_xy],
+[P_y,P_yz],[P_z,P_yz],
+[P_x,P_zx],[P_z,P_zx],
+[P_xy,Pa],[P_yz,Pa],[P_zx,Pa]
+];
+for(var i=0;i<edges.length;i++){
+svg.appendChild(el("line",{
+x1:edges[i][0][0],y1:edges[i][0][1],
+x2:edges[i][1][0],y2:edges[i][1][1],
+class:"box-edge"
+}));
+}
+var projs=[
+{pt:P_xy,lab:"("+ax+","+ay+",0)"},
+{pt:P_x,lab:""},
+{pt:P_y,lab:""},
+{pt:P_z,lab:""}
+];
+for(var j=0;j<projs.length;j++){
+svg.appendChild(el("circle",{cx:projs[j].pt[0],cy:projs[j].pt[1],r:3,class:"dot-proj"}));
+}
+}
+if(ax!==0||ay!==0||az!==0){
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:Pa[0],y2:Pa[1],class:"vec-a","marker-end":"url(#arr-a)"}));
+}
+svg.appendChild(el("circle",{cx:Pa[0],cy:Pa[1],r:4.5,class:"dot-a"}));
+var tPa=el("text",{x:Pa[0]+6,y:Pa[1]-6,class:"point-lab",fill:"#2F7A56"});
+tPa.textContent="a("+ax+","+ay+","+az+")";
+svg.appendChild(tPa);
+var Pb=to2D(bx,by,bz);
+if(bx!==0||by!==0||bz!==0){
+svg.appendChild(el("line",{x1:Ox,y1:Oy,x2:Pb[0],y2:Pb[1],class:"vec-b","marker-end":"url(#arr-b)"}));
+}
+svg.appendChild(el("circle",{cx:Pb[0],cy:Pb[1],r:4.5,class:"dot-b"}));
+var tPb=el("text",{x:Pb[0]+6,y:Pb[1]-6,class:"point-lab",fill:"#966524"});
+tPb.textContent="b("+bx+","+by+","+bz+")";
+svg.appendChild(tPb);
+svg.appendChild(el("line",{x1:Pa[0],y1:Pa[1],x2:Pb[0],y2:Pb[1],class:"seg-dist"}));
+var magA=Math.sqrt(ax*ax+ay*ay+az*az);
+var magB=Math.sqrt(bx*bx+by*by+bz*bz);
+var dot=ax*bx+ay*by+az*bz;
+var dist=Math.sqrt((bx-ax)*(bx-ax)+(by-ay)*(by-ay)+(bz-az)*(bz-az));
+if(magAVal)magAVal.textContent=magA.toFixed(3);
+if(magBVal)magBVal.textContent=magB.toFixed(3);
+if(dotVal)dotVal.textContent=dot;
+if(distVal)distVal.textContent=dist.toFixed(3);
+var cx=ay*bz-az*by;
+var cy=az*bx-ax*bz;
+var cz=ax*by-ay*bx;
+var crossMag=Math.sqrt(cx*cx+cy*cy+cz*cz);
+var isZeroA=(magA===0);
+var isZeroB=(magB===0);
+var isPerp=(!isZeroA&&!isZeroB&&Math.abs(dot)===0);
+var isPara=(!isZeroA&&!isZeroB&&crossMag<1e-5);
+var angleDeg=null;
+if(!isZeroA&&!isZeroB){
+var cosTheta=dot/(magA*magB);
+if(cosTheta>1)cosTheta=1;
+if(cosTheta<-1)cosTheta=-1;
+angleDeg=(Math.acos(cosTheta)*180/Math.PI);
+}
+if(badgePerp){
+badgePerp.classList.toggle("on-perp",isPerp);
+badgePerp.textContent=isPerp?"两向量垂直 a ⊥ b (数量积为 0)":"垂直判定：未垂直";
+}
+if(badgePara){
+badgePara.classList.toggle("on-para",isPara);
+if(isPara){
+badgePara.textContent=(dot>0)?"两向量平行 a ∥ b (同向共线)":"两向量平行 a ∥ b (反向共线)";
+}else{
+badgePara.textContent="平行判定：不共线";
+}
+}
+if(badgeAngle){
+if(angleDeg!==null){
+badgeAngle.textContent="空间夹角 θ = "+angleDeg.toFixed(1)+"°";
+}else{
+badgeAngle.textContent="零向量无确定方向";
+}
+}
+if(calcDetail){
+calcDetail.className="calc-detail"+(isPerp?" hit-perp":(isPara?" hit-para":""));
+var htmlStr="";
+htmlStr+="<b>坐标与模长</b>：\\(\\boldsymbol{a} = ("+ax+", "+ay+", "+az+")\\)，\\(|\\boldsymbol{a}| = \\sqrt{"+ax+"^2 + "+ay+"^2 + "+az+"^2} = "+magA.toFixed(3)+"\\)；";
+htmlStr+="<br>\\(\\boldsymbol{b} = ("+bx+", "+by+", "+bz+")\\)，\\(|\\boldsymbol{b}| = \\sqrt{"+bx+"^2 + "+by+"^2 + "+bz+"^2} = "+magB.toFixed(3)+"\\)。";
+htmlStr+="<br><b>数量积展开</b>：\\(\\boldsymbol{a}\\cdot\\boldsymbol{b} = ("+ax+")\\times("+bx+") + ("+ay+")\\times("+by+") + ("+az+")\\times("+bz+") = "+(ax*bx)+" + "+(ay*by)+" + "+(az*bz)+" = "+dot+"\\)。";
+if(isPerp){
+htmlStr+="<br><span style='color:var(--a); font-weight:700;'>★ 充要判定成立：数量积为 0，故空间向量 \\(\\boldsymbol{a} \\perp \\boldsymbol{b}\\)（空间直线互相垂直）。</span>";
+}else if(isPara){
+var ratioStr=(ax!==0)?(bx/ax).toFixed(2):((ay!==0)?(by/ay).toFixed(2):(bz/az).toFixed(2));
+htmlStr+="<br><span style='color:var(--b); font-weight:700;'>★ 充要判定成立：存在实数 \\(\\lambda = "+ratioStr+"\\) 满足 \\(\\boldsymbol{b} = \\lambda\\boldsymbol{a}\\)，故两向量共线平行（若分量含 0，用数乘判定，避免除以零）。</span>";
+}else if(angleDeg!==null){
+htmlStr+="<br><b>夹角余弦</b>：\\(\\cos\\theta = \\dfrac{"+dot+"}{"+magA.toFixed(3)+" \\times "+magB.toFixed(3)+"} \\approx "+(dot/(magA*magB)).toFixed(4)+"\\)，对应空间夹角 \\(\\theta \\approx "+angleDeg.toFixed(1)+"^\\circ\\)。";
+}
+calcDetail.innerHTML=htmlStr;
+if(window.Peiyu&&window.Peiyu.math){
+window.Peiyu.math(calcDetail);
+}
+}
+}
+var inputs=[axIn,ayIn,azIn,bxIn,byIn,bzIn];
+inputs.forEach(function(inp){
+if(inp){
+inp.addEventListener("input",function(){
+render();
+if(window.Peiyu&&window.Peiyu.log){
+window.Peiyu.log("interact",{type:"slider",id:inp.id,val:inp.value});
+}
+});
+}
+});
+if(showBox){
+showBox.addEventListener("change",function(){
+render();
+});
+}
+var presetBtns=document.querySelectorAll(".btn-pre");
+presetBtns.forEach(function(btn){
+btn.addEventListener("click",function(){
+var pre=btn.getAttribute("data-pre");
+if(pre==="p1"){
+axIn.value=2;ayIn.value=3;azIn.value=4;
+bxIn.value=0;byIn.value=0;bzIn.value=0;
+if(showBox)showBox.checked=true;
+}else if(pre==="perp"){
+axIn.value=2;ayIn.value=1;azIn.value=-1;
+bxIn.value=1;byIn.value=1;bzIn.value=3;
+}else if(pre==="collinear"){
+axIn.value=1;ayIn.value=-2;azIn.value=2;
+bxIn.value=2;byIn.value=-4;bzIn.value=4;
+}else if(pre==="zero-para"){
+axIn.value=1;ayIn.value=0;azIn.value=2;
+bxIn.value=2;byIn.value=0;bzIn.value=4;
+}else if(pre==="opp"){
+axIn.value=2;ayIn.value=-1;azIn.value=1;
+bxIn.value=-2;byIn.value=1;bzIn.value=-1;
+}
+render();
+if(window.Peiyu&&window.Peiyu.log){
+window.Peiyu.log("interact",{type:"preset",pre:pre});
+}
+});
+});
+if(resetBtn){
+resetBtn.addEventListener("click",function(){
+axIn.value=2;ayIn.value=3;azIn.value=4;
+bxIn.value=-2;byIn.value=2;bzIn.value=1;
+if(showBox)showBox.checked=true;
+render();
+if(window.Peiyu&&window.Peiyu.log){
+window.Peiyu.log("interact",{type:"reset"});
+}
+});
+}
+document.addEventListener("keydown",function(e){
+if(e.target&&e.target.tagName==="INPUT"&&e.target.type==="range"){
+render();
+}
+});
+render();
+/*=================0从例子进入：空间站交会对接三维坐标盒(2,3,6)=================*/
+var edkSvg=document.getElementById("entry-dock"),edkBar=document.getElementById("entry-dock-bar"),edkNote=document.getElementById("entry-dock-note");
+function edkDraw(mode){
+if(!edkSvg)return;
+edkSvg.innerHTML="";
+function add(tag,attrs,txt){
+var n=el(tag,attrs);
+if(txt!==undefined)n.textContent=txt;
+edkSvg.appendChild(n);
+return n;
+}
+var isDist=mode==="dist";
+var O=[160,146],Px=[108,182],Py=[328,146],Pxy=[276,182];
+var Pz=[160,42],Pxz=[108,78],Pyz=[328,42],P=[276,78];
+add("polygon",{points:O[0]+","+O[1]+" "+Px[0]+","+Px[1]+" "+Pxy[0]+","+Pxy[1]+" "+Py[0]+","+Py[1],fill:"var(--ok-soft)",stroke:"var(--line)","stroke-width":1.3});
+add("line",{x1:O[0],y1:O[1],x2:76,y2:204,stroke:"var(--muted)","stroke-width":1.6});
+add("line",{x1:O[0],y1:O[1],x2:416,y2:146,stroke:"var(--muted)","stroke-width":1.6});
+add("line",{x1:O[0],y1:O[1],x2:160,y2:18,stroke:"var(--muted)","stroke-width":1.6});
+add("text",{x:66,y:203,fill:"var(--muted)","font-size":13,"font-weight":700},"x轴");
+add("text",{x:422,y:150,fill:"var(--muted)","font-size":13,"font-weight":700},"y轴");
+add("text",{x:168,y:24,fill:"var(--muted)","font-size":13,"font-weight":700},"z轴");
+[[O,Pz],[Px,Pxz],[Py,Pyz],[Pz,Pxz],[Pxz,P],[P,Pyz],[Pyz,Pz],[O,Py],[Py,Pxy]].forEach(function(e){
+add("line",{x1:e[0][0],y1:e[0][1],x2:e[1][0],y2:e[1][1],stroke:"var(--line)","stroke-width":1.3,"stroke-dasharray":"4,3"});
+});
+add("line",{x1:O[0],y1:O[1],x2:Px[0],y2:Px[1],stroke:"var(--a)","stroke-width":3});
+add("line",{x1:Px[0],y1:Px[1],x2:Pxy[0],y2:Pxy[1],stroke:"var(--c)","stroke-width":3});
+add("line",{x1:Pxy[0],y1:Pxy[1],x2:P[0],y2:P[1],stroke:"var(--b)","stroke-width":3});
+add("text",{x:112,y:160,"text-anchor":"end",fill:"var(--a)","font-size":13,"font-weight":700},"x = 2m");
+add("text",{x:196,y:199,"text-anchor":"middle",fill:"var(--c)","font-size":13,"font-weight":700},"y = 3m");
+add("text",{x:Pxy[0]+8,y:136,fill:"var(--b)","font-size":13,"font-weight":700},"z = 6m");
+add("line",{x1:O[0],y1:O[1],x2:Pxy[0],y2:Pxy[1],stroke:"var(--c)","stroke-width":2.2,"stroke-dasharray":"5,3"});
+add("text",{x:232,y:162,fill:"var(--c)","font-size":12.5,"font-weight":700},"底对角线 √(2²+3²)=√13");
+if(isDist){
+add("polygon",{points:O[0]+","+O[1]+" "+Pxy[0]+","+Pxy[1]+" "+P[0]+","+P[1],fill:"rgba(217,72,62,0.12)",stroke:"none"});
+add("line",{x1:O[0],y1:O[1],x2:P[0],y2:P[1],stroke:"var(--no)","stroke-width":3.8});
+add("rect",{x:292,y:42,width:214,height:30,rx:6,fill:"var(--no-soft)",stroke:"var(--no)","stroke-width":1.5});
+add("text",{x:399,y:62,"text-anchor":"middle",fill:"var(--no)","font-size":13.5,"font-weight":700},"|OP| = √(4+9+36) = √49 = 7m");
+edkNote.innerHTML="<b>空间直线距离（体对角线模长）</b>：底面投影对角线长 <b>√(2²+3²) = √13 m</b>，再与竖直高 <b>z = 6 m</b> 用勾股定理：<b>|OP| = √(2² + 3² + 6²) = √49 = 7 m</b>！";
+}else{
+add("rect",{x:292,y:42,width:214,height:30,rx:6,fill:"var(--ok-soft)",stroke:"var(--a)","stroke-width":1.5});
+add("text",{x:399,y:62,"text-anchor":"middle",fill:"var(--a)","font-size":13.5,"font-weight":700},"三轴坐标 P(2, 3, 6)");
+edkNote.innerHTML="<b>三轴坐标步进</b>：从空间站原点 O(0,0,0) 出发，沿 x 轴走 <b>2m</b>、沿 y 轴走 <b>3m</b> 到地面投影点 (2,3,0)，再沿 z 轴向上走 <b>6m</b> 到达飞船 P(2,3,6)（注意 2+3+6=11m 是折线长，不是直线距离！）。";
+}
+add("circle",{cx:O[0],cy:O[1],r:4.5,fill:"var(--fg)"});
+add("text",{x:O[0]-8,y:O[1]-6,"text-anchor":"end",fill:"var(--fg)","font-size":13,"font-weight":700},"空间站 O(0,0,0)");
+add("circle",{cx:P[0],cy:P[1],r:6,fill:"var(--no)",stroke:"var(--card)","stroke-width":2});
+add("text",{x:P[0]-8,y:P[1]-10,"text-anchor":"end",fill:"var(--no)","font-size":13.5,"font-weight":700},"飞船 P(2,3,6)");
+[].forEach.call(edkBar.querySelectorAll("button"),function(b){
+b.classList.toggle("on",b.getAttribute("data-mode")===mode);
+});
+}
+[].forEach.call(edkBar.querySelectorAll("button"),function(b){
+b.onclick=function(){edkDraw(b.getAttribute("data-mode"));};
+});
+document.addEventListener("predict:pick",function(ev){
+if(ev.detail&&ev.detail.id==="entry"){
+edkDraw(ev.detail.choice==="A"||ev.detail.choice==="C"?"steps":"dist");
+}
+});
+document.addEventListener("predict:reset",function(ev){
+if(ev.detail&&ev.detail.id==="entry")edkDraw("dist");
+});
+edkDraw("dist");
+function initMCoordFig(){
+var svgEl=document.getElementById("m-coord-fig");
+var capEl=document.getElementById("m-coord-cap");
+if(!svgEl)return;
+var mode="coord",NS="http://www.w3.org/2000/svg";
+var caps={
+coord:"空间右手系与坐标盒：点 P(x, y, z) 对应沿三轴步进的长方体顶点，向量 OP = x i + y j + z k 为体对角线。",
+dot:"正交数量积公式：a · b = x1 x2 + y1 y2 + z1 z2。垂直充要条件是代数积之和严格为 0。",
+dist:"空间两点距离公式：立体直角三角形二次勾股，d = √((x2-x1)² + (y2-y1)² + (z2-z1)²)。"
+};
+function draw(){
+svgEl.innerHTML="";
+function s(tag,attrs,txt){
+var el=document.createElementNS(NS,tag);
+for(var k in attrs)el.setAttribute(k,attrs[k]);
+if(txt)el.textContent=txt;
+svgEl.appendChild(el);
+return el;
+}
+function ln(x1,y1,x2,y2,c,w,d){
+var a={x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5};
+if(d)a["stroke-dasharray"]=d;
+return s("line",a);
+}
+function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
+function tx(x,y,txt,c,sz,b,anch){
+var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+if(b)a["font-weight"]="bold";
+if(anch)a["text-anchor"]=anch;
+return s("text",a,txt);
+}
+if(mode==="coord"){
+tx(270,24,"空间右手直角坐标系 O-xyz 与投影盒","#0f172a","12.5",true,"middle");
+ln(110,140,50,185,"#64748b",2);tx(42,192,"x","#64748b","11",true);
+ln(110,140,250,140,"#64748b",2);tx(258,144,"y","#64748b","11",true);
+ln(110,140,110,40,"#64748b",2);tx(110,32,"z","#64748b","11",true,"middle");
+ln(110,140,180,140,"#2563eb",1.5);//y-component
+ln(180,140,210,165,"#2563eb",1.5,"2 2");//x-component
+s("circle",{cx:210,cy:165,r:3.5,fill:"#2563eb"});
+tx(218,175,"P'(x, y, 0)","#2563eb","10");
+ln(210, 165, 210, 75, "#059669", 1.5, "2 2");
+s("circle", { cx: 210, cy: 75, r: 4.5, fill: "#dc2626" });
+tx(218, 72, "P(x, y, z)", "#dc2626", "11", true);
+ln(110, 140, 210, 75, "#dc2626", 2.5);
+tx(150, 100, "OP", "#dc2626", "11.5", true);
+rc(330, 50, 185, 120, "#f8fafc", "#cbd5e1", 6);
+tx(345, 78, "坐标盒与正交基底", "#0f172a", "12", true);
+tx(345, 102, "• OP = x i + y j + z k", "#2563eb", "11");
+tx(345, 124, "• |OP| = √(x² + y² + z²)", "#059669", "11");
+tx(345, 146, "• 终点即位移分量", "#dc2626", "10.5", true);
+} else if (mode === "dot") {
+tx(270, 24, "空间数量积代数公式：a · b = x1 x2 + y1 y2 + z1 z2", "#0f172a", "12.5", true, "middle");
+rc(60, 50, 240, 120, "#ffffff", "#cbd5e1", 6);
+tx(80, 75, "向量 a = (x1,  y1,  z1)", "#2563eb", "11.5", true);
+tx(80, 105, "向量 b = (x2,  y2,  z2)", "#059669", "11.5", true);
+ln(75, 120, 285, 120, "#cbd5e1", 1);
+tx(80, 142, "对应分量分别相乘后求和", "#64748b", "10.5");
+tx(80, 160, "a · b = x1 x2 + y1 y2 + z1 z2", "#dc2626", "11", true);
+rc(330, 50, 185, 120, "#f1f5f9", "#cbd5e1", 6);
+tx(345, 78, "垂直与夹角判定", "#0f172a", "12", true);
+tx(345, 104, "a ⊥ b ⟺ a · b = 0", "#dc2626", "11.5", true);
+tx(345, 126, "x1 x2 + y1 y2 + z1 z2 = 0", "#15803d", "10.5");
+tx(345, 148, "无需做辅助线，代数立解", "#64748b", "10");
+} else if (mode === "dist") {
+tx(270, 24, "空间两点距离：底面勾股 + 竖直勾股二次立体合成", "#0f172a", "12.5", true, "middle");
+s("polygon", { points: "100,150 190,150 230,120", fill: "rgba(37,99,235,0.08)", stroke: "#93c5fd" });
+ln(100, 150, 230, 120, "#2563eb", 2);
+tx(150, 145, "底面对角线 √(Δx² + Δy²)", "#2563eb", "10.5");
+ln(230, 120, 230, 50, "#059669", 2);
+tx(238, 85, "竖直高 Δz", "#059669", "10.5", true);
+ln(100, 150, 230, 50, "#dc2626", 2.5);
+tx(145, 90, "空间距离 d", "#dc2626", "12", true);
+s("circle", { cx: 100, cy: 150, r: 4, fill: "#0f172a" }); tx(90, 160, "A", "#0f172a", "11", true);
+s("circle", { cx: 230, cy: 50, r: 4, fill: "#dc2626" }); tx(238, 54, "B", "#dc2626", "11", true);
+rc(330, 50, 185, 120, "#f8fafc", "#cbd5e1", 6);
+tx(345, 78, "空间两点距离公式", "#0f172a", "12", true);
+tx(345, 102, "d = √(Δx² + Δy² + Δz²)", "#dc2626", "11", true);
+tx(345, 124, "两次勾股定理叠加", "#2563eb", "10.5");
+tx(345, 146, "体对角线长计算通法", "#059669", "10.5");
+}
+if (capEl) capEl.textContent = caps[mode];
+if (window.renderMathInElement) window.renderMathInElement(capEl);
+}
+var tabs = document.querySelectorAll(".micro-box .micro-tab");
+tabs.forEach(function(tab) {
+tab.addEventListener("click", function() {
+tabs.forEach(function(t) { t.classList.remove("active"); });
+tab.classList.add("active");
+mode = tab.getAttribute("data-mode");
+draw();
+});
+});
+draw();
+}
+function initMCoordTrapFig() {
+var svgEl = document.getElementById("m-coord-trap-fig");
+if (!svgEl) return;
+svgEl.innerHTML = "";
+var NS = "http://www.w3.org/2000/svg";
+function s(tag, attrs, txt) {
+var el = document.createElementNS(NS, tag);
+for (var k in attrs) el.setAttribute(k, attrs[k]);
+if (txt) el.textContent = txt;
+svgEl.appendChild(el);
+return el;
+}
+function ln(x1,y1,x2,y2,c,w){return s("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5});}
+function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
+function tx(x,y,txt,c,sz,b,anch){
+var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+if(b)a["font-weight"]="bold";
+if(anch)a["text-anchor"]=anch;
+return s("text",a,txt);
+}
+rc(30, 20, 220, 130, "#fef2f2", "#fca5a5", 6);
+tx(140, 44, "❌ 错误：混淆点坐标与向量坐标", "#dc2626", "11.5", true, "middle");
+s("circle", { cx: 70, cy: 110, r: 4, fill: "#dc2626" }); tx(70, 126, "A(1,2,3)", "#dc2626", "10", false, "middle");
+s("circle", { cx: 190, cy: 70, r: 4, fill: "#dc2626" }); tx(190, 62, "B(4,0,5)", "#dc2626", "10", false, "middle");
+ln(70, 110, 190, 70, "#dc2626", 2);
+tx(140, 142, "误以为 AB 向量坐标等于 B 点 (4,0,5)", "#64748b", "9.5", false, "middle");
+rc(290, 20, 220, 130, "#f0fdf4", "#86efac", 6);
+tx(400, 44, "✔ 真谛：终点减起点，位移平移", "#15803d", "11.5", true, "middle");
+tx(400, 70, "AB = B - A = (3, -2, 2)", "#15803d", "11", true, "middle");
+ln(340, 112, 435, 84, "#2563eb", 2.5);
+s("circle", { cx: 340, cy: 112, r: 4, fill: "#0f172a" }); tx(328, 123, "原点 O", "#0f172a", "10", true, "middle");
+s("circle", { cx: 435, cy: 84, r: 4, fill: "#2563eb" }); tx(447, 89, "(3,-2,2)", "#2563eb", "10", true);
+tx(400, 143, "起点平移至原点，终点才是向量坐标", "#15803d", "9.5", false, "middle");
+}
+initMCoordFig();
+initMCoordTrapFig();
 })();
 </script>
 </body></html>

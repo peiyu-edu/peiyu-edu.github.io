@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
@@ -29,8 +31,15 @@
 <p class="lead">掷一颗骰子，结果说不准；可「哪件事更容易发生」能算出来。办法是：先把所有可能的结果列全，再数一数。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>掷一颗普通的骰子，\(1\) 到 \(6\) 点朝上的机会一样。</p>
+  <p>掷一颗普通的骰子，\(1\) 到 \(6\) 点朝上的机会一样。点下面的按钮高亮对应的点数看看：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-dice6" viewBox="0 0 520 195" role="img" aria-label="6颗骰子点数1到6：对比偶数{2,4,6}与大于4{5,6}所占样本点个数"></svg>
+    <div class="entry-bar" id="entry-dice6-bar">
+      <button type="button" data-m="0">看全部 6 种等可能结果</button>
+      <button type="button" data-m="1" class="on">高亮「点数是偶数」{2,4,6} (3/6)</button>
+      <button type="button" data-m="2">高亮「点数大于 4」{5,6} (2/6)</button>
+    </div>
+    <div class="entry-note" id="entry-dice6-note"></div>
     <p>「点数是偶数」和「点数大于 \(4\)」，哪件事更容易发生？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>点数是偶数</button>
@@ -46,8 +55,20 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：集合、子集、交集、并集、补集（<a href="b1-1-1.html">回看 1.1</a>、<a href="b1-1-2.html">1.2</a>、<a href="b1-1-3.html">1.3</a>）。这一节的事件就是集合，运算也是集合运算。</p>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：样本空间、事件关系与古典概型</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="subset">① 点集与包含</button>
+      <button type="button" class="micro-tab" data-mode="mutex">② 互斥 vs 对立</button>
+      <button type="button" class="micro-tab" data-mode="ratio">③ 古典概型比值</button>
+    </div>
+    <svg id="m-prob-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="随机事件与古典概型直观图解"></svg>
+    <div class="micro-caption" id="m-prob-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>随机试验</b>：条件相同、可以重复做，所有可能的结果事先知道，但每次出哪个说不准。</p>
@@ -70,6 +91,27 @@
     <p>例：质地均匀的骰子，\(6\) 个点数机会一样，每个是 \(\dfrac16\)。如果骰子被做了手脚，\(6\) 点更容易出现，就不再等可能了。</p>
   </div>
 
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">核心辨析</span> 互斥事件 vs 对立事件</div>
+      <p><b>互斥事件</b>：\(A \cap B = \varnothing\)，两件事<b>不可能同时发生</b>。但可能同时都不发生（例如掷骰子「点数为 1」与「点数为 2」）。</p>
+      <p><b>对立事件</b>：\(A \cap B = \varnothing\) 且 \(A \cup B = \Omega\)，两件事<b>必有且仅有一件发生</b>（例如掷骰子「偶数」与「奇数」）。</p>
+      <p class="small">口诀：<b>对立必互斥，互斥未必对立</b>。对立是全集划分，恒有 \(P(\overline{A}) = 1 - P(A)\)。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">思维陷阱</span> 基本事件 vs 类别合并</div>
+      <p><b>基本事件</b>：构成样本空间的单元素子集，古典概型要求<b>等可能性</b>（每个点权重均为 \(\frac{1}{n}\)）。</p>
+      <p><b>类别合并</b>：将结果按某种特征粗暴归类（如两枚硬币正面数 0, 1, 2）。各类别含样本点数不同，<b>不再等可能</b>！</p>
+      <p class="small">警惕：抛两枚硬币「一正一反」包含（正反）与（反正）两点，概率为 \(\frac{2}{4}=\frac12\)，绝非三类平分的 \(\frac13\)！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    古典概型公式：\(P(A) = \dfrac{\color{#2563eb}{m}}{\color{#059669}{n}} = \dfrac{\color{#2563eb}{A \text{ 包含的基本事件数}}}{\color{#059669}{\Omega \text{ 中基本事件总数}}}\)<br>
+    互斥加法定理：\(A \cap B = \varnothing \implies P(A \cup B) = \color{#2563eb}{P(A)} + \color{#059669}{P(B)}\)<br>
+    对立求逆定理：\(P(\overline{A}) = 1 - \color{#2563eb}{P(A)}\) &nbsp;（“至少/至多”正难则反）
+  </div>
+
   <h3>2. 先写对样本空间</h3>
   <p>算概率之前，先说清楚做的是什么试验、结果怎么记，再把样本点一个不漏、一个不重地列出来。列表或画树状图最不容易漏。</p>
   <div class="card">
@@ -88,6 +130,7 @@
     </div>
     <div class="reveal"><p><b>C</b>。每枚 \(2\) 种，\(2\times2\times2=8\)：正正正、正正反、正反正、反正正、正反反、反正反、反反正、反反反。选 B 的同学数的是「正面有 \(0,1,2,3\) 枚」四种情况，那是把结果合成了类别，不是样本点。</p></div>
   </div>
+  <div class="vid" data-video="ex-event"></div>
 
   <h3>3. 事件的关系和运算</h3>
   <p>事件是集合，所以集合的关系和运算都能用，只是要读成「事情」：</p>
@@ -118,6 +161,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。\(E\cap F=\varnothing\)，互斥；\(E\cup F=\{1,2,5,6\}\)，少了 \(3,4\)，掷出 \(3\) 时两件都没发生，所以不对立。选 A 的同学看「一小一大」像是相反，没检查并集是不是 \(\Omega\)。</p></div>
   </div>
+  <div class="vid" data-video="ex-calc"></div>
 
   <h3>4. 古典概型：数个数，做除法</h3>
   <p>一个试验如果满足两条：</p>
@@ -171,16 +215,75 @@
     <div class="reveal"><p><b>A</b>。对立事件「两颗相同」有 \((1,1)\) 到 \((6,6)\) 共 \(6\) 个，概率 \(\dfrac6{36}=\dfrac16\)，所以「不同」是 \(1-\dfrac16=\dfrac56\)。选 B 的同学算出了对立事件，忘了用 \(1\) 减。</p></div>
   </div>
 
-  <h3>6. 用之前要注意</h3>
-  <ol>
-    <li><b>先查等可能，再用 \(\dfrac kn\)</b>：「有两种结果」不等于「各 \(\dfrac12\)」。<br><span class="small">反例：抛两枚硬币，正面的枚数有 \(0,1,2\) 三种，但不是各 \(\dfrac13\)：「\(1\) 枚」包含正反、反正两个样本点，概率 \(\dfrac24=\dfrac12\)。</span></li>
-    <li><b>把结果合成类别后，要重查等可能</b>：按无序的「一个 \(1\) 一个 \(2\)」记，和按有序的 \((1,2)\) 记，样本点不一样。<br><span class="small">反例：两颗骰子，「\(\{1,2\}\)」包含 \((1,2)\)、\((2,1)\) 两个结果，「\(\{1,1\}\)」只有 \((1,1)\) 一个，两类机会不同，不能当成等可能再 \(\dfrac kn\)。</span></li>
-    <li><b>互斥才能直接相加</b>。<br><span class="small">反例：例 4(1) 里如果直接 \(\dfrac36+\dfrac36=1\)，就成了「一定发生」，可掷出 \(1\) 或 \(3\) 时两件都没发生。</span></li>
-    <li><b>对立还要并集是 \(\Omega\)</b>。<br><span class="small">反例：例 2 里 \(A\)「偶数」和 \(C\)「点数为 \(1\)」互斥，但掷出 \(3\) 时都没发生，不对立，\(P(C)=\dfrac16\ne 1-P(A)\)。</span></li>
-  </ol>
-  <div class="key">古典概型三步：说清试验和记法 → 写出（或数出）\(\Omega\) 并确认有限、等可能 → 数 \(A\) 的样本点，算 \(\dfrac kn\)，约成最简。</div>
+  <h3>6. 三步破题思维链：古典概型解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>审清试验操作（放回还是不放回、先后有序还是同时无序），判定是否满足古典概型两大特征：<b>有限性</b>与<b>等可能性</b>。确立样本点记法（列表法或坐标数对），计算基本事件总数 \(n\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>确定目标事件 \(A\) 包含的样本点数 \(m\)：出现“至少/至多/不同”时，优先考察对立事件 \(\overline{A}\)；若满足互斥，利用拆分加法 \(P(A\cup B)=P(A)+P(B)\)；一般情况套用公式 \(P(A)=\dfrac{m}{n}\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>检查样本点是否<b>不重不漏</b>；分子分母约分为<b>最简分数</b>；互斥相加前必须确认交集为空，否则须扣除 \(P(A \cap B)\)；概率值必须严格满足 \(0\le P(A)\le 1\)。</p>
+      </div>
+    </div>
+  </div>
 
-  <details class="more">
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：粗暴合并类别，丢掉等可能</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>抛两枚硬币求「一正一反」，误认为只有「两正、两反、一正一反」3 类，算出 \(P=\frac13\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>展开完整有序样本点 \(\Omega=\{\text{正正},\text{正反},\text{反正},\text{反反}\}\)，「一正一反」占 2 点，\(P=\frac24=\frac12\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：非互斥事件盲目直接相加</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>掷骰子「点数是偶数」或「点数大于 3」，直接 \(\frac36+\frac36=1\)，误以为必然发生</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>两事件不互斥（交集为 \(\{4,6\}\)），必须扣除重复交集：\(P = \frac36+\frac36-\frac26=\frac46=\frac23\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：误把「互斥」当「对立」套用 1 - P</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>掷骰子「点数为 1」与「点数为 2」互斥，误认为 \(P(\text{点数为 2})=1-P(\text{点数为 1})\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>互斥只保证两事件不同时发生，并集不为全集（出 3,4,5,6 均不发生），绝不可盲套 \(1-P\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：两枚硬币样本空间网格（为什么「一正一反」是 2 个样本点）</div>
+    <svg id="m-prob-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="两枚硬币样本点等可能分解反例图"></svg>
+    <div class="micro-caption">有序数对（第 1 枚，第 2 枚）展开为 \(2 \times 2 = 4\) 个等可能格点，对角线两格同属「一正一反」，权重是单格的 2 倍！</div>
+  </div>
+
+  <details class="more" style="margin-top:14px;">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>「有限」这一条</b>：在 \(0\) 到 \(1\) 之间随便取一个实数，可能的结果有无穷多个，没法「数个数」，古典概型的公式用不了。这类问题以后另有办法。</p>
     <p><b>概率为 \(0\) 和不可能事件</b>：在本节这种有限、等可能的模型里，\(P(A)=0\) 就说明 \(A\) 一个样本点都没有，也就是 \(A=\varnothing\)。到了样本点无穷多的模型里，「概率是 \(0\)」和「不可能发生」不一定是一回事，现在先只在给定的有限模型里说。</p>
@@ -218,7 +321,7 @@
     <div class="ctrl"><label for="nin">硬币枚数 \(n\)</label><input type="range" id="nin" min="1" max="6" step="1"><output id="nout"></output></div>
     <div class="ctrl"><label for="kin">正面枚数 \(k\)</label><input type="range" id="kin" min="0" max="6" step="1"><output id="kout"></output></div>
     <div class="result" id="coinout" aria-live="polite"></div>
-    <div class="ctrl"><button class="btn ghost" id="coinreset" type="button">重置</button></div>
+    <div class="ctrl"><button class="btn ghost" id="coinreset" type="button">重置</button><button class="btn ghost" id="coiniso" data-iso-tab="1" type="button">等距分流抽样机（3D）</button></div>
   </div>
 </section>
 
@@ -298,6 +401,7 @@
 <nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
 <footer>培玉智能 · 自编讲解。</footer>
 </div>
+<script src="../assets/iso-bench.js"></script>
 <script>
 (function () {
   "use strict";
@@ -420,12 +524,24 @@
   document.getElementById("dicereset").onclick = diceReset;
 
   /* ================= ② 硬币 ================= */
-  var coins = document.getElementById("coins"), nin = document.getElementById("nin"), kin = document.getElementById("kin");
-  var n, k;
+  var coins = document.getElementById("coins"), nin = document.getElementById("nin"), kin = document.getElementById("kin"), coinIsoBtn = document.getElementById("coiniso");
+  var n, k, coinIso = false;
   function comb(a, b) { var r = 1; for (var i = 1; i <= b; i++) r = r * (a - b + i) / i; return Math.round(r); }
   function coinReset() { n = 2; k = 1; nin.value = n; kin.value = k; coinDraw(); }
   function coinDraw() {
     k = clamp(k, 0, n); kin.max = n; kin.value = k;
+    document.getElementById("nout").textContent = n;
+    document.getElementById("kout").textContent = k;
+    if (coinIsoBtn) {
+      coinIsoBtn.classList.toggle("active", coinIso);
+      coinIsoBtn.classList.toggle("ghost", !coinIso);
+    }
+    if (coinIso && window.IsoBench && window.IsoBench.renderSamplingBench) {
+      var outEl = document.getElementById("coinout");
+      window.IsoBench.renderSamplingBench(coins, outEl, n, k, function () { Peiyu.math(outEl); });
+      return;
+    }
+    coins.classList.remove("iso-fig");
     var total = Math.pow(2, n), maxc = comb(n, Math.floor(n / 2));
     var X0 = 30, X1 = 530, Yb = 270, Ht = 200, slot = (X1 - X0) / (n + 1), bw = Math.min(56, slot * 0.7);
     coins.innerHTML = "";
@@ -457,8 +573,257 @@
   nin.addEventListener("change", function () { Peiyu.log("interact", { id: "coins-n", n: n }); });
   kin.addEventListener("change", function () { Peiyu.log("interact", { id: "coins-k", n: n, k: k }); });
   document.getElementById("coinreset").onclick = coinReset;
+  if (coinIsoBtn) coinIsoBtn.onclick = function () { coinIso = !coinIso; coinDraw(); Peiyu.log("interact", { id: "coins-iso", iso: coinIso }); };
 
-  document.addEventListener("DOMContentLoaded", function () { diceReset(); coinReset(); });
+  /* ================= 0 从例子进入：6 颗骰子古典概型 ================= */
+  var ed6Svg = document.getElementById("entry-dice6"), ed6Bar = document.getElementById("entry-dice6-bar"), ed6Note = document.getElementById("entry-dice6-note");
+  var ed6Mode = 1;
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  var PIPS = {
+    1: [[0, 0]],
+    2: [[-1, -1], [1, 1]],
+    3: [[-1, -1], [0, 0], [1, 1]],
+    4: [[-1, -1], [1, -1], [-1, 1], [1, 1]],
+    5: [[-1, -1], [1, -1], [0, 0], [-1, 1], [1, 1]],
+    6: [[-1, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [1, 1]]
+  };
+  function ed6Draw(m) {
+    ed6Mode = m;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    ed6Svg.innerHTML = "";
+    svg("text", { x: 260, y: 24, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14.5 }, ed6Svg).textContent = "样本空间 Ω = {1, 2, 3, 4, 5, 6}（共 6 个等可能样本点）";
+
+    for (var v = 1; v <= 6; v++) {
+      var hit = m === 0 || (m === 1 && v % 2 === 0) || (m === 2 && v > 4);
+      var col = m === 2 ? cb : ca;
+      var x = 26 + (v - 1) * 80, y = 42, s = 64, cx = x + s / 2, cy = y + s / 2;
+      var g = svg("g", { opacity: hit ? 1 : 0.28 }, ed6Svg);
+      svg("rect", { x: x, y: y, width: s, height: s, rx: 12, fill: hit && m > 0 ? okS : card, stroke: hit ? col : ln, "stroke-width": hit ? 2.6 : 1.5 }, g);
+      PIPS[v].forEach(function (p) {
+        svg("circle", { cx: cx + p[0] * 15, cy: cy + p[1] * 15, r: 5.2, fill: hit ? col : fg }, g);
+      });
+      svg("text", { x: cx, y: y + s + 22, "text-anchor": "middle", fill: hit ? col : mu, "font-weight": hit ? 700 : 400, "font-size": 14 }, g).textContent = v + " 点" + (hit && m > 0 ? " ✓" : "");
+    }
+
+    // 底部条形占比对比
+    svg("rect", { x: 26, y: 146, width: 228, height: 34, rx: 8, fill: m === 1 ? okS : card, stroke: ca, "stroke-width": m === 1 ? 2.2 : 1.2 }, ed6Svg);
+    svg("text", { x: 140, y: 168, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 14 }, ed6Svg).textContent = "点数是偶数 {2,4,6}：占 3/6 = 1/2";
+    svg("rect", { x: 266, y: 146, width: 228, height: 34, rx: 8, fill: m === 2 ? okS : card, stroke: cb, "stroke-width": m === 2 ? 2.2 : 1.2 }, ed6Svg);
+    svg("text", { x: 380, y: 168, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 14 }, ed6Svg).textContent = "点数大于 4 {5,6}：占 2/6 = 1/3";
+
+    [].forEach.call(ed6Bar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    ed6Note.innerHTML = m === 1
+      ? "「点数是偶数」包含 <b>{2, 4, 6} 共 3 个样本点</b>，概率 <b>3/6 = 1/2</b>，比「大于 4」（2/6）更容易发生！"
+      : (m === 2 ? "「点数大于 4」只包含 <b>{5, 6} 共 2 个样本点</b>，概率 <b>2/6 = 1/3</b>，小于偶数的 3/6。" : "6 个点数朝上机会相等（每个 1/6），哪个事件包含的样本点多，哪个就更容易发生！");
+  }
+  [].forEach.call(ed6Bar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ed6Draw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: 1, B: 2, C: 0 };
+      if (map[ev.detail.choice] !== undefined) ed6Draw(map[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ed6Draw(1);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { ed6Draw(1); diceReset(); coinReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ed6Draw(ed6Mode); diceDraw(); coinDraw(); });
+
+  // --- Micro-fig: Probability concepts ---
+  function initMProbFig() {
+    var svgEl = document.getElementById("m-prob-fig");
+    var capEl = document.getElementById("m-prob-cap");
+    if (!svgEl) return;
+    var mode = "subset";
+
+    var caps = {
+      subset: "样本空间 \\(\\Omega\\) 是全部样本点集合；事件 \\(A\\) 是 \\(\\Omega\\) 的子集，试验结果落在 \\(A\\) 内即为事件发生。",
+      mutex: "互斥事件两集合无交集（\\(A \\cap B = \\varnothing\\)），不能同时发生；对立事件两集合无交集且充满全集（\\(A \\cup B = \\Omega\\)）。",
+      ratio: "古典概型两要素：有限性与等可能性。每个样本点平分 \\(1/n\\) 权重，概率即包含点数 \\(m\\) 与总点数 \\(n\\) 之比。"
+    };
+
+    function draw() {
+      svgEl.innerHTML = "";
+      var NS = "http://www.w3.org/2000/svg";
+      function s(tag, attrs, txt) {
+        var el = document.createElementNS(NS, tag);
+        for (var k in attrs) el.setAttribute(k, attrs[k]);
+        if (txt) el.textContent = txt;
+        svgEl.appendChild(el);
+        return el;
+      }
+
+      if (mode === "subset") {
+        // Outer rect for Omega
+        s("rect", { x: 30, y: 20, width: 480, height: 165, rx: 8, fill: "#f8fafc", stroke: "#94a3b8", "stroke-dasharray": "4 4", "stroke-width": 1.5 });
+        s("text", { x: 45, y: 42, fill: "#475569", "font-size": "13", "font-weight": "bold" }, "样本空间 Ω (全集，36 个等可能点)");
+
+        // Event A ellipse
+        s("ellipse", { cx: 200, cy: 110, rx: 110, ry: 50, fill: "rgba(37,99,235,0.12)", stroke: "#2563eb", "stroke-width": 2 });
+        s("text", { x: 140, y: 85, fill: "#1d4ed8", "font-size": "12", "font-weight": "bold" }, "事件 A「和为 5」");
+
+        // Points inside A: (1,4), (2,3), (3,2), (4,1)
+        var ptsA = [
+          { x: 135, y: 115, label: "(1,4)" },
+          { x: 175, y: 135, label: "(2,3)" },
+          { x: 225, y: 135, label: "(3,2)" },
+          { x: 265, y: 115, label: "(4,1)" }
+        ];
+        ptsA.forEach(function(p) {
+          s("circle", { cx: p.x, cy: p.y, r: 4.5, fill: "#2563eb" });
+          s("text", { x: p.x, y: p.y - 7, fill: "#1e3a8a", "font-size": "10", "text-anchor": "middle" }, p.label);
+        });
+
+        // Other points outside A
+        var ptsOut = [
+          { x: 75, y: 80, label: "(1,1)" },
+          { x: 80, y: 145, label: "(1,2)" },
+          { x: 360, y: 70, label: "(2,6)" },
+          { x: 420, y: 100, label: "(6,6)" },
+          { x: 380, y: 145, label: "(5,4)" },
+          { x: 460, y: 150, label: "(3,5)" }
+        ];
+        ptsOut.forEach(function(p) {
+          s("circle", { cx: p.x, cy: p.y, r: 3.5, fill: "#94a3b8" });
+          s("text", { x: p.x, y: p.y - 6, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, p.label);
+        });
+
+        s("text", { x: 200, y: 180, fill: "#2563eb", "font-size": "11.5", "text-anchor": "middle", "font-weight": "bold" }, "A ⊂ Ω，包含 m = 4 个基本事件");
+        s("text", { x: 420, y: 60, fill: "#64748b", "font-size": "11" }, "其余 32 个点 ∉ A");
+
+      } else if (mode === "mutex") {
+        // Left side: Mutex
+        s("rect", { x: 25, y: 20, width: 235, height: 165, rx: 8, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1.5 });
+        s("text", { x: 142, y: 42, fill: "#0f172a", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "互斥事件 (A ∩ B = ∅)");
+
+        // Two disjoint circles
+        s("circle", { cx: 85, cy: 95, r: 38, fill: "rgba(37,99,235,0.15)", stroke: "#2563eb", "stroke-width": 1.5 });
+        s("text", { x: 85, y: 100, fill: "#1d4ed8", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "A");
+
+        s("circle", { cx: 195, cy: 95, r: 38, fill: "rgba(5,150,105,0.15)", stroke: "#059669", "stroke-width": 1.5 });
+        s("text", { x: 195, y: 100, fill: "#047857", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "B");
+
+        s("text", { x: 142, y: 145, fill: "#dc2626", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "交集为空，不可同时发生");
+        s("text", { x: 142, y: 168, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "但 A ∪ B 未必充满整个 Ω");
+
+        // Right side: Opposing (Complementary)
+        s("rect", { x: 280, y: 20, width: 235, height: 165, rx: 8, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1.5 });
+        s("text", { x: 397, y: 42, fill: "#0f172a", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "对立事件 (A ∪ B = Ω 且 A ∩ B = ∅)");
+
+        // Split rect
+        s("rect", { x: 310, y: 65, width: 85, height: 60, rx: 4, fill: "rgba(37,99,235,0.2)", stroke: "#2563eb", "stroke-width": 1.5 });
+        s("text", { x: 352, y: 100, fill: "#1d4ed8", "font-size": "14", "font-weight": "bold", "text-anchor": "middle" }, "A");
+
+        s("rect", { x: 395, y: 65, width: 85, height: 60, rx: 4, fill: "rgba(5,150,105,0.2)", stroke: "#059669", "stroke-width": 1.5 });
+        s("text", { x: 437, y: 100, fill: "#047857", "font-size": "14", "font-weight": "bold", "text-anchor": "middle" }, "Ā");
+
+        s("text", { x: 397, y: 145, fill: "#059669", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "必有且仅有一者发生");
+        s("text", { x: 397, y: 168, fill: "#2563eb", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(Ā) = 1 - P(A) 恒成立");
+
+      } else if (mode === "ratio") {
+        // Ratio bar
+        s("text", { x: 270, y: 38, fill: "#0f172a", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "古典概型概率比值结构：P(A) = m / n");
+
+        // Total strip
+        s("rect", { x: 60, y: 65, width: 420, height: 38, rx: 6, fill: "#e2e8f0", stroke: "#64748b", "stroke-width": 1.5 });
+        // Event subset strip
+        s("rect", { x: 60, y: 65, width: 105, height: 38, rx: 6, fill: "#3b82f6", stroke: "#1d4ed8", "stroke-width": 1.5 });
+
+        s("text", { x: 112, y: 89, fill: "#ffffff", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "m = 6");
+        s("text", { x: 295, y: 89, fill: "#475569", "font-size": "12", "text-anchor": "middle" }, "其余样本点 (30 个)");
+
+        // Indicators
+        s("path", { d: "M 60 55 L 60 48 L 165 48 L 165 55", fill: "none", stroke: "#2563eb", "stroke-width": 1.5 });
+        s("text", { x: 112, y: 43, fill: "#2563eb", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "A 所含样本点 m");
+
+        s("path", { d: "M 60 115 L 60 122 L 480 122 L 480 115", fill: "none", stroke: "#64748b", "stroke-width": 1.5 });
+        s("text", { x: 270, y: 138, fill: "#475569", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "全样本空间基本事件总数 n = 36");
+
+        s("rect", { x: 140, y: 152, width: 260, height: 30, rx: 6, fill: "#f1f5f9", stroke: "#059669", "stroke-width": 1.5 });
+        s("text", { x: 270, y: 172, fill: "#059669", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "P(A) = 6 / 36 = 1 / 6 ≈ 16.7%");
+      }
+
+      if (capEl) capEl.textContent = caps[mode];
+      if (window.renderMathInElement) window.renderMathInElement(capEl);
+    }
+
+    var tabs = document.querySelectorAll(".micro-box .micro-tab");
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        tabs.forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        mode = tab.getAttribute("data-mode");
+        draw();
+      });
+    });
+
+    draw();
+  }
+
+  // --- Micro-fig: Trap Coin Grid ---
+  function initMProbTrapFig() {
+    var svgEl = document.getElementById("m-prob-trap-fig");
+    if (!svgEl) return;
+    svgEl.innerHTML = "";
+    var NS = "http://www.w3.org/2000/svg";
+    function s(tag, attrs, txt) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      if (txt) el.textContent = txt;
+      svgEl.appendChild(el);
+      return el;
+    }
+
+    // Grid coordinates
+    // 2x2 grid on left side: x: 70, y: 40, cell size: 70
+    s("text", { x: 140, y: 22, fill: "#475569", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "有序样本空间 Ω (4 个等可能格点)");
+
+    // Headers
+    s("text", { x: 105, y: 42, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "第2枚: 正");
+    s("text", { x: 175, y: 42, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "第2枚: 反");
+    s("text", { x: 55, y: 82, fill: "#64748b", "font-size": "10.5", "text-anchor": "end" }, "第1枚: 正");
+    s("text", { x: 55, y: 132, fill: "#64748b", "font-size": "10.5", "text-anchor": "end" }, "第1枚: 反");
+
+    // Cells
+    // (正, 正)
+    s("rect", { x: 70, y: 55, width: 70, height: 48, fill: "#f1f5f9", stroke: "#cbd5e1" });
+    s("text", { x: 105, y: 77, fill: "#334155", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(正, 正)");
+    s("text", { x: 105, y: 93, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "25% (1/4)");
+
+    // (正, 反) -> Highlight blue
+    s("rect", { x: 140, y: 55, width: 70, height: 48, fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 1.5 });
+    s("text", { x: 175, y: 77, fill: "#1d4ed8", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(正, 反)");
+    s("text", { x: 175, y: 93, fill: "#2563eb", "font-size": "9.5", "font-weight": "bold", "text-anchor": "middle" }, "一正一反");
+
+    // (反, 正) -> Highlight blue
+    s("rect", { x: 70, y: 103, width: 70, height: 48, fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 1.5 });
+    s("text", { x: 105, y: 125, fill: "#1d4ed8", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(反, 正)");
+    s("text", { x: 105, y: 141, fill: "#2563eb", "font-size": "9.5", "font-weight": "bold", "text-anchor": "middle" }, "一正一反");
+
+    // (反, 反)
+    s("rect", { x: 140, y: 103, width: 70, height: 48, fill: "#f1f5f9", stroke: "#cbd5e1" });
+    s("text", { x: 175, y: 125, fill: "#334155", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(反, 反)");
+    s("text", { x: 175, y: 141, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "25% (1/4)");
+
+    // Right Callout Box
+    s("rect", { x: 242, y: 35, width: 286, height: 116, rx: 6, fill: "#ffffff", stroke: "#e2e8f0", "stroke-width": 1.5 });
+    s("text", { x: 254, y: 60, fill: "#dc2626", "font-size": "11.5", "font-weight": "bold" }, "❌ 典型误区：直接数类别");
+    s("text", { x: 258, y: 78, fill: "#64748b", "font-size": "10.5" }, "看作「两正、一正一反、两反」3类 → 误算 1/3");
+
+    s("line", { x1: 254, y1: 90, x2: 516, y2: 90, stroke: "#f1f5f9", "stroke-width": 1 });
+
+    s("text", { x: 254, y: 110, fill: "#059669", "font-size": "11.5", "font-weight": "bold" }, "✔ 正确算法：展开等可能样本点");
+    s("text", { x: 258, y: 128, fill: "#047857", "font-size": "10.5", "font-weight": "bold" }, "「一正一反」含 2 个样本点 → P = 2/4 = 1/2");
+    s("text", { x: 258, y: 143, fill: "#64748b", "font-size": "10" }, "对角线两点机会翻倍，绝非三者均等！");
+  }
+
+  initMProbFig();
+  initMProbTrapFig();
 })();
 </script>
 </body></html>

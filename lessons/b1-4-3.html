@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .tick { stroke: var(--muted); stroke-width: 1; }
@@ -43,66 +45,71 @@
 <p class="lead">已知底数和幂，反过来求指数——这就是对数。学会指对互化、三条运算性质和换底公式，并且每一步都先看「有没有意义」。先从一张纸开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一张纸对折一次变成 \(2\) 层，再折一次 \(4\) 层，每折一次层数翻一倍。</p>
+  <p>学校发布紧急通知，玩「传声筒裂变」：班长 \(1\) 人同时通知 \(2\) 人（第 \(1\) 轮 \(2\) 人），这 \(2\) 人再各自通知 \(2\) 人（第 \(2\) 轮 \(4\) 人），第 \(3\) 轮 \(8\) 人……每往下一轮，当轮通知人数翻一倍（\(2^x\) 人）。点下面的按钮看看通知树：</p>
   <div class="card predict" data-id="entry" data-answer="B">
-    <p>要叠出 \(32\) 层，需要对折几次？</p>
+    <svg class="entry-fig" id="entry-tree" viewBox="0 0 520 210" role="img" aria-label="校园紧急通知二叉树裂变图，从1人传2人、4人、8人、16人到第5轮32人"></svg>
+    <div class="entry-bar" id="entry-tree-bar">
+      <button type="button" data-r="3" class="on">第 3 轮 (8人)</button>
+      <button type="button" data-r="4">第 4 轮 (16人)</button>
+      <button type="button" data-r="5">第 5 轮 (32人)</button>
+    </div>
+    <div class="entry-note" id="entry-tree-note"></div>
+    <p>要让某一轮刚好通知到 \(32\) 人，需要传到第几轮？</p>
     <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(4\) 次</button>
-      <button class="opt" data-v="B"><b>B</b>\(5\) 次</button>
-      <button class="opt" data-v="C"><b>C</b>\(6\) 次</button>
-      <button class="opt" data-v="D"><b>D</b>\(16\) 次</button>
+      <button class="opt" data-v="A"><b>A</b>\(4\) 轮</button>
+      <button class="opt" data-v="B"><b>B</b>\(5\) 轮</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\) 轮</button>
+      <button class="opt" data-v="D"><b>D</b>\(16\) 轮</button>
     </div>
     <div class="reveal">
-      <p>数一数：\(2,4,8,16,32\)，第 \(5\) 次到 \(32\) 层。<b>B</b>。也就是 \(2^5=32\)。</p>
-      <p>这道题知道底数 \(2\)、知道结果 \(32\)，问的是<b>指数</b>：「\(2\) 的几次方等于 \(32\)」。这个「几次方」就叫对数，写成 \(\log_2 32=5\)。</p>
+      <p>数一数：\(2,4,8,16,32\)，第 \(5\) 轮刚好通知到 \(32\) 人。<b>B</b>。也就是 \(2^5=32\)。</p>
+      <p>这道题知道底数 \(2\)、知道结果 \(32\)，反过来问<b>指数</b>（第几轮）：「\(2\) 的几次方等于 \(32\)」。这个「几次方」就叫对数，写成 \(\log_2 32=5\)。</p>
       <p>这一节讲：对数怎么定义、什么时候有意义、怎么算（三条运算性质和换底公式）。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：4.1 的指数幂运算，比如 \(a^p\cdot a^q=a^{p+q}\)、\((a^p)^r=a^{pr}\)（<a href="b1-4-1.html">回看 4.1</a>）；4.2 里 \(a&gt;0\) 时 \(a^x\) 总是正数（<a href="b1-4-2.html">回看 4.2</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从指数式反问「几次方」的对数革命</h3>
+  <p class="small">要用到：4.1 的指数幂运算（<a href="b1-4-1.html">回看 4.1</a>）；4.2 里 \(a&gt;0\) 时 \(a^x&gt;0\) 恒正的真数红线（<a href="b1-4-2.html">回看 4.2</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>底数、指数、幂</b>：\(a^b=N\) 里，\(a\) 是底数，\(b\) 是指数，\(N\) 是幂（乘方的结果）。</p>
-    <p>例：\(2^5=32\)，底数 \(2\)，指数 \(5\)，幂 \(32\)。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>指对互逆天平与对数降维魔法</b></p>
+    <div class="entry-bar" id="m-log-bar" role="group" aria-label="对数微图解切换">
+      <button type="button" class="on" data-m="def">① 指对互逆天平 (已知底和幂，反求指数：2⁵=32 ⇔ log₂32=5)</button>
+      <button type="button" data-m="law">② 对数降维运算 (把乘法变加法、除法变减法、乘方变倍数)</button>
+      <button type="button" data-m="base">③ 换底公式跨界桥 (破除不同底障碍：log₄8 = lg8 / lg4 = 3/2)</button>
+    </div>
+    <svg class="micro-fig" id="m-log-fig" viewBox="0 0 520 160" role="img" aria-label="对数运算与换底微图解"></svg>
+    <p class="entry-note" id="m-log-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">生命红线</span><b>真数必须严格大于 0（负数与 0 无对数）</b></p>
+      <p class="small" style="margin:0">对数是在解 \(a^b=N\)。因为 \(a&gt;0\) 时 \(a^b\) 恒为正数，永远不可能得到 0 或负数！因此式子 \(\log_2(-4)\) 与 \(\log_2 0\) 在实数世界彻底无意义！解对数题第一步先验真数！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">运算伪法则</span><b>积变和 vs 假想的「和拆和」</b></p>
+      <p class="small" style="margin:0">只有「积的对数」能拆成「对数的和」：\(\log_a(MN) = \log_a M + \log_a N\)！数学上绝没有 \(\log_a(M+N) = \log_a M + \log_a N\) 这种伪法则！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心数学定义、性质与换底法则</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{a^b=N \iff b=\log_a N}_{\text{指对互化：底数 } a&gt;0, a\ne1\text{，真数 } N&gt;0}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{\log_a(MN)=\log_a M+\log_a N,\quad \log_a M^r=r\log_a M}_{\text{对数降维：乘变加，除变减，乘方变倍数}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\log_a N = \dfrac{\log_c N}{\log_c a}}_{\text{换底公式：异底化同底神器}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>真数</b>：\(\log_a N\) 里，\(a\) 仍叫底数，\(N\) 叫<b>真数</b>，就是「要变成的那个数」。</p>
-    <p>例：\(\log_2 32\) 的底数是 \(2\)，真数是 \(32\)，值是 \(5\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（指对互化求值）</b></p>
+    <p>(1) 把 \(3^4=81\) 写成对数式：底数 \(3\)，指数 \(4\)，幂 \(81 \implies \log_3 81=4\)。</p>
+    <p>(2) 求 \(\log_3\dfrac19\)：设 \(3^b=\dfrac19=3^{-2} \implies b=-2\)。</p>
+    <p>(3) 特殊值：\(\log_a 1=0\)（因为 \(a^0=1\)），\(\log_a a=1\)，\(a^{\log_a N}=N\)。</p>
   </div>
 
-  <div class="card">
-    <p><b>有意义</b>：一个式子在实数范围里能算出一个确定的数，就说它有意义。</p>
-    <p>例：\(\sqrt9=3\) 有意义；\(\sqrt{-4}\) 在实数里找不到，没有意义。对数也一样，下面会看到 \(\log_2(-4)\) 没有意义。</p>
-  </div>
-
-  <div class="card">
-    <p><b>常用对数、自然对数</b>：两个最常用的底有专门的写法。</p>
-    <ul>
-      <li>以 \(10\) 为底：\(\log_{10}N\) 记作 \(\lg N\)。例：\(\lg100=2\)，因为 \(10^2=100\)。</li>
-      <li>以 \(\e\approx2.718\) 为底：\(\log_\e N\) 记作 \(\ln N\)。例：\(\ln\e=1\)，因为 \(\e^1=\e\)。</li>
-    </ul>
-  </div>
-
-  <h3>2. 对数是在问「几次方」</h3>
-  <div class="key">\(a^b=N\iff b=\log_a N\)，其中底数 \(a&gt;0\) 且 \(a\ne1\)，真数 \(N&gt;0\)。</div>
-  <p>左边叫指数式，右边叫对数式，两种写法说的是同一件事，来回改写叫<b>指对互化</b>。条件为什么这样定：</p>
-  <ul>
-    <li><b>\(a\ne1\)</b>：\(1\) 的任何次方都是 \(1\)。问「\(1\) 的几次方是 \(5\)」没有答案；问「\(1\) 的几次方是 \(1\)」答案又太多。都定不出唯一的指数。</li>
-    <li><b>\(a&gt;0\)</b>：底数为负时，\(a^b\) 对很多 \(b\)（比如 \(\tfrac12\)）没有意义，所以只取正的底数。</li>
-    <li><b>\(N&gt;0\)</b>：\(a&gt;0\) 时 \(a^b\) 总是正数，永远等不到 \(0\) 或负数，所以 \(\log_2 0\)、\(\log_2(-4)\) 都没有意义。</li>
-  </ul>
-  <p>由定义马上得到：\(\log_a 1=0\)（因为 \(a^0=1\)），\(\log_a a=1\)，以及 \(a^{\log_a N}=N\)、\(\log_a a^b=b\)——先取对数再乘方，或者反过来，正好抵消。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>(1) 把 \(3^4=81\) 写成对数式；(2) 求 \(\log_3\dfrac19\)；(3) 求 \(\log_5 1\)。</p>
-    <p>(1) 底数 \(3\)，指数 \(4\)，幂 \(81\)：\(\log_3 81=4\)。</p>
-    <p>(2) 设 \(\log_3\dfrac19=b\)，即 \(3^b=\dfrac19\)。因为 \(\dfrac19=3^{-2}\)，所以 \(b=-2\)。</p>
-    <p>(3) \(5^0=1\)，所以 \(\log_5 1=0\)。</p>
-  </div>
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：\(\log_2\dfrac18=\)？</p>
     <div class="opts cols">
@@ -111,42 +118,49 @@
       <button class="opt" data-v="C"><b>C</b>\(\dfrac13\)</button>
       <button class="opt" data-v="D"><b>D</b>\(-\dfrac13\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(\dfrac18=2^{-3}\)，所以 \(\log_2\dfrac18=-3\)。选 A 的同学丢了负号（\(2^3=8\)，不是 \(\dfrac18\)）；选 C、D 的同学把「取倒数」和「指数变负」弄混了。</p></div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac18=2^{-3}\)，所以 \(\log_2\dfrac18=-3\)。选 A 的同学丢了负号（\(2^3=8\)，不是 \(\dfrac18\)）；选 C、D 的同学把「取倒数」和「指数开方」弄混了。</p></div>
   </div>
 
-  <h3>3. 运算性质：从指数法则「翻译」过来</h3>
-  <p>设 \(\log_a M=p\)，\(\log_a N=q\)，也就是 \(M=a^p\)，\(N=a^q\)。那么 \(MN=a^p\cdot a^q=a^{p+q}\)，换回对数就是 \(\log_a(MN)=p+q\)。同样，\(\dfrac MN=a^{p-q}\)，\(M^r=a^{pr}\)：</p>
-  <div class="key">当 \(a&gt;0,\ a\ne1,\ M&gt;0,\ N&gt;0\) 时：<br>
-  ① \(\log_a(MN)=\log_a M+\log_a N\)<br>
-  ② \(\log_a\dfrac MN=\log_a M-\log_a N\)<br>
-  ③ \(\log_a M^r=r\log_a M\)（\(r\) 是任意实数）</div>
-  <p>一句话：对数把<b>乘</b>变成<b>加</b>，把<b>除</b>变成<b>减</b>，把<b>乘方</b>变成<b>乘</b>。</p>
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（三大对数运算法则）</b></p>
     <p>(1) \(\lg2+\lg5=\lg(2\times5)=\lg10=1\)。</p>
     <p>(2) \(\log_3 18-\log_3 2=\log_3\dfrac{18}{2}=\log_3 9=2\)。</p>
     <p>(3) \(\log_2 8^5=5\log_2 8=5\times3=15\)。</p>
-    <p>每一步里的真数 \(2,5,18,8\) 都是正数，法则可以用。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：\(\log_6 4+\log_6 9=\)？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(2\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\log_6 13\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(13\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(13\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\log_6 13\)</button>
       <button class="opt" data-v="D"><b>D</b>\(1\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。对数相加，真数相<b>乘</b>：\(\log_6(4\times9)=\log_6 36=2\)。选 B 的同学把真数加了起来——对数没有这条法则。</p></div>
+    <div class="reveal"><p><b>A</b>。对数相加，真数相<b>乘</b>：\(\log_6(4\times9)=\log_6 36=2\)。选 C 的同学把真数加了起来——对数没有这条法则。</p></div>
   </div>
 
-  <h3>4. 换底公式</h3>
-  <p>计算器只有 \(\lg\) 和 \(\ln\)，怎么算 \(\log_2 5\)？设 \(b=\log_2 5\)，即 \(2^b=5\)。两边取常用对数：\(\lg2^b=\lg5\)，即 \(b\lg2=\lg5\)，所以 \(b=\dfrac{\lg5}{\lg2}\approx2.32\)。换成 \(\ln\) 结果也一样。</p>
-  <div class="key">\(\log_a N=\dfrac{\log_c N}{\log_c a}\)，要求 \(a&gt;0,a\ne1\)，\(N&gt;0\)，新底 \(c&gt;0,c\ne1\)。</div>
+  <h3>3. 三步破题思维链：换底公式与混合对数化简</h3>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>(1) \(\log_4 8=\dfrac{\lg8}{\lg4}=\dfrac{3\lg2}{2\lg2}=\dfrac32\)。验一下：\(4^{\frac32}=(\sqrt4)^3=8\)。</p>
-    <p>(2) \(\log_2 3\cdot\log_3 4=\dfrac{\lg3}{\lg2}\cdot\dfrac{\lg4}{\lg3}=\dfrac{\lg4}{\lg2}=\dfrac{2\lg2}{\lg2}=2\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：异底对数求值三步法思维链）</b></p>
+    <p style="margin:0 0 8px">计算：\(\log_2 3 \cdot \log_3 4 + \log_9 27 - 2^{\log_2 3}\)。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步异底换底化归为常用对数：</span>
+        对异底乘积使用换底公式：\(\log_2 3 \cdot \log_3 4 = \dfrac{\lg 3}{\lg 2} \cdot \dfrac{\lg 4}{\lg 3} = \dfrac{\lg 4}{\lg 2} = \dfrac{2\lg 2}{\lg 2} = 2\)！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步底与真数化同质幂并提指数：</span>
+        对 \(\log_9 27\)，底数 \(9=3^2\)，真数 \(27=3^3\)：<br>
+        \(\log_9 27 = \dfrac{\lg 27}{\lg 9} = \dfrac{3\lg 3}{2\lg 3} = \dfrac{3}{2}\)；<br>
+        对对数恒等式：\(2^{\log_2 3} = 3\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步合并分数并复核真数非负：</span>
+        原式 \(= 2 + \dfrac{3}{2} - 3 = \dfrac{1}{2}\)！
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-3" data-answer="B">
     <p>自己试试：\(\log_9 27=\)？</p>
     <div class="opts cols">
@@ -158,16 +172,49 @@
     <div class="reveal"><p><b>B</b>。\(\dfrac{\lg27}{\lg9}=\dfrac{3\lg3}{2\lg3}=\dfrac32\)。选 A 的同学算了 \(27\div9\)——换底后是两个<b>对数</b>相除，不是真数相除；选 C 的同学分子分母放反了。</p></div>
   </div>
 
-  <h3>5. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>底数</b>：\(a&gt;0\) 且 \(a\ne1\)，底数是未知数时也要查。<br><span class="small">反例：\(\log_x 9=2\)，得 \(x^2=9\)，\(x=\pm3\)；可底数不能是负数，只有 \(x=3\)。</span></li>
-    <li><b>每个真数分别为正</b>：用积、商法则要 \(M&gt;0\)、\(N&gt;0\) 都成立，\(MN&gt;0\) 不够。<br><span class="small">反例：\(M=N=-2\)，\(\log_2(MN)=\log_2 4=2\) 有意义，可 \(\log_2(-2)\) 没有意义，拆不开。</span></li>
-    <li><b>幂法则要 \(M&gt;0\)</b>：\(M^r\) 有意义不代表 \(M&gt;0\)。<br><span class="small">反例：\(x=-10\)，\(\lg x^2=\lg100=2\)，但 \(2\lg(-10)\) 没有意义。\(x\ne0\) 时只能写 \(\lg x^2=2\lg|x|\)。</span></li>
-    <li><b>没有「和」的拆法</b>：\(\log_a(M+N)\) 不等于 \(\log_a M+\log_a N\)。<br><span class="small">反例：\(\log_2(1+1)=\log_2 2=1\)，而 \(\log_2 1+\log_2 1=0\)。</span></li>
-    <li><b>解对数方程：先列条件，最后验解</b>。<br><span class="small">反例：\(\log_2 x+\log_2(x-1)=1\)。合并得 \(x(x-1)=2\)，\(x=2\) 或 \(x=-1\)。原方程要 \(x&gt;1\)，\(x=-1\) 代回去 \(\log_2(-1)\) 没有意义，舍去，只有 \(x=2\)。</span></li>
-    <li><b>换底的新底</b> \(c\) 也要 \(c&gt;0\)、\(c\ne1\)。常用的 \(\lg\)、\(\ln\) 都满足。</li>
-  </ol>
-  <div class="key">每用一次法则，先问一句：每个对数原来有没有意义？合并以后范围可能变宽，多出来的解要靠检验删掉。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>解对数方程合并后未检验真数，混入增根</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：由 \(\log_2 x+\log_2(x-1)=1\)，合并解得 \(x=2\) 或 \(x=-1\)，两解全留。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：原方程要求 \(x&gt;0\) 且 \(x-1&gt;0 \implies x&gt;1\)！代入 \(x=-1\) 导致真数为负彻底违规，必须果断舍弃，仅 \(x=2\)！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-domain-fig" viewBox="0 0 280 140" role="img" aria-label="对数增根反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>凭空造出「对数和拆开」伪运算法则</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：把 \(\log_a(x+y)\) 拆成 \(\log_a x + \log_a y\)；或把 \(\dfrac{\log_a M}{\log_a N}\) 当作 \(\log_a(M-N)\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：对数只把「真数相乘」拆为「对数相加」！\(\log_2(1+1)=\log_2 2=1\)，而 \(\log_2 1+\log_2 1=0\ne1\)！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>真数偶次方提指数，漏加绝对值护甲</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：把 \(\lg x^2\) 直接提成 \(2\lg x\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：若 \(x=-10\)，原式 \(\lg(-10)^2=\lg 100=2\) 完全有意义，但 \(2\lg(-10)\) 根本无意义！正确化简必须戴绝对值：\(\lg x^2 = 2\lg|x|\)！
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
@@ -265,6 +312,7 @@
       <p>问题出在合并那一步：\(\lg[x(x-3)]\) 只要求乘积为正，比原来两个真数各自为正<b>宽</b>，多出来的解要靠检验删掉。所以先写条件、最后验解。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-base"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="A">
@@ -281,6 +329,7 @@
       <p>选 B 的同学把 \(12\) 拆成了 \(2\times3\)（那是 \(6\)）；选 C 的同学把 \(\lg\dfrac{10}{2}\) 写成了加；D 是把真数直接相除。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-rule"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -498,9 +547,169 @@
   snIn.addEventListener("change", function () { logState("cmp"); });
   function reset() { st = { a: DEF.a, N: DEF.N, M2: DEF.M2, N2: DEF.N2 }; draw(); }
   document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  /* ---------- 0 从例子进入：校园紧急通知树 ---------- */
+  var etSvg = document.getElementById("entry-tree"), etBar = document.getElementById("entry-tree-bar"), etNote = document.getElementById("entry-tree-note");
+  function etDraw(rmax) {
+    etSvg.innerHTML = "";
+    var L = 24, R = 386, ys = [20, 50, 82, 114, 148, 184];
+    function nx(lv, i) { var n = Math.pow(2, lv); return L + (i + 0.5) / n * (R - L); }
+    for (var lv = 0; lv < 5; lv++) {
+      var n = Math.pow(2, lv), on = lv + 1 <= rmax;
+      for (var i = 0; i < n; i++) {
+        var x0 = nx(lv, i), y0 = ys[lv], y1 = ys[lv + 1];
+        mk("line", { x1: x0, y1: y0, x2: nx(lv + 1, 2 * i), y2: y1, stroke: on ? "var(--a)" : "var(--line)", "stroke-width": on ? 1.5 : 1, opacity: on ? 0.65 : 0.35 }, etSvg);
+        mk("line", { x1: x0, y1: y0, x2: nx(lv + 1, 2 * i + 1), y2: y1, stroke: on ? "var(--a)" : "var(--line)", "stroke-width": on ? 1.5 : 1, opacity: on ? 0.65 : 0.35 }, etSvg);
+      }
+    }
+    for (lv = 0; lv <= 5; lv++) {
+      var cnt = Math.pow(2, lv), active = lv === rmax, reached = lv <= rmax, rad = lv <= 2 ? 6.5 : (lv === 3 ? 5.5 : (lv === 4 ? 4.5 : 3.6));
+      for (var j = 0; j < cnt; j++) {
+        mk("circle", { cx: nx(lv, j), cy: ys[lv], r: rad, fill: active ? "var(--hl)" : (reached ? "var(--a)" : "var(--card)"), stroke: active ? "var(--hl)" : (reached ? "var(--a)" : "var(--line)"), "stroke-width": 1.3 }, etSvg);
+      }
+      var lbl = lv === 0 ? "发起：1人" : "第" + lv + "轮：" + cnt + "人";
+      mk("text", { x: 400, y: ys[lv] + 5, fill: active ? "var(--hl)" : (reached ? "var(--fg)" : "var(--muted)"), "font-size": active ? 15 : 13.5, "font-weight": active ? 700 : 400 }, etSvg).textContent = lbl;
+    }
+    [].forEach.call(etBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-r"), 10) === rmax);
+    });
+    var p = Math.pow(2, rmax);
+    etNote.innerHTML = "传到<b>第 " + rmax + " 轮</b>：当轮通知 <b>2^" + rmax + " = " + p + " 人</b>，反过来「已知 " + p + " 人求轮数」就是 <b>log₂" + p + " = " + rmax + "</b>" + (rmax === 5 ? "（<b>刚好 32 人！</b>）" : "");
+  }
+  [].forEach.call(etBar.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () { etDraw(parseInt(b.getAttribute("data-r"), 10)); });
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var m = { A: 4, B: 5, C: 5, D: 5 };
+      if (m[ev.detail.choice]) etDraw(m[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") etDraw(3);
+  });
+
   build();
-  document.addEventListener("DOMContentLoaded", function () { reset(); });
-  if (document.readyState !== "loading") reset();
+  etDraw(3);
+  document.addEventListener("DOMContentLoaded", function () { etDraw(3); reset(); initStep2(); });
+  if (document.readyState !== "loading") { etDraw(3); reset(); initStep2(); }
+
+  // Step 2 Vivid Visualizations
+  function initStep2() {
+    var lFig = document.getElementById("m-log-fig");
+    var lBar = document.getElementById("m-log-bar");
+    var lNote = document.getElementById("m-log-note");
+    var dFig = document.getElementById("m-domain-fig");
+    if (!lFig) return;
+
+    var NS = "http://www.w3.org/2000/svg";
+    function el(tag, attrs, parent) {
+      var elem = document.createElementNS(NS, tag);
+      for (var k in attrs) elem.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(elem);
+      return elem;
+    }
+
+    function drawLog(mode) {
+      lFig.innerHTML = "";
+      if (mode === "def") {
+        el("rect", { x: 30, y: 30, width: 180, height: 75, rx: 8, fill: "var(--card)", stroke: "var(--b)", "stroke-width": "2" }, lFig);
+        el("text", { x: 120, y: 52, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, lFig).textContent = "指数形式：已知底与幂，问乘方";
+        el("text", { x: 120, y: 84, "text-anchor": "middle", fill: "var(--b)", "font-size": "22", "font-weight": "800" }, lFig).textContent = "2⁵ = 32";
+
+        el("path", { d: "M225 67 L295 67", stroke: "var(--hl)", "stroke-width": "2.5" }, lFig);
+        el("polygon", { points: "228,63 218,67 228,71", fill: "var(--hl)" }, lFig);
+        el("polygon", { points: "292,63 302,67 292,71", fill: "var(--hl)" }, lFig);
+        el("text", { x: 260, y: 58, "text-anchor": "middle", fill: "var(--hl)", "font-size": "11.5", "font-weight": "700" }, lFig).textContent = "等价互换";
+        el("text", { x: 260, y: 85, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10.5" }, lFig).textContent = "反向求指数";
+
+        el("rect", { x: 310, y: 30, width: 180, height: 75, rx: 8, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": "2" }, lFig);
+        el("text", { x: 400, y: 52, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, lFig).textContent = "对数形式：已知底与幂，求指数";
+        el("text", { x: 400, y: 84, "text-anchor": "middle", fill: "var(--a)", "font-size": "21", "font-weight": "800" }, lFig).textContent = "log₂ 32 = 5";
+
+        el("text", { x: 260, y: 132, "text-anchor": "middle", fill: "var(--fg)", "font-size": "12", "font-weight": "700" }, lFig).textContent = "对数是在回答：「2 的几次方等于 32？」——答案就是 5！";
+      } else if (mode === "law") {
+        el("rect", { x: 30, y: 25, width: 140, height: 85, rx: 8, fill: "var(--card)", stroke: "var(--warn)", "stroke-width": "1.8" }, lFig);
+        el("text", { x: 100, y: 48, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, lFig).textContent = "真数相乘";
+        el("text", { x: 100, y: 78, "text-anchor": "middle", fill: "var(--warn)", "font-size": "16", "font-weight": "800" }, lFig).textContent = "log₆(4 × 9)";
+        el("text", { x: 100, y: 98, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10.5" }, lFig).textContent = "= log₆ 36 = 2";
+
+        el("path", { d: "M185 67 L245 67", stroke: "var(--a)", "stroke-width": "2.5" }, lFig);
+        el("polygon", { points: "245,63 255,67 245,71", fill: "var(--a)" }, lFig);
+        el("text", { x: 215, y: 55, "text-anchor": "middle", fill: "var(--a)", "font-size": "11", "font-weight": "700" }, lFig).textContent = "对数拆解";
+        el("text", { x: 215, y: 82, "text-anchor": "middle", fill: "var(--a)", "font-size": "11" }, lFig).textContent = "乘 变 加";
+
+        el("rect", { x: 270, y: 25, width: 220, height: 85, rx: 8, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": "1.8" }, lFig);
+        el("text", { x: 380, y: 48, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, lFig).textContent = "对数相加（降维计算）";
+        el("text", { x: 380, y: 78, "text-anchor": "middle", fill: "var(--a)", "font-size": "16", "font-weight": "800" }, lFig).textContent = "log₆ 4 + log₆ 9";
+        el("text", { x: 380, y: 98, "text-anchor": "middle", fill: "var(--fg)", "font-size": "10.5", "font-weight": "700" }, lFig).textContent = "同底相加，真数直接相乘！";
+
+        el("text", { x: 260, y: 134, "text-anchor": "middle", fill: "var(--fg)", "font-size": "12", "font-weight": "700" }, lFig).textContent = "降维法则：积变和、商变差、乘方变倍数！";
+      } else if (mode === "base") {
+        el("rect", { x: 50, y: 30, width: 140, height: 75, rx: 8, fill: "var(--card)", stroke: "var(--b)", "stroke-width": "1.8" }, lFig);
+        el("text", { x: 120, y: 52, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, lFig).textContent = "不同底困难户";
+        el("text", { x: 120, y: 82, "text-anchor": "middle", fill: "var(--b)", "font-size": "20", "font-weight": "800" }, lFig).textContent = "log₄ 8";
+
+        el("path", { d: "M205 67 L265 67", stroke: "var(--hl)", "stroke-width": "2.5" }, lFig);
+        el("polygon", { points: "265,63 275,67 265,71", fill: "var(--hl)" }, lFig);
+        el("text", { x: 235, y: 55, "text-anchor": "middle", fill: "var(--hl)", "font-size": "11", "font-weight": "700" }, lFig).textContent = "换底桥梁";
+        el("text", { x: 235, y: 82, "text-anchor": "middle", fill: "var(--hl)", "font-size": "10.5" }, lFig).textContent = "换为 lg 或 ln";
+
+        el("rect", { x: 290, y: 30, width: 180, height: 75, rx: 8, fill: "var(--ok-soft)", stroke: "var(--ok)", "stroke-width": "1.8" }, lFig);
+        el("text", { x: 380, y: 52, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, lFig).textContent = "统一底数相除";
+        el("text", { x: 380, y: 82, "text-anchor": "middle", fill: "var(--ok)", "font-size": "16", "font-weight": "800" }, lFig).textContent = "lg 8 / lg 4 = 3/2";
+
+        el("text", { x: 260, y: 134, "text-anchor": "middle", fill: "var(--fg)", "font-size": "12", "font-weight": "700" }, lFig).textContent = "换底公式 log_a N = lg N / lg a：将异底计算彻底化归为同底！";
+      }
+
+      var notes = {
+        def: "<b>指对互化</b>：\\(a^b = N \\iff b = \\log_a N\\)。底数 \\(a&gt;0, a\\ne1\\)，因为 \\(a^b&gt;0\\)，真数 \\(N\\) 必须<b>严格大于 0</b>！",
+        law: "<b>对数三大降维性质</b>：积的对数等于对数的和，商的对数等于对数的差，幂的对数等于指数提至前方！",
+        base: "<b>换底公式神器</b>：\\(\\log_a N = \\dfrac{\\log_c N}{\\log_c a}\\)。在化简混合积（如 \\(\\log_2 3 \\cdot \\log_3 4 = 2\\)）时极度高效！"
+      };
+      if (lNote) lNote.innerHTML = notes[mode] || "";
+      if (lBar) {
+        [].forEach.call(lBar.querySelectorAll("button"), function (b) {
+          b.classList.toggle("on", b.getAttribute("data-m") === mode);
+        });
+      }
+    }
+
+    if (lBar) {
+      [].forEach.call(lBar.querySelectorAll("button"), function (b) {
+        b.onclick = function () { drawLog(b.getAttribute("data-m")); };
+      });
+    }
+
+    function drawDomainTrap() {
+      if (!dFig) return;
+      dFig.innerHTML = "";
+      var oy = 75;
+      el("line", { x1: 20, y1: oy, x2: 260, y2: oy, stroke: "var(--line)", "stroke-width": "1.5" }, dFig);
+      el("text", { x: 265, y: oy + 4, fill: "var(--muted)", "font-size": "10" }, dFig).textContent = "x";
+
+      el("line", { x1: 90, y1: oy - 5, x2: 90, y2: oy + 5, stroke: "var(--muted)", "stroke-width": "1.2" }, dFig);
+      el("text", { x: 90, y: oy + 16, "text-anchor": "middle", fill: "var(--muted)", "font-size": "9.5" }, dFig).textContent = "0";
+
+      el("line", { x1: 140, y1: oy - 5, x2: 140, y2: oy + 5, stroke: "var(--muted)", "stroke-width": "1.2" }, dFig);
+      el("text", { x: 140, y: oy + 16, "text-anchor": "middle", fill: "var(--muted)", "font-size": "9.5" }, dFig).textContent = "1";
+
+      el("line", { x1: 140, y1: oy, x2: 255, y2: oy, stroke: "var(--ok)", "stroke-width": "3" }, dFig);
+      el("circle", { cx: 140, cy: oy, r: "4", fill: "#fff", stroke: "var(--ok)", "stroke-width": "2" }, dFig);
+      el("text", { x: 195, y: oy - 12, "text-anchor": "middle", fill: "var(--ok)", "font-size": "10", "font-weight": "700" }, dFig).textContent = "真数要求 x > 1";
+
+      el("circle", { cx: 200, cy: oy, r: "3", fill: "var(--ok)" }, dFig);
+      el("text", { x: 200, y: oy + 16, "text-anchor": "middle", fill: "var(--ok)", "font-size": "9.5", "font-weight": "700" }, dFig).textContent = "x = 2 ✅";
+
+      el("circle", { cx: 45, cy: oy, r: "4", fill: "var(--no)" }, dFig);
+      el("text", { x: 45, y: oy + 19, "text-anchor": "middle", fill: "var(--no)", "font-size": "9", "font-weight": "700" }, dFig).textContent = "-1 ❌ 增根";
+
+      el("text", { x: 140, y: 22, "text-anchor": "middle", fill: "var(--no)", "font-size": "9.5", "font-weight": "700" }, dFig).textContent = "❌ 错解保留 x = -1 (真数无意义！)";
+      el("text", { x: 140, y: 122, "text-anchor": "middle", fill: "var(--ok)", "font-size": "9.5", "font-weight": "700" }, dFig).textContent = "✅ 正解必须舍弃负根，仅取 x = 2！";
+    }
+
+    drawLog("def");
+    drawDomainTrap();
+  }
 })();
 </script>
 </body></html>

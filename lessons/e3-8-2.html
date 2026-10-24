@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .fig text { font-size: 20px; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
@@ -29,12 +31,18 @@
 <p class="lead">散点大致排成一条斜线时，画一条「最贴近」它们的直线，就能用 \(x\) 估计 \(y\)。这一节讲：哪条线算最贴近、怎么算出来、用它预测时要小心什么。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>小卖部记下了 \(5\) 天的最高气温和卖出的冰棍数：</p>
+  <p>小卖部记下了 \(5\) 天的最高气温和卖出的冰棍数。先点下面的按钮，看顺着这 5 天的散点画出趋势线，延伸到 \(30\) ℃ 会指向哪里：</p>
   <div class="tbl"><table class="rec">
     <tr><th>气温 / ℃</th><td>\(20\)</td><td>\(22\)</td><td>\(24\)</td><td>\(26\)</td><td>\(28\)</td></tr>
     <tr><th>冰棍 / 根</th><td>\(40\)</td><td>\(46\)</td><td>\(50\)</td><td>\(55\)</td><td>\(59\)</td></tr>
   </table></div>
   <div class="card predict" data-id="entry" data-answer="C">
+    <svg class="entry-fig" id="entry-reg" viewBox="0 0 520 205" role="img" aria-label="5天最高气温与冰棍销量散点图，以及延伸到30摄氏度的回归预测直线"></svg>
+    <div class="entry-bar" id="entry-reg-bar">
+      <button type="button" data-m="pts">只看前 5 天散点</button>
+      <button type="button" data-m="pred" class="on">画出回归趋势线并延伸预测 30℃（约 64 根！）</button>
+    </div>
+    <div class="entry-note" id="entry-reg-note"></div>
     <p>按这个势头，明天预报 \(30\) ℃，大约能卖多少根？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(30\) 根左右</button>
@@ -51,42 +59,85 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：平均数（<a href="b2-9-2.html">回看 9.2</a>）；散点图和相关系数（<a href="e3-8-1.html">回看 8.1</a>）；二次函数在顶点处取最小值（必修一）。</p>
+  <p class="small">要用到：8.1 散点图与相关系数（<a href="e3-8-1.html">回看 8.1</a>）；必修一 2.3 二次函数最值（<a href="b1-2-3.html">回看 2.3</a>）。线性回归是用一条最优直线去拟合散点的宏观规律。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：回归线用于样本范围内的估计；远离样本范围的外推风险很大，残差应看实际值与预测值的差。</p></div>
 
   <div class="card">
-    <p><b>解释变量和响应变量</b>：用 \(x\) 去估计 \(y\)，\(x\) 叫解释变量（自变量），\(y\) 叫响应变量（因变量）。</p>
-    <p>例：用气温估计冰棍销量，气温是 \(x\)，销量是 \(y\)。谁当 \(x\) 要看你想用什么估计什么，不是随便换的。</p>
+    <p><b>一元线性回归模型</b>：描述因变量 \(Y\) 随自变量 \(x\) 线性变化并伴随随机波动的数学模型：</p>
+    <p>$$Y = bx + a + e$$</p>
+    <p>其中 \(a\) 是截距，\(b\) 是斜率（总体真实参数，未知）；\(e\) 是<b>随机误差项</b>（受测量误差、潜变量扰动等不可控因素产生，满足 \(E(e) = 0\)）。</p>
   </div>
 
   <div class="card">
-    <p><b>样本中心</b>：\(n\) 对数据 \((x_i,y_i)\)，把 \(x\) 的平均数和 \(y\) 的平均数配成一个点 \((\bar x,\bar y)\)。</p>
-    <p>例：五对数据 \((1,2),(2,4),(3,5),(4,6),(5,8)\)。\(\bar x=\dfrac{1+2+3+4+5}{5}=3\)，\(\bar y=\dfrac{2+4+5+6+8}{5}=5\)，样本中心是 \((3,5)\)。下面一直用这五对数据。</p>
+    <p><b>最小二乘法（残差平方和最小化）</b>：如何在一大群散点中画出「最完美」的一条直线？</p>
+    <p>高斯准则：不比水平距离，也不比垂直绝对值，而是比较每个样本点到直线的<b>竖直偏差（残差 \(e_i = y_i - \hat{y}_i\)）的平方和</b>：</p>
+    <p>$$Q(a, b) = \sum_{i=1}^n (y_i - (bx_i + a))^2$$</p>
+    <p>使这个二次函数达到全域最小值的直线，就是<b>经验回归方程 \(\hat{y} = \hat{b}x + \hat{a}\)</b>！</p>
   </div>
 
   <div class="card">
-    <p><b>预测值和残差</b>：画了一条直线后，把 \(x_i\) 代进去得到的 \(\hat y_i\) 叫预测值（\(y\) 上的「帽子」表示「由直线算出来的」）。真实值减预测值，\(y_i-\hat y_i\)，叫<b>残差</b>，就是点和直线在<b>竖直方向</b>上差多少。</p>
-    <p>例：随手画一条 \(y=x+2\)。\(x=5\) 时预测 \(7\)，真实是 \(8\)，残差 \(8-7=1\)（点在线上方，残差为正）；\(x=1\) 时预测 \(3\)，真实是 \(2\)，残差 \(-1\)（点在线下方）。</p>
+    <p><b>样本中心点 \((\bar{x}, \bar{y})\)（回归线的定海神针）</b>：所有样本点的均值构成的坐标点。最小二乘法导出的铁律是：<b>经验回归直线一定穿过样本中心点 \((\bar{x}, \bar{y})\)</b>！</p>
+    <p>$$\bar{y} = \hat{b}\bar{x} + \hat{a} \Longrightarrow \hat{a} = \bar{y} - \hat{b}\bar{x}$$</p>
+    <p>无论大题怎样出，只要算出斜率 \(\hat{b}\)，截距 \(\hat{a}\) 直接代入样本中心点秒解！</p>
   </div>
 
   <div class="card">
-    <p><b>残差平方和</b>：每个残差平方后加起来，记作 \(Q\)。它越小，直线离点越近。平方是为了让正负不抵消，也让大的偏差更「显眼」。</p>
-    <p>例：直线 \(y=x+2\) 在五个点处的残差是 \(-1,0,0,0,1\)，\(Q=1+0+0+0+1=2\)。直接相加是 \(0\)，看不出线画得好不好。</p>
+    <p><b>残差 \(e_i\) 与决定系数 \(R^2\)</b>：</p>
+    <p>• <b>残差</b>：真实观测值减去模型预测值：\(e_i = y_i - \hat{y}_i\)（点在线上方残差为正，在下方为负）；</p>
+    <p>• <b>决定系数 \(R^2\)</b>：模型解释因变量波动的能力占比，\(R^2\) 越接近 1，拟合精度越高（在一元线性回归中，恰好等于相关系数的平方：\(R^2 = r^2\)）。</p>
   </div>
 
-  <h3>2. 回归模型：\(y\) 由两部分组成</h3>
-  <p>同样身高的人，体重并不一样：还受饮食、运动、遗传、测量误差等影响。所以 \(y\) 不是 \(x\) 的函数，一元线性回归模型这样写：</p>
-  <div class="key" style="text-align:center">\(Y=bx+a+e\)，\(E(e)=0\)，\(D(e)=\sigma^2\)。</div>
-  <ul>
-    <li>\(bx+a\)：由 \(x\) 决定的「平均部分」；</li>
-    <li>\(e\)：随机误差，装着其他所有因素。它平均是 \(0\)，波动大小 \(\sigma^2\) 不随 \(x\) 变。</li>
-  </ul>
-  <p>\(b\)、\(a\) 是总体里的数，我们不知道。手里只有一组样本，用它算出的 \(\hat b\)、\(\hat a\) 是对 \(b\)、\(a\) 的<b>估计</b>，得到的 \(\hat y=\hat bx+\hat a\) 叫<b>经验回归方程</b>（它的图象叫经验回归直线）。模型是对总体的假设，经验回归方程是从样本算出来的，换一批样本，\(\hat b\)、\(\hat a\) 会变。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么说）</p>
-    <p>抽了 \(50\) 名男生，由身高 \(x\)（cm）算得体重的经验回归方程 \(\hat y=0.8x-80\)（kg）。</p>
-    <p>\(\hat b=0.8\) 的意思：身高每多 \(1\) cm，体重<b>平均</b>多约 \(0.8\) kg。\(x=170\) 时 \(\hat y=0.8\times170-80=56\)：身高 \(170\) cm 的男生，平均体重估计约 \(56\) kg。某个 \(170\) cm 的男生是 \(52\) kg 还是 \(61\) kg 都正常，那是 \(e\) 的部分。</p>
+  <!-- 伴读直觉微图解 -->
+  <div class="micro-box" id="micro-reg">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="font-weight:700; color:var(--primary); font-size:14px;">线性回归直觉微图解：最小二乘方块面积、样本中心枢轴与残差分析</span>
+      <div class="micro-tabs" id="m-reg-tabs">
+        <button class="micro-tab active" data-tab="1">① 最小二乘法：竖直残差方块面积最小</button>
+        <button class="micro-tab" data-tab="2">② 样本中心点 (x̄, ȳ) 的旋转枢轴</button>
+        <button class="micro-tab" data-tab="3">③ 残差图与决定系数 R²</button>
+      </div>
+    </div>
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+      <svg class="micro-fig" id="m-reg-fig" viewBox="0 0 620 220" style="width:100%; max-width:620px; height:auto; display:block; margin:0 auto;"></svg>
+    </div>
+    <div class="micro-desc" id="m-reg-desc" style="margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.55;">
+      加载中...
+    </div>
   </div>
+
+  <div class="concept-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
+    <div class="card" style="border-top:3px solid #1976d2; margin:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:#1976d2;">总体回归模型（理论真理）</b>
+        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:11px; padding:2px 8px; border-radius:10px;">不可直接测</span>
+      </div>
+      <p class="small" style="margin:0 0 4px 0;"><b>形式</b>：\(Y = bx + a + e\)。</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：宇宙规律本身，参数 \(a, b\) 恒定但未知，含随机误差项 \(e\)。</p>
+      <p class="small" style="margin:0;"><b>特质</b>：不同人抽样，估计出来的 \(\hat{b}\) 围绕真值 \(b\) 波动。</p>
+    </div>
+    <div class="card" style="border-top:3px solid #2e7d32; margin:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:#2e7d32;">经验回归方程（样本估计）</b>
+        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:2px 8px; border-radius:10px;">实践预报</span>
+      </div>
+      <p class="small" style="margin:0 0 4px 0;"><b>形式</b>：\(\hat{y} = \hat{b}x + \hat{a}\)。</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：带帽子表示估计值，由最小二乘法计算得出。</p>
+      <p class="small" style="margin:0;"><b>特质</b>：必定经过样本中心点 \((\bar{x}, \bar{y})\)，用于趋势外推预报。</p>
+    </div>
+  </div>
+
+  <h3>2. 经验回归主公式与残差计算法则</h3>
+  <div class="key" style="background:var(--card); border-left:4px solid var(--primary); padding:12px 16px; margin:14px 0;">
+    <p style="margin:0 0 8px 0; font-weight:700;">回归方程两步求法与核心公式：</p>
+    <p style="margin:0 0 6px 0;">经验回归方程：\(\hat{y} = \color{#1976d2}{\hat{b}}x + \color{#2e7d32}{\hat{a}}\)</p>
+    <p style="margin:0 0 6px 0;">第 1 步求斜率：\(\color{#1976d2}{\hat{b}} = \dfrac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \dfrac{\sum x_i y_i - n\bar{x}\bar{y}}{\sum x_i^2 - n\bar{x}^2}\)</p>
+    <p style="margin:0 0 6px 0;">第 2 步求截距（必过样本中心）：\(\color{#2e7d32}{\hat{a}} = \color{#ef4444}{\bar{y}} - \color{#1976d2}{\hat{b}}\color{#ef4444}{\bar{x}}\)</p>
+    <p style="margin:0;">残差定义式：\(e_i = \color{#1976d2}{y_i} - \color{#2e7d32}{\hat{y}_i} = \text{真实观测值} - \text{模型预报值}\)</p>
+  </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：关于例 1 里的 \(0.8\)，哪句对？</p>
     <div class="opts">
@@ -97,29 +148,6 @@
     <div class="reveal"><p><b>B</b>。\(\hat b\) 带帽子，是样本算出的估计值，样本一变它就变。A 把估计当成了总体参数；C 漏了「平均」：具体两个人之间，体重差多少还受 \(e\) 影响。</p></div>
   </div>
 
-  <h3>3. 最小二乘法：让 \(Q\) 最小</h3>
-  <p>直线 \(y=bx+a\) 的残差平方和是</p>
-  <div class="key" style="text-align:center">\(Q=\sum\limits_{i=1}^{n}(y_i-bx_i-a)^2\)</div>
-  <p>它随 \(b\)、\(a\) 变。让 \(Q\) 最小的那组 \(\hat b,\hat a\) 叫最小二乘估计。注意加的是<b>竖直方向</b>的差的平方，不是点到直线的距离。</p>
-  <p>为什么是下面的公式（只用二次函数）：</p>
-  <ul>
-    <li>先固定 \(b\)，\(Q\) 是 \(a\) 的二次函数，顶点在 \(a=\bar y-b\bar x\)。也就是说，最好的直线一定过样本中心 \((\bar x,\bar y)\)。</li>
-    <li>代回去，记 \(x_i-\bar x\)、\(y_i-\bar y\) 为每个数离平均的偏差，\(Q=b^2\sum(x_i-\bar x)^2-2b\sum(x_i-\bar x)(y_i-\bar y)+\sum(y_i-\bar y)^2\)，又是 \(b\) 的二次函数，顶点就是下面的 \(\hat b\)。</li>
-  </ul>
-  <div class="key">\(\hat b=\dfrac{\sum\limits_{i=1}^{n}(x_i-\bar x)(y_i-\bar y)}{\sum\limits_{i=1}^{n}(x_i-\bar x)^2}\)，\(\hat a=\bar y-\hat b\bar x\)。<br>要求 \(x_i\) 不全相同（否则分母是 \(0\)）。经验回归直线一定过 \((\bar x,\bar y)\)。</div>
-  <div class="card">
-    <p class="small">例 2（写全过程）</p>
-    <p>求五对数据 \((1,2),(2,4),(3,5),(4,6),(5,8)\) 的经验回归方程。</p>
-    <p>\(\bar x=3\)，\(\bar y=5\)。列表算偏差：</p>
-    <div class="tbl"><table class="rec">
-      <tr><th>\(x_i-\bar x\)</th><td>\(-2\)</td><td>\(-1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(2\)</td></tr>
-      <tr><th>\(y_i-\bar y\)</th><td>\(-3\)</td><td>\(-1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(3\)</td></tr>
-      <tr><th>乘积</th><td>\(6\)</td><td>\(1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(6\)</td></tr>
-      <tr><th>\((x_i-\bar x)^2\)</th><td>\(4\)</td><td>\(1\)</td><td>\(0\)</td><td>\(1\)</td><td>\(4\)</td></tr>
-    </table></div>
-    <p>\(\hat b=\dfrac{14}{10}=1.4\)，\(\hat a=5-1.4\times3=0.8\)，所以 \(\hat y=1.4x+0.8\)。</p>
-    <p>检查：五个残差是 \(-0.2,\ 0.4,\ 0,\ -0.4,\ 0.2\)，\(Q=0.04+0.16+0+0.16+0.04=0.4\)，比随手画的 \(y=x+2\) 的 \(Q=2\) 小得多。</p>
-  </div>
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：一组数据 \(\bar x=4\)，\(\bar y=10\)，算得 \(\hat b=2\)。\(\hat a\) 是？</p>
     <div class="opts cols">
@@ -131,14 +159,6 @@
     <div class="reveal"><p><b>A</b>。\(\hat a=\bar y-\hat b\bar x=10-2\times4=2\)。可以验：\(x=4\) 时 \(\hat y=2\times4+2=10=\bar y\)，直线过样本中心。选 B 的同学把减号写成了加号；选 C 的同学忘了乘 \(\hat b\)。</p></div>
   </div>
 
-  <h3>4. 用来预测，再看残差</h3>
-  <p>有了 \(\hat y=\hat bx+\hat a\)，把 \(x\) 代进去就是估计。算完还要回头看残差：如果残差在 \(0\) 上下乱跳、没有规律，说明直线模型还行；如果残差呈现明显的规律（比如先正后负再正），说明数据其实是弯的，直线不合适。</p>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>用例 2 的 \(\hat y=1.4x+0.8\) 估计 \(x=3.5\) 时的 \(y\)，并看残差。</p>
-    <p>\(\hat y=1.4\times3.5+0.8=5.7\)：\(x=3.5\) 时，\(y\) 平均约 \(5.7\)。\(3.5\) 在数据的 \(x\) 范围 \([1,5]\) 里面，这个估计比较放心。</p>
-    <p>残差依次 \(-0.2,\ 0.4,\ 0,\ -0.4,\ 0.2\)：有正有负、大小都小，看不出规律，直线合适。</p>
-  </div>
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：经验回归方程 \(\hat y=0.5x+3\)，数据点 \((4,6)\) 的残差是？</p>
     <div class="opts cols">
@@ -150,23 +170,70 @@
     <div class="reveal"><p><b>A</b>。\(\hat y=0.5\times4+3=5\)，残差 \(=y-\hat y=6-5=1\)，点在直线上方。选 B 是减反了（残差是「真实减预测」）；选 C 只算了预测值。</p></div>
   </div>
 
-  <h3>5. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>\(x\) 不能全相同</b>：\(\hat b\) 的分母 \(\sum(x_i-\bar x)^2\) 会是 \(0\)。<br><span class="small">反例：\((2,1),(2,3),(2,5)\)，\(x\) 一直是 \(2\)，看不出 \(y\) 怎样随 \(x\) 变，算不出经验回归方程。</span></li>
-    <li><b>\(Q\) 量的是竖直偏差</b>，不是点到直线的距离。<br><span class="small">反例：点 \((0,1)\) 和直线 \(y=x\)：竖直方向差 \(1\)，到直线的距离是 \(\dfrac{1}{\sqrt2}\approx0.71\)。两种标准挑出的直线一般不一样。</span></li>
-    <li><b>先看散点图，算完看残差</b>：数据弯的时候，硬拟合直线也能算出数来。<br><span class="small">反例：\((1,1),(2,4),(3,9),(4,16),(5,25)\) 算得 \(\hat y=6x-7\)，残差 \(2,-1,-2,-1,2\)：两头正、中间负，规律明显，直线不合适。</span></li>
-    <li><b>预测是平均趋势，也不能随便外推</b>。<br><span class="small">反例：用 \(7\)～\(12\) 岁孩子的数据得到身高 \(\hat y=6x+76\)（cm）。代 \(x=25\) 得 \(226\) cm，荒唐：成年后身高不再这样涨，数据范围外直线规律不一定还在。</span></li>
-    <li><b>反过来估计要重新拟合</b>：想用 \(y\) 估计 \(x\)，要把 \(y\) 当解释变量重新做最小二乘，不能把原方程反解。<br><span class="small">反例：\((1,1),(2,3),(3,2)\) 的 \(\hat y=0.5x+1\)，反解得 \(x=2y-2\)；重新拟合得 \(\hat x=0.5y+1\)。两条线差很多。</span></li>
-  </ol>
-  <div class="key">经验回归方程给的是「平均来说大约多少」：只在数据范围附近、散点和残差都支持直线时才可信。</div>
+  <div class="vid" data-video="ex2"></div>
 
-  <details class="more">
-    <summary>再深一点（可以先跳过）</summary>
-    <p><b>决定系数 \(R^2\)</b>：\(R^2=1-\dfrac{\sum(y_i-\hat y_i)^2}{\sum(y_i-\bar y)^2}\)。分母是 \(y\) 本身的总波动，分子是直线解释不了的部分，\(R^2\) 越接近 \(1\)，拟合越好。例 2 里 \(\sum(y_i-\bar y)^2=20\)，\(R^2=1-\dfrac{0.4}{20}=0.98\)。但 \(R^2\) 高不等于直线合适：上面 \(y=x^2\) 那组的 \(R^2\) 也有约 \(0.96\)，残差却有明显规律。</p>
-    <p><b>\(\hat b\) 和相关系数 \(r\) 同号</b>：两者分子都是 \(\sum(x_i-\bar x)(y_i-\bar y)\)，分母都是正数。\(r>0\) 时直线向上，\(r&lt;0\) 时向下。</p>
-    <p><b>两条回归直线</b>：\(y\) 对 \(x\) 的斜率乘 \(x\) 对 \(y\) 的斜率等于 \(r^2\)。只有所有点都在一条直线上（\(|r|=1\)）时，反解才和重新拟合一样。</p>
-    <p><b>弯的数据怎么办</b>：比如散点像指数增长，可以先对 \(y\) 取对数，令 \(z=\ln y\)，看 \((x,z)\) 是否接近直线，再对 \(z\) 用最小二乘。要说明为什么这样变换、注意 \(y>0\) 才能取对数，最后照样看残差。</p>
-  </details>
+  <h3>3. 三步破题思维链例题</h3>
+  <div class="card" style="border-left:4px solid #10b981;">
+    <p><b>典型例题</b>：已知某成对样本数据满足：\(\bar{x} = 5,\; \bar{y} = 12\)，且 \(\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y}) = 30,\; \sum_{i=1}^n (x_i - \bar{x})^2 = 15\)。<br>
+    ① 求 \(y\) 关于 \(x\) 的经验回归方程；<br>
+    ② 预测当自变量 \(x = 10\) 时，\(y\) 的预报值；<br>
+    ③ 样本中包含一个数据点 \((4, 11)\)，求该点的残差 \(e\)。</p>
+    <div class="think-steps" style="margin-top:10px;">
+      <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #2563eb;">
+        <b style="color:#2563eb;">👀 第一眼破题信号</b>：
+        <span class="small">解题顺序铁律：<b>先算斜率 \(\hat{b}\)，再代入样本中心点 \((\bar{x}, \bar{y})\) 求截距 \(\hat{a}\)</b>！预报值代入 \(x=10\) 即可；残差严格执行「实际值减去预测值 \(y - \hat{y}\)」。</span>
+      </div>
+      <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #10b981;">
+        <b style="color:#10b981;">🔧 第二步套公式标准化求解</b>：
+        <div class="small" style="margin-top:4px;">
+          • <b>① 求经验回归方程</b>：<br>
+          斜率：\(\hat{b} = \dfrac{30}{15} = 2\)；<br>
+          截距（代入中心点）：\(\hat{a} = \bar{y} - \hat{b}\bar{x} = 12 - 2 \times 5 = 2\)；<br>
+          所求经验回归方程为：\(\hat{y} = 2x + 2\)。<br>
+          • <b>② 预报代入</b>：<br>
+          当 \(x = 10\) 时，\(\hat{y} = 2 \times 10 + 2 = 22\)；<br>
+          • <b>③ 计算点 \((4, 11)\) 的残差</b>：<br>
+          当 \(x = 4\) 时，预测值为 \(\hat{y} = 2 \times 4 + 2 = 10\)；<br>
+          残差为：\(e = y - \hat{y} = 11 - 10 = +1\)。
+        </div>
+      </div>
+      <div class="think-step" style="padding-left:12px; border-left:2px solid #f59e0b;">
+        <b style="color:#f59e0b;">🛡️ 第三步防坑结论核查</b>：
+        <span class="small">核查 1：验证中心点 \((\bar{x}, \bar{y}) = (5, 12)\) 代入方程 \(2 \times 5 + 2 = 12\)，完全成立！核查 2：点 \((4, 11)\) 纵坐标 11 高于直线的预测值 10，点在直线上方，残差必为正数 \(+1\)，切勿算成 \(10 - 11 = -1\)。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="vid" data-video="ex1"></div>
+
+  <h3>4. 三大翻车现场红绿对比卡</h3>
+  <div class="trap-grid" style="display:grid; grid-template-columns:1fr; gap:12px; margin:14px 0;">
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 1：残差减法方向颠倒，正负号搞反</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：真实值是 6，模型预测是 5，残差写成 \(5 - 6 = -1\)。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：<b>残差公式永远是「真实观测值减去模型估计值」：\(e = y - \hat{y}\)</b>！真实值 6 高于预测值 5，点在直线上方，残差必须为正数 \(+1\)。</p>
+    </div>
+
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 2：解截距时忘了移项符号，误写成 \(\hat{a} = \bar{y} + \hat{b}\bar{x}\)</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：\(\bar{x}=4, \bar{y}=10, \hat{b}=2\)，算截距写成 \(10 + 2\times 4 = 18\)。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：由 \(\bar{y} = \hat{b}\bar{x} + \hat{a}\) 移项得 <b>\(\hat{a} = \bar{y} - \hat{b}\bar{x}\)</b>，中间是减号！正确答案是 \(10 - 2\times 4 = 2\)。算完必须把 \((\bar{x}, \bar{y})\) 代入验算一次。</p>
+    </div>
+
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 3：把统计估计当成确定数值，或无节制远距离外推</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：由体重身高模型算出 \(\hat{y} = 0.8x - 85\)，得出「身高多 1 cm 的人体重一定正好重 0.8 kg」的确定性断言。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：线性回归是<b>统计平均趋势</b>，每个个体身上都存在随机误差 \(e\)，只能说「身高增加 1 cm，体重平均增加约 0.8 kg」。同时不能把婴儿或姚明的身高代入该经验模型进行无度外推。</p>
+    </div>
+  </div>
+
+  <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:12px 0;">
+    <div style="font-weight:700; font-size:12.5px; color:var(--fg); margin-bottom:6px;">反例微图解：最小二乘准则（竖直残差方块面积之和最小）直觉示意</div>
+    <svg class="micro-fig" id="m-reg-trap-fig" viewBox="0 0 540 140" style="width:100%; max-width:540px; height:auto; display:block; margin:0 auto;"></svg>
+    <div style="font-size:11.5px; color:var(--muted); margin-top:4px; text-align:center;">
+      最小二乘度量的是竖直方向的偏差平方（拼成方块面积），寻找一条让所有残差方块面积总和最小的直线。
+    </div>
+  </div>
 </section>
 
 <section class="step" data-title="动手">
@@ -529,8 +596,218 @@
   });
   $("resreset").onclick = resReset;
 
-  document.addEventListener("DOMContentLoaded", function () { regReset(); resReset(); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { regDraw(); resDraw(); });
+  /* ================= 0 从例子进入：5天冰棍销量与30℃回归预测 ================= */
+  var erSvg = $("entry-reg"), erBar = $("entry-reg-bar"), erNote = $("entry-reg-note");
+  var erMode = "pred";
+  var POP_PTS = [[20, 40], [22, 46], [24, 50], [26, 55], [28, 59]];
+  function erDraw(mode) {
+    erMode = mode;
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    erSvg.innerHTML = "";
+    var x0 = 56, x1 = 478, y0 = 172, y1 = 22;
+    function rx(t) { return x0 + (t - 19) / 12 * (x1 - x0); }
+    function ry(v) { return y0 - (v - 35) / 33 * (y0 - y1); }
+
+    [40, 50, 60].forEach(function (v) {
+      svg("line", { x1: x0, y1: ry(v), x2: x1, y2: ry(v), stroke: ln }, erSvg);
+      svg("text", { x: x0 - 8, y: ry(v) + 4, "text-anchor": "end", fill: mu, "font-size": 12 }, erSvg).textContent = v + "根";
+    });
+    [20, 22, 24, 26, 28, 30].forEach(function (t) {
+      svg("line", { x1: rx(t), y1: y0, x2: rx(t), y2: y0 + 5, stroke: t === 30 ? hl : fg }, erSvg);
+      svg("text", { x: rx(t), y: y0 + 20, "text-anchor": "middle", fill: t === 30 ? hl : fg, "font-weight": t === 30 ? 700 : 400, "font-size": 12.5 }, erSvg).textContent = t + (t === 30 ? "℃(明)" : "℃");
+    });
+    svg("line", { x1: x0, y1: y0, x2: x1 + 12, y2: y0, stroke: fg, "stroke-width": 1.6 }, erSvg);
+    svg("line", { x1: x0, y1: y0, x2: x0, y2: y1 - 6, stroke: fg, "stroke-width": 1.6 }, erSvg);
+
+    if (mode === "pred") {
+      // 拟合线 y = 2.35x - 6.4：20->40.6, 28->59.4, 30->64.1
+      svg("line", { x1: rx(20), y1: ry(40.6), x2: rx(28), y2: ry(59.4), stroke: ca, "stroke-width": 2.6 }, erSvg);
+      svg("line", { x1: rx(28), y1: ry(59.4), x2: rx(30), y2: ry(64.1), stroke: hl, "stroke-width": 2.8, "stroke-dasharray": "6 4" }, erSvg);
+      var px30 = rx(30), py30 = ry(64.1);
+      svg("line", { x1: px30, y1: y0, x2: px30, y2: py30, stroke: hl, "stroke-width": 1.8, "stroke-dasharray": "4 3" }, erSvg);
+      svg("line", { x1: x0, y1: py30, x2: px30, y2: py30, stroke: hl, "stroke-width": 1.5, "stroke-dasharray": "4 3" }, erSvg);
+      svg("circle", { cx: px30, cy: py30, r: 7.5, fill: hl, stroke: card, "stroke-width": 2 }, erSvg);
+      svg("rect", { x: px30 - 118, y: py30 - 12, width: 108, height: 24, rx: 6, fill: okS, stroke: hl, "stroke-width": 1.6 }, erSvg);
+      svg("text", { x: px30 - 64, y: py30 + 4, "text-anchor": "middle", fill: fg, "font-size": 12.5, "font-weight": 700 }, erSvg).textContent = "预测 ≈ 64 根";
+    } else {
+      svg("text", { x: rx(30), y: ry(52), "text-anchor": "middle", fill: hl, "font-size": 18, "font-weight": 700 }, erSvg).textContent = "？";
+    }
+
+    POP_PTS.forEach(function (pt) {
+      var px = rx(pt[0]), py = ry(pt[1]);
+      svg("circle", { cx: px, cy: py, r: 6, fill: ca, stroke: card, "stroke-width": 2 }, erSvg);
+      var ty = (mode === "pred" && pt[0] === 28) ? (py + 18) : (py - 10);
+      svg("text", { x: px, y: ty, "text-anchor": "middle", fill: fg, "font-size": 12.5, "font-weight": 700 }, erSvg).textContent = pt[1];
+    });
+
+    [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (mode === "pts") {
+      erNote.innerHTML = "前 5 天散点：气温每升高 <b>2℃</b>，冰棍销量分别增加 <b>+6, +4, +5, +4 根</b>（平均每 2℃ 多卖约 5 根）。";
+    } else {
+      erNote.innerHTML = "回归趋势线延伸预测：顺着最贴近这 5 个点的直线延伸到 <b>30℃</b>，对应的预测销量约为 <b>64 根</b>！";
+    }
+  }
+  [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { erDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      erDraw("pred");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erDraw("pred");
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { erDraw("pred"); regReset(); resReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { erDraw(erMode); regDraw(); resDraw(); });
 })();
+
+  // === e3-8-2 Micro-box & Trap Interactive Script ===
+  (function () {
+    var fig = document.getElementById("m-reg-fig");
+    var desc = document.getElementById("m-reg-desc");
+    var trapFig = document.getElementById("m-reg-trap-fig");
+    var tabs = document.querySelectorAll("#m-reg-tabs .micro-tab");
+    if (!fig || !desc) return;
+
+    function el(t, a, txt) {
+      var e = document.createElementNS("http://www.w3.org/2000/svg", t);
+      for (var k in a) e.setAttribute(k, a[k]);
+      if (txt) e.textContent = txt;
+      return e;
+    }
+
+    function drawTab1() {
+      fig.innerHTML = "";
+      // Tab 1: 最小二乘法：竖直残差方块面积之和最小
+      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "最小二乘法准则：每个数据点的垂直残差 eᵢ = yᵢ - ŷᵢ，拼成方块面积总和最小"));
+
+      // Regression line: from (80, 160) to (520, 50)
+      fig.appendChild(el("line", {x1: 60, y1: 165, x2: 540, y2: 45, stroke: "#1976d2", "stroke-width": "2.5"}));
+      fig.appendChild(el("text", {x: 520, y: 35, "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "ŷ = bx + a"));
+
+      // Data points & residual squares
+      // Line equation: y_line(x) = 165 - (x-60)*(120/480) = 165 - (x-60)*0.25
+      var pts = [
+        {x: 140, y: 115}, // line is 165 - 80*0.25 = 145 -> residual = 115 - 145 = -30 (above)
+        {x: 240, y: 140}, // line is 165 - 180*0.25 = 120 -> residual = 140 - 120 = +20 (below)
+        {x: 360, y: 65},  // line is 165 - 300*0.25 = 90 -> residual = 65 - 90 = -25 (above)
+        {x: 460, y: 80}   // line is 165 - 400*0.25 = 65 -> residual = 80 - 65 = +15 (below)
+      ];
+
+      pts.forEach(function(p, idx) {
+        var lineY = 165 - (p.x - 60) * 0.25;
+        var diff = Math.abs(p.y - lineY);
+
+        // Vertical residual line
+        fig.appendChild(el("line", {x1: p.x, y1: p.y, x2: p.x, y2: lineY, stroke: "#ef4444", "stroke-width": "1.5"}));
+
+        // Residual square box
+        var sqX = p.x;
+        var sqY = Math.min(p.y, lineY);
+        fig.appendChild(el("rect", {x: sqX, y: sqY, width: diff, height: diff, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": "1", opacity: "0.6"}));
+
+        // Point dot
+        fig.appendChild(el("circle", {cx: p.x, cy: p.y, r: 4.5, fill: "#10b981"}));
+      });
+
+      fig.appendChild(el("text", {x: 310, y: 205, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "Q = ∑ eᵢ² = 红色正方形面积总和 ➔ 最小二乘法使 Q 达到全域极小值"));
+      desc.innerHTML = "<b>① 最小二乘法几何本质</b>：高斯并不是最小化点到直线的垂线距离，而是度量<b>竖直方向上的预测误差 \(e_i = y_i - \hat{y}_i\)</b>。将每个残差画成一个正方形，经验回归直线恰好是让所有这些红色方块的面积之和达到全局最小的那条最优直线。";
+    }
+
+    function drawTab2() {
+      fig.innerHTML = "";
+      // Tab 2: 样本中心点 (x̄, ȳ) 旋转枢轴
+      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "样本中心点 (x̄, ȳ) 是定海神针：无论斜率如何旋转，回归直线必然经过它"));
+
+      var cx = 310, cy = 110;
+
+      // Axis lines crossing at center
+      fig.appendChild(el("line", {x1: 80, y1: cy, x2: 540, y2: cy, stroke: "var(--line)", "stroke-width": "1.2", "stroke-dasharray": "3 3"}));
+      fig.appendChild(el("line", {x1: cx, y1: 35, x2: cx, y2: 185, stroke: "var(--line)", "stroke-width": "1.2", "stroke-dasharray": "3 3"}));
+
+      // Candidate lines through center
+      fig.appendChild(el("line", {x1: cx - 180, y1: cy + 60, x2: cx + 180, y2: cy - 60, stroke: "#1976d2", "stroke-width": "2.5"}));
+      fig.appendChild(el("line", {x1: cx - 180, y1: cy + 30, x2: cx + 180, y2: cy - 30, stroke: "#9ca3af", "stroke-width": "1.2", "stroke-dasharray": "4 2"}));
+      fig.appendChild(el("line", {x1: cx - 180, y1: cy + 90, x2: cx + 180, y2: cy - 90, stroke: "#9ca3af", "stroke-width": "1.2", "stroke-dasharray": "4 2"}));
+
+      // Center Point
+      fig.appendChild(el("circle", {cx: cx, cy: cy, r: 8, fill: "#ef4444"}));
+      fig.appendChild(el("text", {x: cx, y: cy - 14, "text-anchor": "middle", "font-size": "12.5", "font-weight": "700", fill: "#ef4444"}, "样本中心 (x̄, ȳ) 必过！"));
+
+      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "解题捷径：已知 b̂，截距 â = ȳ - b̂x̄ 代入中心点坐标秒杀！"));
+      desc.innerHTML = "<b>② 样本中心点旋转枢轴</b>：由最小二乘一阶导数方程可严格证明，残差之和 \(\sum e_i = 0\)，这必然导致回归直线穿过数据几何重心 \((\bar{x}, \bar{y})\)。在高考做题中，只要看到题目给出平均值，就意味着得到了直线上的一对现成坐标点！";
+    }
+
+    function drawTab3() {
+      fig.innerHTML = "";
+      // Tab 3: 残差图与决定系数 R^2
+      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "残差分析与 R²：残差在 0 刻度线两侧均匀带状分布，说明线性模型拟合优良"));
+
+      var baseCy = 110;
+      fig.appendChild(el("line", {x1: 60, y1: baseCy, x2: 560, y2: baseCy, stroke: "#1976d2", "stroke-width": "1.8"}));
+      fig.appendChild(el("text", {x: 75, y: baseCy - 6, "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "残差 e = 0 基准线"));
+
+      // Band lines
+      fig.appendChild(el("line", {x1: 60, y1: baseCy - 35, x2: 560, y2: baseCy - 35, stroke: "var(--line)", "stroke-width": "1", "stroke-dasharray": "2 2"}));
+      fig.appendChild(el("line", {x1: 60, y1: baseCy + 35, x2: 560, y2: baseCy + 35, stroke: "var(--line)", "stroke-width": "1", "stroke-dasharray": "2 2"}));
+      fig.appendChild(el("text", {x: 520, y: baseCy - 40, "font-size": "10", fill: "var(--muted)"}, "+水平边界"));
+      fig.appendChild(el("text", {x: 520, y: baseCy + 45, "font-size": "10", fill: "var(--muted)"}, "-水平边界"));
+
+      // Random residual dots
+      var rVals = [-15, 20, -8, 12, -22, 18, -10, 5, -14, 24, -18, 8];
+      rVals.forEach(function(rv, i) {
+        var x = 110 + i * 36;
+        var y = baseCy - rv;
+        fig.appendChild(el("line", {x1: x, y1: baseCy, x2: x, y2: y, stroke: "#ef4444", "stroke-width": "1"}));
+        fig.appendChild(el("circle", {cx: x, cy: y, r: 3.5, fill: "#ef4444"}));
+      });
+
+      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "决定系数 R² = 1 - (∑eᵢ² / ∑(yᵢ-ȳ)²)；带状无弯曲分布表示无需改用曲线模型"));
+      desc.innerHTML = "<b>③ 残差图与决定系数直觉</b>：画出每个样本点的残差图。如果所有残差在水平零线上下均匀、随机散布在一个狭窄水平带内，说明线性模型非常健康；若残差呈现喇叭口或 U 型弯曲，则预示需要改用指数或二次曲线模型。\(R^2\) 越逼近 1，模型拟合精度越高。";
+    }
+
+    function drawTrap() {
+      if (!trapFig) return;
+      trapFig.innerHTML = "";
+      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "正确：竖直残差平方和最小"));
+      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#ef4444"}, "误解：点到直线的垂线距离"));
+
+      // Left: vertical distance
+      trapFig.appendChild(el("line", {x1: 40, y1: 110, x2: 230, y2: 50, stroke: "#1976d2", "stroke-width": "2"}));
+      trapFig.appendChild(el("circle", {cx: 130, cy: 50, r: 4, fill: "#10b981"}));
+      trapFig.appendChild(el("line", {x1: 130, y1: 50, x2: 130, y2: 82, stroke: "#ef4444", "stroke-width": "2"}));
+      trapFig.appendChild(el("text", {x: 145, y: 70, "font-size": "10.5", "font-weight": "700", fill: "#ef4444"}, "竖直偏差 eᵢ"));
+      trapFig.appendChild(el("text", {x: 140, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "因变量预测误差 yᵢ - ŷᵢ"));
+
+      // Separator
+      trapFig.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 135, stroke: "var(--line)", "stroke-width": "1"}));
+
+      // Right: perpendicular distance
+      trapFig.appendChild(el("line", {x1: 310, y1: 110, x2: 500, y2: 50, stroke: "#1976d2", "stroke-width": "2"}));
+      trapFig.appendChild(el("circle", {cx: 400, cy: 50, r: 4, fill: "#ef4444"}));
+      trapFig.appendChild(el("line", {x1: 400, y1: 50, x2: 385, y2: 85, stroke: "#ef4444", "stroke-width": "1.5", "stroke-dasharray": "2 2"}));
+      trapFig.appendChild(el("text", {x: 415, y: 72, "font-size": "10", fill: "#ef4444"}, "倾斜垂距"));
+      trapFig.appendChild(el("text", {x: 400, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "普通最小二乘法不量测垂线距离！"));
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        tabs.forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        var idx = tab.getAttribute("data-tab");
+        if (idx === "1") drawTab1();
+        else if (idx === "2") drawTab2();
+        else if (idx === "3") drawTab3();
+      });
+    });
+
+    drawTab1();
+    drawTrap();
+  })();
+
 </script>
 </body></html>

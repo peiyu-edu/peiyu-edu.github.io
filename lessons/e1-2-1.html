@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--a); font-weight: 700; }
@@ -26,8 +28,14 @@
 <p class="lead">一条直线有多「斜」？可以用一个角说，也可以用一个数说。有了这个数，两条直线平不平行、垂不垂直，算一算就知道。先从坡道开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>四段坡道，量了每段「水平走了多远」和「升高了多少」：</p>
+  <p>四段坡道，量了每段「水平走了多远」和「升高了多少」。先点按钮切换「分开看」与「叠到同一起点」，比一比哪段最陡：</p>
   <div class="card predict" data-id="entry" data-answer="C">
+    <svg class="entry-fig" id="entry-ramp" viewBox="0 0 520 195" role="img" aria-label="四段直角三角形坡道A、B、C、D的水平距离与升高高度对比图"></svg>
+    <div class="entry-bar" id="entry-ramp-bar">
+      <button type="button" data-mode="split" class="on">分开看四段坡道</button>
+      <button type="button" data-mode="stack">叠到同一起点比陡缓（一眼看出 C 最陡！）</button>
+    </div>
+    <div class="entry-note" id="entry-ramp-note"></div>
     <p>哪一段最陡？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>水平 \(10\) 米，升高 \(2\) 米</button>
@@ -44,29 +52,56 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：任意角和正切 \(\tan\alpha\)，以及 \(30^\circ,45^\circ,60^\circ,120^\circ,135^\circ,150^\circ\) 的正切值（<a href="b1-5-2.html">回看 5.2 三角函数的概念</a>）；坐标系里两点的坐标差（<a href="b2-6-3.html">回看 6.3 向量的坐标表示</a>）。</p>
+  <p class="small">要用到：任意角和正切 \(\tan\alpha\)，以及 \(30^\circ,45^\circ,60^\circ,120^\circ,135^\circ,150^\circ\) 的正切值（<a href="b1-5-2.html">回看 5.2</a>）；坐标系里两点的坐标差（<a href="b2-6-3.html">回看 6.3</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：斜率 \(k=\tan\alpha\) 只适用于非竖直直线；竖直线的斜率不存在，判平行或垂直时要单独处理。</p></div>
 
-  <div class="card">
-    <p><b>倾斜角</b>：直线和 \(x\) 轴相交时，从 \(x\) 轴的<b>正方向</b>出发，绕交点<b>逆时针</b>转，转到和直线重合，转过的最小角叫倾斜角，记作 \(\alpha\)。和 \(x\) 轴平行或重合的直线，规定 \(\alpha=0^\circ\)。</p>
-    <p>例：\(y=x\) 这条线往右上走，倾斜角 \(45^\circ\)；\(y=-x\) 往右下走，从 \(x\) 轴正方向逆时针转 \(135^\circ\) 才和它重合，倾斜角是 \(135^\circ\)，不是 \(45^\circ\)。</p>
-    <p>转半圈 \(180^\circ\) 直线就回到原样了，所以倾斜角只在 \(0^\circ\le\alpha&lt;180^\circ\) 里取，即 \(\alpha\in[0,\pi)\)。</p>
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：倾斜角、斜率与两线几何位置判定</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="angle">① 倾斜角与斜率对应</button>
+      <button type="button" class="micro-tab" data-mode="coord">② 两点斜率几何比值</button>
+      <button type="button" class="micro-tab" data-mode="pos">③ 平行与垂直判定</button>
+    </div>
+    <svg id="m-slope-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="直线的倾斜角与斜率几何直观"></svg>
+    <div class="micro-caption" id="m-slope-cap"></div>
   </div>
 
   <div class="card">
-    <p><b>正切</b>：\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}\)，在 \(\cos\alpha\ne0\) 时才有意义。</p>
-    <p>例：\(\tan45^\circ=1\)，\(\tan60^\circ=\sqrt3\)，\(\tan120^\circ=-\sqrt3\)，\(\tan135^\circ=-1\)。而 \(\cos90^\circ=0\)，\(\tan90^\circ\) 没有意义。</p>
+    <p><b>倾斜角</b>：直线和 \(x\) 轴相交时，从 \(x\) 轴的<b>正方向</b>出发，绕交点<b>逆时针</b>转，转到和直线重合，转过的最小角叫倾斜角，记作 \(\alpha\)。和 \(x\) 轴平行或重合的直线，规定 \(\alpha=0^\circ\)。范围恒为 \(\alpha\in[0^\circ,180^\circ)\)。</p>
+    <p>例：\(y=x\) 往右上走，\(\alpha=45^\circ\)；\(y=-x\) 往右下走，逆时针转 \(135^\circ\)，\(\alpha=135^\circ\)（绝非 \(45^\circ\)）。</p>
   </div>
 
   <div class="card">
-    <p><b>竖直线、水平线</b>：所有点横坐标都一样的直线是竖直线，倾斜角 \(90^\circ\)；所有点纵坐标都一样的是水平线，倾斜角 \(0^\circ\)。</p>
-    <p>例：过 \((2,1)\) 和 \((2,5)\) 的直线是竖直线（横坐标都是 \(2\)）；过 \((-1,3)\) 和 \((4,3)\) 的是水平线（纵坐标都是 \(3\)）。</p>
+    <p><b>正切与斜率</b>：\(\alpha\ne90^\circ\) 时，定义斜率 \(k=\tan\alpha\)。\(\alpha=90^\circ\) 时 \(\cos 90^\circ=0\)，<b>斜率不存在</b>。</p>
+    <p>例：\(\tan 45^\circ=1\)，\(\tan 120^\circ=-\sqrt{3}\)；竖直线 \(x=2\) 斜率不存在，切忌称「无穷大」。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">存在辨析</span> 倾斜角 \(\alpha\) 恒存在 vs 斜率 \(k\) 的定义域盲区</div>
+      <p><b>倾斜角</b>：平面内<b>任何直线</b>都有唯一确定的倾斜角，\(\alpha \in [0^\circ, 180^\circ)\)。水平线 \(\alpha=0^\circ\)，竖直线 \(\alpha=90^\circ\)。</p>
+      <p><b>斜率</b>：\(k=\tan\alpha\)。只有当 \(\alpha \ne 90^\circ\) 时斜率才存在！竖直线与 \(x\) 轴垂直，<b>斜率不存在</b>。</p>
+      <p class="small">警惕：做题遇到「设直线方程」时，切忌直接设 \(y=kx+b\)，必须优先讨论「斜率不存在（竖直线）」！</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">关系辨析</span> 斜率相等 vs 两线平行；乘积为 \(-1\) vs 两线垂直</div>
+      <p><b>两线平行</b>：若斜率存在，\(l_1\parallel l_2 \iff k_1=k_2\) <b>且两线不重合</b>！若两线均垂直于 \(x\) 轴且不重合，同样平行。</p>
+      <p><b>两线垂直</b>：若斜率均存在，\(l_1\perp l_2 \iff k_1k_2=-1\)。若一条为水平线（\(k=0\)）、一条为竖直线（斜率不存在），依然垂直！</p>
+      <p class="small">口诀：算平行谨防重合漏验，算垂直不忘一横一竖。</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.8;">
+    两点斜率公式：\(k = \dfrac{\color{#2563eb}{y_2 - y_1}}{\color{#059669}{x_2 - x_1}} = \tan\alpha \quad (x_1 \ne x_2, \alpha \ne 90^\circ)\)<br>
+    平行与垂直判定：\(l_1\parallel l_2 \iff \color{#2563eb}{k_1 = k_2} \text{（且不重合）；}\quad l_1\perp l_2 \iff \color{#dc2626}{k_1 k_2 = -1} \quad (k_1, k_2 \text{ 存在})\)
   </div>
 
   <h3>2. 斜率：倾斜角的正切</h3>
   <p>倾斜角 \(\alpha\ne90^\circ\) 时，把 \(\tan\alpha\) 叫这条直线的<b>斜率</b>，记作 \(k\)。</p>
   <div class="key">\(k=\tan\alpha\)（\(\alpha\ne90^\circ\)）。\(\alpha=90^\circ\) 的竖直线，斜率不存在。</div>
-  <p>为什么用正切：在直线上往右走 \(1\)，竖直方向变了多少，就是 \(\tan\alpha\)——这正是坡道里「升高 ÷ 水平」的那个比。\(\alpha\) 在 \(0^\circ\) 到 \(90^\circ\) 之间，直线往右上走，\(k>0\)；在 \(90^\circ\) 到 \(180^\circ\) 之间，往右下走，\(k&lt;0\)；水平线 \(k=0\)。</p>
+  <p>为什么用正切：在直线上往右走 \(1\)，竖直方向变了多少，就是 \(\tan\alpha\)——这正是坡道里「升高 ÷ 水平」的那个比。\(\alpha\) 在 \(0^\circ\) 到 \(90^\circ\) 之间，直线往右上走，\(k&gt;0\)；在 \(90^\circ\) 到 \(180^\circ\) 之间，往右下走，\(k&lt;0\)；水平线 \(k=0\)。</p>
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>(1) 倾斜角 \(120^\circ\) 的直线，斜率是多少？(2) 斜率为 \(1\) 的直线，倾斜角是多少？</p>
@@ -83,6 +118,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。\(\tan150^\circ=-\tan30^\circ=-\dfrac{\sqrt3}{3}\)。\(150^\circ\) 比 \(90^\circ\) 大，直线往右下走，斜率一定是负的，A 不对；C 是 \(\tan120^\circ\)，把 \(30^\circ\) 和 \(60^\circ\) 记混了。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 已知两点，求斜率</h3>
   <p>直线过 \(P_1(x_1,y_1)\)、\(P_2(x_2,y_2)\)，从 \(P_1\) 走到 \(P_2\)，横向走了 \(x_2-x_1\)，竖向走了 \(y_2-y_1\)。两者的比就是斜率：</p>
@@ -104,6 +140,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。\(k=\dfrac{5-(-1)}{-1-2}=\dfrac{6}{-3}=-2\)。选 A 的同学分子用了 \(Q\) 减 \(P\)、分母用了 \(P\) 减 \(Q\)，顺序没对齐；选 C 是把横纵坐标的差上下放反了。</p></div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 用斜率判断平行</h3>
   <p>两条直线平行，它们的倾斜角相等；倾斜角都不是 \(90^\circ\) 时，正切也相等，就是斜率相等。反过来，斜率相等则倾斜角相等，两条线方向一样——但方向一样的可能是<b>同一条线</b>。</p>
@@ -144,19 +181,79 @@
     <div class="reveal"><p><b>B</b>。\(-3\cdot k_2=-1\)，\(k_2=\dfrac13\)。垂直的斜率是「倒数再变号」：选 C 只取了倒数，选 A 只变了号，选 D 是平行时的斜率。</p></div>
   </div>
 
-  <h3>6. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>倾斜角只在 \([0^\circ,180^\circ)\) 里</b>。<br><span class="small">反例：「水平线的倾斜角是 \(180^\circ\)」不对，规定是 \(0^\circ\)；\(\tan\alpha=1\) 也只能得 \(\alpha=45^\circ\)，不能写 \(225^\circ\)。</span></li>
-    <li><b>每条直线都有倾斜角，但不一定有斜率</b>：\(\alpha=90^\circ\) 时斜率不存在。<br><span class="small">反例：竖直线 \(x=2\) 倾斜角是 \(90^\circ\)，\(\tan90^\circ\) 没有意义，它没有斜率。说「斜率无穷大」也不对，是「不存在」。</span></li>
-    <li><b>两点公式要 \(x_1\ne x_2\)</b>。<br><span class="small">反例：\((2,1)\)、\((2,5)\) 代进去分母是 \(2-2=0\)，算不出来——这条线是竖直的，斜率不存在，先看横坐标再套公式。</span></li>
-    <li><b>斜率相等不一定平行，可能重合</b>。<br><span class="small">反例：过 \((0,0)\)、\((1,1)\) 和过 \((2,2)\)、\((3,3)\) 的两条线，斜率都是 \(1\)，其实是同一条线 \(y=x\)。要再取一条线上的点，看它在不在另一条上。</span></li>
-    <li><b>\(k_1k_2=-1\) 只管两条都有斜率的情形</b>。<br><span class="small">反例：竖直线 \(x=1\) 和水平线 \(y=2\) 垂直，可前者没有斜率，乘不出 \(-1\)。不能因为「算不了 \(k_1k_2\)」就说不垂直。</span></li>
-  </ol>
-  <div class="key">判断两条直线的关系，先看有没有竖直线：都竖直 → 平行或重合；一竖一横 → 垂直；一竖一斜 → 相交不垂直。都不竖直，再比 \(k_1\)、\(k_2\)。</div>
+  <h3>6. 三步破题思维链：直线倾斜角与斜率解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>审清题目已知信息：是给出直线上两点坐标、倾斜角范围，还是要求两条直线的位置关系（平行/垂直/相交）。若含未知参数，必须立刻警觉：<b>斜率是否存在？</b></p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 斜率存在时，套用两点斜率公式 \(k=\frac{y_2-y_1}{x_2-x_1}\) 与 \(k=\tan\alpha\) 进行角与斜率互化；<br>
+        ② 平行问题列出方程 \(k_1=k_2\)；垂直问题列出方程 \(k_1k_2=-1\)；<br>
+        ③ 若斜率可能不存在，必须对直线的垂直情况单独讨论（一条竖直、一条水平即垂直；两条皆竖直且横截距不等即平行）。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>① 平行解得参数后，<b>必须代回原方程验证两线是否重合</b>，重合解坚决剔除！<br>
+        ② 倾斜角从锐角跨过 \(90^\circ\) 到钝角时，斜率发生正负突变（从 \(+\infty\) 骤降至 \(-\infty\)），绝不可直接当单调函数处理！</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：竖直线盲目套公式导致分母为 0</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>求过 \((2,1)\) 与 \((2,5)\) 的斜率，列式 \(k=\frac{5-1}{2-2}\) 算得「无穷大」</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>两点横坐标相等，直线为竖直线 \(x=2\)，倾斜角为 \(90^\circ\)，斜率不存在</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：解得平行参数却遗漏重合检验</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>解得 \(k_1=k_2\) 得出参数 \(m=1\)，直接写平行，未核验截距导致两线重合</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>代入 \(m=1\) 发现两线完全重合，平行要求不重合，该解必须舍去</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：误认「倾斜角越大斜率越大」</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>认为 \(\alpha \in [30^\circ, 120^\circ]\) 时斜率范围对应为 \([\tan 30^\circ, \tan 120^\circ]\) 即 \([\frac{\sqrt3}{3}, -\sqrt3]\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>正切在 \(90^\circ\) 处间断：斜率范围应为 \((-\infty, -\sqrt3] \cup [\frac{\sqrt3}{3}, +\infty)\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：正切函数跨越 \(90^\circ\) 的间断突变</div>
+    <svg id="m-slope-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="正切函数间断反例图"></svg>
+    <div class="micro-caption">正切在 \([0^\circ, 90^\circ)\) 上从 \(0\) 增至 \(+\infty\)；在 \((90^\circ, 180^\circ)\) 上从 \(-\infty\) 增至 \(0\)。跨越 \(90^\circ\) 绝非整体递增！</div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>倾斜角越大，斜率不一定越大</b>：\(\alpha\) 从 \(0^\circ\) 增到 \(90^\circ\)，\(k\) 从 \(0\) 一直变大；一过 \(90^\circ\)，\(k\) 变成负数，再增到 \(180^\circ\) 时回到 \(0\)。例如 \(\alpha=30^\circ\) 时 \(k\approx0.58\)，\(\alpha=120^\circ\) 时 \(k\approx-1.73\)。只在同一段（都锐角或都钝角）里才是「角大斜率大」。</p>
     <p><b>三点共线</b>：\(A\)、\(B\)、\(C\) 横坐标两两不同时，「\(AB\) 的斜率 \(=AC\) 的斜率」就说明三点在同一条线上（两条线方向一样又都过 \(A\)，只能重合）。例 3 查重合用的就是这个。</p>
     <p><b>方向向量</b>：直线上任取两点 \(P_1\)、\(P_2\)，\(\overrightarrow{P_1P_2}=(x_2-x_1,y_2-y_1)\) 叫它的一个方向向量。斜率存在时，\((1,k)\) 也是方向向量。竖直线的方向向量是 \((0,1)\)，用方向向量判断平行、垂直，竖直线不用单独处理。</p>
   </details>
@@ -493,6 +590,209 @@
 
   document.addEventListener("DOMContentLoaded", function () { reset1(); setPreset("start"); });
   if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw1(); draw2(); });
+
+  /* ================= 0 从例子进入：四段坡道比陡缓 ================= */
+  var erSvg = document.getElementById("entry-ramp"), erBar = document.getElementById("entry-ramp-bar"), erNote = document.getElementById("entry-ramp-note");
+  var RAMPS = [
+    { id: "A", dx: 10, dy: 2, k: "0.2", col: "var(--c)", x0: 14 },
+    { id: "B", dx: 4, dy: 1, k: "0.25", col: "var(--b)", x0: 152 },
+    { id: "C", dx: 5, dy: 2, k: "0.4", col: "var(--a)", x0: 256 },
+    { id: "D", dx: 8, dy: 1, k: "0.125", col: "var(--muted)", x0: 376 }
+  ];
+  function erDraw(mode, pickId) {
+    var h = [], by = 148;
+    if (mode === "split") {
+      var sx = 11.5, sy = 36;
+      RAMPS.forEach(function (r) {
+        var w = r.dx * sx, ht = r.dy * sy, x1 = r.x0, x2 = x1 + w, y2 = by - ht;
+        var isC = r.id === "C";
+        h.push('<polygon points="' + x1 + ',' + by + ' ' + x2 + ',' + by + ' ' + x2 + ',' + y2 + '" fill="' + (isC ? 'var(--ok-soft)' : 'var(--card)') + '" stroke="' + r.col + '" stroke-width="2.2"/>');
+        h.push('<text x="' + (x1 + w / 2) + '" y="' + (by - ht - 8) + '" text-anchor="middle" font-weight="700" fill="' + r.col + '" font-size="15">坡道 ' + r.id + '</text>');
+        h.push('<text x="' + (x1 + w / 2) + '" y="' + (by + 20) + '" text-anchor="middle" fill="var(--fg)" font-size="13.5">水平 ' + r.dx + 'm</text>');
+        h.push('<text x="' + (x2 + 4) + '" y="' + (by - ht / 2 + 4) + '" fill="' + r.col + '" font-weight="700" font-size="13.5">升' + r.dy + 'm</text>');
+      });
+      erNote.innerHTML = "四段坡道按同一比例画出：A 和 C 都升高 <b>2 米</b>，但 C 水平只走 <b>5 米</b>，坡面明显更陡！";
+    } else {
+      var ox = 56, oy = 160, ux = 38, uy = 52;
+      h.push('<line x1="' + ox + '" y1="' + oy + '" x2="465" y2="' + oy + '" stroke="var(--line)" stroke-width="1.5"/>');
+      for (var m = 2; m <= 10; m += 2) {
+        h.push('<line x1="' + (ox + m * ux) + '" y1="' + oy + '" x2="' + (ox + m * ux) + '" y2="' + (oy + 5) + '" stroke="var(--muted)"/>');
+        h.push('<text x="' + (ox + m * ux) + '" y="' + (oy + 20) + '" text-anchor="middle" fill="var(--muted)" font-size="13.5">' + m + 'm</text>');
+      }
+      // 叠放四条坡线
+      var order = ["D", "A", "B", "C"];
+      order.forEach(function (id) {
+        var r = RAMPS.filter(function (x) { return x.id === id; })[0];
+        var x2 = ox + r.dx * ux, y2 = oy - r.dy * uy, hi = (!pickId && id === "C") || pickId === id;
+        h.push('<line x1="' + ox + '" y1="' + oy + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + r.col + '" stroke-width="' + (hi ? 3.8 : 2.2) + '"/>');
+        h.push('<line x1="' + x2 + '" y1="' + oy + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + r.col + '" stroke-dasharray="3 3" stroke-width="1.5"/>');
+        h.push('<circle cx="' + x2 + '" cy="' + y2 + '" r="' + (hi ? 5.5 : 4) + '" fill="' + r.col + '"/>');
+      });
+      h.push('<text x="' + (ox + 5 * ux) + '" y="' + (oy - 2 * uy - 10) + '" text-anchor="middle" font-weight="700" fill="var(--a)" font-size="15">C (5,2) 斜率 2/5 = 0.4 最陡！</text>');
+      h.push('<text x="' + (ox + 4 * ux - 10) + '" y="' + (oy - 1 * uy - 8) + '" text-anchor="end" font-weight="700" fill="var(--b)" font-size="14">B 斜率 0.25</text>');
+      h.push('<text x="' + (ox + 10 * ux) + '" y="' + (oy - 2 * uy - 10) + '" text-anchor="middle" font-weight="700" fill="var(--c)" font-size="14">A (10,2) 斜率 0.2</text>');
+      h.push('<text x="' + (ox + 8 * ux + 8) + '" y="' + (oy - 1 * uy + 4) + '" fill="var(--muted)" font-size="13.5">D 斜率 0.125</text>');
+      erNote.innerHTML = "叠到同一起点 O：<b>C 的倾斜角最大</b>，每水平走 1 米升高 <b>2÷5 = 0.4 米</b>（B 是 0.25，A 是 0.2，D 是 0.125）";
+    }
+    erSvg.innerHTML = h.join("");
+    [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-mode") === mode);
+    });
+  }
+  [].forEach.call(erBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { erDraw(b.getAttribute("data-mode")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erDraw("stack", ev.detail.choice);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erDraw("split");
+  });
+  erDraw("split");
 })();
+
+
+function initMSlopeFig(){
+  var svgEl = document.getElementById("m-slope-fig");
+  var capEl = document.getElementById("m-slope-cap");
+  if (!svgEl) return;
+  var mode = "angle";
+  var NS = "http://www.w3.org/2000/svg";
+  var caps = {
+    angle: "倾斜角 α 与斜率 k 对应：锐角 k > 0（往右上走），钝角 k < 0（往右下走），水平 k = 0，竖直 α = 90° 斜率不存在。",
+    coord: "两点求斜率几何意义：k = (y2 - y1) / (x2 - x1) = Δy / Δx = tan α，即直角三角形对边比邻边的坡度。",
+    pos: "位置关系：平行要求斜率相等且不重合；垂直要求 k1 · k2 = -1（互为负倒数）。若含竖直线则单独分析。"
+  };
+
+  function s(el, tag, attrs, txt){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt) e.textContent = txt;
+    el.appendChild(e);
+    return e;
+  }
+  function ln(el, x1, y1, x2, y2, c, w, d){
+    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
+    if (d) a["stroke-dasharray"] = d;
+    return s(el, "line", a);
+  }
+  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
+  function tx(el, x, y, txt, c, sz, b, anch){
+    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
+    if (b) a["font-weight"] = "bold";
+    if (anch) a["text-anchor"] = anch;
+    return s(el, "text", a, txt);
+  }
+
+  function draw(){
+    svgEl.innerHTML = "";
+    if (mode === "angle") {
+      tx(svgEl, 270, 19, "倾斜角 α 范围 [0°, 180°) 与斜率 k = tan α 对应", "#0f172a", "12.5", true, "middle");
+      // Coordinate axes
+      ln(svgEl, 40, 150, 260, 150, "#64748b", 1.5); // x-axis
+      ln(svgEl, 150, 180, 150, 40, "#64748b", 1.5); // y-axis
+      tx(svgEl, 265, 154, "x", "#64748b", "11", true);
+      tx(svgEl, 160, 44, "y", "#64748b", "11", true);
+      tx(svgEl, 140, 165, "O", "#64748b", "10");
+
+      // Lines
+      ln(svgEl, 70, 170, 230, 70, "#2563eb", 2.5); // acute line (k>0)
+      tx(svgEl, 235, 75, "k > 0 (锐角)", "#2563eb", "10.5", true);
+      s(svgEl, "path", {d:"M 180 150 A 30 30 0 0 0 172 135", fill:"none", stroke:"#2563eb", "stroke-width":1.5});
+      tx(svgEl, 185, 142, "α1", "#2563eb", "10", true);
+
+      ln(svgEl, 70, 70, 230, 170, "#dc2626", 2.5); // obtuse line (k<0)
+      tx(svgEl, 235, 175, "k < 0 (钝角)", "#dc2626", "10.5", true);
+      s(svgEl, "path", {d:"M 180 150 A 30 30 0 0 0 135 158", fill:"none", stroke:"#dc2626", "stroke-width":1.5});
+      tx(svgEl, 130, 140, "α2", "#dc2626", "10", true);
+
+      // Info box
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "倾斜角与斜率特征", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• α = 0° ⟹ k = 0 (水平线)", "#059669", "11");
+      tx(svgEl, 325, 120, "• 0° < α < 90° ⟹ k > 0", "#2563eb", "11");
+      tx(svgEl, 325, 142, "• α = 90° ⟹ 斜率不存在", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 90° < α < 180° ⟹ k < 0", "#d97706", "11");
+    } else if (mode === "coord") {
+      tx(svgEl, 270, 24, "两点斜率几何比值：k = (y2 - y1) / (x2 - x1) = Δy / Δx", "#0f172a", "12.5", true, "middle");
+      ln(svgEl, 40, 160, 260, 160, "#64748b", 1.5);
+      ln(svgEl, 80, 180, 80, 40, "#64748b", 1.5);
+
+      // Points P1(100, 130), P2(220, 60)
+      ln(svgEl, 80, 142, 240, 48, "#2563eb", 2.5);
+      s(svgEl, "circle", {cx:110, cy:124, r:4.5, fill:"#2563eb"});
+      tx(svgEl, 95, 120, "P1(x1, y1)", "#2563eb", "10.5", true);
+      s(svgEl, "circle", {cx:210, cy:65, r:4.5, fill:"#2563eb"});
+      tx(svgEl, 215, 62, "P2(x2, y2)", "#2563eb", "10.5", true);
+
+      // Triangle
+      ln(svgEl, 110, 124, 210, 124, "#059669", 1.5, "3 3");
+      tx(svgEl, 160, 138, "Δx = x2 - x1", "#059669", "10.5", true, "middle");
+      ln(svgEl, 210, 124, 210, 65, "#dc2626", 1.5, "3 3");
+      tx(svgEl, 225, 98, "Δy", "#dc2626", "10.5", true);
+      rc(svgEl, 200, 114, 10, 10, "none", "#64748b");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "两点公式避坑核查", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "① 减法顺序严禁颠倒", "#059669", "11", true);
+      tx(svgEl, 325, 120, "② x1 = x2 时为竖直线", "#dc2626", "11", true);
+      tx(svgEl, 325, 142, "③ k = tan α 仅管非竖直", "#2563eb", "11");
+      tx(svgEl, 325, 164, "④ 负倒数即垂直斜率", "#64748b", "10.5");
+    } else if (mode === "pos") {
+      tx(svgEl, 270, 24, "平行 (k1 = k2) 与垂直 (k1 · k2 = -1) 几何图解", "#0f172a", "12.5", true, "middle");
+      // Parallel lines
+      ln(svgEl, 50, 120, 150, 40, "#2563eb", 2);
+      tx(svgEl, 155, 45, "l1: k1 = 1", "#2563eb", "10.5", true);
+      ln(svgEl, 70, 160, 170, 80, "#2563eb", 2);
+      tx(svgEl, 175, 85, "l2: k2 = 1", "#2563eb", "10.5", true);
+      tx(svgEl, 155, 178, "l1 ∥ l2 ⟺ k1 = k2 (不重合)", "#2563eb", "10.5", true, "middle");
+
+      // Perpendicular line
+      ln(svgEl, 180, 50, 260, 150, "#dc2626", 2);
+      tx(svgEl, 265, 155, "l3: k3 = -1", "#dc2626", "10.5", true);
+      rc(svgEl, 140, 95, 10, 10, "none", "#dc2626");
+      tx(svgEl, 155, 198, "l1 ⊥ l3 ⟺ k1 · k3 = -1", "#dc2626", "10.5", true, "middle");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "特殊位置单独判定", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 两线均竖直 ⟹ 平行或重合", "#059669", "11");
+      tx(svgEl, 325, 120, "• 一横一竖 ⟹ 垂直(无斜率积)", "#dc2626", "11", true);
+      tx(svgEl, 325, 142, "• 参数平行解 ⟹ 必查重合", "#2563eb", "11", true);
+      tx(svgEl, 325, 164, "• 垂直乘积恒为 -1", "#64748b", "10.5");
+    }
+
+    if (capEl) capEl.textContent = caps[mode];
+    if (window.renderMathInElement) window.renderMathInElement(capEl);
+  }
+
+  var tabs = document.querySelectorAll(".micro-box .micro-tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      mode = tab.getAttribute("data-mode");
+      draw();
+    });
+  });
+  draw();
+
+  var trapEl = document.getElementById("m-slope-trap-fig");
+  if (trapEl) {
+    trapEl.innerHTML = "";
+    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
+    tx(trapEl, 142, 42, "❌ 误区：认为倾斜角大斜率必大", "#dc2626", "11.5", true, "middle");
+    tx(trapEl, 142, 70, "α从 60° 增至 120° 时", "#dc2626", "10.5", false, "middle");
+    tx(trapEl, 142, 94, "斜率从 √3 骤降至 -√3！", "#b91c1c", "11", true, "middle");
+    tx(trapEl, 142, 130, "跨过 90° 正切断崖式突变！", "#64748b", "9.5", false, "middle");
+
+    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
+    tx(trapEl, 397, 42, "✔ 规律：分段单调有界", "#15803d", "11.5", true, "middle");
+    tx(trapEl, 397, 70, "α ∈ [0°, 90°)：k 从 0 增至 +∞", "#059669", "10.5", true, "middle");
+    tx(trapEl, 397, 94, "α ∈ (90°, 180°)：k 从 -∞ 增至 0", "#15803d", "10.5", true, "middle");
+    tx(trapEl, 397, 130, "同象限单调，跨象限必分段！", "#047857", "10", true, "middle");
+  }
+}
+
+initMSlopeFig();
 </script>
 </body></html>

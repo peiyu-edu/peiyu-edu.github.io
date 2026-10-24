@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
@@ -31,6 +33,12 @@
   <p>初中我们做多项式运算时，遇到含字母的式子如 \((2 + 3x) + (4 - x)\)，只需要把同类项合并，就得到 \(6 + 2x\)。</p>
   <p>在复数中，复数由实部和虚部组成。如果把两个复数加起来，运算法则也是这样自然：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-cadd" viewBox="0 0 520 205" role="img" aria-label="复数(1+2i)+(3+4i)=4+6i的实部虚部积木合并与复平面向量相加"></svg>
+    <div class="entry-bar" id="entry-cadd-bar">
+      <button type="button" data-m="0">看两个复数 (1+2i) 与 (3+4i)</button>
+      <button type="button" data-m="1" class="on">实部合实部(1+3=4)，虚部合虚部(2i+4i=6i)</button>
+    </div>
+    <div class="entry-note" id="entry-cadd-note"></div>
     <p>入门题：计算 \((1 + 2i) + (3 + 4i)\)，实部和实部相加、虚部和虚部相加，结果是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(4 + 6i\)</button>
@@ -47,35 +55,51 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：7.1 复数的概念与复平面（<a href="b2-7-1.html">回看 7.1</a>）；初中多项式乘法与平方差公式；平面向量的加减法则。</p>
 
-  <div class="card">
-    <p><b>虚数单位 \(i\)</b>：定义 \(i^2 = -1\)。加减乘时把它当成多项式中的字母，唯独在遇到 \(i^2\) 时替换为 \(-1\)。</p>
-    <p>例：\(3i \times 2i = 6i^2 = 6 \times (-1) = -6\)。</p>
+  <div class="micro-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="badge-pill">直觉微图解</span>
+      <div class="toggles" id="m-compop-bar" style="margin:0" role="group" aria-label="复数四则运算模式切换">
+        <button class="btn ghost active" type="button" data-op="addsub">加减法（向量合成）</button>
+        <button class="btn ghost" type="button" data-op="mult">乘法（i²=-1 旋转）</button>
+        <button class="btn ghost" type="button" data-op="div">除法（共轭实数化）</button>
+      </div>
+    </div>
+    <svg class="micro-fig" id="m-compop-fig" viewBox="0 0 520 180" role="img" aria-label="复数四则运算几何与代数直观图"></svg>
+    <p class="small" id="m-compop-status" style="margin:6px 0 0 0;min-height:20px;color:var(--text-dim)"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-ok">线性加减 ①</span><b>加减法：对应复平面向量的平行四边形法则</b></div>
+      <p><b>实虚部独立</b>：\((a+bi) \pm (c+di) = (a\pm c) + (b\pm d)i\)。差的模长 \(|z_1 - z_2|\) 几何意义即为复平面上两点间的<b>欧氏距离</b>。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-no">乘除本质 ②</span><b>乘除法：遇见 i² 换成 -1，除法借共轭化实</b></div>
+      <p><b>多项式与实数化</b>：展开后遇 \(i^2=-1\) 合并同类项；除法分子分母同乘分母共轭 \((c-di)\)，分母平方差必出非负实数 \(c^2+d^2\)。</p>
+    </div>
   </div>
 
   <div class="card">
-    <p><b>共轭复数</b>：实部相同、虚部互为相反数的两个复数互为共轭。若 \(z = a + bi\)（\(a,b\in\mathbf{R}\)），其共轭记为 \(\overline{z} = a - bi\)。复平面上它们关于实轴对称。</p>
-    <p>例：\(3 + 2i\) 的共轭是 \(3 - 2i\)；纯虚数 \(5i\) 的共轭是 \(-5i\)；实数 \(4\) 的共轭就是它本身 \(4\)。</p>
+    <p><b>虚数单位 \(i\)</b>：定义 \(i^2 = -1\)。加减乘时把它当成多项式中的字母，唯独在遇到 \(i^2\) 时替换为 \(-1\)（例：\(3i \times 2i = 6i^2 = -6\)）。</p>
   </div>
 
   <div class="card">
-    <p><b>分母实数化</b>：复数除法中，分子分母同乘分母的共轭复数，利用 \((c+di)(c-di) = c^2 + d^2\) 把分母变成非零正实数。</p>
-    <p>例：\(\dfrac{1}{1+i} = \dfrac{1-i}{(1+i)(1-i)} = \dfrac{1-i}{1^2 - i^2} = \dfrac{1-i}{2} = \dfrac{1}{2} - \dfrac{1}{2}i\)。</p>
+    <p><b>共轭复数与分母实数化</b>：若 \(z = a + bi\)，共轭为 \(\overline{z} = a - bi\)。乘积恒为实数：\(z\overline{z} = a^2 + b^2 = |z|^2\)。除法借此消去分母虚部。</p>
   </div>
 
-  <h3>2. 加法与减法：实部虚部分别算，对应向量平行四边形法则</h3>
-  <p>设 \(z_1 = a + bi\)，\(z_2 = c + di\)（\(a,b,c,d\in\mathbf{R}\)）：</p>
-  <div class="key" style="text-align:center">
-    加法：\((a+bi) + (c+di) = (a+c) + (b+d)i\)<br>
-    减法：\((a+bi) - (c+di) = (a-c) + (b-d)i\)
+  <h3>2. 核心公式与运算法则</h3>
+  <div class="key">
+    ① <b>加法与减法</b>：\((a+bi) \pm (c+di) = (a\pm c) + (b\pm d)i\)；<br>
+    ② <b>乘法法则</b>：\((a+bi)(c+di) = (ac - bd) + (ad + bc)i\)（\(bd\cdot i^2 = -bd\) 变号！）；<br>
+    ③ <b>共轭乘积</b>：\(z \cdot \overline{z} = (c+di)(c-di) = c^2 + d^2 = |z|^2\)（中间是<b>加号</b>，恒为非负实数！）；<br>
+    ④ <b>除法分母实数化</b>：\(\dfrac{a+bi}{c+di} = \dfrac{(a+bi)(c-di)}{c^2+d^2} = \dfrac{ac+bd}{c^2+d^2} + \dfrac{bc-ad}{c^2+d^2}i\)；<br>
+    ⑤ <b>模的乘除性质与 i 周期性</b>：\(|z_1 z_2| = |z_1||z_2|\)，\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)；\(i^1=i, i^2=-1, i^3=-i, i^4=1\)（周期为 4）。
   </div>
-  <p><b>几何意义</b>：在复平面内，复数 \(z_1, z_2\) 对应向量 \(\overrightarrow{OZ_1} = (a,b)\)，\(\overrightarrow{OZ_2} = (c,d)\)。</p>
-  <ul>
-    <li>加法 \(z_1 + z_2\) 对应的向量是 \(\overrightarrow{OZ_1} + \overrightarrow{OZ_2}\)，完全符合平面向量的<b>平行四边形法则</b>（或三角形法则）。</li>
-    <li>减法 \(z_1 - z_2\) 对应的向量是 \(\overrightarrow{Z_2Z_1}\)（从 \(Z_2\) 指向 \(Z_1\)）。它的模长 \(|z_1 - z_2|\) 就是复平面上点 \(Z_1\) 与 \(Z_2\) 之间的<b>距离</b>！</li>
-  </ul>
+
   <div class="card">
     <p class="small">例 1（加减法示范）</p>
     <p>已知 \(z_1 = 3 - 2i\)，\(z_2 = -1 + 4i\)，求 \(z_1 + z_2\) 与 \(z_1 - z_2\)。</p>
@@ -83,6 +107,7 @@
     <p>\(z_1 + z_2 = [3 + (-1)] + [-2 + 4]i = 2 + 2i\)。</p>
     <p>\(z_1 - z_2 = [3 - (-1)] + [-2 - 4]i = 4 - 6i\)。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：已知 \(z_1 = 2 + 3i\)，\(z_2 = 4 - i\)，则 \(z_1 - z_2\) 等于？</p>
     <div class="opts cols">
@@ -92,56 +117,67 @@
       <button class="opt" data-v="D"><b>D</b>\(-2 - 4i\)</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。实部相减：\(2 - 4 = -2\)；虚部相减：\(3 - (-1) = 4\)，所以结果为 \(-2 + 4i\)。</p>
-      <p>选 A 的同学把虚部算成了 \(3 - 1 = 2\)（漏掉了负负得正）；选 C 的同学把实部 \(2-4\) 错算成了 \(2\)。</p>
+      <p><b>B</b>。实部相减：\(2 - 4 = -2\)；虚部相减：\(3 - (-1) = 4\)，所以结果为 \(-2 + 4i\)。选 A 的同学把虚部算成了 \(3 - 1 = 2\)（漏掉负负得正）。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-calc"></div>
 
-  <h3>3. 乘法与共轭：像多项式展开，遇见 \(i^2\) 换成 \(-1\)</h3>
-  <p>两个复数相乘，不需要死记公式，直接按多项式乘法展开：</p>
-  <p style="text-align:center">\((a+bi)(c+di) = ac + adi + bci + bdi^2\)</p>
-  <p>因为 \(i^2 = -1\)，最后两项合并整理得到：</p>
-  <div class="key" style="text-align:center">
-    \((a+bi)(c+di) = (ac - bd) + (ad + bc)i\)
-  </div>
-  <p><b>共轭复数相乘的神奇性质</b>：</p>
-  <div class="key" style="text-align:center">
-    \(z \cdot \overline{z} = (a+bi)(a-bi) = a^2 - b^2 i^2 = a^2 + b^2 = |z|^2\)
-  </div>
-  <p>两个互为共轭的复数相乘，虚部相消，结果永远是一个<b>非负实数</b>，且正好等于该复数模长的平方！这是解决除法分母实数化的核心工具。</p>
   <div class="card">
     <p class="small">例 2（乘法与共轭示范）</p>
     <p>计算：(1) \((2 + i)(3 - 2i)\)；(2) \((2 - 3i)(2 + 3i)\)。</p>
     <p><b>解</b>：</p>
-    <p>(1) 展开：\(2\times 3 + 2\times(-2i) + i\times 3 - 2i^2 = 6 - 4i + 3i - 2(-1) = (6+2) + (-4+3)i = 8 - i\)。</p>
-    <p>(2) 利用共轭乘积性质：\(2^2 + (-3)^2 = 4 + 9 = 13\)。</p>
+    <p>(1) 展开：\(2\times 3 + 2\times(-2i) + i\times 3 - 2i^2 = 6 - 4i + 3i - 2(-1) = 8 - i\)。</p>
+    <p>(2) 利用共轭乘积性质：\(2^2 + 3^2 = 4 + 9 = 13\)。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：计算 \((1 + 2i)(2 - i)\) 的结果是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(4 + 3i\)</button>
       <button class="opt" data-v="B"><b>B</b>\(3i\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(4 - 3i\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(2 + 3i\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(2 + 3i\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(4 - 3i\)</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。展开多项式：\(1\times 2 - 1\times i + 2i\times 2 - 2i^2 = 2 - i + 4i - 2(-1) = (2+2) + (-1+4)i = 4 + 3i\)。</p>
-      <p>选 B 的同学漏算了实部常数项；选 D 的同学把 \(i^2\) 当作 \(0\) 扔掉了。</p>
+      <p><b>A</b>。展开：\(2 - i + 4i - 2i^2 = 2 + 3i - 2(-1) = 4 + 3i\)。选 B 的同学忘了算常数项 \(2 - (-2) = 4\)。</p>
     </div>
   </div>
 
-  <h3>4. 除法：分子分母同乘分母的共轭，将分母实数化</h3>
-  <p>复数除法是乘法的逆运算。只要<b>除数不为 0</b>（即 \(c+di \ne 0\)，\(c^2+d^2 \ne 0\)），通过分子分母同乘分母的共轭复数 \(c-di\)：</p>
-  <div class="key" style="text-align:center">
-    \(\dfrac{a+bi}{c+di} = \dfrac{(a+bi)(c-di)}{(c+di)(c-di)} = \dfrac{(ac+bd) + (bc-ad)i}{c^2+d^2} = \dfrac{ac+bd}{c^2+d^2} + \dfrac{bc-ad}{c^2+d^2}i\)
-  </div>
-  <p>分母乘完变成了实数 \(c^2+d^2\)，之后把实部与虚部分开写成代数形式 \(A + Bi\) 即可。</p>
+  <div class="vid" data-video="ex-conj"></div>
+
+  <h3>3. 典型例题：三步思维链精讲</h3>
   <div class="card">
-    <p class="small">例 3（除法示范）</p>
-    <p>计算 \(\dfrac{5+5i}{2+i}\)。</p>
-    <p><b>解</b>：分子分母同乘 \(2-i\)：</p>
-    <p style="text-align:center">\(\dfrac{5+5i}{2+i} = \dfrac{(5+5i)(2-i)}{(2+i)(2-i)} = \dfrac{10 - 5i + 10i - 5i^2}{2^2 - i^2} = \dfrac{15 + 5i}{4 - (-1)} = \dfrac{15 + 5i}{5} = 3 + i\)。</p>
+    <p class="small"><b>例 3（高频综合·分母实数化与高次幂模长）</b></p>
+    <p>已知复数 \(z = \dfrac{3-i}{1+i} + 2i^{2026}\)。<br>
+    ① 将 \(z\) 化为代数形式 \(a+bi\)（\(a, b\in\mathbf{R}\)）；<br>
+    ② 求复数 \(z\) 的共轭复数 \(\overline{z}\) 以及模长 \(|z|\)。</p>
+    <div class="think-steps">
+      <div class="step-card">
+        <div class="step-badge">👀 第一眼·破题信号</div>
+        <div class="step-text">看到分式除法与高次幂 \(i^k\) → <b>核心破题信号：分子分母同乘分母共轭做「分母实数化」，高次幂除以 4 看余数化简</b>！</div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🔧 第二步·套公式拆解</div>
+        <div class="step-text">
+          ① 分母实数化：分子分母同乘 \(1-i\)：<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;\(\dfrac{3-i}{1+i} = \dfrac{(3-i)(1-i)}{(1+i)(1-i)} = \dfrac{3 - 3i - i + i^2}{1^2 - i^2} = \dfrac{3 - 4i - 1}{1 - (-1)} = \dfrac{2 - 4i}{2} = 1 - 2i\)；<br>
+          ② 高次幂化简：\(2026 = 4\times 506 + 2\)，余数为 2：<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;\(i^{2026} = (i^4)^{506}\cdot i^2 = 1\cdot(-1) = -1 \implies 2i^{2026} = -2\)；<br>
+          ③ 代数求和：\(z = (1 - 2i) + (-2) = \) <b>\(-1 - 2i\)</b>；<br>
+          ④ 共轭与模长：\(\overline{z} = \) <b>\(-1 + 2i\)</b>，模长 \(|z| = \sqrt{(-1)^2 + (-2)^2} = \sqrt{1 + 4} = \) <b>\(\sqrt{5}\)</b>。
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🛡️ 第三步·必查防坑点</div>
+        <div class="step-text">
+          ① 分母是 \((1+i)(1-i) = 1^2 - i^2 = 1 - (-1) = 2\)，绝不是 \(1-1=0\)；<br>
+          ② 模长公式根号内必为加号：\((-1)^2 + (-2)^2 = 1 + 4 = 5\)，绝不能写成 \(1 - 4 = -3\)；<br>
+          ③ \(i^2 = -1\) 负负得正变号千万别错。
+        </div>
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-3" data-answer="D">
     <p>自己试试：化简 \(\dfrac{2}{1+i}\) 的结果是？</p>
     <div class="opts cols">
@@ -151,44 +187,61 @@
       <button class="opt" data-v="D"><b>D</b>\(1 - i\)</button>
     </div>
     <div class="reveal">
-      <p><b>D</b>。分子分母同乘 \(1-i\)：\(\dfrac{2(1-i)}{(1+i)(1-i)} = \dfrac{2(1-i)}{1 - i^2} = \dfrac{2(1-i)}{2} = 1 - i\)。</p>
-      <p>选 B 的同学分子乘了共轭，分母却忘了乘以共轭；选 A 的同学直接把分母移到分子变号，没有做分母实数化。</p>
+      <p><b>D</b>。分子分母同乘 \(1-i\)：\(\dfrac{2(1-i)}{(1+i)(1-i)} = \dfrac{2(1-i)}{1 - i^2} = \dfrac{2(1-i)}{2} = 1 - i\)。选 B 的同学分子乘了共轭，分母却忘了乘以共轭。</p>
     </div>
   </div>
 
-  <h3>5. 用之前要注意（专题卡 M2-07-B 关键边界）</h3>
-  <ol>
-    <li><b>虚数单位 \(i\) 的周期性（周期为 4）</b>：<br>
-      \(i^1 = i\)，\(i^2 = -1\)，\(i^3 = -i\)，\(i^4 = 1\)；接着 \(i^5 = i\)，\(i^6 = -1\dots\)<br>
-      任何正整数指数除以 4 看余数：连续 4 个连续整数次幂的和为零：\(i + i^2 + i^3 + i^4 = i - 1 - i + 1 = 0\)。<br>
-      <span class="small">提示：遇到高次幂时先除以 4，如 \(i^{100} = (i^4)^{25} = 1\)，\(i^{103} = i^3 = -i\)。</span>
-    </li>
-    <li><b>负数根式乘法绝对不能套用实数乘法公式</b>：<br>
-      实数中当 \(a, b \ge 0\) 时才有 \(\sqrt{a}\cdot\sqrt{b} = \sqrt{ab}\)。如果两个都是负数，<b>必须先化成虚数单位 \(i\) 的形式再相乘</b>！<br>
-      \(\sqrt{-2}\cdot\sqrt{-3} = (\sqrt{2}i)\cdot(\sqrt{3}i) = \sqrt{6}i^2 = -\sqrt{6}\)。<br>
-      <div class="warn-box">常见致命错误：直接写成 \(\sqrt{(-2)\times(-3)} = \sqrt{6}\)，符号完全相反！</div>
-    </li>
-    <li><b>复数没有大小顺序</b>：<br>
-      实数可以在数轴上排大小（如 \(3 &gt; 2\)），但复平面是二维的，<b>虚数不能比较大小</b>！我们不能写 \(2+3i &gt; 1+4i\) 或 \(i &gt; 0\)。<br>
-      只有实数或复数的<b>模</b>（模是非负实数）才可以比较大小（如 \(|2+3i| = \sqrt{13} &lt; \sqrt{17} = |1+4i|\)）。
-    </li>
-    <li><b>不能无条件搬用实数不等式与绝对值性质</b>：<br>
-      实数中 \(|a+b| = |a| + |b|\)（当同号时）；但在复数中，\(|z_1 + z_2|\) 对应三角形的第三边，\(|z_1|\) 和 \(|z_2|\) 对应两边，一般满足向量三角不等式：<br>
-      \(||z_1| - |z_2|| \le |z_1 \pm z_2| \le |z_1| + |z_2|\)，等号当且仅当对应向量同向（或反向）共线时才取到。
-    </li>
-    <li><b>实系数一元二次方程在复数集的根</b>：<br>
-      若实系数方程 \(ax^2 + bx + c = 0\)（\(a\ne 0\)）的判别式 \(\Delta = b^2 - 4ac &lt; 0\)，方程在实数范围无解，但在复数集内有一对互为共轭的虚根：<br>
-      \(x = \dfrac{-b \pm \sqrt{|\Delta|}i}{2a}\)。解题时必须明确指出是在复数范围内求解。
-    </li>
-  </ol>
+  <h3>4. 这三种情况最容易翻车</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><b>分母平方差写成减号算出除以 0</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>把 \((c+di)(c-di)\) 算成 \(c^2 - d^2\)，当 \(c=1, d=1\) 时算得分母 \(1-1=0\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>\((c+di)(c-di) = c^2 - d^2 i^2 = c^2 + d^2\)！中间是<b>加号</b>，分母恒正不为 0。</p>
+        </div>
+      </div>
+      <svg class="micro-fig" id="m-div-trap-fig" viewBox="0 0 340 160" role="img" aria-label="复数除法分母平方差正确与错误对比图" style="margin-top:8px"></svg>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>负数开方相乘套用实数乘法漏负号</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>\(\sqrt{-2}\times\sqrt{-3} = \sqrt{(-2)\times(-3)} = \sqrt{6}\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>必须先化为虚数单位：\(\sqrt{2}i \times \sqrt{3}i = \sqrt{6}i^2 = -\sqrt{6}\)！相差负号。</p>
+        </div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><b>只乘分子忘记乘分母</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>化简 \(\dfrac{2}{1+i}\) 直接写成 \(2(1-i) = 2-2i\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>必须分子分母同乘共轭，分母为 \(1^2 - i^2 = 2\)，约分后为 \(1-i\)。</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点：高频简算结构与模的运算技巧（可以先跳过）</summary>
     <p><b>高考与模拟高频结构</b>：</p>
     <ul>
-      <li>\((1+i)^2 = 2i\)，\((1-i)^2 = -2i\)（计算高次幂时常先平方）。</li>
-      <li>\(\dfrac{1+i}{1-i} = \dfrac{(1+i)^2}{2} = i\)；\(\dfrac{1-i}{1+i} = -i\)。</li>
-      <li><b>模的乘除法性质</b>：\(|z_1 \cdot z_2| = |z_1| \cdot |z_2|\)；\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)（\(z_2\ne 0\)）。很多题目只求模长时，先取模再乘除，比先化简复数再求模快数倍！</li>
+      <li>\((1+i)^2 = 2i\)，\((1-i)^2 = -2i\)（计算高次幂时先平方秒杀）。</li>
+      <li>\(\dfrac{1+i}{1-i} = i\)；\(\dfrac{1-i}{1+i} = -i\)。</li>
+      <li><b>模的乘除法性质</b>：\(|z_1 \cdot z_2| = |z_1| \cdot |z_2|\)；\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)。只求模长时先取模后乘除，速度翻倍！</li>
     </ul>
   </details>
 </section>
@@ -412,9 +465,9 @@
 
     drawArrow(fig, 20, OY, 545, OY, fg, 2);
     drawArrow(fig, OX, 340, OX, 15, fg, 2);
-    var tRe = svg("text", { x: 546, y: OY + 18, "text-anchor": "end", "font-weight": 700, "font-size": 18 }, fig);
+    var tRe = svg("text", { x: 546, y: OY - 8, "text-anchor": "end", "font-weight": 700, "font-size": 15 }, fig);
     tRe.textContent = "实轴 (Re)";
-    var tIm = svg("text", { x: OX + 10, y: 22, "font-weight": 700, "font-size": 18 }, fig);
+    var tIm = svg("text", { x: OX - 10, y: 24, "text-anchor": "end", "font-weight": 700, "font-size": 15 }, fig);
     tIm.textContent = "虚轴 (Im)";
     var tO = svg("text", { x: OX - 14, y: OY + 18, "font-size": 16, fill: muted }, fig);
     tO.textContent = "O";
@@ -474,7 +527,8 @@
       if (isInside) {
         drawArrow(fig, OX, OY, pProd.sx, pProd.sy, cc, 3.5);
         svg("circle", { cx: pProd.sx, cy: pProd.sy, r: 6, fill: cc }, fig);
-        var tProd = svg("text", { x: pProd.sx + 10, y: pProd.sy - 8, fill: cc, "font-weight": 700, "font-size": 18 }, fig);
+        var tProdY = pProd.sy < 32 ? pProd.sy + 18 : pProd.sy - 8;
+        var tProd = svg("text", { x: pProd.sx + 10, y: tProdY, fill: cc, "font-weight": 700, "font-size": 16 }, fig);
         tProd.textContent = "z₁ · z₂";
       } else {
         var angle = Math.atan2(OY - pProd.sy, pProd.sx - OX);
@@ -619,7 +673,228 @@
     }
   });
 
+  /* ================= 0 从例子进入：实部虚部分仓合并 ================= */
+  var eaSvg = document.getElementById("entry-cadd"), eaBar = document.getElementById("entry-cadd-bar"), eaNote = document.getElementById("entry-cadd-note");
+  var eaMode = 1;
+  function eaDraw(m) {
+    eaMode = m;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    eaSvg.innerHTML = "";
+    // 左侧：实部积木 vs 虚部 i 积木分仓
+    svg("rect", { x: 16, y: 16, width: 256, height: 174, rx: 10, fill: card, stroke: ln, "stroke-width": 1.4 }, eaSvg);
+    svg("text", { x: 144, y: 38, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14.5 }, eaSvg).textContent = m === 0 ? "分装托盘：实数砖 vs 虚数 i 砖" : "同类合并：(1+3) + (2+4)i = 4+6i";
+
+    function drawBricks(x0, y0, nRe, nIm, label) {
+      svg("text", { x: x0, y: y0 - 6, fill: mu, "font-size": 12.5, "font-weight": 700 }, eaSvg).textContent = label;
+      for (var i = 0; i < nRe; i++) {
+        svg("rect", { x: x0 + i * 26, y: y0, width: 22, height: 22, rx: 4, fill: okS, stroke: ca, "stroke-width": 1.6 }, eaSvg);
+        svg("text", { x: x0 + i * 26 + 11, y: y0 + 15, "text-anchor": "middle", fill: ca, "font-size": 12, "font-weight": 700 }, eaSvg).textContent = "1";
+      }
+      var ix0 = x0 + nRe * 26 + 8;
+      for (var j = 0; j < nIm; j++) {
+        svg("rect", { x: ix0 + j * 24, y: y0, width: 21, height: 22, rx: 4, fill: card, stroke: cb, "stroke-width": 1.6 }, eaSvg);
+        svg("text", { x: ix0 + j * 24 + 10.5, y: y0 + 15, "text-anchor": "middle", fill: cb, "font-size": 12, "font-weight": 700 }, eaSvg).textContent = "i";
+      }
+    }
+    if (m === 0) {
+      drawBricks(28, 66, 1, 2, "第一个复数 z₁ = 1 + 2i：");
+      drawBricks(28, 130, 3, 4, "第二个复数 z₂ = 3 + 4i：");
+    } else {
+      drawBricks(28, 66, 4, 0, "实部仓合并：1 + 3 = 4");
+      drawBricks(28, 130, 0, 6, "虚部仓合并：2i + 4i = 6i");
+      svg("text", { x: 162, y: 82, fill: ca, "font-weight": 700, "font-size": 14.5 }, eaSvg).textContent = "→ 实部 4";
+      svg("text", { x: 196, y: 146, fill: cb, "font-weight": 700, "font-size": 14.5 }, eaSvg).textContent = "→ + 6i";
+    }
+
+    // 右侧：复平面向量首尾相加
+    var ox = 310, oy = 172, ux = 34, uy = 22;
+    svg("line", { x1: ox - 10, y1: oy, x2: 498, y2: oy, stroke: fg, "stroke-width": 1.5 }, eaSvg);
+    svg("line", { x1: ox, y1: oy + 10, x2: ox, y2: 20, stroke: fg, "stroke-width": 1.5 }, eaSvg);
+    svg("text", { x: 498, y: oy + 16, "text-anchor": "end", fill: mu, "font-size": 12 }, eaSvg).textContent = "Re";
+    svg("text", { x: ox + 8, y: 30, fill: mu, "font-size": 12 }, eaSvg).textContent = "Im";
+
+    var x1 = ox + 1 * ux, y1 = oy - 2 * uy;
+    var x2 = ox + 3 * ux, y2 = oy - 4 * uy;
+    var xs = ox + 4 * ux, ys = oy - 6 * uy;
+    drawArrow(eaSvg, ox, oy, x1, y1, ca, 2.6);
+    svg("text", { x: x1 - 4, y: y1 - 6, "text-anchor": "end", fill: ca, "font-weight": 700, "font-size": 12.5 }, eaSvg).textContent = "1+2i";
+    drawArrow(eaSvg, ox, oy, x2, y2, cb, 2.6);
+    svg("text", { x: x2 + 6, y: y2 + 12, fill: cb, "font-weight": 700, "font-size": 12.5 }, eaSvg).textContent = "3+4i";
+    if (m === 1) {
+      drawArrow(eaSvg, x1, y1, xs, ys, cb, 2, "4 3");
+      drawArrow(eaSvg, x2, y2, xs, ys, ca, 2, "4 3");
+      drawArrow(eaSvg, ox, oy, xs, ys, cc, 3.2);
+      svg("circle", { cx: xs, cy: ys, r: 5, fill: cc }, eaSvg);
+      svg("text", { x: xs + 6, y: ys + 4, fill: cc, "font-weight": 700, "font-size": 14 }, eaSvg).textContent = "4+6i";
+    }
+
+    [].forEach.call(eaBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    eaNote.innerHTML = m === 0
+      ? "拆分看：<b>1 + 2i</b>（1 块实数砖 + 2 块 i 砖）与 <b>3 + 4i</b>（3 块实数砖 + 4 块 i 砖）。"
+      : "合并同类项：实部 <b>1 + 3 = 4</b>，虚部 <b>2i + 4i = 6i</b>，结果为 <b>4 + 6i</b>（不能把实部和 i 混加成 10i）！";
+  }
+  [].forEach.call(eaBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { eaDraw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") eaDraw(1);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") eaDraw(0);
+  });
+
+  function initStep2() {
+    var fig = document.getElementById("m-compop-fig");
+    var bar = document.getElementById("m-compop-bar");
+    var status = document.getElementById("m-compop-status");
+    var trap = document.getElementById("m-div-trap-fig");
+    if (!fig || !bar) return;
+
+    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var ca = isDark ? "#38bdf8" : "#0284c7";
+    var cb = isDark ? "#f59e0b" : "#d97706";
+    var cc = isDark ? "#10b981" : "#059669";
+    var cd = isDark ? "#ec4899" : "#db2777";
+    var mut = isDark ? "#94a3b8" : "#64748b";
+    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+    var border = isDark ? "#334155" : "#e2e8f0";
+
+    function sEl(parent, tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      parent.appendChild(el);
+      return el;
+    }
+
+    function sArr(parent, x1, y1, x2, y2, color, w, dashed) {
+      var dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+      var lineAttrs = { x1: x1, y1: y1, x2: x2, y2: y2, stroke: color, "stroke-width": w || 2.5 };
+      if (dashed) lineAttrs["stroke-dasharray"] = dashed;
+      sEl(parent, "line", lineAttrs);
+      if (len > 8) {
+        var ux = dx / len, uy = dy / len, hl = Math.min(10, len * 0.35), hw = hl * 0.5;
+        var bx = x2 - hl * ux, by = y2 - hl * uy;
+        var d = "M " + x2 + " " + y2 + " L " + (bx - hw * uy) + " " + (by + hw * ux) + " L " + (bx + hw * uy) + " " + (by - hw * ux) + " Z";
+        sEl(parent, "path", { d: d, fill: color });
+      }
+    }
+
+    function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+      var t = sEl(parent, "text", {
+        x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
+        "font-weight": fw || 400, "text-anchor": anchor || "start"
+      });
+      t.textContent = text;
+      return t;
+    }
+
+    function drawCompOp(mode) {
+      fig.innerHTML = "";
+      var cx = 100, cy = 142;
+      if (mode === "addsub") {
+        sTxt(fig, 24, 22, "【加减几何】平行四边形合成加法，差模长 |z₁ - z₂| 为两点距离", ca, 12, 700);
+        // z1 = 2 + i -> (cx + 46, cy - 26)
+        sArr(fig, cx, cy, cx + 46, cy - 26, ca, 2.5);
+        sTxt(fig, cx + 52, cy - 24, "z₁", ca, 12, 700);
+
+        // z2 = 1 + 2.5i -> (cx + 22, cy - 64)
+        sArr(fig, cx, cy, cx + 22, cy - 64, cb, 2.5);
+        sTxt(fig, cx + 14, cy - 68, "z₂", cb, 12, 700, "end");
+
+        // sum z1 + z2 -> (cx + 68, cy - 90)
+        sEl(fig, "line", { x1: cx + 46, y1: cy - 26, x2: cx + 68, y2: cy - 90, stroke: mut, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
+        sEl(fig, "line", { x1: cx + 22, y1: cy - 64, x2: cx + 68, y2: cy - 90, stroke: mut, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
+        sArr(fig, cx, cy, cx + 68, cy - 90, cc, 3.2);
+        sTxt(fig, cx + 74, cy - 88, "z₁ + z₂", cc, 12.5, 700);
+
+        // diff z1 - z2 from z2 to z1
+        sArr(fig, cx + 22, cy - 64, cx + 46, cy - 26, cd, 2.5);
+        sTxt(fig, cx + 46, cy - 48, "z₁ - z₂", cd, 11, 700);
+
+        sTxt(fig, 248, 55, "• 加法：向量平行四边形对角线", cc, 12, 700);
+        sTxt(fig, 248, 85, "• 减法：由减数终点指向被减数终点", cd, 12, 700);
+        sTxt(fig, 248, 115, "• 距离本质：|z₁ - z₂| 即为两点间直线距离", ca, 11.5);
+        sTxt(fig, 248, 145, "• 三角不等式：||z₁|-|z₂|| ≤ |z₁±z₂| ≤ |z₁|+|z₂|", mut, 11);
+
+        status.textContent = "复数加减几何本质：完全等价于复平面内对应向量的加减，模长遵循三角形三边关系。";
+      } else if (mode === "mult") {
+        sTxt(fig, 24, 22, "【乘法展开】多项式十字相乘，遇见 i² 换为 -1", cb, 12, 700);
+        // Step box
+        sEl(fig, "rect", { x: 24, y: 40, width: 215, height: 115, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
+        sTxt(fig, 36, 65, "(a + bi)(c + di)", cb, 12.5, 700);
+        sTxt(fig, 36, 90, "= ac + adi + bci + bdi²", mut, 11.5);
+        sTxt(fig, 36, 115, "= ac + (ad + bc)i + bd(-1)", cd, 11.5, 700);
+        sTxt(fig, 36, 140, "= (ac - bd) + (ad + bc)i", cc, 12.5, 700);
+
+        sTxt(fig, 255, 55, "• 核心关键：最后项 bdi² 变成实数 -bd", cd, 11.5, 700);
+        sTxt(fig, 255, 85, "• 共轭乘积：(a+bi)(a-bi) = a² + b² (无虚部)", cc, 11.5, 700);
+        sTxt(fig, 255, 115, "• 乘 i 旋转：z · i 相当于逆时针旋转 90°", ca, 11.5);
+        sTxt(fig, 255, 145, "• 模长性质：|z₁ · z₂| = |z₁| · |z₂| (模相乘)", mut, 11.5);
+
+        status.textContent = "复数乘法法则：展开多项式后只需牢记 i² = -1，共轭相乘虚部消除得 a² + b²。";
+      } else {
+        // mode === "div"
+        sTxt(fig, 24, 22, "【除法实数化】分子分母同乘分母共轭，分母必化为正实数 c² + d²", cc, 12, 700);
+        sEl(fig, "rect", { x: 24, y: 40, width: 222, height: 115, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
+        sTxt(fig, 36, 65, "① 原式：(a + bi) / (c + di)", ca, 12, 700);
+        sTxt(fig, 36, 92, "② 同乘共轭：× (c - di) / (c - di)", cb, 11.5, 700);
+        sTxt(fig, 36, 120, "③ 分母成实数：分母变 c² + d²", cd, 11.5, 700);
+        sTxt(fig, 36, 144, "④ 拆分实虚部：A + Bi 代数形式", cc, 12, 700);
+
+        sTxt(fig, 260, 55, "• 桥梁：分母共轭为 c - di", ca, 11.5);
+        sTxt(fig, 260, 85, "• 分母恒正：(c+di)(c-di) = c² + d² > 0", cc, 11.5, 700);
+        sTxt(fig, 260, 115, "• 高频秒杀：(1+i)/(1-i)=i，(1-i)/(1+i)=-i", cb, 11.5, 700);
+        sTxt(fig, 260, 145, "• 模长性质：|z₁ / z₂| = |z₁| / |z₂|", mut, 11.5);
+
+        status.textContent = "除法化简法：分母有虚数？分子分母同乘分母共轭，分母立刻成为实数 c² + d²！";
+      }
+    }
+
+    function drawTrap() {
+      if (!trap) return;
+      trap.innerHTML = "";
+      sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
+      sTxt(trap, 170, 26, "分母平方差对比：中间永远是加号！", cd, 12, 700, "middle");
+
+      // Wrong
+      sTxt(trap, 80, 52, "【常见错解】", cd, 11, 700, "middle");
+      sTxt(trap, 80, 75, "(1+i)(1-i)", mut, 11.5, 400, "middle");
+      sTxt(trap, 80, 96, "= 1² - 1² = 0 ✗", cd, 12.5, 700, "middle");
+      sTxt(trap, 80, 120, "算成分母为 0 崩溃！", cd, 10, 400, "middle");
+
+      sEl(trap, "line", { x1: 165, y1: 40, x2: 165, y2: 135, stroke: border, "stroke-width": 1 });
+
+      // Right
+      sTxt(trap, 245, 52, "【严谨正解】", cc, 11, 700, "middle");
+      sTxt(trap, 245, 75, "(1+i)(1-i) = 1² - i²", mut, 11.5, 400, "middle");
+      sTxt(trap, 245, 96, "= 1 - (-1) = 2 ✓", cc, 12.5, 700, "middle");
+      sTxt(trap, 245, 120, "i² = -1 负负得正变加号", cc, 10, 400, "middle");
+    }
+
+    var currMode = "addsub";
+    [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.onclick = function () {
+        var m = b.getAttribute("data-op");
+        if (m) {
+          currMode = m;
+          [].forEach.call(bar.querySelectorAll("button"), function (btn) {
+            btn.classList.toggle("active", btn === b);
+          });
+          drawCompOp(currMode);
+        }
+      };
+    });
+
+    drawCompOp("addsub");
+    drawTrap();
+  }
+
+  eaDraw(1);
   renderPlane();
+  initStep2();
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { eaDraw(eaMode); renderPlane(); initStep2(); });
 })();
 </script>
 </body></html>

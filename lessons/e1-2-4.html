@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.9; overflow-wrap: anywhere; }
   .result .eq { color: var(--a); font-weight: 700; }
@@ -26,8 +28,16 @@
 <p class="lead">圆就是「到一个点距离一样」的所有点。把这句话用两点距离公式写出来，就得到圆的方程；再学会从方程里读出圆心和半径。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>草地上钉一根木桩，小狗用 \(5\) 米长的绳子拴在上面。以木桩为原点建坐标系，单位是米。</p>
+  <p>草地上钉一根木桩，小狗用 \(5\) 米长的绳子拴在上面。以木桩为原点建坐标系，单位是米。点下面的按钮，试试把绳子牵向四个不同的点：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-dog" viewBox="0 0 520 210" role="img" aria-label="草地原点木桩与5米长绳子画出的圆周，对比A(3,4)、B(4,4)、C(5,5)、D(2,3)四个点的位置"></svg>
+    <div class="entry-bar" id="entry-dog-bar">
+      <button type="button" data-pt="A" class="on">试 A(3,4) 刚好拉直=5m</button>
+      <button type="button" data-pt="B">试 B(4,4) 绳不够长</button>
+      <button type="button" data-pt="C">试 C(5,5) 绳不够长</button>
+      <button type="button" data-pt="D">试 D(2,3) 绳子没拉直</button>
+    </div>
+    <div class="entry-note" id="entry-dog-note"></div>
     <p>小狗把绳子拉直时，它可能站在下面哪个点？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\((3,4)\)</button>
@@ -44,27 +54,55 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：两点间的距离公式 \(|AB|=\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}\)（<a href="e1-2-3.html">回看 2.3</a>）；初中学过的配方。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：一般方程表示真正的圆必须满足 \(D^2+E^2-4F>0\)；等于 0 只有一个点，小于 0 没有实点。</p></div>
 
-  <div class="card">
-    <p><b>圆、圆心、半径</b>：平面上到一个定点距离等于定长的所有点，组成圆。定点叫圆心，定长叫半径，半径是<b>正数</b>。</p>
-    <p>例：到 \((1,2)\) 距离是 \(3\) 的点，有 \((4,2)\)、\((1,5)\)、\((-2,2)\)、\((1,-1)\)……它们都在以 \((1,2)\) 为圆心、\(3\) 为半径的圆上。</p>
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：圆的标准方程、一般方程与判别式三态</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="std">① 标准方程几何构造</button>
+      <button type="button" class="micro-tab" data-mode="gen">② 判别式 D²+E²-4F 三态</button>
+      <button type="button" class="micro-tab" data-mode="geom">③ 几何法与代数法求圆</button>
+    </div>
+    <svg id="m-circle-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="圆的方程几何直观图解"></svg>
+    <div class="micro-caption" id="m-circle-cap"></div>
   </div>
 
   <div class="card">
-    <p><b>曲线的方程</b>：说「某个方程是这条曲线的方程」，意思是两句话都成立：曲线上每个点的坐标都满足方程；坐标满足方程的点都在曲线上。</p>
-    <p>例：\((3,4)\) 代入 \(x^2+y^2=25\)：\(9+16=25\)，成立，所以在圆上；\((4,4)\) 代入得 \(32\ne25\)，不在圆上。</p>
+    <p><b>圆、圆心、半径</b>：平面上到一个定点距离等于定长的所有点组成的闭合曲线。定点叫圆心 \(C(a,b)\)，定长叫半径 \(r\)（\(r>0\)）。</p>
+    <p>例：到 \((1,2)\) 距离为 \(3\) 的点，满足 \((x-1)^2+(y-2)^2=9\)。点 \((1,5)\) 满足 \(0+9=9\)，在圆上；\((1,2)\) 到自身距离为 \(0\)，在圆内。</p>
   </div>
 
   <div class="card">
-    <p><b>配方</b>：把 \(x^2+px\) 凑成一个完全平方，再减去多出来的数：\(x^2+px=\left(x+\dfrac p2\right)^2-\dfrac{p^2}{4}\)。</p>
-    <p>例：\(x^2-6x=(x-3)^2-9\)；\(y^2+4y=(y+2)^2-4\)。展开右边就能验算。</p>
+    <p><b>配方法</b>：对二次式凑成完全平方：\(x^2+px = (x+\frac p2)^2 - \frac{p^2}{4}\)。配方是连接一般方程与标准方程的桥梁。</p>
+    <p>例：\(x^2-6x=(x-3)^2-9\)；\(y^2+4y=(y+2)^2-4\)。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">形式辨析</span> 标准方程 \((a,b,r)\) vs 一般方程 \((D,E,F)\)</div>
+      <p><b>标准方程</b>：\((x-a)^2+(y-b)^2=r^2\)。几何要素一目了然，圆心 \((a,b)\)、半径 \(r\) 直读，判别点圆位置极其便利。</p>
+      <p><b>一般方程</b>：\(x^2+y^2+Dx+Ey+F=0\)。展开齐次形式，最适合已知不共线三点代入解三元一次线性方程组。</p>
+      <p class="small">设方程准则：已知几何特征（圆心、弦长、相切）设标准式；已知三个点坐标设一般式。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">判别式辨析</span> \(D^2+E^2-4F\) 几何三态判别</div>
+      <p><b>充要条件</b>：\(x^2+y^2+Dx+Ey+F=0\) 表示圆的充要条件是 \(\Delta = D^2+E^2-4F > 0\)！</p>
+      <p><b>三态蜕变</b>：\(\Delta > 0\) 为圆；\(\Delta = 0\) 蜕化为单点 \((-\frac D2, -\frac E2)\)；\(\Delta &lt; 0\) 无实数点。</p>
+      <p class="small">警惕：方程含参数求为圆时，必须严格解不等式 \(D^2+E^2-4F > 0\)！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.8;">
+    圆的标准方程：\((x - \color{#2563eb}{a})^2 + (y - \color{#2563eb}{b})^2 = \color{#059669}{r^2} \quad (r &gt; 0)\)<br>
+    圆的一般方程：\(x^2 + y^2 + \color{#2563eb}{D}x + \color{#2563eb}{E}y + \color{#dc2626}{F} = 0 \quad (\color{#dc2626}{D^2+E^2-4F &gt; 0})\)
   </div>
 
   <h3>2. 圆的标准方程</h3>
   <p>圆心 \(C(a,b)\)，半径 \(r\)。点 \(P(x,y)\) 在圆上，就是 \(|PC|=r\)，用距离公式写出来是 \(\sqrt{(x-a)^2+(y-b)^2}=r\)。两边都不是负数，平方后意思不变：</p>
-  <div class="key" style="text-align:center">\((x-a)^2+(y-b)^2=r^2\)　（\(r>0\)）<br>圆心 \((a,b)\)，半径 \(r\)。</div>
+  <div class="key" style="text-align:center">\((x-a)^2+(y-b)^2=r^2\)　（\(r&gt;0\)）<br>圆心 \((a,b)\)，半径 \(r\)。</div>
   <p>读方程时注意符号：括号里是「减圆心」。\((x+1)^2\) 就是 \((x-(-1))^2\)，圆心横坐标是 \(-1\)。右边是 \(r^2\)，半径要开方。</p>
   <p>点和圆的位置也靠它看：把点代进左边，和 \(r^2\) 比，大于就在圆外，等于在圆上，小于在圆内（其实就是比点到圆心的距离和 \(r\)）。</p>
   <div class="card">
@@ -84,6 +122,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。\((y+2)^2=(y-(-2))^2\)，圆心纵坐标是 \(-2\)；\(r^2=9\)，\(r=3\)。选 B 是把两个符号都弄反了；选 C 忘了开方，\(9\) 是 \(r^2\)。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 圆的一般方程</h3>
   <p>把标准方程展开：\(x^2+y^2-2ax-2by+(a^2+b^2-r^2)=0\)。记 \(D=-2a\)，\(E=-2b\)，\(F=a^2+b^2-r^2\)，就是</p>
@@ -91,13 +130,13 @@
   <p>反过来，拿到这样一个方程，对 \(x\)、\(y\) 分别配方：</p>
   <p style="text-align:center">\(\left(x+\dfrac D2\right)^2+\left(y+\dfrac E2\right)^2=\dfrac{D^2+E^2-4F}{4}\)</p>
   <p>左边是两个平方的和，不会是负数。所以要看右边：</p>
-  <div class="key">\(D^2+E^2-4F>0\)：是圆，圆心 \(\left(-\dfrac D2,-\dfrac E2\right)\)，半径 \(\dfrac{\sqrt{D^2+E^2-4F}}{2}\)。<br>\(D^2+E^2-4F=0\)：只有一个点 \(\left(-\dfrac D2,-\dfrac E2\right)\)。<br>\(D^2+E^2-4F&lt;0\)：没有一个实数点满足它。</div>
+  <div class="key">\(D^2+E^2-4F&gt;0\)：是圆，圆心 \(\left(-\dfrac D2,-\dfrac E2\right)\)，半径 \(\dfrac{\sqrt{D^2+E^2-4F}}{2}\)。<br>\(D^2+E^2-4F=0\)：只有一个点 \(\left(-\dfrac D2,-\dfrac E2\right)\)。<br>\(D^2+E^2-4F&lt;0\)：没有一个实数点满足它。</div>
   <div class="card">
     <p class="small">例 2</p>
     <p>方程 \(x^2+y^2-4x+6y-3=0\) 表示什么图形？</p>
     <p>配方：\((x^2-4x+4)+(y^2+6y+9)=3+4+9\)，即 \((x-2)^2+(y+3)^2=16\)。</p>
-    <p>右边 \(16>0\)，是圆，圆心 \((2,-3)\)，半径 \(4\)。</p>
-    <p>用公式核对：\(D^2+E^2-4F=16+36+12=64>0\)，半径 \(\dfrac{\sqrt{64}}{2}=4\)，一样。</p>
+    <p>右边 \(16&gt;0\)，是圆，圆心 \((2,-3)\)，半径 \(4\)。</p>
+    <p>用公式核对：\(D^2+E^2-4F=16+36+12=64&gt;0\)，半径 \(\dfrac{\sqrt{64}}{2}=4\)，一样。</p>
   </div>
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：\(x^2+y^2+2x-4y-4=0\) 的圆心和半径是？</p>
@@ -109,6 +148,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。\((x^2+2x+1)+(y^2-4y+4)=4+1+4\)，即 \((x+1)^2+(y-2)^2=9\)。选 C 是配方时只加了常数 \(4\)，忘了把补进去的 \(1\) 和 \(4\) 也加到右边；选 B 是圆心符号反了。</p></div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 求圆的方程：先设，再解</h3>
   <p>标准方程有 \(a,b,r\) 三个未知数，一般方程有 \(D,E,F\) 三个，所以一般要三个条件。选哪种设法看条件：</p>
@@ -153,21 +193,81 @@
     <div class="reveal"><p><b>A</b>。\((x+1)^2+y^2+(x-1)^2+y^2=10\)，展开 \(2x^2+2y^2+2=10\)，所以 \(x^2+y^2=4\)。选 B 是展开时把两个 \(1\) 丢了。</p></div>
   </div>
 
-  <h3>6. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>标准方程右边要是正数</b>：\(r>0\)。<br><span class="small">反例：\((x-1)^2+(y+2)^2=0\) 只有 \(x=1\)、\(y=-2\) 满足，是一个点 \((1,-2)\)，不是圆；\((x-1)^2+(y+2)^2=-4\) 一个点都没有。</span></li>
-    <li><b>一般方程先看 \(D^2+E^2-4F\)</b>：大于 \(0\) 才是圆，等于 \(0\) 是一个点，小于 \(0\) 没有实点。<br><span class="small">反例：\(x^2+y^2-2x+4y+5=0\) 看着像圆，可 \(D^2+E^2-4F=4+16-20=0\)，配方得 \((x-1)^2+(y+2)^2=0\)，只是点 \((1,-2)\)。\(x^2+y^2+2x+3=0\) 的 \(4-12&lt;0\)，配方得 \((x+1)^2+y^2=-2\)，没有点。</span></li>
-    <li><b>样子要对</b>：\(x^2\) 和 \(y^2\) 的系数相等（不是 \(0\)），而且没有 \(xy\) 项。系数相等但不是 \(1\) 时，先两边同除。<br><span class="small">反例：\(x^2+2y^2=4\) 过 \((2,0)\) 和 \((0,\sqrt2)\)，这两点到原点的距离不同，而图形关于原点对称，它不是圆；\(x^2+y^2+xy=1\) 有 \(xy\) 项，也不是圆。\(2x^2+2y^2-4x=0\) 除以 \(2\) 得 \(x^2+y^2-2x=0\)，是圆。</span></li>
-    <li><b>三个点要不共线</b>：不在一条直线上的三点确定唯一的圆；共线的三点，没有圆能同时经过。<br><span class="small">反例：\((0,0)\)、\((1,1)\)、\((2,2)\)。代入一般方程得 \(F=0\)，\(D+E=-2\)，\(D+E=-4\)，矛盾，无解。</span></li>
-    <li><b>轨迹要补范围、去掉不合规则的点</b>：化简出来的方程可能比真正的轨迹多几个点。<br><span class="small">反例：\(A(-2,0)\)、\(B(2,0)\)，求使 \(\angle APB=90^\circ\) 的点 \(P\)。由勾股定理 \(|PA|^2+|PB|^2=|AB|^2\) 化简得 \(x^2+y^2=4\)。但 \(P\) 取 \(A\) 或 \(B\) 时根本没有角，要去掉：轨迹是 \(x^2+y^2=4\)（除去 \((-2,0)\)、\((2,0)\) 两点）。</span></li>
-  </ol>
-  <div class="key">拿到 \(x^2+y^2+Dx+Ey+F=0\)，先算 \(D^2+E^2-4F\)，再说它是不是圆。求轨迹，最后一步是回头查有没有多出来的点。</div>
+  <h3>6. 三步破题思维链：求圆方程与判别式解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>审清几何条件：是给出圆心、半径，圆与直线相切，还是给出圆上不共线的三点坐标。若方程含参数且提问「何时表示圆」，立刻联想到判别式 \(\Delta = D^2+E^2-4F\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 条件涉及圆心、半径、距离时：设标准方程 \((x-a)^2+(y-b)^2=r^2\)；<br>
+        ② 条件给出圆上三点坐标时：设一般方程 \(x^2+y^2+Dx+Ey+F=0\)，联立解三元一次线性方程组；<br>
+        ③ 含参数判别式：列出 \(D^2+E^2-4F > 0\) 求解参数取值范围。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>① 标准方程右边是 \(r^2\)，回答半径必须开平方根！<br>
+        ② 动点轨迹求出后，必须核验几何边界条件，剔除三点共线等不合题意的空心退化点。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：一般方程判别式为 0 误认成圆</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>将 \(x^2+y^2-2x+4y+5=0\) 直接读成圆，计算半径得 0 仍称作圆</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>配方得 \((x-1)^2+(y+2)^2=0\)，几何图形仅为单个点 \((1,-2)\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：从标准方程读圆心符号弄反</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>由 \((x+1)^2+(y-3)^2=4\) 读出圆心坐标为 \((1,-3)\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>标准方程是 \((x-a)^2\)，圆心为 \((-1,3)\)，切记「负号是公式自带」</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：把右边常数项当半径漏开方</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>由 \((x-2)^2+y^2=9\) 答半径 \(r=9\)，导致周长与面积全错</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>右侧常数项为 \(r^2=9\)，半径必须开方得出 \(r=3\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：判别式 \(\Delta = 0\) 退化为单点图解</div>
+    <svg id="m-circle-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="圆方程退化反例图解"></svg>
+    <div class="micro-caption">\(D^2+E^2-4F = 0\) 时，配方后右侧半径平方为 \(0\)，图形收缩退化为一个孤立点；\(&lt;0\) 时右侧为负数，无任何实数点！</div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>为什么「平方」不会多出点</b>：\(\sqrt{(x-a)^2+(y-b)^2}=r\) 两边都不小于 \(0\)，所以平方前后等价。要是右边可能是负数，平方就会多出解，这也是标准方程要求 \(r>0\) 的原因之一。</p>
-    <p><b>圆心在已知直线上</b>：比如「圆心在 \(y=x\) 上，过 \((0,0)\) 和 \((2,0)\)」，就设 \((x-a)^2+(y-a)^2=r^2\)，只剩 \(a,r\) 两个未知数，两个条件正好够：\(2a^2=r^2\)，\((2-a)^2+a^2=r^2\)，解得 \(a=1\)，\(r^2=2\)。</p>
-    <p><b>三点共线时还可以这样看</b>：圆上任意两点的连线（弦）的垂直平分线都过圆心。三点不共线时，两条垂直平分线交于一点，就是圆心；三点共线时这两条线平行，没有交点，所以没有圆。</p>
+    <p><b>圆心在已知直线上</b>：比如「圆心在 \(y=x\) 上，过 \((0,0)\) 和 \((2,0)\)」，设 \((x-a)^2+(y-a)^2=r^2\)，两个条件联立解出 \(a=1, r^2=2\)。</p>
   </details>
 </section>
 
@@ -471,6 +571,221 @@
 
   document.addEventListener("DOMContentLoaded", function () { circReset(); genReset(); });
   if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { circDraw(); genDraw(); });
+
+  /* ================= 0 从例子进入：草地木桩拴小狗 ================= */
+  var edSvg = document.getElementById("entry-dog"), edBar = document.getElementById("entry-dog-bar"), edNote = document.getElementById("entry-dog-note");
+  var DOG_PTS = {
+    A: { x: 3, y: 4, d: "5", sq: "3²+4²=25", msg: "A(3,4) 到原点距离 √(3²+4²) = <b>5 米</b>，绳子<b>刚好拉直</b>，正好在圆 x²+y²=25 上！" },
+    B: { x: 4, y: 4, d: "≈5.66", sq: "4²+4²=32>25", msg: "B(4,4) 到原点距离 √32 ≈ <b>5.66 米 &gt; 5 米</b>，在圆外，5 米绳子<b>够不着</b>！" },
+    C: { x: 5, y: 5, d: "≈7.07", sq: "5²+5²=50>25", msg: "C(5,5) 到原点距离 √50 ≈ <b>7.07 米 &gt; 5 米</b>，远远超出 5 米绳圈！" },
+    D: { x: 2, y: 3, d: "≈3.61", sq: "2²+3²=13<25", msg: "D(2,3) 到原点距离 √13 ≈ <b>3.61 米 &lt; 5 米</b>，在圆内，绳子<b>松弛没拉直</b>！" }
+  };
+  function edDraw(key) {
+    var ox = 56, oy = 180, u = 28, R = 5 * u, h = [];
+    // 第一象限扇形草地 r=5
+    h.push('<path d="M' + ox + ',' + oy + ' L' + (ox + R) + ',' + oy + ' A' + R + ',' + R + ' 0 0,0 ' + ox + ',' + (oy - R) + ' Z" fill="var(--ok-soft)" opacity="0.65"/>');
+    for (var i = 1; i <= 5; i++) {
+      h.push('<line x1="' + (ox + i * u) + '" y1="' + (oy - 5.5 * u) + '" x2="' + (ox + i * u) + '" y2="' + oy + '" stroke="var(--line)"/>');
+      h.push('<text x="' + (ox + i * u) + '" y="' + (oy + 18) + '" text-anchor="middle" fill="var(--muted)" font-size="13">' + i + '</text>');
+      h.push('<line x1="' + ox + '" y1="' + (oy - i * u) + '" x2="' + (ox + 5.5 * u) + '" y2="' + (oy - i * u) + '" stroke="var(--line)"/>');
+      h.push('<text x="' + (ox - 8) + '" y="' + (oy - i * u + 4) + '" text-anchor="end" fill="var(--muted)" font-size="13">' + i + '</text>');
+    }
+    h.push('<line x1="' + ox + '" y1="' + oy + '" x2="' + (ox + 5.8 * u) + '" y2="' + oy + '" stroke="var(--fg)" stroke-width="1.5"/>');
+    h.push('<line x1="' + ox + '" y1="' + oy + '" x2="' + ox + '" y2="' + (oy - 5.8 * u) + '" stroke="var(--fg)" stroke-width="1.5"/>');
+    // 圆弧 r=5
+    h.push('<path d="M' + (ox + R) + ',' + oy + ' A' + R + ',' + R + ' 0 0,0 ' + ox + ',' + (oy - R) + '" fill="none" stroke="var(--a)" stroke-width="2.6"/>');
+    var p = DOG_PTS[key], px = ox + p.x * u, py = oy - p.y * u;
+    if (key === "A") {
+      h.push('<polygon points="' + ox + ',' + oy + ' ' + px + ',' + oy + ' ' + px + ',' + py + '" fill="var(--hl-soft)" opacity="0.55" stroke="var(--b)" stroke-dasharray="3 2"/>');
+      h.push('<line x1="' + ox + '" y1="' + oy + '" x2="' + px + '" y2="' + py + '" stroke="var(--a)" stroke-width="3.2"/>');
+    } else if (key === "D") {
+      h.push('<path d="M' + ox + ',' + oy + ' Q' + (ox + 1.8 * u) + ',' + (oy - 0.6 * u) + ' ' + px + ',' + py + '" fill="none" stroke="var(--b)" stroke-width="2.8" stroke-dasharray="5 3"/>');
+    } else {
+      var len = Math.sqrt(p.x * p.x + p.y * p.y), ex = ox + (p.x / len) * R, ey = oy - (p.y / len) * R;
+      h.push('<line x1="' + ox + '" y1="' + oy + '" x2="' + ex + '" y2="' + ey + '" stroke="var(--a)" stroke-width="3"/>');
+      h.push('<line x1="' + ex + '" y1="' + ey + '" x2="' + px + '" y2="' + py + '" stroke="var(--no)" stroke-width="2.5" stroke-dasharray="4 3"/>');
+    }
+    // 四个候选点
+    ["A", "B", "C", "D"].forEach(function (k) {
+      var q = DOG_PTS[k], qx = ox + q.x * u, qy = oy - q.y * u, on = k === key;
+      var col = k === "A" ? "var(--a)" : (k === "D" ? "var(--b)" : "var(--no)");
+      h.push('<circle cx="' + qx + '" cy="' + qy + '" r="' + (on ? 6.5 : 4.5) + '" fill="' + (on ? col : 'var(--card)') + '" stroke="' + col + '" stroke-width="2"/>');
+      var tx = k === "A" ? (qx - 8) : (qx + 8);
+      var ty = k === "A" ? (qy - 6) : (qy + 4);
+      var anc = k === "A" ? "end" : "start";
+      h.push('<text x="' + tx + '" y="' + ty + '" text-anchor="' + anc + '" font-weight="' + (on ? '700' : '400') + '" fill="' + (on ? col : 'var(--muted)') + '" font-size="13">' + k + '(' + q.x + ',' + q.y + ')</text>');
+    });
+    h.push('<circle cx="' + ox + '" cy="' + oy + '" r="5.5" fill="var(--fg)"/>');
+    h.push('<text x="6" y="' + (oy + 18) + '" text-anchor="start" font-weight="700" fill="var(--fg)" font-size="12.5">木桩(0,0)</text>');
+    // 右侧计算卡
+    var rx = 266;
+    h.push('<rect x="' + rx + '" y="36" width="238" height="122" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>');
+    h.push('<text x="' + (rx + 14) + '" y="62" font-weight="700" fill="var(--fg)" font-size="15">当前测试点：' + key + '(' + p.x + ', ' + p.y + ')</text>');
+    h.push('<text x="' + (rx + 14) + '" y="90" fill="var(--fg)" font-size="14.5">x² + y² = ' + p.sq + '</text>');
+    h.push('<text x="' + (rx + 14) + '" y="116" fill="' + (key === "A" ? "var(--a)" : "var(--no)") + '" font-weight="700" font-size="14.5">到木桩距离 d = ' + p.d + ' 米</text>');
+    h.push('<text x="' + (rx + 14) + '" y="142" fill="var(--muted)" font-size="13.5">绳长固定 r = 5 米 (r² = 25)</text>');
+    edSvg.innerHTML = h.join("");
+    [].forEach.call(edBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-pt") === key);
+    });
+    edNote.innerHTML = p.msg;
+  }
+  [].forEach.call(edBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { edDraw(b.getAttribute("data-pt")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry" && DOG_PTS[ev.detail.choice]) edDraw(ev.detail.choice);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") edDraw("A");
+  });
+  edDraw("A");
 })();
+
+
+function initMCircleFig(){
+  var svgEl = document.getElementById("m-circle-fig");
+  var capEl = document.getElementById("m-circle-cap");
+  if (!svgEl) return;
+  var mode = "std";
+  var NS = "http://www.w3.org/2000/svg";
+  var caps = {
+    std: "圆的标准方程：圆心 C(a, b)，半径 r，圆上动点 P(x, y) 到圆心距离恒等于 r，两边平方即 (x - a)² + (y - b)² = r²。",
+    gen: "判别式三态：D² + E² - 4F > 0 为圆；= 0 退化为单点；< 0 无实数点。这是含参圆题目的必考考点。",
+    geom: "求圆方程双路径：已知圆心/切线/距离选标准式；已知不共线三点坐标选一般式解线性方程组。"
+  };
+
+  function s(el, tag, attrs, txt){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt) e.textContent = txt;
+    el.appendChild(e);
+    return e;
+  }
+  function ln(el, x1, y1, x2, y2, c, w, d){
+    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
+    if (d) a["stroke-dasharray"] = d;
+    return s(el, "line", a);
+  }
+  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
+  function tx(el, x, y, txt, c, sz, b, anch){
+    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
+    if (b) a["font-weight"] = "bold";
+    if (anch) a["text-anchor"] = anch;
+    return s(el, "text", a, txt);
+  }
+
+  function draw(){
+    svgEl.innerHTML = "";
+    if (mode === "std") {
+      tx(svgEl, 270, 24, "圆的标准方程：(x - a)² + (y - b)² = r² (r > 0)", "#0f172a", "12.5", true, "middle");
+      ln(svgEl, 40, 160, 260, 160, "#64748b", 1.5);
+      ln(svgEl, 70, 180, 70, 40, "#64748b", 1.5);
+
+      // Circle at C(150, 110), r = 50
+      s(svgEl, "circle", {cx:150, cy:110, r:50, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "circle", {cx:150, cy:110, r:4, fill:"#dc2626"});
+      tx(svgEl, 150, 126, "C(a, b)", "#dc2626", "10.5", true, "middle");
+
+      // Point P on circle at angle 35 deg
+      var px = 150 + 50 * 0.819;
+      var py = 110 - 50 * 0.573;
+      s(svgEl, "circle", {cx:px, cy:py, r:4, fill:"#2563eb"});
+      tx(svgEl, px + 8, py - 4, "P(x, y)", "#2563eb", "10.5", true);
+      ln(svgEl, 150, 110, px, py, "#dc2626", 2);
+      tx(svgEl, 166, 92, "r", "#dc2626", "11", true);
+
+      // Triangle for dx, dy
+      ln(svgEl, 150, 110, px, 110, "#059669", 1.5, "3 3");
+      ln(svgEl, px, 110, px, py, "#059669", 1.5, "3 3");
+      tx(svgEl, 170, 120, "x - a", "#059669", "9.5");
+      tx(svgEl, px + 4, 100, "y - b", "#059669", "9.5");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "标准方程速记要诀", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 圆心：(a, b) 注意反号", "#2563eb", "11");
+      tx(svgEl, 325, 120, "• 半径：r = √右边常数", "#059669", "11");
+      tx(svgEl, 325, 142, "• 点圆位置：代入与 r² 比", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 大于在圆外，小于在圆内", "#64748b", "10.5");
+    } else if (mode === "gen") {
+      tx(svgEl, 270, 24, "一般方程 x² + y² + Dx + Ey + F = 0 判别式三态", "#0f172a", "12.5", true, "middle");
+      // 3 states visual
+      // State 1: Circle
+      s(svgEl, "circle", {cx:75, cy:110, r:35, fill:"rgba(37,99,235,0.08)", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "circle", {cx:75, cy:110, r:3, fill:"#2563eb"});
+      tx(svgEl, 75, 160, "① Δ>0 (正常圆)", "#2563eb", "10.5", true, "middle");
+
+      // State 2: Point
+      s(svgEl, "circle", {cx:175, cy:110, r:4, fill:"#dc2626"});
+      tx(svgEl, 175, 160, "② Δ=0 (单点)", "#dc2626", "10.5", true, "middle");
+
+      // State 3: Empty
+      tx(svgEl, 262, 115, "∅", "#64748b", "24", true, "middle");
+      tx(svgEl, 262, 160, "③ Δ<0 (无实点)", "#64748b", "10.5", true, "middle");
+
+      rc(svgEl, 320, 48, 200, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 335, 74, "Δ = D² + E² - 4F 判据", "#0f172a", "11.5", true);
+      tx(svgEl, 335, 98, "• Δ > 0 ⟹ 是圆，半径 > 0", "#2563eb", "10.5");
+      tx(svgEl, 335, 120, "• Δ = 0 ⟹ 点 (-D/2, -E/2)", "#dc2626", "10.5", true);
+      tx(svgEl, 335, 142, "• Δ < 0 ⟹ 不表示任何图形", "#64748b", "10.5");
+      tx(svgEl, 335, 164, "• x², y² 系数必须严格相同", "#059669", "10");
+    } else if (mode === "geom") {
+      tx(svgEl, 270, 24, "三点确定圆：弦的垂直平分线交于圆心", "#0f172a", "12.5", true, "middle");
+      s(svgEl, "circle", {cx:150, cy:110, r:55, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "circle", {cx:150, cy:110, r:4, fill:"#dc2626"});
+      tx(svgEl, 150, 124, "圆心 C", "#dc2626", "10.5", true, "middle");
+
+      // Points A, B, O
+      s(svgEl, "circle", {cx:100, cy:85, r:4, fill:"#059669"});
+      tx(svgEl, 90, 85, "A", "#059669", "11", true);
+      s(svgEl, "circle", {cx:200, cy:90, r:4, fill:"#059669"});
+      tx(svgEl, 210, 90, "B", "#059669", "11", true);
+      s(svgEl, "circle", {cx:150, cy:165, r:4, fill:"#059669"});
+      tx(svgEl, 150, 178, "O", "#059669", "11", true, "middle");
+
+      ln(svgEl, 100, 85, 200, 90, "#93c5fd", 1.5);
+      ln(svgEl, 150, 50, 150, 150, "#dc2626", 1.5, "3 3");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "两套解法对决", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 几何法：求弦中垂线交点", "#059669", "11");
+      tx(svgEl, 325, 120, "• 代数法：代入一般式解 D,E,F", "#2563eb", "11");
+      tx(svgEl, 325, 142, "• 三点共线 ⟹ 垂直平分线平行", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 无解，不能成圆", "#64748b", "10.5");
+    }
+
+    if (capEl) capEl.textContent = caps[mode];
+    if (window.renderMathInElement) window.renderMathInElement(capEl);
+  }
+
+  var tabs = document.querySelectorAll(".micro-box .micro-tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      mode = tab.getAttribute("data-mode");
+      draw();
+    });
+  });
+  draw();
+
+  var trapEl = document.getElementById("m-circle-trap-fig");
+  if (trapEl) {
+    trapEl.innerHTML = "";
+    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
+    tx(trapEl, 142, 42, "❌ 错解：误认 Δ=0 是圆", "#dc2626", "11.5", true, "middle");
+    tx(trapEl, 142, 70, "x² + y² - 2x + 4y + 5 = 0", "#dc2626", "10.5", false, "middle");
+    tx(trapEl, 142, 94, "配方得 (x-1)² + (y+2)² = 0", "#b91c1c", "11", true, "middle");
+    tx(trapEl, 142, 130, "半径为 0 仅为一个点！", "#64748b", "9.5", false, "middle");
+
+    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
+    tx(trapEl, 397, 42, "✔ 正解：严格要求 Δ > 0", "#15803d", "11.5", true, "middle");
+    tx(trapEl, 397, 70, "D² + E² - 4F 必须严格大于 0", "#059669", "10.5", true, "middle");
+    tx(trapEl, 397, 94, "此时半径 r = ½√(D²+E²-4F) > 0", "#15803d", "11", true, "middle");
+    tx(trapEl, 397, 130, "只有大于 0 时才是真正的圆！", "#047857", "10", true, "middle");
+  }
+}
+
+initMCircleFig();
 </script>
 </body></html>

@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   #bis text, #gro text { font-size: 20px; }
   .info { font-size: 16px; margin: 8px 0; line-height: 1.9; overflow-wrap: anywhere; }
@@ -31,8 +33,15 @@
 <p class="lead">方程解不出来，就去找函数图象和 \(x\) 轴的交点：先用零点存在定理圈出一段区间，再用二分法把它一半一半地缩小，直到够精确。最后比一比指数、幂、对数三类函数谁长得快，给实际问题挑模型。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>冬天的一个早上，\(6\) 点气温是 \(-2\,{}^\circ\mathrm C\)，到中午 \(12\) 点升到了 \(5\,{}^\circ\mathrm C\)。气温是一点一点连续变化的，不会突然跳一下。</p>
+  <p>冬天的一个早上，\(6\) 点气温是 \(-2\,{}^\circ\mathrm C\)，到中午 \(12\) 点升到了 \(5\,{}^\circ\mathrm C\)。气温是一点一点连续变化的，不会突然跳一下。先点下面的按钮切换三种不同的天气走势看看：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-temp" viewBox="0 0 520 205" role="img" aria-label="6点零下2度到12点零上5度的三种连续升温曲线，每一条都必穿过0度分界线"></svg>
+    <div class="entry-bar" id="entry-temp-bar">
+      <button type="button" data-m="0" class="on">匀速升温</button>
+      <button type="button" data-m="1">先慢后快</button>
+      <button type="button" data-m="2">中途小幅反复</button>
+    </div>
+    <div class="entry-note" id="entry-temp-note"></div>
     <p>从 \(6\) 点到 \(12\) 点之间，有没有某个时刻气温正好是 \(0\,{}^\circ\mathrm C\)？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>一定有</button>
@@ -40,7 +49,7 @@
       <button class="opt" data-v="C"><b>C</b>一定没有</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。从 \(0\) 度以下升到 \(0\) 度以上，又是连续变化，中途一定经过 \(0\) 度。</p>
+      <p><b>A</b>。从 \(0\) 度以下升到 \(0\) 度以上，又是连续变化，不管天气怎么走，中途一定至少经过一次 \(0\) 度。</p>
       <p>可是<b>几点</b>正好 \(0\) 度，光凭这两个数说不出来。那就查中间：要是 \(9\) 点是 \(1\,{}^\circ\mathrm C\)，\(0\) 度的时刻就在 \(6\) 点到 \(9\) 点之间；再查 \(7\) 点半……每查一次，范围缩小一半。</p>
       <p>这一节就讲这两件事：<b>零点存在定理</b>（一定经过 \(0\)）和<b>二分法</b>（一半一半地找到它）。最后再比一比几类函数谁涨得快。</p>
     </div>
@@ -48,37 +57,45 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：二次函数和一元二次方程（<a href="b1-2-3.html">回看 2.3</a>）；单调性（<a href="b1-3-2.html">回看 3.2</a>）；指数函数、对数函数的图象（<a href="b1-4-2.html">4.2</a>、<a href="b1-4-4.html">4.4</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：零点存在定理、二分法与三大增长模型</h3>
+  <p class="small">要用到：二次函数与一元二次方程（<a href="b1-2-3.html">回看 2.3</a>）；函数的单调性（<a href="b1-3-2.html">回看 3.2</a>）；指数函数与对数函数图象（<a href="b1-4-2.html">回看 4.2</a>、<a href="b1-4-4.html">4.4</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>零点</b>：使 \(f(x)=0\) 的实数 \(x\)。它是一个<b>数</b>，不是一个点。</p>
-    <p>例：\(f(x)=2x-6\)，\(f(3)=0\)，零点是 \(3\)。图象和 \(x\) 轴交在点 \((3,0)\)，但说「零点是 \((3,0)\)」是错的。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>零点存在定理、二分法逼近与三大模型对比</b></p>
+    <div class="entry-bar" id="m-zero-bar" role="group" aria-label="零点微图解切换">
+      <button type="button" class="on" data-m="exist">① 零点存在定理 (连续曲线端点异号 f(a)·f(b) &lt; 0，必穿过 x 轴)</button>
+      <button type="button" data-m="bisect">② 二分法区间对半收缩 (取中点留异号半段，(b-a)/2ⁿ &lt; ε 极速逼近)</button>
+      <button type="button" data-m="growth">③ 三大增长模型终极对决 (x 充分大后：2ˣ ≫ x² ≫ log₂x)</button>
+    </div>
+    <svg class="micro-fig" id="m-zero-fig" viewBox="0 0 520 160" role="img" aria-label="零点存在定理与二分法微图解"></svg>
+    <p class="entry-note" id="m-zero-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">存在性 vs 唯一性</span><b>定理只保「至少一个」，唯一必加「单调性」</b></p>
+      <p class="small" style="margin:0">\(f(a)f(b)&lt;0\) 且连续只保证<b>至少有一个零点</b>（非单调函数可能来回穿梭多次产生奇数个零点）；若要锁定<b>「有且仅有一个零点」</b>，必须追加<b>函数在区间上严格单调</b>！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">概念红线</span><b>零点是「数」不是「点」</b></p>
+      <p class="small" style="margin:0">零点是让方程 \(f(x)=0\) 成立的<b>实数根 \(x\)</b>（如 \(x=3\)），对应图象与 \(x\) 轴交点的横坐标；决不能把零点写成平面坐标点 \((3,0)\)！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心数学性质与二分收敛法则</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{f(a)\cdot f(b) &lt; 0 \text{ 且 } f(x)\text{ 在 }[a,b]\text{ 连续不断} \implies \exists\, x_0 \in (a,b),\, f(x_0)=0}_{\text{零点存在定理：连续穿轴必留痕（存在性保证）}}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{f(x)\text{ 在 }(a,b)\text{ 严格单调} \implies \text{至多一个零点}\quad (\text{存在性}+\text{单调性} \implies \text{唯一零点})}_{\text{根的唯一性锁定公式}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\text{区间长度 } \frac{b-a}{2^n} &lt; \varepsilon}_{\text{二分法 } n \text{ 步收敛判定}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>连续不断</b>：图象在这一段上能一笔画下来，中间不断开。</p>
-    <p>例：\(y=2^x\) 在任何区间上都是一笔画成的；\(y=\dfrac1x\) 在 \([-1,1]\) 上不是，它在 \(x=0\) 处断成了两截。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（零点即方程的实数解）</b></p>
+    <p>(1) 求 \(f(x)=x^2-2x-3\) 的零点。<br>解 \(x^2-2x-3=0 \implies (x-3)(x+1)=0\)，得 \(x=3\) 或 \(x=-1\)。零点是 \(-1\) 和 \(3\)（是实数，不是坐标点！）。</p>
+    <p>(2) 方程 \(\log_2 x=3-x\) 有几个实根？<br>看 \(y=\log_2 x\) 与 \(y=3-x\) 的交点。前者增、后者减，最多相交一次；代入 \(x=2\) 得 \(\log_2 2 = 1 = 3-2\)，恰有唯一解 \(x=2\)。</p>
   </div>
 
-  <div class="card">
-    <p><b>端点异号</b>：\(f(a)\) 和 \(f(b)\) 一正一负，写成 \(f(a)f(b)&lt;0\)。</p>
-    <p>例：\(f(1)=-1\)，\(f(2)=2\)，乘积 \(-2&lt;0\)，异号；\(f(0)=3\)，\(f(2)=3\)，乘积 \(9>0\)，同号。</p>
-  </div>
-
-  <div class="card">
-    <p><b>区间长度和精度</b>：区间 \([a,b]\) 的长度是 \(b-a\)。「精度 \(\varepsilon\)」是说：零点被圈进一个长度小于 \(\varepsilon\) 的区间里，就算找够准了。</p>
-    <p>例：\([1.25,1.375]\) 长 \(0.125\)。要精度 \(0.1\)：\(0.125\ge0.1\)，还不够；要精度 \(0.2\)：\(0.125&lt;0.2\)，够了。</p>
-  </div>
-
-  <h3>2. 零点就是方程的解</h3>
-  <div class="key">\(f(x)\) 有零点 \(\iff\) 方程 \(f(x)=0\) 有实数解 \(\iff\) \(y=f(x)\) 的图象和 \(x\) 轴有公共点。<br>方程 \(g(x)=h(x)\) 的解，就是 \(y=g(x)\) 与 \(y=h(x)\) 两条图象交点的横坐标。</div>
-  <p>所以「求零点」就是「解方程」；方程解不出来时，「有几个解」可以变成「两条图象有几个交点」，画图来数。</p>
-  <div class="card">
-    <p class="small">例 1</p>
-    <p>(1) 求 \(f(x)=x^2-2x-3\) 的零点。<br>解 \(x^2-2x-3=0\)，即 \((x-3)(x+1)=0\)，得 \(x=3\) 或 \(x=-1\)。零点是 \(-1\) 和 \(3\)。</p>
-    <p>(2) 方程 \(\log_2x=3-x\) 有几个解？<br>看 \(y=\log_2x\) 和 \(y=3-x\) 的交点。前者是增函数，后者是减函数，一个一直往上、一个一直往下，最多相交一次。试一下 \(x=2\)：\(\log_22=1\)，\(3-2=1\)，相等。所以恰有一个解 \(x=2\)。</p>
-  </div>
   <div class="card predict" data-id="try-zero" data-answer="A">
     <p>自己试试：\(f(x)=2^x-8\) 的零点是？</p>
     <div class="opts cols">
@@ -87,19 +104,34 @@
       <button class="opt" data-v="C"><b>C</b>\(4\)</button>
       <button class="opt" data-v="D"><b>D</b>\(8\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(2^x=8=2^3\)，\(x=3\)。选 B 的同学写成了点，零点是数；选 C 的同学把 \(8\div2\) 当成了 \(2^x=8\) 的解。</p></div>
+    <div class="reveal"><p><b>A</b>。\(2^x=8=2^3 \implies x=3\)。选 B 的同学写成了坐标点，零点是自变量的值（数）；选 C 的同学把 \(8\div2\) 当成了指数方程的解。</p></div>
   </div>
 
-  <h3>3. 零点存在定理</h3>
-  <p>如果 \(f(x)\) 在 \([a,b]\) 上的图象是<b>连续不断</b>的一条曲线，并且 \(f(a)f(b)&lt;0\)，那么 \(f(x)\) 在 \((a,b)\) 内<b>至少有一个</b>零点。</p>
-  <p>为什么：一笔画下来，从 \(x\) 轴下方走到上方（或反过来），中途总要碰到 \(x\) 轴。就像早上的气温从零下升到零上。</p>
+  <h3>3. 三步破题思维链：证明区间唯一零点与二分法逼近</h3>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>说明 \(f(x)=\lg x+x-3\) 在 \((2,3)\) 内有且只有一个零点。</p>
-    <p><b>存在</b>：\(f(x)\) 在 \([2,3]\) 上连续不断；\(f(2)=\lg2-1\approx-0.70&lt;0\)，\(f(3)=\lg3\approx0.48>0\)，异号。由定理，\((2,3)\) 内至少有一个零点。</p>
-    <p><b>唯一</b>：\(y=\lg x\) 和 \(y=x-3\) 都是增函数，相加还是增函数，图象最多穿过 \(x\) 轴一次。所以恰有一个。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：区间唯一零点证明与二分逼近三步法）</b></p>
+    <p style="margin:0 0 8px">证明函数 \(f(x)=\ln x+2x-6\) 在区间 \((2,3)\) 内有且仅有一个零点，并用二分法进行第 1 次逼近缩小区间。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步说明连续并算端点异号证存在：</span>
+        \(f(x)\) 在 \([2,3]\) 上是由对数与一次函数复合而成，图象连续不断；<br>
+        算端点值：\(f(2)=\ln 2 + 4 - 6 = \ln 2 - 2 &lt; 0\)（因 \(\ln 2 &lt; \ln e = 1\)）；<br>
+        \(f(3)=\ln 3 + 6 - 6 = \ln 3 &gt; 0\)；端点异号 \(f(2)\cdot f(3) &lt; 0\)，由零点存在定理，\((2,3)\) 内<b>至少有一个零点</b>！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步证严格单调递增锁死唯一性：</span>
+        \(y=\ln x\) 在 \((0,+\infty)\) 单调递增，\(y=2x-6\) 在 \(\mathbb{R}\) 单调递增；<br>
+        「增函数 + 增函数 = 严格增函数」，故 \(f(x)\) 在 \((2,3)\) 上严格单调递增，图象最多穿过 \(x\) 轴 1 次！与第一步合璧，<b>有且仅有一个零点</b>！
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步二分取中留异号逼近防同号漏根：</span>
+        取区间 \((2,3)\) 的中点 \(c_1 = 2.5\)；<br>
+        估算 \(f(2.5) = \ln 2.5 + 5 - 6 = \ln 2.5 - 1 \approx 0.916 - 1 &lt; 0\)；<br>
+        因为 \(f(2.5) &lt; 0\) 与 \(f(3) &gt; 0\) 异号，<b>零点锁定在缩小后的一半区间 \((2.5, 3)\) 内</b>，区间长度由 \(1\) 缩半至 \(0.5\)！
+      </div>
+    </div>
   </div>
-  <div class="key">要说「有且只有一个零点」：先用定理说明<b>存在</b>，再用单调性说明<b>唯一</b>。</div>
+
   <div class="card predict" data-id="try-exist" data-answer="B">
     <p>自己试试：\(f(x)=2^x-3\) 的零点在哪个区间里？</p>
     <div class="opts cols">
@@ -108,85 +140,94 @@
       <button class="opt" data-v="C"><b>C</b>\((2,3)\)</button>
       <button class="opt" data-v="D"><b>D</b>\((3,4)\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(f(1)=2-3=-1&lt;0\)，\(f(2)=4-3=1>0\)，异号。选 C 的同学看到 \(3\) 就想到 \((2,3)\)，可 \(f(2)\) 和 \(f(3)=5\) 都是正的。（零点其实是 \(\log_23\approx1.58\)。）</p></div>
+    <div class="reveal"><p><b>B</b>。\(f(1)=2-3=-1&lt;0\)，\(f(2)=4-3=1&gt;0\)，端点异号。选 C 的同学看到 \(3\) 就凭直觉选 \((2,3)\)，代入可知 \(f(2)=1\) 与 \(f(3)=5\) 均为正数。（真实零点为 \(x=\log_2 3 \approx 1.58\)）。</p></div>
   </div>
 
-  <h3>4. 二分法：一半一半地逼近</h3>
-  <p>已知 \(f(a)f(b)&lt;0\)，取中点 \(c=\dfrac{a+b}{2}\)，算 \(f(c)\)：</p>
-  <ul>
-    <li>\(f(c)=0\)：\(c\) 就是零点，结束。</li>
-    <li>否则，\(f(c)\) 一定和 \(f(a)\)、\(f(b)\) 中的一个异号。<b>留下异号的那一半</b>，零点还在里面。</li>
-  </ul>
-  <p>每做一次，区间长度减半：做 \(n\) 次后长度是 \(\dfrac{b-a}{2^n}\)。长度小于 \(\varepsilon\) 就停，区间里任何一个数都可以当近似值。</p>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>用二分法求 \(f(x)=x^2-2\) 在 \([1,2]\) 内的零点，精度 \(0.2\)。</p>
-    <p>\(f(1)=-1&lt;0\)，\(f(2)=2>0\)。</p>
-    <p>第 1 次：\(c=1.5\)，\(f(1.5)=0.25>0\)，和 \(f(1)\) 异号，留 \([1,1.5]\)，长 \(0.5\)。<br>
-    第 2 次：\(c=1.25\)，\(f(1.25)=-0.4375&lt;0\)，和 \(f(1.5)\) 异号，留 \([1.25,1.5]\)，长 \(0.25\)，还不小于 \(0.2\)。<br>
-    第 3 次：\(c=1.375\)，\(f(1.375)\approx-0.11&lt;0\)，留 \([1.375,1.5]\)，长 \(0.125&lt;0.2\)，停。</p>
-    <p>近似值可取 \(1.4\)（区间里的任何数都行）。真正的零点是 \(\sqrt2\approx1.414\)，确实在这个区间里。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（二分法迭代精度计算）</b></p>
+    <p>用二分法求 \(f(x)=x^2-2\) 在 \([1,2]\) 内的零点，精度要求 \(\varepsilon = 0.2\)。</p>
+    <p>\(f(1)=-1&lt;0\)，\(f(2)=2&gt;0\)。<br>
+    第 1 次：\(c=1.5\)，\(f(1.5)=0.25&gt;0\)，与 \(f(1)\) 异号，保留 \([1, 1.5]\)，区间长度 \(0.5\ge0.2\)；<br>
+    第 2 次：\(c=1.25\)，\(f(1.25)=-0.4375&lt;0\)，与 \(f(1.5)\) 异号，保留 \([1.25, 1.5]\)，区间长度 \(0.25\ge0.2\)；<br>
+    第 3 次：\(c=1.375\)，\(f(1.375)\approx-0.11&lt;0\)，保留 \([1.375, 1.5]\)，区间长度 \(0.125&lt;0.2\)，达到精度停止！近似值可取 \(1.4\)（真实零点 \(\sqrt{2}\approx1.414\) 在其内）。</p>
   </div>
+
   <div class="card predict" data-id="try-bisect" data-answer="B">
-    <p>自己试试：从长度为 \(1\) 的区间开始二分，要精度 \(0.1\)，最少要二分几次？</p>
+    <p>自己试试：从长度为 \(1\) 的区间开始二分，要求精度小于 \(0.1\)，最少要二分几次？</p>
     <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(3\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(4\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(5\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(10\)</button>
+      <button class="opt" data-v="A"><b>A</b>\(3\) 次</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\) 次</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\) 次</button>
+      <button class="opt" data-v="D"><b>D</b>\(10\) 次</button>
     </div>
-    <div class="reveal"><p><b>B</b>。长度 \(1\to0.5\to0.25\to0.125\to0.0625\)，第 \(4\) 次才小于 \(0.1\)。选 A 的同学停在了 \(0.125\)，它还比 \(0.1\) 大；选 D 的同学用了 \(1\div0.1\)，可每次是减半，不是减 \(0.1\)。</p></div>
+    <div class="reveal"><p><b>B</b>。区间长度迭代：\(1 \to 0.5 \to 0.25 \to 0.125 \to 0.0625\)。第 \(3\) 次长度为 \(0.125 &gt; 0.1\) 仍不够；第 \(4\) 次 \(0.0625 &lt; 0.1\) 才达标！</p></div>
   </div>
 
-  <h3>5. 增长快慢：要说清在哪一段比</h3>
-  <p>在 \((0,+\infty)\) 上，\(y=2^x\)、\(y=x^2\)、\(y=\log_2x\) 都是增函数，增长的方式不一样。列个表看：</p>
-  <div class="tw"><table>
-    <tr><th>\(x\)</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
-    <tr><th>\(2^x\)</th><td>2</td><td>4</td><td>8</td><td>16</td><td>32</td><td>64</td></tr>
-    <tr><th>\(x^2\)</th><td>1</td><td>4</td><td>9</td><td>16</td><td>25</td><td>36</td></tr>
-    <tr><th>\(\log_2x\)</th><td>0</td><td>1</td><td>1.58</td><td>2</td><td>2.32</td><td>2.58</td></tr>
-  </table></div>
-  <ul>
-    <li><b>指数</b> \(2^x\)：\(x\) 每加 \(1\)，值<b>翻一倍</b>，越往后越快（「指数爆炸」）。</li>
-    <li><b>幂</b> \(x^2\)：也越来越快，但到后面被指数远远甩开。</li>
-    <li><b>对数</b> \(\log_2x\)：\(x\) 翻一倍，值才加 \(1\)，越往后越平缓。</li>
-  </ul>
-  <p>挑模型时看数据怎么变：每次<b>加</b>同样多，用一次函数；每次<b>乘</b>同样的倍数，用指数函数；开始涨得快、后来越来越慢，可以考虑对数函数。建好模型，再回到实际里检验。</p>
   <div class="card">
-    <p class="small">例 4</p>
-    <p>某 App 上线后，第 \(1\)、\(2\)、\(3\)、\(4\) 个月的用户数是 \(1000\)、\(2000\)、\(4000\)、\(8000\)。选什么模型？照这个趋势，第 \(6\) 个月大约多少？</p>
-    <p>相邻两个月：差是 \(1000\)、\(2000\)、\(4000\)，不是一样多；比都是 \(2\)，每月乘同样的倍数，用指数模型 \(y=1000\times2^{x-1}\)。第 \(6\) 个月 \(y=1000\times2^5=32000\)。</p>
-    <p>检验：指数增长不会一直持续（总人数有限），这个预测只适合短期。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（三大增长模型选用）</b></p>
+    <p>某 App 前 4 个月的用户数分别为 \(1000, 2000, 4000, 8000\)。应选用什么模型？第 6 个月预估约为多少？</p>
+    <p>相邻两月成固定公比 \(2\)，选用指数模型 \(y=1000\times 2^{x-1}\)。第 6 个月 \(y=1000\times 2^5 = 32000\)。指数爆炸威力巨大，但在现实中总受承载量制约，仅适用于初期高速扩张阶段。</p>
   </div>
+
   <div class="card predict" data-id="e-growth" data-answer="B">
-    <p>自己试试：「当 \(x>0\) 时，总有 \(2^x>x^2\)。」这句话对吗？</p>
+    <p>自己试试：「当 \(x&gt;0\) 时，总有 \(2^x&gt;x^2\)。」这句话对吗？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>对，指数函数增长最快</button>
-      <button class="opt" data-v="B"><b>B</b>不对，比如 \(x=3\) 时 \(2^x&lt;x^2\)</button>
-      <button class="opt" data-v="C"><b>C</b>不对，只有 \(x>4\) 时才有 \(2^x>x^2\)</button>
+      <button class="opt" data-v="B"><b>B</b>不对，比如 \(x=3\) 时 \(2^3=8 &lt; 3^2=9\)</button>
+      <button class="opt" data-v="C"><b>C</b>不对，只有 \(x&gt;4\) 时才成立</button>
     </div>
-    <div class="reveal">
-      <p><b>B</b>。看上面的表：\(2^3=8\)，\(3^2=9\)，\(8&lt;9\)。</p>
-      <p>C 也不对：\(x=1\) 时 \(2>1\)。准确的说法是：\(0&lt;x&lt;2\) 或 \(x>4\) 时 \(2^x>x^2\)；\(2&lt;x&lt;4\) 时 \(2^x&lt;x^2\)。「指数增长快」说的是 \(x\) 足够大以后的趋势。在「动手」②里把竖线拖到 \(x=3\) 看看。</p>
-    </div>
+    <div class="reveal"><p><b>B</b>。当 \(x=3\) 时 \(2^3=8 &lt; 3^2=9\)！实际上在 \((2, 4)\) 区间内是二次抛物线压制指数曲线；只有当 \(x&gt;4\)（充分大）后，指数函数才彻底甩开幂函数。「指数增长最快」是对终极趋势的定性描述！</p></div>
   </div>
 
-  <h3>6. 用之前，分清这几件事</h3>
-  <ol>
-    <li><b>连续、异号缺一不可</b>。<br><span class="small">反例：\(f(x)=\dfrac1x\) 在 \([-1,1]\) 上 \(f(-1)f(1)=-1&lt;0\)，可它在 \(x=0\) 处断开，根本没有零点。</span></li>
-    <li><b>定理只说「至少一个」，推不出唯一</b>；唯一要再靠单调性。<br><span class="small">反例：\(f(x)=x^3-x\) 在 \([-2,2]\) 上 \(f(-2)=-6\)，\(f(2)=6\)，异号，可零点有 \(-1\)、\(0\)、\(1\) 三个。</span></li>
-    <li><b>端点同号，推不出没有零点</b>。定理的条件是充分的，不是必要的。<br><span class="small">反例：\(f(x)=x^2-1\) 在 \([-2,2]\) 上 \(f(-2)=f(2)=3\)，同号，可 \(\pm1\) 都是零点。</span></li>
-    <li><b>精度看区间长度，不看函数值</b>。中点值为 \(0\) 才算正好找到；否则留异号的一半，长度小于 \(\varepsilon\) 才停。<br><span class="small">反例：\(f(x)=0.001(x-3)\) 在 \(x=3.5\) 处只有 \(0.0005\)，很小，可 \(3.5\) 离零点 \(3\) 还差 \(0.5\)。</span></li>
-    <li><b>比增长快慢，要说明在哪一段比</b>。<br><span class="small">反例：「\(2^x\) 总比 \(x^2\) 大」，在 \(x=3\) 时就不对。</span></li>
-  </ol>
-  <div class="key">定理：连续 + 异号 \(\Rightarrow\) 至少一个零点。反过来不成立，「至少」也不是「恰好」。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>忽视「连续」前提，对断点函数乱套定理</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：\(f(x)=\dfrac{1}{x}\) 在 \([-1,1]\) 上，\(f(-1)=-1&lt;0\)，\(f(1)=1&gt;0\)，乘积小于 0，故在 \((-1,1)\) 内必有零点。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：\(f(x)\) 在 \(x=0\) 处断崖隔断不连续！两端异号是因为跨越了渐近线，全定义域根本没有任何零点！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-jump-fig" viewBox="0 0 280 140" role="img" aria-label="反比例函数断点无零点反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>端点同号就轻率断定「区间内没有零点」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：若 \(f(a)f(b)&gt;0\)，则函数 \(f(x)\) 在 \((a,b)\) 内必定没有零点。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：零点存在定理是<b>充分不必要条件</b>！比如抛物线 \(f(x)=x^2-1\) 在 \([-2,2]\) 上端点 \(f(-2)=f(2)=3&gt;0\)，中间却穿过两次产生两个零点 \(x=\pm1\)！同号完全可以穿入再穿出！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>二分法误将「函数值很小」当成「达到精度」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：算到某中点 \(|f(c)| = 0.001\) 就以为达到了精度 \(0.01\)，提前停止二分。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：精度判定指标是<b>区间长度 \(\dfrac{b-a}{2^n} &lt; \varepsilon\)</b>，而不是函数值高度！曲线很平缓时，\(|f(c)|\) 很小但 \(c\) 距离真正零点仍可能极其遥远！
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>二分法找不到「碰一下就走」的零点</b>：\(f(x)=(x-1)^2\) 的零点是 \(1\)，可它两边都是正的，找不到一对异号的端点，二分法用不上。二分法只管穿过 \(x\) 轴的零点。</p>
-    <p><b>要几次能事先算</b>：长度 \(b-a\) 的区间要精度 \(\varepsilon\)，就找最小的 \(n\) 让 \(\dfrac{b-a}{2^n}&lt;\varepsilon\)。比如长度 \(1\)、精度 \(0.001\)：\(2^{10}=1024>1000\)，\(10\) 次就够。</p>
-    <p><b>慢的指数也会追上快的一次函数</b>：\(x\) 从 \(1\) 到几十，\(1.1^x\) 都远比 \(100x\) 小（\(x=10\) 时约 \(2.6\) 对 \(1000\)），可 \(x\) 到 \(100\) 左右时 \(1.1^x\) 已经超过 \(10^4\)，之后再也追不上它了。只要底数大于 \(1\)，指数函数最后总会超过任何一次函数和 \(x^2\)。</p>
-    <p><b>为什么这样就够了</b>：「连续不断就一定碰到 \(x\) 轴」的严格证明要到大学用实数的性质才讲，高中把它当成看图就明白的事实来用。</p>
+    <p><b>二分法找不到「切而不穿」的偶重零点</b>：如 \(f(x)=(x-1)^2\) 的零点是 \(1\)，但它在零点两侧均为正，不可能找到端点异号的区间，二分法失灵。二分法专克「穿透型（变号）」零点。</p>
+    <p><b>迭代步数的事先预估</b>：若区间长 \(b-a\)，精度要求 \(\varepsilon\)，只需解不等式 \(\dfrac{b-a}{2^n} &lt; \varepsilon \iff 2^n &gt; \dfrac{b-a}{\varepsilon}\)。如初始长度为 1，精度 0.001：\(2^{10}=1024 &gt; 1000\)，恰需 10 步！</p>
+    <p><b>慢指数也能反杀快多项式</b>：哪怕底数只比 1 大一点点（如 \(1.01^x\)），当 \(x\) 足够巨大时，其增长率必将压倒任何幂多项式 \(x^{100}\)！</p>
   </details>
 </section>
 
@@ -281,6 +322,7 @@
       <p>对应边界：<b>存在性定理不能直接推出唯一，唯一要靠单调性</b>。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-exist"></div>
   <div class="card predict" data-id="e-eps" data-answer="B">
     <p>5. 用二分法求某个零点的近似值，要求精度 \(0.01\)。做到某一步，当前区间是 \([1.25,1.375]\)，中点 \(c=1.3125\) 处 \(|f(c)|=0.0003\)。现在能停下，把 \(1.3125\) 当作满足精度的近似值吗？</p>
     <div class="opts">
@@ -310,6 +352,7 @@
       <p>\(x>0\) 时，「动手」②的图上看：两条曲线只在 \(x=2\)、\(x=4\) 相交，过了 \(4\) 以后 \(2^x\) 一直在上面。图只画到有限远，「以后一直在上面」可以这样确认：\(x=4\) 时两边相等，之后 \(x\) 每加 \(1\)，\(2^x\) 翻一倍，而 \(x^2\) 变成 \(\left(\tfrac{x+1}{x}\right)^2\le\left(\tfrac54\right)^2\approx1.56\) 倍，所以 \(2^x\) 越拉越开（严格证明要用到选必二的导数）。合起来共 \(3\) 个。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-bisection"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -574,8 +617,265 @@
   });
   document.getElementById("reset2").onclick = function () { g2 = { X: 5, x: 1 }; drawG(); };
 
-  function all() { drawB(); drawG(); }
+  /* ================= 0 从例子进入：连续升温必过 0°C ================= */
+  var etmSvg = document.getElementById("entry-temp"), etmBar = document.getElementById("entry-temp-bar"), etmNote = document.getElementById("entry-temp-note");
+  var etmMode = 0;
+  function etmDraw(m) {
+    etmMode = m;
+    etmSvg.innerHTML = "";
+    var x0 = 64, x1 = 480, yTop = 20, yBot = 174;
+    function tx(h) { return x0 + (h - 6) / 6 * (x1 - x0); }
+    function ty(c) { return yBot - (c + 3) / 9 * (yBot - yTop); }
+    var y0 = ty(0);
+    svg("rect", { x: x0, y: yTop, width: x1 - x0, height: y0 - yTop, fill: "var(--ok-soft)", opacity: 0.55 }, etmSvg);
+    svg("rect", { x: x0, y: y0, width: x1 - x0, height: yBot - y0, fill: "var(--no-soft)", opacity: 0.45 }, etmSvg);
+    svg("line", { x1: x0, y1: y0, x2: x1, y2: y0, stroke: "var(--fg)", "stroke-width": 2, "stroke-dasharray": "6 4" }, etmSvg);
+    txt("0 °C 冰点分界线", { x: x1 - 8, y: y0 - 7, "text-anchor": "end", fill: "var(--fg)", "font-size": 13.5, "font-weight": 700 }, etmSvg);
+    [6, 8, 10, 12].forEach(function (h) {
+      svg("line", { x1: tx(h), y1: yBot, x2: tx(h), y2: yBot + 5, stroke: "var(--muted)" }, etmSvg);
+      txt(h + ":00", { x: tx(h), y: yBot + 21, "text-anchor": "middle", fill: "var(--muted)", "font-size": 13.5 }, etmSvg);
+    });
+    function tempAt(u) {
+      if (m === 0) return -2 + 7 * u;
+      if (m === 1) return -2 + 7 * u * u * u;
+      return -2 + 7 * u + 1.9 * Math.sin(2.5 * Math.PI * u) * (1 - u);
+    }
+    var d = "", zeros = [], prevC = -2;
+    for (var i = 0; i <= 120; i++) {
+      var u = i / 120, h = 6 + 6 * u, c = tempAt(u);
+      d += (i ? "L" : "M") + tx(h).toFixed(1) + " " + ty(c).toFixed(1);
+      if (i > 0 && prevC * c <= 0) zeros.push(6 + 6 * (u - 0.5 / 120 * (c / (c - prevC))));
+      prevC = c;
+    }
+    svg("path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 3.2 }, etmSvg);
+    svg("circle", { cx: tx(6), cy: ty(-2), r: 6.5, fill: "var(--b)", stroke: "var(--card)", "stroke-width": 2 }, etmSvg);
+    txt("6:00 (−2°C)", { x: tx(6) + 8, y: ty(-2) + 18, fill: "var(--b)", "font-size": 14, "font-weight": 700 }, etmSvg);
+    svg("circle", { cx: tx(12), cy: ty(5), r: 6.5, fill: "var(--c)", stroke: "var(--card)", "stroke-width": 2 }, etmSvg);
+    txt("12:00 (+5°C)", { x: tx(12) - 8, y: ty(5) - 10, "text-anchor": "end", fill: "var(--c)", "font-size": 14, "font-weight": 700 }, etmSvg);
+    zeros.forEach(function (zh, idx) {
+      svg("circle", { cx: tx(zh), cy: y0, r: 7, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, etmSvg);
+      if (idx === 0) txt("必穿过 0°C！", { x: tx(zh), y: y0 + 23, "text-anchor": "middle", fill: "var(--hl)", "font-size": 14, "font-weight": 700 }, etmSvg);
+    });
+    [].forEach.call(etmBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    var desc = ["匀速升温（穿过 0°C <b>1 次</b>）", "先慢后快（9点半左右穿过 0°C <b>1 次</b>）", "中途小幅反复（来回穿过 0°C <b>3 次</b>）"][m];
+    etmNote.innerHTML = "当前天气：" + desc + "——只要曲线<b>一笔不断开</b>，从 0°C 以下到 0°C 以上<b>必然至少穿过 0°C 一次</b>！";
+  }
+  [].forEach.call(etmBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { etmDraw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var m = { A: 0, B: 2, C: 1 };
+      if (m[ev.detail.choice] !== undefined) etmDraw(m[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") etmDraw(0);
+  });
+
+  // Step 2 Vivid Visualizations
+  function initStep2() {
+    var zFig = document.getElementById("m-zero-fig");
+    var zBar = document.getElementById("m-zero-bar");
+    var zNote = document.getElementById("m-zero-note");
+    var jFig = document.getElementById("m-jump-fig");
+    if (!zFig || !jFig) return;
+
+    function drawZero(mode) {
+      zFig.innerHTML = "";
+      if (mode === "exist") {
+        // 零点存在定理：[a, b] 连续穿过 x 轴
+        var yAx = 80, ax0 = 40, ax1 = 480;
+        svg("line", { x1: ax0, y1: yAx, x2: ax1, y2: yAx, stroke: "var(--muted)", "stroke-width": 1.4 }, zFig);
+        svg("polygon", { points: "480," + (yAx - 4) + " 488," + yAx + " 480," + (yAx + 4), fill: "var(--muted)" }, zFig);
+        txt("x", { x: 486, y: yAx + 16, fill: "var(--muted)", "font-size": 12 }, zFig);
+
+        // a = 110, b = 410, x0 = 260
+        var a = 110, b = 410, x0 = 260;
+        var faY = 135, fbY = 32;
+
+        // 垂直虚线引出端点值
+        svg("line", { x1: a, y1: yAx, x2: a, y2: faY, stroke: "var(--warn)", "stroke-width": 1.2, "stroke-dasharray": "3 3" }, zFig);
+        svg("line", { x1: b, y1: yAx, x2: b, y2: fbY, stroke: "var(--b)", "stroke-width": 1.2, "stroke-dasharray": "3 3" }, zFig);
+
+        // 曲线连续穿过 x 轴
+        var d = "M " + a + " " + faY + " C " + (a + 60) + " " + faY + " " + (x0 - 50) + " " + yAx + " " + x0 + " " + yAx + " S " + (b - 60) + " " + fbY + " " + b + " " + fbY;
+        svg("path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 3 }, zFig);
+
+        // 点 A, B
+        svg("circle", { cx: a, cy: faY, r: 5, fill: "var(--warn)", stroke: "var(--card)", "stroke-width": 1.5 }, zFig);
+        txt("A(a, f(a) < 0)", { x: a - 8, y: faY + 16, "text-anchor": "middle", fill: "var(--warn)", "font-size": 11, "font-weight": 700 }, zFig);
+
+        svg("circle", { cx: b, cy: fbY, r: 5, fill: "var(--b)", stroke: "var(--card)", "stroke-width": 1.5 }, zFig);
+        txt("B(b, f(b) > 0)", { x: b + 8, y: fbY - 8, "text-anchor": "middle", fill: "var(--b)", "font-size": 11, "font-weight": 700 }, zFig);
+
+        // 穿过 x 轴处交点
+        svg("circle", { cx: x0, cy: yAx, r: 6.5, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, zFig);
+        txt("零点 (x₀, 0)", { x: x0, y: yAx - 12, "text-anchor": "middle", fill: "var(--hl)", "font-size": 12.5, "font-weight": 700 }, zFig);
+        txt("f(x₀) = 0", { x: x0, y: yAx + 20, "text-anchor": "middle", fill: "var(--fg)", "font-size": 11 }, zFig);
+
+        if (zNote) zNote.innerHTML = "<b>定理直观解释</b>：只要图象一笔画成（连续），从 \\(x\\) 轴下方 \\(f(a)&lt;0\\) 走到上方 \\(f(b)&gt;0\\)，<b>中途必然至少穿过 \\(x\\) 轴一次</b>产生零点！";
+      } else if (mode === "bisect") {
+        // 二分法对半收缩图解 (梯级收敛)
+        var rowY = [35, 75, 115];
+        var spans = [
+          { l: 70, r: 450, mid: 260, pick: "right", keepL: 260, keepR: 450, label: "初始区间 [a, b]，长 380 → 取中点 c₁" },
+          { l: 260, r: 450, mid: 355, pick: "left", keepL: 260, keepR: 355, label: "留异号半段 [c₁, b]，长 190 → 取中点 c₂" },
+          { l: 260, r: 355, mid: 308, pick: "target", keepL: 280, keepR: 330, label: "留异号半段 [c₁, c₂]，长 95 < ε 停！锁定零点 x₀" }
+        ];
+
+        spans.forEach(function (sp, idx) {
+          var y = rowY[idx];
+          // 全段灰线
+          svg("line", { x1: sp.l, y1: y, x2: sp.r, y2: y, stroke: "var(--muted)", "stroke-width": 2 }, zFig);
+          // 中点及分割
+          svg("circle", { cx: sp.mid, cy: y, r: 4, fill: "var(--hl)", stroke: "var(--card)", "stroke-width": 1.5 }, zFig);
+          // 保留半段高亮绿色
+          if (idx < 2) {
+            svg("line", { x1: sp.keepL, y1: y, x2: sp.keepR, y2: y, stroke: "var(--a)", "stroke-width": 3.8 }, zFig);
+          } else {
+            svg("line", { x1: sp.l, y1: y, x2: sp.r, y2: y, stroke: "var(--a)", "stroke-width": 4.5 }, zFig);
+            svg("circle", { cx: 312, cy: y, r: 5.5, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 1.5 }, zFig);
+            txt("x₀ ≈ 312", { x: 312, y: y - 10, "text-anchor": "middle", fill: "var(--hl)", "font-size": 11, "font-weight": 700 }, zFig);
+          }
+          // 左右端点标记
+          svg("circle", { cx: sp.l, cy: y, r: 3.5, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 1.5 }, zFig);
+          svg("circle", { cx: sp.r, cy: y, r: 3.5, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 1.5 }, zFig);
+          txt("第 " + (idx + 1) + " 步", { x: 20, y: y + 4, fill: "var(--fg)", "font-size": 11, "font-weight": 700 }, zFig);
+          txt(sp.label, { x: sp.mid, y: y + 17, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10.5 }, zFig);
+        });
+
+        // 漏斗虚线连线
+        svg("line", { x1: spans[0].keepL, y1: rowY[0], x2: spans[1].l, y2: rowY[1], stroke: "var(--a)", "stroke-width": 1, "stroke-dasharray": "2 2" }, zFig);
+        svg("line", { x1: spans[0].keepR, y1: rowY[0], x2: spans[1].r, y2: rowY[1], stroke: "var(--a)", "stroke-width": 1, "stroke-dasharray": "2 2" }, zFig);
+        svg("line", { x1: spans[1].keepL, y1: rowY[1], x2: spans[2].l, y2: rowY[2], stroke: "var(--a)", "stroke-width": 1, "stroke-dasharray": "2 2" }, zFig);
+        svg("line", { x1: spans[1].keepR, y1: rowY[1], x2: spans[2].r, y2: rowY[2], stroke: "var(--a)", "stroke-width": 1, "stroke-dasharray": "2 2" }, zFig);
+
+        if (zNote) zNote.innerHTML = "<b>二分法核心机制</b>：每次取中点算值，<b>只留端点异号的那一半</b>；步步减半 \\(\\dfrac{b-a}{2^n}\\)，漏斗状极速将零点圈入目标精度内！";
+      } else {
+        // growth: 2^x vs x^2 vs log2 x
+        var ox = 60, oy = 135;
+        svg("line", { x1: 20, y1: oy, x2: 490, y2: oy, stroke: "var(--muted)", "stroke-width": 1.4 }, zFig);
+        svg("polygon", { points: "490," + (oy - 4) + " 498," + oy + " 490," + (oy + 4), fill: "var(--muted)" }, zFig);
+        txt("x", { x: 496, y: oy + 16, fill: "var(--muted)", "font-size": 12 }, zFig);
+
+        svg("line", { x1: ox, y1: oy + 10, x2: ox, y2: 12, stroke: "var(--muted)", "stroke-width": 1.4 }, zFig);
+        svg("polygon", { points: (ox - 4) + ",12 " + ox + ",4 " + (ox + 4) + ",12", fill: "var(--muted)" }, zFig);
+        txt("y", { x: ox - 14, y: 16, fill: "var(--muted)", "font-size": 12 }, zFig);
+        txt("O", { x: ox - 14, y: oy + 16, fill: "var(--muted)", "font-size": 12 }, zFig);
+
+        function gx(x) { return ox + x * 65; }
+        function gy(y) { return oy - y * 1.8; }
+
+        // 1. y = 2^x (指数爆炸) 绿色
+        var dExp = "";
+        for (var i = 0; i <= 100; i++) {
+          var xv = i / 100 * 6.2;
+          var yv = Math.pow(2, xv);
+          dExp += (i === 0 ? "M" : "L") + gx(xv).toFixed(1) + " " + Math.max(14, gy(yv)).toFixed(1);
+        }
+        svg("path", { d: dExp, fill: "none", stroke: "var(--a)", "stroke-width": 2.8 }, zFig);
+        txt("y = 2ˣ (指数爆炸)", { x: 380, y: 26, fill: "var(--a)", "font-size": 12.5, "font-weight": 700 }, zFig);
+
+        // 2. y = x^2 (二次幂) 蓝色
+        var dPow = "";
+        for (var j = 0; j <= 100; j++) {
+          var xv2 = j / 100 * 6.2;
+          var yv2 = xv2 * xv2;
+          dPow += (j === 0 ? "M" : "L") + gx(xv2).toFixed(1) + " " + Math.max(14, gy(yv2)).toFixed(1);
+        }
+        svg("path", { d: dPow, fill: "none", stroke: "var(--b)", "stroke-width": 2.5 }, zFig);
+        txt("y = x² (幂增长)", { x: 420, y: 70, fill: "var(--b)", "font-size": 12, "font-weight": 700 }, zFig);
+
+        // 3. y = log2 x (对数平缓) 金色
+        var dLog = "";
+        for (var k = 1; k <= 100; k++) {
+          var xv3 = 0.2 + k / 100 * 6.0;
+          var yv3 = Math.max(0, Math.log(xv3) / Math.LN2 * 12);
+          dLog += (k === 1 ? "M" : "L") + gx(xv3).toFixed(1) + " " + gy(yv3).toFixed(1);
+        }
+        svg("path", { d: dLog, fill: "none", stroke: "var(--hl)", "stroke-width": 2.5 }, zFig);
+        txt("y = log₂x (极度平缓)", { x: 410, y: oy - 14, fill: "var(--hl)", "font-size": 12, "font-weight": 700 }, zFig);
+
+        // 关键对比交汇刻度 x=2, x=4
+        [2, 4].forEach(function (cv) {
+          svg("line", { x1: gx(cv), y1: oy - 3, x2: gx(cv), y2: oy + 3, stroke: "var(--muted)", "stroke-width": 1 }, zFig);
+          txt(cv, { x: gx(cv), y: oy + 15, "text-anchor": "middle", fill: "var(--muted)", "font-size": 11 }, zFig);
+        });
+
+        if (zNote) zNote.innerHTML = "<b>增长快慢终极规律</b>：在区间 (2, 4) 上二次抛物线 \\(x^2\\) 一度反超 \\(2^x\\)；但只要 <b>\\(x &gt; 4\\) 足够大</b>，指数函数 \\(2^x\\) 必然一骑绝尘，把幂函数和对数函数远远甩在身后！";
+      }
+
+      if (zBar) {
+        [].forEach.call(zBar.querySelectorAll("button"), function (b) {
+          b.classList.toggle("on", b.getAttribute("data-m") === mode);
+        });
+      }
+      if (window.Peiyu && zNote) Peiyu.math(zNote);
+    }
+
+    if (zBar) {
+      [].forEach.call(zBar.querySelectorAll("button"), function (b) {
+        b.addEventListener("click", function () { drawZero(b.getAttribute("data-m")); });
+      });
+    }
+
+    function drawJumpTrap() {
+      jFig.innerHTML = "";
+      var ox = 140, oy = 70;
+      // 坐标轴
+      svg("line", { x1: 20, y1: oy, x2: 260, y2: oy, stroke: "var(--muted)", "stroke-width": 1.2 }, jFig);
+      svg("polygon", { points: "260," + (oy - 3) + " 266," + oy + " 260," + (oy + 3), fill: "var(--muted)" }, jFig);
+      txt("x", { x: 264, y: oy + 14, fill: "var(--muted)", "font-size": 10.5 }, jFig);
+
+      svg("line", { x1: ox, y1: 130, x2: ox, y2: 12, stroke: "var(--muted)", "stroke-width": 1.2 }, jFig);
+      svg("polygon", { points: (ox - 3) + ",12 " + ox + ",6 " + (ox + 3) + ",12", fill: "var(--muted)" }, jFig);
+      txt("y", { x: ox - 12, y: 14, fill: "var(--muted)", "font-size": 10.5 }, jFig);
+
+      // y = 1/x 曲线两支
+      var scale = 40;
+      // 左支 x in [-1, -0.3]
+      var dL = "";
+      for (var i = 0; i <= 30; i++) {
+        var xL = -1 + 0.7 * i / 30;
+        var yL = 1 / xL;
+        dL += (i === 0 ? "M" : "L") + (ox + xL * scale).toFixed(1) + " " + (oy - yL * scale * 0.35).toFixed(1);
+      }
+      svg("path", { d: dL, fill: "none", stroke: "var(--warn)", "stroke-width": 2.2 }, jFig);
+
+      // 右支 x in [0.3, 1]
+      var dR = "";
+      for (var j = 0; j <= 30; j++) {
+        var xR = 0.3 + 0.7 * j / 30;
+        var yR = 1 / xR;
+        dR += (j === 0 ? "M" : "L") + (ox + xR * scale).toFixed(1) + " " + (oy - yR * scale * 0.35).toFixed(1);
+      }
+      svg("path", { d: dR, fill: "none", stroke: "var(--b)", "stroke-width": 2.2 }, jFig);
+
+      // 端点 (-1, -1) 与 (1, 1)
+      var pA = { x: ox - scale, y: oy + scale * 0.35 };
+      var pB = { x: ox + scale, y: oy - scale * 0.35 };
+      svg("circle", { cx: pA.x, cy: pA.y, r: 4, fill: "var(--warn)", stroke: "var(--card)", "stroke-width": 1.2 }, jFig);
+      txt("f(-1) < 0", { x: pA.x - 4, y: pA.y + 14, "text-anchor": "middle", fill: "var(--warn)", "font-size": 10 }, jFig);
+
+      svg("circle", { cx: pB.x, cy: pB.y, r: 4, fill: "var(--b)", stroke: "var(--card)", "stroke-width": 1.2 }, jFig);
+      txt("f(1) > 0", { x: pB.x + 4, y: pB.y - 6, "text-anchor": "middle", fill: "var(--b)", "font-size": 10 }, jFig);
+
+      // x=0 渐近线警示
+      svg("line", { x1: ox, y1: 18, x2: ox, y2: 125, stroke: "var(--warn)", "stroke-width": 1.4, "stroke-dasharray": "3 2" }, jFig);
+      txt("❌ x=0 断崖断开！", { x: ox + 6, y: 35, fill: "var(--warn)", "font-size": 10, "font-weight": 700 }, jFig);
+      txt("无交点 · 无零点！", { x: 140, y: 128, "text-anchor": "middle", fill: "var(--warn)", "font-size": 10.5, "font-weight": 700 }, jFig);
+    }
+
+    drawZero("exist");
+    drawJumpTrap();
+  }
+
+  function all() { etmDraw(etmMode); drawB(); drawG(); initStep2(); }
   document.addEventListener("DOMContentLoaded", all);
+  if (document.readyState !== "loading") { all(); }
   if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
 })();
 </script>

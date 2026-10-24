@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -27,8 +29,15 @@
 <p class="lead">表面积靠「展开化平」，体积抓「底面与高」。理解柱锥台球的统一结构，牢记母线与高的勾股差异，识别组合体接合面陷阱与祖暅原理思维。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>冷饮店有两种相同高度 \(h=10\text{ cm}\)、底面半径都是 \(r=3\text{ cm}\) 的冰淇淋容器：一个是直筒圆柱杯，一个是尖底圆锥蛋筒。</p>
+  <p>冷饮店有两种相同高度 \(h=10\text{ cm}\)、底面半径都是 \(r=3\text{ cm}\) 的冰淇淋容器：一个是尖底圆锥蛋筒，一个是直筒圆柱杯。先点下面的按钮，把圆锥蛋筒里的冰淇淋一筒一筒倒进圆柱杯试试：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-pour" viewBox="0 0 520 204" role="img" aria-label="三个等底等高圆锥蛋筒向圆柱杯倒冰淇淋的容积对比实验"></svg>
+    <div class="entry-bar" id="entry-pour-bar">
+      <button type="button" data-n="1">倒满 1 个圆锥 (1/3 杯)</button>
+      <button type="button" data-n="2">倒满 2 个圆锥 (2/3 杯)</button>
+      <button type="button" data-n="3" class="on">倒满 3 个圆锥 (刚好装满整杯！)</button>
+    </div>
+    <div class="entry-note" id="entry-pour-note"></div>
     <p>如果将圆柱杯盛满冰淇淋，刚好能倒满几个这种等底等高的圆锥蛋筒？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>刚好倒满 2 个</button>
@@ -43,42 +52,57 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中的矩形与扇形面积、勾股定理、圆周长与圆面积公式。</p>
+  <p class="small">要用到：初中矩形与扇形面积、勾股定理、圆周长与圆面积公式。</p>
 
-  <div class="card">
-    <p><b>高（\(h\)）与母线（\(l\)）</b>：高是两底面或顶点到底面的<b>垂直距离</b>；母线是旋转体侧面的倾斜生成线。圆锥中满足勾股定理：\(l = \sqrt{r^2+h^2} &gt; h\)。</p>
-    <div class="key">算侧面积必须用母线 \(l\)；算体积必须用垂直高 \(h\)！</div>
+  <div class="micro-box">
+    <div class="micro-head">
+      <span>直观微图解</span>
+      <div class="micro-bar" id="m-vol-bar">
+        <button class="on" data-m="sys">柱锥台体系（祖暅原理）</button>
+        <button data-m="expand">旋转体侧面展开</button>
+        <button data-m="sphere">球与长方体外接球</button>
+      </div>
+    </div>
+    <svg id="m-vol-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <div class="micro-status" id="m-vol-status">柱体 V=Sh，等底等高锥体体积为三分之一；台体为其平截过渡通式。</div>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">母线 \(l\)</span> 倾斜生成线（侧面积专用）</div>
+      <p><b>本质定义</b>：直角三角形斜边绕直角边旋转形成的曲面边界线。</p>
+      <p><b>数量关系</b>：由勾股定理 \(l = \sqrt{r^2 + h^2} &gt; h\)，母线必定严格长于垂直高。</p>
+      <p><b>唯一使命</b>：在侧面展开扇形中充当<b>展开半径</b>，专门用于计算<b>侧面积</b> \(S_{\text{侧}} = \pi r l\)。</p>
+    </div>
+    <div class="concept-card highlight">
+      <div class="concept-head"><span class="badge-pill accent">垂直高 \(h\)</span> 空间两底垂距（体积专用）</div>
+      <p><b>本质定义</b>：几何体顶点到底面、或两平行底面之间的<b>垂直垂线段</b>。</p>
+      <p><b>空间本质</b>：代表几何体在垂直方向上的堆积厚度（祖暅原理核心变量）。</p>
+      <p><b>唯一使命</b>：专门用于计算<b>体积</b> \(V = \frac{1}{3}Sh\) 或 \(V = Sh\)，<b>严禁用斜长母线代入</b>！</p>
+    </div>
   </div>
 
   <div class="card">
-    <p><b>表面积与侧面积</b>：所有侧面的面积之和叫<b>侧面积</b>；侧面积与底面积之和叫<b>表面积</b>（全面积），即 \(S_{\text{表}} = S_{\text{侧}} + S_{\text{底}}\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>祖暅（gèng）原理</b>：「幂势既同，则积不容异」。两等高立体在所有等高处的水平截面面积恒相等，则两立体体积必相等。这是推导柱、锥、球体积公式的灵魂基石。</p>
+    <p><b>祖暅原理</b>：「幂势既同，则积不容异」。两等高几何体在所有等高处的水平截面面积恒相等，则其体积必相等。这是推导柱、锥、球体积公式的灵魂基石。</p>
+    <p><b>表面积与侧面积</b>：所有侧面的面积之和叫<b>侧面积</b>；侧面积加底面积之和叫<b>表面积</b>（全面积），即 \(S_{\text{表}} = S_{\text{侧}} + S_{\text{底}}\)。</p>
   </div>
 
   <h3>2. 侧面展开与表面积：圆柱、圆锥、圆台</h3>
-  <p>研究旋转体表面积的核心思想是<b>把曲面展开成平面多边形或扇形</b>：</p>
-  <ul>
-    <li><b>圆柱</b>：侧面展开是长为 \(2\pi r\)、宽为 \(h\) 的矩形。\(S_{\text{侧}} = 2\pi rh\)，\(S_{\text{表}} = 2\pi r(r+h)\)。</li>
-    <li><b>圆锥</b>：侧面展开是半径为母线 \(l\)、弧长为底面周长 \(2\pi r\) 的扇形。
-      <br>\(S_{\text{侧}} = \dfrac{1}{2}(2\pi r)l = \pi rl\)，\(S_{\text{表}} = \pi r(r+l)\)；展开扇形圆心角 \(\theta = \dfrac{r}{l} \times 360^\circ\)。
-    </li>
-    <li><b>圆台</b>：侧面展开是扇环。\(S_{\text{侧}} = \pi(r_1+r_2)l\)，\(S_{\text{表}} = \pi(r_1+r_2)l + \pi r_1^2 + \pi r_2^2\)。</li>
-  </ul>
-  <div class="key">展开扇形抓两量：半径等于母线 \(l\)，弧长等于底面周长 \(2\pi r\)。圆心角占比等于底面半径与母线之比：\(\theta = 360^\circ \times \dfrac{r}{l}\)。</div>
+  <div class="key">
+    $$\color{#0284c7}{S_{\text{圆柱侧}} = 2\pi rh}, \quad \color{#d97706}{S_{\text{圆锥侧}} = \pi r \color{#ec4899}{l}}, \quad \color{#059669}{S_{\text{圆台侧}} = \pi(r_1+r_2)\color{#ec4899}{l}}$$
+    <div style="font-size:12.5px;color:var(--mut, #64748b);margin-top:6px;text-align:center">圆锥侧面展开是扇形：半径等于母线 \(l\)，弧长等于底面周长 \(2\pi r\)，圆心角 \(\theta = 360^\circ \times \dfrac{r}{l}\)</div>
+  </div>
 
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>已知圆锥底面半径 \(r = 3\)，垂直高度 \(h = 4\)。求：① 侧面积与全面积；② 侧面展开扇形圆心角 \(\theta\)；③ 底部拼接等底且高为 \(2\) 的圆柱，求组合体表面积。</p>
-    <div class="reveal-box" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
-      <p><b>解</b>：</p>
-      <p>① 由勾股定理，母线长 \(l = \sqrt{r^2+h^2} = \sqrt{3^2+4^2} = 5\)。</p>
-      <p>侧面积 \(S_{\text{侧}} = \pi rl = \pi \times 3 \times 5 = 15\pi\)；全面积 \(S_{\text{表}} = 15\pi + \pi \times 3^2 = 24\pi\)。</p>
-      <p>② 展开扇形圆心角：\(\theta = \dfrac{r}{l} \times 360^\circ = \dfrac{3}{5} \times 360^\circ = 216^\circ\)（弧度制 \(\dfrac{6\pi}{5}\)）。</p>
-      <p>③ <b>拼接组合体表面积警示</b>：拼接处的内部公共底面<b>绝不能算进表面积</b>！外露表面为：圆锥侧面（\(15\pi\)）+ 圆柱侧面（\(2\pi \times 3 \times 2 = 12\pi\)）+ 圆柱下底（\(9\pi\)）。总表面积 \(S = 15\pi + 12\pi + 9\pi = 36\pi\)。</p>
+    <div class="reveal-box" style="margin-top:8px;padding:8px;background:var(--bg);border-radius:8px">
+      <p>① 由勾股定理，母线长 \(l = \sqrt{r^2+h^2} = \sqrt{3^2+4^2} = 5\)。<br>
+      侧面积 \(S_{\text{侧}} = \pi rl = \pi \times 3 \times 5 = 15\pi\)；全面积 \(S_{\text{表}} = 15\pi + \pi \times 3^2 = 24\pi\)。</p>
+      <p>② 展开扇形圆心角：\(\theta = \dfrac{r}{l} \times 360^\circ = \dfrac{3}{5} \times 360^\circ = 216^\circ\)。</p>
+      <p>③ <b>拼接组合体表面积</b>：拼接处的内部公共底面<b>绝不能算进表面积</b>！外露表面为：圆锥侧面（\(15\pi\)）+ 圆柱侧面（\(2\pi \times 3 \times 2 = 12\pi\)）+ 圆柱下底（\(9\pi\)）。总表面积 \(S = 15\pi + 12\pi + 9\pi = 36\pi\)。</p>
     </div>
   </div>
 
@@ -94,24 +118,20 @@
       <p><b>B</b>。侧面积必须用母线斜长 \(l\)，绝不能把垂直高代入！由勾股定理，母线 \(l = \sqrt{3^2+4^2} = 5\)，代入得 \(S_{\text{侧}} = \pi rl = 15\pi\)。选 A 把垂直高当成了母线；选 C 算成了全面积。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-vol"></div>
 
-  <h3>3. 柱、锥、台的体积体系与祖暅原理</h3>
-  <p>体积体系由柱体出发，由祖暅原理统一贯通：</p>
-  <ul>
-    <li><b>柱体</b>：\(V_{\text{柱}} = Sh\)。无论是直柱还是斜柱，只要截面积相等、高相等，体积恒相等。</li>
-    <li><b>锥体</b>：\(V_{\text{锥}} = \dfrac{1}{3}Sh\)。等于等底等高柱体体积的三分之一。</li>
-    <li><b>台体</b>：\(V_{\text{台}} = \dfrac{1}{3}h\left(S_1 + \sqrt{S_1S_2} + S_2\right)\)。</li>
-  </ul>
-  <div class="key">台体公式是通式：当上底缩小为一个点（\(S_1 = 0\)）退化为锥体 \(V = \frac{1}{3}S_2h\)；当上底与下底全等（\(S_1 = S_2 = S\)）退化为柱体 \(V = Sh\)。</div>
+  <h3>3. 柱、锥、台的体积体系与通式</h3>
+  <div class="key" style="text-align:center">
+    $$\color{#0284c7}{V_{\text{柱}} = Sh}, \qquad \color{#d97706}{V_{\text{锥}} = \frac{1}{3}Sh}, \qquad \color{#059669}{V_{\text{台}} = \frac{1}{3}h\left(S_1 + \sqrt{S_1S_2} + S_2\right)}$$
+    <div style="font-size:12.5px;color:var(--mut, #64748b);margin-top:6px">台体公式是通式：\(S_1=0\) 退化为锥体 \(V=\frac{1}{3}S_2h\)；\(S_1=S_2=S\) 退化为柱体 \(V=Sh\)。</div>
+  </div>
 
   <div class="card">
-    <p class="small">例 2</p>
-    <p>正四棱台的上底面边长为 \(2\)，下底面边长为 \(4\)，高为 \(3\)。① 用台体公式求体积；② 用大棱锥减去小棱锥验证。</p>
-    <div class="reveal-box" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
-      <p><b>解</b>：</p>
-      <p>① 上底面积 \(S_1 = 2^2 = 4\)，下底面积 \(S_2 = 4^2 = 16\)，\(\sqrt{S_1S_2} = \sqrt{4 \times 16} = 8\)。</p>
-      <p>代入台体公式：\(V = \dfrac{1}{3} \times 3 \times (4 + 8 + 16) = 28\)。</p>
-      <p>② <b>还原法验证</b>：设补上的小棱锥高为 \(x\)，由相似比 \(\dfrac{x}{x+3} = \dfrac{2}{4} \implies x = 3\)。大棱锥高为 \(6\)。大棱锥体积 \(V_{\text{大}} = \dfrac{1}{3} \times 16 \times 6 = 32\)；小棱锥体积 \(V_{\text{小}} = \dfrac{1}{3} \times 4 \times 3 = 4\)；棱台体积 \(V = 32 - 4 = 28\)。</p>
+    <p class="small">例 2（台体体积求法）</p>
+    <p>正四棱台的上底边长 \(2\)，下底边长 \(4\)，高为 \(3\)。求棱台体积。</p>
+    <div class="reveal-box" style="margin-top:8px;padding:8px;background:var(--bg);border-radius:8px">
+      <p>上底面积 \(S_1 = 2^2 = 4\)，下底面积 \(S_2 = 4^2 = 16\)，\(\sqrt{S_1S_2} = \sqrt{4 \times 16} = 8\)。<br>
+      代入台体公式：\(V = \dfrac{1}{3} \times 3 \times (4 + 8 + 16) = 28\)。</p>
     </div>
   </div>
 
@@ -127,27 +147,46 @@
       <p><b>C</b>。等底等高的圆锥与圆柱体积之比为 \(1:3\)。\(V_{\text{锥}} = \dfrac{1}{3}V_{\text{柱}} = \dfrac{1}{3} \times 18\pi = 6\pi\)。选 B 是除以了 2；选 D 是乘了 3。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-sphere"></div>
 
-  <h3>4. 球的表面积、体积与经典切接模型</h3>
+  <h3>4. 球的表面积、体积与外接球思维链</h3>
   <div class="key" style="text-align:center">
-    $$S_{\text{球}} = 4\pi R^2, \qquad V_{\text{球}} = \frac{4}{3}\pi R^3$$
-    <span class="small">球表面积等于最大截面大圆面积的 4 倍；体积可看作以球心为顶点的微小锥体累加：\(V = \dfrac{1}{3}SR = \dfrac{4}{3}\pi R^3\)。</span>
+    $$\color{#ec4899}{S_{\text{球}} = 4\pi R^2}, \qquad \color{#ec4899}{V_{\text{球}} = \frac{4}{3}\pi R^3}, \qquad \color{#0284c7}{\text{墙角模型外接球 } 2R = \sqrt{a^2+b^2+c^2}}$$
+    <div style="font-size:12.5px;color:var(--mut, #64748b);margin-top:6px">球表面积是大圆面积的 4 倍；长方体体对角线长等于外接球直径 \(2R\)。</div>
   </div>
-  <p>高考中球的切接核心是<b>找准球心与半径 \(R\)</b>：</p>
-  <ul>
-    <li><b>长方体外接球（补形法）</b>：长宽高为 \(a, b, c\) 的长方体，体对角线长 \(\sqrt{a^2+b^2+c^2}\)。外接球直径等于体对角线：\(2R = \sqrt{a^2+b^2+c^2}\)。三条两两垂直棱的几何体（墙角模型）均可补成长方体求外接球！</li>
-    <li><b>正方体内切球</b>：切于 6 个面，直径等于棱长：\(2r_{\text{内}} = a \implies r_{\text{内}} = \dfrac{a}{2}\)。</li>
-    <li><b>正方体棱切球</b>：切于 12 条棱，直径等于面对角线：\(2R_{\text{棱}} = \sqrt{2}a \implies R_{\text{棱}} = \dfrac{\sqrt{2}}{2}a\)。</li>
-  </ul>
 
-  <div class="card">
-    <p class="small">例 3（墙角模型求外接球）</p>
-    <p>在三棱锥 \(P-ABC\) 中，\(PA \perp PB\)，\(PB \perp PC\)，\(PC \perp PA\)，且 \(PA = 2, PB = 3, PC = 6\)。求外接球的表面积与体积。</p>
-    <div class="reveal-box" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
-      <p><b>解</b>：</p>
-      <p>三条侧棱两两垂直，补成长宽高分别为 \(2, 3, 6\) 的长方体。外接球直径等于长方体体对角线：</p>
-      <p>$$2R = \sqrt{2^2+3^2+6^2} = \sqrt{4+9+36} = 7 \implies R = \frac{7}{2}$$</p>
-      <p>外接球表面积 \(S = 4\pi R^2 = 4\pi \left(\dfrac{7}{2}\right)^2 = 49\pi\)；体积 \(V = \dfrac{4}{3}\pi R^3 = \dfrac{343}{6}\pi\)。</p>
+  <div class="card think-steps">
+    <div class="small" style="font-weight:700;color:var(--key, #0284c7);margin-bottom:8px">典型题三步思维链：两两垂直棱（墙角模型）求外接球面积与体积</div>
+    <p><b>题目</b>：在三棱锥 \(P-ABC\) 中，\(PA \perp PB\)，\(PB \perp PC\)，\(PC \perp PA\)，且 \(PA = 2, PB = 3, PC = 6\)。求三棱锥外接球的表面积与体积。</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号：</b>
+        侧棱 \(PA, PB, PC\) 两两垂直！这是最经典的<b>空间长方体墙角模型</b>。长方体同一个顶点出发的三条互相垂直的棱长正是 \(a=2, b=3, c=6\)。
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法（补形法）：</b>
+        <p>① 将三棱锥补成完整的长方体，两者的外接球完全重合。</p>
+        <p>② 长方体体对角线即外接球直径：<br>
+        \(2R = \sqrt{a^2+b^2+c^2} = \sqrt{2^2+3^2+6^2} = \sqrt{4+9+36} = \sqrt{49} = 7 \implies R = \dfrac{7}{2}\)。</p>
+        <p>③ 代入公式：<br>
+        表面积 \(S = 4\pi R^2 = 4\pi \left(\dfrac{7}{2}\right)^2 = 49\pi\)。<br>
+        体积 \(V = \dfrac{4}{3}\pi R^3 = \dfrac{4}{3}\pi \left(\dfrac{7}{2}\right)^3 = \dfrac{343}{6}\pi\)。</p>
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论：</b>
+        ① 算出的体对角线长 \(\sqrt{a^2+b^2+c^2}\) 是<b>直径 \(2R\)</b>，千万不能当成半径 \(R\)；<br>
+        ② 球体积公式的分母是 3（\(\frac{4}{3}\pi R^3\)），千万别漏乘前面的 4。
+      </div>
     </div>
   </div>
 
@@ -164,13 +203,29 @@
     </div>
   </div>
 
-  <h3>5. 边界与高频易错（各配一个反例）</h3>
-  <div class="card">
-    <p><b>① 算体积误把斜高或母线当成高</b>。反例：底面半径为 \(3\)、母线长为 \(5\) 的圆锥，垂直高为 \(4\)，体积是 \(12\pi\)，代入母线会错算成 \(15\pi\)。</p>
-    <p><b>② 组合体表面积不扣除内部粘合面</b>。反例：两棱长为 \(1\) 的正方体拼成长方体，表面积是 \(10\) 不是 \(12\)，贴合面已在内部。</p>
-    <p><b>③ 台体体积中间项是几何平均数</b>。反例：中间项是 \(\sqrt{S_1S_2}\)，不能写成 \(\dfrac{S_1+S_2}{2}\)，由均值不等式用算术平均会高估体积。</p>
-    <p><b>④ 半球表面积忘加底面圆面</b>。反例：封闭半球表面积是半球面 \(2\pi R^2\) 加上底圆 \(\pi R^2\)，等于 \(3\pi R^2\)。</p>
-    <p><b>⑤ 并非所有几何体外接球球心都在内部</b>。反例：直角三棱柱外接球球心在斜边面对角线中点；钝角三角形底面棱柱的外接球球心在几何体外。</p>
+  <h3>5. 三大翻车现场与反例微图解</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 1</span> 锥体体积算错：拿母线 \(l\) 当高 \(h\)</div>
+      <p class="wrong">❌ 圆锥体积误算为 \(\frac{1}{3}\pi r^2 l\)，把斜长当成垂直高。</p>
+      <p class="right">✔ <b>高线垂直</b>：体积必须用空间垂直距离 \(h = \sqrt{l^2-r^2}\)。母线 \(l\) 只能用于侧面积 \(\pi rl\)！</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 2</span> 组合体表面积漏扣内部粘合面</div>
+      <p class="wrong">❌ 两个几何体拼接在一起，直接把两个原本的表面积相加。</p>
+      <p class="right">✔ <b>内部不可见</b>：粘合面已经封在体内，不再属于表面！必须减去被盖住的面（若底面贴合需减去 \(2S_{\text{底}}\)）。</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 3</span> 台体体积中间项错写为算术平均</div>
+      <p class="wrong">❌ 误写成 \(V = \frac{1}{3}h(S_1 + \frac{S_1+S_2}{2} + S_2)\)。</p>
+      <p class="right">✔ <b>必须是几何平均</b>：中间项是 \(\sqrt{S_1S_2}\)。由均值不等式，错用算术平均会导致体积严重偏大！</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="small" style="font-weight:700;color:var(--no, #dc2626);margin-bottom:6px">反例微图解：圆锥轴截面中高 \(h\) 与母线 \(l\) 的根本差异</div>
+    <svg id="m-vol-trap-fig" viewBox="0 0 520 150" class="micro-fig"></svg>
+    <p class="small" style="color:var(--mut, #64748b);margin-top:4px">母线 \(l=5\) 是斜边（决定侧面扇形面积），垂直高 \(h=4\) 是直角边（决定体积）。误把母线当高会使体积虚胖 25%！</p>
   </div>
 
   <details class="more">
@@ -188,6 +243,7 @@
     <button type="button" data-tab="cone">圆锥母线与侧面积展开（扇形半径为母线 l）</button>
     <button type="button" data-tab="frustum">圆台与截顶棱台</button>
     <button type="button" data-tab="sphere">球的内接/外接正方体</button>
+    <button type="button" data-tab="cavalieri">祖暅原理等高截面台（等距 3D）</button>
   </div>
 
   <svg class="fig" id="geoSvg" viewBox="0 0 560 280" role="img" aria-label="几何体表面积与体积交互演示图"></svg>
@@ -317,663 +373,656 @@
 <footer>培玉智能 · 自编讲解。</footer>
 </div>
 
+<script src="../assets/iso-bench.js"></script>
 <script>
-(function () {
-  "use strict";
+(function(){
+"use strict";
+var currentTab="compare";
+var svg=document.getElementById("geoSvg");
+var sliderA=document.getElementById("sliderA");
+var sliderB=document.getElementById("sliderB");
+var outA=document.getElementById("outA");
+var outB=document.getElementById("outB");
+var lblA=document.getElementById("lblA");
+var lblB=document.getElementById("lblB");
+var desc=document.getElementById("resultDesc");
+var resetBtn=document.getElementById("resetBtn");
+var tabBtns=document.querySelectorAll("#tabs button");
+function el(tag,attrs){
+var node=document.createElementNS("http://www.w3.org/2000/svg",tag);
+for(var k in attrs){
+node.setAttribute(k,attrs[k]);
+}
+return node;
+}
+function renderMath(){
+if(window.Peiyu&&window.Peiyu.math){
+window.Peiyu.math(desc);
+}else if(window.renderMathInElement){
+window.renderMathInElement(desc,{
+delimiters:[
+{left:"$",right:"$",display:true},
+{left:"\\(",right:"\\)",display:false}
+],
+throwOnError:false
+});
+}
+}
+function setTabConfig(tab){
+currentTab=tab;
+if(tab==="compare"){
+lblA.innerHTML="底面半径 \\(r = \\)";
+lblB.innerHTML="垂直高度 \\(h = \\)";
+sliderA.min="15";sliderA.max="45";sliderA.step="1";sliderA.value="30";
+sliderB.min="20";sliderB.max="55";sliderB.step="1";sliderB.value="40";
+}else if(tab==="cone"){
+lblA.innerHTML="底面半径 \\(r = \\)";
+lblB.innerHTML="垂直高度 \\(h = \\)";
+sliderA.min="15";sliderA.max="45";sliderA.step="1";sliderA.value="30";
+sliderB.min="20";sliderB.max="55";sliderB.step="1";sliderB.value="40";
+}else if(tab==="frustum"){
+lblA.innerHTML="下底半径 \\(r_2 = \\)";
+lblB.innerHTML="垂直高度 \\(h = \\)";
+sliderA.min="25";sliderA.max="45";sliderA.step="1";sliderA.value="36";
+sliderB.min="20";sliderB.max="50";sliderB.step="1";sliderB.value="35";
+}else if(tab==="sphere"){
+lblA.innerHTML="正方体棱长 \\(a = \\)";
+lblB.innerHTML="深度比例 = ";
+sliderA.min="20";sliderA.max="50";sliderA.step="1";sliderA.value="38";
+sliderB.min="20";sliderB.max="50";sliderB.step="1";sliderB.value="35";
+}else if(tab==="cavalieri"){
+lblA.innerHTML="球/柱半径 \\(R = \\)";
+lblB.innerHTML="截面高度比 \\(h/R = \\)";
+sliderA.min="20";sliderA.max="45";sliderA.step="1";sliderA.value="34";
+sliderB.min="0";sliderB.max="95";sliderB.step="5";sliderB.value="50";
+}
+if(window.Peiyu&&window.Peiyu.math){
+window.Peiyu.math(lblA);
+window.Peiyu.math(lblB);
+}else if(window.renderMathInElement){
+window.renderMathInElement(lblA,{delimiters:[{left:"\\(",right:"\\)",display:false}]});
+window.renderMathInElement(lblB,{delimiters:[{left:"\\(",right:"\\)",display:false}]});
+}
+}
+function renderCompare(valA,valB){
+var r=valA/10;
+var h=valB/10;
+outA.textContent=r.toFixed(1);
+outB.textContent=h.toFixed(1);
+var scale=18;
+var rPx=r*scale;
+var hPx=h*scale;
+var ryPx=Math.max(7,rPx*0.32);
+var baseY=225;
+var cx1=140;
+var topY1=baseY-hPx;
+var y1_3=baseY-hPx/3;
+var waterPath="M "+(cx1-rPx)+" "+baseY+
+" A "+rPx+" "+ryPx+" 0 0 0 "+(cx1+rPx)+" "+baseY+
+" L "+(cx1+rPx)+" "+y1_3+
+" A "+rPx+" "+ryPx+" 0 0 1 "+(cx1-rPx)+" "+y1_3+" Z";
+svg.appendChild(el("path",{d:waterPath,fill:"rgba(16,185,129,0.22)"}));
+var cylBg="M "+(cx1-rPx)+" "+baseY+" L "+(cx1-rPx)+" "+topY1+
+" A "+rPx+" "+ryPx+" 0 0 1 "+(cx1+rPx)+" "+topY1+
+" L "+(cx1+rPx)+" "+baseY+
+" A "+rPx+" "+ryPx+" 0 0 1 "+(cx1-rPx)+" "+baseY+" Z";
+svg.appendChild(el("path",{d:cylBg,fill:"rgba(59,130,246,0.06)"}));
+svg.appendChild(el("path",{
+d:"M "+(cx1-rPx)+" "+baseY+" A "+rPx+" "+ryPx+" 0 0 1 "+(cx1+rPx)+" "+baseY,
+stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.4"
+}));
+svg.appendChild(el("path",{
+d:"M "+(cx1-rPx)+" "+baseY+" A "+rPx+" "+ryPx+" 0 0 0 "+(cx1+rPx)+" "+baseY,
+stroke:"var(--a)",fill:"none","stroke-width":"1.8"
+}));
+svg.appendChild(el("ellipse",{
+cx:cx1,cy:topY1,rx:rPx,ry:ryPx,
+stroke:"var(--a)",fill:"rgba(59,130,246,0.12)","stroke-width":"1.8"
+}));
+svg.appendChild(el("line",{x1:cx1-rPx,y1:topY1,x2:cx1-rPx,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:cx1+rPx,y1:topY1,x2:cx1+rPx,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+svg.appendChild(el("ellipse",{
+cx:cx1,cy:y1_3,rx:rPx,ry:ryPx,
+stroke:"var(--ok)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.5"
+}));
+var t13=el("text",{x:cx1,y:y1_3-4,"text-anchor":"middle",fill:"var(--ok)","font-size":"11.5","font-weight":"700"});
+t13.textContent="1/3 容积线";
+svg.appendChild(t13);
+var tCyl=el("text",{x:cx1,y:topY1-12,"text-anchor":"middle",fill:"var(--fg)","font-size":"14","font-weight":"700"});
+tCyl.textContent="圆柱 (V = Sh, 3份体积)";
+svg.appendChild(tCyl);
+svg.appendChild(el("line",{x1:cx1-rPx-10,y1:topY1,x2:cx1-rPx-10,y2:baseY,stroke:"var(--no)","stroke-width":"1.4"}));
+var tH1=el("text",{x:cx1-rPx-14,y:(topY1+baseY)/2+4,"text-anchor":"end",fill:"var(--no)","font-size":"12","font-weight":"700"});
+tH1.textContent="h="+h.toFixed(1);
+svg.appendChild(tH1);
+var cx2=400;
+var apexY=baseY-hPx;
+var conePath="M "+cx2+" "+apexY+" L "+(cx2-rPx)+" "+baseY+
+" A "+rPx+" "+ryPx+" 0 0 0 "+(cx2+rPx)+" "+baseY+" Z";
+svg.appendChild(el("path",{d:conePath,fill:"rgba(16,185,129,0.22)"}));
+svg.appendChild(el("path",{
+d:"M "+(cx2-rPx)+" "+baseY+" A "+rPx+" "+ryPx+" 0 0 1 "+(cx2+rPx)+" "+baseY,
+stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.4"
+}));
+svg.appendChild(el("path",{
+d:"M "+(cx2-rPx)+" "+baseY+" A "+rPx+" "+ryPx+" 0 0 0 "+(cx2+rPx)+" "+baseY,
+stroke:"var(--a)",fill:"none","stroke-width":"1.8"
+}));
+svg.appendChild(el("line",{x1:cx2,y1:apexY,x2:cx2-rPx,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:cx2,y1:apexY,x2:cx2+rPx,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:cx2,y1:apexY,x2:cx2,y2:baseY,stroke:"var(--no)","stroke-dasharray":"3,3","stroke-width":"1.6"}));
+svg.appendChild(el("line",{x1:cx2,y1:baseY,x2:cx2+rPx,y2:baseY,stroke:"var(--c)","stroke-dasharray":"3,3","stroke-width":"1.6"}));
+var sq=7;
+svg.appendChild(el("path",{
+d:"M "+cx2+" "+(baseY-sq)+" L "+(cx2+sq)+" "+(baseY-sq)+" L "+(cx2+sq)+" "+baseY,
+fill:"none",stroke:"var(--no)","stroke-width":"1.2"
+}));
+var tCone=el("text",{x:cx2,y:apexY-12,"text-anchor":"middle",fill:"var(--fg)","font-size":"14","font-weight":"700"});
+tCone.textContent="圆锥 (V = 1/3 Sh, 1份体积)";
+svg.appendChild(tCone);
+var tR2=el("text",{x:cx2+rPx/2,y:baseY+16,"text-anchor":"middle",fill:"var(--c)","font-size":"12","font-weight":"700"});
+tR2.textContent="r="+r.toFixed(1);
+svg.appendChild(tR2);
+var midX=270;
+var cardRect=el("rect",{x:midX-42,y:110,width:84,height:62,rx:8,fill:"var(--card)",stroke:"var(--line)","stroke-width":"1.2"});
+svg.appendChild(cardRect);
+var tm1=el("text",{x:midX,y:130,"text-anchor":"middle",fill:"var(--muted)","font-size":"11.5"});
+tm1.textContent="等底等高";
+svg.appendChild(tm1);
+var tm2=el("text",{x:midX,y:152,"text-anchor":"middle",fill:"var(--a)","font-size":"16","font-weight":"800"});
+tm2.textContent="3 : 1";
+svg.appendChild(tm2);
+var sBase=Math.PI*r*r;
+var vCyl=sBase*h;
+var vCone=vCyl/3;
+desc.innerHTML=
+"<b>对比结论</b>：底面半径 \\(r = "+r.toFixed(1)+"\\)，垂直高 \\(h = "+h.toFixed(1)+"\\)；"+
+"底面积 \\(S = \\pi r^2 = "+sBase.toFixed(2)+"\\)。<br>"+
+"圆柱体积 \\(V_{\\text{柱}} = Sh = "+vCyl.toFixed(2)+"\\)；"+
+"圆锥体积 \\(V_{\\text{锥}} = \\dfrac{1}{3}Sh = "+vCone.toFixed(2)+"\\)；"+
+"体积比 \\(V_{\\text{柱}} : V_{\\text{锥}} = 3 : 1\\)。<br>"+
+"<b>祖暅原理思维</b>：「幂势既同，则积不容异」。圆锥内部各截面面积随高度成平方缩小，累加体积严格等于等底等高圆柱的三分之一。";
+renderMath();
+}
+function renderCone(valA,valB){
+var r=valA/10;
+var h=valB/10;
+outA.textContent=r.toFixed(1);
+outB.textContent=h.toFixed(1);
+var l=Math.sqrt(r*r+h*h);
+var scale=20;
+var rPx=r*scale;
+var hPx=h*scale;
+var ryPx=Math.max(7,rPx*0.32);
+var baseY=225;
+var cx=135;
+var apexY=baseY-hPx;
+svg.appendChild(el("path",{
+d:"M "+(cx-rPx)+" "+baseY+" A "+rPx+" "+ryPx+" 0 0 1 "+(cx+rPx)+" "+baseY,
+stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.4"
+}));
+svg.appendChild(el("path",{
+d:"M "+(cx-rPx)+" "+baseY+" A "+rPx+" "+ryPx+" 0 0 0 "+(cx+rPx)+" "+baseY,
+stroke:"var(--a)",fill:"none","stroke-width":"1.8"
+}));
+svg.appendChild(el("line",{x1:cx,y1:apexY,x2:cx-rPx,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:cx,y1:apexY,x2:cx+rPx,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+var triPath="M "+cx+" "+apexY+" L "+cx+" "+baseY+" L "+(cx+rPx)+" "+baseY+" Z";
+svg.appendChild(el("path",{d:triPath,fill:"rgba(245,158,11,0.28)",stroke:"var(--warn)","stroke-width":"2"}));
+var sq=8;
+svg.appendChild(el("path",{
+d:"M "+cx+" "+(baseY-sq)+" L "+(cx+sq)+" "+(baseY-sq)+" L "+(cx+sq)+" "+baseY,
+fill:"none",stroke:"var(--no)","stroke-width":"1.4"
+}));
+var tH=el("text",{x:cx-6,y:(apexY+baseY)/2,"text-anchor":"end",fill:"var(--no)","font-size":"12.5","font-weight":"700"});
+tH.textContent="h="+h.toFixed(1);
+svg.appendChild(tH);
+var tR=el("text",{x:cx+rPx/2,y:baseY+16,"text-anchor":"middle",fill:"var(--c)","font-size":"12.5","font-weight":"700"});
+tR.textContent="r="+r.toFixed(1);
+svg.appendChild(tR);
+var tL=el("text",{x:cx+rPx/2+16,y:(apexY+baseY)/2-4,"text-anchor":"start",fill:"var(--a)","font-size":"13","font-weight":"800"});
+tL.textContent="母线 l="+l.toFixed(2);
+svg.appendChild(tL);
+var tLeftTitle=el("text",{x:cx,y:apexY-12,"text-anchor":"middle",fill:"var(--fg)","font-size":"13.5","font-weight":"700"});
+tLeftTitle.textContent="圆锥轴截面：l = √(r²+h²)";
+svg.appendChild(tLeftTitle);
+var sOx=390;
+var sOy=104;
+var sRadius=Math.min(105,l*scale*0.8);
+var thetaDeg=360*(r/l);
+var thetaRad=thetaDeg*Math.PI/180;
+var startA=Math.PI/2-thetaRad/2;
+var endA=Math.PI/2+thetaRad/2;
+var sx1=sOx+sRadius*Math.cos(startA);
+var sy1=sOy+sRadius*Math.sin(startA);
+var sx2=sOx+sRadius*Math.cos(endA);
+var sy2=sOy+sRadius*Math.sin(endA);
+var largeArc=thetaDeg>180?1:0;
+var sectorD="M "+sOx+" "+sOy+" L "+sx1.toFixed(1)+" "+sy1.toFixed(1)+
+" A "+sRadius.toFixed(1)+" "+sRadius.toFixed(1)+" 0 "+largeArc+" 1 "+sx2.toFixed(1)+" "+sy2.toFixed(1)+" Z";
+svg.appendChild(el("path",{d:sectorD,fill:"rgba(16,185,129,0.18)",stroke:"var(--ok)","stroke-width":"2"}));
+var arcD="M "+sx1.toFixed(1)+" "+sy1.toFixed(1)+
+" A "+sRadius.toFixed(1)+" "+sRadius.toFixed(1)+" 0 "+largeArc+" 1 "+sx2.toFixed(1)+" "+sy2.toFixed(1);
+svg.appendChild(el("path",{d:arcD,fill:"none",stroke:"var(--a)","stroke-width":"3"}));
+var tRad=el("text",{x:sOx+sRadius+8,y:sOy+4,"text-anchor":"start",fill:"var(--ok)","font-size":"12","font-weight":"700"});
+tRad.textContent="R扇 = l";
+svg.appendChild(tRad);
+var tArc=el("text",{x:sOx,y:sOy+sRadius+22,"text-anchor":"middle",fill:"var(--a)","font-size":"12.5","font-weight":"700"});
+tArc.textContent="展开弧长 = 底面周长 2πr = "+(2*Math.PI*r).toFixed(1);
+svg.appendChild(tArc);
+var tDeg=el("text",{x:sOx,y:sOy+28,"text-anchor":"middle",fill:"var(--warn)","font-size":"13","font-weight":"700"});
+tDeg.textContent="θ = "+thetaDeg.toFixed(1)+"°";
+svg.appendChild(tDeg);
+var tRightTitle=el("text",{x:sOx,y:20,"text-anchor":"middle",fill:"var(--fg)","font-size":"13.5","font-weight":"700"});
+tRightTitle.textContent="侧面展开扇形（半径为母线 l）";
+svg.appendChild(tRightTitle);
+var sSide=Math.PI*r*l;
+var sBase=Math.PI*r*r;
+var sTotal=sSide+sBase;
+desc.innerHTML=
+"<b>勾股分水岭</b>：母线 \\(l = \\sqrt{r^2+h^2} = \\sqrt{"+r.toFixed(1)+"^2 + "+h.toFixed(1)+"^2} = "+l.toFixed(2)+"\\)（绝不可把垂直高 \\(h\\) 当母线！）；<br>"+
+"<b>展开扇形</b>：半径为母线 \\(l = "+l.toFixed(2)+"\\)，弧长 \\(c = 2\\pi r = "+(2*Math.PI*r).toFixed(2)+"\\)；"+
+"圆心角 \\(\\theta = 360^\\circ \\times \\dfrac{r}{l} = "+thetaDeg.toFixed(1)+"^\\circ\\)；<br>"+
+"<b>面积计算</b>：侧面积 \\(S_{\\text{侧}} = \\pi r l = "+sSide.toFixed(2)+"\\)，"+
+"底面积 \\(S_{\\text{底}} = \\pi r^2 = "+sBase.toFixed(2)+"\\)，"+
+"表面积 \\(S_{\\text{表}} = \\pi r(r+l) = "+sTotal.toFixed(2)+"\\)。";
+renderMath();
+}
+function renderFrustum(valA,valB){
+var r2=valA/10;
+var r1=r2*0.45;
+var h=valB/10;
+outA.textContent=r2.toFixed(1);
+outB.textContent=h.toFixed(1);
+var scale=17;
+var r2Px=r2*scale;
+var r1Px=r1*scale;
+var hPx=h*scale;
+var ry2Px=Math.max(7,r2Px*0.32);
+var ry1Px=Math.max(4,r1Px*0.32);
+var baseY=230;
+var topY=baseY-hPx;
+var H=h*(r2/(r2-r1));
+var HPx=Math.min(200,H*scale);
+var apexY=baseY-HPx;
+var cx1=145;
+svg.appendChild(el("line",{x1:cx1,y1:apexY,x2:cx1-r1Px,y2:topY,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.2"}));
+svg.appendChild(el("line",{x1:cx1,y1:apexY,x2:cx1+r1Px,y2:topY,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.2"}));
+var tApex1=el("text",{x:cx1,y:apexY-6,"text-anchor":"middle",fill:"var(--muted)","font-size":"11.5"});
+tApex1.textContent="原圆锥顶点 (截顶)";
+svg.appendChild(tApex1);
+var frustPath="M "+(cx1-r1Px)+" "+topY+" L "+(cx1-r2Px)+" "+baseY+
+" A "+r2Px+" "+ry2Px+" 0 0 0 "+(cx1+r2Px)+" "+baseY+
+" L "+(cx1+r1Px)+" "+topY+
+" A "+r1Px+" "+ry1Px+" 0 0 1 "+(cx1-r1Px)+" "+topY+" Z";
+svg.appendChild(el("path",{d:frustPath,fill:"rgba(59,130,246,0.14)"}));
+svg.appendChild(el("path",{
+d:"M "+(cx1-r2Px)+" "+baseY+" A "+r2Px+" "+ry2Px+" 0 0 1 "+(cx1+r2Px)+" "+baseY,
+stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.3"
+}));
+svg.appendChild(el("path",{
+d:"M "+(cx1-r2Px)+" "+baseY+" A "+r2Px+" "+ry2Px+" 0 0 0 "+(cx1+r2Px)+" "+baseY,
+stroke:"var(--a)",fill:"none","stroke-width":"1.8"
+}));
+svg.appendChild(el("ellipse",{
+cx:cx1,cy:topY,rx:r1Px,ry:ry1Px,
+stroke:"var(--a)",fill:"rgba(59,130,246,0.22)","stroke-width":"1.8"
+}));
+svg.appendChild(el("line",{x1:cx1-r1Px,y1:topY,x2:cx1-r2Px,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:cx1+r1Px,y1:topY,x2:cx1+r2Px,y2:baseY,stroke:"var(--a)","stroke-width":"1.8"}));
+var tR1=el("text",{x:cx1,y:topY-8,"text-anchor":"middle",fill:"var(--c)","font-size":"12","font-weight":"700"});
+tR1.textContent="r₁="+r1.toFixed(1);
+svg.appendChild(tR1);
+var tR2=el("text",{x:cx1,y:baseY+18,"text-anchor":"middle",fill:"var(--c)","font-size":"12","font-weight":"700"});
+tR2.textContent="r₂="+r2.toFixed(1);
+svg.appendChild(tR2);
+var lFrust=Math.sqrt((r2-r1)*(r2-r1)+h*h);
+var tL1=el("text",{x:cx1+(r1Px+r2Px)/2+10,y:(topY+baseY)/2,fill:"var(--warn)","font-size":"12","font-weight":"700"});
+tL1.textContent="l="+lFrust.toFixed(2);
+svg.appendChild(tL1);
+var tF1=el("text",{x:cx1,y:baseY+36,"text-anchor":"middle",fill:"var(--fg)","font-size":"13","font-weight":"700"});
+tF1.textContent="圆台 (侧面积 π(r₁+r₂)l)";
+svg.appendChild(tF1);
+var cx2=390;
+var w2=r2Px*1.8,d2=r2Px*0.7;
+var w1=r1Px*1.8,d1=r1Px*0.7;
+var B0x=cx2-w2/2+d2/2,B0y=baseY-d2/2;//后左(虚)
+var B1x=cx2+w2/2+d2/2,B1y=baseY-d2/2;//后右
+var B2x=cx2+w2/2-d2/2,B2y=baseY+d2/2;//前右
+var B3x=cx2-w2/2-d2/2,B3y=baseY+d2/2;//前左
+var T0x=cx2-w1/2+d1/2,T0y=topY-d1/2;
+var T1x=cx2+w1/2+d1/2,T1y=topY-d1/2;
+var T2x=cx2+w1/2-d1/2,T2y=topY+d1/2;
+var T3x=cx2-w1/2-d1/2,T3y=topY+d1/2;
+svg.appendChild(el("line",{x1:cx2,y1:apexY,x2:T2x,y2:T2y,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.2"}));
+svg.appendChild(el("line",{x1:cx2,y1:apexY,x2:T3x,y2:T3y,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.2"}));
+var pyrBody="M "+T3x+" "+T3y+" L "+B3x+" "+B3y+" L "+B2x+" "+B2y+" L "+T2x+" "+T2y+" Z";
+svg.appendChild(el("path",{d:pyrBody,fill:"rgba(16,185,129,0.18)"}));
+var pyrTop="M "+T0x+" "+T0y+" L "+T1x+" "+T1y+" L "+T2x+" "+T2y+" L "+T3x+" "+T3y+" Z";
+svg.appendChild(el("path",{d:pyrTop,fill:"rgba(16,185,129,0.28)",stroke:"var(--ok)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:B3x,y1:B3y,x2:B2x,y2:B2y,stroke:"var(--ok)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:B2x,y1:B2y,x2:B1x,y2:B1y,stroke:"var(--ok)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:B3x,y1:B3y,x2:B0x,y2:B0y,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.3"}));
+svg.appendChild(el("line",{x1:B1x,y1:B1y,x2:B0x,y2:B0y,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.3"}));
+svg.appendChild(el("line",{x1:T3x,y1:T3y,x2:B3x,y2:B3y,stroke:"var(--ok)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:T2x,y1:T2y,x2:B2x,y2:B2y,stroke:"var(--ok)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:T1x,y1:T1y,x2:B1x,y2:B1y,stroke:"var(--ok)","stroke-width":"1.8"}));
+svg.appendChild(el("line",{x1:T0x,y1:T0y,x2:B0x,y2:B0y,stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.3"}));
+var tF2=el("text",{x:cx2,y:baseY+36,"text-anchor":"middle",fill:"var(--fg)","font-size":"13","font-weight":"700"});
+tF2.textContent="正四棱台 (侧棱延长线汇交于顶)";
+svg.appendChild(tF2);
+var s1=Math.PI*r1*r1;
+var s2=Math.PI*r2*r2;
+var vFrust=(h/3)*(s1+Math.sqrt(s1*s2)+s2);
+var sSideFrust=Math.PI*(r1+r2)*lFrust;
+var sTotalFrust=sSideFrust+s1+s2;
+desc.innerHTML=
+"<b>台体参数</b>：上底半径 \\(r_1 = "+r1.toFixed(2)+"\\)，下底半径 \\(r_2 = "+r2.toFixed(1)+"\\)，垂直高 \\(h = "+h.toFixed(1)+"\\)；"+
+"母线 \\(l = \\sqrt{(r_2-r_1)^2+h^2} = "+lFrust.toFixed(2)+"\\)；<br>"+
+"上底面积 \\(S_1 = \\pi r_1^2 = "+s1.toFixed(2)+"\\)，下底面积 \\(S_2 = \\pi r_2^2 = "+s2.toFixed(2)+"\\)；<br>"+
+"<b>台体体积</b>：\\(V = \\dfrac{1}{3}h(S_1 + \\sqrt{S_1S_2} + S_2) = "+vFrust.toFixed(2)+"\\)；<br>"+
+"<b>圆台侧面积</b>：\\(S_{\\text{侧}} = \\pi(r_1+r_2)l = "+sSideFrust.toFixed(2)+"\\)，"+
+"表面积 \\(S_{\\text{表}} = S_{\\text{侧}} + S_1 + S_2 = "+sTotalFrust.toFixed(2)+"\\)。";
+renderMath();
+}
+function renderSphere(valA,valB){
+var a=valA/10;
+outA.textContent=a.toFixed(1);
+outB.textContent="35°";
+var scale=19;
+var s=a*scale;
+var dx=s*0.35;
+var dy=-s*0.25;
+var cx1=140;
+var cy1=145;
+var rOut=(Math.sqrt(3)/2)*a*scale;
+svg.appendChild(el("circle",{
+cx:cx1,cy:cy1,r:rOut,
+fill:"rgba(59,130,246,0.12)",stroke:"var(--a)","stroke-width":"2"
+}));
+svg.appendChild(el("ellipse",{
+cx:cx1,cy:cy1,rx:rOut,ry:rOut*0.32,
+stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.2"
+}));
+function drawCubeEdges(cx,backOnly){
+var flbx=cx-s/2-dx/2,flby=cy1+s/2-dy/2;
+var frbx=cx+s/2-dx/2,frby=flby,frtx=frbx,frty=cy1-s/2-dy/2,fltx=flbx,flty=frty;
+var blbx=flbx+dx,blby=flby+dy,brbx=frbx+dx,brby=frby+dy,brtx=frtx+dx,brty=frty+dy,bltx=fltx+dx,blty=flty+dy;
+var back=[[flbx,flby,blbx,blby],[blbx,blby,brbx,brby],[blbx,blby,bltx,blty]];
+var front=[[flbx,flby,frbx,frby],[frbx,frby,frtx,frty],[frtx,frty,fltx,flty],[fltx,flty,flbx,flby],
+[fltx,flty,bltx,blty],[frtx,frty,brtx,brty],[frbx,frby,brbx,brby],[bltx,blty,brtx,brty],[brtx,brty,brbx,brby]];
+(backOnly?back:front).forEach(function(e){
+svg.appendChild(el("line",backOnly
+?{x1:e[0],y1:e[1],x2:e[2],y2:e[3],stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.2"}
+:{x1:e[0],y1:e[1],x2:e[2],y2:e[3],stroke:"var(--fg)","stroke-width":"1.5"}));
+});
+return[blbx,blby,frtx,frty];
+}
+var diag=drawCubeEdges(cx1,false);
+drawCubeEdges(cx1,true);
+svg.appendChild(el("line",{x1:diag[0],y1:diag[1],x2:diag[2],y2:diag[3],stroke:"var(--warn)","stroke-width":"2.4"}));
+var tDiag=el("text",{x:cx1-8,y:cy1-10,fill:"var(--warn)","font-size":"12","font-weight":"800"});
+tDiag.textContent="体对角线 2R=√3 a";
+svg.appendChild(tDiag);
+var tOutTitle=el("text",{x:cx1,y:30,"text-anchor":"middle",fill:"var(--fg)","font-size":"13.5","font-weight":"700"});
+tOutTitle.textContent="正方体外接球 (8 顶点在球上)";
+svg.appendChild(tOutTitle);
+var cx2=405,cy2=145,rIn=(a/2)*scale;
+drawCubeEdges(cx2,true);
+svg.appendChild(el("circle",{cx:cx2,cy:cy2,r:rIn,fill:"rgba(16,185,129,0.18)",stroke:"var(--ok)","stroke-width":"2"}));
+svg.appendChild(el("ellipse",{cx:cx2,cy:cy2,rx:rIn,ry:rIn*0.32,stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.2"}));
+drawCubeEdges(cx2,false);
+svg.appendChild(el("line",{x1:cx2,y1:cy2-rIn,x2:cx2,y2:cy2+rIn,stroke:"var(--no)","stroke-width":"2.2"}));
+var tDiam=el("text",{x:cx2+6,y:cy2+4,fill:"var(--no)","font-size":"12","font-weight":"800"});
+tDiam.textContent="直径 2r=a";
+svg.appendChild(tDiam);
+var tInTitle=el("text",{x:cx2,y:30,"text-anchor":"middle",fill:"var(--fg)","font-size":"13.5","font-weight":"700"});
+tInTitle.textContent="正方体内切球 (切于 6 个面中心)";
+svg.appendChild(tInTitle);
+var midX=272;
+var bRect=el("rect",{x:midX-44,y:92,width:88,height:96,rx:8,fill:"var(--card)",stroke:"var(--line)","stroke-width":"1.2"});
+svg.appendChild(bRect);
+var mb1=el("text",{x:midX,y:112,"text-anchor":"middle",fill:"var(--muted)","font-size":"11.5","font-weight":"700"});
+mb1.textContent="外接 : 内切";
+svg.appendChild(mb1);
+var mb2=el("text",{x:midX,y:132,"text-anchor":"middle",fill:"var(--a)","font-size":"13","font-weight":"800"});
+mb2.textContent="半径 √3 : 1";
+svg.appendChild(mb2);
+var mb3=el("text",{x:midX,y:152,"text-anchor":"middle",fill:"var(--ok)","font-size":"13","font-weight":"800"});
+mb3.textContent="面积 3 : 1";
+svg.appendChild(mb3);
+var mb4=el("text",{x:midX,y:172,"text-anchor":"middle",fill:"var(--warn)","font-size":"13","font-weight":"800"});
+mb4.textContent="体积 3√3 : 1";
+svg.appendChild(mb4);
+var realR_out=(Math.sqrt(3)/2)*a;
+var realR_in=a/2;
+var sOut=4*Math.PI*realR_out*realR_out;
+var vOut=(4/3)*Math.PI*Math.pow(realR_out,3);
+var sIn=4*Math.PI*realR_in*realR_in;
+var vIn=(4/3)*Math.PI*Math.pow(realR_in,3);
+desc.innerHTML=
+"<b>正方体</b>：棱长 \\(a = "+a.toFixed(1)+"\\)，体积 \\(V_{\\text{方}} = a^3 = "+Math.pow(a,3).toFixed(2)+"\\)；<br>"+
+"<b>外接球</b>：半径 \\(R_{\\text{外}} = \\dfrac{\\sqrt{3}}{2}a = "+realR_out.toFixed(2)+"\\)，"+
+"表面积 \\(S_{\\text{外}} = 3\\pi a^2 = "+sOut.toFixed(2)+"\\)，体积 \\(V_{\\text{外}} = "+vOut.toFixed(2)+"\\)；<br>"+
+"<b>内切球</b>：半径 \\(R_{\\text{内}} = \\dfrac{a}{2} = "+realR_in.toFixed(2)+"\\)，"+
+"表面积 \\(S_{\\text{内}} = \\pi a^2 = "+sIn.toFixed(2)+"\\)，体积 \\(V_{\\text{内}} = "+vIn.toFixed(2)+"\\)；<br>"+
+"<b>比例铁律</b>：半径比 \\(R_{\\text{外}} : R_{\\text{内}} = \\sqrt{3} : 1\\)；"+
+"表面积比 \\(S_{\\text{外}} : S_{\\text{内}} = 3 : 1\\)；"+
+"体积比 \\(V_{\\text{外}} : V_{\\text{内}} = 3\\sqrt{3} : 1\\)。";
+renderMath();
+}
+function render(){
+svg.innerHTML="";
+var valA=parseFloat(sliderA.value)||30;
+var valB=parseFloat(sliderB.value)||40;
+if(currentTab==="compare"){
+renderCompare(valA,valB);
+}else if(currentTab==="cone"){
+renderCone(valA,valB);
+}else if(currentTab==="frustum"){
+renderFrustum(valA,valB);
+}else if(currentTab==="sphere"){
+renderSphere(valA,valB);
+}else if(currentTab==="cavalieri"&&window.IsoBench&&window.IsoBench.isReal===true){
+window.IsoBench.renderCavalieriBench(svg,desc,outA,outB,valA,valB,renderMath);
+}
+}
+tabBtns.forEach(function(btn){
+btn.addEventListener("click",function(){
+tabBtns.forEach(function(b){b.classList.remove("on");});
+btn.classList.add("on");
+setTabConfig(btn.getAttribute("data-tab"));
+render();
+});
+});
+sliderA.addEventListener("input",render);
+sliderB.addEventListener("input",render);
+resetBtn.addEventListener("click",function(){
+setTabConfig(currentTab);
+render();
+});
+window.addEventListener("keydown",function(e){
+if(e.target&&(e.target.tagName==="INPUT"||e.target.tagName==="BUTTON")){
+return;
+}
+if(e.key==="ArrowLeft"){
+sliderA.value=Math.max(parseFloat(sliderA.min),(parseFloat(sliderA.value)||30)-parseFloat(sliderA.step));
+render();
+e.preventDefault();
+}else if(e.key==="ArrowRight"){
+sliderA.value=Math.min(parseFloat(sliderA.max),(parseFloat(sliderA.value)||30)+parseFloat(sliderA.step));
+render();
+e.preventDefault();
+}else if(e.key==="ArrowDown"){
+sliderB.value=Math.max(parseFloat(sliderB.min),(parseFloat(sliderB.value)||40)-parseFloat(sliderB.step));
+render();
+e.preventDefault();
+}else if(e.key==="ArrowUp"){
+sliderB.value=Math.min(parseFloat(sliderB.max),(parseFloat(sliderB.value)||40)+parseFloat(sliderB.step));
+render();
+e.preventDefault();
+}
+});
+render();
+/*0从例子进入：圆锥倒圆柱体积实验*/
+var epSvg=document.getElementById("entry-pour"),epBar=document.getElementById("entry-pour-bar"),epNote=document.getElementById("entry-pour-note");
+function epDraw(n){
+if(!epSvg)return;
+epSvg.innerHTML="";
+var topY=44,botY=164,H=120,cr=27,cyR=44;
+[52,126,200].forEach(function(cx,i){
+var on=i<n,col=on?"var(--a)":"var(--muted)";
+var g=el("g",{style:"cursor:pointer"});
+g.appendChild(el("polygon",{points:(cx-cr)+","+topY+" "+(cx+cr)+","+topY+" "+cx+","+botY,fill:on?"var(--ok-soft)":"var(--card)",stroke:col,"stroke-width":on?2.2:1.4}));
+g.appendChild(el("ellipse",{cx:cx,cy:topY,rx:cr,ry:7,fill:on?"var(--ok-soft)":"var(--card)",stroke:col,"stroke-width":on?2:1.3}));
+var t=el("text",{x:cx,y:botY+20,"text-anchor":"middle","font-size":13,"font-weight":on?700:400,fill:on?"var(--a)":"var(--muted)"});
+t.textContent="第"+(i+1)+"锥"+(on?" ✓":"");
+g.appendChild(t);
+g.onclick=function(){epDraw(i+1);};
+epSvg.appendChild(g);
+});
+var ar=el("text",{x:274,y:108,"text-anchor":"middle","font-size":15,"font-weight":700,fill:"var(--b)"});
+ar.textContent="倒入 ➔";
+epSvg.appendChild(ar);
+var cx=386,fillH=H*n/3,fy=botY-fillH;
+epSvg.appendChild(el("rect",{x:cx-cyR,y:topY,width:cyR*2,height:H,fill:"var(--card)",stroke:"var(--c)","stroke-width":2}));
+epSvg.appendChild(el("rect",{x:cx-cyR,y:fy,width:cyR*2,height:fillH,fill:n===3?"var(--ok-soft)":"rgba(217,140,43,0.22)"}));
+epSvg.appendChild(el("ellipse",{cx:cx,cy:fy,rx:cyR,ry:9,fill:n===3?"var(--ok-soft)":"rgba(217,140,43,0.32)",stroke:n===3?"var(--a)":"var(--b)","stroke-width":1.8}));
+[1,2,3].forEach(function(k){
+var ky=botY-H*k/3;
+epSvg.appendChild(el("line",{x1:cx-cyR,y1:ky,x2:cx+cyR+6,y2:ky,stroke:k===n?"var(--a)":"var(--line)","stroke-dasharray":"4,3","stroke-width":1.4}));
+var tk=el("text",{x:cx+cyR+10,y:ky+4,"font-size":12.5,"font-weight":k===n?700:400,fill:k===n?"var(--a)":"var(--muted)"});
+tk.textContent=k+"/3 杯";
+epSvg.appendChild(tk);
+});
+epSvg.appendChild(el("ellipse",{cx:cx,cy:topY,rx:cyR,ry:9,fill:"none",stroke:"var(--c)","stroke-width":2}));
+epSvg.appendChild(el("ellipse",{cx:cx,cy:botY,rx:cyR,ry:9,fill:"none",stroke:"var(--c)","stroke-width":2}));
+var tc=el("text",{x:cx,y:24,"text-anchor":"middle","font-size":13.5,"font-weight":700,fill:"var(--fg)"});
+tc.textContent="等底等高圆柱杯 (r=3, h=10)";
+epSvg.appendChild(tc);
+var tb=el("text",{x:cx,y:botY+23,"text-anchor":"middle","font-size":13,"font-weight":700,fill:n===3?"var(--a)":"var(--b)"});
+tb.textContent="液面高度："+n+"/3 h ("+(n*30)+"π / 90π)";
+epSvg.appendChild(tb);
+[].forEach.call(epBar.querySelectorAll("button"),function(b){
+b.classList.toggle("on",parseInt(b.getAttribute("data-n"),10)===n);
+});
+epNote.innerHTML="已倒入 <b>"+n+" 个</b>等底等高圆锥（单锥体积 30π）：圆柱杯液面升至 <b>"+n+"/3 杯（"+(n*30)+"π）</b>"+(n===3?"——<b>刚好装满整杯（90π = 3 × 30π）！</b>":"，还没装满！");
+}
+[].forEach.call(epBar.querySelectorAll("button"),function(b){
+b.onclick=function(){epDraw(parseInt(b.getAttribute("data-n"),10));};
+});
+document.addEventListener("predict:pick",function(ev){
+if(ev.detail&&ev.detail.id==="entry")epDraw(ev.detail.choice==="A"?2:3);
+});
+document.addEventListener("predict:reset",function(ev){
+if(ev.detail&&ev.detail.id==="entry")epDraw(3);
+});
+epDraw(3);
+})();
+</script>
 
-  var currentTab = "compare";
-  var svg = document.getElementById("geoSvg");
-  var sliderA = document.getElementById("sliderA");
-  var sliderB = document.getElementById("sliderB");
-  var outA = document.getElementById("outA");
-  var outB = document.getElementById("outB");
-  var lblA = document.getElementById("lblA");
-  var lblB = document.getElementById("lblB");
-  var desc = document.getElementById("resultDesc");
-  var resetBtn = document.getElementById("resetBtn");
-  var tabBtns = document.querySelectorAll("#tabs button");
 
-  function el(tag, attrs) {
-    var node = document.createElementNS("http://www.w3.org/2000/svg", tag);
-    for (var k in attrs) {
-      node.setAttribute(k, attrs[k]);
+
+<script>
+(function(){
+  var fig=document.getElementById("m-vol-fig"),bar=document.getElementById("m-vol-bar"),status=document.getElementById("m-vol-status"),trap=document.getElementById("m-vol-trap-fig");
+  if(!fig||!bar)return;
+  var isDark=document.documentElement.classList.contains("dark")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches),
+      ca=isDark?"#38bdf8":"#0284c7",cb=isDark?"#f59e0b":"#d97706",cc=isDark?"#10b981":"#059669",cd=isDark?"#ec4899":"#db2777",
+      mut=isDark?"#94a3b8":"#64748b",bgCard=isDark?"#1e293b":"#f1f5f9",border=isDark?"#334155":"#e2e8f0",NS="http://www.w3.org/2000/svg";
+  function E(p,t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;}
+  function T(p,x,y,s,c,sz,w,an){var t=E(p,"text",{x:x,y:y,fill:c||mut,"font-size":sz||11.5,"font-weight":w||400,"text-anchor":an||"start"});t.textContent=s;return t;}
+  function draw(m){
+    fig.innerHTML="";
+    if(m==="sys"){
+      T(fig,65,24,"圆柱: V=Sh",ca,12,700,"middle");
+      E(fig,"ellipse",{cx:65,cy:45,rx:35,ry:10,fill:"rgba(2,132,199,0.08)",stroke:ca,"stroke-width":1.5});
+      E(fig,"line",{x1:30,y1:45,x2:30,y2:125,stroke:ca,"stroke-width":1.5});
+      E(fig,"line",{x1:100,y1:45,x2:100,y2:125,stroke:ca,"stroke-width":1.5});
+      E(fig,"ellipse",{cx:65,cy:125,rx:35,ry:10,fill:"rgba(2,132,199,0.08)",stroke:ca,"stroke-width":1.5});
+      T(fig,65,148,"等底等高标准柱",ca,10.5,400,"middle");
+      T(fig,185,24,"圆锥: V=1/3 Sh",cb,12,700,"middle");
+      E(fig,"line",{x1:185,y1:45,x2:150,y2:125,stroke:cb,"stroke-width":1.5});
+      E(fig,"line",{x1:185,y1:45,x2:220,y2:125,stroke:cb,"stroke-width":1.5});
+      E(fig,"line",{x1:185,y1:45,x2:185,y2:125,stroke:mut,"stroke-width":1.2,"stroke-dasharray":"3 3"});
+      E(fig,"ellipse",{cx:185,cy:125,rx:35,ry:10,fill:"rgba(217,119,6,0.08)",stroke:cb,"stroke-width":1.5});
+      T(fig,185,148,"柱体的 1/3 体积",cb,10.5,700,"middle");
+      T(fig,305,24,"圆台: 通式过渡",cc,12,700,"middle");
+      E(fig,"ellipse",{cx:305,cy:60,rx:20,ry:6,fill:"rgba(16,185,129,0.08)",stroke:cc,"stroke-width":1.5});
+      E(fig,"line",{x1:285,y1:60,x2:270,y2:125,stroke:cc,"stroke-width":1.5});
+      E(fig,"line",{x1:325,y1:60,x2:340,y2:125,stroke:cc,"stroke-width":1.5});
+      E(fig,"ellipse",{cx:305,cy:125,rx:35,ry:10,fill:"rgba(16,185,129,0.08)",stroke:cc,"stroke-width":1.5});
+      T(fig,305,148,"1/3 h(S1+√S1S2+S2)",cc,10,600,"middle");
+      E(fig,"rect",{x:375,y:25,width:135,height:125,rx:6,fill:bgCard,stroke:border});
+      T(fig,385,48,"祖暅原理精要：",cb,11.5,700);
+      T(fig,385,72,"「幂势既同 则积不容异」",mut,10.5);
+      T(fig,385,96,"等高处截面积相等",cc,11,700);
+      T(fig,385,118,"→ 整体体积必相等",ca,11,700);
+    }else if(m==="expand"){
+      T(fig,30,24,"【侧面展开】曲面转平面",ca,12,700);
+      T(fig,70,48,"圆柱侧面: 矩形",ca,11,700);
+      E(fig,"rect",{x:40,y:56,width:130,height:60,fill:"rgba(2,132,199,0.08)",stroke:ca,"stroke-width":1.5});
+      T(fig,105,90,"S = 2πrh",ca,11,600,"middle");
+      T(fig,105,130,"长 2πr (底周长)",mut,10,400,"middle");
+      T(fig,240,48,"圆锥侧面: 扇形",cb,11,700);
+      E(fig,"path",{d:"M 270,115 L 320,55 A 70,70 0 0,1 360,110 Z",fill:"rgba(217,119,6,0.08)",stroke:cb,"stroke-width":1.5});
+      T(fig,290,80,"母线 l",cb,10.5,700);
+      T(fig,370,90,"弧长 2πr",cd,10.5,600);
+      T(fig,320,135,"S = 1/2 · 2πr · l = πrl",cb,11,700,"middle");
+      E(fig,"rect",{x:395,y:25,width:115,height:125,rx:6,fill:bgCard,stroke:border});
+      T(fig,405,48,"展开两要素：",cb,11.5,700);
+      T(fig,405,72,"• 半径 = 母线 l",ca,11,600);
+      T(fig,405,94,"• 弧长 = 2πr",cd,11,600);
+      T(fig,405,118,"• θ = 360° · r/l",cb,11,700);
+      T(fig,405,136,"★ 严禁用高 h！",cd,10,700);
+    }else if(m==="sphere"){
+      T(fig,30,24,"【球体与外接球】墙角模型补形求 2R",cd,12,700);
+      E(fig,"circle",{cx:90,cy:90,r:45,fill:"rgba(236,72,153,0.08)",stroke:cd,"stroke-width":1.8});
+      E(fig,"ellipse",{cx:90,cy:90,rx:45,ry:15,fill:"none",stroke:cd,"stroke-width":1.2,"stroke-dasharray":"3 3"});
+      E(fig,"line",{x1:90,y1:90,x2:125,y2:60,stroke:cd,"stroke-width":1.5});
+      T(fig,115,80,"R",cd,11,700);
+      T(fig,90,150,"S=4πR², V=4/3πR³",cd,11,700,"middle");
+      T(fig,195,50,"三垂侧棱补成长方体：",ca,11.5,700);
+      T(fig,195,75,"体对角线长 = 外接球直径 2R",ca,11,600);
+      T(fig,195,100,"(2R)² = a² + b² + c²",cb,12,700);
+      T(fig,195,125,"R = 1/2 · √(a²+b²+c²)",cc,11.5,700);
+      E(fig,"rect",{x:375,y:25,width:135,height:125,rx:6,fill:bgCard,stroke:border});
+      T(fig,385,48,"经典切接模型：",cb,11.5,700);
+      T(fig,385,70,"• 墙角模型: 补长方体",ca,10.5,600);
+      T(fig,385,90,"• 正方体内切: 2r = a",mut,10.5);
+      T(fig,385,110,"• 正方体棱切: 2R=√2a",mut,10.5);
+      T(fig,385,130,"• 正方体外接: 2R=√3a",cc,10.5,700);
     }
-    return node;
   }
-
-  function renderMath() {
-    if (window.Peiyu && window.Peiyu.math) {
-      window.Peiyu.math(desc);
-    } else if (window.renderMathInElement) {
-      window.renderMathInElement(desc, {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "\\(", right: "\\)", display: false }
-        ],
-        throwOnError: false
-      });
-    }
-  }
-
-  function setTabConfig(tab) {
-    currentTab = tab;
-    if (tab === "compare") {
-      lblA.innerHTML = "底面半径 \\(r = \\)";
-      lblB.innerHTML = "垂直高度 \\(h = \\)";
-      sliderA.min = "15"; sliderA.max = "45"; sliderA.step = "1"; sliderA.value = "30";
-      sliderB.min = "20"; sliderB.max = "55"; sliderB.step = "1"; sliderB.value = "40";
-    } else if (tab === "cone") {
-      lblA.innerHTML = "底面半径 \\(r = \\)";
-      lblB.innerHTML = "垂直高度 \\(h = \\)";
-      sliderA.min = "15"; sliderA.max = "45"; sliderA.step = "1"; sliderA.value = "30";
-      sliderB.min = "20"; sliderB.max = "55"; sliderB.step = "1"; sliderB.value = "40";
-    } else if (tab === "frustum") {
-      lblA.innerHTML = "下底半径 \\(r_2 = \\)";
-      lblB.innerHTML = "垂直高度 \\(h = \\)";
-      sliderA.min = "25"; sliderA.max = "45"; sliderA.step = "1"; sliderA.value = "36";
-      sliderB.min = "20"; sliderB.max = "50"; sliderB.step = "1"; sliderB.value = "35";
-    } else if (tab === "sphere") {
-      lblA.innerHTML = "正方体棱长 \\(a = \\)";
-      lblB.innerHTML = "深度比例 = ";
-      sliderA.min = "20"; sliderA.max = "50"; sliderA.step = "1"; sliderA.value = "38";
-      sliderB.min = "20"; sliderB.max = "50"; sliderB.step = "1"; sliderB.value = "35";
-    }
-    if (window.Peiyu && window.Peiyu.math) {
-      window.Peiyu.math(lblA);
-      window.Peiyu.math(lblB);
-    } else if (window.renderMathInElement) {
-      window.renderMathInElement(lblA, { delimiters: [{ left: "\\(", right: "\\)", display: false }] });
-      window.renderMathInElement(lblB, { delimiters: [{ left: "\\(", right: "\\)", display: false }] });
-    }
-  }
-
-  function renderCompare(valA, valB) {
-    var r = valA / 10;
-    var h = valB / 10;
-    outA.textContent = r.toFixed(1);
-    outB.textContent = h.toFixed(1);
-
-    var scale = 18;
-    var rPx = r * scale;
-    var hPx = h * scale;
-    var ryPx = Math.max(7, rPx * 0.32);
-    var baseY = 225;
-
-    // 左侧：圆柱
-    var cx1 = 140;
-    var topY1 = baseY - hPx;
-
-    // 圆柱下1/3液面
-    var y1_3 = baseY - hPx / 3;
-    var waterPath = "M " + (cx1 - rPx) + " " + baseY +
-      " A " + rPx + " " + ryPx + " 0 0 0 " + (cx1 + rPx) + " " + baseY +
-      " L " + (cx1 + rPx) + " " + y1_3 +
-      " A " + rPx + " " + ryPx + " 0 0 1 " + (cx1 - rPx) + " " + y1_3 + " Z";
-    svg.appendChild(el("path", { d: waterPath, fill: "rgba(16,185,129,0.22)" }));
-
-    // 圆柱侧面与上部背景
-    var cylBg = "M " + (cx1 - rPx) + " " + baseY + " L " + (cx1 - rPx) + " " + topY1 +
-      " A " + rPx + " " + ryPx + " 0 0 1 " + (cx1 + rPx) + " " + topY1 +
-      " L " + (cx1 + rPx) + " " + baseY +
-      " A " + rPx + " " + ryPx + " 0 0 1 " + (cx1 - rPx) + " " + baseY + " Z";
-    svg.appendChild(el("path", { d: cylBg, fill: "rgba(59,130,246,0.06)" }));
-
-    // 圆柱轮廓线
-    svg.appendChild(el("path", {
-      d: "M " + (cx1 - rPx) + " " + baseY + " A " + rPx + " " + ryPx + " 0 0 1 " + (cx1 + rPx) + " " + baseY,
-      stroke: "var(--muted)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.4"
-    }));
-    svg.appendChild(el("path", {
-      d: "M " + (cx1 - rPx) + " " + baseY + " A " + rPx + " " + ryPx + " 0 0 0 " + (cx1 + rPx) + " " + baseY,
-      stroke: "var(--a)", fill: "none", "stroke-width": "1.8"
-    }));
-    svg.appendChild(el("ellipse", {
-      cx: cx1, cy: topY1, rx: rPx, ry: ryPx,
-      stroke: "var(--a)", fill: "rgba(59,130,246,0.12)", "stroke-width": "1.8"
-    }));
-    svg.appendChild(el("line", { x1: cx1 - rPx, y1: topY1, x2: cx1 - rPx, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: cx1 + rPx, y1: topY1, x2: cx1 + rPx, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-
-    // 1/3 高度虚线椭圆
-    svg.appendChild(el("ellipse", {
-      cx: cx1, cy: y1_3, rx: rPx, ry: ryPx,
-      stroke: "var(--ok)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.5"
-    }));
-    var t13 = el("text", { x: cx1, y: y1_3 - 4, "text-anchor": "middle", fill: "var(--ok)", "font-size": "11.5", "font-weight": "700" });
-    t13.textContent = "1/3 容积线";
-    svg.appendChild(t13);
-
-    // 圆柱标注
-    var tCyl = el("text", { x: cx1, y: topY1 - 12, "text-anchor": "middle", fill: "var(--fg)", "font-size": "14", "font-weight": "700" });
-    tCyl.textContent = "圆柱 (V = Sh, 3份体积)";
-    svg.appendChild(tCyl);
-
-    // 左高标注
-    svg.appendChild(el("line", { x1: cx1 - rPx - 10, y1: topY1, x2: cx1 - rPx - 10, y2: baseY, stroke: "var(--no)", "stroke-width": "1.4" }));
-    var tH1 = el("text", { x: cx1 - rPx - 14, y: (topY1 + baseY) / 2 + 4, "text-anchor": "end", fill: "var(--no)", "font-size": "12", "font-weight": "700" });
-    tH1.textContent = "h=" + h.toFixed(1);
-    svg.appendChild(tH1);
-
-    // 右侧：圆锥
-    var cx2 = 400;
-    var apexY = baseY - hPx;
-
-    // 圆锥身体填充
-    var conePath = "M " + cx2 + " " + apexY + " L " + (cx2 - rPx) + " " + baseY +
-      " A " + rPx + " " + ryPx + " 0 0 0 " + (cx2 + rPx) + " " + baseY + " Z";
-    svg.appendChild(el("path", { d: conePath, fill: "rgba(16,185,129,0.22)" }));
-
-    // 圆锥底面
-    svg.appendChild(el("path", {
-      d: "M " + (cx2 - rPx) + " " + baseY + " A " + rPx + " " + ryPx + " 0 0 1 " + (cx2 + rPx) + " " + baseY,
-      stroke: "var(--muted)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.4"
-    }));
-    svg.appendChild(el("path", {
-      d: "M " + (cx2 - rPx) + " " + baseY + " A " + rPx + " " + ryPx + " 0 0 0 " + (cx2 + rPx) + " " + baseY,
-      stroke: "var(--a)", fill: "none", "stroke-width": "1.8"
-    }));
-    svg.appendChild(el("line", { x1: cx2, y1: apexY, x2: cx2 - rPx, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: cx2, y1: apexY, x2: cx2 + rPx, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-
-    // 垂直高与底面半径
-    svg.appendChild(el("line", { x1: cx2, y1: apexY, x2: cx2, y2: baseY, stroke: "var(--no)", "stroke-dasharray": "3,3", "stroke-width": "1.6" }));
-    svg.appendChild(el("line", { x1: cx2, y1: baseY, x2: cx2 + rPx, y2: baseY, stroke: "var(--c)", "stroke-dasharray": "3,3", "stroke-width": "1.6" }));
-
-    // 直角标记
-    var sq = 7;
-    svg.appendChild(el("path", {
-      d: "M " + cx2 + " " + (baseY - sq) + " L " + (cx2 + sq) + " " + (baseY - sq) + " L " + (cx2 + sq) + " " + baseY,
-      fill: "none", stroke: "var(--no)", "stroke-width": "1.2"
-    }));
-
-    var tCone = el("text", { x: cx2, y: apexY - 12, "text-anchor": "middle", fill: "var(--fg)", "font-size": "14", "font-weight": "700" });
-    tCone.textContent = "圆锥 (V = 1/3 Sh, 1份体积)";
-    svg.appendChild(tCone);
-
-    var tR2 = el("text", { x: cx2 + rPx / 2, y: baseY + 16, "text-anchor": "middle", fill: "var(--c)", "font-size": "12", "font-weight": "700" });
-    tR2.textContent = "r=" + r.toFixed(1);
-    svg.appendChild(tR2);
-
-    // 中间对比牌
-    var midX = 270;
-    var cardRect = el("rect", { x: midX - 42, y: 110, width: 84, height: 62, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": "1.2" });
-    svg.appendChild(cardRect);
-    var tm1 = el("text", { x: midX, y: 130, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11.5" });
-    tm1.textContent = "等底等高";
-    svg.appendChild(tm1);
-    var tm2 = el("text", { x: midX, y: 152, "text-anchor": "middle", fill: "var(--a)", "font-size": "16", "font-weight": "800" });
-    tm2.textContent = "3 : 1";
-    svg.appendChild(tm2);
-
-    // 数值描述
-    var sBase = Math.PI * r * r;
-    var vCyl = sBase * h;
-    var vCone = vCyl / 3;
-    desc.innerHTML =
-      "<b>对比结论</b>：底面半径 \\(r = " + r.toFixed(1) + "\\)，垂直高 \\(h = " + h.toFixed(1) + "\\)；" +
-      "底面积 \\(S = \\pi r^2 = " + sBase.toFixed(2) + "\\)。<br>" +
-      "圆柱体积 \\(V_{\\text{柱}} = Sh = " + vCyl.toFixed(2) + "\\)；" +
-      "圆锥体积 \\(V_{\\text{锥}} = \\dfrac{1}{3}Sh = " + vCone.toFixed(2) + "\\)；" +
-      "体积比 \\(V_{\\text{柱}} : V_{\\text{锥}} = 3 : 1\\)。<br>" +
-      "<b>祖暅原理思维</b>：「幂势既同，则积不容异」。圆锥内部各截面面积随高度成平方缩小，累加体积严格等于等底等高圆柱的三分之一。";
-    renderMath();
-  }
-
-  function renderCone(valA, valB) {
-    var r = valA / 10;
-    var h = valB / 10;
-    outA.textContent = r.toFixed(1);
-    outB.textContent = h.toFixed(1);
-
-    var l = Math.sqrt(r * r + h * h);
-    var scale = 20;
-    var rPx = r * scale;
-    var hPx = h * scale;
-    var ryPx = Math.max(7, rPx * 0.32);
-    var baseY = 225;
-
-    // 左侧：圆锥剖面
-    var cx = 135;
-    var apexY = baseY - hPx;
-
-    // 底面椭圆
-    svg.appendChild(el("path", {
-      d: "M " + (cx - rPx) + " " + baseY + " A " + rPx + " " + ryPx + " 0 0 1 " + (cx + rPx) + " " + baseY,
-      stroke: "var(--muted)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.4"
-    }));
-    svg.appendChild(el("path", {
-      d: "M " + (cx - rPx) + " " + baseY + " A " + rPx + " " + ryPx + " 0 0 0 " + (cx + rPx) + " " + baseY,
-      stroke: "var(--a)", fill: "none", "stroke-width": "1.8"
-    }));
-    svg.appendChild(el("line", { x1: cx, y1: apexY, x2: cx - rPx, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: cx, y1: apexY, x2: cx + rPx, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-
-    // 高亮直角三角形截面
-    var triPath = "M " + cx + " " + apexY + " L " + cx + " " + baseY + " L " + (cx + rPx) + " " + baseY + " Z";
-    svg.appendChild(el("path", { d: triPath, fill: "rgba(245,158,11,0.28)", stroke: "var(--warn)", "stroke-width": "2" }));
-
-    // 直角标记
-    var sq = 8;
-    svg.appendChild(el("path", {
-      d: "M " + cx + " " + (baseY - sq) + " L " + (cx + sq) + " " + (baseY - sq) + " L " + (cx + sq) + " " + baseY,
-      fill: "none", stroke: "var(--no)", "stroke-width": "1.4"
-    }));
-
-    // 文字标注
-    var tH = el("text", { x: cx - 6, y: (apexY + baseY) / 2, "text-anchor": "end", fill: "var(--no)", "font-size": "12.5", "font-weight": "700" });
-    tH.textContent = "h=" + h.toFixed(1);
-    svg.appendChild(tH);
-
-    var tR = el("text", { x: cx + rPx / 2, y: baseY + 16, "text-anchor": "middle", fill: "var(--c)", "font-size": "12.5", "font-weight": "700" });
-    tR.textContent = "r=" + r.toFixed(1);
-    svg.appendChild(tR);
-
-    var tL = el("text", { x: cx + rPx / 2 + 16, y: (apexY + baseY) / 2 - 4, "text-anchor": "start", fill: "var(--a)", "font-size": "13", "font-weight": "800" });
-    tL.textContent = "母线 l=" + l.toFixed(2);
-    svg.appendChild(tL);
-
-    var tLeftTitle = el("text", { x: cx, y: apexY - 12, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13.5", "font-weight": "700" });
-    tLeftTitle.textContent = "圆锥轴截面：l = √(r²+h²)";
-    svg.appendChild(tLeftTitle);
-
-    // 右侧：展开扇形
-    var sOx = 390;
-    var sOy = 70;
-    var sRadius = Math.min(135, l * scale * 0.95);
-    var thetaDeg = 360 * (r / l);
-    var thetaRad = thetaDeg * Math.PI / 180;
-
-    var startA = Math.PI / 2 - thetaRad / 2;
-    var endA = Math.PI / 2 + thetaRad / 2;
-    var sx1 = sOx + sRadius * Math.cos(startA);
-    var sy1 = sOy + sRadius * Math.sin(startA);
-    var sx2 = sOx + sRadius * Math.cos(endA);
-    var sy2 = sOy + sRadius * Math.sin(endA);
-    var largeArc = thetaDeg > 180 ? 1 : 0;
-
-    var sectorD = "M " + sOx + " " + sOy + " L " + sx1.toFixed(1) + " " + sy1.toFixed(1) +
-      " A " + sRadius.toFixed(1) + " " + sRadius.toFixed(1) + " 0 " + largeArc + " 1 " + sx2.toFixed(1) + " " + sy2.toFixed(1) + " Z";
-    svg.appendChild(el("path", { d: sectorD, fill: "rgba(16,185,129,0.18)", stroke: "var(--ok)", "stroke-width": "2" }));
-
-    // 强调弧长
-    var arcD = "M " + sx1.toFixed(1) + " " + sy1.toFixed(1) +
-      " A " + sRadius.toFixed(1) + " " + sRadius.toFixed(1) + " 0 " + largeArc + " 1 " + sx2.toFixed(1) + " " + sy2.toFixed(1);
-    svg.appendChild(el("path", { d: arcD, fill: "none", stroke: "var(--a)", "stroke-width": "3" }));
-
-    // 扇形半径标注
-    var tRad = el("text", { x: (sOx + sx1) / 2 + 10, y: (sOy + sy1) / 2 - 4, fill: "var(--ok)", "font-size": "12", "font-weight": "700" });
-    tRad.textContent = "半径 = 母线 l";
-    svg.appendChild(tRad);
-
-    // 扇形弧长标注
-    var tArc = el("text", { x: sOx, y: Math.max(sy1, sy2) + 20, "text-anchor": "middle", fill: "var(--a)", "font-size": "12.5", "font-weight": "700" });
-    tArc.textContent = "展开弧长 = 底面周长 2πr = " + (2 * Math.PI * r).toFixed(1);
-    svg.appendChild(tArc);
-
-    // 扇形圆心角标注
-    var tDeg = el("text", { x: sOx, y: sOy + 26, "text-anchor": "middle", fill: "var(--warn)", "font-size": "13", "font-weight": "700" });
-    tDeg.textContent = "θ = " + thetaDeg.toFixed(1) + "°";
-    svg.appendChild(tDeg);
-
-    var tRightTitle = el("text", { x: sOx, y: sOy - 14, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13.5", "font-weight": "700" });
-    tRightTitle.textContent = "侧面展开扇形（半径为母线 l）";
-    svg.appendChild(tRightTitle);
-
-    var sSide = Math.PI * r * l;
-    var sBase = Math.PI * r * r;
-    var sTotal = sSide + sBase;
-    desc.innerHTML =
-      "<b>勾股分水岭</b>：母线 \\(l = \\sqrt{r^2+h^2} = \\sqrt{" + r.toFixed(1) + "^2 + " + h.toFixed(1) + "^2} = " + l.toFixed(2) + "\\)（绝不可把垂直高 \\(h\\) 当母线！）；<br>" +
-      "<b>展开扇形</b>：半径为母线 \\(l = " + l.toFixed(2) + "\\)，弧长 \\(c = 2\\pi r = " + (2 * Math.PI * r).toFixed(2) + "\\)；" +
-      "圆心角 \\(\\theta = 360^\\circ \\times \\dfrac{r}{l} = " + thetaDeg.toFixed(1) + "^\\circ\\)；<br>" +
-      "<b>面积计算</b>：侧面积 \\(S_{\\text{侧}} = \\pi r l = " + sSide.toFixed(2) + "\\)，" +
-      "底面积 \\(S_{\\text{底}} = \\pi r^2 = " + sBase.toFixed(2) + "\\)，" +
-      "表面积 \\(S_{\\text{表}} = \\pi r(r+l) = " + sTotal.toFixed(2) + "\\)。";
-    renderMath();
-  }
-
-  function renderFrustum(valA, valB) {
-    var r2 = valA / 10;
-    var r1 = r2 * 0.45;
-    var h = valB / 10;
-    outA.textContent = r2.toFixed(1);
-    outB.textContent = h.toFixed(1);
-
-    var scale = 17;
-    var r2Px = r2 * scale;
-    var r1Px = r1 * scale;
-    var hPx = h * scale;
-    var ry2Px = Math.max(7, r2Px * 0.32);
-    var ry1Px = Math.max(4, r1Px * 0.32);
-    var baseY = 230;
-    var topY = baseY - hPx;
-
-    // 原锥顶点
-    var H = h * (r2 / (r2 - r1));
-    var HPx = Math.min(200, H * scale);
-    var apexY = baseY - HPx;
-
-    // 左侧：圆台
-    var cx1 = 145;
-
-    // 截去的小圆锥虚线
-    svg.appendChild(el("line", { x1: cx1, y1: apexY, x2: cx1 - r1Px, y2: topY, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    svg.appendChild(el("line", { x1: cx1, y1: apexY, x2: cx1 + r1Px, y2: topY, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    var tApex1 = el("text", { x: cx1, y: apexY - 6, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11.5" });
-    tApex1.textContent = "原圆锥顶点 (截顶)";
-    svg.appendChild(tApex1);
-
-    // 圆台侧面与下底
-    var frustPath = "M " + (cx1 - r1Px) + " " + topY + " L " + (cx1 - r2Px) + " " + baseY +
-      " A " + r2Px + " " + ry2Px + " 0 0 0 " + (cx1 + r2Px) + " " + baseY +
-      " L " + (cx1 + r1Px) + " " + topY +
-      " A " + r1Px + " " + ry1Px + " 0 0 1 " + (cx1 - r1Px) + " " + topY + " Z";
-    svg.appendChild(el("path", { d: frustPath, fill: "rgba(59,130,246,0.14)" }));
-
-    // 下底椭圆
-    svg.appendChild(el("path", {
-      d: "M " + (cx1 - r2Px) + " " + baseY + " A " + r2Px + " " + ry2Px + " 0 0 1 " + (cx1 + r2Px) + " " + baseY,
-      stroke: "var(--muted)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.3"
-    }));
-    svg.appendChild(el("path", {
-      d: "M " + (cx1 - r2Px) + " " + baseY + " A " + r2Px + " " + ry2Px + " 0 0 0 " + (cx1 + r2Px) + " " + baseY,
-      stroke: "var(--a)", fill: "none", "stroke-width": "1.8"
-    }));
-
-    // 上底椭圆
-    svg.appendChild(el("ellipse", {
-      cx: cx1, cy: topY, rx: r1Px, ry: ry1Px,
-      stroke: "var(--a)", fill: "rgba(59,130,246,0.22)", "stroke-width": "1.8"
-    }));
-
-    // 母线实线
-    svg.appendChild(el("line", { x1: cx1 - r1Px, y1: topY, x2: cx1 - r2Px, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: cx1 + r1Px, y1: topY, x2: cx1 + r2Px, y2: baseY, stroke: "var(--a)", "stroke-width": "1.8" }));
-
-    // 标注
-    var tR1 = el("text", { x: cx1, y: topY - 8, "text-anchor": "middle", fill: "var(--c)", "font-size": "12", "font-weight": "700" });
-    tR1.textContent = "r₁=" + r1.toFixed(1);
-    svg.appendChild(tR1);
-
-    var tR2 = el("text", { x: cx1, y: baseY + 18, "text-anchor": "middle", fill: "var(--c)", "font-size": "12", "font-weight": "700" });
-    tR2.textContent = "r₂=" + r2.toFixed(1);
-    svg.appendChild(tR2);
-
-    var lFrust = Math.sqrt((r2 - r1) * (r2 - r1) + h * h);
-    var tL1 = el("text", { x: cx1 + (r1Px + r2Px) / 2 + 10, y: (topY + baseY) / 2, fill: "var(--warn)", "font-size": "12", "font-weight": "700" });
-    tL1.textContent = "l=" + lFrust.toFixed(2);
-    svg.appendChild(tL1);
-
-    var tF1 = el("text", { x: cx1, y: baseY + 36, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13", "font-weight": "700" });
-    tF1.textContent = "圆台 (侧面积 π(r₁+r₂)l)";
-    svg.appendChild(tF1);
-
-    // 右侧：正四棱台
-    var cx2 = 390;
-    var w2 = r2Px * 1.8, d2 = r2Px * 0.7;
-    var w1 = r1Px * 1.8, d1 = r1Px * 0.7;
-
-    var B0x = cx2 - w2 / 2 + d2 / 2, B0y = baseY - d2 / 2; // 后左 (虚)
-    var B1x = cx2 + w2 / 2 + d2 / 2, B1y = baseY - d2 / 2; // 后右
-    var B2x = cx2 + w2 / 2 - d2 / 2, B2y = baseY + d2 / 2; // 前右
-    var B3x = cx2 - w2 / 2 - d2 / 2, B3y = baseY + d2 / 2; // 前左
-
-    var T0x = cx2 - w1 / 2 + d1 / 2, T0y = topY - d1 / 2;
-    var T1x = cx2 + w1 / 2 + d1 / 2, T1y = topY - d1 / 2;
-    var T2x = cx2 + w1 / 2 - d1 / 2, T2y = topY + d1 / 2;
-    var T3x = cx2 - w1 / 2 - d1 / 2, T3y = topY + d1 / 2;
-
-    // 棱台截顶虚线
-    svg.appendChild(el("line", { x1: cx2, y1: apexY, x2: T2x, y2: T2y, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    svg.appendChild(el("line", { x1: cx2, y1: apexY, x2: T3x, y2: T3y, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-
-    // 棱台侧面填充
-    var pyrBody = "M " + T3x + " " + T3y + " L " + B3x + " " + B3y + " L " + B2x + " " + B2y + " L " + T2x + " " + T2y + " Z";
-    svg.appendChild(el("path", { d: pyrBody, fill: "rgba(16,185,129,0.18)" }));
-
-    // 顶面
-    var pyrTop = "M " + T0x + " " + T0y + " L " + T1x + " " + T1y + " L " + T2x + " " + T2y + " L " + T3x + " " + T3y + " Z";
-    svg.appendChild(el("path", { d: pyrTop, fill: "rgba(16,185,129,0.28)", stroke: "var(--ok)", "stroke-width": "1.8" }));
-
-    // 棱台棱线
-    svg.appendChild(el("line", { x1: B3x, y1: B3y, x2: B2x, y2: B2y, stroke: "var(--ok)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: B2x, y1: B2y, x2: B1x, y2: B1y, stroke: "var(--ok)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: B3x, y1: B3y, x2: B0x, y2: B0y, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.3" }));
-    svg.appendChild(el("line", { x1: B1x, y1: B1y, x2: B0x, y2: B0y, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.3" }));
-
-    svg.appendChild(el("line", { x1: T3x, y1: T3y, x2: B3x, y2: B3y, stroke: "var(--ok)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: T2x, y1: T2y, x2: B2x, y2: B2y, stroke: "var(--ok)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: T1x, y1: T1y, x2: B1x, y2: B1y, stroke: "var(--ok)", "stroke-width": "1.8" }));
-    svg.appendChild(el("line", { x1: T0x, y1: T0y, x2: B0x, y2: B0y, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.3" }));
-
-    var tF2 = el("text", { x: cx2, y: baseY + 36, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13", "font-weight": "700" });
-    tF2.textContent = "正四棱台 (侧棱延长线汇交于顶)";
-    svg.appendChild(tF2);
-
-    // 数值
-    var s1 = Math.PI * r1 * r1;
-    var s2 = Math.PI * r2 * r2;
-    var vFrust = (h / 3) * (s1 + Math.sqrt(s1 * s2) + s2);
-    var sSideFrust = Math.PI * (r1 + r2) * lFrust;
-    var sTotalFrust = sSideFrust + s1 + s2;
-    desc.innerHTML =
-      "<b>台体参数</b>：上底半径 \\(r_1 = " + r1.toFixed(2) + "\\)，下底半径 \\(r_2 = " + r2.toFixed(1) + "\\)，垂直高 \\(h = " + h.toFixed(1) + "\\)；" +
-      "母线 \\(l = \\sqrt{(r_2-r_1)^2+h^2} = " + lFrust.toFixed(2) + "\\)；<br>" +
-      "上底面积 \\(S_1 = \\pi r_1^2 = " + s1.toFixed(2) + "\\)，下底面积 \\(S_2 = \\pi r_2^2 = " + s2.toFixed(2) + "\\)；<br>" +
-      "<b>台体体积</b>：\\(V = \\dfrac{1}{3}h(S_1 + \\sqrt{S_1S_2} + S_2) = " + vFrust.toFixed(2) + "\\)；<br>" +
-      "<b>圆台侧面积</b>：\\(S_{\\text{侧}} = \\pi(r_1+r_2)l = " + sSideFrust.toFixed(2) + "\\)，" +
-      "表面积 \\(S_{\\text{表}} = S_{\\text{侧}} + S_1 + S_2 = " + sTotalFrust.toFixed(2) + "\\)。";
-    renderMath();
-  }
-
-  function renderSphere(valA, valB) {
-    var a = valA / 10;
-    outA.textContent = a.toFixed(1);
-    outB.textContent = "35°";
-
-    var scale = 19;
-    var s = a * scale;
-    var dx = s * 0.35;
-    var dy = -s * 0.25;
-
-    // 左侧：外接球
-    var cx1 = 140;
-    var cy1 = 145;
-    var rOut = (Math.sqrt(3) / 2) * a * scale;
-
-    // 球面轮廓
-    svg.appendChild(el("circle", {
-      cx: cx1, cy: cy1, r: rOut,
-      fill: "rgba(59,130,246,0.12)", stroke: "var(--a)", "stroke-width": "2"
-    }));
-    svg.appendChild(el("ellipse", {
-      cx: cx1, cy: cy1, rx: rOut, ry: rOut * 0.32,
-      stroke: "var(--muted)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.2"
-    }));
-
-    // 正方体顶点 (以球心为中心)
-    var flbx = cx1 - s / 2 - dx / 2, flby = cy1 + s / 2 - dy / 2;
-    var frbx = cx1 + s / 2 - dx / 2, frby = cy1 + s / 2 - dy / 2;
-    var frtx = cx1 + s / 2 - dx / 2, frty = cy1 - s / 2 - dy / 2;
-    var fltx = cx1 - s / 2 - dx / 2, flty = cy1 - s / 2 - dy / 2;
-
-    var blbx = flbx + dx, blby = flby + dy;
-    var brbx = frbx + dx, brby = frby + dy;
-    var brtx = frtx + dx, brty = frty + dy;
-    var bltx = fltx + dx, blty = flty + dy;
-
-    // 正方体轮廓
-    svg.appendChild(el("line", { x1: flbx, y1: flby, x2: frbx, y2: frby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: frbx, y1: frby, x2: frtx, y2: frty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: frtx, y1: frty, x2: fltx, y2: flty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: fltx, y1: flty, x2: flbx, y2: flby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-
-    svg.appendChild(el("line", { x1: fltx, y1: flty, x2: bltx, y2: blty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: frtx, y1: frty, x2: brtx, y2: brty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: frbx, y1: frby, x2: brbx, y2: brby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: bltx, y1: blty, x2: brtx, y2: brty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: brtx, y1: brty, x2: brbx, y2: brby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-
-    // 内部虚线
-    svg.appendChild(el("line", { x1: flbx, y1: flby, x2: blbx, y2: blby, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    svg.appendChild(el("line", { x1: blbx, y1: blby, x2: brbx, y2: brby, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    svg.appendChild(el("line", { x1: blbx, y1: blby, x2: bltx, y2: blty, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-
-    // 体对角线 (突出加粗)
-    svg.appendChild(el("line", { x1: blbx, y1: blby, x2: frtx, y2: frty, stroke: "var(--warn)", "stroke-width": "2.4" }));
-    var tDiag = el("text", { x: cx1 - 8, y: cy1 - 10, fill: "var(--warn)", "font-size": "12", "font-weight": "800" });
-    tDiag.textContent = "体对角线 2R=√3 a";
-    svg.appendChild(tDiag);
-
-    var tOutTitle = el("text", { x: cx1, y: 30, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13.5", "font-weight": "700" });
-    tOutTitle.textContent = "正方体外接球 (8 顶点在球上)";
-    svg.appendChild(tOutTitle);
-
-    // 右侧：内切球
-    var cx2 = 405;
-    var cy2 = 145;
-    var rIn = (a / 2) * scale;
-
-    var f2lbx = cx2 - s / 2 - dx / 2, f2lby = cy2 + s / 2 - dy / 2;
-    var f2rbx = cx2 + s / 2 - dx / 2, f2rby = cy2 + s / 2 - dy / 2;
-    var f2rtx = cx2 + s / 2 - dx / 2, f2rty = cy2 - s / 2 - dy / 2;
-    var f2ltx = cx2 - s / 2 - dx / 2, f2lty = cy2 - s / 2 - dy / 2;
-
-    var b2lbx = f2lbx + dx, b2lby = f2lby + dy;
-    var b2rbx = f2rbx + dx, b2rby = f2rby + dy;
-    var b2rtx = f2rtx + dx, b2rty = f2rty + dy;
-    var b2ltx = f2ltx + dx, b2lty = f2lty + dy;
-
-    // 正方体后部虚线
-    svg.appendChild(el("line", { x1: f2lbx, y1: f2lby, x2: b2lbx, y2: b2lby, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    svg.appendChild(el("line", { x1: b2lbx, y1: b2lby, x2: b2rbx, y2: b2rby, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-    svg.appendChild(el("line", { x1: b2lbx, y1: b2lby, x2: b2ltx, y2: b2lty, stroke: "var(--muted)", "stroke-dasharray": "3,3", "stroke-width": "1.2" }));
-
-    // 内切球
-    svg.appendChild(el("circle", {
-      cx: cx2, cy: cy2, r: rIn,
-      fill: "rgba(16,185,129,0.18)", stroke: "var(--ok)", "stroke-width": "2"
-    }));
-    svg.appendChild(el("ellipse", {
-      cx: cx2, cy: cy2, rx: rIn, ry: rIn * 0.32,
-      stroke: "var(--muted)", "stroke-dasharray": "3,3", fill: "none", "stroke-width": "1.2"
-    }));
-
-    // 正方体前部实线
-    svg.appendChild(el("line", { x1: f2lbx, y1: f2lby, x2: f2rbx, y2: f2rby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: f2rbx, y1: f2rby, x2: f2rtx, y2: f2rty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: f2rtx, y1: f2rty, x2: f2ltx, y2: f2lty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: f2ltx, y1: f2lty, x2: f2lbx, y2: f2lby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-
-    svg.appendChild(el("line", { x1: f2ltx, y1: f2lty, x2: b2ltx, y2: b2lty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: f2rtx, y1: f2rty, x2: b2rtx, y2: b2rty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: f2rbx, y1: f2rby, x2: b2rbx, y2: b2rby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: b2ltx, y1: b2lty, x2: b2rtx, y2: b2rty, stroke: "var(--fg)", "stroke-width": "1.5" }));
-    svg.appendChild(el("line", { x1: b2rtx, y1: b2rty, x2: b2rbx, y2: b2rby, stroke: "var(--fg)", "stroke-width": "1.5" }));
-
-    // 直径标注
-    svg.appendChild(el("line", { x1: cx2, y1: cy2 - rIn, x2: cx2, y2: cy2 + rIn, stroke: "var(--no)", "stroke-width": "2.2" }));
-    var tDiam = el("text", { x: cx2 + 6, y: cy2 + 4, fill: "var(--no)", "font-size": "12", "font-weight": "800" });
-    tDiam.textContent = "直径 2r=a";
-    svg.appendChild(tDiam);
-
-    var tInTitle = el("text", { x: cx2, y: 30, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13.5", "font-weight": "700" });
-    tInTitle.textContent = "正方体内切球 (切于 6 个面中心)";
-    svg.appendChild(tInTitle);
-
-    // 中间对比牌
-    var midX = 272;
-    var bRect = el("rect", { x: midX - 44, y: 92, width: 88, height: 96, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": "1.2" });
-    svg.appendChild(bRect);
-    var mb1 = el("text", { x: midX, y: 112, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11.5", "font-weight": "700" });
-    mb1.textContent = "外接 : 内切";
-    svg.appendChild(mb1);
-    var mb2 = el("text", { x: midX, y: 132, "text-anchor": "middle", fill: "var(--a)", "font-size": "13", "font-weight": "800" });
-    mb2.textContent = "半径 √3 : 1";
-    svg.appendChild(mb2);
-    var mb3 = el("text", { x: midX, y: 152, "text-anchor": "middle", fill: "var(--ok)", "font-size": "13", "font-weight": "800" });
-    mb3.textContent = "面积 3 : 1";
-    svg.appendChild(mb3);
-    var mb4 = el("text", { x: midX, y: 172, "text-anchor": "middle", fill: "var(--warn)", "font-size": "13", "font-weight": "800" });
-    mb4.textContent = "体积 3√3 : 1";
-    svg.appendChild(mb4);
-
-    // 数值
-    var realR_out = (Math.sqrt(3) / 2) * a;
-    var realR_in = a / 2;
-    var sOut = 4 * Math.PI * realR_out * realR_out;
-    var vOut = (4 / 3) * Math.PI * Math.pow(realR_out, 3);
-    var sIn = 4 * Math.PI * realR_in * realR_in;
-    var vIn = (4 / 3) * Math.PI * Math.pow(realR_in, 3);
-    desc.innerHTML =
-      "<b>正方体</b>：棱长 \\(a = " + a.toFixed(1) + "\\)，体积 \\(V_{\\text{方}} = a^3 = " + Math.pow(a, 3).toFixed(2) + "\\)；<br>" +
-      "<b>外接球</b>：半径 \\(R_{\\text{外}} = \\dfrac{\\sqrt{3}}{2}a = " + realR_out.toFixed(2) + "\\)，" +
-      "表面积 \\(S_{\\text{外}} = 3\\pi a^2 = " + sOut.toFixed(2) + "\\)，体积 \\(V_{\\text{外}} = " + vOut.toFixed(2) + "\\)；<br>" +
-      "<b>内切球</b>：半径 \\(R_{\\text{内}} = \\dfrac{a}{2} = " + realR_in.toFixed(2) + "\\)，" +
-      "表面积 \\(S_{\\text{内}} = \\pi a^2 = " + sIn.toFixed(2) + "\\)，体积 \\(V_{\\text{内}} = " + vIn.toFixed(2) + "\\)；<br>" +
-      "<b>比例铁律</b>：半径比 \\(R_{\\text{外}} : R_{\\text{内}} = \\sqrt{3} : 1\\)；" +
-      "表面积比 \\(S_{\\text{外}} : S_{\\text{内}} = 3 : 1\\)；" +
-      "体积比 \\(V_{\\text{外}} : V_{\\text{内}} = 3\\sqrt{3} : 1\\)。";
-    renderMath();
-  }
-
-  function render() {
-    svg.innerHTML = "";
-    var valA = parseFloat(sliderA.value) || 30;
-    var valB = parseFloat(sliderB.value) || 40;
-
-    if (currentTab === "compare") {
-      renderCompare(valA, valB);
-    } else if (currentTab === "cone") {
-      renderCone(valA, valB);
-    } else if (currentTab === "frustum") {
-      renderFrustum(valA, valB);
-    } else if (currentTab === "sphere") {
-      renderSphere(valA, valB);
-    }
-  }
-
-  tabBtns.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      tabBtns.forEach(function (b) { b.classList.remove("on"); });
-      btn.classList.add("on");
-      setTabConfig(btn.getAttribute("data-tab"));
-      render();
-    });
+  [].forEach.call(bar.querySelectorAll("button"),function(b){
+    b.onclick=function(){
+      [].forEach.call(bar.querySelectorAll("button"),function(x){x.classList.remove("on");});
+      b.classList.add("on");
+      var m=b.getAttribute("data-m");
+      draw(m);
+      if(m==="sys")status.textContent="柱体 V=Sh，等底等高锥体体积为三分之一；台体为其平截过渡通式。";
+      else if(m==="expand")status.textContent="侧面展开核心：展开扇形半径为母线 l，弧长为底面周长 2πr。";
+      else if(m==="sphere")status.textContent="外接球核心：三垂侧棱补成长方体，体对角线即外接球直径 2R！";
+    };
   });
-
-  sliderA.addEventListener("input", render);
-  sliderB.addEventListener("input", render);
-
-  resetBtn.addEventListener("click", function () {
-    setTabConfig(currentTab);
-    render();
-  });
-
-  window.addEventListener("keydown", function (e) {
-    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "BUTTON")) {
-      return;
-    }
-    if (e.key === "ArrowLeft") {
-      sliderA.value = Math.max(parseFloat(sliderA.min), (parseFloat(sliderA.value) || 30) - parseFloat(sliderA.step));
-      render();
-      e.preventDefault();
-    } else if (e.key === "ArrowRight") {
-      sliderA.value = Math.min(parseFloat(sliderA.max), (parseFloat(sliderA.value) || 30) + parseFloat(sliderA.step));
-      render();
-      e.preventDefault();
-    } else if (e.key === "ArrowDown") {
-      sliderB.value = Math.max(parseFloat(sliderB.min), (parseFloat(sliderB.value) || 40) - parseFloat(sliderB.step));
-      render();
-      e.preventDefault();
-    } else if (e.key === "ArrowUp") {
-      sliderB.value = Math.min(parseFloat(sliderB.max), (parseFloat(sliderB.value) || 40) + parseFloat(sliderB.step));
-      render();
-      e.preventDefault();
-    }
-  });
-
-  render();
+  draw("sys");
+  if(trap){
+    T(trap,30,20,"【圆锥轴截面】母线 l 与垂直高 h 的直角关系",ca,12,700);
+    E(trap,"line",{x1:76,y1:115,x2:196,y2:115,stroke:border,"stroke-width":1.5});
+    E(trap,"line",{x1:136,y1:35,x2:76,y2:115,stroke:border,"stroke-width":1});
+    E(trap,"line",{x1:136,y1:35,x2:136,y2:115,stroke:ca,"stroke-width":2.2});
+    T(trap,128,75,"垂直高 h=4 (算体积)",ca,10.5,700,"end");
+    E(trap,"path",{d:"M 136,105 L 146,105 L 146,115",fill:"none",stroke:mut,"stroke-width":1.2});
+    E(trap,"line",{x1:136,y1:115,x2:196,y2:115,stroke:cc,"stroke-width":2.2});
+    T(trap,166,130,"底面半径 r = 3",cc,11,600,"middle");
+    E(trap,"line",{x1:136,y1:35,x2:196,y2:115,stroke:cd,"stroke-width":2.2});
+    T(trap,172,68,"母线 l = 5 (算侧面)",cd,11,700);
+    E(trap,"rect",{x:270,y:25,width:240,height:105,rx:6,fill:bgCard,stroke:border});
+    T(trap,280,48,"错解代价警示：",cd,12,700);
+    T(trap,280,70,"• 正确体积: V = 1/3 π·3²·4 = 12π",ca,11,600);
+    T(trap,280,92,"• 错代母线: V=⅓π·3²·5=15π (虚胖25%)","#ef4444",10.5,700);
+    T(trap,280,114,"★ 铁律：斜长母线 l 绝不代入体积公式！",cd,10.5,700);
+  }
 })();
 </script>
 </body>

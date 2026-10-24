@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .tbl { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0; }
   .tbl th, .tbl td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
@@ -46,8 +48,15 @@
 <p class="lead">「所有的都……」和「有一个……」怎么判断真假？它们的否定又该怎么写？</p>
 
 <section class="step" data-title="从例子进入">
-  <p>全班 \(40\) 人。班长对老师说：「我们班<b>所有</b>同学都交了作业。」老师不太信。</p>
+  <p>全班 \(40\) 人。班长对老师说：「我们班<b>所有</b>同学都交了作业。」老师不太信。点下面按钮或作业本帮老师抽查：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-hw" viewBox="0 0 520 190" role="img" aria-label="抽查一排作业本，发现第3本未交即可推翻全称命题"></svg>
+    <div class="entry-bar" id="entry-hw-bar">
+      <button type="button" data-m="claim">班长声称：全都交了</button>
+      <button type="button" data-m="one" class="on">抽查到 3 号（发现 1 本未交！）</button>
+      <button type="button" data-m="all">为什么不用查满 40 人？</button>
+    </div>
+    <div class="entry-note" id="entry-hw-note"></div>
     <p>老师要说明班长这句话不对，最少需要查到什么？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>找到 \(1\) 个没交作业的同学</button>
@@ -63,59 +72,54 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：集合和「属于」\(x\in M\)（<a href="b1-1-1.html">回看 1.1</a>）；命题和真假（<a href="b1-1-4.html">回看 1.4</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「判决规则与量词符号」建立直觉</h3>
+  <p class="small">要用到：集合和「属于」\(x\in M\)（<a href="b1-1-1.html">回看 1.1</a>）；命题和真假（<a href="b1-1-4.html">回看 1.4</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>命题</b>：能判断真假的一句话。</p>
-    <p>例：「\(3&gt;2\)」是真命题；「\(2\) 是奇数」是假命题；「\(x&gt;2\)」不是命题，\(x\) 没定，说不出真假。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>全称 vs 存在量词的判真判假机制</b></p>
+    <div class="entry-bar" id="m-quant-bar" role="group" aria-label="量词判决机制微图解切换">
+      <button type="button" class="on" data-k="univ">① 全称 ∀（一票否决：全员成立才真，1个反例直接判假！）</button>
+      <button type="button" data-k="exis">② 存在 ∃（一票赞成：抓到1个正例即真，全军覆没才假！）</button>
+      <button type="button" data-k="nega">③ 否定 ￢（三部曲：改量词、抄范围、反结论）</button>
+    </div>
+    <svg class="micro-fig" id="m-quant-fig" viewBox="0 0 520 160" role="img" aria-label="全称与存在量词判决机制微图解"></svg>
+    <p class="entry-note" id="m-quant-note"></p>
   </div>
 
-  <div class="card">
-    <p><b>全称量词</b>：「所有的」「任意一个」「每一个」，说的是范围里的<b>全部</b>，记作 \(\forall\)（倒写的 A，取 All）。</p>
-    <p>例：「\(\forall x\in\{1,2,3\},\ x&gt;0\)」读作「对 \(\{1,2,3\}\) 里任意一个 \(x\)，都有 \(x&gt;0\)」。\(1,2,3\) 一个一个看，都大于 \(0\)，所以是真的。</p>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">判决机制</span><b>∀（一票否决）vs ∃（一票赞成）</b></p>
+      <p class="small" style="margin:0"><b>\(\forall\)（All 倒写）</b>：要证明它真必须铁证如山对每一个都成立；推翻它只要揪出 <b>1 个反例</b>！<b>\(\exists\)（Exist 反写）</b>：要证明它真只需随手举出 <b>1 个正例</b>；推翻它才需要排除每一种可能！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">否定铁律</span><b>否定三部曲：换量词、抄范围、反结论！</b></p>
+      <p class="small" style="margin:0">舞台范围 \(x\in M\) 是前提背景，<b>一个字都不能改</b>！只颠倒量词（\(\forall\leftrightarrow\exists\)），再把结论取反（\(&gt;\) 变 \(\le\)，\(=\) 变 \(\ne\)）。原命题与否定必<b>一真一假</b>！</p>
+    </div>
   </div>
 
-  <div class="card">
-    <p><b>存在量词</b>：「存在」「有一个」「至少有一个」，说的是范围里<b>至少有一个</b>，记作 \(\exists\)（反写的 E，取 Exist）。</p>
-    <p>例：「\(\exists x\in\{1,2,3\},\ x&gt;2\)」：\(x=3\) 就满足，所以是真的。有一个就够，\(1\) 和 \(2\) 不满足没关系。</p>
+  <h3>2. 量词命题的数学定义与真假判决表</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\neg(\forall x\in M,\ p(x)) \iff \exists x\in M,\ \neg p(x)}_{\text{全称否定：所有都满足的反面是存在至少一个不满足}}}\)</span>
+    <span style="display:inline-block; margin:0 12px">\(\color{#966524}{\underbrace{\neg(\exists x\in M,\ p(x)) \iff \forall x\in M,\ \neg p(x)}_{\text{存在否定：存在一个满足的反面是全军覆没全都不满足}}}\)</span>
   </div>
 
-  <div class="card">
-    <p><b>范围</b>：\(x\in M\) 里的 \(M\)，说的是「在谁里面讨论」。同一句结论，换个范围，真假可能变。</p>
-    <p>例：「\(\forall x\in\{1,2,3\},\ x&gt;0\)」真；把范围换成 \(\{-1,0,1\}\)，\(x=-1\) 不满足，就假了。</p>
-  </div>
-
-  <div class="card">
-    <p><b>反例</b>：让「所有的都……」不成立的那一个对象。</p>
-    <p>例：「所有质数都是奇数」，\(2\) 是质数，却不是奇数，\(2\) 就是反例，一个就够推翻它。</p>
-  </div>
-
-  <div class="card">
-    <p><b>否定</b>：命题 \(p\) 的否定记作 \(\neg p\)，读作「非 \(p\)」，意思是「\(p\) 不成立」。两者<b>一真一假</b>。</p>
-    <p>例：\(p\)：「\(5&gt;3\)」，真；\(\neg p\)：「\(5\le 3\)」，假。注意「不大于」就是 \(\le\)：\(5\) 不大于 \(5\)，因为 \(5=5\)。</p>
-  </div>
-
-  <h3>2. 量词命题怎么判断真假</h3>
-  <p>带上范围 \(M\) 和一句结论 \(p(x)\)，就得到两种命题：</p>
-  <div class="key">全称量词命题：\(\forall x\in M,\ p(x)\)　　存在量词命题：\(\exists x\in M,\ p(x)\)</div>
   <table class="tbl">
-    <tr><th></th><th>说它真</th><th>说它假</th></tr>
-    <tr><td>\(\forall x\in M,\ p(x)\)</td><td>要说明<b>每一个</b>都满足（举几个例子不够）</td><td>举<b>一个反例</b>就够</td></tr>
-    <tr><td>\(\exists x\in M,\ p(x)\)</td><td>举<b>一个例子</b>就够</td><td>要说明<b>每一个</b>都不满足</td></tr>
+    <tr><th>命题类型</th><th>说它真（证明成立）</th><th>说它假（推翻命题）</th></tr>
+    <tr><td>全称命题 \(\forall x\in M,\ p(x)\)</td><td>必须说明<b>每一个</b>都满足（严格证明）</td><td>举出<b>一个反例</b>即可一票否决！</td></tr>
+    <tr><td>存在命题 \(\exists x\in M,\ p(x)\)</td><td>举出<b>一个正例</b>即可一票赞成！</td><td>必须说明<b>每一个</b>都不满足（全面排除）</td></tr>
   </table>
-  <p>为什么：「所有的都满足」，只要漏掉一个就不对，所以一个反例能推翻它；可要说它对，就得把每一个都管到。「有一个」正好反过来。</p>
-  <p class="small">有的命题把量词藏起来了。「正方形是矩形」其实是「<b>所有</b>正方形都是矩形」；「若 \(a&gt;b\)，则 \(a^2&gt;b^2\)」其实是「对<b>任意</b>实数 \(a,b\)……」。</p>
+
   <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>判断真假：</p>
-    <p>(1) \(\forall x\in\R,\ x^2-2x+1\ge 0\)。\(x^2-2x+1=(x-1)^2\)，任何实数的平方都不是负数，每一个 \(x\) 都满足，<b>真</b>。</p>
-    <p>(2) \(\forall x\in\R,\ x^2&gt;x\)。取 \(x=1\)：\(1&gt;1\) 不成立。一个反例，<b>假</b>。</p>
-    <p>(3) \(\exists x\in\R,\ x^2=2\)。\(x=\sqrt2\) 就满足，<b>真</b>。</p>
-    <p>(4) \(\exists x\in\Z,\ 2x+1=4\)。解得 \(x=\dfrac32\)，不是整数，没有一个整数满足，<b>假</b>。（范围换成 \(\R\) 就真了。）</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（看一遍怎么判断真假）</b></p>
+    <p>(1) \(\forall x\in\mathbf{R},\ x^2-2x+1\ge 0\)：\((x-1)^2\ge 0\) 恒成立，每个 \(x\) 都满足，<b>真</b>。</p>
+    <p>(2) \(\forall x\in\mathbf{R},\ x^2&gt;x\)：取 \(x=1\) 时 \(1&gt;1\) 不成立，抓到 1 个反例，<b>假</b>。</p>
+    <p>(3) \(\exists x\in\mathbf{R},\ x^2=2\)：\(x=\sqrt2\) 就能满足，抓到 1 个正例，<b>真</b>。</p>
+    <p>(4) \(\exists x\in\mathbf{Z},\ 2x+1=4\)：解得 \(x=1.5\notin\mathbf{Z}\)，没有一个整数满足，<b>假</b>。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
-    <p>自己试试：命题「\(\forall x\in\R,\ |x|&gt;0\)」是真是假？</p>
+    <p>自己试试：命题「\(\forall x\in\mathbf{R},\ |x|&gt;0\)」是真是假？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>真：\(x=1,2,-3\) 都满足</button>
       <button class="opt" data-v="B"><b>B</b>假：\(x=0\) 时 \(|0|=0\)，不大于 \(0\)</button>
@@ -124,30 +128,30 @@
     <div class="reveal"><p><b>B</b>。\(x=0\) 是反例。选 A 的同学只举了几个例子，全称命题要管到每一个；选 C 的同学把「不是负数」（\(\ge 0\)）当成了「\(&gt;0\)」，漏了 \(0\)。</p></div>
   </div>
 
-  <h3>3. 怎么写否定</h3>
-  <p>「并不是所有的都满足」，意思就是「至少有一个不满足」。反过来，「并不存在满足的」，意思就是「每一个都不满足」。</p>
-  <div class="key">
-    \(\neg(\forall x\in M,\ p(x))\) 是 \(\exists x\in M,\ \neg p(x)\)<br>
-    \(\neg(\exists x\in M,\ p(x))\) 是 \(\forall x\in M,\ \neg p(x)\)<br>
-    三步：<b>换量词</b>（\(\forall\leftrightarrow\exists\)）→ <b>范围照抄</b>（\(x\in M\) 不动）→ <b>结论取反</b>（\(p(x)\) 变 \(\neg p(x)\)）。
-  </div>
-  <p>结论取反时，注意这些「反面」：</p>
-  <table class="tbl">
-    <tr><th>原来</th><th>取反后</th></tr>
-    <tr><td>\(\ge\)（不小于）</td><td>\(&lt;\)</td></tr>
-    <tr><td>\(&gt;\)</td><td>\(\le\)（不大于，不是 \(&lt;\)）</td></tr>
-    <tr><td>\(=\)</td><td>\(\ne\)</td></tr>
-    <tr><td>是</td><td>不是</td></tr>
-  </table>
+  <h3>3. 三步破题思维链：命题否定与双向真假校验</h3>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>(1) \(p\)：\(\forall x\in\R,\ x^2+2x+2&gt;0\)。写出 \(\neg p\)，并判断真假。</p>
-    <p>换量词 \(\forall\to\exists\)，范围 \(\R\) 照抄，\(&gt;\) 变 \(\le\)：\(\neg p\)：\(\exists x\in\R,\ x^2+2x+2\le 0\)。</p>
-    <p>\(x^2+2x+2=(x+1)^2+1\ge 1&gt;0\)，每个 \(x\) 都满足，\(p\) 真，所以 \(\neg p\) 假。</p>
-    <p>(2) \(q\)：「有的三角形是直角三角形」。\(\neg q\)：「<b>所有</b>三角形<b>都不是</b>直角三角形」。\(q\) 真（三边 \(3,4,5\) 的三角形），\(\neg q\) 假。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">设命题 \(p: \forall x\in\mathbf{R},\ x^2+2x+2&gt;0\)。写出 \(\neg p\) 并判断两者的真假。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼拆解命题三大要素：</span>
+        量词是<b>全称量词 \(\forall\)</b>，讨论范围是全体实数 \(x\in\mathbf{R}\)，结论不等式是 \(x^2+2x+2&gt;0\)。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步执行否定三步法：</span>
+        ① 换量词：\(\forall\) 变为 \(\exists\)；② 抄范围：\(x\in\mathbf{R}\) 照抄一字不改；③ 反结论：\(&gt;\) 取反变为 \(\le\)。<br>
+        故得到否定命题：<b>\(\neg p: \exists x\in\mathbf{R},\ x^2+2x+2\le 0\)</b>。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步配方判真假（一真一假互锁）：</span>
+        对原式配方：\(x^2+2x+2=(x+1)^2+1\ge 1&gt;0\) 对所有实数恒成立！因此原命题 \(p\) 为<b>真</b>。<br>
+        根据互斥铁律，否定命题 \(\neg p\) 必为<b>假</b>！双向印证闭环。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="trap-truth" data-answer="B">
-    <p>自己试试：命题 \(p\)：「\(\exists x\in\R,\ x^2&lt;x\)」。下面判断正确的是？</p>
+    <p>自己试试：命题 \(p\)：「\(\exists x\in\mathbf{R},\ x^2&lt;x\)」。下面判断正确的是？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>\(p\) 假，\(\neg p\) 真</button>
       <button class="opt" data-v="B"><b>B</b>\(p\) 真，\(\neg p\) 假</button>
@@ -156,18 +160,56 @@
     </div>
     <div class="reveal">
       <p>是 <b>B</b>。「平方会变大」只对一部分数成立。取 \(x=\tfrac12\)：\(\tfrac14&lt;\tfrac12\)，一个例子就说明 \(p\) 真。</p>
-      <p>\(\neg p\) 是「\(\forall x\in\R,\ x^2\ge x\)」，同一个 \(x=\tfrac12\) 就是它的反例，所以 \(\neg p\) 假。选 A 的同学只试了 \(x=2,3\) 这类数；C、D 一眼就能排除：否定和原命题永远一真一假。</p>
+      <p>\(\neg p\) 是「\(\forall x\in\mathbf{R},\ x^2\ge x\)」，同一个 \(x=\tfrac12\) 就是它的反例，所以 \(\neg p\) 假。选 A 的同学只试了 \(x=2,3\) 这类数；C、D 一眼就能排除：否定和原命题永远一真一假。</p>
     </div>
   </div>
-  <div class="key">否定和原命题<b>一真一假</b>。要判断否定的真假，先判断原命题，再反过来就行。</div>
+  <div class="vid" data-video="ex-neg"></div>
 
-  <h3>4. 写否定时，查三件事</h3>
-  <ol>
-    <li><b>范围照抄</b>：\(x\in M\) 是「在谁里面讨论」，不是结论，一个字都不改。<br><span class="small">反例：「\(\forall x&gt;1,\ x^2&gt;1\)」如果写成「\(\exists x\le 1,\ x^2\le 1\)」，取 \(x=0\) 它是真的；原命题也是真的。两个都真，不是否定。</span></li>
-    <li><b>量词和结论两处都改</b>：否定「所有……都……」，不能还留着「所有」。<br><span class="small">反例：「\(\forall x\in\{1,2,3\},\ x&gt;1\)」假（\(x=1\)）；写成「\(\forall x\in\{1,2,3\},\ x\le 1\)」也假（\(x=2\)）。两个都假，不是否定。正确的是「\(\exists x\in\{1,2,3\},\ x\le1\)」，真。</span></li>
-    <li><b>「不大于」是 \(\le\)，不是 \(&lt;\)</b>。<br><span class="small">反例：「\(\forall x\in\R,\ x^2&gt;0\)」假（\(x=0\)）；写成「\(\exists x\in\R,\ x^2&lt;0\)」也假（平方不会是负数）。漏掉的正是 \(x^2=0\) 这种情况。</span></li>
-  </ol>
-  <div class="key">写完用「一真一假」检验：算出原命题和你写的否定的真假，两个同真或同假，就是写错了。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>写否定时乱改讨论范围</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：把「\(\forall x&gt;1,\ x^2&gt;1\)」写成「\(\exists x\le 1,\ x^2\le 1\)」。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：\(x&gt;1\) 是我们讨论的前提大舞台，不是结论！舞台<b>一个字都不能动</b>，正确否定是「\(\exists x&gt;1,\ x^2\le 1\)」！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>「大于」取反漏掉等号，误写成「小于」</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：把 \(x^2&gt;0\) 的否定写成 \(x^2&lt;0\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：「不大于」就是「小于或等于」！\(&gt;0\) 的反面必为 <b>\(\le 0\)</b>，漏掉 \(x^2=0\) 会导致原命题和否定同时为假，产生悖论！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-neg-fig" viewBox="0 0 280 140" role="img" aria-label="大于与小于等于数轴微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>只改量词漏改结论，或只改结论漏改量词</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：把「所有同学都及格」否定写成「所有同学都没及格」。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：「全都不及格」是极端对立，不是逻辑否定！只要<b>存在 1 个人不及格</b>，就彻底推翻了「全部及格」！必须量词与结论两处同时改！
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vid" data-video="ex-param"></div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
@@ -540,6 +582,166 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   reset();
+
+  /* ---------- 0 从例子进入：抽查作业本 ---------- */
+  var ehSvg = $("entry-hw"), ehBar = $("entry-hw-bar"), ehNote = $("entry-hw-note");
+  function ehDraw(mode) {
+    ehSvg.innerHTML = "";
+    var isClaim = mode === "claim";
+    // 顶部横幅：班长的全称命题
+    ehSvg.appendChild(svgEl("rect", { x: 16, y: 10, width: 488, height: 42, rx: 10, fill: isClaim ? "var(--ok-soft)" : "var(--no-soft)", stroke: isClaim ? "var(--a)" : "var(--no)", "stroke-width": 1.8 }));
+    ehSvg.appendChild(svgEl("text", { x: 260, y: 36, "text-anchor": "middle", "font-weight": 700, fill: isClaim ? "var(--a)" : "var(--no)", "font-size": 14.5 },
+      isClaim ? "班长声称（∀全称）：「全班 40 人全都交了作业！」" : "班长声称：「全都交了」 → 已被 3 号这 1 个反例推翻 ✗"));
+
+    // 一排作业本卡片
+    var books = ["1号", "2号", "3号", "4号", "5号", "6号", "…", "40号"];
+    books.forEach(function (lb, i) {
+      var x = 18 + i * 61, y = 66, isBad = i === 2 && !isClaim, isDots = i === 6;
+      var g = svgEl("g", { style: "cursor:pointer" });
+      ehSvg.appendChild(g);
+      if (isDots) {
+        g.appendChild(svgEl("text", { x: x + 26, y: y + 48, "text-anchor": "middle", "font-weight": 700, fill: "var(--muted)", "font-size": 20 }, "···"));
+        return;
+      }
+      var strokeCol = isBad ? "var(--no)" : (isClaim || i < 2 || mode === "all" ? "var(--a)" : "var(--line)");
+      var fillCol = isBad ? "var(--no-soft)" : (isClaim || i < 2 || mode === "all" ? "var(--ok-soft)" : "var(--card)");
+      g.appendChild(svgEl("rect", { x: x, y: y, width: 54, height: 76, rx: 7, fill: fillCol, stroke: strokeCol, "stroke-width": isBad ? 2.6 : 1.5 }));
+      g.appendChild(svgEl("text", { x: x + 27, y: y + 26, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 13.5 }, lb));
+      var stTxt = isBad ? "✗ 未交" : (isClaim || i < 2 || mode === "all" ? "✓ 已交" : "不用查");
+      var stCol = isBad ? "var(--no)" : (isClaim || i < 2 || mode === "all" ? "var(--a)" : "var(--muted)");
+      g.appendChild(svgEl("text", { x: x + 27, y: y + 54, "text-anchor": "middle", "font-weight": 700, fill: stCol, "font-size": 13 }, stTxt));
+      if (isBad) {
+        g.appendChild(svgEl("text", { x: x + 27, y: y + 98, "text-anchor": "middle", "font-weight": 700, fill: "var(--no)", "font-size": 13 }, "▲ 只需 1 个反例！"));
+      }
+      g.onclick = function () { ehDraw(i === 2 ? "one" : (isClaim ? "one" : "all")); };
+    });
+
+    [].forEach.call(ehBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (isClaim) {
+      ehNote.innerHTML = "要让「<b>所有人</b>都交了」成立，必须 1 号到 40 号<b>一个不漏全打 ✓</b>。点「抽查到 3 号」看看怎么推翻它！";
+    } else if (mode === "one") {
+      ehNote.innerHTML = "查到 <b>3 号未交 ✗</b>！哪怕其余 39 人全交了，「所有人都交了」也立刻变成<b>假话</b>——推翻「所有」只需 <b>1 个反例</b>。";
+    } else {
+      ehNote.innerHTML = "就算后面 4~40 号全都交了（39 本 ✓），只要<b>存在 1 本未交</b>，「全都交了」就已经不成立，不用再查 20 人或 40 人！";
+    }
+  }
+  [].forEach.call(ehBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ehDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      ehDraw(ev.detail.choice === "A" ? "one" : "all");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ehDraw("one");
+  });
+  /* ================= ② 讲清楚微图解 ================= */
+  var mQntSvg = $("m-quant-fig"), mQntBar = $("m-quant-bar"), mQntNote = $("m-quant-note");
+  var mNegSvg = $("m-neg-fig");
+  var mQntKey = "univ";
+
+  function drawQnt(k) {
+    mQntKey = k;
+    if (!mQntSvg) return;
+    mQntSvg.innerHTML = "";
+
+    if (k === "univ") {
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 30, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 15 }, "全称命题 ∀：必须每一个都满足（一票否决制）"));
+      var samples = [
+        { x: 70, ok: true, lb: "x₁ ✓" },
+        { x: 165, ok: true, lb: "x₂ ✓" },
+        { x: 260, ok: false, lb: "反例 x₀ ✗" },
+        { x: 355, ok: true, lb: "x₄ ✓" },
+        { x: 450, ok: true, lb: "x₅ ✓" }
+      ];
+      samples.forEach(function (s) {
+        var col = s.ok ? "var(--a)" : "var(--no)";
+        var fill = s.ok ? "var(--ok-soft)" : "var(--no-soft)";
+        mQntSvg.appendChild(svgEl("circle", { cx: s.x, cy: 80, r: 28, fill: fill, stroke: col, "stroke-width": s.ok ? 2 : 3 }));
+        mQntSvg.appendChild(svgEl("text", { x: s.x, y: 86, "text-anchor": "middle", fill: col, "font-weight": 700, "font-size": 14 }, s.lb));
+      });
+      mQntSvg.appendChild(svgEl("rect", { x: 140, y: 124, width: 240, height: 28, rx: 6, fill: "var(--no-soft)", stroke: "var(--no)", "stroke-width": 1.5 }));
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 143, "text-anchor": "middle", fill: "var(--no)", "font-weight": 700, "font-size": 13 }, "抓到 1 个反例 → 全称命题直接为假 ✗"));
+      if (mQntNote) mQntNote.innerHTML = "<b>全称量词 ∀（一票否决制）</b>：就算试了 100 个数都成立，只要有 <b>1 个反例</b>（如 x₀），全称命题就瞬间崩塌！";
+    } else if (k === "exis") {
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 30, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 15 }, "存在命题 ∃：只要有 1 个满足就过关（一票赞成制）"));
+      var samples2 = [
+        { x: 70, ok: false, lb: "不满足" },
+        { x: 165, ok: true, lb: "正例 x₀ ✓" },
+        { x: 260, ok: false, lb: "不满足" },
+        { x: 355, ok: false, lb: "不满足" },
+        { x: 450, ok: false, lb: "不满足" }
+      ];
+      samples2.forEach(function (s) {
+        var col = s.ok ? "var(--a)" : "var(--muted)";
+        var fill = s.ok ? "var(--ok-soft)" : "var(--card)";
+        mQntSvg.appendChild(svgEl("circle", { cx: s.x, cy: 80, r: 28, fill: fill, stroke: col, "stroke-width": s.ok ? 3 : 1.5 }));
+        mQntSvg.appendChild(svgEl("text", { x: s.x, y: 86, "text-anchor": "middle", fill: col, "font-weight": 700, "font-size": 14 }, s.lb));
+      });
+      mQntSvg.appendChild(svgEl("rect", { x: 140, y: 124, width: 240, height: 28, rx: 6, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": 1.5 }));
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 143, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 13 }, "抓到 1 个正例 → 存在命题直接为真 ✓"));
+      if (mQntNote) mQntNote.innerHTML = "<b>存在量词 ∃（一票赞成制）</b>：证明存在命题为真，不需要大费周章遍历全域，只需随手抓出 <b>1 个成功正例</b>（如 x₀）即可！";
+    } else if (k === "nega") {
+      mQntSvg.appendChild(svgEl("rect", { x: 30, y: 30, width: 200, height: 95, rx: 10, fill: "var(--card)", stroke: "var(--a)", "stroke-width": 2 }));
+      mQntSvg.appendChild(svgEl("text", { x: 130, y: 60, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 15 }, "原命题 p"));
+      mQntSvg.appendChild(svgEl("text", { x: 130, y: 95, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, "∀ x ∈ M, p(x)"));
+
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 72, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 18 }, "⇄"));
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 95, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 12 }, "否定取反"));
+
+      mQntSvg.appendChild(svgEl("rect", { x: 290, y: 30, width: 200, height: 95, rx: 10, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 2 }));
+      mQntSvg.appendChild(svgEl("text", { x: 390, y: 60, "text-anchor": "middle", fill: "var(--b)", "font-weight": 700, "font-size": 15 }, "否定命题 ￢p"));
+      mQntSvg.appendChild(svgEl("text", { x: 390, y: 95, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, "∃ x ∈ M, ￢p(x)"));
+
+      mQntSvg.appendChild(svgEl("text", { x: 260, y: 148, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 13 }, "三步法：① 换量词  ② 范围照抄  ③ 结论取反（一真一假）"));
+      if (mQntNote) mQntNote.innerHTML = "<b>否定三部曲</b>：换量词（∀ ↔ ∃）+ 范围照抄（M 不动）+ 结论取反（符号反转），写完立即用「一真一假」闭环校验！";
+    }
+
+    if (mQntBar) {
+      [].forEach.call(mQntBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+    }
+  }
+
+  function drawNegTrap() {
+    if (!mNegSvg) return;
+    mNegSvg.innerHTML = "";
+    // 上层蓝色 x > 0
+    mNegSvg.appendChild(svgEl("text", { x: 195, y: 24, "text-anchor": "middle", fill: "var(--b)", "font-weight": 700, "font-size": 12 }, "原结论: x > 0 (空心)"));
+    mNegSvg.appendChild(svgEl("line", { x1: 140, y1: 36, x2: 250, y2: 36, stroke: "var(--b)", "stroke-width": 2.5 }));
+    mNegSvg.appendChild(svgEl("circle", { cx: 140, cy: 36, r: 4, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 2 }));
+
+    // 中层绿色 x <= 0
+    mNegSvg.appendChild(svgEl("text", { x: 85, y: 56, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 12 }, "反面: x ≤ 0 (含0实心)"));
+    mNegSvg.appendChild(svgEl("line", { x1: 30, y1: 68, x2: 140, y2: 68, stroke: "var(--a)", "stroke-width": 2.5 }));
+    mNegSvg.appendChild(svgEl("circle", { cx: 140, cy: 68, r: 4.5, fill: "var(--a)" }));
+
+    // 下层数轴与原点 0
+    mNegSvg.appendChild(svgEl("line", { x1: 20, y1: 92, x2: 260, y2: 92, stroke: "var(--line)", "stroke-width": 1.6 }));
+    mNegSvg.appendChild(svgEl("path", { d: "M 255 88 L 263 92 L 255 96 Z", fill: "var(--muted)" }));
+    mNegSvg.appendChild(svgEl("line", { x1: 140, y1: 87, x2: 140, y2: 97, stroke: "var(--fg)", "stroke-width": 1.5 }));
+    mNegSvg.appendChild(svgEl("text", { x: 140, y: 110, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, "0"));
+
+    mNegSvg.appendChild(svgEl("text", { x: 140, y: 130, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 12 }, "> 0 的反面必须是 ≤ 0，不能漏掉 0！"));
+  }
+
+  function initStep2() {
+    if (mQntBar) {
+      [].forEach.call(mQntBar.querySelectorAll("button"), function (b) {
+        b.onclick = function () { drawQnt(b.getAttribute("data-k")); };
+      });
+    }
+    drawQnt("univ");
+    drawNegTrap();
+  }
+
+  ehDraw("one");
+  initStep2();
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ehDraw(ehBar.querySelector("button.on").getAttribute("data-m")); drawQnt(mQntKey); drawNegTrap(); });
 });
 </script>
 </body></html>

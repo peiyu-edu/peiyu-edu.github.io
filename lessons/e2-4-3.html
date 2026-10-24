@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .fig text { font-size: 22px; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
@@ -25,12 +27,19 @@
 <header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
 <p class="crumb">选择性必修第二册 · 第 4 章 数列</p>
 <h1>4.3 等比数列</h1>
-<p class="lead">每一项都是前一项乘同一个数。这一节讲它的通项、等比中项和前 \(n\) 项和，以及用公式前要查的几件事。先从折纸开始。</p>
+<p class="lead">每一项都是前一项乘同一个数。这一节讲它的通项、等比中项和前 \(n\) 项和，以及用公式前要查的几件事。先从拉面师傅扣面开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一张纸对折一次变成 \(2\) 层，再对折变成 \(4\) 层，再对折变成 \(8\) 层……</p>
+  <p>拉面师傅做手工拉面：一团面拉开再对折叫「一扣」。拉第 \(1\) 扣变成 \(2\) 根，并拢对折拉第 \(2\) 扣变成 \(4\) 根，第 \(3\) 扣变成 \(8\) 根……每次根数都翻倍（乘 \(2\)）。点按钮看看面条根数怎么涨：</p>
   <div class="card predict" data-id="entry" data-answer="D">
-    <p>一共对折 \(5\) 次，纸有几层？</p>
+    <svg class="entry-fig" id="entry-noodle" viewBox="0 0 520 200" role="img" aria-label="拉面师傅第1扣到第5扣面条根数按2的n次方成倍翻番示意图"></svg>
+    <div class="entry-bar" id="entry-noodle-bar">
+      <button type="button" data-k="1" class="on">第 1 扣 (2根)</button>
+      <button type="button" data-k="3">第 3 扣 (8根)</button>
+      <button type="button" data-k="5">第 5 扣 (32根)</button>
+    </div>
+    <div class="entry-note" id="entry-noodle-note"></div>
+    <p>一共拉了 \(5\) 扣，手里有几根面条？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(10\)</button>
       <button class="opt" data-v="B"><b>B</b>\(16\)</button>
@@ -38,46 +47,101 @@
       <button class="opt" data-v="D"><b>D</b>\(32\)</button>
     </div>
     <div class="reveal">
-      <p><b>D</b>。每折一次，层数<b>乘 \(2\)</b>：\(2,\ 4,\ 8,\ 16,\ 32\)。不是每次加 \(2\)（那是 \(10\)），也不是 \(5\times5\)。</p>
-      <p>后一项总是前一项的同一个倍数，这样的数列叫<b>等比数列</b>。第 \(n\) 次折完是 \(2^n\) 层。</p>
+      <p><b>D</b>。每拉一扣，根数<b>乘 \(2\)</b>：\(2,\ 4,\ 8,\ 16,\ 32\)。不是每次加 \(2\)（那是 \(10\)），也不是 \(5\times5\)。</p>
+      <p>后一项总是前一项的同一个倍数，这样的数列叫<b>等比数列</b>。拉完第 \(n\) 扣是 \(2^n\) 根。</p>
       <p>这一节讲三件事：第 \(n\) 项怎么写（通项）、三个数怎样成等比（等比中项）、前 \(n\) 项加起来是多少（求和），比如 \(2+4+8+16+32\)。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：数列、通项、\(S_n\) 的记号（<a href="e2-4-1.html">回看 4.1</a>）；等差数列的研究思路，这里把「加 \(d\)」换成「乘 \(q\)」（<a href="e2-4-2.html">回看 4.2</a>）；整数指数幂的运算（<a href="b1-4-1.html">回看 4.1 指数</a>）和指数函数（<a href="b1-4-2.html">回看 4.2 指数函数</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：等比求和必须先分流：\(q=1\) 时用 \(S_n=na_1\)，只有 \(q\ne1\) 才能除以 \(1-q\)。</p></div>
 
   <div class="card">
-    <p><b>公比</b>：等比数列里，后一项除以前一项得到的那个不变的数，记作 \(q\)。</p>
+    <p><b>公比 \(q\)</b>：等比数列里，后一项除以前一项得到的那个不变的常数，记作 \(q\)（\(q\ne0\)）。</p>
     <p>例：\(3,6,12,24\) 的公比是 \(2\)；\(8,4,2,1\) 的公比是 \(\dfrac12\)；\(1,-2,4,-8\) 的公比是 \(-2\)。</p>
   </div>
 
   <div class="card">
-    <p><b>正负交替</b>：一项正、一项负地轮流出现。公比是负数时就会这样，因为每乘一次负数，符号翻一次。</p>
-    <p>例：\(1,-2,4,-8,16\)：正、负、正、负、正。这个数列忽大忽小，说不上越来越大还是越来越小。</p>
+    <p><b>正负交替与摆动</b>：公比是负数时，每乘一次负数符号就翻转一次，数列忽正忽负、上下摆动。</p>
+    <p>例：\(1,-2,4,-8,16\)：正、负、正、负、正，数列在横轴两侧摆动，不能直接谈单调递增或递减。</p>
   </div>
 
   <div class="card">
     <p><b>前 \(n\) 项和 \(S_n\)</b>：把第 \(1\) 项到第 \(n\) 项加起来，\(S_n=a_1+a_2+\dots+a_n\)。</p>
-    <p>例：数列 \(1,2,4,8,\dots\) 里，\(S_3=1+2+4=7\)，\(S_4=7+8=15\)。注意 \(S_4\) 是四个数的和，不是第 \(4\) 项。</p>
+    <p>例：数列 \(1,2,4,8,\dots\) 里，\(S_3=1+2+4=7\)，\(S_4=7+8=15\)。注意 \(S_4\) 是四个数的总和，不是第 \(4\) 项。</p>
   </div>
 
   <div class="card">
-    <p><b>一次投入和逐期投入</b>：一次投入是开始时一次把钱存进去；逐期投入是每期（比如每年）存一笔。</p>
-    <p>例：年利率 \(5\%\)、按复利算。年初一次存 \(2000\) 元，两年后是 \(2000\times1.05^2=2205\) 元；每年年末各存 \(1000\) 元、存两次，第二年末是 \(1000\times1.05+1000=2050\) 元。本金一样，结果不一样。</p>
+    <p><b>一次投入和逐期投入</b>：一次投入是期初一次性存入；逐期投入是每期（如每年）固定存一笔。</p>
+    <p>例：年利率 \(5\%\) 复利。年初一次存 \(2000\) 元，两年后是 \(2000\times1.05^2=2205\) 元；每年年末存 \(1000\) 元存两次，第二年末是 \(1000\times1.05+1000=2050\) 元。</p>
   </div>
 
-  <h3>2. 定义和通项公式</h3>
-  <p>一个数列从第 \(2\) 项起，每一项与前一项的<b>比</b>都等于同一个常数 \(q\)，它就是等比数列：\(\dfrac{a_{n+1}}{a_n}=q\)。要做除法，所以<b>每一项都不能是 \(0\)</b>，\(q\) 也不能是 \(0\)。</p>
-  <p>为什么通项是 \(a_1q^{n-1}\)：从 \(a_1\) 走到 \(a_n\)，中间乘了 \(n-1\) 次 \(q\)。比如 \(a_4=a_1\cdot q\cdot q\cdot q=a_1q^3\)。</p>
-  <div class="key">\(a_n=a_1q^{n-1}\)（\(a_1\ne0\)，\(q\ne0\)）。更一般地，\(a_n=a_mq^{n-m}\)。</div>
+  <!-- 组件一：伴读直觉微图解 -->
+  <div class="micro-box" style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:12px;padding:16px;margin:16px 0">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-weight:700;font-size:15px;color:var(--text,#1e293b);display:flex;align-items:center;gap:6px">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#0284c7"></span>等比核心直觉：指数暴涨与摆动、错位相减对消、公比分流
+      </div>
+      <div style="display:flex;gap:6px" id="m-gp-tabs">
+        <button class="btn btn-sm" onclick="setMGpTab(0)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid #0284c7;background:#0284c7;color:#fff;cursor:pointer">① 暴涨与摆动</button>
+        <button class="btn btn-sm" onclick="setMGpTab(1)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">② 错位相减</button>
+        <button class="btn btn-sm" onclick="setMGpTab(2)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">③ q=1 分流</button>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;height:220px;background:var(--bg-subtle,#f8fafc);border-radius:8px;overflow:hidden">
+      <svg id="m-gp-fig" viewBox="0 0 540 220" style="width:100%;height:100%;display:block"></svg>
+    </div>
+    <div id="m-gp-desc" style="font-size:13px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
+  </div>
+
+  <!-- 组件二：概念对比双卡 -->
+  <div class="concept-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:16px 0">
+    <div class="concept-card" style="border:1px solid #bae6fd;background:#f0f9ff;border-radius:10px;padding:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="badge-pill" style="background:#0284c7;color:#fff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">中项辨析</span>
+        <b style="color:#0369a1;font-size:14px">等比中项的双解与符号</b>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
+        <li><b>同号两数等比中项</b>：\(G^2=ab \implies G=\pm\sqrt{ab}\)，通常有<b>正负两个</b>（如 \(1\) 与 \(9\) 的中项是 \(\pm3\)）。</li>
+        <li><b>具体数列限制</b>：若在同号数列中（隔两步 \(a_3=a_1q^2\)），符号必与首项一致，负值需舍去。</li>
+        <li><b>异号两数无中项</b>：若 \(ab&lt;0\)，实数范围内不存在等比中项。</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border:1px solid #bbf7d0;background:#f0fdf4;border-radius:10px;padding:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="badge-pill" style="background:#16a34a;color:#fff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">机制对偶</span>
+        <b style="color:#15803d;font-size:14px">等差 vs 等比 对偶法则</b>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
+        <li><b>步进法则</b>：等差「每步加 \(d\)」\(\longleftrightarrow\) 等比「每步乘 \(q\)」。</li>
+        <li><b>下标对称</b>：等差「下标和等则项和等」\(\longleftrightarrow\) 等比「下标和等则项积等」（\(a_ma_n=a_pa_q\)）。</li>
+        <li><b>求和机制</b>：等差倒序相加对称配对 \(\longleftrightarrow\) 等比错位相减抵消中段。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 组件三：色彩语义主公式 -->
+  <h3>2. 定义与色彩语义主公式</h3>
+  <p>一个数列从第 \(2\) 项起，每一项与前一项的<b>比</b>都等于同一个常数 \(q\)，它就是等比数列：\(\dfrac{a_{n+1}}{a_n}=q\)。各项均非零（\(a_1\ne0, q\ne0\)）。</p>
+  <div class="key" style="text-align:center;padding:12px;background:#f8fafc;border-left:4px solid #0284c7;border-radius:6px;margin:12px 0">
+    <div style="font-size:15px">定义式：\(\dfrac{a_{n+1}}{a_n} = \color{#0284c7}{q}\quad (a_1\ne0, q\ne0)\)</div>
+    <div style="margin-top:6px;font-size:15px">
+      通项公式：\(a_n = a_1 \color{#0284c7}{q}^{n-1} = a_m \color{#0284c7}{q}^{n-m}\)（乘 \(n-1\) 次公比）
+    </div>
+    <div style="margin-top:6px;font-size:15px">
+      前 \(n\) 项和（公比分流）：\(S_n = \begin{cases} \color{#0284c7}{\dfrac{a_1(1-q^n)}{1-q}} = \dfrac{a_1 - a_n q}{1-q}, & q \ne 1 \\ \color{#16a34a}{n a_1}, & q = 1 \end{cases}\)
+    </div>
+  </div>
+
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>等比数列 \(\{a_n\}\) 中，\(a_2=6\)，\(a_5=48\)。求 \(q\)、\(a_1\) 和通项。</p>
-    <p>从 \(a_2\) 到 \(a_5\) 乘了 \(3\) 次 \(q\)：\(a_5=a_2q^3\)，所以 \(q^3=\dfrac{48}{6}=8\)，\(q=2\)（实数的立方根只有一个）。</p>
-    <p>\(a_1=\dfrac{a_2}{q}=\dfrac62=3\)，通项 \(a_n=3\times2^{n-1}\)。验一下：\(a_5=3\times2^4=48\)，对。</p>
+    <p>从 \(a_2\) 到 \(a_5\) 乘了 \(3\) 次 \(q\)：\(a_5=a_2q^3\)，所以 \(q^3=\dfrac{48}{6}=8 \implies q=2\)。</p>
+    <p>\(a_1=\dfrac{a_2}{q}=\dfrac62=3\)，通项 \(a_n=3\times2^{n-1}\)。验算：\(a_5=3\times2^4=48\)，完全相符。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：等比数列首项 \(a_1=2\)，公比 \(q=3\)，\(a_4\) 是？</p>
@@ -89,16 +153,43 @@
     </div>
     <div class="reveal"><p><b>A</b>。\(a_4=2\times3^{3}=54\)：\(2,6,18,54\)。选 B 的同学用了 \(q^4\)，多乘了一次；指数是 \(n-1\)。选 D 是按等差 \(2+3\times3\) 算了。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
-  <h3>3. 等比中项</h3>
-  <p>三个数 \(a,G,b\) 成等比数列，\(G\) 叫 \(a\) 与 \(b\) 的<b>等比中项</b>。由 \(\dfrac Ga=\dfrac bG\) 得</p>
-  <div class="key">\(G^2=ab\)，\(G=\pm\sqrt{ab}\)。要 \(ab>0\)（\(a\)、\(b\) 同号）才有；有的话<b>正负两个都行</b>。</div>
-  <p>例：\(2\) 和 \(8\) 的等比中项是 \(\pm4\)：\(2,4,8\)（公比 \(2\)）和 \(2,-4,8\)（公比 \(-2\)）都是等比数列。</p>
+  <!-- 组件四：三步破题思维链例题 -->
+  <h3>3. 等比中项与三步破题思维链</h3>
+  <div class="think-steps" style="border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:16px;background:var(--card,#fff);margin:14px 0">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:10px;font-size:14px">🧩 典型例题：含参数公比等比数列的前 n 项和讨论</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">👀 信号</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          题目给出首项 \(a_1\) 且公比含有未知字母 \(q\)，要求前 \(n\) 项和 \(S_n\) 的表达式。
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#fef3c7;color:#d97706;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">🔧 步骤</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          1. <b>判定公比分界</b>：检查公比是否可能为 1；<br>
+          2. <b>分支书写求和</b>：<br>
+             - 若 \(q=1\)，数列为常数列，\(S_n = na_1\)；<br>
+             - 若 \(q\ne1\)，套用错位相减公式 \(S_n = \dfrac{a_1(1-q^n)}{1-q}\)；<br>
+          3. <b>核对指数项数</b>：分子中的指数 \(n\) 严格代表项数，切勿因末项指数误减 1。
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#dcfce7;color:#16a34a;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">🛡️ 防坑</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          公比为字母时漏掉 \(q=1\) 分类会导致分母为 0 严重失分；数项数从 \(q^0\) 到 \(q^{n-1}\) 共 \(n\) 项。
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small">例 2（等比中项求值）</p>
     <p>等比数列 \(\{a_n\}\) 中，\(a_1=1\)，\(a_5=16\)，求 \(a_3\)。</p>
-    <p>\(a_3\) 是 \(a_1\) 与 \(a_5\) 的等比中项：\(a_3^2=a_1a_5=16\)，\(a_3=\pm4\)。</p>
-    <p>但这里还有一层：\(a_3=a_1q^2=q^2>0\)。\(a_3\) 和 \(a_1\) 隔了两步，乘了两次 \(q\)，符号一定和 \(a_1\) 相同。所以 \(a_3=4\)，\(-4\) 要舍去。</p>
+    <p>\(a_3\) 是 \(a_1\) 与 \(a_5\) 的等比中项：\(a_3^2=a_1a_5=16 \implies a_3=\pm4\)。</p>
+    <p>再由 \(a_3=a_1q^2=q^2&gt;0\) 可知，隔两步必同号，所以 \(a_3=4\)，负解 \(-4\) 需舍去。</p>
   </div>
   <div class="card predict" data-id="try-2" data-answer="B">
     <p>自己试试：\(1\) 和 \(9\) 的等比中项是？</p>
@@ -108,22 +199,22 @@
       <button class="opt" data-v="C"><b>C</b>\(5\)</button>
       <button class="opt" data-v="D"><b>D</b>\(-3\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(G^2=1\times9=9\)，\(G=\pm3\)：\(1,3,9\) 和 \(1,-3,9\) 都行。选 A 漏了负的那个；选 C 是等差中项 \(\dfrac{1+9}{2}\)。（只问「两个数的等比中项」时两个都要；放进一个具体的数列里，像例 2，才可能只剩一个。）</p></div>
+    <div class="reveal"><p><b>B</b>。\(G^2=1\times9=9 \implies G=\pm3\)：公比为 \(3\) 或 \(-3\) 均可。选 A 漏了负中项；选 C 是等差中项。</p></div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
-  <h3>4. 前 \(n\) 项和：乘 \(q\) 再相减</h3>
-  <p>把 \(S_n\) 写出来，再整体乘 \(q\)。两行错开一位，中间的项一一对上：</p>
+  <h3>4. 前 \(n\) 项和：乘 \(q\) 错位相减法</h3>
+  <p>将 \(S_n\) 整体乘以 \(q\) 后错开一位相减，中间各项完全对消，直接得出求和公式：</p>
   <div class="card">
     \[\small\begin{aligned} S_n&=a_1+a_1q+\dots+a_1q^{n-1}\\ qS_n&=\phantom{a_1+{}}a_1q+\dots+a_1q^{n-1}+a_1q^n \end{aligned}\]
-    <p>上减下，中间全部抵消，只剩头尾：\((1-q)S_n=a_1-a_1q^n\)。</p>
-    <p>接下来要两边除以 \(1-q\)，<b>先查它是不是 \(0\)</b>。\(q\ne1\) 时可以除；\(q=1\) 时每项都等于 \(a_1\)，直接 \(S_n=na_1\)。</p>
+    <p>上式减下式得：\((1-q)S_n = a_1 - a_1q^n \implies S_n = \dfrac{a_1(1-q^n)}{1-q}\quad (q\ne1)\)。</p>
   </div>
-  <div class="key">\(q\ne1\)：\(S_n=\dfrac{a_1(1-q^n)}{1-q}\)（也可写成 \(\dfrac{a_1-a_nq}{1-q}\)）；<br>\(q=1\)：\(S_n=na_1\)。</div>
+
   <div class="card">
     <p class="small">例 3</p>
-    <p>求 \(1+2+4+\dots+2^9\)。</p>
-    <p>首项 \(a_1=1\)，公比 \(q=2\)。项数：指数从 \(0\) 到 \(9\)，共 \(10\) 项（不是 \(9\) 项）。\(q\ne1\)，</p>
-    <p style="text-align:center">\(S_{10}=\dfrac{1\times(1-2^{10})}{1-2}=\dfrac{-1023}{-1}=1023\)。</p>
+    <p>求 \(1+2+4+\dots+2^9\) 的和。</p>
+    <p>首项 \(a_1=1\)，公比 \(q=2\)。项数：指数从 \(0\) 到 \(9\)，共 \(10\) 项。代入公式：</p>
+    <p style="text-align:center">\(S_{10}=\dfrac{1\times(1-2^{10})}{1-2}=\dfrac{1-1024}{-1}=1023\)。</p>
   </div>
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：\(3+6+12+24+48=\)？（用公式算，再加一遍核对）</p>
@@ -133,25 +224,52 @@
       <button class="opt" data-v="C"><b>C</b>\(96\)</button>
       <button class="opt" data-v="D"><b>D</b>\(45\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(a_1=3\)，\(q=2\)，\(n=5\)：\(S_5=\dfrac{3(1-2^5)}{1-2}=3\times31=93\)。选 B 的同学把项数数成了 \(6\)；选 C 算的是下一项 \(a_6=96\)。</p></div>
+    <div class="reveal"><p><b>A</b>。\(a_1=3, q=2, n=5\)：\(S_5=\dfrac{3(1-2^5)}{1-2}=3\times31=93\)。选 B 的同学项数数成了 \(6\)；选 C 算的是下一项 \(96\)。</p></div>
   </div>
 
-  <h3>5. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>\(q\ne0\)，各项都不是 \(0\)</b>。<br><span class="small">反例：\(1,0,0,0\) 不是等比数列：\(\dfrac01=0\) 不能当公比，后面 \(\dfrac00\) 更没有意义。\(0,0,0\) 也不是。</span></li>
-    <li><b>\(q=1\) 单独算</b>：除以 \(1-q\) 之前查它不是 \(0\)。<br><span class="small">反例：\(5,5,5,5\)，\(S_4=20\)；硬套 \(\dfrac{5(1-1^4)}{1-1}\) 得 \(\dfrac00\)，算不出来。公比是字母 \(q\) 时，要分 \(q=1\) 和 \(q\ne1\) 两种写。</span></li>
-    <li><b>\(q&lt;0\) 时正负交替</b>：不能当成「底数是正数的指数函数」去说它递增或递减。<br><span class="small">反例：\(a_n=(-2)^{n-1}\)：\(1,-2,4,-8,\dots\) 一大一小来回跳，既不递增也不递减。指数函数 \(y=a^x\) 要求 \(a>0\)，\((-2)^x\) 在 \(x=\dfrac12\) 时没有意义。</span></li>
-    <li><b>复利、逐期投入：先统一时点</b>，分清一次投入和逐期投入，每笔钱算清存了几期。<br><span class="small">反例：年利率 \(5\%\)，每年<b>年末</b>存 \(1000\) 元、存 \(3\) 年，到第 \(3\) 年末：第一笔只存了 \(2\) 年，最后一笔刚存进去。合计 \(1000+1000\times1.05+1000\times1.05^2=3152.5\) 元，不是 \(3000\times1.05^3\)，也不是 \(1000(1.05+1.05^2+1.05^3)\)。</span></li>
-    <li><b>只讲有限的前 \(n\) 项</b>：\(n\) 是一个确定的正整数。「一直加下去、无穷多项」不在这一节。</li>
-  </ol>
+  <!-- 组件五：三大翻车现场红绿对比卡 + 反例微图解 -->
+  <h3>5. 三大翻车现场红绿对比卡</h3>
+  <div class="trap-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:16px 0">
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区一：求和遗漏 q=1 分类</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：公比为字母时直接除以 \(1-q\)</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：当 \(q=1\) 时分母为 0！必须分流：\(q=1 \implies S_n=na_1\)。
+      </div>
+    </div>
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区二：等比中项漏掉负根</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：问 \(1\) 与 \(9\) 的等比中项只答 \(3\)</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：\(G^2=ab \implies G=\pm\sqrt{ab}\)，双解 \(\pm3\) 均满足定义！
+      </div>
+    </div>
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区三：项数指数混淆（数漏首项）</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：\(2^0+2^1+\dots+2^9\) 误代入 \(n=9\) 项</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：从 \(0\) 次幂到 \(9\) 次幂共有 \(9-0+1=10\) 项，公式指数为 \(10\)！
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:14px;margin:12px 0">
+    <div style="font-weight:700;font-size:13px;color:var(--text,#1e293b);margin-bottom:8px">🔍 反例微图解：中项双解交错 vs 指数项数偏差</div>
+    <div style="width:100%;height:150px;background:var(--bg-subtle,#f8fafc);border-radius:6px;overflow:hidden">
+      <svg id="m-gp-trap-fig" viewBox="0 0 540 150" style="width:100%;height:100%;display:block"></svg>
+    </div>
+    <div style="font-size:12px;color:var(--text-subtle,#64748b);margin-top:6px">
+      左图：中项 \(G=\pm3\) 对应公比 \(q=3\)（全正）与 \(q=-3\)（摆动）；右图：末项 \(2^9\) 实为第 \(10\) 项（包含 \(2^0=1\)）。
+    </div>
+  </div>
+
   <div class="key">先确认是等比数列（\(q\ne0\)、各项非零），求和先看 \(q\) 是不是 \(1\)，实际问题先画时间线数每笔钱存了几期。</div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>和指数函数的关系</b>：\(q>0\) 时 \(a_n=\dfrac{a_1}{q}\cdot q^n\)，这些点都在 \(y=\dfrac{a_1}{q}\cdot q^x\) 的图象上，只是 \(x\) 只取正整数。所以 \(a_1>0\)、\(q>1\) 时递增，\(a_1>0\)、\(0&lt;q&lt;1\) 时递减（\(a_1&lt;0\) 时反过来）。\(q&lt;0\) 没有这样的指数函数可对照。</p>
-    <p><b>下标和相等，乘积相等</b>：\(m+n=p+k\) 时，\(a_ma_n=a_pa_k\)。因为两边都是 \(a_1^2q^{m+n-2}\)。例：\(a_2a_8=a_5^2\)。等差数列里对应的是「和相等」。</p>
-    <p><b>等差和等比对照</b>：等差每次加 \(d\)，通项 \(a_1+(n-1)d\)，求和靠首尾配对；等比每次乘 \(q\)，通项 \(a_1q^{n-1}\)，求和靠乘 \(q\) 错位相减。</p>
-    <p><b>项数怎么数</b>：\(a_1q^{k}\) 一直写到 \(a_1q^{m}\)，一共 \(m-k+1\) 项。例 3 和「自己试试」最容易错在这里。</p>
+    <p><b>与指数函数的关系</b>：当 \(q&gt;0\) 时，点 \((n, a_n)\) 位于曲线 \(y=\frac{a_1}{q}\cdot q^x\) 上。当 \(q&lt;0\) 时正负震荡，无实数连续函数对照。</p>
+    <p><b>下标和与乘积性质</b>：若 \(m+n=p+k\)，则 \(a_m a_n = a_p a_k\)。</p>
+    <p><b>项数计数技巧</b>：从 \(a_1 q^k\) 到 \(a_1 q^m\)，总项数为 \(m-k+1\) 项。</p>
   </details>
 </section>
 
@@ -485,6 +603,206 @@
 
   document.addEventListener("DOMContentLoaded", function () { geoReset(); invReset(); });
   if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { geoDraw(); invDraw(); });
+
+  /* ================= 0 从例子进入：拉面师傅扣面翻倍 ================= */
+  var enSvg = document.getElementById("entry-noodle"), enBar = document.getElementById("entry-noodle-bar"), enNote = document.getElementById("entry-noodle-note");
+  function enDraw(kSel) {
+    var h = [], x0 = 28, cw = 84, gap = 14, yTop = 32, yBot = 148;
+    for (var k = 1; k <= 5; k++) {
+      var cnt = Math.pow(2, k), x = x0 + (k - 1) * (cw + gap), on = k <= kSel, cur = k === kSel;
+      h.push('<rect x="' + x + '" y="' + yTop + '" width="' + cw + '" height="' + (yBot - yTop) + '" rx="8" fill="' + (cur ? 'var(--ok-soft)' : 'var(--card)') + '" stroke="' + (cur ? 'var(--a)' : (on ? 'var(--b)' : 'var(--line)')) + '" stroke-width="' + (cur ? 2.4 : 1.4) + '"/>');
+      // 画出 cnt 根面条线条
+      for (var i = 0; i < cnt; i++) {
+        var ly = yTop + 12 + (i + 0.5) * ((yBot - yTop - 24) / cnt);
+        h.push('<line x1="' + (x + 10) + '" y1="' + ly.toFixed(1) + '" x2="' + (x + cw - 10) + '" y2="' + ly.toFixed(1) + '" stroke="' + (on ? 'var(--b)' : 'var(--line)') + '" stroke-width="' + (cnt <= 8 ? 2.4 : (cnt <= 16 ? 1.5 : 1)) + '" stroke-linecap="round"/>');
+      }
+      h.push('<text x="' + (x + cw / 2) + '" y="22" text-anchor="middle" font-weight="700" fill="' + (cur ? 'var(--a)' : 'var(--fg)') + '" font-size="13.5">第 ' + k + ' 扣</text>');
+      h.push('<text x="' + (x + cw / 2) + '" y="' + (yBot + 20) + '" text-anchor="middle" font-weight="700" fill="' + (on ? 'var(--a)' : 'var(--muted)') + '" font-size="14.5">' + (on ? cnt + ' 根' : '2^' + k + ' 根') + '</text>');
+      h.push('<text x="' + (x + cw / 2) + '" y="' + (yBot + 38) + '" text-anchor="middle" fill="var(--muted)" font-size="12.5">2^' + k + '</text>');
+      if (k < 5) {
+        h.push('<text x="' + (x + cw + gap / 2) + '" y="' + ((yTop + yBot) / 2 + 5) + '" text-anchor="middle" fill="var(--b)" font-weight="700" font-size="13">×2</text>');
+      }
+    }
+    enSvg.innerHTML = h.join("");
+    [].forEach.call(enBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-k"), 10) === kSel);
+    });
+    enNote.innerHTML = "拉到第 <b>" + kSel + "</b> 扣：每扣对折翻倍（×2），共有 <b>2<sup>" + kSel + "</sup> = " + Math.pow(2, kSel) + " 根</b>面条！";
+  }
+  [].forEach.call(enBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { enDraw(parseInt(b.getAttribute("data-k"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") enDraw(5);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") enDraw(1);
+  });
+  enDraw(1);
 })();
+
+/* --- 伴读微图解 JS: 等比数列 --- */
+(function(){
+  var curTab = 0;
+  function el(t, a, txt) {
+    var e = document.createElementNS("http://www.w3.org/2000/svg", t);
+    for (var k in a) e.setAttribute(k, a[k]);
+    if (txt) e.textContent = txt;
+    return e;
+  }
+  function drawTab0(svg) {
+    // Tab 0: 暴涨 vs 摆动 (q=2 vs q=-1)
+    var ox = 50, oy = 110;
+    svg.appendChild(el("line", {x1: 30, y1: oy, x2: 500, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 490, y: oy - 6, fill: "#94a3b8", "font-size": 12}, "n"));
+    svg.appendChild(el("text", {x: ox + 8, y: 30, fill: "#94a3b8", "font-size": 12}, "a_n"));
+
+    // q=2 positive explosion
+    var pts1 = [
+      {n: 1, v: 1, y: oy - 12},
+      {n: 2, v: 2, y: oy - 24},
+      {n: 3, v: 4, y: oy - 48},
+      {n: 4, v: 8, y: oy - 85}
+    ];
+    pts1.forEach(function(p){
+      var x = ox + p.n * 55;
+      svg.appendChild(el("circle", {cx: x, cy: p.y, r: 4, fill: "#0284c7"}));
+      svg.appendChild(el("text", {x: x - 6, y: p.y - 8, fill: "#0284c7", "font-size": 10, "font-weight": "bold"}, "2^" + (p.n-1)));
+    });
+    // curve line
+    svg.appendChild(el("path", {d: "M " + (ox+55) + " " + (oy-12) + " Q " + (ox+165) + " " + (oy-25) + " " + (ox+220) + " " + (oy-85), fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: ox + 115, y: oy - 72, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "q=2 指数爆炸"));
+
+    // q=-1.5 oscillation
+    var pts2 = [
+      {n: 1, v: 2, y: oy - 20},
+      {n: 2, v: -3, y: oy + 30},
+      {n: 3, v: 4.5, y: oy - 45},
+      {n: 4, v: -6.7, y: oy + 65}
+    ];
+    var d2 = "M " + (ox + 290) + " " + pts2[0].y;
+    pts2.forEach(function(p, i){
+      var x = ox + 290 + i * 50;
+      svg.appendChild(el("circle", {cx: x, cy: p.y, r: 4, fill: p.y < oy ? "#16a34a" : "#dc2626"}));
+      svg.appendChild(el("line", {x1: x, y1: oy, x2: x, y2: p.y, stroke: "#cbd5e1", "stroke-width": 1, "stroke-dasharray": "2,2"}));
+      if (i > 0) d2 += " L " + x + " " + p.y;
+    });
+    svg.appendChild(el("path", {d: d2, fill: "none", stroke: "#eab308", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+    svg.appendChild(el("text", {x: ox + 360, y: oy + 85, "text-anchor": "middle", fill: "#ca8a04", "font-size": 11, "font-weight": "bold"}, "q < 0 上下交错摆动"));
+  }
+
+  function drawTab1(svg) {
+    // Tab 1: 错位相减
+    var cy1 = 60, cy2 = 115;
+    // Row 1: S_n
+    svg.appendChild(el("text", {x: 45, y: cy1 + 18, fill: "#0284c7", "font-size": 13, "font-weight": "bold"}, "S_n ="));
+    svg.appendChild(el("rect", {x: 85, y: cy1, width: 45, height: 28, rx: 4, fill: "#dcfce7", stroke: "#16a34a", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 107, y: cy1 + 18, "text-anchor": "middle", fill: "#15803d", "font-size": 11, "font-weight": "bold"}, "a₁"));
+    svg.appendChild(el("text", {x: 140, y: cy1 + 18, fill: "#94a3b8", "font-size": 12}, "+"));
+    svg.appendChild(el("rect", {x: 155, y: cy1, width: 220, height: 28, rx: 4, fill: "#f1f5f9", stroke: "#cbd5e1", "stroke-width": 1}));
+    svg.appendChild(el("text", {x: 265, y: cy1 + 18, "text-anchor": "middle", fill: "#64748b", "font-size": 11}, "a₁q + a₁q² + … + a₁q^{n-1}"));
+
+    // Row 2: q S_n
+    svg.appendChild(el("text", {x: 35, y: cy2 + 18, fill: "#ca8a04", "font-size": 13, "font-weight": "bold"}, "q S_n ="));
+    svg.appendChild(el("rect", {x: 155, y: cy2, width: 220, height: 28, rx: 4, fill: "#fef9c3", stroke: "#facc15", "stroke-width": 1}));
+    svg.appendChild(el("text", {x: 265, y: cy2 + 18, "text-anchor": "middle", fill: "#854d0e", "font-size": 11}, "a₁q + a₁q² + … + a₁q^{n-1}"));
+    svg.appendChild(el("text", {x: 385, y: cy2 + 18, fill: "#94a3b8", "font-size": 12}, "+"));
+    svg.appendChild(el("rect", {x: 400, y: cy2, width: 65, height: 28, rx: 4, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 432, y: cy2 + 18, "text-anchor": "middle", fill: "#b91c1c", "font-size": 11, "font-weight": "bold"}, "a₁q^n"));
+
+    // Middle cancel bracket
+    svg.appendChild(el("line", {x1: 265, y1: cy1 + 30, x2: 265, y2: cy2 - 2, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "2,2"}));
+    svg.appendChild(el("text", {x: 265, y: (cy1 + cy2)/2 + 12, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "一减完全对消！"));
+
+    // Result
+    svg.appendChild(el("rect", {x: 90, y: 165, width: 360, height: 35, rx: 6, fill: "#eff6ff", stroke: "#3b82f6", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 270, y: 187, "text-anchor": "middle", fill: "#1d4ed8", "font-size": 13, "font-weight": "bold"}, "(1 - q) S_n = a₁ - a₁q^n -> S_n = a₁(1 - q^n) / (1 - q)"));
+  }
+
+  function drawTab2(svg) {
+    // Tab 2: q=1 vs q!=1 decision branch
+    svg.appendChild(el("rect", {x: 180, y: 25, width: 180, height: 36, rx: 6, fill: "#f8fafc", stroke: "#64748b", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 270, y: 47, "text-anchor": "middle", fill: "#1e293b", "font-size": 13, "font-weight": "bold"}, "求和前先审视公比 q"));
+
+    // Branch left: q != 1
+    svg.appendChild(el("line", {x1: 220, y1: 61, x2: 130, y2: 105, stroke: "#0284c7", "stroke-width": 2}));
+    svg.appendChild(el("text", {x: 160, y: 80, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "q ≠ 1"));
+    svg.appendChild(el("rect", {x: 40, y: 105, width: 190, height: 50, rx: 8, fill: "#e0f2fe", stroke: "#0284c7", "stroke-width": 2}));
+    svg.appendChild(el("text", {x: 135, y: 126, "text-anchor": "middle", fill: "#0369a1", "font-size": 11}, "分母非零，套公式："));
+    svg.appendChild(el("text", {x: 135, y: 144, "text-anchor": "middle", fill: "#0284c7", "font-size": 13, "font-weight": "bold"}, "S_n = a₁(1-q^n)/(1-q)"));
+
+    // Branch right: q = 1
+    svg.appendChild(el("line", {x1: 320, y1: 61, x2: 410, y2: 105, stroke: "#16a34a", "stroke-width": 2}));
+    svg.appendChild(el("text", {x: 375, y: 80, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "q = 1"));
+    svg.appendChild(el("rect", {x: 310, y: 105, width: 190, height: 50, rx: 8, fill: "#dcfce7", stroke: "#16a34a", "stroke-width": 2}));
+    svg.appendChild(el("text", {x: 405, y: 126, "text-anchor": "middle", fill: "#15803d", "font-size": 11}, "退化为常数列 a₁, a₁…："));
+    svg.appendChild(el("text", {x: 405, y: 144, "text-anchor": "middle", fill: "#16a34a", "font-size": 13, "font-weight": "bold"}, "S_n = n · a₁"));
+
+    // Warning banner bottom
+    svg.appendChild(el("rect", {x: 80, y: 175, width: 380, height: 30, rx: 6, fill: "#fef2f2", stroke: "#f87171", "stroke-width": 1}));
+    svg.appendChild(el("text", {x: 270, y: 194, "text-anchor": "middle", fill: "#991b1b", "font-size": 11, "font-weight": "bold"}, "⚠️ 警示：当公比含有未知字母时，必须分类讨论！"));
+  }
+
+  function renderFig() {
+    var svg = document.getElementById("m-gp-fig");
+    var desc = document.getElementById("m-gp-desc");
+    if (!svg) return;
+    svg.innerHTML = "";
+    if (curTab === 0) {
+      drawTab0(svg);
+      if (desc) desc.innerHTML = "<b>① 指数爆炸与摆动震荡</b>：q > 1 时数列沿指数轨迹急剧暴涨；而当 q < 0 时符号交替在正负两侧大幅跳跃，无法简单套用递增递减。";
+    } else if (curTab === 1) {
+      drawTab1(svg);
+      if (desc) desc.innerHTML = "<b>② 乘 q 错位相减机制</b>：将总和乘 q 后错移一位，首末之间庞大的中间项被整体减尽对消，仅余头项 a₁ 与尾项 a₁q^n。";
+    } else {
+      drawTab2(svg);
+      if (desc) desc.innerHTML = "<b>③ q=1 黄金分流法则</b>：q ≠ 1 方可除以 1-q；当 q = 1 时分母为零公式崩溃，必须分流为常数列求和 S_n = na₁。";
+    }
+  }
+
+  window.setMGpTab = function(idx) {
+    curTab = idx;
+    var btns = document.querySelectorAll("#m-gp-tabs button");
+    btns.forEach(function(b, i){
+      b.style.borderColor = (i === idx) ? "#0284c7" : "var(--border,#cbd5e1)";
+      b.style.background = (i === idx) ? "#0284c7" : "transparent";
+      b.style.color = (i === idx) ? "#fff" : "var(--text,#475569)";
+    });
+    renderFig();
+  };
+
+  function drawTrapFig() {
+    var svg = document.getElementById("m-gp-trap-fig");
+    if (!svg) return;
+    svg.innerHTML = "";
+    // Left: G = +-3
+    svg.appendChild(el("text", {x: 135, y: 22, "text-anchor": "middle", fill: "#0369a1", "font-size": 12, "font-weight": "bold"}, "误区一：等比中项遗漏负根 G = -3"));
+    svg.appendChild(el("rect", {x: 40, y: 45, width: 80, height: 32, rx: 4, fill: "#eff6ff", stroke: "#93c5fd", "stroke-width": 1}));
+    svg.appendChild(el("text", {x: 80, y: 65, "text-anchor": "middle", fill: "#1d4ed8", "font-size": 11, "font-weight": "bold"}, "1, 3, 9 (q=3)"));
+    svg.appendChild(el("rect", {x: 145, y: 45, width: 90, height: 32, rx: 4, fill: "#fef3c7", stroke: "#fcd34d", "stroke-width": 1}));
+    svg.appendChild(el("text", {x: 190, y: 65, "text-anchor": "middle", fill: "#b45309", "font-size": 11, "font-weight": "bold"}, "1, -3, 9 (q=-3)"));
+    svg.appendChild(el("text", {x: 135, y: 105, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "G² = 1 × 9 = 9 -> G = ±3"));
+    svg.appendChild(el("text", {x: 135, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "问两数中项必须兼顾正负两解"));
+
+    // Divider
+    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 140, stroke: "#e2e8f0", "stroke-width": 1}));
+
+    // Right: 2^0 to 2^9 is 10 terms
+    svg.appendChild(el("text", {x: 405, y: 22, "text-anchor": "middle", fill: "#b91c1c", "font-size": 12, "font-weight": "bold"}, "误区二：1 + 2 + … + 2^9 误以为 9 项"));
+    svg.appendChild(el("text", {x: 300, y: 60, fill: "#64748b", "font-size": 12}, "2^0 + 2^1 + 2^2 + … + 2^9"));
+    svg.appendChild(el("line", {x1: 300, y1: 75, x2: 500, y2: 75, stroke: "#16a34a", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 400, y: 95, "text-anchor": "middle", fill: "#16a34a", "font-size": 12, "font-weight": "bold"}, "指数从 0 到 9，共 9-0+1 = 10 项！"));
+    svg.appendChild(el("text", {x: 405, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "公式分子为 1 - 2^{10}，并非 2^9"));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){ renderFig(); drawTrapFig(); });
+  } else {
+    renderFig();
+    drawTrapFig();
+  }
+})();
+
 </script>
 </body></html>

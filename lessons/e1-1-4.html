@@ -8,25 +8,9 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
-<style>
-  .shape-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 16px; }
-  .shape-tabs button {
-    border: 1px solid var(--line); background: var(--card); color: var(--fg);
-    border-radius: 8px; padding: 7px 14px; font: inherit; font-size: 14px; cursor: pointer;
-  }
-  .shape-tabs button.on { background: var(--a); border-color: var(--a); color: #fff; font-weight: 600; }
-  .ctrl-panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin: 10px 0; }
-  .ctrl-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 6px 0; }
-  .ctrl-row label { font-size: 14.5px; font-weight: 500; }
-  .result { font-size: 15px; margin: 10px 0 4px; min-height: 3.2em; line-height: 1.8; overflow-wrap: anywhere; }
-  .result b { color: var(--fg); }
-  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
-  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin: 10px 0; }
-  .stat-card { background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
-  .stat-card .tit { font-size: 12.5px; color: var(--muted); }
-  .stat-card .val { font-size: 16px; font-weight: 700; color: var(--fg); margin-top: 2px; }
-</style>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
+<style> .shape-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px;}.shape-tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:8px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;}.shape-tabs button.on{background:var(--a);border-color:var(--a);color:#fff;font-weight:600;}.ctrl-panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin:10px 0;}.ctrl-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:6px 0;}.ctrl-row label{font-size:14.5px;font-weight:500;}.result{font-size:15px;margin:10px 0 4px;min-height:3.2em;line-height:1.8;overflow-wrap:anywhere;}.result b{color:var(--fg);}details.more{margin:16px 0;border:1px solid var(--line);border-radius:var(--radius);padding:8px 14px;background:var(--card);}details.more summary{cursor:pointer;font-weight:600;padding:4px 0;}.stat-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:10px;margin:10px 0;}.stat-card{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;}.stat-card .tit{font-size:12.5px;color:var(--muted);}.stat-card .val{font-size:16px;font-weight:700;color:var(--fg);margin-top:2px;}</style>
 </head>
 <body data-sec="e1-1-4">
 <div class="wrap">
@@ -36,8 +20,14 @@
 <p class="lead">将立体图形放置在空间直角坐标系中，平行与垂直被转化为向量的共线与数量积，点到平面的距离化为投影向量的模长，空间三大夹角更可通过法向量与方向向量的代数运算直接求解，免去繁杂的辅助线构造。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>在立体几何综合大题中，求「点 \(P\) 到平面 \(\alpha\) 的距离」是一道常见压轴问。在传统综合几何法中，求点面距离必须先在平面内准确找出点 \(P\) 的<b>垂足 \(H\)</b>，常常需要复杂的线面垂直证明和繁琐的几何作图。</p>
+  <p>在立体几何综合大题中，求「点 \(P\) 到平面 \(\alpha\) 的距离 \(d\)」是一道常见压轴问。传统综合几何法必须在平面内苦苦寻找垂足 \(H\)；那空间向量法是怎么算的？先点下面的两个按钮对比看看：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-proj" viewBox="0 0 520 208" role="img" aria-label="点P到平面距离的传统几何找垂足法与空间向量法向量投影法对比图"></svg>
+    <div class="entry-bar" id="entry-proj-bar">
+      <button type="button" data-mode="geo">传统几何法：费力做辅助面找垂足 H</button>
+      <button type="button" data-mode="vec" class="on">空间向量法：任取面内一点 A，把 AP 往法向量 n 上直接投影！</button>
+    </div>
+    <div class="entry-note" id="entry-proj-note"></div>
     <p>如果引入空间向量坐标法，并求得了平面 \(\alpha\) 的一个法向量 \(\boldsymbol{n}\)，我们还需要在图中费劲寻找垂足 \(H\) 的确切空间位置吗？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>仍然需要，必须先求出垂足 \(H\) 的坐标，才能用两点间距离公式求 \(|PH|\)</button>
@@ -45,15 +35,28 @@
     </div>
     <div class="reveal">
       <p><b>选 B</b>。这就是空间向量法最强大的地方：<b>免去作垂线与找垂足！</b></p>
-      <p>无论垂足 \(H\) 落在平面的哪个角落甚至图形外部，在法向量 \(\boldsymbol{n}\) 的指引下，平面内任意一点 \(A\) 与 \(P\) 构成的斜向量 \(\overrightarrow{AP}\)，在法向量上的投影长度恰好恒等于垂线段的长度 \(d\)。</p>
+      <p>看上方的投影直角三角形：无论垂足 \(H\) 落在平面的哪个角落甚至图形外部，由于法向量 \(\boldsymbol{n}\perp\alpha\) 且 \(PH\perp\alpha\)，\(\boldsymbol{n}\) 与垂线段 \(PH\) 必然平行。平面内任意已知点 \(A\) 与 \(P\) 构成的斜向量 \(\overrightarrow{AP}\)，往法向量 \(\boldsymbol{n}\) 上一投影，投影直角边长恰好恒等于垂线段长 \(d = |PH|\)！</p>
       <p>几何的辅助线构图被彻底转化为向量数量积的代数运算。这一节我们就来系统掌握空间向量在<b>平行与垂直判定</b>、<b>空间距离</b>以及<b>三大夹角（线线角、线面角、二面角）</b>计算中的核心公式与解题程序。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：空间向量的坐标运算、数量积、模长、夹角（<a href="e1-1-3.html">回看 1.3</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：法向量必须取非零向量；求平面法向量时，要在平面内取两条不共线向量，不能只用一条线的条件。</p></div>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：法向量线面角、二面角与点面距离</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="lineplane">① 法向量与线面角</button>
+      <button type="button" class="micro-tab" data-mode="dihed">② 二面角法向量转化</button>
+      <button type="button" class="micro-tab" data-mode="pldist">③ 点面距离向量射影</button>
+    </div>
+    <svg id="m-app-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="空间向量应用几何直观图解"></svg>
+    <div class="micro-caption" id="m-app-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>直线的方向向量</b>：和直线平行（或就在直线上）的<b>非零</b>向量 \(\boldsymbol{u}\)。一条直线的方向向量有无数个，彼此共线。</p>
@@ -75,8 +78,26 @@
     <p>例：\(\boldsymbol{u}=(1,0,0)\)，\(\boldsymbol{v}=(-1,1,0)\)，向量夹角是 \(135^\circ\)；但以它们为方向的两条直线所成角是 \(45^\circ\)。所以后面的公式里常有绝对值。</p>
   </div>
 
-  <p>下面四块都用同一个正方体举例：棱长为 \(2\) 的正方体 \(ABCD-A_1B_1C_1D_1\)，以 \(D\) 为原点，\(DA, DC, DD_1\) 分别为 \(x, y, z\) 轴。各点坐标：</p>
-  <p style="text-align:center">\(D(0,0,0)\)，\(A(2,0,0)\)，\(B(2,2,0)\)，\(C(0,2,0)\)，<br>\(A_1(2,0,2)\)，\(B_1(2,2,2)\)，\(C_1(0,2,2)\)。</p>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">三角转换</span> 线面角（正弦） vs 线线角（余弦）</div>
+      <p><b>线线角</b>：两方向向量夹角 \(\theta\in(0,\frac{\pi}{2}]\)，直接求余弦：\(\cos\theta = \frac{|\boldsymbol{u}_1\cdot\boldsymbol{u}_2|}{|\boldsymbol{u}_1||\boldsymbol{u}_2|}\)。</p>
+      <p><b>线面角</b>：法向量 \(\boldsymbol{n}\perp\alpha\)，直线与法向量夹角与线面角<b>互余</b>，算出来恒为<b>正弦值</b>：\(\sin\theta = \frac{|\boldsymbol{u}\cdot\boldsymbol{n}|}{|\boldsymbol{u}||\boldsymbol{n}|}\)！</p>
+      <p class="small">警惕：算得 \(\frac12\) 时，线面角是 \(30^\circ\)（因为 \(\sin 30^\circ=\frac12\)），绝非 \(60^\circ\)！</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">符号辨析</span> 二面角符号判定 vs 距离公式绝对值</div>
+      <p><b>二面角余弦</b>：二面角可以是钝角（\(\cos\theta < 0\)），<b>绝不可机械加绝对值</b>！必须结合几何立体图开口钝锐判定符号。</p>
+      <p><b>点面距离</b>：\(d = \frac{|\overrightarrow{AP}\cdot\boldsymbol{n}|}{|\boldsymbol{n}|}\)，空间距离为纯几何正长度，分子<b>必须严格加绝对值</b>！</p>
+      <p class="small">技巧：二面角法向量同向内或同向外时互补；一内一外时相等。结合图形直观一眼定正负。</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    线面角正弦公式：\(\sin\theta = \dfrac{\color{#2563eb}{|\boldsymbol{u}\cdot\boldsymbol{n}|}}{\color{#059669}{|\boldsymbol{u}||\boldsymbol{n}|}}\) &nbsp;（\(\theta \in [0, \frac{\pi}{2}]\)，互余求正弦）<br>
+    二面角余弦公式：\(\cos\theta = \color{#dc2626}{\pm}\dfrac{\color{#2563eb}{\boldsymbol{n}_1\cdot\boldsymbol{n}_2}}{\color{#059669}{|\boldsymbol{n}_1||\boldsymbol{n}_2|}}\) &nbsp;（正负由图形开口钝锐决定）<br>
+    点到平面距离公式：\(d = \dfrac{\color{#2563eb}{|\overrightarrow{AP}\cdot\boldsymbol{n}|}}{\color{#059669}{|\boldsymbol{n}|}}\) &nbsp;（\(A\) 为平面内任意已知点）
+  </div>
 
   <h3>2. 求平面的法向量</h3>
   <p>法向量要和平面里<b>每一个</b>向量垂直。只要和面里两个<b>不共线</b>的向量都垂直就够了（两条相交直线定下一个平面）。于是设 \(\boldsymbol{n}=(x,y,z)\)，列两个数量积为 \(0\) 的方程。两个方程三个未知数，解出来是一串成比例的解，取其中一个<b>非零</b>的就行。</p>
@@ -102,6 +123,7 @@
       <p>C 只和 \(\boldsymbol{v}_1\) 垂直（\(-1+1+0=0\)），和 \(\boldsymbol{v}_2\) 的数量积是 \(2\)：只验了一个方程就收手，是最常见的错。D 虽然满足两个方程，但法向量必须非零。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 用向量证平行与垂直</h3>
   <p>直线看方向向量 \(\boldsymbol{u}\)，平面看法向量 \(\boldsymbol{n}\)。「平行、垂直」就翻译成「共线、数量积为 \(0\)」：</p>
@@ -131,6 +153,7 @@
       <p>选 A 的同学看到「两个向量平行」就写「线面平行」——可这里一个是<b>法</b>向量，和法向量平行恰好是垂直。线面平行要的是 \(\boldsymbol{u}\cdot\boldsymbol{n}=0\)，这里 \(\boldsymbol{u}\cdot\boldsymbol{n}=2+8+2=12\)。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 求点到平面的距离</h3>
   <p>不用找垂足。在平面里随便取一点 \(A\)，连出 \(\overrightarrow{AP}\)。垂线段 \(PH\) 和法向量同方向，所以 \(\overrightarrow{AP}\) 在 \(\boldsymbol{n}\) 方向上的投影长度就是 \(|PH|\)。</p>
@@ -191,18 +214,80 @@
     </div>
   </div>
 
-  <h3>6. 用之前要注意</h3>
-  <ol>
-    <li><b>法向量要非零，「令某分量为 1」要看方程允不允许。</b><br><span class="small">反例：面内向量 \((1,0,0)\) 和 \((0,1,2)\)，第一个方程就是 \(x=0\)。这时再「令 \(x=1\)」就矛盾了；应令 \(z=1\)，得 \(\boldsymbol{n}=(0,-2,1)\)。</span></li>
-    <li><b>\(\boldsymbol{u}\cdot\boldsymbol{n}=0\) 只说明「平行或在面内」；方向向量共线只说明「平行或重合」；法向量共线也要区分两平面平行还是重合。</b><br><span class="small">反例：平面 \(z=0\)，法向量 \((0,0,1)\)；直线过 \((0,0,0)\)，方向 \((1,0,0)\)。数量积为 \(0\)，可这条直线就是 \(x\) 轴，躺在平面里。要再验一点在不在面内。</span></li>
-    <li><b>距离公式分子带绝对值；相交的两个对象距离是 \(0\)。</b><br><span class="small">反例：直线和平面相交时，在直线上随便取一点代入点面距离公式，一般会得到一个正数，可二者的距离是 \(0\)。「任取一点」的算法只对平行的线面、面面成立，先确认平行。</span></li>
-    <li><b>二面角可能是钝角，不能一律加绝对值。</b><br><span class="small">反例：例 4 的二面角 \(A_1-BD-C\)，加了绝对值就会写成 \(\dfrac{\sqrt3}{3}\)，而它其实是钝角，余弦为 \(-\dfrac{\sqrt3}{3}\)。</span></li>
-  </ol>
-  <details class="more"><summary>再深一点（可以先跳过）</summary>
-    <p><b>用法向量的朝向定二面角正负</b>：两个法向量都从棱出发画。若两个都指向二面角<b>内部</b>（或都指向外部），法向量夹角与二面角<b>互补</b>；若一个指向内部、一个指向外部，二者<b>相等</b>。最后仍要和图上看到的张口大小对一下。</p>
-    <p><b>点到直线的距离</b>：\(A\) 在直线 \(l\) 上，\(\boldsymbol{e}\) 是 \(l\) 的单位方向向量，则</p>
-    <p>\[d=\sqrt{|\overrightarrow{AP}|^2-(\overrightarrow{AP}\cdot\boldsymbol{e})^2}\]</p>
-    <p>这是勾股定理：\(|\overrightarrow{AP}|\) 是斜边，\(|\overrightarrow{AP}\cdot\boldsymbol{e}|\) 是沿直线方向的那条直角边，剩下的直角边就是距离。</p>
+  
+  <h3>6. 三步破题思维链：空间向量应用解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>遇到求线面角、二面角或空间点面距离的高考大题，审清空间几何体的对称性与垂直棱，建立空间直角坐标系 \(O\text{-}xyz\)，准确写出各点坐标，求出目标直线方向向量 \(\boldsymbol{u}\) 或两平面法向量 \(\boldsymbol{n}_1, \boldsymbol{n}_2\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 线面角：代入 \(\sin\theta = \frac{|\boldsymbol{u}\cdot\boldsymbol{n}|}{|\boldsymbol{u}||\boldsymbol{n}|}\) 求解正弦值，求角注意反解正弦；<br>
+        ② 二面角：代入 \(\cos\langle\boldsymbol{n}_1,\boldsymbol{n}_2\rangle\)，观察图形开口是锐角还是钝角，决定 \(\cos\theta\) 符号；<br>
+        ③ 点面距离：在目标平面内任选一点 \(A\)，代入射影公式 \(d = \frac{|\overrightarrow{AP}\cdot\boldsymbol{n}|}{|\boldsymbol{n}|}\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>线面角算出来是 \(\sin\theta\) 绝非 \(\cos\theta\)；二面角注意题目所求是钝二面角还是锐二面角，符号万万不可弄反；点面距离只有在直线与平面平行时才能转化为“直线上任一点到平面的距离”！</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：线面角误把计算结果当余弦</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>套公式求得 \(\frac{|\boldsymbol{u}\cdot\boldsymbol{n}|}{|\boldsymbol{u}||\boldsymbol{n}|} = \frac12\)，误答直线与平面所成角为 \(60^\circ\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>法向量与直线互余，公式求出的是 \(\sin\theta = \frac12\)，真实线面角为 \(30^\circ\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：二面角机械全加绝对值丢失钝角负号</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>二面角 \(A_1-BD-C\) 明明是钝二面角，无脑加绝对值硬算出 \(\cos\theta = \frac{\sqrt{3}}{3}\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>观察几何图形开口大于 \(90^\circ\)，余弦值必为负数，正确答案为 \(-\frac{\sqrt{3}}{3}\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：相交线面盲目套用点面距离公式</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>直线与平面相交，在直线上任取一点算点面距离得出正数，当作线面距离</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>相交直线与平面公共点距离为 0，距离公式仅适用于平行线面或平行平面之间</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：线面角与法向量互余关系图解</div>
+    <svg id="m-app-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="线面角互余原理反例图"></svg>
+    <div class="micro-caption">直线与法向量夹角为 \(\varphi\)，线面角为 \(\theta\)。因为 \(\boldsymbol{n}\perp\alpha\)，\(\theta + \varphi = 90^\circ\)，所以 \(\sin\theta = |\cos\varphi|\)！</div>
+  </div>
+
+    <details class="more" style="margin-top:14px;"><summary>再深一点：法向量朝向与点线距离公式</summary>
+    <p><b>法向量朝向定二面角正负</b>：两法向量同指二面角内部（或外部）时夹角与二面角互补；一内一外时夹角与二面角相等。仍需与几何直观核对开口。</p>
+    <p><b>点到直线的距离</b>：\(A\) 在直线 \(l\) 上，\(\boldsymbol{e}\) 为单位方向向量，由勾股定理：\(d=\sqrt{|\overrightarrow{AP}|^2-(\overrightarrow{AP}\cdot\boldsymbol{e})^2}\)。</p>
   </details>
 </section>
 
@@ -214,6 +299,7 @@
     <button type="button" class="on" data-tab="dist">模式 1：点到平面距离与投影</button>
     <button type="button" data-tab="lineangle">模式 2：线面角与法向量互余原理</button>
     <button type="button" data-tab="dihedral">模式 3：二面角正负号辨析</button>
+    <button type="button" data-tab="isodist" data-iso-tab="1">模式 4：法向量激光测距台（3D 实验台）</button>
   </div>
 
   <svg class="fig" id="geoSvg" viewBox="0 0 560 320" role="img" aria-label="立体几何向量法综合交互图"></svg>
@@ -363,464 +449,6 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
 </div>
 
-<script>
-(function () {
-  "use strict";
-
-  var currentTab = "dist";
-  var svg = document.getElementById("geoSvg");
-  var desc = document.getElementById("labDesc");
-
-  var tabBtns = document.querySelectorAll("#labTabs button");
-  var ctrlDist = document.getElementById("ctrlDist");
-  var ctrlLineAngle = document.getElementById("ctrlLineAngle");
-  var ctrlDihedral = document.getElementById("ctrlDihedral");
-
-  var heightRange = document.getElementById("heightRange");
-  var heightOut = document.getElementById("heightOut");
-  var offsetRange = document.getElementById("offsetRange");
-  var offsetOut = document.getElementById("offsetOut");
-
-  var thetaLineRange = document.getElementById("thetaLineRange");
-  var thetaLineOut = document.getElementById("thetaLineOut");
-  var invertLineCheck = document.getElementById("invertLineCheck");
-
-  var dihedralRange = document.getElementById("dihedralRange");
-  var dihedralOut = document.getElementById("dihedralOut");
-
-  var resetBtn = document.getElementById("resetBtn");
-  var resetBtn2 = document.getElementById("resetBtn2");
-  var resetBtn3 = document.getElementById("resetBtn3");
-
-  var btnA1 = document.getElementById("btnA1");
-  var btnA2 = document.getElementById("btnA2");
-  var btnA3 = document.getElementById("btnA3");
-  var currentPtA = [0, 0, 0];
-
-  function createSvgEl(tag, attrs) {
-    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-    for (var k in attrs) {
-      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
-        el.setAttribute(k, attrs[k]);
-      }
-    }
-    return el;
-  }
-
-  // 3D 投影体系：水平面 X 轴水平向右，Y 轴斜向 35°（斜二测系数 0.6），Z 轴竖直向上
-  var KX = 0.6 * 0.81915;
-  var KY = 0.6 * 0.57357;
-  function proj(x, y, z) {
-    return {
-      x: 260 + x * 40 + y * 40 * KX,
-      y: 200 + y * 40 * KY - z * 40
-    };
-  }
-
-  function addDefs() {
-    var defs = createSvgEl("defs");
-    var markers = [
-      { id: "m-arr-a", color: "var(--a)" },
-      { id: "m-arr-c", color: "var(--c)" },
-      { id: "m-arr-no", color: "var(--no)" },
-      { id: "m-arr-b", color: "var(--b)" }
-    ];
-    markers.forEach(function (m) {
-      var marker = createSvgEl("marker", {
-        id: m.id,
-        viewBox: "0 0 10 10",
-        refX: "7",
-        refY: "5",
-        markerWidth: "6",
-        markerHeight: "6",
-        orient: "auto-start-reverse"
-      });
-      var path = createSvgEl("path", {
-        d: "M 0 1.5 L 8 5 L 0 8.5 z",
-        fill: m.color
-      });
-      marker.appendChild(path);
-      defs.appendChild(marker);
-    });
-    svg.appendChild(defs);
-  }
-
-  function drawLine(p1, p2, color, w, dash, markerEnd) {
-    var attrs = {
-      x1: p1.x.toFixed(1),
-      y1: p1.y.toFixed(1),
-      x2: p2.x.toFixed(1),
-      y2: p2.y.toFixed(1),
-      stroke: color,
-      "stroke-width": w || "1.8"
-    };
-    if (dash) attrs["stroke-dasharray"] = dash;
-    if (markerEnd) attrs["marker-end"] = "url(#" + markerEnd + ")";
-    var line = createSvgEl("line", attrs);
-    svg.appendChild(line);
-    return line;
-  }
-
-  function drawPolygon(pts, fill, stroke, w, dash) {
-    var ptStr = pts.map(function (p) { return p.x.toFixed(1) + "," + p.y.toFixed(1); }).join(" ");
-    var attrs = {
-      points: ptStr,
-      fill: fill || "none",
-      stroke: stroke || "none",
-      "stroke-width": w || "1.5"
-    };
-    if (dash) attrs["stroke-dasharray"] = dash;
-    var poly = createSvgEl("polygon", attrs);
-    svg.appendChild(poly);
-    return poly;
-  }
-
-  function drawCircle(p, r, fill, stroke) {
-    var c = createSvgEl("circle", {
-      cx: p.x.toFixed(1),
-      cy: p.y.toFixed(1),
-      r: r || "4",
-      fill: fill || "var(--fg)",
-      stroke: stroke || "none"
-    });
-    svg.appendChild(c);
-    return c;
-  }
-
-  function drawText(p, text, color, dx, dy, fontSize, fontWeight) {
-    var t = createSvgEl("text", {
-      x: (p.x + (dx || 0)).toFixed(1),
-      y: (p.y + (dy || 0)).toFixed(1),
-      fill: color || "var(--fg)",
-      "font-size": fontSize || "13",
-      "font-weight": fontWeight || "600"
-    });
-    t.textContent = text;
-    svg.appendChild(t);
-    return t;
-  }
-
-  /* ========== 模式 1：点到平面距离与投影 ========== */
-  function renderDist() {
-    svg.innerHTML = "";
-    addDefs();
-
-    var h = parseFloat(heightRange ? heightRange.value : 25) / 10;
-    var offX = parseFloat(offsetRange ? offsetRange.value : 5) / 10;
-    if (isNaN(h)) h = 2.5;
-    if (isNaN(offX)) offX = 0.5;
-
-    if (heightOut) heightOut.textContent = h.toFixed(1);
-    if (offsetOut) offsetOut.textContent = offX.toFixed(1);
-
-    // 绘制基底平面 alpha (z = 0)
-    var pM1 = proj(-3.2, -1.8, 0);
-    var pM2 = proj(3.2, -1.8, 0);
-    var pM3 = proj(2.6, 2.2, 0);
-    var pM4 = proj(-3.8, 2.2, 0);
-    drawPolygon([pM1, pM2, pM3, pM4], "rgba(47, 122, 86, 0.08)", "var(--a)", "1.8");
-    drawText(proj(2.7, -1.5, 0), "平面 α (z = 0)", "var(--a)", 4, -4, "13", "700");
-
-    // 平面内参考点 A 与空间点 P
-    var ax = currentPtA[0], ay = currentPtA[1], az = 0;
-    var ptA = proj(ax, ay, az);
-
-    var px = offX, py = 0.4, pz = h;
-    var ptP = proj(px, py, pz);
-    var ptH = proj(px, py, 0); // 真正垂足
-
-    // 垂线段 PH (红色粗虚线)
-    drawLine(ptP, ptH, "var(--no)", "2.6", "4,3");
-    // 垂足标志折线
-    var r1 = proj(px + 0.25, py, 0);
-    var r2 = proj(px + 0.25, py, 0.25);
-    var r3 = proj(px, py, 0.25);
-    drawLine(r1, r2, "var(--no)", "1.2");
-    drawLine(r2, r3, "var(--no)", "1.2");
-
-    // 平面内连线 AH
-    drawLine(ptA, ptH, "var(--muted)", "1.4", "3,3");
-
-    // 斜向量 AP (蓝色箭头)
-    drawLine(ptA, ptP, "var(--c)", "2.6", null, "m-arr-c");
-
-    // 法向量 n (松绿箭头，垂直于平面向上)
-    var ptN = proj(ax, ay, az + 1.8);
-    drawLine(ptA, ptN, "var(--a)", "2.8", null, "m-arr-a");
-    // 法向量与平面直角折线
-    var n1 = proj(ax + 0.22, ay, az);
-    var n2 = proj(ax + 0.22, ay, az + 0.22);
-    var n3 = proj(ax, ay, az + 0.22);
-    drawLine(n1, n2, "var(--a)", "1.2");
-    drawLine(n2, n3, "var(--a)", "1.2");
-
-    // 标记节点
-    drawCircle(ptA, 4.5, "var(--c)");
-    drawText(ptA, "A(" + ax + "," + ay + ",0)", "var(--c)", -18, 18);
-
-    drawCircle(ptP, 5, "var(--no)");
-    drawText(ptP, "P(" + px.toFixed(1) + "," + py.toFixed(1) + "," + pz.toFixed(1) + ")", "var(--no)", 8, -6);
-
-    drawCircle(ptH, 4, "var(--no)");
-    drawText(ptH, "垂足 H", "var(--no)", 8, 14);
-
-    drawText(ptN, "法向量 n = (0, 0, 1.8)", "var(--a)", 8, -2);
-    drawText(proj((px + ax) / 2, (py + ay) / 2, pz / 2), "斜向量 AP", "var(--c)", -68, -4);
-    drawText(proj(px, py, pz / 2), "距离 d = " + h.toFixed(1), "var(--no)", 10, 0, "13", "700");
-
-    // 实时计算公式解析
-    if (desc) {
-      var dx = (px - ax).toFixed(1);
-      var dy = (py - ay).toFixed(1);
-      var dz = pz.toFixed(1);
-      desc.innerHTML =
-        "<b>点面距离代数验算</b>：<br>" +
-        "当前选定面内参考点 \\(A(" + ax + ", " + ay + ", 0)\\)，斜向量 \\(\\overrightarrow{AP} = (" + dx + ", " + dy + ", " + dz + ")\\)。<br>" +
-        "取法向量 \\(\\boldsymbol{n} = (0, 0, 1)\\)，数量积 \\(\\overrightarrow{AP}\\cdot\\boldsymbol{n} = " + dx + "\\times 0 + " + dy + "\\times 0 + " + dz + "\\times 1 = " + dz + "\\)。<br>" +
-        "点面距离公式：\\(d = \\dfrac{|\\overrightarrow{AP}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{n}|} = \\dfrac{|" + dz + "|}{1} = " + h.toFixed(1) + "\\)。<br>" +
-        "<span class=\"small\" style=\"color:var(--a);font-weight:600\">★ 核心发现：切换不同的参考点 A，向量 AP 的水平分量会变化，但在法向量上的投影高恒为 " + h.toFixed(1) + "，完全不需要寻找垂足 H！</span>";
-      if (window.Peiyu && window.Peiyu.math) window.Peiyu.math(desc);
-    }
-  }
-
-  /* ========== 模式 2：线面角与法向量互余原理 ========== */
-  function renderLineAngle() {
-    svg.innerHTML = "";
-    addDefs();
-
-    var deg = parseFloat(thetaLineRange ? thetaLineRange.value : 30);
-    if (isNaN(deg)) deg = 30;
-    if (thetaLineOut) thetaLineOut.textContent = Math.round(deg) + "°";
-    var invert = invertLineCheck && invertLineCheck.checked;
-
-    var rad = deg * Math.PI / 180;
-    var len = 3.4;
-
-    // 平面 alpha
-    var pM1 = proj(-3.2, -1.8, 0);
-    var pM2 = proj(3.2, -1.8, 0);
-    var pM3 = proj(2.6, 2.2, 0);
-    var pM4 = proj(-3.8, 2.2, 0);
-    drawPolygon([pM1, pM2, pM3, pM4], "rgba(47, 122, 86, 0.08)", "var(--a)", "1.8");
-    drawText(proj(2.7, -1.5, 0), "平面 α", "var(--a)", 4, -4, "13", "700");
-
-    var ptO = proj(0, 0, 0);
-    drawCircle(ptO, 4.5, "var(--fg)");
-    drawText(ptO, "O (交点)", "var(--fg)", -14, 18);
-
-    // 法向量 n 垂直平面向上 (0, 0, 2.6)
-    var ptN = proj(0, 0, 2.6);
-    drawLine(ptO, ptN, "var(--a)", "2.8", null, "m-arr-a");
-    drawText(ptN, "法向量 n", "var(--a)", 8, -2);
-    // 直角符号
-    var n1 = proj(0.24, 0, 0);
-    var n2 = proj(0.24, 0, 0.24);
-    var n3 = proj(0, 0, 0.24);
-    drawLine(n1, n2, "var(--a)", "1.2");
-    drawLine(n2, n3, "var(--a)", "1.2");
-
-    // 斜线方向向量 u
-    var sign = invert ? -1 : 1;
-    var ux = len * Math.cos(rad) * 0.9;
-    var uy = len * Math.cos(rad) * 0.43;
-    var uz = sign * len * Math.sin(rad);
-
-    var ptU = proj(ux, uy, uz);
-    var ptProjH = proj(ux, uy, 0);
-
-    // 射影线 OH (平面内虚线)
-    drawLine(ptO, ptProjH, "var(--muted)", "1.6", "4,3");
-    drawText(proj(ux * 0.6, uy * 0.6, 0), "斜线在平面内的射影", "var(--muted)", -20, 16, "12");
-
-    // 垂线 (端点到平面射影)
-    drawLine(ptU, ptProjH, "var(--no)", "2.0", "3,3");
-
-    // 斜线向量 u
-    drawLine(ptO, ptU, "var(--b)", "3.0", null, "m-arr-b");
-    drawCircle(ptU, 4.5, "var(--b)");
-    drawText(ptU, invert ? "方向向量 u (反向指入下方)" : "方向向量 u (斜线 l)", "var(--b)", 10, invert ? 14 : -6);
-
-    // 角度弧线示意
-    var phiDeg = invert ? (90 + deg) : (90 - deg);
-    var sinTheta = Math.sin(rad);
-    var cosPhi = Math.cos(phiDeg * Math.PI / 180);
-
-    if (desc) {
-      desc.innerHTML =
-        "<b>线面角与法向量互余关系实时解析</b>：<br>" +
-        "① 斜线与平面所成角：\\(\\theta = " + Math.round(deg) + "^\\circ\\)（范围 \\([0, 90^\\circ]\\)），其正弦值 \\(\\sin\\theta = " + sinTheta.toFixed(3) + "\\)。<br>" +
-        "② 方向向量 \\(\\boldsymbol{u}\\) 与法向量 \\(\\boldsymbol{n}\\) 的夹角：\\(\\varphi = " + Math.round(phiDeg) + "^\\circ\\)，其余弦值 \\(\\cos\\varphi = " + cosPhi.toFixed(3) + "\\)。<br>" +
-        "③ 数量积绝对值计算：\\(\\dfrac{|\\boldsymbol{u}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{u}||\\boldsymbol{n}|} = |" + cosPhi.toFixed(3) + "| = " + Math.abs(cosPhi).toFixed(3) + " = \\sin\\theta\\)！<br>" +
-        "<span style=\"color:var(--no);font-weight:600\">★ 极度警惕：法向量与平面垂直，因此 \\(\\langle\\boldsymbol{u},\\boldsymbol{n}\\rangle\\) 与 \\(\\theta\\) 互余，计算出的是 \\(\\sin\\theta\\) 而非 \\(\\cos\\theta\\)！</span>";
-      if (window.Peiyu && window.Peiyu.math) window.Peiyu.math(desc);
-    }
-  }
-
-  /* ========== 模式 3：二面角正负号辨析 ========== */
-  function renderDihedral() {
-    svg.innerHTML = "";
-    addDefs();
-
-    var deg = parseFloat(dihedralRange ? dihedralRange.value : 120);
-    if (isNaN(deg)) deg = 120;
-    if (dihedralOut) dihedralOut.textContent = Math.round(deg) + "°";
-
-    var radios = document.getElementsByName("normDir");
-    var mode = "out";
-    for (var i = 0; i < radios.length; i++) {
-      if (radios[i].checked) mode = radios[i].value;
-    }
-
-    var rad = deg * Math.PI / 180;
-    var cosD = Math.cos(rad);
-    var sinD = Math.sin(rad);
-
-    // 公共棱在 Y 轴上，自 y = -1.6 到 y = 2.0
-    var pEdge1 = proj(0, -1.6, 0);
-    var pEdge2 = proj(0, 2.0, 0);
-
-    // 固定半平面 alpha (水平面上 x >= 0)
-    var pA1 = proj(0, -1.6, 0);
-    var pA2 = proj(2.6, -1.6, 0);
-    var pA3 = proj(2.6, 2.0, 0);
-    var pA4 = proj(0, 2.0, 0);
-    drawPolygon([pA1, pA2, pA3, pA4], "rgba(47, 122, 86, 0.08)", "var(--a)", "1.8");
-    drawText(proj(2.3, -1.3, 0), "半平面 α", "var(--a)", 4, 14, "13", "700");
-
-    // 旋转半平面 beta: 绕 Y 轴旋转开合角度 deg
-    // 在截面内由 (1, 0) 旋转至 (cosD, sinD)
-    var bLen = 2.6;
-    var bx = bLen * cosD;
-    var bz = bLen * sinD;
-
-    var pB1 = proj(0, -1.6, 0);
-    var pB2 = proj(bx, -1.6, bz);
-    var pB3 = proj(bx, 2.0, bz);
-    var pB4 = proj(0, 2.0, 0);
-    drawPolygon([pB1, pB2, pB3, pB4], "rgba(62, 92, 118, 0.09)", "var(--c)", "1.8");
-    drawText(proj(bx * 0.9, -1.3, bz * 0.9), "半平面 β", "var(--c)", -30, -6, "13", "700");
-
-    // 公共棱粗实线
-    drawLine(pEdge1, pEdge2, "var(--fg)", "2.6");
-    drawText(proj(0, 2.1, 0), "二面角的棱 l", "var(--fg)", -20, 16);
-
-    // 棱上公共垂足 O
-    var ptO = proj(0, 0.2, 0);
-    drawCircle(ptO, 4.5, "var(--fg)");
-
-    // 在平面 alpha 内垂直于棱的射线 OA
-    var ptRayA = proj(1.8, 0.2, 0);
-    drawLine(ptO, ptRayA, "var(--a)", "2.0", "3,2");
-
-    // 在平面 beta 内垂直于棱的射线 OB
-    var ptRayB = proj(1.8 * cosD, 0.2, 1.8 * sinD);
-    drawLine(ptO, ptRayB, "var(--c)", "2.0", "3,2");
-
-    // 法向量 n1 (垂直于 alpha 向上)
-    var ptN1 = proj(0, 0.2, 1.9);
-    drawLine(ptO, ptN1, "var(--a)", "2.8", null, "m-arr-a");
-    drawText(ptN1, "n₁ ⊥ α", "var(--a)", 6, -2);
-
-    // 法向量 n2 (垂直于 beta)
-    // beta 内垂直射线为 (cosD, 0, sinD)
-    // 外法向量 (-sinD, 0, cosD); 若一内一外则取相反方向 (sinD, 0, -cosD)
-    var n2Sign = (mode === "out") ? 1 : -1;
-    var n2x = -n2Sign * 1.9 * sinD;
-    var n2z = n2Sign * 1.9 * cosD;
-    var ptN2 = proj(n2x, 0.2, n2z);
-    drawLine(ptO, ptN2, "var(--c)", "2.8", null, "m-arr-c");
-    drawText(ptN2, "n₂ ⊥ β", "var(--c)", -36, 12);
-
-    var isObtuse = deg > 90;
-    var isRight = deg === 90;
-    var angleKind = isRight ? "直二面角" : (isObtuse ? "钝二面角" : "锐二面角");
-
-    // 计算点积与角度
-    // n1 = (0, 0, 1), n2 = (-sinD, 0, cosD) * n2Sign
-    var dot = n2Sign * cosD;
-    var nAngleRad = Math.acos(Math.max(-1, Math.min(1, dot)));
-    var nAngleDeg = nAngleRad * 180 / Math.PI;
-
-    if (desc) {
-      desc.innerHTML =
-        "<div class=\"stat-grid\">" +
-          "<div class=\"stat-card\"><div class=\"tit\">二面角实际大小</div><div class=\"val\" style=\"color:" + (isObtuse ? "var(--no)" : "var(--a)") + "\">\\(\\theta = " + Math.round(deg) + "^\\circ\\)（" + angleKind + "）</div></div>" +
-          "<div class=\"stat-card\"><div class=\"tit\">真实余弦值 \\(\\cos\\theta\\)</div><div class=\"val\">\\(" + cosD.toFixed(3) + "\\)</div></div>" +
-          "<div class=\"stat-card\"><div class=\"tit\">两法向量夹角 \\(\\langle\\boldsymbol{n}_1,\\boldsymbol{n}_2\\rangle\\)</div><div class=\"val\">\\(" + Math.round(nAngleDeg) + "^\\circ\\)</div></div>" +
-          "<div class=\"stat-card\"><div class=\"tit\">法向量数量积比值</div><div class=\"val\">\\(" + dot.toFixed(3) + "\\)</div></div>" +
-        "</div>" +
-        "<b>二面角符号判定结论</b>：<br>" +
-        (isObtuse
-          ? "<span style=\"color:var(--no);font-weight:700\">【致命陷阱警示】当前几何图形明显为【钝二面角】（\\(\\theta = " + Math.round(deg) + "^\\circ &gt; 90^\\circ\\)），其实际余弦值必须为负值（\\(\\cos\\theta = " + cosD.toFixed(3) + " &lt; 0\\)）！</span><br>" +
-            "若直接套用绝对值公式算得 \\(|" + dot.toFixed(3) + "| = " + Math.abs(dot).toFixed(3) + "\\)，就会得出 \\(\\theta = " + (180 - Math.round(deg)) + "^\\circ\\)，把钝二面角活生生错算为锐角，整道立体几何解答题直接丢分！"
-          : "<span style=\"color:var(--a);font-weight:700\">当前图形为【锐二面角】（\\(\\theta = " + Math.round(deg) + "^\\circ \\le 90^\\circ\\)），其实际余弦值为正值（\\(\\cos\\theta = " + cosD.toFixed(3) + " &gt; 0\\)）。</span><br>" +
-            "无论法向量朝向如何，锐二面角余弦值必为正：\\(\\cos\\theta = +\\dfrac{|\\boldsymbol{n}_1\\cdot\\boldsymbol{n}_2|}{|\\boldsymbol{n}_1||\\boldsymbol{n}_2|}\\)。");
-      if (window.Peiyu && window.Peiyu.math) window.Peiyu.math(desc);
-    }
-  }
-
-  function render() {
-    if (currentTab === "dist") renderDist();
-    else if (currentTab === "lineangle") renderLineAngle();
-    else if (currentTab === "dihedral") renderDihedral();
-  }
-
-  // 绑定选项卡
-  if (tabBtns) {
-    for (var i = 0; i < tabBtns.length; i++) {
-      (function (btn) {
-        btn.addEventListener("click", function () {
-          for (var j = 0; j < tabBtns.length; j++) tabBtns[j].classList.remove("on");
-          btn.classList.add("on");
-          currentTab = btn.getAttribute("data-tab");
-          if (ctrlDist) ctrlDist.style.display = (currentTab === "dist") ? "block" : "none";
-          if (ctrlLineAngle) ctrlLineAngle.style.display = (currentTab === "lineangle") ? "block" : "none";
-          if (ctrlDihedral) ctrlDihedral.style.display = (currentTab === "dihedral") ? "block" : "none";
-          render();
-          if (window.Peiyu && window.Peiyu.log) window.Peiyu.log("tab", { tab: currentTab });
-        });
-      })(tabBtns[i]);
-    }
-  }
-
-  // 模式 1 事件
-  if (heightRange) heightRange.addEventListener("input", renderDist);
-  if (offsetRange) offsetRange.addEventListener("input", renderDist);
-  if (btnA1) btnA1.addEventListener("click", function () { currentPtA = [0, 0, 0]; renderDist(); });
-  if (btnA2) btnA2.addEventListener("click", function () { currentPtA = [-1, 1, 0]; renderDist(); });
-  if (btnA3) btnA3.addEventListener("click", function () { currentPtA = [1, -1, 0]; renderDist(); });
-
-  // 模式 2 事件
-  if (thetaLineRange) thetaLineRange.addEventListener("input", renderLineAngle);
-  if (invertLineCheck) invertLineCheck.addEventListener("change", renderLineAngle);
-
-  // 模式 3 事件
-  if (dihedralRange) dihedralRange.addEventListener("input", renderDihedral);
-  var rds = document.getElementsByName("normDir");
-  for (var k = 0; k < rds.length; k++) {
-    rds[k].addEventListener("change", renderDihedral);
-  }
-
-  // 重置按钮
-  function resetAll() {
-    if (heightRange) heightRange.value = 25;
-    if (offsetRange) offsetRange.value = 5;
-    currentPtA = [0, 0, 0];
-    if (thetaLineRange) thetaLineRange.value = 30;
-    if (invertLineCheck) invertLineCheck.checked = false;
-    if (dihedralRange) dihedralRange.value = 120;
-    var r1 = document.querySelector('input[name="normDir"][value="out"]');
-    if (r1) r1.checked = true;
-    render();
-    if (window.Peiyu && window.Peiyu.log) window.Peiyu.log("reset", { tab: currentTab });
-  }
-
-  if (resetBtn) resetBtn.addEventListener("click", resetAll);
-  if (resetBtn2) resetBtn2.addEventListener("click", resetAll);
-  if (resetBtn3) resetBtn3.addEventListener("click", resetAll);
-
-  // 初始化
-  render();
-})();
-</script>
+<script src="../assets/iso-bench.js"></script>
+<script src="../assets/e1-1-4.js"></script>
 </body></html>

@@ -8,13 +8,13 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
   .result .bad { color: var(--no); font-weight: 700; }
   .ctrl output { min-width: 3em; font-weight: 600; }
-  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
-  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
 </head>
 <body data-sec="b1-2-2">
@@ -25,8 +25,16 @@
 <p class="lead">两个正数，「和的一半」总不小于「积的平方根」。这一句话能求很多最大值、最小值。先从一个长方形开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一根 \(20\) 厘米的铁丝，围成一个长方形。长和宽加起来总是 \(10\) 厘米，可围法不同，面积不一样。</p>
+  <p>一根 \(20\) 厘米的铁丝，围成一个长方形。长和宽加起来总是 \(10\) 厘米，可围法不同，面积不一样。先点下面的按钮或拉动滑块，亲手把铁丝框变形看看：</p>
   <div class="card predict" data-id="entry" data-answer="D">
+    <svg class="entry-fig" id="entry-wire" viewBox="0 0 520 205" role="img" aria-label="周长20厘米的铁丝围成不同长宽的长方形，方格数展示面积变化"></svg>
+    <div class="entry-bar" id="entry-wire-bar">
+      <button type="button" data-w="9">A 围成 9×1</button>
+      <button type="button" data-w="7">B 围成 7×3</button>
+      <button type="button" data-w="6">C 围成 6×4</button>
+      <button type="button" data-w="5" class="on">D 围成 5×5</button>
+    </div>
+    <div class="entry-note" id="entry-wire-note"></div>
     <p>下面四种围法，哪种面积最大？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>长 \(9\)，宽 \(1\)</button>
@@ -36,110 +44,192 @@
     </div>
     <div class="reveal">
       <p>算一算：\(9\times1=9\)，\(7\times3=21\)，\(6\times4=24\)，\(5\times5=25\)。<b>D</b> 最大。</p>
-      <p>长宽的<b>和</b>都是 \(10\)，两条边越接近，面积（<b>积</b>）越大；正好相等时最大。</p>
+      <p>看上面的方格图：长宽的<b>和</b>都是 \(10\)，扁长条（\(9\times1\)）只占 \(9\) 格；两条边越接近，围出的方格越多；正好相等成正方形（\(5\times5\)）时达到满格 \(25\)。</p>
       <p>这一节就讲这件事：两个正数，和一定时，积在它们相等时最大；反过来，积一定时，和在它们相等时最小。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：平方根（初中学过）；2.1 的不等式性质，比如两边同乘一个正数、方向不变（<a href="b1-2-1.html">回看 2.1</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「拉平木条」与「跷跷板」建立直觉</h3>
+  <p class="small">前置知识：算术平方根（初中）；2.1 不等式基本性质（<a href="b1-2-1.html">回看 2.1</a>）。不用死背名词，先看下面两幅图：</p>
 
   <div class="card">
-    <p><b>两种平均数</b>：两个正数 \(a\)、\(b\)，</p>
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>算术平均数 vs 几何平均数：削峰填谷拉平 vs 等面积正方形</b></p>
+    <p class="small" style="margin:4px 0 8px;">点下面三组正数 \(a, b\)，左边看「加起来除以 2（拉平长度）」，右边看「乘起来开方（揉成同面积正方形的边长）」：</p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m-avg-bar" style="margin-top:2px;">
+        <button type="button" data-pair="2,8" class="on">a = 2, b = 8（差得远：4 &lt; 5）</button>
+        <button type="button" data-pair="1,9">a = 1, b = 9（极扁：3 &lt; 5）</button>
+        <button type="button" data-pair="5,5">a = 5, b = 5（相等：5 = 5！）</button>
+      </div>
+      <svg class="micro-fig" id="m-avg-fig" viewBox="0 0 520 185" role="img" aria-label="算术平均数削峰填谷与几何平均数等面积正方形对比图"></svg>
+      <div class="entry-note" id="m-avg-note"></div>
+    </div>
     <ul>
-      <li><b>算术平均数</b> \(\dfrac{a+b}{2}\)：加起来，除以 \(2\)。</li>
-      <li><b>几何平均数</b> \(\sqrt{ab}\)：乘起来，开平方。</li>
+      <li><b class="ca">算术平均数 \(\dfrac{a+b}{2}\)</b>（<b>和的一半</b>）：把长木条多出的部分切一半补给短木条，两根<b>一刀拉平</b>后的长度（保持<b>和</b>不变）。</li>
+      <li><b class="cb">几何平均数 \(\sqrt{ab}\)</b>（<b>积的平方根</b>）：把长 \(a\) 宽 \(b\) 的长方形<b>变成同面积正方形</b>后的边长（保持<b>面积乘积</b>不变）。</li>
+      <li><b>一眼看穿核心规律</b>：长方形越扁（\(a, b\) 差得越远），围出的面积越亏，正方形边长 <b class="cb">\(\sqrt{ab}\)</b> 就比拉平长度 <b class="ca">\(\dfrac{a+b}{2}\)</b> 矮越多；<b>当且仅当 \(a=b\)</b>（本来就是正方形）时，两者才一样高！</li>
     </ul>
-    <p>例：\(2\) 和 \(8\)。算术平均数 \(\dfrac{2+8}{2}=5\)，几何平均数 \(\sqrt{2\times8}=\sqrt{16}=4\)。</p>
-    <p>再换几组：\(3\) 和 \(12\) 是 \(7.5\) 和 \(6\)；\(5\) 和 \(5\) 是 \(5\) 和 \(5\)。几何平均数从没比算术平均数大，两个数相等时两者一样。这就是本节的结论。</p>
-    <p class="small">叫「几何」平均数，是因为 \(\sqrt{ab}\) 正好是和 \(a\times b\) 长方形面积一样大的正方形的边长：\(2\times8\) 的长方形面积 \(16\)，同面积的正方形边长 \(4\)。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>什么叫「定值」？（跷跷板守恒）</b></p>
+      <p>两个量虽然各自在变，但它们的<b>和</b>或<b>积</b>像跷跷板一样互相抵消、锁死在同一个常数上：</p>
+      <ul>
+        <li><b>和是定值</b>：长 \(a\) 多 \(1\)，宽 \(b\) 就少 \(1\)，\(\color{#2F7A56}{a+b=10}\) 始终不变。</li>
+        <li><b>积是定值（高频信号！）</b>：看 <b class="ca">\(x\)</b> 和 <b class="cb">\(\dfrac{4}{x}\)</b>——一个在分子、一个在分母，一乘起来 <b class="ca">\(x\)</b> <b>咔嚓约掉</b>：\(x\cdot\dfrac{4}{x}=4\)！看到<b>「分子分母能约掉未知数」</b>，立刻想到积是定值。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>「下界」\(\ne\)「最小值」 &amp;「当且仅当」</b></p>
+      <ul>
+        <li><b>当且仅当 \(a=b\) 取等号</b>：双向锁死——\(a=b\) 时必定相等；只要 \(a\ne b\)，就严格是「\(&lt;\)」。</li>
+        <li><b>下界 vs 最小值</b>：算出 \(f(x)\ge 4\) 只说明 \(4\) 是<b>地板砖（下界，压得住）</b>；只有当<b>真能找到一个符合题意的 \(x\) 让式子恰好等于 \(4\)（摸得着）</b>时，\(4\) 才叫<b>最小值</b>！</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>2. 核心定理：为什么 \(\sqrt{ab}\le\dfrac{a+b}{2}\) 永远成立？</h3>
+  <p>对任意两个正数 \(a&gt;0\)，\(b&gt;0\)，都有：</p>
+  <div class="key" style="text-align:center;font-size:16px;overflow-x:auto;">
+    <span style="display:inline-block;margin:2px 8px;">\(\color{#966524}{\underbrace{\sqrt{ab}}_{\text{几何平均（积的开方）}}} \;\le\; \color{#2F7A56}{\underbrace{\dfrac{a+b}{2}}_{\text{算术平均（和的一半）}}}\)</span>
+    <span style="display:inline-block;margin:2px 8px;">\(\Longleftrightarrow \quad \color{#2F7A56}{\underbrace{a+b}_{\text{两正数之和}}} \;\ge\; \color{#966524}{\underbrace{2\sqrt{ab}}_{\text{积开方的 2 倍}}}\)</span><br>
+    <span class="small" style="color:var(--fg);">（<b>当且仅当 \(a=b\) 时，等号成立</b>）</span>
   </div>
 
   <div class="card">
-    <p><b>定值</b>：不随别的量变化的数。</p>
-    <p>例：周长 \(20\) 的长方形，长 \(9\) 宽 \(1\)、长 \(7\) 宽 \(3\)、长 \(5\) 宽 \(5\)……长、宽一直在变，长 \(+\) 宽始终是 \(10\)：「和是定值」。</p>
-    <p>再看 \(x\) 和 \(\dfrac4x\)：\(x=1\) 时是 \(1\) 和 \(4\)，\(x=2\) 时是 \(2\) 和 \(2\)，\(x=8\) 时是 \(8\) 和 \(0.5\)。两个数都在变，乘积始终是 \(4\)：「积是定值」。</p>
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>为什么 \(a+b\) 总比 \(2\sqrt{ab}\) 大？差的那一块在哪？</b></p>
+    <p>把 \(a\) 看作边长 \(\sqrt{a}\) 的正方形面积，\(b\) 看作边长 \(\sqrt{b}\) 的正方形面积。点按钮对比<b>「两个正方形面积和 \(a+b\)」</b>与<b>「两个长方形面积和 \(2\sqrt{ab}\)」</b>：</p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m-gap-bar" style="margin-top:2px;">
+        <button type="button" data-ab="9,1" class="on">a = 9, b = 1（多出红色缺口 4！）</button>
+        <button type="button" data-ab="4,1">a = 4, b = 1（多出缺口 1）</button>
+        <button type="button" data-ab="4,4">a = 4, b = 4（严丝合缝，缺口 = 0！）</button>
+      </div>
+      <svg class="micro-fig" id="m-gap-fig" viewBox="0 0 520 155" role="img" aria-label="a加b与2根号ab的差值正是完全平方"></svg>
+    </div>
+    <p style="margin:6px 0 0;"><b>一行代数秒证</b>：任何实数的平方都不小于 \(0\)，所以 \(\color{#B5452F}{(\sqrt{a}-\sqrt{b})^2 \ge 0}\)。把左边展开就是 \((a+b) - 2\sqrt{ab} \ge 0\)，移项即得 \(a+b \ge 2\sqrt{ab}\)！<b>左边比右边多出来的部分，恰恰就是那个非负的差平方 \(\color{#B5452F}{(\sqrt{a}-\sqrt{b})^2}\)</b>。</p>
   </div>
 
+  <h3>3. 招式一：积一定，求和的最小值（分子分母互消型）</h3>
   <div class="card">
-    <p><b>当且仅当</b>：「当且仅当 \(a=b\) 时等号成立」是两句话合在一起：</p>
-    <ul>
-      <li>\(a=b\) 时，等号一定成立；</li>
-      <li>等号成立时，一定是 \(a=b\)。只要 \(a\ne b\)，就是严格的「\(&lt;\)」。</li>
-    </ul>
-    <p>例：\(a=b=3\)，\(\sqrt{9}=3\)，\(\dfrac{3+3}{2}=3\)，相等；\(a=2\)，\(b=8\)，\(4&lt;5\)，不相等。</p>
-  </div>
-
-  <div class="card">
-    <p><b>最小值和下界</b>：</p>
-    <ul>
-      <li>「\(f(x)\ge m\)」只是说值不会比 \(m\) 小，\(m\) 叫一个<b>下界</b>。下界可以有很多：值都 \(\ge 4\) 的话，说「\(\ge 3\)」「\(\ge 0\)」也都对。</li>
-      <li><b>最小值</b>是真能取到的那个最小的值：要找得到一个 \(x\)，让值<b>等于</b>它。</li>
-    </ul>
-    <p>例：\(x\ge 3\) 时看 \(x+\dfrac4x\)。\(x=3\) 时约 \(4.33\)，\(x=4\) 时是 \(5\)，\(x=6\) 时约 \(6.67\)。值都 \(\ge 4\)，所以 \(4\) 是下界；可没有一个 \(x\) 能让它等于 \(4\)，所以 \(4\) 不是最小值。（这里的最小值是 \(x=3\) 时的 \(\dfrac{13}{3}\)，「练一练」第 4 题会讲。）</p>
-  </div>
-
-  <h3>2. 结论</h3>
-  <p>设 \(a>0\)，\(b>0\)，那么</p>
-  <div class="key" style="text-align:center">\(\sqrt{ab}\le\dfrac{a+b}{2}\)，当且仅当 \(a=b\) 时取等号。</div>
-  <p>用上面的词说：<b>两个正数的几何平均数不大于算术平均数，当且仅当两数相等时取等号。</b>常用的写法是 \(a+b\ge 2\sqrt{ab}\)。</p>
-  <p>为什么：任何数的平方都不是负数，\((\sqrt a-\sqrt b)^2\ge 0\)，展开是 \(a-2\sqrt{ab}+b\ge 0\)，移项就得到 \(a+b\ge 2\sqrt{ab}\)。等号只在 \(\sqrt a=\sqrt b\)，也就是 \(a=b\) 时成立。</p>
-  <p>回到长方形：长 \(a\)、宽 \(b\)，\(a+b=10\)，那么 \(\sqrt{ab}\le 5\)，面积 \(ab\le 25\)，\(a=b=5\) 时取到。</p>
-
-  <h3>3. 积一定，求和的最小值</h3>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>\(x>0\)，求 \(x+\dfrac4x\) 的最小值。</p>
-    <p>\(x\) 和 \(\dfrac4x\) 都是正数，它们的积 \(x\cdot\dfrac4x=4\) 是定值，所以</p>
-    <p style="text-align:center">\(x+\dfrac4x\ge 2\sqrt{x\cdot\dfrac4x}=2\sqrt4=4\)。</p>
-    <p>等号要 \(x=\dfrac4x\)，即 \(x=2\)。\(x=2\) 满足 \(x>0\)，能取到。所以最小值是 \(4\)，在 \(x=2\) 时取到。</p>
+    <p class="small" style="margin:0 0 6px;"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px;">已知 \(x&gt;0\)，求 \(x+\dfrac4x\) 的最小值。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号（一正二定）：</span>
+        题目给了 \(x&gt;0\)（<b>正数</b>✓）；要求<b>和</b>的最小值，而两项一乘：<b class="ca">\(x\)</b> \(\cdot\) <b class="cb">\(\dfrac{4}{x}\)</b> \(= 4\)，分子分母的 \(x\) 恰好约掉变成<b>定值 \(4\)</b>（<b>定值</b>✓）！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步套基本不等式：</span>
+        直接代入 \(a+b \ge 2\sqrt{ab}\)：<br>
+        <span style="display:block;text-align:center;margin:4px 0;">\(\color{#2F7A56}{x} + \color{#966524}{\dfrac{4}{x}} \;\ge\; 2\sqrt{\color{#2F7A56}{x}\cdot\color{#966524}{\dfrac{4}{x}}} = 2\sqrt{4} = \mathbf{4}\)。</span>
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步必查等号（三相等）：</span>
+        <b>没验等号不准交卷！</b>当且仅当两项相等，即 \(x = \dfrac{4}{x} \implies x^2=4 \implies x=2\) 时取等号。因为 \(x=2\) 满足 \(x&gt;0\)（<b>真能取到</b>✓），所以最小值为 \(4\)。
+      </div>
+    </div>
   </div>
   <div class="card predict" data-id="try-1" data-answer="B">
-    <p>自己试试：\(x>0\)，\(x+\dfrac9x\) 的最小值是？</p>
+    <p>自己试试：\(x&gt;0\)，\(x+\dfrac9x\) 的最小值是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(3\)</button>
       <button class="opt" data-v="B"><b>B</b>\(6\)</button>
       <button class="opt" data-v="C"><b>C</b>\(9\)</button>
       <button class="opt" data-v="D"><b>D</b>\(10\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。积 \(x\cdot\dfrac9x=9\)，所以 \(x+\dfrac9x\ge 2\sqrt9=6\)，等号在 \(x=\dfrac9x\)，即 \(x=3\) 时取到。选 A 的同学只算了 \(\sqrt9\)，忘了前面的 \(2\)。</p></div>
+    <div class="reveal"><p><b>B</b>。① 正：\(x&gt;0\)；② 定：积 \(x\cdot\dfrac9x=9\) 是定值，故 \(x+\dfrac9x\ge 2\sqrt9=6\)；③ 等：当且仅当 \(x=\dfrac9x\) 即 \(x=3\) 时取到。选 A 的同学只算了 \(\sqrt9\)，漏乘了公式前面的 \(2\)！</p></div>
   </div>
 
-  <h3>4. 和一定，求积的最大值</h3>
+  <h3>4. 招式二：和一定，求积的最大值（周长固定围面积型）</h3>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>\(a>0\)，\(b>0\)，\(a+b=6\)，求 \(ab\) 的最大值。</p>
-    <p>\(\sqrt{ab}\le\dfrac{a+b}{2}=3\)，两边平方得 \(ab\le 9\)。等号要 \(a=b\)，配上 \(a+b=6\) 得 \(a=b=3\)，能取到。所以最大值是 \(9\)。</p>
+    <p class="small" style="margin:0 0 6px;"><b>例 2（示范：和定积最大）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px;">已知 \(a&gt;0\)，\(b&gt;0\)，且 \(a+b=6\)，求 \(ab\) 的最大值。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号（一正二定）：</span>
+        \(a,b&gt;0\)（<b>正数</b>✓）；已知两数之<b>和 \(a+b=6\) 是定值</b>（<b>定值</b>✓），求乘积 \(ab\) 的最大值。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步套公式并平方：</span>
+        由 \(\sqrt{ab}\le\dfrac{a+b}{2}=\dfrac{6}{2}=3\)，<b>两边同时平方</b>得 \(ab\le 3^2 = \mathbf{9}\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步必查等号（三相等）：</span>
+        当且仅当 \(a=b\) 且 \(a+b=6\)，即 \(a=b=3\) 时取等号（<b>真能取到</b>✓）。所以 \(ab\) 的最大值是 \(9\)。
+      </div>
+    </div>
   </div>
   <div class="card predict" data-id="try-2" data-answer="C">
-    <p>自己试试：\(x>0\)，\(y>0\)，\(x+y=8\)，\(xy\) 的最大值是？</p>
+    <p>自己试试：\(x&gt;0\)，\(y&gt;0\)，\(x+y=8\)，\(xy\) 的最大值是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(4\)</button>
       <button class="opt" data-v="B"><b>B</b>\(8\)</button>
       <button class="opt" data-v="C"><b>C</b>\(16\)</button>
       <button class="opt" data-v="D"><b>D</b>\(64\)</button>
     </div>
-    <div class="reveal"><p><b>C</b>。\(\sqrt{xy}\le\dfrac{8}{2}=4\)，平方得 \(xy\le 16\)，\(x=y=4\) 时取到。选 A 的同学停在了 \(\sqrt{xy}\le 4\)，还没平方。</p></div>
+    <div class="reveal"><p><b>C</b>。\(\sqrt{xy}\le\dfrac{8}{2}=4\)，<b>两边平方</b>得 \(xy\le 16\)，当且仅当 \(x=y=4\) 时取到。选 A 的同学停在了 \(\sqrt{xy}\le 4\)，忘了平方！</p></div>
   </div>
-  <div class="key">积一定，和有最小值：\(ab=P\) 时，\(a+b\ge 2\sqrt P\)。<br>和一定，积有最大值：\(a+b=S\) 时，\(ab\le\dfrac{S^2}{4}\)。<br>两种都在 \(a=b\) 时取到。</div>
+  <div class="key"><b>口诀总结</b>：<b class="cb">积一定</b>（\(ab=P\)），<b class="ca">和有最小值 \(2\sqrt{P}\)</b>；<b class="ca">和一定</b>（\(a+b=S\)），<b class="cb">积有最大值 \(\left(\dfrac{S}{2}\right)^2\)</b>。两者都在 <b>\(a=b\)</b> 时取到！</div>
 
-  <h3>5. 用之前，查三件事</h3>
-  <p>上面两个例子都顺利，是因为三件事都满足了。换一道题，可能就有一件不满足：</p>
-  <ol>
-    <li><b>正</b>：两个数都是正数。<br><span class="small">反例：只说 \(x\ne0\)，那 \(x=-1\) 时 \(x+\dfrac1x=-2\)，比 \(2\) 小，「\(\ge2\)」不对。</span></li>
-    <li><b>定</b>：积是定值（求和的最小值），或和是定值（求积的最大值）。<br><span class="small">反例：\(x+\dfrac1{x^2}\) 里 \(x\cdot\dfrac1{x^2}=\dfrac1x\) 会变，直接套就算不出一个数。</span></li>
-    <li><b>等</b>：等号要求的 \(a=b\)，在题目条件下真能做到。<br><span class="small">反例：\(x\ge3\) 时 \(x+\dfrac4x\ge4\) 没错，但等号要 \(x=2\)，不在范围里，\(4\) 取不到。</span></li>
-  </ol>
-  <div class="key">得到「\(\ge m\)」还不等于「最小值是 \(m\)」：要写出等号在哪里取到，并确认它满足题目条件。</div>
+  <h3>5. 用之前必查：「一正、二定、三相等」三大翻车现场</h3>
+  <p>基本不等式看着简单，但考场上十个错九个是因为漏查了下面三件事之一：</p>
+
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><b>漏查「一正」：把负数直接塞进了正数公式</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：已知 \(x\ne 0\)，求 \(x+\dfrac{1}{x}\) 的最小值。<br>
+          错写：\(x+\dfrac{1}{x}\ge 2\sqrt{x\cdot\dfrac{1}{x}}=2\)，答最小值为 \(2\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：题目只说 \(x\ne 0\)，<b>没说 \(x&gt;0\)</b>！<br>
+          反例：代 \(x=-1\)，式子 \(=-2\)；代 \(x=-100\)，式子 \(=-100.01\)，往负无穷掉下去根本没有最小值！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>漏查「二定」：两项相乘根本消不掉未知数</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：已知 \(x&gt;0\)，求 \(x+\dfrac{1}{x^2}\) 的最小值。<br>
+          错写：\(x+\dfrac{1}{x^2}\ge 2\sqrt{x\cdot\dfrac{1}{x^2}} = \dfrac{2}{\sqrt{x}}\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：不等号右边的 \(\dfrac{2}{\sqrt{x}}\) <b>还带着变量 \(x\)，根本不是常数（定值）</b>！两边都在随 \(x\) 变动，无法直接得出最小值。
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（最高频！）</span><b>漏查「三相等」：谷底 \(x=2\) 被切在定义域门外！</b></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：当 \(x\ge 3\) 时，求 \(x+\dfrac{4}{x}\) 的最小值。<br>
+            错写：\(x+\dfrac{4}{x}\ge 2\sqrt{4}=4\)，答最小值为 \(4\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：等号要求 \(x=\dfrac{4}{x}\implies x=2\)，但题目限制 \(x\ge 3\)，<b>谷底 \(x=2\) 在灰色禁区里取不到！</b>在 \(x\ge 3\) 的绿线上曲线一路上升，最低点卡在左端点 \(x=3\)，最小值是 \(3+\dfrac{4}{3}=\mathbf{\dfrac{13}{3}}\)！
+          </div>
+        </div>
+        <svg class="micro-fig" id="m-trap-fig" viewBox="0 0 260 165" role="img" aria-label="对勾函数在x大于等于3时谷底x=2在范围外，最小值在端点x=3处取到"></svg>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>对任意实数都成立的一条</b>：\((a-b)^2\ge 0\) 展开得 \(a^2+b^2\ge 2ab\)，\(a,b\) 正负都行，等号也在 \(a=b\) 时取到。别和 \(a+b\ge 2\sqrt{ab}\) 混：后者要求 \(a,b\) 不是负数，\(a=b=-1\) 时 \(a+b=-2\)，\(2\sqrt{ab}=2\)，就错了。</p>
     <p><b>有一个是 \(0\) 也行</b>：\(a\ge0\)，\(b\ge0\) 时结论照样成立（这时 \(\sqrt{ab}=0\)）。课本按正数写，知道 \(0\) 也对就行。</p>
-    <p><b>几何上看</b>：线段长 \(a+b\)，被点 \(C\) 分成 \(a\)、\(b\) 两段，以它为直径画半圆，过 \(C\) 的垂线交半圆于 \(D\)。那么 \(CD=\sqrt{ab}\)，半径 \(=\dfrac{a+b}{2}\)，半弦不会比半径长。下一步可以拖着看。</p>
-    <p><b>连用几次</b>：一道题里用两次基本不等式，两处的等号要<b>能同时成立</b>，否则得到的数取不到。「练一练」最后一题就是这种。</p>
+    <p><b>几何上看（半圆模型）</b>：线段长 \(a+b\)，被点 \(C\) 分成 \(a\)、\(b\) 两段，以它为直径画半圆，过 \(C\) 的垂线交半圆于 \(D\)。由射影定理/相似三角形可知半弦 \(CD=\sqrt{ab}\)，而半径 \(OD=\dfrac{a+b}{2}\)，半弦永远不会比半径长。下一步「动手」①可以亲手拖着看。</p>
+    <p><b>连用两次基本不等式的陷阱</b>：一道题里连续用两次基本不等式时，两处的等号条件必须<b>能同时成立</b>，否则算出的下界取不到。「练一练」最后一题就是这种。</p>
   </details>
 </section>
 
@@ -187,6 +277,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。和是定值的是 \(2x\) 与 \(y\)（不是 \(x\) 与 \(y\)），先凑出来：\(xy=\dfrac12\cdot(2x)\cdot y\le\dfrac12\left(\dfrac{2x+y}{2}\right)^2=\dfrac12\cdot4=2\)。等号要 \(2x=y\)，配上 \(2x+y=4\) 得 \(x=1\)，\(y=2\)。选 C 的同学把 \(x\)、\(y\) 当成和为 \(4\) 了。</p></div>
   </div>
+  <div class="vid" data-video="ex-sub"></div>
 
   <h3>易错</h3>
   <div class="card predict" data-id="p-trap-pos" data-answer="C">
@@ -210,6 +301,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。「等」这一条不满足：\(x+\dfrac4x\ge 4\) 没错，但等号要 \(x=2\)，不在 \(x\ge3\) 里，\(4\) 只是下界。在「动手」②里把 \(k\) 调成 \(4\)、\(m\) 调成 \(3\)：这一段一直往上走，最低点在端点 \(x=3\)，值是 \(3+\dfrac43=\dfrac{13}{3}\)。（「越往右越大」的严格说明要到第 3 章学单调性，现在看图、代几个数就能确认。）</p></div>
   </div>
+  <div class="vid" data-video="ex-cons"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="B">
@@ -350,7 +442,7 @@
     svg("text", { x: X1 + 4, y: Yb - 8, "text-anchor": "end" }, cv).textContent = "x";
     // 下界线
     svg("line", { x1: X0, y1: cy(lb), x2: X1, y2: cy(lb), stroke: cc, "stroke-width": 2, "stroke-dasharray": "6 5" }, cv);
-    svg("text", { x: X1, y: cy(lb) + 20, "text-anchor": "end", fill: cc }, cv).textContent = "下界 2√k";
+    svg("text", { x: X1 - 24, y: cy(lb) - 7, "text-anchor": "end", fill: cc }, cv).textContent = "下界 2√k";
     // 曲线：范围外淡，范围内实
     var g = svg("g", { "clip-path": "url(#cvclip)" }, cv);
     svg("path", { d: curvePath(0.05, XMAX), fill: "none", stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "3 4" }, g);
@@ -402,8 +494,201 @@
   mIn.addEventListener("change", function () { Peiyu.log("interact", { id: "curve-m", m: m10 / 10 }); });
   document.getElementById("curvereset").onclick = curveReset;
 
-  document.addEventListener("DOMContentLoaded", function () { semiReset(); curveReset(); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { semiDraw(); curveDraw(); });
+  /* ================= 0 从例子进入：铁丝围长方形 ================= */
+  var ew = document.getElementById("entry-wire"), ewBar = document.getElementById("entry-wire-bar"), ewNote = document.getElementById("entry-wire-note");
+  var ewW = 7;
+  function ewDraw(w) {
+    ewW = w;
+    var h = 10 - w, area = w * h, u = 24, ox = 48, oy = 172;
+    var fg = css("--fg"), ca = css("--a"), ok = css("--ok-soft"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card");
+    ew.innerHTML = "";
+    // 虚线参照：5x5 正方形
+    svg("rect", { x: ox, y: oy - 5 * u, width: 5 * u, height: 5 * u, fill: "none", stroke: hl, "stroke-width": 1.8, "stroke-dasharray": "5 4" }, ew);
+    svg("text", { x: ox + 5 * u + 6, y: oy - 5 * u + 15, fill: hl, "font-size": 14 }, ew).textContent = "5×5 参照框 (25格)";
+    // 当前 w x h 方格网
+    svg("rect", { x: ox, y: oy - h * u, width: w * u, height: h * u, fill: ok, stroke: ca, "stroke-width": 2.5 }, ew);
+    for (var i = 1; i < w; i++) svg("line", { x1: ox + i * u, y1: oy - h * u, x2: ox + i * u, y2: oy, stroke: ca, "stroke-opacity": 0.35 }, ew);
+    for (var j = 1; j < h; j++) svg("line", { x1: ox, y1: oy - j * u, x2: ox + w * u, y2: oy - j * u, stroke: ca, "stroke-opacity": 0.35 }, ew);
+    svg("text", { x: ox + w * u / 2, y: oy + 22, "text-anchor": "middle", "font-weight": 700, fill: fg }, ew).textContent = "长 " + w + " cm";
+    svg("text", { x: ox - 8, y: oy - h * u / 2 + 5, "text-anchor": "end", "font-weight": 700, fill: fg }, ew).textContent = "宽 " + h;
+    // 右侧四方案柱状对比
+    var cases = [[9, 1, "A 9×1"], [7, 3, "B 7×3"], [6, 4, "C 6×4"], [5, 5, "D 5×5"]];
+    var bx0 = 315, bw = 38, gap = 10;
+    svg("text", { x: bx0 + 95, y: 26, "text-anchor": "middle", fill: mu, "font-size": 14 }, ew).textContent = "面积对比（方格数）";
+    cases.forEach(function (c, idx) {
+      var cw = c[0], s = cw * c[1], active = cw === w, bh = s * 4.6, x = bx0 + idx * (bw + gap), y = oy - bh;
+      var g = svg("g", { style: "cursor:pointer" }, ew);
+      svg("rect", { x: x, y: y, width: bw, height: bh, rx: 5, fill: active ? (cw === 5 ? hl : ca) : card, stroke: active ? (cw === 5 ? hl : ca) : ln, "stroke-width": active ? 2 : 1.2 }, g);
+      svg("text", { x: x + bw / 2, y: y - 6, "text-anchor": "middle", "font-weight": active ? 700 : 400, fill: active ? fg : mu, "font-size": 15 }, g).textContent = s;
+      svg("text", { x: x + bw / 2, y: oy + 20, "text-anchor": "middle", fill: active ? fg : mu, "font-size": 13.5, "font-weight": active ? 700 : 400 }, g).textContent = c[2].split(" ")[0]; // 只写字母：手机上字放大后「A 9×1」会互相压住，长×宽在按钮上
+      g.onclick = function () { ewDraw(cw); };
+    });
+    [].forEach.call(ewBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-w"), 10) === w);
+    });
+    ewNote.innerHTML = "当前围法：长 <b>" + w + "</b> + 宽 <b>" + h + "</b> = 10 cm（和一定），面积 = <b>" + w + " × " + h + " = " + area + "</b> 个小方格" + (w === 5 ? "（<b>正方形时面积最大！</b>）" : "");
+  }
+  [].forEach.call(ewBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ewDraw(parseInt(b.getAttribute("data-w"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: 9, B: 7, C: 6, D: 5 };
+      if (map[ev.detail.choice]) ewDraw(map[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ewDraw(7);
+  });
+
+  /* ================= 讲清楚微图解 ①：算术平均 vs 几何平均 ================= */
+  var avgFig = document.getElementById("m-avg-fig"), avgBar = document.getElementById("m-avg-bar"), avgNote = document.getElementById("m-avg-note");
+  var curPair = [2, 8];
+  function drawAvg(a, b) {
+    curPair = [a, b];
+    if (!avgFig) return;
+    avgFig.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), hlS = css("--hl-soft");
+    var am = (a + b) / 2, gm = Math.sqrt(a * b), u = 17;
+    // 左半区：算术平均（削峰填谷拉平）
+    svg("rect", { x: 8, y: 8, width: 244, height: 168, rx: 8, fill: card, stroke: ln }, avgFig);
+    svg("text", { x: 130, y: 28, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 14.5 }, avgFig).textContent = "算术平均 (a+b)/2 = " + am + "（一刀拉平）";
+    var y1 = 56, y2 = 92, y3 = 134, x0 = 56;
+    svg("text", { x: 46, y: y1 + 14, "text-anchor": "end", fill: mu, "font-size": 13.5 }, avgFig).textContent = "a=" + a;
+    svg("rect", { x: x0, y: y1, width: a * u, height: 18, rx: 4, fill: okS, stroke: ca, "stroke-width": 1.8 }, avgFig);
+    if (a < am) {
+      svg("rect", { x: x0 + a * u, y: y1, width: (am - a) * u, height: 18, rx: 3, fill: "none", stroke: ca, "stroke-dasharray": "4 3", "stroke-width": 1.5 }, avgFig);
+      svg("text", { x: x0 + am * u + 6, y: y1 + 14, fill: ca, "font-size": 12.5 }, avgFig).textContent = "+补" + (am - a);
+    }
+    svg("text", { x: 46, y: y2 + 14, "text-anchor": "end", fill: mu, "font-size": 13.5 }, avgFig).textContent = "b=" + b;
+    svg("rect", { x: x0, y: y2, width: am * u, height: 18, rx: 4, fill: okS, stroke: ca, "stroke-width": 1.8 }, avgFig);
+    if (b > am) {
+      svg("rect", { x: x0 + am * u, y: y2, width: (b - am) * u, height: 18, rx: 3, fill: hlS, stroke: cb, "stroke-dasharray": "4 3", "stroke-width": 1.5 }, avgFig);
+    }
+    // 基准拉平线
+    svg("line", { x1: x0 + am * u, y1: 42, x2: x0 + am * u, y2: 162, stroke: ca, "stroke-width": 2, "stroke-dasharray": "4 3" }, avgFig);
+    svg("text", { x: 46, y: y3 + 14, "text-anchor": "end", fill: ca, "font-weight": 700, "font-size": 13.5 }, avgFig).textContent = "拉平";
+    svg("rect", { x: x0, y: y3, width: am * u, height: 18, rx: 4, fill: ca }, avgFig);
+    svg("text", { x: x0 + am * u + 8, y: y3 + 14, fill: ca, "font-weight": 700, "font-size": 14 }, avgFig).textContent = "长 = " + am;
+
+    // 右半区：几何平均（等面积正方形边长）
+    svg("rect", { x: 264, y: 8, width: 248, height: 168, rx: 8, fill: card, stroke: ln }, avgFig);
+    svg("text", { x: 388, y: 28, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 14.5 }, avgFig).textContent = "几何平均 √ab = " + gm + "（等面积方框）";
+    var su = 13.5, rx0 = 282, ry0 = 152;
+    // a x b 原始长方形
+    svg("rect", { x: rx0, y: ry0 - a * su, width: b * su, height: a * su, fill: hlS, stroke: cb, "stroke-width": 1.8 }, avgFig);
+    svg("text", { x: rx0 + b * su / 2, y: ry0 + 16, "text-anchor": "middle", fill: cb, "font-size": 13 }, avgFig).textContent = b + "×" + a + " (面积" + (a * b) + ")";
+    // 箭头 -> 等面积正方形
+    svg("text", { x: 416, y: 102, "text-anchor": "middle", fill: mu, "font-size": 16, "font-weight": 700 }, avgFig).textContent = "⇒";
+    var sx0 = 434;
+    // 虚线参照：am x am 正方形
+    svg("rect", { x: sx0, y: ry0 - am * su, width: am * su, height: am * su, fill: "none", stroke: ca, "stroke-dasharray": "4 3", "stroke-width": 1.5 }, avgFig);
+    // 实线：gm x gm 正方形
+    svg("rect", { x: sx0, y: ry0 - gm * su, width: gm * su, height: gm * su, fill: okS, stroke: cb, "stroke-width": 2.2 }, avgFig);
+    svg("text", { x: sx0 + gm * su / 2, y: ry0 - gm * su / 2 + 5, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 13 }, avgFig).textContent = (a * b);
+    svg("text", { x: sx0 + am * su / 2, y: ry0 + 16, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13 }, avgFig).textContent = "边长 √" + (a * b) + "=" + gm;
+
+    [].forEach.call(avgBar.querySelectorAll("button"), function (btn) {
+      btn.classList.toggle("on", btn.getAttribute("data-pair") === a + "," + b);
+    });
+    avgNote.innerHTML = a === b
+      ? "当 <b>a = b = " + a + "</b> 时：本来就是正方形，几何平均 <b>√ab = " + gm + "</b> 与算术平均 <b>(a+b)/2 = " + am + "</b> <b>完全相等</b>！"
+      : "当前 <b>a = " + a + ", b = " + b + "</b>：等面积正方形边长 <b class=\"cb\">√ab = " + gm + "</b> 比拉平长度 <b class=\"ca\">(a+b)/2 = " + am + "</b> 短 <b>" + (am - gm) + "</b>（虚线框高出的部分）！";
+  }
+  if (avgBar) {
+    [].forEach.call(avgBar.querySelectorAll("button"), function (btn) {
+      btn.onclick = function () {
+        var p = btn.getAttribute("data-pair").split(",");
+        drawAvg(parseFloat(p[0]), parseFloat(p[1]));
+      };
+    });
+  }
+
+  /* ================= 讲清楚微图解 ②：a+b 与 2√ab 的差平方缺口 ================= */
+  var gapFig = document.getElementById("m-gap-fig"), gapBar = document.getElementById("m-gap-bar");
+  var curGap = [9, 1];
+  function drawGap(a, b) {
+    curGap = [a, b];
+    if (!gapFig) return;
+    gapFig.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), hlS = css("--hl-soft"), noS = css("--no-soft");
+    var sum = a + b, twoGm = 2 * Math.sqrt(a * b), diff = sum - twoGm;
+    var scale = 34, x0 = 96;
+    // 上条：a + b
+    svg("text", { x: 86, y: 46, "text-anchor": "end", fill: ca, "font-weight": 700, "font-size": 14.5 }, gapFig).textContent = "a + b = " + sum;
+    svg("rect", { x: x0, y: 28, width: a * scale, height: 26, rx: 4, fill: okS, stroke: ca, "stroke-width": 2 }, gapFig);
+    svg("text", { x: x0 + a * scale / 2, y: 46, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 13.5 }, gapFig).textContent = "a = " + a;
+    svg("rect", { x: x0 + a * scale, y: 28, width: b * scale, height: 26, rx: 4, fill: okS, stroke: ca, "stroke-width": 2 }, gapFig);
+    svg("text", { x: x0 + a * scale + b * scale / 2, y: 46, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 13.5 }, gapFig).textContent = "b=" + b;
+
+    // 下条：2√ab + (√a - √b)² 缺口
+    svg("text", { x: 86, y: 100, "text-anchor": "end", fill: cb, "font-weight": 700, "font-size": 14.5 }, gapFig).textContent = "2√ab = " + twoGm;
+    svg("rect", { x: x0, y: 82, width: twoGm * scale, height: 26, rx: 4, fill: hlS, stroke: cb, "stroke-width": 2 }, gapFig);
+    svg("text", { x: x0 + twoGm * scale / 2, y: 100, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13.5 }, gapFig).textContent = "2√(" + a + "×" + b + ") = " + twoGm;
+    if (diff > 0.01) {
+      svg("rect", { x: x0 + twoGm * scale, y: 82, width: diff * scale, height: 26, rx: 4, fill: noS, stroke: no, "stroke-width": 2, "stroke-dasharray": "4 3" }, gapFig);
+      svg("text", { x: x0 + twoGm * scale + diff * scale / 2, y: 100, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 13 }, gapFig).textContent = "差 (√a-√b)² = " + diff;
+    } else {
+      svg("text", { x: x0 + twoGm * scale - 6, y: 74, "text-anchor": "end", fill: ca, "font-weight": 700, "font-size": 13 }, gapFig).textContent = "✓ 差 (√a-√b)² = 0，两式严格相等！";
+    }
+    svg("text", { x: 260, y: 138, "text-anchor": "middle", fill: mu, "font-size": 13.5 }, gapFig).textContent =
+      diff > 0.01 ? "因为 (√" + a + " - √" + b + ")² = " + diff + " > 0，所以 a+b 比 2√ab 严格大 " + diff + "！" : "当 a = b = " + a + " 时，(√a - √b)² = 0，缺口消失，取到等号！";
+
+    [].forEach.call(gapBar.querySelectorAll("button"), function (btn) {
+      btn.classList.toggle("on", btn.getAttribute("data-ab") === a + "," + b);
+    });
+  }
+  if (gapBar) {
+    [].forEach.call(gapBar.querySelectorAll("button"), function (btn) {
+      btn.onclick = function () {
+        var p = btn.getAttribute("data-ab").split(",");
+        drawGap(parseFloat(p[0]), parseFloat(p[1]));
+      };
+    });
+  }
+
+  /* ================= 讲清楚微图解 ③：三相等翻车静态对比图 ================= */
+  var trapFig = document.getElementById("m-trap-fig");
+  function drawTrap() {
+    if (!trapFig) return;
+    trapFig.innerHTML = "";
+    var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), noS = css("--no-soft");
+    var x0 = 32, x1 = 246, yb = 140, yt = 14, xmax = 5.5, ymax = 7.5;
+    function tx(x) { return x0 + x / xmax * (x1 - x0); }
+    function ty(y) { return yb - (y - 2.5) / (ymax - 2.5) * (yb - yt); }
+    // 禁区 x < 3
+    svg("rect", { x: x0, y: yt, width: tx(3) - x0, height: yb - yt, fill: noS, opacity: 0.55 }, trapFig);
+    svg("text", { x: (x0 + tx(3)) / 2, y: 30, "text-anchor": "middle", fill: no, "font-size": 12, "font-weight": 700 }, trapFig).textContent = "x<3 禁区";
+    svg("line", { x1: tx(3), y1: yt, x2: tx(3), y2: yb, stroke: fg, "stroke-dasharray": "3 3" }, trapFig);
+    // 坐标轴
+    svg("line", { x1: x0, y1: yb, x2: x1, y2: yb, stroke: fg, "stroke-width": 1.3 }, trapFig);
+    svg("line", { x1: x0, y1: yb, x2: x0, y2: yt, stroke: fg, "stroke-width": 1.3 }, trapFig);
+    // 下界 y = 4
+    svg("line", { x1: x0, y1: ty(4), x2: x1, y2: ty(4), stroke: cc, "stroke-dasharray": "4 3", "stroke-width": 1.3 }, trapFig);
+    svg("text", { x: x1 - 2, y: ty(4) + 14, "text-anchor": "end", fill: cc, "font-size": 11.5 }, trapFig).textContent = "下界 y=4 (取不到)";
+    // 虚线完整对勾曲线 (0.8 ~ 3)
+    var d1 = "", d2 = "";
+    for (var i = 0; i <= 50; i++) {
+      var xv = 0.85 + (3 - 0.85) * i / 50, yv = xv + 4 / xv;
+      d1 += (i ? "L" : "M") + tx(xv).toFixed(1) + " " + ty(yv).toFixed(1);
+    }
+    for (var j = 0; j <= 50; j++) {
+      var xv2 = 3 + (5.2 - 3) * j / 50, yv2 = xv2 + 4 / xv2;
+      d2 += (j ? "L" : "M") + tx(xv2).toFixed(1) + " " + ty(yv2).toFixed(1);
+    }
+    svg("path", { d: d1, fill: "none", stroke: mu, "stroke-width": 1.6, "stroke-dasharray": "3 3" }, trapFig);
+    svg("path", { d: d2, fill: "none", stroke: ca, "stroke-width": 2.8 }, trapFig);
+    // 谷底 (2, 4) 空心点
+    svg("circle", { cx: tx(2), cy: ty(4), r: 4.5, fill: card, stroke: no, "stroke-width": 2 }, trapFig);
+    svg("text", { x: tx(2), y: yb + 15, "text-anchor": "middle", fill: no, "font-size": 11.5, "font-weight": 700 }, trapFig).textContent = "x=2";
+    // 真实最小值 (3, 13/3)
+    svg("circle", { cx: tx(3), cy: ty(13 / 3), r: 5, fill: hl, stroke: fg, "stroke-width": 1.5 }, trapFig);
+    svg("text", { x: tx(3), y: ty(13 / 3) - 10, "text-anchor": "middle", fill: fg, "font-size": 11.5, "font-weight": 700 }, trapFig).textContent = "最低点(3, 13/3)";
+    svg("text", { x: tx(3), y: yb + 15, "text-anchor": "middle", fill: fg, "font-size": 11.5, "font-weight": 700 }, trapFig).textContent = "x=3";
+  }
+
+  document.addEventListener("DOMContentLoaded", function () { ewDraw(7); drawAvg(2, 8); drawGap(9, 1); drawTrap(); semiReset(); curveReset(); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ewDraw(ewW); drawAvg(curPair[0], curPair[1]); drawGap(curGap[0], curGap[1]); drawTrap(); semiDraw(); curveDraw(); });
 })();
 </script>
 </body></html>

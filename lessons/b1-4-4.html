@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 2; }
   .fig .grid { stroke: var(--line); stroke-width: 1; }
@@ -50,8 +52,15 @@
 <p class="lead">把对数 \(\log_a x\) 看成随 \(x\) 变化的量，它的图象长什么样、怎么用来比大小和解不等式？它和同底的指数函数又是什么关系？先从一个翻倍的例子开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一个细胞每过 \(1\) 小时分裂一次，数量翻一倍：开始 \(1\) 个，\(1\) 小时后 \(2\) 个，\(2\) 小时后 \(4\) 个，\(3\) 小时后 \(8\) 个……</p>
+  <p>一个细胞每过 \(1\) 小时分裂一次，数量翻一倍：开始 \(1\) 个，\(1\) 小时后 \(2\) 个，\(2\) 小时后 \(4\) 个，\(3\) 小时后 \(8\) 个……点下面的按钮对照上下两排刻度尺，看看细胞数 \(N\) 翻倍暴涨时，时间 \(t=\log_2 N\) 怎么一步步慢慢走：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-logf" viewBox="0 0 520 210" role="img" aria-label="细胞数量N与时间t=log2(N)的双向对照标尺及对数缓慢增长曲线"></svg>
+    <div class="entry-bar" id="entry-logf-bar">
+      <button type="button" data-t="3" class="on">N = 8 → 3小时</button>
+      <button type="button" data-t="6">N = 64 → 6小时</button>
+      <button type="button" data-t="10">N = 1024 → 10小时</button>
+    </div>
+    <div class="entry-note" id="entry-logf-note"></div>
     <p>数量变成 \(1024\) 个，过了几小时？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(10\) 小时</button>
@@ -68,33 +77,45 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：4.3 的对数（<a href="b1-4-3.html">回看 4.3</a>）；4.2 的指数函数（<a href="b1-4-2.html">回看 4.2</a>）；3.1 的定义域、3.2 的单调性（<a href="b1-3-1.html">回看 3.1</a>、<a href="b1-3-2.html">3.2</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：对数函数图象形态与关于 y = x 的镜像反函数</h3>
+  <p class="small">要用到：4.3 的对数概念（<a href="b1-4-3.html">回看 4.3</a>）；4.2 的指数函数（<a href="b1-4-2.html">回看 4.2</a>）；3.1 的定义域与 3.2 的单调性（<a href="b1-3-1.html">回看 3.1</a>、<a href="b1-3-2.html">3.2</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>对数、底数、真数</b>：\(\log_a N\) 问的是「\(a\) 的几次方等于 \(N\)」。\(a\) 叫<b>底数</b>，\(N\) 叫<b>真数</b>。</p>
-    <p>例：\(\log_2 8=3\)，因为 \(2^3=8\)；\(\log_3\dfrac19=-2\)，因为 \(3^{-2}=\dfrac19\)。两个最常用的：\(\log_a1=0\)（\(a^0=1\)），\(\log_a a=1\)（\(a^1=a\)），比如 \(\log_5 1=0\)，\(\log_5 5=1\)。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>对数函数图象形态与指对镜像反函数</b></p>
+    <div class="entry-bar" id="m-logfn-bar" role="group" aria-label="对数函数微图解切换">
+      <button type="button" class="on" data-m="inc">① 底数 a > 1 缓慢爬坡 (单调递增，贴 y 轴负半轴下探，过定点 (1,0))</button>
+      <button type="button" data-m="dec">② 底数 0 < a < 1 陡降滑梯 (单调递减，贴 y 轴正半轴高企，过定点 (1,0))</button>
+      <button type="button" data-m="sym">③ 互为反函数 (y=log_a x 与 y=a^x 关于直线 y=x 翻折镜像对称)</button>
+    </div>
+    <svg class="micro-fig" id="m-logfn-fig" viewBox="0 0 520 160" role="img" aria-label="对数函数形态微图解"></svg>
+    <p class="entry-note" id="m-logfn-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">单调性命脉</span><b>增减分水岭（底数 \(a&gt;1\) vs \(0&lt;a&lt;1\)）</b></p>
+      <p class="small" style="margin:0">底数 \(a&gt;1\) 严格递增，脱去 \(\log\) 不等号同向；底数 \(0&lt;a&lt;1\) 严格递减，<b>脱去 \(\log\) 不等号必须强力反向</b>！且无论哪种，<b>真数必须追加 \(N&gt;0\)</b> 下限！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">图象铁律</span><b>过定点 \((1,0)\) 与主对角线 \(y=x\) 对称</b></p>
+      <p class="small" style="margin:0">指数函数过 \((0,1)\) 在 \(x\) 轴上方；对数函数过 \((1,0)\) 在 \(y\) 轴右侧！两者的定义域与值域完全互换，坐标 \((s,t)\leftrightarrow(t,s)\) 关于直线 \(y=x\) 轴对称！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心数学性质与脱底数解不等式法则</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\log_a f(x) &gt; \log_a g(x) \iff \begin{cases} f(x) &gt; g(x) &gt; 0, &amp; a&gt;1 \\ 0 &lt; f(x) &lt; g(x), &amp; 0&lt;a&lt;1 \end{cases}}_{\text{对数不等式双铁律：真数大于 0 + 底数定不等号方向}}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{y=\log_a x \xleftrightarrow{\text{关于 } y=x \text{ 对称}} y=a^x}_{\text{指对反函数：坐标对调 }(s,t)\leftrightarrow(t,s)}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\log_a 1 = 0,\quad x \in (0, +\infty)}_{\text{定点 }(1,0)\text{ 与定义域生命线}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>定义域</b>：让式子有意义的 \(x\) 的全体。</p>
-    <p>例：\(y=\dfrac1{x-3}\) 里分母不能是 \(0\)，定义域是 \(x\ne3\)；\(y=\sqrt{x-2}\) 里根号下不能是负数，定义域是 \(x\ge2\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>递增、递减</b>：在一个范围里，\(x\) 变大时 \(y\) 跟着变大，叫递增；\(x\) 变大时 \(y\) 反而变小，叫递减。</p>
-    <p>例：\(y=2^x\)，\(x=1,2,3\) 时 \(y=2,4,8\)，递增；\(y=\left(\dfrac12\right)^x\)，\(x=1,2,3\) 时 \(y=\dfrac12,\dfrac14,\dfrac18\)，递减。</p>
-  </div>
-
-  <h3>2. 什么是对数函数：真数要大于 0</h3>
-  <p>上一节的 \(\log_a N\) 是一个数。现在让真数变起来，写成 \(x\)，每个 \(x\) 对应唯一一个 \(\log_a x\)，就得到一个函数：</p>
-  <div class="key">函数 \(y=\log_a x\)（\(a&gt;0\) 且 \(a\ne1\)）叫做<b>对数函数</b>。定义域是 \((0,+\infty)\)，值域是 \(\mathbf R\)。</div>
-  <p><b>为什么定义域是 \((0,+\infty)\)</b>：\(y=\log_a x\) 就是 \(a^y=x\)，而 \(a^y\) 总是正数，所以 \(x\) 只能取正数——<b>真数大于 0</b>。反过来，任何实数 \(y\) 都能当指数，所以值域是全体实数。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（对数函数定义域求解）</b></p>
     <p>求 \(y=\log_2(x-1)+\sqrt{3-x}\) 的定义域。</p>
-    <p>每个部分都要有意义：真数 \(x-1&gt;0\)，得 \(x&gt;1\)；根号下 \(3-x\ge0\)，得 \(x\le3\)。两个同时满足，定义域是 \((1,3]\)。</p>
+    <p>真数严格大于 \(0\)：\(x-1&gt;0 \implies x&gt;1\)；偶次根式非负：\(3-x\ge0 \implies x\le3\)。取交集得定义域为 \((1,3]\)。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：\(y=\lg(5-x)\) 的定义域是？</p>
     <div class="opts cols">
@@ -103,26 +124,15 @@
       <button class="opt" data-v="C"><b>C</b>\(x\le5\)</button>
       <button class="opt" data-v="D"><b>D</b>\(x\ne5\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。真数 \(5-x&gt;0\)，得 \(x&lt;5\)。选 C 的同学把「大于 0」写成了「大于等于 0」：\(x=5\) 时真数是 \(0\)，\(\lg0\) 没有意义（\(10\) 的几次方都不是 \(0\)）。</p></div>
+    <div class="reveal"><p><b>A</b>。真数 \(5-x&gt;0 \implies x&lt;5\)。选 C 的同学把「严格大于 0」错写成了「大于等于 0」：\(x=5\) 时真数等于 \(0\)，\(\lg 0\) 无意义！</p></div>
   </div>
 
-  <h3>3. 图象：看底数和 1 比</h3>
-  <p>描几个点。\(y=\log_2 x\)：\(x=\tfrac14,\tfrac12,1,2,4\) 时 \(y=-2,-1,0,1,2\)，一路往上走；\(y=\log_{\frac12}x\)：同样这几个 \(x\)，\(y=2,1,0,-1,-2\)，一路往下走。两条图象关于 \(x\) 轴对称，因为 \(\log_{\frac12}x=-\log_2x\)。</p>
-  <table class="rec">
-    <tr><th></th><th>\(a&gt;1\)</th><th>\(0&lt;a&lt;1\)</th></tr>
-    <tr><td>单调性</td><td>在 \((0,+\infty)\) 上<b>递增</b></td><td>在 \((0,+\infty)\) 上<b>递减</b></td></tr>
-    <tr><td>定点</td><td colspan="2">都过 \((1,0)\)，也都过 \((a,1)\)</td></tr>
-    <tr><td>\(x&gt;1\) 时</td><td>\(y&gt;0\)</td><td>\(y&lt;0\)</td></tr>
-    <tr><td>\(0&lt;x&lt;1\) 时</td><td>\(y&lt;0\)</td><td>\(y&gt;0\)</td></tr>
-    <tr><td>靠近 \(y\) 轴</td><td>往下无限延伸</td><td>往上无限延伸</td></tr>
-  </table>
-  <div class="key">\(a&gt;1\)：递增；\(0&lt;a&lt;1\)：递减。图象都在 \(y\) 轴<b>右边</b>，都过 \((1,0)\)。</div>
-  <p><b>点 \((a,1)\) 很好用</b>：因为 \(\log_a a=1\)。画一条横线 \(y=1\)，它和曲线交点的横坐标就是底数。底数越大，交点越靠右，所以在 \(x&gt;1\) 那一段，\(a&gt;1\) 时<b>底数越大，图象越贴近 \(x\) 轴</b>。</p>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>不管 \(a\) 取多少（\(a&gt;0\) 且 \(a\ne1\)），\(y=\log_a(x-1)+2\) 的图象都过哪个点？</p>
-    <p>\(\log_a1=0\) 对每个 \(a\) 都成立，所以让真数等于 \(1\)：\(x-1=1\)，\(x=2\)。这时 \(y=0+2=2\)。图象一定过 \((2,2)\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（恒过定点分析）</b></p>
+    <p>不管 \(a\) 取何值（\(a&gt;0\) 且 \(a\ne1\)），\(y=\log_a(x-1)+2\) 的图象恒过哪个定点？</p>
+    <p>令真数等于 \(1\)：\(x-1=1 \implies x=2\)。代入得 \(y=\log_a 1 + 2 = 0+2=2\)。图象必过定点 \((2,2)\)。</p>
   </div>
+
   <div class="card predict" data-id="warmup" data-answer="B">
     <p>自己试试：不管底数 \(a\) 取多少，\(y=\log_a x\) 的图象一定经过哪个点？</p>
     <div class="opts cols">
@@ -131,60 +141,50 @@
       <button class="opt" data-v="C"><b>C</b>\((a,0)\)</button>
       <button class="opt" data-v="D"><b>D</b>跟 \(a\) 有关</button>
     </div>
-    <div class="reveal">
-      <p><b>B</b>。\(\log_a1=0\)，图象过 \((1,0)\)。</p>
-      <p>选 A 的同学把指数函数的结论搬过来了：\(y=a^x\) 过 \((0,1)\)。对数函数里 \(x=0\) 根本不行，\(\log_a0\) 没有意义。指数函数过 \((0,1)\)、对数函数过 \((1,0)\)，横纵坐标正好对调，第 6 小块会讲为什么。</p>
+    <div class="reveal"><p><b>B</b>。\(\log_a 1=0\)，图象恒过 \((1,0)\)。选 A 的同学混淆了指数函数（\(y=a^x\) 过 \((0,1)\)）。两者关于 \(y=x\) 对称，横纵坐标正好颠倒！</p></div>
+  </div>
+
+  <h3>3. 三步破题思维链：对数不等式求解与单调性比大小</h3>
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：对数不等式求解三步法思维链）</b></p>
+    <p style="margin:0 0 8px">解不等式 \(\log_{0.5}(2x-1) \ge -2\)；并比较 \(\log_2 3\) 与 \(\log_3 2\) 的大小。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步化同底并严列真数非负：</span>
+        将常数化为同底对数：\(-2 = \log_{0.5}(0.5)^{-2} = \log_{0.5} 4\)；<br>
+        <b>命脉约束</b>：真数必须为正，先列 \(2x-1 &gt; 0 \implies x &gt; \dfrac{1}{2}\)！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步看底数反转不等号或借中间量 1：</span>
+        底数 \(a = 0.5 \in (0,1)\)，函数单调递减，脱去 \(\log\) 时<b>不等号必须反转</b>：<br>
+        \(2x-1 \le 4 \implies 2x \le 5 \implies x \le 2.5\)；<br>
+        比大小：\(\log_2 3 &gt; \log_2 2 = 1\)，\(\log_3 2 &lt; \log_3 3 = 1\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步双向求交防下限漏球：</span>
+        对不等式求交集：\(\dfrac{1}{2} &lt; x \le 2.5\)！（若漏写真数大于 0，解出 \(x \le 2.5\) 包含负数直接全错！）<br>
+        比大小结论：\(\log_2 3 &gt; 1 &gt; \log_3 2\)！
+      </div>
     </div>
   </div>
 
-  <h3>4. 比较大小：同底看单调，异底找中间量</h3>
-  <p>单调性说的是<b>同一个函数</b>里 \(x\) 变化时 \(y\) 怎么变。所以：</p>
-  <ul>
-    <li><b>同底</b>：看底数和 \(1\) 比，用递增或递减。</li>
-    <li><b>不同底</b>：单调性用不上，找一个<b>中间量</b>：和 \(0\) 比（真数在 \(1\) 的哪边），和 \(1\) 比（真数和底数谁大），或者和 \(\tfrac12\)、\(2\) 这样的数比。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>(1) 比较 \(\log_{0.3}1.8\) 和 \(\log_{0.3}2.7\)。同底，底数 \(0.3&lt;1\)，函数递减；\(1.8&lt;2.7\)，所以 \(\log_{0.3}1.8&gt;\log_{0.3}2.7\)。</p>
-    <p>(2) 比较 \(\log_2 3\) 和 \(\log_3 2\)。不同底，和 \(1\) 比：\(\log_2 3&gt;\log_2 2=1\)，\(\log_3 2&lt;\log_3 3=1\)。所以 \(\log_2 3&gt;1&gt;\log_3 2\)。</p>
-  </div>
-  <div class="card predict" data-id="try-3" data-answer="A">
-    <p>自己试试：比较 \(\log_{0.5}3\) 和 \(\log_{0.5}5\)。</p>
-    <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(\log_{0.5}3&gt;\log_{0.5}5\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\log_{0.5}3&lt;\log_{0.5}5\)</button>
-      <button class="opt" data-v="C"><b>C</b>相等</button>
-    </div>
-    <div class="reveal"><p><b>A</b>。底数 \(0.5&lt;1\)，函数递减，真数大的反而小：\(3&lt;5\)，所以 \(\log_{0.5}3&gt;\log_{0.5}5\)（约 \(-1.58\) 和 \(-2.32\)）。选 B 的同学照着「真数大值就大」去比了，那只在底数大于 \(1\) 时对。</p></div>
-  </div>
-
-  <h3>5. 解对数不等式：先真数，再看底</h3>
-  <p>把两边写成同底的对数，用单调性去掉 \(\log\)。两件事一件也不能少：① 每个真数都大于 \(0\)；② 底数大于 \(1\)，不等号方向不变；底数在 \(0\) 和 \(1\) 之间，<b>不等号反过来</b>。</p>
-  <div class="card">
-    <p class="small">例 4</p>
-    <p>(1) 解 \(\log_2(x-1)&lt;2\)。把 \(2\) 写成 \(\log_2 4\)，底数 \(2&gt;1\)，方向不变：\(x-1&lt;4\)。再加真数 \(x-1&gt;0\)。合起来 \(1&lt;x&lt;5\)。</p>
-    <p>(2) 解 \(\log_{\frac13}x\ge2\)。\(2=\log_{\frac13}\dfrac19\)，底数 \(\tfrac13&lt;1\)，方向反过来：\(x\le\dfrac19\)。再加真数 \(x&gt;0\)。合起来 \(0&lt;x\le\dfrac19\)。</p>
-  </div>
   <div class="card predict" data-id="try-4" data-answer="B">
-    <p>自己试试：解 \(\log_3 x&lt;2\)。</p>
+    <p>自己试试：解不等式 \(\log_3 x &lt; 2\)。</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(x&lt;9\)</button>
       <button class="opt" data-v="B"><b>B</b>\(0&lt;x&lt;9\)</button>
       <button class="opt" data-v="C"><b>C</b>\(0&lt;x&lt;6\)</button>
       <button class="opt" data-v="D"><b>D</b>\(x&gt;9\)</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(2=\log_3 9\)，底数 \(3&gt;1\)，方向不变：\(x&lt;9\)；再加真数 \(x&gt;0\)。选 A 的同学忘了真数：\(x=-1\) 时 \(\log_3(-1)\) 没有意义。选 C 是把 \(3\) 的 \(2\) 次方算成了 \(3\times2\)。</p></div>
+    <div class="reveal"><p><b>B</b>。\(2=\log_3 9\)，底数 \(3&gt;1\)，方向不变：\(x&lt;9\)；但<b>必须追加真数大于 0</b>：\(x&gt;0\)，得 \(0&lt;x&lt;9\)。选 A 的同学漏了真数大于 0 下限！</p></div>
   </div>
 
-  <h3>6. 和指数函数的关系：关于 \(y=x\) 对称</h3>
-  <p>\(y=a^x\) 和 \(y=\log_a x\)（同一个 \(a\)）说的是同一个关系 \(a^y=x\) 的两种读法：一个由指数求幂，一个由幂求指数。所以</p>
-  <div class="key">点 \((s,t)\) 在 \(y=a^x\) 的图象上 ⇔ 点 \((t,s)\) 在 \(y=\log_a x\) 的图象上。<br>横纵坐标对调，就是关于直线 \(y=x\) 翻折：两条图象<b>关于 \(y=x\) 对称</b>，它们<b>互为反函数</b>。</div>
-  <p>对调之后，指数函数的定义域 \(\mathbf R\) 变成对数函数的值域，值域 \((0,+\infty)\) 变成对数函数的定义域；\((0,1)\) 变成 \((1,0)\)；单调性不变（\(a&gt;1\) 时都增，\(0&lt;a&lt;1\) 时都减）。</p>
   <div class="card">
-    <p class="small">例 5</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（指对互为反函数）</b></p>
     <p>\(y=a^x\) 的图象过 \((2,9)\)。求 \(a\)，并说出它的反函数在 \(x=27\) 处的值。</p>
-    <p>\(a^2=9\)，\(a&gt;0\)，所以 \(a=3\)。反函数是 \(y=\log_3x\)，它过对调后的点 \((9,2)\)。\(x=27\) 时 \(y=\log_3 27=3\)，因为 \(3^3=27\)。</p>
+    <p>\(a^2=9 \implies a=3\)。反函数是 \(y=\log_3 x\)，它过对调点 \((9,2)\)。\(x=27\) 时 \(y=\log_3 27=3\)。</p>
   </div>
+
   <div class="card predict" data-id="try-5" data-answer="A">
     <p>自己试试：\(y=\log_a x\) 的图象过 \((4,2)\)。那么 \(y=a^x\) 的图象过哪个点？</p>
     <div class="opts cols">
@@ -193,17 +193,52 @@
       <button class="opt" data-v="C"><b>C</b>\((2,16)\)</button>
       <button class="opt" data-v="D"><b>D</b>\((4,16)\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。横纵坐标对调：\((4,2)\to(2,4)\)。验算：\(\log_a4=2\) 得 \(a=2\)，\(2^2=4\)，对。选 B 的同学忘了对调；选 C 是把底数当成了 \(4\)。</p></div>
+    <div class="reveal"><p><b>A</b>。横纵坐标对调：\((4,2) \to (2,4)\)。验算：\(\log_a 4=2 \implies a^2=4 \implies a=2\)，代入指数函数 \(2^2=4\)，完全吻合！</p></div>
   </div>
 
-  <h3>7. 用之前，查四件事</h3>
-  <ol>
-    <li><b>底数</b>：\(a&gt;0\) 且 \(a\ne1\)。<br><span class="small">反例：\(a=1\) 时 \(1\) 的任何次方都是 \(1\)，\(\log_1 3\) 找不到；底数是负数，像 \((-2)^{\frac12}\) 这样的幂没有定义。</span></li>
-    <li><b>真数</b>：每个真数都 \(&gt;0\)，用运算法则也一样。<br><span class="small">反例：\(\log_2(x^2)\) 只要 \(x\ne0\)，\(2\log_2x\) 却要 \(x&gt;0\)。\(x=-2\) 时前者是 \(\log_24=2\)，后者没有意义。</span></li>
-    <li><b>底和 1 比</b>：决定递增还是递减，也决定去掉 \(\log\) 时不等号翻不翻。<br><span class="small">反例：\(2&lt;4\)，可 \(\log_{\frac12}2=-1\)，\(\log_{\frac12}4=-2\)，前者反而大。</span></li>
-    <li><b>同底才能用单调性</b>：不同底不能说「底数大，值就大」。<br><span class="small">反例：底数 \(3&gt;2\)，可 \(\log_3 5\approx1.46\)，\(\log_2 5\approx2.32\)，前者反而小。</span></li>
-  </ol>
-  <div class="key">见到 \(\log_a(\cdots)\)，先写「底数 \(a&gt;0\) 且 \(a\ne1\)，真数 \(&gt;0\)」，再看底数和 \(1\) 比。底数里有字母 \(a\) 时，分 \(a&gt;1\) 和 \(0&lt;a&lt;1\) 两种情况。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>解对数不等式只脱 log，漏写真数大于 0 下限</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：解 \(\log_2(x-1)&lt;2\)，直接脱 \(\log\) 写出 \(x-1&lt;4 \implies x&lt;5\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：漏写真数大于 0 会引入负数灾难！必须联立 \(x-1&gt;0\)，正确交集为 \(1&lt;x&lt;5\)！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-logineq-fig" viewBox="0 0 280 140" role="img" aria-label="对数不等式漏下限微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>底数介于 0 到 1 时，脱对数忘记反转不等号</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：由 \(\log_{0.3}(x+1) &gt; \log_{0.3} 3\)，盲目同向写出 \(x+1 &gt; 3 \implies x &gt; 2\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：\(0&lt;0.3&lt;1\) 单调递减！脱对数必须反转不等号：\(0 &lt; x+1 &lt; 3 \implies -1 &lt; x &lt; 2\)！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>求复合对数定义域，忽视内层整块大于 0</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：求 \(y=\log_2(\log_3 x)\) 的定义域只写 \(x&gt;0\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：外层对数真数是 \(\log_3 x\)！必须满足 \(\log_3 x &gt; 0 \implies x &gt; 1\)！内外层真数必须层层保正！
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
@@ -297,6 +332,7 @@
       <p>再加上真数 \(x-1&gt;0\)，得 \(1&lt;x&lt;3\)。只反向、忘了真数，就得到 B——比如 \(x=0\) 时 \(\log_{\frac12}(-1)\) 根本没有意义。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-domain"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="C">
@@ -314,6 +350,7 @@
       <p>两种合起来是 C。只算了一种情况就会得到 A 或 B；D 是在 \(0&lt;a&lt;1\) 时忘了反向。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-ineq"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -544,8 +581,228 @@
   document.getElementById("half").addEventListener("click", function () { st.a = 0.5; draw(); logState("preset"); });
   document.getElementById("five").addEventListener("click", function () { st.a = 5; draw(); logState("preset"); });
   btnToggle.addEventListener("click", function () { st.showExp = !st.showExp; syncToggle(); draw(); logState("toggle"); });
+  /* ---------- 0 从例子进入：细胞数 N 与时间 t=log2(N) 双向对照标尺 ---------- */
+  var elSvg = document.getElementById("entry-logf"), elBar = document.getElementById("entry-logf-bar"), elNote = document.getElementById("entry-logf-note");
+  function elDraw(tSel) {
+    elSvg.innerHTML = "";
+    var x0 = 68, x1 = 492, dx = (x1 - x0) / 10, yN = 40, yT = 84;
+    mk("text", { x: 10, y: yN + 5, fill: "var(--b)", "font-size": 13.5, "font-weight": 700 }, elSvg).textContent = "数量 N";
+    mk("text", { x: 10, y: yT + 5, fill: "var(--a)", "font-size": 13.5, "font-weight": 700 }, elSvg).textContent = "时间 t";
+    mk("line", { x1: x0, y1: yN, x2: x1, y2: yN, stroke: "var(--b)", "stroke-width": 2 }, elSvg);
+    mk("line", { x1: x0, y1: yT, x2: x1, y2: yT, stroke: "var(--a)", "stroke-width": 2 }, elSvg);
+    for (var i = 0; i <= 10; i++) {
+      var x = x0 + i * dx, nVal = Math.pow(2, i), on = i === tSel, pass = i <= tSel;
+      var g = mk("g", { style: "cursor:pointer" }, elSvg);
+      if (on) mk("rect", { x: x - 20, y: 12, width: 40, height: 92, rx: 8, fill: "var(--ok-soft)", stroke: "var(--hl)", "stroke-width": 2 }, g);
+      mk("line", { x1: x, y1: yN + 8, x2: x, y2: yT - 8, stroke: on ? "var(--hl)" : (pass ? "var(--a)" : "var(--line)"), "stroke-width": on ? 2.2 : 1.2, "stroke-dasharray": on ? "" : "3 3" }, g);
+      mk("circle", { cx: x, cy: yN, r: on ? 5.5 : 3.5, fill: on ? "var(--hl)" : (pass ? "var(--b)" : "var(--card)"), stroke: "var(--b)", "stroke-width": 1.5 }, g);
+      mk("circle", { cx: x, cy: yT, r: on ? 5.5 : 3.5, fill: on ? "var(--hl)" : (pass ? "var(--a)" : "var(--card)"), stroke: "var(--a)", "stroke-width": 1.5 }, g);
+      mk("text", { x: x, y: yN - 11, "text-anchor": "middle", fill: on ? "var(--fg)" : "var(--b)", "font-size": i >= 7 ? 11.5 : 13, "font-weight": on ? 700 : 500 }, g).textContent = nVal;
+      mk("text", { x: x, y: yT + 20, "text-anchor": "middle", fill: on ? "var(--fg)" : "var(--a)", "font-size": 13.5, "font-weight": on ? 700 : 500 }, g).textContent = i + "h";
+      (function (ii) { g.onclick = function () { elDraw(ii); }; })(i);
+    }
+    // 下半区：真实比例 N (1..1024) 对比 t = log2(N) 的扁平曲线
+    var gx0 = 68, gx1 = 492, gy0 = 192, gy1 = 124;
+    mk("line", { x1: gx0, y1: gy0, x2: gx1, y2: gy0, stroke: "var(--muted)", "stroke-width": 1.4 }, elSvg);
+    mk("line", { x1: gx0, y1: gy0, x2: gx0, y2: gy1 - 6, stroke: "var(--muted)", "stroke-width": 1.4 }, elSvg);
+    var d = "";
+    for (var s = 1; s <= 1024; s += 8) {
+      var px = gx0 + (s / 1024) * (gx1 - gx0), py = gy0 - (Math.log(s) / Math.LN2 / 10) * (gy0 - gy1);
+      d += (s === 1 ? "M" : "L") + px.toFixed(1) + " " + py.toFixed(1);
+    }
+    mk("path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 2.8 }, elSvg);
+    var curN = Math.pow(2, tSel), cx = gx0 + (curN / 1024) * (gx1 - gx0), cy = gy0 - (tSel / 10) * (gy0 - gy1);
+    mk("line", { x1: cx, y1: gy0, x2: cx, y2: cy, stroke: "var(--hl)", "stroke-width": 2, "stroke-dasharray": "4 3" }, elSvg);
+    mk("circle", { cx: cx, cy: cy, r: 6.5, fill: "var(--hl)", stroke: "var(--card)", "stroke-width": 2 }, elSvg);
+    mk("text", { x: Math.min(cx + 10, 395), y: Math.max(cy - 8, 134), fill: "var(--fg)", "font-size": 13.5, "font-weight": 700 }, elSvg).textContent = "(" + curN + ", log₂" + curN + "=" + tSel + ")";
+    mk("text", { x: 280, y: 206, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12.5 }, elSvg).textContent = "对数曲线 t = log₂N：N 翻倍暴涨到 1024，t 才匀速走到 10（越往右越平缓）";
+    [].forEach.call(elBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-t"), 10) === tSel);
+    });
+    elNote.innerHTML = "当细胞数 <b>N = " + curN + "</b>（= 2^" + tSel + "）时，经过时间 <b>t = log₂" + curN + " = " + tSel + " 小时</b>（上排每次 ×2，下排每次只 +1）";
+  }
+  [].forEach.call(elBar.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () { elDraw(parseInt(b.getAttribute("data-t"), 10)); });
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var m = { A: 10, B: 5, C: 9, D: 10 };
+      if (m[ev.detail.choice]) elDraw(m[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") elDraw(3);
+  });
+
+  // Step 2 Vivid Visualizations
+  function initStep2() {
+    var fnFig = document.getElementById("m-logfn-fig");
+    var fnBar = document.getElementById("m-logfn-bar");
+    var fnNote = document.getElementById("m-logfn-note");
+    var ineqFig = document.getElementById("m-logineq-fig");
+    if (!fnFig || !ineqFig) return;
+
+    function drawLogfn(mode) {
+      fnFig.innerHTML = "";
+      var ox = 85, oy = 85, kx = 55, ky = 26;
+      function sx(x) { return ox + x * kx; }
+      function sy(y) { return oy - y * ky; }
+
+      // 坐标轴
+      mk("line", { x1: 20, y1: oy, x2: 500, y2: oy, stroke: "var(--muted)", "stroke-width": 1.4 }, fnFig);
+      mk("polygon", { points: "500," + (oy - 4) + " 508," + oy + " 500," + (oy + 4), fill: "var(--muted)" }, fnFig);
+      mk("text", { x: 506, y: oy + 16, fill: "var(--muted)", "font-size": 12 }, fnFig).textContent = "x";
+
+      mk("line", { x1: ox, y1: 152, x2: ox, y2: 12, stroke: "var(--muted)", "stroke-width": 1.4 }, fnFig);
+      mk("polygon", { points: (ox - 4) + ",12 " + ox + ",4 " + (ox + 4) + ",12", fill: "var(--muted)" }, fnFig);
+      mk("text", { x: ox - 14, y: 16, fill: "var(--muted)", "font-size": 12 }, fnFig).textContent = "y";
+      mk("text", { x: ox - 14, y: oy + 16, fill: "var(--muted)", "font-size": 12 }, fnFig).textContent = "O";
+
+      // 刻度
+      [1, 2, 4, 7].forEach(function (v) {
+        mk("line", { x1: sx(v), y1: oy - 3, x2: sx(v), y2: oy + 3, stroke: "var(--muted)", "stroke-width": 1 }, fnFig);
+        mk("text", { x: sx(v), y: oy + 15, "text-anchor": "middle", fill: "var(--muted)", "font-size": 11 }, fnFig).textContent = v;
+      });
+
+      if (mode === "inc") {
+        // y = log2 x
+        var d = "";
+        for (var i = 0; i <= 200; i++) {
+          var xv = 0.08 + (7.2 - 0.08) * i / 200;
+          var yv = Math.log(xv) / Math.LN2;
+          d += (i === 0 ? "M" : "L") + sx(xv).toFixed(1) + " " + sy(Math.max(-2.6, Math.min(2.8, yv))).toFixed(1);
+        }
+        mk("path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 2.8 }, fnFig);
+        // 特征点 (1,0), (2,1), (4,2)
+        [[1, 0], [2, 1], [4, 2]].forEach(function (pt) {
+          mk("circle", { cx: sx(pt[0]), cy: sy(pt[1]), r: 4.5, fill: "var(--hl)", stroke: "var(--card)", "stroke-width": 1.5 }, fnFig);
+        });
+        mk("text", { x: sx(1) + 4, y: sy(0) - 8, fill: "var(--fg)", "font-size": 11.5, "font-weight": 700 }, fnFig).textContent = "(1,0) 定点";
+        mk("text", { x: sx(2) + 6, y: sy(1) + 4, fill: "var(--fg)", "font-size": 11 }, fnFig).textContent = "(2,1)";
+        mk("text", { x: sx(4) + 6, y: sy(2) + 4, fill: "var(--fg)", "font-size": 11 }, fnFig).textContent = "(4,2)";
+        mk("text", { x: 380, y: 40, fill: "var(--a)", "font-size": 14, "font-weight": 700 }, fnFig).textContent = "y = log₂x (a > 1)";
+        mk("text", { x: 380, y: 62, fill: "var(--fg)", "font-size": 12 }, fnFig).textContent = "单调递增 · 增长越来越缓";
+        mk("line", { x1: ox, y1: oy, x2: ox, y2: 150, stroke: "var(--warn)", "stroke-width": 1.5, "stroke-dasharray": "3 3" }, fnFig);
+        mk("text", { x: ox + 8, y: 145, fill: "var(--warn)", "font-size": 11 }, fnFig).textContent = "x→0⁺, y→-∞ (渐近线)";
+
+        if (fnNote) fnNote.innerHTML = "<b>底数 a = 2 &gt; 1</b>：全定义域 (0, +∞) 严格递增。当 <b>x &gt; 1</b> 时 <b>y &gt; 0</b>；当 <b>0 &lt; x &lt; 1</b> 时 <b>y &lt; 0</b>。恒过必考定点 <b>(1, 0)</b>。";
+      } else if (mode === "dec") {
+        // y = log_{0.5} x
+        var d2 = "";
+        for (var j = 0; j <= 200; j++) {
+          var xv2 = 0.08 + (7.2 - 0.08) * j / 200;
+          var yv2 = -Math.log(xv2) / Math.LN2;
+          d2 += (j === 0 ? "M" : "L") + sx(xv2).toFixed(1) + " " + sy(Math.max(-2.6, Math.min(2.8, yv2))).toFixed(1);
+        }
+        mk("path", { d: d2, fill: "none", stroke: "var(--hl)", "stroke-width": 2.8 }, fnFig);
+        // 特征点 (1,0), (2,-1), (4,-2), (0.5,1)
+        [[1, 0], [2, -1], [4, -2], [0.5, 1]].forEach(function (pt) {
+          mk("circle", { cx: sx(pt[0]), cy: sy(pt[1]), r: 4.5, fill: "var(--a)", stroke: "var(--card)", "stroke-width": 1.5 }, fnFig);
+        });
+        mk("text", { x: sx(1) + 6, y: sy(0) - 8, fill: "var(--fg)", "font-size": 11.5, "font-weight": 700 }, fnFig).textContent = "(1,0) 定点";
+        mk("text", { x: sx(2) + 6, y: sy(-1) + 4, fill: "var(--fg)", "font-size": 11 }, fnFig).textContent = "(2,-1)";
+        mk("text", { x: sx(4) + 6, y: sy(-2) + 4, fill: "var(--fg)", "font-size": 11 }, fnFig).textContent = "(4,-2)";
+        mk("text", { x: 345, y: 125, fill: "var(--hl)", "font-size": 13.5, "font-weight": 700 }, fnFig).textContent = "y = log₀.₅x (0 < a < 1)";
+        mk("text", { x: 345, y: 145, fill: "var(--fg)", "font-size": 11.5 }, fnFig).textContent = "单调递减 · 脱对数必须反向！";
+        mk("line", { x1: ox, y1: oy, x2: ox, y2: 15, stroke: "var(--warn)", "stroke-width": 1.5, "stroke-dasharray": "3 3" }, fnFig);
+        mk("text", { x: ox + 8, y: 28, fill: "var(--warn)", "font-size": 11 }, fnFig).textContent = "x→0⁺, y→+∞ (渐近线)";
+
+        if (fnNote) fnNote.innerHTML = "<b>底数 a = 0.5 ∈ (0, 1)</b>：全定义域 (0, +∞) 严格递减。当 <b>0 &lt; x &lt; 1</b> 时 <b>y &gt; 0</b>；当 <b>x &gt; 1</b> 时 <b>y &lt; 0</b>。脱去 log 时<b>不等号必须强力反向</b>！";
+      } else {
+        // sym: y = x, y = 2^x, y = log2 x
+        // 对角线 y=x
+        mk("line", { x1: sx(-1), y1: sy(-1), x2: sx(2.8), y2: sy(2.8), stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "4 4" }, fnFig);
+        mk("text", { x: sx(2.5) + 8, y: sy(2.5) + 4, fill: "var(--muted)", "font-size": 11.5 }, fnFig).textContent = "y = x (镜像对称轴)";
+
+        // y = log2 x
+        var dLog = "";
+        for (var k = 0; k <= 150; k++) {
+          var xvl = 0.15 + (6.5 - 0.15) * k / 150;
+          var yvl = Math.log(xvl) / Math.LN2;
+          dLog += (k === 0 ? "M" : "L") + sx(xvl).toFixed(1) + " " + sy(Math.max(-2.5, Math.min(4.8, yvl))).toFixed(1);
+        }
+        mk("path", { d: dLog, fill: "none", stroke: "var(--a)", "stroke-width": 2.5 }, fnFig);
+
+        // y = 2^x
+        var dExp = "";
+        for (var m = 0; m <= 150; m++) {
+          var xve = -2 + (2.3 - (-2)) * m / 150;
+          var yve = Math.pow(2, xve);
+          dExp += (m === 0 ? "M" : "L") + sx(xve).toFixed(1) + " " + sy(Math.max(-2.5, Math.min(4.8, yve))).toFixed(1);
+        }
+        mk("path", { d: dExp, fill: "none", stroke: "var(--b)", "stroke-width": 2.5 }, fnFig);
+
+        // 对称连线 (1, 2) and (2, 1)
+        mk("line", { x1: sx(1), y1: sy(2), x2: sx(2), y2: sy(1), stroke: "var(--hl)", "stroke-width": 1.8, "stroke-dasharray": "3 3" }, fnFig);
+        mk("circle", { cx: sx(1), cy: sy(2), r: 4.5, fill: "var(--b)", stroke: "var(--card)", "stroke-width": 1.5 }, fnFig);
+        mk("circle", { cx: sx(2), cy: sy(1), r: 4.5, fill: "var(--a)", stroke: "var(--card)", "stroke-width": 1.5 }, fnFig);
+        mk("text", { x: sx(1) - 8, y: sy(2) + 4, "text-anchor": "end", fill: "var(--b)", "font-size": 10.5, "font-weight": 700 }, fnFig).textContent = "P(1,2)∈y=2ˣ";
+        mk("text", { x: sx(2) + 6, y: sy(1) + 16, fill: "var(--a)", "font-size": 11.5, "font-weight": 700 }, fnFig).textContent = "P'(2, 1) ∈ y=log₂x";
+
+        mk("circle", { cx: sx(0), cy: sy(1), r: 4, fill: "var(--b)" }, fnFig);
+        mk("text", { x: sx(0) - 8, y: sy(1) + 4, "text-anchor": "end", fill: "var(--b)", "font-size": 11 }, fnFig).textContent = "(0,1)";
+        mk("circle", { cx: sx(1), cy: sy(0), r: 4, fill: "var(--a)" }, fnFig);
+        mk("text", { x: sx(1) + 4, y: sy(0) + 14, fill: "var(--a)", "font-size": 11 }, fnFig).textContent = "(1,0)";
+
+        if (fnNote) fnNote.innerHTML = "<b>互为反函数</b>：\\(y=2^x\\) 与 \\(y=\\log_2 x\\) 坐标颠倒 \\((s, t) \\leftrightarrow (t, s)\\)，图象关于 <b>y = x 镜像对称</b>！定义域与值域完全互换。";
+      }
+
+      if (fnBar) {
+        [].forEach.call(fnBar.querySelectorAll("button"), function (b) {
+          b.classList.toggle("on", b.getAttribute("data-m") === mode);
+        });
+      }
+      if (window.Peiyu && fnNote) Peiyu.math(fnNote);
+    }
+
+    if (fnBar) {
+      [].forEach.call(fnBar.querySelectorAll("button"), function (b) {
+        b.addEventListener("click", function () { drawLogfn(b.getAttribute("data-m")); });
+      });
+    }
+
+    function drawLogIneqTrap() {
+      ineqFig.innerHTML = "";
+      var yAx = 68;
+      function ax(v) { return 40 + (v - (-1)) / 7 * 210; } // v=-1 -> 40, v=6 -> 250
+
+      // 灾难危险区背景 [ -1, 1 ]
+      mk("rect", { x: ax(-1), y: 36, width: ax(1) - ax(-1), height: 48, rx: 4, fill: "rgba(230, 80, 80, 0.12)", stroke: "var(--warn)", "stroke-dasharray": "3 2", "stroke-width": 1 }, ineqFig);
+      mk("text", { x: (ax(-1) + ax(1)) / 2, y: 52, "text-anchor": "middle", fill: "var(--warn)", "font-size": 10.5, "font-weight": 700 }, ineqFig).textContent = "❌ 灾难负数区 (真数≤0)";
+
+      // 数轴
+      mk("line", { x1: 20, y1: yAx, x2: 265, y2: yAx, stroke: "var(--muted)", "stroke-width": 1.4 }, ineqFig);
+      mk("polygon", { points: "265," + (yAx - 3) + " 272," + yAx + " 265," + (yAx + 3), fill: "var(--muted)" }, ineqFig);
+      mk("text", { x: 268, y: yAx + 14, fill: "var(--muted)", "font-size": 11 }, ineqFig).textContent = "x";
+
+      // 刻度
+      [0, 1, 3, 5].forEach(function (v) {
+        mk("line", { x1: ax(v), y1: yAx - 3, x2: ax(v), y2: yAx + 3, stroke: "var(--muted)", "stroke-width": 1 }, ineqFig);
+        mk("text", { x: ax(v), y: yAx + 15, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10.5 }, ineqFig).textContent = v;
+      });
+
+      // 合法解集 (1, 5) 绿色区间
+      mk("line", { x1: ax(1), y1: yAx, x2: ax(5), y2: yAx, stroke: "var(--a)", "stroke-width": 4.5 }, ineqFig);
+      mk("circle", { cx: ax(1), cy: yAx, r: 4.5, fill: "var(--card)", stroke: "var(--a)", "stroke-width": 2 }, ineqFig);
+      mk("circle", { cx: ax(5), cy: yAx, r: 4.5, fill: "var(--card)", stroke: "var(--a)", "stroke-width": 2 }, ineqFig);
+
+      // 上方标签
+      mk("text", { x: (ax(1) + ax(5)) / 2, y: 30, "text-anchor": "middle", fill: "var(--a)", "font-size": 12, "font-weight": 700 }, ineqFig).textContent = "✅ 正确解集：(1, 5)";
+
+      // 下方警示
+      mk("text", { x: 140, y: 104, "text-anchor": "middle", fill: "var(--warn)", "font-size": 10.5 }, ineqFig).textContent = "脱对数得 x < 5 必须与真数 x > 1 取交集！";
+      mk("text", { x: 140, y: 122, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10 }, ineqFig).textContent = "若漏写下限 x > 1，解集直接扩至 (-∞, 5) 惨遭扣光";
+    }
+
+    drawLogfn("inc");
+    drawLogIneqTrap();
+  }
+
   build();
   reset();
+  elDraw(3);
+  document.addEventListener("DOMContentLoaded", function () { elDraw(3); reset(); initStep2(); });
+  if (document.readyState !== "loading") { elDraw(3); reset(); initStep2(); }
 })();
 </script>
 </body></html>

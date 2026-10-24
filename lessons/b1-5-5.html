@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.2; }
   .fig .grid { stroke: var(--line); stroke-width: 1; }
@@ -40,8 +42,15 @@
 <p class="lead">\(\cos(\alpha-\beta)\) 不能拆成 \(\cos\alpha-\cos\beta\)。这一节找出它真正等于什么，再由它得到和角、二倍角公式，最后把 \(a\sin x+b\cos x\) 并成一项。先从两个熟悉的角开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>\(60^\circ\) 和 \(30^\circ\) 的三角函数值都会：\(\cos60^\circ=\dfrac12=0.5\)，\(\cos30^\circ=\dfrac{\sqrt3}{2}\approx0.866\)。而 \(60^\circ-30^\circ=30^\circ\)。</p>
+  <p>\(60^\circ\) 和 \(30^\circ\) 的三角函数值都会：\(\cos60^\circ=\dfrac12=0.5\)，\(\cos30^\circ=\dfrac{\sqrt3}{2}\approx0.866\)。而 \(60^\circ-30^\circ=30^\circ\)。点下面的按钮，比一比单位圆上的投影长度：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-cosd" viewBox="0 0 520 205" role="img" aria-label="单位圆上60度与30度的余弦投影对比，展示cos(60-30)=0.866与cos60-cos30=-0.366的差别"></svg>
+    <div class="entry-bar" id="entry-cosd-bar">
+      <button type="button" data-m="0">看 cos 60° 与 cos 30°</button>
+      <button type="button" data-m="1">直接相减：0.5 - 0.866 = -0.366</button>
+      <button type="button" data-m="2" class="on">先减角再算：cos 30° = 0.866</button>
+    </div>
+    <div class="entry-note" id="entry-cosd-note"></div>
     <p>算一算：\(\cos(60^\circ-30^\circ)\) 和 \(\cos60^\circ-\cos30^\circ\) 分别约是多少？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>\(0.866\) 和 \(0.866\)</button>
@@ -59,40 +68,42 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：单位圆上角 \(\alpha\) 的终边与圆交于 \((\cos\alpha,\sin\alpha)\)，以及 \(\sin^2\alpha+\cos^2\alpha=1\)、\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}\)（<a href="b1-5-2.html">回看 5.2</a>）；\(\cos(-\alpha)=\cos\alpha\)、\(\sin\left(\dfrac{\pi}{2}-\alpha\right)=\cos\alpha\) 这类诱导公式（<a href="b1-5-3.html">回看 5.3</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：和差角、倍角与辅助角变换总纲</h3>
+  <p class="small">要用到：单位圆与诱导公式（<a href="b1-5-2.html">5.2</a>、<a href="b1-5-3.html">5.3</a>）。三角恒等变换的灵魂是「拆角、合角与降幂」，先看微图解：</p>
 
-  <div class="card">
-    <p><b>和角、差角</b>：\(\alpha+\beta\)、\(\alpha-\beta\) 本身是一个新角。</p>
-    <p>例：\(75^\circ=45^\circ+30^\circ\)，\(15^\circ=45^\circ-30^\circ\)。\(75^\circ\)、\(15^\circ\) 不是特殊角，可拆成的两个都是，这正是本节公式派上用场的地方。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>旋转等距弦长、二倍角展开与辅助角几何构造全景</b></p>
+    <div class="entry-bar" id="m-trans-bar" role="group" aria-label="三角恒等变换微图解切换">
+      <button type="button" class="on" data-m="add">① 和差角公式 (单位圆等距弦长推导：cos同名相反，sin异名相同)</button>
+      <button type="button" data-m="dbl">② 二倍角与降幂 (sin2α=2sincos，cos2α三形态与降幂升角)</button>
+      <button type="button" data-m="aux">③ 辅助角公式 (a sin+b cos=R sin(x+φ)，直角三角形与极坐标)</button>
+    </div>
+    <svg class="micro-fig" id="m-trans-fig" viewBox="0 0 520 160" role="img" aria-label="三角恒等变换核心微图解"></svg>
+    <p class="entry-note" id="m-trans-note"></p>
   </div>
 
-  <div class="card">
-    <p><b>展开</b>：把 \(\cos(\alpha-\beta)\) 这样「一个函数套一个和差角」的式子，写成只含 \(\sin\alpha,\cos\alpha,\sin\beta,\cos\beta\) 的式子。</p>
-    <p>例：「从例子进入」里，\(\cos(60^\circ-30^\circ)\) 展开成 \(\cos60^\circ\cos30^\circ+\sin60^\circ\sin30^\circ\)，两边都约是 \(0.866\)。</p>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">口诀心法</span><b>和角口诀：余弦「同名相反」，正弦「异名相同」</b></p>
+      <p class="small" style="margin:0">\(\cos(\alpha\pm\beta) = \cos\alpha\cos\beta \mp \sin\alpha\sin\beta\)（两项名字相同，连接符号正好<b>相反</b>）；\(\sin(\alpha\pm\beta) = \sin\alpha\cos\beta \pm \cos\alpha\sin\beta\)（交叉配对，连接符号<b>相同</b>）。</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">定象限铁律</span><b>辅助角看点 \((a,b)\) 所在象限，绝不能只算 \(\tan\varphi\)</b></p>
+      <p class="small" style="margin:0">化简 \(a\sin x+b\cos x = \sqrt{a^2+b^2}\sin(x+\varphi)\) 时，\(\cos\varphi = \dfrac{a}{R}\)，\(\sin\varphi = \dfrac{b}{R}\)。角 \(\varphi\) 的终边必经过点 \((a, b)\)。若 \(a=-1, b=-\sqrt{3}\)，点在第三象限，\(\varphi\) 必须取 \(-\dfrac{2\pi}{3}\) 或 \(\dfrac{4\pi}{3}\)，绝不能因为 \(\tan\varphi=\sqrt{3}\) 误取第一象限的 \(\dfrac{\pi}{3}\)！</p>
+    </div>
   </div>
 
-  <div class="card">
-    <p><b>二倍角</b>：\(2\alpha\) 是 \(\alpha\) 的二倍。「二倍」是相对的：\(\alpha\) 也是 \(\dfrac{\alpha}{2}\) 的二倍。</p>
-    <p>例：\(60^\circ\) 是 \(30^\circ\) 的二倍，可 \(\sin60^\circ=\dfrac{\sqrt3}{2}\approx0.866\)，\(2\sin30^\circ=1\)，二倍角的正弦不是正弦的二倍。</p>
+  <h3>2. 核心公式全景矩阵</h3>
+  <div class="key" style="font-size:13.5px;line-height:1.8">
+    \[\begin{aligned}
+    \textbf{和差角：}&\quad \cos(\alpha\mp\beta)=\cos\alpha\cos\beta\pm\sin\alpha\sin\beta,\quad \sin(\alpha\pm\beta)=\sin\alpha\cos\beta\pm\cos\alpha\sin\beta \\
+    \textbf{二倍角：}&\quad \sin 2\alpha = 2\sin\alpha\cos\alpha,\quad \cos 2\alpha = \cos^2\alpha-\sin^2\alpha = 2\cos^2\alpha-1 = 1-2\sin^2\alpha \\
+    \textbf{降幂扩角：}&\quad \sin^2\alpha = \dfrac{1-\cos 2\alpha}{2},\quad \cos^2\alpha = \dfrac{1+\cos 2\alpha}{2} \\
+    \textbf{辅助角：}&\quad a\sin x + b\cos x = \sqrt{a^2+b^2}\sin(x+\varphi)\quad \left(\cos\varphi=\frac{a}{\sqrt{a^2+b^2}},\ \sin\varphi=\frac{b}{\sqrt{a^2+b^2}}\right)
+    \end{aligned}\]
   </div>
 
-  <div class="card">
-    <p><b>恒等式</b>：只要两边都有意义，不管角取多少，两边都相等。</p>
-    <p>例：\(\sin^2\alpha+\cos^2\alpha=1\) 对任何角都成立。\(\tan\alpha\cos\alpha=\sin\alpha\) 也是恒等式，但只在 \(\cos\alpha\ne0\) 时说：\(\alpha=90^\circ\) 时右边是 \(1\)，左边的 \(\tan90^\circ\) 根本不存在。</p>
-  </div>
-
-  <h3>2. 两角差、两角和的余弦</h3>
-  <div class="key" style="text-align:center">\(\cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta\)<br>\(\cos(\alpha+\beta)=\cos\alpha\cos\beta-\sin\alpha\sin\beta\)</div>
-  <p>对任意角 \(\alpha,\beta\) 都成立。第二条是把第一条里的 \(\beta\) 换成 \(-\beta\)：\(\cos(-\beta)=\cos\beta\)，\(\sin(-\beta)=-\sin\beta\)，中间的加号就变成减号。</p>
-  <p>为什么第一条对：单位圆上角 \(\alpha\)、\(\beta\) 的两点之间的弦，和角 \(\alpha-\beta\)、角 \(0\) 的两点之间的弦，其实是同一条弦转了个位置，一样长。把两个长度都用坐标算出来，相等，就得到这条公式。「动手」①可以拖着看，完整的计算在本步最后的「再深一点」里。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>求 \(\cos15^\circ\)。</p>
-    <p>\(15^\circ=45^\circ-30^\circ\)，用差角公式：</p>
-    <p style="text-align:center">\(\cos15^\circ=\cos45^\circ\cos30^\circ+\sin45^\circ\sin30^\circ=\dfrac{\sqrt2}{2}\cdot\dfrac{\sqrt3}{2}+\dfrac{\sqrt2}{2}\cdot\dfrac12=\dfrac{\sqrt6+\sqrt2}{4}\)。</p>
-    <p>估一下：\(\dfrac{2.449+1.414}{4}\approx0.966\)，比 \(\cos30^\circ\approx0.866\) 大，角越小余弦越大，说得通。</p>
-  </div>
   <div class="card predict" data-id="try-cos" data-answer="B">
     <p>自己试试：\(\cos75^\circ\) 等于？（\(75^\circ=45^\circ+30^\circ\)）</p>
     <div class="opts cols">
@@ -103,16 +114,6 @@
     <div class="reveal"><p><b>B</b>。\(\cos75^\circ=\cos45^\circ\cos30^\circ-\sin45^\circ\sin30^\circ=\dfrac{\sqrt6}{4}-\dfrac{\sqrt2}{4}\approx0.259\)。选 A 的同学中间用了加号：和角的余弦中间是<b>减号</b>，A 其实是 \(\cos15^\circ\)。C 是 \(\cos45^\circ+\cos30^\circ\)，约 \(1.57\)，比 \(1\) 还大，余弦不可能这么大。</p></div>
   </div>
 
-  <h3>3. 两角和差的正弦、正切</h3>
-  <div class="key" style="text-align:center">\(\sin(\alpha\pm\beta)=\sin\alpha\cos\beta\pm\cos\alpha\sin\beta\)<br>\(\tan(\alpha\pm\beta)=\dfrac{\tan\alpha\pm\tan\beta}{1\mp\tan\alpha\tan\beta}\)</div>
-  <p>正弦这条从余弦换来：\(\sin(\alpha+\beta)=\cos\left(\dfrac{\pi}{2}-\alpha-\beta\right)=\cos\left(\left(\dfrac{\pi}{2}-\alpha\right)-\beta\right)\)，用差角余弦展开，再把 \(\cos\left(\dfrac{\pi}{2}-\alpha\right)\) 换回 \(\sin\alpha\)、\(\sin\left(\dfrac{\pi}{2}-\alpha\right)\) 换回 \(\cos\alpha\)。正切那条是正弦除以余弦，上下同除 \(\cos\alpha\cos\beta\)。</p>
-  <p class="small">记法：余弦「同名相乘、符号相反」，正弦「异名相乘、符号相同」。忘了就从 \(\cos(\alpha-\beta)\) 重新换一遍。</p>
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>求 \(\sin75^\circ\) 和 \(\tan15^\circ\)。</p>
-    <p>\(\sin75^\circ=\sin45^\circ\cos30^\circ+\cos45^\circ\sin30^\circ=\dfrac{\sqrt6}{4}+\dfrac{\sqrt2}{4}=\dfrac{\sqrt6+\sqrt2}{4}\approx0.966\)。</p>
-    <p>\(\tan15^\circ=\dfrac{\tan45^\circ-\tan30^\circ}{1+\tan45^\circ\tan30^\circ}=\dfrac{1-\frac{\sqrt3}{3}}{1+\frac{\sqrt3}{3}}=\dfrac{3-\sqrt3}{3+\sqrt3}=\dfrac{(3-\sqrt3)^2}{9-3}=2-\sqrt3\approx0.268\)。</p>
-  </div>
   <div class="card predict" data-id="try-sin" data-answer="A">
     <p>自己试试：\(\sin15^\circ\) 等于？（\(15^\circ=45^\circ-30^\circ\)）</p>
     <div class="opts cols">
@@ -123,17 +124,6 @@
     <div class="reveal"><p><b>A</b>。\(\sin15^\circ=\sin45^\circ\cos30^\circ-\cos45^\circ\sin30^\circ=\dfrac{\sqrt6-\sqrt2}{4}\approx0.259\)。选 B 的同学把差角正弦中间写成了加号；C 是 \(\sin45^\circ-\sin30^\circ\)，又「拆开」了。</p></div>
   </div>
 
-  <h3>4. 二倍角</h3>
-  <p>在和角公式里令 \(\beta=\alpha\)：</p>
-  <div class="key">\(\sin2\alpha=2\sin\alpha\cos\alpha\)<br>\(\cos2\alpha=\cos^2\alpha-\sin^2\alpha=2\cos^2\alpha-1=1-2\sin^2\alpha\)<br>\(\tan2\alpha=\dfrac{2\tan\alpha}{1-\tan^2\alpha}\)</div>
-  <p>\(\cos2\alpha\) 的三种写法用 \(\sin^2\alpha+\cos^2\alpha=1\) 互换。挑哪种看手里有什么：只知道 \(\sin\alpha\) 就用 \(1-2\sin^2\alpha\)。反过来读就是<b>降幂</b>：\(\cos^2\alpha=\dfrac{1+\cos2\alpha}{2}\)，\(\sin^2\alpha=\dfrac{1-\cos2\alpha}{2}\)，平方没了，角翻倍。</p>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>\(\sin\alpha=\dfrac35\)，\(\dfrac{\pi}{2}&lt;\alpha&lt;\pi\)，求 \(\sin2\alpha\) 和 \(\cos2\alpha\)。</p>
-    <p>\(\alpha\) 在第二象限，余弦为负：\(\cos\alpha=-\sqrt{1-\dfrac{9}{25}}=-\dfrac45\)。</p>
-    <p>\(\sin2\alpha=2\cdot\dfrac35\cdot\left(-\dfrac45\right)=-\dfrac{24}{25}\)；\(\cos2\alpha=1-2\cdot\dfrac{9}{25}=\dfrac{7}{25}\)。</p>
-    <p class="small">核对：\(\cos^2\alpha-\sin^2\alpha=\dfrac{16}{25}-\dfrac{9}{25}=\dfrac{7}{25}\)，一样。</p>
-  </div>
   <div class="card predict" data-id="try-double" data-answer="B">
     <p>自己试试：\(\cos\alpha=\dfrac13\)，\(\cos2\alpha\) 等于？</p>
     <div class="opts cols">
@@ -145,17 +135,6 @@
     <div class="reveal"><p><b>B</b>。手里有 \(\cos\alpha\)，用 \(2\cos^2\alpha-1=\dfrac29-1=-\dfrac79\)。选 A 是把 \(\cos2\alpha\) 当成 \(2\cos\alpha\)；选 C 是把 \(\cos\alpha\) 代进了 \(1-2\sin^2\alpha\) 那个式子，名字对不上。</p></div>
   </div>
 
-  <h3>5. 辅助角：两项并成一项</h3>
-  <p>\(a\sin x+b\cos x\)（\(a,b\) 不全为 \(0\)）里提出 \(R=\sqrt{a^2+b^2}\)：</p>
-  <div class="key">\(a\sin x+b\cos x=R\sin(x+\varphi)\)，其中 \(\cos\varphi=\dfrac aR\)，\(\sin\varphi=\dfrac bR\)。最大值 \(R\)，最小值 \(-R\)。</div>
-  <p>为什么行：\(\left(\dfrac aR\right)^2+\left(\dfrac bR\right)^2=1\)，点 \(\left(\dfrac aR,\dfrac bR\right)\) 在单位圆上，总有一个角 \(\varphi\) 的终边经过它；再把 \(R\sin(x+\varphi)=R(\sin x\cos\varphi+\cos x\sin\varphi)\) 展开，就是原式。</p>
-  <div class="card">
-    <p class="small">例 4</p>
-    <p>把 \(\sin x+\sqrt3\cos x\) 化成一项，并求最大值。</p>
-    <p>\(a=1\)，\(b=\sqrt3\)，\(R=\sqrt{1+3}=2\)。\(\cos\varphi=\dfrac12\)，\(\sin\varphi=\dfrac{\sqrt3}{2}\)，取 \(\varphi=\dfrac{\pi}{3}\)。</p>
-    <p style="text-align:center">\(\sin x+\sqrt3\cos x=2\left(\dfrac12\sin x+\dfrac{\sqrt3}{2}\cos x\right)=2\sin\left(x+\dfrac{\pi}{3}\right)\)。</p>
-    <p>最大值 \(2\)，在 \(x+\dfrac{\pi}{3}=\dfrac{\pi}{2}\)，比如 \(x=\dfrac{\pi}{6}\) 时取到：\(\dfrac12+\sqrt3\cdot\dfrac{\sqrt3}{2}=2\)。</p>
-  </div>
   <div class="card predict" data-id="try-aux" data-answer="B">
     <p>自己试试：\(3\sin x+4\cos x\) 的最大值是？</p>
     <div class="opts cols">
@@ -167,20 +146,35 @@
     <div class="reveal"><p><b>B</b>。\(R=\sqrt{9+16}=5\)。选 A 的同学让 \(\sin x\) 和 \(\cos x\) 同时等于 \(1\)，可它们不会同时取到 \(1\)（平方和要是 \(1\)），所以 \(7\) 到不了。</p></div>
   </div>
 
-  <h3>6. 怎么变：比较角、名、次</h3>
-  <p>题目不会直接说用哪条公式。先把目标和已知比三件事：</p>
-  <ul>
-    <li><b>角</b>：目标的角能不能用已知角拼出来？常用 \(\beta=(\alpha+\beta)-\alpha\)，\(2\alpha=(\alpha+\beta)+(\alpha-\beta)\)。</li>
-    <li><b>名</b>：正弦、余弦、正切混着？已知 \(\tan\alpha\) 时，常把分母添成 \(\sin^2\alpha+\cos^2\alpha\)，上下同除 \(\cos^2\alpha\)，全化成 \(\tan\alpha\)。</li>
-    <li><b>次</b>：有平方就想降幂（角翻倍）；有 \(1\pm\cos2\alpha\) 就想升幂（角减半）。</li>
-  </ul>
+  <h3>3. 三步破题思维链：三角求值与化简「三看破局」</h3>
   <div class="card">
-    <p class="small">例 5（「名」不同）</p>
-    <p>\(\tan\alpha=2\)，求 \(\sin2\alpha\)。</p>
-    <p>目标是正弦余弦，已知是正切。把 \(1\) 写成 \(\sin^2\alpha+\cos^2\alpha\)，上下同除 \(\cos^2\alpha\)：</p>
-    <p style="text-align:center">\(\sin2\alpha=\dfrac{2\sin\alpha\cos\alpha}{\sin^2\alpha+\cos^2\alpha}=\dfrac{2\tan\alpha}{\tan^2\alpha+1}=\dfrac{4}{5}\)。</p>
-    <p class="small">不用分 \(\alpha\) 在哪个象限：两种情况 \(\sin\alpha\)、\(\cos\alpha\) 同时变号，乘积不变。</p>
+    <p class="small"><b>例题示范：</b>已知 \(\tan\alpha = 2\)，求 \(\dfrac{\sin 2\alpha + \cos 2\alpha}{\sin^2\alpha + 2\cos^2\alpha}\) 的值。</p>
+    <div class="think-steps">
+      <div class="step-row">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <b>👀 第一眼破题信号：</b>分子是二倍角 \(2\alpha\)，分母是单角二次式 \(\alpha\)。角不同、次不同，已知条件是正切 \(\tan\alpha\)。<b>核心目标：角化同、次齐整、切化化！</b>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <b>🔧 第二步展开二倍角与齐次分式同除：</b>
+          <p style="margin:4px 0 0">• 展开分子：\(\sin 2\alpha = 2\sin\alpha\cos\alpha\)，\(\cos 2\alpha = \cos^2\alpha - \sin^2\alpha\)。</p>
+          <p style="margin:4px 0 0">• 原式化为齐次分式：\[\dfrac{2\sin\alpha\cos\alpha + \cos^2\alpha - \sin^2\alpha}{\sin^2\alpha + 2\cos^2\alpha}\]</p>
+          <p style="margin:4px 0 0">• 分子分母同时除以 \(\cos^2\alpha\)：化为全 \(\tan\) 形式：\[\dfrac{2\tan\alpha + 1 - \tan^2\alpha}{\tan^2\alpha + 2}\]</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <b>🛡️ 第三步代入数值终检：</b>
+          <p style="margin:4px 0 0">将 \(\tan\alpha = 2\) 代入：分子为 \(2\times 2 + 1 - 4 = 1\)，分母为 \(4 + 2 = 6\)！结果为 \(\dfrac{1}{6}\)。全程无需开方求角所在的象限，正负号完全自洽！</p>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-name" data-answer="A">
     <p>自己试试：\(\tan\alpha=3\)，\(\sin2\alpha\) 等于？</p>
     <div class="opts cols">
@@ -191,23 +185,38 @@
     <div class="reveal"><p><b>A</b>。\(\dfrac{2\tan\alpha}{\tan^2\alpha+1}=\dfrac{6}{10}=\dfrac35\)。选 B 是把 \(\sin2\alpha\) 当成 \(2\tan\alpha\)，正弦不会大于 \(1\)；C 是 \(\dfrac{2\tan\alpha}{1-\tan^2\alpha}\)，算成了 \(\tan2\alpha\)。</p></div>
   </div>
 
-  <h3>7. 用公式时守住的几条边</h3>
-  <ol>
-    <li><b>正切公式要「都有意义」</b>：\(\tan\alpha\)、\(\tan\beta\)、\(\tan(\alpha\pm\beta)\) 都存在，分母 \(1\mp\tan\alpha\tan\beta\ne0\)。<br><span class="small">反例：\(\tan\alpha=2\)，\(\tan\beta=\dfrac12\)，分母 \(1-1=0\)，这时 \(\cos(\alpha+\beta)=0\)，\(\tan(\alpha+\beta)\) 不存在，不是「等于无穷」。</span></li>
-    <li><b>半角开方，符号看半角在哪</b>：由 \(\cos\alpha=2\cos^2\dfrac{\alpha}{2}-1\) 只能先得到 \(\cos\dfrac{\alpha}{2}=\pm\sqrt{\dfrac{1+\cos\alpha}{2}}\)。<br><span class="small">反例：\(\alpha=\dfrac{5\pi}{3}\)，\(\cos\alpha=\dfrac12\)，\(\sqrt{\dfrac34}=\dfrac{\sqrt3}{2}\)；可 \(\dfrac{\alpha}{2}=\dfrac{5\pi}{6}\)，\(\cos\dfrac{5\pi}{6}=-\dfrac{\sqrt3}{2}\)，要取负号。</span></li>
-    <li><b>不随手约掉可能为 \(0\) 的因子</b>：要约，先分「它等于 \(0\)」和「不等于 \(0\)」两种情况。<br><span class="small">反例：\(2\sin x\cos x=\sin x\) 两边约去 \(\sin x\)，就丢了 \(\sin x=0\) 的解 \(x=0\)、\(\pi\)。</span></li>
-    <li><b>恒等只在共同定义域里说</b>：两边都有意义的角，才谈相等。<br><span class="small">反例：\(\tan\alpha\cos\alpha=\sin\alpha\) 在 \(\alpha=\dfrac{\pi}{2}\) 时左边没有意义，不能拿这个角代进去验证。</span></li>
-    <li><b>辅助角 \(\varphi\) 要看两个符号</b>：\(\cos\varphi\)、\(\sin\varphi\) 的正负一起定象限，只看 \(\tan\varphi=\dfrac ba\) 会差 \(\pi\)。<br><span class="small">反例：\(-\sin x+\cos x\)，\(\tan\varphi=-1\) 会让人取 \(\varphi=-\dfrac{\pi}{4}\)；可 \(\cos\varphi=-\dfrac{\sqrt2}{2}\lt 0\)，应取 \(\dfrac{3\pi}{4}\)。代 \(x=0\) 验证：原式是 \(1\)，\(\sqrt2\sin\left(-\dfrac{\pi}{4}\right)=-1\)，对不上。</span></li>
-  </ol>
-  <div class="key">变形之前先问：这个分母、这个因子会不会是 \(0\)？开方取哪个号？变形后两边的定义域一样吗？</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">翻车现场 ①</span><b>和角余弦公式符号写反（加号误作加号）</b></p>
+      <p class="small" style="color:var(--hl);margin:0 0 4px"><b>典型错解：</b>计算 \(\cos(x+\frac{\pi}{3})\) 时写成 \(\cos x\cos\frac{\pi}{3} + \sin x\sin\frac{\pi}{3}\)。</p>
+      <p class="small" style="color:var(--b);margin:0"><b>一眼看清真相：</b>余弦和角公式中间必是<b>减号</b>！\(\cos(\alpha+\beta) = \cos\alpha\cos\beta - \sin\alpha\sin\beta\)。反之差角中间才是加号！背口诀「余弦同名符号反」！</p>
+    </div>
+
+    <div class="trap-card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">翻车现场 ②</span><b>辅助角公式只算 \(\tan\) 导致象限完全颠倒</b></p>
+      <div class="trap-split">
+        <div style="flex:1">
+          <p class="small" style="color:var(--hl);margin:0 0 4px"><b>典型错解：</b>化简 \(-\sin x - \sqrt{3}\cos x\) 时，算 \(\tan\varphi=\frac{-\sqrt3}{-1}=\sqrt3\)，便断定 \(\varphi=\frac{\pi}{3}\)，写成 \(2\sin(x+\frac{\pi}{3})\)。</p>
+          <p class="small" style="color:var(--b);margin:0"><b>看右图秒懂真相：</b>点 \((a,b)=(-1,-\sqrt{3})\) 位于<b>第三象限</b>！\(\cos\varphi=-\frac{1}{2}, \sin\varphi=-\frac{\sqrt3}{2}\)，\(\varphi\) 必须取 \(-\frac{2\pi}{3}\)（即 \(-120^\circ\)）！误取第一象限会与真实函数值正负彻底颠倒！</p>
+        </div>
+        <div style="width:280px;flex-shrink:0">
+          <svg class="micro-fig" id="m-aux-trap-fig" viewBox="0 0 280 140" role="img" aria-label="辅助角象限颠倒反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">翻车现场 ③</span><b>二倍角降幂公式分母漏除以 \(2\)</b></p>
+      <p class="small" style="color:var(--hl);margin:0 0 4px"><b>典型错解：</b>将 \(\sin^2 x\) 降幂误写为 \(1 - \cos 2x\)。</p>
+      <p class="small" style="color:var(--b);margin:0"><b>一眼看清真相：</b>由 \(\cos 2x = 1 - 2\sin^2 x\) 移项得 \(2\sin^2 x = 1 - \cos 2x\)，必须除以 \(2\) 得 \(\sin^2 x = \dfrac{1-\cos 2x}{2}\)！忘除 \(2\) 会导致振幅暴涨一倍！</p>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>差角余弦的完整推导</b>：单位圆上取 \(P_1(\cos\alpha,\sin\alpha)\)、\(P_2(\cos\beta,\sin\beta)\)。整个图绕原点转 \(-\beta\)：\(P_2\) 转到 \(A(1,0)\)，\(P_1\) 转到 \(P(\cos(\alpha-\beta),\sin(\alpha-\beta))\)。旋转不改变长度，\(|P_1P_2|=|AP|\)。用两点间距离公式（\(\sin^2+\cos^2=1\) 消掉很多项）：</p>
-    <p>\(|P_1P_2|^2=2-2(\cos\alpha\cos\beta+\sin\alpha\sin\beta)\)，\(|AP|^2=2-2\cos(\alpha-\beta)\)。</p>
-    <p>两者相等，就得到 \(\cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta\)。\(P_1\)、\(P_2\) 重合时两条弦都缩成一个点，长度都是 \(0\)，等式照样成立。这里只用了单位圆和距离公式。</p>
-    <p><b>半角、积化和差、和差化积</b>：都能从上面的公式推出来，会推就行，<b>不要求背</b>。比如把 \(\sin(\alpha+\beta)\) 和 \(\sin(\alpha-\beta)\) 相加，得 \(\sin\alpha\cos\beta=\dfrac12[\sin(\alpha+\beta)+\sin(\alpha-\beta)]\)，这就是一条积化和差。</p>
-    <p><b>常用的拼角</b>：\(2\alpha=\dfrac{\pi}{2}-2\left(\dfrac{\pi}{4}-\alpha\right)\)，所以 \(\sin2\alpha=\cos2\left(\dfrac{\pi}{4}-\alpha\right)\)。已知 \(\dfrac{\pi}{4}-\alpha\) 的三角函数值时很好用，真题里会遇到。</p>
+    <p><b>差角余弦的完整推导</b>：单位圆上取 \(P_1(\cos\alpha,\sin\alpha)\)、\(P_2(\cos\beta,\sin\beta)\)。整个图绕原点转 \(-\beta\)：\(P_2\) 转到 \(A(1,0)\)，\(P_1\) 转到 \(P(\cos(\alpha-\beta),\sin(\alpha-\beta))\)。旋转不改变长度，\(|P_1P_2|=|AP|\)。用两点间距离公式：\(|P_1P_2|^2=2-2(\cos\alpha\cos\beta+\sin\alpha\sin\beta)\)，\(|AP|^2=2-2\cos(\alpha-\beta)\)。两者相等，得证。</p>
+    <p><b>积化和差与和差化积</b>：由和差角相加减即得，考试不强求死记，考场随时手推。</p>
   </details>
 </section>
 
@@ -293,6 +302,7 @@
       <p><b>B</b>。\(\sin x\) 可能等于 \(0\)，不能直接约掉。应该移项提因式：\(\sin x(2\cos x-1)=0\)，所以 \(\sin x=0\) 或 \(\cos x=\dfrac12\)。前者给出 \(x=0,\pi\)，后者给出 \(\dfrac{\pi}{3},\dfrac{5\pi}{3}\)，一共 \(4\) 个解。小明丢了 \(0\) 和 \(\pi\)。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-split"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="A">
@@ -308,6 +318,7 @@
       <p>\(\sin\beta=\sin(\alpha+\beta)\cos\alpha-\cos(\alpha+\beta)\sin\alpha=\dfrac{12}{13}\cdot\dfrac45-\dfrac{5}{13}\cdot\dfrac35=\dfrac{48-15}{65}=\dfrac{33}{65}\)。选 B 的同学中间用了加号；C 是 \(\sin(\alpha+\beta)\) 取了负号，可锐角 \(\beta\) 的正弦不会是负的。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-sumtan"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -550,8 +561,191 @@
   function resetA() { sa2 = { a: DEFA.a, b: DEFA.b }; drawA(); }
   document.getElementById("resetA").addEventListener("click", function () { resetA(); logI({ fig: "aux", how: "reset" }); });
 
+  /* ---------- 0 从例子进入：cos(60°-30°) 与 cos60°-cos30° 对比 ---------- */
+  var ecd = document.getElementById("entry-cosd"), ecdBar = document.getElementById("entry-cosd-bar"), ecdNote = document.getElementById("entry-cosd-note");
+  function ecdDraw(m) {
+    ecd.innerHTML = "";
+    var cx = 92, cy = 114, r = 72;
+    mk(ecd, "circle", { cx: cx, cy: cy, r: r, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.8 });
+    mk(ecd, "line", { x1: cx - r - 10, y1: cy, x2: cx + r + 14, y2: cy, stroke: "var(--muted)", "stroke-width": 1.4 });
+    mk(ecd, "line", { x1: cx, y1: cy - r - 10, x2: cx, y2: cy + 28, stroke: "var(--muted)", "stroke-width": 1.4 });
+    [[60, "var(--b)", "60°"], [30, "var(--a)", "30°"]].forEach(function (it) {
+      var a = it[0] * Math.PI / 180, px = cx + r * Math.cos(a), py = cy - r * Math.sin(a);
+      mk(ecd, "line", { x1: cx, y1: cy, x2: px, y2: py, stroke: it[1], "stroke-width": 2.4 });
+      mk(ecd, "line", { x1: px, y1: py, x2: px, y2: cy, stroke: it[1], "stroke-dasharray": "3 3" });
+      mk(ecd, "circle", { cx: px, cy: py, r: 5, fill: it[1] });
+    });
+    // 右侧横向对比条（0 点在 x = 264，比例 1 单位 = 135px）
+    var ox = 264, sc = 135;
+    mk(ecd, "line", { x1: ox, y1: 24, x2: ox, y2: 192, stroke: "var(--fg)", "stroke-width": 1.5, "stroke-dasharray": "4 3" });
+    mk(ecd, "text", { x: ox, y: 18, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12 }).textContent = "0";
+    var bars = [
+      ["cos 60° = 0.5", 0.5, 48, "var(--b)", m === 0],
+      ["cos 30° ≈ 0.866", 0.866, 92, "var(--a)", m === 0],
+      ["cos(60°−30°) = cos 30° ≈ +0.866", 0.866, 138, "var(--a)", m === 2],
+      ["cos 60° − cos 30° ≈ −0.366", -0.366, 180, "var(--no)", m === 1]
+    ];
+    bars.forEach(function (b) {
+      var v = b[1], y = b[2], w = Math.abs(v) * sc, x = v >= 0 ? ox : ox - w, hi = b[4];
+      mk(ecd, "rect", { x: x, y: y, width: w, height: 12, rx: 3, fill: b[3], opacity: hi ? 1 : 0.42 });
+      mk(ecd, "text", { x: ox + 6, y: y - 4, "text-anchor": "start", fill: hi ? "var(--fg)" : "var(--muted)", "font-size": 12.5, "font-weight": hi ? 700 : 500 }).textContent = b[0];
+    });
+    [].forEach.call(ecdBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
+    });
+    var notes = [
+      "单位圆上：<b>cos 60° = 0.5</b>（短），<b>cos 30° ≈ 0.866</b>（长）——角变大，余弦反而变小！",
+      "若错误地直接拆开相减：<b>cos 60° − cos 30° = 0.5 − 0.866 = −0.366</b>（变成负数了！）",
+      "正确先减角再算：<b>cos(60° − 30°) = cos 30° ≈ +0.866</b>，和直接相减的 −0.366 完全不相等！"
+    ];
+    ecdNote.innerHTML = notes[m];
+  }
+  [].forEach.call(ecdBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ecdDraw(parseInt(b.getAttribute("data-m"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecdDraw(ev.detail.choice === "B" ? 2 : 1);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecdDraw(2);
+  });
+
+  function initStep2() {
+    var fig = document.getElementById("m-trans-fig");
+    var bar = document.getElementById("m-trans-bar");
+    var note = document.getElementById("m-trans-note");
+    var trap = document.getElementById("m-aux-trap-fig");
+    if (!fig || !bar) return;
+
+    function el(target, tag, attrs) {
+      var e = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (var k in attrs) e.setAttribute(k, attrs[k]);
+      target.appendChild(e);
+      return e;
+    }
+
+    function renderCard(target, title, titleCol, items) {
+      el(target, "rect", { x: 212, y: 15, width: 300, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
+      el(target, "text", { x: 222, y: 38, fill: titleCol, "font-size": 12.5, "font-weight": 700 }).textContent = title;
+      items.forEach(function (it, idx) {
+        el(target, "text", { x: 222, y: 62 + idx * 22, fill: it[1], "font-size": 10.5, "font-weight": it[2] || 400 }).textContent = it[0];
+      });
+    }
+
+    function drawTrans(mode) {
+      fig.innerHTML = "";
+      var cx = 75, cy = 80, r = 55;
+
+      if (mode === "add") {
+        el(fig, "circle", { cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--line)", "stroke-width": 1.5 });
+        el(fig, "line", { x1: cx - r - 12, y1: cy, x2: cx + r + 12, y2: cy, stroke: "var(--muted)", "stroke-width": 1.2 });
+        el(fig, "line", { x1: cx, y1: cy - r - 12, x2: cx, y2: cy + r + 12, stroke: "var(--muted)", "stroke-width": 1.2 });
+
+        var a = 65 * Math.PI / 180, b = 20 * Math.PI / 180;
+        var p1x = cx + r * Math.cos(a), p1y = cy - r * Math.sin(a);
+        var p2x = cx + r * Math.cos(b), p2y = cy - r * Math.sin(b);
+        el(fig, "line", { x1: cx, y1: cy, x2: p1x, y2: p1y, stroke: "var(--a)", "stroke-width": 1.8 });
+        el(fig, "line", { x1: cx, y1: cy, x2: p2x, y2: p2y, stroke: "var(--b)", "stroke-width": 1.8 });
+        el(fig, "line", { x1: p1x, y1: p1y, x2: p2x, y2: p2y, stroke: "var(--hl)", "stroke-width": 2.2 });
+        el(fig, "circle", { cx: p1x, cy: p1y, r: 4, fill: "var(--a)" });
+        el(fig, "circle", { cx: p2x, cy: p2y, r: 4, fill: "var(--b)" });
+        el(fig, "text", { x: p1x - 12, y: p1y - 6, fill: "var(--a)", "font-size": 10.5, "font-weight": 700 }).textContent = "P1(α)";
+        el(fig, "text", { x: p2x + 4, y: p2y - 2, fill: "var(--b)", "font-size": 10.5, "font-weight": 700 }).textContent = "P2(β)";
+
+        var da = a - b;
+        var pax = cx + r * Math.cos(da), pay = cy - r * Math.sin(da);
+        var ax = cx + r, ay = cy;
+        el(fig, "line", { x1: ax, y1: ay, x2: pax, y2: pay, stroke: "var(--hl)", "stroke-width": 2.2, "stroke-dasharray": "3 2" });
+        el(fig, "circle", { cx: pax, cy: pay, r: 3.5, fill: "var(--hl)" });
+        el(fig, "circle", { cx: ax, cy: ay, r: 3.5, fill: "var(--muted)" });
+        el(fig, "text", { x: pax + 4, y: pay - 4, fill: "var(--hl)", "font-size": 10 }).textContent = "P(α-β)";
+
+        renderCard(fig, "和差角余弦：单位圆旋转等距弦长", "var(--a)", [
+          ["• 弦长不变：|P1P2| 绕原点旋转 -β 与 |AP| 严格重合", "var(--fg)"],
+          ["• 距离展开：cos(α-β) = cosα cosβ + sinα sinβ", "var(--a)", 600],
+          ["• 余弦展开：同名相乘，符号相反 (加变减，减变加)", "var(--b)", 600],
+          ["• 正弦展开：异名相乘，符号相同 (sin cos ± cos sin)", "var(--hl)", 600]
+        ]);
+      } else if (mode === "dbl") {
+        el(fig, "rect", { x: 15, y: 20, width: 185, height: 52, rx: 6, fill: "var(--card)", stroke: "var(--a)", "stroke-width": 1.5 });
+        el(fig, "text", { x: 25, y: 42, fill: "var(--a)", "font-size": 12, "font-weight": 700 }).textContent = "二倍角扩角 (角翻倍)";
+        el(fig, "text", { x: 25, y: 60, fill: "var(--fg)", "font-size": 11 }).textContent = "sin 2α = 2sinα cosα";
+
+        el(fig, "line", { x1: 107, y1: 74, x2: 107, y2: 90, stroke: "var(--muted)", "stroke-width": 1.8 });
+        el(fig, "polygon", { points: "103,90 107,96 111,90", fill: "var(--muted)" });
+
+        el(fig, "rect", { x: 15, y: 98, width: 185, height: 52, rx: 6, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 1.5 });
+        el(fig, "text", { x: 25, y: 120, fill: "var(--b)", "font-size": 12, "font-weight": 700 }).textContent = "降幂升角 (次数减半)";
+        el(fig, "text", { x: 25, y: 138, fill: "var(--fg)", "font-size": 11 }).textContent = "sin²α = (1 - cos 2α) / 2";
+
+        renderCard(fig, "二倍角与降幂互逆转换枢纽", "var(--b)", [
+          ["• cos 2α 三式：cos²α-sin²α = 2cos²α-1 = 1-2sin²α", "var(--fg)"],
+          ["• 降幂扩角：cos²α = (1+cos 2α)/2，分母切记带 2！", "var(--a)", 600],
+          ["• 正切倍角：tan 2α = 2tanα / (1 - tan²α)", "var(--b)", 600],
+          ["• 实战价值：把二次三角式降为一次周期波", "var(--hl)", 600]
+        ]);
+      } else {
+        var tox = 42, toy = 125, ta = 68, tb = 80;
+        el(fig, "line", { x1: tox, y1: toy, x2: tox + ta, y2: toy, stroke: "var(--a)", "stroke-width": 2.2 });
+        el(fig, "line", { x1: tox + ta, y1: toy, x2: tox + ta, y2: toy - tb, stroke: "var(--b)", "stroke-width": 2.2 });
+        el(fig, "line", { x1: tox, y1: toy, x2: tox + ta, y2: toy - tb, stroke: "var(--hl)", "stroke-width": 2.5 });
+        el(fig, "circle", { cx: tox + ta, cy: toy - tb, r: 4, fill: "var(--hl)" });
+        el(fig, "text", { x: tox + ta * 0.45, y: toy + 14, fill: "var(--a)", "font-size": 11, "font-weight": 700 }).textContent = "a";
+        el(fig, "text", { x: tox + ta + 6, y: toy - tb * 0.45, fill: "var(--b)", "font-size": 11, "font-weight": 700 }).textContent = "b";
+        el(fig, "text", { x: 8, y: toy - tb * 0.55 - 6, "text-anchor": "start", fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }).textContent = "R=√(a²+b²)";
+        el(fig, "text", { x: tox + 16, y: toy - 8, fill: "var(--muted)", "font-size": 10.5 }).textContent = "φ";
+
+        renderCard(fig, "辅助角公式：几何直角三角形合成", "var(--hl)", [
+          ["• 变形心法：a sin x + b cos x = R sin(x + φ)", "var(--fg)"],
+          ["• 合成振幅：R = √(a²+b²)，最大值为 R，最小为 -R", "var(--a)", 600],
+          ["• 辅助角定向：cos φ=a/R，sin φ=b/R，tan φ=b/a", "var(--b)", 600],
+          ["• 避坑核心：φ 的象限由点(a,b)决定，绝不只算 tan！", "var(--hl)", 600]
+        ]);
+      }
+
+      [].forEach.call(bar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-m") === mode);
+      });
+      var noteMap = {
+        add: "两角和差：余弦<b>同名相乘、符号相反</b>；正弦<b>异名相乘、符号相同</b>！",
+        dbl: "二倍角与降幂互逆：<b>升角必降幂，降幂必扩角</b>，牢记 cos²α = (1+cos 2α)/2！",
+        aux: "辅助角公式：两项合为单项，<b>振幅 R = √(a²+b²)，角 φ 由点 (a,b) 坐标象限定向</b>！"
+      };
+      if (note) note.innerHTML = noteMap[mode] || "";
+    }
+
+    [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.addEventListener("click", function () { drawTrans(b.getAttribute("data-m")); });
+    });
+
+    if (trap) {
+      trap.innerHTML = "";
+      var tox2 = 62, toy2 = 65;
+      el(trap, "line", { x1: 12, y1: toy2, x2: 112, y2: toy2, stroke: "var(--muted)", "stroke-width": 1 });
+      el(trap, "line", { x1: tox2, y1: 10, x2: tox2, y2: 125, stroke: "var(--muted)", "stroke-width": 1 });
+
+      var px3 = tox2 - 22, py3 = toy2 + 38;
+      el(trap, "line", { x1: tox2, y1: toy2, x2: px3, y2: py3, stroke: "var(--hl)", "stroke-width": 2.2 });
+      el(trap, "circle", { cx: px3, cy: py3, r: 4, fill: "var(--hl)" });
+      el(trap, "text", { x: 6, y: py3 + 14, fill: "var(--hl)", "font-size": 9, "font-weight": 700 }).textContent = "(-1,-√3) 三象限";
+
+      var px1 = tox2 + 22, py1 = toy2 - 38;
+      el(trap, "line", { x1: tox2, y1: toy2, x2: px1, y2: py1, stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "2 2" });
+      el(trap, "circle", { cx: px1, cy: py1, r: 3.5, fill: "var(--muted)" });
+      el(trap, "text", { x: px1 - 4, y: py1 - 4, "text-anchor": "end", fill: "var(--muted)", "font-size": 8.5 }).textContent = "错取 60°";
+
+      el(trap, "text", { x: 122, y: 30, fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }).textContent = "翻车点：辅助角象限看反！";
+      el(trap, "text", { x: 122, y: 52, fill: "var(--fg)", "font-size": 9.5 }).textContent = "式子: -sin x - √3 cos x";
+      el(trap, "text", { x: 122, y: 72, fill: "var(--a)", "font-size": 9.5 }).textContent = "点(-1,-√3)在第 3 象限";
+      el(trap, "text", { x: 122, y: 92, fill: "var(--hl)", "font-size": 9.5, "font-weight": 600 }).textContent = "tan φ = √3 但 φ ≠ π/3！";
+      el(trap, "text", { x: 122, y: 116, fill: "var(--b)", "font-size": 9.5, "font-weight": 600 }).textContent = "正解: φ = -2π/3 (-120°)";
+    }
+
+    drawTrans("add");
+  }
+
   buildC(); buildA();
-  function init() { resetC(); resetA(); }
+  function init() { ecdDraw(2); resetC(); resetA(); initStep2(); }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

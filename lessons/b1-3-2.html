@@ -8,17 +8,15 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   #mf text, #pp text { font-size: 20px; }
   .ops button.on { background: var(--a); color: #fff; }
   .info { font-size: 16px; margin: 8px 0; line-height: 1.9; overflow-wrap: anywhere; }
   .info .bad { color: var(--no); font-weight: 600; }
   .info .good { color: var(--a); font-weight: 600; }
-  .cb { color: var(--b); font-weight: 600; }
-  .cc { color: var(--c); font-weight: 600; }
   .ctrl label { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; }
-  details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
-  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
 </head>
 <body data-sec="b1-3-2">
@@ -29,9 +27,16 @@
 <p class="lead">图象往上走还是往下走、最高点和最低点在哪、左右是不是对称——这一节把这些「看得出来」的特点写成能检验的数学语言：单调性、最大（小）值、奇偶性。先从一天的气温开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>某天从早到晚，每两小时记一次气温：</p>
-  <p style="text-align:center">6 点 \(10^\circ\)，8 点 \(13^\circ\)，10 点 \(17^\circ\)，12 点 \(21^\circ\)，14 点 \(23^\circ\)，16 点 \(20^\circ\)，18 点 \(16^\circ\)</p>
+  <p>某天从早到晚，每两小时记一次气温。点下面的按钮（或点折线上的圆点）看看各时段气温怎么变：</p>
   <div class="card predict" data-id="entry" data-answer="C">
+    <svg class="entry-fig" id="entry-temp" viewBox="0 0 520 200" role="img" aria-label="6点到18点气温变化折线图，标出上升段、14点最高温23度与下降段"></svg>
+    <div class="entry-bar" id="entry-temp-bar">
+      <button type="button" data-m="all" class="on">看全天趋势</button>
+      <button type="button" data-m="up">6~14点：上升段(递增)</button>
+      <button type="button" data-m="peak">14点：最高温 23℃(最大值)</button>
+      <button type="button" data-m="down">14~18点：下降段(递减)</button>
+    </div>
+    <div class="entry-note" id="entry-temp-note"></div>
     <p>从 6 点到 18 点，气温是怎么变的？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>一直在升高</button>
@@ -47,29 +52,62 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h2>一、单调性和最大（小）值</h2>
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：函数、定义域和区间的写法（<a href="b1-3-1.html">回看 3.1</a>）；二次函数配方找顶点（<a href="b1-2-3.html">回看 2.3</a>）。</p>
-  <div class="card">
-    <p><b>开端点、闭端点</b>：方括号含端点，圆括号不含。</p>
-    <p>例：\(3\in[1,3]\)，\(3\notin[1,3)\)；\(2.9\)、\(2.99\)、\(2.999\) 都在 \([1,3)\) 里，可以无限靠近 \(3\)，就是到不了 \(3\)。</p>
-  </div>
-  <div class="card">
-    <p><b>任意、存在、反例</b>：「任意」是每一个都要满足；「存在」是至少找得到一个。要推翻一句「任意……都……」，举<b>一个</b>不满足的例子就够，这叫反例。</p>
-    <p>例：「对任意 \(x\in[1,3]\)，\(x^2\ge1\)」对。「存在 \(x\)，使 \(x^2=4\)」对，\(x=2\) 就是。「对任意实数 \(x\)，\(x^2>x\)」不对，反例 \(x=0.5\)：\(0.25&lt;0.5\)。</p>
+  <div class="vid" data-video="concept"></div>
+  <h2>一、单调性与最大（小）值</h2>
+  <h3>1. 先认识几个词：从「爬坡滑梯与对称折纸」建立直觉</h3>
+  <p class="small">要用到：函数、定义域和区间的写法（<a href="b1-3-1.html">回看 3.1</a>）；二次函数配方找顶点（<a href="b1-2-3.html">回看 2.3</a>）。先看下面这幅微图解：</p>
+
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>函数四大核心形态：增、减、偶对称、奇对称</b></p>
+    <div class="entry-bar" id="m-prop-bar" role="group" aria-label="函数性质微图解切换">
+      <button type="button" class="on" data-k="inc">① 增函数（爬坡：x 变大 y 跟着变大）</button>
+      <button type="button" data-k="dec">② 减函数（滑梯：x 变大 y 反而变小）</button>
+      <button type="button" data-k="even">③ 偶函数（关于 y 轴镜面对称：f(-x) = f(x)）</button>
+      <button type="button" data-k="odd">④ 奇函数（绕原点转半圈对称：f(-x) = -f(x)）</button>
+    </div>
+    <svg class="micro-fig" id="m-prop-fig" viewBox="0 0 520 160" role="img" aria-label="函数性质微图解"></svg>
+    <p class="entry-note" id="m-prop-note"></p>
   </div>
 
-  <h3>2. 单调性：任意两点都要比</h3>
-  <p>\(D\) 是 \(f(x)\) 定义域里的一个区间。对 \(D\) 里<b>任意</b>的 \(x_1&lt;x_2\)，都有 \(f(x_1)&lt;f(x_2)\)，就说 \(f(x)\) 在 \(D\) 上<b>单调递增</b>；都有 \(f(x_1)>f(x_2)\)，就是<b>单调递减</b>。\(D\) 叫单调区间；\(D\) 是整个定义域时，叫<b>增函数</b>（<b>减函数</b>）。</p>
-  <p>为什么要「任意」：抽查几个点、看一小段图，中间可能藏着往回走的地方。所以证明用固定四步：</p>
-  <div class="key"><b>任取</b> \(x_1&lt;x_2\) → <b>作差</b> \(f(x_1)-f(x_2)\) → <b>变形、判号</b>（因式分解、通分、配方）→ <b>下结论</b>。</div>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>证明 \(f(x)=1-\dfrac2x\) 在 \((0,+\infty)\) 上单调递增。</p>
-    <p>任取 \(x_1,x_2\in(0,+\infty)\)，\(x_1&lt;x_2\)。</p>
-    <p>作差：\(f(x_1)-f(x_2)=\left(1-\dfrac2{x_1}\right)-\left(1-\dfrac2{x_2}\right)=\dfrac2{x_2}-\dfrac2{x_1}=\dfrac{2(x_1-x_2)}{x_1x_2}\)。</p>
-    <p>判号：\(x_1-x_2&lt;0\)，\(x_1x_2>0\)，所以差 \(&lt;0\)，即 \(f(x_1)&lt;f(x_2)\)。结论：在 \((0,+\infty)\) 上单调递增。</p>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">单调本质</span><b>任意两点都要比（抽查几个点不作数！）</b></p>
+      <p class="small" style="margin:0">单调递增要求区间内「任意」两个自变量：\(x_1&lt;x_2 \Rightarrow f(x_1)&lt;f(x_2)\)。哪怕抽查了 10 个点都在上升，中间只要有一小段回踩下滑，就绝对不能算增函数！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">奇偶生死线</span><b>定义域关于原点对称是第一前提！</b></p>
+      <p class="small" style="margin:0">判断奇偶性必须先看定义域！若定义域在原点两侧不对称（例如 \([-1, 2]\)），无论解析式如何完美对称，也一票否决、直接判定为「非奇非偶」！</p>
+    </div>
   </div>
+
+  <h3>2. 核心数学定义与性质总览</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\forall x_1,x_2\in D,\ x_1&lt;x_2\implies f(x_1)&lt;f(x_2)}_{\text{增函数（同向变化：爬坡）}}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{f(-x)=f(x)}_{\text{偶函数（关于 y 轴对称）}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{f(-x)=-f(x)}_{\text{奇函数（关于原点对称）}}}\)</span>
+  </div>
+
+  <h3>3. 三步破题思维链：定义法证明单调性与最值求解</h3>
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：定义法证明单调性思维链）</b></p>
+    <p style="margin:0 0 8px">证明函数 \(f(x)=1-\dfrac2x\) 在 \((0,+\infty)\) 上单调递增。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步任取两点设大小：</span>
+        在区间 \((0,+\infty)\) 内<b>任取</b> \(x_1, x_2\)，令 \(x_1 &lt; x_2\)。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步作差通分因式分解：</span>
+        \(f(x_1)-f(x_2)=\left(1-\frac2{x_1}\right)-\left(1-\frac2{x_2}\right)=\frac2{x_2}-\frac2{x_1}=\frac{2(x_1-x_2)}{x_1x_2}\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步严密判号下定结论：</span>
+        因为 \(x_1&lt;x_2\)，所以分子 \(x_1-x_2&lt;0\)；因为 \(x_1,x_2&gt;0\)，所以分母 \(x_1x_2&gt;0\)。<br>
+        故差值 \(\frac{2(x_1-x_2)}{x_1x_2}&lt;0\)，即 \(f(x_1)&lt;f(x_2)\)，严格获证单调递增！
+      </div>
+    </div>
+  </div>
+
   <div class="card predict" data-id="e-any" data-answer="C">
     <p>自己试试：\(f(x)=2x^2-5x\)。算得 \(f(1)=-3\)，\(f(2)=-2\)，\(f(3)=3\)，一个比一个大。\(f(x)\) 在 \([1,3]\) 上单调递增吗？</p>
     <div class="opts">
@@ -78,19 +116,16 @@
       <button class="opt" data-v="C"><b>C</b>不是，在 \(\left[1,\frac54\right]\) 上它在变小</button>
       <button class="opt" data-v="D"><b>D</b>不是，因为 \(f(2)-f(1)\neq f(3)-f(2)\)</button>
     </div>
-    <div class="reveal"><p><b>C</b>。配方：\(2x^2-5x=2\left(x-\frac54\right)^2-\frac{25}{8}\)，对称轴 \(x=\frac54\) 落在 \([1,3]\) 里，左边一小段在下降：\(1&lt;\frac54\)，而 \(f\left(\frac54\right)=-\frac{25}{8}&lt;-3=f(1)\)。抽查几个点（A）、只比两端（B）都不是「任意」；D 说的是涨得快慢，和单调无关。它的递增区间是 \(\left[\frac54,+\infty\right)\)。</p></div>
+    <div class="reveal"><p><b>C</b>。配方：\(2x^2-5x=2\left(x-\frac54\right)^2-\frac{25}{8}\)，对称轴 \(x=\frac54\) 落在 \([1,3]\) 里，左边一小段在下降：\(1&lt;\frac54\)，而 \(f\left(\frac54\right)=-\frac{25}{8}&lt;-3=f(1)\)。抽查几个点（A）、只比两端（B）都不是「任意」；它的递增区间是 \(\left[\frac54,+\infty\right)\)。</p></div>
   </div>
 
-  <h3>3. 最大值、最小值：压得住，还要取得到</h3>
-  <p>\(f(x)\) 的定义域是 \(I\)。\(M\) 是<b>最大值</b>，要两条都满足：① 对任意 \(x\in I\)，\(f(x)\le M\)（压得住）；② 存在 \(x_0\in I\)，\(f(x_0)=M\)（取得到）。最小值把「\(\le\)」换成「\(\ge\)」。</p>
-  <p>单调性是找最值的主要工具：在 \([a,b]\) 上递增，最小值 \(f(a)\)、最大值 \(f(b)\)；递减反过来；先减后增，最小值在拐弯处，最大值比两端。</p>
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（闭区间二次函数最值）</b></p>
     <p>求 \(f(x)=x^2-2x-1\) 在 \([-1,2]\) 上的最大值和最小值。</p>
     <p>配方：\(f(x)=(x-1)^2-2\)。在 \([-1,1]\) 上递减，在 \([1,2]\) 上递增。</p>
     <p>最小值在拐弯处：\(f(1)=-2\)。最大值比两端：\(f(-1)=2\)，\(f(2)=-1\)，所以最大值 \(2\)，在 \(x=-1\) 取到。</p>
-    <p class="small">区间改成 \((-1,2]\) 呢？靠近 \(-1\) 时函数值无限接近 \(2\)，却取不到，就<b>没有</b>最大值了。在「动手」图一里切换端点开闭看看。</p>
   </div>
+
   <div class="card predict" data-id="try-max" data-answer="A">
     <p>自己试试：\(f(x)=\dfrac6x\)，\(x\in[2,6]\)。最大值和最小值是？</p>
     <div class="opts">
@@ -101,35 +136,15 @@
     <div class="reveal"><p><b>A</b>。\(\dfrac6x\) 在 \([2,6]\) 上递减，左端最大 \(f(2)=3\)，右端最小 \(f(6)=1\)。选 B 是当成递增了；选 C 把端点的 \(x\) 当成了函数值。</p></div>
   </div>
 
-  <h3>4. 这一块的边界</h3>
-  <ol>
-    <li><b>抽查不能代替「任意」</b>，看一小段图也不能。<br><span class="small">反例：上面的 \(2x^2-5x\)，三个点在涨，\(\left[1,\frac54\right]\) 上却在降。</span></li>
-    <li><b>两个区间上分别递增，不能直接说在并集上递增</b>，单调区间之间用「和」，不用 \(\cup\)。<br><span class="small">反例：\(\dfrac1x\) 在 \((-\infty,0)\)、\((0,+\infty)\) 上分别递减，可 \(-1&lt;1\) 时 \(f(-1)=-1&lt;f(1)=1\)。</span></li>
-    <li><b>开端点可能让最值取不到</b>。<br><span class="small">反例：\(f(x)=x\)，\(x\in[0,1)\)，值能无限接近 \(1\)，没有最大值。</span></li>
-    <li><b>只「压得住」不算最值</b>。<br><span class="small">反例：\(x^2\) 在 \([0,2]\) 上的值都 \(\le100\)，但 \(100\) 取不到，最大值是 \(4\)。</span></li>
-  </ol>
-
-  <h2>二、奇偶性</h2>
-  <h3>5. 先认识几个词</h3>
+  <h2>二、奇偶性及其应用</h2>
   <div class="card">
-    <p><b>\(f(-x)\)</b>：把式子里的每个 \(x\) 都换成 \(-x\)，带括号换。</p>
-    <p>例：\(f(x)=x^2+x\)，\(f(-x)=(-x)^2+(-x)=x^2-x\)。\(x=2\) 时，\(f(-2)=4-2=2\)，而 \(f(2)=6\)。</p>
-  </div>
-  <div class="card">
-    <p><b>定义域关于原点对称</b>：\(x\) 在里面，\(-x\) 也一定在里面。</p>
-    <p>例：\([-2,2]\)、\(\{x\mid x\neq0\}\) 是对称的；\([-2,3]\) 不是：\(3\) 在里面，\(-3\) 不在。</p>
-  </div>
-
-  <h3>6. 奇函数、偶函数：先看定义域，再代 \(-x\)</h3>
-  <p>定义域关于原点对称时：对<b>所有</b> \(x\) 都有 \(f(-x)=f(x)\)，是<b>偶函数</b>，图象关于 \(y\) 轴对称（左右翻折重合）；都有 \(f(-x)=-f(x)\)，是<b>奇函数</b>，图象关于原点对称（绕原点转半圈重合）。定义域不对称，直接是非奇非偶。</p>
-  <div class="key">判断奇偶性：<b>先查定义域对不对称，再算 \(f(-x)\)</b>，和 \(f(x)\)、\(-f(x)\) 比。</div>
-  <div class="card">
-    <p class="small">例 3</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（奇偶性代数判断）</b></p>
     <p>判断奇偶性：(1) \(f(x)=x+\dfrac1x\)；(2) \(g(x)=x^4+x^2\)；(3) \(h(x)=x^2+x\)。</p>
-    <p>(1) 定义域 \(\{x\mid x\neq0\}\)，对称。\(f(-x)=-x+\dfrac1{-x}=-\left(x+\dfrac1x\right)=-f(x)\)，奇函数。</p>
-    <p>(2) 定义域 \(\mathbf R\)。\(g(-x)=(-x)^4+(-x)^2=x^4+x^2=g(x)\)，偶函数。</p>
-    <p>(3) 定义域 \(\mathbf R\)。\(h(-1)=0\)，\(h(1)=2\)：既不相等，也不互为相反数，非奇非偶（一对反例就够）。</p>
+    <p>(1) 定义域 \(\{x\mid x\neq0\}\) 对称。\(f(-x)=-x-\dfrac1x=-f(x)\)，奇函数。</p>
+    <p>(2) 定义域 \(\mathbf R\)。\(g(-x)=(-x)^4+(-x)^2=g(x)\)，偶函数。</p>
+    <p>(3) 定义域 \(\mathbf R\)。\(h(-1)=0\)，\(h(1)=2\)，既不相等也不相反，非奇非偶。</p>
   </div>
+
   <div class="card predict" data-id="try-parity" data-answer="A">
     <p>自己试试：\(f(x)=x|x|\) 是？</p>
     <div class="opts cols">
@@ -137,17 +152,16 @@
       <button class="opt" data-v="B"><b>B</b>偶函数</button>
       <button class="opt" data-v="C"><b>C</b>非奇非偶</button>
     </div>
-    <div class="reveal"><p><b>A</b>。定义域 \(\mathbf R\)。\(f(-x)=(-x)\cdot|-x|=-x|x|=-f(x)\)。选 B 的同学看到绝对值就以为是偶函数，可前面还乘了一个 \(x\)。代数验一下：\(f(2)=4\)，\(f(-2)=-4\)。</p></div>
+    <div class="reveal"><p><b>A</b>。定义域 \(\mathbf R\)。\(f(-x)=(-x)\cdot|-x|=-x|x|=-f(x)\)。选 B 的同学看到绝对值就以为是偶函数，可前面还乘了一个 \(x\)。</p></div>
   </div>
 
-  <h3>7. 知道一半，就知道另一半</h3>
-  <p>奇偶函数两边是对称的，知道 \(x>0\) 时的式子，就能求 \(x&lt;0\) 的值。单调性也跟着走：<b>偶函数在 \(y\) 轴两侧单调性相反，奇函数在原点两侧单调性相同。</b></p>
   <div class="card">
-    <p class="small">例 4</p>
-    <p>\(f(x)\) 是定义在 \(\mathbf R\) 上的奇函数，\(x>0\) 时 \(f(x)=x^2-2x\)。求 \(f(-1)\)，以及 \(x&lt;0\) 时的式子。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（利用对称性已知一半求另一半）</b></p>
+    <p>\(f(x)\) 是定义在 \(\mathbf R\) 上的奇函数，\(x&gt;0\) 时 \(f(x)=x^2-2x\)。求 \(f(-1)\)，以及 \(x&lt;0\) 时的式子。</p>
     <p>\(f(-1)=-f(1)=-(1-2)=1\)。</p>
-    <p>\(x&lt;0\) 时 \(-x>0\)，可以代已知式子：\(f(-x)=(-x)^2-2(-x)=x^2+2x\)。奇函数 \(f(x)=-f(-x)=-x^2-2x\)。验一下：\(f(-1)=-1+2=1\)，对得上。另外 \(f(0)=0\)。</p>
+    <p>\(x&lt;0\) 时 \(-x&gt;0\)，代入得：\(f(-x)=(-x)^2-2(-x)=x^2+2x\)。由奇函数性质 \(f(x)=-f(-x)=-x^2-2x\)。另外 \(f(0)=0\)。</p>
   </div>
+
   <div class="card predict" data-id="try-half" data-answer="A">
     <p>自己试试：\(f(x)\) 是偶函数，\(x\ge0\) 时 \(f(x)=x^2-3x\)。\(f(-2)=\)？</p>
     <div class="opts cols">
@@ -158,20 +172,55 @@
     <div class="reveal"><p><b>A</b>。偶函数 \(f(-2)=f(2)=4-6=-2\)。选 B 是把 \(-2\) 直接代进 \(x\ge0\) 的式子，可那个式子只管 \(x\ge0\)；选 C 是当成奇函数，多了个负号。</p></div>
   </div>
 
-  <h3>8. 这一块的边界</h3>
-  <ol>
-    <li><b>定义域不对称，式子再像也不是</b>。<br><span class="small">反例：\(f(x)=x^2\)，\(x\in[-1,2]\)，\(2\) 在、\(-2\) 不在，非奇非偶。</span></li>
-    <li><b>奇函数在 \(0\) 有定义，则 \(f(0)=0\)；反过来不成立。</b><br><span class="small">反例：\(x^2\) 也有 \(f(0)=0\)，它是偶函数。</span></li>
-    <li><b>恒为 \(0\) 的函数</b>（定义域对称）既是奇函数又是偶函数。<br><span class="small">\(f(-x)=0\)，既等于 \(f(x)\)，也等于 \(-f(x)\)。</span></li>
-    <li><b>「含奇次幂」「图象看着对称」都不够</b>。<br><span class="small">反例：\(x^3+1\)，\(f(-1)=0\)，\(-f(1)=-2\)，不是奇函数；它的图象关于点 \((0,1)\) 对称，不是原点。</span></li>
-  </ol>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>单调区间随手用并集符号 ∪ 连接</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：随手写出 \(f(x)=\dfrac{1}{x}\) 在 \((-\infty,0)\cup(0,+\infty)\) 上单调递减。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：跨区间彻底失效！比如取 \(-1&lt;1\)，但 \(f(-1)=-1&lt;1=f(1)\)，反而变大了！多个单调区间只能用「和」或顿号隔开，<b>严禁写并集 \(\cup\)</b>！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-inv-fig" viewBox="0 0 280 140" role="img" aria-label="反比例函数并集错误微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>求最值忽略开端点「取不到」问题</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：断定函数 \(f(x)=x\) 在区间 \([0,1)\) 上的最大值是 \(1\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：数值可以无限逼近 \(1\)（如 \(0.999\)），但因开端点永远取不到 \(1\)！最值必须<b>压得住且取得到</b>，此题结论是<b>没有最大值</b>！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>定义域不对称强谈奇偶，或将「含奇次幂」等同于奇函数</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：看到 \(f(x)=x^3+1\) 含有奇次幂就判断是奇函数；或者在 \([-1,2]\) 上判断 \(x^2\) 是偶函数。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：定义域不对称直接判非奇非偶！\(f(x)=x^3+1\) 绕原点旋转不对称（\(f(0)=1\ne 0\)），不符合 \(f(-x)=-f(x)\)，是非奇非偶！
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>单调区间端点写开写闭</b>：函数在端点有定义、图象连着时，两种都行，如 \((x-1)^2\) 的递增区间写 \([1,+\infty)\) 或 \((1,+\infty)\)；端点不在定义域里（如 \(\dfrac1x\) 的 \(0\)）就只能开。</p>
-    <p><b>什么时候能连起来</b>：奇函数在 \([0,+\infty)\) 上递增，那它在 \((-\infty,0]\) 上也递增；左边的值都 \(\le f(0)=0\)，右边都 \(\ge0\)，跨过 \(0\) 也不往回走，所以在 \(\mathbf R\) 上递增。「练一练」最后一题要用。</p>
-    <p><b>一个点碰巧成立不算</b>：\(f(x)=\frac14x^3-x+1\) 有 \(f(-2)=f(2)=1\)，可 \(f(-1)=\frac74\)，\(f(1)=\frac14\)，它不是偶函数。奇偶性要对所有 \(x\) 成立（图二里拖到 \(t=2\) 看）。</p>
-    <p><b>这一章不用导数</b>：单调性只靠定义、代数变形和图象来判断，导数在选择性必修里才学。</p>
+    <p><b>什么时候能连起来</b>：奇函数在 \([0,+\infty)\) 上递增，那它在 \((-\infty,0]\) 上也递增；左边的值都 \(\le f(0)=0\)，右边都 \(\ge0\)，跨过 \(0\) 也不往回走，所以在 \(\mathbf R\) 上递增。</p>
+    <p><b>奇函数在原点有定义必有 \(f(0)=0\)</b>：由 \(f(-0)=-f(0)\implies f(0)=-f(0)\implies 2f(0)=0\implies f(0)=0\)。这是高考高频送分考点！</p>
   </details>
 </section>
 
@@ -264,6 +313,7 @@
       <p>最大值：\(x\) 越靠近 \(2\)，\(x^2\) 越接近 \(4\)，可 \(2\) 不在区间里，\(4\) 取不到（A 错）；\(1\) 又压不住，\(f(1.5)=2.25>1\)（B 错）。比 \(4\) 小的数都会被超过，所以<b>没有</b>最大值。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-mono"></div>
   <div class="card predict" data-id="e-parity" data-answer="C">
     <p>5. 下面说法正确的是？</p>
     <div class="opts">
@@ -289,6 +339,7 @@
       <p>选 B 是把 \(-f(x-2)\) 当成了 \(f(x-2)\)，得 \(2x-1>x-2\)；选 C 是把不等号方向弄反了，递增函数去掉 \(f\) 时方向不变。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-axis"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -676,7 +727,175 @@
   document.getElementById("mo").onchange = function () { p.mo = this.checked; drawP(); logP(); };
   document.getElementById("reset2").onclick = function () { p = { fn: "even", t: 3, my: false, mo: false }; drawP(); };
 
-  function drawAll() { drawM(); drawP(); }
+  /* ================= 0 从例子进入：全天气温曲线 ================= */
+  var etSvg = document.getElementById("entry-temp"), etBar = document.getElementById("entry-temp-bar"), etNote = document.getElementById("entry-temp-note");
+  var etMode = "all";
+  function etDraw(mode) {
+    etMode = mode;
+    var c = C(), okS = css("--ok-soft");
+    etSvg.innerHTML = "";
+    var pts = [[6, 10], [8, 13], [10, 17], [12, 21], [14, 23], [16, 20], [18, 16]];
+    var x0 = 54, x1 = 474, y0 = 158, y1 = 36;
+    function X(hr) { return x0 + (hr - 6) / 12 * (x1 - x0); }
+    function Y(tp) { return y0 - (tp - 8) / 17 * (y0 - y1); }
+
+    // 区域背景高亮
+    if (mode === "up" || mode === "all") {
+      svg("rect", { x: X(6), y: 20, width: X(14) - X(6), height: y0 - 20, rx: 6, fill: okS, opacity: mode === "up" ? 0.85 : 0.4 }, etSvg);
+      svg("text", { x: (X(6) + X(14)) / 2, y: 36, "text-anchor": "middle", "font-weight": 700, fill: c.a, "font-size": 13.5 }, etSvg).textContent = "6~14点：上升段 ↗";
+    }
+    if (mode === "down" || mode === "all") {
+      svg("rect", { x: X(14), y: 20, width: X(18) - X(14), height: y0 - 20, rx: 6, fill: c.line, opacity: mode === "down" ? 0.55 : 0.25 }, etSvg);
+      svg("text", { x: (X(14) + X(18)) / 2 + 12, y: 36, "text-anchor": "middle", "font-weight": 700, fill: c.b, "font-size": 12.5 }, etSvg).textContent = "14~18点：下降段 ↘";
+    }
+
+    // 坐标轴与水平网格
+    [10, 15, 20, 23].forEach(function (tp) {
+      svg("line", { x1: x0 - 6, y1: Y(tp), x2: x1 + 6, y2: Y(tp), stroke: tp === 23 && mode === "peak" ? c.hl : c.line, "stroke-dasharray": tp === 23 ? "4 3" : "" }, etSvg);
+      svg("text", { x: x0 - 10, y: Y(tp) + 5, "text-anchor": "end", fill: c.muted, "font-size": 12.5 }, etSvg).textContent = tp + "°";
+    });
+    svg("line", { x1: x0 - 6, y1: y0, x2: x1 + 12, y2: y0, stroke: c.fg, "stroke-width": 1.5 }, etSvg);
+
+    // 上升折线 (6~14) 与 下降折线 (14~18)
+    var dUp = "", dDn = "";
+    pts.forEach(function (pt, idx) {
+      if (idx <= 4) dUp += (idx ? "L" : "M") + X(pt[0]).toFixed(1) + " " + Y(pt[1]).toFixed(1);
+      if (idx >= 4) dDn += (idx > 4 ? "L" : "M") + X(pt[0]).toFixed(1) + " " + Y(pt[1]).toFixed(1);
+    });
+    svg("path", { d: dUp, fill: "none", stroke: c.a, "stroke-width": mode === "up" || mode === "all" ? 3.6 : 2, opacity: mode === "down" ? 0.35 : 1 }, etSvg);
+    svg("path", { d: dDn, fill: "none", stroke: c.b, "stroke-width": mode === "down" || mode === "all" ? 3.6 : 2, opacity: mode === "up" ? 0.35 : 1 }, etSvg);
+
+    pts.forEach(function (pt) {
+      var hr = pt[0], tp = pt[1], isPeak = hr === 14;
+      var col = isPeak ? c.hl : (hr < 14 ? c.a : c.b);
+      var g = svg("g", { style: "cursor:pointer" }, etSvg);
+      svg("circle", { cx: X(hr), cy: Y(tp), r: isPeak ? 8 : 5.5, fill: isPeak ? c.hl : col, stroke: c.card, "stroke-width": 2 }, g);
+      svg("text", { x: isPeak ? X(hr) - 10 : X(hr), y: Y(tp) - (isPeak ? 10 : 9), "text-anchor": isPeak ? "end" : "middle", "font-weight": 700, fill: isPeak ? c.fg : col, "font-size": isPeak ? 13.5 : 13 }, g).textContent = (isPeak ? "★最高 " : "") + tp + "°";
+      svg("text", { x: X(hr), y: y0 + 22, "text-anchor": "middle", fill: c.fg, "font-weight": isPeak ? 700 : 400, "font-size": 13 }, g).textContent = hr + "点";
+      g.onclick = function () { etDraw(isPeak ? "peak" : (hr < 14 ? "up" : "down")); };
+    });
+
+    [].forEach.call(etBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (mode === "up") {
+      etNote.innerHTML = "<b>6 点 → 14 点（上升段）</b>：10° → 13° → 17° → 21° → 23°，时间越往后气温越高（<b>单调递增</b>）。";
+    } else if (mode === "peak") {
+      etNote.innerHTML = "<b>14 点达到最高峰</b>：全天最高气温 <b>23°C</b>（这就是函数在这段时间上的<b>最大值</b>）。";
+    } else if (mode === "down") {
+      etNote.innerHTML = "<b>14 点 → 18 点（下降段）</b>：23° → 20° → 16°，气温开始回落（<b>单调递减</b>）。";
+    } else {
+      etNote.innerHTML = "全天走势：<b>先升高（6~14点递增）→ 14 点达到最高 23°C（最大值）→ 然后降低（14~18点递减）</b>。";
+    }
+  }
+  [].forEach.call(etBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { etDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: "up", B: "down", C: "all", D: "all" };
+      etDraw(map[ev.detail.choice] || "all");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") etDraw("all");
+  });
+
+  /* ================= ② 讲清楚微图解 ================= */
+  var mPropSvg = document.getElementById("m-prop-fig");
+  var mPropBar = document.getElementById("m-prop-bar");
+  var mPropNote = document.getElementById("m-prop-note");
+  var mInvSvg = document.getElementById("m-inv-fig");
+  var mPropKey = "inc";
+
+  function drawProp(k) {
+    mPropKey = k;
+    if (!mPropSvg) return;
+    mPropSvg.innerHTML = "";
+    var c = C();
+
+    svg("line", { x1: 60, y1: 118, x2: 460, y2: 118, stroke: c.line, "stroke-width": 1.5 }, mPropSvg);
+    svg("line", { x1: 260, y1: 132, x2: 260, y2: 20, stroke: c.line, "stroke-width": 1.5 }, mPropSvg);
+    svg("text", { x: 465, y: 122, fill: c.muted, "font-size": 12 }, mPropSvg).textContent = "x";
+    svg("text", { x: 260, y: 15, "text-anchor": "middle", fill: c.muted, "font-size": 12 }, mPropSvg).textContent = "y";
+
+    if (k === "inc") {
+      svg("path", { d: "M 100 110 Q 240 92 420 28", fill: "none", stroke: c.a, "stroke-width": 3 }, mPropSvg);
+      svg("circle", { cx: 160, cy: 96, r: 5, fill: c.a }, mPropSvg);
+      svg("circle", { cx: 340, cy: 56, r: 5, fill: c.a }, mPropSvg);
+      svg("text", { x: 160, y: 133, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "x₁";
+      svg("text", { x: 340, y: 133, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "x₂";
+      svg("text", { x: 150, y: 88, "text-anchor": "end", fill: c.a, "font-weight": 700, "font-size": 12.5 }, mPropSvg).textContent = "f(x₁)";
+      svg("text", { x: 350, y: 52, "text-anchor": "start", fill: c.a, "font-weight": 700, "font-size": 12.5 }, mPropSvg).textContent = "f(x₂)";
+      svg("text", { x: 260, y: 154, "text-anchor": "middle", fill: c.a, "font-weight": 700, "font-size": 13 }, mPropSvg).textContent = "单调递增：x 越大，y 越大（同向爬坡）";
+      if (mPropNote) mPropNote.innerHTML = "<b>单调递增（爬坡）</b>：对区间内任意 x₁ < x₂，都有 f(x₁) < f(x₂)。自变量向右走，图象一路向上爬！";
+    } else if (k === "dec") {
+      svg("path", { d: "M 100 28 Q 240 92 420 110", fill: "none", stroke: c.b, "stroke-width": 3 }, mPropSvg);
+      svg("circle", { cx: 160, cy: 56, r: 5, fill: c.b }, mPropSvg);
+      svg("circle", { cx: 340, cy: 96, r: 5, fill: c.b }, mPropSvg);
+      svg("text", { x: 160, y: 133, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "x₁";
+      svg("text", { x: 340, y: 133, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "x₂";
+      svg("text", { x: 150, y: 52, "text-anchor": "end", fill: c.b, "font-weight": 700, "font-size": 12.5 }, mPropSvg).textContent = "f(x₁)";
+      svg("text", { x: 350, y: 88, "text-anchor": "start", fill: c.b, "font-weight": 700, "font-size": 12.5 }, mPropSvg).textContent = "f(x₂)";
+      svg("text", { x: 260, y: 154, "text-anchor": "middle", fill: c.b, "font-weight": 700, "font-size": 13 }, mPropSvg).textContent = "单调递减：x 越大，y 反而越小（反向滑梯）";
+      if (mPropNote) mPropNote.innerHTML = "<b>单调递减（滑梯）</b>：对区间内任意 x₁ < x₂，都有 f(x₁) > f(x₂)。自变量向右走，图象一路顺坡下滑！";
+    } else if (k === "even") {
+      svg("path", { d: "M 130 35 Q 260 140 390 35", fill: "none", stroke: c.hl, "stroke-width": 3 }, mPropSvg);
+      svg("circle", { cx: 180, cy: 75, r: 5, fill: c.hl }, mPropSvg);
+      svg("circle", { cx: 340, cy: 75, r: 5, fill: c.hl }, mPropSvg);
+      svg("line", { x1: 180, y1: 75, x2: 340, y2: 75, stroke: c.hl, "stroke-dasharray": "3 3", "stroke-width": 1.2 }, mPropSvg);
+      svg("text", { x: 180, y: 146, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "-x";
+      svg("text", { x: 340, y: 146, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "x";
+      svg("text", { x: 260, y: 65, "text-anchor": "middle", fill: c.hl, "font-weight": 700, "font-size": 13 }, mPropSvg).textContent = "f(-x) = f(x) 关于 y 轴镜面对称";
+      if (mPropNote) mPropNote.innerHTML = "<b>偶函数（y 轴折纸镜面对称）</b>：左右两侧互为镜像，f(-x) = f(x)。偶函数在 y 轴两侧单调性必相反！";
+    } else if (k === "odd") {
+      svg("path", { d: "M 130 115 Q 240 100 260 80 Q 280 60 390 45", fill: "none", stroke: c.hl, "stroke-width": 3 }, mPropSvg);
+      svg("circle", { cx: 180, cy: 104, r: 5, fill: c.hl }, mPropSvg);
+      svg("circle", { cx: 340, cy: 56, r: 5, fill: c.hl }, mPropSvg);
+      svg("line", { x1: 180, y1: 104, x2: 340, y2: 56, stroke: c.hl, "stroke-dasharray": "3 3", "stroke-width": 1.2 }, mPropSvg);
+      svg("circle", { cx: 260, cy: 80, r: 4, fill: c.card, stroke: c.hl, "stroke-width": 2 }, mPropSvg);
+      svg("text", { x: 180, y: 146, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "-x";
+      svg("text", { x: 340, y: 146, "text-anchor": "middle", fill: c.fg, "font-size": 12 }, mPropSvg).textContent = "x";
+      svg("text", { x: 260, y: 40, "text-anchor": "middle", fill: c.hl, "font-weight": 700, "font-size": 13 }, mPropSvg).textContent = "f(-x) = -f(x) 绕原点旋转180°对称";
+      if (mPropNote) mPropNote.innerHTML = "<b>奇函数（原点中心旋转对称）</b>：绕原点转半圈与自身重合，f(-x) = -f(x)。在原点两侧单调性必定相同！";
+    }
+
+    if (mPropBar) {
+      [].forEach.call(mPropBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+    }
+  }
+
+  function drawInvTrap() {
+    if (!mInvSvg) return;
+    mInvSvg.innerHTML = "";
+    var c = C();
+    svg("line", { x1: 20, y1: 70, x2: 260, y2: 70, stroke: c.line, "stroke-width": 1.5 }, mInvSvg);
+    svg("line", { x1: 140, y1: 130, x2: 140, y2: 10, stroke: c.line, "stroke-width": 1.5 }, mInvSvg);
+
+    svg("path", { d: "M 40 68 Q 120 66 132 125", fill: "none", stroke: c.a, "stroke-width": 2.2 }, mInvSvg);
+    svg("path", { d: "M 148 15 Q 160 74 240 72", fill: "none", stroke: c.a, "stroke-width": 2.2 }, mInvSvg);
+
+    svg("circle", { cx: 90, cy: 95, r: 4.5, fill: c.no }, mInvSvg);
+    svg("circle", { cx: 190, cy: 45, r: 4.5, fill: c.a }, mInvSvg);
+    svg("text", { x: 90, y: 112, "text-anchor": "middle", fill: c.no, "font-size": 11, "font-weight": 700 }, mInvSvg).textContent = "(-1,-1)";
+    svg("text", { x: 190, y: 35, "text-anchor": "middle", fill: c.a, "font-size": 11, "font-weight": 700 }, mInvSvg).textContent = "(1, 1)";
+
+    svg("text", { x: 140, y: 132, "text-anchor": "middle", fill: c.no, "font-weight": 700, "font-size": 11.5 }, mInvSvg).textContent = "跨原点：-1 < 1 却 f(-1) < f(1)，严禁写 ∪！";
+  }
+
+  function initStep2() {
+    if (mPropBar) {
+      [].forEach.call(mPropBar.querySelectorAll("button"), function (b) {
+        b.onclick = function () { drawProp(b.getAttribute("data-k")); };
+      });
+    }
+    drawProp("inc");
+    drawInvTrap();
+  }
+
+  function drawAll() { etDraw(etMode); drawM(); drawP(); initStep2(); }
   document.addEventListener("DOMContentLoaded", drawAll);
   if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawAll);
 })();

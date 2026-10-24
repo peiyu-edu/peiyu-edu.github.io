@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig text.lab { font-size: 16px; font-weight: 700; fill: var(--fg); }
   .fig text.sub { font-size: 13px; fill: var(--muted); }
@@ -34,8 +36,15 @@
 <p class="lead">用向量推导出正弦定理、余弦定理，把三角形的边和角联结起来；解决实际中的距离、角度和测量问题。先从一个无法直接测量的距离开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>两根木棒由同一点铰接，长度分别为 \(3\text{ 米}\) 和 \(5\text{ 米}\)。初中我们学过：若两木棒垂直（夹角为 \(90^\circ\)），两端点间的距离可由勾股定理算出：\(\sqrt{3^2+5^2}=\sqrt{34}\approx5.83\text{ 米}\)。</p>
+  <p>两根木棒由同一点 \(C\) 铰接，长度分别为 \(a=3\text{ 米}\) 和 \(b=5\text{ 米}\)。若两木棒垂直（夹角 \(90^\circ\)），两端点距离由勾股定理得 \(\sqrt{3^2+5^2}=\sqrt{34}\approx5.83\text{ 米}\)。先点按钮把夹角缩到 \(60^\circ\) 看看：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-rods" viewBox="0 0 520 205" role="img" aria-label="两根3米和5米的铰接木棒在不同夹角下第三边长度c的变化"></svg>
+    <div class="entry-bar" id="entry-rods-bar">
+      <button type="button" data-deg="120">夹角 120° (c = 7.00m)</button>
+      <button type="button" data-deg="90">夹角 90° 直角 (c ≈ 5.83m)</button>
+      <button type="button" data-deg="60" class="on">夹角缩小到 60° (c ≈ 4.36m 变短)</button>
+    </div>
+    <div class="entry-note" id="entry-rods-note"></div>
     <p>如果把两根木棒的夹角从 \(90^\circ\) 缩小到 \(60^\circ\)，两端点之间的距离会如何变化？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>变大，比 \(5.83\text{ 米}\) 更长</button>
@@ -52,55 +61,58 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：前面学过的平面向量数量积与模长运算（<a href="b2-6-2.html">回看 6.2</a>）；特殊角的三角函数值与诱导公式（<a href="b1-5-2.html">回看 5.2</a>、<a href="b1-5-3.html">5.3</a>）。</p>
 
-  <div class="card">
-    <p><b>对边与对角</b>：在 \(\triangle ABC\) 中，每个角正对一条边。习惯上，内角 \(A,B,C\) 所对的边长分别记为小写字母 \(a,b,c\)。</p>
-    <p>例：在 \(\triangle ABC\) 中，若角 \(C=60^\circ\)，它的对边就是线段 \(AB\)，长记为 \(c\)；边 \(a\) 即线段 \(BC\)，它所对的角就是内角 \(A\)。</p>
+  <div class="micro-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="badge-pill">直觉微图解</span>
+      <div class="toggles" id="m-triapp-bar" style="margin:0" role="group" aria-label="解三角形模式切换">
+        <button class="btn ghost active" type="button" data-tri="cos">余弦定理（勾股推广）</button>
+        <button class="btn ghost" type="button" data-tri="sin">正弦定理（外接圆）</button>
+        <button class="btn ghost" type="button" data-tri="area">面积与射影</button>
+      </div>
+    </div>
+    <svg class="micro-fig" id="m-triapp-fig" viewBox="0 0 520 180" role="img" aria-label="正弦定理余弦定理几何直观图"></svg>
+    <p class="small" id="m-triapp-status" style="margin:6px 0 0 0;min-height:20px;color:var(--text-dim)"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-ok">神器 ①</span><b>正弦定理：对边对角之比等于外接圆直径 2R</b></div>
+      <p><b>边角互化</b>：\(\dfrac{a}{\sin A} = \dfrac{b}{\sin B} = \dfrac{c}{\sin C} = 2R\)。已知两角一边（AAS/ASA）必选；已知两边一对角（SSA）求角时需警惕<b>一锐一钝两解</b>！</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-no">神器 ②</span><b>余弦定理：向量数量积与广义勾股定理</b></div>
+      <p><b>无多解歧义</b>：\(c^2 = a^2 + b^2 - 2ab\cos C\)。已知两边夹角（SAS）求第三边；已知三边（SSS）求内角余弦。\(\cos C\) 符号直接定胜负：正锐、零直、负钝。</p>
+    </div>
   </div>
 
   <div class="card">
-    <p><b>外接圆与外接圆直径 \(2R\)</b>：过三角形三个顶点的圆叫作外接圆，其半径记为 \(R\)，直径为 \(2R\)。外心是三边垂直平分线的交点。</p>
-    <p>例：直角三角形的斜边就是其外接圆的直径。若斜边长为 \(10\)，则外接圆直径 \(2R=10\)，外接圆半径 \(R=5\)。</p>
+    <p><b>对边与对角</b>：在 \(\triangle ABC\) 中，每个角正对一条边。内角 \(A,B,C\) 所对的边长分别记为小写字母 \(a,b,c\)。大边对大角，小边对小角。</p>
   </div>
 
   <div class="card">
-    <p><b>仰角、俯角与方位角</b>：实际测量中，视线在水平线上方与水平线的夹角叫<b>仰角</b>；视线在水平线下方与水平线的夹角叫<b>俯角</b>；从正北方向顺时针转至目标方向的角叫<b>方位角</b>（或指明「北偏东 \(30^\circ\)」）。</p>
-    <p>例：在平地抬头看塔顶，视线与水平地面成 \(30^\circ\)，仰角就是 \(30^\circ\)；塔顶观测员低头看地面的人，俯角也是 \(30^\circ\)。</p>
+    <p><b>外接圆与外接圆直径 \(2R\)</b>：过三角形三个顶点的圆叫作外接圆，其半径记为 \(R\)，直径为 \(2R\)。直角三角形斜边即为外接圆直径。</p>
   </div>
 
   <div class="card">
-    <p><b>解三角形</b>：已知三角形的部分边和角，通过几何或代数定理求出其余所有未知的边和角的过程。</p>
-    <p>例：已知 \(a=3, b=4, C=90^\circ\)，求出第三边 \(c=5\) 及另外两个锐角，这个计算过程就叫解三角形。</p>
+    <p><b>仰角、俯角与方位角</b>：视线在水平线上方为<b>仰角</b>，视线在水平线下方为<b>俯角</b>；从正北方向顺时针转至目标方向的角叫<b>方位角</b>（如北偏东 \(30^\circ\)）。</p>
   </div>
 
-  <h3>2. 余弦定理：推广的勾股定理</h3>
-  <p>在 \(\triangle ABC\) 中，利用向量减法表示边向量：</p>
-  <p style="text-align:center">\(\overrightarrow{AB}=\overrightarrow{CB}-\overrightarrow{CA}\)</p>
-  <p>两边同时求模的平方（即向量自身做数量积）：</p>
-  <p style="text-align:center">\(|\overrightarrow{AB}|^2=|\overrightarrow{CB}-\overrightarrow{CA}|^2=|\overrightarrow{CB}|^2+|\overrightarrow{CA}|^2-2\overrightarrow{CB}\cdot\overrightarrow{CA}\)</p>
-  <p>注意到 \(|\overrightarrow{AB}|=c\)，\(|\overrightarrow{CB}|=a\)，\(|\overrightarrow{CA}|=b\)，且向量 \(\overrightarrow{CB}\) 与 \(\overrightarrow{CA}\) 的夹角正是三角形内角 \(C\)，所以它们的数量积为 \(ab\cos C\)。代入即得：</p>
-  <div class="key" style="text-align:center">
-    \(c^2=a^2+b^2-2ab\cos C\)<br>
-    变形求角：\(\cos C=\dfrac{a^2+b^2-c^2}{2ab}\)
+  <h3>2. 核心公式与边角互化法则</h3>
+  <div class="key">
+    ① <b>正弦定理</b>：\(\dfrac{a}{\sin A} = \dfrac{b}{\sin B} = \dfrac{c}{\sin C} = 2R\)（边化角：\(a=2R\sin A\)；角化边：\(\sin A = \dfrac{a}{2R}\)）；<br>
+    ② <b>余弦定理</b>：\(c^2 = a^2 + b^2 - 2ab\cos C\)（变形求角：\(\cos C = \dfrac{a^2+b^2-c^2}{2ab}\)）；<br>
+    ③ <b>面积公式</b>：\(S = \dfrac{1}{2}ab\sin C = \dfrac{1}{2}bc\sin A = \dfrac{1}{2}ac\sin B = \dfrac{abc}{4R}\)；<br>
+    ④ <b>定理选择口诀</b>：已知对边对角找正弦，已知两边夹角找余弦；求角优先余弦定钝锐，求边比例正弦最顺手。
   </div>
-  <p>同理，轮换另外两组边与角：</p>
-  <p style="text-align:center">\(a^2=b^2+c^2-2bc\cos A \iff \cos A=\dfrac{b^2+c^2-a^2}{2bc}\)</p>
-  <p style="text-align:center">\(b^2=a^2+c^2-2ac\cos B \iff \cos B=\dfrac{a^2+c^2-b^2}{2ac}\)</p>
-  <p>看看不同角时的变化规律：</p>
-  <ul>
-    <li>当 \(C=90^\circ\) 时，\(\cos 90^\circ=0\)，末项消失，化为 \(c^2=a^2+b^2\)（初中勾股定理）；</li>
-    <li>当 \(C&lt;90^\circ\)（锐角）时，\(\cos C&gt;0\)，减去正数使得 \(c^2&lt;a^2+b^2\)，对边变短；</li>
-    <li>当 \(C&gt;90^\circ\)（钝角）时，\(\cos C&lt;0\)，减去负数相当于加上正数，使得 \(c^2&gt;a^2+b^2\)，对边变长。</li>
-  </ul>
 
   <div class="card">
     <p class="small">例 1（已知两边及夹角求对边）</p>
     <p>在 \(\triangle ABC\) 中，\(b=3\)，\(c=4\)，\(A=60^\circ\)，求边 \(a\) 的长度。</p>
-    <p>由余弦定理：</p>
-    <p style="text-align:center">\(a^2=b^2+c^2-2bc\cos A=3^2+4^2-2\times3\times4\times\cos 60^\circ\)</p>
-    <p style="text-align:center">\(=9+16-24\times\dfrac{1}{2}=25-12=13\)。</p>
+    <p>由余弦定理：\(a^2=b^2+c^2-2bc\cos A=3^2+4^2-2\times3\times4\times\cos 60^\circ = 9+16-24\times\dfrac{1}{2}=25-12=13\)。</p>
     <p>因为边长 \(a&gt;0\)，所以 \(a=\sqrt{13}\)。</p>
   </div>
 
@@ -113,28 +125,15 @@
       <button class="opt" data-v="D"><b>D</b>\(\sqrt{13}\)</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。代入余弦定理：\(c^2=2^2+3^2-2\times2\times3\times\cos 60^\circ=4+9-6=7\)，开方得 \(c=\sqrt{7}\)。</p>
-      <p>选 B 的同学把公式里的减号算成了加号；选 C 的同学忘了开平方。</p>
+      <p><b>A</b>。由余弦定理：\(c^2=a^2+b^2-2ab\cos C = 2^2+3^2-2(2)(3)\cos 60^\circ = 4+9-12\times\dfrac{1}{2}=13-6=7\)。故 \(c=\sqrt{7}\)。</p>
     </div>
   </div>
 
-  <h3>3. 正弦定理与三角形面积</h3>
-  <p>在任意 \(\triangle ABC\) 中，各边与它所对角的正弦的比值全部相等，且该比值等于三角形外接圆的直径 \(2R\)：</p>
-  <div class="key" style="text-align:center">
-    \(\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=\dfrac{c}{\sin C}=2R\)
-  </div>
-  <p>为什么等于 \(2R\)：在直角三角形中斜边即外接圆直径 \(2R\)，由定义 \(\sin A=\dfrac{a}{2R} \implies \dfrac{a}{\sin A}=2R\)；在任意非直角三角形中，作过点 \(C\) 的外接圆直径 \(CD=2R\)，由同弧所对圆周角相等（或互补，正弦值一致），同样有 \(\sin A=\dfrac{a}{CD}=\dfrac{a}{2R}\)。</p>
-  <p>三角形面积公式：以边 \(a\) 为底，对应高为 \(h=b\sin C\)，因此面积为：</p>
-  <div class="key" style="text-align:center">
-    \(S=\dfrac{1}{2}ab\sin C=\dfrac{1}{2}bc\sin A=\dfrac{1}{2}ac\sin B\)
-  </div>
-
   <div class="card">
-    <p class="small">例 2（已知两角及一边求对边与外接圆）</p>
+    <p class="small">例 2（已知两角及一边求另边与外接圆半径）</p>
     <p>在 \(\triangle ABC\) 中，\(A=45^\circ\)，\(B=30^\circ\)，边 \(a=4\)，求边 \(b\) 的长及外接圆半径 \(R\)。</p>
-    <p>由正弦定理 \(\dfrac{a}{\sin A}=\dfrac{b}{\sin B}=2R\)：</p>
-    <p style="text-align:center">外接圆直径 \(2R=\dfrac{a}{\sin A}=\dfrac{4}{\sin 45^\circ}=\dfrac{4}{\frac{\sqrt{2}}{2}}=4\sqrt{2} \implies R=2\sqrt{2}\)。</p>
-    <p style="text-align:center">边 \(b=2R\sin B=4\sqrt{2}\times\sin 30^\circ=4\sqrt{2}\times\dfrac{1}{2}=2\sqrt{2}\)。</p>
+    <p>外接圆直径 \(2R=\dfrac{a}{\sin A}=\dfrac{4}{\sin 45^\circ}=\dfrac{4}{\frac{\sqrt{2}}{2}}=4\sqrt{2} \implies R=2\sqrt{2}\)。</p>
+    <p>边 \(b=2R\sin B=4\sqrt{2}\times\sin 30^\circ=4\sqrt{2}\times\dfrac{1}{2}=2\sqrt{2}\)。</p>
   </div>
 
   <div class="card predict" data-id="try-2" data-answer="A">
@@ -146,45 +145,92 @@
       <button class="opt" data-v="D"><b>D</b>\(\dfrac{3}{2}\)</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。面积 \(S=\dfrac{1}{2}ab\sin C=\dfrac{1}{2}\times3\times4\times\sin 30^\circ=6\times\dfrac{1}{2}=3\)。</p>
-      <p>选 B 的同学漏掉了公式前面的 \(\dfrac{1}{2}\)；选 C 的同学把 \(\sin 30^\circ\) 记成了 \(\cos 30^\circ\)。</p>
+      <p><b>A</b>。面积 \(S=\dfrac{1}{2}ab\sin C=\dfrac{1}{2}\times3\times4\times\sin 30^\circ=6\times\dfrac{1}{2}=3\)。选 B 的漏乘了 \(\dfrac{1}{2}\)；选 C 的误套成了余弦。</p>
+    </div>
+  </div>
+  <div class="vid" data-video="ex-meas"></div>
+
+  <h3>3. 典型例题：三步思维链精讲</h3>
+  <div class="card">
+    <p class="small"><b>例 3（高频考法·方程法求未知边与面积）</b></p>
+    <p>在 \(\triangle ABC\) 中，已知 \(a=\sqrt{3}\)，\(b=1\)，\(A=120^\circ\)。求：① 边 \(c\) 的长度；② \(\triangle ABC\) 的面积 \(S\)。</p>
+    <div class="think-steps">
+      <div class="step-card">
+        <div class="step-badge">👀 第一眼·破题信号</div>
+        <div class="step-text">已知两边及其中一边的对角（钝角 \(A=120^\circ\)）求第三边 \(c\) → <b>核心破题信号：余弦定理设未知数列一元二次方程</b>（无多解歧义），解出后算面积！</div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🔧 第二步·套公式拆解</div>
+        <div class="step-text">
+          ① 列余弦定理方程：\(a^2 = b^2 + c^2 - 2bc\cos A\)；<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;\((\sqrt{3})^2 = 1^2 + c^2 - 2(1)(c)\cos 120^\circ \implies 3 = 1 + c^2 - 2c\left(-\dfrac{1}{2}\right)\)；<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;化简得 \(c^2 + c - 2 = 0 \implies (c+2)(c-1) = 0\)；<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;因边长 \(c &gt; 0\)，舍去负根得 <b>\(c = 1\)</b>（此时 \(\triangle ABC\) 为等腰三角形！）；<br>
+          ② 计算三角形面积：<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;\(S = \dfrac{1}{2}bc\sin A = \dfrac{1}{2}\times 1\times 1\times\sin 120^\circ = \dfrac{1}{2}\times\dfrac{\sqrt{3}}{2} = \dfrac{\sqrt{3}}{4}\)。
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🛡️ 第三步·必查防坑点</div>
+        <div class="step-text">
+          ① 钝角余弦值为负（\(\cos 120^\circ = -\frac{1}{2}\)），\(-2bc\cos A\) 负负得正变 \(+c\)，符号千万不能错；<br>
+          ② 边长必须为正数，解二次方程后负根 \(c=-2\) 坚决舍弃；<br>
+          ③ 验证三角形不等式：\(b=1, c=1, a=\sqrt{3}\approx 1.732\)，\(1+1 &gt; \sqrt{3}\)，两边之和大于第三边成立。
+        </div>
+      </div>
     </div>
   </div>
 
-  <h3>4. 用之前要注意（边界条件）</h3>
-  <p>解三角形时，公式不能盲目套用，必须时刻注意以下三条红线：</p>
-  <div class="card">
-    <p><b>① 几何基本条件</b>：</p>
-    <ul>
-      <li>边长必须为正：\(a&gt;0, b&gt;0, c&gt;0\)；</li>
-      <li><b>两边之和必须大于第三边</b>：\(a+b&gt;c, b+c&gt;a, c+a&gt;b\)。反例：若已知三边 \(a=3, b=5, c=8\)，代入余弦定理虽可算出 \(\cos C=-1\)，但因为 \(3+5=8=c\)，三点落在同一条直线上，根本围不成三角形！</li>
-      <li>内角和为 \(\pi\)：\(A+B+C=180^\circ\)，每个角均在 \((0, \pi)\) 内。</li>
-    </ul>
+  <div class="vid" data-video="ex-solve"></div>
+
+  <h3>4. 这三种情况最容易翻车</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><b>SSA 盲套正弦定理丢掉钝角解</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>已知 \(A=30^\circ, b=4, a=2\sqrt{3}\)，由 \(\sin B=\frac{\sqrt{3}}{2}\) 只得出 \(B=60^\circ\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>高 \(h=b\sin A=2\)。由于 \(h &lt; a &lt; b\)，圆规以 \(a\) 为半径与底边相交于两点！\(B\) 可为 \(60^\circ\)（锐角）或 \(120^\circ\)（钝角），<b>恰有两解</b>，遗漏扣一半分。</p>
+        </div>
+      </div>
+      <svg class="micro-fig" id="m-ssa-trap-fig" viewBox="0 0 340 160" role="img" aria-label="SSA已知两边及对角两解反例图" style="margin-top:8px"></svg>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>盲目硬算忽视「三角形三边不等式」</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>已知 \(a=2, b=3, c=5\)，代入余弦定理硬算得出 \(\cos C = -1 \implies C=180^\circ\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>\(2+3=5\)，三点落在一条直线上，根本围不成三角形！做题前必须时刻牢记<b>两边之和必须大于第三边</b>。</p>
+        </div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><b>面积公式漏乘 1/2 或角边不对应</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>面积公式算成 \(ab\sin C\)（漏乘 \(\frac{1}{2}\)），或已知边 \(a, b\) 却去乘 \(\sin A\)。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>严格牢记 \(S = \dfrac{1}{2}ab\sin C\)：正弦角必须是两已知边的<b>正夹角</b>，系数 \(\dfrac{1}{2}\) 绝不可丢。</p>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <p><b>② 两边及一对角（SSA）的多解与无解陷阱</b>：</p>
-    <p>已知两边 \(a,b\) 和角 \(A\)，求角 \(B\) 时由正弦定理得 \(\sin B=\dfrac{b\sin A}{a}\)。在 \((0, \pi)\) 内，正弦值通常对应一锐一钝两个互补角。<b>不能只取计算器给出的锐角！</b></p>
-    <ul>
-      <li>若 \(a&lt;b\sin A\)：边 \(a\) 比高还短，<b>无解</b>；</li>
-      <li>若 \(a=b\sin A\)：边 \(a\) 恰垂直底边，<b>一解（直角三角形）</b>；</li>
-      <li>若 \(b\sin A&lt;a&lt;b\) 且 \(A\) 为锐角：大边对大角，短边 \(a\) 对锐角 \(A\)，此时钝角 \(180^\circ-B\) 与 \(A\) 之和仍小于 \(180^\circ\)，<b>恰有两解</b>！</li>
-      <li>若 \(a\ge b\)：大边对大角要求 \(A\ge B\)，三角形至多一个钝角，故角 \(B\) 只能是锐角，<b>只有一解</b>。</li>
-    </ul>
-    <p>反例：若 \(A=30^\circ\)，\(b=4\)，\(a=2\sqrt{3}\approx3.46\)。高 \(h=4\sin 30^\circ=2\)。由于 \(2&lt;a&lt;4\)，\(\sin B=\dfrac{\sqrt{3}}{2}\)，角 \(B\) 可以是 \(60^\circ\) 或 \(120^\circ\)，两解均成立！只写 \(60^\circ\) 就丢失了一半解。</p>
-  </div>
-
-  <div class="card">
-    <p><b>③ 定理选择策略</b>：</p>
-    <ul>
-      <li>已知两边及夹角（SAS）或已知三边（SSS）→ 优先选用<b>余弦定理</b>；</li>
-      <li>已知两角及一边（AAS / ASA）或已知两边及一对角（SSA）→ 优先选用<b>正弦定理</b>。</li>
-    </ul>
-  </div>
-
-  <details class="more"><summary>再深一点（可以先跳过）</summary>
-    <p><b>射影定理与坐标推导</b>：从点 \(A\) 向对边 \(BC\) 作高，垂足将底边分为两段射影：\(a=b\cos C+c\cos B\)。同理有 \(b=c\cos A+a\cos C\)，\(c=a\cos B+b\cos A\)。将三式分别乘 \(a,b,c\) 后两两相减，即可直接消去另外两个角得出余弦定理！</p>
-    <p>也可以用<b>直角坐标系</b>推导：以 \(C\) 为原点，\(CB\) 所在射线为 \(x\) 轴，则 \(C(0,0)\)，\(B(a,0)\)，\(A(b\cos C, b\sin C)\)。由两点间距离公式直接展开 \(c^2=(b\cos C-a)^2+(b\sin C)^2=a^2+b^2-2ab\cos C\)。代数与向量完全同源。</p>
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>射影定理与余弦定理互推</b>：从点 \(A\) 向对边 \(BC\) 作高，底边分为两段投影：\(a=b\cos C+c\cos B\)。同理有 \(b=c\cos A+a\cos C\)，\(c=a\cos B+b\cos A\)。将三式分别乘 \(a,b,c\) 后两两相减，即可直接得出余弦定理！</p>
+    <p><b>向量直角坐标系推导</b>：以 \(C\) 为原点，\(CB\) 为 \(x\) 轴，则 \(C(0,0)\)，\(B(a,0)\)，\(A(b\cos C, b\sin C)\)。由两点间距离公式展开 \(c^2=(b\cos C-a)^2+(b\sin C)^2=a^2+b^2-2ab\cos C\)。代数、几何与向量在此完美统一。</p>
   </details>
 </section>
 
@@ -631,7 +677,7 @@
 
         if (x1 <= Ax) {
           svg("circle", { cx: x1, cy: Ay, r: 4, fill: muted, opacity: 0.4 }, ssafig);
-          svg("text", { x: x1, y: Ay + 18, fill: muted, "font-size": 12, "text-anchor": "middle" }, ssafig).textContent = "(反向交点舍去)";
+          svg("text", { x: Math.max(8, x1), y: Ay - 12, fill: muted, "font-size": 12, "text-anchor": x1 < 75 ? "start" : "middle" }, ssafig).textContent = "(反向交点舍去)";
         }
 
         descHtml = '<span class="eq">仅有一解（锐角）</span>：\\(a=' + f2(a) + '\\ge b=6.0\\)。由「大边对大角」，\\(a\\ge b \\implies A\\ge B\\)。因为三角形至多一个钝角，角 \\(B\\) 必为锐角（钝角交点落在 \\(A\\) 左侧反向射线上，舍去）。角 \\(B\\approx' + f2(degB) + '^\\circ\\)。';
@@ -652,12 +698,226 @@
   }
   if (ssareset) ssareset.onclick = ssaReset;
 
+  /* ================= 0 从例子进入：铰接木棒与余弦定理 ================= */
+  var erdSvg = document.getElementById("entry-rods"), erdBar = document.getElementById("entry-rods-bar"), erdNote = document.getElementById("entry-rods-note");
+  var erdDeg = 60;
+  function erdDraw(deg) {
+    erdDeg = deg;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    erdSvg.innerHTML = "";
+    var cx = 115, cy = 166, u = 28; // b=5 -> 140px, a=3 -> 84px
+    var ax = cx + 5 * u, ay = cy;
+    var rad = deg * Math.PI / 180;
+    var bx = cx + 3 * u * Math.cos(rad), by = cy - 3 * u * Math.sin(rad);
+    // 90° 虚线参照
+    var bx90 = cx, by90 = cy - 3 * u;
+    if (deg !== 90) {
+      svg("line", { x1: cx, y1: cy, x2: bx90, y2: by90, stroke: mu, "stroke-width": 2, "stroke-dasharray": "3 3", opacity: 0.55 }, erdSvg);
+      svg("line", { x1: ax, y1: ay, x2: bx90, y2: by90, stroke: mu, "stroke-width": 1.5, "stroke-dasharray": "3 3", opacity: 0.55 }, erdSvg);
+      svg("text", { x: bx90 + 6, y: by90 - 4, fill: mu, "font-size": 12 }, erdSvg).textContent = "90°时 B₀ (5.83m)";
+    }
+    // 夹角弧
+    var rArc = 26;
+    svg("path", { d: "M " + (cx + rArc) + " " + cy + " A " + rArc + " " + rArc + " 0 0 0 " + (cx + rArc * Math.cos(rad)) + " " + (cy - rArc * Math.sin(rad)), fill: "none", stroke: hl, "stroke-width": 2.2 }, erdSvg);
+    svg("text", { x: cx + 34, y: cy - 10, fill: hl, "font-weight": 700, "font-size": 13.5 }, erdSvg).textContent = deg + "°";
+
+    // 木棒 b=5m (底边) 与 a=3m (旋转边)
+    svg("line", { x1: cx, y1: cy, x2: ax, y2: ay, stroke: cb, "stroke-width": 5, "stroke-linecap": "round" }, erdSvg);
+    svg("line", { x1: cx, y1: cy, x2: bx, y2: by, stroke: ca, "stroke-width": 5, "stroke-linecap": "round" }, erdSvg);
+    // 第三边 c
+    var cLen = Math.sqrt(34 - 30 * Math.cos(rad));
+    svg("line", { x1: ax, y1: ay, x2: bx, y2: by, stroke: cc, "stroke-width": 3, "stroke-dasharray": "6 4" }, erdSvg);
+    svg("circle", { cx: cx, cy: cy, r: 5.5, fill: fg }, erdSvg);
+    svg("circle", { cx: ax, cy: ay, r: 5, fill: cb }, erdSvg);
+    svg("circle", { cx: bx, cy: by, r: 5, fill: ca }, erdSvg);
+    svg("text", { x: (cx + ax) / 2, y: cy + 20, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 14 }, erdSvg).textContent = "木棒 b = 5 m";
+    svg("text", { x: (cx + bx) / 2 - 10, y: (cy + by) / 2 - 6, "text-anchor": "end", fill: ca, "font-weight": 700, "font-size": 14 }, erdSvg).textContent = "a = 3 m";
+    svg("text", { x: (ax + bx) / 2 + 10, y: (ay + by) / 2 - 4, fill: cc, "font-weight": 700, "font-size": 14.5 }, erdSvg).textContent = "c ≈ " + cLen.toFixed(2) + " m";
+
+    // 右侧余弦定理看板
+    var rx = 305;
+    svg("rect", { x: rx, y: 24, width: 198, height: 156, rx: 10, fill: deg === 60 ? okS : card, stroke: cc, "stroke-width": 1.6 }, erdSvg);
+    svg("text", { x: rx + 99, y: 52, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14.5 }, erdSvg).textContent = "夹角 C = " + deg + "° 时的第三边";
+    svg("text", { x: rx + 14, y: 84, fill: fg, "font-size": 13.5 }, erdSvg).textContent = "c² = 3² + 5² − 2·3·5·cos" + deg + "°";
+    var c2 = Math.round(34 - 30 * Math.cos(rad));
+    svg("text", { x: rx + 14, y: 112, fill: cc, "font-weight": 700, "font-size": 14 }, erdSvg).textContent = "c = √" + c2 + " ≈ " + cLen.toFixed(2) + " 米";
+    svg("text", { x: rx + 14, y: 146, fill: deg === 60 ? ca : (deg === 120 ? no : mu), "font-weight": 700, "font-size": 14 }, erdSvg).textContent = deg === 60 ? "比 90° 的 5.83m 明显变短！" : (deg === 90 ? "恰为直角勾股定理 √34" : "钝角张开，比 5.83m 更长");
+
+    [].forEach.call(erdBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-deg"), 10) === deg);
+    });
+    erdNote.innerHTML = "当前夹角 <b>" + deg + "°</b>：两端点距离 <b>c = √" + c2 + " ≈ " + cLen.toFixed(2) + " 米</b>" + (deg === 60 ? "（比直角时的 5.83 米<b>更短</b>！）" : "");
+  }
+  [].forEach.call(erdBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { erdDraw(parseInt(b.getAttribute("data-deg"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: 120, B: 60, C: 90 };
+      if (map[ev.detail.choice]) erdDraw(map[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erdDraw(60);
+  });
+
+  function initStep2() {
+    var fig = document.getElementById("m-triapp-fig");
+    var bar = document.getElementById("m-triapp-bar");
+    var status = document.getElementById("m-triapp-status");
+    var trap = document.getElementById("m-ssa-trap-fig");
+    if (!fig || !bar) return;
+
+    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var ca = isDark ? "#38bdf8" : "#0284c7";
+    var cb = isDark ? "#f59e0b" : "#d97706";
+    var cc = isDark ? "#10b981" : "#059669";
+    var cd = isDark ? "#ec4899" : "#db2777";
+    var mut = isDark ? "#94a3b8" : "#64748b";
+    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+    var border = isDark ? "#334155" : "#e2e8f0";
+
+    function sEl(parent, tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      parent.appendChild(el);
+      return el;
+    }
+
+    function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+      var t = sEl(parent, "text", {
+        x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
+        "font-weight": fw || 400, "text-anchor": anchor || "start"
+      });
+      t.textContent = text;
+      return t;
+    }
+
+    function drawTriApp(mode) {
+      fig.innerHTML = "";
+      if (mode === "cos") {
+        sTxt(fig, 30, 24, "【余弦定理】c² = a² + b² - 2ab cos C (向量数量积推广)", ca, 12.5, 700);
+        // Triangle C at (70, 140), B at (230, 140), A at (140, 50)
+        var cx = 70, cy = 140, bx = 230, by = 140, ax = 140, ay = 50;
+        sEl(fig, "polygon", { points: cx+","+cy+" "+bx+","+by+" "+ax+","+ay, fill: isDark ? "rgba(56,189,248,0.1)" : "rgba(2,132,199,0.08)", stroke: ca, "stroke-width": 2 });
+        sTxt(fig, cx - 14, cy + 12, "C", ca, 13, 700);
+        sTxt(fig, bx + 6, cy + 12, "B", ca, 13, 700);
+        sTxt(fig, ax, ay - 8, "A", ca, 13, 700, "middle");
+        sTxt(fig, (cx+bx)/2, cy + 16, "a (边 BC)", cb, 11.5, 700, "middle");
+        sTxt(fig, (cx+ax)/2 - 12, (cy+ay)/2, "b", cb, 11.5, 700);
+        sTxt(fig, (ax+bx)/2 + 10, (ay+by)/2, "c", cd, 12.5, 700);
+
+        sTxt(fig, 248, 55, "• 锐角 C：cos C > 0 → c² < a² + b² (对边短)", cc, 11.5, 700);
+        sTxt(fig, 248, 85, "• 直角 C：cos C = 0 → c² = a² + b² (勾股定理)", ca, 11.5, 700);
+        sTxt(fig, 248, 115, "• 钝角 C：cos C < 0 → c² > a² + b² (对边长)", cd, 11.5, 700);
+        sTxt(fig, 248, 145, "• 向量本质：|AB|² = |CB - CA|² = a²+b²-2a·b", mut, 11);
+
+        status.textContent = "余弦定理：勾股定理在任意三角形的完美推广，减去 2ab cos C 即为向量数量积交叉项。";
+      } else if (mode === "sin") {
+        sTxt(fig, 30, 24, "【正弦定理与外接圆】a/sin A = b/sin B = c/sin C = 2R", cb, 12.5, 700);
+        // circumcircle
+        var ox = 130, oy = 95, r = 52;
+        sEl(fig, "circle", { cx: ox, cy: oy, r: r, fill: "none", stroke: cb, "stroke-width": 1.5, "stroke-dasharray": "3 2" });
+        sEl(fig, "circle", { cx: ox, cy: oy, r: 3, fill: cb });
+        sTxt(fig, ox + 6, oy - 4, "O (外心)", cb, 11);
+
+        // inscribed triangle: A(130, 43), B(84, 123), C(176, 123)
+        var pAx = 130, pAy = 43, pBx = 84, pBy = 123, pCx = 176, pCy = 123;
+        sEl(fig, "polygon", { points: pAx+","+pAy+" "+pBx+","+pBy+" "+pCx+","+pCy, fill: isDark ? "rgba(245,158,11,0.1)" : "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 2 });
+        sTxt(fig, pAx, pAy - 6, "A", cb, 12, 700, "middle");
+        sTxt(fig, pBx - 10, pBy + 10, "B", cb, 12, 700);
+        sTxt(fig, pCx + 6, pCy + 10, "C", cb, 12, 700);
+        sTxt(fig, (pBx+pCx)/2, pCy + 16, "a", cd, 12, 700, "middle");
+
+        sTxt(fig, 245, 55, "• 比值恒等于外接圆直径 2R", cb, 12, 700);
+        sTxt(fig, 245, 85, "• 边角互化：a = 2R sin A, b = 2R sin B", ca, 11.5);
+        sTxt(fig, 245, 115, "• 连比性质：a : b : c = sin A : sin B : sin C", cc, 11.5, 700);
+        sTxt(fig, 245, 145, "• 警惕：SSA(两边及一边的对角)可能有两解！", cd, 11.5, 700);
+
+        status.textContent = "正弦定理：三角形对边与其对角正弦之比恒等于外接圆直径 2R，边角互化核心桥梁。";
+      } else {
+        // mode === "area"
+        sTxt(fig, 30, 24, "【面积公式与射影定理】S = 1/2 a b sin C", cc, 12.5, 700);
+        var cx2 = 55, cy2 = 140, bx2 = 210, by2 = 140, ax2 = 125, ay2 = 50;
+        sEl(fig, "polygon", { points: cx2+","+cy2+" "+bx2+","+by2+" "+ax2+","+ay2, fill: isDark ? "rgba(16,185,129,0.1)" : "rgba(5,150,105,0.08)", stroke: cc, "stroke-width": 2 });
+        // altitude from A to BC
+        sEl(fig, "line", { x1: ax2, y1: ay2, x2: ax2, y2: cy2, stroke: cd, "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        sTxt(fig, ax2 + 6, (ay2+cy2)/2, "h = b sin C", cd, 11, 700);
+
+        sTxt(fig, cx2 - 12, cy2 + 10, "C", cc, 12, 700);
+        sTxt(fig, bx2 + 4, cy2 + 10, "B", cc, 12, 700);
+        sTxt(fig, ax2, ay2 - 6, "A", cc, 12, 700, "middle");
+        sTxt(fig, (cx2+bx2)/2, cy2 + 16, "底边 a", cc, 12, 700, "middle");
+
+        sTxt(fig, 245, 55, "• 三角形面积：S = 1/2·底·高 = 1/2 ab sin C", cc, 11.5, 700);
+        sTxt(fig, 245, 85, "• 三组对称：1/2 ab sin C = 1/2 bc sin A", ca, 11.5);
+        sTxt(fig, 245, 115, "• 射影定理：a = b cos C + c cos B (投影和)", cb, 11.5);
+        sTxt(fig, 245, 145, "• 外接圆联动：S = abc / (4R)", mut, 11.5);
+
+        status.textContent = "面积公式：高 h = b sin C 代入初中底乘高即得 1/2 ab sin C，三组边角完全对称。";
+      }
+    }
+
+    function drawTrap() {
+      if (!trap) return;
+      trap.innerHTML = "";
+      sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
+      sTxt(trap, 170, 26, "SSA 两解直观：圆规画圆交底边于两点！", cd, 12, 700, "middle");
+
+      // Angle A at (28, 120), line AC = b along (28, 120) -> (130, 45)
+      var pAx = 28, pAy = 120, pCx = 130, pCy = 45;
+      sEl(trap, "line", { x1: pAx, y1: pAy, x2: 290, y2: pAy, stroke: mut, "stroke-width": 1.2 });
+      sEl(trap, "line", { x1: pAx, y1: pAy, x2: pCx, y2: pCy, stroke: ca, "stroke-width": 2 });
+      sTxt(trap, pAx, pAy - 8, "A(30°)", ca, 10.5, 700);
+      sTxt(trap, pCx - 4, pCy - 6, "C", ca, 10.5, 700);
+      sTxt(trap, (pAx+pCx)/2 - 14, (pAy+pCy)/2 - 4, "b=4", ca, 10.5, 700);
+
+      // altitude h = 2
+      sEl(trap, "line", { x1: pCx, y1: pCy, x2: pCx, y2: pAy, stroke: mut, "stroke-dasharray": "2 2", "stroke-width": 1 });
+      sTxt(trap, pCx + 4, (pCy+pAy)/2, "h=2", mut, 10);
+
+      // two points B1, B2 on bottom line: distance from C is a = 2.6
+      var b1x = 92, b2x = 172;
+      // circular arc around C
+      sEl(trap, "path", { d: "M 75 120 A 85 85 0 0 1 185 120", fill: "none", stroke: cd, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
+      sEl(trap, "line", { x1: pCx, y1: pCy, x2: b1x, y2: pAy, stroke: cd, "stroke-width": 2 });
+      sEl(trap, "line", { x1: pCx, y1: pCy, x2: b2x, y2: pAy, stroke: cc, "stroke-width": 2 });
+
+      sEl(trap, "circle", { cx: b1x, cy: pAy, r: 3.5, fill: cd });
+      sTxt(trap, b1x - 4, pAy + 15, "B₁(120°钝)", cd, 10, 700, "middle");
+
+      sEl(trap, "circle", { cx: b2x, cy: pAy, r: 3.5, fill: cc });
+      sTxt(trap, b2x + 12, pAy + 15, "B₂(60°锐)", cc, 10, 700, "middle");
+    }
+
+    var currMode = "cos";
+    [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.onclick = function () {
+        var m = b.getAttribute("data-tri");
+        if (m) {
+          currMode = m;
+          [].forEach.call(bar.querySelectorAll("button"), function (btn) {
+            btn.classList.toggle("active", btn === b);
+          });
+          drawTriApp(currMode);
+        }
+      };
+    });
+
+    drawTriApp("cos");
+    drawTrap();
+  }
+
   // 页面加载完成初始化
   window.addEventListener("DOMContentLoaded", function () {
+    erdDraw(60);
     initTriCoords();
     triDraw();
     ssaDraw();
+    initStep2();
   });
+  if (document.readyState !== "loading") { initStep2(); }
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { erdDraw(erdDeg); triDraw(); ssaDraw(); initStep2(); });
 })();
 </script>
 </body></html>

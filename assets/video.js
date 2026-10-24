@@ -113,7 +113,7 @@
     var slots = document.querySelectorAll(".vid[data-video]");
     if (!slots.length) return;
     var listUrl = new URL("../data/videos.json", document.baseURI).href;
-    fetch(listUrl).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (data) {
+    fetch(listUrl, { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (data) {
       var mine = (data.sections || {})[sec] || {};
       var base = new URL(data.base || "", listUrl).href;
       Array.prototype.forEach.call(slots, function (box) {

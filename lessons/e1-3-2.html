@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -30,9 +32,14 @@
 <p class="lead">从声源定位的时间差到冷却塔的双曲面外形，双曲线以「距离差的绝对值恒定」刻画了两支无限延伸的对称曲线。正项定实轴、渐近线无限逼近、离心率大于 1 是洞悉双曲线本质的三把钥匙。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>在海防导航或防空预警中，两个相距 \(10\text{ km}\) 的监测站 \(F_1, F_2\) 同时记录到某处海域传来的爆炸声。由于声音传播需要时间，\(F_1\) 站比 \(F_2\) 站晚了 \(2\) 秒听到声响（声速取 \(3\text{ km/s}\)）。</p>
-  <p>这意味着声源 \(P\) 到两监测站的距离差满足 \(|PF_1| - |PF_2| = 2 \times 3 = 6\text{ km}\)。</p>
+  <p>在海防导航中，两个相距 \(10\text{ km}\) 的监测站 \(F_1(-5,0), F_2(5,0)\) 同时记录到某处海域传来的爆炸声。\(F_1\) 站比 \(F_2\) 站晚了 \(2\) 秒听到声响（声速 \(3\text{ km/s}\)），意味着声源 \(P\) 到两站的距离差满足 \(|PF_1| - |PF_2| = 6\text{ km}\)。点按钮看声波传播与轨迹：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-hyp" viewBox="0 0 520 205" role="img" aria-label="海防双监测站F1和F2声波扩散同心圆与距离差|PF1|-|PF2|=6对应的双曲线右支轨迹"></svg>
+    <div class="entry-bar" id="entry-hyp-bar">
+      <button type="button" data-mode="wave" class="on">看声波传播与距离差 |PF₁|-|PF₂|=6</button>
+      <button type="button" data-mode="branch">看轨迹：为什么只落在靠近 F₂ 的右支上？</button>
+    </div>
+    <div class="entry-note" id="entry-hyp-note"></div>
     <p>如果动点 \(P\) 满足条件 \(|PF_1| - |PF_2| = 6\text{ km}\)（注意：此处没有加绝对值！），那么声源 \(P\) 可能所在的轨迹是什么图形？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>包含左右两支的完整双曲线</button>
@@ -50,27 +57,53 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：两点间距离公式（<a href="e1-2-3.html">回看 2.3</a>）；椭圆的定义和 \(a,b,c\)（<a href="e1-3-1.html">回看 3.1 椭圆</a>），双曲线的研究路子和它一样。</p>
+  <p class="small">要用到：两点间距离公式（<a href="e1-2-3.html">回看 2.3</a>）；椭圆的定义和 \(a,b,c\)（<a href="e1-3-1.html">回看 3.1</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：双曲线定义要求 \(0<2a<2c\)，并使用距离差的绝对值；\(2a=2c\) 是两条射线的退化情形。</p></div>
 
-  <div class="card">
-    <p><b>焦点、焦距</b>：定义里那两个定点叫<b>焦点</b> \(F_1,F_2\)，它们之间的距离 \(|F_1F_2|=2c\) 叫<b>焦距</b>，\(c\) 叫半焦距。</p>
-    <p>例：\(F_1(-5,0)\)、\(F_2(5,0)\)，焦距 \(2c=10\)，\(c=5\)。</p>
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：双曲线定义、渐近线特征矩形与离心率</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="def">① 第一定义与特征矩形</button>
+      <button type="button" class="micro-tab" data-mode="asymp">② 渐近线 y=±(b/a)x 几何贴近</button>
+      <button type="button" class="micro-tab" data-mode="axis">③ 正项定焦点原则</button>
+    </div>
+    <svg id="m-hyper-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="双曲线几何直观图解"></svg>
+    <div class="micro-caption" id="m-hyper-cap"></div>
   </div>
 
   <div class="card">
-    <p><b>实轴、虚轴</b>：双曲线和焦点所在直线交于两个<b>顶点</b>，两顶点之间的线段是<b>实轴</b>，长 \(2a\)；另一条对称轴上取长 \(2b\) 的线段叫<b>虚轴</b>（曲线并不经过它的端点，所以叫「虚」）。</p>
-    <p>例：\(\dfrac{x^2}{16}-\dfrac{y^2}{9}=1\) 的顶点是 \((\pm4,0)\)，实轴长 \(8\)，虚轴长 \(2\times3=6\)。</p>
+    <p><b>焦点与焦距</b>：两定点叫<b>焦点</b> \(F_1,F_2\)，焦距为 \(|F_1F_2|=2c\)（<b>焦距是 \(2c\)，不是 \(c\)</b>；\(c\) 为半焦距）。</p>
+    <p>例：\(F_1(-5,0), F_2(5,0)\)，焦距 \(2c=10, c=5\)。在双曲线中 \(c > a > 0\)。</p>
   </div>
 
   <div class="card">
-    <p><b>离心率</b>：\(e=\dfrac{c}{a}\)，和椭圆的写法一样，用来比曲线「张得多开」。</p>
-    <p>例：\(c=5\)，\(a=4\)，\(e=\dfrac54\)。</p>
+    <p><b>实轴与虚轴</b>：焦点所在轴上的两顶点连线叫<b>实轴</b>，长为 \(2a\)；垂直平分线上的线段叫<b>虚轴</b>，长为 \(2b\)。核心勾股式：\(c^2 = a^2 + b^2\)（<b>\(c\) 最大</b>）。</p>
+    <p>例：\(\dfrac{x^2}{16}-\dfrac{y^2}{9}=1\)，实轴长 \(2a=8\)，虚轴长 \(2b=6\)，\(c=\sqrt{16+9}=5\)。</p>
   </div>
 
-  <div class="card">
-    <p><b>渐近线</b>：曲线往远处走时越来越贴近的一条直线。</p>
-    <p>例：\(y=\dfrac1x\) 在 \(x=100\) 时 \(y=0.01\)，在 \(x=1000\) 时 \(y=0.001\)，越来越贴近 \(x\) 轴，但永远不等于 \(0\)。\(x\) 轴就是它的一条渐近线。</p>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">参数对比</span> 双曲线 \(c^2=a^2+b^2\) (\(c\) 最大) vs 椭圆 \(a^2=b^2+c^2\) (\(a\) 最大)</div>
+      <p><b>双曲线</b>：焦点在两翼最外侧，\(c > a\)，勾股关系为 \(c^2 = a^2 + b^2\)（<b>\(c\) 是斜边</b>！）。离心率 \(e = \frac ca > 1\)。</p>
+      <p><b>椭圆</b>：长轴端点在最外侧，\(a > c\)，勾股关系为 \(a^2 = b^2 + c^2\)（\(a\) 是斜边）。离心率 \(e = \frac ca \in (0, 1)\)。</p>
+      <p class="small">切记：双曲线里允许 \(a &lt; b\) 或 \(a = b\)（等轴双曲线），判定焦点必须看<b>正项</b>而非分母大小！</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">临界辨析</span> 距离差绝对值 \(2a\) 与焦距 \(2c\) 的三态边界</div>
+      <p><b>三态蜕变</b>：平面内到两焦点距离差的绝对值 \(\big||PF_1|-|PF_2|\big| = 2a\)：<br>
+      ① \(0 &lt; 2a &lt; 2c\) ⟹ 轨迹为<b>双曲线（两支）</b>；<br>
+      ② \(2a = 2c\) ⟹ 轨迹退化为<b>两条射线</b>；<br>
+      ③ \(2a &gt; 2c\) ⟹ 两边之差不可能大于第三边，<b>无轨迹（空集）</b>；<br>
+      ④ \(2a = 0\) ⟹ 垂直平分线。</p>
+      <p class="small">绝对值警示：无绝对值时仅表示双曲线的单单一支！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.8;">
+    标准方程（正项定焦点）：\(\dfrac{x^2}{\color{#2563eb}{a^2}} - \dfrac{y^2}{\color{#059669}{b^2}} = 1 \quad (\color{#dc2626}{c^2} = \color{#2563eb}{a^2} + \color{#059669}{b^2}) \quad\Longrightarrow\quad \text{渐近线：} y = \pm \dfrac{\color{#059669}{b}}{\color{#2563eb}{a}}x\)<br>
+    离心率与定义常数：\(e = \dfrac{\color{#dc2626}{c}}{\color{#2563eb}{a}} = \sqrt{1 + \dfrac{\color{#059669}{b^2}}{\color{#2563eb}{a^2}}} &gt; 1;\quad \big||PF_1| - |PF_2|\big| = \color{#2563eb}{2a} &lt; \color{#dc2626}{2c}\)
   </div>
 
   <h3>2. 定义：距离差的绝对值等于 \(2a\)</h3>
@@ -78,17 +111,15 @@
   <div class="key">平面内到两个定点 \(F_1,F_2\) 的距离之差的<b>绝对值</b>等于常数 \(2a\)，并且 \(0&lt;2a&lt;|F_1F_2|=2c\)，这样的点的轨迹叫双曲线。$$\big||PF_1|-|PF_2|\big|=2a$$</div>
   <ul>
     <li><b>为什么要绝对值</b>：\(|PF_1|-|PF_2|=2a\) 说明 \(P\) 离 \(F_2\) 更近，只得到靠近 \(F_2\) 的<b>一支</b>；\(|PF_1|-|PF_2|=-2a\) 是靠近 \(F_1\) 的另一支。加上绝对值，两支合起来才是整条双曲线。</li>
-    <li><b>为什么要 \(2a&lt;2c\)</b>：三角形两边之差小于第三边，\(\big||PF_1|-|PF_2|\big|\) 最多等于 \(2c\)。等于 \(2c\) 时只剩两条射线，大于 \(2c\) 时一个点也没有（见第 6 块）。</li>
+    <li><b>为什么要 \(2a&lt;2c\)</b>：三角形两边之差小于第三边，\(\big||PF_1|-|PF_2|\big|\) 最多等于 \(2c\)。等于 \(2c\) 时只剩两条射线，大于 \(2c\) 时一个点也没有。</li>
   </ul>
 
   <div class="card">
     <p class="small">例 1（两支都要想到）</p>
     <p>双曲线 \(\dfrac{x^2}{16}-\dfrac{y^2}{9}=1\) 上一点 \(P\) 到右焦点 \(F_2\) 的距离是 \(10\)，求它到左焦点 \(F_1\) 的距离。</p>
     <p>\(a=4\)，\(b=3\)，\(c=\sqrt{16+9}=5\)。由定义 \(\big||PF_1|-10\big|=2a=8\)，所以 \(|PF_1|=18\) 或 \(|PF_1|=2\)。</p>
-    <p>两个都要检查能不能取到：</p>
-    <p>右支上的点到 \(F_2\) 的距离最小是 \(c-a=1\)，\(10\ge1\)，可以；这时 \(|PF_1|=10+8=18\)。</p>
-    <p>左支上的点到 \(F_2\) 的距离最小是 \(a+c=9\)，\(10\ge9\)，也可以；这时 \(|PF_1|=10-8=2\)，而左支上到 \(F_1\) 的距离最小是 \(c-a=1\)，\(2\ge1\)，对得上。</p>
-    <p>所以 \(|PF_1|=18\) 或 \(2\)。题目若说明 \(P\) 在右支上，就只剩 \(18\)。</p>
+    <p>两个都要检查能不能取到：右支最小距为 \(c-a=1 \le 10\)（成立，\(|PF_1|=18\)）；左支到右焦点最小距为 \(a+c=9 \le 10\)（成立，\(|PF_1|=2\)）。</p>
+    <p>所以 \(|PF_1|=18\) 或 \(2\)。若题目指明 \(P\) 在右支上，则只取 \(18\)。</p>
   </div>
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：\(P\) 在双曲线 \(\dfrac{x^2}{9}-\dfrac{y^2}{16}=1\) 的<b>右支</b>上，\(|PF_1|=10\)，那么 \(|PF_2|=\)？</p>
@@ -100,21 +131,21 @@
     </div>
     <div class="reveal"><p><b>A</b>。\(a=3\)，\(2a=6\)。右支上的点离 \(F_2\) 更近，\(|PF_1|-|PF_2|=6\)，所以 \(|PF_2|=10-6=4\)。选 B 是把差的方向弄反了（那是左支）；选 C 是没用上「右支」这个条件；选 D 是把 \(c-a\) 当成了答案。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 标准方程：正项定焦点</h3>
-  <p>焦点放在 \(x\) 轴上：\(F_1(-c,0)\)、\(F_2(c,0)\)。用距离公式写出定义式，移项、两次平方化简，得到 \((c^2-a^2)x^2-a^2y^2=a^2(c^2-a^2)\)。因为 \(c&gt;a\)，令 \(b^2=c^2-a^2&gt;0\)，就是</p>
+  <p>焦点放在 \(x\) 轴上：\(F_1(-c,0)\)、\(F_2(c,0)\)。移项整理得到标准方程：</p>
   <div class="key">焦点在 \(x\) 轴：$$\frac{x^2}{a^2}-\frac{y^2}{b^2}=1,\quad F(\pm c,0)$$
     焦点在 \(y\) 轴：$$\frac{y^2}{a^2}-\frac{x^2}{b^2}=1,\quad F(0,\pm c)$$
     其中 \(a&gt;0\)，\(b&gt;0\)，\(c^2=a^2+b^2\)。</div>
-  <p>怎么看焦点在哪个轴：<b>哪一项是正的，焦点就在哪个轴上</b>，正项下面的分母是 \(a^2\)。这和椭圆「看分母谁大」不一样：双曲线里 \(a\) 可以比 \(b\) 小。</p>
+  <p>怎么看焦点在哪个轴：<b>哪一项是正的，焦点就在哪个轴上</b>，正项下面的分母是 \(a^2\)。这和椭圆「看分母谁大」不同：双曲线里 \(a\) 可以小于 \(b\)。</p>
 
   <div class="card">
     <p class="small">例 2</p>
     <p>双曲线 \(\dfrac{y^2}{9}-\dfrac{x^2}{16}=1\)，求实轴长、虚轴长、焦距、焦点和顶点坐标。</p>
-    <p>正号在 \(y^2\) 项上，焦点在 \(y\) 轴上。\(a^2=9\)，\(a=3\)；\(b^2=16\)，\(b=4\)。这里 \(a&lt;b\)，没有问题。</p>
-    <p>\(c^2=a^2+b^2=9+16=25\)，\(c=5\)。</p>
-    <p>实轴长 \(2a=6\)，虚轴长 \(2b=8\)，焦距 \(2c=10\)。</p>
-    <p>焦点 \((0,-5)\)、\((0,5)\)；顶点 \((0,\pm3)\)。</p>
+    <p>正号在 \(y^2\) 项上，焦点在 \(y\) 轴上。\(a^2=9, a=3\)；\(b^2=16, b=4\)（允许 \(a&lt;b\)）。</p>
+    <p>\(c^2=a^2+b^2=9+16=25, c=5\)。</p>
+    <p>实轴长 \(2a=6\)，虚轴长 \(2b=8\)，焦距 \(2c=10\)。焦点 \((0,\pm5)\)；顶点 \((0,\pm3)\)。</p>
   </div>
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：方程 \(-\dfrac{x^2}{9}+\dfrac{y^2}{7}=1\) 表示的双曲线，焦点坐标是？</p>
@@ -126,19 +157,18 @@
     </div>
     <div class="reveal"><p><b>A</b>。改写成 \(\dfrac{y^2}{7}-\dfrac{x^2}{9}=1\)，正项是 \(y^2\)，焦点在 \(y\) 轴上；\(c^2=7+9=16\)，\(c=4\)。选 B 是按「分母大的在哪个轴」判断，那是椭圆的做法；选 C、D 是用了椭圆的 \(c^2=a^2-b^2\)。</p></div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. \(a,b,c\) 的关系和离心率</h3>
-  <p>双曲线里 \(c^2=a^2+b^2\)，\(c\) 最大，像直角三角形的斜边；椭圆里是 \(a^2=b^2+c^2\)，\(a\) 最大。两个式子别记混。</p>
-  <p>因为 \(c&gt;a&gt;0\)，离心率</p>
+  <p>双曲线里 \(c^2=a^2+b^2\)，\(c\) 最大，像直角三角形的斜边。离心率</p>
   <div class="key">$$e=\frac ca=\sqrt{1+\Big(\frac ba\Big)^2}&gt;1$$</div>
-  <p>（椭圆的 \(e\) 在 \(0\) 和 \(1\) 之间。）\(e\) 越大，\(\dfrac ba\) 越大，双曲线的开口越开阔。</p>
+  <p>\(e\) 越大，\(\dfrac ba\) 越大，双曲线开口越开阔。</p>
 
   <div class="card">
     <p class="small">例 3</p>
     <p>双曲线的焦点在 \(x\) 轴上，虚轴长 \(6\)，离心率 \(e=\dfrac54\)，求它的标准方程。</p>
-    <p>虚轴长 \(2b=6\)，\(b=3\)。由 \(e=\dfrac ca=\dfrac54\) 得 \(c=\dfrac54a\)。</p>
-    <p>代入 \(c^2=a^2+b^2\)：\(\dfrac{25}{16}a^2=a^2+9\)，\(\dfrac{9}{16}a^2=9\)，\(a^2=16\)。</p>
-    <p>所以方程是 \(\dfrac{x^2}{16}-\dfrac{y^2}{9}=1\)。验算：\(c=5\)，\(e=\dfrac54\)，对。</p>
+    <p>虚轴长 \(2b=6, b=3\)。由 \(e=\dfrac ca=\dfrac54\) 得 \(c=\dfrac54a\)。代入 \(c^2=a^2+b^2\) 得 \(\dfrac{25}{16}a^2=a^2+9 \implies a^2=16\)。</p>
+    <p>方程是 \(\dfrac{x^2}{16}-\dfrac{y^2}{9}=1\)。</p>
   </div>
   <div class="card predict" data-id="try-4" data-answer="A">
     <p>自己试试：双曲线 \(\dfrac{x^2}{4}-\dfrac{y^2}{5}=1\) 的离心率是？</p>
@@ -148,23 +178,17 @@
       <button class="opt" data-v="C"><b>C</b>\(\dfrac34\)</button>
       <button class="opt" data-v="D"><b>D</b>\(\dfrac{3\sqrt5}{5}\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(a=2\)，\(c^2=4+5=9\)，\(c=3\)，\(e=\dfrac32\)。选 B 算的是 \(\dfrac ba\)；选 D 算的是 \(\dfrac cb\)；选 C 把 \(a^2=4\) 当成了 \(a\)，而且双曲线的 \(e\) 不可能小于 \(1\)，看一眼就能排除。</p></div>
+    <div class="reveal"><p><b>A</b>。\(a=2\)，\(c^2=4+5=9\)，\(c=3\)，\(e=\dfrac32\)。双曲线的 \(e\) 恒大于 \(1\)。</p></div>
   </div>
 
   <h3>5. 渐近线</h3>
   <p>把标准方程右边的 \(1\) 换成 \(0\)，因式分解就得到两条渐近线：</p>
   <div class="key">\(\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=1\) 的渐近线是 \(y=\pm\dfrac bax\)；\(\dfrac{y^2}{a^2}-\dfrac{x^2}{b^2}=1\) 的渐近线是 \(y=\pm\dfrac abx\)。</div>
-  <p>为什么叫「渐近」：看 \(\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=1\) 在第一象限的部分，\(y=\dfrac ba\sqrt{x^2-a^2}\)，比直线上的 \(\dfrac bax\) 小一点，差是</p>
-  <p style="text-align:center">\(\dfrac ba\left(x-\sqrt{x^2-a^2}\right)=\dfrac{ab}{x+\sqrt{x^2-a^2}}\)，</p>
-  <p>\(x\) 越大，分母越大，差越小，趋近 \(0\) 但始终是正的：曲线越来越贴近直线，却碰不到。</p>
 
   <div class="card">
-    <p class="small">例 4（接例 2：换了轴，斜率要重算）</p>
-    <p>\(\dfrac{y^2}{9}-\dfrac{x^2}{16}=1\)：令 \(\dfrac{y^2}{9}-\dfrac{x^2}{16}=0\)，得 \(y^2=\dfrac{9}{16}x^2\)，渐近线 \(y=\pm\dfrac34x\)。</p>
-    <p>对比 \(\dfrac{x^2}{9}-\dfrac{y^2}{16}=1\)：令右边为 \(0\)，得 \(y^2=\dfrac{16}{9}x^2\)，渐近线 \(y=\pm\dfrac43x\)。分母一样，正项换了，斜率就倒过来。</p>
-    <p>在 \(\dfrac{x^2}{9}-\dfrac{y^2}{16}=1\) 上看看有多「近」：</p>
-    <p>\(x=15\) 时，曲线 \(y=\dfrac43\sqrt{216}=8\sqrt6\approx19.60\)，直线 \(y=20\)，差约 \(0.40\)；</p>
-    <p>\(x=30\) 时，曲线 \(y=\dfrac43\sqrt{891}=12\sqrt{11}\approx39.80\)，直线 \(y=40\)，差约 \(0.20\)。</p>
+    <p class="small">例 4</p>
+    <p>\(\dfrac{y^2}{9}-\dfrac{x^2}{16}=1\)：令右端为 \(0\)，得 \(y^2=\dfrac{9}{16}x^2\)，渐近线 \(y=\pm\dfrac34x\)。</p>
+    <p>对比 \(\dfrac{x^2}{9}-\dfrac{y^2}{16}=1\)：令右端为 \(0\)，得 \(y^2=\dfrac{16}{9}x^2\)，渐近线 \(y=\pm\dfrac43x\)。分母一样，正项换了，斜率倒置。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：已知双曲线方程为 \(\dfrac{x^2}{4} - \dfrac{y^2}{12} = 1\)，则该双曲线的离心率 \(e\) 和渐近线方程分别为：</p>
@@ -175,38 +199,85 @@
       <button class="opt" data-v="D"><b>D</b>\(e = \sqrt{3}\)，渐近线 \(y = \pm \sqrt{3}x\)</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。正项是 \(x^2\)，焦点在 \(x\) 轴上。\(a^2 = 4\)，\(a = 2\)；\(b^2 = 12\)，\(b = 2\sqrt{3}\)。</p>
-      <p>\(c^2 = a^2 + b^2 = 16\)，\(c = 4\)，离心率 \(e = \dfrac{c}{a} = 2\)。</p>
-      <p>令右端为 \(0\)：\(y^2 = 3x^2\)，\(y = \pm \sqrt{3}x\)。</p>
-      <p>选 C 是把斜率写成了 \(\dfrac ab\)（那是焦点在 \(y\) 轴时的写法）；选 D 是把 \(\dfrac ba\) 当成了 \(e\)；选 B 的 \(4\) 是 \(\dfrac{c^2}{a^2}\)，忘了开方。</p>
+      <p><b>A</b>。正项是 \(x^2\)，\(a=2, b=2\sqrt{3}, c=4 \implies e=2\)。令右端为 \(0 \implies y=\pm\sqrt3x\)。</p>
     </div>
   </div>
 
-  <h3>6. 专题卡 E1-03-B：用之前要注意</h3>
-  <ol>
-    <li><b>绝对值决定一支还是两支</b>：\(\big||PF_1|-|PF_2|\big|=2a\) 是两支；没有绝对值的 \(|PF_1|-|PF_2|=2a\) 只是靠近 \(F_2\) 的一支。<br>
-      <span class="small">反例：\(F_1(-5,0)\)、\(F_2(5,0)\)，\(|PF_1|-|PF_2|=8\)。平方化简得到的 \(\dfrac{x^2}{16}-\dfrac{y^2}{9}=1\) 是整条双曲线，但左顶点 \((-4,0)\) 代回去是 \(1-9=-8\)，不满足。要筛掉左支，只留 \(x\ge4\) 的部分。</span></li>
-    <li><b>常数和焦距比大小</b>（\(|F_1F_2|=2c\)，常数为 \(2a\)）：
-      <ul>
-        <li>\(0&lt;2a&lt;2c\)：双曲线；</li>
-        <li>\(2a=2c\)：两条射线（从 \(F_1\)、\(F_2\) 各自向外）；</li>
-        <li>\(2a&gt;2c\)：没有这样的点；</li>
-        <li>常数为 \(0\)，即 \(|PF_1|=|PF_2|\)：线段 \(F_1F_2\) 的垂直平分线。</li>
-      </ul>
-      <span class="small">反例：\(F_1(-3,0)\)、\(F_2(3,0)\)，\(\big||PF_1|-|PF_2|\big|=6\)。点 \((5,0)\) 满足 \(8-2=6\)，可不在 \(x\) 轴上的点 \(P\) 和 \(F_1,F_2\) 围成三角形，两边之差小于 \(6\)，都不满足：轨迹是 \(x\ge3\) 和 \(x\le-3\) 两条射线，不是双曲线。</span></li>
-    <li><b>正项定实轴，不看分母大小</b>。<br>
-      <span class="small">反例：\(\dfrac{y^2}{4}-\dfrac{x^2}{25}=1\) 的 \(a=2\)，不是 \(5\)；焦点在 \(y\) 轴上。</span></li>
-    <li><b>\(c^2=a^2+b^2\)，不是椭圆的 \(a^2=b^2+c^2\)</b>。<br>
-      <span class="small">反例：\(\dfrac{x^2}{25}-\dfrac{y^2}{16}=1\) 的 \(c=\sqrt{41}\)；用椭圆的公式会算成 \(3\)。</span></li>
-    <li><b>换了轴，渐近线要重新算</b>：焦点在 \(y\) 轴时斜率是 \(\pm\dfrac ab\)，不要套 \(\pm\dfrac ba\)（例 4）。</li>
-    <li><b>渐近线说的是「无限贴近」</b>：图上画到远处看着和直线贴在一起，不等于相交；双曲线和自己的渐近线确实没有公共点。但这不能推广成「任何曲线都不和自己的渐近线相交」。<br>
-      <span class="small">反例：\(y=\dfrac{\sin x}{x}\) 以 \(x\) 轴为渐近线，可它在 \(x=\pi,2\pi,\dots\) 处都和 \(x\) 轴相交。</span></li>
-  </ol>
+  <h3>6. 三步破题思维链：双曲线标准解题动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>审清方程或几何条件：找准<b>正项</b>锁定焦点轴向（\(x^2\) 项为正，焦点在 \(x\) 轴；\(y^2\) 项为正，焦点在 \(y\) 轴），正项分母恒为 \(a^2\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 参数关系：套用 \(c^2 = a^2 + b^2\)（\(c\) 最大）与 \(e = \frac ca > 1\)；<br>
+        ② 渐近线求解：直接把标准方程右边的 \(1\) 替换为 \(0\)，去分母分解得两条直线；<br>
+        ③ 若给出渐近线方程 \(y = \pm \frac ba x\)，可直接设双曲线系方程 \(\frac{x^2}{a^2} - \frac{y^2}{b^2} = \lambda\)（\(\lambda \ne 0\)）。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>① 焦点在 \(y\) 轴时渐近线斜率为 \(\pm\frac ab\) 绝非 \(\pm\frac ba\)！<br>
+        ② 题目若说明动点在「右支」或「左支」，脱绝对值时只能取单修正号，切勿保留双解。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：误套椭圆公式算 c²=a²-b²</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>对 \(\frac{x^2}{25}-\frac{y^2}{16}=1\)，套椭圆公式算 \(c^2=25-16=9 \Rightarrow c=3\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>双曲线 \(c\) 最大，正解为 \(c^2=a^2+b^2=25+16=41 \Rightarrow c=\sqrt{41}\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：y 轴焦点渐近线斜率倒错</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>对 \(\frac{y^2}{9}-\frac{x^2}{16}=1\)，死记硬套 \(y=\pm\frac ba x = \pm\frac 43 x\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>令右侧为 0 得 \(\frac{y^2}{9}=\frac{x^2}{16}\)，渐近线正解为 \(y=\pm\frac 34 x\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：漏掉绝对值把单支当全双曲</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>认为 \(|PF_1|-|PF_2|=2a\) 表示整条双曲线</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>不加绝对值仅表示靠近 \(F_2\) 的单单一支，全双曲线必须加绝对值</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：双支（加绝对值） vs 单支（无绝对值）对比</div>
+    <svg id="m-hyper-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="双曲线单双支反例图解"></svg>
+    <div class="micro-caption">不加绝对值时，\(|PF_1| - |PF_2| = 2a\) 仅能描绘靠近 \(F_2\) 的右支；必须套上绝对值 \(\big||PF_1| - |PF_2|\big| = 2a\) 才是完整的双支双曲线！</div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>等轴双曲线</b>：\(a=b\) 时方程是 \(x^2-y^2=a^2\)（或 \(y^2-x^2=a^2\)），渐近线 \(y=\pm x\) 互相垂直，\(c=\sqrt2a\)，离心率 \(e=\sqrt2\)。</p>
-    <p><b>共渐近线的双曲线</b>：\(\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=\lambda\)（\(\lambda\ne0\)）都以 \(y=\pm\dfrac bax\) 为渐近线；\(\lambda&gt;0\) 时焦点在 \(x\) 轴，\(\lambda&lt;0\) 时焦点换到 \(y\) 轴。「练一练」第 5 题会用到。</p>
+    <p><b>等轴双曲线</b>：\(a=b\) 时方程是 \(x^2-y^2=a^2\)，渐近线 \(y=\pm x\) 互相垂直，离心率 \(e=\sqrt2\)。</p>
+    <p><b>共渐近线方程系</b>：\(\dfrac{x^2}{a^2}-\dfrac{y^2}{b^2}=\lambda\)（\(\lambda\ne0\)）具有共同的渐近线 \(y=\pm\dfrac bax\)。</p>
   </details>
 </section>
 
@@ -220,6 +291,7 @@
         <button type="button" class="btn ghost" id="btnEqui">等轴双曲线 (\(a=b\))</button>
         <button type="button" class="btn ghost" id="btnInvert">正项定焦点反例 (\(y\) 轴焦点)</button>
         <button type="button" class="btn ghost" id="btnBranch">切换所选分支</button>
+        <button type="button" class="btn ghost" id="btnIsoHyp" data-iso-tab="1">双焦柱渐近线台（等距 3D）</button>
       </div>
       <button type="button" class="btn ghost" id="btnReset">重置实验台</button>
     </div>
@@ -355,6 +427,7 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
 </div>
 
+<script src="../assets/iso-bench.js"></script>
 <script>
 (function () {
   "use strict";
@@ -396,6 +469,8 @@
   var btnEqui = document.getElementById("btnEqui");
   var btnInvert = document.getElementById("btnInvert");
   var btnBranch = document.getElementById("btnBranch");
+  var btnIsoHyp = document.getElementById("btnIsoHyp");
+  var hypIso = false;
 
   var fig = document.getElementById("hypSvg");
   var desc = document.getElementById("hypDesc");
@@ -417,6 +492,16 @@
     if (valAOut) valAOut.textContent = f2(a);
     if (valBOut) valBOut.textContent = f2(b);
     if (valTOut) valTOut.textContent = f2(t);
+
+    if (btnIsoHyp) {
+      btnIsoHyp.classList.toggle("active", hypIso);
+      btnIsoHyp.classList.toggle("ghost", !hypIso);
+    }
+    if (hypIso && window.IsoBench && window.IsoBench.renderHyperbolaBench) {
+      window.IsoBench.renderHyperbolaBench(fig, desc, a, b, t, axis, branch, function () { if (desc) Peiyu.math(desc); });
+      return;
+    }
+    fig.classList.remove("iso-fig");
 
     var fg = css("--fg") || "#1A2822";
     var ca = css("--a") || "#2F7A56";
@@ -569,10 +654,11 @@
     svg("line", { x1: spX, y1: spY, x2: sqX, y2: sqY, stroke: hl, "stroke-width": 2.5 }, g);
     svg("circle", { cx: sqX, cy: sqY, r: 3, fill: hl }, g);
 
-    // 标垂足 Q 和距离标签
-    var midX = (spX + sqX) / 2;
-    var midY = (spY + sqY) / 2;
-    svg("text", { x: midX + 8, y: midY - 6, "font-size": 12, fill: hl, "font-weight": 700 }, g).textContent = "d=" + f2(distAsymp);
+    // 标垂足 Q 和距离标签（始终置于安全区内，与 P 坐标及顶点 A1/A2 严格分离）
+    var safePy = clamp(spY, 52, 322);
+    var safePx = clamp(spX, 65, 495);
+    var nearVertex = Math.abs(t) < 0.35;
+    svg("text", { x: safePx, y: nearVertex ? (safePy - 10) : (safePy + 22), "font-size": 12, fill: hl, "font-weight": 700, "text-anchor": "middle" }, g).textContent = "d=" + f2(distAsymp);
 
     // 动点 P 句柄
     var handleP = svg("circle", {
@@ -582,7 +668,7 @@
       class: "handle"
     }, g);
 
-    svg("text", { x: spX + 10, y: spY - 8, "font-size": 13, "font-weight": 700, fill: fg }, g).textContent = "P(" + f2(pX) + "," + f2(pY) + ")";
+    svg("text", { x: safePx, y: nearVertex ? (safePy - 28) : (safePy - 12), "font-size": 13, "font-weight": 700, fill: fg, "text-anchor": "middle" }, g).textContent = "P(" + f2(pX) + "," + f2(pY) + ")";
 
     // 键盘支持
     handleP.addEventListener("keydown", function (ev) {
@@ -741,11 +827,229 @@
   if (btnEqui) btnEqui.onclick = labEqui;
   if (btnInvert) btnInvert.onclick = labInvert;
   if (btnBranch) btnBranch.onclick = labBranch;
+  if (btnIsoHyp) btnIsoHyp.onclick = function () { hypIso = !hypIso; render(); Peiyu.log("interact", { id: "hyp-iso", iso: hypIso }); };
 
   document.addEventListener("DOMContentLoaded", function () { labReset(); });
   if (window.matchMedia) {
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { render(); });
   }
+
+  /* ================= 0 从例子进入：海防双站声波定位与双曲线单支 ================= */
+  var ehSvg = document.getElementById("entry-hyp"), ehBar = document.getElementById("entry-hyp-bar"), ehNote = document.getElementById("entry-hyp-note");
+  function ehDraw(mode) {
+    var ox = 176, oy = 106, u = 16, f1x = ox - 5 * u, f2x = ox + 5 * u, h = [];
+    h.push('<line x1="20" y1="' + oy + '" x2="335" y2="' + oy + '" stroke="var(--line)" stroke-width="1.5"/>');
+    h.push('<line x1="' + ox + '" y1="18" x2="' + ox + '" y2="192" stroke="var(--line)" stroke-width="1.5"/>');
+    // a=3, b=4, c=5. 绘制左右两支
+    var rPts = [], lPts = [];
+    for (var t = -1.15; t <= 1.15; t += 0.1) {
+      var ch = (Math.exp(t) + Math.exp(-t)) / 2, sh = (Math.exp(t) - Math.exp(-t)) / 2;
+      var x = 3 * ch, y = 4 * sh;
+      rPts.push((rPts.length ? "L" : "M") + (ox + x * u).toFixed(1) + "," + (oy - y * u).toFixed(1));
+      lPts.push((lPts.length ? "L" : "M") + (ox - x * u).toFixed(1) + "," + (oy - y * u).toFixed(1));
+    }
+    // 左支（虚线，|PF1|-|PF2| = -6）
+    h.push('<path d="' + lPts.join(" ") + '" fill="none" stroke="' + (mode === "branch" ? "var(--no)" : "var(--muted)") + '" stroke-width="2" stroke-dasharray="4 4"/>');
+    // 右支（实线，|PF1|-|PF2| = +6）
+    h.push('<path d="' + rPts.join(" ") + '" fill="none" stroke="var(--a)" stroke-width="3.2"/>');
+    // 选右支上一点 P (x=4.5, y=4*sqrt(2.25-1)=4.47 => |PF1|=9.5, |PF2|=3.5)
+    var px = ox + 4.2 * u, py = oy - 3.92 * u;
+    if (mode === "wave") {
+      // 声波同心圆示意
+      h.push('<circle cx="' + px + '" cy="' + py + '" r="18" fill="none" stroke="var(--hl)" stroke-opacity="0.55" stroke-dasharray="3 2"/>');
+      h.push('<circle cx="' + px + '" cy="' + py + '" r="34" fill="none" stroke="var(--hl)" stroke-opacity="0.35" stroke-dasharray="3 2"/>');
+      h.push('<line x1="' + f1x + '" y1="' + oy + '" x2="' + px + '" y2="' + py + '" stroke="var(--c)" stroke-width="2.4"/>');
+      h.push('<line x1="' + f2x + '" y1="' + oy + '" x2="' + px + '" y2="' + py + '" stroke="var(--b)" stroke-width="2.4"/>');
+      h.push('<text x="' + ((f1x + px) / 2 - 10) + '" y="' + ((oy + py) / 2 - 6) + '" fill="var(--c)" font-weight="700" font-size="13.5">|PF₁| = 9 km</text>');
+      h.push('<text x="' + ((f2x + px) / 2 + 22) + '" y="' + ((oy + py) / 2 + 4) + '" fill="var(--b)" font-weight="700" font-size="13.5">|PF₂| = 3 km</text>');
+    } else {
+      h.push('<text x="' + (ox - 4.3 * u) + '" y="32" text-anchor="middle" fill="var(--no)" font-weight="700" font-size="13.5">左支：|PF₁|−|PF₂| = −6</text>');
+      h.push('<text x="' + (ox + 4.5 * u) + '" y="32" text-anchor="middle" fill="var(--a)" font-weight="700" font-size="13.5">右支：|PF₁|−|PF₂| = +6</text>');
+    }
+    h.push('<circle cx="' + px + '" cy="' + py + '" r="5.5" fill="var(--hl)" stroke="var(--fg)" stroke-width="1.5"/>');
+    h.push('<text x="' + (px + 9) + '" y="' + (py + 14) + '" font-weight="700" fill="var(--fg)" font-size="13">声源 P</text>');
+    h.push('<circle cx="' + f1x + '" cy="' + oy + '" r="5" fill="var(--c)"/>');
+    h.push('<text x="' + f1x + '" y="' + (oy + 20) + '" text-anchor="middle" font-weight="700" fill="var(--c)" font-size="13.5">F₁(-5,0)</text>');
+    h.push('<circle cx="' + f2x + '" cy="' + oy + '" r="5" fill="var(--b)"/>');
+    h.push('<text x="' + f2x + '" y="' + (oy + 20) + '" text-anchor="middle" font-weight="700" fill="var(--b)" font-size="13.5">F₂(5,0)</text>');
+    // 右侧对比面板
+    var rx = 342;
+    h.push('<rect x="' + rx + '" y="36" width="166" height="132" rx="9" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>');
+    h.push('<text x="' + (rx + 10) + '" y="60" font-weight="700" fill="var(--fg)" font-size="14">F₁ 晚 2 秒听到：</text>');
+    h.push('<text x="' + (rx + 10) + '" y="84" fill="var(--a)" font-weight="700" font-size="14">|PF₁| − |PF₂| = +6</text>');
+    h.push('<text x="' + (rx + 10) + '" y="108" fill="var(--fg)" font-size="13.5">⇒ |PF₁| &gt; |PF₂|</text>');
+    h.push('<text x="' + (rx + 10) + '" y="132" fill="var(--a)" font-weight="700" font-size="13.5">⇒ P 必离 F₂ 更近</text>');
+    h.push('<text x="' + (rx + 10) + '" y="154" fill="var(--muted)" font-size="13">只画出右侧单支！</text>');
+    ehSvg.innerHTML = h.join("");
+    [].forEach.call(ehBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-mode") === mode);
+    });
+    ehNote.innerHTML = mode === "wave"
+      ? "例如 |PF₁| = 9 km、|PF₂| = 3 km，差为 <b>9 − 3 = 6 km &gt; 0</b>：声源 P 离 F₂ 更近，落在<b>右支（绿实线）</b>上。"
+      : "不加绝对值时：<b>|PF₁| − |PF₂| = +6</b> 只有靠近 F₂ 的<b>右支</b>；加绝对值 <b>||PF₁| − |PF₂|| = 6</b> 才包含左右两支！";
+  }
+  [].forEach.call(ehBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ehDraw(b.getAttribute("data-mode")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ehDraw("branch");
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ehDraw("wave");
+  });
+  ehDraw("wave");
 })();
+
+
+function initMHyperFig(){
+  var svgEl = document.getElementById("m-hyper-fig");
+  var capEl = document.getElementById("m-hyper-cap");
+  if (!svgEl) return;
+  var mode = "def";
+  var NS = "http://www.w3.org/2000/svg";
+  var caps = {
+    def: "双曲线定义：||PF1| - |PF2|| = 2a (2a < 2c)。加绝对值包含左右两支。特征矩形边长 2a, 2b，对角线即为渐近线。",
+    asymp: "渐近线几何贴近：令标准方程右侧为 0，即得渐近线 y = ±(b/a)x。曲线沿渐近线向无穷远处延伸无限逼近。",
+    axis: "正项定焦点：x²/a² - y²/b² = 1 焦点在 x 轴；y²/a² - x²/b² = 1 焦点在 y 轴。正项分母恒为 a²。"
+  };
+
+  function s(el, tag, attrs, txt){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt) e.textContent = txt;
+    el.appendChild(e);
+    return e;
+  }
+  function ln(el, x1, y1, x2, y2, c, w, d){
+    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
+    if (d) a["stroke-dasharray"] = d;
+    return s(el, "line", a);
+  }
+  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
+  function tx(el, x, y, txt, c, sz, b, anch){
+    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
+    if (b) a["font-weight"] = "bold";
+    if (anch) a["text-anchor"] = anch;
+    return s(el, "text", a, txt);
+  }
+
+  function draw(){
+    svgEl.innerHTML = "";
+    if (mode === "def") {
+      tx(svgEl, 270, 24, "双曲线特征矩形与渐近线：c² = a² + b² (c 最长)", "#0f172a", "12.5", true, "middle");
+      // Axes
+      ln(svgEl, 40, 115, 260, 115, "#64748b", 1.5);
+      ln(svgEl, 150, 180, 150, 45, "#64748b", 1.5);
+
+      // Feature rectangle: center (150, 115), a = 40, b = 30
+      rc(svgEl, 110, 85, 80, 60, "none", "#94a3b8", 0);
+      s(svgEl, "line", {x1:110, y1:85, x2:190, y2:85, stroke:"#94a3b8", "stroke-dasharray":"3 3"});
+
+      // Asymptotes (diagonals)
+      ln(svgEl, 70, 55, 230, 175, "#93c5fd", 1.5, "3 3");
+      ln(svgEl, 70, 175, 230, 55, "#93c5fd", 1.5, "3 3");
+
+      // Hyperbola branches
+      s(svgEl, "path", {d:"M 190 115 Q 195 85 240 60 M 190 115 Q 195 145 240 170", fill:"none", stroke:"#2563eb", "stroke-width":2.5});
+      s(svgEl, "path", {d:"M 110 115 Q 105 85 60 60 M 110 115 Q 105 145 60 170", fill:"none", stroke:"#2563eb", "stroke-width":2.5});
+
+      // Vertices
+      s(svgEl, "circle", {cx:190, cy:115, r:3.5, fill:"#2563eb"});
+      tx(svgEl, 194, 128, "A2(a,0)", "#2563eb", "9.5");
+      s(svgEl, "circle", {cx:110, cy:115, r:3.5, fill:"#2563eb"});
+
+      // Foci F1(100, 115), F2(200, 115) -> c = 50
+      s(svgEl, "circle", {cx:200, cy:115, r:4, fill:"#dc2626"});
+      tx(svgEl, 204, 110, "F2(c,0)", "#dc2626", "10", true);
+      s(svgEl, "circle", {cx:100, cy:115, r:4, fill:"#dc2626"});
+
+      // Labels a, b, c
+      tx(svgEl, 170, 110, "a", "#2563eb", "10", true, "middle");
+      tx(svgEl, 155, 98, "b", "#059669", "10", true);
+      ln(svgEl, 150, 115, 190, 85, "#dc2626", 1.5);
+      tx(svgEl, 172, 94, "c", "#dc2626", "10", true);
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "双曲线特征矩形", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 矩形宽 2a、高 2b", "#2563eb", "11");
+      tx(svgEl, 325, 120, "• 对角线半长恒等于 c", "#dc2626", "11", true);
+      tx(svgEl, 325, 142, "• 勾股定理：c² = a² + b²", "#059669", "11");
+      tx(svgEl, 325, 164, "• 对角线即为渐近线！", "#d97706", "10.5");
+    } else if (mode === "asymp") {
+      tx(svgEl, 270, 24, "渐近线 y = ±(b/a)x 几何贴近演示", "#0f172a", "12.5", true, "middle");
+      ln(svgEl, 40, 115, 260, 115, "#64748b", 1.5);
+      ln(svgEl, 150, 180, 150, 45, "#64748b", 1.5);
+
+      // Asymptotes
+      ln(svgEl, 60, 50, 240, 180, "#dc2626", 1.5, "3 3");
+      tx(svgEl, 245, 180, "y = -(b/a)x", "#dc2626", "9.5");
+      ln(svgEl, 60, 180, 240, 50, "#dc2626", 1.5, "3 3");
+      tx(svgEl, 245, 52, "y = (b/a)x", "#dc2626", "9.5");
+
+      // Right branch
+      s(svgEl, "path", {d:"M 185 115 Q 190 85 240 54 M 185 115 Q 190 145 240 176", fill:"none", stroke:"#2563eb", "stroke-width":2.5});
+      s(svgEl, "circle", {cx:185, cy:115, r:3.5, fill:"#2563eb"});
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "渐近线求法口诀", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 右端 1 换 0，因式分解", "#2563eb", "11", true);
+      tx(svgEl, 325, 120, "• 焦点在 x 轴：y = ±(b/a)x", "#059669", "11");
+      tx(svgEl, 325, 142, "• 焦点在 y 轴：y = ±(a/b)x", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 无限贴近，永不相交！", "#64748b", "10.5");
+    } else if (mode === "axis") {
+      tx(svgEl, 270, 24, "正项定焦点原则：看正负号，不看分母大小", "#0f172a", "12.5", true, "middle");
+      // Horizontal
+      s(svgEl, "path", {d:"M 95 110 Q 100 85 125 65 M 95 110 Q 100 135 125 155", fill:"none", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "path", {d:"M 65 110 Q 60 85 35 65 M 65 110 Q 60 135 35 155", fill:"none", stroke:"#2563eb", "stroke-width":2});
+      tx(svgEl, 80, 165, "x²/a² - y²/b² = 1", "#2563eb", "10.5", true, "middle");
+      tx(svgEl, 80, 180, "x² 为正 ⟹ 焦点在 x 轴", "#0f172a", "9.5", false, "middle");
+
+      // Vertical
+      s(svgEl, "path", {d:"M 210 95 Q 185 100 165 125 M 210 95 Q 235 100 255 125", fill:"none", stroke:"#059669", "stroke-width":2});
+      s(svgEl, "path", {d:"M 210 125 Q 185 120 165 95 M 210 125 Q 235 120 255 95", fill:"none", stroke:"#059669", "stroke-width":2});
+      tx(svgEl, 210, 165, "y²/a² - x²/b² = 1", "#059669", "10.5", true, "middle");
+      tx(svgEl, 210, 180, "y² 为正 ⟹ 焦点在 y 轴", "#0f172a", "9.5", false, "middle");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "轴向判别法则", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 椭圆：比分母大小", "#64748b", "10.5");
+      tx(svgEl, 325, 120, "• 双曲线：看正项所在轴", "#dc2626", "11", true);
+      tx(svgEl, 325, 142, "• 正项分母必为 a²", "#2563eb", "11");
+      tx(svgEl, 325, 164, "• 即使 a < b 也是正常的！", "#059669", "10.5");
+    }
+
+    if (capEl) capEl.textContent = caps[mode];
+    if (window.renderMathInElement) window.renderMathInElement(capEl);
+  }
+
+  var tabs = document.querySelectorAll(".micro-box .micro-tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      mode = tab.getAttribute("data-mode");
+      draw();
+    });
+  });
+  draw();
+
+  var trapEl = document.getElementById("m-hyper-trap-fig");
+  if (trapEl) {
+    trapEl.innerHTML = "";
+    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
+    tx(trapEl, 142, 42, "❌ 误解：无绝对值当全双曲", "#dc2626", "11.5", true, "middle");
+    tx(trapEl, 142, 70, "|PF1| - |PF2| = 2a", "#dc2626", "10.5", false, "middle");
+    tx(trapEl, 142, 94, "仅表示靠近 F2 的右单一支！", "#b91c1c", "11", true, "middle");
+    tx(trapEl, 142, 130, "漏掉左支答案扣一半！", "#64748b", "9.5", false, "middle");
+
+    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
+    tx(trapEl, 397, 42, "✔ 正解：绝对值囊括双支", "#15803d", "11.5", true, "middle");
+    tx(trapEl, 397, 70, "||PF1| - |PF2|| = 2a", "#059669", "10.5", true, "middle");
+    tx(trapEl, 397, 94, "加绝对值才表示完整的左右双支", "#15803d", "10.5", true, "middle");
+    tx(trapEl, 397, 130, "定义必带绝对值！", "#047857", "10", true, "middle");
+  }
+}
+
+initMHyperFig();
 </script>
 </body></html>

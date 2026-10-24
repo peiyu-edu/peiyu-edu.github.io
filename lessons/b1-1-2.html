@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
 .venn { width: 100%; max-width: 300px; display: block; margin: 6px auto; }
 .venn text { font-size: 15px; fill: var(--fg); }
@@ -43,9 +45,15 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 <p class="lead">两个集合放在一起，谁装得下谁？这一节讲子集、相等、真子集和空集，再学会在数轴上比两个范围。先从一张课表开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>你们班的数学课排在周一、周三、周五。把这三天放进集合 \(A\)，把一周的五个工作日放进集合 \(B\)：</p>
-  <p style="text-align:center">\(A\)：周一、周三、周五　　\(B\)：周一、周二、周三、周四、周五</p>
+  <p>你们班的数学课排在周一、周三、周五。把这三天放进集合 \(A\)，把一周的五个工作日放进集合 \(B\)。点下面按钮看看两个集合谁装得下谁：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-cal" viewBox="0 0 520 190" role="img" aria-label="一周五个工作日集合B的大框内部包着数学课集合A（周一、周三、周五）"></svg>
+    <div class="entry-bar" id="entry-cal-bar">
+      <button type="button" data-m="A">看集合 A（数学课）</button>
+      <button type="button" data-m="B">看集合 B（工作日）</button>
+      <button type="button" data-m="sub" class="on">对比包含关系 A ⊆ B</button>
+    </div>
+    <div class="entry-note" id="entry-cal-note"></div>
     <p>下面哪句话是对的？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>\(A\) 里的每一天，\(B\) 里都有</button>
@@ -62,46 +70,46 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：1.1 的元素、属于（\(\in\)）、列举法和描述法（<a href="b1-1-1.html">回看 1.1</a>）；初中在数轴上画 \(x\ge1\) 这类范围。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「文氏包含与空集书包」建立直觉</h3>
+  <p class="small">要用到：1.1 的元素、属于（\(\in\)）、列举法和描述法（<a href="b1-1-1.html">回看 1.1</a>）；初中在数轴上画 \(x\ge1\) 这类范围。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>属于</b>：说的是<b>一个元素</b>在不在<b>一个集合</b>里，用 \(\in\)、\(\notin\)。</p>
-    <p>例：\(2\in\{1,2,3\}\)，\(5\notin\{1,2,3\}\)。注意 \(\{2\}\) 是一个集合（里面只装了 \(2\)），和数 \(2\) 不是一回事。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>子集包含的三种视觉形态</b></p>
+    <div class="entry-bar" id="m-sub-bar" role="group" aria-label="子集微图解切换">
+      <button type="button" class="on" data-k="sub">① 子集 A ⊆ B（小圆全在里面，允许重合）</button>
+      <button type="button" data-k="psub">② 真子集 A ⊊ B（大圆肚子里必有额外元素）</button>
+      <button type="button" data-k="notsub">③ 不是子集 A ⊈ B（只要 1 个反例冒头就破）</button>
+    </div>
+    <svg class="micro-fig" id="m-sub-fig" viewBox="0 0 520 160" role="img" aria-label="文氏图子集微图解"></svg>
+    <p class="entry-note" id="m-sub-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">核心概念 ②</span><b>属于（\(\in\)）vs 包含（\(\subseteq\)）</b></p>
+      <p class="small" style="margin:0"><b>\(\in\)</b> 连「元素与集合」（小对大，如 \(2 \in \{1,2\}\)）；<b>\(\subseteq\)</b> 连「集合与集合」（包对包，如 \(\{2\} \subseteq \{1,2\}\)）。绝不能写成 \(2 \subseteq \{1,2\}\)！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">核心概念 ③</span><b>空集 \(\varnothing\) 是幽灵：任何集合的子集！</b></p>
+      <p class="small" style="margin:0">要推翻「\(\varnothing \subseteq B\)」，必须从 \(\varnothing\) 里找出一个不在 \(B\) 里的元素；而空集里根本没有元素，<b>谁也抓不到反例</b>！所以 \(\varnothing \subseteq B\) 对任何集合恒真！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心判定与子集计算公式</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{A \subseteq B}_{\text{A 中任意元素都在 B 中}}}\)</span>
+    <span style="display:inline-block; margin:0 12px">\(\color{#966524}{\underbrace{A \subsetneqq B}_{A\subseteq B\text{ 且 B 至少多出 1 个元素}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\text{子集数 } = 2^n}_{\text{n 个元素，每个「选/不选」两种抉择}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>「每一个」和「有一个」</b>：说「每一个都……」，要一个不漏地查完；说「有一个……」，找到一个就够。</p>
-    <p>例：「\(\{2,4,6\}\) 里每一个都是偶数」，要 \(2\)、\(4\)、\(6\) 都查过才算数；「\(\{2,4,6\}\) 里有一个是 \(3\) 的倍数」，找到 \(6\) 就够了。</p>
-    <p>反过来，要推翻「每一个都是 \(3\) 的倍数」，也只要指出一个：\(2\) 不是。这个「一个反例就推翻」等下马上要用。</p>
-  </div>
-
-  <div class="card">
-    <p><b>空集</b>：一个元素都没有的集合，记作 \(\varnothing\)。</p>
-    <p>例：\(\{x\mid x+1=x\}\)：没有哪个数比自己大 \(1\)，这个集合里什么也没有，就是 \(\varnothing\)。「班里身高超过 \(3\) 米的同学」组成的集合，也是空集。</p>
-  </div>
-
-  <div class="card">
-    <p><b>实心点和空心点</b>：数轴上画范围，端点取得到画实心，取不到画空心。</p>
-    <p>例：\(\{x\mid 1\le x\lt 3\}\)：\(1\) 处实心，\(3\) 处空心。所以 \(1\) 在里面，\(2.9\) 在里面，\(3\) 不在里面。</p>
-  </div>
-
-  <h3>2. 子集：A 里的每一个，B 里都有</h3>
-  <p>如果集合 \(A\) 的<b>每一个</b>元素都是集合 \(B\) 的元素，就说 \(A\) 是 \(B\) 的<b>子集</b>，记作 \(A\subseteq B\)（读作「\(A\) 包含于 \(B\)」，也可以写 \(B\supseteq A\)，「\(B\) 包含 \(A\)」）。</p>
-  <svg class="venn" viewBox="0 0 300 150" role="img" aria-label="韦恩图：小圆 A 整个在大圆 B 里面">
-    <ellipse cx="150" cy="75" rx="130" ry="65" fill="none" stroke="var(--b)" stroke-width="2.5"/>
-    <ellipse cx="125" cy="80" rx="55" ry="36" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2.5"/>
-    <text x="118" y="86" style="fill:var(--a);font-weight:600">A</text>
-    <text x="225" y="62" style="fill:var(--b);font-weight:600">B</text>
-  </svg>
-  <p>反过来，要说明 \(A\) <b>不是</b> \(B\) 的子集（记作 \(A\not\subseteq B\)），只要找出<b>一个</b> \(x\in A\) 但 \(x\notin B\) 就够了。</p>
-  <div class="key">\(A\subseteq B\)：任取 \(x\in A\)，都有 \(x\in B\)。<br>\(A\not\subseteq B\)：能找到一个 \(x\in A\)，却 \(x\notin B\)。</div>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（看一遍怎么写）</b></p>
     <p>\(B=\{1,2,3,4,6,12\}\)（\(12\) 的正因数），\(A=\{1,2,4\}\)，\(C=\{1,2,5\}\)。\(A\)、\(C\) 是不是 \(B\) 的子集？</p>
     <p>\(A\)：逐个查，\(1\in B\)，\(2\in B\)，\(4\in B\)，每一个都在，所以 \(A\subseteq B\)。</p>
     <p>\(C\)：\(1\)、\(2\) 在 \(B\) 里，但 \(5\notin B\)。有一个反例就够了，所以 \(C\not\subseteq B\)。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：\(B=\{1,2,3,4,5,6\}\)。下面哪个集合是 \(B\) 的子集？</p>
     <div class="opts">
@@ -113,18 +121,14 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
     <div class="reveal"><p><b>B</b>。\(6\) 的正因数是 \(1,2,3,6\)，都在 \(B\) 里。A 有 \(0\)，C 有 \(8\)，都不在 \(B\) 里。选 D 的同学忘了<b>自然数包括 \(0\)</b>：小于 \(7\) 的自然数是 \(0,1,\dots,6\)，\(0\) 就是那个反例。</p></div>
   </div>
 
-  <h3>3. 相等和真子集</h3>
-  <p><b>相等</b>：\(A\subseteq B\) 而且 \(B\subseteq A\)，两个集合的元素一模一样，记作 \(A=B\)。集合不管顺序，\(\{1,2\}=\{2,1\}\)；写法也可以不同，比如 \(\{x\mid x^2=1\}=\{-1,1\}\)。</p>
-  <p><b>真子集</b>：\(A\subseteq B\)，并且 \(B\) 里<b>至少有一个</b>元素不在 \(A\) 里，就说 \(A\) 是 \(B\) 的真子集，记作 \(A\subsetneqq B\)。开头的课表就是这样：\(A\subsetneqq B\)。</p>
-  <p>可以拿数的大小来帮着记：\(\subseteq\) 像 \(\le\)，允许相等；\(\subsetneqq\) 像 \(\lt\)，不许相等。所以 \(A\subseteq A\) 对，\(A\subsetneqq A\) 错。不过这只是帮你记，集合的事还是按定义判断（「再深一点」里有一个不像的地方）。</p>
-  <div class="key">\(A=B\)：互相包含。<br>\(A\subsetneqq B\)：\(A\subseteq B\)，而且 \(B\) 里有 \(A\) 没有的元素。</div>
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（相等与真子集）</b></p>
     <p>\(A=\{x\mid x^2=1\}\)，\(B=\{-1,1\}\)，\(C=\{-1,0,1\}\)。说出 \(A\) 和 \(B\)、\(A\) 和 \(C\) 的关系。</p>
     <p>先把 \(A\) 写清楚：\(x^2=1\) 的解是 \(x=1\) 或 \(x=-1\)，所以 \(A=\{-1,1\}\)。</p>
     <p>\(A\) 和 \(B\) 元素一样，\(A=B\)。</p>
     <p>\(A\) 的 \(-1\)、\(1\) 都在 \(C\) 里，\(A\subseteq C\)；而 \(0\in C\)，\(0\notin A\)，所以 \(A\subsetneqq C\)。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：\(\{x\mid x\text{ 是小于 }4\text{ 的正整数}\}\) 和 \(\{3,1,2\}\) 是什么关系？</p>
     <div class="opts">
@@ -136,38 +140,13 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
     <div class="reveal"><p><b>A</b>。小于 \(4\) 的正整数是 \(1,2,3\)，和 \(\{3,1,2\}\) 元素一样，只是顺序不同，顺序不影响相等。选 C 的同学多半把 \(0\) 也算成了正整数；\(0\) 不是正数。</p></div>
   </div>
 
-  <h3>4. 空集：谁的子集都是</h3>
-  <p>规定：<b>空集是任何集合的子集</b>，\(\varnothing\subseteq B\)。</p>
-  <p>为什么说得通？想说「\(\varnothing\) 不是 \(B\) 的子集」，就得找到一个「在 \(\varnothing\) 里、却不在 \(B\) 里」的元素。空集里根本没有元素，这样的反例找不到，所以 \(\varnothing\subseteq B\) 总成立。\(B\) 不是空集时，\(\varnothing\subsetneqq B\)。</p>
-  <div class="warn">\(\varnothing\)、\(\{0\}\)、\(0\) 是三样东西：\(\varnothing\) 没有元素；\(\{0\}\) 有一个元素 \(0\)；\(0\) 是一个数，不是集合。所以 \(\varnothing\ne\{0\}\)，而是 \(\varnothing\subsetneqq\{0\}\)。</div>
-  <p><b>符号别用混</b>：元素和集合之间用 \(\in\)、\(\notin\)；集合和集合之间用 \(\subseteq\)、\(\subsetneqq\)、\(=\)。</p>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>写出 \(0\)、\(\varnothing\)、\(\{0\}\)、\(\{0,1\}\) 之间的关系。</p>
-    <p>\(0\) 是元素：\(0\in\{0\}\)，\(0\in\{0,1\}\)，\(0\notin\varnothing\)。</p>
-    <p>三个集合：\(\varnothing\) 是子集，\(\{0\}\) 比它多一个 \(0\)，所以 \(\varnothing\subsetneqq\{0\}\)；\(\{0,1\}\) 又多一个 \(1\)，所以 \(\{0\}\subsetneqq\{0,1\}\)，也有 \(\varnothing\subsetneqq\{0,1\}\)。</p>
-    <p>不能写的：\(0\subseteq\{0\}\)（\(0\) 是元素，要用 \(\in\)）；\(\varnothing=\{0\}\)（一个没有元素，一个有）。</p>
-  </div>
-  <div class="card predict" data-id="try-3" data-answer="A">
-    <p>自己试试：\(\varnothing\) 和 \(\{5\}\) 是什么关系？</p>
-    <div class="opts">
-      <button class="opt" data-v="A"><b>A</b>\(\varnothing\subsetneqq\{5\}\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\varnothing=\{5\}\)</button>
-      <button class="opt" data-v="C"><b>C</b>没有包含关系，因为 \(\varnothing\) 里没有 \(5\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(\{5\}\subseteq\varnothing\)</button>
-    </div>
-    <div class="reveal"><p><b>A</b>。空集是任何集合的子集；\(\{5\}\) 还多一个 \(5\)，所以是真子集。选 C 的同学把方向想反了：子集要求的是「\(\varnothing\) 里的每一个都在 \(\{5\}\) 里」，不是「\(\{5\}\) 里的都在 \(\varnothing\) 里」。D 不对：\(5\in\{5\}\)，\(5\notin\varnothing\)。</p></div>
-  </div>
-
-  <h3>5. 子集有几个</h3>
-  <p>集合有 \(n\) 个元素时，挑子集就是对每个元素决定「要」还是「不要」，一共 \(\underbrace{2\times2\times\cdots\times2}_{n\text{ 个}}=2^n\) 种挑法，所以有 \(2^n\) 个子集。一个都不挑是 \(\varnothing\)，全挑是集合自己，这两个都算。</p>
-  <div class="key">\(n\) 个元素的集合：子集 \(2^n\) 个；真子集 \(2^n-1\) 个（去掉自己）；非空真子集 \(2^n-2\) 个（再去掉 \(\varnothing\)，要求 \(n\ge1\)）。</div>
-  <div class="card">
-    <p class="small">例 4</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（子集个数推导）</b></p>
     <p>列出 \(\{a,b\}\) 的全部子集，再看加进 \(c\) 以后有几个。</p>
     <p>\(\{a,b\}\)：\(\varnothing\)，\(\{a\}\)，\(\{b\}\)，\(\{a,b\}\)，共 \(4=2^2\) 个。</p>
     <p>加进 \(c\)：原来 \(4\) 个照样是子集（不挑 \(c\)）；再各带上 \(c\)，得 \(\{c\}\)，\(\{a,c\}\)，\(\{b,c\}\)，\(\{a,b,c\}\)（挑 \(c\)）。一共 \(8=2^3\) 个。每多一个元素，个数翻一倍。</p>
   </div>
+
   <div class="card predict" data-id="try-4" data-answer="B">
     <p>自己试试：\(\{1,2,3,4\}\) 有几个真子集？</p>
     <div class="opts cols">
@@ -178,15 +157,27 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
     </div>
     <div class="reveal"><p><b>B</b>。子集 \(2^4=16\) 个，去掉集合自己，真子集 \(15\) 个。选 A 的同学没去掉自己；选 C 的同学连 \(\varnothing\) 也去掉了，可 \(\varnothing\) 是 \(\{1,2,3,4\}\) 的真子集，\(14\) 是「非空真子集」的个数。</p></div>
   </div>
+  <div class="vid" data-video="ex-count"></div>
 
-  <h3>6. 在数轴上比两个范围</h3>
-  <p>像 \(\{x\mid a\le x\lt b\}\) 这样的集合，画在数轴上比较最清楚。中间部分一看就知道，<b>容易错的是端点重合的时候</b>：端点 \(p\) 重合时，如果 \(p\in A\)（\(A\) 这头实心），那 \(B\) 这头也必须实心；如果 \(A\) 这头空心，\(B\) 那头实心空心都行。</p>
+  <h3>3. 在数轴上比范围：端点穿透法则</h3>
   <div class="card">
-    <p class="small">例 5</p>
-    <p>\(B=\{x\mid -1\le x\lt 3\}\)。\(A_1=\{x\mid 0\lt x\le 3\}\)，\(A_2=\{x\mid -1\le x\lt 2\}\) 是不是 \(B\) 的子集？</p>
-    <p>\(A_1\)：\(0\) 到 \(3\) 之间都在 \(B\) 里，但右端 \(3\) 重合：\(A_1\) 这头实心，\(3\in A_1\)；\(B\) 那头空心，\(3\notin B\)。\(3\) 就是反例，\(A_1\not\subseteq B\)。</p>
-    <p>\(A_2\)：左端 \(-1\) 重合，两边都实心，\(-1\in B\)，没问题；右端 \(2\lt 3\)，在 \(B\) 里面。所以 \(A_2\subseteq B\)；\(B\) 里还有 \(2.5\) 不在 \(A_2\) 里，所以 \(A_2\subsetneqq B\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 5（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">已知 \(B=\{x\mid -1\le x\lt 3\}\)，判断 \(A_1=\{x\mid 0\lt x\le 3\}\) 与 \(A_2=\{x\mid -1\le x\lt 2\}\) 是否是 \(B\) 的子集？</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看破题信号：</span>连续区间比较，先看内部有没有跑出去，再重点核查<b>重合的端点</b>！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步核对 A1 右端点：</span>
+        \(A_1\) 的内部 \(0&lt;x&lt;3\) 都在 \(B\) 里，但右端点 \(x=3\)：\(A_1\) 这头是<b>实心</b>（\(3 \in A_1\)），而 \(B\) 这头是<b>空心</b>（\(3 \notin B\)）！找到反例 \(3\)，故 \(A_1 \not\subseteq B\)！
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步核对 A2 左右端点：</span>
+        \(A_2\) 左端 \(-1\) 两边都是实心（\(-1 \in B\) 满足）；右端 \(2 &lt; 3\) 落在 \(B\) 内部。所以 \(A_2 \subseteq B\)（且 \(B\) 还有元素 \(2.5\) 不在 \(A_2\) 中，是真子集 \(A_2 \subsetneqq B\)）。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-5" data-answer="B">
     <p>自己试试：\(B=\{x\mid 1\lt x\le 5\}\)。下面哪个是 \(B\) 的子集？</p>
     <div class="opts cols">
@@ -198,16 +189,58 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
     <div class="reveal"><p><b>B</b>。右端 \(5\) 重合，两边都实心，可以。选 A 的同学最多：\(1\) 在 A 里（实心），可 \(B\) 的 \(1\) 是空心，\(1\notin B\)。C 有 \(0.5\)，D 有 \(6\)，都跑到 \(B\) 外面了。</p></div>
   </div>
 
-  <h3>7. 做包含题，查三件事</h3>
-  <ol>
-    <li><b>先看元素是什么</b>：是数、是点（有序数对），还是别的。<br><span class="small">反例：\(\{1,2\}\) 有两个元素，是两个数；\(\{(1,2)\}\) 只有一个元素，是一个点。两个集合互不包含，更不相等。</span></li>
-    <li><b>端点单独代回去查</b>：等号要不要，不靠感觉。<br><span class="small">反例：\(B=\{x\mid x\lt 3\}\)，\(A=\{x\mid x\le a\}\)，要 \(A\subseteq B\)。写成 \(a\le3\) 就错了：\(a=3\) 时 \(3\in A\)，但 \(3\notin B\)。正确的是 \(a\lt 3\)。</span></li>
-    <li><b>含参数时，先问「会不会是空集」</b>：不能一上来就假设集合里有元素。<br><span class="small">反例：\(B=\{x\mid 0\le x\le 2\}\)，\(A=\{x\mid m\le x\le 1\}\)，要 \(A\subseteq B\)。只算「\(A\) 有元素」的情况得 \(0\le m\le 1\)；可 \(m>1\) 时 \(A=\varnothing\)，空集是子集，也满足。答案是 \(m\ge 0\)。</span></li>
-  </ol>
-  <div class="key">「\(A\subseteq B\)」求参数：先确定元素是什么；算完把端点代回去查一遍；\(A\) 可能是空集时，空集那部分也要算进答案。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>\(A \subseteq B\) 求参数，遗漏「\(A = \varnothing\)」分支</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：设 \(B=\{x\mid 0\le x\le 2\}, A=\{x\mid m\le x\le 1\}\)，若 \(A\subseteq B\)，只算有元素时的 \(0\le m\le 1\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：当 \(m&gt;1\) 时，集合 \(A=\varnothing\)（空集）！因为<b>空集是任何集合的子集</b>，所以 \(m&gt;1\) 完全满足题意！最终答案必须是 \(m\ge 0\)！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>区间端点重合时，漏审「内实外空」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：\(B=\{x\mid x&lt;3\}, A=\{x\mid x\le a\}\)，要 \(A\subseteq B\)，想当然写出 \(a\le 3\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：代入 \(a=3\) 检验：\(A\) 这头是实心（\(3\in A\)），但 \(B\) 这头是空心（\(3\notin B\)），元素 \(3\) 跑出了集合！所以只能是严格小于 \(a&lt;3\)（不能带等号）！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③（最高频！）</span><span>混淆「属于 \(\in\)」与「包含 \(\subseteq\)」</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：写出 \(0 \subseteq \{0\}\) 或 \(\{0\} \in \{0, 1\}\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：元素对集合用 \(\in\)；集合对集合才用 \(\subseteq\)！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-sym-fig" viewBox="0 0 280 140" role="img" aria-label="符号辨析微图解"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vid" data-video="ex-param"></div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
+    <p><b>为什么真子集不能有等于号</b>：若 \(A=B\)，则 \(A\subseteq B\) 成立，但不能说 \(A\subsetneqq B\)。类比实数：\(2 \le 2\) 成立，但 \(2 &lt; 2\) 错误。</p>
+    <p><b>传递性</b>：若 \(A\subseteq B\) 且 \(B\subseteq C\)，则必有 \(A\subseteq C\)。</p>
+  </details>
+</section>
     <p><b>类比到哪里就不像了</b>：两个数总能比大小，不是 \(a\le b\) 就是 \(b\le a\)。两个集合却可能谁也不包含谁：\(\{1,2\}\) 和 \(\{2,3\}\)，\(1\) 不在后者里，\(3\) 不在前者里。所以「像 \(\le\)」只是帮你发现问题，数的性质不能直接搬过来。</p>
     <p><b>传递</b>：\(A\subseteq B\)，\(B\subseteq C\)，那么 \(A\subseteq C\)：\(A\) 的每个元素都在 \(B\) 里，\(B\) 的每个元素又都在 \(C\) 里。</p>
     <p><b>求出参数后，查元素互不相同</b>：集合里的元素不能重复。比如 \(\{1,a,a^2\}\)，\(a=1\) 时三个都是 \(1\)，这不是三个元素的集合，这样的 \(a\) 要舍掉。真题里含参数的集合，算出参数都要代回去看一眼。</p>
@@ -561,9 +594,139 @@ details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
   });
   document.getElementById("reset2").onclick = function () { S2 = DEF2.slice(); last = null; draw2(); Peiyu.log("interact", { w: "subsets", how: "reset" }); };
 
-  function init() { st = clone(DEF); S2 = DEF2.slice(); draw(); draw2(); }
+  /* ---------- 0 从例子进入：课程表集合包含 ---------- */
+  var ecSvg = document.getElementById("entry-cal"), ecBar = document.getElementById("entry-cal-bar"), ecNote = document.getElementById("entry-cal-note");
+  var ecMode = "sub";
+  function ecDraw(mode) {
+    ecMode = mode;
+    ecSvg.innerHTML = "";
+    var hiA = mode === "A" || mode === "sub", hiB = mode === "B" || mode === "sub";
+    // 外框：集合 B（五个工作日）
+    mk("rect", { x: 16, y: 12, width: 488, height: 166, rx: 16, fill: hiB ? "var(--card)" : "var(--bg)", stroke: hiB ? "var(--b)" : "var(--line)", "stroke-width": hiB ? 2.5 : 1.5 }, ecSvg);
+    mk("text", { x: 32, y: 36, "font-weight": 700, fill: "var(--b)", "font-size": 15 }, ecSvg).textContent = "大集合 B：五个工作日（周一 ~ 周五）";
+    // 内胶囊：集合 A（数学课三天）
+    mk("rect", { x: 30, y: 48, width: 288, height: 116, rx: 14, fill: hiA ? "var(--ok-soft)" : "var(--card)", stroke: hiA ? "var(--a)" : "var(--line)", "stroke-width": hiA ? 2.4 : 1.5 }, ecSvg);
+    mk("text", { x: 174, y: 70, "text-anchor": "middle", "font-weight": 700, fill: "var(--a)", "font-size": 14.5 }, ecSvg).textContent = "小集合 A：数学课（完全装在 B 里）";
+
+    var daysA = ["周一", "周三", "周五"];
+    daysA.forEach(function (d, i) {
+      var x = 44 + i * 90, y = 82;
+      mk("rect", { x: x, y: y, width: 80, height: 66, rx: 10, fill: "var(--card)", stroke: hiA ? "var(--a)" : "var(--line)", "stroke-width": hiA ? 2 : 1.2 }, ecSvg);
+      mk("text", { x: x + 40, y: y + 26, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 15 }, ecSvg).textContent = d;
+      mk("text", { x: x + 40, y: y + 49, "text-anchor": "middle", fill: "var(--a)", "font-weight": 600, "font-size": 13 }, ecSvg).textContent = "有数学 ✓";
+    });
+
+    var daysB = ["周二", "周四"];
+    mk("text", { x: 412, y: 70, "text-anchor": "middle", fill: "var(--b)", "font-weight": 600, "font-size": 13.5 }, ecSvg).textContent = "B 比 A 多出的两天";
+    daysB.forEach(function (d, i) {
+      var x = 334 + i * 82, y = 82;
+      mk("rect", { x: x, y: y, width: 74, height: 66, rx: 10, fill: "var(--card)", stroke: hiB ? "var(--b)" : "var(--line)", "stroke-width": hiB ? 2 : 1.2, opacity: mode === "A" ? 0.5 : 1 }, ecSvg);
+      mk("text", { x: x + 37, y: y + 26, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 15 }, ecSvg).textContent = d;
+      mk("text", { x: x + 37, y: y + 49, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12.5 }, ecSvg).textContent = "只在 B 里";
+    });
+
+    [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (mode === "A") {
+      ecNote.innerHTML = "集合 <b>A = {周一, 周三, 周五}</b>：这三天全在大框 <b>B</b> 里面，没有一天跑到 B 外面！";
+    } else if (mode === "B") {
+      ecNote.innerHTML = "集合 <b>B = {周一, 周二, 周三, 周四, 周五}</b>：除了 A 的三天，还多出<b>周二、周四</b>（它们不在 A 里）。";
+    } else {
+      ecNote.innerHTML = "包含关系：<b>A 里的每一天，B 里都有</b>（记作 <b>A ⊆ B</b>，而且 B 比 A 多两天，是<b>真子集 A ⊊ B</b>）。";
+    }
+  }
+  [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ecDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: "sub", B: "B", C: "sub", D: "A" };
+      ecDraw(map[ev.detail.choice] || "sub");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecDraw("sub");
+  });
+
+  function init() { ecDraw("sub"); st = clone(DEF); S2 = DEF2.slice(); draw(); draw2(); initStep2(); }
   if (window.Peiyu && window.renderMathInElement) init();
   else document.addEventListener("DOMContentLoaded", init);
+
+  /* ---------- Step 2 讲清楚微图解 ---------- */
+  function initStep2() {
+    var sSvg = document.getElementById("m-sub-fig"), sBar = document.getElementById("m-sub-bar"), sNote = document.getElementById("m-sub-note");
+    if (!sSvg || !sBar) return;
+
+    function drawSub(k) {
+      sSvg.innerHTML = "";
+      var cA = "var(--a)", cB = "var(--b)", cNo = "var(--no)", cM = "var(--muted)", cFg = "var(--fg)", cCd = "var(--card)", cOk = "var(--ok-soft)";
+
+      if (k === "sub") {
+        // 大圆 B，内嵌小圆 A
+        mk("ellipse", { cx: 260, cy: 80, rx: 190, ry: 65, fill: cCd, stroke: cB, "stroke-width": 2.2 }, sSvg);
+        mk("text", { x: 410, y: 75, fill: cB, "font-weight": 700, "font-size": 14 }, sSvg).textContent = "大集合 B";
+        mk("ellipse", { cx: 210, cy: 80, rx: 100, ry: 45, fill: cOk, stroke: cA, "stroke-width": 2.2 }, sSvg);
+        mk("text", { x: 210, y: 85, "text-anchor": "middle", fill: cA, "font-weight": 700, "font-size": 15 }, sSvg).textContent = "A ⊆ B (小圆在内，也允许重合)";
+        sNote.innerHTML = "<b>子集 A ⊆ B</b>：A 里的<b>每一个元素</b>都在 B 里，就像小圆全盘嵌套在大圆内（当两者完全一样时也叫子集，此时 A = B）。";
+      } else if (k === "psub") {
+        mk("ellipse", { cx: 260, cy: 80, rx: 190, ry: 65, fill: cCd, stroke: cB, "stroke-width": 2.2 }, sSvg);
+        mk("text", { x: 410, y: 55, fill: cB, "font-weight": 700, "font-size": 14 }, sSvg).textContent = "大集合 B";
+        mk("ellipse", { cx: 180, cy: 80, rx: 85, ry: 42, fill: cOk, stroke: cA, "stroke-width": 2.2 }, sSvg);
+        mk("text", { x: 180, y: 78, "text-anchor": "middle", fill: cA, "font-weight": 700, "font-size": 14 }, sSvg).textContent = "A = {1, 2}";
+        mk("text", { x: 180, y: 98, "text-anchor": "middle", fill: cA, "font-size": 12 }, sSvg).textContent = "真子集 A ⊊ B";
+
+        // B 多出的元素
+        mk("circle", { cx: 330, cy: 65, r: 12, fill: "var(--hl-soft)", stroke: cB, "stroke-width": 1.5 }, sSvg);
+        mk("text", { x: 330, y: 70, "text-anchor": "middle", fill: cB, "font-weight": 700, "font-size": 13 }, sSvg).textContent = "3";
+        mk("circle", { cx: 365, cy: 100, r: 12, fill: "var(--hl-soft)", stroke: cB, "stroke-width": 1.5 }, sSvg);
+        mk("text", { x: 365, y: 105, "text-anchor": "middle", fill: cB, "font-weight": 700, "font-size": 13 }, sSvg).textContent = "4";
+        mk("text", { x: 350, y: 135, "text-anchor": "middle", fill: cB, "font-weight": 600, "font-size": 12.5 }, sSvg).textContent = "▲ B 多出的额外元素";
+        sNote.innerHTML = "<b>真子集 A ⊊ B</b>：A 是子集，并且 B 里<b>至少多出 1 个元素</b>（如元素 3、4 不在 A 里，不能画等号！）。";
+      } else {
+        // A 探出 B 外面
+        mk("ellipse", { cx: 200, cy: 80, rx: 140, ry: 60, fill: cCd, stroke: cB, "stroke-width": 2.2 }, sSvg);
+        mk("text", { x: 140, y: 85, "text-anchor": "middle", fill: cB, "font-weight": 700, "font-size": 14 }, sSvg).textContent = "集合 B";
+
+        mk("ellipse", { cx: 330, cy: 80, rx: 110, ry: 48, fill: "var(--no-soft)", stroke: cNo, "stroke-width": 2.2, opacity: 0.8 }, sSvg);
+        mk("text", { x: 380, y: 70, fill: cNo, "font-weight": 700, "font-size": 14 }, sSvg).textContent = "集合 A";
+
+        // 反例点
+        mk("circle", { cx: 405, cy: 90, r: 13, fill: cNo }, sSvg);
+        mk("text", { x: 405, y: 95, "text-anchor": "middle", fill: "#fff", "font-weight": 700, "font-size": 13 }, sSvg).textContent = "5";
+        mk("rect", { x: 340, y: 118, width: 140, height: 26, rx: 6, fill: cCd, stroke: cNo, "stroke-width": 1.4 }, sSvg);
+        mk("text", { x: 410, y: 135, "text-anchor": "middle", fill: cNo, "font-weight": 700, "font-size": 12 }, sSvg).textContent = "反例：5 ∈ A 但 5 ∉ B！";
+        sNote.innerHTML = "<b>不是子集 A ⊈ B</b>：只要能抓到<b> 1 个反例</b>（如 5 ∈ A 却不在 B 里），「A 的每个元素都在 B 里」立刻宣告破产！";
+      }
+
+      [].forEach.call(sBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+    }
+
+    [].forEach.call(sBar.querySelectorAll("button"), function (b) {
+      b.onclick = function () { drawSub(b.getAttribute("data-k")); };
+    });
+    drawSub("sub");
+
+    // 翻车现场 ③ 微图解
+    var ySvg = document.getElementById("m-sym-fig");
+    if (ySvg) {
+      ySvg.innerHTML = "";
+      var rows = [
+        { text: "0 ∈ {0}", ok: true, note: "✓ 对：数字属于集合" },
+        { text: "0 ⊆ {0}", ok: false, note: "✗ 错：数字不能包含集合" },
+        { text: "{0} ⊆ {0}", ok: true, note: "✓ 对：集合包含集合" },
+        { text: "∅ ⊆ {0}", ok: true, note: "✓ 对：空集是任何集合子集" }
+      ];
+      rows.forEach(function (r, idx) {
+        var ry = 10 + idx * 30;
+        mk("rect", { x: 8, y: ry, width: 264, height: 26, rx: 6, fill: r.ok ? "var(--ok-soft)" : "var(--no-soft)", stroke: r.ok ? "var(--a)" : "var(--no)", "stroke-width": 1.2 }, ySvg);
+        mk("text", { x: 18, y: ry + 17, fill: r.ok ? "var(--a)" : "var(--no)", "font-weight": 700, "font-size": 12.5 }, ySvg).textContent = r.text;
+        mk("text", { x: 100, y: ry + 17, fill: "var(--fg)", "font-size": 11.5 }, ySvg).textContent = r.note;
+      });
+    }
+  }
 })();
 </script>
 </body></html>

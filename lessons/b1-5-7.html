@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   #fw text { font-size: 20px; }
   .ctrl .sl { display: flex; align-items: center; gap: 8px; width: 100%; }
@@ -28,8 +30,16 @@
 <p class="lead">摩天轮转一圈又一圈，潮水涨了又落，气温一天一个来回——这些「周期现象」都能用 \(y=A\sin(\omega x+\varphi)+B\) 来描述。这一节把每个字母在现实里是什么讲清楚，再学会从数据把它们定出来。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一座摩天轮半径 \(50\) 米，中心离地 \(60\) 米，匀速转一圈要 \(30\) 分钟。你从<b>最低点</b>上车，这时离地 \(60-50=10\) 米。</p>
+  <p>一座摩天轮半径 \(50\) 米，中心离地 \(60\) 米，匀速转一圈要 \(30\) 分钟。你从<b>最低点</b>上车，这时离地 \(60-50=10\) 米。点下面的时间按钮，看座舱离地高度怎么随时间变化：</p>
   <div class="card predict" data-id="entry" data-answer="D">
+    <svg class="entry-fig" id="entry-app" viewBox="0 0 520 205" role="img" aria-label="中心离地60米、半径50米的摩天轮与离地高度h(t)从10米到110米的周期曲线"></svg>
+    <div class="entry-bar" id="entry-app-bar">
+      <button type="button" data-t="0">t = 0 min 最低点 (10m)</button>
+      <button type="button" data-t="7.5" class="on">t = 7.5 min 中腰 (60m)</button>
+      <button type="button" data-t="15">t = 15 min 最高点 (110m)</button>
+      <button type="button" data-t="30">t = 30 min 回到最低点 (10m)</button>
+    </div>
+    <div class="entry-note" id="entry-app-note"></div>
     <p>上车 \(15\) 分钟后，你离地多高？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(10\) 米</button>
@@ -46,41 +56,42 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：弧度（<a href="b1-5-1.html">5.1</a>）；周期和正弦函数的最值（<a href="b1-5-4.html">5.4</a>）；\(y=A\sin(\omega x+\varphi)\) 的图象和参数（<a href="b1-5-6.html">5.6</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：周期现实模型与正弦函数参量映射</h3>
+  <p class="small">要用到：弧度制（<a href="b1-5-1.html">5.1</a>）、正弦图象与最值（<a href="b1-5-4.html">5.4</a>）、函数 \(y=A\sin(\omega x+\varphi)+B\)（<a href="b1-5-6.html">5.6</a>）。先看微图解：</p>
 
-  <div class="card">
-    <p><b>周期 \(T\) 和频率</b>：周期是重复一次要的时间；频率 \(\dfrac1T\) 是单位时间里重复几次。</p>
-    <p>例：摩天轮 \(T=30\) 分钟，频率 \(\dfrac1{30}\) 圈/分钟。弹簧振子来回一次 \(0.5\) 秒，频率 \(\dfrac1{0.5}=2\)，每秒来回 \(2\) 次。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>摩天轮、潮汐涨落与弹簧振子正弦建模全景</b></p>
+    <div class="entry-bar" id="m-app-bar" role="group" aria-label="实际应用微图解切换">
+      <button type="button" class="on" data-m="ferris">① 摩天轮旋转 (圆周投影为正弦波：半径 A，轴高 B，一圈 T)</button>
+      <button type="button" data-m="tide">② 港口潮汐涨落 (高低潮差为 2A，平均水深为 B，安全通航区间)</button>
+      <button type="button" data-m="spr">③ 弹簧简谐振动 (平衡位置 B=0，最大位移振幅 A，振动频率 f=1/T)</button>
+    </div>
+    <svg class="micro-fig" id="m-app-fig" viewBox="0 0 520 160" role="img" aria-label="三角函数应用微图解"></svg>
+    <p class="entry-note" id="m-app-note"></p>
   </div>
-  <div class="card">
-    <p><b>振幅 \(A\) 和平衡位置 \(B\)</b>：\(\sin\) 在 \(-1\) 到 \(1\) 之间，所以 \(y=A\sin(\cdots)+B\) 在 \(B-A\) 到 \(B+A\) 之间，围着 \(y=B\) 上下摆。\(B\) 是正中间（平衡位置），\(A\) 是往上、往下各摆多远（振幅，约定 \(A>0\)）。</p>
-    <p>例：摩天轮最高 \(110\)、最低 \(10\)：\(B=\dfrac{110+10}{2}=60\)（中心高），\(A=\dfrac{110-10}{2}=50\)（半径）。</p>
-  </div>
-  <div class="card">
-    <p><b>角速度 \(\omega\)</b>：每单位时间转过多少弧度，\(\omega=\dfrac{2\pi}{T}\)（约定 \(\omega>0\)）。它不是「几次」。</p>
-    <p>例：\(30\) 分钟转一圈 \(2\pi\)，\(\omega=\dfrac{2\pi}{30}=\dfrac{\pi}{15}\) 弧度/分钟。</p>
-  </div>
-  <div class="card">
-    <p><b>初相 \(\varphi\)</b>：\(t=0\) 时括号里 \(\omega t+\varphi\) 就是 \(\varphi\)，它决定「从哪儿开始」。</p>
-    <p>例：\(h=50\sin\left(\dfrac{\pi}{15}t+\varphi\right)+60\)。\(\varphi=0\) 时 \(h(0)=60\)，从和中心一样高的地方出发；\(\varphi=-\dfrac{\pi}{2}\) 时 \(h(0)=50\times(-1)+60=10\)，从最低点出发。</p>
-  </div>
-  <table class="ptab">
-    <tr><th>字母</th><th>摩天轮里是</th><th>怎么从数据读</th></tr>
-    <tr><td>\(A\)</td><td>半径</td><td>\(\dfrac{\text{最大}-\text{最小}}{2}\)</td></tr>
-    <tr><td>\(B\)</td><td>中心高</td><td>\(\dfrac{\text{最大}+\text{最小}}{2}\)</td></tr>
-    <tr><td>\(T\)、\(\omega\)</td><td>转一圈的时间</td><td>相邻两个最高点隔多久；\(\omega=\dfrac{2\pi}{T}\)</td></tr>
-    <tr><td>\(\varphi\)</td><td>\(t=0\) 时在哪</td><td>代入一个已知时刻</td></tr>
-  </table>
 
-  <h3>2. 由最高、最低、周期定 \(A\)、\(B\)、\(\omega\)</h3>
-  <p>最大值 \(M=B+A\)，最小值 \(m=B-A\)，两式相加、相减就得到 \(B=\dfrac{M+m}{2}\)，\(A=\dfrac{M-m}{2}\)。相邻两个最高点隔一个周期；最高点到相邻的最低点只隔<b>半个</b>周期。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>某港口一天里水深（米）像正弦曲线一样变化：最深 \(7\) 米，最浅 \(3\) 米，相邻两次最深隔 \(12\) 小时。写成 \(y=A\sin(\omega t+\varphi)+B\)，求 \(A\)、\(B\)、\(\omega\)。</p>
-    <p>\(A=\dfrac{7-3}{2}=2\)，\(B=\dfrac{7+3}{2}=5\)。周期 \(T=12\) 小时，\(\omega=\dfrac{2\pi}{12}=\dfrac{\pi}{6}\)（弧度/小时）。</p>
-    <p>所以 \(y=2\sin\left(\dfrac{\pi}{6}t+\varphi\right)+5\)，\(\varphi\) 要知道某一时刻的水深才能定（下一块）。</p>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">参量映射</span><b>现实数据与函数参量 \(A, B, \omega\) 的对应法则</b></p>
+      <p class="small" style="margin:0">最大值 \(M=B+A\)，最小值 \(m=B-A\)。两式相加得<b>平衡中心基准 \(B = \dfrac{M+m}{2}\)</b>；两式相减得<b>半波振幅 \(A = \dfrac{M-m}{2}\)</b>；相邻两次最高相隔整周期 \(T \implies \omega = \dfrac{2\pi}{T}\)！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-b">定初相诀窍</span><b>初相 \(\varphi\) 必代已知时刻，按「升降趋势」挑选</b></p>
+      <p class="small" style="margin:0">代入 \(t=0\) 的已知位置，若 \(\sin\varphi = \dfrac{1}{2}\)，一个周期内有 \(\dfrac{\pi}{6}\) 与 \(\dfrac{5\pi}{6}\) 两个角。观察此时是在<b>往上升</b>（导数/变化为正，选 \(\dfrac{\pi}{6}\)）还是在<b>往下降</b>（选 \(\dfrac{5\pi}{6}\)），绝不能单凭开方猜想！</p>
+    </div>
   </div>
+
+  <h3>2. 三角函数现实建模核心公式矩阵</h3>
+  <div class="key" style="font-size:13.5px;line-height:1.8">
+    \[\begin{aligned}
+    \textbf{模型通用表达式：}&\quad y = A\sin(\omega t + \varphi) + B\quad (A &gt; 0,\ \omega &gt; 0) \\
+    \textbf{极值与基准：}&\quad y_{\max} = B + A,\quad y_{\min} = B - A \implies B = \frac{y_{\max}+y_{\min}}{2},\ A = \frac{y_{\max}-y_{\min}}{2} \\
+    \textbf{周期与频率：}&\quad T = \frac{2\pi}{\omega}\ (\text{单位：s 或 min}),\quad f = \frac{1}{T} = \frac{\omega}{2\pi}\ (\text{单位：Hz 或 次/分}) \\
+    \textbf{初相确定：}&\quad \text{代入初始时刻点 }(t_0, y_0)\text{，结合上升/下降导向定唯一 }\varphi \in (-\pi, \pi]
+    \end{aligned}\]
+  </div>
+
   <div class="card predict" data-id="e-freq" data-answer="B">
     <p>自己试试：弹簧振子的位移 \(y=3\sin\left(4\pi t+\frac{\pi}{3}\right)\)（\(y\) 单位 cm，\(t\) 单位 s）。它<b>每秒</b>来回振动几次？</p>
     <div class="opts cols">
@@ -91,17 +102,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。周期 \(T=\frac{2\pi}{4\pi}=\frac12\) 秒，一秒来回 \(\frac1T=2\) 次，这就是频率。选 A 是把 \(\omega\) 当成了次数，\(\omega=4\pi\) 是每秒转过的弧度；C 是周期（单位是秒）；D 是振幅（单位是厘米）。看单位能分清。</p></div>
   </div>
-  <div class="key">先 \(A\) 和 \(B\)（看最高、最低），再 \(\omega\)（看周期）。最高到最低是半个周期。</div>
 
-  <h3>3. 代一个点定 \(\varphi\)，再验一个点</h3>
-  <p>\(\varphi\) 放最后：代入一个已知时刻，得到 \(\sin\varphi\) 等于某个数。可一个周期里 \(\sin\) 等于同一个数的角往往有两个，一个在往上走，一个在往下走，要按题目说的「这时在升还是在降」来挑。挑好以后再拿另一个时刻验一下。</p>
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>水车半径 \(4\) 米，轮轴在水面上方 \(2\) 米，逆时针匀速转，\(12\) 秒一圈。开始时（\(t=0\)）点 \(P\) 离水面 \(4\) 米，正在往上走。求 \(P\) 离水面的高度 \(h(t)\)。</p>
-    <p>\(A=4\)，\(B=2\)，\(\omega=\dfrac{2\pi}{12}=\dfrac{\pi}{6}\)，设 \(h=4\sin\left(\dfrac{\pi}{6}t+\varphi\right)+2\)。</p>
-    <p>代 \(t=0\)：\(4\sin\varphi+2=4\)，\(\sin\varphi=\dfrac12\)，\(\varphi=\dfrac{\pi}{6}\) 或 \(\dfrac{5\pi}{6}\)。角从 \(\dfrac{\pi}{6}\) 往大走，\(\sin\) 在变大（往上）；从 \(\dfrac{5\pi}{6}\) 往大走，\(\sin\) 在变小（往下）。题目说往上，取 \(\varphi=\dfrac{\pi}{6}\)。</p>
-    <p>\(h(t)=4\sin\left(\dfrac{\pi}{6}t+\dfrac{\pi}{6}\right)+2\)。验一下：\(t=2\) 时括号里是 \(\dfrac{\pi}{2}\)，\(h=6\)，最高点，和「开始往上走」对得上。</p>
-  </div>
   <div class="card predict" data-id="warmup" data-answer="B">
     <p>自己试试：回到开头的摩天轮（半径 \(50\) m，中心离地 \(60\) m，\(30\) 分钟一圈），从<b>最低点</b>上车开始计时。\(t\) 分钟后的高度 \(h(t)\) 是哪个？</p>
     <div class="opts">
@@ -115,16 +116,36 @@
       <p>A 代进去得 \(60\)，是从中心高出发，漏了初相。C 把「30 分钟一圈」直接当成 \(\omega\)，应是 \(\frac{2\pi}{30}=\frac{\pi}{15}\)。D 把半径和中心高弄反了，最低点会是 \(-10\)，钻到地下。</p>
     </div>
   </div>
-  <div class="key">定 \(\varphi\)：代一个点 → 按升降挑角 → 再拿另一个点验。</div>
 
-  <h3>4. 用模型回答问题</h3>
-  <p>式子写好以后，「某时刻多高」就是代数；「什么时候高于某个值」就是在给定的时间范围里解一个三角不等式：先把括号整体记作 \(\theta\)，看 \(\theta\) 走过哪一段，再在这一段里找。</p>
+  <h3>3. 三步破题思维链：从实际问题建立三角模型与求解</h3>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>摩天轮 \(h=50\sin\left(\dfrac{\pi}{15}t-\dfrac{\pi}{2}\right)+60\)，转一圈（\(0\le t\le 30\)）中，离地不低于 \(85\) 米的时间有多长？</p>
-    <p>\(50\sin\theta+60\ge 85\)，即 \(\sin\theta\ge\dfrac12\)，其中 \(\theta=\dfrac{\pi}{15}t-\dfrac{\pi}{2}\)。\(t\) 从 \(0\) 到 \(30\)，\(\theta\) 从 \(-\dfrac{\pi}{2}\) 走到 \(\dfrac{3\pi}{2}\)；这一段里 \(\sin\theta\ge\dfrac12\) 的是 \(\dfrac{\pi}{6}\le\theta\le\dfrac{5\pi}{6}\)。</p>
-    <p>换回 \(t\)：\(\dfrac{\pi}{15}t\) 在 \(\dfrac{2\pi}{3}\) 到 \(\dfrac{4\pi}{3}\) 之间，\(10\le t\le 20\)。一共 \(10\) 分钟。</p>
+    <p class="small"><b>例题示范：</b>摩天轮半径 \(50\text{ m}\)，圆心离地面 \(60\text{ m}\)，按逆时针方向 \(30\text{ min}\) 匀速旋转一周。某人从最低点登上座舱开始计时，问在转动一周内，座舱离地面高度不低于 \(85\text{ m}\) 的持续时间有多长？</p>
+    <div class="think-steps">
+      <div class="step-row">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <b>👀 第一眼破题信号：</b>读参量：半径 \(A = 50\text{ m}\)，轴高 \(B = 60\text{ m}\)，最高 \(110\text{ m}\)，最低 \(10\text{ m}\)。周期 \(T = 30\text{ min} \implies \omega = \dfrac{2\pi}{30} = \dfrac{\pi}{15}\)。从最低点出发：\(\varphi = -\dfrac{\pi}{2}\)，高度方程为 \(h(t) = 50\sin\left(\dfrac{\pi}{15}t - \dfrac{\pi}{2}\right) + 60\)。
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <b>🔧 第二步列不等式并视整体角为单体求解：</b>
+          <p style="margin:4px 0 0">• 要求高度 \(h(t) \ge 85\)：\[50\sin\left(\dfrac{\pi}{15}t - \dfrac{\pi}{2}\right) + 60 \ge 85 \implies \sin\theta \ge \dfrac{1}{2}\quad \left(\theta = \dfrac{\pi}{15}t - \dfrac{\pi}{2}\right)\]</p>
+          <p style="margin:4px 0 0">• 考察 \(t\in[0, 30]\) 时整体角范围：\(\theta \in \left[-\dfrac{\pi}{2}, \dfrac{3\pi}{2}\right]\)。</p>
+          <p style="margin:4px 0 0">• 在该范围内满足 \(\sin\theta \ge \dfrac{1}{2}\) 的区间为：\(\dfrac{\pi}{6} \le \theta \le \dfrac{5\pi}{6}\)。</p>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <b>🛡️ 第三步还原时间自变量 \(t\) 与结论核算：</b>
+          <p style="margin:4px 0 0">将 \(\theta\) 还原：\(\dfrac{\pi}{6} \le \dfrac{\pi}{15}t - \dfrac{\pi}{2} \le \dfrac{5\pi}{6}\)，各边同加 \(\dfrac{\pi}{2}\) 得 \(\dfrac{2\pi}{3} \le \dfrac{\pi}{15}t \le \dfrac{4\pi}{3}\)！同乘 \(\dfrac{15}{\pi}\) 得 \(10 \le t \le 20\text{ min}\)，离地不低于 \(85\text{ m}\) 的持续时间为 \(20 - 10 = 10\text{ min}\)！</p>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-tide" data-answer="B">
     <p>自己试试：港口水深 \(y=2\sin\dfrac{\pi}{6}t+5\)（米，\(t\) 是 \(0\) 到 \(24\) 时）。一艘船要水深不少于 \(6\) 米才能进港。一天里能进港的时间一共几小时？</p>
     <div class="opts cols">
@@ -136,22 +157,38 @@
     <div class="reveal"><p><b>B</b>。\(\sin\dfrac{\pi}{6}t\ge\dfrac12\)。\(t\) 从 \(0\) 到 \(24\)，\(\dfrac{\pi}{6}t\) 走了两圈（\(0\) 到 \(4\pi\)），满足的有两段：\(1\le t\le 5\) 和 \(13\le t\le 17\)，共 \(8\) 小时。选 A 的同学只找了第一圈：周期是 \(12\) 小时，一天有两个周期。</p></div>
   </div>
 
-  <h3>5. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>单位</b>：\(t\) 用分钟还是秒，\(\omega\) 差 \(60\) 倍。式子写完注明 \(t\)、\(y\) 的单位。<br><span class="small">反例：\(30\) 分钟一圈，按分钟 \(\omega=\dfrac{\pi}{15}\)；按秒是 \(\dfrac{2\pi}{1800}=\dfrac{\pi}{900}\)。混用，算出的高度就全错。</span></li>
-    <li><b>时间范围</b>：模型常常只在一段时间里成立。在这一段里求最值，要看括号实际走到哪，不能直接说最大值是 \(A+B\)。<br><span class="small">反例：上面的摩天轮只看 \(0\le t\le 10\)：\(\theta\) 从 \(-\dfrac{\pi}{2}\) 走到 \(\dfrac{\pi}{6}\)，最高只到 \(50\times\dfrac12+60=85\) 米，不是 \(110\)。</span></li>
-    <li><b>先规范成 \(A>0\)、\(\omega>0\)</b>：系数是负的，先用诱导公式化过来，再读振幅和初相。<br><span class="small">反例：\(y=-3\sin 2t\) 的振幅是 \(3\)，不是 \(-3\)：\(-\sin x=\sin(x+\pi)\)，写成 \(y=3\sin(2t+\pi)\)。</span></li>
-    <li><b>平移量是 \(-\dfrac{\varphi}{\omega}\)，不是 \(\varphi\)</b>：<br><span class="small">反例：\(y=\sin\left(2t+\dfrac{\pi}{3}\right)=\sin 2\left(t+\dfrac{\pi}{6}\right)\)，是 \(y=\sin 2t\) 向左移 \(\dfrac{\pi}{6}\)，不是 \(\dfrac{\pi}{3}\)。验证：它在 \(t=-\dfrac{\pi}{6}\) 时等于 \(\sin0=0\)。</span></li>
-    <li><b>振幅或 \(\omega\) 是 \(0\)，就不是周期现象了</b>：\(A=0\) 时 \(y=B\)；\(\omega=0\) 时 \(y=A\sin\varphi+B\)。都是常数，\(T=\dfrac{2\pi}{\omega}\) 不能再用。<br><span class="small">反例：摩天轮不转（\(\omega=0\)），高度一直不变，任何正数都算「周期」，没有最小正周期，\(\dfrac{2\pi}{0}\) 也没有意义。</span></li>
-  </ol>
-  <div class="key">模型是<b>近似</b>：真实的潮水、气温不会正好落在正弦曲线上。用它预测要说「大约」，离开拟合的时间段就不一定可靠。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">翻车现场 ①</span><b>直接把周期时间误当作角速度 \(\omega\)</b></p>
+      <p class="small" style="color:var(--hl);margin:0 0 4px"><b>典型错解：</b>摩天轮 30 分钟转一圈，直接写出解析式 \(y = 50\sin(30t) + 60\)。</p>
+      <p class="small" style="color:var(--b);margin:0"><b>一眼看清真相：</b>角速度 \(\omega\) 是单位时间内转过的弧度，公式是 \(\omega = \dfrac{2\pi}{T}\)！必须写成 \(\omega = \dfrac{2\pi}{30} = \dfrac{\pi}{15}\)！直接写 30 会导致计算频率暴涨近 100 倍！</p>
+    </div>
+
+    <div class="trap-card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">翻车现场 ②</span><b>解可行时间段漏算多个完整周期</b></p>
+      <div class="trap-split">
+        <div style="flex:1">
+          <p class="small" style="color:var(--hl);margin:0 0 4px"><b>典型错解：</b>港口水深周期 12 小时，求一天（24 小时）内通航时间，只算出前 12 小时里的 4 小时就作为最终答案。</p>
+          <p class="small" style="color:var(--b);margin:0"><b>看右图秒懂真相：</b>一天有整整 24 小时，包含 <b>2 个完整的潮汐周期</b>！第一周期通航 4 小时（1~5h），第二周期同样通航 4 小时（13~17h），<b>全天累计通航时间为 8 小时</b>！漏算第二周期是高考应用题最大失分坑！</p>
+        </div>
+        <div style="width:280px;flex-shrink:0">
+          <svg class="micro-fig" id="m-tide-trap-fig" viewBox="0 0 280 140" role="img" aria-label="全天两个潮汐周期通航反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">翻车现场 ③</span><b>受截断时间限制盲目套用全域极值 \(B \pm A\)</b></p>
+      <p class="small" style="color:var(--hl);margin:0 0 4px"><b>典型错解：</b>某气温模型 \(y = 6\sin(\frac{\pi}{12}t - \frac{2\pi}{3}) + 18\) 仅在 \(t\in[8, 14]\) 成立，问最大温差直接算 \(2A = 12^\circ\text{C}\)。</p>
+      <p class="small" style="color:var(--b);margin:0"><b>一眼看清真相：</b>自变量范围有限！\(t\in[8, 14]\) 时内部角只从 \(0\) 走到 \(\frac{\pi}{2}\)，只走了四分之一个周期，气温从 \(18^\circ\text{C}\) 爬升到 \(24^\circ\text{C}\)，温差只有 \(6^\circ\text{C}\)！必须严格将时间代入整体角核算端点与内部极值！</p>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>常见的周期现象</b>：摩天轮、水车（\(A\) 是半径，\(B\) 是轴高）；弹簧振子、小角度单摆（简谐运动，平衡位置在 \(0\)，\(y=A\sin(\omega t+\varphi)\)）；潮汐（约 \(12\) 小时涨落一次）；一天的气温（周期 \(24\) 小时，往往只有一段时间拟合得好）。</p>
     <p><b>用 \(\cos\) 写也行</b>：从最低点出发的摩天轮也可以写成 \(h=60-50\cos\dfrac{\pi}{15}t\)，因为 \(\sin\left(x-\dfrac{\pi}{2}\right)=-\cos x\)。两种写法是同一个函数。</p>
-    <p><b>\(\varphi\) 不唯一</b>：\(\varphi\) 加减 \(2\pi\) 得到的是同一个函数，所以题目常给范围，比如 \(|\varphi|&lt;\pi\) 或 \(0\le\varphi&lt;2\pi\)，要在范围里挑。</p>
-    <p><b>相位</b>：简谐运动里，\(\omega t+\varphi\) 叫相位，\(\varphi\) 是 \(t=0\) 时的相位，所以叫初相。频率 \(f\) 和角速度的关系是 \(\omega=2\pi f\)。</p>
   </details>
 </section>
 
@@ -227,6 +264,7 @@
     </div>
     <div class="reveal"><p><b>C</b>。（平移量是 \(-\dfrac{\varphi}{\omega}\)）\(\dfrac{\pi}{15}t-\dfrac{\pi}{2}=\dfrac{\pi}{15}(t-7.5)\)，所以 \(h_1(t)=h_2(t-7.5)\)，向右 \(7.5\) 分钟。选 A 是直接拿 \(\varphi\) 当平移量。也可以这样想：从最低点转到中心高要四分之一圈，\(30\div4=7.5\) 分钟，所以 \(h_1\) 比 \(h_2\) 晚 \(7.5\) 分钟到中心高。</p></div>
   </div>
+  <div class="vid" data-video="ex-wheel"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="B">
@@ -243,6 +281,7 @@
       <p>几何上看：两个轿厢在圆上相隔 \(60^\circ\)，连线（弦）长 \(2\times50\times\sin30^\circ=50\)，竖直方向的差不会超过弦长，弦竖直时正好等于它。选 D 的同学以为两人能一高一低在直径两端，可他们只差六分之一圈。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-tide"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -464,8 +503,188 @@
   }
   onSlide("R", sR); onSlide("H", sH); onSlide("T", sT); onSlide("P", sP); onSlide("t", sTime);
 
-  document.addEventListener("DOMContentLoaded", reset);
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { draw(); });
+  /* ---------- 0 从例子进入：架高摩天轮与离地高度曲线 ---------- */
+  var eap = document.getElementById("entry-app"), eapBar = document.getElementById("entry-app-bar"), eapNote = document.getElementById("entry-app-note");
+  function eapDraw(t) {
+    eap.innerHTML = "";
+    var gy = 178, k = 1.32, cx = 96, cy = gy - 60 * k, r = 50 * k, x0 = 204, x1 = 492;
+    function hy(h) { return gy - h * k; }
+    var ang = (t / 30 * 2 - 0.5) * Math.PI, px = cx + r * Math.cos(ang), py = cy - r * Math.sin(ang);
+    var curH = Math.round(60 - 50 * Math.cos(t / 15 * Math.PI));
+    // 地面与支架
+    svg("line", { x1: 20, y1: gy, x2: 502, y2: gy, stroke: "var(--fg)", "stroke-width": 1.8 }, eap);
+    svg("line", { x1: cx, y1: cy, x2: cx - 28, y2: gy, stroke: "var(--line)", "stroke-width": 2.5 }, eap);
+    svg("line", { x1: cx, y1: cy, x2: cx + 28, y2: gy, stroke: "var(--line)", "stroke-width": 2.5 }, eap);
+    svg("circle", { cx: cx, cy: cy, r: r, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 2 }, eap);
+    svg("line", { x1: cx, y1: cy, x2: px, y2: py, stroke: "var(--fg)", "stroke-width": 2.2 }, eap);
+    // 10m、60m、110m 水平参考线
+    [[10, "最低 10m", "var(--b)"], [60, "中心 B=60m", "var(--c)"], [110, "最高 110m", "var(--a)"]].forEach(function (lv) {
+      svg("line", { x1: x0, y1: hy(lv[0]), x2: x1, y2: hy(lv[0]), stroke: lv[2], "stroke-dasharray": "4 3", "stroke-width": 1.3 }, eap);
+      svg("text", { x: x1, y: hy(lv[0]) - 5, "text-anchor": "end", fill: lv[2], "font-size": 12.5, "font-weight": 600 }, eap).textContent = lv[1];
+    });
+    var d = "";
+    for (var i = 0; i <= 60; i++) {
+      var tt = 30 * i / 60, hh = 60 - 50 * Math.cos(tt / 15 * Math.PI);
+      d += (i ? "L" : "M") + (x0 + tt / 30 * (x1 - x0)).toFixed(1) + " " + hy(hh).toFixed(1);
+    }
+    svg("path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 3 }, eap);
+    [0, 7.5, 15, 22.5, 30].forEach(function (q) {
+      var qx = x0 + q / 30 * (x1 - x0);
+      svg("text", { x: qx, y: gy + 18, "text-anchor": "middle", fill: q === t ? "var(--fg)" : "var(--muted)", "font-size": 12.5, "font-weight": q === t ? 700 : 400 }, eap).textContent = q + "m";
+    });
+    var wx = x0 + t / 30 * (x1 - x0);
+    svg("line", { x1: px, y1: py, x2: wx, y2: py, stroke: "var(--hl)", "stroke-width": 2, "stroke-dasharray": "4 3" }, eap);
+    svg("circle", { cx: px, cy: py, r: 6.5, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, eap);
+    svg("circle", { cx: wx, cy: py, r: 6.5, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, eap);
+    [].forEach.call(eapBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", Math.abs(parseFloat(b.getAttribute("data-t")) - t) < 0.1);
+    });
+    eapNote.innerHTML = "当 <b>t = " + t + " 分钟</b>：座舱离地高度 <b>h = " + curH + " 米</b>（中心高 B=60m，半径 A=50m：最低 60−50=10m，最高 60+50=110m）";
+  }
+  [].forEach.call(eapBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { eapDraw(parseFloat(b.getAttribute("data-t"))); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") eapDraw({ A: 0, B: 7.5, C: 10, D: 15 }[ev.detail.choice] || 15);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") eapDraw(7.5);
+  });
+
+  function initStep2() {
+    var fig = document.getElementById("m-app-fig");
+    var bar = document.getElementById("m-app-bar");
+    var note = document.getElementById("m-app-note");
+    var trap = document.getElementById("m-tide-trap-fig");
+    if (!fig || !bar) return;
+
+    function renderCard(title, titleCol, items) {
+      svg("rect", { x: 215, y: 15, width: 296, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, fig);
+      svg("text", { x: 226, y: 38, fill: titleCol, "font-size": 12.5, "font-weight": 700 }, fig).textContent = title;
+      items.forEach(function (it, idx) {
+        var t = svg("text", { x: 226, y: 62 + idx * 22, fill: it[1], "font-size": 10.5, "font-weight": it[2] || 400 }, fig);
+        t.textContent = it[0];
+      });
+    }
+
+    function drawApp(mode) {
+      fig.innerHTML = "";
+
+      if (mode === "ferris") {
+        var cx = 75, cy = 72, r = 46, gy = 135;
+        svg("line", { x1: 15, y1: gy, x2: 175, y2: gy, stroke: "var(--muted)", "stroke-width": 1.5 }, fig);
+        svg("line", { x1: cx, y1: cy, x2: cx - 22, y2: gy, stroke: "var(--line)", "stroke-width": 2 }, fig);
+        svg("line", { x1: cx, y1: cy, x2: cx + 22, y2: gy, stroke: "var(--line)", "stroke-width": 2 }, fig);
+        svg("circle", { cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--line)", "stroke-width": 1.5 }, fig);
+        svg("circle", { cx: cx, cy: cy, r: 4, fill: "var(--muted)" }, fig);
+        svg("text", { x: cx + 6, y: cy + 4, fill: "var(--muted)", "font-size": 9.5 }, fig).textContent = "轴高 B";
+
+        var pa = 40 * Math.PI / 180;
+        var px = cx + r * Math.cos(pa), py = cy - r * Math.sin(pa);
+        svg("line", { x1: cx, y1: cy, x2: px, y2: py, stroke: "var(--a)", "stroke-width": 2 }, fig);
+        svg("circle", { cx: px, cy: py, r: 4.5, fill: "var(--hl)" }, fig);
+        svg("text", { x: (cx + px) / 2 - 8, y: (cy + py) / 2 - 4, fill: "var(--a)", "font-size": 10, "font-weight": 700 }, fig).textContent = "半径 A";
+
+        renderCard("摩天轮模型：圆周投影正弦高度", "var(--a)", [
+          ["• 振幅 A：即转轮半径，A = (最高 - 最低) / 2", "var(--fg)"],
+          ["• 平衡位置 B：轮轴离地高，B = (最高 + 最低) / 2", "var(--b)", 600],
+          ["• 角速度 ω：ω = 2π / T (T 为转一整圈所用时间)", "var(--a)", 600],
+          ["• 初相 φ：最低点上车 φ = -π/2，中心高上车 φ = 0", "var(--hl)", 600]
+        ]);
+      } else if (mode === "tide") {
+        var ox = 25, oy = 80, w = 160;
+        svg("line", { x1: ox, y1: oy + 45, x2: ox + w, y2: oy + 45, stroke: "var(--muted)", "stroke-width": 1.2 }, fig);
+        svg("line", { x1: ox, y1: oy - 55, x2: ox, y2: oy + 55, stroke: "var(--muted)", "stroke-width": 1.2 }, fig);
+
+        var d = "";
+        for (var i = 0; i <= 60; i++) {
+          var t = i / 60 * 2 * Math.PI;
+          d += (i ? "L" : "M") + (ox + (i / 60) * w).toFixed(1) + " " + (oy - 35 * Math.sin(t)).toFixed(1);
+        }
+        svg("path", { d: d, fill: "none", stroke: "var(--b)", "stroke-width": 2.5 }, fig);
+        svg("line", { x1: ox, y1: oy, x2: ox + w, y2: oy, stroke: "var(--line)", "stroke-dasharray": "3 2" }, fig);
+        svg("text", { x: ox + w - 4, y: oy + 14, "text-anchor": "end", fill: "var(--muted)", "font-size": 9.5 }, fig).textContent = "平水深 B";
+        svg("line", { x1: ox + w * 0.25, y1: oy, x2: ox + w * 0.25, y2: oy - 35, stroke: "var(--hl)", "stroke-width": 1.8 }, fig);
+        svg("text", { x: ox + w * 0.25 + 4, y: oy - 16, fill: "var(--hl)", "font-size": 9.5, "font-weight": 700 }, fig).textContent = "潮差半幅 A";
+
+        renderCard("港口潮汐模型：水深波动与通航计算", "var(--b)", [
+          ["• 潮高极值：高潮位 M = B+A，低潮位 m = B-A", "var(--fg)"],
+          ["• 平均水深：B = (M+m)/2，振幅 A = (M-m)/2", "var(--a)", 600],
+          ["• 潮汐周期：相邻高潮隔 12h，全天 24h 两个周期", "var(--b)", 600],
+          ["• 通航判定：列不等式 h(t) ≥ 吃水深，求有效时段", "var(--hl)", 600]
+        ]);
+      } else {
+        var ox2 = 25, oy2 = 80, w2 = 160;
+        svg("line", { x1: ox2, y1: oy2, x2: ox2 + w2, y2: oy2, stroke: "var(--muted)", "stroke-width": 1.2 }, fig);
+        svg("line", { x1: ox2, y1: oy2 - 55, x2: ox2, y2: oy2 + 55, stroke: "var(--muted)", "stroke-width": 1.2 }, fig);
+
+        var d2 = "";
+        for (var j = 0; j <= 60; j++) {
+          var t2 = j / 60 * 4 * Math.PI;
+          d2 += (j ? "L" : "M") + (ox2 + (j / 60) * w2).toFixed(1) + " " + (oy2 - 38 * Math.cos(t2)).toFixed(1);
+        }
+        svg("path", { d: d2, fill: "none", stroke: "var(--hl)", "stroke-width": 2.2 }, fig);
+        svg("text", { x: ox2 + 6, y: oy2 - 42, fill: "var(--hl)", "font-size": 9.5, "font-weight": 700 }, fig).textContent = "+A (最大位移)";
+        svg("text", { x: ox2 + 6, y: oy2 + 48, fill: "var(--hl)", "font-size": 9.5, "font-weight": 700 }, fig).textContent = "-A (反向最大)";
+
+        renderCard("弹簧简谐运动：平衡位置为零点", "var(--hl)", [
+          ["• 波动方程：x(t) = A sin(ωt + φ)，平衡位置 B = 0", "var(--fg)"],
+          ["• 频率概念：f = 1/T = ω/(2π)，每秒振动次数 (Hz)", "var(--a)", 600],
+          ["• 振幅意义：偏离平衡位置的最大位移绝对值", "var(--b)", 600],
+          ["• 速度与位移：最大位移处速度为0，平衡处速度最大", "var(--muted)"]
+        ]);
+      }
+
+      [].forEach.call(bar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-m") === mode);
+      });
+      var noteMap = {
+        ferris: "摩天轮模型：<b>A 是轮盘半径，B 是中心轴离地高，T 是一圈耗时，φ 由起始上车点决定</b>",
+        tide: "潮汐模型：<b>最高最低水深折半为平均水深 B，潮差一半为振幅 A，一天包含整整两个潮汐周期</b>",
+        spr: "简谐振动：<b>平衡位置 B = 0，A 为最大振幅，频率 f = 1/T 为每秒振动次数</b>"
+      };
+      if (note) note.innerHTML = noteMap[mode] || "";
+    }
+
+    [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.addEventListener("click", function () { drawApp(b.getAttribute("data-m")); });
+    });
+
+    if (trap) {
+      trap.innerHTML = "";
+      var tox = 15, toy = 70, tw = 100;
+      svg("line", { x1: tox, y1: toy + 35, x2: tox + tw, y2: toy + 35, stroke: "var(--muted)", "stroke-width": 1 }, trap);
+
+      var dAll = "";
+      for (var k = 0; k <= 60; k++) {
+        var xk = tox + (k / 60) * tw;
+        var yk = toy - 28 * Math.sin(k / 60 * 4 * Math.PI);
+        dAll += (k ? "L" : "M") + xk.toFixed(1) + " " + yk.toFixed(1);
+      }
+      svg("path", { d: dAll, fill: "none", stroke: "var(--b)", "stroke-width": 2 }, trap);
+
+      svg("line", { x1: tox, y1: toy - 14, x2: tox + tw, y2: toy - 14, stroke: "var(--hl)", "stroke-width": 1.5, "stroke-dasharray": "3 2" }, trap);
+      svg("text", { x: tox + 2, y: toy - 4, fill: "var(--hl)", "font-size": 8.5, "font-weight": 700 }, trap).textContent = "水深≥6m";
+
+      svg("rect", { x: tox + tw * (1 / 24), y: toy - 32, width: tw * (4 / 24), height: 18, fill: "var(--a)", opacity: 0.35, rx: 2 }, trap);
+      svg("text", { x: tox + tw * (1 / 24) + 2, y: toy - 20, fill: "var(--a)", "font-size": 8.5, "font-weight": 700 }, trap).textContent = "4h";
+
+      svg("rect", { x: tox + tw * (13 / 24), y: toy - 32, width: tw * (4 / 24), height: 18, fill: "var(--a)", opacity: 0.35, rx: 2 }, trap);
+      svg("text", { x: tox + tw * (13 / 24) + 2, y: toy - 20, fill: "var(--a)", "font-size": 8.5, "font-weight": 700 }, trap).textContent = "4h";
+
+      svg("text", { x: 120, y: 30, fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }, trap).textContent = "翻车点：全天通航漏算周期";
+      svg("text", { x: 120, y: 52, fill: "var(--fg)", "font-size": 9.5 }, trap).textContent = "周期 T=12h，全天 2 个周期！";
+      svg("text", { x: 120, y: 72, fill: "var(--a)", "font-size": 9.5, "font-weight": 600 }, trap).textContent = "第1周期: 1h~5h (通航4h)";
+      svg("text", { x: 120, y: 92, fill: "var(--a)", "font-size": 9.5, "font-weight": 600 }, trap).textContent = "第2周期: 13h~17h (通航4h)";
+      svg("text", { x: 120, y: 116, fill: "var(--hl)", "font-size": 9.5, "font-weight": 700 }, trap).textContent = "全天累计: 4 + 4 = 8 小时！";
+    }
+
+    drawApp("ferris");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () { eapDraw(7.5); reset(); initStep2(); });
+  if (document.readyState !== "loading") { initStep2(); }
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { eapDraw(7.5); draw(); initStep2(); });
 })();
 </script>
 </body></html>

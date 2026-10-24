@@ -71,11 +71,48 @@
   }
 
   /* ---------- 先猜（不判分，只记录，然后揭晓） ---------- */
+  var SVG_RETRY = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/></svg>';
+
   function setupPredict() {
     [].forEach.call(document.querySelectorAll(".predict"), function (box) {
+      if (box.getAttribute("data-predict-init")) return;
+      box.setAttribute("data-predict-init", "1");
       var ans = box.getAttribute("data-answer"), id = box.getAttribute("data-id") || "";
       var reveal = box.querySelector(".reveal"); if (reveal) reveal.hidden = true;
       var opts = [].slice.call(box.querySelectorAll(".opt"));
+
+      function reset() {
+        box.classList.remove("done");
+        opts.forEach(function (p) {
+          p.classList.remove("right", "wrong", "sel");
+          p.removeAttribute("aria-disabled");
+        });
+        if (reveal) reveal.hidden = true;
+        log("retry", { id: id });
+        try { box.dispatchEvent(new CustomEvent("predict:reset", { detail: { id: id }, bubbles: true })); } catch (e) { /* ignore */ }
+      }
+
+      var topBtn = document.createElement("button");
+      topBtn.type = "button";
+      topBtn.className = "card-retry";
+      topBtn.title = "重新作答";
+      topBtn.setAttribute("aria-label", "重新作答");
+      topBtn.innerHTML = SVG_RETRY + " 重新作答";
+      topBtn.onclick = reset;
+      box.insertBefore(topBtn, box.firstChild);
+
+      if (reveal) {
+        var foot = document.createElement("div");
+        foot.className = "ctrl retry-ctrl";
+        var btmBtn = document.createElement("button");
+        btmBtn.type = "button";
+        btmBtn.className = "btn ghost retry-btn";
+        btmBtn.innerHTML = SVG_RETRY + " 重新作答";
+        btmBtn.onclick = reset;
+        foot.appendChild(btmBtn);
+        reveal.appendChild(foot);
+      }
+
       opts.forEach(function (o) {
         o.type = "button";
         o.onclick = function () {
@@ -90,6 +127,7 @@
           });
           if (reveal) reveal.hidden = false;
           log("predict", { id: id, choice: v, correct: v === ans });
+          try { box.dispatchEvent(new CustomEvent("predict:pick", { detail: { id: id, choice: v, answer: ans, correct: v === ans }, bubbles: true })); } catch (e) { /* ignore */ }
         };
       });
     });
@@ -105,36 +143,105 @@
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
+  function formatTag(p) {
+    var year = p.year;
+    var paper = p.paper;
+    var no = p.no != null ? p.no : p.number;
+
+    if (!year || !paper) {
+      var src = typeof p.source === "string" ? p.source : (p.source && p.source.stem ? p.source.stem : "");
+      if (src) {
+        if (src.indexOf("2026补充") >= 0) {
+          if (!year) year = "2026";
+          var mSup = src.match(/2026补充\/([^\/]+)\//);
+          if (mSup && !paper) paper = mSup[1].replace("高考", "卷");
+        } else {
+          var mYear = src.match(/(\d{4})年/);
+          if (mYear && !year) year = mYear[1];
+          var mDetail = src.match(/高考数学试卷[（\(](.*?)[）\)](?:[（\(](.*?)[）\)])?/);
+          if (mDetail && !paper) {
+            var p1 = mDetail[1], p2 = mDetail[2];
+            if (p2 && p2 !== "空白卷" && p2 !== "高清") paper = p2 + "（" + p1 + "）";
+            else if (p1 && p1 !== "空白卷" && p1 !== "高清") paper = p1;
+          }
+        }
+        if (!paper) {
+          var base = src.split("/").pop() || "";
+          base = base.replace(/(\d{4})|年|高考|数学|试卷|\.pdf|[（\(](空白卷|高清)[）\)]|-教师版|（高清）/g, "").trim();
+          base = base.replace(/^[（\(]|[）\)]$|[-_]/g, "").trim();
+          if (base) paper = base;
+        }
+      }
+    }
+
+    var parts = [];
+    if (year) parts.push(year);
+    if (paper) parts.push(paper);
+    if (no != null && no !== "") parts.push("第" + no + "题");
+    return parts.length ? parts.join(" ") : "高考真题";
+  }
+
   function renderProblem(p, idx) {
     var card = el("div", "card prob");
-    card.appendChild(el("div", "small", '<span class="tag">' + esc(p.year + " " + p.paper + " 第" + p.no + "题") + "</span>" +
-      (p.level ? '<span class="tag">' + esc(p.level) + "</span>" : "") + (p.note ? esc(p.note) : "")));
-    if (p.figure) {
-      var fig = el("figure", "prob-figure");
-      var image = document.createElement("img");
-      image.src = "../" + String(p.figure).replace(/^\/+/, "");
-      image.alt = p.figure_alt || "题目示意图";
-      image.loading = "lazy";
-      image.style.display = "block";
-      image.style.maxWidth = "100%";
-      image.style.height = "auto";
-      image.style.margin = "8px auto";
-      fig.appendChild(image);
-      card.appendChild(fig);
+    if (p.cards && Array.isArray(p.cards) && p.cards.length) {
+      card.setAttribute("data-cards", p.cards.join(","));
     }
+    var topBtn = el("button", "card-retry", SVG_RETRY + " 重新作答");
+    topBtn.type = "button"; topBtn.title = "重新作答"; topBtn.setAttribute("aria-label", "重新作答");
+    card.appendChild(topBtn);
+    card.appendChild(el("div", "small", '<span class="tag">' + esc(formatTag(p)) + "</span>" +
+      (p.level ? '<span class="tag">' + esc(p.level) + "</span>" : "") + (p.note ? esc(p.note) : "")));
     card.appendChild(el("div", "stem", "<b>" + (idx + 1) + ".</b> " + esc(p.stem)));
     var fb = el("div", "fb"), sol = el("div", "sol");
     sol.hidden = true;
     sol.innerHTML = (p.answer ? "<p><b>答案：</b>" + esc(p.answer) + "</p>" : "") +
       (p.solution ? '<p class="stem"><b>解析：</b>' + esc(p.solution) + "</p>" : "");
+    var foot = el("div", "ctrl retry-ctrl");
+    var btmBtn = el("button", "btn ghost retry-btn", SVG_RETRY + " 重新作答");
+    btmBtn.type = "button";
+    foot.appendChild(btmBtn);
+    sol.appendChild(foot);
+
     var done = false;
     function finish(correct, choice) {
       if (done) return; done = true;
+      card.classList.add("done");
       fb.className = "fb " + (correct ? "ok" : "no");
       fb.textContent = correct ? "对了。" : "不对，看看解析。";
       sol.hidden = false; math(sol);
       log("answer", { id: p.id, choice: choice, correct: correct });
     }
+
+    function resetProblem() {
+      done = false;
+      card.classList.remove("done");
+      fb.className = "fb"; fb.textContent = "";
+      sol.hidden = true;
+      var rep = card.querySelector(".selfrep");
+      if (rep) rep.remove();
+      var opts = [].slice.call(card.querySelectorAll(".opt"));
+      opts.forEach(function (o) {
+        o.classList.remove("right", "wrong", "sel");
+        o.removeAttribute("aria-disabled");
+      });
+      if (multi) {
+        picked = {};
+        var sub = card.querySelector("button.btn:not(.retry-btn)");
+        if (sub) sub.disabled = false;
+      }
+      var inp = card.querySelector("input[type=text]");
+      if (inp) {
+        inp.value = ""; inp.disabled = false;
+        var chk = card.querySelector(".ctrl button.btn:not(.retry-btn)");
+        if (chk) chk.disabled = false;
+      }
+      var see = card.querySelector("button.btn.ghost:not(.retry-btn)");
+      if (see) see.disabled = false;
+      log("retry", { id: p.id });
+    }
+    topBtn.onclick = resetProblem;
+    btmBtn.onclick = resetProblem;
+
     var multi = /多选/.test(p.type);
     if (p.choices && p.choices.length) {
       var box = el("div", "opts" + (p.choices.every(function (c) { return c.length < 40; }) ? " cols" : ""));
@@ -147,6 +254,7 @@
           var right = norm(p.answer).toUpperCase() === LETTERS[i];
           o.classList.add(right ? "right" : "wrong");
           if (!right) markRight(box, p.answer);
+          [].forEach.call(box.querySelectorAll(".opt"), function (p) { p.setAttribute("aria-disabled", "true"); });
           finish(right, LETTERS[i]);
         };
         box.appendChild(o);
@@ -155,9 +263,11 @@
       if (multi) {
         var sub = el("button", "btn", "提交"); sub.type = "button";
         sub.onclick = function () {
+          if (done) return;
           var mine = Object.keys(picked).filter(function (k) { return picked[k]; }).sort().join("");
           var want = norm(p.answer).toUpperCase().replace(/[^A-E]/g, "").split("").sort().join("");
           markRight(box, want);
+          [].forEach.call(box.querySelectorAll(".opt"), function (p) { p.setAttribute("aria-disabled", "true"); });
           finish(mine === want, mine); sub.disabled = true;
         };
         card.appendChild(sub);
@@ -169,6 +279,7 @@
       row.appendChild(inp); row.appendChild(chk); card.appendChild(row);
       chk.onclick = function () {
         if (done) return;
+        inp.disabled = true;
         if (norm(inp.value) && norm(inp.value) === norm(p.answer)) { finish(true, inp.value); return; }
         // 写法不同也可能是对的：给出答案，让学生自己判
         sol.hidden = false; math(sol);
@@ -179,6 +290,7 @@
       var see = el("button", "btn ghost", "做完了，看解析"); see.type = "button";
       card.appendChild(see);
       see.onclick = function () {
+        if (done) return;
         sol.hidden = false; math(sol); see.disabled = true;
         selfReport(card, function (ok) { finish(ok, ok ? "自判对" : "自判错"); });
       };
@@ -205,24 +317,29 @@
     host.innerHTML = '<p class="small">题目加载中…</p>';
     fetch("../data/sections/" + sec + ".json").then(function (r) { return r.json(); }).then(function (probs) {
       host.innerHTML = "";
-      // sections 是渲染器的稳定接口。未经规范化的 OCR 导入只有
-      // number/stem/solution/source，不能安全地当成题目展示：它会让
-      // 元信息变成 undefined，也没有可判分的选项和答案。
-      function isCanonicalProblem(p) {
-        return p && typeof p === "object" && typeof p.id === "string" && p.id &&
-          Number.isFinite(Number(p.year)) && typeof p.paper === "string" && p.paper &&
-          Number.isFinite(Number(p.no)) && typeof p.type === "string" && p.type &&
-          typeof p.stem === "string" && Array.isArray(p.choices) &&
-          typeof p.answer === "string" && typeof p.solution === "string";
-      }
-      probs = Array.isArray(probs) ? probs.filter(isCanonicalProblem) : [];
-      if (!probs.length) { return; }
+      if (!probs.length) { host.innerHTML = '<p class="small">这一节的真题还在整理。</p>'; return; }
       // <div id="practice" data-fold-later>：note 写了「要用到 <节号>」、且那一节在本节之后的题，收进最后一个折叠块。
       // 只比「章.节」：b1-2-3 是 2.3，note 里的 4.2 在后面要折叠，1.4 在前面不折叠。
       var fold = host.hasAttribute("data-fold-later");
+      var BOOK_ORDER = { b1: 1, b2: 2, e1: 3, e2: 4, e3: 5 };
+      function parseSecOrder(sid) {
+        var m = /^(b1|b2|e1|e2|e3)-(\d+)-(\d+)$/.exec(sid || "");
+        return m ? [BOOK_ORDER[m[1]] || 0, Number(m[2]), Number(m[3])] : null;
+      }
+      var meOrd = parseSecOrder(sec);
       var me = (sec.match(/-(\d+)-(\d+)$/) || []).slice(1).map(Number);
-      function isLater(note) {
-        var m = /要用到([^；;。]*)/.exec(note || "");
+      function isLaterProblem(p) {
+        // 1. 优先支持图谱受控字段 prereq_secs: ["e2-5-3", ...]
+        if (meOrd && p.prereq_secs && Array.isArray(p.prereq_secs)) {
+          var byGraph = p.prereq_secs.some(function (rs) {
+            var o = parseSecOrder(rs);
+            if (!o) return false;
+            return o[0] > meOrd[0] || (o[0] === meOrd[0] && o[1] > meOrd[1]) || (o[0] === meOrd[0] && o[1] === meOrd[1] && o[2] > meOrd[2]);
+          });
+          if (byGraph) return true;
+        }
+        // 2. 兼容 note 里的「要用到 <节号>」
+        var m = /要用到([^；;。]*)/.exec((p && p.note) || "");
         if (!m || me.length < 2) return false;
         var refs = m[1].match(/\d+\.\d+/g) || [];
         return refs.some(function (r) {
@@ -230,7 +347,7 @@
           return x[0] > me[0] || (x[0] === me[0] && x[1] > me[1]);
         });
       }
-      var later = fold ? probs.filter(function (p) { return isLater(p.note); }) : [];
+      var later = fold ? probs.filter(function (p) { return isLaterProblem(p); }) : [];
       var now = probs.filter(function (p) { return later.indexOf(p) < 0; });
       now.forEach(function (p, i) { host.appendChild(renderProblem(p, i)); });
       if (later.length) {
@@ -243,10 +360,89 @@
     }).catch(function () { host.innerHTML = '<p class="small">题目没加载出来，刷新一下试试。</p>'; });
   }
 
-  /* ---------- 图上文字不随 SVG 缩得太小 ----------
+  /* ---------- 图上文字不随 SVG 缩得太小 + 移动端拖动点自动扩大触控靶区 ----------
      SVG 在手机上整体缩小，文字也跟着缩。这里按缩放比把 <text> 放大到屏幕上至少 MIN_PX，
-     页面重画（新插入的 text）也会处理。页面不用做什么。 */
-  var MIN_PX = 12, fitQueued = false;
+     同时给半径偏小的可拖动圆点/滑块自动挂上透明大触控圆（屏幕半径 ≥ 22px），页面不用改代码。 */
+  var MIN_PX = 12, MIN_HIT_PX = 22, SVG_NS = "http://www.w3.org/2000/svg", fitQueued = false;
+  if (typeof SVGElement !== "undefined" && SVGElement.prototype && SVGElement.prototype.addEventListener) {
+    var origSvgAdd = SVGElement.prototype.addEventListener;
+    SVGElement.prototype.addEventListener = function (type, fn, opts) {
+      if ((type === "pointerdown" || type === "mousedown" || type === "touchstart") &&
+          (this.tagName === "circle" || this.tagName === "rect")) {
+        try { this.setAttribute("data-peiyu-drag", "1"); } catch (e) { /* ignore */ }
+      }
+      return origSvgAdd.call(this, type, fn, opts);
+    };
+  }
+  function bindHitForward(hit, target) {
+    ["pointerdown", "mousedown", "touchstart", "click"].forEach(function (evType) {
+      hit.addEventListener(evType, function (ev) {
+        if (ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+        ev.preventDefault();
+        var clone;
+        try {
+          if (typeof PointerEvent !== "undefined" && evType.indexOf("pointer") === 0) {
+            clone = new PointerEvent(evType, {
+              bubbles: true, cancelable: true, clientX: ev.clientX, clientY: ev.clientY,
+              pointerId: ev.pointerId, pointerType: ev.pointerType, isPrimary: ev.isPrimary, button: ev.button, buttons: ev.buttons
+            });
+          } else {
+            clone = new MouseEvent(evType, {
+              bubbles: true, cancelable: true, clientX: ev.clientX, clientY: ev.clientY, button: ev.button, buttons: ev.buttons
+            });
+          }
+          target.dispatchEvent(clone);
+        } catch (e) { /* ignore */ }
+      });
+    });
+  }
+  function fitTouchTargets(svg, k) {
+    var minR = Math.max(MIN_HIT_PX, Math.ceil(MIN_HIT_PX / k));
+    var sel = 'circle[role="slider"], circle[tabindex], circle.handle, circle[data-peiyu-drag], circle[style*="cursor"], rect[role="slider"], rect[tabindex], rect[data-peiyu-drag], rect[style*="cursor"]';
+    [].forEach.call(svg.querySelectorAll(sel), function (h) {
+      if (!h.parentNode || (h.classList && (h.classList.contains("hit") || h.classList.contains("peiyu-hit")))) return;
+      if (h.parentNode.tagName === "g" && h.parentNode.querySelector("circle.hit, circle[r='22'], circle[r='24']")) return;
+      var hit = h._peiyuHit;
+      if (h.tagName === "circle") {
+        var r0 = parseFloat(h.getAttribute("r")) || 0;
+        if (r0 <= 0 || r0 >= 20) return;
+        if (!hit || hit.parentNode !== h.parentNode) {
+          hit = document.createElementNS(SVG_NS, "circle");
+          hit.setAttribute("class", "peiyu-hit");
+          hit.setAttribute("fill", "transparent");
+          hit.setAttribute("stroke", "none");
+          bindHitForward(hit, h);
+          h.parentNode.insertBefore(hit, h.nextSibling);
+          h._peiyuHit = hit;
+        }
+        hit.setAttribute("cx", h.getAttribute("cx") || "0");
+        hit.setAttribute("cy", h.getAttribute("cy") || "0");
+        hit.setAttribute("r", String(minR));
+        if (h.getAttribute("transform")) hit.setAttribute("transform", h.getAttribute("transform"));
+        hit.style.cursor = h.style.cursor || "grab";
+      } else if (h.tagName === "rect") {
+        var w0 = parseFloat(h.getAttribute("width")) || 0, h0 = parseFloat(h.getAttribute("height")) || 0;
+        if (w0 <= 0 || h0 <= 0 || (w0 >= 36 && h0 >= 36)) return;
+        if (!hit || hit.parentNode !== h.parentNode) {
+          hit = document.createElementNS(SVG_NS, "rect");
+          hit.setAttribute("class", "peiyu-hit");
+          hit.setAttribute("fill", "transparent");
+          hit.setAttribute("stroke", "none");
+          bindHitForward(hit, h);
+          h.parentNode.insertBefore(hit, h.nextSibling);
+          h._peiyuHit = hit;
+        }
+        var x0 = parseFloat(h.getAttribute("x")) || 0, y0 = parseFloat(h.getAttribute("y")) || 0;
+        var nw = Math.max(w0, minR * 2), nh = Math.max(h0, minR * 2);
+        hit.setAttribute("x", String(x0 - (nw - w0) / 2));
+        hit.setAttribute("y", String(y0 - (nh - h0) / 2));
+        hit.setAttribute("width", String(nw));
+        hit.setAttribute("height", String(nh));
+        if (h.getAttribute("transform")) hit.setAttribute("transform", h.getAttribute("transform"));
+        hit.style.cursor = h.style.cursor || "grab";
+      }
+    });
+  }
   function fitFigText() {
     fitQueued = false;
     [].forEach.call(document.querySelectorAll(".step svg[viewBox]"), function (svg) {
@@ -262,6 +458,7 @@
         var want = Math.max(fs0, MIN_PX / k);
         t.style.fontSize = want > fs0 + 0.01 ? want.toFixed(1) + "px" : "";
       });
+      fitTouchTargets(svg, k);
     });
   }
   // 太宽的段落（多半是长行内公式）只在自己里面横向滚动，不撑宽整页。只处理真的超宽的那几块。
@@ -286,7 +483,12 @@
     if (window.MutationObserver) {
       [].forEach.call(document.querySelectorAll(".step svg[viewBox]"), function (svg) {
         new MutationObserver(function (ms) {
-          if (ms.some(function (m) { return m.addedNodes.length; })) queueFit();
+          var realAdd = ms.some(function (m) {
+            return [].some.call(m.addedNodes, function (n) {
+              return n.nodeType === 1 && (!n.classList || !n.classList.contains("peiyu-hit"));
+            });
+          });
+          if (realAdd) queueFit();
         }).observe(svg, { childList: true, subtree: true });
       });
     }
@@ -301,7 +503,10 @@
     math(document.body);
     log("open", {});
     var ws = document.createElement("script");
-    ws.src = "../assets/wiki.js";
+    ws.src = "../assets/wiki.js?v=concept-map-20261024-fix1";
     document.head.appendChild(ws);
+    var hs = document.createElement("script"); // 交互层（PY-53）
+    hs.src = "../assets/hci.js";
+    document.head.appendChild(hs);
   });
 })();

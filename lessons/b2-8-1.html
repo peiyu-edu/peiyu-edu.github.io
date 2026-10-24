@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -27,8 +29,15 @@
 <p class="lead">多面体由平面多边形围成，旋转体由平面曲线绕轴旋转生成。不仅要看几何体的直观外观，更要由严格的定义条件识别棱柱、棱锥、棱台与圆柱、圆锥、圆台、球。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>生活中有各种各样的包装盒：粉笔盒、茶叶罐、金字塔模型、水杯和足球。我们常根据它们的外形进行分类。</p>
+  <p>生活中有各种各样的包装盒：粉笔盒、台灯罩、金字塔模型、水杯和足球。先点下面的按钮对比三个都满足「上下底面平行、四个侧面都是四边形」的立体模型，看看它们的侧棱有什么不同：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-poly" viewBox="0 0 520 212" role="img" aria-label="标准直四棱柱、四棱台灯罩与扭曲多面体的侧棱对比图"></svg>
+    <div class="entry-bar" id="entry-poly-bar">
+      <button type="button" data-mode="prism">看标准四棱柱（侧棱平行 ✓）</button>
+      <button type="button" data-mode="frustum" class="on">看反例：四棱台灯罩（两底平行+侧面四边形，但侧棱相交 ✗）</button>
+      <button type="button" data-ext="1" class="on">显隐侧棱延长线</button>
+    </div>
+    <div class="entry-note" id="entry-poly-note"></div>
     <p>如果一个多面体「有两个面互相平行，其余各个面都是四边形」，它一定能叫<b>棱柱</b>吗？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>一定能，因为棱柱的特征就是上下底面平行，侧面都是四边形</button>
@@ -36,48 +45,63 @@
     </div>
     <div class="reveal">
       <p><b>B</b>。仅有两个面平行且其余面是四边形，并不足以构成棱柱！</p>
-      <p>反例：像一个四棱台（上下底平行，侧面是梯形且侧棱相交于一点），或者侧棱扭曲交错的多面体，都满足「两底平行且侧面为四边形」，但它们由于侧棱不平行，都不是棱柱！</p>
-      <p>立体几何的分类不能只凭眼看，必须从<b>底面形态、侧面结构与侧棱平行性</b>等严格几何条件来界定。这一节我们就来系统建立基本立体图形的识别框架。</p>
+      <p>反例：看图中间的<b>② 四棱台灯罩</b>（上下底平行，四个侧面全是梯形四边形，但四条侧棱向上延长后交于同一点 \(S\)）和右边的<b>③ 扭曲侧面多面体</b>，它们都满足「两底平行且侧面为四边形」，但因为侧棱不互相平行，都不是棱柱！</p>
+      <p>立体几何的分类不能只凭粗看，必须从<b>底面形态、侧面结构与侧棱平行性</b>等严格几何条件来界定。这一节我们就来系统建立基本立体图形的识别框架。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：初中平面几何中的多边形、圆、矩形、直角三角形与圆心角。</p>
 
+  <div class="micro-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="badge-pill">直觉微图解</span>
+      <div class="toggles" id="m-poly-bar" style="margin:0" role="group" aria-label="立体图形模式切换">
+        <button class="btn ghost active" type="button" data-poly="prism">多面体（柱·锥·台）</button>
+        <button class="btn ghost" type="button" data-poly="revol">四大旋转体（母线旋转）</button>
+        <button class="btn ghost" type="button" data-poly="sect">空间截面规律</button>
+      </div>
+    </div>
+    <svg class="micro-fig" id="m-poly-fig" viewBox="0 0 520 180" role="img" aria-label="基本立体图形结构与截面图"></svg>
+    <p class="small" id="m-poly-status" style="margin:6px 0 0 0;min-height:20px;color:var(--text-dim)"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-ok">族系 ①</span><b>多面体：平面多边形围成，核心抓侧棱</b></div>
+      <p><b>侧棱关系定分类</b>：<br>
+      • <b>棱柱</b>：两底面平行全等，侧棱<b>互相平行且相等</b>；<br>
+      • <b>棱锥</b>：底面为多边形，侧棱<b>相交于唯一点</b>；<br>
+      • <b>棱台</b>：截顶而成，侧棱<b>延长线必交于一点</b>。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill badge-no">族系 ②</span><b>旋转体：平面绕定轴旋转，垂直截面必是圆</b></div>
+      <p><b>旋转生成与轴截面</b>：矩形绕边成圆柱、Rt\(\triangle\) 绕直角边成圆锥、梯形绕腰成圆台、半圆绕直径成球。垂直于轴的截面<b>全是圆面</b>。</p>
+    </div>
+  </div>
+
   <div class="card">
-    <p><b>多面体与旋转体</b>：</p>
+    <p><b>「直」与「正」的区别</b>：</p>
     <ul>
-      <li><b>多面体</b>：由若干个平面多边形围成的几何体叫做多面体。围成多面体的各个多边形叫<b>面</b>；相邻两个面的公共边叫<b>棱</b>；棱和棱的公共点叫<b>顶点</b>。例：三棱柱有 \(5\) 个面、\(9\) 条棱、\(6\) 个顶点。</li>
-      <li><b>旋转体</b>：由一个平面图形绕它所在平面内的一条定直线旋转所形成的封闭几何体。这条定直线叫<b>轴</b>。垂直于轴的截面都是圆。例：圆柱、圆锥、圆台、球。</li>
+      <li><b>「直」</b>：指侧棱（或轴）垂直于底面。例：直棱柱侧棱垂直底面，侧面都是矩形；</li>
+      <li><b>「正」</b>：在「直」的基础上，要求底面是<b>正多边形</b>（正棱锥顶点投影落在底面中心）。长方体是直四棱柱，但底面非正方形时不是正四棱柱。</li>
     </ul>
   </div>
 
   <div class="card">
-    <p><b>直与正的区别</b>：</p>
-    <ul>
-      <li><b>「直」</b>：指侧棱（或旋转轴）垂直于底面。例：直棱柱的侧棱垂直于底面，各个侧面都是矩形。</li>
-      <li><b>「正」</b>：在「直」的基础上，还要求底面是<b>正多边形</b>（正棱锥还要求顶点在底面的正投影落在底面中心）。例：底面是矩形的直四棱柱是长方体，但不是正四棱柱；底面必须是正方形才是正四棱柱。</li>
-    </ul>
+    <p><b>轴截面与平行截面</b>：经过旋转轴的截面叫<b>轴截面</b>（圆柱为矩形、圆锥为等腰三角形、圆台为等腰梯形、球为大圆）；平行于底面的截面都是圆面。</p>
   </div>
 
-  <div class="card">
-    <p><b>轴截面与平行截面</b>：</p>
-    <ul>
-      <li><b>轴截面</b>：经过旋转体旋转轴的平面所截得的截面。例：圆柱的轴截面是矩形，圆锥的轴截面是等腰三角形，圆台的轴截面是等腰梯形，球的任意过球心截面都是大圆。</li>
-      <li><b>平行截面</b>：平行于底面的截面。圆锥和圆台平行于底面的截面都是圆面。</li>
-    </ul>
+  <h3>2. 核心判定与结构规律</h3>
+  <div class="key">
+    ① <b>棱柱本质</b>：两底面平行且全等，<b>每相邻两四边形的公共边（侧棱）互相平行</b>；<br>
+    ② <b>棱锥与正棱锥</b>：共顶点三角形侧面；底面为正多边形且顶点投影在中心才叫正棱锥；<br>
+    ③ <b>棱台严苛条件</b>：必须由棱锥平行截取，<b>侧棱延长线必汇交于同一点</b>；<br>
+    ④ <b>截面两规律</b>：① 截面多边形边数 \(3 \le n \le \text{多面体总面数}\)；② 平行面被截交线必平行。
   </div>
-
-  <h3>2. 棱柱、棱锥与棱台的结构特征</h3>
-  <p>识别多面体不能光看大致长相，必须抓住底面、侧面与侧棱的严格定义：</p>
-  <ul>
-    <li><b>棱柱</b>：有两个面互相平行，其余各面都是四边形，并且<b>每相邻两个四边形的公共边都互相平行</b>。两个平行的面叫<b>底面</b>（形状完全相同的全等多边形）；其余各面叫<b>侧面</b>（全为平行四边形）；相邻侧面的公共边叫<b>侧棱</b>（侧棱长全部相等且互相平行）。</li>
-    <li><b>棱锥</b>：有一个面是多边形（底面），其余各面都是<b>有一个公共顶点的三角形</b>（侧面）。底面是正多边形、顶点在底面的正投影是底面中心的棱锥叫<b>正棱锥</b>（各侧棱长相等，各侧面是全等的等腰三角形）。</li>
-    <li><b>棱台</b>：用一个<b>平行于棱锥底面的平面</b>去截棱锥，底面与截面之间的部分。两个底面是相似多边形，侧面全为梯形，<b>侧棱延长线必汇交于同一点</b>（原棱锥顶点）。</li>
-  </ul>
-  <div class="key">识别棱柱抓侧棱平行；识别棱锥抓公共顶点；识别棱台抓平行截顶（侧棱延长线必汇交于同一点）。</div>
 
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
@@ -87,81 +111,74 @@
     <p>③ 侧面都是全等等腰三角形的棱锥一定是正棱锥。</p>
     <div class="reveal-box" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
       <p><b>解</b>：</p>
-      <p>① <b>错误</b>。定义要求「每相邻两个四边形的公共边都互相平行」。若一个六面体相对两底面平行，四个侧面虽为平行四边形，但侧棱分成两组不同方向的平行线，则不是棱柱。</p>
-      <p>② <b>正确</b>。侧面是矩形说明侧棱与底面多边形相邻两边都垂直，由线面垂直判定定理，侧棱垂直于底面，因此该棱柱为直棱柱；又底面是正多边形，所以一定是正棱柱。</p>
-      <p>③ <b>错误</b>。反例：底面为菱形（对角线长分别为 \(6\) 和 \(8\)，边长为 \(5\)）的四棱锥，顶点在底面中心正上方高为 \(4\) 处。由勾股定理可算出各侧棱长都相等，四个侧面都是全等的等腰三角形，但底面是菱形而不是正方形，所以它不是正棱锥。</p>
+      <p>① <b>错误</b>。定义要求「每相邻两个四边形的公共边都互相平行」。若相对两底面平行，四个侧面为平行四边形，但侧棱不互相平行，则不是棱柱。</p>
+      <p>② <b>正确</b>。侧面是矩形说明侧棱垂直底面，因此是直棱柱；底面又是正多边形，所以是正棱柱。</p>
+      <p>③ <b>错误</b>。反例：底面为菱形的四棱锥，顶点在底面中心正上方，四个侧面全是全等的等腰三角形，但底面是菱形而不是正方形，不是正棱锥。</p>
     </div>
   </div>
 
   <div class="card predict" data-id="try-1" data-answer="C">
-    <p><b>自己试试</b>：一个多面体有 \(6\) 个顶点、\(9\) 条棱、\(5\) 个面，其中有两个面是互相平行的全等三角形，另外三个面是平行四边形。这个几何体一定是：</p>
+    <p><b>自己试试</b>：观察一个六棱柱，它的底面边数是 6。那么这个六棱柱的面数 \(F\)、顶点数 \(V\)、侧棱数分别等于：</p>
     <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>三棱锥</button>
-      <button class="opt" data-v="B"><b>B</b>四棱锥</button>
-      <button class="opt" data-v="C"><b>C</b>三棱柱</button>
-      <button class="opt" data-v="D"><b>D</b>三棱台</button>
+      <button class="opt" data-v="A"><b>A</b>\(F=6, V=12\)，侧棱数 \(=6\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(F=8, V=6\)，侧棱数 \(=6\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(F=8, V=12\)，侧棱数 \(=6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(F=7, V=12\)，侧棱数 \(=12\)</button>
     </div>
     <div class="reveal">
-      <p><b>C</b>。两个底面是全等三角形且互相平行，三个侧面是平行四边形，侧棱互相平行，共有 \(2+3=5\) 个面、\(3\times3=9\) 条棱、\(2\times3=6\) 个顶点，符合三棱柱的严格定义。</p>
-      <p>三棱锥只有 \(4\) 个面（全为三角形）；四棱锥底面是四边形，侧面是三角形；三棱台的侧面是梯形，不是平行四边形。</p>
+      <p><b>C</b>。六棱柱有 2 个底面加 6 个侧面，共 \(2+6=8\) 个面；每个底面有 6 个顶点，两底共 \(6\times 2=12\) 个顶点；连结上下对应顶点的侧棱恰有 6 条。故 \(F=8, V=12\)，侧棱数 6。</p>
     </div>
   </div>
-
-  <h3>3. 旋转体：圆柱、圆锥、圆台与球的形成与性质</h3>
-  <p>旋转体是由平面图形绕轴旋转一周得到的封闭几何体：</p>
-  <ul>
-    <li><b>圆柱</b>：矩形绕一边旋转形成。母线平行于轴且垂直于底面，母线长等于高（\(l = h\)）。垂直于轴的截面是圆面；轴截面是矩形。</li>
-    <li><b>圆锥</b>：直角三角形绕一直角边旋转形成。母线长 \(l = \sqrt{r^2+h^2}\)；平行于底面的截面是圆面；轴截面是以底面直径为底、母线为腰的等腰三角形。</li>
-    <li><b>圆台</b>：直角梯形绕垂直于底边的腰旋转形成，或由平行于底面的平面截圆锥得到。母线延长线汇交于轴上一点；轴截面是等腰梯形。</li>
-    <li><b>球</b>：半圆绕直径所在直线旋转形成。球心到球面上任意一点的距离恒等于半径 \(R\)。用平面去截球，所得截面恒为圆面。</li>
-  </ul>
-  <div class="key">球的核心截面关系是直角三角形：若球半径为 \(R\)，球心到截面平面的距离为 \(d\)（\(d &lt; R\)），则截面圆的半径 \(r = \sqrt{R^2 - d^2}\)。</div>
+  <div class="vid" data-video="ex-cube"></div>
 
   <div class="card">
     <p class="small">例 2</p>
-    <p>① 一个圆锥的轴截面是一个顶角为 \(60^\circ\) 的等腰三角形，底面半径为 \(r = 2\)，求该圆锥的母线长 \(l\) 和高 \(h\)；</p>
-    <p>② 已知球 \(O\) 的半径为 \(R = 5\)，球心 \(O\) 到截面平面的距离为 \(d = 4\)，求截面圆的面积。</p>
+    <p>圆台的上、下底面半径分别为 \(1\) 和 \(3\)，母线长为 \(4\)。求：(1) 圆台的高；(2) 轴截面的面积。</p>
     <div class="reveal-box" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
       <p><b>解</b>：</p>
-      <p>① 轴截面是等腰三角形且顶角为 \(60^\circ\)，所以它是等边三角形。底边长等于底面直径 \(2r = 4\)，因此母线长 \(l = 4\)。</p>
-      <p>在轴截面直角三角形中，高 \(h = \sqrt{l^2 - r^2} = \sqrt{4^2 - 2^2} = 2\sqrt{3}\)。</p>
-      <p>② 在球心、截面圆心和截面圆周上一点构成的直角三角形中，截面圆半径 \(r = \sqrt{R^2 - d^2} = \sqrt{5^2 - 4^2} = 3\)。</p>
-      <p>截面圆面积 \(S = \pi r^2 = \pi \times 3^2 = 9\pi\)。</p>
+      <p>(1) 截取圆台轴截面等腰梯形的一半（直角梯形），由勾股定理：高 \(h = \sqrt{l^2 - (r_2 - r_1)^2} = \sqrt{4^2 - (3 - 1)^2} = \sqrt{16 - 4} = 2\sqrt{3}\)；</p>
+      <p>(2) 轴截面是等腰梯形，上底 \(2r_1 = 2\)，下底 \(2r_2 = 6\)，高 \(h = 2\sqrt{3}\)。面积 \(S = \dfrac{2 + 6}{2}\times 2\sqrt{3} = 8\sqrt{3}\)。</p>
     </div>
   </div>
 
   <div class="card predict" data-id="try-2" data-answer="B">
-    <p><b>自己试试</b>：已知球 \(O\) 的半径为 \(10\)，用一个平面去截该球，截得的截面圆周长为 \(12\pi\)。则球心 \(O\) 到截面平面的距离为：</p>
+    <p><b>自己试试</b>：圆锥的底面半径为 \(3\)，高为 \(4\)，则它的轴截面面积是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(6\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(8\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(\sqrt{136}\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(4\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(12\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(15\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(24\)</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。截面圆周长 \(C = 2\pi r = 12\pi \implies r = 6\)。由球心距、截面半径与球半径构成的直角三角形：</p>
-      <p>$$d = \sqrt{R^2 - r^2} = \sqrt{10^2 - 6^2} = 8$$</p>
-      <p>选 A 是把截面圆半径 \(r=6\) 误当成了球心距；选 D 是误用 \(R-r = 10-6 = 4\)，注意距离满足勾股定理，不能直接相减。</p>
+      <p><b>B</b>。圆锥轴截面是底边为直径 \(2r=6\)、高为 \(h=4\) 的等腰三角形。面积 \(S = \dfrac{1}{2}\times 6\times 4 = 12\)。选 A 的同学误把底边当作了半径；选 C 的同学误把高用成了母线长 \(5\)。</p>
     </div>
   </div>
 
-  <h3>4. 空间截面与简单组合体</h3>
-  <p>组合体是由柱、锥、台、球等基本立体图形经过<b>拼接</b>或<b>挖去</b>形成的几何体。在分析组合体与多面体时，常要研究截面的形状：</p>
-  <ul>
-    <li><b>截面多边形的边数规律</b>：用平面去截多面体，平面与多面体的一个面相交就产生一条交线（截面的一条边）。因此，<b>截面多边形的边数不可能超过多面体的面数</b>！三棱锥只有 \(4\) 个面，截面只能是三角形或四边形；正方体有 \(6\) 个面，截面可以是三边形至六边形，但绝不可能是七边形。</li>
-    <li><b>平行截面性质</b>：若多面体有两个互相平行的面，截面与这两个平行面相交所得的两条交线必然<b>互相平行</b>。</li>
-  </ul>
-  <div class="key">空间截面两规律：① 截面边数 \(\le\) 多面体总面数；② 相对平行面被截所得交线必平行。</div>
-
+  <h3>3. 典型例题：三步思维链精讲</h3>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>在正方体 \(ABCD-A_1B_1C_1D_1\) 中：</p>
-    <p>① 用一个不过顶点的平面去截正方体，截面形状可能是正五边形吗？为什么？</p>
-    <p>② 若平面经过三条面对角线 \(A_1B, BD, DA_1\) 的端点，截面的形状是什么？</p>
-    <div class="reveal-box" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px">
-      <p><b>解</b>：</p>
-      <p>① <b>不可能</b>。正方体中相对的面是两两互相平行的。如果截面是五边形，则它必然与正方体的某两对平行面都相交，截出的五边形中必然有两组对边互相平行。但平面几何中正五边形的任意两条边都不平行（内角为 \(108^\circ\)），所以正方体的截面绝不可能是正五边形。</p>
-      <p>② 截面是以 \(A_1, B, D\) 为顶点的三角形 \(\triangle A_1BD\)。因为正方体各个面的边长都相等，所以面对角线 \(A_1B = BD = DA_1 = \sqrt{2}a\)。三边长度相等，截面是<b>等边三角形</b>（正三角形）。</p>
+    <p class="small"><b>例 3（截面问题·空间几何体截面规律）</b></p>
+    <p>在正方体 \(ABCD-A_1B_1C_1D_1\) 中：<br>
+    ① 用一个平面去截正方体，截面形状可能是正五边形吗？为什么？<br>
+    ② 用一个平面去截一个五棱柱（2个底面加5个侧面），截面多边形的边数最多是几？</p>
+    <div class="think-steps">
+      <div class="step-card">
+        <div class="step-badge">👀 第一眼·破题信号</div>
+        <div class="step-text">看到截面多边形判定与边数上限 → <b>核心破题信号：牢记两规律「截面边数 ≤ 几何体总面数」与「平行面被截交线必互相平行」</b>！</div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🔧 第二步·套公式拆解</div>
+        <div class="step-text">
+          ① 分析正五边形能否截出：正方体相对的面互相平行。如果截面是五边形，则它必然与正方体的某两对平行面都相交，截出的五边形中<b>必然有两组对边互相平行</b>。但在平面几何中，正五边形内角为 \(108^\circ\)，任意两边都不平行！因此正方体截面<b>绝不可能是正五边形</b>！<br>
+          ② 分析五棱柱截面边数上限：五棱柱一共有 \(2 + 5 = 7\) 个面。一个平面截多面体，与一个面相交产生一条棱交线，因此截面边数最多等于总面数 <b>\(7\)（七边形）</b>。
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-badge">🛡️ 第三步·必查防坑点</div>
+        <div class="step-text">
+          ① 截面多边形的边是平面与几何体各个面的交线，边数绝不能超出几何体的总面数；<br>
+          ② 遇到平行六面体截面，牢记相对平行面被截出的线段必然平行。
+        </div>
+      </div>
     </div>
   </div>
 
@@ -174,25 +191,60 @@
       <button class="opt" data-v="D"><b>D</b>10</button>
     </div>
     <div class="reveal">
-      <p><b>C</b>。五棱柱一共有 \(2+5=7\) 个面。一个平面去截多面体，最多能与该多面体的全部 \(7\) 个面都相交，每个面产生一条交线，所以截面多边形的边数最多为 \(7\)（七边形）。选 A 误以为只能截 \(5\) 条侧棱；选 D 误把棱数当成了面数上限。</p>
+      <p><b>C</b>。五棱柱一共有 \(2+5=7\) 个面。一个平面去截多面体，最多能与全部 7 个面都相交，所以截面多边形的边数最多为 7。选 A 误以为只能截 5 条侧棱；选 D 误把棱数当成了面数上限。</p>
     </div>
   </div>
 
-  <h3>5. 边界与高频易错（各配一个反例）</h3>
-  <div class="card">
-    <p><b>① 「两底面平行且全等」推不出棱柱</b>。反例：将两个底面全等的四棱台大底面贴合在一起，虽然上下两底面互相平行且全等，其余侧面也是四边形，但侧棱不平行，不是棱柱。棱柱必须要求「每相邻两个侧面的公共边互相平行」。</p>
-    <p><b>② 「侧面全为等腰三角形」推不出正棱锥</b>。反例：底面是菱形而不是正方形时，顶点在底面中心正上方，四个侧面可以全都是全等的等腰三角形，但它不是正棱锥。正棱锥底面必须是正多边形。</p>
-    <p><b>③ 「侧面全为梯形」推不出棱台</b>。反例：若将长方体侧棱削斜成上下两底平行、侧面全为梯形，但四条侧棱延长线如果不交于同一点，就无法还原为棱锥，属于伪棱台。</p>
-    <p><b>④ 截面边数绝不能超过几何体的总面数</b>。反例：三棱锥无论怎么截，截面最多只能是四边形，绝不可能截出五边形。</p>
-    <p><b>⑤ 球面与球体的区别</b>。球面是二维曲面（只有面积没有体积，类似圆周）；球体是实心空间立体（包含内部所有点，有体积）。</p>
+  <div class="vid" data-video="ex-poly"></div>
+
+  <h3>4. 这三种情况最容易翻车</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><b>侧棱不交于一点的「伪棱台」</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>上下底面平行，侧面全为梯形，就直接断定是棱台。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>棱台必须由棱锥平行截取！<b>四条侧棱延长线必须交于同一点</b>。若不交于一点，无法复原为棱锥，属于伪棱台！</p>
+        </div>
+      </div>
+      <svg class="micro-fig" id="m-poly-trap-fig" viewBox="0 0 340 160" role="img" aria-label="真棱台与伪棱台侧棱汇交对比图" style="margin-top:8px"></svg>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>侧面全等误断「正棱锥」</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>侧面都是全等等腰三角形，就断定该棱锥为正棱锥。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>正棱锥要求底面必须是<b>正多边形</b>！底面为菱形的四棱锥侧面完全可以全等，但底面非正方形，绝不是正棱锥。</p>
+        </div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><b>截面边数幻想超出多面体面数</b></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <span class="badge-pill badge-no">错解</span>
+          <p>以为三棱锥（4个面）可以截出五边形或六边形。</p>
+        </div>
+        <div class="trap-right">
+          <span class="badge-pill badge-ok">正解</span>
+          <p>平面与多面体的一个面相交产生一条交线，因此截面边数上限严格等于几何体的总面数（三棱锥最多四边形）。</p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>凸多面体的欧拉公式</b>：任意凸多面体的顶点数 \(V\)、面数 \(F\)、棱数 \(E\) 恒满足关系：</p>
-    <p style="text-align:center">\(V + F - E = 2\)</p>
-    <p>检验：三棱锥 \(4+4-6=2\)；正方体 \(8+6-12=2\)；三棱柱 \(6+5-9=2\)。</p>
-    <p><b>正多面体（柏拉图多面体）只有五种</b>：正四面体（4个正三角形面）、正六面体（正方体，6个正方形面）、正八面体（8个正三角形面）、正十二面体（12个正五边形面）、正二十面体（20个正三角形面）。</p>
+    <p><b>凸多面体的欧拉公式</b>：任意凸多面体的顶点数 \(V\)、面数 \(F\)、棱数 \(E\) 恒满足关系：\(V + F - E = 2\)。检验：三棱锥 \(4+4-6=2\)；正方体 \(8+6-12=2\)；三棱柱 \(6+5-9=2\)。</p>
+    <p><b>正多面体（柏拉图多面体）只有五种</b>：正四面体（4个正三角形）、正六面体（正方体，6个正方形）、正八面体（8个正三角形）、正十二面体（12个正五边形）、正二十面体（20个正三角形）。</p>
   </details>
 </section>
 
@@ -207,6 +259,7 @@
     <button type="button" data-shape="frustum4">正四棱台</button>
     <button type="button" data-shape="cylinder">圆柱</button>
     <button type="button" data-shape="cone">圆锥</button>
+    <button type="button" data-shape="lathe" data-iso-tab="1">旋转体车削实验台（等距 3D）</button>
   </div>
 
   <svg class="fig" id="geo3dSvg" viewBox="0 0 560 320" role="img" aria-label="3D立体几何图形旋转演示"></svg>
@@ -300,6 +353,7 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
 </div>
 
+<script src="../assets/iso-bench.js"></script>
 <script>
 (function () {
   "use strict";
@@ -467,6 +521,13 @@
     rotYOut.textContent = ry + "°";
     rotXOut.textContent = rx + "°";
 
+    if (currentShape === "lathe" && window.IsoBench && window.IsoBench.isReal === true) {
+      window.IsoBench.renderLatheBench(svg, desc, rotYOut, rotXOut, ry, rx, function () {
+        if (window.Peiyu && window.Peiyu.math) window.Peiyu.math(desc);
+      });
+      return;
+    }
+
     var shape = SHAPE_DATA[currentShape];
     desc.innerHTML = shape.info;
 
@@ -528,6 +589,325 @@
   });
 
   render();
+
+  /* ================= 0 从例子进入：棱柱 vs 四棱台灯罩 vs 扭曲多面体 ================= */
+  var epSvg = document.getElementById("entry-poly"), epBar = document.getElementById("entry-poly-bar"), epNote = document.getElementById("entry-poly-note");
+  var epMode = "frustum", epExt = true;
+  function epEl(tag, attrs, p) {
+    var n = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (p) p.appendChild(n);
+    return n;
+  }
+  function epDraw() {
+    if (!epSvg) return;
+    epSvg.innerHTML = "";
+    var isP = epMode === "prism";
+    // 三个卡片背景框
+    var cards = [
+      { cx: 90, title: "① 标准直四棱柱(粉笔盒)", sub: "侧棱互相平行 ✓ 是棱柱", ok: true, hi: isP },
+      { cx: 260, title: "② 四棱台灯罩(反例1)", sub: "侧棱交于一点 ✗ 非棱柱", ok: false, hi: !isP },
+      { cx: 430, title: "③ 扭曲多面体(反例2)", sub: "侧棱错位歪斜 ✗ 非棱柱", ok: false, hi: !isP }
+    ];
+    cards.forEach(function (c, idx) {
+      var g = epEl("g", { style: "cursor:pointer" }, epSvg);
+      var col = c.ok ? "var(--a)" : "var(--no)";
+      var bg = c.hi ? (c.ok ? "var(--ok-soft)" : "var(--no-soft)") : "var(--card)";
+      epEl("rect", { x: c.cx - 78, y: 8, width: 156, height: 196, rx: 10, fill: bg, stroke: c.hi ? col : "var(--line)", "stroke-width": c.hi ? 2.2 : 1.2 }, g);
+      epEl("text", { x: c.cx, y: 27, "text-anchor": "middle", "font-size": 13, "font-weight": 700, fill: c.hi ? col : "var(--fg)" }, g).textContent = c.title;
+      epEl("text", { x: c.cx, y: 192, "text-anchor": "middle", "font-size": 12.5, "font-weight": 700, fill: col }, g).textContent = c.sub;
+      g.onclick = function () { epMode = idx === 0 ? "prism" : "frustum"; epDraw(); };
+    });
+
+    function quad(pts, fill, stroke, dash) {
+      var s = pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+      var a = { points: s, fill: fill, stroke: stroke, "stroke-width": 1.8, "stroke-linejoin": "round" };
+      if (dash) a["stroke-dasharray"] = dash;
+      epEl("polygon", a, epSvg);
+    }
+    function seg(p1, p2, stroke, w, dash) {
+      var a = { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: stroke, "stroke-width": w || 2 };
+      if (dash) a["stroke-dasharray"] = dash;
+      epEl("line", a, epSvg);
+    }
+
+    // ① 直四棱柱 (cx=90)
+    var pB = [[44, 162], [112, 162], [134, 142], [66, 142]];
+    var pT = [[44, 86], [112, 86], [134, 66], [66, 66]];
+    quad([pB[0], pB[1], pT[1], pT[0]], "rgba(47,122,86,0.12)", "none");
+    quad([pB[1], pB[2], pT[2], pT[1]], "rgba(47,122,86,0.20)", "none");
+    quad(pT, "rgba(47,122,86,0.26)", "var(--a)");
+    seg(pB[0], pB[3], "var(--muted)", 1.3, "3,3");
+    seg(pB[3], pB[2], "var(--muted)", 1.3, "3,3");
+    seg(pB[3], pT[3], "var(--muted)", 1.5, "3,3");
+    seg(pB[0], pB[1], "var(--a)", 1.8);
+    seg(pB[1], pB[2], "var(--a)", 1.8);
+    [0, 1, 2].forEach(function (i) { seg(pB[i], pT[i], "var(--a)", 2.4); });
+    if (epExt) {
+      [0, 1, 2, 3].forEach(function (i) {
+        seg(pT[i], [pT[i][0], pT[i][1] - 26], "var(--a)", 1.5, "3,3");
+      });
+      epEl("text", { x: 90, y: 52, "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, fill: "var(--a)" }, epSvg).textContent = "延长线永远平行";
+    }
+
+    // ② 四棱台灯罩 (cx=260)
+    var fB = [[210, 164], [288, 164], [312, 142], [234, 142]];
+    var fT = [[232, 102], [274, 102], [287, 90], [245, 90]];
+    var apex = [260, 44];
+    quad([fB[0], fB[1], fT[1], fT[0]], "rgba(217,72,62,0.12)", "none");
+    quad([fB[1], fB[2], fT[2], fT[1]], "rgba(217,72,62,0.20)", "none");
+    quad(fT, "rgba(217,72,62,0.25)", "var(--no)");
+    seg(fB[0], fB[3], "var(--muted)", 1.3, "3,3");
+    seg(fB[3], fB[2], "var(--muted)", 1.3, "3,3");
+    seg(fB[3], fT[3], "var(--muted)", 1.5, "3,3");
+    seg(fB[0], fB[1], "var(--no)", 1.8);
+    seg(fB[1], fB[2], "var(--no)", 1.8);
+    [0, 1, 2].forEach(function (i) { seg(fB[i], fT[i], "var(--no)", 2.4); });
+    if (epExt) {
+      [0, 1, 2, 3].forEach(function (i) { seg(fT[i], apex, "var(--no)", 1.6, "3,3"); });
+      epEl("circle", { cx: apex[0], cy: apex[1], r: 4, fill: "var(--no)" }, epSvg);
+      epEl("text", { x: apex[0] + 8, y: apex[1] + 4, "font-size": 12, "font-weight": 700, fill: "var(--no)" }, epSvg).textContent = "交于一点 S";
+    }
+
+    // ③ 扭曲侧面多面体 (cx=430)：上底平行下底，但水平错位旋转导致侧棱歪斜不平行
+    var tB = [[382, 162], [452, 162], [474, 142], [404, 142]];
+    var tT = [[398, 86], [442, 86], [478, 66], [412, 66]];
+    quad([tB[0], tB[1], tT[1], tT[0]], "rgba(217,72,62,0.12)", "none");
+    quad([tB[1], tB[2], tT[2], tT[1]], "rgba(217,72,62,0.20)", "none");
+    quad(tT, "rgba(217,72,62,0.25)", "var(--no)");
+    seg(tB[0], tB[3], "var(--muted)", 1.3, "3,3");
+    seg(tB[3], tB[2], "var(--muted)", 1.3, "3,3");
+    seg(tB[3], tT[3], "var(--muted)", 1.5, "3,3");
+    seg(tB[0], tB[1], "var(--no)", 1.8);
+    seg(tB[1], tB[2], "var(--no)", 1.8);
+    [0, 1, 2].forEach(function (i) { seg(tB[i], tT[i], "var(--no)", 2.4); });
+    if (epExt) {
+      [0, 1, 2].forEach(function (i) {
+        var dx = tT[i][0] - tB[i][0], dy = tT[i][1] - tB[i][1];
+        seg(tT[i], [tT[i][0] + dx * 0.36, tT[i][1] + dy * 0.36], "var(--no)", 1.6, "3,3");
+      });
+      epEl("text", { x: 430, y: 52, "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, fill: "var(--no)" }, epSvg).textContent = "方向各异不平行";
+    }
+
+    [].forEach.call(epBar.querySelectorAll("button"), function (b) {
+      var m = b.getAttribute("data-mode");
+      if (m) b.classList.toggle("on", m === epMode);
+      else b.classList.toggle("on", epExt);
+    });
+    if (isP) {
+      epNote.innerHTML = "<b>① 标准直四棱柱</b>：上下底面平行，四个侧面都是矩形，更重要的是<b>四条侧棱方向完全一致、互相平行</b>，这才是真正的棱柱！";
+    } else {
+      epNote.innerHTML = "<b>② 四棱台灯罩 & ③ 扭曲多面体</b>：上下底面同样平行，四个侧面也都是四边形（梯形或斜四边形），但<b>侧棱不互相平行</b>（交于一点或各奔东西），所以<b>绝不是棱柱</b>！";
+    }
+  }
+  if (epBar) {
+    [].forEach.call(epBar.querySelectorAll("button"), function (b) {
+      b.onclick = function () {
+        var m = b.getAttribute("data-mode");
+        if (m) epMode = m;
+        else epExt = !epExt;
+        epDraw();
+      };
+    });
+  }
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      epMode = ev.detail.choice === "A" ? "prism" : "frustum";
+      epExt = true;
+      epDraw();
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      epMode = "frustum";
+      epExt = true;
+      epDraw();
+    }
+  });
+  function initStep2() {
+    var fig = document.getElementById("m-poly-fig");
+    var bar = document.getElementById("m-poly-bar");
+    var status = document.getElementById("m-poly-status");
+    var trap = document.getElementById("m-poly-trap-fig");
+    if (!fig || !bar) return;
+
+    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    var ca = isDark ? "#38bdf8" : "#0284c7";
+    var cb = isDark ? "#f59e0b" : "#d97706";
+    var cc = isDark ? "#10b981" : "#059669";
+    var cd = isDark ? "#ec4899" : "#db2777";
+    var mut = isDark ? "#94a3b8" : "#64748b";
+    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+    var border = isDark ? "#334155" : "#e2e8f0";
+    var NS = "http://www.w3.org/2000/svg";
+
+    function sEl(parent, tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      parent.appendChild(el);
+      return el;
+    }
+
+    function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+      var t = sEl(parent, "text", {
+        x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
+        "font-weight": fw || 400, "text-anchor": anchor || "start"
+      });
+      t.textContent = text;
+      return t;
+    }
+
+    function drawPoly(mode) {
+      fig.innerHTML = "";
+      if (mode === "prism") {
+        sTxt(fig, 30, 22, "【多面体族】棱柱（侧棱平行） vs 棱锥（聚于一点） vs 棱台（延长汇交）", ca, 12, 700);
+
+        // 1. Prism (x: 40~150)
+        sTxt(fig, 85, 42, "棱柱 (侧棱平行)", ca, 11.5, 700, "middle");
+        sEl(fig, "polygon", { points: "55,70 115,70 125,55 65,55", fill: "none", stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "polygon", { points: "55,140 115,140 125,125 65,125", fill: "none", stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 55, y1: 70, x2: 55, y2: 140, stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 115, y1: 70, x2: 115, y2: 140, stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 125, y1: 55, x2: 125, y2: 125, stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 65, y1: 55, x2: 65, y2: 125, stroke: ca, "stroke-width": 1.2, "stroke-dasharray": "2 2" });
+        sTxt(fig, 85, 160, "侧棱平行且相等", ca, 10.5, 400, "middle");
+
+        // 2. Pyramid (x: 190~300)
+        sTxt(fig, 245, 42, "棱锥 (共顶点)", cb, 11.5, 700, "middle");
+        var topX = 245, topY = 60;
+        sEl(fig, "polygon", { points: "215,140 275,140 285,125 225,125", fill: "none", stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: topX, y1: topY, x2: 215, y2: 140, stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: topX, y1: topY, x2: 275, y2: 140, stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: topX, y1: topY, x2: 285, y2: 125, stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: topX, y1: topY, x2: 225, y2: 125, stroke: cb, "stroke-width": 1.2, "stroke-dasharray": "2 2" });
+        sTxt(fig, 245, 160, "侧棱汇交于顶点", cb, 10.5, 400, "middle");
+
+        // 3. Frustum (x: 350~460)
+        sTxt(fig, 410, 42, "棱台 (截面与延长交点)", cc, 11.5, 700, "middle");
+        sEl(fig, "polygon", { points: "390,85 430,85 438,75 398,75", fill: "none", stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "polygon", { points: "380,140 440,140 450,125 390,125", fill: "none", stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 390, y1: 85, x2: 380, y2: 140, stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 430, y1: 85, x2: 440, y2: 140, stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 438, y1: 75, x2: 450, y2: 125, stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 398, y1: 75, x2: 390, y2: 125, stroke: cc, "stroke-width": 1.2, "stroke-dasharray": "2 2" });
+        // extend lines
+        sEl(fig, "line", { x1: 390, y1: 85, x2: 410, y2: 48, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
+        sEl(fig, "line", { x1: 430, y1: 85, x2: 410, y2: 48, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
+        sEl(fig, "circle", { cx: 410, cy: 48, r: 2.5, fill: cd });
+        sTxt(fig, 410, 160, "侧棱延长汇交于顶点", cc, 10.5, 400, "middle");
+
+        status.textContent = "多面体核心特征：棱柱侧棱全部平行且相等，棱锥共顶点，棱台侧棱延长线汇交于一点。";
+      } else if (mode === "revol") {
+        sTxt(fig, 30, 22, "【旋转体族】圆柱、圆锥、圆台、球：垂直于轴的截面全为圆面", cb, 12, 700);
+
+        // 1. Cylinder
+        sTxt(fig, 85, 42, "圆柱 (矩形绕边)", ca, 11, 700, "middle");
+        sEl(fig, "ellipse", { cx: 85, cy: 65, rx: 30, ry: 10, fill: "none", stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "ellipse", { cx: 85, cy: 135, rx: 30, ry: 10, fill: "none", stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 55, y1: 65, x2: 55, y2: 135, stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 115, y1: 65, x2: 115, y2: 135, stroke: ca, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 85, y1: 55, x2: 85, y2: 145, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
+
+        // 2. Cone
+        sTxt(fig, 205, 42, "圆锥 (Rt△ 绕直角边)", cb, 11, 700, "middle");
+        sEl(fig, "ellipse", { cx: 205, cy: 135, rx: 30, ry: 10, fill: "none", stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 205, y1: 65, x2: 175, y2: 135, stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 205, y1: 65, x2: 235, y2: 135, stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 205, y1: 55, x2: 205, y2: 145, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
+
+        // 3. Truncated cone
+        sTxt(fig, 325, 42, "圆台 (梯形绕腰)", cc, 11, 700, "middle");
+        sEl(fig, "ellipse", { cx: 325, cy: 75, rx: 18, ry: 6, fill: "none", stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "ellipse", { cx: 325, cy: 135, rx: 32, ry: 10, fill: "none", stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 307, y1: 75, x2: 293, y2: 135, stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 343, y1: 75, x2: 357, y2: 135, stroke: cc, "stroke-width": 1.5 });
+        sEl(fig, "line", { x1: 325, y1: 65, x2: 325, y2: 145, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
+
+        // 4. Sphere
+        sTxt(fig, 445, 42, "球 (半圆绕直径)", cd, 11, 700, "middle");
+        sEl(fig, "circle", { cx: 445, cy: 100, r: 35, fill: "none", stroke: cd, "stroke-width": 1.5 });
+        sEl(fig, "ellipse", { cx: 445, cy: 100, rx: 35, ry: 10, fill: "none", stroke: cd, "stroke-width": 1.2, "stroke-dasharray": "3 2" });
+        sEl(fig, "line", { x1: 445, y1: 60, x2: 445, y2: 140, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
+
+        status.textContent = "旋转体结构：母线绕轴高速旋转所得，垂直于旋转轴截面必为圆面，过轴截面为轴截面。";
+      } else {
+        // mode === "sect"
+        sTxt(fig, 30, 22, "【空间截面两规律】边数 ≤ 总面数；相对平行面被截交线必互相平行", cd, 12, 700);
+
+        // Cube with cut plane (x: 50~230)
+        sTxt(fig, 140, 42, "正方体截面 (边数 3~6)", ca, 11, 700, "middle");
+        // Cube outline
+        sEl(fig, "polygon", { points: "90,65 150,65 180,45 120,45", fill: "none", stroke: mut, "stroke-width": 1.2 });
+        sEl(fig, "polygon", { points: "90,135 150,135 180,115 120,115", fill: "none", stroke: mut, "stroke-width": 1.2 });
+        sEl(fig, "line", { x1: 90, y1: 65, x2: 90, y2: 135, stroke: mut, "stroke-width": 1.2 });
+        sEl(fig, "line", { x1: 150, y1: 65, x2: 150, y2: 135, stroke: mut, "stroke-width": 1.2 });
+        sEl(fig, "line", { x1: 180, y1: 45, x2: 180, y2: 115, stroke: mut, "stroke-width": 1.2 });
+
+        // Cut section: hexagon
+        sEl(fig, "polygon", { points: "90,95 120,65 165,55 180,80 150,135 105,125", fill: isDark ? "rgba(236,72,153,0.2)" : "rgba(219,39,119,0.15)", stroke: cd, "stroke-width": 2 });
+        sTxt(fig, 140, 160, "最多截出六边形 (对边必平行)", cd, 10.5, 700, "middle");
+
+        sTxt(fig, 270, 55, "• 截面边数上限：截面多边形边数 ≤ 多面体总面数 F", cc, 12, 700);
+        sTxt(fig, 270, 85, "• 三棱锥（4面）最多截出四边形，绝无五边形！", cd, 12, 700);
+        sTxt(fig, 270, 115, "• 正方体相对面平行，截出的对边必然平行", ca, 12);
+        sTxt(fig, 270, 145, "• 正方体截面绝不可能是正五边形（两组对边平行）", cb, 12, 700);
+
+        status.textContent = "截面规律：截面由平面与多面体各面的交线围成，边数不超面数，平行面交线必平行。";
+      }
+    }
+
+    function drawTrap() {
+      if (!trap) return;
+      trap.innerHTML = "";
+      sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
+      sTxt(trap, 170, 24, "侧棱汇交对比：真正棱台必须汇交于顶点！", cd, 11.5, 700, "middle");
+
+      // Left: True frustum
+      sTxt(trap, 80, 44, "【真棱台】交于一点 P", cc, 10.5, 700, "middle");
+      sEl(trap, "polygon", { points: "65,80 95,80 102,72 72,72", fill: "none", stroke: cc, "stroke-width": 1.2 });
+      sEl(trap, "polygon", { points: "55,125 105,125 115,115 65,115", fill: "none", stroke: cc, "stroke-width": 1.2 });
+      sEl(trap, "line", { x1: 65, y1: 80, x2: 55, y2: 125, stroke: cc, "stroke-width": 1.2 });
+      sEl(trap, "line", { x1: 95, y1: 80, x2: 105, y2: 125, stroke: cc, "stroke-width": 1.2 });
+      // extend lines to P
+      sEl(trap, "line", { x1: 65, y1: 80, x2: 80, y2: 55, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
+      sEl(trap, "line", { x1: 95, y1: 80, x2: 80, y2: 55, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
+      sEl(trap, "circle", { cx: 80, cy: 55, r: 2.5, fill: cd });
+      sTxt(trap, 80, 140, "四条侧棱交于 P ✓", cc, 10, 700, "middle");
+
+      sEl(trap, "line", { x1: 165, y1: 35, x2: 165, y2: 140, stroke: border, "stroke-width": 1 });
+
+      // Right: Fake frustum
+      sTxt(trap, 245, 44, "【伪棱台】各奔东西不相交", cd, 10.5, 700, "middle");
+      sEl(trap, "polygon", { points: "230,80 260,80 270,72 240,72", fill: "none", stroke: cd, "stroke-width": 1.2 });
+      sEl(trap, "polygon", { points: "220,125 275,125 282,115 228,115", fill: "none", stroke: cd, "stroke-width": 1.2 });
+      sEl(trap, "line", { x1: 230, y1: 80, x2: 220, y2: 125, stroke: cd, "stroke-width": 1.2 });
+      sEl(trap, "line", { x1: 260, y1: 80, x2: 275, y2: 125, stroke: cd, "stroke-width": 1.2 });
+      // extend lines do not meet
+      sEl(trap, "line", { x1: 230, y1: 80, x2: 240, y2: 52, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
+      sEl(trap, "line", { x1: 260, y1: 80, x2: 250, y2: 52, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
+      sTxt(trap, 245, 140, "不交于同点 ✗ 不是棱台", cd, 10, 700, "middle");
+    }
+
+    var currMode = "prism";
+    [].forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.onclick = function () {
+        var m = b.getAttribute("data-poly");
+        if (m) {
+          currMode = m;
+          [].forEach.call(bar.querySelectorAll("button"), function (btn) {
+            btn.classList.toggle("active", btn === b);
+          });
+          drawPoly(currMode);
+        }
+      };
+    });
+
+    drawPoly("prism");
+    drawTrap();
+  }
+
+  initStep2();
+  epDraw();
 })();
 </script>
 </body>

@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .grid { stroke: var(--line); stroke-width: 1; }
@@ -44,8 +46,16 @@
 <p class="lead">五个最常见的函数 \(y=x,\ x^2,\ x^3,\ \sqrt x,\ \dfrac1x\)：先看定义域，再看图象，再用图象比大小。先从几个身边的量开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>取 \(x=4\)，算一算下面四个量（单位先不管）：</p>
+  <p>取 \(x=4\)，算一算下面四个量（单位先不管）。点下面卡片或按钮对比它们的几何大小：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-pow" viewBox="0 0 520 195" role="img" aria-label="当x等于4时四个幂函数几何意义的四格视觉对比卡"></svg>
+    <div class="entry-bar" id="entry-pow-bar">
+      <button type="button" data-m="A">A 正方形面积 4²=16</button>
+      <button type="button" data-m="B" class="on">B 正方体体积 4³=64</button>
+      <button type="button" data-m="C">C 面积4的边长 √4=2</button>
+      <button type="button" data-m="D">D 平分蛋糕 1/4=0.25</button>
+    </div>
+    <div class="entry-note" id="entry-pow-note"></div>
     <p>哪一个最大？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>边长 \(4\) 的正方形的面积</button>
@@ -62,48 +72,46 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：3.1 的定义域（<a href="b1-3-1.html">回看 3.1</a>）；3.2 的单调性和奇偶性（<a href="b1-3-2.html">回看 3.2</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「五大典型幂函数交于 (1,1)」建立直觉</h3>
+  <p class="small">要用到：3.1 的定义域（<a href="b1-3-1.html">回看 3.1</a>）；3.2 的单调性和奇偶性（<a href="b1-3-2.html">回看 3.2</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>幂、底数、指数</b>：\(a^n\) 叫 \(a\) 的 \(n\) 次幂，\(a\) 是<b>底数</b>，\(n\) 是<b>指数</b>。</p>
-    <p>例：\(2^3=2\times2\times2=8\)，底数 \(2\)，指数 \(3\)；\(3^2=9\)，底数 \(3\)，指数 \(2\)。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>第一象限五大典型幂函数展翅交汇</b></p>
+    <div class="entry-bar" id="m-pow-bar" role="group" aria-label="幂函数微图解切换">
+      <button type="button" class="on" data-k="pt">① 关键定点 (1,1)（1的任何次幂恒为1，五线必交于此！）</button>
+      <button type="button" data-k="low">② 区间 0 < x < 1（小底数多次方越乘越小：x³ < x² < x < √x）</button>
+      <button type="button" data-k="high">③ 区间 x > 1（大底数多次方暴涨起飞：√x < x < x² < x³）</button>
+    </div>
+    <svg class="micro-fig" id="m-pow-fig" viewBox="0 0 520 160" role="img" aria-label="五大幂函数第一象限展翅微图解"></svg>
+    <p class="entry-note" id="m-pow-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">结构特征</span><b>幂函数 \(y=x^\alpha\) vs 指数函数 \(y=a^x\)</b></p>
+      <p class="small" style="margin:0">底数是自变量 \(x\) 的才是幂函数！系数必须纯净为 1，常数项必须为 0！形如 \(y=2^x\) 是指数函数（第 4 章），\(y=2x^2\) 或 \(y=x^2+1\) 绝非幂函数！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">高低翻转</span><b>以 (1,1) 为界，五大图象高低次序完全逆转！</b></p>
+      <p class="small" style="margin:0">在 \((0,1)\) 内，多次方「越乘越小」，小指数在上方、大指数在下方；一旦跨过 \(x=1\)，多次方「爆炸增长」，大指数在上、小指数在下！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心数学定义与性质总览表</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{y = x^\alpha,\quad \alpha \in \{1, 2, 3, \tfrac{1}{2}, -1\}}_{\text{标准幂函数：系数为 1，不加常数项，必过 (1,1) 定点}}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{0&lt;x&lt;1:\ x^3 &lt; x^2 &lt; x &lt; \sqrt{x}}_{\text{小底数多乘缩小：指数小者居上}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{x&gt;1:\ \sqrt{x} &lt; x &lt; x^2 &lt; x^3}_{\text{大底数多乘暴增：指数大者居上}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>指数是 \(\tfrac12\) 和 \(-1\)</b>：先记两个写法，第 4 章再讲为什么。</p>
-    <ul>
-      <li>\(x^{\frac12}=\sqrt x\)：平方后等于 \(x\) 的那个非负数。例：\(9^{\frac12}=\sqrt9=3\)。</li>
-      <li>\(x^{-1}=\dfrac1x\)：\(x\) 的倒数。例：\(4^{-1}=\dfrac14\)，\(\left(\dfrac12\right)^{-1}=2\)。</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <p><b>定义域</b>：让式子有意义的 \(x\) 的全体。</p>
-    <p>例：\(\sqrt x\) 在 \(x=-4\) 时没有意义（没有实数平方后等于 \(-4\)），所以 \(-4\) 不在它的定义域里；\(\dfrac1x\) 在 \(x=0\) 时没有意义（分母是 \(0\)）。</p>
-  </div>
-
-  <div class="card">
-    <p><b>单调区间</b>：函数在这一段上一直增（或一直减），这一段就是它的单调区间。</p>
-    <p>例：\(y=x^2\) 在 \([0,+\infty)\) 上，\(1&lt;2\) 时 \(1^2=1&lt;2^2=4\)，是增；在 \((-\infty,0]\) 上，\(-2&lt;-1\) 时 \((-2)^2=4&gt;(-1)^2=1\)，是减。同一个函数，换一段，增减可能不一样。</p>
-  </div>
-
-  <h3>2. 什么叫幂函数</h3>
-  <p>形如 \(y=x^\alpha\) 的函数叫<b>幂函数</b>：底数是自变量 \(x\)，指数 \(\alpha\) 是一个固定的常数，前面没有系数、后面不加常数。这一节只研究 \(\alpha=1,2,3,\tfrac12,-1\) 这五个：</p>
-  <div class="key">\(y=x,\quad y=x^2,\quad y=x^3,\quad y=x^{\frac12}=\sqrt x,\quad y=x^{-1}=\dfrac1x\)</div>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么判断）</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（辨别幂函数）</b></p>
     <p>下面哪些是幂函数：\(y=x^3\)，\(y=3x\)，\(y=x^2+1\)，\(y=\dfrac1x\)，\(y=2^x\)，\(y=\sqrt x\)？</p>
     <p>逐个看是不是「\(x^\alpha\)，前面系数是 \(1\)，后面不加东西」：</p>
-    <ul>
-      <li>\(y=x^3\)：是，\(\alpha=3\)。</li>
-      <li>\(y=3x\)：多了系数 \(3\)，不是。</li>
-      <li>\(y=x^2+1\)：后面加了 \(1\)，不是。</li>
-      <li>\(y=\dfrac1x=x^{-1}\)：是，\(\alpha=-1\)。</li>
-      <li>\(y=2^x\)：底数固定是 \(2\)，指数在变，是第 4 章的指数函数，不是。</li>
-      <li>\(y=\sqrt x=x^{\frac12}\)：是，\(\alpha=\tfrac12\)。</li>
-    </ul>
+    <p>\(y=x^3\)、\(y=\dfrac1x=x^{-1}\)、\(y=\sqrt x=x^{\frac12}\) 是；\(y=3x\)（系数不是 1）、\(y=x^2+1\)（加了常数）、\(y=2^x\)（指数在变）不是。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：下面哪个是幂函数？</p>
     <div class="opts cols">
@@ -115,25 +123,19 @@
     <div class="reveal"><p><b>B</b>，\(\dfrac1x=x^{-1}\)。A 多加了 \(1\)，D 多了系数 \(3\)。选 C 最常见：\(2^x\) 里变的是指数，底数不动，和幂函数正好反过来。</p></div>
   </div>
 
-  <h3>3. 定义域、图象和性质</h3>
-  <p>画图、求值、比大小之前，先问「\(x\) 能取哪些数」。</p>
   <div class="scroll"><table class="tb">
     <tr><th>函数</th><th>\(x\)</th><th>\(x^2\)</th><th>\(x^3\)</th><th>\(\sqrt x\)</th><th>\(\dfrac1x\)</th></tr>
     <tr><th>定义域</th><td>\(\R\)</td><td>\(\R\)</td><td>\(\R\)</td><td>\([0,+\infty)\)</td><td>\(x\ne0\)</td></tr>
     <tr><th>值域</th><td>\(\R\)</td><td>\([0,+\infty)\)</td><td>\(\R\)</td><td>\([0,+\infty)\)</td><td>\(y\ne0\)</td></tr>
     <tr><th>奇偶性</th><td>奇</td><td>偶</td><td>奇</td><td>非奇非偶</td><td>奇</td></tr>
   </table></div>
-  <p>\(\sqrt x\) 的定义域只在 \(0\) 的右边，不关于原点对称，谈不上奇偶，图象只有第一象限那一条。</p>
-  <p><b>单调性</b>：\(y=x\)、\(y=x^3\)、\(y=\sqrt x\) 在各自定义域上都是增函数；\(y=x^2\) 在 \((-\infty,0]\) 上递减、在 \([0,+\infty)\) 上递增，最小值 \(0\)；\(y=\dfrac1x\) 在 \((-\infty,0)\) 上递减，在 \((0,+\infty)\) 上<b>也</b>递减（两段要分开说，第 6 块讲）。</p>
-  <p><b>公共点</b>：五个图象都过 \((1,1)\)，因为 \(1\) 的任何次幂都是 \(1\)。前四个还过原点；\(\dfrac1x\) 在 \(0\) 处没定义，图象碰不到两条坐标轴。</p>
+
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（\(y=x^3\) 全貌分析）</b></p>
     <p>说出 \(y=x^3\) 的定义域、值域、奇偶性、单调性。</p>
-    <p>定义域：任何实数都能连乘三次，是 \(\R\)。</p>
-    <p>列几个点：\(x=-2,-1,0,1,2\) 时 \(y=-8,-1,0,1,8\)。负数的立方是负数，正数的立方是正数，值能取遍所有实数，值域 \(\R\)。</p>
-    <p>奇偶性：\((-x)^3=-x^3\)，即 \(f(-x)=-f(x)\)，是奇函数，图象关于原点对称。</p>
-    <p>单调性：上面的点从左到右一直往上，\(x\) 越大 \(x^3\) 越大，在 \(\R\) 上是增函数。</p>
+    <p>定义域与值域均为 \(\mathbf{R}\)。\((-x)^3=-x^3=-f(x)\)，为<b>奇函数</b>，图象关于原点对称；在 \(\mathbf{R}\) 上单调递增，且过点 \((0,0)\) 与 \((1,1)\)。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="B">
     <p>自己试试：\(y=x^2\) 在哪个区间上递减？</p>
     <div class="opts cols">
@@ -145,15 +147,13 @@
     <div class="reveal"><p><b>B</b>。取 \(-3&lt;-1\)：\((-3)^2=9&gt;(-1)^2=1\)，自变量变大、函数值变小。选 C 是把增区间当成了减区间；选 D 是只想着「越乘越大」，忘了负数那一边。</p></div>
   </div>
 
-  <h3>4. 第一象限里谁高谁低</h3>
-  <p>只看 \(x&gt;0\)。乘以一个比 \(1\) 小的正数会变小，乘以一个比 \(1\) 大的数会变大。\(x^2=x\cdot x\)，\(x^3=x^2\cdot x\)：多乘一次 \(x\) 往哪边走，看 \(x\) 比 \(1\) 大还是小。\(\sqrt x\) 正好反过来：\((\sqrt x)^2=x\)，所以 \(\sqrt x\) 和 \(x\) 的大小关系，跟 \(x\) 和 \(x^2\) 一样。</p>
-  <div class="key">\(0&lt;x&lt;1\) 时：\(x^3&lt;x^2&lt;x&lt;\sqrt x\)，且 \(\dfrac1x&gt;1\)。<br>\(x&gt;1\) 时：\(\sqrt x&lt;x&lt;x^2&lt;x^3\)，且 \(0&lt;\dfrac1x&lt;1\)。<br>以 \(x=1\) 为界，顺序整个翻过来。</div>
   <div class="card">
-    <p class="small">例 3</p>
+    <p class="small" style="margin:0 0 4px"><b>例 3（高低翻转检验）</b></p>
     <p>分别取 \(x=4\) 和 \(x=\dfrac14\)，把五个函数值从小到大排。</p>
-    <p>\(x=4\)：\(\sqrt4=2\)，\(4\)，\(4^2=16\)，\(4^3=64\)，\(\dfrac14\)。顺序 \(\dfrac14&lt;2&lt;4&lt;16&lt;64\)，即 \(\dfrac1x&lt;\sqrt x&lt;x&lt;x^2&lt;x^3\)。</p>
-    <p>\(x=\dfrac14\)：\(x^3=\dfrac1{64}\)，\(x^2=\dfrac1{16}\)，\(x=\dfrac14\)，\(\sqrt x=\dfrac12\)，\(\dfrac1x=4\)。顺序 \(x^3&lt;x^2&lt;x&lt;\sqrt x&lt;\dfrac1x\)，和上面正好相反。</p>
+    <p>\(x=4\)（&gt;1）：\(\dfrac14 &lt; 2 &lt; 4 &lt; 16 &lt; 64\)，即 \(\dfrac1x &lt; \sqrt x &lt; x &lt; x^2 &lt; x^3\)。</p>
+    <p>\(x=\dfrac14\)（&lt;1）：顺序正好相反：\(x^3 &lt; x^2 &lt; x &lt; \sqrt x &lt; \dfrac1x\)。</p>
   </div>
+
   <div class="card predict" data-id="try-3" data-answer="B">
     <p>自己试试：\(x=\dfrac19\) 时，\(\sqrt x\) 等于？</p>
     <div class="opts cols">
@@ -165,15 +165,28 @@
     <div class="reveal"><p><b>B</b>。\(\left(\dfrac13\right)^2=\dfrac19\)。\(\dfrac13&gt;\dfrac19\)，正好印证「\(0&lt;x&lt;1\) 时 \(\sqrt x&gt;x\)」。选 A 是做成了平方，选 C 是除以了 \(2\)，选 D 是求成了倒数再开方。</p></div>
   </div>
 
-  <h3>5. 用性质比大小</h3>
-  <p>比较两个幂，先看能不能看成「同一个函数在两个点的值」，再用这个函数的单调性。</p>
-  <div class="key">比大小三步：认出是哪个函数 → 看清定义域和单调区间 → 两个自变量放进<b>同一个</b>单调区间再比。</div>
+  <h3>3. 三步破题思维链：利用单调性比大小</h3>
   <div class="card">
-    <p class="small">例 4</p>
-    <p>(1) 比较 \(1.2^3\) 和 \(1.3^3\)。两个都是 \(y=x^3\) 的值，它在 \(\R\) 上递增，\(1.2&lt;1.3\)，所以 \(1.2^3&lt;1.3^3\)。</p>
-    <p>(2) 比较 \((-1.3)^2\) 和 \(1.2^2\)。都是 \(y=x^2\) 的值，但 \(-1.3\) 和 \(1.2\) 不在同一个单调区间。\(y=x^2\) 是偶函数，\((-1.3)^2=1.3^2\)；在 \([0,+\infty)\) 上递增，\(1.3&gt;1.2\)，所以 \((-1.3)^2&gt;1.2^2\)（验算：\(1.69&gt;1.44\)）。</p>
-    <p>(3) 比较 \(0.3^2\) 和 \(0.3\)。底数相同，\(0&lt;0.3&lt;1\)，用第 4 块的顺序：\(x^2&lt;x\)，所以 \(0.3^2&lt;0.3\)（\(0.09&lt;0.3\)）。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（示范：利用单调性比大小三步法思维链）</b></p>
+    <p style="margin:0 0 8px">比较 \((-1.3)^2\) 和 \(1.2^2\)，以及 \(0.3^2\) 和 \(0.3\) 的大小。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步认出原型函数：</span>
+        两组分别对应幂函数 \(y=x^2\) 的两个值，以及底数同为 \(0.3\) 的幂大小。
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步利用对称性归入同侧单调区间：</span>
+        因为 \(y=x^2\) 是偶函数，所以 \((-1.3)^2=1.3^2\)。把两数统一归入递增区间 \([0,+\infty)\)。<br>
+        在 \([0,+\infty)\) 上 \(y=x^2\) 递增，且 \(1.3 &gt; 1.2\)，故 \(1.3^2 &gt; 1.2^2\)。
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步跨 1 临界法则下结论：</span>
+        第二组中，底数 \(0&lt;0.3&lt;1\)，小底数多次方越乘越小，故 \(0.3^2 &lt; 0.3\)！<br>
+        结论：\((-1.3)^2 &gt; 1.2^2\)，\(0.3^2 &lt; 0.3\)。
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-4" data-answer="A">
     <p>自己试试：比较 \(\dfrac1{2.5}\) 和 \(\dfrac1{3.1}\)。</p>
     <div class="opts cols">
@@ -181,24 +194,57 @@
       <button class="opt" data-v="B"><b>B</b>\(\dfrac1{2.5}&lt;\dfrac1{3.1}\)</button>
       <button class="opt" data-v="C"><b>C</b>相等</button>
     </div>
-    <div class="reveal"><p><b>A</b>。都是 \(y=\dfrac1x\) 的值，它在 \((0,+\infty)\) 上递减，\(2.5&lt;3.1\)，所以 \(\dfrac1{2.5}&gt;\dfrac1{3.1}\)（\(0.4&gt;0.32\cdots\)）。选 B 是照搬了「自变量大，值就大」，那只对增函数成立。</p></div>
+    <div class="reveal"><p><b>A</b>。都是 \(y=\dfrac1x\) 的值，它在 \((0,+\infty)\) 上递减，\(2.5&lt;3.1\)，所以 \(\dfrac1{2.5}&gt;\dfrac1{3.1}\)。选 B 是照搬了「自变量大，值就大」，那只对增函数成立。</p></div>
   </div>
 
-  <h3>6. 用之前，注意这几件事</h3>
-  <ol>
-    <li><b>先看定义域</b>：作图、求值、比大小之前先定 \(x\) 的范围；几个式子加在一起，定义域取交集。<br><span class="small">反例：\(\sqrt x+\dfrac1x\) 在 \(x=0\) 时，\(\sqrt0\) 有意义，可 \(\dfrac10\) 没有意义，所以 \(0\) 不在定义域里。</span></li>
-    <li><b>\(\dfrac1x\) 两段分别递减，不能连成一段</b>：要说「在 \((-\infty,0)\) 和 \((0,+\infty)\) 上分别递减」，不写「在定义域上递减」，也不用 \(\cup\) 并起来；画图时两支不连。<br><span class="small">反例：\(-1&lt;1\)，可 \(\dfrac1{-1}=-1&lt;\dfrac11=1\)，自变量变大、函数值也变大。</span></li>
-    <li><b>比大小要在同一个单调区间里</b>：\(y=x^2\) 不是在整个 \(\R\) 上递增。<br><span class="small">反例：\(-2&lt;1\)，可 \((-2)^2=4&gt;1^2=1\)。</span></li>
-    <li><b>只研究这五个</b>：一般的 \(x^\alpha\)（如 \(x^{\frac23}\)、\(x^{-2}\)）要等第 4 章学完实数指数幂；现在也不拿指数、对数、导数来解释。<br><span class="small">反例：\(y=2^x\) 长得像，可它是指数函数；\(y=2x^2\) 多了系数，也不是幂函数。</span></li>
-    <li><b>放进实际问题，写单位和范围</b>：边长 \(a\) 米的正方形，面积 \(S=a^2\) 平方米，这里 \(a&gt;0\)，在这个范围里 \(S\) 随 \(a\) 增大而增大。<br><span class="small">反例：不写 \(a&gt;0\)，只看 \(S=a^2\)，它在 \(\R\) 上并不单调，「边长越大面积越大」就说不出来。</span></li>
-  </ol>
-  <div class="key">先定义域，再单调区间，最后才比大小；\(\dfrac1x\) 的两支永远分开说。</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>看到形如 2^x 或 2x^2 误当成幂函数</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：把 \(y=2^x\) 当作幂函数，或者认为 \(y=3x^2\) 也是标准幂函数。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：底数在变才是幂函数！\(y=2^x\) 指数在变是<b>指数函数</b>；幂函数系数必须纯净为 1，\(y=3x^2\) 多了系数，绝非幂函数！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>比大小时两数不在同侧单调区间，强套单调性</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：由 \(-2&lt;1\)，盲目套用递增性质写出 \((-2)^2&lt;1^2\)。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：\(y=x^2\) 在原点左侧递减、右侧递增！不在同一个单调区间，绝不能直接比大小，必须先用偶函数性质化为同号（\((-2)^2=2^2&gt;1^2\)）！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-cross-fig" viewBox="0 0 280 140" role="img" aria-label="幂函数交叉微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>将反比例函数单调性写在定义域或并集 ∪ 上</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：写成 \(y=\dfrac1x\) 在 \((-\infty,0)\cup(0,+\infty)\) 上单调递减。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：跨原点单调性失效！\(-1&lt;1\) 但 \(f(-1)=-1&lt;1=f(1)\)，两支完全不连贯，只能用「和」分开书写，<b>严禁使用并集符号 \(\cup\)</b>！
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>研究函数的路线</b>：这一节走的是 定义（什么样子叫幂函数）→ 图象（画出来看）→ 性质（定义域、单调性、奇偶性、特殊点）→ 用性质解题。第 4 章的指数函数、对数函数也照这条路走。</p>
-    <p><b>\(\sqrt x\) 和 \(x^2\) 的图象</b>：把 \(y=x^2\) 在 \(x\ge0\) 的那一半沿直线 \(y=x\) 翻过去，正好是 \(y=\sqrt x\)。因为点 \((2,4)\) 在 \(y=x^2\) 上，就有 \((4,2)\) 在 \(y=\sqrt x\) 上，横纵坐标对调。</p>
-    <p><b>为什么 \(\dfrac1x\) 碰不到坐标轴</b>：\(x=0\) 没定义，碰不到 \(y\) 轴；\(\dfrac1x\) 永远不是 \(0\)，碰不到 \(x\) 轴。\(x\) 越接近 \(0\)，\(\left|\dfrac1x\right|\) 越大（\(\dfrac1{0.01}=100\)）；\(x\) 越大，\(\dfrac1x\) 越接近 \(0\)。</p>
+    <p><b>\(\sqrt x\) 和 \(x^2\) 的图象</b>：把 \(y=x^2\) 在 \(x\ge0\) 的那一半沿直线 \(y=x\) 翻过去，正好是 \(y=\sqrt x\)。点 \((2,4)\) 在 \(y=x^2\) 上，就有 \((4,2)\) 在 \(y=\sqrt x\) 上，横纵坐标对调。</p>
+    <p><b>为什么 \(\dfrac1x\) 碰不到坐标轴</b>：\(x=0\) 没定义，碰不到 \(y\) 轴；\(\dfrac1x\) 永远不是 \(0\)，碰不到 \(x\) 轴。</p>
   </details>
 </section>
 
@@ -274,6 +320,7 @@
       <p>选 B 是只看了 \(\sqrt x\)，忘了 \(x=0\) 时 \(\dfrac1x\) 没意义；选 D 是只看了 \(\dfrac1x\)，忘了负数不能开平方。几个式子加在一起，定义域要取<b>交集</b>。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-parity"></div>
 
   <div class="card predict" data-id="trap-reciprocal" data-answer="B">
     <p>5. 关于 \(y=\dfrac1x\) 的单调性，哪句说法对？</p>
@@ -302,6 +349,7 @@
       <p>\(y=x^2\) 在 \((-\infty,0]\) 上是<b>递减</b>的，\(-0.8&lt;-0.6\) 反而得到 \(c&gt;d\)（\(0.64&gt;0.36\)）。如果照搬「\(x^2\) 是增函数」就会选 B。比大小前先看两个自变量落在哪个单调区间里。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-symm"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -630,8 +678,218 @@
 
   function reset() { ka = 10; kb = 25; active = "a"; draw(); }
   document.getElementById("invreset").addEventListener("click", function () { reset(); log("reset"); });
-  document.addEventListener("DOMContentLoaded", function () { reset(); });
-  if (document.readyState !== "loading") reset();
+
+  /* ---------- 0 从例子进入：x=4 四格幂函数对比 ---------- */
+  var epSvg = document.getElementById("entry-pow"), epBar = document.getElementById("entry-pow-bar"), epNote = document.getElementById("entry-pow-note");
+  function epEl(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || epSvg).appendChild(e); return e;
+  }
+  function epDraw(sel) {
+    epSvg.innerHTML = "";
+    var cards = [
+      { id: "A", title: "A 面积 x²", val: "4² = 16", col: "var(--b)" },
+      { id: "B", title: "B 体积 x³", val: "4³ = 64 ★", col: "var(--c)" },
+      { id: "C", title: "C 边长 √x", val: "√4 = 2", col: "var(--a)" },
+      { id: "D", title: "D 平分 1/x", val: "1/4 = 0.25", col: "var(--hl)" }
+    ];
+    cards.forEach(function (c, idx) {
+      var x = 12 + idx * 126, y = 10, w = 118, h = 174, act = c.id === sel;
+      var g = epEl("g", { style: "cursor:pointer" });
+      epEl("rect", { x: x, y: y, width: w, height: h, rx: 12, fill: act ? "var(--ok-soft)" : "var(--card)", stroke: act ? c.col : "var(--line)", "stroke-width": act ? 2.6 : 1.3 }, g);
+      epEl("text", { x: x + w / 2, y: y + 24, "text-anchor": "middle", "font-weight": 700, fill: c.col, "font-size": 14.5 }, g).textContent = c.title;
+
+      // 图形示意区 (y: 42..136)
+      if (c.id === "A") {
+        // 4x4 网格 (16格)
+        var gx0 = x + 27, gy0 = y + 46, u = 16;
+        epEl("rect", { x: gx0, y: gy0, width: 64, height: 64, fill: "var(--card)", stroke: c.col, "stroke-width": 2 }, g);
+        for (var i = 1; i < 4; i++) {
+          epEl("line", { x1: gx0 + i * u, y1: gy0, x2: gx0 + i * u, y2: gy0 + 64, stroke: c.col, "stroke-opacity": 0.45 }, g);
+          epEl("line", { x1: gx0, y1: gy0 + i * u, x2: gx0 + 64, y2: gy0 + i * u, stroke: c.col, "stroke-opacity": 0.45 }, g);
+        }
+        epEl("text", { x: x + w / 2, y: gy0 + 82, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12.5 }, g).textContent = "4×4 = 16 格";
+      } else if (c.id === "B") {
+        // 4x4x4 正方体块 (64块)
+        var cx = x + 59, cy = y + 78;
+        epEl("path", { d: "M" + cx + " " + (cy - 34) + " L" + (cx + 34) + " " + (cy - 17) + " L" + cx + " " + cy + " L" + (cx - 34) + " " + (cy - 17) + "Z", fill: "var(--ok-soft)", stroke: c.col, "stroke-width": 1.8 }, g);
+        epEl("path", { d: "M" + (cx - 34) + " " + (cy - 17) + " L" + cx + " " + cy + " L" + cx + " " + (cy + 36) + " L" + (cx - 34) + " " + (cy + 19) + "Z", fill: "var(--card)", stroke: c.col, "stroke-width": 1.8 }, g);
+        epEl("path", { d: "M" + cx + " " + cy + " L" + (cx + 34) + " " + (cy - 17) + " L" + (cx + 34) + " " + (cy + 19) + " L" + cx + " " + (cy + 36) + "Z", fill: "var(--bg)", stroke: c.col, "stroke-width": 1.8 }, g);
+        epEl("text", { x: x + w / 2, y: y + 128, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12.5 }, g).textContent = "4×4×4 = 64 块";
+      } else if (c.id === "C") {
+        // 面积4的正方形，边长=2
+        var sx = x + 39, sy = y + 56;
+        epEl("rect", { x: sx, y: sy, width: 40, height: 40, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 1.5 }, g);
+        epEl("line", { x1: sx + 20, y1: sy, x2: sx + 20, y2: sy + 40, stroke: "var(--line)" }, g);
+        epEl("line", { x1: sx, y1: sy + 20, x2: sx + 40, y2: sy + 20, stroke: "var(--line)" }, g);
+        epEl("line", { x1: sx, y1: sy + 40, x2: sx + 40, y2: sy + 40, stroke: c.col, "stroke-width": 4 }, g);
+        epEl("text", { x: x + w / 2, y: y + 128, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12.5 }, g).textContent = "4格正方形边长=2";
+      } else {
+        // 1个圆蛋糕切4份
+        var rx = x + 59, ry = y + 76, r = 28;
+        epEl("circle", { cx: rx, cy: ry, r: r, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 1.5 }, g);
+        epEl("path", { d: "M" + rx + " " + ry + " L" + (rx + r) + " " + ry + " A" + r + " " + r + " 0 0 0 " + rx + " " + (ry - r) + " Z", fill: c.col, opacity: 0.75, stroke: c.col, "stroke-width": 1.8 }, g);
+        epEl("line", { x1: rx - r, y1: ry, x2: rx + r, y2: ry, stroke: "var(--muted)" }, g);
+        epEl("line", { x1: rx, y1: ry - r, x2: rx, y2: ry + r, stroke: "var(--muted)" }, g);
+        epEl("text", { x: x + w / 2, y: y + 128, "text-anchor": "middle", fill: "var(--muted)", "font-size": 12.5 }, g).textContent = "1个蛋糕分4份";
+      }
+
+      epEl("text", { x: x + w / 2, y: y + 158, "text-anchor": "middle", "font-weight": 700, fill: act ? c.col : "var(--fg)", "font-size": 15 }, g).textContent = c.val;
+      g.onclick = function () { epDraw(c.id); };
+    });
+
+    [].forEach.call(epBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === sel);
+    });
+    var notes = {
+      A: "<b>A 正方形面积 x²</b>：边长 4 的正方形含 <b>4² = 16</b> 个小方格。",
+      B: "<b>B 正方体体积 x³</b>：棱长 4 的正方体含 <b>4³ = 64</b> 个小方块，在四个量里<b>最大</b>！",
+      C: "<b>C 面积 4 的正方形边长 √x</b>：什么数的平方等于 4？<b>√4 = 2</b>。",
+      D: "<b>D 平分蛋糕 1/x</b>：1 个蛋糕分给 4 个人，每人分到 <b>1/4 = 0.25</b> 个（最小）。"
+    };
+    epNote.innerHTML = notes[sel] + "　大小顺序：<b>1/4 &lt; 2 &lt; 16 &lt; 64</b>";
+  }
+  [].forEach.call(epBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { epDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry" && ev.detail.choice) epDraw(ev.detail.choice);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") epDraw("B");
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { epDraw("B"); reset(); initStep2(); });
+  if (document.readyState !== "loading") { epDraw("B"); reset(); initStep2(); }
+
+  // Step 2 Vivid Visualizations
+  function initStep2() {
+    var pFig = document.getElementById("m-pow-fig");
+    var pBar = document.getElementById("m-pow-bar");
+    var pNote = document.getElementById("m-pow-note");
+    var cFig = document.getElementById("m-cross-fig");
+    if (!pFig) return;
+
+    var NS = "http://www.w3.org/2000/svg";
+    function el(tag, attrs, parent) {
+      var elem = document.createElementNS(NS, tag);
+      for (var k in attrs) elem.setAttribute(k, attrs[k]);
+      if (parent) parent.appendChild(elem);
+      return elem;
+    }
+
+    function drawPow(mode) {
+      pFig.innerHTML = "";
+      var ox = 70, oy = 130, ux = 120, uy = 60;
+      if (mode === "low") {
+        el("rect", { x: ox, y: 15, width: ux, height: oy - 15, fill: "var(--warn-soft)", opacity: "0.4" }, pFig);
+        el("text", { x: 335, y: 24, "text-anchor": "middle", fill: "var(--warn)", "font-size": "11.5", "font-weight": "700" }, pFig).textContent = "0 < x < 1 小底数多乘缩小区";
+      } else if (mode === "high") {
+        el("rect", { x: ox + ux, y: 15, width: 280, height: oy - 15, fill: "var(--ok-soft)", opacity: "0.4" }, pFig);
+        el("text", { x: ox + ux + 165, y: 16, "text-anchor": "middle", fill: "var(--ok)", "font-size": "11.5", "font-weight": "700" }, pFig).textContent = "x > 1 大底数多乘暴增区";
+      }
+
+      el("line", { x1: ox - 20, y1: oy, x2: 480, y2: oy, stroke: "var(--line)", "stroke-width": "1.5" }, pFig);
+      el("line", { x1: ox, y1: oy + 10, x2: ox, y2: 15, stroke: "var(--line)", "stroke-width": "1.5" }, pFig);
+      el("text", { x: 485, y: oy + 4, fill: "var(--muted)", "font-size": "11" }, pFig).textContent = "x";
+      el("text", { x: ox - 10, y: 18, fill: "var(--muted)", "font-size": "11" }, pFig).textContent = "y";
+      el("text", { x: ox - 10, y: oy + 12, fill: "var(--muted)", "font-size": "11" }, pFig).textContent = "0";
+
+      el("line", { x1: ox + ux, y1: oy, x2: ox + ux, y2: 15, stroke: "var(--line)", "stroke-dasharray": "3 3" }, pFig);
+      el("line", { x1: ox, y1: oy - uy, x2: 480, y2: oy - uy, stroke: "var(--line)", "stroke-dasharray": "3 3" }, pFig);
+      el("text", { x: ox + ux, y: oy + 15, fill: "var(--muted)", "font-size": "11", "text-anchor": "middle" }, pFig).textContent = "1";
+      el("text", { x: ox - 10, y: oy - uy + 4, fill: "var(--muted)", "font-size": "11", "text-anchor": "end" }, pFig).textContent = "1";
+
+      el("line", { x1: ox, y1: oy, x2: ox + 180, y2: oy - 90, stroke: "var(--muted)", "stroke-width": "1.5", "stroke-dasharray": "4 3" }, pFig);
+      el("path", { d: "M" + ox + " " + oy + " Q" + (ox + 70) + " " + (oy - 10) + " " + (ox + ux) + " " + (oy - uy) + " T" + (ox + 160) + " " + (oy - 107), fill: "none", stroke: "var(--b)", "stroke-width": "2" }, pFig);
+      el("path", { d: "M" + ox + " " + oy + " Q" + (ox + 90) + " " + (oy - 5) + " " + (ox + ux) + " " + (oy - uy) + " Q" + (ox + 130) + " " + (oy - 95) + " " + (ox + 140) + " 15", fill: "none", stroke: "var(--c)", "stroke-width": "2" }, pFig);
+      el("path", { d: "M" + ox + " " + oy + " Q" + (ox + 50) + " " + (oy - 55) + " " + (ox + ux) + " " + (oy - uy) + " Q" + (ox + 220) + " " + (oy - 85) + " 460 " + (oy - 110), fill: "none", stroke: "var(--a)", "stroke-width": "2" }, pFig);
+      el("path", { d: "M" + (ox + 35) + " 15 Q" + (ox + 60) + " " + (oy - 45) + " " + (ox + ux) + " " + (oy - uy) + " Q" + (ox + 240) + " " + (oy - 25) + " 460 " + (oy - 15), fill: "none", stroke: "var(--hl)", "stroke-width": "2" }, pFig);
+
+      el("text", { x: 465, y: oy - 110, fill: "var(--a)", "font-size": "11", "font-weight": "700" }, pFig).textContent = "y=√x";
+      el("text", { x: 465, y: oy - 15, fill: "var(--hl)", "font-size": "11", "font-weight": "700" }, pFig).textContent = "y=1/x";
+      el("text", { x: ox + 132, y: 24, "text-anchor": "end", fill: "var(--c)", "font-size": "11", "font-weight": "700" }, pFig).textContent = "y=x³";
+      el("text", { x: ox + 168, y: oy - 98, fill: "var(--b)", "font-size": "11", "font-weight": "700" }, pFig).textContent = "y=x²";
+
+      if (mode === "pt") {
+        el("circle", { cx: ox + ux, cy: oy - uy, r: "7", fill: "var(--hl)", stroke: "#fff", "stroke-width": "2" }, pFig);
+        el("text", { x: ox + ux + 12, y: oy - uy - 8, fill: "var(--hl)", "font-size": "13", "font-weight": "800" }, pFig).textContent = "定点 (1, 1)";
+        el("text", { x: ox + ux + 12, y: oy - uy + 10, fill: "var(--fg)", "font-size": "11" }, pFig).textContent = "1 的任何次方都是 1，五线交于一点！";
+      } else if (mode === "low") {
+        var x0 = ox + 55;
+        el("line", { x1: x0, y1: oy, x2: x0, y2: 20, stroke: "var(--warn)", "stroke-width": "1.5", "stroke-dasharray": "2 2" }, pFig);
+        el("circle", { cx: x0, cy: oy - 102, r: "4", fill: "var(--hl)" }, pFig);
+        el("circle", { cx: x0, cy: oy - 42, r: "4", fill: "var(--a)" }, pFig);
+        el("circle", { cx: x0, cy: oy - 28, r: "4", fill: "var(--muted)" }, pFig);
+        el("circle", { cx: x0, cy: oy - 15, r: "4", fill: "var(--b)" }, pFig);
+        el("circle", { cx: x0, cy: oy - 5, r: "4", fill: "var(--c)" }, pFig);
+        el("text", { x: x0 + 8, y: oy - 98, fill: "var(--hl)", "font-size": "11" }, pFig).textContent = "1/x 最高";
+        el("text", { x: x0 + 8, y: oy - 42, fill: "var(--a)", "font-size": "11" }, pFig).textContent = "√x 次高";
+        el("text", { x: x0 + 8, y: oy - 5, fill: "var(--c)", "font-size": "11" }, pFig).textContent = "x³ 垫底";
+      } else if (mode === "high") {
+        var x1 = ox + ux + 60;
+        el("line", { x1: x1, y1: oy, x2: x1, y2: 20, stroke: "var(--ok)", "stroke-width": "1.5", "stroke-dasharray": "2 2" }, pFig);
+        el("circle", { cx: x1, cy: 40, r: "4", fill: "var(--c)" }, pFig);
+        el("circle", { cx: x1, cy: oy - 80, r: "4", fill: "var(--b)" }, pFig);
+        el("circle", { cx: x1, cy: oy - 55, r: "4", fill: "var(--a)" }, pFig);
+        el("circle", { cx: x1, cy: oy - 25, r: "4", fill: "var(--hl)" }, pFig);
+        el("text", { x: x1 + 8, y: 44, fill: "var(--c)", "font-size": "11" }, pFig).textContent = "x³ 暴涨最高";
+        el("text", { x: x1 + 8, y: oy - 25, fill: "var(--hl)", "font-size": "11" }, pFig).textContent = "1/x 垫底";
+      }
+
+      var notes = {
+        pt: "<b>定点 (1,1) 是分界枢纽</b>：因为 \\(1^\\alpha = 1\\)，所有幂函数图象在第一象限都穿过 \\((1,1)\\)。",
+        low: "<b>在 (0, 1) 内（小底数多次方越乘越小）</b>：\\(x^3 &lt; x^2 &lt; x &lt; \\sqrt{x} &lt; \\dfrac{1}{x}\\)，指数越小图象越高！",
+        high: "<b>在 (1, +\\infty) 内（大底数多次方爆炸暴增）</b>：\\(\\dfrac{1}{x} &lt; \\sqrt{x} &lt; x &lt; x^2 &lt; x^3\\)，指数越大图象越高！"
+      };
+      if (pNote) pNote.innerHTML = notes[mode] || "";
+      if (pBar) {
+        [].forEach.call(pBar.querySelectorAll("button"), function (b) {
+          b.classList.toggle("on", b.getAttribute("data-k") === mode);
+        });
+      }
+    }
+
+    if (pBar) {
+      [].forEach.call(pBar.querySelectorAll("button"), function (b) {
+        b.onclick = function () { drawPow(b.getAttribute("data-k")); };
+      });
+    }
+
+    function drawCrossTrap() {
+      if (!cFig) return;
+      cFig.innerHTML = "";
+      var ox = 140, oy = 110;
+      el("line", { x1: 20, y1: oy, x2: 260, y2: oy, stroke: "var(--line)", "stroke-width": "1.2" }, cFig);
+      el("line", { x1: ox, y1: oy + 10, x2: ox, y2: 15, stroke: "var(--line)", "stroke-width": "1.2" }, cFig);
+      el("text", { x: 265, y: oy + 4, fill: "var(--muted)", "font-size": "10" }, cFig).textContent = "x";
+      el("text", { x: ox - 8, y: 15, fill: "var(--muted)", "font-size": "10" }, cFig).textContent = "y";
+
+      el("path", { d: "M50 20 Q140 120 230 20", fill: "none", stroke: "var(--b)", "stroke-width": "2" }, cFig);
+
+      el("circle", { cx: 60, cy: 30, r: "4", fill: "var(--no)" }, cFig);
+      el("text", { x: 50, y: 22, fill: "var(--no)", "font-size": "9.5", "font-weight": "700" }, cFig).textContent = "A(-2, 4)";
+      el("line", { x1: 60, y1: oy, x2: 60, y2: 30, stroke: "var(--line)", "stroke-dasharray": "2 2" }, cFig);
+      el("text", { x: 60, y: oy + 12, fill: "var(--muted)", "font-size": "9", "text-anchor": "middle" }, cFig).textContent = "-2";
+
+      el("circle", { cx: 180, cy: 85, r: "4", fill: "var(--fg)" }, cFig);
+      el("text", { x: 190, y: 92, fill: "var(--fg)", "font-size": "9.5" }, cFig).textContent = "B(1, 1)";
+      el("line", { x1: 180, y1: oy, x2: 180, y2: 85, stroke: "var(--line)", "stroke-dasharray": "2 2" }, cFig);
+      el("text", { x: 180, y: oy + 12, fill: "var(--muted)", "font-size": "9", "text-anchor": "middle" }, cFig).textContent = "1";
+
+      el("path", { d: "M60 30 L180 85", stroke: "var(--no)", "stroke-width": "1.5", "stroke-dasharray": "3 2" }, cFig);
+      el("text", { x: 110, y: 68, fill: "var(--no)", "font-size": "9.5", "font-weight": "700", "text-anchor": "middle" }, cFig).textContent = "❌ 跨原点硬套递增";
+
+      el("circle", { cx: 220, cy: 30, r: "4", fill: "var(--ok)" }, cFig);
+      el("text", { x: 225, y: 24, fill: "var(--ok)", "font-size": "9.5", "font-weight": "700" }, cFig).textContent = "A'(2, 4)";
+      el("path", { d: "M60 30 Q140 5 220 30", fill: "none", stroke: "var(--ok)", "stroke-width": "1.5", "stroke-dasharray": "2 2" }, cFig);
+      el("text", { x: 140, y: 40, fill: "var(--ok)", "font-size": "9.5", "font-weight": "700", "text-anchor": "middle" }, cFig).textContent = "✅ 偶函数对称折返";
+    }
+
+    drawPow("pt");
+    drawCrossTrap();
+  }
 })();
 </script>
 </body></html>

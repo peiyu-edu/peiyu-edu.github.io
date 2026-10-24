@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
@@ -27,8 +29,16 @@
 <p class="lead">一个点加一个方向，就定下一条直线。把它写成关于 \(x\)、\(y\) 的等式，有五种常见写法：点斜式是基础，另外四种是它的特例或变形，各有写不出来的时候。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>水箱里原来有 \(1\) 升水，打开水龙头后每分钟流进 \(2\) 升。用 \(x\) 表示分钟数，\(y\) 表示水量（升）。</p>
+  <p>水箱里原来有 \(1\) 升水，打开水龙头后每分钟流进 \(2\) 升。用 \(x\) 表示分钟数，\(y\) 表示水量（升）。点下面的时间按钮，看左边水箱水位与右边坐标点的同步变化：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-tank" viewBox="0 0 520 205" role="img" aria-label="左侧水箱水位随时间上升，右侧坐标系描出(0,1),(1,3),(2,5),(3,7)连成直线"></svg>
+    <div class="entry-bar" id="entry-tank-bar">
+      <button type="button" data-t="0">x = 0 分钟 (1升)</button>
+      <button type="button" data-t="1" class="on">x = 1 分钟 (3升)</button>
+      <button type="button" data-t="2">x = 2 分钟 (5升)</button>
+      <button type="button" data-t="3">x = 3 分钟 (7升)</button>
+    </div>
+    <div class="entry-note" id="entry-tank-note"></div>
     <p>\(3\) 分钟后，水箱里有多少升水？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(6\)</button>
@@ -45,28 +55,50 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：2.1 的倾斜角与斜率，特别是两点求斜率 \(k=\dfrac{y_2-y_1}{x_2-x_1}\)（\(x_1\ne x_2\)）（<a href="e1-2-1.html">回看 2.1</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：点斜式和斜截式默认斜率存在；截距式还要求两个截距都非零。竖直线统一用一般式或 \(x=x_0\) 表示。</p></div>
 
-  <div class="card">
-    <p><b>直线的方程</b>：一个关于 \(x\)、\(y\) 的等式，直线上每个点的坐标都满足它，满足它的点也都在直线上。</p>
-    <p>例：\(y=2x+1\)。点 \((1,3)\) 代进去 \(3=2+1\)，成立，在直线上；点 \((1,4)\) 代进去 \(4\ne3\)，不在。</p>
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：五种直线方程形态与适用范围</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="point">① 点斜式与斜截式</button>
+      <button type="button" class="micro-tab" data-mode="inter">② 截距式与两点式</button>
+      <button type="button" class="micro-tab" data-mode="gen">③ 全能一般式矩阵</button>
+    </div>
+    <svg id="m-line-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="直线方程几何直观图解"></svg>
+    <div class="micro-caption" id="m-line-cap"></div>
   </div>
 
   <div class="card">
-    <p><b>斜率</b>（2.1 学过）：往右走 \(1\)，往上（负数就是往下）走多少。</p>
-    <p>例：过 \((1,2)\)、\((3,8)\)，\(k=\dfrac{8-2}{3-1}=3\)。过 \((2,1)\)、\((2,5)\) 时 \(x_2-x_1=0\)，这条直线是<b>竖直</b>的，没有斜率。</p>
+    <p><b>直线的方程</b>：一个关于 \(x\)、\(y\) 的代数等式，直线上每个点的坐标都满足它，满足它的点也都在直线上。</p>
+    <p>例：\(y=2x+1\)。点 \((1,3)\) 代入 \(3=2+1\) 成立，在直线上；点 \((1,4)\) 代入 \(4\ne3\)，不在直线上。</p>
   </div>
 
   <div class="card">
-    <p><b>截距</b>：直线和 \(y\) 轴交于 \((0,b)\)，\(b\) 叫<b>纵截距</b>（在 \(y\) 轴上的截距）；和 \(x\) 轴交于 \((a,0)\)，\(a\) 叫<b>横截距</b>。</p>
-    <p>例：\(y=2x-4\)。令 \(x=0\) 得 \(y=-4\)，纵截距是 \(-4\)；令 \(y=0\) 得 \(x=2\)，横截距是 \(2\)。</p>
-    <p>截距是交点的<b>坐标</b>，可正可负可为 \(0\)，不是长度：这里的纵截距是 \(-4\)，不是 \(4\)。</p>
+    <p><b>截距</b>：直线和 \(y\) 轴交点 \((0,b)\) 的纵坐标 \(b\) 叫<b>纵截距</b>；和 \(x\) 轴交点 \((a,0)\) 的横坐标 \(a\) 叫<b>横截距</b>。</p>
+    <p>例：\(y=2x-4\)。令 \(x=0\) 得纵截距 \(b=-4\)；令 \(y=0\) 得横截距 \(a=2\)。<b>截距是坐标不是距离</b>，可正可负可为 \(0\)！</p>
   </div>
 
-  <div class="card">
-    <p><b>竖直、水平直线</b>：竖直直线上每个点横坐标相同，方程是 \(x=x_0\)；水平直线方程是 \(y=y_0\)，斜率 \(0\)。</p>
-    <p>例：过 \((3,-1)\) 的竖直直线是 \(x=3\)，水平直线是 \(y=-1\)。</p>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">局限辨析</span> 四种特殊方程 vs 全能一般式 \(Ax+By+C=0\)</div>
+      <p><b>特殊方程局限</b>：点斜式、斜截式要求<b>斜率存在</b>（无法表示竖直线 \(x=x_0\)）；两点式要求分母非零；截距式要求 \(a,b\ne0\)（<b>无法表示过原点</b>或平行于轴的直线）。</p>
+      <p><b>一般式兜底</b>：\(Ax+By+C=0\)（\(A,B\) 不同时为 \(0\)），能表示平面内<b>任何直线</b>，无需分类讨论斜率。</p>
+      <p class="small">做题法则：设方程时优先考虑特殊位置；拿不准时用一般式兜底。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">概念辨析</span> 截距（有向坐标） vs 距离（非负长度）</div>
+      <p><b>截距</b>：交点的真实坐标值，例如 \(x-y-3=0\) 的纵截距为 \(-3\)，横截距为 \(3\)。</p>
+      <p><b>围成面积</b>：直线与两坐标轴围成的直角三角形面积为 \(S = \frac12 |a||b|\)，<b>必须加绝对值</b>。</p>
+      <p class="small">高考命题陷阱：题干说「截距相等」，包含 \(a=b\ne0\) 与 \(a=b=0\)（过原点）两大类！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.8;">
+    点斜式与斜截式：\(y - \color{#2563eb}{y_0} = \color{#dc2626}{k}(x - \color{#2563eb}{x_0}) \quad\Longrightarrow\quad y = \color{#dc2626}{k}x + \color{#059669}{b} \quad (k \text{ 存在})\)<br>
+    截距式与一般式：\(\dfrac{x}{\color{#2563eb}{a}} + \dfrac{y}{\color{#059669}{b}} = 1 \quad (ab \ne 0);\quad \color{#2563eb}{A}x + \color{#059669}{B}y + \color{#dc2626}{C} = 0 \quad (A^2+B^2\ne0)\)
   </div>
 
   <h3>2. 点斜式与斜截式</h3>
@@ -88,6 +120,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。\(x_0=-1\)，\(x-x_0=x-(-1)=x+1\)。选 C 的同学把 \(x-(-1)\) 写成了 \(x-1\)；选 B 是两个坐标的符号都弄反了。代 \(x=-1\) 验算：A 得 \(y=2\)，对。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 两点式与截距式</h3>
   <p>知道两个点 \((x_1,y_1)\)、\((x_2,y_2)\)，先求斜率，再用点斜式，就是两点式。写成对称的样子：</p>
@@ -108,6 +141,7 @@
     </div>
     <div class="reveal"><p><b>B</b>。\(-\dfrac y2=\dfrac y{-2}\)，所以 \(b=-2\)。直接令 \(x=0\) 也行：\(-\dfrac y2=1\)，\(y=-2\)。选 A 的同学把截距当成了长度，丢了负号。</p></div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 一般式</h3>
   <p>上面每种写法，移项后都是 \(Ax+By+C=0\) 的样子；竖直直线 \(x=x_0\) 也是（\(B=0\)）。所以<b>任何直线都能写成一般式</b>。反过来：</p>
@@ -132,25 +166,82 @@
     </div>
     <div class="reveal"><p><b>B</b>。移项 \(y=-3x+6\)。选 A 的同学直接读了 \(x\) 前面的 \(3\)，忘了移到另一边要变号；用公式 \(-\dfrac AB=-\dfrac31\) 也是 \(-3\)。</p></div>
   </div>
-  <div class="key">五种写法的关系：点斜式是基础；斜截式是点取在 \(y\) 轴上的点斜式；两点式是先算斜率的点斜式；截距式是点取在两条轴上的两点式；一般式能装下所有直线。</div>
 
-  <h3>5. 用之前，查这几件事</h3>
-  <p>写方程前先看三种特殊直线：<b>竖直的</b>、<b>水平的</b>、<b>过原点的</b>。每种写法都有它写不出的直线：</p>
-  <ol>
-    <li><b>点斜式、斜截式要斜率存在。</b><br><span class="small">反例：过 \((2,1)\) 的竖直直线 \(x=2\)，没有 \(k\)，写不成 \(y-1=k(x-2)\)。</span></li>
-    <li><b>两点式另外要 \(x_1\ne x_2\) 且 \(y_1\ne y_2\)。</b><br><span class="small">反例：过 \((1,3)\)、\((4,3)\)，分母 \(y_2-y_1=0\)，两点式写不出；这条是水平直线 \(y=3\)。</span></li>
-    <li><b>截距式要 \(a\ne0\)，\(b\ne0\)。</b><br><span class="small">反例：\(y=2x\) 过原点，两个截距都是 \(0\)，\(\dfrac x0\) 没有意义；\(y=3\) 平行于 \(x\) 轴，根本没有横截距。过原点的、平行于坐标轴的直线都没有截距式。</span></li>
-    <li><b>截距是有符号的坐标，不是长度。</b><br><span class="small">反例：\(x+y+2=0\) 的两个截距都是 \(-2\)；它和两轴围成的三角形，两条直角边长是 \(|-2|=2\)。</span></li>
-    <li><b>一般式要 \(A\)、\(B\) 不同时为 \(0\)。</b><br><span class="small">反例：\(0x+0y+1=0\) 没有一个点满足，\(0x+0y+0=0\) 每个点都满足，都不是直线。</span></li>
-    <li><b>设 \(y=kx+b\) 或 \(y-y_0=k(x-x_0)\) 之前，先说清楚竖直直线有没有漏掉。</b><br><span class="small">反例：求过 \((1,2)\)、横截距为 \(1\) 的直线。设 \(y-2=k(x-1)\)，令 \(y=0\) 得 \(x=1-\dfrac2k\)，要等于 \(1\) 解不出 \(k\)。可是答案存在：竖直直线 \(x=1\)。</span></li>
-  </ol>
-  <div class="key">先问：竖直吗？水平吗？过原点吗？再选写法。拿不准就用一般式，它什么直线都能写。</div>
+  <h3>5. 三步破题思维链：求直线方程解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>审清几何条件：是过定点、斜率已知，还是截距关系（截距相等、截距互为相反数、两截距之和/积为定值）。特别警惕：<b>题目是否可能包含特殊直线？</b></p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 过定点：先检验斜率不存在的竖直线 \(x=x_0\) 是否满足；斜率存在时设点斜式 \(y-y_0=k(x-x_0)\)；<br>
+        ② 截距关系：先检验过原点直线 \(y=kx\)（截距均为 0 往往成立）；不过原点时再设截距式 \(\frac{x}{a}+\frac{y}{b}=1\)；<br>
+        ③ 若题目涉及两线平行或垂直，直接利用一般式系数字段比：\(A_1x+B_1y+C_1=0\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>① 截距相等必查 \(a=b=0\)（过原点），高考漏此解直接扣一半分！<br>
+        ② 求斜率或倾斜角范围时，若涉及竖直线，必须分开两段书写，切勿把间断处连成一段闭区间。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>6. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：设截距式遗漏「过原点」漏解</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>求在两坐标轴上截距相等的直线，直接设 \(\frac{x}{a}+\frac{y}{a}=1\)，只算出一解</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>截距皆为 \(0\) 时同样满足相等条件！过原点直线 \(y=kx\) 也是合法解</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：设点斜式漏掉竖直线</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>过定点 \((2,1)\) 直接设方程为 \(y-1=k(x-2)\)，遗漏斜率不存在的 \(x=2\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>必先检验斜率不存在的竖直线 \(x=2\) 是否符合题意，再设点斜式</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：把截距当距离致面积错漏绝对值</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>直线与两轴交于 \((a,0),(0,b)\)，直接算面积 \(S=\frac12 ab\)，结果出现负数</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>截距是坐标可为负数，三角形边长为绝对值，面积恒为 \(S=\frac12 |a||b|\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：截距相等两类解几何对比</div>
+    <svg id="m-line-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="截距相等反例图解"></svg>
+    <div class="micro-caption">「截距相等」包含两类情况：① 不过原点，\(a=b\ne0\)，直线斜率恒为 \(-1\)；② 过原点，\(a=b=0\)，直线斜率任意（由所过定点决定）。</div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>不怕分母为 \(0\) 的两点式</b>：把两点式交叉相乘，\((y-y_1)(x_2-x_1)=(x-x_1)(y_2-y_1)\)。只要两点不同，它对竖直、水平直线也成立。例：\((2,1)\)、\((2,5)\) 代进去得 \(0=4(x-2)\)，就是 \(x=2\)。</p>
     <p><b>一般式不唯一</b>：\(2x-3y+6=0\) 两边乘 \(-2\) 得 \(-4x+6y-12=0\)，是同一条直线。比较两条直线时，先化成同样的系数再比。</p>
-    <p><b>方向向量</b>（选学）：直线的方向也可以用一个向量 \((1,k)\) 表示，竖直直线用 \((0,1)\)。用向量写直线，就不必单独讨论斜率存不存在；课本放在「探究与发现」里，有兴趣可以看。</p>
   </details>
 </section>
 
@@ -485,6 +576,199 @@
   document.getElementById("reset2").onclick = reset2;
 
   document.addEventListener("DOMContentLoaded", function () { build1(); reset1(); build2(); reset2(); });
+
+  /* ================= 0 从例子进入：水箱注水与直线描点 ================= */
+  var etSvg = document.getElementById("entry-tank"), etBar = document.getElementById("entry-tank-bar"), etNote = document.getElementById("entry-tank-note");
+  function etDraw(t) {
+    var yVal = 1 + 2 * t, h = [];
+    // 左侧水箱 (x: 42..142, yBottom: 170, 每升 18px, 最大 8 升 = 144px)
+    var tx = 44, tw = 96, tyB = 172, uL = 18;
+    h.push('<text x="' + (tx + tw / 2) + '" y="20" text-anchor="middle" font-weight="700" fill="var(--fg)" font-size="14.5">水箱水量 y = ' + yVal + ' 升</text>');
+    // 原有 1 升底水
+    h.push('<rect x="' + tx + '" y="' + (tyB - uL) + '" width="' + tw + '" height="' + uL + '" fill="var(--hl-soft)" stroke="var(--hl)" stroke-width="1.5"/>');
+    h.push('<text x="' + (tx + tw / 2) + '" y="' + (tyB - 4) + '" text-anchor="middle" fill="var(--b)" font-size="12.5" font-weight="700">原有 1L</text>');
+    // 新增 2t 升水
+    if (t > 0) {
+      var addH = 2 * t * uL;
+      h.push('<rect x="' + tx + '" y="' + (tyB - uL - addH) + '" width="' + tw + '" height="' + addH + '" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="1.5"/>');
+      h.push('<text x="' + (tx + tw / 2) + '" y="' + (tyB - uL - addH / 2 + 5) + '" text-anchor="middle" fill="var(--a)" font-weight="700" font-size="14">+' + (2 * t) + 'L (' + t + '分钟)</text>');
+    }
+    h.push('<rect x="' + tx + '" y="' + (tyB - 8 * uL) + '" width="' + tw + '" height="' + (8 * uL) + '" fill="none" stroke="var(--fg)" stroke-width="2" rx="3"/>');
+    for (var lv = 1; lv <= 7; lv += 2) {
+      var ly = tyB - lv * uL;
+      h.push('<line x1="' + (tx - 5) + '" y1="' + ly + '" x2="' + tx + '" y2="' + ly + '" stroke="var(--fg)"/>');
+      h.push('<text x="' + (tx - 8) + '" y="' + (ly + 4) + '" text-anchor="end" fill="var(--muted)" font-size="13">' + lv + 'L</text>');
+    }
+    // 右侧坐标系 (ox=235, oy=172, ux=68, uy=18)
+    var ox = 235, oy = 172, ux = 68, uy = 18;
+    h.push('<line x1="' + ox + '" y1="' + oy + '" x2="485" y2="' + oy + '" stroke="var(--fg)" stroke-width="1.5"/>');
+    h.push('<line x1="' + ox + '" y1="' + oy + '" x2="' + ox + '" y2="22" stroke="var(--fg)" stroke-width="1.5"/>');
+    h.push('<text x="492" y="' + (oy + 4) + '" fill="var(--muted)" font-size="13.5">x(分)</text>');
+    h.push('<text x="' + (ox - 6) + '" y="20" text-anchor="end" fill="var(--muted)" font-size="13.5">y(升)</text>');
+    // 直线 y = 2x + 1
+    h.push('<line x1="' + ox + '" y1="' + (oy - 1 * uy) + '" x2="' + (ox + 3.4 * ux) + '" y2="' + (oy - 7.8 * uy) + '" stroke="var(--a)" stroke-width="2" stroke-dasharray="5 4"/>');
+    if (t > 0) {
+      h.push('<line x1="' + ox + '" y1="' + (oy - 1 * uy) + '" x2="' + (ox + t * ux) + '" y2="' + (oy - yVal * uy) + '" stroke="var(--a)" stroke-width="3"/>');
+    }
+    for (var i = 0; i <= 3; i++) {
+      var px = ox + i * ux, py = oy - (1 + 2 * i) * uy, act = i === t;
+      h.push('<line x1="' + px + '" y1="' + oy + '" x2="' + px + '" y2="' + (oy + 5) + '" stroke="var(--fg)"/>');
+      h.push('<text x="' + px + '" y="' + (oy + 20) + '" text-anchor="middle" fill="var(--fg)" font-size="13.5">' + i + '</text>');
+      if (i > 0 && i <= t) {
+        var ppx = ox + (i - 1) * ux, ppy = oy - (1 + 2 * (i - 1)) * uy;
+        h.push('<polyline points="' + ppx + ',' + ppy + ' ' + px + ',' + ppy + ' ' + px + ',' + py + '" fill="none" stroke="var(--b)" stroke-width="1.6" stroke-dasharray="3 2"/>');
+        h.push('<text x="' + (px + 5) + '" y="' + ((ppy + py) / 2 + 4) + '" fill="var(--b)" font-size="12.5" font-weight="700">+2</text>');
+      }
+      h.push('<circle cx="' + px + '" cy="' + py + '" r="' + (act ? 6.5 : 4.5) + '" fill="' + (act ? 'var(--hl)' : (i <= t ? 'var(--a)' : 'var(--card)')) + '" stroke="var(--a)" stroke-width="2"/>');
+      h.push('<text x="' + (px - 6) + '" y="' + (py - 9) + '" text-anchor="middle" font-weight="' + (act ? '700' : '400') + '" fill="' + (act ? 'var(--fg)' : 'var(--muted)') + '" font-size="13.5">(' + i + ',' + (1 + 2 * i) + ')</text>');
+    }
+    etSvg.innerHTML = h.join("");
+    [].forEach.call(etBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-t"), 10) === t);
+    });
+    etNote.innerHTML = "当 x = <b>" + t + "</b> 分钟时：水量 y = 1 + 2×<b>" + t + "</b> = <b>" + yVal + " 升</b>，对应直线上点 <b>(" + t + ", " + yVal + ")</b>（每往右 1 格，固定往上 2 格）";
+  }
+  [].forEach.call(etBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { etDraw(parseInt(b.getAttribute("data-t"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") etDraw(3);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") etDraw(1);
+  });
+  etDraw(1);
 })();
+
+
+function initMLineFig(){
+  var svgEl = document.getElementById("m-line-fig");
+  var capEl = document.getElementById("m-line-cap");
+  if (!svgEl) return;
+  var mode = "point";
+  var NS = "http://www.w3.org/2000/svg";
+  var caps = {
+    point: "点斜式与斜截式：过定点 P0(x0, y0)，斜率 k 决定旋转倾角；当点落在 y 轴时化为斜截式 y = kx + b（b 为纵截距）。",
+    inter: "截距式与两点式：截距式 x/a + y/b = 1 直观反映与坐标轴截距，围成直角三角形直角边为 |a| 与 |b|。",
+    gen: "一般式 Ax + By + C = 0：A、B 不同时为 0，能够无死角覆盖平面内任意直线（包括所有水平线与竖直线）。"
+  };
+
+  function s(el, tag, attrs, txt){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt) e.textContent = txt;
+    el.appendChild(e);
+    return e;
+  }
+  function ln(el, x1, y1, x2, y2, c, w, d){
+    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
+    if (d) a["stroke-dasharray"] = d;
+    return s(el, "line", a);
+  }
+  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
+  function tx(el, x, y, txt, c, sz, b, anch){
+    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
+    if (b) a["font-weight"] = "bold";
+    if (anch) a["text-anchor"] = anch;
+    return s(el, "text", a, txt);
+  }
+
+  function draw(){
+    svgEl.innerHTML = "";
+    if (mode === "point") {
+      tx(svgEl, 270, 19, "点斜式 y - y0 = k(x - x0) 与斜截式 y = kx + b", "#0f172a", "12.5", true, "middle");
+      ln(svgEl, 40, 150, 260, 150, "#64748b", 1.5);
+      ln(svgEl, 150, 180, 150, 40, "#64748b", 1.5);
+      tx(svgEl, 265, 154, "x", "#64748b", "11", true);
+      tx(svgEl, 160, 44, "y", "#64748b", "11", true);
+
+      // Line y - y0 = k(x - x0)
+      ln(svgEl, 60, 170, 240, 70, "#2563eb", 2.5);
+      s(svgEl, "circle", {cx:190, cy:98, r:4.5, fill:"#2563eb"});
+      tx(svgEl, 195, 92, "P0(x0, y0)", "#2563eb", "10.5", true);
+
+      // y-intercept (0, b)
+      s(svgEl, "circle", {cx:150, cy:120, r:4, fill:"#059669"});
+      tx(svgEl, 135, 122, "(0, b)", "#059669", "10.5", true, "end");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "点斜与斜截要义", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 点斜式：定点 + 倾斜方向", "#2563eb", "11");
+      tx(svgEl, 325, 120, "• 斜截式：点取在 y 轴 (0, b)", "#059669", "11");
+      tx(svgEl, 325, 142, "• 共同盲区：无法表示竖直线", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 竖直线方程：x = x0", "#d97706", "10.5");
+    } else if (mode === "inter") {
+      tx(svgEl, 270, 24, "截距式 x/a + y/b = 1 几何直观", "#0f172a", "12.5", true, "middle");
+      ln(svgEl, 40, 140, 260, 140, "#64748b", 1.5);
+      ln(svgEl, 100, 180, 100, 40, "#64748b", 1.5);
+
+      // Line crossing (a, 0) and (0, b)
+      s(svgEl, "polygon", {points:"100,140 210,140 100,70", fill:"rgba(37,99,235,0.08)"});
+      ln(svgEl, 70, 50, 240, 160, "#2563eb", 2.5);
+
+      s(svgEl, "circle", {cx:210, cy:140, r:4.5, fill:"#2563eb"});
+      tx(svgEl, 210, 156, "(a, 0)", "#2563eb", "10.5", true, "middle");
+
+      s(svgEl, "circle", {cx:100, cy:70, r:4.5, fill:"#059669"});
+      tx(svgEl, 85, 72, "(0, b)", "#059669", "10.5", true, "end");
+
+      tx(svgEl, 140, 115, "S = ½|ab|", "#dc2626", "11", true);
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "截距式避坑核查", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "① 要求 a ≠ 0 且 b ≠ 0", "#dc2626", "11", true);
+      tx(svgEl, 325, 120, "② 过原点直线无截距式", "#b91c1c", "11", true);
+      tx(svgEl, 325, 142, "③ 与轴平行直线无截距式", "#d97706", "11");
+      tx(svgEl, 325, 164, "④ 截距为坐标，非几何距离", "#059669", "10.5");
+    } else if (mode === "gen") {
+      tx(svgEl, 270, 24, "一般式 Ax + By + C = 0 几何覆盖矩阵", "#0f172a", "12.5", true, "middle");
+      rc(svgEl, 40, 48, 250, 132, "#f1f5f9", "#cbd5e1", 6);
+      tx(svgEl, 55, 74, "系数特征与对应直线形态", "#0f172a", "11.5", true);
+      tx(svgEl, 55, 98, "• B ≠ 0 ⟹ 斜率 k = -A/B，纵截距 -C/B", "#2563eb", "10.5");
+      tx(svgEl, 55, 120, "• B = 0, A ≠ 0 ⟹ 竖直线 x = -C/A", "#dc2626", "10.5", true);
+      tx(svgEl, 55, 142, "• A = 0, B ≠ 0 ⟹ 水平线 y = -C/B", "#059669", "10.5");
+      tx(svgEl, 55, 164, "• C = 0 ⟹ 直线必过原点 (0, 0)", "#d97706", "10.5");
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "全能一般式优势", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 无死角：包揽全部直线", "#059669", "11", true);
+      tx(svgEl, 325, 120, "• 运算整洁：避免分母为 0", "#2563eb", "11");
+      tx(svgEl, 325, 142, "• 平行设定：Ax + By + m = 0", "#d97706", "10.5");
+      tx(svgEl, 325, 164, "• 垂直设定：Bx - Ay + n = 0", "#dc2626", "10.5");
+    }
+
+    if (capEl) capEl.textContent = caps[mode];
+    if (window.renderMathInElement) window.renderMathInElement(capEl);
+  }
+
+  var tabs = document.querySelectorAll(".micro-box .micro-tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      mode = tab.getAttribute("data-mode");
+      draw();
+    });
+  });
+  draw();
+
+  var trapEl = document.getElementById("m-line-trap-fig");
+  if (trapEl) {
+    trapEl.innerHTML = "";
+    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
+    tx(trapEl, 142, 42, "❌ 误区：设截距式遗漏过原点", "#dc2626", "11.5", true, "middle");
+    tx(trapEl, 142, 70, "条件：在两轴截距相等", "#dc2626", "10.5", false, "middle");
+    tx(trapEl, 142, 94, "仅设 x/a + y/a = 1 漏掉 y = kx！", "#b91c1c", "11", true, "middle");
+    tx(trapEl, 142, 130, "原点处截距均为 0 也是截距相等！", "#64748b", "9.5", false, "middle");
+
+    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
+    tx(trapEl, 397, 42, "✔ 严密：分类讨论两类情况", "#15803d", "11.5", true, "middle");
+    tx(trapEl, 397, 70, "① 截距为 0：直线过原点 y = kx", "#059669", "10.5", true, "middle");
+    tx(trapEl, 397, 94, "② 截距不为 0：设 x/a + y/a = 1", "#15803d", "10.5", true, "middle");
+    tx(trapEl, 397, 130, "两类情况合并才是完整解！", "#047857", "10", true, "middle");
+  }
+}
+
+initMLineFig();
 </script>
 </body></html>

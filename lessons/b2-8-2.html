@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 14.5px; margin: 10px 0; min-height: 4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -31,54 +33,83 @@
 <p class="lead">在平面纸张上表现空间几何体的立体感，核心是「斜二测画法」。横向长度不变，纵向长度折半并倾斜 45 度——面积随之缩减为原来的四分之根号二。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>在工程制图或美术素描中，我们要把一个水平放置的正方体纸箱画在平面的纸张或黑板上。</p>
+  <p>在工程制图或美术素描中，我们要把一个水平放置的正方体纸箱（棱长 \(4\)）画在平面的纸张或黑板上。先点下面的两个按钮，亲眼看看顶面画成「正方形」和画成「\(45^\circ\) 平行四边形」的视觉差距：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-cube" viewBox="0 0 520 208" role="img" aria-label="正方体顶面画成正方形与斜二测45度平行四边形的立体感对比"></svg>
+    <div class="entry-bar" id="entry-cube-bar">
+      <button type="button" data-mode="A">A 顶面画成正方形（像正上方俯视平面图，毫无立体感）</button>
+      <button type="button" data-mode="B" class="on">B 斜二测画法：顶面画成 45° 平行四边形（立刻立起来！）</button>
+    </div>
+    <div class="entry-note" id="entry-cube-note"></div>
     <p>为了让看图的人一眼看出纸箱顶面是水平「平铺躺着」的，纸面上画出来的顶面应该是什么几何形状？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>正方形，因为纸箱顶面本来就是正方形</button>
       <button class="opt" data-v="B"><b>B</b>平行四边形，前后边倾斜且比左右边更短</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。如果在纸面上真画成正方形，整个人看过去就会像垂直正上方俯视的平面图，彻底失去了三维纵深与立体感！</p>
-      <p>为了在二维平面上规范、准确地表达空间图形，数学上采用<b>斜二测画法</b>绘制直观图。它既能保留平行性和线段比例，又能产生自然的视觉立体感。这一节我们就来彻底弄清它的作图法则与面积变换规律。</p>
+      <p><b>B</b>。如果在纸面上真画成正方形（切到上方按钮 A 看看），整个人看过去就像垂直正上方俯视的平面图，彻底失去了三维纵深与立体感！</p>
+      <p>为了在二维平面上规范、准确地表达空间图形，数学上采用<b>斜二测画法</b>绘制直观图：<b>横向不变（\(4\)）、纵向折半（\(4\div2=2\)）且倾斜 \(45^\circ\)</b>。它既能保留平行性和线段比例，又能产生自然的视觉立体感。这一节我们就来彻底弄清它的作图法则与面积变换规律。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：8.1 的棱柱、棱锥（<a href="b2-8-1.html">回看 8.1</a>）；初中学过的平面直角坐标系、平行线、三角形和平行四边形的面积。</p>
+  <p class="small">要用到：8.1 的柱锥台球（<a href="b2-8-1.html">回看 8.1</a>）；初中平面直角坐标系、平行线性质与三角形面积公式。</p>
 
-  <div class="card">
-    <p><b>直观图</b>：把立体图形（或平放在桌上的平面图形）画到纸上、让人看出立体感的图。它是「示意图」，不是按真实尺寸画的。</p>
-    <p>例：桌上一张 \(4\times4\) 的正方形纸，画成直观图后是一个边长 \(4\) 和 \(2\) 的平行四边形，看上去像「平躺着」。</p>
+  <div class="micro-box">
+    <div class="micro-head">
+      <span>直观微图解</span>
+      <div class="micro-bar" id="m-ortho-bar">
+        <button class="on" data-m="plane">平面斜二测（横同纵半45°）</button>
+        <button data-m="solid">空间立体图（立高虚线）</button>
+        <button data-m="area">面积换算比（S' = √2/4 · S）</button>
+      </div>
+    </div>
+    <svg id="m-ortho-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <div class="micro-status" id="m-ortho-status">斜二测核心：横向平行不变且长不变，纵向平行 45° 倾斜且长度折半。</div>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">原真实图形</span> 空间真实尺寸与直角</div>
+      <p><b>坐标轴</b>：\(x\) 轴与 \(y\) 轴互相垂直（夹角 \(90^\circ\)）。</p>
+      <p><b>边长与形状</b>：长是长、宽是宽，正方形、矩形有真实垂直对边。</p>
+      <p><b>面积基准</b>：真实面积 \(S_{\text{原}}\)，多边形底高正交计算。</p>
+    </div>
+    <div class="concept-card highlight">
+      <div class="concept-head"><span class="badge-pill accent">斜二测直观图</span> 平面示意与立体透视</div>
+      <p><b>坐标轴</b>：\(x'\) 与 \(y'\) 夹角变为 <b>\(45^\circ\) 或 \(135^\circ\)</b>。</p>
+      <p><b>尺寸规则</b>：<b>横不变</b>（平行于 \(x\) 轴等长）；<b>纵折半</b>（平行于 \(y\) 轴长度减半）；竖直 \(z\) 轴长度不变。</p>
+      <p><b>面积形变</b>：\(S_{\text{直观}} = \dfrac{\sqrt{2}}{4} S_{\text{原}}\)，视觉面积缩减为约 \(0.35\) 倍。</p>
+    </div>
   </div>
 
   <div class="card">
     <p><b>斜二测坐标系</b>：原图里 \(x\) 轴、\(y\) 轴互相垂直；画直观图时，把 \(y\) 轴画斜，让 \(\angle x'O'y'=45^\circ\)（也可以取 \(135^\circ\)）。「斜」指 \(y'\) 轴斜着画，「二测」指两个方向用两种量法（横向照量，纵向折半）。</p>
-    <p>例：原图中 \(\angle xOy=90^\circ\)，直观图里画成 \(\angle x'O'y'=45^\circ\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>竖直的 \(z\) 轴</b>：画立体图形时再加一条 \(z'\) 轴，竖直向上，和 \(x'\) 轴成 \(90^\circ\)，表示「高」的方向。</p>
-    <p>例：一个高 \(3\) 的长方体，竖直的棱在直观图里还是画 \(3\) 长。</p>
+    <p><b>竖直的 \(z\) 轴</b>：画立体图形时再加一条 \(z'\) 轴，竖直向上，和 \(x'\) 轴成 \(90^\circ\)，表示「高」的方向，长度严格保持真实高度不变。</p>
   </div>
 
   <h3>2. 平面图形怎么画：横不变，纵折半</h3>
-  <p>斜二测画法的规则只有三条：</p>
-  <div class="key">① 原图中平行于 \(x\) 轴的线段，直观图里仍平行于 \(x'\) 轴，<b>长度不变</b>；<br>② 原图中平行于 \(y\) 轴的线段，直观图里平行于 \(y'\) 轴，<b>长度变为一半</b>；<br>③ 原来平行的线段画出来仍平行。其余的线段（斜着的边、对角线）不能直接量，要先定出端点再连线。</div>
-  <p>为什么 \(y\) 方向要折半、还画斜：「往远处去」的方向在眼睛里看起来短而且斜，这样画才像平躺着。规则定死了，大家画出来的图才一致，也才能从图反推原图。</p>
+  <p>斜二测画法的铁律只有三条：</p>
+  <div class="key">
+    $$\color{#0284c7}{x'\text{ 轴方向：平行仍平行，长度保持 1 倍不变}}$$
+    $$\color{#d97706}{y'\text{ 轴方向：夹角成 } 45^\circ \text{，长度折半变为 } \frac{1}{2}}$$
+    $$\color{#059669}{z'\text{ 轴方向（空间高）：竖直向上保持 } 90^\circ \text{，高度保持原长}}$$
+    <div style="font-size:12.5px;color:var(--mut, #64748b);margin-top:6px;text-align:center">其余非平行于坐标轴的斜线段（如对角线、斜腰），<b>一律不可直接折半或翻倍</b>，必须先定端点再连线！</div>
+  </div>
 
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>画一个水平放置、边长 \(4\) 的正方形 \(ABCD\) 的直观图。</p>
-    <p>建系：以 \(A\) 为原点，\(AB\) 在 \(x\) 轴上，\(AD\) 在 \(y\) 轴上。</p>
-    <p>画 \(x'\) 轴、\(y'\) 轴，\(\angle x'A'y'=45^\circ\)。</p>
-    <p>\(AB\) 平行 \(x\) 轴：在 \(x'\) 轴上取 \(A'B'=4\)。</p>
-    <p>\(AD\) 平行 \(y\) 轴：在 \(y'\) 轴上取 \(A'D'=\dfrac12\times4=2\)。</p>
-    <p>过 \(D'\) 画 \(D'C'\parallel A'B'\) 且 \(D'C'=4\)，连 \(B'C'\)。</p>
-    <p>得到平行四边形 \(A'B'C'D'\)：两组边长 \(4\) 和 \(2\)，内角 \(45^\circ\) 和 \(135^\circ\)。</p>
+    <p>① 建系：以 \(A\) 为原点，\(AB\) 在 \(x\) 轴上，\(AD\) 在 \(y\) 轴上。</p>
+    <p>② 画轴：画 \(x'\) 轴、\(y'\) 轴，使 \(\angle x'A'y'=45^\circ\)。</p>
+    <p>③ 取点：在 \(x'\) 轴上取 \(A'B'=4\)；在 \(y'\) 轴上取 \(A'D'=\dfrac{1}{2}\times 4 = 2\)。</p>
+    <p>④ 补形：过 \(D'\) 画 \(D'C'\parallel A'B'\) 且 \(D'C'=4\)，连 \(B'C'\)。</p>
+    <p>⑤ 结论：得到平行四边形 \(A'B'C'D'\)：边长 \(4\) 与 \(2\)，内角 \(45^\circ\) 与 \(135^\circ\)。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="C">
     <p>自己试试：原图中有一点 \(P(6,4)\)。画直观图时，从 \(O'\) 出发，先沿 \(x'\) 轴走多远、再沿 \(y'\) 轴方向走多远，才能定出 \(P'\)？</p>
     <div class="opts cols">
@@ -89,18 +120,20 @@
     </div>
     <div class="reveal"><p><b>C</b>。横坐标方向不变，走 \(6\)；纵坐标方向折半，走 \(\dfrac12\times4=2\)。选 A 是忘了折半；选 B 是把两个方向都折半了；选 D 是把面积公式里的 \(\sin45^\circ\) 混进了长度规则。</p></div>
   </div>
+  <div class="vid" data-video="ex-recov"></div>
 
-  <h3>3. 立体图形怎么画：先画底，再立高</h3>
-  <p>立体图形的直观图分两步：先按上一块的规则画出<b>底面</b>；再从底面的点竖直向上画出<b>高</b>。竖直方向（\(z\) 轴）和 \(x\) 轴一样，<b>长度不变</b>。最后连上顶面，看不见的棱画成虚线。</p>
+  <h3>3. 立体图形画法：先画底面，再立竖高</h3>
+  <p>画立体几何体分两步：先按斜二测画出<b>水平底面</b>，再从关键顶点沿 \(z'\) 轴向上作垂线画出<b>空间高</b>（长度真实不变）。看不见的棱画成<b>虚线</b>。</p>
 
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small">例 2（长方体直观图）</p>
     <p>画一个长 \(4\)、宽 \(2\)、高 \(3\) 的长方体的直观图（长沿 \(x\) 轴，宽沿 \(y\) 轴）。</p>
-    <p>画底面：在 \(x'\) 轴上取 \(A'B'=4\)，在 \(y'\) 轴上取 \(A'D'=\dfrac12\times2=1\)，补成平行四边形 \(A'B'C'D'\)。</p>
-    <p>立高：过 \(A',B',C',D'\) 各画一条竖直线段，长都是 \(3\)，上端记为 \(A_1',B_1',C_1',D_1'\)。</p>
-    <p>连顶面 \(A_1'B_1'C_1'D_1'\)，它和底面形状一样。</p>
-    <p>被挡住的棱（从 \(D'\) 出发的三条）画虚线，其余画实线。</p>
+    <p>① 画底面：在 \(x'\) 轴上取 \(A'B'=4\)，在 \(y'\) 轴上取 \(A'D'=\dfrac{1}{2}\times 2 = 1\)，补成平行四边形 \(A'B'C'D'\)。</p>
+    <p>② 立高：过 \(A',B',C',D'\) 各画一条竖直向上的线段，长都是 \(3\)，上端记为 \(A_1',B_1',C_1',D_1'\)。</p>
+    <p>③ 连顶面：连顶面 \(A_1'B_1'C_1'D_1'\)，与底面完全全等。</p>
+    <p>④ 虚实线：被正面挡住的后方棱（从 \(D'\) 出发的三条）改画为虚线。</p>
   </div>
+
   <div class="card predict" data-id="try-3" data-answer="B">
     <p>自己试试：一个正四棱锥，底面边长 \(2\)，高 \(3\)。画直观图时，从底面中心 \(O'\) 竖直向上画到顶点 \(P'\)，\(O'P'\) 应画多长？</p>
     <div class="opts cols">
@@ -111,24 +144,47 @@
     </div>
     <div class="reveal"><p><b>B</b>。高沿竖直的 \(z\) 轴，长度不变，画 \(3\)。选 A 是把「纵折半」用到了竖直方向——折半只管原图里平行于 \(y\) 轴的线段（底面上「前后」那个方向）。底面画出来是边长 \(2\) 和 \(1\) 的平行四边形。</p></div>
   </div>
+  <div class="vid" data-video="ex-draw"></div>
 
-  <h3>4. 面积怎么变：乘 \(\dfrac{\sqrt2}{4}\)</h3>
-  <p>先看一个底边在 \(x\) 轴上的三角形，底 \(a\)、高 \(h\)（高平行于 \(y\) 轴）。画成直观图：底还是 \(a\)；高那条线段变成 \(\dfrac h2\)，而且斜着 \(45^\circ\)，它真正「垂直于底边的高度」只剩 \(\dfrac h2\cdot\sin45^\circ=\dfrac{\sqrt2}{4}h\)。所以面积变成原来的 \(\dfrac{\sqrt2}{4}\)。任何多边形都能切成这样的三角形，比例一样：</p>
-  <div class="key" style="text-align:center">$$S_{\text{直观}}=\frac{\sqrt2}{4}\,S_{\text{原}}$$$$S_{\text{原}}=2\sqrt2\,S_{\text{直观}}$$</div>
-  <p class="small">\(\dfrac{\sqrt2}{4}\approx0.35\)：直观图比原图小。从直观图倒推原图，要乘 \(2\sqrt2\)，越算越大。</p>
+  <h3>4. 面积转换与三步破题思维链</h3>
+  <div class="key" style="text-align:center">
+    $$\color{#0284c7}{S_{\text{直观}}} = \color{#d97706}{\frac{\sqrt{2}}{4}} \cdot \color{#059669}{S_{\text{原}}} \quad \iff \quad \color{#059669}{S_{\text{原}}} = \color{#d97706}{2\sqrt{2}} \cdot \color{#0284c7}{S_{\text{直观}}}$$
+    <div style="font-size:12.5px;color:var(--mut, #64748b);margin-top:6px">推导本源：底边平行于 \(x\) 轴长度保持 \(a\)；原高 \(h\) 折半为 \(\frac{h}{2}\)，因倾斜 \(45^\circ\)，垂直高度变为 \(\frac{h}{2}\sin 45^\circ = \frac{\sqrt{2}}{4}h\)。底不变高乘 \(\frac{\sqrt{2}}{4}\)，总面积乘 \(\frac{\sqrt{2}}{4}\)！</div>
+  </div>
 
-  <div class="card">
-    <p class="small">例 3（正着算）</p>
-    <p>一个水平放置的梯形，上下底平行于 \(x\) 轴，上底 \(2\)、下底 \(6\)、高 \(4\)。求它直观图的面积。</p>
-    <p>原图面积 \(S_{\text{原}}=\dfrac{2+6}{2}\times4=16\)。</p>
-    <p>\(S_{\text{直观}}=\dfrac{\sqrt2}{4}\times16=4\sqrt2\)。</p>
+  <div class="card think-steps">
+    <div class="small" style="font-weight:700;color:var(--key, #0284c7);margin-bottom:8px">典型题三步思维链：直观图求原平面图形面积与周长</div>
+    <p><b>题目</b>：如图，水平放置的平面图形，其斜二测直观图是一个底角为 \(45^\circ\) 的等腰梯形 \(A'B'C'D'\)，其中 \(A'B'=4\)，\(C'D'=2\)，腰长 \(A'D'=\sqrt{2}\)，且 \(A'B'\) 在 \(x'\) 轴上，\(A'D'\) 在 \(y'\) 轴上。求原平面图形的面积与周长。</p>
+
+    <div class="step-row">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号：</b>
+        直观图的梯形底在 \(x'\) 轴上，腰在 \(y'\) 轴上！认准<b>谁平行于 \(x\) 轴，谁平行于 \(y\) 轴</b>。梯形上下底平行于 \(x\) 轴，腰在 \(y'\) 轴上说明原图中这条腰与底边<b>真正垂直</b>！
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法（还原与求解）：</b>
+        <p>① <b>各边还原</b>：底边 \(AB=A'B'=4\)，\(CD=C'D'=2\)（平行于 \(x\) 轴长度不变）；腰 \(A'D'=\sqrt{2}\) 在 \(y'\) 轴上，原图形中 \(AD \perp AB\)，且长度翻倍：\(AD = 2 \times \sqrt{2} = 2\sqrt{2}\)。原图形是一个<b>直角梯形</b>！</p>
+        <p>② <b>求原图面积</b>：\(S_{\text{原}} = \dfrac{AB + CD}{2} \times AD = \dfrac{4 + 2}{2} \times 2\sqrt{2} = 6\sqrt{2}\)。<br>（验算：直观图高 \(h' = \sqrt{2}\sin 45^\circ = 1\)，\(S_{\text{直观}} = \dfrac{4+2}{2}\times 1 = 3\)，\(S_{\text{原}} = 2\sqrt{2} S_{\text{直观}} = 6\sqrt{2}\)，一致！）</p>
+        <p>③ <b>求原图周长</b>：斜腰 \(BC\) 在原图中由勾股定理求得：底边投影差 \(4 - 2 = 2\)，高 \(2\sqrt{2}\)，故 \(BC = \sqrt{2^2 + (2\sqrt{2})^2} = \sqrt{4 + 8} = 2\sqrt{3}\)！<br>
+        周长 \(P = AB + BC + CD + DA = 4 + 2\sqrt{3} + 2 + 2\sqrt{2} = 6 + 2\sqrt{2} + 2\sqrt{3}\)。</p>
+      </div>
+    </div>
+
+    <div class="step-row">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论：</b>
+        ① 面积还原直接用 \(S_{\text{原}} = 2\sqrt{2}S_{\text{直观}}\)，切勿把比例倒过来乘成 \(\frac{\sqrt{2}}{4}\)；<br>
+        ② <b>斜腰 \(B'C'\) 绝不能直接乘以 2</b>！因为 \(B'C'\) 既不平行于 \(x'\) 轴也不平行于 \(y'\) 轴，它的长度必须通过端点还原后用勾股定理重新计算。
+      </div>
+    </div>
   </div>
-  <div class="card">
-    <p class="small">例 4（倒着算）</p>
-    <p>\(\triangle ABC\) 的直观图 \(\triangle A'B'C'\) 中，\(A'B'\) 在 \(x'\) 轴上，\(A'B'=2\)；\(A'C'\) 在 \(y'\) 轴上，\(A'C'=\sqrt2\)。求原三角形面积。</p>
-    <p>方法一：直观图中 \(C'\) 到 \(A'B'\) 的距离 \(=\sqrt2\sin45^\circ=1\)，\(S_{\text{直观}}=\dfrac12\times2\times1=1\)，所以 \(S_{\text{原}}=2\sqrt2\times1=2\sqrt2\)。</p>
-    <p>方法二：还原。\(AB\) 在 \(x\) 轴上，\(AB=2\)；\(AC\) 在 \(y\) 轴上，\(AC=2\times\sqrt2=2\sqrt2\)，且 \(AC\perp AB\)。\(S_{\text{原}}=\dfrac12\times2\times2\sqrt2=2\sqrt2\)。两种方法一致。</p>
-  </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：一个水平放置的多边形，它的斜二测直观图面积是 \(\sqrt{2}\)。原多边形面积是？</p>
     <div class="opts cols">
@@ -143,20 +199,29 @@
     </div>
   </div>
 
-  <h3>5. 边界：图上看到的不一定是真的</h3>
-  <div class="card">
-    <p><b>① 图上的角不是真的角。</b>原图垂直，图上不一定垂直；图上画成直角，原图也不一定垂直。</p>
-    <p>反例：正方形的直角，在直观图里变成 \(45^\circ\)（例 1）。反过来，原图取 \(A(1,0)\)、\(B(-\sqrt2,4)\)，直观图里 \(B'\) 正好在 \(O'\) 的正上方，\(\angle A'O'B'=90^\circ\)；可原图中 \(\overrightarrow{OA}\cdot\overrightarrow{OB}=-\sqrt2\ne0\)，\(OA\) 和 \(OB\) 并不垂直。</p>
+  <h3>5. 三大翻车现场与反例微图解</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 1</span> 斜线段胡乱套用“纵折半”</div>
+      <p class="wrong">❌ 看到直观图里对角线或斜腰长为 \(L\)，原图就直接猜 \(2L\) 或 \(L\)。</p>
+      <p class="right">✔ <b>铁律</b>：只有平行于 \(x\) 轴或 \(y\) 轴的线段才满足 1 倍或折半！斜线段必须通过定两端点坐标，再在原图中求两点距离。</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 2</span> 面积缩放比例方向乘颠倒</div>
+      <p class="wrong">❌ 直观图求原图乘 \(\dfrac{\sqrt{2}}{4}\)，原图求直观图乘 \(2\sqrt{2}\)。</p>
+      <p class="right">✔ <b>常识检验</b>：直观图是平躺透视，面积必定<b>变小</b>；原图是真实展开，面积必定<b>变大</b>！原图到直观图乘 \(\dfrac{\sqrt{2}}{4}\)，逆推乘 \(2\sqrt{2}\)。</p>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="trap-tag">翻车点 3</span> 直观图上“看着像直角”就当下结论</div>
+      <p class="wrong">❌ 直观图上两条线画成垂直（\(90^\circ\)），就断定原图中也垂直。</p>
+      <p class="right">✔ <b>图上看到的不算数</b>：斜二测是仿射投影变换，<b>不保角</b>！原图垂直在直观图里是 \(45^\circ\)；直观图画成直角，原图夹角必定是钝角或锐角。</p>
+    </div>
   </div>
-  <div class="card">
-    <p><b>② 图上等长不等于原图等长，斜线段的长度也不是「不变」或「折半」。</b></p>
-    <p>反例：边长 \(4\) 的正方形 \(ABCD\)（例 1），两条对角线原来都是 \(4\sqrt2\approx5.66\)。直观图里（以 \(A'\) 为原点、\(x'\) 轴水平）：\(C'(4+\sqrt2,\ \sqrt2)\)，\(B'(4,0)\)，\(D'(\sqrt2,\ \sqrt2)\)，</p>
-    <p>$$A'C'=\sqrt{20+8\sqrt2}\approx5.60$$$$B'D'=\sqrt{20-8\sqrt2}\approx2.95$$</p>
-    <p>原来相等的两条对角线画出来一长一短，而且哪条都不是 \(4\sqrt2\) 的一半。斜线段只能先定端点、再连线。</p>
-  </div>
-  <div class="card">
-    <p><b>③ 只有题目给的条件才算数。</b>从直观图读原图时，只能用「谁平行于哪条轴、长多少」这些规则倒推；不能拿尺子在图上量角、比长短，就下结论。</p>
-    <p>反例：直观图中 \(O'A'=O'B'=2\)，\(O'A'\) 在 \(x'\) 轴上、\(O'B'\) 在 \(y'\) 轴上，看着一样长，原图却是 \(OA=2\)、\(OB=4\)。</p>
+
+  <div class="card" style="margin-top:12px">
+    <div class="small" style="font-weight:700;color:var(--no, #dc2626);margin-bottom:6px">反例微图解：正方形两条对角线在斜二测中的剧烈形变</div>
+    <svg id="m-ortho-trap-fig" viewBox="0 0 520 150" class="micro-fig"></svg>
+    <p class="small" style="color:var(--mut, #64748b);margin-top:4px">原正方形中相等且垂直的两条对角线 \(AC=BD\)，在直观图中变成一条被严重拉长（\(A'C'\approx 5.60\)）、一条被严重压缩（\(B'D'\approx 2.95\)），且完全不再垂直！</p>
   </div>
 
   <details class="more"><summary>再深一点（可以先跳过）</summary>
@@ -633,7 +698,285 @@
   });
 
   render();
+
+  /* ================= 0 从例子进入：正方体顶面视角与斜二测变形 ================= */
+  var ecSvg = document.getElementById("entry-cube"), ecBar = document.getElementById("entry-cube-bar"), ecNote = document.getElementById("entry-cube-note");
+  var ecMode = "B", ecT = 1, ecAnim = null;
+  function ecEl(tag, attrs, p) {
+    var n = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    if (p) p.appendChild(n);
+    return n;
+  }
+  function ecRender(t) {
+    if (!ecSvg) return;
+    ecSvg.innerHTML = "";
+    var isB = ecMode === "B";
+    // 左卡：画法 A 俯视平面图；右卡：动态三维变形预演
+    ecEl("rect", { x: 14, y: 10, width: 214, height: 188, rx: 10, fill: !isB ? "var(--no-soft)" : "var(--card)", stroke: !isB ? "var(--no)" : "var(--line)", "stroke-width": !isB ? 2.2 : 1.2 }, ecSvg);
+    ecEl("text", { x: 121, y: 31, "text-anchor": "middle", "font-size": 13.5, "font-weight": 700, fill: !isB ? "var(--no)" : "var(--fg)" }, ecSvg).textContent = "画法 A：顶面照画成正方形";
+    ecEl("rect", { x: 73, y: 50, width: 96, height: 96, fill: "rgba(217,72,62,0.12)", stroke: "var(--no)", "stroke-width": 2.2 }, ecSvg);
+    ecEl("polyline", { points: "73,134 85,134 85,146", fill: "none", stroke: "var(--no)", "stroke-width": 1.5 }, ecSvg);
+    ecEl("text", { x: 92, y: 142, "font-size": 12, fill: "var(--no)", "font-weight": 700 }, ecSvg).textContent = "90°";
+    ecEl("text", { x: 121, y: 164, "text-anchor": "middle", "font-size": 12.5, fill: "var(--fg)", "font-weight": 600 }, ecSvg).textContent = "横边 4，纵边也是 4";
+    ecEl("text", { x: 121, y: 184, "text-anchor": "middle", "font-size": 12.5, fill: "var(--no)", "font-weight": 700 }, ecSvg).textContent = "✗ 像平面方块，看不出高与纵深";
+
+    ecEl("rect", { x: 242, y: 10, width: 264, height: 188, rx: 10, fill: isB ? "var(--ok-soft)" : "var(--card)", stroke: isB ? "var(--a)" : "var(--line)", "stroke-width": isB ? 2.2 : 1.2 }, ecSvg);
+    ecEl("text", { x: 374, y: 31, "text-anchor": "middle", "font-size": 13.5, "font-weight": 700, fill: isB ? "var(--a)" : "var(--fg)" }, ecSvg).textContent = "画法 B：斜二测画法（动态变形）";
+
+    // 右侧动态正方体：t=0 时顶面是正方形且正立面被压扁为 0；t=1 时顶面是 45° 平行四边形(纵边折半)且正立面高度展开为 S
+    var S = 86;
+    var ox = 316, oy = 96; // 顶面左下角 A'
+    // 顶面纵边向量 (dx, dy)：t=0 时为 (0, -52) 正方形感；t=1 时为 (S*0.5*cos45, -S*0.5*sin45) = (30.4, -30.4)
+    var dx = t * (S * 0.5 * 0.7071);
+    var dy = -(1 - t) * 52 - t * (S * 0.5 * 0.7071);
+    var hz = (1 - t) * 0 + t * 72; // 竖直棱高度
+
+    var T0 = [ox, oy], T1 = [ox + S, oy], T2 = [ox + S + dx, oy + dy], T3 = [ox + dx, oy + dy];
+    var B0 = [T0[0], T0[1] + hz], B1 = [T1[0], T1[1] + hz], B2 = [T2[0], T2[1] + hz], B3 = [T3[0], T3[1] + hz];
+
+    function poly(pts, fill, stroke, w) {
+      var s = pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+      ecEl("polygon", { points: s, fill: fill, stroke: stroke, "stroke-width": w || 2, "stroke-linejoin": "round" }, ecSvg);
+    }
+    function ln(p1, p2, stroke, w, dash) {
+      var a = { x1: p1[0].toFixed(1), y1: p1[1].toFixed(1), x2: p2[0].toFixed(1), y2: p2[1].toFixed(1), stroke: stroke, "stroke-width": w || 2 };
+      if (dash) a["stroke-dasharray"] = dash;
+      ecEl("line", a, ecSvg);
+    }
+
+    if (hz > 2) {
+      // 后方隐藏棱虚线
+      ln(T3, B3, "var(--muted)", 1.4, "3,3");
+      ln(B0, B3, "var(--muted)", 1.4, "3,3");
+      ln(B3, B2, "var(--muted)", 1.4, "3,3");
+      // 正面与右侧面
+      poly([T0, T1, B1, B0], "rgba(47,122,86,0.12)", "var(--a)", 2);
+      poly([T1, T2, B2, B1], "rgba(47,122,86,0.22)", "var(--a)", 2);
+    }
+    // 顶面高亮（平行四边形 vs 正方形）
+    poly([T0, T1, T2, T3], t > 0.5 ? "rgba(217,140,43,0.28)" : "rgba(217,72,62,0.16)", t > 0.5 ? "var(--b)" : "var(--no)", 2.5);
+
+    // 标注顶面内角与边长
+    var degNow = Math.round(90 - 45 * t);
+    ecEl("text", { x: T0[0] + 18, y: T0[1] - 6, "font-size": 12.5, "font-weight": 700, fill: t > 0.5 ? "var(--b)" : "var(--no)" }, ecSvg).textContent = degNow + "°";
+    ecEl("text", { x: (T3[0] + T2[0]) / 2, y: T3[1] - 7, "text-anchor": "middle", "font-size": 12, "font-weight": 700, fill: "var(--fg)" }, ecSvg).textContent = "横不变: 4";
+    ecEl("text", { x: T2[0] + 6, y: (T1[1] + T2[1]) / 2 + 4, "font-size": 12.5, "font-weight": 700, fill: t > 0.5 ? "var(--b)" : "var(--no)" }, ecSvg).textContent = t > 0.5 ? "纵折半: 2" : "纵边: 4";
+    ecEl("text", { x: 374, y: 186, "text-anchor": "middle", "font-size": 12.5, "font-weight": 700, fill: t > 0.5 ? "var(--a)" : "var(--no)" }, ecSvg).textContent = t > 0.5 ? "✓ 顶面画成 45° 平行四边形，正方体立刻立起来！" : "✗ 顶面画成 90° 正方形，丧失立体纵深";
+  }
+
+  function ecSetMode(m) {
+    ecMode = m;
+    var target = m === "B" ? 1 : 0;
+    if (ecAnim) { clearInterval(ecAnim); ecAnim = null; }
+    [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-mode") === m);
+    });
+    if (Math.abs(ecT - target) < 0.02) {
+      ecT = target;
+      ecRender(ecT);
+    } else {
+      ecAnim = setInterval(function () {
+        ecT += (target - ecT) * 0.28;
+        if (Math.abs(ecT - target) < 0.03) {
+          ecT = target;
+          clearInterval(ecAnim);
+          ecAnim = null;
+        }
+        ecRender(ecT);
+      }, 24);
+    }
+    if (m === "A") {
+      ecNote.innerHTML = "当前为 <b>A 顶面画成正方形（90°）</b>：虽然真纸箱顶面确实是正方形，但原样画在纸上就像正上方垂直俯视的平面图，<b>完全看不出纸箱是立体的</b>！";
+    } else {
+      ecNote.innerHTML = "当前为 <b>B 斜二测画法（45° 平行四边形）</b>：顶面<b>横向长度保持 4 不变，前后方向倾斜 45° 且长度折半画成 2</b>，纸箱顶面立刻像水平「平铺躺着」一样立起来了！";
+    }
+  }
+  if (ecBar) {
+    [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
+      b.onclick = function () { ecSetMode(b.getAttribute("data-mode")); };
+    });
+  }
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      ecSetMode(ev.detail.choice === "A" ? "A" : "B");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ecSetMode("B");
+  });
+  ecSetMode("B");
 })();
 </script>
+
+<script>
+(function() {
+  "use strict";
+  var fig = document.getElementById("m-ortho-fig");
+  var bar = document.getElementById("m-ortho-bar");
+  var status = document.getElementById("m-ortho-status");
+  var trap = document.getElementById("m-ortho-trap-fig");
+  if (!fig || !bar) return;
+
+  var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  var ca = isDark ? "#38bdf8" : "#0284c7";
+  var cb = isDark ? "#f59e0b" : "#d97706";
+  var cc = isDark ? "#10b981" : "#059669";
+  var cd = isDark ? "#ec4899" : "#db2777";
+  var mut = isDark ? "#94a3b8" : "#64748b";
+  var bgCard = isDark ? "#1e293b" : "#f1f5f9";
+  var border = isDark ? "#334155" : "#e2e8f0";
+  var NS = "http://www.w3.org/2000/svg";
+
+  function sEl(parent, tag, attrs) {
+    var el = document.createElementNS(NS, tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    parent.appendChild(el);
+    return el;
+  }
+
+  function sTxt(parent, x, y, text, col, sz, fw, anchor) {
+    var t = sEl(parent, "text", {
+      x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
+      "font-weight": fw || 400, "text-anchor": anchor || "start"
+    });
+    t.textContent = text;
+    return t;
+  }
+
+  function drawOrtho(mode) {
+    fig.innerHTML = "";
+    if (mode === "plane") {
+      // 原正方形 vs 直观平行四边形
+      sTxt(fig, 30, 24, "【原平面图形】真实正方形", ca, 12, 700);
+      sEl(fig, "rect", { x: 50, y: 40, width: 80, height: 80, fill: "rgba(2,132,199,0.08)", stroke: ca, "stroke-width": 2 });
+      sTxt(fig, 90, 136, "边长 a", ca, 11.5, 400, "middle");
+      sTxt(fig, 42, 84, "边长 a", ca, 11, 400, "end");
+      sTxt(fig, 90, 84, "直角 90°", ca, 12, 700, "middle");
+
+      sEl(fig, "line", { x1: 175, y1: 80, x2: 215, y2: 80, stroke: cb, "stroke-width": 2, "marker-end": "url(#arr)" });
+      sTxt(fig, 195, 72, "斜二测", cb, 11.5, 700, "middle");
+
+      sTxt(fig, 260, 24, "【斜二测直观图】45° 平行四边形", cb, 12, 700);
+      // 原点 A'(260, 120), B'(340, 120), D'(288, 92), C'(368, 92)
+      // dx = 40 * cos(45) = 28.28, dy = 40 * sin(45) = 28.28
+      var pts = "260,120 340,120 368,92 288,92";
+      sEl(fig, "polygon", { points: pts, fill: "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 2 });
+      sTxt(fig, 300, 136, "横不变: a", cb, 11.5, 700, "middle");
+      sTxt(fig, 260, 102, "纵折半: a/2", cb, 11.5, 700, "end");
+      sTxt(fig, 280, 118, "45°", cd, 11.5, 700);
+
+      // 右侧总结
+      sEl(fig, "rect", { x: 395, y: 30, width: 115, height: 110, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 405, 52, "核心规则：", cb, 12, 700);
+      sTxt(fig, 405, 74, "• x 轴平行: 等长", ca, 11, 600);
+      sTxt(fig, 405, 96, "• y 轴平行: 折半", cb, 11, 600);
+      sTxt(fig, 405, 118, "• 夹角: 45°/135°", cd, 11, 600);
+    } else if (mode === "solid") {
+      // 空间立体画法：长方体直观图
+      sTxt(fig, 30, 24, "【立体画法】先底面后立高（z轴真实高度不变）", cc, 12, 700);
+
+      // 底面 ABCD: A(100, 140), B(180, 140), C(210, 115), D(130, 115)
+      // 高 h = 60
+      // 顶面 A1(100, 80), B1(180, 80), C1(210, 55), D1(130, 55)
+      // 虚线棱: DA, DC, DD1
+      sEl(fig, "line", { x1: 130, y1: 115, x2: 100, y2: 140, stroke: mut, "stroke-width": 1.5, "stroke-dasharray": "4 4" });
+      sEl(fig, "line", { x1: 130, y1: 115, x2: 210, y2: 115, stroke: mut, "stroke-width": 1.5, "stroke-dasharray": "4 4" });
+      sEl(fig, "line", { x1: 130, y1: 115, x2: 130, y2: 55, stroke: mut, "stroke-width": 1.5, "stroke-dasharray": "4 4" });
+
+      // 实线棱
+      sEl(fig, "line", { x1: 100, y1: 140, x2: 180, y2: 140, stroke: cc, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 180, y1: 140, x2: 210, y2: 115, stroke: cc, "stroke-width": 2 });
+
+      sEl(fig, "line", { x1: 100, y1: 140, x2: 100, y2: 80, stroke: cc, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 180, y1: 140, x2: 180, y2: 80, stroke: cc, "stroke-width": 2 });
+      sEl(fig, "line", { x1: 210, y1: 115, x2: 210, y2: 55, stroke: cc, "stroke-width": 2 });
+
+      // 顶面
+      sEl(fig, "polygon", { points: "100,80 180,80 210,55 130,55", fill: "rgba(16,185,129,0.1)", stroke: cc, "stroke-width": 2 });
+
+      sTxt(fig, 140, 154, "底长 a (不变)", ca, 11, 600, "middle");
+      sTxt(fig, 218, 132, "宽 b/2", cb, 11, 600);
+      sTxt(fig, 85, 110, "高 h", cc, 11.5, 700, "end");
+      sTxt(fig, 85, 122, "(真实长)", cc, 10, 400, "end");
+
+      // 右侧三步提示
+      sEl(fig, "rect", { x: 260, y: 30, width: 245, height: 115, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 275, 52, "空间立体图形作图三步曲：", cc, 12, 700);
+      sTxt(fig, 275, 74, "1. 选基底画底面：按斜二测画出水平底面", mut, 11.5);
+      sTxt(fig, 275, 96, "2. 沿 z' 轴立高：过各顶点作竖直垂线，原长不变", mut, 11.5);
+      sTxt(fig, 275, 118, "3. 顺次连顶面，看不见的部分画成虚线", mut, 11.5);
+      sTxt(fig, 275, 136, "★ 铁律：只有沿 y 轴方向才折半，z 轴竖高绝对不折半！", cd, 10.5, 700);
+    } else if (mode === "area") {
+      // 面积比例推导
+      sTxt(fig, 30, 24, "【面积换算】S' = (√2 / 4) · S 的几何真谛", cb, 12, 700);
+
+      // 原图三角形 底 a, 高 h
+      sEl(fig, "polygon", { points: "50,130 130,130 90,50", fill: "rgba(2,132,199,0.08)", stroke: ca, "stroke-width": 1.8 });
+      sEl(fig, "line", { x1: 90, y1: 50, x2: 90, y2: 130, stroke: ca, "stroke-width": 1.2, "stroke-dasharray": "3 3" });
+      sTxt(fig, 90, 144, "底 a", ca, 11, 600, "middle");
+      sTxt(fig, 94, 90, "高 h", ca, 11, 600);
+      sTxt(fig, 90, 40, "原面积 S = 1/2 · a · h", ca, 11.5, 700, "middle");
+
+      // 直观图三角形
+      // 底 a 不变: (200, 130) 到 (280, 130)
+      // 原顶点 (90, 50) 沿 y 轴高 h=80 变成倾斜 45° 长度 40: dx=28.28, dy=28.28 => (228.28, 101.72)
+      sEl(fig, "polygon", { points: "200,130 280,130 228,102", fill: "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 1.8 });
+      sEl(fig, "line", { x1: 228, y1: 102, x2: 228, y2: 130, stroke: cd, "stroke-width": 1.2, "stroke-dasharray": "3 3" });
+      sTxt(fig, 240, 144, "底 a 不变", cb, 11, 600, "middle");
+      sTxt(fig, 232, 118, "h' = h/2 · sin45°", cd, 10, 700);
+      sTxt(fig, 240, 92, "直观图", cb, 11.5, 700, "middle");
+
+      // 右侧换算公式
+      sEl(fig, "rect", { x: 320, y: 30, width: 185, height: 115, rx: 6, fill: bgCard, stroke: border });
+      sTxt(fig, 335, 52, "面积换算核心口诀：", cb, 12, 700);
+      sTxt(fig, 335, 74, "• 正算缩小: S' = (√2 / 4) · S", ca, 11.5, 600);
+      sTxt(fig, 335, 96, "• 逆推放大: S = 2√2 · S'", cb, 11.5, 700);
+      sTxt(fig, 335, 118, "• 倍数系数 ≈ 0.354 (直观)", mut, 11);
+      sTxt(fig, 335, 134, "• 逆推系数 ≈ 2.828 (原图)", mut, 11);
+    }
+  }
+
+  // 绑定 Tab 切换
+  [].forEach.call(bar.querySelectorAll("button"), function(b) {
+    b.onclick = function() {
+      [].forEach.call(bar.querySelectorAll("button"), function(x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var m = b.getAttribute("data-m");
+      drawOrtho(m);
+      if (m === "plane") status.textContent = "斜二测核心：横向平行不变且长不变，纵向平行 45° 倾斜且长度折半。";
+      else if (m === "solid") status.textContent = "立体几何作图：底面按斜二测画出，竖直高严格按实际长度保持不变！";
+      else if (m === "area") status.textContent = "面积缩放铁律：直观图面积等于原面积乘以 √2 / 4；从直观图逆推原面积乘 2√2。";
+    };
+  });
+  drawOrtho("plane");
+
+  // 绘制反例微图解
+  if (trap) {
+    sTxt(trap, 30, 20, "【原正方形】两对角线相等且垂直", ca, 12, 700);
+    sEl(trap, "rect", { x: 60, y: 35, width: 80, height: 80, fill: "none", stroke: border, "stroke-width": 1.5 });
+    // AC & BD
+    sEl(trap, "line", { x1: 60, y1: 115, x2: 140, y2: 35, stroke: cc, "stroke-width": 2 });
+    sEl(trap, "line", { x1: 60, y1: 35, x2: 140, y2: 115, stroke: cc, "stroke-width": 2 });
+    sTxt(trap, 100, 130, "AC = BD = 4√2 ≈ 5.66 (相等)", cc, 11, 600, "middle");
+    sTxt(trap, 100, 75, "垂直 90°", cc, 11, 700, "middle");
+
+    sEl(trap, "line", { x1: 190, y1: 75, x2: 230, y2: 75, stroke: mut, "stroke-width": 2, "marker-end": "url(#arr)" });
+    sTxt(trap, 210, 68, "斜二测", mut, 11, 600, "middle");
+
+    sTxt(trap, 270, 20, "【直观变形】对角线一长一短，不再垂直！", cd, 12, 700);
+    // 直观图 A'(270, 115), B'(350, 115), C'(378, 87), D'(298, 87)
+    sEl(trap, "polygon", { points: "270,115 350,115 378,87 298,87", fill: "none", stroke: border, "stroke-width": 1.5 });
+    // A'C': (270,115) 到 (378,87) -> 拉长
+    sEl(trap, "line", { x1: 270, y1: 115, x2: 378, y2: 87, stroke: cd, "stroke-width": 2.2 });
+    sTxt(trap, 385, 92, "A'C' ≈ 5.60 (拉长)", cd, 11, 700);
+    // B'D': (350,115) 到 (298,87) -> 缩短
+    sEl(trap, "line", { x1: 350, y1: 115, x2: 298, y2: 87, stroke: "#ef4444", "stroke-width": 2.2 });
+    sTxt(trap, 335, 132, "B'D' ≈ 2.95 (大幅压缩)", "#ef4444", 11, 700);
+    sTxt(trap, 326, 96, "≠ 90°", cd, 11, 700);
+  }
+})();
+</script>
+
 </body>
 </html>

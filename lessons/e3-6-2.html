@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -30,8 +32,14 @@
 <section class="step" data-title="从例子进入">
   <p>班级里有 4 位优秀的同学 \(A, B, C, D\) 竞选班委：</p>
   <p>情境 1：推选 2 人，分别担任「正班长」和「副班长」；<br>
-  情境 2：推选 2 人，共同组成「图书整理小组」。</p>
+  情境 2：推选 2 人，共同组成「图书整理小组」。先点下面的按钮对比两种选法：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-perm" viewBox="0 0 520 205" role="img" aria-label="从A、B、C、D四人中选2人：左侧正副班长讲顺序有12种，右侧图书小组不讲顺序有6种"></svg>
+    <div class="entry-bar" id="entry-perm-bar">
+      <button type="button" data-m="all" class="on">对比两种情境总览 (12种 vs 6种)</button>
+      <button type="button" data-m="ab">聚焦 A 和 B：为什么当正副班长算 2 种，进小组只算 1 种？</button>
+    </div>
+    <div class="entry-note" id="entry-perm-note"></div>
     <p>情境 1 和情境 2 最终选出的方案总数是否一样？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>一样多，都是从 4 人中挑选出 2 个人</button>
@@ -46,66 +54,83 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+
   <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：6.1 的分类加法和分步乘法计数原理（<a href="e3-6-1.html">回看 6.1</a>）。本节的公式都是用「分步乘法」一步步数出来的。</p>
+  <p class="small">要用到：6.1 分类加法与分步乘法（<a href="e3-6-1.html">回看 6.1</a>），排列与组合是分步乘法在「选取与排序」问题上的系统化公式。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：先问“换位置算不算新结果”：有职务次序用排列，无次序分组用组合；重复或限制条件不能直接套无条件公式。</p></div>
 
   <div class="card">
-    <p><b>不同元素</b>：参加排队、被挑选的对象两两能区分开。本节的公式只管这种情况，而且<b>每个元素最多用一次</b>（不重复取）。</p>
-    <p>例：\(A,B,C,D\) 四个人是 4 个不同元素；三张一模一样的电影票就不是不同元素，谁拿哪张没有区别。</p>
+    <p><b>排列（有序安排）</b>：从 \(n\) 个不同元素中取出 \(m\) 个（\(m \le n\)），<b>按照一定的顺序排成一列</b>。元素相同但次序不同，就是两种不同的排列。</p>
+    <p>例：选班长和副班长，甲当班长乙当副班长，与乙当班长甲当副班长是两码事，这是排列。</p>
   </div>
 
   <div class="card">
-    <p><b>阶乘</b>：\(n!=n\times(n-1)\times\cdots\times2\times1\)，从 \(n\) 一直乘到 \(1\)。规定 \(0!=1\)。</p>
-    <p>例：\(3!=6\)，\(4!=24\)，\(5!=120\)。还有个好用的写法：\(\dfrac{6!}{4!}=6\times5=30\)，后面相同的部分约掉了。</p>
+    <p><b>组合（无序挑选）</b>：从 \(n\) 个不同元素中取出 \(m\) 个（\(m \le n\)），<b>不管先后顺序，合成一组</b>。只要取出的元素完全相同，不管谁先谁后都是同一种组合。</p>
+    <p>例：选 2 名代表去开会，选出甲和乙，不管先叫谁的名字，代表团成员完全一样，这是组合。</p>
   </div>
 
   <div class="card">
-    <p><b>交换检验</b>：选出的东西里，随便挑两个<b>互换一下</b>，看结果变没变。变了，说明讲顺序；没变，说明不讲顺序。</p>
-    <p>例：甲当正班长、乙当副班长，换成乙正甲副，是另一个方案（变了）；甲乙两人一起去整理图书，换一下还是这两个人（没变）。</p>
+    <p><b>交换检验法</b>：判定排列与组合的黄金法则。取出元素后，<b>将其中任意两个元素交换次序</b>，问自己：「事情的结果发生改变了吗？」</p>
+    <p>• 改变了 \(\Longrightarrow\) <b>排列</b>（如站队、车票、排座位、选职位）；<br>
+    • 没有改变 \(\Longrightarrow\) <b>组合</b>（如握手、组队、选代表、连线段）。</p>
   </div>
-
-  <h3>2. 排列与排列数（讲顺序）</h3>
-  <p>从 \(n\) 个不同元素中取出 \(m\) 个（\(1\le m\le n\)），<b>按顺序排成一列</b>，叫一个<b>排列</b>；所有排列的个数叫<b>排列数</b>，记作 \(A_n^m\)。</p>
-  <p>为什么是下面这个式子：排第 1 个位置有 \(n\) 种选法；第 1 个用掉了，第 2 个位置剩 \(n-1\) 种；……第 \(m\) 个位置剩 \(n-m+1\) 种。分步相乘：</p>
-  <div class="key">$$A_n^m=n(n-1)\cdots(n-m+1)$$ 用阶乘写：$$A_n^m=\frac{n!}{(n-m)!}$$</div>
-  <p>乘了 \(m\) 个数，从 \(n\) 往下数。\(m=n\) 时是<b>全排列</b>：\(A_n^n=n!\)。</p>
 
   <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>6 名同学中选 3 人，分别当语文、数学、英语课代表，有多少种安排？</p>
-    <p>交换检验：甲当语文、乙当数学，和乙当语文、甲当数学是两种安排，讲顺序，是排列。</p>
-    <p>语文课代表 6 种选法，数学剩 5 种，英语剩 4 种：</p>
-    <p style="text-align:center">\(A_6^3=6\times5\times4=120\)（种）。</p>
-    <p>也可以用阶乘式：\(\dfrac{6!}{3!}=\dfrac{720}{6}=120\)，一样。</p>
+    <p><b>阶乘 \(n!\)</b>：正整数 \(1\) 到 \(n\) 的连乘积，规定 \(0! = 1\)。全排列数即为 \(A_n^n = n!\)。</p>
   </div>
-  <div class="card predict" data-id="try-1" data-answer="B">
-    <p>自己试试：用 5 种不同颜色给一面旗上从左到右的 3 条竖条涂色，每条一种颜色，颜色互不相同。有几种涂法？</p>
-    <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(125\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(60\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(15\)</button>
+
+  <!-- 伴读直觉微图解 -->
+  <div class="micro-box" id="micro-perm">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="font-weight:700; color:var(--primary); font-size:14px;">排列组合直觉微图解：交换检验、捆绑插空模型与组合对称递推</span>
+      <div class="micro-tabs" id="m-perm-tabs">
+        <button class="micro-tab active" data-tab="1">① 交换检验：排列 vs 组合</button>
+        <button class="micro-tab" data-tab="2">② 相邻捆绑与不相邻插空</button>
+        <button class="micro-tab" data-tab="3">③ 组合数两大性质几何直觉</button>
+      </div>
     </div>
-    <div class="reveal"><p><b>B</b>。左、中、右三条位置不同，换颜色就是另一面旗，是排列：\(A_5^3=5\times4\times3=60\)。选 A 是 \(5^3\)，允许了颜色重复，题目说互不相同；选 C 是 \(C_5^3\)，只选了颜色没排位置；选 D 是把 \(5\times3\) 当成了排列数。</p></div>
+    <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
+      <svg class="micro-fig" id="m-perm-fig" viewBox="0 0 620 220" style="width:100%; max-width:620px; height:auto; display:block; margin:0 auto;"></svg>
+    </div>
+    <div class="micro-desc" id="m-perm-desc" style="margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.55;">
+      加载中...
+    </div>
   </div>
 
-  <h3>3. 组合与组合数（不讲顺序）</h3>
-  <p>从 \(n\) 个不同元素中取出 \(m\) 个（\(1\le m\le n\)）<b>合成一组</b>，不管先后，叫一个<b>组合</b>；所有组合的个数叫<b>组合数</b>，记作 \(C_n^m\)。</p>
-  <p>为什么要除以 \(m!\)：把「排一列」拆成两步——先选出一组（\(C_n^m\) 种），再把这 \(m\) 个排好（\(m!\) 种）。所以 \(A_n^m=C_n^m\cdot m!\)，也就是每一组恰好被排列重复数了 \(m!\) 次：</p>
-  <div class="key">$$C_n^m=\frac{A_n^m}{m!}$$ 用阶乘写：$$C_n^m=\frac{n!}{m!\,(n-m)!}$$</div>
-  <p>规定 \(C_n^0=1\)（什么都不选，只有一种情况）。</p>
-
-  <div class="card">
-    <p class="small">例 2</p>
-    <p>平面上有 6 个点，任意三点不共线。① 以其中两点为端点的线段有几条？② 有向线段（分起点、终点）有几条？</p>
-    <p>① 线段 \(PQ\) 和 \(QP\) 是同一条，交换后没变，是组合：</p>
-    <p style="text-align:center">\(C_6^2=\dfrac{6\times5}{2\times1}=15\)（条）。</p>
-    <p>② 有向线段 \(\overrightarrow{PQ}\) 和 \(\overrightarrow{QP}\) 方向相反，是两条，交换后变了，是排列：</p>
-    <p style="text-align:center">\(A_6^2=6\times5=30\)（条）。</p>
-    <p>对比：\(30=15\times2!\)，每条线段对应两条有向线段，正好是 \(A=C\cdot m!\)。</p>
+  <div class="concept-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
+    <div class="card" style="border-top:3px solid #1976d2; margin:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:#1976d2;">排列数 \(A_n^m\)（有序）</b>
+        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:11px; padding:2px 8px; border-radius:10px;">次序敏感</span>
+      </div>
+      <p class="small" style="margin:0 0 4px 0;"><b>公式</b>：\(A_n^m = n(n-1)\cdots(n-m+1) = \dfrac{n!}{(n-m)!}\)</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>本质</b>：从 \(n\) 个元素里挑出 \(m\) 个排进 \(m\) 个带编号的槽位。</p>
+      <p class="small" style="margin:0;"><b>检验</b>：交换槽位元素，方案改变（\((A, B) \ne (B, A)\)）。</p>
+    </div>
+    <div class="card" style="border-top:3px solid #2e7d32; margin:0;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <b style="color:#2e7d32;">组合数 \(C_n^m\)（无序）</b>
+        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:2px 8px; border-radius:10px;">消重折叠</span>
+      </div>
+      <p class="small" style="margin:0 0 4px 0;"><b>公式</b>：\(C_n^m = \dfrac{A_n^m}{m!} = \dfrac{n!}{m!(n-m)!}\)</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>本质</b>：不管内部顺序，把内部全排列的 \(m!\) 种重复方案折叠为 1 种。</p>
+      <p class="small" style="margin:0;"><b>检验</b>：交换两元素，集合未变（\(\{A, B\} = \{B, A\}\)）。</p>
+    </div>
   </div>
+
+  <h3>2. 排列组合核心公式与性质</h3>
+  <div class="key" style="background:var(--card); border-left:4px solid var(--primary); padding:12px 16px; margin:14px 0;">
+    <p style="margin:0 0 8px 0; font-weight:700;">核心公式与消重联系：</p>
+    <p style="margin:0 0 6px 0;">排列数：\(A_n^m = \color{#1976d2}{n(n-1)\cdots(n-m+1)} = \color{#1976d2}{\dfrac{n!}{(n-m)!}}\)</p>
+    <p style="margin:0 0 8px 0;">组合数：\(C_n^m = \color{#2e7d32}{\dfrac{A_n^m}{m!}} = \color{#2e7d32}{\dfrac{n!}{m!(n-m)!}}\quad (\color{#2e7d32}{\text{除以 } m! \text{ 消除内部乱序}})\)</p>
+    <p style="margin:0 0 6px 0;"><b>两大组合性质</b>：</p>
+    <p style="margin:0 0 4px 0;">① 对称性：\(C_n^m = C_n^{n-m}\quad (\text{选 } m \text{ 个留下等价于选 } n-m \text{ 个淘汰})\)</p>
+    <p style="margin:0;">② 递推性：\(C_{n+1}^m = C_n^m + C_n^{m-1}\quad (\text{含特异元素分类：不含它 } C_n^m + \text{含它 } C_n^{m-1})\)</p>
+  </div>
+
   <div class="card predict" data-id="chk1" data-answer="B">
-    <p><b>自己试试</b>：判断下列两个情境属于排列还是组合？<br>
+    <p><b>自检</b>：判断下列两个情境属于排列还是组合？<br>
     情境 1：10 个人见面，每两个人之间握一次手，共握手多少次？<br>
     情境 2：一条铁路线路上有 10 个车站，铁路局需要准备多少种不同的硬座火车票（区分起点与终点）？</p>
     <div class="opts cols">
@@ -119,20 +144,17 @@
     </div>
   </div>
 
-  <h3>4. 组合数的两个性质（会推就行，不用死记）</h3>
-  <p>两个性质都能用「组合数在数什么」现场讲出来：</p>
-  <ul>
-    <li><b>对称</b>：\(C_n^m=C_n^{n-m}\)。从 \(n\) 个里选 \(m\) 个留下，等于选 \(n-m\) 个不要，两种说法一一对应。\(m\) 比 \(\dfrac n2\) 大时，换成小的算更快。</li>
-    <li><b>递推</b>：\(C_{n+1}^m=C_n^m+C_n^{m-1}\)。从 \(n+1\) 个里选 \(m\) 个，盯住其中某一个元素：不选它，从其余 \(n\) 个里选 \(m\) 个；选它，再从其余 \(n\) 个里选 \(m-1\) 个。分两类相加。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>① 求 \(C_{12}^{10}\)。② 验证 \(C_5^2+C_5^3=C_6^3\)。</p>
-    <p>① 直接算要乘 10 个数。用对称：</p>
-    <p style="text-align:center">\(C_{12}^{10}=C_{12}^{2}=\dfrac{12\times11}{2}=66\)。</p>
-    <p>② \(C_5^2=\dfrac{5\times4}{2}=10\)，\(C_5^3=C_5^2=10\)，和是 \(20\)；\(C_6^3=\dfrac{6\times5\times4}{3\times2\times1}=20\)。相等。</p>
-    <p>用递推的说法：6 人里选 3 人，按「甲去不去」分两类：甲不去，从另 5 人选 3 人（\(C_5^3\)）；甲去，再从另 5 人选 2 人（\(C_5^2\)）。</p>
+  <div class="card predict" data-id="try-1" data-answer="B">
+    <p>自己试试：用 5 种不同颜色给一面旗上从左到右的 3 条竖条涂色，每条一种颜色，颜色互不相同。有几种涂法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(125\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(60\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(10\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(15\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。左、中、右三条位置不同，换颜色就是另一面旗，是排列：\(A_5^3=5\times4\times3=60\)。选 A 是 \(5^3\)，允许了颜色重复，题目说互不相同；选 C 是 \(C_5^3\)，只选了颜色没排位置；选 D 是把 \(5\times3\) 当成了排列数。</p></div>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="C">
     <p>自己试试：\(C_{20}^{18}\) 等于？</p>
     <div class="opts cols">
@@ -144,21 +166,33 @@
     <div class="reveal"><p><b>C</b>。\(C_{20}^{18}=C_{20}^{2}=\dfrac{20\times19}{2\times1}=190\)。选 A 是只算了 \(20\times19\)，忘了除以 \(2!\)（那是 \(A_{20}^2\)）；选 B 是把 \(C_{20}^{18}\) 当成了 \(C_{20}^{1}\)。</p></div>
   </div>
 
-  <h3>5. 有条件的排队：特殊优先、捆绑、插空</h3>
-  <p>这些方法不是新公式，只是把分步乘法安排得聪明一点。每种都有适用条件：</p>
-  <ul>
-    <li><b>特殊元素（位置）优先</b>：某个人只能站某些位置、某个位置只能放某些人时，先安排它，再排其余的。先排没限制的，后面就可能没法排了。</li>
-    <li><b>捆绑（必须相邻）</b>：把要相邻的几个看成一个整体，和其余的一起排；<b>再乘上整体内部的排法</b>。</li>
-    <li><b>插空（互不相邻）</b>：先排没限制的 \(k\) 个，它们之间和两端共有 \(k+1\) 个空；再把不能相邻的插进<b>不同的空</b>里，这样它们中间一定隔着人。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 4</p>
-    <p>5 名男生和 2 名女生站成一排合影（共 7 人）：① 2 名女生相邻；② 2 名女生不相邻；③ 2 名女生站在两端。各有多少种站法？</p>
-    <p>① <b>捆绑</b>：2 名女生看成一个整体，和 5 名男生共 6 个单位，排法 \(A_6^6=720\)；整体内部两人可以换位，\(A_2^2=2\)。共 \(720\times2=1440\)（种）。</p>
-    <p>② <b>插空</b>：先排 5 名男生，\(A_5^5=120\)；5 人之间和两端共 \(5+1=6\) 个空（_男_男_男_男_男_）；2 名女生插进其中 2 个不同的空，\(A_6^2=30\)。共 \(120\times30=3600\)（种）。</p>
-    <p>检查：不加限制共 \(7!=5040\) 种，相邻和不相邻正好分完：\(1440+3600=5040\)。</p>
-    <p>③ <b>特殊位置优先</b>：两端两个位置先给 2 名女生，\(A_2^2=2\)；中间 5 个位置排男生，\(A_5^5=120\)。共 \(2\times120=240\)（种）。</p>
+  <h3>3. 三步破题思维链例题</h3>
+  <div class="card" style="border-left:4px solid #10b981;">
+    <p><b>典型例题</b>：甲、乙、丙、丁、戊 5 人排成一排照相，要求<b>甲、乙两人必须相邻</b>，且<b>丙、丁两人不能相邻</b>。一共有多少种不同的排法？</p>
+    <div class="think-steps" style="margin-top:10px;">
+      <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #2563eb;">
+        <b style="color:#2563eb;">👀 第一眼破题信号</b>：
+        <span class="small">题目包含双重限制：相邻（捆绑法）+ 不相邻（插空法）。破题次序铁律：<b>先绑后插！先把相邻元素捆绑成一个大元，与其余无限制元素一起排好，再用产生的空位去插入不相邻元素</b>。</span>
+      </div>
+      <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #10b981;">
+        <b style="color:#10b981;">🔧 第二步分步套用模型</b>：
+        <div class="small" style="margin-top:4px;">
+          • <b>第 1 步（捆绑并内排）</b>：将甲、乙捆成一个大元素 \(M = (\text{甲乙})\)，甲乙内部有 \(A_2^2 = 2\) 种排法；<br>
+          • <b>第 2 步（排基准元素）</b>：当前基准元素有大元 \(M\) 和无限制者戊，共 2 个元素排成一列，有 \(A_2^2 = 2\) 种排法；<br>
+          • <b>第 3 步（产生空位插空）</b>：2 个基准元素排好后，两侧加中间共产生 \(2 + 1 = 3\) 个空位（即 \(\_ \text{元}_1 \_ \text{元}_2 \_\)）。将丙、丁两人插入这 3 个空位中，排法有 \(A_3^2 = 3 \times 2 = 6\) 种。
+        </div>
+      </div>
+      <div class="think-step" style="padding-left:12px; border-left:2px solid #f59e0b;">
+        <b style="color:#f59e0b;">🛡️ 第三步工序连乘与防坑核查</b>：
+        <span class="small">由分步乘法原理，总排法数为各步相乘：<br>
+        $$N = A_2^2(\text{甲乙内部}) \times A_2^2(\text{基准排列}) \times A_3^2(\text{丙丁插空}) = 2 \times 2 \times 6 = 24\text{ 种}$$
+        防坑：切勿先排丙丁插空，因为甲乙是捆绑大元，只占 1 个空位；若先插空容易将甲乙拆散掉入不同槽位。</span>
+      </div>
+    </div>
   </div>
+
+  <div class="vid" data-video="ex2"></div>
+
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：甲、乙、丙、丁、戊 5 人排成一排，甲既不站排头也不站排尾。有几种排法？</p>
     <div class="opts cols">
@@ -170,22 +204,34 @@
     <div class="reveal"><p><b>A</b>。甲是特殊元素，先排：中间 3 个位置任选一个，3 种；其余 4 人排剩下 4 个位置，\(4!=24\)。共 \(3\times24=72\)。也可以从反面算：\(120-2\times24=72\)。选 B 是只去掉了「甲站排头」的 24 种，忘了排尾；选 D 是没管限制。</p></div>
   </div>
 
-  <h3>6. 用之前要注意</h3>
-  <ol>
-    <li><b>先做交换检验，再决定用 \(A\) 还是 \(C\)</b>。<br><span class="small">反例：「从 10 人中选 3 人组成代表队」是 \(C_{10}^3=120\)；写成 \(A_{10}^3=720\)，就把同一支队伍数了 \(3!=6\) 遍。</span></li>
-    <li><b>公式只管「不同元素、不重复取、\(1\le m\le n\) 的整数」</b>。<br><span class="small">反例：3 位数字密码，每位 \(0\sim9\) 可以重复，是 \(10^3=1000\) 种，不是 \(A_{10}^3=720\)。\(m>n\) 时（5 人选 6 人）根本没法选，不能硬套公式。</span></li>
-    <li><b>有相同元素，不能直接用全排列</b>。<br><span class="small">反例：把字母 \(A,A,B\) 排成一列，只有 \(AAB,ABA,BAA\) 3 种，不是 \(3!=6\) 种：两个 \(A\) 互换看不出区别。</span></li>
-    <li><b>插空法的空数是 \(k+1\)，两端也算</b>。<br><span class="small">反例：3 人站好后有 _人_人_人_ 共 4 个空；只数中间的 2 个，就漏掉了站在最左、最右的情况。</span></li>
-    <li><b>捆绑后别忘了乘内部的排法</b>，用这些方法时要说清楚「每种排法只数了一次」。<br><span class="small">反例：例 4 ① 只写 \(A_6^6=720\)，就把「女甲在左」「女乙在左」当成了一种。</span></li>
-  </ol>
+  <h3>4. 三大翻车现场红绿对比卡</h3>
+  <div class="trap-grid" style="display:grid; grid-template-columns:1fr; gap:12px; margin:14px 0;">
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 1：均匀无序分组未消除「组的次序」重复计数</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：将 6 本不同书平均分成 3 堆，每堆 2 本，写成 \(C_6^2 C_4^2 C_2^2 = 15 \times 6 \times 1 = 90\) 种。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：3 堆书没有顺序、没有标签（如第一堆、第二堆），步步选出时人为赋予了堆的次序。必须<b>除以 \(3! = 6\) 消除堆的全排列</b>：\(\dfrac{C_6^2 C_4^2 C_2^2}{3!} = \dfrac{90}{6} = 15\) 种！只有分配给甲、乙、丙 3 个人（有主人）时才不除以 \(3!\)。</p>
+    </div>
 
-  <details class="more">
-    <summary>再深一点（可以先跳过）</summary>
-    <p><b>定序问题</b>：\(n\) 个人排队，其中 \(k\) 个人的先后顺序已经定死（不一定相邻）。每一种「这 \(k\) 人的顺序」在全排列里出现的次数一样多，一共 \(k!\) 种顺序，只保留其中一种：</p>
-    <p style="text-align:center">排法数 \(=\dfrac{n!}{k!}\)。</p>
-    <p>例：4 人排队，甲在乙前面。\(\dfrac{4!}{2!}=12\)。</p>
-    <p><b>先选后排</b>：「从 6 人中选 3 人，排成一排，其中甲必须入选」：先把甲选上，再从另 5 人选 2 人，\(C_5^2=10\)；选好的 3 人排一排，\(3!=6\)。共 \(10\times6=60\)。</p>
-  </details>
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 2：捆绑法漏乘「内部全排列」</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：3 名男生 2 名女生排队，女生必须相邻，将女生捆绑成 1 个大元，直接算 \(A_4^4 = 24\) 种。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：捆绑法必须<b>先外排再内排</b>（或先内排再外排）！2 名女生在捆绑包内部自身有 \(A_2^2 = 2\) 种次序（左女1右女2 vs 左女2右女1），正确答案是 \(A_4^4 \times A_2^2 = 24 \times 2 = 48\) 种。</p>
+    </div>
+
+    <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
+      <b style="color:#ef4444;">翻车现场 3：插空法空位数数错（\(k\) 个元素产生几个空位？）</b>
+      <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：先排好 3 个男生，认为只有中间 2 个空位，算成 \(A_2^2\)。</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：\(k\) 个元素排成一条直线，产生的空位包含<b>两头端点和所有间隔</b>，共有 \(k+1\) 个空位！3 个男生排好后产生 \(3+1=4\) 个空位，插 2 名女生应为 \(A_4^2 = 12\) 种。</p>
+    </div>
+  </div>
+
+  <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:12px 0;">
+    <div style="font-weight:700; font-size:12.5px; color:var(--fg); margin-bottom:6px;">反例微图解：6 本书平均分成 3 堆的均匀分组消重（除以 3!）直觉示意</div>
+    <svg class="micro-fig" id="m-perm-trap-fig" viewBox="0 0 540 140" style="width:100%; max-width:540px; height:auto; display:block; margin:0 auto;"></svg>
+    <div style="font-size:11.5px; color:var(--muted); margin-top:4px; text-align:center;">
+      无名额分组：同一种分法在抽取过程中会有 \(3! = 6\) 种产生次序，必须除以 \(3!\) 消去人为虚增的次序。
+    </div>
+  </div>
 </section>
 
 <section class="step" data-title="动手">
@@ -258,6 +304,8 @@
       <p><b>D</b>。握手属于典型的无序组合问题（甲与乙握手等同于乙与甲握手，不区分先后）。总握手次数为从 8 人中任取 2 人的组合数：\(C_8^2 = \dfrac{8 \times 7}{2 \times 1} = 28\) 次。切忌错用排列数算成 56！</p>
     </div>
   </div>
+
+  <div class="vid" data-video="ex1"></div>
 
   <div class="card predict" data-id="p4" data-answer="B">
     <p>4. 某班级排练节目，4 名男生和 3 名女生排成一排，要求任意两名女生不能相邻排在一起，则不同的排法种数共有：</p>
@@ -399,7 +447,232 @@
   selM.addEventListener("change", render);
 
   render();
+
+  /* ================= 0 从例子进入：排列 vs 组合并排对照 ================= */
+  var NS = "http://www.w3.org/2000/svg";
+  function elSvg(tag, attrs, parent) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  var epSvg = document.getElementById("entry-perm"), epBar = document.getElementById("entry-perm-bar"), epNote = document.getElementById("entry-perm-note");
+  var epMode = "all", epPair = 0;
+  var PAIRS = [
+    ["AB", "BA", "{A, B}"],
+    ["AC", "CA", "{A, C}"],
+    ["AD", "DA", "{A, D}"],
+    ["BC", "CB", "{B, C}"],
+    ["BD", "DB", "{B, D}"],
+    ["CD", "DC", "{C, D}"]
+  ];
+  function epDraw(mode, pairIdx) {
+    epMode = mode;
+    if (typeof pairIdx === "number") epPair = pairIdx;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    epSvg.innerHTML = "";
+    // 左框：情境1（正班长+副班长，12种）
+    elSvg("rect", { x: 10, y: 8, width: 242, height: 188, rx: 10, fill: card, stroke: ca, "stroke-width": 1.8 }, epSvg);
+    elSvg("text", { x: 131, y: 28, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13.5 }, epSvg).textContent = "情境1：正班长+副班长 (讲顺序)";
+    var cur = PAIRS[epPair];
+    elSvg("rect", { x: 22, y: 36, width: 218, height: 30, rx: 6, fill: okS, stroke: mode === "ab" ? hl : ln, "stroke-width": mode === "ab" ? 1.8 : 1 }, epSvg);
+    elSvg("text", { x: 131, y: 56, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 12.5 }, epSvg).textContent = "正" + cur[0][0] + "副" + cur[0][1] + " ≠ 正" + cur[1][0] + "副" + cur[1][1] + "（算 2 种）";
+
+    // 右框：情境2（2人图书小组，6种）
+    elSvg("rect", { x: 268, y: 8, width: 242, height: 188, rx: 10, fill: card, stroke: cb, "stroke-width": 1.8 }, epSvg);
+    elSvg("text", { x: 389, y: 28, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13.5 }, epSvg).textContent = "情境2：2人图书小组 (不讲顺序)";
+    elSvg("rect", { x: 280, y: 36, width: 218, height: 30, rx: 6, fill: okS, stroke: mode === "ab" ? hl : ln, "stroke-width": mode === "ab" ? 1.8 : 1 }, epSvg);
+    elSvg("text", { x: 389, y: 56, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 12.5 }, epSvg).textContent = cur[2] + " 同一组（合并算 1 种）";
+
+    // 排列 12 格（6行×2列 -> 排成 3行×2组，每组含正反2个）
+    PAIRS.forEach(function (pr, idx) {
+      var col = idx % 2, row = Math.floor(idx / 2);
+      var gx = 22 + col * 112, gy = 76 + row * 32;
+      var foc = mode === "ab" && idx === epPair;
+      var dim = mode === "ab" && idx !== epPair;
+      [pr[0], pr[1]].forEach(function (code, sub) {
+        var bx = gx + sub * 52;
+        var g = elSvg("g", { style: "cursor:pointer" }, epSvg);
+        elSvg("rect", { x: bx, y: gy, width: 48, height: 24, rx: 5, fill: foc ? okS : card, stroke: foc ? hl : (dim ? ln : ca), "stroke-width": foc ? 2.2 : 1.2, opacity: dim ? 0.45 : 1 }, g);
+        elSvg("text", { x: bx + 24, y: gy + 16, "text-anchor": "middle", fill: foc ? fg : (dim ? mu : ca), "font-weight": 700, "font-size": 12.5 }, g).textContent = code[0] + "正" + code[1] + "副";
+        g.onclick = function () { epDraw("ab", idx); };
+      });
+      // 右侧对应 1 个组合格
+      var rx = 284 + col * 110, ry = 76 + row * 32;
+      var rg = elSvg("g", { style: "cursor:pointer" }, epSvg);
+      elSvg("rect", { x: rx, y: ry, width: 98, height: 24, rx: 12, fill: foc ? okS : card, stroke: foc ? hl : (dim ? ln : cb), "stroke-width": foc ? 2.2 : 1.3, opacity: dim ? 0.45 : 1 }, rg);
+      elSvg("text", { x: rx + 49, y: ry + 16, "text-anchor": "middle", fill: foc ? fg : (dim ? mu : cb), "font-weight": 700, "font-size": 13 }, rg).textContent = pr[2];
+      rg.onclick = function () { epDraw("ab", idx); };
+    });
+
+    elSvg("text", { x: 131, y: 187, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13 }, epSvg).textContent = "共 4 × 3 = 12 种有序排法";
+    elSvg("text", { x: 389, y: 187, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 13 }, epSvg).textContent = "共 12 ÷ 2 = 6 种无序组合";
+
+    [].forEach.call(epBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === mode);
+    });
+    if (mode === "all") {
+      epNote.innerHTML = "总览对比：左边讲职务顺序，每对人都能交换正副，共 <b>12 种</b>；右边只看哪两个人进组，两两合并后只有 <b>6 种</b>（点任意名牌可聚焦）。";
+    } else {
+      epNote.innerHTML = "聚焦 <b>" + cur[0][0] + " 和 " + cur[0][1] + "</b>：当正副班长时「<b>" + cur[0][0] + "正" + cur[0][1] + "副</b>」与「<b>" + cur[1][0] + "正" + cur[1][1] + "副</b>」是 <b>2 种</b>不同任命；进图书小组都是 <b>" + cur[2] + "</b> 这 <b>1 组</b>！";
+    }
+  }
+  [].forEach.call(epBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { epDraw(b.getAttribute("data-m"), 0); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      epDraw(ev.detail.choice === "B" ? "ab" : "all", 0);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") epDraw("all", 0);
+  });
+  document.addEventListener("DOMContentLoaded", function () { epDraw("all", 0); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { epDraw(epMode, epPair); });
 })();
+
+  // === e3-6-2 Micro-box & Trap Interactive Script ===
+  (function () {
+    var fig = document.getElementById("m-perm-fig");
+    var desc = document.getElementById("m-perm-desc");
+    var trapFig = document.getElementById("m-perm-trap-fig");
+    var tabs = document.querySelectorAll("#m-perm-tabs .micro-tab");
+    if (!fig || !desc) return;
+
+    function el(t, a, txt) {
+      var e = document.createElementNS("http://www.w3.org/2000/svg", t);
+      for (var k in a) e.setAttribute(k, a[k]);
+      if (txt) e.textContent = txt;
+      return e;
+    }
+
+    function drawTab1() {
+      fig.innerHTML = "";
+      // Tab 1: 交换检验法 排列 (有序) vs 组合 (无序)
+      // Left: 排列 (选甲当班长，乙当副班长)
+      fig.appendChild(el("rect", {x: 30, y: 35, width: 260, height: 135, rx: 8, fill: "var(--card)", stroke: "#1976d2", "stroke-width": "1.5"}));
+      fig.appendChild(el("text", {x: 160, y: 58, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#1976d2"}, "排列（有序安排，位置敏感）"));
+
+      // Slot 1 & 2
+      fig.appendChild(el("rect", {x: 50, y: 75, width: 95, height: 35, rx: 6, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "1"}));
+      fig.appendChild(el("text", {x: 97, y: 97, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "班长：甲"));
+
+      fig.appendChild(el("rect", {x: 175, y: 75, width: 95, height: 35, rx: 6, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "1"}));
+      fig.appendChild(el("text", {x: 222, y: 97, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "副班长：乙"));
+
+      fig.appendChild(el("text", {x: 160, y: 135, "text-anchor": "middle", "font-size": "11", fill: "#ef4444"}, "⇄ 交换后：班长乙、副班长甲（不同方案！）"));
+      fig.appendChild(el("text", {x: 160, y: 155, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "A₄² = 4 × 3 = 12 种"));
+
+      // Right: 组合 (选甲、乙为代表)
+      fig.appendChild(el("rect", {x: 330, y: 35, width: 260, height: 135, rx: 8, fill: "var(--card)", stroke: "#2e7d32", "stroke-width": "1.5"}));
+      fig.appendChild(el("text", {x: 460, y: 58, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#2e7d32"}, "组合（无序挑选，装入同一袋）"));
+
+      fig.appendChild(el("rect", {x: 370, y: 75, width: 180, height: 35, rx: 18, fill: "#e8f5e9", stroke: "#2e7d32", "stroke-width": "1"}));
+      fig.appendChild(el("text", {x: 460, y: 97, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#2e7d32"}, "{ 代表甲, 代表乙 }"));
+
+      fig.appendChild(el("text", {x: 460, y: 135, "text-anchor": "middle", "font-size": "11", fill: "#10b981"}, "⇄ 交换后：{ 乙, 甲 }（同一组代表，不变！）"));
+      fig.appendChild(el("text", {x: 460, y: 155, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#2e7d32"}, "C₄² = A₄² / 2! = 12 / 2 = 6 种"));
+
+      fig.appendChild(el("text", {x: 310, y: 200, "text-anchor": "middle", "font-size": "12.5", "font-weight": "700", fill: "var(--fg)"}, "判定铁律：取出两元素交换位置，方案改变是排列，方案不变是组合"));
+      desc.innerHTML = "<b>① 交换检验法直觉</b>：从 4 人中挑 2 人。左边是有序职位（班长、副班长），交换甲乙次序结果发生实质改变，是排列 \(A_4^2 = 12\)；右边是无序代表团，交换两人名字集合完全相同，内部排列次序被消重折叠，是组合 \(C_4^2 = A_4^2 / 2! = 6\)。";
+    }
+
+    function drawTab2() {
+      fig.innerHTML = "";
+      // Tab 2: 捆绑法 (相邻) 与插空法 (不相邻)
+      fig.appendChild(el("text", {x: 310, y: 25, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "相邻问题用「捆绑法」，不相邻问题用「插空法」"));
+
+      // Bundled element: [甲乙]
+      fig.appendChild(el("rect", {x: 60, y: 55, width: 140, height: 50, rx: 8, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "2", "stroke-dasharray": "4 2"}));
+      fig.appendChild(el("text", {x: 130, y: 80, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "捆绑大元 M = (甲, 乙)"));
+      fig.appendChild(el("text", {x: 130, y: 96, "text-anchor": "middle", "font-size": "10", fill: "#1976d2"}, "内部全排列 A₂² = 2 种"));
+
+      // Element 戊
+      fig.appendChild(el("rect", {x: 230, y: 55, width: 70, height: 50, rx: 8, fill: "#f3f4f6", stroke: "#6b7280", "stroke-width": "1.5"}));
+      fig.appendChild(el("text", {x: 265, y: 85, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "基准戊"));
+
+      // Slots for insertion
+      var slotX = [30, 210, 320];
+      slotX.forEach(function(x, idx) {
+        fig.appendChild(el("rect", {x: x, y: 130, width: 32, height: 26, rx: 4, fill: "#fef3c7", stroke: "#f59e0b", "stroke-width": "1.5"}));
+        fig.appendChild(el("text", {x: x + 16, y: 147, "text-anchor": "middle", "font-size": "10", "font-weight": "700", fill: "#d97706"}, "空" + (idx+1)));
+        fig.appendChild(el("line", {x1: x + 16, y1: 125, x2: x + 16, y2: 110, stroke: "#f59e0b", "stroke-width": "1.2", "marker-end": "url(#arrow)"}));
+      });
+
+      fig.appendChild(el("text", {x: 460, y: 80, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#10b981"}, "第 1 步：甲乙捆绑 A₂² = 2"));
+      fig.appendChild(el("text", {x: 460, y: 105, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "第 2 步：排基准大元 A₂² = 2"));
+      fig.appendChild(el("text", {x: 460, y: 130, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#f59e0b"}, "第 3 步：丙丁插 3 空 A₃² = 6"));
+      fig.appendChild(el("text", {x: 460, y: 160, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#ef4444"}, "连乘总数：2 × 2 × 6 = 24 种"));
+
+      fig.appendChild(el("text", {x: 310, y: 200, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "先捆绑大元内排，再排基准元素，最后在产生的 (k+1) 个空位中插入不相邻元素"));
+      desc.innerHTML = "<b>② 捆绑与插空经典模型</b>：甲乙必须相邻 $\\to$ 捆成大元，内部自排 $A_2^2=2$ 种；与元素戊排好共 $A_2^2=2$ 种；产生的 3 个空位插入丙丁（不相邻）有 $A_3^2=6$ 种。分步连乘得 $2 \\times 2 \\times 6 = 24$ 种。";
+    }
+
+    function drawTab3() {
+      fig.innerHTML = "";
+      // Tab 3: 组合数两大性质几何直觉
+      // Left: 对称性 C_n^m = C_n^{n-m}
+      fig.appendChild(el("rect", {x: 30, y: 40, width: 260, height: 130, rx: 8, fill: "var(--card)", stroke: "#1976d2", "stroke-width": "1.5"}));
+      fig.appendChild(el("text", {x: 160, y: 65, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#1976d2"}, "性质 1：对称性 Cₙᵐ = Cₙⁿ⁻ᵐ"));
+      fig.appendChild(el("text", {x: 160, y: 92, "text-anchor": "middle", "font-size": "11", fill: "var(--fg)"}, "从 10 个人中选 2 个人去扫地"));
+      fig.appendChild(el("text", {x: 160, y: 112, "text-anchor": "middle", "font-size": "11", fill: "var(--fg)"}, "等价于选出 8 个人留在教室"));
+      fig.appendChild(el("text", {x: 160, y: 145, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "C₁₀⁸ = C₁₀² = 45（大幅化简运算！）"));
+
+      // Right: 递推性 C_{n+1}^m = C_n^m + C_n^{m-1}
+      fig.appendChild(el("rect", {x: 330, y: 40, width: 260, height: 130, rx: 8, fill: "var(--card)", stroke: "#2e7d32", "stroke-width": "1.5"}));
+      fig.appendChild(el("text", {x: 460, y: 65, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#2e7d32"}, "性质 2：加法递推（杨辉三角）"));
+      fig.appendChild(el("text", {x: 460, y: 92, "text-anchor": "middle", "font-size": "11", fill: "var(--fg)"}, "从 (n+1) 人选 m 人（盯住特异元素 A）："));
+      fig.appendChild(el("text", {x: 460, y: 112, "text-anchor": "middle", "font-size": "11", fill: "var(--fg)"}, "① 不含 A：Cₙᵐ 种；② 必含 A：Cₙᵐ⁻¹ 种"));
+      fig.appendChild(el("text", {x: 460, y: 145, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#2e7d32"}, "Cₙ₊₁ᵐ = Cₙᵐ + Cₙᵐ⁻¹（两肩相加得脚下）"));
+
+      fig.appendChild(el("text", {x: 310, y: 195, "text-anchor": "middle", "font-size": "12.5", "font-weight": "700", fill: "var(--fg)"}, "对称性用于大角标快速降维，递推性是杨辉三角与二项式定理的底层骨架"));
+      desc.innerHTML = "<b>③ 组合数两大性质直觉</b>：对称性源于「选出的与留下的方案一一对应」，求 $C_{20}^{18}$ 转换为 $C_{20}^2 = 190$ 瞬杀；递推公式按「是否包含某个特异元素」分类穷尽，是下一节杨辉三角的灵魂基石。";
+    }
+
+    function drawTrap() {
+      if (!trapFig) return;
+      trapFig.innerHTML = "";
+      // 6 本书均分 3 堆 (书1,2; 书3,4; 书5,6)
+      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#ef4444"}, "直接乘积：C₆² C₄² C₂² = 90（多算 6 倍！）"));
+      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "消除堆序：90 ÷ 3! = 15 种（正确答案）"));
+
+      // Left: 3 piles with artificial orders 1st, 2nd, 3rd
+      var piles = ["堆1: {A,B}", "堆2: {C,D}", "堆3: {E,F}"];
+      piles.forEach(function(p, i) {
+        var x = 40 + i * 75;
+        trapFig.appendChild(el("rect", {x: x, y: 40, width: 68, height: 26, rx: 4, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": "1"}));
+        trapFig.appendChild(el("text", {x: x + 34, y: 57, "text-anchor": "middle", "font-size": "9.5", fill: "#ef4444"}, p));
+      });
+      trapFig.appendChild(el("text", {x: 140, y: 88, "text-anchor": "middle", "font-size": "10.5", fill: "#ef4444"}, "先后挑出人为产生了 3! = 6 种伪顺序"));
+      trapFig.appendChild(el("text", {x: 140, y: 120, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "实际上 3 堆没有名字，完全无序！"));
+
+      // Separator
+      trapFig.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 135, stroke: "var(--line)", "stroke-width": "1"}));
+
+      // Right: Folded identical piles
+      trapFig.appendChild(el("rect", {x: 310, y: 40, width: 180, height: 45, rx: 8, fill: "#e8f5e9", stroke: "#10b981", "stroke-width": "1.5"}));
+      trapFig.appendChild(el("text", {x: 400, y: 60, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "合并消除次序：÷ 3!"));
+      trapFig.appendChild(el("text", {x: 400, y: 76, "text-anchor": "middle", "font-size": "10", fill: "#2e7d32"}, "{A,B}, {C,D}, {E,F} 平等摆放"));
+      trapFig.appendChild(el("text", {x: 400, y: 120, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "N = 90 ÷ 6 = 15 种"));
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        tabs.forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        var idx = tab.getAttribute("data-tab");
+        if (idx === "1") drawTab1();
+        else if (idx === "2") drawTab2();
+        else if (idx === "3") drawTab3();
+      });
+    });
+
+    drawTab1();
+    drawTrap();
+  })();
+
 </script>
 </body>
 </html>

@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -42,9 +44,15 @@
 <p class="lead">把平面向量的加减、数乘和数量积搬到空间：法则不变，新多出来的问题是三个向量共不共面。这一节学这些运算，以及怎样用它们算长度、判垂直。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一架无人机在无风的天空中执行巡检任务。从起飞点出发，无人机先沿水平向东飞行了 \(12\text{ m}\)，接着沿水平向北飞行了 \(5\text{ m}\)，最后垂直向上爬升了 \(9\text{ m}\)。</p>
+  <p>一架无人机在无风的天空中执行巡检任务。从起飞点 \(O\) 出发，无人机先沿水平向东飞行了 \(12\text{ m}\) 到 \(A\)，接着沿水平向北飞行了 \(5\text{ m}\) 到 \(B\)，最后垂直向上爬升了 \(9\text{ m}\) 到达空中点 \(P\)。先点下面的两个步骤按钮，看看平面位移怎样一步步合成为空间总位移：</p>
   <div class="card predict" data-id="entry" data-answer="C">
-    <p>地面飞控员想知道：无人机现在的空间位置相对于起飞点的总位移大小是多少？</p>
+    <svg class="entry-fig" id="entry-drone" viewBox="0 0 520 208" role="img" aria-label="无人机向东12米、向北5米、向上9米的三维长方体体对角线位移合成图"></svg>
+    <div class="entry-bar" id="entry-drone-bar">
+      <button type="button" data-step="1">第1步：向东12m + 向北5m (地面13m)</button>
+      <button type="button" data-step="2" class="on">第2步：再向上爬升 9m (空间总位移 15.8m)</button>
+    </div>
+    <div class="entry-note" id="entry-drone-note"></div>
+    <p>地面飞控员想知道：无人机现在的空间位置 \(P\) 相对于起飞点 \(O\) 的总位移大小是多少？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(12 + 5 + 9 = 26\text{ m}\)</button>
       <button class="opt" data-v="B"><b>B</b>无法计算，高度和地面不在同一平面内</button>
@@ -59,8 +67,21 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：平面向量概念与加减法（<a href="b2-6-1.html">回看 6.1</a>、<a href="b2-6-2.html">6.2</a>）；空间两条直线的位置关系（<a href="b2-8-4.html">回看 8.4</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：三维空间里的加减、数乘和数量积法则与平面相同；讨论夹角和垂直时，参与的向量必须是非零向量。</p></div>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：空间自由向量平移、折线回路与数量积</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="free">① 自由平移共面</button>
+      <button type="button" class="micro-tab" data-mode="loop">② 空间折线回路</button>
+      <button type="button" class="micro-tab" data-mode="dot">③ 数量积投影</button>
+    </div>
+    <svg id="m-svec-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="空间向量几何直观图解"></svg>
+    <div class="micro-caption" id="m-svec-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>空间自由向量</b>：在空间中，具有大小和方向的量叫做空间向量。向量的大小叫做向量的<b>模</b>（或长度），记作 \(|\boldsymbol{a}|\)。向量只由大小与方向决定，与起点位置无关，可以在三维空间中<b>自由平行移动</b>。</p>
@@ -80,6 +101,27 @@
   <div class="card">
     <p><b>投影向量与投影数量</b>：设 \(\boldsymbol{e} = \dfrac{\boldsymbol{b}}{|\boldsymbol{b}|}\) 是与 \(\boldsymbol{b}\) 同向的单位向量，\(\boldsymbol{a}\) 在 \(\boldsymbol{b}\) 上的<b>投影向量</b>为 \((\boldsymbol{a}\cdot\boldsymbol{e})\boldsymbol{e} = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{b}|^2}\boldsymbol{b}\)（是一个向量）；而<b>投影数量</b>（有向投影长）是实数 \(|\boldsymbol{a}|\cos\langle\boldsymbol{a},\boldsymbol{b}\rangle = \dfrac{\boldsymbol{a}\cdot\boldsymbol{b}}{|\boldsymbol{b}|}\)。</p>
     <p>例：若 \(|\boldsymbol{a}|=4\)，夹角为 \(60^\circ\)，则在 \(\boldsymbol{b}\) 上的投影数量为 \(4\cos 60^\circ = 2\)，投影向量是沿 \(\boldsymbol{b}\) 方向长度为 \(2\) 的向量。</p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">核心辨析</span> 空间直线（定着） vs 空间向量（自由）</div>
+      <p><b>空间直线</b>：位置固定，可以既不相交也不平行（<b>异面直线</b>）。</p>
+      <p><b>空间向量</b>：只认大小和方向，与位置无关，可<b>自由平移</b>。任意两向量平移至同一起点后必落在同一平面内，<b>空间绝无异面向量</b>！</p>
+      <p class="small">结论：异面直线所成的角，本质就是两直线方向向量夹角（或其补角）。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">运算警戒</span> 数量积分配律 vs 结合律不成立</div>
+      <p><b>分配律恒成立</b>：\(\boldsymbol{a}\cdot(\boldsymbol{b}+\boldsymbol{c}) = \boldsymbol{a}\cdot\boldsymbol{b} + \boldsymbol{a}\cdot\boldsymbol{c}\)（三维空间线性有效）。</p>
+      <p><b>结合律彻底失效</b>：\((\boldsymbol{a}\cdot\boldsymbol{b})\boldsymbol{c} \ne \boldsymbol{a}(\boldsymbol{b}\cdot\boldsymbol{c})\)。左边沿 \(\boldsymbol{c}\) 方向，右边沿 \(\boldsymbol{a}\) 方向，两向量根本不同向！</p>
+      <p class="small">警惕：数量积运算绝不可约去！\(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c} \not\implies \boldsymbol{b}=\boldsymbol{c}\)。</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    数量积定义：\(\boldsymbol{a}\cdot\boldsymbol{b} = \color{#2563eb}{|\boldsymbol{a}|} \times \color{#059669}{|\boldsymbol{b}|} \cos\color{#d97706}{\theta}\)<br>
+    空间垂直充要条件：\(\boldsymbol{a}\perp\boldsymbol{b} \iff \boldsymbol{a}\cdot\boldsymbol{b} = \color{#dc2626}{0}\) &nbsp;（\(\boldsymbol{a},\boldsymbol{b}\ne\boldsymbol{0}\)）<br>
+    空间折线加法：\(\overrightarrow{A_1A_n} = \sum_{i=1}^{n-1} \color{#2563eb}{\overrightarrow{A_iA_{i+1}}}\)，封闭空间多边形回路总和恒为 \(\color{#059669}{\boldsymbol{0}}\)
   </div>
 
   <h3>2. 加减法与折线回路</h3>
@@ -122,6 +164,7 @@
       <p class="small">常见算错：选 B。向量减向量，结果还是向量，要写 \(\boldsymbol{0}\)；实数 \(0\) 是数，不是向量。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 共线向量与共面向量定理</h3>
   <p><b>意思</b>：判断三点共线、四点共面，就看一个向量能不能用别的向量「伸缩再相加」表示出来。<b>为什么</b>：和 \(\boldsymbol{b}\) 平行的向量只是把 \(\boldsymbol{b}\) 拉长、缩短或反向；两个不共线的向量 \(\boldsymbol{a}, \boldsymbol{b}\) 伸缩后相加，只能走遍它们所在的那个平面。</p>
@@ -163,6 +206,7 @@
       <p class="small">常见算错：算 \(2 + (-3) = -1 \ne 1\)，就选 D。「系数和为 1」只用在从平面外一点 \(O\) 出发、写成 \(\overrightarrow{OA}, \overrightarrow{OB}, \overrightarrow{OC}\) 三项的式子；这里是从 \(A\) 出发的两项式子，系数取什么都共面。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 数量积与长度、角度、垂直</h3>
   <p><b>意思</b>：\(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}||\boldsymbol{b}|\cos\langle\boldsymbol{a},\boldsymbol{b}\rangle\)，定义和平面里一样。<b>为什么能照搬</b>：两个向量平移到同一起点后在同一平面内，夹角就在这个平面里量。有了它，长度、角度、垂直都能算：</p>
@@ -206,24 +250,79 @@
     </div>
   </div>
 
-  <h3>5. 用之前要注意</h3>
-  <p>从平面到空间，下面四条最容易出错，各配一个反例：</p>
-  <ol>
-    <li><b>两两不共线，不等于不共面</b><br>
-      <span class="small">反例：同一个平面内两两成 \(120^\circ\) 的三个向量，两两不共线，但都在这个平面里，不能做空间的基底。</span>
-    </li>
-    <li><b>数量积没有结合律</b><br>
-      <span class="small">反例：\((\boldsymbol{a}\cdot\boldsymbol{b})\boldsymbol{c}\) 是平行于 \(\boldsymbol{c}\) 的向量，而 \(\boldsymbol{a}(\boldsymbol{b}\cdot\boldsymbol{c})\) 是平行于 \(\boldsymbol{a}\) 的向量。\(\boldsymbol{a}\) 与 \(\boldsymbol{c}\) 不共线时，除非 \(\boldsymbol{a}\cdot\boldsymbol{b}\) 与 \(\boldsymbol{b}\cdot\boldsymbol{c}\) 都是 \(0\)，两边不相等。</span>
-    </li>
-    <li><b>数量积不能约去</b><br>
-      <span class="small">反例：若 \(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c}\)（\(\boldsymbol{a}\ne\boldsymbol{0}\)），移项得 \(\boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{c}) = 0\)，只能说明 \(\boldsymbol{a} \perp (\boldsymbol{b}-\boldsymbol{c})\) 或 \(\boldsymbol{b}=\boldsymbol{c}\)，不能得出 \(\boldsymbol{b}=\boldsymbol{c}\)。例：\(\boldsymbol{a}\) 是竖直向上的单位向量，\(\boldsymbol{b}, \boldsymbol{c}\) 是两个不同的水平向量，\(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c} = 0\)，但 \(\boldsymbol{b}\ne\boldsymbol{c}\)。</span>
-    </li>
-    <li><b>基向量不垂直时，交叉项要保留</b><br>
-      <span class="small">反例：计算 \(|\boldsymbol{a}+\boldsymbol{b}|^2\) 时，只有当 \(\boldsymbol{a}\perp\boldsymbol{b}\)（直角系）时才等于 \(|\boldsymbol{a}|^2+|\boldsymbol{b}|^2\)；一般基底下必须保留 \(2\boldsymbol{a}\cdot\boldsymbol{b} = 2|\boldsymbol{a}||\boldsymbol{b}|\cos\theta\)。例：\(|\boldsymbol{a}| = |\boldsymbol{b}| = 1\)，夹角 \(60^\circ\)，\(|\boldsymbol{a}+\boldsymbol{b}|^2 = 1 + 1 + 1 = 3\)，不是 \(2\)。</span>
-    </li>
-  </ol>
+  <h3>5. 三步破题思维链：空间向量解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>遇到空间几何体中的垂直证明、求夹角或模长问题，发现传统辅助线极难作时，果断建立<b>向量化思路</b>：选取有公共顶点的三条不共面棱向量作为基底（如正四面体或长方体三棱 \(\boldsymbol{a},\boldsymbol{b},\boldsymbol{c}\)）。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 用基底线性表示目标线段向量：利用首尾折线回路拆分；<br>
+        ② 数量积求角或证垂直：代入 \(\boldsymbol{a}\cdot\boldsymbol{b} = |\boldsymbol{a}||\boldsymbol{b}|\cos\theta\) 展开代数式，判定是否为 0；<br>
+        ③ 求线段长度：套用“求模先平方”公式 \(|\boldsymbol{v}|^2 = \boldsymbol{v}\cdot\boldsymbol{v}\)，展开所有交叉项后开方。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>检查两向量不垂直时展开模方是否保留了交叉项 \(2\boldsymbol{a}\cdot\boldsymbol{b}\)；向量夹角 \(\theta\in[0,\pi]\)，但两条异面直线所成角范围为 \((0,\frac{\pi}{2}]\)，钝角需取补角；数量积相等不可直接约去！</p>
+      </div>
+    </div>
+  </div>
 
-  <details class="more">
+  <h3>6. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：误以为空间向量可以“异面”</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>正方体中 \(AB\) 与 \(CC_1\) 异面，误认为向量 \(\overrightarrow{AB}\) 与 \(\overrightarrow{CC_1}\) 也“异面无法合成”</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>向量可自由平行移动，将 \(\overrightarrow{CC_1}\) 平移为 \(\overrightarrow{BB_1}\) 后同在平面 \(ABB_1A_1\) 内，必共面</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：数量积等式随意盲目约去</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>已知 \(\boldsymbol{a}\cdot\boldsymbol{b} = \boldsymbol{a}\cdot\boldsymbol{c}\)（\(\boldsymbol{a}
+e\boldsymbol{0}\)），误直接约去得 \(\boldsymbol{b}=\boldsymbol{c}\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>移项得 \(\boldsymbol{a}\cdot(\boldsymbol{b}-\boldsymbol{c})=0\)，完全可能 \(\boldsymbol{a}\perp(\boldsymbol{b}-\boldsymbol{c})\) 而 \(\boldsymbol{b}
+e\boldsymbol{c}\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：模方展开遗漏非垂直交叉项</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>计算 \(|\boldsymbol{a}+\boldsymbol{b}|^2\) 时，直接算成 \(|\boldsymbol{a}|^2+|\boldsymbol{b}|^2\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>一般基底下夹角非直角，必须完整保留交叉项 \(2\boldsymbol{a}\cdot\boldsymbol{b} = 2|\boldsymbol{a}||\boldsymbol{b}|\cos\theta\)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：异面直线向量平移共面图解（打破“异面向量”幻觉）</div>
+    <svg id="m-svec-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="异面直线方向向量平移共面反例图"></svg>
+    <div class="micro-caption">正方体中两条红线虽空间异面，但将方向向量平移到公共顶点 B 后，瞬时共面相交，构成平面夹角！</div>
+  </div>
+
+  <details class="more" style="margin-top:14px;">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>空间里四个向量，为什么总有一个能用另外三个表示？</b>空间只有三个「方向自由度」：三个不共面的向量就能表示空间里所有向量，第四个必然能用它们表示出来。下一节（<a href="e1-1-2.html">1.2 空间向量基本定理</a>）把这件事讲清楚。</p>
   </details>
@@ -237,6 +336,7 @@
     <button type="button" class="on" data-mode="add" role="tab" aria-selected="true">加法：平行四边形 / 三角形</button>
     <button type="button" data-mode="dot" role="tab" aria-selected="false">数量积与空间夹角 \(\theta\)</button>
     <button type="button" data-mode="proj" role="tab" aria-selected="false">投影向量</button>
+    <button type="button" data-mode="isopara" data-iso-tab="1" role="tab" aria-selected="false">平行六面体合成台（等距 3D）</button>
   </div>
 
   <div class="legend">
@@ -365,373 +465,527 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
 </div>
 
+<script src="../assets/iso-bench.js"></script>
 <script>
-(function () {
-  "use strict";
+(function(){
+"use strict";
+var axIn=document.getElementById("ax");
+var ayIn=document.getElementById("ay");
+var azIn=document.getElementById("az");
+var bxIn=document.getElementById("bx");
+var byIn=document.getElementById("by");
+var bzIn=document.getElementById("bz");
+var axOut=document.getElementById("axOut");
+var ayOut=document.getElementById("ayOut");
+var azOut=document.getElementById("azOut");
+var bxOut=document.getElementById("bxOut");
+var byOut=document.getElementById("byOut");
+var bzOut=document.getElementById("bzOut");
+var svg=document.getElementById("fig3d");
+var desc=document.getElementById("vecResult");
+var resetBtn=document.getElementById("reset");
+var modeTabs=document.getElementById("modeTabs");
+var curMode="add";
+var origin=[250,205];
+var scale=25;
+function toScreen(x,y,z){
+var px=origin[0]+(x-0.3536*y)*scale;
+var py=origin[1]-(z-0.3536*y)*scale;
+return[px,py];
+}
+function svgEl(tag,attrs){
+var el=document.createElementNS("http://www.w3.org/2000/svg",tag);
+for(var k in attrs){
+if(Object.prototype.hasOwnProperty.call(attrs,k)){
+el.setAttribute(k,attrs[k]);
+}
+}
+return el;
+}
+function drawArrow(p1,p2,color,w,dash){
+var dx=p2[0]-p1[0],dy=p2[1]-p1[1];
+var len=Math.hypot(dx,dy);
+if(len<1)return;
+var ux=dx/len,uy=dy/len;
+var al=Math.min(10,len*0.4);
+var aw=al*0.55;
+var endX=p2[0]-ux*(al*0.7);
+var endY=p2[1]-uy*(al*0.7);
+var line=svgEl("line",{
+x1:p1[0].toFixed(1),y1:p1[1].toFixed(1),
+x2:endX.toFixed(1),y2:endY.toFixed(1),
+stroke:color,"stroke-width":w||"2.5"
+});
+if(dash)line.setAttribute("stroke-dasharray",dash);
+svg.appendChild(line);
+var tipX=p2[0],tipY=p2[1];
+var leftX=tipX-ux*al-uy*aw;
+var leftY=tipY-uy*al+ux*aw;
+var rightX=tipX-ux*al+uy*aw;
+var rightY=tipY-uy*al-ux*aw;
+var poly=svgEl("polygon",{
+points:tipX.toFixed(1)+","+tipY.toFixed(1)+" "+
+leftX.toFixed(1)+","+leftY.toFixed(1)+" "+
+rightX.toFixed(1)+","+rightY.toFixed(1),
+fill:color
+});
+svg.appendChild(poly);
+}
+function drawText(pt,str,color,dx,dy,sz){
+var txt=svgEl("text",{
+x:(pt[0]+(dx||0)).toFixed(1),
+y:(pt[1]+(dy||0)).toFixed(1),
+fill:color||"var(--fg)",
+"font-size":sz||"13",
+"font-weight":"700"
+});
+txt.textContent=str;
+svg.appendChild(txt);
+}
+function drawCircle(pt,r,color,strokeColor){
+var circ=svgEl("circle",{
+cx:pt[0].toFixed(1),cy:pt[1].toFixed(1),
+r:r,fill:color
+});
+if(strokeColor){
+circ.setAttribute("stroke",strokeColor);
+circ.setAttribute("stroke-width","2");
+}
+svg.appendChild(circ);
+return circ;
+}
+function render(){
+var ax=parseFloat(axIn.value);
+var ay=parseFloat(ayIn.value);
+var az=parseFloat(azIn.value);
+var bx=parseFloat(bxIn.value);
+var by=parseFloat(byIn.value);
+var bz=parseFloat(bzIn.value);
+axOut.textContent=ax;
+ayOut.textContent=ay;
+azOut.textContent=az;
+bxOut.textContent=bx;
+byOut.textContent=by;
+bzOut.textContent=bz;
+svg.innerHTML="";
+if(curMode==="isopara"&&window.IsoBench&&window.IsoBench.isReal===true){
+window.IsoBench.renderParallelepipedBench(svg,desc,ax,ay,az,bx,by,bz,function(){
+if(window.renderMathInElement){
+window.renderMathInElement(desc,{
+delimiters:[
+{left:"$",right:"$",display:true},
+{left:"\\(",right:"\\)",display:false}
+],
+throwOnError:false
+});
+}
+});
+return;
+}
+var O=toScreen(0,0,0);
+for(var gx=-2;gx<=5;gx+=1){
+var g1=toScreen(gx,-1,0);
+var g2=toScreen(gx,4,0);
+var gl=svgEl("line",{
+x1:g1[0].toFixed(1),y1:g1[1].toFixed(1),
+x2:g2[0].toFixed(1),y2:g2[1].toFixed(1),
+stroke:"var(--line)","stroke-width":"0.9"
+});
+svg.appendChild(gl);
+}
+for(var gy=-1;gy<=4;gy+=1){
+var h1=toScreen(-2,gy,0);
+var h2=toScreen(5,gy,0);
+var hl=svgEl("line",{
+x1:h1[0].toFixed(1),y1:h1[1].toFixed(1),
+x2:h2[0].toFixed(1),y2:h2[1].toFixed(1),
+stroke:"var(--line)","stroke-width":"0.9"
+});
+svg.appendChild(hl);
+}
+var xEnd=toScreen(6.2,0,0);
+var yEnd=toScreen(0,5.2,0);
+var zEnd=toScreen(0,0,5.5);
+drawArrow(O,xEnd,"var(--muted)","1.5");
+drawArrow(O,yEnd,"var(--muted)","1.5");
+drawArrow(O,zEnd,"var(--muted)","1.5");
+drawText(xEnd,"x","var(--muted)",8,4);
+drawText(yEnd,"y","var(--muted)",-14,14);
+drawText(zEnd,"z","var(--muted)",-4,-8);
+drawText(O,"O","var(--fg)",-22,-6);
+var ptA=toScreen(ax,ay,az);
+var ptB=toScreen(bx,by,bz);
+var ptA_ground=toScreen(ax,ay,0);
+var ptB_ground=toScreen(bx,by,0);
+var dashA=svgEl("line",{
+x1:ptA[0].toFixed(1),y1:ptA[1].toFixed(1),
+x2:ptA_ground[0].toFixed(1),y2:ptA_ground[1].toFixed(1),
+stroke:"var(--a)","stroke-width":"1.2","stroke-dasharray":"3,3",opacity:"0.6"
+});
+svg.appendChild(dashA);
+var dashB=svgEl("line",{
+x1:ptB[0].toFixed(1),y1:ptB[1].toFixed(1),
+x2:ptB_ground[0].toFixed(1),y2:ptB_ground[1].toFixed(1),
+stroke:"var(--c)","stroke-width":"1.2","stroke-dasharray":"3,3",opacity:"0.6"
+});
+svg.appendChild(dashB);
+var lenA=Math.hypot(ax,ay,az);
+var lenB=Math.hypot(bx,by,bz);
+var dot=ax*bx+ay*by+az*bz;
+var hasAngle=(lenA>1e-4&&lenB>1e-4);
+var cosTheta=hasAngle?Math.max(-1,Math.min(1,dot/(lenA*lenB))):1;
+var deg=Math.acos(cosTheta)*180/Math.PI;
+if(curMode==="add"){
+var sumX=ax+bx,sumY=ay+by,sumZ=az+bz;
+var ptP=toScreen(sumX,sumY,sumZ);
+var aux1=svgEl("line",{
+x1:ptA[0].toFixed(1),y1:ptA[1].toFixed(1),
+x2:ptP[0].toFixed(1),y2:ptP[1].toFixed(1),
+stroke:"var(--c)","stroke-width":"1.5","stroke-dasharray":"4,3",opacity:"0.8"
+});
+var aux2=svgEl("line",{
+x1:ptB[0].toFixed(1),y1:ptB[1].toFixed(1),
+x2:ptP[0].toFixed(1),y2:ptP[1].toFixed(1),
+stroke:"var(--a)","stroke-width":"1.5","stroke-dasharray":"4,3",opacity:"0.8"
+});
+svg.appendChild(aux1);
+svg.appendChild(aux2);
+drawArrow(O,ptA,"var(--a)","3");
+drawArrow(O,ptB,"var(--c)","3");
+drawArrow(O,ptP,"var(--b)","3.8");
+drawCircle(ptA,4,"var(--a)","#fff");
+drawCircle(ptB,4,"var(--c)","#fff");
+drawCircle(ptP,5,"var(--b)","#fff");
+drawText(ptA,"a","var(--a)",-12,-8);
+drawText(ptB,"b","var(--c)",8,14);
+drawText(ptP,"a+b","var(--b)",10,-6);
+var lenP=Math.hypot(sumX,sumY,sumZ);
+desc.innerHTML=
+"<b>空间向量加法</b>：\\(\\boldsymbol{a} = ("+ax+", "+ay+", "+az+")\\)，\\(\\boldsymbol{b} = ("+bx+", "+by+", "+bz+")\\)；<br>"+
+"合向量 \\(\\boldsymbol{a} + \\boldsymbol{b} = ("+sumX+", "+sumY+", "+sumZ+")\\)，"+
+"模长 \\(|\\boldsymbol{a} + \\boldsymbol{b}| = "+lenP.toFixed(2)+"\\)。<br>"+
+"<span class=\"small\">既满足平行四边形法则（对角线 \\(\\overrightarrow{OP}\\)），也满足三角形法则（首尾相接 \\(\\overrightarrow{OA}+\\overrightarrow{AP}\\)）。</span>";
+}else if(curMode==="dot"){
+drawArrow(O,ptA,"var(--a)","3");
+drawArrow(O,ptB,"var(--c)","3");
+drawCircle(ptA,4,"var(--a)","#fff");
+drawCircle(ptB,4,"var(--c)","#fff");
+drawText(ptA,"a","var(--a)",-12,-8);
+drawText(ptB,"b","var(--c)",8,14);
+if(hasAngle&&deg>1){
+var arcPts=[];
+var steps=14;
+var rVal=1.3;
+for(var i=0;i<=steps;i++){
+var t=i/steps;
+var ux=(1-t)*(ax/lenA)+t*(bx/lenB);
+var uy=(1-t)*(ay/lenA)+t*(by/lenB);
+var uz=(1-t)*(az/lenA)+t*(bz/lenB);
+var uLen=Math.hypot(ux,uy,uz);
+if(uLen>1e-4){
+ux=(ux/uLen)*rVal;
+uy=(uy/uLen)*rVal;
+uz=(uz/uLen)*rVal;
+}
+arcPts.push(toScreen(ux,uy,uz));
+}
+var pathD="M "+O[0].toFixed(1)+" "+O[1].toFixed(1);
+for(var k=0;k<arcPts.length;k++){
+pathD+=" L "+arcPts[k][0].toFixed(1)+" "+arcPts[k][1].toFixed(1);
+}
+pathD+=" Z";
+var arcPoly=svgEl("path",{
+d:pathD,
+fill:"var(--hl-soft)",
+stroke:"var(--hl)",
+"stroke-width":"1.5",
+opacity:"0.85"
+});
+svg.appendChild(arcPoly);
+var midPt=arcPts[Math.floor(steps/2)];
+drawText(midPt,"θ","var(--b)",4,-4);
+}
+var tagCls="tag-acute",tagTxt="锐角";
+if(!hasAngle){tagCls="";tagTxt="含零向量";}
+else if(Math.abs(deg-90)<0.1){tagCls="tag-right";tagTxt="垂直 (90°)";}
+else if(deg>90){tagCls="tag-obtuse";tagTxt="钝角";}
+else if(deg<0.1){tagCls="tag-acute";tagTxt="同向 (0°)";}
+else if(Math.abs(deg-180)<0.1){tagCls="tag-obtuse";tagTxt="反向 (180°)";}
+desc.innerHTML=
+"<b>空间数量积与夹角</b>：\\(|\\boldsymbol{a}| = "+lenA.toFixed(2)+"\\)，\\(|\\boldsymbol{b}| = "+lenB.toFixed(2)+"\\)；<br>"+
+"数量积 \\(\\boldsymbol{a}\\cdot\\boldsymbol{b} = "+dot.toFixed(2)+"\\)，"+
+"空间夹角 \\(\\theta = "+(hasAngle?deg.toFixed(1)+"^\\circ":"未定义")+"\\)"+
+(hasAngle?" <span class=\"tag-status "+tagCls+"\">"+tagTxt+"</span>":"")+"。<br>"+
+"<span class=\"small\">"+(dot===0&&hasAngle?"★ 数量积为 0，两非零空间向量垂直！":"注意：空间向量夹角规定在 [0, π] 范围内。")+"</span>";
+}else if(curMode==="proj"){
+drawArrow(O,ptA,"var(--a)","3");
+drawArrow(O,ptB,"var(--c)","3");
+var bLenSq=bx*bx+by*by+bz*bz;
+var hx=0,hy=0,hz=0;
+var projScalar=0;
+if(bLenSq>1e-4){
+var coeff=dot/bLenSq;
+hx=coeff*bx;
+hy=coeff*by;
+hz=coeff*bz;
+projScalar=dot/lenB;
+}
+var ptH=toScreen(hx,hy,hz);
+var perp=svgEl("line",{
+x1:ptA[0].toFixed(1),y1:ptA[1].toFixed(1),
+x2:ptH[0].toFixed(1),y2:ptH[1].toFixed(1),
+stroke:"var(--no)","stroke-width":"1.6","stroke-dasharray":"4,3"
+});
+svg.appendChild(perp);
+drawArrow(O,ptH,"var(--b)","4");
+drawCircle(ptH,4,"var(--b)","#fff");
+drawCircle(ptA,4,"var(--a)","#fff");
+drawCircle(ptB,4,"var(--c)","#fff");
+var hNearB=Math.hypot(ptH[0]-ptB[0],ptH[1]-ptB[1])<36;
+var hNearO=Math.hypot(ptH[0]-O[0],ptH[1]-O[1])<36;
+drawText(ptA,"a","var(--a)",-12,-8);
+drawText(ptB,"b","var(--c)",10,18);
+drawText(ptH,"H","var(--b)",hNearO?14:(hNearB?-22:10),hNearO?-12:(hNearB?-12:-8));
+desc.innerHTML=
+"<b>投影向量</b>：将 \\(\\boldsymbol{a}\\) 的终点向 \\(\\boldsymbol{b}\\) 所在直线作垂线，垂足为 \\(H\\)；<br>"+
+"投影向量 \\(\\overrightarrow{OH} = (\\boldsymbol{a}\\cdot\\boldsymbol{e})\\boldsymbol{e} = ("+hx.toFixed(2)+", "+hy.toFixed(2)+", "+hz.toFixed(2)+")\\)；<br>"+
+"投影数量（有向长）：\\(|\\boldsymbol{a}|\\cos\\theta = \\dfrac{\\boldsymbol{a}\\cdot\\boldsymbol{b}}{|\\boldsymbol{b}|} = "+projScalar.toFixed(2)+"\\)。";
+}
+if(window.renderMathInElement){
+window.renderMathInElement(desc,{
+delimiters:[
+{left:"$",right:"$",display:true},
+{left:"\\(",right:"\\)",display:false}
+],
+throwOnError:false
+});
+}
+}
+[axIn,ayIn,azIn,bxIn,byIn,bzIn].forEach(function(inp){
+inp.addEventListener("input",render);
+});
+resetBtn.addEventListener("click",function(){
+axIn.value=3;
+ayIn.value=1;
+azIn.value=3;
+bxIn.value=2;
+byIn.value=4;
+bzIn.value=0;
+curMode="add";
+[].forEach.call(modeTabs.children,function(btn){
+btn.classList.toggle("on",btn.getAttribute("data-mode")==="add");
+btn.setAttribute("aria-selected",btn.getAttribute("data-mode")==="add"?"true":"false");
+});
+render();
+});
+modeTabs.addEventListener("click",function(ev){
+var btn=ev.target.closest("button");
+if(!btn)return;
+var m=btn.getAttribute("data-mode");
+if(!m)return;
+curMode=m;
+[].forEach.call(modeTabs.children,function(b){
+var sel=b===btn;
+b.classList.toggle("on",sel);
+b.setAttribute("aria-selected",sel?"true":"false");
+});
+render();
+});
+render();
+/*=================0从例子进入：无人机三维长方体位移合成=================*/
+var edSvg=document.getElementById("entry-drone"),edBar=document.getElementById("entry-drone-bar"),edNote=document.getElementById("entry-drone-note");
+function edDraw(step){
+if(!edSvg)return;
+edSvg.innerHTML="";
+function add(tag,attrs,txt){
+var n=svgEl(tag,attrs);
+if(txt!==undefined)n.textContent=txt;
+edSvg.appendChild(n);
+return n;
+}
+var O=[90,172],A=[310,172],B=[378,126],D=[158,126];
+var O1=[90,76],A1=[310,76],P=[378,30],D1=[158,30];
+add("polygon",{points:O[0]+","+O[1]+" "+A[0]+","+A[1]+" "+B[0]+","+B[1]+" "+D[0]+","+D[1],fill:"var(--ok-soft)",stroke:"var(--line)","stroke-width":1.4});
+[[O,O1],[A,A1],[D,D1],[O1,A1],[A1,P],[P,D1],[D1,O1],[O,D],[D,B]].forEach(function(e){
+add("line",{x1:e[0][0],y1:e[0][1],x2:e[1][0],y2:e[1][1],stroke:"var(--line)","stroke-width":1.3,"stroke-dasharray":"4,3"});
+});
+add("line",{x1:O[0],y1:O[1],x2:A[0],y2:A[1],stroke:"var(--a)","stroke-width":3.2});
+add("line",{x1:A[0],y1:A[1],x2:B[0],y2:B[1],stroke:"var(--c)","stroke-width":3.2});
+add("line",{x1:O[0],y1:O[1],x2:B[0],y2:B[1],stroke:"var(--b)","stroke-width":3,"stroke-dasharray":step===2?"6,3":""});
+add("text",{x:200,y:192,"text-anchor":"middle",fill:"var(--a)","font-size":13.5,"font-weight":700},"① 向东 12m");
+add("text",{x:364,y:158,fill:"var(--c)","font-size":13.5,"font-weight":700},"② 向北 5m");
+add("text",{x:222,y:144,"text-anchor":"middle",fill:"var(--b)","font-size":13,"font-weight":700},"地面合成 √(12²+5²)=13m");
+if(step===2){
+add("polygon",{points:O[0]+","+O[1]+" "+B[0]+","+B[1]+" "+P[0]+","+P[1],fill:"rgba(217,72,62,0.12)",stroke:"none"});
+add("polyline",{points:(B[0]-12)+","+(B[1]+5)+" "+(B[0]-12)+","+(B[1]-9)+" "+B[0]+","+(B[1]-14),fill:"none",stroke:"var(--c)","stroke-width":1.8});
+add("line",{x1:B[0],y1:B[1],x2:P[0],y2:P[1],stroke:"var(--c)","stroke-width":3.4});
+add("line",{x1:O[0],y1:O[1],x2:P[0],y2:P[1],stroke:"var(--no)","stroke-width":4});
+add("circle",{cx:P[0],cy:P[1],r:6,fill:"var(--no)",stroke:"var(--card)","stroke-width":2});
+add("text",{x:B[0]+10,y:82,fill:"var(--c)","font-size":13.5,"font-weight":700},"③ 向上 9m");
+add("text",{x:215,y:84,"text-anchor":"middle",fill:"var(--no)","font-size":14,"font-weight":700},"空间总位移 |OP| = √(13²+9²) ≈ 15.8m");
+add("text",{x:P[0]+10,y:P[1]+5,fill:"var(--no)","font-size":13.5,"font-weight":700},"P (无人机)");
+edNote.innerHTML="<b>第 2 步（三维合成）</b>：地面斜边 <b>13m</b> 与竖直向上爬升的 <b>9m</b> 再次构成直角三角形！由勾股定理，空间体对角线总位移 = <b>√(13² + 9²) = √(12² + 5² + 9²) = √250 ≈ 15.8m</b>。";
+}else{
+add("circle",{cx:B[0],cy:B[1],r:5.5,fill:"var(--b)",stroke:"var(--card)","stroke-width":2});
+add("text",{x:B[0]+10,y:B[1]-4,fill:"var(--b)","font-size":13.5,"font-weight":700},"B (地面 13m)");
+edNote.innerHTML="<b>第 1 步（地面合成）</b>：向东 <b>12m</b> 与向北 <b>5m</b> 在水平地面内互相垂直，合成地面位移 |OB| = <b>√(12² + 5²) = 13m</b>（注意：还没算向上的 9m！请点第 2 步）。";
+}
+add("circle",{cx:O[0],cy:O[1],r:4.5,fill:"var(--fg)"});
+add("text",{x:O[0]-10,y:O[1]+5,"text-anchor":"end",fill:"var(--fg)","font-size":13.5,"font-weight":700},"起点 O");
+[].forEach.call(edBar.querySelectorAll("button"),function(b){
+b.classList.toggle("on",parseInt(b.getAttribute("data-step"),10)===step);
+});
+}
+[].forEach.call(edBar.querySelectorAll("button"),function(b){
+b.onclick=function(){edDraw(parseInt(b.getAttribute("data-step"),10));};
+});
+document.addEventListener("predict:pick",function(ev){
+if(ev.detail&&ev.detail.id==="entry"){
+edDraw(ev.detail.choice==="D"?1:2);
+}
+});
+document.addEventListener("predict:reset",function(ev){
+if(ev.detail&&ev.detail.id==="entry")edDraw(2);
+});
+edDraw(2);
+function initMSvecFig(){
+  var svgEl=document.getElementById("m-svec-fig"),capEl=document.getElementById("m-svec-cap");
+  if(!svgEl)return;
+  var mode="free",NS="http://www.w3.org/2000/svg";
+  var caps={
+    free:"空间自由向量自由平移：任意给定空间两个向量，平移到同一起点后必落在同一个平面内，绝无「异面向量」！",
+    loop:"空间折线回路法则：空间任意封闭多边形的首尾相接向量和恒为零向量，起点指向终点为合成向量。",
+    dot:"空间数量积与投影：a · b = |a||b| cos θ，几何意义为向量 a 的模与向量 b 在 a 方向上的投影数量之积。"
+  };
+  function draw(){
+    svgEl.innerHTML="";
+    function s(tag,attrs,txt){
+      var el=document.createElementNS(NS,tag);
+      for(var k in attrs)el.setAttribute(k,attrs[k]);
+      if(txt)el.textContent=txt;
+      svgEl.appendChild(el);
+      return el;
+    }
+    function ln(x1,y1,x2,y2,c,w,d){
+      var a={x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5};
+      if(d)a["stroke-dasharray"]=d;
+      return s("line",a);
+    }
+    function rc(x,y,w,h,f,c,r,d){
+      var a={x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none"};
+      if(r)a.rx=r;
+      if(d)a["stroke-dasharray"]=d;
+      return s("rect",a);
+    }
+    function tx(x,y,txt,c,sz,b,anch){
+      var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+      if(b)a["font-weight"]="bold";
+      if(anch)a["text-anchor"]=anch;
+      return s("text",a,txt);
+    }
 
-  var axIn = document.getElementById("ax");
-  var ayIn = document.getElementById("ay");
-  var azIn = document.getElementById("az");
-  var bxIn = document.getElementById("bx");
-  var byIn = document.getElementById("by");
-  var bzIn = document.getElementById("bz");
+    if(mode==="free"){
+      tx(270,24,"正方体中异面棱向量自由平移共面","#0f172a","12.5",true,"middle");
+      rc(100,70,90,90,"none","#cbd5e1");
+      rc(150,40,90,90,"none","#cbd5e1",null,"3 3");
+      ln(100,70,150,40);ln(190,70,240,40);ln(100,160,150,130,"#cbd5e1",1.5,"3 3");ln(190,160,240,130);
+      ln(100,160,190,160,"#2563eb",2.5);tx(145,178,"向量 AB","#2563eb","11",true,"middle");
+      ln(240,130,240,40,"#d97706",2,"3 3");tx(265,85,"棱 CC1 (原异面)","#d97706","10.5");
+      ln(190,160,190,70,"#059669",2.5);tx(215,115,"平移至 BB1","#059669","11",true);
+      s("path",{d:"M 235 75 Q 210 95 195 85",fill:"none",stroke:"#94a3b8","stroke-width":1.5,"stroke-dasharray":"2 2"});
+      s("polygon",{points:"100,70 190,70 190,160 100,160",fill:"rgba(37,99,235,0.08)",stroke:"none"});
+      tx(145,115,"平面 ABB1A1","#1e3a8a","11",false,"middle");
+      rc(330,50,185,120,"#f8fafc","#cbd5e1",6);
+      tx(345,78,"向量共面铁律","#0f172a","12",true);
+      tx(345,102,"• 直线异面，向量共面","#2563eb","11");
+      tx(345,124,"• 起点统一，平移即合","#059669","11");
+      tx(345,146,"• 绝无「异面向量」！","#dc2626","10.5",true);
 
-  var axOut = document.getElementById("axOut");
-  var ayOut = document.getElementById("ayOut");
-  var azOut = document.getElementById("azOut");
-  var bxOut = document.getElementById("bxOut");
-  var byOut = document.getElementById("byOut");
-  var bzOut = document.getElementById("bzOut");
+    }else if(mode==="loop"){
+      tx(270,24,"空间折线合成：首尾相接回路恒等于零向量","#0f172a","12.5",true,"middle");
+      ln(80,140,190,160,"#2563eb",2);tx(130,165,"AB","#2563eb","11",true);
+      ln(190,160,310,110,"#059669",2);tx(255,150,"BC","#059669","11",true);
+      ln(310,110,220,50,"#d97706",2);tx(275,75,"CD","#d97706","11",true);
+      ln(80,140,220,50,"#dc2626",2.5);tx(135,85,"AD = AB + BC + CD","#dc2626","12",true);
+      ln(220,50,80,140,"#94a3b8",1.5,"3 3");
+      [{x:80,y:140,n:"A"},{x:190,y:160,n:"B"},{x:310,y:110,n:"C"},{x:220,y:50,n:"D"}].forEach(function(p){
+        s("circle",{cx:p.x,cy:p.y,r:4,fill:"#0f172a"});
+        tx(p.x-8,p.y-6,p.n,"#0f172a","11",true);
+      });
+      rc(330,60,180,95,"#f1f5f9","#cbd5e1",6);
+      tx(345,88,"空间折线定理","#0f172a","11.5",true);
+      tx(345,112,"AB + BC + CD = AD","#2563eb","11");
+      tx(345,134,"AB + BC + CD + DA = 0","#059669","10.5",true);
 
-  var svg = document.getElementById("fig3d");
-  var desc = document.getElementById("vecResult");
-  var resetBtn = document.getElementById("reset");
-  var modeTabs = document.getElementById("modeTabs");
+    }else if(mode==="dot"){
+      tx(270,24,"空间数量积：a · b = |a| × (|b| cos θ)","#0f172a","12.5",true,"middle");
+      ln(80,150,300,150,"#2563eb",2.5);tx(190,172,"向量 a (模长 |a|)","#2563eb","12",true,"middle");
+      ln(80,150,210,60,"#059669",2.5);tx(135,95,"向量 b","#059669","12",true);
+      s("path",{d:"M 120 150 A 40 40 0 0 0 110 128",fill:"none",stroke:"#d97706","stroke-width":1.5});
+      tx(128,135,"θ","#d97706","11",true);
+      ln(210,60,210,150,"#dc2626",1.5,"3 3");
+      rc(200,140,10,10,"none","#dc2626");
+      ln(80,154,210,154,"#dc2626",2.5);tx(145,192,"投影数量 |b| cos θ","#dc2626","11",true,"middle");
+      rc(330,55,185,105,"#f1f5f9","#cbd5e1",6);
+      tx(345,82,"数量积几何本质","#0f172a","12",true);
+      tx(345,105,"a · b = |a| × 投影数量","#2563eb","11");
+      tx(345,126,"垂直 ⟺ 投影为 0","#dc2626","11",true);
+      tx(345,146,"cos 90° = 0 ⟹ a · b = 0","#64748b","10");
+    }
 
-  var curMode = "add";
-
-  // 空间斜二测投影参数：原点 (250, 205)，缩放尺 25 px/单位
-  var origin = [250, 205];
-  var scale = 25;
-
-  function toScreen(x, y, z) {
-    // x: 水平向右, y: 进深斜向左下(成45度，长度减半), z: 竖直向上
-    var px = origin[0] + (x - 0.3536 * y) * scale;
-    var py = origin[1] - (z - 0.3536 * y) * scale;
-    return [px, py];
+    if(capEl)capEl.textContent=caps[mode];
+    if(window.renderMathInElement)window.renderMathInElement(capEl);
   }
 
-  function svgEl(tag, attrs) {
-    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
-    for (var k in attrs) {
-      if (Object.prototype.hasOwnProperty.call(attrs, k)) {
-        el.setAttribute(k, attrs[k]);
-      }
-    }
+  var tabs=document.querySelectorAll(".micro-box .micro-tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click",function(){
+      tabs.forEach(function(t){t.classList.remove("active");});
+      tab.classList.add("active");
+      mode=tab.getAttribute("data-mode");
+      draw();
+    });
+  });
+  draw();
+}
+
+function initMSvecTrapFig(){
+  var svgEl=document.getElementById("m-svec-trap-fig");
+  if(!svgEl)return;
+  svgEl.innerHTML="";
+  var NS="http://www.w3.org/2000/svg";
+  function s(tag,attrs,txt){
+    var el=document.createElementNS(NS,tag);
+    for(var k in attrs)el.setAttribute(k,attrs[k]);
+    if(txt)el.textContent=txt;
+    svgEl.appendChild(el);
     return el;
   }
-
-  function drawArrow(p1, p2, color, w, dash) {
-    var dx = p2[0] - p1[0], dy = p2[1] - p1[1];
-    var len = Math.hypot(dx, dy);
-    if (len < 1) return;
-    var ux = dx / len, uy = dy / len;
-    var al = Math.min(10, len * 0.4);
-    var aw = al * 0.55;
-    var endX = p2[0] - ux * (al * 0.7);
-    var endY = p2[1] - uy * (al * 0.7);
-
-    var line = svgEl("line", {
-      x1: p1[0].toFixed(1), y1: p1[1].toFixed(1),
-      x2: endX.toFixed(1), y2: endY.toFixed(1),
-      stroke: color, "stroke-width": w || "2.5"
-    });
-    if (dash) line.setAttribute("stroke-dasharray", dash);
-    svg.appendChild(line);
-
-    var tipX = p2[0], tipY = p2[1];
-    var leftX = tipX - ux * al - uy * aw;
-    var leftY = tipY - uy * al + ux * aw;
-    var rightX = tipX - ux * al + uy * aw;
-    var rightY = tipY - uy * al - ux * aw;
-    var poly = svgEl("polygon", {
-      points: tipX.toFixed(1) + "," + tipY.toFixed(1) + " " +
-              leftX.toFixed(1) + "," + leftY.toFixed(1) + " " +
-              rightX.toFixed(1) + "," + rightY.toFixed(1),
-      fill: color
-    });
-    svg.appendChild(poly);
+  function ln(x1,y1,x2,y2,c,w){return s("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5});}
+  function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
+  function tx(x,y,txt,c,sz,b,anch){
+    var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+    if(b)a["font-weight"]="bold";
+    if(anch)a["text-anchor"]=anch;
+    return s("text",a,txt);
   }
 
-  function drawText(pt, str, color, dx, dy, sz) {
-    var txt = svgEl("text", {
-      x: (pt[0] + (dx || 0)).toFixed(1),
-      y: (pt[1] + (dy || 0)).toFixed(1),
-      fill: color || "var(--fg)",
-      "font-size": sz || "13",
-      "font-weight": "700"
-    });
-    txt.textContent = str;
-    svg.appendChild(txt);
-  }
+  rc(30,20,220,130,"#fef2f2","#fca5a5",6);
+  tx(140,44,"❌ 典型误区：异面直线向量异面","#dc2626","11.5",true,"middle");
+  ln(60,110,130,60,"#dc2626",2);tx(75,80,"直线 l1","#dc2626","10.5");
+  ln(150,120,220,120,"#dc2626",2);tx(185,112,"直线 l2 (异面)","#dc2626","10.5",false,"middle");
+  tx(140,141,"误认为无法求夹角与加减","#64748b","9.5",false,"middle");
 
-  function drawCircle(pt, r, color, strokeColor) {
-    var circ = svgEl("circle", {
-      cx: pt[0].toFixed(1), cy: pt[1].toFixed(1),
-      r: r, fill: color
-    });
-    if (strokeColor) {
-      circ.setAttribute("stroke", strokeColor);
-      circ.setAttribute("stroke-width", "2");
-    }
-    svg.appendChild(circ);
-    return circ;
-  }
-
-  function render() {
-    var ax = parseFloat(axIn.value);
-    var ay = parseFloat(ayIn.value);
-    var az = parseFloat(azIn.value);
-    var bx = parseFloat(bxIn.value);
-    var by = parseFloat(byIn.value);
-    var bz = parseFloat(bzIn.value);
-
-    axOut.textContent = ax;
-    ayOut.textContent = ay;
-    azOut.textContent = az;
-    bxOut.textContent = bx;
-    byOut.textContent = by;
-    bzOut.textContent = bz;
-
-    svg.innerHTML = "";
-
-    var O = toScreen(0, 0, 0);
-
-    // 绘制地面网格 (x-y 平面基底)
-    for (var gx = -2; gx <= 5; gx += 1) {
-      var g1 = toScreen(gx, -1, 0);
-      var g2 = toScreen(gx, 4, 0);
-      var gl = svgEl("line", {
-        x1: g1[0].toFixed(1), y1: g1[1].toFixed(1),
-        x2: g2[0].toFixed(1), y2: g2[1].toFixed(1),
-        stroke: "var(--line)", "stroke-width": "0.9"
-      });
-      svg.appendChild(gl);
-    }
-    for (var gy = -1; gy <= 4; gy += 1) {
-      var h1 = toScreen(-2, gy, 0);
-      var h2 = toScreen(5, gy, 0);
-      var hl = svgEl("line", {
-        x1: h1[0].toFixed(1), y1: h1[1].toFixed(1),
-        x2: h2[0].toFixed(1), y2: h2[1].toFixed(1),
-        stroke: "var(--line)", "stroke-width": "0.9"
-      });
-      svg.appendChild(hl);
-    }
-
-    // 绘制 3 根坐标轴
-    var xEnd = toScreen(6.2, 0, 0);
-    var yEnd = toScreen(0, 5.2, 0);
-    var zEnd = toScreen(0, 0, 5.5);
-    drawArrow(O, xEnd, "var(--muted)", "1.5");
-    drawArrow(O, yEnd, "var(--muted)", "1.5");
-    drawArrow(O, zEnd, "var(--muted)", "1.5");
-    drawText(xEnd, "x", "var(--muted)", 8, 4);
-    drawText(yEnd, "y", "var(--muted)", -14, 14);
-    drawText(zEnd, "z", "var(--muted)", -4, -8);
-    drawText(O, "O", "var(--fg)", -14, 14);
-
-    var ptA = toScreen(ax, ay, az);
-    var ptB = toScreen(bx, by, bz);
-
-    // 投影虚线（显示点 A、B 在地面的空间垂直射影）
-    var ptA_ground = toScreen(ax, ay, 0);
-    var ptB_ground = toScreen(bx, by, 0);
-    var dashA = svgEl("line", {
-      x1: ptA[0].toFixed(1), y1: ptA[1].toFixed(1),
-      x2: ptA_ground[0].toFixed(1), y2: ptA_ground[1].toFixed(1),
-      stroke: "var(--a)", "stroke-width": "1.2", "stroke-dasharray": "3,3", opacity: "0.6"
-    });
-    svg.appendChild(dashA);
-    var dashB = svgEl("line", {
-      x1: ptB[0].toFixed(1), y1: ptB[1].toFixed(1),
-      x2: ptB_ground[0].toFixed(1), y2: ptB_ground[1].toFixed(1),
-      stroke: "var(--c)", "stroke-width": "1.2", "stroke-dasharray": "3,3", opacity: "0.6"
-    });
-    svg.appendChild(dashB);
-
-    // 模长与数量积计算
-    var lenA = Math.hypot(ax, ay, az);
-    var lenB = Math.hypot(bx, by, bz);
-    var dot = ax * bx + ay * by + az * bz;
-    var hasAngle = (lenA > 1e-4 && lenB > 1e-4);
-    var cosTheta = hasAngle ? Math.max(-1, Math.min(1, dot / (lenA * lenB))) : 1;
-    var deg = Math.acos(cosTheta) * 180 / Math.PI;
-
-    if (curMode === "add") {
-      // 模式 1：加法（平行四边形法则与三角形法则）
-      var sumX = ax + bx, sumY = ay + by, sumZ = az + bz;
-      var ptP = toScreen(sumX, sumY, sumZ);
-
-      // 平行四边形两边辅助虚线：A -> P (向量 b) 与 B -> P (向量 a)
-      var aux1 = svgEl("line", {
-        x1: ptA[0].toFixed(1), y1: ptA[1].toFixed(1),
-        x2: ptP[0].toFixed(1), y2: ptP[1].toFixed(1),
-        stroke: "var(--c)", "stroke-width": "1.5", "stroke-dasharray": "4,3", opacity: "0.8"
-      });
-      var aux2 = svgEl("line", {
-        x1: ptB[0].toFixed(1), y1: ptB[1].toFixed(1),
-        x2: ptP[0].toFixed(1), y2: ptP[1].toFixed(1),
-        stroke: "var(--a)", "stroke-width": "1.5", "stroke-dasharray": "4,3", opacity: "0.8"
-      });
-      svg.appendChild(aux1);
-      svg.appendChild(aux2);
-
-      // 主向量 a, b 与合向量 a+b
-      drawArrow(O, ptA, "var(--a)", "3");
-      drawArrow(O, ptB, "var(--c)", "3");
-      drawArrow(O, ptP, "var(--b)", "3.8");
-
-      drawCircle(ptA, 4, "var(--a)", "#fff");
-      drawCircle(ptB, 4, "var(--c)", "#fff");
-      drawCircle(ptP, 5, "var(--b)", "#fff");
-
-      drawText(ptA, "a", "var(--a)", -12, -8);
-      drawText(ptB, "b", "var(--c)", 8, 14);
-      drawText(ptP, "a+b", "var(--b)", 10, -6);
-
-      var lenP = Math.hypot(sumX, sumY, sumZ);
-      desc.innerHTML =
-        "<b>空间向量加法</b>：\\(\\boldsymbol{a} = (" + ax + ", " + ay + ", " + az + ")\\)，\\(\\boldsymbol{b} = (" + bx + ", " + by + ", " + bz + ")\\)；<br>" +
-        "合向量 \\(\\boldsymbol{a} + \\boldsymbol{b} = (" + sumX + ", " + sumY + ", " + sumZ + ")\\)，" +
-        "模长 \\(|\\boldsymbol{a} + \\boldsymbol{b}| = " + lenP.toFixed(2) + "\\)。<br>" +
-        "<span class=\"small\">既满足平行四边形法则（对角线 \\(\\overrightarrow{OP}\\)），也满足三角形法则（首尾相接 \\(\\overrightarrow{OA}+\\overrightarrow{AP}\\)）。</span>";
-    } else if (curMode === "dot") {
-      // 模式 2：空间夹角与数量积
-      drawArrow(O, ptA, "var(--a)", "3");
-      drawArrow(O, ptB, "var(--c)", "3");
-
-      drawCircle(ptA, 4, "var(--a)", "#fff");
-      drawCircle(ptB, 4, "var(--c)", "#fff");
-      drawText(ptA, "a", "var(--a)", -12, -8);
-      drawText(ptB, "b", "var(--c)", 8, 14);
-
-      // 绘制空间两向量夹角扇弧
-      if (hasAngle && deg > 1) {
-        var arcPts = [];
-        var steps = 14;
-        var rVal = 1.3;
-        for (var i = 0; i <= steps; i++) {
-          var t = i / steps;
-          // 在 3D 中沿单位向量插值
-          var ux = (1 - t) * (ax / lenA) + t * (bx / lenB);
-          var uy = (1 - t) * (ay / lenA) + t * (by / lenB);
-          var uz = (1 - t) * (az / lenA) + t * (bz / lenB);
-          var uLen = Math.hypot(ux, uy, uz);
-          if (uLen > 1e-4) {
-            ux = (ux / uLen) * rVal;
-            uy = (uy / uLen) * rVal;
-            uz = (uz / uLen) * rVal;
-          }
-          arcPts.push(toScreen(ux, uy, uz));
-        }
-        var pathD = "M " + O[0].toFixed(1) + " " + O[1].toFixed(1);
-        for (var k = 0; k < arcPts.length; k++) {
-          pathD += " L " + arcPts[k][0].toFixed(1) + " " + arcPts[k][1].toFixed(1);
-        }
-        pathD += " Z";
-        var arcPoly = svgEl("path", {
-          d: pathD,
-          fill: "var(--hl-soft)",
-          stroke: "var(--hl)",
-          "stroke-width": "1.5",
-          opacity: "0.85"
-        });
-        svg.appendChild(arcPoly);
-
-        var midPt = arcPts[Math.floor(steps / 2)];
-        drawText(midPt, "θ", "var(--b)", 4, -4);
-      }
-
-      var tagCls = "tag-acute", tagTxt = "锐角";
-      if (!hasAngle) { tagCls = ""; tagTxt = "含零向量"; }
-      else if (Math.abs(deg - 90) < 0.1) { tagCls = "tag-right"; tagTxt = "垂直 (90°)"; }
-      else if (deg > 90) { tagCls = "tag-obtuse"; tagTxt = "钝角"; }
-      else if (deg < 0.1) { tagCls = "tag-acute"; tagTxt = "同向 (0°)"; }
-      else if (Math.abs(deg - 180) < 0.1) { tagCls = "tag-obtuse"; tagTxt = "反向 (180°)"; }
-
-      desc.innerHTML =
-        "<b>空间数量积与夹角</b>：\\(|\\boldsymbol{a}| = " + lenA.toFixed(2) + "\\)，\\(|\\boldsymbol{b}| = " + lenB.toFixed(2) + "\\)；<br>" +
-        "数量积 \\(\\boldsymbol{a}\\cdot\\boldsymbol{b} = " + dot.toFixed(2) + "\\)，" +
-        "空间夹角 \\(\\theta = " + (hasAngle ? deg.toFixed(1) + "^\\circ" : "未定义") + "\\)" +
-        (hasAngle ? " <span class=\"tag-status " + tagCls + "\">" + tagTxt + "</span>" : "") + "。<br>" +
-        "<span class=\"small\">" + (dot === 0 && hasAngle ? "★ 数量积为 0，两非零空间向量垂直！" : "注意：空间向量夹角规定在 [0, π] 范围内。") + "</span>";
-    } else if (curMode === "proj") {
-      // 模式 3：投影向量
-      drawArrow(O, ptA, "var(--a)", "3");
-      drawArrow(O, ptB, "var(--c)", "3");
-
-      var bLenSq = bx * bx + by * by + bz * bz;
-      var hx = 0, hy = 0, hz = 0;
-      var projScalar = 0;
-      if (bLenSq > 1e-4) {
-        var coeff = dot / bLenSq;
-        hx = coeff * bx;
-        hy = coeff * by;
-        hz = coeff * bz;
-        projScalar = dot / lenB;
-      }
-      var ptH = toScreen(hx, hy, hz);
-
-      // 从点 A 向向量 b 所在直线作垂线 A -> H
-      var perp = svgEl("line", {
-        x1: ptA[0].toFixed(1), y1: ptA[1].toFixed(1),
-        x2: ptH[0].toFixed(1), y2: ptH[1].toFixed(1),
-        stroke: "var(--no)", "stroke-width": "1.6", "stroke-dasharray": "4,3"
-      });
-      svg.appendChild(perp);
-
-      // 高亮绘制投影向量 OH
-      drawArrow(O, ptH, "var(--b)", "4");
-      drawCircle(ptH, 4, "var(--b)", "#fff");
-      drawCircle(ptA, 4, "var(--a)", "#fff");
-      drawCircle(ptB, 4, "var(--c)", "#fff");
-
-      drawText(ptA, "a", "var(--a)", -12, -8);
-      drawText(ptB, "b", "var(--c)", 8, 14);
-      drawText(ptH, "H", "var(--b)", -12, 16);
-
-      desc.innerHTML =
-        "<b>投影向量</b>：将 \\(\\boldsymbol{a}\\) 的终点向 \\(\\boldsymbol{b}\\) 所在直线作垂线，垂足为 \\(H\\)；<br>" +
-        "投影向量 \\(\\overrightarrow{OH} = (\\boldsymbol{a}\\cdot\\boldsymbol{e})\\boldsymbol{e} = (" + hx.toFixed(2) + ", " + hy.toFixed(2) + ", " + hz.toFixed(2) + ")\\)；<br>" +
-        "投影数量（有向长）：\\(|\\boldsymbol{a}|\\cos\\theta = \\dfrac{\\boldsymbol{a}\\cdot\\boldsymbol{b}}{|\\boldsymbol{b}|} = " + projScalar.toFixed(2) + "\\)。";
-    }
-
-    if (window.renderMathInElement) {
-      window.renderMathInElement(desc, {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "\\(", right: "\\)", display: false }
-        ],
-        throwOnError: false
-      });
-    }
-  }
-
-  [axIn, ayIn, azIn, bxIn, byIn, bzIn].forEach(function (inp) {
-    inp.addEventListener("input", render);
-  });
-
-  resetBtn.addEventListener("click", function () {
-    axIn.value = 3;
-    ayIn.value = 1;
-    azIn.value = 3;
-    bxIn.value = 2;
-    byIn.value = 4;
-    bzIn.value = 0;
-    curMode = "add";
-    [].forEach.call(modeTabs.children, function (btn) {
-      btn.classList.toggle("on", btn.getAttribute("data-mode") === "add");
-      btn.setAttribute("aria-selected", btn.getAttribute("data-mode") === "add" ? "true" : "false");
-    });
-    render();
-  });
-
-  modeTabs.addEventListener("click", function (ev) {
-    var btn = ev.target.closest("button");
-    if (!btn) return;
-    var m = btn.getAttribute("data-mode");
-    if (!m) return;
-    curMode = m;
-    [].forEach.call(modeTabs.children, function (b) {
-      var sel = b === btn;
-      b.classList.toggle("on", sel);
-      b.setAttribute("aria-selected", sel ? "true" : "false");
-    });
-    render();
-  });
-
-  render();
+  rc(290,20,220,130,"#f0fdf4","#86efac",6);
+  tx(400,44,"✔ 向量真谛：自由平移必共面","#15803d","11.5",true,"middle");
+  ln(340,110,440,110,"#2563eb",2.5);ln(340,110,410,60,"#059669",2.5);
+  s("circle",{cx:340,cy:110,r:4,fill:"#0f172a"});
+  tx(332,125,"同起点 O","#0f172a","10.5",true,"middle");
+  tx(415,125,"向量 a","#2563eb","10.5");tx(395,76,"向量 b","#059669","10.5");
+  tx(400,143,"同一起点必共面，直接求数量积","#15803d","9.5",false,"middle");
+}
+initMSvecFig();
+initMSvecTrapFig();
 })();
 </script>
 </body>

@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .tick { stroke: var(--muted); stroke-width: 1; }
@@ -44,8 +46,15 @@
 <p class="lead">一件事能不能保证另一件事？学会用「推得出 / 推不出 + 反例」说清楚两个条件的关系。先从一个地名开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>杭州是浙江省的一个城市。宁波、温州也在浙江。</p>
+  <p>杭州是浙江省的一个城市。宁波、温州也在浙江。点下面按钮把小人放到不同城市，看看哪句推理一定成立：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-zj" viewBox="0 0 520 195" role="img" aria-label="浙江省大圈包含杭州、宁波、温州三个城市小圈的推出关系图"></svg>
+    <div class="entry-bar" id="entry-zj-bar">
+      <button type="button" data-m="hz" class="on">人在杭州 → 必在浙江 ✓</button>
+      <button type="button" data-m="nb">人在浙江（如宁波）→ 未必在杭州 ✗</button>
+      <button type="button" data-m="wz">人在浙江（如温州）→ 反例 ✗</button>
+    </div>
+    <div class="entry-note" id="entry-zj-note"></div>
     <p>下面哪句话<b>一定</b>对？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>一个人在杭州，他就一定在浙江</button>
@@ -61,41 +70,54 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中学过的「命题」（能判断对错的话）；1.1 用描述法写集合（<a href="b1-1-1.html">回看 1.1</a>）；1.2 的子集、真子集（<a href="b1-1-2.html">回看 1.2</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：从「包含关系与逻辑箭头」建立直觉</h3>
+  <p class="small">要用到：初中学过的「命题」（能判断对错的陈述句）；1.1 用描述法写集合（<a href="b1-1-1.html">回看 1.1</a>）；1.2 的子集、真子集（<a href="b1-1-2.html">回看 1.2</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>「若 \(p\)，则 \(q\)」</b>：很多命题能写成这个样子，\(p\) 是前提，\(q\) 是结论。对的叫真命题，错的叫假命题。</p>
-    <p>例：「若 \(x=2\)，则 \(x^2=4\)」是真命题；「若 \(x^2=4\)，则 \(x=2\)」是假命题。前提和结论换了位置，真假就可能变。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>充分必要条件的集合视觉</b></p>
+    <div class="entry-bar" id="m-arrow-bar" role="group" aria-label="充分必要条件微图解切换">
+      <button type="button" class="on" data-k="suff">① 充分条件（小圈 P 嵌在大圈 Q 里，p ⇒ q 畅通）</button>
+      <button type="button" data-k="nece">② 不必要条件（大圈倒推受阻：反例红点，q ⇏ p）</button>
+      <button type="button" data-k="eq">③ 充要条件（P 与 Q 完全重合：p ⇔ q 双向互推）</button>
+    </div>
+    <svg class="micro-fig" id="m-arrow-fig" viewBox="0 0 520 160" role="img" aria-label="充分必要条件集合与箭头微图解"></svg>
+    <p class="entry-note" id="m-arrow-note"></p>
   </div>
 
-  <div class="card">
-    <p><b>推出 \(\Rightarrow\)</b>：「若 \(p\)，则 \(q\)」是真命题，就写 \(p\Rightarrow q\)，读作「\(p\) 推出 \(q\)」；是假命题，就写 \(p\nRightarrow q\)。</p>
-    <p>例：\(x=2\Rightarrow x^2=4\)；\(x^2=4\nRightarrow x=2\)。</p>
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">核心本质</span><b>小范围推大范围（\(P \subseteq Q\)）</b></p>
+      <p class="small" style="margin:0">要求越严、门槛越高，符合条件的范围越小，就越有资格当<b>充分条件</b>！比如「考满分」必然能推「及格」；但「及格」绝不能反推「考满分」！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">主客颠倒神坑</span><b>「谁是谁的」vs「谁的是谁」</b></p>
+      <p class="small" style="margin:0">「\(p\) 是 \(q\) 的充分条件」与「\(q\) 的充分条件是 \(p\)」说的是<b>同一件事</b>，都是 \(p \Rightarrow q\)！破题第一步：抓准谁是箭头的发起者，别被语序带偏。</p>
+    </div>
   </div>
 
-  <div class="card">
-    <p><b>反例</b>：满足 \(p\)、却不满足 \(q\) 的一个具体例子。有一个反例，「若 \(p\)，则 \(q\)」就是错的。</p>
-    <p>例：\(x=-2\) 满足 \(x^2=4\)，却不满足 \(x=2\)，它就是「若 \(x^2=4\)，则 \(x=2\)」的反例。</p>
+  <h3>2. 充分、必要与充要的核心定义与判别表</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{p \Rightarrow q}_{\text{p 是 q 的充分条件，q 是 p 的必要条件（小圈推大圈：}P \subseteq Q\text{）}}}\)</span>
+    <span style="display:inline-block; margin:0 12px">\(\color{#966524}{\underbrace{p \Leftrightarrow q}_{\text{p 与 q 互为充要条件（两圈完全重合：}P = Q\text{）}}}\)</span>
   </div>
 
-  <div class="card">
-    <p><b>子集和真子集</b>：\(A\subseteq B\) 是说 \(A\) 的每个元素都在 \(B\) 里；如果 \(B\) 里还有不在 \(A\) 里的元素，就是真子集 \(A\subsetneqq B\)。</p>
-    <p>例：\(\{x\mid x&gt;2\}\subsetneqq\{x\mid x&gt;1\}\)。\(3\) 在两个集合里都有；\(1.5\) 只在后一个里。</p>
-  </div>
+  <table class="rec">
+    <tr><th>\(p\Rightarrow q\)？</th><th>\(q\Rightarrow p\)？</th><th>结论：\(p\) 是 \(q\) 的……</th></tr>
+    <tr><td>成立</td><td>不成立</td><td>充分不必要条件（\(P\subsetneqq Q\)）</td></tr>
+    <tr><td>不成立</td><td>成立</td><td>必要不充分条件（\(Q\subsetneqq P\)）</td></tr>
+    <tr><td>成立</td><td>成立</td><td>充要条件（\(P=Q\)，记 \(p\Leftrightarrow q\)）</td></tr>
+    <tr><td>不成立</td><td>不成立</td><td>既不充分也不必要条件（互有独立部分）</td></tr>
+  </table>
 
-  <h3>2. 充分条件和必要条件</h3>
-  <p>拿到两个条件 \(p\)、\(q\)，先问一句：「若 \(p\) 成立，\(q\) 一定成立吗？」如果一定成立，就是 \(p\Rightarrow q\)。这时我们说：</p>
-  <div class="key">\(p\Rightarrow q\) 时，\(p\) 是 \(q\) 的<b>充分条件</b>，\(q\) 是 \(p\) 的<b>必要条件</b>。<br>两句话说的是同一件事，只是站的角度不同。</div>
-  <p><b>为什么叫「充分」？</b>有了 \(p\) 就<b>足够</b>保证 \(q\)，不用再加别的。</p>
-  <p><b>为什么叫「必要」？</b>想让 \(p\) 成立，\(q\) 是<b>少不了</b>的：一旦 \(q\) 不成立，\(p\) 也不可能成立（否则就推出 \(q\) 了）。</p>
   <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（整除与奇偶关系：语言表述规范）</b></p>
     <p>对整数 \(n\)，说明「\(n\) 能被 \(4\) 整除」\(\Rightarrow\)「\(n\) 是偶数」，并用「充分」「必要」各说一句。</p>
-    <p>\(n\) 能被 \(4\) 整除，就是 \(n=4k\)（\(k\) 是整数）。于是 \(n=2\times(2k)\)，\(2k\) 是整数，\(n\) 是偶数。所以「能被 \(4\) 整除」\(\Rightarrow\)「是偶数」。</p>
-    <p>说法一：「能被 \(4\) 整除」是「是偶数」的<b>充分条件</b>。</p>
-    <p>说法二：「是偶数」是「能被 \(4\) 整除」的<b>必要条件</b>——不是偶数（比如 \(7\)），就不可能被 \(4\) 整除。</p>
+    <p>\(n\) 能被 \(4\) 整除，即 \(n=4k=2(2k)\)，显然是偶数。所以「能被 \(4\) 整除」\(\Rightarrow\)「是偶数」。</p>
+    <p>说法一：「能被 \(4\) 整除」是「是偶数」的<b>充分条件</b>（条件够充分）。</p>
+    <p>说法二：「是偶数」是「能被 \(4\) 整除」的<b>必要条件</b>（底线少不了：不是偶数绝对无法被 \(4\) 整除）。</p>
   </div>
+
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：「若一个四边形是正方形，则它是矩形」是真命题。那么「是矩形」是「是正方形」的？</p>
     <div class="opts cols">
@@ -105,23 +127,26 @@
     <div class="reveal"><p><b>B</b>。正方形 \(\Rightarrow\) 矩形，箭头后面的「矩形」是必要条件：想当正方形，先得是矩形。选 A 的同学看到「是矩形」写在问句前面，就当成了充分条件。先找出谁推谁，再看问的是哪一个。</p></div>
   </div>
 
-  <h3>3. 两个方向都要查</h3>
-  <p>只查 \(p\Rightarrow q\) 还不够。要说清楚关系，\(q\Rightarrow p\) 也得看：</p>
-  <table class="rec">
-    <tr><th>\(p\Rightarrow q\)？</th><th>\(q\Rightarrow p\)？</th><th>结论：\(p\) 是 \(q\) 的……</th></tr>
-    <tr><td>成立</td><td>不成立</td><td>充分不必要条件</td></tr>
-    <tr><td>不成立</td><td>成立</td><td>必要不充分条件</td></tr>
-    <tr><td>成立</td><td>成立</td><td>充要条件，记 \(p\Leftrightarrow q\)</td></tr>
-    <tr><td>不成立</td><td>不成立</td><td>既不充分也不必要条件</td></tr>
-  </table>
-  <div class="key"><b>推得出</b>：要对<b>所有</b>满足 \(p\) 的情况说明 \(q\) 成立，是一个证明。<br><b>推不出</b>：只要找到<b>一个</b>反例就够了。</div>
+  <h3>3. 三步破题思维链：代数与范围型判别法</h3>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>对整数 \(n\)，「\(n\) 能被 \(4\) 整除」是「\(n\) 是偶数」的什么条件？</p>
-    <p>前推后：例 1 已经说明，成立。</p>
-    <p>后推前：找反例。\(n=6\) 是偶数，可 \(6\div4=1.5\) 不是整数，不能被 \(4\) 整除。推不出。</p>
-    <p>结论：前推后成立、后推前不成立，「能被 \(4\) 整除」是「是偶数」的<b>充分不必要条件</b>。说「不必要」，一定要拿出 \(n=6\) 这样的反例。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：跟老师走一遍思考过程）</b></p>
+    <p style="margin:0 0 8px">设 \(p: -1 &lt; x &lt; 3\)，\(q: 0 &lt; x &lt; 2\)。判断 \(p\) 是 \(q\) 的什么条件？</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一眼看主客体锁定箭头：</span>
+        问的是「\(p\) 是 \(q\) 的什么条件」，我们要分别检验：① 前推后 \(p \Rightarrow q\) 是否恒成立？② 后推前 \(q \Rightarrow p\) 是否恒成立？
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步画数轴比对范围大小：</span>
+        写出对应集合：\(P=(-1,3)\)，\(Q=(0,2)\)。在数轴上，区间 \(Q\) 完完整整落在大区间 \(P\) 肚子里面，即 \(Q \subsetneqq P\)。小范围能推大范围：故 \(q \Rightarrow p\) 必然成立！
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步验反例下最终结论：</span>
+        大范围推小范围：找反例 \(x=2.5\in P\)，显然 \(2.5\notin Q\)，所以 \(p \nRightarrow q\) 失败！结论：前不推后、后推前，\(p\) 是 \(q\) 的<b>必要不充分条件</b>！
+      </div>
+    </div>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：「\(x=1\)」是「\(x^2=1\)」的什么条件？</p>
     <div class="opts">
@@ -133,17 +158,6 @@
     <div class="reveal"><p><b>A</b>。\(x=1\Rightarrow x^2=1\)，成立；反过来 \(x=-1\) 也满足 \(x^2=1\)，却不是 \(1\)，是反例，推不出。选 C 的同学只查了一个方向，或者忘了 \(x=-1\)。</p></div>
   </div>
 
-  <h3>4. 用集合看：小范围推大范围</h3>
-  <p>如果 \(p\)、\(q\) 说的是<b>同一个变量</b>（比如都在说实数 \(x\)），可以把满足它们的 \(x\) 收集成集合：\(P=\{x\mid p\}\)，\(Q=\{x\mid q\}\)。那么</p>
-  <div class="key">\(p\Rightarrow q\) 就是 \(P\subseteq Q\)：小范围推得出大范围。<br>\(P\subsetneqq Q\)：\(p\) 是 \(q\) 的充分不必要条件；\(P=Q\)：充要条件。</div>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>\(p\)：\(-1&lt;x&lt;3\)，\(q\)：\(0&lt;x&lt;2\)。\(p\) 是 \(q\) 的什么条件？</p>
-    <p>\(P=\{x\mid -1&lt;x&lt;3\}\)，\(Q=\{x\mid 0&lt;x&lt;2\}\)。在数轴上，\(Q\) 那一段整个落在 \(P\) 里面，\(P\) 还多出两头，所以 \(Q\subsetneqq P\)。</p>
-    <p>\(q\Rightarrow p\)：\(0&lt;x&lt;2\) 的数一定满足 \(-1&lt;x&lt;3\)，成立。</p>
-    <p>\(p\nRightarrow q\)：反例 \(x=2.5\)，满足 \(-1&lt;x&lt;3\)，不满足 \(0&lt;x&lt;2\)。</p>
-    <p>结论：\(p\) 是 \(q\) 的<b>必要不充分条件</b>（换个角度：\(q\) 是 \(p\) 的充分不必要条件）。</p>
-  </div>
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：「\(x&gt;2\)」是「\(x&gt;1\)」的什么条件？</p>
     <div class="opts">
@@ -158,20 +172,6 @@
     </div>
   </div>
 
-  <h3>5. 定义、判定、性质</h3>
-  <p>学过的很多结论，其实都在说条件关系：</p>
-  <ul>
-    <li><b>定义</b>是充要条件：「\(n\) 是偶数」\(\Leftrightarrow\)「\(n\) 能被 \(2\) 整除」，两边可以互相替换。</li>
-    <li><b>判定</b>一类的结论（「只要……，就是……」）给的是<b>充分条件</b>：「整数 \(n\) 的末位是 \(0\)」\(\Rightarrow\)「\(n\) 能被 \(5\) 整除」。它必要不必要要另外查，这里不必要，\(n=15\) 是反例。</li>
-    <li><b>性质</b>一类的结论（「是……，就有……」）给的是<b>必要条件</b>：有这个身份，就一定有这个性质。</li>
-  </ul>
-  <div class="card">
-    <p class="small">例 4</p>
-    <p>「对顶角相等」是一条性质。「两个角相等」是「两个角是对顶角」的什么条件？</p>
-    <p>性质说的是：两个角是对顶角 \(\Rightarrow\) 两个角相等。所以「相等」是「对顶角」的必要条件。</p>
-    <p>反过来：一个三角形里的两个 \(60^\circ\) 角相等，却不是对顶角，是反例，推不出。</p>
-    <p>结论：<b>必要不充分条件</b>。</p>
-  </div>
   <div class="card predict" data-id="try-4" data-answer="B">
     <p>自己试试：由等式的性质，\(x=y\Rightarrow x^2=y^2\)。「\(x^2=y^2\)」是「\(x=y\)」的什么条件？</p>
     <div class="opts">
@@ -182,21 +182,59 @@
     </div>
     <div class="reveal"><p><b>B</b>。\(x=y\Rightarrow x^2=y^2\)，所以 \(x^2=y^2\) 是必要条件；反过来 \(x=1\)，\(y=-1\) 时 \(x^2=y^2=1\)，可 \(x\ne y\)，推不出。选 C 的同学把「平方相等」当成「本身相等」，忘了还可能 \(x=-y\)。</p></div>
   </div>
+  <div class="vid" data-video="ex-set"></div>
 
-  <h3>6. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>变量和范围先统一</b>。<br><span class="small">反例：「\(x^2=4\)」和「\(x=2\)」，在全体实数里 \(x=-2\) 是反例，\(x^2=4\nRightarrow x=2\)；如果题目先说了 \(x&gt;0\)，\(-2\) 不在考虑范围里，两者就能互相推出，结论变成充要。端点也一样：\(\{x\mid 0\le x\le 2\}\) 和 \(\{x\mid 0&lt;x\le 2\}\) 只差一个 \(0\)，这一个点就是反例。</span></li>
-    <li><b>两个方向分开说明</b>：证了 \(p\Rightarrow q\)（充分性），不等于证了 \(q\Rightarrow p\)（必要性）。<br><span class="small">反例：\(x=1\Rightarrow x^2=1\) 成立，可 \(x^2=1\nRightarrow x=1\)（\(x=-1\)）。</span></li>
-    <li><b>举几个例子不是证明</b>：试了几个数都对，不等于推得出；一个反例却能推翻「推得出」。<br><span class="small">反例：「若 \(x&gt;0\)，则 \(x^2&gt;x\)」，试 \(x=2,3,10\) 都对；可 \(x=0.5\) 时 \(x^2=0.25&lt;0.5\)，这句话是错的。</span></li>
-    <li><b>先还原成「若……则……」，别背口诀</b>：同一个意思有好几种说法。<br><span class="small">反例：「偶数的充分条件是能被 \(4\) 整除」听着像「偶数 \(\Rightarrow\) 能被 \(4\) 整除」，其实说的是「能被 \(4\) 整除 \(\Rightarrow\) 偶数」。</span></li>
-  </ol>
-  <div class="key">「A 是 B 的充分条件」＝「B 的充分条件是 A」＝ A \(\Rightarrow\) B<br>「A 是 B 的必要条件」＝「B 的必要条件是 A」＝ B \(\Rightarrow\) A</div>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>被中文语序带偏：看到「p 的充分条件是 q」误当成 p ⇒ q</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：顺着汉字语序把开头的 \(p\) 当成箭头发起者，列出 \(p \Rightarrow q\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：这是主谓倒装！「充分条件是 \(q\)」，主语正是 <b>\(q\)</b>，箭头是由 \(q\) 发起的，真正成立的是 <b>\(q \Rightarrow p\)</b>！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>看到数字大误以为范围大（倒置包含关系）</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：看到 \(x&gt;2\) 和 \(x&gt;1\)，觉得 \(2&gt;1\)，断定 \(x&gt;2\) 的范围比 \(x&gt;1\) 大。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：画数轴便知，\((2, +\infty)\) 完全被嵌在 \((1, +\infty)\) 里面，门槛越高范围越窄，它是真正的<b>子集（小范围）</b>！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-range-fig" viewBox="0 0 280 140" role="img" aria-label="数轴区间包含微图解"></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>只验单向推导，直接轻率下结论</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：做题只验证了 \(p \Rightarrow q\) 成立，就随手勾选「充要条件」，或者忘了举出反例。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：充要必须<b>双向同行</b>！证明了 \(p \Rightarrow q\) 后，必须强制启动「找反例雷达」逆向查 \(q \Rightarrow p\)（尤其是平方、绝对值、除以 0、虚数等暗坑）！
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vid" data-video="ex-param"></div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>两个变量</b>：条件说的是 \(x\)、\(y\) 两个数时，集合里的元素是点 \((x,y)\)，要在平面上比，不能只看一条数轴。例：「\(x&gt;0\) 且 \(y&gt;0\)」\(\Rightarrow\)「\(xy&gt;0\)」成立；反过来 \(x=y=-1\) 是反例。</p>
     <p><b>当且仅当</b>：\(p\) 是 \(q\) 的充要条件，也说成「\(p\) 当且仅当 \(q\)」。「当」是 \(q\Rightarrow p\)，「仅当」是 \(p\Rightarrow q\)。</p>
-    <p><b>能接起来</b>：\(p\Rightarrow q\)，\(q\Rightarrow r\)，就有 \(p\Rightarrow r\)。例：能被 \(4\) 整除 \(\Rightarrow\) 是偶数 \(\Rightarrow\) 末位是 \(0,2,4,6,8\) 之一。</p>
+    <p><b>传递性</b>：\(p\Rightarrow q\)，\(q\Rightarrow r\)，就有 \(p\Rightarrow r\)。</p>
   </details>
 </section>
 
@@ -497,8 +535,151 @@
   }
   document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
   build();
-  document.addEventListener("DOMContentLoaded", function () { reset(); });
-  if (document.readyState !== "loading") reset();
+
+  /* ---------- 0 从例子进入：浙江与杭州 ---------- */
+  var ezSvg = document.getElementById("entry-zj"), ezBar = document.getElementById("entry-zj-bar"), ezNote = document.getElementById("entry-zj-note");
+  var ezCity = "hz";
+  function ezDraw(city) {
+    ezCity = city;
+    ezSvg.innerHTML = "";
+    // 左侧：浙江省大圈
+    mk("rect", { x: 16, y: 12, width: 266, height: 170, rx: 22, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 2.4 }, ezSvg);
+    mk("text", { x: 149, y: 34, "text-anchor": "middle", "font-weight": 700, fill: "var(--b)", "font-size": 15 }, ezSvg).textContent = "大范围 Q：浙江省";
+
+    var cities = [
+      { id: "hz", name: "杭州 (P)", cx: 102, cy: 108, r: 46, isHz: true },
+      { id: "nb", name: "宁波", cx: 212, cy: 78, r: 33, isHz: false },
+      { id: "wz", name: "温州", cx: 212, cy: 144, r: 31, isHz: false }
+    ];
+    cities.forEach(function (c) {
+      var active = c.id === city;
+      var col = c.isHz ? "var(--a)" : "var(--no)";
+      var g = mk("g", { style: "cursor:pointer" }, ezSvg);
+      mk("circle", { cx: c.cx, cy: c.cy, r: c.r, fill: active ? (c.isHz ? "var(--ok-soft)" : "var(--no-soft)") : "var(--bg)", stroke: active ? col : (c.isHz ? "var(--a)" : "var(--line)"), "stroke-width": active ? 2.6 : 1.6 }, g);
+      mk("text", { x: c.cx, y: c.cy + (active ? -10 : 5), "text-anchor": "middle", "font-weight": 700, fill: active ? col : "var(--fg)", "font-size": 14.5 }, g).textContent = c.name;
+      if (active) {
+        mk("text", { x: c.cx, y: c.cy + 15, "text-anchor": "middle", "font-weight": 700, fill: col, "font-size": 13 }, g).textContent = "● 人在这里";
+      }
+      g.onclick = function () { ezDraw(c.id); };
+    });
+
+    // 右侧：双向推出判断卡
+    var isHz = city === "hz";
+    mk("rect", { x: 296, y: 18, width: 208, height: 74, rx: 10, fill: isHz ? "var(--ok-soft)" : "var(--card)", stroke: "var(--a)", "stroke-width": isHz ? 2.2 : 1.3 }, ezSvg);
+    mk("text", { x: 400, y: 44, "text-anchor": "middle", "font-weight": 700, fill: "var(--a)", "font-size": 14.5 }, ezSvg).textContent = "在杭州 ⇒ 在浙江";
+    mk("text", { x: 400, y: 72, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, ezSvg).textContent = "✓ 一定对（小范围推大范围）";
+
+    mk("rect", { x: 296, y: 104, width: 208, height: 74, rx: 10, fill: !isHz ? "var(--no-soft)" : "var(--card)", stroke: "var(--no)", "stroke-width": !isHz ? 2.2 : 1.3 }, ezSvg);
+    mk("text", { x: 400, y: 130, "text-anchor": "middle", "font-weight": 700, fill: "var(--no)", "font-size": 14.5 }, ezSvg).textContent = "在浙江 ⇒ 在杭州？";
+    mk("text", { x: 400, y: 158, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, ezSvg).textContent = "✗ 不一定（反例：宁波/温州）";
+
+    [].forEach.call(ezBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-m") === city);
+    });
+    if (isHz) {
+      ezNote.innerHTML = "当前位置：<b>杭州</b>。因为杭州整个在浙江圈内，所以<b>人在杭州 ⇒ 必在浙江</b>（充分条件 ✓）。";
+    } else {
+      var cname = city === "nb" ? "宁波" : "温州";
+      ezNote.innerHTML = "当前位置：<b>" + cname + "</b>。满足「人在浙江」，但<b>不在杭州</b>！这 1 个反例就说明「在浙江 ⇒ 在杭州」不成立 ✗。";
+    }
+  }
+  [].forEach.call(ezBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { ezDraw(b.getAttribute("data-m")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      ezDraw(ev.detail.choice === "A" ? "hz" : "nb");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") ezDraw("hz");
+  });
+
+  /* ================= ② 讲清楚微图解 ================= */
+  var mArrSvg = document.getElementById("m-arrow-fig");
+  var mArrBar = document.getElementById("m-arrow-bar");
+  var mArrNote = document.getElementById("m-arrow-note");
+  var mRngSvg = document.getElementById("m-range-fig");
+  var mArrKey = "suff";
+
+  function drawArr(k) {
+    mArrKey = k;
+    if (!mArrSvg) return;
+    mArrSvg.innerHTML = "";
+    var defs = mk("defs", {}, mArrSvg);
+    var marker = mk("marker", { id: "mArrHead", viewBox: "0 0 10 10", refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto-start-reverse" }, defs);
+    mk("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: "var(--hl)" }, marker);
+
+    if (k === "suff") {
+      mk("ellipse", { cx: 210, cy: 80, rx: 110, ry: 65, fill: "var(--ok-soft)", "fill-opacity": 0.25, stroke: "var(--b)", "stroke-width": 2.2 }, mArrSvg);
+      mk("text", { x: 260, y: 40, fill: "var(--b)", "font-weight": 700, "font-size": 14 }, mArrSvg).textContent = "大范围 Q";
+      mk("circle", { cx: 165, cy: 85, r: 40, fill: "var(--card)", stroke: "var(--a)", "stroke-width": 2.2 }, mArrSvg);
+      mk("text", { x: 165, y: 90, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 14 }, mArrSvg).textContent = "小范围 P";
+      mk("path", { d: "M 340 80 L 440 80", stroke: "var(--hl)", "stroke-width": 3, "marker-end": "url(#mArrHead)" }, mArrSvg);
+      mk("text", { x: 390, y: 65, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 15 }, mArrSvg).textContent = "p ⇒ q (畅通无阻)";
+      mk("text", { x: 390, y: 105, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, mArrSvg).textContent = "小推大：充分条件 ✓";
+      if (mArrNote) mArrNote.innerHTML = "<b>充分条件（小圈推大圈 P ⊆ Q）</b>：人在小圈 P 内，由于 P 整体落在 Q 肚子里，故必然落在 Q 内（p ⇒ q 成立）。";
+    } else if (k === "nece") {
+      mk("ellipse", { cx: 210, cy: 80, rx: 110, ry: 65, fill: "var(--no-soft)", "fill-opacity": 0.2, stroke: "var(--b)", "stroke-width": 2.2 }, mArrSvg);
+      mk("circle", { cx: 165, cy: 85, r: 40, fill: "var(--card)", stroke: "var(--a)", "stroke-width": 2.2 }, mArrSvg);
+      mk("text", { x: 165, y: 90, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 14 }, mArrSvg).textContent = "小范围 P";
+      mk("circle", { cx: 265, cy: 85, r: 7, fill: "var(--no)", stroke: "#fff", "stroke-width": 2 }, mArrSvg);
+      mk("text", { x: 265, y: 112, "text-anchor": "middle", fill: "var(--no)", "font-weight": 700, "font-size": 12 }, mArrSvg).textContent = "反例点 (在Q但不在P)";
+      mk("path", { d: "M 440 80 L 340 80", stroke: "var(--no)", "stroke-width": 3, "marker-end": "url(#mArrHead)" }, mArrSvg);
+      mk("text", { x: 390, y: 65, "text-anchor": "middle", fill: "var(--no)", "font-weight": 700, "font-size": 15 }, mArrSvg).textContent = "q ⇏ p (倒推受阻)";
+      mk("text", { x: 390, y: 105, "text-anchor": "middle", fill: "var(--no)", "font-size": 13 }, mArrSvg).textContent = "大推小常有反例 ✗";
+      if (mArrNote) mArrNote.innerHTML = "<b>不必要条件（大推小 q ⇏ p 遭遇反例）</b>：人在浙江省（比如宁波），完全可以不在杭州！只要能拎出 1 个反例，后推前就彻底失效。";
+    } else if (k === "eq") {
+      mk("circle", { cx: 200, cy: 80, r: 56, fill: "var(--ok-soft)", "fill-opacity": 0.35, stroke: "var(--a)", "stroke-width": 3 }, mArrSvg);
+      mk("text", { x: 200, y: 86, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 16 }, mArrSvg).textContent = "P = Q";
+      mk("text", { x: 200, y: 116, "text-anchor": "middle", fill: "var(--b)", "font-size": 13 }, mArrSvg).textContent = "完全等价无多余";
+      mk("path", { d: "M 330 80 L 440 80", stroke: "var(--hl)", "stroke-width": 3, "marker-end": "url(#mArrHead)", "marker-start": "url(#mArrHead)" }, mArrSvg);
+      mk("text", { x: 385, y: 65, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 15 }, mArrSvg).textContent = "p ⇔ q (双向通行)";
+      mk("text", { x: 385, y: 105, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, mArrSvg).textContent = "同甘共苦：充要条件";
+      if (mArrNote) mArrNote.innerHTML = "<b>充要条件（P = Q 双向畅通）</b>：两边要求完全等价，彼此互为充分、互为必要，数学解题中可随时互相替代。";
+    }
+
+    if (mArrBar) {
+      [].forEach.call(mArrBar.querySelectorAll("button"), function (b) {
+        b.classList.toggle("on", b.getAttribute("data-k") === k);
+      });
+    }
+  }
+
+  function drawRangeTrap() {
+    if (!mRngSvg) return;
+    mRngSvg.innerHTML = "";
+    mk("line", { x1: 20, y1: 75, x2: 260, y2: 75, stroke: "var(--line)", "stroke-width": 1.6 }, mRngSvg);
+    mk("path", { d: "M 255 71 L 263 75 L 255 79 Z", fill: "var(--muted)" }, mRngSvg);
+    mk("line", { x1: 90, y1: 71, x2: 90, y2: 79, stroke: "var(--fg)", "stroke-width": 1.5 }, mRngSvg);
+    mk("text", { x: 90, y: 95, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, mRngSvg).textContent = "1";
+    mk("line", { x1: 170, y1: 71, x2: 170, y2: 79, stroke: "var(--fg)", "stroke-width": 1.5 }, mRngSvg);
+    mk("text", { x: 170, y: 95, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, mRngSvg).textContent = "2";
+
+    mk("line", { x1: 90, y1: 42, x2: 250, y2: 42, stroke: "var(--b)", "stroke-width": 2.5 }, mRngSvg);
+    mk("circle", { cx: 90, cy: 42, r: 3.5, fill: "var(--bg)", stroke: "var(--b)", "stroke-width": 2 }, mRngSvg);
+    mk("text", { x: 140, y: 34, fill: "var(--b)", "font-weight": 700, "font-size": 12.5 }, mRngSvg).textContent = "x > 1 (大范围)";
+
+    mk("line", { x1: 170, y1: 58, x2: 250, y2: 58, stroke: "var(--a)", "stroke-width": 2.5 }, mRngSvg);
+    mk("circle", { cx: 170, cy: 58, r: 3.5, fill: "var(--bg)", stroke: "var(--a)", "stroke-width": 2 }, mRngSvg);
+    mk("text", { x: 180, y: 72, fill: "var(--a)", "font-weight": 700, "font-size": 12 }, mRngSvg).textContent = "x > 2 (小子集)";
+
+    mk("text", { x: 140, y: 124, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 12 }, mRngSvg).textContent = "x > 2 ⊆ x > 1：门槛高反而范围更小！";
+  }
+
+  function initStep2() {
+    if (mArrBar) {
+      [].forEach.call(mArrBar.querySelectorAll("button"), function (b) {
+        b.onclick = function () { drawArr(b.getAttribute("data-k")); };
+      });
+    }
+    drawArr("suff");
+    drawRangeTrap();
+  }
+
+  document.addEventListener("DOMContentLoaded", function () { ezDraw("hz"); reset(); initStep2(); });
+  if (document.readyState !== "loading") { ezDraw("hz"); reset(); initStep2(); }
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { ezDraw(ezCity); draw(); drawArr(mArrKey); drawRangeTrap(); });
 })();
 </script>
 </body></html>

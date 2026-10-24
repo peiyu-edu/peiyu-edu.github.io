@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+<script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .circ { fill: none; stroke: var(--muted); stroke-width: 2; }
@@ -46,8 +48,16 @@
 <p class="lead">初中的 sin、cos、tan 只管锐角。把角放进坐标系、让终边去碰单位圆，任意角都有了正弦、余弦、正切，还顺带有了正负号。先从一座摩天轮开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一座摩天轮，半径 \(10\) 米。一个座舱从和中心一样高的最右边出发，逆时针转。</p>
+  <p>一座摩天轮，半径 \(10\) 米。一个座舱从和中心一样高的最右边（\(0^\circ\)）出发，逆时针转。点下面的角度按钮，看座舱里的直角三角形怎么给出「水平距离」和「高度」：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-fw" viewBox="0 0 520 205" role="img" aria-label="半径10米的摩天轮座舱转到30度时，内部直角三角形展示对边高度5米与邻边8.7米"></svg>
+    <div class="entry-bar" id="entry-fw-bar">
+      <button type="button" data-d="0">0° (高 0m)</button>
+      <button type="button" data-d="30" class="on">30° (高 5m，水平 8.7m)</button>
+      <button type="button" data-d="60">60° (高 8.7m)</button>
+      <button type="button" data-d="90">90° 最高点 (高 10m)</button>
+    </div>
+    <div class="entry-note" id="entry-fw-note"></div>
     <p>座舱绕中心转过 \(30^\circ\) 时，它比中心高多少米？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(5\) 米</button>
@@ -64,39 +74,46 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
-  <p class="small">要用到：初中的锐角三角函数（对边比斜边）；5.1 的任意角和弧度制（<a href="b1-5-1.html">回看 5.1</a>）。</p>
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：单位圆定义、象限符号与同角两大关系</h3>
+  <p class="small">要用到：初中的锐角三角比（对边比斜边）；5.1 的任意角与弧度制（<a href="b1-5-1.html">回看 5.1</a>）。先看下面这幅微图解：</p>
 
-  <div class="card">
-    <p><b>终边</b>：把角的顶点放在原点、始边放在 \(x\) 轴的非负半轴，绕原点转（逆时针为正、顺时针为负），停下来的那条射线就是终边。</p>
-    <p>例：\(30^\circ\)、\(390^\circ\)（多转一圈）、\(-330^\circ\)（反着转）停在同一条射线上，终边相同；可它们是三个不同的角，转的量不一样。</p>
+  <div class="micro-box">
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>单位圆坐标定义、四象限符号与同角平方商数</b></p>
+    <div class="entry-bar" id="m-trig-bar" role="group" aria-label="三角函数微图解切换">
+      <button type="button" class="on" data-m="def">① 单位圆坐标定义 (P(cosα, sinα)，纵正弦、横余弦、比值正切)</button>
+      <button type="button" data-m="sgn">② 四象限符号口诀 (一全正、二正弦、三正切、四余弦)</button>
+      <button type="button" data-m="rel">③ 同角两大基石 (sin²α+cos²α=1 勾股平方 + tanα=sinα/cosα 弦切化)</button>
+    </div>
+    <svg class="micro-fig" id="m-trig-fig" viewBox="0 0 520 160" role="img" aria-label="三角函数定义与同角关系微图解"></svg>
+    <p class="entry-note" id="m-trig-note"></p>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">维度飞跃</span><b>初中边长之比 vs 高中单位圆坐标</b></p>
+      <p class="small" style="margin:0">初中直角三角形内只能算锐角且恒正；高中将角顶点放原点、始边重合 \(x\) 轴正向，\(\sin\alpha=y,\ \cos\alpha=x\) 赋予<b>坐标正负号</b>，彻底兼容一切钝角、负角与多圈大角！</p>
+    </div>
+    <div class="card">
+      <p style="margin:0 0 6px"><span class="badge-pill badge-no">定义禁区</span><b>正切无意义点与轴线角</b></p>
+      <p class="small" style="margin:0">当终边落在 \(y\) 轴上（\(\alpha=\dfrac{\pi}{2}+k\pi\)）时，横坐标 \(x=0\)，\(\tan\alpha=\dfrac{y}{x}\) <b>分母为零绝对无定义</b>！坐标轴上的轴线角不属于任何象限！</p>
+    </div>
+  </div>
+
+  <h3>2. 核心数学定义与同角三角恒等式</h3>
+  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\sin\alpha = y = \frac{y}{r},\quad \cos\alpha = x = \frac{x}{r},\quad \tan\alpha = \frac{y}{x}\ (x\ne0)}_{\text{单位圆/终边任意点三角函数定义（}r=\sqrt{x^2+y^2}\text{ 恒正）}}}\)</span>
+    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{\sin^2\alpha + \cos^2\alpha = 1}_{\text{平方关系（知一求二，开方必查象限）}}}\)</span>
+    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{\tan\alpha = \frac{\sin\alpha}{\cos\alpha}\quad \left(\alpha \ne \frac{\pi}{2}+k\pi\right)}_{\text{商数关系（弦化切超级武器）}}}\)</span>
   </div>
 
   <div class="card">
-    <p><b>象限角、轴线角</b>：终边落在第几象限，就叫第几象限角；终边落在坐标轴上的叫轴线角，<b>不属于任何象限</b>。</p>
-    <p>例：\(120^\circ\) 是第二象限角，\(-30^\circ\) 是第四象限角；\(90^\circ\)、\(180^\circ\)、\(\dfrac{3\pi}2\) 是轴线角。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 1（单位圆坐标求三角函数值）</b></p>
+    <p>求 \(\alpha=\dfrac{2\pi}{3}\)（即 \(120^\circ\)）的三个三角函数值。</p>
+    <p>终边在第二象限，与 \(x\) 轴负半轴夹角为 \(60^\circ\)，单位圆交点 \(P\left(-\dfrac{1}{2}, \dfrac{\sqrt{3}}{2}\right)\)。<br>
+    由定义直接读坐标：\(\sin\dfrac{2\pi}{3} = \dfrac{\sqrt{3}}{2}\)，\(\cos\dfrac{2\pi}{3} = -\dfrac{1}{2}\)，\(\tan\dfrac{2\pi}{3} = \dfrac{\sqrt{3}/2}{-1/2} = -\sqrt{3}\)。</p>
   </div>
 
-  <div class="card">
-    <p><b>单位圆</b>：圆心在原点、半径为 \(1\) 的圆。圆上的点 \((x,y)\) 到原点的距离是 \(1\)，所以 \(x^2+y^2=1\)，\(x\)、\(y\) 都在 \(-1\) 到 \(1\) 之间。</p>
-    <p>例：\((0.6,\,0.8)\) 在单位圆上，\(0.36+0.64=1\)；\((1,1)\) 不在，\(1+1=2\)。</p>
-  </div>
-
-  <div class="card">
-    <p><b>\(\sin^2\alpha\) 的写法</b>：\(\sin^2\alpha\) 指 \((\sin\alpha)^2\)，先求正弦再平方，不是 \(\sin(\alpha^2)\)。</p>
-    <p>例：\(\sin30^\circ=\dfrac12\)，\(\sin^230^\circ=\dfrac14\)。</p>
-  </div>
-
-  <h3>2. 定义：读单位圆上的坐标</h3>
-  <p>角 \(\alpha\) 的终边和单位圆交于点 \(P(x,y)\)。摩天轮的半径换成 \(1\)，「高度 \(\div\) 半径」就是 \(y\) 本身：</p>
-  <div class="key">\(\sin\alpha=y\)，\(\cos\alpha=x\)，\(\tan\alpha=\dfrac yx\ (x\ne0)\)。<br>正弦是 \(P\) 的纵坐标，余弦是横坐标，正切是纵横坐标之比。</div>
-  <p>为什么和初中一致：对锐角，从 \(P\) 向 \(x\) 轴作垂线，得到斜边为 \(1\) 的直角三角形，对边是 \(y\)，邻边是 \(x\)，「对边比斜边」正好是 \(y\)。新定义只是把旧定义推广到了所有角。</p>
-  <div class="card">
-    <p class="small">例 1（看一遍怎么写）</p>
-    <p>求 \(\alpha=\dfrac{2\pi}3\)（即 \(120^\circ\)）的三个三角函数值。</p>
-    <p>终边在第二象限，和 \(x\) 轴负半轴夹 \(60^\circ\)。从 \(P\) 向 \(x\) 轴作垂线：斜边 \(1\)，竖直边 \(\dfrac{\sqrt3}2\)，水平边 \(\dfrac12\)。\(P\) 在 \(y\) 轴左边、\(x\) 轴上方，所以 \(P\left(-\dfrac12,\dfrac{\sqrt3}2\right)\)。</p>
-    <p>\(\sin\dfrac{2\pi}3=\dfrac{\sqrt3}2\)，\(\cos\dfrac{2\pi}3=-\dfrac12\)，\(\tan\dfrac{2\pi}3=\dfrac{\sqrt3/2}{-1/2}=-\sqrt3\)。</p>
-  </div>
   <div class="card predict" data-id="try-1" data-answer="C">
     <p>自己试试：\(\cos\pi=\)？</p>
     <div class="opts cols">
@@ -105,45 +122,50 @@
       <button class="opt" data-v="C"><b>C</b>\(-1\)</button>
       <button class="opt" data-v="D"><b>D</b>没有意义</button>
     </div>
-    <div class="reveal"><p><b>C</b>。\(\pi\) 的终边是 \(x\) 轴负半轴，碰到单位圆在 \(P(-1,0)\)，\(\cos\pi=x=-1\)。选 A 的同学把 \(x\)、\(y\) 弄反了（\(\sin\pi=0\)）；选 B 是忘了 \(P\) 在左边。余弦对任何角都有意义，没意义的只可能是正切。</p></div>
+    <div class="reveal"><p><b>C</b>。\(\pi\) 的终边落在 \(x\) 轴负半轴，单位圆交点为 \(P(-1, 0)\)，余弦等于横坐标，即 \(\cos\pi = -1\)。选 A 的同学混淆了横纵坐标（\(\sin\pi = 0\)）。</p></div>
   </div>
 
-  <h3>3. 终边上任取一点也行</h3>
-  <p>终边上任取一点 \((x,y)\)（不是原点），记它到原点的距离 \(r=\sqrt{x^2+y^2}\)。把它按比例缩到单位圆上（三个坐标都除以 \(r\)），就得到</p>
-  <div class="key">\(\sin\alpha=\dfrac yr\)，\(\cos\alpha=\dfrac xr\)，\(\tan\alpha=\dfrac yx\)。\(r\) 是距离，总是正的，正负号全由 \(x\)、\(y\) 决定。</div>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>角 \(\alpha\) 的终边经过点 \((-3,4)\)，求 \(\sin\alpha\)、\(\cos\alpha\)、\(\tan\alpha\)。</p>
-    <p>\(r=\sqrt{(-3)^2+4^2}=5\)。\(\sin\alpha=\dfrac45\)，\(\cos\alpha=\dfrac{-3}5=-\dfrac35\)，\(\tan\alpha=\dfrac4{-3}=-\dfrac43\)。</p>
+    <p class="small" style="margin:0 0 4px"><b>例 2（终边任取一点求值）</b></p>
+    <p>角 \(\alpha\) 的终边经过点 \((-3,4)\)，求 \(\sin\alpha,\ \cos\alpha,\ \tan\alpha\)。</p>
+    <p>到原点距离 \(r = \sqrt{(-3)^2+4^2} = 5\)（距离恒正）。<br>
+    \(\sin\alpha = \dfrac{y}{r} = \dfrac{4}{5}\)，\(\cos\alpha = \dfrac{x}{r} = -\dfrac{3}{5}\)，\(\tan\alpha = \dfrac{y}{x} = -\dfrac{4}{3}\)。</p>
   </div>
+
   <div class="card predict" data-id="try-2" data-answer="C">
     <p>自己试试：角 \(\alpha\) 的终边经过点 \(P(3,-4)\)，\(\sin\alpha=\)？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(-4\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\dfrac45\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(-\dfrac45\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(-\dfrac43\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{4}{5}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(-\dfrac{4}{5}\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-\dfrac{4}{3}\)</button>
     </div>
-    <div class="reveal">
-      <p><b>C</b>。\(r=\sqrt{3^2+(-4)^2}=5\)，\(\sin\alpha=\dfrac{-4}{5}\)。</p>
-      <p>选 B 是按「边长都是正的」想的，可点在 \(x\) 轴下方，纵坐标是负的。选 A 忘了除以 \(r\)。选 D 把 \(\dfrac yx\) 当成了正弦，那是 \(\tan\alpha\)。</p>
+    <div class="reveal"><p><b>C</b>。\(r = \sqrt{3^2+(-4)^2} = 5\)，\(\sin\alpha = \dfrac{y}{r} = -\dfrac{4}{5}\)。选 B 是把边长恒正套了上来，忽略了第四象限纵坐标为负！</p></div>
+  </div>
+
+  <h3>3. 三步破题思维链：同角三角函数知一求二与弦化切</h3>
+  <div class="card">
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：同角求值与齐次分式弦化切三步思维链）</b></p>
+    <p style="margin:0 0 8px">已知 \(\sin\alpha = -\dfrac{3}{5}\)，且 \(\alpha\) 是第四象限角。求 \(\cos\alpha,\ \tan\alpha\)；并求分式 \(\dfrac{2\sin\alpha + \cos\alpha}{\cos\alpha - \sin\alpha}\) 的值。</p>
+    <div class="think-steps">
+      <div class="think-step">
+        <span class="ts-tag ca">👀 第一步由象限锁定余弦正负并开方求值：</span>
+        因 \(\alpha\) 是<b>第四象限角</b>，横坐标必为正，故 \(\cos\alpha &gt; 0\)！<br>
+        由同角平方公式开方取正根：\(\cos\alpha = +\sqrt{1 - \sin^2\alpha} = \sqrt{1 - \dfrac{9}{25}} = \dfrac{4}{5}\)！
+      </div>
+      <div class="think-step step-op">
+        <span class="ts-tag cb">🔧 第二步商数关系求正切：</span>
+        代入商数关系式：\(\tan\alpha = \dfrac{\sin\alpha}{\cos\alpha} = \dfrac{-3/5}{4/5} = -\dfrac{3}{4}\)；<br>
+        核对口诀「四余弦正」，第四象限只有余弦为正，正切为负，完全自洽！
+      </div>
+      <div class="think-step step-chk">
+        <span class="ts-tag cc">🛡️ 第三步齐次分式弦化切避免通分繁杂运算：</span>
+        所求式分子、分母均为正弦、余弦的一次齐次式，分子分母同除以 \(\cos\alpha\)（\(\cos\alpha = \dfrac{4}{5} \ne 0\)）：<br>
+        \(\dfrac{2\sin\alpha + \cos\alpha}{\cos\alpha - \sin\alpha} = \dfrac{2\tan\alpha + 1}{1 - \tan\alpha} = \dfrac{2(-3/4) + 1}{1 - (-3/4)} = \dfrac{-1/2}{7/4} = -\dfrac{2}{7}\)！
+      </div>
     </div>
   </div>
 
-  <h3>4. 正负号看象限</h3>
-  <p>正负号就是 \(P\) 的坐标符号：\(x\) 轴上方 \(y\) 为正，\(y\) 轴右边 \(x\) 为正，\(\tan\) 看 \(x\)、\(y\) 同号还是异号。</p>
-  <table class="rec sgn">
-    <tr><th></th><th>一</th><th>二</th><th>三</th><th>四</th></tr>
-    <tr><td>\(\sin\alpha\)</td><td>+</td><td>+</td><td>−</td><td>−</td></tr>
-    <tr><td>\(\cos\alpha\)</td><td>+</td><td>−</td><td>−</td><td>+</td></tr>
-    <tr><td>\(\tan\alpha\)</td><td>+</td><td>−</td><td>+</td><td>−</td></tr>
-  </table>
-  <p class="small">不用死记：想一下点在哪儿就行。「动手」里可以按按钮给四个象限涂上符号。</p>
-  <div class="card">
-    <p class="small">例 3</p>
-    <p>判断 \(\sin4\)、\(\cos4\)、\(\tan4\) 的正负（\(4\) 是弧度）。</p>
-    <p>\(\pi\approx3.14\)，\(\dfrac{3\pi}2\approx4.71\)，\(\pi&lt;4&lt;\dfrac{3\pi}2\)，终边在第三象限，\(P\) 在左下方：\(\sin4&lt;0\)，\(\cos4&lt;0\)，\(\tan4&gt;0\)（负除以负）。</p>
-  </div>
   <div class="card predict" data-id="try-3" data-answer="C">
     <p>自己试试：\(\tan\alpha&gt;0\) 且 \(\cos\alpha&lt;0\)，\(\alpha\) 是第几象限角？</p>
     <div class="opts cols">
@@ -152,61 +174,74 @@
       <button class="opt" data-v="C"><b>C</b>第三象限</button>
       <button class="opt" data-v="D"><b>D</b>第四象限</button>
     </div>
-    <div class="reveal"><p><b>C</b>。\(\tan\alpha&gt;0\)：第一或第三象限；\(\cos\alpha&lt;0\)：第二或第三象限。两条都满足的只有第三象限。选 A 的同学只看了正切一个条件。</p></div>
+    <div class="reveal"><p><b>C</b>。\(\tan\alpha&gt;0\) 说明横纵坐标同号（一或三象限）；\(\cos\alpha&lt;0\) 说明横坐标为负（二或三象限）。取交集即为第三象限！</p></div>
   </div>
 
-  <h3>5. 平方关系：知一求二</h3>
-  <p>\(P(x,y)\) 在单位圆上，\(x^2+y^2=1\)；正切本来就是 \(y\) 除以 \(x\)。换成三角函数的写法：</p>
-  <div class="key">\(\sin^2\alpha+\cos^2\alpha=1\)（对一切 \(\alpha\)）<br>\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}\)（要求 \(\cos\alpha\ne0\)）</div>
   <div class="card">
-    <p class="small">例 4</p>
-    <p>已知 \(\sin\alpha=-\dfrac5{13}\)，\(\alpha\) 是第三象限角，求 \(\cos\alpha\)、\(\tan\alpha\)。</p>
-    <p>\(\cos^2\alpha=1-\dfrac{25}{169}=\dfrac{144}{169}\)，开方得 \(\pm\dfrac{12}{13}\)。第三象限余弦为负，所以 \(\cos\alpha=-\dfrac{12}{13}\)。</p>
-    <p>\(\tan\alpha=\dfrac{\sin\alpha}{\cos\alpha}=\dfrac{-5/13}{-12/13}=\dfrac5{12}\)。</p>
-  </div>
-  <div class="card predict" data-id="try-4" data-answer="B">
-    <p>自己试试：\(\cos\alpha=\dfrac35\)，\(\alpha\) 是第四象限角，\(\sin\alpha=\)？</p>
-    <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(\dfrac45\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(-\dfrac45\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(\pm\dfrac45\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(-\dfrac43\)</button>
-    </div>
-    <div class="reveal"><p><b>B</b>。\(\sin^2\alpha=1-\dfrac9{25}=\dfrac{16}{25}\)，第四象限正弦为负，取 \(-\dfrac45\)。选 A 是开方后忘了看象限；题目已经给了象限，所以不用写 C 的两种。D 是 \(\tan\alpha\)。</p></div>
-  </div>
-
-  <h3>6. 商关系：已知正切，把式子化成正切</h3>
-  <div class="card">
-    <p class="small">例 5</p>
+    <p class="small" style="margin:0 0 4px"><b>例 4（已知正切化弦求值）</b></p>
     <p>\(\tan\alpha=2\)，求 \(\dfrac{\sin\alpha+\cos\alpha}{\sin\alpha-\cos\alpha}\)。</p>
-    <p>正切存在，说明 \(\cos\alpha\ne0\)，可以把分子、分母同除以 \(\cos\alpha\)：</p>
-    <p style="text-align:center">\(\dfrac{\tan\alpha+1}{\tan\alpha-1}=\dfrac{2+1}{2-1}=3\)。</p>
+    <p>分子分母同除以 \(\cos\alpha\)（正切存在必有 \(\cos\alpha\ne0\)）：<br>
+    原式 \(= \dfrac{\tan\alpha+1}{\tan\alpha-1} = \dfrac{2+1}{2-1} = 3\)。</p>
   </div>
+
   <div class="card predict" data-id="try-5" data-answer="A">
     <p>自己试试：\(\tan\alpha=3\)，\(\dfrac{2\sin\alpha-\cos\alpha}{\sin\alpha+\cos\alpha}=\)？</p>
     <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(\dfrac54\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(\dfrac34\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(\dfrac74\)</button>
+      <button class="opt" data-v="A"><b>A</b>\(\dfrac{5}{4}\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(\dfrac{3}{4}\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(\dfrac{7}{4}\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。同除以 \(\cos\alpha\)：\(\dfrac{2\tan\alpha-1}{\tan\alpha+1}=\dfrac{6-1}{3+1}=\dfrac54\)。选 B 是把 \(\dfrac{\cos\alpha}{\cos\alpha}\) 错写成了 \(\tan\alpha\)；选 C 是把分子的减号抄成了加号。</p></div>
+    <div class="reveal"><p><b>A</b>。同除以 \(\cos\alpha\) 得 \(\dfrac{2\tan\alpha-1}{\tan\alpha+1} = \dfrac{6-1}{3+1} = \dfrac{5}{4}\)。</p></div>
   </div>
-  <div class="key">除以 \(\cos\alpha\)（或 \(\sin\alpha\)）之前，先说明它不等于 \(0\)。</div>
 
-  <h3>7. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>轴线角不属于任何象限。</b><br><span class="small">反例：\(\dfrac{3\pi}2\) 不是第三象限角。它的终边是 \(y\) 轴负半轴，\(P(0,-1)\)，不能套「第三象限正切为正」。</span></li>
-    <li><b>正切要求 \(\alpha\ne\dfrac\pi2+k\pi\ (k\in\Z)\)。</b><br><span class="small">反例：\(\alpha=\dfrac\pi2\) 时 \(P(0,1)\)，\(\dfrac yx\) 要除以 \(0\)，\(\tan\dfrac\pi2\) 没有意义。正弦、余弦则对一切角都有意义，值在 \([-1,1]\) 里。</span></li>
-    <li><b>终边相同，函数值相同；角不一定相同。</b><br><span class="small">反例：\(\sin30^\circ=\sin390^\circ=\dfrac12\)，可 \(390^\circ\ne30^\circ\)。所以由 \(\sin\alpha=\dfrac12\) 推不出 \(\alpha=30^\circ\)。</span></li>
-    <li><b>由平方求值，正负号要靠象限或角的范围定；没给就两种都写。</b><br><span class="small">反例：只知道 \(\sin\alpha=\dfrac35\)，\(\alpha\) 可能在第一或第二象限，\(\cos\alpha=\pm\dfrac45\)。</span></li>
-    <li><b>两边除以 \(\cos\alpha\)、\(\sin\alpha\) 之前，查它是不是 \(0\)。</b><br><span class="small">反例：解 \(\sin\alpha\cos\alpha=\cos\alpha\)，两边直接约掉 \(\cos\alpha\) 得 \(\sin\alpha=1\)，就丢了 \(\alpha=\dfrac{3\pi}2\) 这类角（\(\cos\alpha=0\)，两边都是 \(0\)）。</span></li>
-  </ol>
+  <h3>4. 用之前必查：三大高频翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>开方求值不看象限，单解漏解或双解乱套</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：已知 \(\sin\alpha = \dfrac{4}{5}\)，直接得出 \(\cos\alpha = \sqrt{1-(4/5)^2} = \dfrac{3}{5}\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：题目若未指明象限，\(\alpha\) 既可能在第一象限（\(\cos\alpha = \dfrac{3}{5}\)），也可能在第二象限（\(\cos\alpha = -\dfrac{3}{5}\)）！必须分类讨论取 \(\pm\dfrac{3}{5}\)！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>方程两边盲目约掉未知数导致漏根</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong">
+          <b>❌ 典型错解</b>：解方程 \(\sin\alpha\cos\alpha = \cos\alpha\)，两边同时约去 \(\cos\alpha\) 得 \(\sin\alpha = 1\)。
+        </div>
+        <div class="trap-right">
+          <b>✅ 一眼看清真相</b>：未知式除以 \(\cos\alpha\) 必须先证明其非零！移项因式分解 \(\cos\alpha(\sin\alpha-1)=0\)，解得 \(\cos\alpha=0\) 或 \(\sin\alpha=1\)！直接约分直接漏解！
+        </div>
+      </div>
+    </div>
+
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>忽视正切在 y 轴轴线角的无定义禁区</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong">
+            <b>❌ 典型错解</b>：以为正切和正弦余弦一样处处有定义，把 \(\tan 90^\circ\) 当成某具体数值。
+          </div>
+          <div class="trap-right">
+            <b>✅ 看右图秒懂真相</b>：\(\alpha = \dfrac{\pi}{2}+k\pi\) 时终边落在 \(y\) 轴上，横坐标 \(x=0\)，分母断裂<b>绝对无意义</b>！
+          </div>
+        </div>
+        <div>
+          <svg class="micro-fig" id="m-tan-trap-fig" viewBox="0 0 280 140" role="img" aria-label="正切函数y轴无定义禁区反例微图解"></svg>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>为什么取哪个点都一样</b>：终边上两个点 \((x,y)\) 和 \((x',y')\) 在同一条射线上，坐标成比例，\(\dfrac yr=\dfrac{y'}{r'}\)。所以三角函数值只看终边，不看取了哪个点。</p>
-    <p><b>把「1」换掉</b>：分母只有 \(1\) 的式子也能化成正切。\(\tan\alpha=2\) 时，\(\sin\alpha\cos\alpha=\dfrac{\sin\alpha\cos\alpha}{\sin^2\alpha+\cos^2\alpha}\)，上下同除以 \(\cos^2\alpha\)，得 \(\dfrac{\tan\alpha}{\tan^2\alpha+1}=\dfrac25\)。高考真题里常见这一步。</p>
-    <p><b>同正弦的两个点</b>：\(P(x,y)\) 和它关于 \(y\) 轴的对称点 \(P'(-x,y)\) 正弦相同、余弦相反。「动手」图里虚线连着的就是它们。这件事到 5.3 诱导公式会再用到。</p>
+    <p><b>为什么终边取任何点比值都一样</b>：终边上任意两点坐标成相似比例，\(\dfrac{y_1}{r_1} = \dfrac{y_2}{r_2}\)，比值只由旋转角度决定，与所取点到原点的距离完全无关！</p>
+    <p><b>利用「1」的代换弦化切</b>：对于二次分式如 \(\sin\alpha\cos\alpha\)，可巧妙除以 \(1 = \sin^2\alpha+\cos^2\alpha\)，转化为 \(\dfrac{\sin\alpha\cos\alpha}{\sin^2\alpha+\cos^2\alpha} = \dfrac{\tan\alpha}{\tan^2\alpha+1}\)！这是高考小题高频秒杀技！</p>
   </details>
 </section>
 
@@ -292,6 +327,7 @@
       <p>这里正好能用平方关系排除 \(\cos\alpha=0\)：那样 \(\sin\alpha\) 也得是 \(0\)，两者的平方和就成了 \(0\)，不是 \(1\)。写上这一句，推理才完整。C 错：两边相除不会产生正负号，正负号是开平方时才有的。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-coord"></div>
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="C">
@@ -307,6 +343,7 @@
       <p>\(\alpha\in(0,\pi)\)，终边在 \(x\) 轴上方，\(\sin\alpha&gt;0\)，只能 \(\sin\alpha=\dfrac45\)，\(\cos\alpha=-\dfrac35\)，\(\tan\alpha=-\dfrac43\)。选 B 是没用角的范围去掉 \(\sin\alpha=-\dfrac35\)、\(\cos\alpha=\dfrac45\) 那一组。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex-sign"></div>
 </section>
 
 <section class="step" data-title="高考真题">
@@ -524,9 +561,207 @@
     draw();
   }
   document.getElementById("reset").addEventListener("click", function () { reset(); logState("reset"); });
+  /* ---------- 0 从例子进入：摩天轮座舱高度与直角三角形 ---------- */
+  var efwSvg = document.getElementById("entry-fw"), efwBar = document.getElementById("entry-fw-bar"), efwNote = document.getElementById("entry-fw-note");
+  function efwDraw(d) {
+    efwSvg.innerHTML = "";
+    var cx = 136, cy = 104, r = 76, rad = d * Math.PI / 180;
+    var px = cx + r * Math.cos(rad), py = cy - r * Math.sin(rad);
+    var hVal = Math.round(10 * Math.sin(rad) * 10) / 10, wVal = Math.round(10 * Math.cos(rad) * 10) / 10;
+    // 摩天轮底座与轮盘
+    mk("line", { x1: cx, y1: cy, x2: cx - 34, y2: 192, stroke: "var(--line)", "stroke-width": 3 }, efwSvg);
+    mk("line", { x1: cx, y1: cy, x2: cx + 34, y2: 192, stroke: "var(--line)", "stroke-width": 3 }, efwSvg);
+    mk("circle", { cx: cx, cy: cy, r: r, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 2 }, efwSvg);
+    mk("line", { x1: cx - r - 10, y1: cy, x2: cx + r + 14, y2: cy, stroke: "var(--muted)", "stroke-dasharray": "4 3" }, efwSvg);
+    mk("line", { x1: cx, y1: cy - r - 10, x2: cx, y2: cy + r + 10, stroke: "var(--muted)", "stroke-dasharray": "4 3" }, efwSvg);
+    // 直角三角形填充
+    if (d > 0 && d < 90) {
+      mk("polygon", { points: cx + "," + cy + " " + px.toFixed(1) + "," + cy + " " + px.toFixed(1) + "," + py.toFixed(1), fill: "var(--ok-soft)", opacity: 0.7 }, efwSvg);
+    }
+    // 水平邻边与竖直对边（高度）
+    mk("line", { x1: cx, y1: cy, x2: px, y2: cy, stroke: "var(--b)", "stroke-width": 4.5, "stroke-linecap": "round" }, efwSvg);
+    mk("line", { x1: px, y1: cy, x2: px, y2: py, stroke: "var(--a)", "stroke-width": 5, "stroke-linecap": "round" }, efwSvg);
+    mk("line", { x1: cx, y1: cy, x2: px, y2: py, stroke: "var(--fg)", "stroke-width": 2.5 }, efwSvg);
+    mk("circle", { cx: cx, cy: cy, r: 4, fill: "var(--fg)" }, efwSvg);
+    mk("rect", { x: px - 8, y: py - 8, width: 16, height: 16, rx: 4, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, efwSvg);
+    // 右侧数据说明卡
+    mk("rect", { x: 248, y: 20, width: 254, height: 165, rx: 10, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, efwSvg);
+    mk("text", { x: 266, y: 48, fill: "var(--fg)", "font-size": 15.5, "font-weight": 700 }, efwSvg).textContent = "座舱转角 α = " + d + "°（半径 r = 10m）";
+    mk("text", { x: 266, y: 84, fill: "var(--a)", "font-size": 16, "font-weight": 700 }, efwSvg).textContent = "竖直高度 y = " + hVal + " m（对边）";
+    mk("text", { x: 266, y: 116, fill: "var(--b)", "font-size": 15, "font-weight": 600 }, efwSvg).textContent = "水平距离 x = " + wVal + " m（邻边）";
+    mk("text", { x: 266, y: 152, fill: "var(--muted)", "font-size": 13.5 }, efwSvg).textContent = "高度 ÷ 半径 = " + hVal + "/10 = sin " + d + "°";
+    [].forEach.call(efwBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-d"), 10) === d);
+    });
+    efwNote.innerHTML = "当座舱转过 <b>" + d + "°</b>：斜边（半径）= <b>10 m</b>，比中心高 <b>y = 10 × sin " + d + "° = " + hVal + " m</b>，水平距离 <b>x = " + wVal + " m</b>";
+  }
+  [].forEach.call(efwBar.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () { efwDraw(parseInt(b.getAttribute("data-d"), 10)); });
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var m = { A: 30, B: 60, C: 90, D: 30 };
+      if (m[ev.detail.choice] !== undefined) efwDraw(m[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") efwDraw(30);
+  });
+
+  // Step 2 Vivid Visualizations
+  function initStep2() {
+    var tFig = document.getElementById("m-trig-fig");
+    var tBar = document.getElementById("m-trig-bar");
+    var tNote = document.getElementById("m-trig-note");
+    var tanFig = document.getElementById("m-tan-trap-fig");
+    if (!tFig || !tanFig) return;
+
+    function drawTrig(mode) {
+      tFig.innerHTML = "";
+      var cx = 110, cy = 80, r = 58;
+
+      if (mode === "def") {
+        // ① 单位圆定义与三角函数线
+        mk("line", { x1: cx - 80, y1: cy, x2: cx + 80, y2: cy, stroke: "var(--muted)", "stroke-width": 1.2 }, tFig);
+        mk("line", { x1: cx, y1: cy + 70, x2: cx, y2: cy - 70, stroke: "var(--muted)", "stroke-width": 1.2 }, tFig);
+        mk("text", { x: cx + 76, y: cy + 14, fill: "var(--muted)", "font-size": 11 }, tFig).textContent = "x";
+        mk("text", { x: cx - 12, y: cy - 60, fill: "var(--muted)", "font-size": 11 }, tFig).textContent = "y";
+
+        // 单位圆
+        mk("circle", { cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--line)", "stroke-width": 1.5 }, tFig);
+
+        // 角 α = 50°
+        var rad = 50 * Math.PI / 180;
+        var px = cx + r * Math.cos(rad), py = cy - r * Math.sin(rad);
+
+        // 终边
+        mk("line", { x1: cx, y1: cy, x2: px, y2: py, stroke: "var(--fg)", "stroke-width": 2 }, tFig);
+
+        // 垂线与投影
+        // 余弦线 OM (水平金色加粗)
+        mk("line", { x1: cx, y1: cy, x2: px, y2: cy, stroke: "var(--hl)", "stroke-width": 3.8, "stroke-linecap": "round" }, tFig);
+        // 正弦线 MP (竖直绿色加粗)
+        mk("line", { x1: px, y1: cy, x2: px, y2: py, stroke: "var(--a)", "stroke-width": 3.8, "stroke-linecap": "round" }, tFig);
+
+        // 点 P(x, y)
+        mk("circle", { cx: px, cy: py, r: 4.5, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 1.5 }, tFig);
+        mk("text", { x: px + 6, y: py - 4, fill: "var(--fg)", "font-size": 11.5, "font-weight": 700 }, tFig).textContent = "P(cosα, sinα)";
+
+        // 标注
+        mk("text", { x: (cx + px) / 2, y: cy + 15, "text-anchor": "middle", fill: "var(--hl)", "font-size": 11, "font-weight": 700 }, tFig).textContent = "cosα = x";
+        mk("text", { x: px + 8, y: (cy + py) / 2 + 4, fill: "var(--a)", "font-size": 11, "font-weight": 700 }, tFig).textContent = "sinα = y";
+
+        // 右侧说明卡
+        mk("rect", { x: 220, y: 16, width: 285, height: 128, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1 }, tFig);
+        mk("text", { x: 235, y: 42, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, tFig).textContent = "单位圆定义（半径 r = 1）：";
+        mk("text", { x: 235, y: 66, fill: "var(--a)", "font-size": 12 }, tFig).textContent = "• 正弦 sinα = y（终边交点 P 的纵坐标）";
+        mk("text", { x: 235, y: 88, fill: "var(--hl)", "font-size": 12 }, tFig).textContent = "• 余弦 cosα = x（终边交点 P 的横坐标）";
+        mk("text", { x: 235, y: 110, fill: "var(--b)", "font-size": 12 }, tFig).textContent = "• 正切 tanα = y/x（终边射线的斜率，x≠0）";
+        mk("text", { x: 235, y: 130, fill: "var(--muted)", "font-size": 11 }, tFig).textContent = "任意点推广：sinα = y/r, cosα = x/r, tanα = y/x";
+
+        if (tNote) tNote.innerHTML = "<b>单位圆核心定义</b>：角 \\(\\alpha\\) 终边与单位圆交于 \\(P(x,y)\\)，<b>正弦就是纵坐标 \\(y\\)，余弦就是横坐标 \\(x\\)，正切就是比值 \\(y/x\\)</b>！";
+      } else if (mode === "sgn") {
+        // ② 四象限符号口诀（一全正、二正弦、三正切、四余弦）
+        mk("line", { x1: cx - 80, y1: cy, x2: cx + 80, y2: cy, stroke: "var(--muted)", "stroke-width": 1.2 }, tFig);
+        mk("line", { x1: cx, y1: cy + 70, x2: cx, y2: cy - 70, stroke: "var(--muted)", "stroke-width": 1.2 }, tFig);
+
+        // 第一象限：全正
+        mk("rect", { x: cx + 4, y: cy - 65, width: 70, height: 60, rx: 6, fill: "rgba(47, 122, 86, 0.12)" }, tFig);
+        mk("text", { x: cx + 39, y: cy - 42, "text-anchor": "middle", fill: "var(--a)", "font-size": 12, "font-weight": 700 }, tFig).textContent = "一：全正";
+        mk("text", { x: cx + 39, y: cy - 22, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10.5 }, tFig).textContent = "sin, cos, tan > 0";
+
+        // 第二象限：仅 sin 正
+        mk("rect", { x: cx - 74, y: cy - 65, width: 70, height: 60, rx: 6, fill: "rgba(62, 92, 118, 0.12)" }, tFig);
+        mk("text", { x: cx - 39, y: cy - 42, "text-anchor": "middle", fill: "var(--b)", "font-size": 12, "font-weight": 700 }, tFig).textContent = "二：正弦正";
+        mk("text", { x: cx - 39, y: cy - 22, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10.5 }, tFig).textContent = "仅 sin > 0";
+
+        // 第三象限：仅 tan 正
+        mk("rect", { x: cx - 74, y: cy + 5, width: 70, height: 60, rx: 6, fill: "rgba(196, 98, 16, 0.12)" }, tFig);
+        mk("text", { x: cx - 39, y: cy + 28, "text-anchor": "middle", fill: "var(--hl)", "font-size": 12, "font-weight": 700 }, tFig).textContent = "三：正切正";
+        mk("text", { x: cx - 39, y: cy + 48, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10.5 }, tFig).textContent = "仅 tan > 0";
+
+        // 第四象限：仅 cos 正
+        mk("rect", { x: cx + 4, y: cy + 5, width: 70, height: 60, rx: 6, fill: "rgba(150, 101, 36, 0.12)" }, tFig);
+        mk("text", { x: cx + 39, y: cy + 28, "text-anchor": "middle", fill: "var(--c)", "font-size": 12, "font-weight": 700 }, tFig).textContent = "四：余弦正";
+        mk("text", { x: cx + 39, y: cy + 48, "text-anchor": "middle", fill: "var(--muted)", "font-size": 10.5 }, tFig).textContent = "仅 cos > 0";
+
+        // 右侧口诀卡
+        mk("rect", { x: 220, y: 16, width: 285, height: 128, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1 }, tFig);
+        mk("text", { x: 235, y: 44, fill: "var(--fg)", "font-size": 14, "font-weight": 700 }, tFig).textContent = "象限符号必背口诀：";
+        mk("text", { x: 235, y: 72, fill: "var(--hl)", "font-size": 15, "font-weight": 700 }, tFig).textContent = "「一全正、二正弦、三正切、四余弦」";
+        mk("text", { x: 235, y: 98, fill: "var(--fg)", "font-size": 12 }, tFig).textContent = "看点 P(x, y) 所在位置直接推导：";
+        mk("text", { x: 230, y: 120, fill: "var(--muted)", "font-size": 10 }, tFig).textContent = "x轴上方 y>0(sin正)；y轴右侧 x>0(cos正)；同号tan正";
+
+        if (tNote) tNote.innerHTML = "<b>四象限正负号口诀</b>：<b>「一全正、二正弦、三正切、四余弦」</b>；不用死记，根据 \\(P(x,y)\\) 的横纵坐标正负一眼看穿！";
+      } else {
+        // ③ 同角基本关系（平方与商数）
+        var rId = 55, radId = 38 * Math.PI / 180;
+        mk("circle", { cx: cx, cy: cy, r: rId, fill: "none", stroke: "var(--line)", "stroke-width": 1.2 }, tFig);
+        var ix = cx + rId * Math.cos(radId), iy = cy - rId * Math.sin(radId);
+        // 三角形内部淡填充
+        mk("polygon", { points: cx + "," + cy + " " + ix.toFixed(1) + "," + cy + " " + ix.toFixed(1) + "," + iy.toFixed(1), fill: "rgba(47, 122, 86, 0.15)" }, tFig);
+        mk("line", { x1: cx, y1: cy, x2: ix, y2: cy, stroke: "var(--hl)", "stroke-width": 3 }, tFig);
+        mk("line", { x1: ix, y1: cy, x2: ix, y2: iy, stroke: "var(--a)", "stroke-width": 3 }, tFig);
+        mk("line", { x1: cx, y1: cy, x2: ix, y2: iy, stroke: "var(--fg)", "stroke-width": 2 }, tFig);
+        mk("text", { x: (cx + ix) / 2 - 8, y: (cy + iy) / 2 - 4, fill: "var(--fg)", "font-size": 11, "font-weight": 700 }, tFig).textContent = "r = 1";
+        mk("text", { x: (cx + ix) / 2, y: cy + 15, "text-anchor": "middle", fill: "var(--hl)", "font-size": 11, "font-weight": 700 }, tFig).textContent = "cosα";
+        mk("text", { x: ix + 6, y: (cy + iy) / 2 + 4, fill: "var(--a)", "font-size": 11, "font-weight": 700 }, tFig).textContent = "sinα";
+
+        // 右侧公式卡
+        mk("rect", { x: 215, y: 16, width: 290, height: 128, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1 }, tFig);
+        mk("text", { x: 230, y: 44, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, tFig).textContent = "同角两大基石公式：";
+        mk("text", { x: 230, y: 72, fill: "var(--a)", "font-size": 14, "font-weight": 700 }, tFig).textContent = "① 平方关系：sin²α + cos²α = 1";
+        mk("text", { x: 230, y: 98, fill: "var(--b)", "font-size": 14, "font-weight": 700 }, tFig).textContent = "② 商数关系：tanα = sinα / cosα";
+        mk("text", { x: 230, y: 124, fill: "var(--warn)", "font-size": 11 }, tFig).textContent = "核心技法：弦切互化（齐次分式上下同除以 cosα）";
+
+        if (tNote) tNote.innerHTML = "<b>同角三角函数两大基石</b>：勾股定理导出 <b>\\(\\sin^2\\alpha + \\cos^2\\alpha = 1\\)</b>（知一求二，开方必看象限！）；斜率定义导出 <b>\\(\\tan\\alpha = \\dfrac{\\sin\\alpha}{\\cos\\alpha}\\)</b>（弦化切利器）！";
+      }
+
+      if (tBar) {
+        [].forEach.call(tBar.querySelectorAll("button"), function (b) {
+          b.classList.toggle("on", b.getAttribute("data-m") === mode);
+        });
+      }
+      if (window.Peiyu && tNote) Peiyu.math(tNote);
+    }
+
+    if (tBar) {
+      [].forEach.call(tBar.querySelectorAll("button"), function (b) {
+        b.addEventListener("click", function () { drawTrig(b.getAttribute("data-m")); });
+      });
+    }
+
+    function drawTanTrap() {
+      tanFig.innerHTML = "";
+      var cx = 105, cy = 70;
+      // 坐标轴
+      mk("line", { x1: 15, y1: cy, x2: 260, y2: cy, stroke: "var(--muted)", "stroke-width": 1.2 }, tanFig);
+      mk("line", { x1: cx, y1: 130, x2: cx, y2: 12, stroke: "var(--muted)", "stroke-width": 1.2 }, tanFig);
+      mk("text", { x: 262, y: cy + 13, fill: "var(--muted)", "font-size": 10.5 }, tanFig).textContent = "x";
+      mk("text", { x: cx - 12, y: 15, fill: "var(--muted)", "font-size": 10.5 }, tanFig).textContent = "y";
+
+      // y 轴两条红线警示禁区
+      mk("line", { x1: cx, y1: 14, x2: cx, y2: cy - 4, stroke: "var(--warn)", "stroke-width": 3, "stroke-dasharray": "4 2" }, tanFig);
+      mk("line", { x1: cx, y1: cy + 4, x2: cx, y2: 126, stroke: "var(--warn)", "stroke-width": 3, "stroke-dasharray": "4 2" }, tanFig);
+
+      mk("circle", { cx: cx, cy: 26, r: 4.5, fill: "var(--warn)" }, tanFig);
+      mk("text", { x: cx + 8, y: 30, fill: "var(--warn)", "font-size": 10.5, "font-weight": 700 }, tanFig).textContent = "α = π/2 (90°) x=0 无定义！";
+
+      mk("circle", { cx: cx, cy: 114, r: 4.5, fill: "var(--warn)" }, tanFig);
+      mk("text", { x: cx + 8, y: 118, fill: "var(--warn)", "font-size": 10.5, "font-weight": 700 }, tanFig).textContent = "α = 3π/2 (270°) x=0 无定义！";
+
+      mk("text", { x: 50, y: 45, "text-anchor": "middle", fill: "var(--warn)", "font-size": 10.5, "font-weight": 700 }, tanFig).textContent = "❌ 正切禁区";
+      mk("text", { x: 50, y: 62, "text-anchor": "middle", fill: "var(--muted)", "font-size": 9.5 }, tanFig).textContent = "分母横坐标 x=0";
+    }
+
+    drawTrig("def");
+    drawTanTrap();
+  }
+
   build();
-  document.addEventListener("DOMContentLoaded", function () { reset(); });
-  if (document.readyState !== "loading") reset();
+  efwDraw(30);
+  document.addEventListener("DOMContentLoaded", function () { efwDraw(30); reset(); initStep2(); });
+  if (document.readyState !== "loading") { efwDraw(30); reset(); initStep2(); }
 })();
 </script>
 </body></html>

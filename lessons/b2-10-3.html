@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
@@ -29,8 +31,15 @@
 <p class="lead">一次试验的结果猜不准，做很多次，「出现的比例」却会稳在一个数附近。这一节讲怎么用这个比例去估计概率，以及它和概率到底差在哪。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>拿一枚普通的硬币，连着抛 \(100\) 次，数一数正面朝上几次。</p>
+  <p>拿一枚普通的硬币，连着抛 \(100\) 次，数一数正面朝上几次。先点下面的按钮抛几轮 \(100\) 次试试：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-flip" viewBox="0 0 520 205" role="img" aria-label="连抛100次硬币的正面次数模拟图：多轮结果在50次基准线附近波动"></svg>
+    <div class="entry-bar" id="entry-flip-bar">
+      <button type="button" data-r="0" class="on">看第 1 轮 (48次正)</button>
+      <button type="button" data-r="1">看第 2 轮 (53次正)</button>
+      <button type="button" data-r="2">再抛一轮 100 次硬币</button>
+    </div>
+    <div class="entry-note" id="entry-flip-note"></div>
     <p>正面朝上的次数，最可能在哪个数附近？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(10\) 次左右</button>
@@ -46,8 +55,20 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：随机事件、古典概型算概率（<a href="b2-10-1.html">回看 10.1</a>）；频数、频率在统计里见过（<a href="b2-9-2.html">回看 9.2</a>）。</p>
+
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：大数定律收敛、波动性与蒙特卡洛模拟</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="converge">① 大数定律收敛</button>
+      <button type="button" class="micro-tab" data-mode="fluc">② 小样本随机波动</button>
+      <button type="button" class="micro-tab" data-mode="monte">③ 蒙特卡洛模拟</button>
+    </div>
+    <svg id="m-freq-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="频率与概率大数定律直观图解"></svg>
+    <div class="micro-caption" id="m-freq-cap"></div>
+  </div>
 
   <div class="card">
     <p><b>频数和频率</b>：做 \(n\) 次试验，事件 \(A\) 发生了 \(n_A\) 次。\(n_A\) 叫<b>频数</b>，\(\dfrac{n_A}{n}\) 叫<b>频率</b>，记作 \(f_n(A)\)。</p>
@@ -65,85 +86,187 @@
     <p>例：用 \(1\sim6\) 的随机整数代替掷骰子，出现 \(6\) 就算「掷出 6 点」。产生 \(60\) 个数，里面有 \(11\) 个 \(6\)，频率 \(=\dfrac{11}{60}\approx0.183\)。</p>
   </div>
 
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">本质对比</span> 频率（经验事实） vs 概率（客观常数）</div>
+      <p><b>频率 \(f_n(A)\)</b>：由具体试验统计得出，随批次与试验次数变化，具有<b>随机波动性</b>。是概率的测量值，结论写“\(\approx\)”。</p>
+      <p><b>概率 \(P(A)\)</b>：由事件内部物理结构决定的固有常数，<b>客观且恒定</b>。无需试验即可理论推导（古典概型），结论写“\(=\)”。</p>
+      <p class="small">辩证统一：<b>概率是频率的稳定中心，频率是概率的经验逼近</b>。</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">思维清障</span> 大数定律稀释 vs 赌徒谬误补偿</div>
+      <p><b>大数稀释机理</b>：试验次数 \(n\) 极大时，前期的局部绝对偏差 \(\Delta\) 被分母海量试验<b>稀释平摊</b>：\(\frac{n_A + \Delta}{n} \to P(A)\)。</p>
+      <p><b>赌徒谬误妄想</b>：误以为试验系统会“主动记忆与纠错”（连出 5 次反面，第 6 次出正面概率变大）。<b>试验无记忆</b>，单次概率恒为 \(\frac12\)！</p>
+      <p class="small">警惕：大数定律绝非事后补偿，而是未来海量试验对过往偏差的稀释！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
+    频率定义公式：\(f_n(A) = \dfrac{\color{#2563eb}{n_A}}{\color{#059669}{n}} = \dfrac{\color{#2563eb}{\text{事件 } A \text{ 发生的频数}}}{\color{#059669}{\text{试验总次数 } n}}\)<br>
+    伯努利大数定律直觉：\(\lim_{n \to \infty} P\Big(\big|f_n(A) - \color{#d97706}{P(A)}\big| &lt; \varepsilon\Big) = 1\) &nbsp;（大样本下频率概率依概率收敛）<br>
+    总体指标推断公式：\(\text{估计数量 } \widehat{N}_A \approx \color{#059669}{\text{总体总量 } N} \times \color{#2563eb}{f_n(A)}\)
+  </div>
+
   <h3>2. 频率会变，但会稳下来</h3>
   <p>同一个试验做 \(n\) 次，频率 \(f_n(A)\) 是<b>随机</b>的：这一批是 \(0.45\)，下一批可能是 \(0.53\)。但 \(n\) 越来越大时，它的摆动越来越小，<b>稳定在概率 \(P(A)\) 附近</b>。这叫频率的<b>稳定性</b>。</p>
-  <p>为什么会这样？次数少时，多一次正面就能让比例变很多（\(10\) 次里多 \(1\) 次，比例差 \(0.1\)）；次数多了，一两次的偶然被大量结果「冲淡」，比例就不太动了。</p>
-  <div class="key">试验次数足够多时，可以用频率 \(f_n(A)\) 作为概率 \(P(A)\) 的<b>估计值</b>。</div>
+  <p>为什么会这样？次数少的时候，碰巧多出几次正面，频率就被带偏很大；做成千上万次，碰巧多出来的那几枚被庞大的总数摊薄了，频率就紧紧贴在 \(\dfrac12\) 附近。</p>
+  <p>历史上有几位数学家真的做过成千上万次抛硬币试验，数据都在这里：</p>
+  <div class="card">
+    <p class="small">历史上抛硬币的经典数据</p>
+    <ul>
+      <li>德·摩根（De Morgan）：抛 \(2048\) 次，正面 \(1061\) 次，频率 \(\approx0.5181\)</li>
+      <li>蒲丰（Buffon）：抛 \(4040\) 次，正面 \(2048\) 次，频率 \(\approx0.5069\)</li>
+      <li>皮尔逊（Pearson）：抛 \(12000\) 次，正面 \(6019\) 次，频率 \(\approx0.5016\)</li>
+      <li>皮尔逊：抛 \(24000\) 次，正面 \(12012\) 次，频率 \(\approx0.5005\)</li>
+    </ul>
+    <p class="small">看最后一列：次数越多，离 \(0.5\) 越近，摆动幅度越小。</p>
+  </div>
+
+  <h3>3. 频率能用来估计概率</h3>
+  <p>古典概型要求「有限、等可能」，可生活里很多事根本不满足：</p>
+  <ul>
+    <li>种子的发芽率（每粒种子的好坏不可能完全一样）；</li>
+    <li>某位射击运动员的中靶概率（人的状态在变，不是几选一）；</li>
+    <li>流水线上某批产品的次品率。</li>
+  </ul>
+  <p>这时没有公式能直接算出 \(P(A)\)，但我们能在相同条件下做大量重复试验，用得到的<b>频率去估计概率</b>：</p>
+  <div class="key" style="text-align:center">\(P(A)\approx f_n(A)=\dfrac{n_A}{n}\quad\text{（}n\text{ 很大时）}\)</div>
+  <p>也可以反过来：已知概率（或用频率估计出概率），去推测总体里有多少个符合条件的——用总数乘这个概率。</p>
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
-    <p>一枚图钉往桌上抛，「钉尖朝上」的概率没法像硬币那样直接算。几个同学合起来抛，记录如下：</p>
-    <table class="tb">
-      <tr><th>抛的次数 \(n\)</th><td>\(100\)</td><td>\(500\)</td><td>\(1000\)</td><td>\(2000\)</td></tr>
-      <tr><th>钉尖朝上次数</th><td>\(62\)</td><td>\(304\)</td><td>\(611\)</td><td>\(1218\)</td></tr>
-    </table>
-    <p>算频率：\(\dfrac{62}{100}=0.62\)，\(\dfrac{304}{500}=0.608\)，\(\dfrac{611}{1000}=0.611\)，\(\dfrac{1218}{2000}=0.609\)。</p>
-    <p>次数多了以后，频率稳在 \(0.61\) 附近，所以估计 \(P(\text{钉尖朝上})\approx0.61\)。</p>
-    <p class="small">写「\(\approx\)」：这是估计值，换一批人再抛，会得到略有不同的数。</p>
+    <p>某林场为了估计一批树苗的成活率，随机抽取了 \(500\) 株，发现成活了 \(475\) 株。估计这批树苗的成活概率，并估计林场种植的 \(20000\) 株树苗大约能成活多少株。</p>
+    <p>成活频率：\(f_{500}(\text{成活})=\dfrac{475}{500}=0.95\)。</p>
+    <p>因此，估计这批树苗成活的概率约为 \(0.95\)。</p>
+    <p>总体成活株数估计：\(20000\times0.95=19000\)（株）。</p>
+    <p class="small">注意写「约为」「估计」：抽样得到的数是随机的，不能说「恰好有 19000 株活下来」。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：做种子发芽试验，\(800\) 粒种子里有 \(712\) 粒发芽。估计这批种子的发芽概率约是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(0.89\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(0.712\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(0.11\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(712\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(0.88\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(0.90\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(89\%\)（必须带百分号）</button>
     </div>
-    <div class="reveal"><p><b>A</b>。频率 \(=\dfrac{712}{800}=0.89\)，用它估计概率。选 B 的同学把分母当成了 \(1000\)；选 C 的 \(0.11\) 是没发芽的频率 \(\dfrac{88}{800}\)，题目问的是发芽；选 D 把频数当成了概率——概率不会大于 \(1\)。</p></div>
+    <div class="reveal"><p><b>A</b>。\(712\div800=0.89\)。概率可以用小数也可以用分数或百分数，\(0.89\) 和 \(89\%\) 都对，但选 D 认为「必须带百分号」是错的，概率就是实数。</p></div>
   </div>
 
-  <h3>3. 用估计出的概率，反过来估计数量</h3>
-  <p>袋子里球的颜色看不见，但可以有放回地摸很多次：摸到红球的频率 \(\approx\) 红球占的比例。</p>
   <div class="card">
-    <p class="small">例 2</p>
-    <p>不透明袋里有红、白两种球共 \(20\) 个。每次摸一个、记下颜色、放回、摇匀，共摸 \(400\) 次，红球 \(98\) 次。估计红球有几个。</p>
-    <p>红球的频率 \(=\dfrac{98}{400}=0.245\)，估计摸到红球的概率约 \(0.245\)。</p>
-    <p>摸到红球的概率等于 \(\dfrac{\text{红球个数}}{20}\)，所以红球约 \(20\times0.245=4.9\)，个数是整数，估计 \(5\) 个。</p>
-    <p class="small">「放回、摇匀」是为了每次试验条件一样，否则每次摸到红球的概率在变，频率就不是在估计同一个数。</p>
+    <p class="small">例 2（抓阄标记法估总体）</p>
+    <p>湖里有很多鱼。渔业人员捕了 \(1000\) 条，做上标记后放回湖里。过了一周，在湖里重新捕了 \(500\) 条，发现其中有标记的鱼有 \(25\) 条。估计湖里大约有多少条鱼。</p>
+    <p>设湖里大约有 \(N\) 条鱼。因为鱼在湖里充分混匀，有标记的鱼占总数的比例，可以用重捕样本中有标记的比例来估计：</p>
+    <p style="text-align:center">\(\dfrac{1000}{N}\approx\dfrac{25}{500}\implies N\approx\dfrac{1000\times500}{25}=20000\text{（条）}\)。</p>
+    <p class="small">这个办法叫「标志重捕法」，在生态学里天天用。道理就是用样本频率估计总体比例。</p>
   </div>
   <div class="card predict" data-id="try-2" data-answer="A">
     <p>自己试试：袋里黑、白球共 \(30\) 个，有放回地摸 \(300\) 次，黑球 \(102\) 次。估计黑球约有几个？</p>
     <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(10\)</button>
-      <button class="opt" data-v="B"><b>B</b>\(20\)</button>
-      <button class="opt" data-v="C"><b>C</b>\(34\)</button>
-      <button class="opt" data-v="D"><b>D</b>\(102\)</button>
+      <button class="opt" data-v="A"><b>A</b>\(10\) 个</button>
+      <button class="opt" data-v="B"><b>B</b>\(12\) 个</button>
+      <button class="opt" data-v="C"><b>C</b>恰好 \(10.2\) 个</button>
+      <button class="opt" data-v="D"><b>D</b>不能估计</button>
     </div>
-    <div class="reveal"><p><b>A</b>。频率 \(=\dfrac{102}{300}=0.34\)，黑球约 \(30\times0.34=10.2\)，估计 \(10\) 个。选 D 的同学把摸到的次数当成了球的个数；选 C 是把 \(0.34\) 直接写成了 \(34\)，超过了总数 \(30\)。</p></div>
+    <div class="reveal"><p><b>A</b>。黑球频率 \(\dfrac{102}{300}=0.34\)，估计黑球数 \(30\times0.34=10.2\)。球数只能是整数，四舍五入约 \(10\) 个。选 C 的同学忘了实际物体数量必须是整数。</p></div>
   </div>
 
-  <h3>4. 随机模拟</h3>
-  <p>有些试验真做太慢，就用随机数代替。关键是<b>规定对应关系</b>：让「代表事件发生」的数，在全部可能的数里占的比例正好等于那个概率。</p>
+  <div class="vid" data-video="ex-dec"></div>
+
+  <h3>4. 随机模拟：用计算机替你做试验</h3>
+  <p>要抛一万次硬币太费时间，可以用电脑（或者计算器的随机数函数）来模拟。步骤只有三步：</p>
+  <ol>
+    <li><b>设计对应规则</b>：用哪些随机数代表事件发生。规则要保证：代表该事件的数占总数的比例，正好等于这个事件的理论概率。</li>
+    <li><b>产生随机数</b>：生成大量随机数，模拟试验过程。</li>
+    <li><b>统计频率</b>：数出代表事件发生的数出现了多少次，除以总个数，作为概率的估计。</li>
+  </ol>
   <div class="card">
-    <p class="small">例 3</p>
-    <p>某人投篮命中率是 \(0.4\)，估计他投 \(3\) 次恰好中 \(2\) 次的概率。</p>
-    <p>规定：用 \(0\sim9\) 的随机数字，\(0,1,2,3\) 这 \(4\) 个代表「命中」，其余 \(6\) 个代表「没中」，命中占 \(\dfrac{4}{10}=0.4\)，对得上。每 \(3\) 个数字一组代表投 \(3\) 次。产生 \(20\) 组：</p>
-    <p class="groups">907 966 <b>191</b> 925 <b>271</b> <b>932</b> <b>812</b> 458 569 683 <b>431</b> 257 398 <b>027</b> 556 488 750 113 537 989</p>
-    <p>逐组数「\(0\sim3\) 恰好有 \(2\) 个」的：\(191,271,932,812,431,027\)，共 \(6\) 组（\(113\) 三个数字都在 \(0\sim3\) 里，是投中 \(3\) 次，不算）。</p>
-    <p>频率 \(=\dfrac{6}{20}=0.3\)，估计概率约 \(0.3\)。</p>
-    <p class="small">只有 \(20\) 组，估计很粗；组数越多越可靠。学了 <a href="b2-10-2.html">10.2</a> 能算出精确值 \(3\times0.4^2\times0.6=0.288\)，模拟值在它附近，但不相等。</p>
+    <p class="small">例 3（看怎么设计规则）</p>
+    <p>设计一个随机模拟方案，估计「抛均匀硬币 \(3\) 次，至少两次正面朝上」的概率。</p>
+    <p>① 对应：产生 \(0\) 和 \(1\) 的随机整数，\(1\) 代表正面，\(0\) 代表反面（各自占 \(\dfrac12\)）。</p>
+    <p>② 产生：每 \(3\) 个随机数一组，代表一次「抛 \(3\) 枚」试验。比如产生 \(100\) 组（共 \(300\) 个数）。</p>
+    <p>③ 统计：数出有多少组里的 \(1\) 至少出现 \(2\) 次，除以 \(100\)，就是所求概率的估计。</p>
   </div>
   <div class="card predict" data-id="try-3" data-answer="A">
     <p>自己试试：要用随机数模拟「中奖概率是 \(0.3\) 的抽奖」，下面哪种规定对？</p>
     <div class="opts">
-      <button class="opt" data-v="A"><b>A</b>\(0\sim9\) 的随机数字，\(0,1,2\) 代表中奖</button>
-      <button class="opt" data-v="B"><b>B</b>\(0\sim9\) 的随机数字，\(0,1,2,3\) 代表中奖</button>
-      <button class="opt" data-v="C"><b>C</b>掷一个骰子，掷出 \(1\) 或 \(2\) 代表中奖</button>
+      <button class="opt" data-v="A"><b>A</b>产生 \(0\sim9\) 的随机整数，\(1,2,3\) 代表中奖，其余代表不中</button>
+      <button class="opt" data-v="B"><b>B</b>产生 \(1\sim3\) 的随机整数，\(1\) 代表中奖</button>
+      <button class="opt" data-v="C"><b>C</b>产生 \(0\sim9\) 的随机整数，\(0,1,2,3\) 代表中奖</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(0\sim9\) 共 \(10\) 个数字，\(3\) 个代表中奖，占 \(0.3\)。B 是 \(4\) 个，占 \(0.4\)——常见错是数「\(1\) 到 \(3\)」时把 \(0\) 也顺手算进去。C 是 \(\dfrac26=\dfrac13\approx0.333\)，接近但不等于 \(0.3\)。</p></div>
+    <div class="reveal"><p><b>A</b>。\(0\sim9\) 共 \(10\) 个等可能的数，\(1,2,3\) 占 \(3\) 个，比例 \(\dfrac{3}{10}=0.3\)，对上了。B 算出来是 \(\dfrac13\approx0.333\)；C 包含了 \(0,1,2,3\) 共 \(4\) 个数，比例是 \(0.4\)。</p></div>
+  </div>
+  <div class="vid" data-video="ex-monte"></div>
+
+  <h3>5. 三步破题思维链：统计概率解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>分清已知是<b>古典概率</b>（能理论数点算出）还是<b>统计概率</b>（只能靠大样本频数统计估计）。锁定试验总次数 \(n\) 与目标频数 \(n_A\)，看清是求概率估计值，还是反推总体总量 \(N\)。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 求概率估计：套用公式 \(P(A)\approx f_n(A)=\dfrac{n_A}{n}\)，化为小数或最简分数；<br>
+        ② 反推总体规模：利用比例方程 \(\dfrac{n_A}{n}\approx\dfrac{N_A}{N}\)，求得目标总量估计值 \(\widehat{N}_A\approx N\times f_n(A)\)（物理离散量注意取整）；<br>
+        ③ 设计蒙特卡洛模拟：确立产生随机数的基数空间与等比例映射规则。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>回答必须带有“估计/约为”字眼，严禁写成绝对确定；频率值必须在 \([0,1]\) 内；试验必须在<b>同等独立条件</b>下进行；切忌陷入“赌徒谬误”主观臆断。</p>
+      </div>
+    </div>
   </div>
 
-  <h3>5. 频率和概率，别混为一谈</h3>
-  <p>用频率估计概率很方便，但下面几件事最容易说错：</p>
-  <ol>
-    <li><b>频率是随机的，概率是确定的</b>。频率要做了试验才有，每批都可能不同；概率是事件本身的一个数，不随试验变。<br><span class="small">反例：甲、乙各抛 \(100\) 次，甲得 \(47\) 次正面、乙得 \(55\) 次，两人的频率是 \(0.47\) 和 \(0.55\)，可硬币正面的概率始终是 \(0.5\)。</span></li>
-    <li><b>「稳定在附近」不是「等于」，也不是「每一步都更近」</b>。次数多时频率大体在概率附近小幅摆动，但某一次加多了次数，频率完全可能离得更远。<br><span class="small">反例：前 \(10\) 次正面 \(5\) 次，频率正好 \(0.5\)；前 \(20\) 次正面 \(9\) 次，频率 \(0.45\)，次数多了，反而离 \(0.5\) 远了。</span></li>
-    <li><b>概率不是少量试验里必有的比例</b>。\(P=\dfrac12\) 不代表抛 \(10\) 次一定 \(5\) 次正面。<br><span class="small">反例：抛 \(10\) 次，正好 \(5\) 次正面的概率只有约 \(0.246\)（「再深一点」里有算法），大多数时候都不是 \(5\) 次。</span></li>
-    <li><b>前面的结果不「欠」后面的</b>。每次试验互不影响时，前面连续没发生，下一次发生的概率并不变大。<br><span class="small">反例：硬币已经连着 \(5\) 次反面，第 \(6\) 次正面的概率仍是 \(\dfrac12\)。硬币不记得前面的结果。</span></li>
-    <li><b>条件要一致，模拟只是估计</b>。每次试验条件要相同（比如有放回、摇匀）；随机模拟的映射要和真实概率对上；得到的频率只是估计值，写「\(\approx\)」。<br><span class="small">反例：摸球不放回，每摸走一个，袋里比例就变了，这时数出来的频率不是在估计「摸到红球的概率」这一个数。</span></li>
-  </ol>
-  <div class="key">频率：做出来的，随机，写「\(\approx\)」估计；概率：事件本身的，确定。次数多时，前者稳定在后者附近。</div>
+  <h3>6. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：小样本偶然波动误作概率改变</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>抛硬币 10 次出现 7 次正面，断定该硬币不均匀，正面概率变成了 0.7</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>小样本下出现 7 次正面属于完全正常的随机起伏，硬币正面理论概率仍为严格的 0.5</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：赌徒谬误，妄想系统“事后补偿”</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>硬币连抛 5 次皆为反面，认为第 6 次“必然或极大概率”出正面来拉平</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>硬币没有记忆，各次抛掷严格相互独立，第 6 次出正面的概率依然精准等于 0.5</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：误把“大数逼近”当作“单调越来越近”</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>前 100 次频率为 0.52，认为抛到 200 次时频率一定会比 0.52 更接近 0.5</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>大数定律指的是极限与概率意义上的总体收敛趋势，局部范围内频率随时可能短暂反弹远离</span>
+      </div>
+    </div>
+  </div>
 
-  <details class="more">
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：大数稀释 vs 赌徒补偿真实机理</div>
+    <svg id="m-freq-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="大数稀释与赌徒谬误机理对比反例图"></svg>
+    <div class="micro-caption">大数定律靠分母增长稀释前期绝对偏差（5/1000 趋向于 0），分子不需要任何神秘力量逆势“补偿”！</div>
+  </div>
+
+  <details class="more" style="margin-top:14px;">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>摆动大约多大</b>：抛均匀硬币 \(n\) 次，频率离 \(0.5\) 的偏差，常见大小大约是 \(\dfrac{1}{2\sqrt n}\) 这个量级：\(n=100\) 时约 \(0.05\)，\(n=10000\) 时约 \(0.005\)。次数变成 \(100\) 倍，摆动只缩到 \(\dfrac1{10}\)，所以想估计得更准，要多做很多次。这只是一个大致的感觉，严格说法属于大学的「大数定律」。</p>
     <p><b>正好 5 次正面的概率</b>：抛 \(10\) 次共有 \(2^{10}=1024\) 种等可能的正反序列，其中恰有 \(5\) 个正面的有 \(252\) 种（从 \(10\) 个位置里选 \(5\) 个放正面），所以概率 \(=\dfrac{252}{1024}\approx0.246\)。数「选法」要到选择性必修的计数原理才系统学。</p>
@@ -303,7 +426,7 @@
   };
   var MAXN = 20000;
   var fig = document.getElementById("toss");
-  var X0 = 70, X1 = 540, Yt = 16, Yb = 270;
+  var X0 = 70, X1 = 540, Yt = 16, Yb = 260;
   var ev, rand, hits, n, freqs, marks; // freqs[i] = 前 i+1 次的频率；marks：每次按按钮后的 [n, 频数]
   function fx(i, N) { return X0 + (N ? i / N : 0) * (X1 - X0); }
   function fy(v) { return Yb - v * (Yb - Yt); }
@@ -343,9 +466,9 @@
       var xx = fx(t, N);
       svg("line", { x1: xx, y1: Yb, x2: xx, y2: Yb + 5, stroke: fg }, fig);
       var anchor = t === 0 ? "start" : (xx > X1 - 30 ? "end" : "middle");
-      svg("text", { x: xx, y: Yb + 26, "text-anchor": anchor, fill: muted }, fig).textContent = t;
+      svg("text", { x: xx, y: Yb + 22, "text-anchor": anchor, fill: muted }, fig).textContent = t;
     }
-    svg("text", { x: X0 - 8, y: Yb + 46, "text-anchor": "start", fill: muted }, fig).textContent = "次数 n →";
+    svg("text", { x: (X0 + X1) / 2, y: Yb + 46, "text-anchor": "middle", fill: muted }, fig).textContent = "次数 n →";
     // 概率虚线
     svg("line", { x1: X0, y1: fy(e.p), x2: X1, y2: fy(e.p), stroke: cc, "stroke-width": 2.5, "stroke-dasharray": "8 6" }, fig);
     svg("text", { x: X1, y: fy(e.p) - 8, "text-anchor": "end", fill: cc, "font-weight": 700 }, fig).textContent = e.pLab;
@@ -429,8 +552,228 @@
   document.getElementById("crowdnew").onclick = function () { crowdGen(newSeed()); Peiyu.log("interact", { id: "crowd-new" }); };
   document.getElementById("crowdreset").onclick = function () { crowdGen(20261023); };
 
-  document.addEventListener("DOMContentLoaded", function () { tossStart("coin", true); crowdGen(20261023); });
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { tossDraw(); crowdDraw(); });
+  /* ================= 0 从例子进入：连抛 100 次硬币微实验 ================= */
+  var efSvg = document.getElementById("entry-flip"), efBar = document.getElementById("entry-flip-bar"), efNote = document.getElementById("entry-flip-note");
+  var efRounds = [48, 53, 51, 47, 52, 49], efCur = 0, efSeed = 103;
+  function efDraw(idx) {
+    efCur = idx;
+    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
+    efSvg.innerHTML = "";
+    var x0 = 56, x1 = 336, yTop = 22, yBot = 172;
+    function sy(v) { return yBot - v / 100 * (yBot - yTop); }
+
+    // 10、50、90 参照线
+    [[90, "90次 (C)", ln], [50, "50次 (频率 0.5)", cc], [10, "10次 (A)", ln]].forEach(function (row) {
+      var y = sy(row[0]), is50 = row[0] === 50;
+      svg("line", { x1: x0, y1: y, x2: x1, y2: y, stroke: row[2], "stroke-width": is50 ? 2.2 : 1.2, "stroke-dasharray": is50 ? "6 4" : "3 3" }, efSvg);
+      svg("text", { x: x0 - 8, y: y + 5, "text-anchor": "end", fill: is50 ? cc : mu, "font-weight": is50 ? 700 : 400, "font-size": 12.5 }, efSvg).textContent = row[0];
+    });
+    svg("line", { x1: x0, y1: yBot, x2: x1, y2: yBot, stroke: fg, "stroke-width": 1.5 }, efSvg);
+
+    var n = efRounds.length, slot = (x1 - x0) / n, bw = Math.min(32, slot * 0.65);
+    efRounds.forEach(function (h, i) {
+      var xm = x0 + slot * (i + 0.5), y = sy(h), active = i === idx;
+      svg("rect", { x: xm - bw / 2, y: y, width: bw, height: yBot - y, rx: 5, fill: active ? ca : okS, stroke: ca, "stroke-width": active ? 2.2 : 1.2 }, efSvg);
+      svg("text", { x: xm, y: y - 6, "text-anchor": "middle", fill: active ? ca : fg, "font-weight": active ? 700 : 400, "font-size": 13.5 }, efSvg).textContent = h;
+      svg("text", { x: xm, y: yBot + 18, "text-anchor": "middle", fill: active ? fg : mu, "font-size": 12 }, efSvg).textContent = "第" + (i + 1) + "轮";
+    });
+
+    // 右侧当前轮统计卡
+    var curH = efRounds[idx], rx = 352;
+    svg("rect", { x: rx, y: 24, width: 152, height: 154, rx: 10, fill: okS, stroke: ca, "stroke-width": 1.6 }, efSvg);
+    svg("text", { x: rx + 76, y: 50, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14.5 }, efSvg).textContent = "第 " + (idx + 1) + " 轮（抛100次）";
+    svg("text", { x: rx + 14, y: 82, fill: ca, "font-weight": 700, "font-size": 14.5 }, efSvg).textContent = "• 正面：" + curH + " 次";
+    svg("text", { x: rx + 14, y: 108, fill: fg, "font-size": 13.5 }, efSvg).textContent = "• 反面：" + (100 - curH) + " 次";
+    svg("text", { x: rx + 14, y: 136, fill: cc, "font-weight": 700, "font-size": 14 }, efSvg).textContent = "频率 = " + (curH / 100).toFixed(2) + " ≈ 0.50";
+    svg("text", { x: rx + 14, y: 162, fill: mu, "font-size": 12 }, efSvg).textContent = "始终围绕 50 次上下微调";
+
+    [].forEach.call(efBar.querySelectorAll("button"), function (b, bi) {
+      b.classList.toggle("on", (bi === 0 && idx === 0) || (bi === 1 && idx === 1) || (bi === 2 && idx >= 2));
+    });
+    efNote.innerHTML = "第 <b>" + (idx + 1) + "</b> 轮 100 次硬币：正面朝上 <b>" + curH + " 次</b>（频率 <b>" + (curH / 100).toFixed(2) + "</b>），总是稳稳落在 <b>50 次（频率 0.5）</b>附近！";
+  }
+  [].forEach.call(efBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () {
+      var code = parseInt(b.getAttribute("data-r"), 10);
+      if (code === 0 || code === 1) {
+        efDraw(code);
+      } else {
+        var r = rng(efSeed++), h = 0;
+        for (var i = 0; i < 100; i++) if (r() < 0.5) h++;
+        if (efRounds.length >= 6) efRounds[efRounds.length - 1] = h;
+        else efRounds.push(h);
+        efDraw(efRounds.length - 1);
+      }
+    };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") efDraw(efCur);
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") efDraw(0);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () { efDraw(0); tossStart("coin", true); crowdGen(20261023); });
+  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { efDraw(efCur); tossDraw(); crowdDraw(); });
+
+  // --- Micro-fig: Frequency & Probability concepts ---
+  function initMFreqFig() {
+    var svgEl = document.getElementById("m-freq-fig");
+    var capEl = document.getElementById("m-freq-cap");
+    if (!svgEl) return;
+    var mode = "converge";
+
+    var caps = {
+      converge: "大数定律收敛曲线：试验次数充分大时，频率的振荡幅度剧烈衰减，紧密稳定在客观概率 P=0.5 附近。",
+      fluc: "小样本随机波动：样本容量 n=10 时，每次试验由于纯偶然性产生 0.3~0.8 的宽幅偏离，绝非概率发生改变。",
+      monte: "蒙特卡洛模拟：向单位正方形内随机投点，落在 1/4 圆内的频率以极大概率收敛于面积之比 π/4。"
+    };
+
+    function draw() {
+      svgEl.innerHTML = "";
+      var NS = "http://www.w3.org/2000/svg";
+      function s(tag, attrs, txt) {
+        var el = document.createElementNS(NS, tag);
+        for (var k in attrs) el.setAttribute(k, attrs[k]);
+        if (txt) el.textContent = txt;
+        svgEl.appendChild(el);
+        return el;
+      }
+
+      if (mode === "converge") {
+        // Convergence line chart
+        // Box: x: 60, y: 30, w: 420, h: 140
+        // Axis
+        s("line", { x1: 60, y1: 170, x2: 480, y2: 170, stroke: "#64748b", "stroke-width": 1.5 });
+        s("line", { x1: 60, y1: 170, x2: 60, y2: 30, stroke: "#64748b", "stroke-width": 1.5 });
+
+        // Ticks
+        s("text", { x: 50, y: 35, fill: "#64748b", "font-size": "10", "text-anchor": "end" }, "1.0");
+        s("text", { x: 50, y: 103, fill: "#dc2626", "font-size": "10.5", "font-weight": "bold", "text-anchor": "end" }, "P=0.5");
+        s("text", { x: 50, y: 173, fill: "#64748b", "font-size": "10", "text-anchor": "end" }, "0.0");
+
+        s("text", { x: 60, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "n=10");
+        s("text", { x: 180, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "100");
+        s("text", { x: 320, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "1000");
+        s("text", { x: 460, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "10000");
+
+        // Target Probability line y = 100
+        s("line", { x1: 60, y1: 100, x2: 480, y2: 100, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "4 4" });
+
+        // Convergence curve points
+        var pathD = "M 60 70 L 90 140 L 120 80 L 150 120 L 180 92 L 230 108 L 280 96 L 330 102 L 380 99 L 430 101 L 480 100";
+        s("path", { d: pathD, fill: "none", stroke: "#2563eb", "stroke-width": 2 });
+
+        // Callout at start: 剧烈摆动
+        s("rect", { x: 80, y: 40, width: 90, height: 22, rx: 4, fill: "#fef2f2", stroke: "#fca5a5" });
+        s("text", { x: 125, y: 55, fill: "#b91c1c", "font-size": "10", "font-weight": "bold", "text-anchor": "middle" }, "小样本大摆动");
+
+        // Callout at end: 高度收敛稳定
+        s("rect", { x: 350, y: 70, width: 110, height: 22, rx: 4, fill: "#f0fdf4", stroke: "#86efac" });
+        s("text", { x: 405, y: 85, fill: "#15803d", "font-size": "10", "font-weight": "bold", "text-anchor": "middle" }, "大样本紧随 P=0.5");
+
+      } else if (mode === "fluc") {
+        // Fluctuation bars
+        s("text", { x: 270, y: 32, fill: "#0f172a", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "4 名同学各抛 10 次硬币的正面试验结果对比");
+
+        var students = [
+          { name: "小明", k: 7, f: "0.7", c: "#2563eb" },
+          { name: "小红", k: 4, f: "0.4", c: "#059669" },
+          { name: "小亮", k: 6, f: "0.6", c: "#d97706" },
+          { name: "小华", k: 3, f: "0.3", c: "#dc2626" }
+        ];
+
+        // Baseline P = 0.5 at y: 110
+        s("line", { x1: 60, y1: 110, x2: 480, y2: 110, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("text", { x: 50, y: 114, fill: "#64748b", "font-size": "10.5", "text-anchor": "end" }, "P=0.5");
+
+        students.forEach(function(stu, idx) {
+          var bx = 100 + idx * 95;
+          var barH = stu.k * 12;
+          var by = 170 - barH;
+          s("rect", { x: bx, y: by, width: 45, height: barH, rx: 4, fill: stu.c, opacity: 0.85 });
+          s("text", { x: bx + 22, y: by - 6, fill: stu.c, "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, stu.f);
+          s("text", { x: bx + 22, y: 186, fill: "#334155", "font-size": "11", "text-anchor": "middle" }, stu.name);
+        });
+
+        s("line", { x1: 60, y1: 170, x2: 480, y2: 170, stroke: "#cbd5e1", "stroke-width": 1 });
+        s("text", { x: 270, y: 202, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "每个人频率各不相同，纯属随机偶然，绝非硬币本身改变！");
+
+      } else if (mode === "monte") {
+        // Monte Carlo square & quadrant
+        s("text", { x: 270, y: 32, fill: "#0f172a", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "蒙特卡洛随机投点估计圆周率 π");
+
+        // Square: x: 100, y: 45, w: 120, h: 120
+        s("rect", { x: 100, y: 45, width: 120, height: 120, fill: "#f8fafc", stroke: "#64748b", "stroke-width": 1.5 });
+        // Quadrant arc: center (100, 165), r = 120
+        s("path", { d: "M 100 165 L 220 165 A 120 120 0 0 0 100 45 Z", fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 1.5 });
+
+        // Random dots
+        var dots = [
+          { x: 130, y: 130, inQ: true }, { x: 160, y: 140, inQ: true }, { x: 120, y: 90, inQ: true },
+          { x: 170, y: 110, inQ: true }, { x: 140, y: 70, inQ: true }, { x: 190, y: 150, inQ: true },
+          { x: 200, y: 60, inQ: false }, { x: 210, y: 80, inQ: false }, { x: 185, y: 55, inQ: false }
+        ];
+        dots.forEach(function(d) {
+          s("circle", { cx: d.x, cy: d.y, r: 3, fill: d.inQ ? "#2563eb" : "#ef4444" });
+        });
+
+        // Right side formula box
+        s("rect", { x: 260, y: 45, width: 230, height: 120, rx: 6, fill: "#f1f5f9", stroke: "#cbd5e1" });
+        s("text", { x: 275, y: 72, fill: "#1e3a8a", "font-size": "11.5", "font-weight": "bold" }, "几何测度与概率映射");
+        s("text", { x: 285, y: 95, fill: "#2563eb", "font-size": "11" }, "圆内频率: f = N_in / N_总 ≈ π / 4");
+        s("text", { x: 285, y: 120, fill: "#059669", "font-size": "11", "font-weight": "bold" }, "反解: π ≈ 4 × (N_in / N_总)");
+        s("text", { x: 285, y: 145, fill: "#64748b", "font-size": "10" }, "用计算机产生百万随机点，精度随 n 提升");
+      }
+
+      if (capEl) capEl.textContent = caps[mode];
+      if (window.renderMathInElement) window.renderMathInElement(capEl);
+    }
+
+    var tabs = document.querySelectorAll(".micro-box .micro-tab");
+    tabs.forEach(function(tab) {
+      tab.addEventListener("click", function() {
+        tabs.forEach(function(t) { t.classList.remove("active"); });
+        tab.classList.add("active");
+        mode = tab.getAttribute("data-mode");
+        draw();
+      });
+    });
+
+    draw();
+  }
+
+  // --- Micro-fig: Trap Gambler Fallacy vs Law of Large Numbers ---
+  function initMFreqTrapFig() {
+    var svgEl = document.getElementById("m-freq-trap-fig");
+    if (!svgEl) return;
+    svgEl.innerHTML = "";
+    var NS = "http://www.w3.org/2000/svg";
+    function s(tag, attrs, txt) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      if (txt) el.textContent = txt;
+      svgEl.appendChild(el);
+      return el;
+    }
+
+    // Left: Fallacy
+    s("rect", { x: 30, y: 20, width: 225, height: 130, rx: 6, fill: "#fef2f2", stroke: "#fca5a5", "stroke-width": 1.5 });
+    s("text", { x: 142, y: 44, fill: "#dc2626", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "❌ 赌徒谬误：主动平衡补偿");
+    s("text", { x: 142, y: 72, fill: "#475569", "font-size": "10.5", "text-anchor": "middle" }, "前 5 次全出反面 (亏欠 5 次正面)");
+    s("text", { x: 142, y: 98, fill: "#b91c1c", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "妄想：第 6 次必出正面补偿！");
+    s("text", { x: 142, y: 125, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "事实：硬币无记忆，P 恒为 0.5");
+
+    // Right: Large numbers dilution
+    s("rect", { x: 285, y: 20, width: 225, height: 130, rx: 6, fill: "#f0fdf4", stroke: "#86efac", "stroke-width": 1.5 });
+    s("text", { x: 397, y: 44, fill: "#15803d", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "✔ 大数稀释：海量分母平摊");
+    s("text", { x: 397, y: 72, fill: "#475569", "font-size": "10.5", "text-anchor": "middle" }, "前 5 次偏差 Δ = -5");
+    s("text", { x: 397, y: 98, fill: "#047857", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "当总次数 n 扩大至 10000 次时：");
+    s("text", { x: 397, y: 125, fill: "#15803d", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "Δ / n = 5 / 10000 = 0.0005 ≈ 0");
+  }
+
+  initMFreqFig();
+  initMFreqTrapFig();
 })();
 </script>
 </body></html>

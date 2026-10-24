@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .result { font-size: 15px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result b { color: var(--fg); }
@@ -23,9 +25,29 @@
 <h1>5.1 导数的概念及其意义</h1>
 <p class="lead">汽车的速度表显示的是「这一瞬间」有多快。这一节把「一段时间的平均变化率」一步步缩小到「一瞬间的变化率」，这个数就叫导数；在图上，它是切线的斜率。</p>
 
+<section class="concept-map card" id="concept-map" aria-labelledby="concept-map-title" style="border-left:4px solid var(--a); margin-bottom:18px;">
+  <p style="margin:0 0 6px"><span class="badge-pill badge-a">本节概念地图</span><b id="concept-map-title">先认词 → 再认关系 → 再看做法 → 自己用</b></p>
+  <p class="small" style="margin:0 0 8px"><b>核心概念：</b>导数是平均变化率在 \(\Delta x\to0\) 时的极限，也表示曲线在该点的切线斜率。</p>
+  <a class="btn" href="#step2-video" style="margin-bottom:8px">▶ 概念课视频｜先看这里</a>
+  <div class="concept-grid" style="margin:4px 0 10px">
+    <a class="card" href="#step2-definition" style="text-decoration:none;color:inherit"><span class="badge-pill badge-a">① 定义与符号</span><span class="small">\(\Delta x\)、\(\Delta y\)、平均变化率</span></a>
+    <a class="card" href="#step2-intuition" style="text-decoration:none;color:inherit"><span class="badge-pill badge-b">② 直觉与关系</span><span class="small">割线逼近切线、瞬时变化率</span></a>
+    <a class="card" href="#step2-method" style="text-decoration:none;color:inherit"><span class="badge-pill badge-a">③ 方法与意义</span><span class="small">求导数值、切线斜率与方程</span></a>
+    <a class="card" href="#step2-boundary" style="text-decoration:none;color:inherit"><span class="badge-pill badge-no">④ 边界与反例</span><span class="small">\(\Delta x\ne0\)、在点处与过点</span></a>
+  </div>
+  <p class="small" style="margin:0"><b>前置：</b><a href="b1-3-1.html">函数与函数值</a>、直线斜率、极限直觉　<b>解锁：</b>导数运算与导数在函数研究中的应用</p>
+</section>
+
 <section class="step" data-title="从例子进入">
-  <p>在初中平面几何中，我们把圆的切线定义为「与圆有且仅有一个公共点的直线」。但在高中面对任意曲线时：</p>
+  <p>在初中平面几何中，圆的切线在圆外侧且只碰圆 \(1\) 个点。但到了高中面对一般曲线（如过山车轨道 \(y=x^3\) 或波浪线 \(y=\sin x\)），把切线看作「割线 \(OQ\) 逼近出来的极限直线」时，点下面的按钮看看会发生什么：</p>
   <div class="card predict" data-id="entry" data-answer="B">
+    <svg class="entry-fig" id="entry-tan" viewBox="0 0 520 205" role="img" aria-label="对比圆的切线、三次曲线y=x³在原点被水平切线y=0穿过、正弦曲线切线有多个交点"></svg>
+    <div class="entry-bar" id="entry-tan-bar">
+      <button type="button" data-mode="circle">看圆的切线（在圆外侧只碰1点）</button>
+      <button type="button" data-mode="cubic" class="on">看曲线 y = x³ 在原点的切线（割线极限 y=0 直接穿过曲线！）</button>
+      <button type="button" data-mode="sine">看正弦曲线切线（与曲线有无穷多个交点）</button>
+    </div>
+    <div class="entry-note" id="entry-tan-note"></div>
     <p>如果一条直线与曲线在某处相切，这条直线能不能穿过曲线？它与曲线能不能有多个公共点？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>绝对不能，切线必须永远在曲线外侧，且只能有一个公共点</button>
@@ -40,39 +62,92 @@
 </section>
 
 <section class="step" data-title="讲清楚">
-  <h3>1. 先认识几个词</h3>
+  <div class="key" id="step2-video" style="margin-top:0"><b>概念课｜先把导数的定义、极限和切线意义讲清楚</b>：看完视频，再用下面的定义卡和微图回看。</div>
+  <div class="vid" data-video="concept"></div>
+  <h3 id="step2-definition">1. 概念定义｜先认识几个词</h3>
   <p class="small">要用到：函数和函数值（<a href="b1-3-1.html">回看 3.1</a>）；直线的斜率（<a href="e1-2-1.html">回看选必一 2.1</a>）和点斜式方程（<a href="e1-2-2.html">回看选必一 2.2</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：按定义求导时先保持 \(\Delta x\ne0\)，代数约分后再令 \(\Delta x\to0\)；“过点切线”要先判断该点是否在曲线上。</p></div>
 
   <div class="card">
-    <p><b>增量 \(\Delta x\)、\(\Delta y\)</b>：自变量从 \(x_0\) 变到 \(x_0+\Delta x\)，变了多少就是 \(\Delta x\)（\(\Delta x\ne0\)，可正可负）；函数值跟着变了多少叫 \(\Delta y\)：</p>
-    <p style="text-align:center">\(\Delta y=f(x_0+\Delta x)-f(x_0)\)。</p>
-    <p>例：\(f(x)=x^2\)，\(x\) 从 \(2\) 变到 \(2.5\)：\(\Delta x=0.5\)，\(\Delta y=6.25-4=2.25\)。从 \(2\) 变到 \(1.5\)：\(\Delta x=-0.5\)，\(\Delta y=2.25-4=-1.75\)。</p>
+    <p><b>增量 \(\Delta x\)、\(\Delta y\)</b>：自变量从 \(x_0\) 变到 \(x_0+\Delta x\)，变了多少就是 \(\Delta x\)（\(\Delta x\ne0\)，可正可负）；函数值变了多少叫 \(\Delta y = f(x_0+\Delta x)-f(x_0)\)。</p>
+    <p>例：\(f(x)=x^2\)，从 \(2\) 变到 \(2.5\)：\(\Delta x=0.5, \Delta y=6.25-4=2.25\)；变到 \(1.5\)：\(\Delta x=-0.5, \Delta y=-1.75\)。</p>
   </div>
 
   <div class="card">
-    <p><b>割线和它的斜率</b>：曲线上两点连成的直线叫<b>割线</b>。两点 \((x_1,y_1)\)、\((x_2,y_2)\) 连线的斜率是 \(\dfrac{y_2-y_1}{x_2-x_1}\)。</p>
-    <p>例：抛物线 \(y=x^2\) 上的 \((1,1)\) 和 \((3,9)\)，割线斜率 \(\dfrac{9-1}{3-1}=4\)。</p>
+    <p><b>割线与斜率</b>：曲线上两点连成的直线叫<b>割线</b>，其斜率就是两点间的平均变化率 \(\dfrac{\Delta y}{\Delta x}\)。</p>
+    <p>例：抛物线 \(y=x^2\) 上 \((1,1)\) 与 \((3,9)\) 的割线斜率是 \(\dfrac{9-1}{3-1}=4\)。</p>
   </div>
 
   <div class="card">
-    <p><b>趋近于（\(\to\)）</b>：「\(\Delta x\to0\)」是说 \(\Delta x\) 越来越接近 \(0\)，但<b>始终不等于 \(0\)</b>。这时看某个式子是不是越来越贴近一个确定的数。</p>
-    <p>例：式子 \(4+\Delta x\)。\(\Delta x=0.1\) 时 \(4.1\)，\(\Delta x=0.01\) 时 \(4.01\)，\(\Delta x=-0.01\) 时 \(3.99\)。两边都往 \(4\) 贴，记作 \(\Delta x\to0\) 时 \(4+\Delta x\to4\)。</p>
+    <p><b>趋近于（\(\to\)）</b>：「\(\Delta x\to0\)」指 \(\Delta x\) 无限接近 \(0\) 但<b>始终不等于 \(0\)</b>，观察分式逼近的确定极限值。</p>
+    <p>例：式子 \(4+\Delta x\)，当 \(\Delta x\to0\) 时，无论从正侧还是负侧逼近，值均贴近 \(4\)。</p>
   </div>
 
-  <h3>2. 平均变化率和瞬时变化率</h3>
-  <p>一段区间上「函数值平均每单位变多少」，就是<b>平均变化率</b>：</p>
-  <div class="key" style="text-align:center">\(\dfrac{\Delta y}{\Delta x}=\dfrac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\)</div>
-  <p>它在图上是割线的斜率。单位是「\(y\) 的单位 ÷ \(x\) 的单位」：路程（米）对时间（秒）就是米/秒，即平均速度。</p>
-  <p>为什么还要「瞬时」：平均速度只说一整段，说不出「某一刻有多快」。办法是把这一段越取越短，看平均速度往哪个数贴，那个数就是这一刻的<b>瞬时变化率</b>（瞬时速度）。</p>
+  <!-- 组件一：伴读直觉微图解 -->
+  <div class="micro-box" id="step2-intuition" style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:12px;padding:16px;margin:16px 0">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-weight:700;font-size:15px;color:var(--text,#1e293b);display:flex;align-items:center;gap:6px">
+        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#0284c7"></span>导数核心直觉：割线逼近切线、局部以直代曲与切点辨析
+      </div>
+      <div style="display:flex;gap:6px" id="m-der-tabs">
+        <button class="btn btn-sm" onclick="setMDerTab(0)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid #0284c7;background:#0284c7;color:#fff;cursor:pointer">① 割线逼近切线</button>
+        <button class="btn btn-sm" onclick="setMDerTab(1)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">② 局部以直代曲</button>
+        <button class="btn btn-sm" onclick="setMDerTab(2)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">③ 在点处 vs 过点</button>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;height:220px;background:var(--bg-subtle,#f8fafc);border-radius:8px;overflow:hidden">
+      <svg id="m-der-fig" viewBox="0 0 540 220" style="width:100%;height:100%;display:block"></svg>
+    </div>
+    <div id="m-der-desc" style="font-size:13px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
+  </div>
+
+  <!-- 组件二：概念对比双卡 -->
+  <div class="concept-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:16px 0">
+    <div class="concept-card" style="border:1px solid #bae6fd;background:#f0f9ff;border-radius:10px;padding:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="badge-pill" style="background:#0284c7;color:#fff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">极限跨越</span>
+        <b style="color:#0369a1;font-size:14px">平均变化率 vs 瞬时导数</b>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
+        <li><b>平均变化率</b>：两点割线斜率 \(\dfrac{\Delta y}{\Delta x}\)，反映宏观区间的平均快慢。</li>
+        <li><b>瞬时变化率（导数）</b>：割线极限 \(f'(x_0)=\lim_{\Delta x\to0}\dfrac{\Delta y}{\Delta x}\)，是单点的切线斜率。</li>
+        <li><b>运算核心</b>：必须先约去分母中的 \(\Delta x\)，绝不能直接代入 \(\Delta x=0\) 算 \(\frac00\)。</li>
+      </ul>
+    </div>
+    <div class="concept-card" style="border:1px solid #bbf7d0;background:#f0fdf4;border-radius:10px;padding:14px">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <span class="badge-pill" style="background:#16a34a;color:#fff;font-size:11px;padding:2px 8px;border-radius:12px;font-weight:600">切点辨析</span>
+        <b style="color:#15803d;font-size:14px">「在点处」 vs 「过某点」</b>
+      </div>
+      <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
+        <li><b>在点 \(P\) 处</b>：\(P(x_0, y_0)\) 是曲线本身的切点，斜率就是 \(f'(x_0)\)，一条确定。</li>
+        <li><b>过点 \(P\)</b>：点 \(P\) 通常不在曲线上！必须先设切点 \((t, f(t))\)，代入方程反解 \(t\)。</li>
+        <li><b>解的个数</b>：过曲线上某点的切线可能有多条（不仅是在该点处的切线，还可能相切于他处）。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 组件三：色彩语义主公式 -->
+  <h3>2. 平均变化率、导数与几何意义主公式</h3>
+  <p>导数是平均变化率在区间无限收缩时的极限，几何上严格对应切线的斜率：</p>
+  <div class="key" style="text-align:center;padding:12px;background:#f8fafc;border-left:4px solid #0284c7;border-radius:6px;margin:12px 0">
+    <div style="font-size:15px">
+      割线斜率（平均变化率）：\(\color{#0284c7}{\dfrac{\Delta y}{\Delta x}} = \dfrac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\)
+    </div>
+    <div style="margin-top:6px;font-size:15px">
+      切线斜率（导数定义）：\(\color{#16a34a}{f'(x_0)} = \lim_{\Delta x\to0}\dfrac{\Delta y}{\Delta x} = \color{#16a34a}{k_{\text{切}}}\)
+    </div>
+    <div style="margin-top:6px;font-size:15px">
+      切线方程（点斜式）：\(y - \color{#0284c7}{f(x_0)} = \color{#16a34a}{f'(x_0)}(x - \color{#0284c7}{x_0})\)
+    </div>
+  </div>
 
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
-    <p>小球下落，\(t\) 秒内落下 \(s(t)=5t^2\)（米）。求 \([1,1+\Delta t]\) 上的平均速度，再看 \(t=1\) 这一刻的速度。</p>
-    <p>\(\Delta s=5(1+\Delta t)^2-5\times1^2\)</p>
-    <p>\(\phantom{\Delta s}=10\Delta t+5(\Delta t)^2\)。</p>
+    <p>小球下落，\(t\) 秒内落下 \(s(t)=5t^2\)（米）。求 \([1,1+\Delta t]\) 上的平均速度，再看 \(t=1\) 这一刻的瞬时速度。</p>
+    <p>\(\Delta s=5(1+\Delta t)^2-5\times1^2 = 10\Delta t+5(\Delta t)^2\)。</p>
     <p>平均速度 \(\dfrac{\Delta s}{\Delta t}=10+5\Delta t\)（米/秒）。</p>
-    <p>\(\Delta t=0.1\)：\(10.5\)；\(\Delta t=0.01\)：\(10.05\)；\(\Delta t=0.001\)：\(10.005\)。</p>
-    <p>\(\Delta t\to0\) 时 \(10+5\Delta t\to10\)，所以 \(t=1\) 时小球的瞬时速度是 \(10\) 米/秒。</p>
+    <p>当 \(\Delta t\to0\) 时，\(10+5\Delta t\to10\)，所以 \(t=1\) 时的瞬时速度为 \(10\) 米/秒。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：\(f(x)=x^2+1\) 在区间 \([1,3]\) 上的平均变化率是？</p>
@@ -82,25 +157,47 @@
       <button class="opt" data-v="C"><b>C</b>\(5\)</button>
       <button class="opt" data-v="D"><b>D</b>\(2\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。\(f(1)=2\)，\(f(3)=10\)，\(\dfrac{\Delta y}{\Delta x}=\dfrac{10-2}{3-1}=4\)。选 B 是只算了 \(\Delta y=8\)，忘了除以 \(\Delta x\)；选 C 是没减 \(f(1)\)，拿 \(\dfrac{10}{2}\) 当答案；\(2\) 是 \(\Delta x\)，不是变化率。</p></div>
+    <div class="reveal"><p><b>A</b>。\(f(1)=2\)，\(f(3)=10\)，\(\dfrac{\Delta y}{\Delta x}=\dfrac{10-2}{3-1}=4\)。选 B 是只算了 \(\Delta y=8\)；选 C 是没减 \(f(1)\)；\(2\) 是 \(\Delta x\)。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
-  <h3>3. 导数的定义</h3>
-  <p>把例 1 的做法用到任意函数、任意一点：\(\Delta x\to0\) 时，平均变化率如果趋于一个<b>确定的有限数</b>，就说 \(f(x)\) 在 \(x_0\) 处<b>可导</b>，这个数叫 \(f(x)\) 在 \(x_0\) 处的<b>导数</b>（瞬时变化率），记作 \(f'(x_0)\)：</p>
-  <div class="key">$$f'(x_0)=\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}$$</div>
-  <p>按定义求导数分三步：<b>① 算 \(\Delta y\)；② 算 \(\dfrac{\Delta y}{\Delta x}\) 并约掉分母里的 \(\Delta x\)；③ 看 \(\Delta x\to0\) 时趋于几。</b>第 ② 步不能省：直接把 \(\Delta x=0\) 代进分母，得到的是没有意义的 \(\dfrac00\)。</p>
-  <p class="small">\(f'(x_0)\) 是某一点处的一个数；把每个 \(x\) 对应的导数放在一起，得到的函数 \(f'(x)\) 叫<b>导函数</b>（5.2 细讲）。</p>
+  <!-- 组件四：三步破题思维链例题 -->
+  <h3 id="step2-method">3. 导数几何意义与三步破题思维链</h3>
+  <div class="think-steps" style="border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:16px;background:var(--card,#fff);margin:14px 0">
+    <div style="font-weight:700;color:#0369a1;margin-bottom:10px;font-size:14px">🧩 典型例题：求曲线的切线方程（辨清「在点处」与「过点」）</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#e0f2fe;color:#0284c7;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">👀 信号</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          审视题目字眼：是「在点 \(P\) 处」还是「过点 \(P\)」；验证点 \(P\) 坐标是否在函数曲线上。
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#fef3c7;color:#d97706;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">🔧 步骤</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          1. <b>定切点</b>：若「在点处」，切点即为 \(P(x_0, y_0)\)；若「过点」，必须设切点为 \((t, f(t))\)；<br>
+          2. <b>求导数斜率</b>：计算导数得到切线斜率 \(k = f'(t)\)；<br>
+          3. <b>点斜式反解</b>：代入 \(y - f(t) = f'(t)(x - t)\)，代入点 \(P\) 坐标解出 \(t\) 并写出所有切线。
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <span style="background:#dcfce7;color:#16a34a;font-weight:700;font-size:12px;padding:3px 8px;border-radius:6px;white-space:nowrap">🛡️ 防坑</span>
+        <div style="font-size:13px;color:var(--text,#1e293b);line-height:1.6">
+          若点 \(P\) 不在曲线上，切勿直接以 \(f'(x_P)\) 当作切线斜率！过曲线外一点往往有两条甚至多条切线。
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="card">
-    <p class="small">例 2</p>
+    <p class="small">例 2（按定义求导）</p>
     <p>按定义求 \(f(x)=x^2\) 在 \(x=2\) 处的导数。</p>
-    <p>① \(\Delta y=(2+\Delta x)^2-2^2\)</p>
-    <p>\(\quad\phantom{\Delta y}=4\Delta x+(\Delta x)^2\)。</p>
-    <p>② \(\dfrac{\Delta y}{\Delta x}=\dfrac{4\Delta x+(\Delta x)^2}{\Delta x}=4+\Delta x\)（\(\Delta x\ne0\)，可以约分）。</p>
-    <p>③ \(\Delta x\to0\) 时 \(4+\Delta x\to4\)，所以 \(f'(2)=4\)。</p>
+    <p>① \(\Delta y=(2+\Delta x)^2-2^2 = 4\Delta x+(\Delta x)^2\)。</p>
+    <p>② \(\dfrac{\Delta y}{\Delta x}=4+\Delta x\)。约去分母中的 \(\Delta x\)。</p>
+    <p>③ 当 \(\Delta x\to0\) 时，\(4+\Delta x\to4\)。故 \(f'(2)=4\)。</p>
   </div>
   <div class="card predict" data-id="try-2" data-answer="A">
-    <p>自己试试：按定义，\(f(x)=x^2-3x\) 在 \(x=1\) 处的导数 \(f'(1)\) 是？</p>
+    <p>自己试试：用定义求 \(f(x)=x^2-3x\) 在 \(x=1\) 处的导数 \(f'(1)\) 是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(-1\)</button>
       <button class="opt" data-v="B"><b>B</b>\(2\)</button>
@@ -108,24 +205,19 @@
       <button class="opt" data-v="D"><b>D</b>不存在</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。\(\Delta y=(1+\Delta x)^2-3(1+\Delta x)-(1-3)\)</p>
-      <p>\(\phantom{\Delta y}=-\Delta x+(\Delta x)^2\)，</p>
-      <p>\(\dfrac{\Delta y}{\Delta x}=-1+\Delta x\to-1\)。</p>
-      <p>选 B 是展开时漏了 \(-3\Delta x\)；选 C 是把函数值 \(f(1)=-2\) 当成了导数；选 D 是先把 \(\Delta x=0\) 代进分母，看到 \(\dfrac00\) 就下结论。</p>
+      <p><b>A</b>。\(\Delta y=(1+\Delta x)^2-3(1+\Delta x)-(1-3)=-\Delta x+(\Delta x)^2\)，\(\dfrac{\Delta y}{\Delta x}=-1+\Delta x\to-1\)。</p>
+      <p>选 B 是漏了 \(-3\Delta x\)；选 C 是把函数值 \(f(1)=-2\) 当导数；选 D 是直接代 \(\Delta x=0\) 看到 \(\frac00\)。</p>
     </div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
-  <h3>4. 几何意义：切线的斜率</h3>
-  <p>在图上，\(\dfrac{\Delta y}{\Delta x}\) 是割线 \(PQ\) 的斜率。\(\Delta x\to0\) 时，\(Q\) 沿曲线滑向 \(P\)，割线绕 \(P\) 转，它的极限位置就是曲线在 \(P\) 处的<b>切线</b>。所以</p>
-  <div class="key" style="text-align:center">切线斜率 \(k=f'(x_0)\)；切线方程 \(y-f(x_0)=f'(x_0)(x-x_0)\)</div>
-  <p>导数大，切线陡、函数在这附近涨得快；导数为负，切线往下斜；导数为 \(0\)，切线水平。在切点附近一小段，曲线几乎和切线重合，这就是「以直代曲」。</p>
+  <h3>4. 几何意义：切线的斜率与方程</h3>
+  <p>在图上，割线 \(PQ\) 的极限位置是曲线在 \(P\) 处的<b>切线</b>。切线斜率 \(k=f'(x_0)\)，方程为 \(y-f(x_0)=f'(x_0)(x-x_0)\)。在切点附近一小段，曲线几乎和切线重合，这就是「以直代曲」。</p>
 
   <div class="card">
-    <p class="small">例 3（接例 2）</p>
+    <p class="small">例 3（求切线方程）</p>
     <p>求曲线 \(y=x^2\) 在点 \(P(2,4)\) 处的切线方程。</p>
-    <p>先看割线：\(Q(2+\Delta x,(2+\Delta x)^2)\)，割线 \(PQ\) 斜率是例 2 的 \(4+\Delta x\)。\(\Delta x=1\) 时 \(Q(3,9)\)，斜率 \(5\)；\(\Delta x=0.1\) 时斜率 \(4.1\)；越来越贴近 \(4\)。</p>
-    <p>\(P\) 在曲线上，是切点，切线斜率 \(k=f'(2)=4\)。</p>
-    <p>点斜式：\(y-4=4(x-2)\)，即 \(y=4x-4\)。</p>
+    <p>\(P\) 在曲线上，是切点，切线斜率 \(k=f'(2)=4\)。点斜式：\(y-4=4(x-2)\)，即 \(y=4x-4\)。</p>
   </div>
   <div class="card predict" data-id="chk1" data-answer="C">
     <p>自己试试：曲线 \(y=f(x)\) 在点 \(P(1,2)\) 处的切线平行于直线 \(y=3x-1\)，则 \(f'(1)\) 是？</p>
@@ -136,20 +228,53 @@
       <button class="opt" data-v="D"><b>D</b>\(-1\)</button>
     </div>
     <div class="reveal">
-      <p><b>C</b>。平行的直线斜率相等，切线斜率 \(k=3\)，而 \(f'(1)\) 就是这条切线的斜率，所以 \(f'(1)=3\)。选 B 是把切点纵坐标 \(f(1)=2\) 当成了 \(f'(1)\)；选 A 是拿了切点横坐标；\(-1\) 是那条直线的截距。</p>
+      <p><b>C</b>。平行直线斜率相等，切线斜率 \(k=3\)，故 \(f'(1)=3\)。选 B 是把纵坐标当导数；选 A 拿了横坐标；\(-1\) 是截距。</p>
     </div>
   </div>
 
-  <h3>5. 用之前要注意</h3>
-  <ol>
-    <li><b>\(\Delta x\to0\) 不是把 \(\Delta x\) 代成 \(0\)</b>：\(\Delta x\) 始终不为 \(0\)，先约分再看趋势。<br><span class="small">反例：例 2 里直接代 \(\Delta x=0\)，得到 \(\dfrac{0}{0}\)，什么也算不出来；约成 \(4+\Delta x\) 后才看得出趋于 \(4\)。</span></li>
-    <li><b>趋于确定的有限数才叫可导</b>；没有有限导数的点，不能套切线公式 \(y-f(x_0)=f'(x_0)(x-x_0)\)。<br><span class="small">反例：\(f(x)=|x|\) 在 \(x=0\) 处，\(\dfrac{\Delta y}{\Delta x}=\dfrac{|\Delta x|}{\Delta x}\)，\(\Delta x>0\) 时恒为 \(1\)，\(\Delta x&lt;0\) 时恒为 \(-1\)，不贴向同一个数，所以在 \(0\) 处不可导，图象在原点是个尖角。</span></li>
-    <li><b>切线不能用「只有一个公共点」或「在曲线一侧」来认</b>，要看割线的极限位置。<br><span class="small">反例 1：\(y=x^3\) 在原点的切线是 \(y=0\)，它从曲线中间穿过去。反例 2：竖直线 \(x=1\) 和 \(y=x^2\) 只有一个公共点 \((1,1)\)，但它不是切线，那里的切线是 \(y=2x-1\)。</span></li>
-    <li><b>「在点 \(P\) 处的切线」和「过点 \(P\) 的切线」不一样</b>：前者 \(P\) 就是切点，斜率直接是 \(f'(x_0)\)；后者 \(P\) 不一定是切点，要先设切点 \((t,f(t))\)，再用 \(P\) 在切线上列方程求 \(t\)。<br><span class="small">反例：过原点作 \(y=x^2+1\) 的切线，原点不在曲线上，切点是 \((\pm1,2)\)，切线有 \(y=2x\) 和 \(y=-2x\) 两条（「练一练」第 3 题）。</span></li>
-    <li><b>\(f'(x_0)\) 是一个数，\(f'(x)\) 是一个函数</b>。<br><span class="small">反例：\(f(x)=x^2\)，\(f'(2)=4\) 是一个数；\(f'(x)=2x\) 是导函数，代 \(x=2\) 才得 \(4\)。</span></li>
-    <li><b>看图估计变化率，结果是近似值，要写「≈」</b>；变化率带单位，单位是「\(y\) 的单位 ÷ \(x\) 的单位」。<br><span class="small">例：从水箱水量 \(V\)（升）随时间 \(t\)（分）的图上，量出某时刻切线大约过两格，斜率只能写 \(V'(t_0)\approx1.5\) 升/分，不能写成「\(=1.5\)」。</span></li>
-  </ol>
+  <!-- 组件五：三大翻车现场红绿对比卡 + 反例微图解 -->
+  <h3 id="step2-boundary">5. 三大翻车现场红绿对比卡</h3>
+  <div class="trap-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:16px 0">
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区一：混淆「在点处」与「过点」</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：求过原点与 \(y=x^2+1\) 的切线，直接令 \(k=f'(0)=0\)</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：原点不在曲线上！必须设切点 \((t, t^2+1)\)，解得 \(t=\pm1\)，切线有 \(y=\pm2x\) 两条！
+      </div>
+    </div>
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区二：代入 0 误判零除无意义</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：直接把 \(\Delta x=0\) 代入分母看到 \(\frac00\) 判不可导</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：\(\Delta x \ne 0\)！必须先代数约分化简出 \(4+\Delta x\)，再令其趋于 \(0\) 获得导数 \(4\)。
+      </div>
+    </div>
+    <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
+      <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区三：切线等同于唯一公共点</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：认为切线绝不可穿过曲线，或只有一个交点必是切线</div>
+      <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
+        ✅ 正确：切线是割线极限位置！\(y=x^3\) 在原点切线为 \(y=0\)（穿过曲线）；竖直线 \(x=1\) 与抛物线相交一次但非切线。
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:14px;margin:12px 0">
+    <div style="font-weight:700;font-size:13px;color:var(--text,#1e293b);margin-bottom:8px">🔍 反例微图解：过曲线外一点双切线 vs 拐点切线穿透</div>
+    <div style="width:100%;height:150px;background:var(--bg-subtle,#f8fafc);border-radius:6px;overflow:hidden">
+      <svg id="m-der-trap-fig" viewBox="0 0 540 150" style="width:100%;height:100%;display:block"></svg>
+    </div>
+    <div style="font-size:12px;color:var(--text-subtle,#64748b);margin-top:6px">
+      左图：过原点向 \(y=x^2+1\) 引切线，对称产生两条切线 \(y=\pm2x\)；右图：\(y=x^3\) 在原点的切线 \(y=0\) 直接穿越拐点。
+    </div>
+  </div>
+
   <div class="key">平均变化率是割线斜率，瞬时变化率是它在 \(\Delta x\to0\) 时趋于的数，也就是导数，几何上是切线斜率。</div>
+
+  <details class="more">
+    <summary>再深一点（可以先跳过）</summary>
+    <p><b>不可导的典型反例</b>：\(f(x)=|x|\) 在 \(x=0\) 处的左右变化率分别为 \(1\) 和 \(-1\)，左右极限不相等，故不可导（几何上为尖点）。</p>
+    <p><b>以直代曲的现代意义</b>：在微小邻域内将复杂非线性曲线近似为直线切线，是微积分进行数值计算、物理建模和优化算法的根本基石。</p>
+  </details>
 </section>
 
 <section class="step" data-title="动手">
@@ -163,6 +288,7 @@
     <input type="range" id="valDx" min="1" max="25" step="1" value="15">
     <output id="valDxOut" style="font-weight:700">1.50</output>
 
+    <button type="button" class="btn ghost" id="isoSecBtn" data-iso-tab="1">瞬时变化率千分表（等距 3D）</button>
     <button type="button" class="btn ghost" id="resetBtn">重置实验台</button>
   </div>
 
@@ -250,19 +376,23 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。</footer>
 </div>
 
+<script src="../assets/iso-bench.js"></script>
 <script>
 (function () {
   "use strict";
 
   var dxIn = document.getElementById("valDx");
   var dxOut = document.getElementById("valDxOut");
+  var isoSecBtn = document.getElementById("isoSecBtn");
   var resetBtn = document.getElementById("resetBtn");
   var svg = document.getElementById("secantSvg");
   var desc = document.getElementById("secantDesc");
+  var showIsoSec = false;
 
-  var oX = 140;
-  var oY = 220;
-  var scale = 70; // 1个单位 = 70像素
+  var oX = 105;
+  var oY = 248;
+  var scaleX = 95;
+  var scaleY = 34;
 
   // 函数 f(x) = 0.5 * x^2, P(1, 0.5), 切线斜率 k_tangent = 1.0
   var pX0 = 1.0;
@@ -272,78 +402,376 @@
     var rawDx = (parseInt(dxIn.value, 10) || 15) / 10; // 0.1 到 2.5
     dxOut.textContent = rawDx.toFixed(2);
 
+    if (showIsoSec && window.IsoBench && window.IsoBench.isReal === true) {
+      window.IsoBench.renderSecantBench(svg, desc, rawDx, function () {
+        if (window.Peiyu && window.Peiyu.math) window.Peiyu.math(desc);
+      });
+      return;
+    }
+
     var qX0 = pX0 + rawDx;
     var qY0 = 0.5 * qX0 * qX0;
 
     // 割线斜率 = (0.5*(1+dx)^2 - 0.5) / dx = 1 + 0.5*dx
     var kSecant = (qY0 - pY0) / rawDx;
-    var kTangent = 1.0;
 
     // 像素坐标
-    var ptP = { x: oX + pX0 * scale, y: oY - pY0 * scale };
-    var ptQ = { x: oX + qX0 * scale, y: oY - qY0 * scale };
+    var ptP = { x: oX + pX0 * scaleX, y: oY - pY0 * scaleY };
+    var ptQ = { x: oX + qX0 * scaleX, y: oY - qY0 * scaleY };
 
     var h = [];
+    h.push('<defs><clipPath id="secClip"><rect x="25" y="18" width="510" height="260"/></clipPath></defs>');
 
     // 坐标轴
     h.push('<line x1="30" y1="' + oY + '" x2="520" y2="' + oY + '" stroke="var(--line)" stroke-width="1.2"/>');
-    h.push('<line x1="' + oX + '" y1="30" x2="' + oX + '" y2="270" stroke="var(--line)" stroke-width="1.2"/>');
-    h.push('<text x="525" y="' + (oY + 4) + '" font-size="12" fill="var(--muted)">x</text>');
-    h.push('<text x="' + (oX + 6) + '" y="36" font-size="12" fill="var(--muted)">y</text>');
-    h.push('<text x="' + (oX + 4) + '" y="' + (oY + 14) + '" font-size="11" fill="var(--muted)">O</text>');
+    h.push('<line x1="' + oX + '" y1="22" x2="' + oX + '" y2="276" stroke="var(--line)" stroke-width="1.2"/>');
+    h.push('<text x="526" y="' + (oY + 4) + '" font-size="12" fill="var(--muted)">x</text>');
+    h.push('<text x="' + (oX + 6) + '" y="32" font-size="12" fill="var(--muted)">y</text>');
+    h.push('<text x="' + (oX - 8) + '" y="' + (oY + 15) + '" font-size="11" fill="var(--muted)" text-anchor="end">O</text>');
 
     // 绘制曲线 f(x) = 0.5 * x^2
     var pts = [];
-    for (var x = -0.5; x <= 4.2; x += 0.05) {
+    for (var x = -0.6; x <= 3.7; x += 0.05) {
       var y = 0.5 * x * x;
-      var curPx = oX + x * scale;
-      var curPy = oY - y * scale;
+      var curPx = oX + x * scaleX;
+      var curPy = oY - y * scaleY;
       pts.push((pts.length === 0 ? "M" : "L") + curPx.toFixed(1) + "," + curPy.toFixed(1));
     }
+    h.push('<g clip-path="url(#secClip)">');
     h.push('<path d="' + pts.join(" ") + '" fill="none" stroke="#2563eb" stroke-width="2.5"/>');
-    h.push('<text x="' + (oX + 3.8 * scale) + '" y="' + (oY - 0.5 * 3.8 * 3.8 * scale - 6) + '" font-size="12" font-weight="700" fill="#2563eb">y = 0.5x²</text>');
 
     // 真实切线 (紫色虚线，斜率 1.0，过点 P(1, 0.5))
-    // y - 0.5 = 1.0 * (x - 1) => y = x - 0.5
     var tanX1 = -0.5, tanY1 = tanX1 - 0.5;
-    var tanX2 = 3.5, tanY2 = tanX2 - 0.5;
-    h.push('<line x1="' + (oX + tanX1 * scale) + '" y1="' + (oY - tanY1 * scale) + '" x2="' + (oX + tanX2 * scale) + '" y2="' + (oY - tanY2 * scale) + '" stroke="#8b5cf6" stroke-width="1.8" stroke-dasharray="4 3"/>');
-    h.push('<text x="' + (oX + 3.2 * scale) + '" y="' + (oY - (3.2 - 0.5) * scale + 16) + '" font-size="11" font-weight="700" fill="#8b5cf6">极限切线 (k = 1.0)</text>');
+    var tanX2 = 3.8, tanY2 = tanX2 - 0.5;
+    h.push('<line x1="' + (oX + tanX1 * scaleX) + '" y1="' + (oY - tanY1 * scaleY) + '" x2="' + (oX + tanX2 * scaleX) + '" y2="' + (oY - tanY2 * scaleY) + '" stroke="#8b5cf6" stroke-width="1.8" stroke-dasharray="4 3"/>');
 
     // 割线 PQ (橙色实线)
-    // 割线延伸
     var secX1 = pX0 - 0.8;
     var secY1 = pY0 - 0.8 * kSecant;
     var secX2 = qX0 + 0.8;
     var secY2 = qY0 + 0.8 * kSecant;
-    h.push('<line x1="' + (oX + secX1 * scale) + '" y1="' + (oY - secY1 * scale) + '" x2="' + (oX + secX2 * scale) + '" y2="' + (oY - secY2 * scale) + '" stroke="#f59e0b" stroke-width="2.2"/>');
+    h.push('<line x1="' + (oX + secX1 * scaleX) + '" y1="' + (oY - secY1 * scaleY) + '" x2="' + (oX + secX2 * scaleX) + '" y2="' + (oY - secY2 * scaleY) + '" stroke="#f59e0b" stroke-width="2.2"/>');
+    h.push('</g>');
+
+    h.push('<text x="' + (oX + 2.6 * scaleX) + '" y="36" font-size="12" font-weight="700" fill="#2563eb">y = 0.5x²</text>');
+    h.push('<text x="518" y="234" font-size="11" font-weight="700" fill="#8b5cf6" text-anchor="end">极限切线 (k = 1.0)</text>');
 
     // 辅助直角三角形 (Δx 与 Δy)
     h.push('<line x1="' + ptP.x + '" y1="' + ptP.y + '" x2="' + ptQ.x + '" y2="' + ptP.y + '" stroke="var(--line)" stroke-dasharray="2 2"/>');
     h.push('<line x1="' + ptQ.x + '" y1="' + ptP.y + '" x2="' + ptQ.x + '" y2="' + ptQ.y + '" stroke="var(--line)" stroke-dasharray="2 2"/>');
-    h.push('<text x="' + ((ptP.x + ptQ.x) / 2) + '" y="' + (ptP.y + 14) + '" font-size="11" fill="var(--muted)" text-anchor="middle">Δx=' + rawDx.toFixed(2) + '</text>');
-    h.push('<text x="' + (ptQ.x + 6) + '" y="' + ((ptP.y + ptQ.y) / 2) + '" font-size="11" fill="var(--muted)">Δy=' + (qY0 - pY0).toFixed(2) + '</text>');
+    h.push('<text x="' + Math.max(ptP.x + 12, (ptP.x + ptQ.x) / 2 - 14) + '" y="' + (ptP.y + 18) + '" font-size="11" fill="var(--muted)" text-anchor="start">Δx=' + rawDx.toFixed(2) + '</text>');
+    var dyMidY = Math.min(ptP.y - 4, Math.max(54, (ptP.y + ptQ.y) / 2 + 4));
+    h.push('<text x="' + (ptQ.x + 10) + '" y="' + dyMidY + '" font-size="11" fill="var(--muted)" text-anchor="start">Δy=' + (qY0 - pY0).toFixed(2) + '</text>');
 
     // 点 P 与点 Q
     h.push('<circle cx="' + ptP.x + '" cy="' + ptP.y + '" r="5" fill="#e11d48"/>');
-    h.push('<text x="' + (ptP.x - 16) + '" y="' + (ptP.y - 10) + '" font-size="12" font-weight="700" fill="#e11d48">P(1, 0.5)</text>');
+    h.push('<text x="' + (ptP.x - 10) + '" y="' + (ptP.y + 15) + '" font-size="12" font-weight="700" fill="#e11d48" text-anchor="end">P(1, 0.5)</text>');
 
     h.push('<circle cx="' + ptQ.x + '" cy="' + ptQ.y + '" r="5" fill="#f59e0b"/>');
-    h.push('<text x="' + (ptQ.x + 8) + '" y="' + (ptQ.y + 12) + '" font-size="12" font-weight="700" fill="#f59e0b">Q</text>');
+    var qLabelY = Math.max(24, ptQ.y - 10);
+    h.push('<text x="' + (ptQ.x - 8) + '" y="' + qLabelY + '" font-size="12" font-weight="700" fill="#f59e0b" text-anchor="end">Q</text>');
 
     svg.innerHTML = h.join("");
 
     desc.innerHTML = '<b>割线趋近切线</b>：当 Δx 从 1.50 缩至 <b>' + rawDx.toFixed(2) + '</b> 时，动点 Q 沿曲线向 P 靠拢。当前割线斜率 <b>k割 = Δy/Δx = ' + kSecant.toFixed(3) + '</b>。当 Δx → 0 时，割线逐渐贴紧紫色切线，极限斜率 <b>f\'(1) = 1.000</b>！';
   }
 
+  if (isoSecBtn) {
+    isoSecBtn.addEventListener("click", function () {
+      showIsoSec = !showIsoSec;
+      isoSecBtn.classList.toggle("on", showIsoSec);
+      render();
+    });
+  }
+
   resetBtn.addEventListener("click", function () {
     dxIn.value = 15;
+    showIsoSec = false;
+    if (isoSecBtn) isoSecBtn.classList.remove("on");
     render();
   });
 
   dxIn.addEventListener("input", render);
 
   render();
+
+  /* ================= 0 从例子进入：割线逼近切线与穿切反例 ================= */
+  var etanSvg = document.getElementById("entry-tan"), etanBar = document.getElementById("entry-tan-bar"), etanNote = document.getElementById("entry-tan-note");
+  function etanDraw(mode) {
+    var ox = 165, oy = 112, h = [];
+    if (mode === "circle") {
+      var r = 56;
+      h.push('<circle cx="' + ox + '" cy="' + (oy + 12) + '" r="' + r + '" fill="var(--ok-soft)" stroke="var(--c)" stroke-width="2.5"/>');
+      var ty = oy + 12 - r;
+      h.push('<line x1="45" y1="' + ty + '" x2="285" y2="' + ty + '" stroke="var(--a)" stroke-width="3"/>');
+      h.push('<circle cx="' + ox + '" cy="' + ty + '" r="5.5" fill="var(--a)"/>');
+      h.push('<text x="' + ox + '" y="' + (ty - 10) + '" text-anchor="middle" font-weight="700" fill="var(--a)" font-size="14">切点 P（在圆外侧，仅1个公共点）</text>');
+      h.push('<rect x="305" y="42" width="198" height="118" rx="9" fill="var(--card)" stroke="var(--line)" stroke-width="1.5"/>');
+      h.push('<text x="317" y="68" font-weight="700" fill="var(--c)" font-size="14.5">初中的圆切线（特例）：</text>');
+      h.push('<text x="317" y="95" fill="var(--fg)" font-size="13.5">圆是处处往同一侧弯的</text>');
+      h.push('<text x="317" y="118" fill="var(--fg)" font-size="13.5">闭合凸曲线，切线碰巧</text>');
+      h.push('<text x="317" y="141" fill="var(--muted)" font-size="13.5">在圆外侧且只交于 1 点。</text>');
+      etanNote.innerHTML = "圆只是特殊曲线：点右边两个按钮，看看<b>三次曲线 y = x³</b> 和<b>正弦曲线 y = sin x</b> 的切线！";
+    } else if (mode === "cubic") {
+      // y = x^3, ox=165, oy=108, ux=72, uy=54
+      var ux = 75, uy = 52;
+      h.push('<line x1="30" y1="' + oy + '" x2="300" y2="' + oy + '" stroke="var(--line)" stroke-width="1.5"/>');
+      h.push('<line x1="' + ox + '" y1="22" x2="' + ox + '" y2="192" stroke="var(--line)" stroke-width="1.5"/>');
+      // 两条割线 OQ1 (x=1.1), OQ2 (x=0.7)
+      [1.1, 0.7].forEach(function (qx, idx) {
+        var qy = qx * qx * qx, k = qx * qx;
+        h.push('<line x1="' + (ox - 1.2 * ux) + '" y1="' + (oy + 1.2 * k * uy).toFixed(1) + '" x2="' + (ox + 1.25 * ux) + '" y2="' + (oy - 1.25 * k * uy).toFixed(1) + '" stroke="var(--b)" stroke-width="1.6" stroke-dasharray="4 3"/>');
+        h.push('<circle cx="' + (ox + qx * ux).toFixed(1) + '" cy="' + (oy - qy * uy).toFixed(1) + '" r="4" fill="var(--b)"/>');
+        if (idx === 0) h.push('<text x="' + (ox + qx * ux + 8).toFixed(1) + '" y="' + (oy - qy * uy + 4).toFixed(1) + '" fill="var(--b)" font-weight="700" font-size="13">割线 OQ ↘</text>');
+      });
+      // 曲线 y = x^3
+      var pts = [];
+      for (var x = -1.18; x <= 1.18; x += 0.06) {
+        pts.push((pts.length ? "L" : "M") + (ox + x * ux).toFixed(1) + "," + (oy - x * x * x * uy).toFixed(1));
+      }
+      h.push('<path d="' + pts.join(" ") + '" fill="none" stroke="var(--c)" stroke-width="2.8"/>');
+      // 原点处的极限切线 y = 0（直接穿过曲线！）
+      h.push('<line x1="34" y1="' + oy + '" x2="296" y2="' + oy + '" stroke="var(--a)" stroke-width="3.4"/>');
+      h.push('<circle cx="' + ox + '" cy="' + oy + '" r="6" fill="var(--hl)" stroke="var(--a)" stroke-width="2"/>');
+      h.push('<text x="156" y="182" text-anchor="middle" font-weight="700" fill="var(--a)" font-size="13">切点 O(0,0)：切线 y=0 穿过曲线！</text>');
+      h.push('<rect x="308" y="36" width="198" height="130" rx="9" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="1.8"/>');
+      h.push('<text x="320" y="62" font-weight="700" fill="var(--a)" font-size="14.5">y = x³ 在原点 O(0,0)：</text>');
+      h.push('<text x="320" y="88" fill="var(--fg)" font-size="13.5">Q→O 时割线斜率 x² → 0</text>');
+      h.push('<text x="320" y="114" font-weight="700" fill="var(--fg)" font-size="13.5">极限切线就是 x 轴 (y=0)</text>');
+      h.push('<text x="320" y="140" font-weight="700" fill="var(--no)" font-size="13.5">左低右高，切线直接穿过曲线！</text>');
+      etanNote.innerHTML = "看曲线 <b>y = x³</b>：随着 Q 逼近原点 O，割线旋转趋于水平线 <b>y = 0</b>——这条切线在原点<b>直接穿过了曲线</b>！";
+    } else {
+      // y = sin x
+      var sy0 = 118, sux = 26, suy = 48;
+      h.push('<line x1="24" y1="' + sy0 + '" x2="300" y2="' + sy0 + '" stroke="var(--line)" stroke-width="1.5"/>');
+      var spts = [];
+      for (var sx = -4.8; sx <= 5.2; sx += 0.15) {
+        spts.push((spts.length ? "L" : "M") + (160 + sx * sux).toFixed(1) + "," + (sy0 - Math.sin(sx) * suy).toFixed(1));
+      }
+      h.push('<path d="' + spts.join(" ") + '" fill="none" stroke="var(--c)" stroke-width="2.6"/>');
+      var topY = sy0 - suy;
+      h.push('<line x1="24" y1="' + topY + '" x2="300" y2="' + topY + '" stroke="var(--a)" stroke-width="3"/>');
+      [-4.71, 1.57].forEach(function (pk) {
+        var px = 160 + pk * sux;
+        h.push('<circle cx="' + px.toFixed(1) + '" cy="' + topY + '" r="6" fill="var(--hl)" stroke="var(--a)" stroke-width="2"/>');
+      });
+      h.push('<text x="162" y="' + (topY - 12) + '" text-anchor="middle" font-weight="700" fill="var(--a)" font-size="12.5">切线 y = 1 与无数个波峰相切（无穷多个公共点！）</text>');
+      h.push('<rect x="308" y="42" width="198" height="118" rx="9" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="1.8"/>');
+      h.push('<text x="320" y="68" font-weight="700" fill="var(--a)" font-size="14.5">正弦曲线 y = sin x：</text>');
+      h.push('<text x="320" y="95" fill="var(--fg)" font-size="13.5">波峰处的切线 y = 1</text>');
+      h.push('<text x="320" y="120" font-weight="700" fill="var(--fg)" font-size="13.5">与曲线有无穷多个公共点</text>');
+      h.push('<text x="320" y="143" fill="var(--muted)" font-size="13">颠覆「只交1点」的旧印象！</text>');
+      etanNote.innerHTML = "看正弦曲线 <b>y = sin x</b>：波峰处的切线 <b>y = 1</b> 与曲线有<b>无穷多个公共点</b>！";
+    }
+    etanSvg.innerHTML = h.join("");
+    [].forEach.call(etanBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", b.getAttribute("data-mode") === mode);
+    });
+  }
+  [].forEach.call(etanBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { etanDraw(b.getAttribute("data-mode")); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      etanDraw(ev.detail.choice === "A" ? "circle" : "cubic");
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") etanDraw("cubic");
+  });
+  etanDraw("cubic");
+})();
+
+/* --- 伴读微图解 JS: 导数概念 --- */
+(function(){
+  var curTab = 0;
+  function el(t, a, txt) {
+    var e = document.createElementNS("http://www.w3.org/2000/svg", t);
+    for (var k in a) e.setAttribute(k, a[k]);
+    if (txt) e.textContent = txt;
+    return e;
+  }
+  function drawTab0(svg) {
+    // Tab 0: 割线逼近切线极限动态
+    var ox = 60, oy = 180;
+    svg.appendChild(el("line", {x1: 40, y1: oy, x2: 480, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
+    // Curve y = 0.005 x^2
+    var d = "M " + ox + " " + oy;
+    for (var x = 0; x <= 380; x += 10) {
+      var y = oy - 0.001 * x * x;
+      d += " L " + (ox + x) + " " + y;
+    }
+    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2}));
+    // Fixed point P(100, f(100))
+    var px = ox + 100, py = oy - 0.001 * 100 * 100; // oy - 10
+    svg.appendChild(el("circle", {cx: px, cy: py, r: 5, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: px - 18, y: py - 8, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "P(x₀)"));
+
+    // Tangent line at P (k = 0.2)
+    svg.appendChild(el("line", {x1: px - 80, y1: py + 16, x2: px + 200, y2: py - 40, stroke: "#16a34a", "stroke-width": 2}));
+    svg.appendChild(el("text", {x: px + 170, y: py - 46, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "极限切线 (k = f'(x₀))"));
+
+    // Secant Q1
+    var q1x = ox + 260, q1y = oy - 0.001 * 260 * 260; // oy - 67.6
+    svg.appendChild(el("circle", {cx: q1x, cy: q1y, r: 4, fill: "#94a3b8"}));
+    svg.appendChild(el("line", {x1: px - 40, y1: py + (py-q1y)/(px-q1x)*40, x2: q1x + 40, y2: q1y - (py-q1y)/(px-q1x)*40, stroke: "#94a3b8", "stroke-width": 1.5, "stroke-dasharray": "3,3"}));
+    svg.appendChild(el("text", {x: q1x + 8, y: q1y, fill: "#94a3b8", "font-size": 10}, "割线 Q₁ (Δx大)"));
+
+    // Secant Q2
+    var q2x = ox + 170, q2y = oy - 0.001 * 170 * 170;
+    svg.appendChild(el("circle", {cx: q2x, cy: q2y, r: 4, fill: "#3b82f6"}));
+    svg.appendChild(el("line", {x1: px - 40, y1: py + (py-q2y)/(px-q2x)*40, x2: q2x + 60, y2: q2y - (py-q2y)/(px-q2x)*60, stroke: "#3b82f6", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
+    svg.appendChild(el("text", {x: q2x - 8, y: q2y - 16, "text-anchor": "end", fill: "#3b82f6", "font-size": 10}, "割线 Q₂ (Δx小)"));
+
+    // Motion arrow Q -> P
+    svg.appendChild(el("path", {d: "M " + (q1x - 10) + " " + (q1y + 8) + " Q " + (q2x + 15) + " " + (q2y + 6) + " " + (px + 15) + " " + (py + 4), fill: "none", stroke: "#dc2626", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 235, y: 168, fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "Q 沿曲线滑向 P (Δx -> 0)"));
+  }
+
+  function drawTab1(svg) {
+    // Tab 1: 局部以直代曲放大镜
+    var cx = 270, cy = 110, r = 85;
+    // Outer big circle lens
+    svg.appendChild(el("circle", {cx: cx, cy: cy, r: r, fill: "#f8fafc", stroke: "#0284c7", "stroke-width": 3}));
+    svg.appendChild(el("circle", {cx: cx, cy: cy, r: 4, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: cx + 8, y: cy - 6, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "切点 P"));
+
+    // Curve inside lens
+    svg.appendChild(el("path", {d: "M " + (cx - 70) + " " + (cy + 45) + " Q " + cx + " " + cy + " " + (cx + 70) + " " + (cy - 48), fill: "none", stroke: "#0284c7", "stroke-width": 3}));
+    // Tangent line inside lens
+    svg.appendChild(el("line", {x1: cx - 75, y1: cy + 50, x2: cx + 75, y2: cy - 50, stroke: "#16a34a", "stroke-width": 2, "stroke-dasharray": "4,3"}));
+
+    // Labels
+    svg.appendChild(el("text", {x: 80, y: 80, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "蓝线：原非线性曲线 y=f(x)"));
+    svg.appendChild(el("text", {x: 80, y: 140, fill: "#16a34a", "font-size": 12, "font-weight": "bold"}, "绿虚线：切线 y-y₀=k(x-x₀)"));
+    svg.appendChild(el("rect", {x: 375, y: 85, width: 140, height: 48, rx: 6, fill: "#ecfdf5", stroke: "#10b981", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 445, y: 105, "text-anchor": "middle", fill: "#065f46", "font-size": 11, "font-weight": "bold"}, "极小微元局部"));
+    svg.appendChild(el("text", {x: 445, y: 122, "text-anchor": "middle", fill: "#065f46", "font-size": 11, "font-weight": "bold"}, "曲线几乎就是直线！"));
+  }
+
+  function drawTab2(svg) {
+    // Tab 2: 在点处 vs 过点
+    // Left: 在点处
+    svg.appendChild(el("text", {x: 135, y: 25, "text-anchor": "middle", fill: "#0369a1", "font-size": 13, "font-weight": "bold"}, "「在点 P 处的切线」"));
+    svg.appendChild(el("path", {d: "M 40 160 Q 135 150 230 40", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
+    svg.appendChild(el("circle", {cx: 140, cy: 110, r: 4, fill: "#0284c7"}));
+    svg.appendChild(el("text", {x: 152, y: 114, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "P 在曲线上 (切点)"));
+    svg.appendChild(el("line", {x1: 65, y1: 170, x2: 215, y2: 50, stroke: "#16a34a", "stroke-width": 2}));
+    svg.appendChild(el("text", {x: 135, y: 195, "text-anchor": "middle", fill: "#15803d", "font-size": 11, "font-weight": "bold"}, "唯一切线：k = f'(x_P)"));
+
+    // Divider
+    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 205, stroke: "#e2e8f0", "stroke-width": 1}));
+
+    // Right: 过点 P
+    svg.appendChild(el("text", {x: 405, y: 25, "text-anchor": "middle", fill: "#b91c1c", "font-size": 13, "font-weight": "bold"}, "「过点 P 的切线」"));
+    svg.appendChild(el("path", {d: "M 320 80 Q 405 180 490 80", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
+    var extX = 405, extY = 195;
+    svg.appendChild(el("circle", {cx: extX, cy: extY, r: 4, fill: "#dc2626"}));
+    svg.appendChild(el("text", {x: extX, y: extY + 16, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "P 在曲线外"));
+
+    // Tangents from external P to curve
+    svg.appendChild(el("circle", {cx: 350, cy: 115, r: 3, fill: "#16a34a"}));
+    svg.appendChild(el("circle", {cx: 460, cy: 115, r: 3, fill: "#16a34a"}));
+    svg.appendChild(el("line", {x1: extX, y1: extY, x2: 335, y2: 95, stroke: "#16a34a", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: extX, y1: extY, x2: 475, y2: 95, stroke: "#16a34a", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 405, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "两条切线 (切点待解)"));
+  }
+
+  function renderFig() {
+    var svg = document.getElementById("m-der-fig");
+    var desc = document.getElementById("m-der-desc");
+    if (!svg) return;
+    svg.innerHTML = "";
+    if (curTab === 0) {
+      drawTab0(svg);
+      if (desc) desc.innerHTML = "<b>① 割线旋转逼近切线</b>：割线 PQ 斜率表示平均变化率，当 Q 沿曲线逼近 P（Δx -> 0）时，割线绕 P 旋转的最终极限姿态即为切线。";
+    } else if (curTab === 1) {
+      drawTab1(svg);
+      if (desc) desc.innerHTML = "<b>② 局部以直代曲原理</b>：在切点 P 的极小微观邻域内，弯曲的非线性曲线与平直切线几乎完全重叠，这也是微积分线性化的核心思想。";
+    } else {
+      drawTab2(svg);
+      if (desc) desc.innerHTML = "<b>③ 切线语义精准辨析</b>：「在点处」切线仅有 1 条，斜率直取导数；「过某点」该点可位于曲线外部，可能引出多条切线。";
+    }
+  }
+
+  window.setMDerTab = function(idx) {
+    curTab = idx;
+    var btns = document.querySelectorAll("#m-der-tabs button");
+    btns.forEach(function(b, i){
+      b.style.borderColor = (i === idx) ? "#0284c7" : "var(--border,#cbd5e1)";
+      b.style.background = (i === idx) ? "#0284c7" : "transparent";
+      b.style.color = (i === idx) ? "#fff" : "var(--text,#475569)";
+    });
+    renderFig();
+  };
+
+  function drawTrapFig() {
+    var svg = document.getElementById("m-der-trap-fig");
+    if (!svg) return;
+    svg.innerHTML = "";
+    // Left: external point tangents
+    svg.appendChild(el("text", {x: 135, y: 22, "text-anchor": "middle", fill: "#0369a1", "font-size": 12, "font-weight": "bold"}, "误区一：过原点向 y=x²+1 切线误取 k=0"));
+    svg.appendChild(el("path", {d: "M 45 40 Q 135 120 225 40", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
+    svg.appendChild(el("circle", {cx: 135, cy: 135, r: 3, fill: "#dc2626"}));
+    svg.appendChild(el("text", {x: 135, y: 147, "text-anchor": "middle", fill: "#dc2626", "font-size": 10}, "原点 (0,0) 不在曲线上"));
+    svg.appendChild(el("line", {x1: 135, y1: 135, x2: 75, y2: 45, stroke: "#16a34a", "stroke-width": 1.5}));
+    svg.appendChild(el("line", {x1: 135, y1: 135, x2: 195, y2: 45, stroke: "#16a34a", "stroke-width": 1.5}));
+    svg.appendChild(el("text", {x: 135, y: 80, "text-anchor": "middle", fill: "#16a34a", "font-size": 10, "font-weight": "bold"}, "正解：y = ±2x (两条切线)"));
+
+    // Divider
+    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 140, stroke: "#e2e8f0", "stroke-width": 1}));
+
+    // Right: inflection tangent crosses curve
+    svg.appendChild(el("text", {x: 405, y: 22, "text-anchor": "middle", fill: "#b91c1c", "font-size": 12, "font-weight": "bold"}, "误区二：认为切线不能穿过曲线"));
+    svg.appendChild(el("path", {d: "M 320 120 Q 380 120 405 80 T 490 40", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
+    // Tangent at inflection
+    svg.appendChild(el("line", {x1: 330, y1: 80, x2: 480, y2: 80, stroke: "#dc2626", "stroke-width": 2}));
+    svg.appendChild(el("circle", {cx: 405, cy: 80, r: 4, fill: "#dc2626"}));
+    svg.appendChild(el("text", {x: 405, y: 70, "text-anchor": "middle", fill: "#dc2626", "font-size": 10}, "y=x³ 原点切线 y=0 直接穿透曲线"));
+    svg.appendChild(el("text", {x: 405, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "切线是由极限定义的，穿透完全合法"));
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function(){ renderFig(); drawTrapFig(); });
+  } else {
+    renderFig();
+    drawTrapFig();
+  }
+})();
+
+</script>
+<script>
+(function () {
+  function labelConceptStep() {
+    var tab = document.querySelector(".steps button:nth-child(2)");
+    if (tab) tab.textContent = "2 概念课";
+    document.querySelectorAll(".next .btn").forEach(function (button) {
+      if (button.textContent === "下一步：讲清楚") button.textContent = "下一步：概念课";
+    });
+  }
+  function openConceptHash() {
+    if (location.hash.indexOf("#step2-") !== 0) return;
+    var step2 = document.querySelector(".steps button:nth-child(2)");
+    var target = document.querySelector(location.hash);
+    labelConceptStep();
+    if (step2) step2.click();
+    if (target) window.setTimeout(function () { target.scrollIntoView({ block: "start" }); }, 0);
+  }
+  function wireConceptMap() {
+    document.querySelectorAll(".concept-map a[href^='#step2-']").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var step2 = document.querySelector(".steps button:nth-child(2)");
+        labelConceptStep();
+        if (step2) step2.click();
+        var target = document.querySelector(link.getAttribute("href"));
+        if (target) window.setTimeout(function () { target.scrollIntoView({ block: "start" }); }, 0);
+      });
+    });
+    window.setTimeout(function () { labelConceptStep(); openConceptHash(); }, 50);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", wireConceptMap);
+  else wireConceptMap();
 })();
 </script>
 </body>

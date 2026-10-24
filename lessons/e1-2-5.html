@@ -8,6 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/student-textbook.js"></script>
+  <script defer src="../assets/video.js"></script>
 <style>
   .fig text { font-size: 20px; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
@@ -30,8 +32,15 @@
 <p class="lead">一条直线和一个圆碰不碰得上、两个圆怎么摆，不用画图去猜：算一个距离，和半径比一比就知道。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一座雷达站能看到周围 \(5\) 千米以内的飞机。一条笔直的航线，离雷达站最近的地方是 \(4\) 千米。</p>
+  <p>一座雷达站能看到周围 \(5\) 千米以内的飞机。一条笔直的航线，离雷达站最近的地方是 \(4\) 千米。点下面的按钮，改变航线离雷达站的最近距离 \(d\) 看看：</p>
   <div class="card predict" data-id="entry" data-answer="A">
+    <svg class="entry-fig" id="entry-radar" viewBox="0 0 520 205" role="img" aria-label="雷达站半径5千米探测圆与不同最近距离d的飞机直线航线位置关系"></svg>
+    <div class="entry-bar" id="entry-radar-bar">
+      <button type="button" data-d="4" class="on">最近距离 d = 4 km &lt; 5（穿过雷达圈：相交）</button>
+      <button type="button" data-d="5">d = 5 km = r（刚好擦边：相切）</button>
+      <button type="button" data-d="6">d = 6 km &gt; 5（进不去：相离）</button>
+    </div>
+    <div class="entry-note" id="entry-radar-note"></div>
     <p>沿这条航线飞的飞机，会不会进入雷达的探测范围？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>会进入</button>
@@ -47,37 +56,59 @@
 </section>
 
 <section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
   <h3>1. 先认识几个词</h3>
   <p class="small">要用到：点到直线的距离公式 \(d=\dfrac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}\)（<a href="e1-2-3.html">回看 2.3</a>）；圆的标准方程、一般方程，以及配方找圆心和半径（<a href="e1-2-4.html">回看 2.4</a>）。</p>
+  <div class="card student-concept-note"><p><b>课本用词</b>：先求圆心距，再与半径和、半径差比较：等号是相切，大于半径和是相离，小于半径差时一圆在另一圆内且无交点。</p></div>
 
-  <div class="card">
-    <p><b>圆心到直线的距离 \(d\)</b>：从圆心向直线作垂线，垂线段的长。它是直线上所有点里离圆心<b>最近</b>的那一个的距离。</p>
-    <p>例：圆心 \((0,0)\)，直线 \(3x+4y-10=0\)，\(d=\dfrac{|0+0-10|}{\sqrt{9+16}}=\dfrac{10}{5}=2\)。</p>
+  <div class="micro-box">
+    <div class="micro-title">伴读直觉微图解：直线与圆位置、弦长与两圆五态关系</div>
+    <div class="micro-tabs">
+      <button type="button" class="micro-tab active" data-mode="linecir">① 直线与圆位置及弦长</button>
+      <button type="button" class="micro-tab" data-mode="twocir">② 两圆五种位置关系全景</button>
+      <button type="button" class="micro-tab" data-mode="chord">③ 两圆相减公共弦方程</button>
+    </div>
+    <svg id="m-rel-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="直线与圆位置关系几何直观"></svg>
+    <div class="micro-caption" id="m-rel-cap"></div>
   </div>
 
   <div class="card">
-    <p><b>相交、相切、相离</b>：按公共点的个数分。两个公共点叫<b>相交</b>（直线叫割线），一个叫<b>相切</b>（直线叫切线，那个点叫切点），没有叫<b>相离</b>。</p>
-    <p>例：圆 \(x^2+y^2=1\)。直线 \(y=0\) 和它有 \((\pm1,0)\) 两个公共点，相交；直线 \(y=1\) 只碰到 \((0,1)\)，相切；直线 \(y=2\) 碰不到，相离。</p>
+    <p><b>圆心到直线的距离 \(d\)</b>：从圆心向直线作垂线段的长。它是直线上离圆心最近点的距离。</p>
+    <p>例：圆心 \((0,0)\)，直线 \(3x+4y-10=0\)，\(d=\dfrac{|-10|}{\sqrt{9+16}}=2\)。若圆半径 \(r=2\)，则 \(d=r\)，相切。</p>
   </div>
 
   <div class="card">
-    <p><b>弦与垂径定理</b>：直线截圆得到的线段叫<b>弦</b>。圆心到弦的垂线平分这条弦（初中的垂径定理），所以半弦、\(d\)、半径 \(r\) 正好围成直角三角形。</p>
-    <p>例：\(r=5\)，\(d=3\)，半弦 \(=\sqrt{5^2-3^2}=4\)，弦长 \(=8\)。</p>
+    <p><b>垂径定理与半弦直角三角形</b>：圆心到弦的垂线平分该弦。圆心距 \(d\)、半弦长 \(\frac L2\)、半径 \(r\) 构成经典直角三角形：\((\frac L2)^2 + d^2 = r^2\)，故弦长 \(L = 2\sqrt{r^2 - d^2}\)。</p>
+    <p>例：\(r=5, d=3\)，半弦为 \(\sqrt{25-9}=4\)，弦长 \(L=8\)。无需联立方程解交点！</p>
   </div>
 
-  <div class="card">
-    <p><b>圆心距</b>：两个圆的圆心之间的距离，也记作 \(d\)。</p>
-    <p>例：圆心 \((0,0)\) 和 \((3,4)\)，圆心距 \(d=\sqrt{3^2+4^2}=5\)。</p>
+  <div class="concept-grid">
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">方法辨析</span> 几何法（比 \(d\) 与 \(r\)） vs 代数法（联立判别式 \(\Delta\)）</div>
+      <p><b>几何法</b>：求圆心到直线距离 \(d\)，与 \(r\) 比较大小（\(d&lt;r\) 相交；\(d=r\) 相切；\(d&gt;r\) 相离）。计算量极小，推荐率 100%！</p>
+      <p><b>代数法</b>：联立方程代入消元得一元二次方程，算 \(\Delta\)。对于圆的问题计算繁冗，容易算错，多用于后续椭圆与双曲线。</p>
+      <p class="small">高考秘诀：凡涉及圆的相交相切问题，一律优先用几何法！</p>
+    </div>
+    <div class="concept-card">
+      <div class="concept-head"><span class="badge-pill">临界辨析</span> 两圆相切双重态：外切 (\(d=r_1+r_2\)) vs 内切 (\(d=|r_1-r_2|\))</div>
+      <p><b>相切双态</b>：题干若说「两圆相切」，必须<b>严格分类讨论外切与内切</b>！</p>
+      <p><b>五态全景</b>：外离 (\(d&gt;r_1+r_2\))、外切 (\(d=r_1+r_2\))、相交 (\(|r_1-r_2|&lt;d&lt;r_1+r_2\))、内切 (\(d=|r_1-r_2|\))、内含 (\(d&lt;|r_1-r_2|\))。</p>
+      <p class="small">警惕：只考虑外切遗漏内切，高考直接丢一半答案分！</p>
+    </div>
+  </div>
+
+  <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.8;">
+    垂径定理弦长公式：\(L = 2\sqrt{\color{#059669}{r^2} - \color{#dc2626}{d^2}} \quad (d &lt; r)\)<br>
+    两圆相切临界判据：\(\text{外切} \iff \color{#2563eb}{d = r_1 + r_2};\quad \text{内切} \iff \color{#dc2626}{d = |r_1 - r_2|} \quad (r_1 \ne r_2)\)
   </div>
 
   <h3>2. 直线和圆：比较 \(d\) 和 \(r\)</h3>
-  <p>直线上离圆心最近的点距离是 \(d\)。\(d&lt;r\)，最近的点在圆内，直线从圆里穿过去，进出各一个点；\(d=r\)，最近的点正好在圆上，其他点都更远，只碰一下；\(d>r\)，连最近的点都在圆外，整条线都碰不到。</p>
+  <p>直线上离圆心最近的点距离是 \(d\)。\(d&lt;r\)，最近的点在圆内，直线从圆里穿过去，进出各一个点；\(d=r\)，最近的点正好在圆上，其他点都更远，只碰一下；\(d&gt;r\)，连最近的点都在圆外，整条线都碰不到。</p>
   <table class="rel">
-    <tr><th>\(d\) 和 \(r\)</th><th>\(d&lt;r\)</th><th>\(d=r\)</th><th>\(d>r\)</th></tr>
+    <tr><th>\(d\) 和 \(r\)</th><th>\(d&lt;r\)</th><th>\(d=r\)</th><th>\(d&gt;r\)</th></tr>
     <tr><th>关系</th><td>相交</td><td>相切</td><td>相离</td></tr>
     <tr><th>公共点</th><td>\(2\) 个</td><td>\(1\) 个</td><td>\(0\) 个</td></tr>
   </table>
-  <p>也可以<b>联立</b>：把直线方程代入圆的方程消去一个未知数，得到一元二次方程，\(\Delta>0\)、\(=0\)、\(&lt;0\) 分别对应相交、相切、相离。两种方法结论一样，几何法（算 \(d\)）一般更快。</p>
   <div class="card">
     <p class="small">例 1（看一遍怎么写）</p>
     <p>判断直线 \(3x+4y-5=0\) 与圆 \(x^2+y^2-4x-2y-4=0\) 的位置关系。</p>
@@ -94,6 +125,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。圆心 \((0,0)\)，\(r=2\)；\(d=\dfrac{|0+0-2|}{\sqrt{1+1}}=\dfrac{2}{\sqrt2}=\sqrt2\approx1.41&lt;2\)，相交（两个交点是 \((2,0)\) 和 \((0,2)\)）。选 B 的同学多半忘了除以 \(\sqrt{1^2+1^2}\)，把 \(d\) 算成了 \(2\)。</p></div>
   </div>
+  <div class="vid" data-video="ex1"></div>
 
   <h3>3. 弦长：用垂径定理</h3>
   <p>相交时，半弦、\(d\)、\(r\) 是一个直角三角形的三边，斜边是 \(r\)：</p>
@@ -115,18 +147,18 @@
     </div>
     <div class="reveal"><p><b>B</b>。\(d=2\)，\(r=\sqrt{13}\)，半弦 \(=\sqrt{13-4}=3\)，弦长 \(6\)。选 A 的同学停在了半弦，忘了乘 \(2\)；选 C 是把直径当成了弦长；选 D 是把 \(r^2-d^2\) 算成了 \(13-2\)（\(d\) 没平方）。</p></div>
   </div>
+  <div class="vid" data-video="ex2"></div>
 
   <h3>4. 圆和圆：比较圆心距 \(d\) 和 \(r_1+r_2\)、\(|r_1-r_2|\)</h3>
-  <p>想象一个圆不动，另一个圆从很远处朝它靠过来：先是分开（<b>外离</b>），然后外面碰一下（<b>外切</b>），接着两圈交叉（<b>相交</b>），再往里，里面碰一下（<b>内切</b>），最后小圆整个跑进大圆里（<b>内含</b>）。外切时圆心距正好是两半径之和，内切时正好是两半径之差。</p>
+  <p>想象一个圆不动，另一个圆从很远处朝它靠过来：外离 \(\to\) 外切 \(\to\) 相交 \(\to\) 内切 \(\to\) 内含。外切时圆心距正好是两半径之和，内切时正好是两半径之差。</p>
   <table class="rel">
     <tr><th>圆心距 \(d\)</th><th>关系</th><th>公共点</th></tr>
-    <tr><td>\(d>r_1+r_2\)</td><td>外离</td><td>\(0\)</td></tr>
+    <tr><td>\(d&gt;r_1+r_2\)</td><td>外离</td><td>\(0\)</td></tr>
     <tr><td>\(d=r_1+r_2\)</td><td>外切</td><td>\(1\)</td></tr>
     <tr><td>\(|r_1-r_2|&lt;d&lt;r_1+r_2\)</td><td>相交</td><td>\(2\)</td></tr>
     <tr><td>\(d=|r_1-r_2|\)，且 \(r_1\ne r_2\)</td><td>内切</td><td>\(1\)</td></tr>
     <tr><td>\(d&lt;|r_1-r_2|\)</td><td>内含（\(d=0\) 时是同心圆）</td><td>\(0\)</td></tr>
   </table>
-  <p>两条分界线 \(r_1+r_2\) 和 \(|r_1-r_2|\) <b>都要比</b>。只和 \(r_1+r_2\) 比，分不出相交、内切、内含。</p>
   <div class="card">
     <p class="small">例 3</p>
     <p>判断圆 \(C_1:x^2+y^2=4\) 与圆 \(C_2:x^2+y^2-6x-8y+16=0\) 的位置关系。</p>
@@ -145,14 +177,12 @@
   </div>
 
   <h3>5. 公共弦：两个方程相减</h3>
-  <p>两圆相交时，把两个圆的一般方程（\(x^2\)、\(y^2\) 系数都是 \(1\)）相减，\(x^2\) 和 \(y^2\) 消掉，剩下一个一次方程，它就是<b>公共弦所在直线</b>。</p>
-  <p>为什么：两个交点既在第一个圆上、又在第二个圆上，两个方程都满足，相减后的方程当然也满足；一次方程表示一条直线，两点确定一条直线，所以它就是过这两个交点的直线。</p>
+  <p>两圆相交时，把两个圆的一般方程（\(x^2\)、\(y^2\) 系数都是 \(1\)）相减，消去二次项，得到的一次方程就是<b>公共弦所在直线方程</b>。</p>
   <div class="card">
     <p class="small">例 4</p>
     <p>圆 \(C_1:x^2+y^2-4=0\)，圆 \(C_2:x^2+y^2-2x-2y-2=0\)。求公共弦所在直线和公共弦长。</p>
-    <p>先确认相交：\(C_2\) 配方得 \((x-1)^2+(y-1)^2=4\)，圆心 \((1,1)\)，\(r_2=2\)；\(r_1=2\)，圆心距 \(d=\sqrt2\)，\(0&lt;\sqrt2&lt;4\)，相交。</p>
     <p>相减：\((x^2+y^2-4)-(x^2+y^2-2x-2y-2)=2x+2y-2=0\)，即 \(x+y-1=0\)。</p>
-    <p>弦长：\(C_1\) 的圆心 \((0,0)\) 到这条直线距离 \(\dfrac{|-1|}{\sqrt2}=\dfrac{\sqrt2}{2}\)，半弦 \(=\sqrt{4-\dfrac12}=\dfrac{\sqrt{14}}{2}\)，公共弦长 \(\sqrt{14}\)。</p>
+    <p>弦长：\(C_1\) 圆心 \((0,0)\) 到直线距离 \(\dfrac{|-1|}{\sqrt2}=\dfrac{\sqrt2}{2}\)，半弦 \(=\sqrt{4-\dfrac12}=\dfrac{\sqrt{14}}{2}\)，公共弦长 \(\sqrt{14}\)。</p>
   </div>
   <div class="card predict" data-id="try-4" data-answer="A">
     <p>自己试试：圆 \(x^2+y^2-4=0\) 与圆 \(x^2+y^2-4x=0\) 相交，公共弦所在直线是？</p>
@@ -162,24 +192,84 @@
       <button class="opt" data-v="C"><b>C</b>\(x=2\)</button>
       <button class="opt" data-v="D"><b>D</b>\(y=1\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。相减：\((x^2+y^2-4)-(x^2+y^2-4x)=4x-4=0\)，\(x=1\)。选 B 的同学减的时候 \(-4x\) 前面的负号没变号。验证：\(x=1\) 代入第一个圆，\(y=\pm\sqrt3\)，两个点也满足第二个圆。</p></div>
+    <div class="reveal"><p><b>A</b>。相减：\((x^2+y^2-4)-(x^2+y^2-4x)=4x-4=0\)，\(x=1\)。选 B 的同学减的时候 \(-4x\) 前面的负号没变号。</p></div>
   </div>
 
-  <h3>6. 用之前，查这几件事</h3>
-  <ol>
-    <li><b>判别式法：消元后先确认是二次方程。</b>\(\Delta\) 只对二次方程有意义。用直线 \(y=kx+b\) 代入圆，二次项系数是 \(1+k^2\)，不会是 \(0\)；可方程里有参数时，二次项系数可能变成 \(0\)，这时方程只有一个解，<b>不代表相切</b>（「练一练」第 5 题）。</li>
-    <li><b>设斜率之前，先看竖直线。</b>设 \(y-y_0=k(x-x_0)\) 就默认了直线有斜率，竖直的切线或割线会被漏掉。<br><span class="small">反例：过点 \(P(2,3)\) 作圆 \(x^2+y^2=4\) 的切线。设 \(y-3=k(x-2)\)，代入圆再令 \(\Delta=0\)，关于 \(k\) 的方程里 \(k^2\) 项正好抵消，只剩 \(12k-5=0\)，得 \(k=\dfrac5{12}\)。点在圆外本该有两条切线：另一条是没有斜率的 \(x=2\)（圆心到它的距离正好是 \(2\)），设斜率时就被漏掉了。</span></li>
-    <li><b>两圆：两条分界线都要比，还要单独看 \(d=0\)。</b><br><span class="small">反例：\(x^2+y^2=1\) 与 \(x^2+y^2=4\)，\(d=0&lt;3=r_1+r_2\)，但它们一个公共点都没有：同心，属于内含。\(x^2+y^2=4\) 与 \(x^2+y^2=4\)，\(d=0\) 且 \(r_1=r_2\)，是<b>重合</b>，不算内切。内切要 \(d=|r_1-r_2|\) 且 \(r_1\ne r_2\)。</span></li>
-    <li><b>相减得到公共弦，前提是两圆确有两个公共点。</b>不相交的两个圆，方程相减照样得到一条直线，可它不是弦。<br><span class="small">反例：\(x^2+y^2=1\) 与 \(x^2+y^2-8x+15=0\)（圆心 \((4,0)\)，半径 \(1\)），\(d=4>2\)，外离。相减得 \(8x-16=0\)，即 \(x=2\)。这条直线在两圆中间，哪个圆都不碰，不是公共弦。</span></li>
-  </ol>
-  <div class="key">求公共弦：先比 \(d\) 和 \(r_1+r_2\)、\(|r_1-r_2|\)，确认相交，再相减。</div>
+  <h3>6. 三步破题思维链：直线与圆综合解题标准动作</h3>
+  <div class="think-steps">
+    <div class="think-step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <b>👀 第一眼破题信号</b>
+        <p>审清题目已知：是直线与圆相切/相交截弦，还是过圆外一点作切线，或是两圆位置关系。若求切线，立刻自问：<b>是否存在斜率不存在的竖直切线？</b></p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <b>🔧 第二步套公式/方法</b>
+        <p>① 割线弦长问题：算圆心到直线距离 \(d\)，套用垂径公式 \(L = 2\sqrt{r^2-d^2}\)；<br>
+        ② 切线方程问题：令圆心到直线距离 \(d = r\) 列方程解斜率 \(k\)；<br>
+        ③ 两圆相切问题：分别列出 \(d = r_1+r_2\)（外切）与 \(d = |r_1-r_2|\)（内切）方程求解参数。</p>
+      </div>
+    </div>
+    <div class="think-step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <b>🛡️ 第三步必查防坑结论</b>
+        <p>① 圆外一点引切线恒有两条，若由 \(d=r\) 仅解出一个斜率，必须把漏掉的竖直切线 \(x=x_0\) 补上！<br>
+        ② 题目说「两圆相切」，内切与外切缺一不可；方程相减求公共弦前，必须确认两圆两交点真实存在。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>7. 三大翻车现场与反例辨析</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 1：过圆外一点求切线漏掉竖直线</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>过 \((2,3)\) 作 \(x^2+y^2=4\) 切线，设 \(y-3=k(x-2)\) 仅解出 \(k=\frac{5}{12}\)</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>圆外点必有两条切线，漏掉的是斜率不存在的竖直切线 \(x=2\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 2：两圆相切只求外切漏掉内切</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>条件「两圆相切」，仅列 \(d=r_1+r_2\) 求解参数，丢掉一半答案</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>相切包含外切与内切两大类，内切条件为 \(d=|r_1-r_2|\)</span>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-tag">翻车现场 3：两圆不相交相减误当公共弦</div>
+      <div class="compare-row bad">
+        <span class="icon">❌</span>
+        <span>两外离圆方程相减得到一直线，直接当公共弦算弦长得出虚数</span>
+      </div>
+      <div class="compare-row good">
+        <span class="icon">✔</span>
+        <span>相减得到的是根轴，只有当两圆确实相交时才是真实的公共弦</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-box" style="margin-top:14px;">
+    <div class="micro-title">反例微图解：过圆外一点的两条切线（防漏竖直线）</div>
+    <svg id="m-rel-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="切线漏解反例图解"></svg>
+    <div class="micro-caption">点 \(P(2,3)\) 在圆 \(x^2+y^2=4\) 外。一条切线斜率为 \(\frac{5}{12}\)，另一条切线为竖直切线 \(x=2\)（斜率不存在）。设点斜式极易遗漏！</div>
+  </div>
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>相切时相减得到什么</b>：例 3 的两个外切圆相减，\(6x+8y-20=0\)，即 \(3x+4y-10=0\)。原点到它的距离 \(\dfrac{10}{5}=2=r_1\)，它和两个圆都相切，是过切点的那条<b>公切线</b>，不是弦。</p>
-    <p><b>同心圆相减</b>：\(x^2+y^2-1=0\) 与 \(x^2+y^2-4=0\) 相减得 \(3=0\)，根本不是方程，得不到直线。</p>
-    <p><b>不相交时那条直线是什么</b>：它叫两圆的<b>根轴</b>。从它上面（两圆外的部分）任一点向两个圆各作切线，两条切线一样长。这是背景知识，不作要求。</p>
-    <p><b>公切线有几条</b>：外离 \(4\) 条，外切 \(3\) 条，相交 \(2\) 条，内切 \(1\) 条，内含 \(0\) 条。可以在「动手」②里一边拖一边想。</p>
+    <p><b>公切线条数总结</b>：外离 \(4\) 条（\(2\) 外公切、\(2\) 内公切）；外切 \(3\) 条；相交 \(2\) 条；内切 \(1\) 条；内含 \(0\) 条。</p>
+    <p><b>圆系方程</b>：过两圆交点的圆系方程可设为 \(C_1 + \lambda C_2 = 0\)（\(\lambda \ne -1\)），当 \(\lambda = -1\) 时即为公共弦方程。</p>
   </details>
 </section>
 
@@ -567,6 +657,206 @@
 
   document.addEventListener("DOMContentLoaded", function () { lcReset(); ccReset(); });
   if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { lcDraw(); ccDraw(); });
+
+  /* ================= 0 从例子进入：雷达站探测圆与飞机航线 ================= */
+  var erdSvg = document.getElementById("entry-radar"), erdBar = document.getElementById("entry-radar-bar"), erdNote = document.getElementById("entry-radar-note");
+  function erdDraw(d) {
+    var cx = 148, cy = 132, u = 15.5, r = 5, R = r * u, ly = cy - d * u, h = [];
+    // 雷达探测圆 r=5
+    h.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2.2"/>');
+    h.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + (R * 0.5) + '" fill="none" stroke="var(--a)" stroke-opacity="0.35" stroke-dasharray="3 3"/>');
+    // 半径 r=5 标注（向右）
+    h.push('<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + R) + '" y2="' + cy + '" stroke="var(--a)" stroke-width="1.8" stroke-dasharray="4 3"/>');
+    h.push('<text x="' + (cx + R / 2) + '" y="' + (cy + 16) + '" text-anchor="middle" fill="var(--a)" font-weight="700" font-size="13.5">半径 r = 5 km</text>');
+    // 垂线段 d（向上到航线）
+    var col = d < 5 ? "var(--a)" : (d === 5 ? "var(--b)" : "var(--no)");
+    h.push('<line x1="' + cx + '" y1="' + cy + '" x2="' + cx + '" y2="' + ly + '" stroke="' + col + '" stroke-width="2.5"/>');
+    h.push('<polyline points="' + (cx + 8) + ',' + ly + ' ' + (cx + 8) + ',' + (ly + 8) + ' ' + cx + ',' + (ly + 8) + '" fill="none" stroke="' + col + '" stroke-width="1.5"/>');
+    // 航线
+    h.push('<line x1="26" y1="' + ly + '" x2="270" y2="' + ly + '" stroke="' + col + '" stroke-width="2.6"/>');
+    if (d < 5) {
+      var half = Math.sqrt(r * r - d * d) * u;
+      h.push('<line x1="' + (cx - half) + '" y1="' + ly + '" x2="' + (cx + half) + '" y2="' + ly + '" stroke="var(--hl)" stroke-width="5"/>');
+      h.push('<circle cx="' + (cx - half) + '" cy="' + ly + '" r="4.5" fill="var(--a)"/>');
+      h.push('<circle cx="' + (cx + half) + '" cy="' + ly + '" r="4.5" fill="var(--a)"/>');
+    } else if (d === 5) {
+      h.push('<circle cx="' + cx + '" cy="' + ly + '" r="5.5" fill="var(--b)"/>');
+    }
+    h.push('<circle cx="' + cx + '" cy="' + cy + '" r="5" fill="var(--fg)"/>');
+    h.push('<text x="' + cx + '" y="' + (cy + 34) + '" text-anchor="middle" font-weight="700" fill="var(--fg)" font-size="13.5">雷达站 C</text>');
+    h.push('<text x="' + (cx - 10) + '" y="' + ((cy + ly) / 2 + 4) + '" text-anchor="end" font-weight="700" fill="' + col + '" font-size="13.5">d=' + d + 'km</text>');
+    // 右侧结论面板
+    var rx = 286;
+    h.push('<rect x="' + rx + '" y="36" width="218" height="130" rx="10" fill="var(--card)" stroke="' + col + '" stroke-width="1.8"/>');
+    h.push('<text x="' + (rx + 14) + '" y="64" font-weight="700" fill="var(--fg)" font-size="15">圆心到航线距离 d = ' + d + ' km</text>');
+    h.push('<text x="' + (rx + 14) + '" y="90" fill="var(--muted)" font-size="14">雷达半径 r = 5 km</text>');
+    var relTxt = d < 5 ? "d &lt; r ⇒ 相交（2个公共点）" : (d === 5 ? "d = r ⇒ 相切（1个公共点）" : "d &gt; r ⇒ 相离（0个公共点）");
+    var subTxt = d < 5 ? "圈内飞行段长 2√(5²-4²) = 6 km" : (d === 5 ? "只在最近点擦边而过" : "整条航线都在雷达圈外");
+    h.push('<text x="' + (rx + 14) + '" y="118" font-weight="700" fill="' + col + '" font-size="14.5">' + relTxt + '</text>');
+    h.push('<text x="' + (rx + 14) + '" y="144" fill="var(--fg)" font-size="13.5">' + subTxt + '</text>');
+    erdSvg.innerHTML = h.join("");
+    [].forEach.call(erdBar.querySelectorAll("button"), function (b) {
+      b.classList.toggle("on", parseInt(b.getAttribute("data-d"), 10) === d);
+    });
+    erdNote.innerHTML = d < 5
+      ? "当 <b>d = 4 km &lt; 5 km</b> 时：最近点已经在圆内，航线<b>穿过雷达圈（相交）</b>，在圈内飞过 6 km！"
+      : (d === 5 ? "当 <b>d = 5 km = r</b> 时：航线刚好在最近点<b>擦过圆周（相切）</b>，只有 1 个公共点。"
+        : "当 <b>d = 6 km &gt; r</b> 时：连离雷达最近的点都在 6 km 外，整条航线<b>进不去（相离）</b>。");
+  }
+  [].forEach.call(erdBar.querySelectorAll("button"), function (b) {
+    b.onclick = function () { erdDraw(parseInt(b.getAttribute("data-d"), 10)); };
+  });
+  document.addEventListener("predict:pick", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") {
+      var map = { A: 4, B: 5, C: 6 };
+      if (map[ev.detail.choice]) erdDraw(map[ev.detail.choice]);
+    }
+  });
+  document.addEventListener("predict:reset", function (ev) {
+    if (ev.detail && ev.detail.id === "entry") erdDraw(4);
+  });
+  erdDraw(4);
 })();
+
+
+function initMRelFig(){
+  var svgEl = document.getElementById("m-rel-fig");
+  var capEl = document.getElementById("m-rel-cap");
+  if (!svgEl) return;
+  var mode = "linecir";
+  var NS = "http://www.w3.org/2000/svg";
+  var caps = {
+    linecir: "直线与圆位置关系：d < r 相交割弦，垂径直角三角形半弦长 √(r² - d²)，全弦 L = 2√(r² - d²)；d = r 相切；d > r 相离。",
+    twocir: "两圆五态关系：外离 (d > r1+r2)、外切 (d = r1+r2)、相交 (|r1-r2| < d < r1+r2)、内切 (d = |r1-r2|)、内含 (d < |r1-r2|)。",
+    chord: "公共弦求法：两圆一般方程相减消去二次项即得公共弦直线方程，再由圆心到弦距离求出公共弦长。"
+  };
+
+  function s(el, tag, attrs, txt){
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt) e.textContent = txt;
+    el.appendChild(e);
+    return e;
+  }
+  function ln(el, x1, y1, x2, y2, c, w, d){
+    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
+    if (d) a["stroke-dasharray"] = d;
+    return s(el, "line", a);
+  }
+  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
+  function tx(el, x, y, txt, c, sz, b, anch){
+    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
+    if (b) a["font-weight"] = "bold";
+    if (anch) a["text-anchor"] = anch;
+    return s(el, "text", a, txt);
+  }
+
+  function draw(){
+    svgEl.innerHTML = "";
+    if (mode === "linecir") {
+      tx(svgEl, 270, 24, "直线与圆相交垂径直角三角形：L = 2√(r² - d²)", "#0f172a", "12.5", true, "middle");
+      // Circle at (150, 115), r = 55
+      s(svgEl, "circle", {cx:150, cy:115, r:55, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "circle", {cx:150, cy:115, r:4, fill:"#dc2626"});
+      tx(svgEl, 150, 130, "圆心 C", "#dc2626", "10.5", true, "middle");
+
+      // Secant line y = 85 (d = 30)
+      ln(svgEl, 50, 85, 250, 85, "#2563eb", 2);
+      tx(svgEl, 255, 88, "割线 l", "#2563eb", "10.5", true);
+
+      // Distance segment C to H(150, 85)
+      ln(svgEl, 150, 115, 150, 85, "#dc2626", 2);
+      rc(svgEl, 150, 85, 8, 8, "none", "#dc2626");
+      tx(svgEl, 140, 102, "d", "#dc2626", "11", true);
+
+      // Chord endpoints A(104, 85), B(196, 85)
+      s(svgEl, "circle", {cx:104, cy:85, r:4, fill:"#059669"});
+      tx(svgEl, 96, 80, "A", "#059669", "11", true);
+      s(svgEl, "circle", {cx:196, cy:85, r:4, fill:"#059669"});
+      tx(svgEl, 204, 80, "B", "#059669", "11", true);
+
+      // Radius CA
+      ln(svgEl, 150, 115, 104, 85, "#059669", 2);
+      tx(svgEl, 122, 108, "r", "#059669", "11", true);
+      tx(svgEl, 127, 78, "L/2", "#2563eb", "10", true);
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "相交位置三要素", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 距离：d < r 必然相交", "#059669", "11");
+      tx(svgEl, 325, 120, "• 垂径定理：半弦 = √(r² - d²)", "#2563eb", "11");
+      tx(svgEl, 325, 142, "• 全弦长：L = 2√(r² - d²)", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 免求交点，勾股直达！", "#d97706", "10.5");
+    } else if (mode === "twocir") {
+      tx(svgEl, 270, 24, "两圆五种位置关系全景判据", "#0f172a", "12.5", true, "middle");
+      // Outer tangent visual
+      s(svgEl, "circle", {cx:90, cy:110, r:35, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "circle", {cx:155, cy:110, r:30, fill:"rgba(5,150,105,0.06)", stroke:"#059669", "stroke-width":2});
+      ln(svgEl, 90, 110, 155, 110, "#dc2626", 1.5);
+      s(svgEl, "circle", {cx:125, cy:110, r:3.5, fill:"#dc2626"});
+      tx(svgEl, 122, 160, "外切：d = r1 + r2", "#dc2626", "11", true, "middle");
+
+      // Intersecting visual
+      s(svgEl, "circle", {cx:230, cy:110, r:30, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":1.5});
+      s(svgEl, "circle", {cx:260, cy:110, r:25, fill:"rgba(5,150,105,0.06)", stroke:"#059669", "stroke-width":1.5});
+      tx(svgEl, 245, 160, "相交：|r1-r2| < d < r1+r2", "#2563eb", "10", true, "middle");
+
+      rc(svgEl, 320, 48, 200, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 335, 74, "两圆五态核心总结", "#0f172a", "11.5", true);
+      tx(svgEl, 335, 98, "• 外离：d > r1 + r2", "#64748b", "10.5");
+      tx(svgEl, 335, 120, "• 外切：d = r1 + r2", "#dc2626", "10.5", true);
+      tx(svgEl, 335, 142, "• 内切：d = |r1 - r2|", "#dc2626", "10.5", true);
+      tx(svgEl, 335, 164, "• 内含：d < |r1 - r2|", "#64748b", "10.5");
+    } else if (mode === "chord") {
+      tx(svgEl, 270, 24, "相交两圆公共弦方程：C1 - C2 = 0", "#0f172a", "12.5", true, "middle");
+      s(svgEl, "circle", {cx:120, cy:110, r:45, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
+      s(svgEl, "circle", {cx:170, cy:110, r:45, fill:"rgba(5,150,105,0.06)", stroke:"#059669", "stroke-width":2});
+
+      // Common chord line
+      ln(svgEl, 145, 45, 145, 175, "#dc2626", 2.5);
+      tx(svgEl, 145, 36, "公共弦所在直线", "#dc2626", "10.5", true, "middle");
+      s(svgEl, "circle", {cx:145, cy:73, r:4, fill:"#dc2626"});
+      s(svgEl, "circle", {cx:145, cy:147, r:4, fill:"#dc2626"});
+
+      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
+      tx(svgEl, 325, 74, "公共弦代数妙解", "#0f172a", "12", true);
+      tx(svgEl, 325, 98, "• 两圆一般方程直接相减", "#059669", "11");
+      tx(svgEl, 325, 120, "• 二次项抵消，得一次直线", "#2563eb", "11");
+      tx(svgEl, 325, 142, "• 此直线必过两公共交点", "#dc2626", "11", true);
+      tx(svgEl, 325, 164, "• 配合垂径定理求弦长", "#d97706", "10.5");
+    }
+
+    if (capEl) capEl.textContent = caps[mode];
+    if (window.renderMathInElement) window.renderMathInElement(capEl);
+  }
+
+  var tabs = document.querySelectorAll(".micro-box .micro-tab");
+  tabs.forEach(function(tab){
+    tab.addEventListener("click", function(){
+      tabs.forEach(function(t){ t.classList.remove("active"); });
+      tab.classList.add("active");
+      mode = tab.getAttribute("data-mode");
+      draw();
+    });
+  });
+  draw();
+
+  var trapEl = document.getElementById("m-rel-trap-fig");
+  if (trapEl) {
+    trapEl.innerHTML = "";
+    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
+    tx(trapEl, 142, 42, "❌ 错解：圆外点切线漏竖直线", "#dc2626", "11.5", true, "middle");
+    tx(trapEl, 142, 70, "过 P(2,3) 作 x² + y² = 4 切线", "#dc2626", "10.5", false, "middle");
+    tx(trapEl, 142, 94, "仅求出斜截式 y - 3 = 5/12(x-2)", "#b91c1c", "11", true, "middle");
+    tx(trapEl, 142, 130, "漏掉竖直切线 x = 2 扣一半分！", "#64748b", "9.5", false, "middle");
+
+    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
+    tx(trapEl, 397, 42, "✔ 正解：圆外引切线必有两条", "#15803d", "11.5", true, "middle");
+    tx(trapEl, 397, 70, "圆外点到圆的切线恒为 2 条", "#059669", "10.5", true, "middle");
+    tx(trapEl, 397, 94, "一条斜率 5/12，另一条竖直 x = 2", "#15803d", "11", true, "middle");
+    tx(trapEl, 397, 130, "只解出一个 k，必有一条竖直线！", "#047857", "10", true, "middle");
+  }
+}
+
+initMRelFig();
 </script>
 </body></html>

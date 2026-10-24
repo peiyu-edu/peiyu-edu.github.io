@@ -253,7 +253,8 @@
     });
   }
   function queueFit() {
-    if (!fitQueued) { fitQueued = true; requestAnimationFrame(function () { fitFigText(); fitWide(); }); }
+    // 用 setTimeout 而不是 requestAnimationFrame：页面在后台标签里时 rAF 不跑，量不到
+    if (!fitQueued) { fitQueued = true; setTimeout(function () { fitFigText(); fitWide(); }, 30); }
   }
   function setupFigText() {
     window.addEventListener("resize", queueFit);

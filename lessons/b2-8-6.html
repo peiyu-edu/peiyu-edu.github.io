@@ -616,15 +616,16 @@
     svg.appendChild(polyAlpha);
 
     // 点 O 坐标 (斜足)
-    var Ox = 120, Oy = 275;
+    var Ox = 110, Oy = 270;
+    var scale = 1.35;
 
-    // 点 P' (正射影) 坐标，沿底面略带透视延伸
-    var PxPrime = Ox + d * 1.5;
-    var PyPrime = Oy - d * 0.16;
+    // 点 P' (正射影) 坐标，沿底面水平放置（保证屏幕直角三角形比例与三角函数精确一致）
+    var PxPrime = Ox + d * scale;
+    var PyPrime = Oy;
 
-    // 点 P (空间顶点) 坐标，垂直向上 h 距离
+    // 点 P (空间顶点) 坐标，垂直向上 h 距离（同一比例尺）
     var Px = PxPrime;
-    var Py = PyPrime - h * 1.25;
+    var Py = PyPrime - h * scale;
 
     // 直角三角形 POP' 填充面
     var triPoly = createSvgEl("polygon", {
@@ -655,13 +656,10 @@
 
     // 直角标记 (在 P' 处，表示 PP' 垂直底面)
     if (h > 15 && d > 15) {
-      var dx = Ox - PxPrime, dy = Oy - PyPrime;
-      var dist = Math.hypot(dx, dy);
-      var ux = (dx / dist) * 14, uy = (dy / dist) * 14;
       var markRight = createSvgEl("polyline", {
-        points: (PxPrime + ux).toFixed(1) + "," + (PyPrime + uy).toFixed(1) + " " +
-                (PxPrime + ux).toFixed(1) + "," + (PyPrime + uy - 14).toFixed(1) + " " +
-                PxPrime.toFixed(1) + "," + (PyPrime - 14).toFixed(1),
+        points: (PxPrime - 12).toFixed(1) + "," + PyPrime.toFixed(1) + " " +
+                (PxPrime - 12).toFixed(1) + "," + (PyPrime - 12).toFixed(1) + " " +
+                PxPrime.toFixed(1) + "," + (PyPrime - 12).toFixed(1),
         fill: "none", stroke: "var(--no)", "stroke-width": "1.3"
       });
       svg.appendChild(markRight);
@@ -743,7 +741,7 @@
     // 说明面板
     var thetaDesc = "";
     if (h === 0) {
-      thetaDesc = '<span class="badge badge-orange">线在面内 (θ = 0°)</span> 直线落在平面内或与平面平行，线面角为 0°。';
+      thetaDesc = '<span class="badge badge-orange">线在面内 (θ = 0°)</span> 直线落在平面内，线面角为 0°（若直线与平面平行，线面角规定亦为 0°）。';
     } else if (d === 0) {
       thetaDesc = '<span class="badge badge-green">线面垂直 (θ = 90°)</span> 直线垂直于平面，正射影缩为垂足一点，线面角为 90°（π/2）。';
     } else {

@@ -109,6 +109,19 @@
     var card = el("div", "card prob");
     card.appendChild(el("div", "small", '<span class="tag">' + esc(p.year + " " + p.paper + " 第" + p.no + "题") + "</span>" +
       (p.level ? '<span class="tag">' + esc(p.level) + "</span>" : "") + (p.note ? esc(p.note) : "")));
+    if (p.figure) {
+      var fig = el("figure", "prob-figure");
+      var image = document.createElement("img");
+      image.src = "../" + String(p.figure).replace(/^\/+/, "");
+      image.alt = p.figure_alt || "题目示意图";
+      image.loading = "lazy";
+      image.style.display = "block";
+      image.style.maxWidth = "100%";
+      image.style.height = "auto";
+      image.style.margin = "8px auto";
+      fig.appendChild(image);
+      card.appendChild(fig);
+    }
     card.appendChild(el("div", "stem", "<b>" + (idx + 1) + ".</b> " + esc(p.stem)));
     var fb = el("div", "fb"), sol = el("div", "sol");
     sol.hidden = true;
@@ -192,7 +205,18 @@
     host.innerHTML = '<p class="small">题目加载中…</p>';
     fetch("../data/sections/" + sec + ".json").then(function (r) { return r.json(); }).then(function (probs) {
       host.innerHTML = "";
-      if (!probs.length) { host.innerHTML = '<p class="small">这一节的真题还在整理。</p>'; return; }
+      // sections 是渲染器的稳定接口。未经规范化的 OCR 导入只有
+      // number/stem/solution/source，不能安全地当成题目展示：它会让
+      // 元信息变成 undefined，也没有可判分的选项和答案。
+      function isCanonicalProblem(p) {
+        return p && typeof p === "object" && typeof p.id === "string" && p.id &&
+          Number.isFinite(Number(p.year)) && typeof p.paper === "string" && p.paper &&
+          Number.isFinite(Number(p.no)) && typeof p.type === "string" && p.type &&
+          typeof p.stem === "string" && Array.isArray(p.choices) &&
+          typeof p.answer === "string" && typeof p.solution === "string";
+      }
+      probs = Array.isArray(probs) ? probs.filter(isCanonicalProblem) : [];
+      if (!probs.length) { return; }
       // <div id="practice" data-fold-later>：note 写了「要用到 <节号>」、且那一节在本节之后的题，收进最后一个折叠块。
       // 只比「章.节」：b1-2-3 是 2.3，note 里的 4.2 在后面要折叠，1.4 在前面不折叠。
       var fold = host.hasAttribute("data-fold-later");

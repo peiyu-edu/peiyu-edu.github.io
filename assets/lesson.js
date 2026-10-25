@@ -402,6 +402,9 @@
     [].forEach.call(svg.querySelectorAll(sel), function (h) {
       if (!h.parentNode || (h.classList && (h.classList.contains("hit") || h.classList.contains("peiyu-hit")))) return;
       if (h.parentNode.tagName === "g" && h.parentNode.querySelector("circle.hit, circle[r='22'], circle[r='24']")) return;
+      var matrix = h.getScreenCTM && h.getScreenCTM();
+      var hitScale = matrix ? Math.hypot(matrix.a, matrix.b) : k;
+      var minR = Math.max(MIN_HIT_PX, Math.ceil(MIN_HIT_PX / Math.max(0.01, hitScale)));
       var hit = h._peiyuHit;
       if (h.tagName === "circle") {
         var r0 = parseFloat(h.getAttribute("r")) || 0;
@@ -448,6 +451,7 @@
     [].forEach.call(document.querySelectorAll(".step svg[viewBox]"), function (svg) {
       var vb = svg.viewBox.baseVal, w = svg.getBoundingClientRect().width;
       if (!vb || !vb.width || !w) return;
+      if (window.PeiyuFigureLayout) PeiyuFigureLayout.prepare(svg);
       var k = w / vb.width;
       [].forEach.call(svg.querySelectorAll("text"), function (t) {
         var fs0 = parseFloat(t.getAttribute("data-fs0"));
@@ -459,6 +463,7 @@
         t.style.fontSize = want > fs0 + 0.01 ? want.toFixed(1) + "px" : "";
       });
       fitTouchTargets(svg, k);
+      if (window.PeiyuFigureLayout) PeiyuFigureLayout.fit(svg);
     });
   }
   // 太宽的段落（多半是长行内公式）只在自己里面横向滚动，不撑宽整页。只处理真的超宽的那几块。
@@ -468,7 +473,7 @@
       var tight = [].some.call(box.children, function (o) { return o.scrollWidth > o.clientWidth + 1; });
       if (tight) box.classList.remove("cols");
     });
-    [].forEach.call(document.querySelectorAll(".step.on p, .step.on li, .step.on .key, .step.on .warn, .step.on td, .step.on .opt"), function (el) {
+    [].forEach.call(document.querySelectorAll(".step.on p, .step.on li, .step.on .key, .step.on .warn, .step.on td, .step.on .opt, .step.on .stem, .step.on .result, .step.on .result > div, .step.on .ctrl"), function (el) {
       if (el.closest("svg")) return;
       if (el.scrollWidth > el.clientWidth + 1) el.classList.add("wide-x");
     });
@@ -485,7 +490,7 @@
         new MutationObserver(function (ms) {
           var realAdd = ms.some(function (m) {
             return [].some.call(m.addedNodes, function (n) {
-              return n.nodeType === 1 && (!n.classList || !n.classList.contains("peiyu-hit"));
+              return n.nodeType === 1 && !n.hasAttribute("data-figure-layout") && !n.hasAttribute("data-figure-camera") && !n.hasAttribute("data-figure-camera-part") && !n.hasAttribute("data-figure-label") && (!n.classList || !n.classList.contains("peiyu-hit"));
             });
           });
           if (realAdd) queueFit();
@@ -496,12 +501,15 @@
   }
 
   /* ---------- 公共接口给页面里的互动图用 ---------- */
-  window.Peiyu = { log: log, math: math, readLog: readLog, store: store, LOG_KEY: LOG_KEY, NAME_KEY: NAME_KEY };
+  window.Peiyu = { log: log, math: math, readLog: readLog, store: store, LOG_KEY: LOG_KEY, NAME_KEY: NAME_KEY, layout: queueFit, layoutNow: function () { fitFigText(); fitWide(); } };
 
   document.addEventListener("DOMContentLoaded", function () {
     setupSteps(); setupPredict(); setupPractice(); setupFigText();
     math(document.body);
     log("open", {});
+    var fl = document.createElement("script");
+    fl.src = "../assets/figure-layout.js";
+    document.head.appendChild(fl);
     var ws = document.createElement("script");
     ws.src = "../assets/wiki.js?v=concept-map-20261024-fix1";
     document.head.appendChild(ws);

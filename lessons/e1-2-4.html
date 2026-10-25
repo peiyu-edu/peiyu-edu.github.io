@@ -275,7 +275,7 @@
   <h3>① 拖圆心和半径点，看两种方程</h3>
   <p class="small">拖动圆心 \(C\) 或圆上的点 \(P\)（也可以点一下再按方向键），两个点都停在格点上。看标准方程和展开后的一般方程一起变。</p>
   <div class="card">
-    <svg class="fig" id="circ" viewBox="0 0 560 400" role="img" aria-label="坐标系里的圆，圆心 C 和圆上一点 P 可以拖动"></svg>
+    <svg class="fig" id="circ" data-fit-camera="1" viewBox="0 0 560 400" role="img" aria-label="坐标系里的圆，圆心 C 和圆上一点 P 可以拖动"></svg>
     <div class="result" id="circout" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="circreset" type="button">重置</button></div>
   </div>
@@ -391,7 +391,8 @@
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
   function toSvg(el, ev) {
     var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
-    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+    var camera = el.querySelector("g[data-figure-camera]") || el;
+    var m = camera.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
   }
   function draggable(fig, handle, onMove, onEnd) {
     handle.addEventListener("pointerdown", function (ev) {

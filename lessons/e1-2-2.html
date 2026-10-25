@@ -249,7 +249,7 @@
   <h3>① 拖两个点，看五种写法</h3>
   <p class="small">拖动 \(P_1\)、\(P_2\)（或选中后按方向键，每次一格）。下面同时列出这条直线的五种写法；写不出的会说为什么。试试把两点拖成竖直、水平，或让直线过原点。</p>
   <div class="card">
-    <svg class="fig" id="fig1" viewBox="0 0 560 480" role="img" aria-label="坐标系里两个可拖动的点 P1、P2 确定一条直线"></svg>
+    <svg class="fig" id="fig1" data-fit-camera="1" viewBox="0 0 560 480" role="img" aria-label="坐标系里两个可拖动的点 P1、P2 确定一条直线"></svg>
     <div class="result" id="out1" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset1" type="button">重置</button></div>
   </div>
@@ -257,7 +257,7 @@
   <h3>② 进阶：一点加斜率，看截距的正负</h3>
   <p class="small">拖动点 \(P\)，用滑块改斜率（最右一格是竖直）。金色点是和 \(x\) 轴的交点，蓝色点是和 \(y\) 轴的交点，旁边写的是带符号的截距。把 \(P\) 放在 \((2,3)\)，找出两个截距相等的直线：\(k=-1\) 是一条，还有一条在哪？</p>
   <div class="card">
-    <svg class="fig" id="fig2" viewBox="0 0 560 480" role="img" aria-label="过可拖动点 P 的直线，斜率可调，显示带符号的横截距和纵截距"></svg>
+    <svg class="fig" id="fig2" data-fit-camera="1" viewBox="0 0 560 480" role="img" aria-label="过可拖动点 P 的直线，斜率可调，显示带符号的横截距和纵截距"></svg>
     <div class="ctrl"><label for="kin">\(k\)</label><input type="range" id="kin" min="0" max="15" step="1"><output id="kout"></output></div>
     <div class="result" id="out2" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset2" type="button">重置</button></div>
@@ -359,7 +359,8 @@
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
   function toSvg(el, ev) {
     var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
-    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+    var camera = el.querySelector("g[data-figure-camera]") || el;
+    var m = camera.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
   }
   function dragPt(fig, handle, onMove, onEnd) {
     handle.addEventListener("pointerdown", function (ev) {

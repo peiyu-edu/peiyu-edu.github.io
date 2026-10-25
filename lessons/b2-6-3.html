@@ -267,7 +267,7 @@
   <h3>① 基础：平面直角坐标系中的双向量与判定器</h3>
   <p class="small">拖动墨绿点 \(A(x_1, y_1)\) 改变向量 \(\boldsymbol{a}\)，拖动赤金点 \(B(x_2, y_2)\) 改变向量 \(\boldsymbol{b}\)。观察下方坐标、模长、数量积与判定式徽章的实时计算。键盘操作：Tab 选中端点，方向键每次移动 \(1\) 个单位。</p>
   <div class="card">
-    <svg class="fig" id="fig" viewBox="0 0 560 380" role="img" aria-label="平面直角坐标系，可拖动端点 A 和 B 观察两个向量的坐标运算、共线判定与垂直判定"></svg>
+    <svg class="fig" id="fig" data-fit-camera="1" viewBox="0 0 560 380" role="img" aria-label="平面直角坐标系，可拖动端点 A 和 B 观察两个向量的坐标运算、共线判定与垂直判定"></svg>
     <div class="ctrl-bar">
       <button class="btn ghost" id="reset" type="button">重置</button>
       <button class="btn ghost" id="preset-perp" type="button">垂直示例 (3,2) 与 (-2,3)</button>
@@ -446,7 +446,8 @@
   function toSvg(el, ev) {
     var pt = el.createSVGPoint ? el.createSVGPoint() : { x: 0, y: 0 };
     pt.x = ev.clientX; pt.y = ev.clientY;
-    var m = el.getScreenCTM ? el.getScreenCTM() : null;
+    var camera = el.querySelector("g[data-figure-camera]") || el;
+    var m = camera.getScreenCTM ? camera.getScreenCTM() : null;
     return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
   }
 

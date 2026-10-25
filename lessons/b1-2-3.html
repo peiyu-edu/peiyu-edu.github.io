@@ -792,6 +792,8 @@
 
     function drawFloat(k) {
       flSvg.innerHTML = "";
+      var windowDefs = svg("defs", {}, flSvg), windowClip = svg("clipPath", { id: "float-window" }, windowDefs);
+      svg("rect", { x: 16, y: 8, width: 488, height: 152 }, windowClip);
       var yAx = 100;
       var cA = "var(--a)", cB = "var(--b)", cNo = "var(--no)", cM = "var(--muted)", cFg = "var(--fg)", cCd = "var(--card)", cBg = "var(--bg)";
 
@@ -817,7 +819,7 @@
         var px = fX(vx), py = fY(vx, k);
         d += (i ? " L " : "M ") + px.toFixed(1) + " " + py.toFixed(1);
       }
-      svg("path", { d: d, fill: "none", stroke: k === "lt" ? cA : cB, "stroke-width": 3 }, flSvg);
+      svg("path", { d: d, fill: "none", stroke: k === "lt" ? cA : cB, "stroke-width": 3, "clip-path": "url(#float-window)" }, flSvg);
 
       if (k === "gt") {
         var r1 = fX(1.5), r2 = fX(4.5);
@@ -864,7 +866,7 @@
       var d2 = "";
       for (var j = 0; j <= 40; j++) {
         var xP = 30 + j * 5.5;
-        var yP = 42 + 0.016 * (xP - 140) * (xP - 140);
+        var yP = 72 - 0.003 * (xP - 140) * (xP - 140); // 复用 B07 已交付修正：SVG y 向下，最低点仍在横轴上方
         d2 += (j ? " L " : "M ") + xP.toFixed(1) + " " + yP.toFixed(1);
       }
       svg("path", { d: d2, fill: "none", stroke: cA, "stroke-width": 2.5 }, aSvg);

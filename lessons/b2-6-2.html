@@ -273,7 +273,7 @@
       <button class="btn ghost" type="button" id="btn-iso" data-iso-tab="1">滑轨拉车测功台（等距 3D）</button>
       <button class="btn ghost" id="reset" type="button">重置</button>
     </div>
-    <svg class="fig" id="fig" viewBox="0 0 560 380" role="img" aria-label="平面向量运算交互图：拖动向量 a 和 b，实时展示和、差、夹角与数量积"></svg>
+    <svg class="fig" id="fig" data-fit-camera="1" viewBox="0 0 560 380" role="img" aria-label="平面向量运算交互图：拖动向量 a 和 b，实时展示和、差、夹角与数量积"></svg>
     <div class="readout-box" id="readout" aria-live="polite">
       <div class="readout-row">
         <div>\(|\boldsymbol{a}| = \)<span class="readout-val" id="val-a">3.91</span></div>
@@ -664,12 +664,11 @@
       }
 
       function onMove(e) {
-        var rect = svg.getBoundingClientRect();
-        if (!rect || rect.width <= 0) return;
-        var scaleX = 560 / rect.width;
-        var scaleY = 380 / rect.height;
-        var svgX = (e.clientX - rect.left) * scaleX;
-        var svgY = (e.clientY - rect.top) * scaleY;
+        var camera = svg.querySelector("g[data-figure-camera]") || svg;
+        var matrix = camera.getScreenCTM();
+        if (!matrix) return;
+        var point = new DOMPoint(e.clientX, e.clientY).matrixTransform(matrix.inverse());
+        var svgX = point.x, svgY = point.y;
         pos.x = clamp(svgX, 30, 530);
         pos.y = clamp(svgY, 30, 350);
         redraw();

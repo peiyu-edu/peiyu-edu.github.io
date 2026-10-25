@@ -246,7 +246,7 @@
   <h3>② 进阶：两边及一对角（SSA）为什么会出现两解、一解或无解</h3>
   <p class="small">固定角 \(A=30^\circ\)，固定边 \(AC=b=6.0\)。滑动改变对边 \(a\) 的长度，观察以点 \(C\) 为圆心、半径为 \(a\) 的圆与底边射线的交点情况。</p>
   <div class="card">
-    <svg class="fig" id="ssafig" viewBox="0 0 560 270" role="img" aria-label="SSA 条件下圆与射线交点演示图"></svg>
+    <svg class="fig" id="ssafig" data-fit-camera="1" viewBox="0 0 560 270" role="img" aria-label="SSA 条件下圆与射线交点演示图"></svg>
     <div class="ctrl">
       <label for="ssa-a">边长 \(a\)：</label>
       <input type="range" id="ssa-a" min="1.5" max="8.0" step="0.1" value="4.5">
@@ -436,6 +436,8 @@
   function triDraw() {
     if (!trifig) return;
     trifig.innerHTML = "";
+    var triDefs = svg("defs", {}, trifig), triClip = svg("clipPath", { id: "triangle-window" }, triDefs);
+    svg("rect", { x: 8, y: 8, width: 544, height: 314 }, triClip);
 
     var fg = css("--fg") || "#1A2822";
     var colA = css("--a") || "#2F7A56";
@@ -472,8 +474,8 @@
       var Oy = ((ptA.x * ptA.x + ptA.y * ptA.y) * (ptC.x - ptB.x) + (ptB.x * ptB.x + ptB.y * ptB.y) * (ptA.x - ptC.x) + (ptC.x * ptC.x + ptC.y * ptC.y) * (ptB.x - ptA.x)) / D;
       var Rpx = Math.hypot(ptA.x - Ox, ptA.y - Oy);
       if (Rpx < 420 && Ox > -200 && Ox < 760 && Oy > -200 && Oy < 550) {
-        svg("circle", { cx: Ox, cy: Oy, r: Rpx, fill: "none", stroke: muted, "stroke-width": 1.2, "stroke-dasharray": "5 5", opacity: 0.45 }, trifig);
-        svg("circle", { cx: Ox, cy: Oy, r: 3.5, fill: muted }, trifig);
+        svg("circle", { cx: Ox, cy: Oy, r: Rpx, fill: "none", stroke: muted, "stroke-width": 1.2, "stroke-dasharray": "5 5", opacity: 0.45, "clip-path": "url(#triangle-window)" }, trifig);
+        svg("circle", { cx: Ox, cy: Oy, r: 3.5, fill: muted, "clip-path": "url(#triangle-window)" }, trifig);
         svg("text", { x: Ox + 6, y: Oy - 6, "font-size": 13, fill: muted }, trifig).textContent = "O (外心)";
       }
     }

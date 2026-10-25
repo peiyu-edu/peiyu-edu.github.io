@@ -35,14 +35,14 @@
 <section class="step" data-title="从例子进入">
   <p>同时掷两枚骰子，把两个点数加起来。玩过大富翁的同学可能有感觉：有的和经常出现，有的很少见。先点下面的按钮或柱子，看看 \(36\) 种点数对按「点数和」叠起来是什么形状：</p>
   <div class="card predict" data-id="entry" data-answer="C">
-    <svg class="entry-fig" id="entry-dice" viewBox="0 0 520 205" role="img" aria-label="两枚骰子点数和2到12的金字塔柱状图：36种点数对按和叠放，和为7叠了6层最高"></svg>
+    <svg class="entry-fig" id="entry-dice" viewBox="0 0 520 205" role="group" aria-label="两枚骰子点数和2到12的金字塔柱状图：36种点数对按和叠放，和为7叠了6层最高"></svg>
     <div class="entry-bar" id="entry-dice-bar">
       <button type="button" data-s="all">看全部 36 种点数和金字塔</button>
       <button type="button" data-s="7" class="on">高亮和为 7（6种，最高峰！）</button>
       <button type="button" data-s="6">高亮和为 6（5种）</button>
       <button type="button" data-s="ext">高亮极端值：和为 2 或 12（各1种）</button>
     </div>
-    <div class="entry-note" id="entry-dice-note"></div>
+    <div class="entry-note" id="entry-dice-note" aria-live="polite"></div>
     <p>两个点数的和，下面哪个最容易出现？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(2\)</button>
@@ -584,20 +584,23 @@
       }
       var isHit = edSel === "all" || (edSel === "ext" && (s === 2 || s === 12)) || String(s) === edSel;
       var isPeak = s === 7 && (edSel === "7" || edSel === "all");
-      var g = svg("g", { style: "cursor:pointer" }, edSvg);
+      var g = svg("g", { style: "cursor:pointer", tabindex: 0, role: "button", "data-sum": s, "aria-label": "点数和 " + s + "，" + pairs.length + " 种点数对" }, edSvg);
       pairs.forEach(function (pr, k) {
         var y = base - (k + 1) * (ch + 2);
         var fillCol = isPeak ? hl : (isHit ? okS : card);
         var strokeCol = isPeak ? hl : (isHit ? ca : ln);
         svg("rect", { x: x, y: y, width: cw, height: ch, rx: 4, fill: fillCol, "fill-opacity": isPeak ? 0.25 : 1, stroke: strokeCol, "stroke-width": isHit ? 1.8 : 1 }, g);
-        svg("text", { x: x + cw / 2, y: y + 14.5, "text-anchor": "middle", fill: isHit ? fg : mu, "font-size": 11.5, "font-weight": isHit ? 700 : 400 }, g).textContent = "(" + pr + ")";
+        svg("title", {}, g).textContent = "点数对 (" + pr + ")";
       });
       var topY = base - pairs.length * (ch + 2) - 5;
       svg("text", { x: x + cw / 2, y: topY, "text-anchor": "middle", fill: isPeak ? hl : (isHit ? ca : mu), "font-size": 12, "font-weight": isHit ? 700 : 400 }, g).textContent = pairs.length + "种";
       svg("text", { x: x + cw / 2, y: base + 19, "text-anchor": "middle", fill: isHit ? fg : mu, "font-size": 13, "font-weight": isHit ? 700 : 400 }, g).textContent = s;
-      (function (sumVal) { g.onclick = function () { edDraw(String(sumVal)); }; })(s);
+      (function (sumVal, column) {
+        column.onclick = function () { edDraw(String(sumVal)); };
+        column.onkeydown = function (ev) { if(ev.key === "Enter" || ev.key === " "){ev.preventDefault();edDraw(String(sumVal));edSvg.querySelector('[data-sum="'+sumVal+'"]').focus();} };
+      })(s, g);
     }
-    svg("text", { x: 14, y: 18, fill: mu, "font-size": 12.5 }, edSvg).textContent = "两枚骰子 36 种等可能点对 (a,b) 按点数和叠放（点任意一列查看）：";
+    svg("text", { x: 14, y: 18, fill: mu, "font-size": 12.5 }, edSvg).textContent = "36 个色块代表 36 种等可能结果；点色块在下方查看点数对。";
 
     [].forEach.call(edBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", b.getAttribute("data-s") === edSel);
@@ -609,6 +612,12 @@
     } else {
       var nWay = 6 - Math.abs(parseInt(edSel, 10) - 7);
       edNote.innerHTML = "点数和 <b>X = " + edSel + "</b>：共有 <b>" + nWay + " 种</b>点对组合，出现概率 <b>P(X=" + edSel + ") = " + nWay + "/36</b>" + (edSel === "7" ? "（<b>所有和里最高！</b>）" : "。");
+    }
+    var selectedSum = parseInt(edSel, 10);
+    if (selectedSum >= 2 && selectedSum <= 12) {
+      var combinations = [];
+      for (var first = 1; first <= 6; first++) { var second = selectedSum - first; if (second >= 1 && second <= 6) combinations.push("(" + first + ", " + second + ")"); }
+      edNote.innerHTML += "<div><b>对应点数对：</b>" + combinations.join("，") + "。</div>";
     }
   }
   [].forEach.call(edBar.querySelectorAll("button"), function (b) {

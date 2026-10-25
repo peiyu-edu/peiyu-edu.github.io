@@ -57,14 +57,6 @@
       .iso-solid-accent .iso-outline { stroke: var(--iso-accent); stroke-width: 1.45; }
       .iso-solid-warn .iso-outline { stroke: var(--iso-warn); stroke-width: 1.45; }
       .iso-bevel { fill: none; stroke: var(--iso-card); stroke-opacity: 0.7; stroke-width: 0.8; }
-      .iso-fig text[font-size="10.5"] { font-size: 10.5px !important; }
-      .iso-fig text[font-size="11"] { font-size: 11px !important; }
-      .iso-fig text[font-size="11.5"] { font-size: 11.5px !important; }
-      .iso-fig text[font-size="12"] { font-size: 12px !important; }
-      .iso-fig text[font-size="12.5"] { font-size: 12.5px !important; }
-      .iso-fig text[font-size="13"] { font-size: 13px !important; }
-      .iso-fig text[font-size="13.5"] { font-size: 13.5px !important; }
-      .iso-fig text[font-size="15"] { font-size: 15px !important; }
     `;
     document.head.appendChild(style);
   }
@@ -1195,8 +1187,10 @@
     svg.classList.add("iso-fig");
     const mu = Number.isFinite(Number(muVal)) ? Number(muVal) : 0;
     const sg = Math.max(0.2, Number(sgVal) || 1.0);
-    const lo = Math.min(Number(loVal) || -1, Number(hiVal) || 1);
-    const hi = Math.max(Number(loVal) || -1, Number(hiVal) || 1);
+    const rawLo = Number(loVal), rawHi = Number(hiVal);
+    const loValue = Number.isFinite(rawLo) ? rawLo : -1, hiValue = Number.isFinite(rawHi) ? rawHi : 1;
+    const lo = Math.min(loValue, hiValue);
+    const hi = Math.max(loValue, hiValue);
     const mode = Number(modeVal) || 0;
     const peak = 1 / (sg * Math.sqrt(2 * Math.PI));
 
@@ -2490,7 +2484,8 @@
     injectStyles();
     svg.classList.add("iso-fig");
     const n = Math.max(2, Math.min(6, Math.round(Number(nVal) || 5)));
-    const r = Math.max(0, Math.min(n, Math.round(Number(rVal) || 2)));
+    const rawR = Number(rVal);
+    const r = Math.max(0, Math.min(n, Math.round(Number.isFinite(rawR) ? rawR : 2)));
 
     function comb(nn, kk) {
       if (kk < 0 || kk > nn) return 0;

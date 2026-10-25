@@ -277,7 +277,7 @@
   <h3>① 直线 \(y=kx+b\) 和圆 \((x-1)^2+(y-1)^2=9\)</h3>
   <p class="small">拖动直线和 \(y\) 轴的交点（金色圆点）上下移动直线，或选中它按 ↑↓ 改 \(b\)、←→ 改 \(k\)；也可以拉下面的滑块。看 \(d\) 和 \(r=3\) 怎么比、弦怎么变。试试 \(k=0\)、\(b=4\)，以及 \(k=0.75\)、\(b=4\)。</p>
   <div class="card">
-    <svg class="fig" id="lc" viewBox="0 0 560 400" role="img" aria-label="一个圆和一条可以移动的直线，显示圆心到直线的距离和弦"></svg>
+    <svg class="fig" id="lc" data-fit-camera="1" viewBox="0 0 560 400" role="img" aria-label="一个圆和一条可以移动的直线，显示圆心到直线的距离和弦"></svg>
     <div class="ctrl"><label for="kin">\(k\)</label><input type="range" id="kin" min="0" max="16" step="1"><output id="kout"></output></div>
     <div class="ctrl"><label for="bin">\(b\)</label><input type="range" id="bin" min="-24" max="24" step="1"><output id="bout"></output></div>
     <div class="result" id="lcout" aria-live="polite"></div>
@@ -417,7 +417,8 @@
   }
   function toSvg(el, ev) {
     var pt = el.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
-    var m = el.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
+    var camera = el.querySelector("g[data-figure-camera]") || el;
+    var m = camera.getScreenCTM(); return m ? pt.matrixTransform(m.inverse()) : { x: 0, y: 0 };
   }
   function draggable(fig, handle, onMove, onEnd) {
     handle.addEventListener("pointerdown", function (ev) {
@@ -661,7 +662,7 @@
   /* ================= 0 从例子进入：雷达站探测圆与飞机航线 ================= */
   var erdSvg = document.getElementById("entry-radar"), erdBar = document.getElementById("entry-radar-bar"), erdNote = document.getElementById("entry-radar-note");
   function erdDraw(d) {
-    var cx = 148, cy = 132, u = 15.5, r = 5, R = r * u, ly = cy - d * u, h = [];
+    var cx = 148, cy = 124, u = 15.5, r = 5, R = r * u, ly = cy - d * u, h = [];
     // 雷达探测圆 r=5
     h.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2.2"/>');
     h.push('<circle cx="' + cx + '" cy="' + cy + '" r="' + (R * 0.5) + '" fill="none" stroke="var(--a)" stroke-opacity="0.35" stroke-dasharray="3 3"/>');

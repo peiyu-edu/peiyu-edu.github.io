@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -97,10 +97,10 @@
         <button class="btn btn-sm" onclick="setMParabTab(2)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">③ 折线拉直最值</button>
       </div>
     </div>
-    <div style="position:relative;width:100%;height:220px;background:var(--bg-subtle,#f8fafc);border-radius:8px;overflow:hidden">
-      <svg id="m-parab-fig" viewBox="0 0 540 220" style="width:100%;height:100%;display:block"></svg>
+    <div style="position:relative;width:100%;background:var(--card);border-radius:8px;overflow:hidden">
+      <svg id="m-parab-fig" viewBox="0 0 540 300" style="width:100%;height:auto;display:block"></svg>
     </div>
-    <div id="m-parab-desc" style="font-size:13px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
+    <div id="m-parab-desc" style="font-size:15px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
   </div>
 
   <!-- 组件二：概念对比双卡 -->
@@ -258,8 +258,8 @@
 
   <div style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:14px;margin:12px 0">
     <div style="font-weight:700;font-size:13px;color:var(--text,#1e293b);margin-bottom:8px">🔍 反例微图解：点 A 在内部 vs 外部的破题分流</div>
-    <div style="width:100%;height:150px;background:var(--bg-subtle,#f8fafc);border-radius:6px;overflow:hidden">
-      <svg id="m-parab-trap-fig" viewBox="0 0 540 150" style="width:100%;height:100%;display:block"></svg>
+    <div style="width:100%;background:var(--card);border-radius:6px;overflow:hidden">
+      <svg id="m-parab-trap-fig" viewBox="0 0 540 260" style="width:100%;height:auto;display:block"></svg>
     </div>
     <div style="font-size:12px;color:var(--text-subtle,#64748b);margin-top:6px">
       点 \(A\) 在内部时，折线 \(A 	o P 	o H\) 可拉直为垂直准线的线段（最小值 \(x_A + \frac{p}{2}\)）；点 \(A\) 在外部时，直线 \(AF\) 与抛物线相交取到最小值 \(|AF|\)。
@@ -277,7 +277,7 @@
 </section>
 
 <section class="step" data-title="动手">
-  <h3>① 焦半径与准线等距折射微实验室</h3>
+  <h3>① 焦半径与准线等距反射微实验室</h3>
   <p class="small">拖动抛物线上的动点 \(P\)（或选中后按键盘方向键），观察焦半径 \(PF\) 与到准线的垂线段 \(PH\)。切换 4 种开口方向或调节焦准距 \(p\)，体会等距性质。开启「光路演示」可查看平行光反射会聚于焦点 \(F\) 的动态光束。</p>
 
   <div class="tabs" role="tablist" aria-label="开口方向">
@@ -458,6 +458,8 @@
     fig.innerHTML = "";
     var org = getOrigin();
     var ox = org.ox, oy = org.oy;
+    var extent = Math.max(4, Math.abs(tVal), tVal*tVal/(2*pVal), pVal/2);
+    U = Math.min(28, 200/extent, (curDir === "up" || curDir === "down") ? 200/extent : 150/Math.max(4,Math.abs(tVal)));
 
     function X(x) { return ox + x * U; }
     function Y(y) { return oy - y * U; }
@@ -510,7 +512,7 @@
       dltx = 25; dlty = Math.max(24, Y(f) - 10); dlAnchor = "start";
     }
     svg("line", { x1: dlx1, y1: dly1, x2: dlx2, y2: dly2, stroke: cc, "stroke-width": 2, "stroke-dasharray": "6 4" }, g);
-    var dirEq = (curDir === "right") ? "准线 l: x = -" + f1(f) : (curDir === "left") ? "准线 l: x = " + f1(f) : (curDir === "up") ? "准线 l: y = -" + f1(f) : "准线 l: y = " + f1(f);
+    var dirEq = (curDir === "right") ? "准线 l: x = -" + f2(f) : (curDir === "left") ? "准线 l: x = " + f2(f) : (curDir === "up") ? "准线 l: y = -" + f2(f) : "准线 l: y = " + f2(f);
     svg("text", { x: dltx, y: dlty, "text-anchor": dlAnchor, fill: cc, "font-size": 13, "font-weight": 600 }, g).textContent = dirEq;
 
     // Parabola curve
@@ -598,7 +600,7 @@
 
     // Dot F (focus)
     svg("circle", { cx: sxF, cy: syF, r: 5, fill: ca }, g);
-    svg("text", { x: sxF + 8, y: syF + (P.y >= 0 ? 20 : -10), fill: ca, "font-size": 14, "font-weight": 700 }, g).textContent = "F(" + f1(F.x) + ", " + f1(F.y) + ")";
+    svg("text", { x: sxF + 8, y: syF + (P.y >= 0 ? 20 : -10), fill: ca, "font-size": 14, "font-weight": 700 }, g).textContent = "F(" + f2(F.x) + ", " + f2(F.y) + ")";
 
     // Dot H (foot)
     svg("circle", { cx: sxH, cy: syH, r: 4, fill: cb }, g);
@@ -650,8 +652,8 @@
 
     // Update Result Text
     var eqStr = (curDir === "right") ? "y^2 = " + (2 * pVal) + "x" : (curDir === "left") ? "y^2 = -" + (2 * pVal) + "x" : (curDir === "up") ? "x^2 = " + (2 * pVal) + "y" : "x^2 = -" + (2 * pVal) + "y";
-    var fStr = "(" + f1(F.x) + ", " + f1(F.y) + ")";
-    var lStr = (curDir === "right" || curDir === "left") ? ("x = " + f1(H.x)) : ("y = " + f1(H.y));
+    var fStr = "(" + f2(F.x) + ", " + f2(F.y) + ")";
+    var lStr = (curDir === "right" || curDir === "left") ? ("x = " + f2(H.x)) : ("y = " + f2(H.y));
 
     var msg = '<b>当前方程</b>：\\(' + eqStr + '\\)（焦准距 \\(p = ' + f1(pVal) + '\\)）<br>' +
       '<b>焦点</b> \\(F' + fStr + '\\)，<b>准线</b> \\(l: ' + lStr + '\\) | <b>动点</b> \\(P(' + f2(P.x) + ', ' + f2(P.y) + ')\\)<br>' +
@@ -785,159 +787,39 @@
   edhDraw("focus");
 })();
 
-/* --- 伴读微图解 JS: 抛物线 --- */
+/* conics-semantic-micro parabola */
 (function(){
-  var curTab = 0;
-  function el(t, a, txt) {
-    var e = document.createElementNS("http://www.w3.org/2000/svg", t);
-    for (var k in a) e.setAttribute(k, a[k]);
-    if (txt) e.textContent = txt;
-    return e;
+  var fig=document.getElementById("m-parab-fig"),cap=document.getElementById("m-parab-desc"),mode=0;if(!fig)return;
+
+  function add(target, tag, attrs, label) {
+    var n=document.createElementNS("http://www.w3.org/2000/svg",tag);
+    for(var k in attrs)n.setAttribute(k,attrs[k]);
+    if(label!==undefined)n.textContent=label; target.appendChild(n);return n;
   }
-  function drawTab0(svg) {
-    var ox = 220, oy = 110, p = 60, dx = ox - p/2, fx = ox + p/2;
-    svg.appendChild(el("line", {x1: 40, y1: oy, x2: 480, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 470, y: oy - 6, fill: "#94a3b8", "font-size": 12}, "x"));
-    svg.appendChild(el("text", {x: ox + 8, y: 30, fill: "#94a3b8", "font-size": 12}, "y"));
-    svg.appendChild(el("line", {x1: dx, y1: 20, x2: dx, y2: 200, stroke: "#dc2626", "stroke-width": 2, "stroke-dasharray": "5,3"}));
-    svg.appendChild(el("text", {x: dx - 48, y: 35, fill: "#dc2626", "font-size": 12, "font-weight": "bold"}, "l: x=-p/2"));
-    svg.appendChild(el("circle", {cx: fx, cy: oy, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: fx + 6, y: oy + 16, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "F(p/2,0)"));
-    var d = "M " + (ox + 80*80/120) + " " + (oy - 80);
-    for (var y = -80; y <= 80; y += 4) d += " L " + (ox + (y*y)/120) + " " + (oy + y);
-    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2.5}));
-    var px = ox + 30, py = oy - 60;
-    svg.appendChild(el("circle", {cx: px, cy: py, r: 4, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: px + 8, y: py - 4, fill: "#16a34a", "font-size": 12, "font-weight": "bold"}, "P(x₀,y₀)"));
-    svg.appendChild(el("circle", {cx: dx, cy: py, r: 3, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: dx - 20, y: py - 4, fill: "#dc2626", "font-size": 11}, "H"));
-    svg.appendChild(el("line", {x1: px, y1: py, x2: dx, y2: py, stroke: "#16a34a", "stroke-width": 2}));
-    svg.appendChild(el("line", {x1: px, y1: py, x2: fx, y2: oy, stroke: "#0284c7", "stroke-width": 2, "stroke-dasharray": "4,3"}));
-    svg.appendChild(el("path", {d: "M " + (dx + 8) + " " + py + " L " + (dx + 8) + " " + (py + 8) + " L " + dx + " " + (py + 8), fill: "none", stroke: "#dc2626", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: (px + dx)/2 - 16, y: py - 8, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "|PH|=d"));
-    svg.appendChild(el("text", {x: (px + fx)/2 + 8, y: (py + oy)/2, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "|PF|=d"));
+  function text(target,x,y,label,anchor){return add(target,"text",{x:x,y:y,fill:"var(--fg)","font-size":24,"text-anchor":anchor||"middle"},label);}
+  function chart(target,m,v){
+    function X(x){return v.ox+x*v.u;} function Y(y){return v.oy-y*v.u;}
+    function attrs(extra){var a={"data-model":m.kind,"data-a":m.a||0,"data-b":m.b||0,"data-p":m.p||0,"data-axis":m.axis||"x","data-direction":m.dir||"right","data-ox":v.ox,"data-oy":v.oy,"data-u":v.u};for(var k in extra)a[k]=extra[k];return a;}
+    function at(t,branch){var x,y;if(m.kind==="ellipse"){x=m.a*Math.cos(t);y=m.b*Math.sin(t);}else if(m.kind==="hyperbola"){x=(branch||1)*m.a*Math.cosh(t);y=m.b*Math.sinh(t);}else{x=t*t/(2*m.p);y=t;if(m.dir==="left")x=-x;if(m.dir==="up"){var q=x;x=y;y=q;}else if(m.dir==="down"){var q2=x;x=y;y=-q2;}}if(m.kind!=="parabola"&&m.axis==="y"){var z=x;x=y;y=z;}return{x:x,y:y};}
+    function line(x1,y1,x2,y2,role,dash){return add(target,"line",attrs({x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:role==="asymptote"||role==="directrix"?"var(--b)":"var(--muted)","stroke-width":1.7,"stroke-dasharray":dash||"none","data-role":role||"segment"}));}
+    function dot(x,y,role,label,dx,dy){add(target,"circle",attrs({cx:X(x),cy:Y(y),r:5,fill:role==="focus"?"var(--b)":"var(--a)","data-role":role,"data-x":x,"data-y":y}));if(label)text(target,X(x)+(dx||0),Y(y)+(dy||-16),label);}
+    function curve(lo,hi,branch){var d="";for(var i=0;i<=240;i++){var p=at(lo+(hi-lo)*i/240,branch);d+=(i?" L":"M")+X(p.x).toFixed(6)+" "+Y(p.y).toFixed(6);}return add(target,"path",attrs({d:d,fill:"none",stroke:"var(--a)","stroke-width":3,"data-role":"curve","data-branch":branch||1}));}
+    return {X:X,Y:Y,at:at,line:line,dot:dot,curve:curve,meta:attrs};
   }
 
-  function drawTab1(svg) {
-    var cols = [
-      {t: "y²=2px", ox: 80, o: "r", eq: "F(p/2,0), x=-p/2"},
-      {t: "y²=-2px", ox: 200, o: "l", eq: "F(-p/2,0), x=p/2"},
-      {t: "x²=2py", ox: 325, o: "u", eq: "F(0,p/2), y=-p/2"},
-      {t: "x²=-2py", ox: 450, o: "d", eq: "F(0,-p/2), y=p/2"}
-    ];
-    cols.forEach(function(c){
-      svg.appendChild(el("text", {x: c.ox, y: 35, "text-anchor": "middle", fill: "#0f172a", "font-size": 12, "font-weight": "bold"}, c.t));
-      svg.appendChild(el("line", {x1: c.ox - 45, y1: 110, x2: c.ox + 45, y2: 110, stroke: "#e2e8f0", "stroke-width": 1}));
-      svg.appendChild(el("line", {x1: c.ox, y1: 60, x2: c.ox, y2: 160, stroke: "#e2e8f0", "stroke-width": 1}));
-      var p = 24, oy = 110;
-      if (c.o === "r") {
-        svg.appendChild(el("line", {x1: c.ox - p/2, y1: 65, x2: c.ox - p/2, y2: 155, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-        svg.appendChild(el("circle", {cx: c.ox + p/2, cy: oy, r: 3, fill: "#0284c7"}));
-        svg.appendChild(el("path", {d: "M " + (c.ox + 35) + " 70 Q " + (c.ox - 5) + " " + oy + " " + (c.ox + 35) + " 150", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-      } else if (c.o === "l") {
-        svg.appendChild(el("line", {x1: c.ox + p/2, y1: 65, x2: c.ox + p/2, y2: 155, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-        svg.appendChild(el("circle", {cx: c.ox - p/2, cy: oy, r: 3, fill: "#0284c7"}));
-        svg.appendChild(el("path", {d: "M " + (c.ox - 35) + " 70 Q " + (c.ox + 5) + " " + oy + " " + (c.ox - 35) + " 150", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-      } else if (c.o === "u") {
-        svg.appendChild(el("line", {x1: c.ox - 45, y1: oy + p/2, x2: c.ox + 45, y2: oy + p/2, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-        svg.appendChild(el("circle", {cx: c.ox, cy: oy - p/2, r: 3, fill: "#16a34a"}));
-        svg.appendChild(el("path", {d: "M " + (c.ox - 40) + " 75 Q " + c.ox + " " + (oy + 5) + " " + (c.ox + 40) + " 75", fill: "none", stroke: "#16a34a", "stroke-width": 2}));
-      } else {
-        svg.appendChild(el("line", {x1: c.ox - 45, y1: oy - p/2, x2: c.ox + 45, y2: oy - p/2, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-        svg.appendChild(el("circle", {cx: c.ox, cy: oy + p/2, r: 3, fill: "#16a34a"}));
-        svg.appendChild(el("path", {d: "M " + (c.ox - 40) + " 145 Q " + c.ox + " " + (oy - 5) + " " + (c.ox + 40) + " 145", fill: "none", stroke: "#16a34a", "stroke-width": 2}));
-      }
-      svg.appendChild(el("text", {x: c.ox, y: 185, "text-anchor": "middle", fill: "#64748b", "font-size": 10}, c.eq));
-    });
+  function scene(target,dir,v,p,extent){var m={kind:"parabola",p:p,dir:dir},q=chart(target,m,v),f=p/2,F=dir==="right"?{x:f,y:0}:dir==="left"?{x:-f,y:0}:dir==="up"?{x:0,y:f}:{x:0,y:-f};q.line(-2.7,0,3.8,0,"axis");q.line(0,-2.7,0,2.7,"axis");if(dir==="right"||dir==="left")q.line(dir==="right"?-f:f,-extent,dir==="right"?-f:f,extent,"directrix","5 4");else q.line(-extent,dir==="up"?-f:f,extent,dir==="up"?-f:f,"directrix","5 4");q.curve(-extent,extent);q.dot(F.x,F.y,"focus","F",0,29);q.dot(0,0,"vertex");return{q:q,F:F,f:f};}
+  function minimum(target,ox,external){var v={ox:ox,oy:135,u:24},s=scene(target,"right",v,2,2.2),p=s.q,A=external?{x:-1,y:1.5}:{x:3,y:1.5},P;
+    if(external){var dx=A.x-s.F.x,dy=A.y-s.F.y;var qa=dy*dy,qb=-4*dx,qc=-4;var r=(-qb+Math.sqrt(qb*qb-4*qa*qc))/(2*qa);P={x:s.F.x+r*dx,y:r*dy};}else P=p.at(A.y);
+    p.dot(A.x,A.y,"fixed","A",external?-15:12,external?-14:-22);p.dot(P.x,P.y,"optimal","P*",16,-14);p.line(A.x,A.y,P.x,P.y,"to-fixed");p.line(P.x,P.y,s.F.x,s.F.y,"to-focus");if(!external)p.line(P.x,P.y,-s.f,P.y,"to-directrix");
+    return{A:A,P:P,F:s.F};
   }
-
-  function drawTab2(svg) {
-    var ox = 200, oy = 110, p = 50, dx = ox - p/2, fx = ox + p/2;
-    svg.appendChild(el("line", {x1: 40, y1: oy, x2: 480, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    svg.appendChild(el("line", {x1: dx, y1: 20, x2: dx, y2: 200, stroke: "#dc2626", "stroke-width": 2, "stroke-dasharray": "5,3"}));
-    svg.appendChild(el("circle", {cx: fx, cy: oy, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: fx + 6, y: oy + 16, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "F(p/2,0)"));
-    var d = "M " + (ox + 80*80/100) + " 30";
-    for (var y = -80; y <= 80; y += 4) d += " L " + (ox + (y*y)/100) + " " + (oy + y);
-    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-    var ax = ox + 90, ay = oy - 45, p0x = ox + (45*45)/100;
-    svg.appendChild(el("circle", {cx: ax, cy: ay, r: 4, fill: "#d97706"}));
-    svg.appendChild(el("text", {x: ax + 6, y: ay - 6, fill: "#d97706", "font-size": 12, "font-weight": "bold"}, "A(内部定点)"));
-    svg.appendChild(el("line", {x1: ax, y1: ay, x2: dx, y2: ay, stroke: "#16a34a", "stroke-width": 2.5}));
-    svg.appendChild(el("circle", {cx: p0x, cy: ay, r: 4, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: p0x - 8, y: ay + 18, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "P*(最优点)"));
-    svg.appendChild(el("line", {x1: p0x, y1: ay, x2: fx, y2: oy, stroke: "#0284c7", "stroke-width": 1.5, "stroke-dasharray": "3,3"}));
-    svg.appendChild(el("rect", {x: 270, y: 155, width: 230, height: 32, rx: 6, fill: "#ecfdf5", stroke: "#10b981", "stroke-width": 1}));
-    svg.appendChild(el("text", {x: 385, y: 175, "text-anchor": "middle", fill: "#065f46", "font-size": 12, "font-weight": "bold"}, "min(|PA|+|PF|) = x_A + p/2 (垂线最短)"));
+  function draw(){fig.innerHTML="";
+    if(mode===0){var s=scene(fig,"right",{ox:210,oy:160,u:40},2,2.3),p=s.q,P=p.at(1.5),H={x:-1,y:P.y};p.dot(P.x,P.y,"point","P",17,-15);p.dot(H.x,H.y,"foot","H",-17,-15);p.line(P.x,P.y,H.x,H.y,"to-directrix");p.line(P.x,P.y,s.F.x,s.F.y,"to-focus");cap.textContent="本图为y²=4x，p=2，顶点O(0,0)、焦点F(1,0)、准线x=−1。P(0.5625,1.5)由方程计算，PF=PH=1.5625；等距关系与同一坐标图完全一致。";
+    }else if(mode===1){["right","left","up","down"].forEach(function(dir,i){var ox= i%2?405:135,oy=i<2?93:250;scene(fig,dir,{ox:ox,oy:oy,u:20},2,1.8);text(fig,ox,i<2?25:185,["y²=4x","y²=−4x","x²=4y","x²=−4y"][i]);});cap.textContent="四图均p=2：右/左开口焦点(±1,0)，准线x=∓1；上/下开口焦点(0,±1)，准线y=∓1。每条曲线用对应标准方程计算，顶点固定在各图原点，焦点位于开口内侧。";
+    }else{minimum(fig,235,false);cap.textContent="本图仍为y²=4x，固定点A(3,1.5)在抛物线内部。以PF=PH替换焦半径，PA+PH≥A到准线的距离4。在P*(0.5625,1.5)处A、P*、H共线且P*位于中间，等号成立，最小值为4。";}
   }
-
-  function renderFig() {
-    var svg = document.getElementById("m-parab-fig");
-    var desc = document.getElementById("m-parab-desc");
-    if (!svg) return;
-    svg.innerHTML = "";
-    if (curTab === 0) {
-      drawTab0(svg);
-      if (desc) desc.innerHTML = "<b>① 抛物线定义与等距特征</b>：抛物线上任意点 P(x₀, y₀) 到焦点 F(p/2, 0) 的焦半径 |PF|，恒等于它到准线 l: x = -p/2 的垂线距离 |PH| = x₀ + p/2。";
-    } else if (curTab === 1) {
-      drawTab1(svg);
-      if (desc) desc.innerHTML = "<b>② 四种标准方程开口与定位</b>：由一次项定轴、符号定开口。焦点到准线距离恒为 p，焦点坐标为一次项系数除以 4。";
-    } else {
-      drawTab2(svg);
-      if (desc) desc.innerHTML = "<b>③ 折线拉直与最值定理</b>：求 |PA|+|PF| 的最小值，将焦半径 |PF| 换为垂线段 |PH|，拉直为垂直准线的线段，最小值为 x_A + p/2。";
-    }
-  }
-
-  window.setMParabTab = function(idx) {
-    curTab = idx;
-    var btns = document.querySelectorAll("#m-parab-tabs button");
-    btns.forEach(function(b, i){
-      b.style.borderColor = (i === idx) ? "#0284c7" : "var(--border,#cbd5e1)";
-      b.style.background = (i === idx) ? "#0284c7" : "transparent";
-      b.style.color = (i === idx) ? "#fff" : "var(--text,#475569)";
-    });
-    renderFig();
-  };
-
-  function drawTrapFig() {
-    var svg = document.getElementById("m-parab-trap-fig");
-    if (!svg) return;
-    svg.innerHTML = "";
-    svg.appendChild(el("text", {x: 135, y: 22, "text-anchor": "middle", fill: "#0369a1", "font-size": 12, "font-weight": "bold"}, "情况 A: 定点在内部 (向准线垂线)"));
-    svg.appendChild(el("line", {x1: 25, y1: 30, x2: 25, y2: 135, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-    svg.appendChild(el("path", {d: "M 180 40 Q 55 85 180 130", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 85, cy: 85, r: 3, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 85, y: 100, "text-anchor": "middle", fill: "#0284c7", "font-size": 10}, "F"));
-    svg.appendChild(el("circle", {cx: 145, cy: 65, r: 3, fill: "#d97706"}));
-    svg.appendChild(el("text", {x: 155, y: 68, fill: "#d97706", "font-size": 10}, "A"));
-    svg.appendChild(el("line", {x1: 145, y1: 65, x2: 25, y2: 65, stroke: "#16a34a", "stroke-width": 2}));
-    svg.appendChild(el("circle", {cx: 88, cy: 65, r: 3, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: 95, y: 60, fill: "#16a34a", "font-size": 10}, "P*"));
-    svg.appendChild(el("text", {x: 135, y: 140, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "min = x_A + p/2"));
-
-    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 140, stroke: "#e2e8f0", "stroke-width": 1}));
-
-    svg.appendChild(el("text", {x: 405, y: 22, "text-anchor": "middle", fill: "#b91c1c", "font-size": 12, "font-weight": "bold"}, "情况 B: 定点在外部 (|PA|+|PF| >= |AF|)"));
-    svg.appendChild(el("line", {x1: 295, y1: 30, x2: 295, y2: 135, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-    svg.appendChild(el("path", {d: "M 450 40 Q 325 85 450 130", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 355, cy: 85, r: 3, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 355, y: 100, "text-anchor": "middle", fill: "#0284c7", "font-size": 10}, "F"));
-    svg.appendChild(el("circle", {cx: 340, cy: 45, r: 3, fill: "#d97706"}));
-    svg.appendChild(el("text", {x: 335, y: 40, fill: "#d97706", "font-size": 10}, "A(外部)"));
-    svg.appendChild(el("line", {x1: 340, y1: 45, x2: 355, y2: 85, stroke: "#dc2626", "stroke-width": 2}));
-    svg.appendChild(el("circle", {cx: 344, cy: 56, r: 3, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 352, y: 55, fill: "#dc2626", "font-size": 10}, "P*"));
-    svg.appendChild(el("text", {x: 405, y: 140, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "min = |AF| (直线最短)"));
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function(){ renderFig(); drawTrapFig(); });
-  } else {
-    renderFig();
-    drawTrapFig();
-  }
+  window.setMParabTab=function(i){mode=i;document.querySelectorAll("#m-parab-tabs button").forEach(function(b,j){b.style.background=i===j?"var(--a)":"transparent";b.style.color=i===j?"var(--card)":"var(--fg)";});fig.setAttribute("viewBox",i===1?"0 0 540 340":"0 0 540 300");draw();};draw();
+  var trap=document.getElementById("m-parab-trap-fig");if(trap){minimum(trap,135,false);minimum(trap,405,true);text(trap,135,26,"内部A：向准线拉直");text(trap,405,26,"外部A：向焦点拉直");text(trap,135,237,"最小值4");text(trap,405,237,"最小值2.5");}
 })();
 
 </script>

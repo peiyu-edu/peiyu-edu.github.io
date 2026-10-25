@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -627,14 +627,8 @@
   var trap = document.getElementById("m-hist-trap-fig");
   if (!fig || !bar) return;
 
-  var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  var ca = isDark ? "#38bdf8" : "#0284c7";
-  var cb = isDark ? "#f59e0b" : "#d97706";
-  var cc = isDark ? "#10b981" : "#059669";
-  var cd = isDark ? "#ec4899" : "#db2777";
-  var mut = isDark ? "#94a3b8" : "#64748b";
-  var bgCard = isDark ? "#1e293b" : "#f1f5f9";
-  var border = isDark ? "#334155" : "#e2e8f0";
+  var ca = "var(--c)", cb = "var(--b)", cc = "var(--a)", cd = "var(--no)";
+  var mut = "var(--muted)", bgCard = "var(--card)", border = "var(--line)";
   var NS = "http://www.w3.org/2000/svg";
 
   function sEl(parent, tag, attrs) {
@@ -655,6 +649,7 @@
 
   function drawHist(mode) {
     fig.innerHTML = "";
+    fig.setAttribute("viewBox", mode === "skew" ? "0 0 360 180" : "0 0 520 180");
     if (mode === "hist") {
       // 直方图面积=频率
       sTxt(fig, 30, 16, "【直方图面积公理】每个矩形面积 = 频率，总面积 = 1.0", ca, 12, 700);
@@ -693,36 +688,23 @@
       sTxt(fig, 355, 70, "• 矩形高 = 频率 / 组距", ca, 10.5);
       sTxt(fig, 355, 90, "• 面积 = 高 · 组距 = 频率", cb, 10.5);
       sTxt(fig, 355, 110, "• 总面积 ∑ S = 1.0", cc, 11, 700);
-      sTxt(fig, 355, 130, "• 均值 = ∑ (中点 · 频率)", cd, 10.5);
+      sTxt(fig, 355, 130, "• 估计均值 ≈ ∑ (组中值 · 频率)", cd, 10.5);
     } else if (mode === "skew") {
-      // 均值 vs 中位数偏度
-      sTxt(fig, 30, 24, "【分布偏度与均值偏离】极端值对均值的剧烈拉扯", cb, 12, 700);
-
-      // 右偏分布曲线
-      sEl(fig, "line", { x1: 50, y1: 140, x2: 320, y2: 140, stroke: mut, "stroke-width": 1.5 });
-      sEl(fig, "path", { d: "M 50,140 Q 90,30 130,70 T 310,140 Z", fill: "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 2 });
-
-      // 众数 (峰值 x=100)
-      sEl(fig, "line", { x1: 100, y1: 45, x2: 100, y2: 140, stroke: mut, "stroke-width": 1.2, "stroke-dasharray": "3 3" });
-      sTxt(fig, 100, 154, "众数", mut, 10, 600, "middle");
-
-      // 中位数 (面积平分线 x=125)
-      sEl(fig, "line", { x1: 125, y1: 65, x2: 125, y2: 140, stroke: cc, "stroke-width": 2 });
-      sTxt(fig, 125, 154, "中位数", cc, 10.5, 700, "middle");
-
-      // 平均数 (受右侧长尾拉高 x=160)
-      sEl(fig, "line", { x1: 160, y1: 85, x2: 160, y2: 140, stroke: cd, "stroke-width": 2 });
-      sTxt(fig, 160, 154, "平均数", cd, 10.5, 700, "middle");
-
-      sTxt(fig, 230, 100, "右侧长尾拉扯 ⟹", cd, 10.5, 600);
-
-      // 右侧总结
-      sEl(fig, "rect", { x: 335, y: 25, width: 175, height: 125, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 345, 48, "偏度分布核心结论：", cd, 11.5, 700);
-      sTxt(fig, 345, 70, "• 对称分布: 均值 = 中位数", ca, 10.5);
-      sTxt(fig, 345, 92, "• 右偏(长尾在右): 均值 > 中位数", cb, 10.5, 700);
-      sTxt(fig, 345, 114, "• 左偏(长尾在左): 均值 < 中位数", cc, 10.5);
-      sTxt(fig, 345, 134, "★ 中位数更抗极端值干扰！", cd, 10, 700);
+      sTxt(fig, 180, 18, "本例右偏模型", cb, 16, 700, "middle");
+      // A normalized triangular density on [0,6], with mode 1.
+      // Its area is 1, centroid x=7/3, and F(m)=1-(6-m)^2/30=1/2.
+      var sx = function (x) { return 50 + 45 * x; };
+      var sy = function (density) { return 140 - 270 * density; };
+      var density = function (x) { return x <= 1 ? x / 3 : (6 - x) / 15; };
+      var middle = 6 - Math.sqrt(15), mean = 7 / 3;
+      sEl(fig, "line", { x1: sx(0), y1: sy(0), x2: sx(6), y2: sy(0), stroke: mut, "stroke-width": 1.5 });
+      sEl(fig, "path", { "data-density": "triangle", d: "M " + sx(0) + "," + sy(0) + " L " + sx(1) + "," + sy(1 / 3) + " L " + sx(6) + "," + sy(0) + " Z", fill: "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 2 });
+      [{key: "mode", x: 1, c: mut, mark: "众数", y: 38}, {key: "median", x: middle, c: cc, mark: "中位数", y: 156}, {key: "mean", x: mean, c: cd, mark: "均值", y: 176}].forEach(function (item) {
+        sEl(fig, "line", { "data-statistic": item.key, x1: sx(item.x), y1: sy(density(item.x)), x2: sx(item.x), y2: sy(0), stroke: item.c, "stroke-width": 1.7, "stroke-dasharray": item.key === "mode" ? "3 3" : "none" });
+        sTxt(fig, sx(item.x), item.y, item.mark, item.c, 16, 700, "middle");
+      });
+      sTxt(fig, sx(0), 156, "0", mut, 11, 400, "middle");
+      sTxt(fig, sx(6), 156, "6", mut, 11, 400, "middle");
     } else if (mode === "percentile") {
       // 百分位数双分支算法
       sTxt(fig, 30, 24, "【第 p 百分位数判定流程】双分支规范算法", cd, 12, 700);
@@ -769,7 +751,7 @@
       var m = b.getAttribute("data-m");
       drawHist(m);
       if (m === "hist") status.textContent = "直方图面积=频率：每个小矩形面积才等于频率，总面积恒等于 1.0。";
-      else if (m === "skew") status.textContent = "偏度影响：右偏长尾剧烈拉高平均数，而中位数稳健抗干扰。";
+      else if (m === "skew") status.textContent = "本例取值0至6，总面积为1：众数=1（峰顶）；中位数=6−√15≈2.13（左右面积各半）；均值=7/3≈2.33（三角形的横向重心）。本例均值大于中位数、再大于众数。这个顺序来自本例计算，不能仅凭长尾给任意分布套顺序。分组数据用组中值估计均值时，要写近似号。";
       else if (m === "percentile") status.textContent = "百分位数：i=np% 若非整数向上进一位；若为整数取两数平均值。";
     };
   });

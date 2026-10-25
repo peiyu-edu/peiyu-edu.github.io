@@ -7,31 +7,31 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
-  .fig .axis { stroke: var(--muted); stroke-width: 2; }
-  .fig .grid { stroke: var(--line); stroke-width: 1; }
-  .fig text.num { font-size: 20px; fill: var(--muted); text-anchor: middle; }
-  .fig text.lab { font-size: 22px; font-weight: 700; }
-  .fig .curve { fill: none; stroke: var(--a); stroke-width: 3; opacity: .55; }
-  .fig .piece { fill: none; stroke: var(--a); stroke-width: 6; stroke-linecap: round; }
-  .fig .band { fill: var(--hl-soft); }
-  .fig .asym { stroke: var(--no); stroke-width: 2; stroke-dasharray: 6 6; }
-  .fig .sym { stroke: var(--c); stroke-width: 2; stroke-dasharray: 3 5; }
-  .fig .ctr { fill: var(--card); stroke: var(--c); stroke-width: 3; }
-  .fig .guide { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 4 5; }
-  .fig .track { stroke: var(--line); stroke-width: 6; stroke-linecap: round; }
-  .fig .ptMax { fill: var(--b); }
-  .fig .ptMin { fill: var(--c); }
-  .fig .ptEnd { fill: var(--card); stroke: var(--fg); stroke-width: 2.5; }
-  .fig .h { stroke: var(--fg); stroke-width: 3; cursor: grab; outline: none; fill: var(--hl); }
-  .fig .h:focus-visible { stroke: var(--no); stroke-width: 5; }
-  .fig .hit { fill: transparent; cursor: grab; }
-  .fig text.tb { fill: var(--b); }
-  .fig text.tc { fill: var(--c); }
-  .fig text.tno { fill: var(--no); font-size: 20px; font-weight: 700; text-anchor: middle; }
+.fig .axis { stroke: var(--muted); stroke-width: 2; }
+.fig .grid { stroke: var(--line); stroke-width: 1; }
+.fig text.num { font-size: 20px; fill: var(--muted); text-anchor: middle; }
+.fig text.lab { font-size: 22px; font-weight: 700; }
+.fig .curve { fill: none; stroke: var(--a); stroke-width: 3; opacity: .55; }
+.fig .piece { fill: none; stroke: var(--a); stroke-width: 6; stroke-linecap: round; }
+.fig .band { fill: var(--hl-soft); }
+.fig .asym { stroke: var(--no); stroke-width: 2; stroke-dasharray: 6 6; }
+.fig .sym { stroke: var(--c); stroke-width: 2; stroke-dasharray: 3 5; }
+.fig .ctr { fill: var(--card); stroke: var(--c); stroke-width: 3; }
+.fig .guide { stroke: var(--dim); stroke-width: 1.5; stroke-dasharray: 4 5; }
+.fig .track { stroke: var(--line); stroke-width: 6; stroke-linecap: round; }
+.fig .ptMax { fill: var(--b); }
+.fig .ptMin { fill: var(--c); }
+.fig .ptEnd { fill: var(--card); stroke: var(--fg); stroke-width: 2.5; }
+.fig .h { stroke: var(--fg); stroke-width: 3; cursor: grab; outline: none; fill: var(--hl); }
+.fig .h:focus-visible { stroke: var(--no); stroke-width: 5; }
+.fig .hit { fill: transparent; cursor: grab; }
+.fig text.tb { fill: var(--b); }
+.fig text.tc { fill: var(--c); }
+.fig text.tno { fill: var(--no); font-size: 20px; font-weight: 700; text-anchor: middle; }
   .fns button.on { background: var(--a); color: #fff; }
   .rd { font-size: 16px; line-height: 1.75; }
   .rd .row { margin: 3px 0; }
@@ -42,11 +42,11 @@
   table.rec td, table.rec th { vertical-align: top; }
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
-  .fig .rad { stroke: var(--fg); stroke-width: 2.5; }
-  .fig .proj { stroke: var(--hl); stroke-width: 5; stroke-linecap: round; }
-  .fig .arc { fill: none; stroke: var(--c); stroke-width: 2.5; }
-  .fig .dot { fill: var(--hl); stroke: var(--fg); stroke-width: 2; }
-  .fig .ring { fill: none; stroke: var(--muted); stroke-width: 2; }
+.fig .rad { stroke: var(--fg); stroke-width: 2.5; }
+.fig .proj { stroke: var(--hl); stroke-width: 5; stroke-linecap: round; }
+.fig .arc { fill: none; stroke: var(--c); stroke-width: 2.5; }
+.fig .dot { fill: var(--hl); stroke: var(--fg); stroke-width: 2; }
+.fig .ring { fill: none; stroke: var(--muted); stroke-width: 2; }
 </style>
 </head>
 <body data-sec="b1-5-4">
@@ -476,18 +476,19 @@
     mk("text", { x: sx(0) + 10, y: YTOP + 20, "class": "lab" }, G.axes).textContent = "y";
   }
 
-  // 曲线：k 从 lo 到 hi（实数），正切在渐近线处断开
   function path(f, lo, hi) {
-    var d = "", pen = false, n = Math.max(2, Math.ceil((hi - lo) * 8));
+    var d = "", pen = false, lastBranch = null, n = Math.max(2, Math.ceil((hi - lo) * 8));
     for (var i = 0; i <= n; i++) {
       var k = lo + (hi - lo) * i / n, y;
       if (f === "tan") {
         var off = mod(k - 6, 12);
         if (off < 0.02 || off > 11.98) { pen = false; continue; }
+        var branch = Math.floor((k - 6) / 12);
+        if (lastBranch !== branch) pen = false;
+        lastBranch = branch;
         y = Math.tan(k * Math.PI / 12);
-        y = Math.max(-8, Math.min(8, y));
       } else y = f === "sin" ? Math.sin(k * Math.PI / 12) : Math.cos(k * Math.PI / 12);
-      d += (pen ? "L" : "M") + sx(k).toFixed(1) + " " + sy(y).toFixed(1);
+      d += (pen ? "L" : "M") + sx(k).toFixed(6) + " " + sy(y).toFixed(6);
       pen = true;
     }
     return d;
@@ -524,6 +525,11 @@
 
   function draw() {
     var f = st.f, a = st.a, b = st.b;
+    if (f === "tan") {
+      var extent = 3;
+      [a, b].forEach(function (k) { var y = val(f, k); if (isFinite(y)) extent = Math.max(extent, Math.abs(y)); });
+      YS.tan = 120 / extent;
+    }
     drawAxes();
     G.plot.innerHTML = ""; G.marks.innerHTML = ""; G.labels.innerHTML = "";
     G.band.setAttribute("x", sx(a) - (a === b ? 2 : 0));
@@ -531,7 +537,7 @@
     if (f === "tan") {
       for (var q = -18; q <= 18; q += 12) mk("line", { x1: sx(q), y1: YTOP, x2: sx(q), y2: YBOT, "class": "asym" }, G.plot);
     }
-    mk("path", { d: path(f, KMIN - 0.6, KMAX + 0.6), "class": "curve" }, G.plot);
+    mk("path", { "data-math-curve": f, "data-sy": YS[f], d: path(f, KMIN - 0.6, KMAX + 0.6), "class": "curve" }, G.plot);
     if (b > a) mk("path", { d: path(f, a, b), "class": "piece" }, G.plot);
     if (st.sym) drawSym();
     [a, b].forEach(function (k) {
@@ -543,11 +549,12 @@
       mk("circle", { cx: sx(b), cy: sy(val(f, b)), r: 6, "class": "ptEnd" }, G.marks);
       mk("circle", { cx: sx(r.mx), cy: sy(val(f, r.mx)), r: 8, "class": "ptMax" }, G.marks);
       mk("circle", { cx: sx(r.mn), cy: sy(val(f, r.mn)), r: 8, "class": "ptMin" }, G.marks);
-    } else if (!r.asym.length) {
-      mk("circle", { cx: sx(a), cy: sy(Math.max(-8, Math.min(8, val(f, a)))), r: 6, "class": "ptEnd" }, G.marks);
-      mk("circle", { cx: sx(b), cy: sy(Math.max(-8, Math.min(8, val(f, b)))), r: 6, "class": "ptEnd" }, G.marks);
     } else {
-      mk("text", { x: 280, y: YTOP + 24, "class": "tno" }, G.labels).textContent = "区间里有渐近线";
+      [a, b].forEach(function (k) {
+        var y = val(f, k);
+        if (isFinite(y)) mk("circle", { "data-tan-endpoint": k, cx: sx(k), cy: sy(y), r: 6, "class": "ptEnd" }, G.marks);
+      });
+      if (r.asym.length) mk("text", { x: 280, y: YTOP + 24, "class": "tno" }, G.labels).textContent = "区间里有渐近线";
     }
     placeHandles();
     readout(r);
@@ -886,31 +893,33 @@
         mk("text", { x: 228, y: 106, fill: "var(--b)", "font-size": 10.5, "font-weight": 600 }, fig).textContent = "• 对称轴过波峰波谷：x = kπ (含 y 轴 x=0)";
         mk("text", { x: 228, y: 128, fill: "var(--hl)", "font-size": 10.5, "font-weight": 600 }, fig).textContent = "• 对称中心过平衡零点：(π/2 + kπ, 0)";
       } else {
-        [ox + 5, ox + 95, ox + 185].forEach(function (lx) {
-          mk("line", { x1: lx, y1: oy - 55, x2: lx, y2: oy + 55, stroke: "var(--muted)", "stroke-width": 1.2, "stroke-dasharray": "3 2" }, fig);
+        var defs = mk("defs", {}, fig), clip = mk("clipPath", { id: "micro-tan-window" }, defs);
+        mk("rect", { x: 20, y: 25, width: 190, height: 110 }, clip);
+        function tx(t) { return ox + t / (2 * Math.PI) * w; }
+        function ty(t) { return oy - 18 * Math.tan(t); }
+        [Math.PI / 2, 3 * Math.PI / 2].forEach(function (t) {
+          mk("line", { "data-tan-asymptote": t, x1: tx(t), y1: 25, x2: tx(t), y2: 135, stroke: "var(--muted)", "stroke-width": 1.2, "stroke-dasharray": "3 2" }, fig);
         });
-        mk("text", { x: ox + 98, y: oy - 46, fill: "var(--muted)", "font-size": 9 }, fig).textContent = "x=π/2";
-
-        function drawTanBranch(branchCx) {
-          var dt = "";
-          for (var k = -40; k <= 40; k++) {
-            var ang = (k / 45) * (Math.PI / 2);
-            var px = branchCx + (k / 45) * 36;
-            var py = oy - Math.max(-50, Math.min(50, 18 * Math.tan(ang)));
-            dt += (k === -40 ? "M" : "L") + px.toFixed(1) + " " + py.toFixed(1);
+        [[0, Math.PI / 2 - 0.01], [Math.PI / 2 + 0.01, 3 * Math.PI / 2 - 0.01], [3 * Math.PI / 2 + 0.01, 2 * Math.PI]].forEach(function (span) {
+          var d = "";
+          for (var i = 0; i <= 240; i++) {
+            var t = span[0] + (span[1] - span[0]) * i / 240;
+            d += (i ? "L" : "M") + tx(t).toFixed(6) + " " + ty(t).toFixed(6);
           }
-          mk("path", { d: dt, fill: "none", stroke: "var(--hl)", "stroke-width": 2.2 }, fig);
-          mk("circle", { cx: branchCx, cy: oy, r: 3.5, fill: "var(--a)" }, fig);
-        }
-        drawTanBranch(ox + 50);
-        drawTanBranch(ox + 140);
-
+          mk("path", { "data-math-curve": "micro-tan", d: d, fill: "none", stroke: "var(--hl)", "stroke-width": 2.2, "clip-path": "url(#micro-tan-window)" }, fig);
+        });
+        [0, Math.PI, 2 * Math.PI].forEach(function (t) {
+          mk("circle", { "data-tan-zero": t, cx: tx(t), cy: oy, r: 3.5, fill: "var(--a)" }, fig);
+        });
+        mk("text", { x: 70, y: 18, fill: "var(--muted)", "font-size": 10 }, fig).textContent = "π/2";
+        mk("text", { x: 160, y: 18, fill: "var(--muted)", "font-size": 10 }, fig).textContent = "3π/2";
+        mk("text", { x: 115, y: 150, fill: "var(--fg)", "font-size": 10 }, fig).textContent = "π";
         mk("rect", { x: 220, y: 15, width: 290, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, fig);
-        mk("text", { x: 228, y: 38, fill: "var(--hl)", "font-size": 13, "font-weight": 700 }, fig).textContent = "y = tan x 核心图象指征";
-        mk("text", { x: 228, y: 62, fill: "var(--fg)", "font-size": 10.5 }, fig).textContent = "• 渐近线：x = π/2 + kπ，靠近时单侧无限冲向 ±∞";
-        mk("text", { x: 228, y: 84, fill: "var(--fg)", "font-size": 10.5 }, fig).textContent = "• 周期减半：T = π；奇函数，图象关于原点中心对称";
-        mk("text", { x: 228, y: 106, fill: "var(--a)", "font-size": 10.5, "font-weight": 600 }, fig).textContent = "• 单调性：在每个区间 (-π/2+kπ, π/2+kπ) 内递增";
-        mk("text", { x: 228, y: 128, fill: "var(--hl)", "font-size": 10.5, "font-weight": 600 }, fig).textContent = "• 无对称轴！对称中心包含截距点 (kπ/2, 0)";
+        mk("text", { x: 228, y: 38, fill: "var(--hl)", "font-size": 13, "font-weight": 700 }, fig).textContent = "y = tan x";
+        mk("text", { x: 228, y: 62, fill: "var(--fg)", "font-size": 10.5 }, fig).textContent = "• 渐近线：x = π/2 + kπ";
+        mk("text", { x: 228, y: 84, fill: "var(--fg)", "font-size": 10.5 }, fig).textContent = "• 周期 T = π；奇函数；零点 x = kπ";
+        mk("text", { x: 228, y: 106, fill: "var(--a)", "font-size": 10.5 }, fig).textContent = "• 每个 (-π/2+kπ, π/2+kπ) 内递增";
+        mk("text", { x: 228, y: 128, fill: "var(--hl)", "font-size": 10.5 }, fig).textContent = "• 对称中心 (kπ/2,0)，可不在图象上";
       }
 
       [].forEach.call(bar.querySelectorAll("button"), function (b) {
@@ -919,7 +928,7 @@
       var noteMap = {
         sin: "正弦函数：从 (0,0) 开始起步，<b>周期 2π，对称轴过峰谷 x=π/2+kπ，对称中心过零点 (kπ,0)</b>",
         cos: "余弦函数：正弦向左平移 π/2，<b>偶函数关于 y 轴对称，对称轴 x=kπ，对称中心 (π/2+kπ,0)</b>",
-        tan: "正切函数：<b>周期缩短为 π</b>，两旁被竖直渐近线隔离，<b>无极值点、无对称轴，仅段内单调递增</b>"
+        tan: "正切函数：<b>周期缩短为 π</b>，两旁被竖直渐近线隔离，<b>无极值点、无对称轴，仅各连续分支内递增；对称中心 (kπ/2,0) 中，奇数 k 处不属于函数图象</b>"
       };
       if (note) note.innerHTML = noteMap[mode] || "";
     }
@@ -931,28 +940,24 @@
     if (trap) {
       trap.innerHTML = "";
       var tox = 60, toy = 70;
+      function px(deg) { return tox + (deg - 90) * 8; }
+      function py(deg) { return toy - 0.8 * Math.tan(deg * Math.PI / 180); }
+      var defs = mk("defs", {}, trap), clip = mk("clipPath", { id: "trap-tan-window" }, defs);
+      mk("rect", { x: 15, y: 12, width: 90, height: 116 }, clip);
       mk("line", { x1: 15, y1: toy, x2: 105, y2: toy, stroke: "var(--muted)", "stroke-width": 1 }, trap);
       mk("line", { x1: tox, y1: 12, x2: tox, y2: 128, stroke: "var(--hl)", "stroke-width": 1.5, "stroke-dasharray": "3 2" }, trap);
-      mk("text", { x: tox + 4, y: 18, fill: "var(--hl)", "font-size": 9, "font-weight": 700 }, trap).textContent = "x=π/2";
-
-      var dL = "M 20 " + (toy + 8) + " Q 45 " + (toy - 5) + " 55 18";
-      mk("path", { d: dL, fill: "none", stroke: "var(--a)", "stroke-width": 2 }, trap);
-      mk("circle", { cx: 55, cy: 18, r: 3, fill: "var(--a)" }, trap);
-      mk("text", { x: 6, y: 36, fill: "var(--a)", "font-size": 8.5 }, trap).textContent = "89°→+57";
-
-      var dR = "M 65 122 Q 75 " + (toy + 5) + " 100 " + (toy - 8);
-      mk("path", { d: dR, fill: "none", stroke: "var(--b)", "stroke-width": 2 }, trap);
-      mk("circle", { cx: 65, cy: 122, r: 3, fill: "var(--b)" }, trap);
-      mk("text", { x: 62, y: 134, fill: "var(--b)", "font-size": 8.5 }, trap).textContent = "91°→-57";
-
-      mk("line", { x1: 56, y1: 24, x2: 64, y2: 116, stroke: "var(--hl)", "stroke-width": 1.8, "stroke-dasharray": "2 2" }, trap);
-      mk("text", { x: 50, y: 74, fill: "var(--hl)", "font-size": 11, "font-weight": 700 }, trap).textContent = "⚡暴跌";
-
-      mk("text", { x: 112, y: 32, fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }, trap).textContent = "翻车点：正切跨渐近线连并集";
-      mk("text", { x: 112, y: 54, fill: "var(--fg)", "font-size": 9.5 }, trap).textContent = "x 从 89° 增加到 91° 时：";
-      mk("text", { x: 112, y: 76, fill: "var(--hl)", "font-size": 9.5, "font-weight": 600 }, trap).textContent = "tan 89°≈+57 暴跌至 -57";
-      mk("text", { x: 112, y: 96, fill: "var(--fg)", "font-size": 9.5 }, trap).textContent = "函数值严重下跌，绝不单调！";
-      mk("text", { x: 112, y: 116, fill: "var(--b)", "font-size": 9.5, "font-weight": 600 }, trap).textContent = "必须逐段写，绝不可连并集！";
+      [[84.5,89.9],[90.1,95.5]].forEach(function(span){
+        var d="";
+        for(var i=0;i<=100;i++){var a=span[0]+(span[1]-span[0])*i/100;d+=(i?"L":"M")+px(a).toFixed(6)+" "+py(a).toFixed(6);}
+        mk("path", { "data-math-curve":"trap-tan", d:d,fill:"none",stroke:"var(--a)","stroke-width":2,"clip-path":"url(#trap-tan-window)" },trap);
+      });
+      [89,91].forEach(function(a){mk("circle",{"data-tan-degree":a,cx:px(a),cy:py(a),r:3,fill:"var(--b)"},trap);});
+      mk("text", {x:30,y:140,fill:"var(--fg)","font-size":10},trap).textContent="89°";
+      mk("text", {x:72,y:140,fill:"var(--fg)","font-size":10},trap).textContent="91°";
+      mk("text", {x:112,y:32,fill:"var(--hl)","font-size":11,"font-weight":700},trap).textContent="跨渐近线，不再整体递增";
+      mk("text", {x:112,y:58,fill:"var(--fg)","font-size":10},trap).textContent="89° < 91°，但 tan89° > tan91°";
+      mk("text", {x:112,y:84,fill:"var(--fg)","font-size":10},trap).textContent="两值约为 +57.29、−57.29";
+      mk("text", {x:112,y:110,fill:"var(--b)","font-size":10},trap).textContent="90°处无定义，两支不能连线";
     }
 
     drawTrig("sin");

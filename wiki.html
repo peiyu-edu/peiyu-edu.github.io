@@ -116,9 +116,11 @@
     padding: 10px; margin: 12px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
     box-shadow: 0 4px 16px rgba(26,40,34,.05);
   }
-  .kg-svg-wrap svg { display: block; width: 100%; min-width: 820px; height: auto; user-select: none; }
+  .kg-svg-wrap svg { display: block; width: 100%; min-width: 1450px; height: auto; user-select: none; }
   .kg-svg-wrap svg g[data-map-pick] rect { transition: transform .12s ease, filter .12s ease; }
   .kg-svg-wrap svg g[data-map-pick]:hover { opacity: 1 !important; }
+  .kg-svg-wrap:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+  .kg-scroll-hint { font-size: 13px; margin: 4px 0 8px; color: var(--muted); }
   .kg-inspector {
     background: var(--card); border: 1.5px solid var(--a); border-radius: 14px;
     padding: 16px 18px; margin: 14px 0; scroll-margin-top: 64px;
@@ -140,6 +142,8 @@
   }
   .kg-flow-box.pre-box { border-left: 3.5px solid var(--c); }
   .kg-flow-box.unl-box { border-left: 3.5px solid var(--a); }
+  .kg-course-rel > summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+  .kg-course-rel[open] > summary { margin-bottom: 6px; }
   .kg-flow-lbl {
     font-size: 12.5px; font-weight: 700; color: var(--muted); margin-bottom: 6px;
     display: flex; align-items: center; justify-content: space-between;
@@ -175,8 +179,14 @@
   .kg-node-pill.is-unlock { border-color: var(--a); background: var(--ok-soft); font-weight: 600; }
   .kg-node-pill.st-mastered { border-left: 4px solid var(--a); }
   .kg-node-pill.st-weak { border-left: 4px solid var(--no); background: var(--no-soft); }
+
+  /* Keep Labs labels readable inside a local native scroll region. */
+  .lab .lab-figure-scroll { max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; border-radius:10px; }
+  .lab .lab-figure-scroll:focus-visible { outline:2px solid var(--a); outline-offset:2px; }
+  .lab .lab-figure-scroll > svg.lab-fig { min-width:360px; }
+  .lab .lab-scroll-hint { margin:4px 0 7px; font-size:13px; line-height:1.6; color:var(--muted); }
 </style>
-<script defer src="assets/hci.js"></script>
+<script defer src="assets/hci.js?v=vs-c5846d8946b2"></script>
 </head>
 <body>
 <div class="wrap">
@@ -292,7 +302,8 @@
   </div>
 
   <!-- 交互式 SVG 地铁拓扑图 -->
-  <div class="kg-svg-wrap">
+  <p class="small kg-scroll-hint" id="kgScrollHint">完整图谱可左右滑动，或聚焦图谱后按 ← / → 键查看；所有小节也在下方泳道列表中。</p>
+  <div class="kg-svg-wrap" tabindex="0" role="region" aria-label="可左右滚动的73节知识图谱" aria-describedby="kgScrollHint">
     <svg id="kgSvg" viewBox="0 0 1120 604" role="img" aria-label="高中数学 73 节四大主线与跨章先修拓扑图谱"></svg>
   </div>
 
@@ -318,7 +329,7 @@
 
 <!-- ==================== TAB 3：易错反例微实验室 ==================== -->
 <section class="step" id="tab-labs">
-  <p class="small">高中数学丢分最多的地方，是「不满足前提条件却硬套公式」。每个实验先猜一句，再亲手拨动反例开关，把红线刻进肌肉记忆。实验由 <code>assets/wiki-labs.js</code> 的三种模板（滑块 / 切换 / 路线对比）生成，卡片库里带 🧪 的卡也能原地打开同一个实验。</p>
+  <p class="small">高中数学丢分最多的地方，是「不满足前提条件却硬套公式」。每个实验先猜一句，再亲手拨动反例开关，把红线刻进肌肉记忆。卡片库里带 🧪 的卡也能原地打开同一个实验。</p>
   <div id="labList"></div>
 </section>
 
@@ -326,12 +337,49 @@
 <footer>培玉智能 · 高中数学互动知识库（Wiki）。依据人教 A 版教材与教学约束提炼，真题与章节互动页双向联通。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="assets/wiki.js"></script>
+<script src="assets/wiki.js?v=vs-12d546b3f39c"></script>
 <script src="assets/wiki-cues.js"></script>
 <script src="assets/wiki-trainer.js"></script>
 <script src="assets/wiki-cards.js"></script>
-<script src="assets/wiki-labs.js"></script>
-<script src="assets/wiki-map-actions.js"></script>
+<script src="assets/wiki-labs.js?v=vs-49c29cab4227"></script>
+<script src="assets/wiki-map-actions.js?v=vs-943ff9bb98e6"></script>
+<script>
+(function () {
+  var nextLabHint = 0, scheduled = false;
+  function wrapLabFigures() {
+    document.querySelectorAll('.lab svg.lab-fig').forEach(function (svg) {
+      if (svg.parentElement.classList.contains('lab-figure-scroll')) return;
+      var holder = document.createElement('div'), hint = document.createElement('p');
+      holder.className = 'lab-figure-scroll';
+      holder.tabIndex = 0;
+      holder.setAttribute('role', 'region');
+      holder.setAttribute('aria-label', '实验图，可左右滚动');
+      hint.className = 'lab-scroll-hint';
+      hint.id = 'labScrollHint-' + (++nextLabHint);
+      hint.textContent = '图可左右滑动；键盘聚焦图框后按 ← / → 查看两端。';
+      holder.setAttribute('aria-describedby', hint.id);
+      svg.parentNode.insertBefore(hint, svg);
+      svg.parentNode.insertBefore(holder, svg);
+      holder.appendChild(svg);
+    });
+  }
+  var observer = new MutationObserver(function (records) {
+    var addedFigure = records.some(function (r) {
+      return Array.prototype.some.call(r.addedNodes, function (n) {
+        return n.nodeType === 1 && (n.matches('svg.lab-fig') || n.querySelector('svg.lab-fig'));
+      });
+    });
+    if (!addedFigure || scheduled) return;
+    scheduled = true;
+    queueMicrotask(function () { scheduled = false; wrapLabFigures(); });
+  });
+  ['labList', 'cardList'].forEach(function (id) {
+    var root = document.getElementById(id);
+    if (root) observer.observe(root, { childList:true, subtree:true });
+  });
+  wrapLabFigures();
+})();
+</script>
 <script>
 (function () {
   "use strict";
@@ -409,7 +457,7 @@
     if (curKind !== "all" && c.kind !== curKind) return false;
     if (curCh !== "all" && String(c.ch) !== curCh) return false;
     if (curQ) {
-      var hay = (c.title + " " + c.secName + " " + c.trig + " " + c.key + " " + c.warn + " " + (c.more || "") + " " + ((c.keywords || []).join(" "))).toLowerCase();
+      var hay = (c.title + " " + c.secName + " " + window.PEIYU_WIKI_HTML(c.trig) + " " + window.PEIYU_WIKI_HTML(c.key) + " " + window.PEIYU_WIKI_HTML(c.warn) + " " + (c.more || "") + " " + ((c.keywords || []).join(" "))).toLowerCase();
       if (hay.indexOf(curQ.toLowerCase()) < 0) return false;
     }
     return true;
@@ -435,10 +483,10 @@
             '<span class="tag">' + c.secName + "</span>" +
             '<h2 class="w-title">' + c.title + "</h2>" +
           "</div>" +
-          '<p class="w-trig"><b>🎯 什么时候用：</b>' + c.trig + "</p>" +
-          '<div class="key">' + c.key + "</div>" +
-          '<div class="warn"><b>⚠️ 易错红线：</b>' + c.warn + "</div>" +
-          (c.more ? '<details class="more"><summary>典型母题与深一层说明</summary><p class="small" style="margin:6px 0 2px">' + c.more + "</p></details>" : "") +
+          '<p class="w-trig"><b>🎯 什么时候用：</b>' + window.PEIYU_WIKI_HTML(c.trig) + "</p>" +
+          '<div class="key">' + window.PEIYU_WIKI_HTML(c.key) + "</div>" +
+          '<div class="warn"><b>⚠️ 易错红线：</b>' + window.PEIYU_WIKI_HTML(c.warn) + "</div>" +
+          (c.more ? '<details class="more"><summary>典型母题与深一层说明</summary><p class="small" style="margin:6px 0 2px">' + window.PEIYU_WIKI_HTML(c.more) + "</p></details>" : "") +
           '<div class="w-links">' +
             '<a class="act" href="lessons/' + c.sec + '.html#step3">👉 去 ' + c.secName.split(" ")[0] + " 节动手拖图</a>" +
             '<a class="sec-link" href="lessons/' + c.sec + '.html#step2">📖 完整讲解</a>' +
@@ -1052,11 +1100,11 @@
     var selMeta = SEC_META[curMapSec];
     var selCards = CARDS.filter(function (c) { return c.sec === curMapSec; });
     var selMst = mastery[curMapSec] || { total: 0, right: 0, wrong: 0, status: "untouched" };
-    var mstBadge = selMst.status === "mastered"
-      ? '<span class="w-badge concept">🟢 已点亮（答对 ' + selMst.right + "/" + selMst.total + "）</span>"
-      : (selMst.status === "weak"
-          ? '<span class="w-badge pitfall">🔴 待攻克（做错 ' + selMst.wrong + " 题）</span>"
-          : '<span class="tag">⚪ 尚未做题</span>');
+    var mstBadge = selMst.questionTotal > 0
+      ? (selMst.questionWrong > 0
+          ? '<span class="w-badge pitfall">🔴 真题有答错记录（' + selMst.questionWrong + ' / 已做 ' + selMst.questionTotal + ' 题）</span>'
+          : '<span class="w-badge concept">🟢 真题答对 ' + selMst.questionRight + '/' + selMst.questionTotal + ' 题</span>')
+      : '<span class="tag">⚪ 暂无真题作答记录</span>';
 
     var preBtns = (selMeta.prereqs || []).map(function (pid) {
       var pm = SEC_META[pid];
@@ -1101,10 +1149,10 @@
       "</div>" +
       (extraTags ? '<div style="margin:0 0 10px;display:flex;gap:6px;flex-wrap:wrap">' + extraTags + "</div>" : "") +
       '<div class="kg-flow-grid">' +
-        '<div class="kg-flow-box pre-box">' +
-          '<div class="kg-flow-lbl"><span>⬅️ 硬先修溯源（本节卡壳时先查）</span><span>直接 ' + (selMeta.prereqs || []).length + ' 节 / 累计 ' + totalPreCnt + ' 节</span></div>' +
+        '<details class="kg-flow-box pre-box kg-course-rel">' +
+          '<summary>课程关联（可选回看） · 直接 ' + (selMeta.prereqs || []).length + ' 节 / 累计 ' + totalPreCnt + ' 节</summary>' +
           '<div class="kg-chain-row">' + preBtns + "</div>" +
-        "</div>" +
+        "</details>" +
         '<div class="kg-flow-box unl-box">' +
           '<div class="kg-flow-lbl"><span>➡️ 学完本节解锁（后置综合应用）</span><span>直接 ' + (selMeta.unlocks || []).length + ' 节 / 累计 ' + totalUnlCnt + ' 节</span></div>' +
           '<div class="kg-chain-row">' + unlBtns + "</div>" +

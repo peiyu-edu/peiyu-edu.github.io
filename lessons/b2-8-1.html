@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -65,7 +65,7 @@
         <button class="btn ghost" type="button" data-poly="sect">空间截面规律</button>
       </div>
     </div>
-    <svg class="micro-fig" id="m-poly-fig" viewBox="0 0 520 180" role="img" aria-label="基本立体图形结构与截面图"></svg>
+    <svg class="micro-fig" id="m-poly-fig" viewBox="0 0 520 300" role="img" aria-label="基本立体图形结构与截面图"></svg>
     <p class="small" id="m-poly-status" style="margin:6px 0 0 0;min-height:20px;color:var(--text-dim)"></p>
   </div>
 
@@ -211,7 +211,7 @@
           <p>棱台必须由棱锥平行截取！<b>四条侧棱延长线必须交于同一点</b>。若不交于一点，无法复原为棱锥，属于伪棱台！</p>
         </div>
       </div>
-      <svg class="micro-fig" id="m-poly-trap-fig" viewBox="0 0 340 160" role="img" aria-label="真棱台与伪棱台侧棱汇交对比图" style="margin-top:8px"></svg>
+      <svg class="micro-fig" id="m-poly-trap-fig" viewBox="0 0 520 290" role="img" aria-label="真棱台与伪棱台侧棱汇交对比图" style="margin-top:8px"></svg>
     </div>
     <div class="trap-card">
       <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>侧面全等误断「正棱锥」</b></div>
@@ -353,8 +353,27 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="../assets/iso-bench.js"></script>
+<script src="../assets/iso-bench.js?v=vs-b03c46885f5f"></script>
 <script>
+
+/* Solid models use one orthonormal camera; every geometric primitive keeps its source coordinates. */
+function solidsAdd(target,tag,attrs,label){var n=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in attrs)n.setAttribute(k,attrs[k]);if(label!==undefined)n.textContent=label;target.appendChild(n);return n;}
+function solidsText(target,x,y,label){return solidsAdd(target,"text",{x:x,y:y,fill:"var(--fg)","font-size":24,"text-anchor":"middle"},label);}
+function solidsChart(target,v){
+ var yaw=(v.yaw===undefined?35:v.yaw)*Math.PI/180,pitch=(v.pitch===undefined?20:v.pitch)*Math.PI/180,cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+ function P(p){return[v.ox+v.u*(cy*p[0]-sy*p[1]),v.oy+v.u*(sp*(sy*p[0]+cy*p[1])-cp*p[2])];}
+ function meta(a,xyz,role){a["data-xyz"]=JSON.stringify(xyz);a["data-role"]=role;a["data-ox"]=v.ox;a["data-oy"]=v.oy;a["data-u"]=v.u;a["data-yaw"]=yaw;a["data-pitch"]=pitch;return a;}
+ function line(a,b,role,dash){var A=P(a),B=P(b);return solidsAdd(target,"line",meta({x1:A[0],y1:A[1],x2:B[0],y2:B[1],stroke:role==="extension"?"var(--b)":"var(--a)","stroke-width":2,"stroke-dasharray":dash||"none"},[a,b],role||"edge"));}
+ function poly(points,role,fill){return solidsAdd(target,"polygon",meta({points:points.map(P).map(function(p){return p.join(",");}).join(" "),fill:fill||"none",stroke:"var(--muted)","stroke-width":1.5},points,role||"face"));}
+ function dot(p,role,label,dx,dy){var q=P(p);var e=solidsAdd(target,"circle",meta({cx:q[0],cy:q[1],r:4,fill:"var(--b)"},p,role||"point"));if(label)solidsText(target,q[0]+(dx||0),q[1]+(dy||-15),label);return e;}
+ function curve(points,role,dash){return solidsAdd(target,"path",meta({d:points.map(function(p,i){var q=P(p);return(i?"L":"M")+q[0]+" "+q[1];}).join(" "),fill:"none",stroke:"var(--a)","stroke-width":2,"stroke-dasharray":dash||"none"},points,role||"curve"));}
+ return{P:P,line:line,poly:poly,dot:dot,curve:curve,meta:meta};
+}
+function solidsCube(s){var q=[];for(var i=0;i<8;i++)q.push([(i&1?1:-1)*s/2,(i&2?1:-1)*s/2,(i&4?1:-1)*s/2]);return q;}
+function solidsEdges(){var q=[];for(var i=0;i<8;i++)for(var bit=1;bit<=4;bit*=2)if(!(i&bit))q.push([i,i|bit]);return q;}
+function solidsFrustum(kind){var base=[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],apex=[0,0,4],top=base.map(function(p){return kind==="prism"?[p[0],p[1],2.2]:kind==="fake"?[p[0]*.5,p[1]*.8,2]:[p[0]*.5,p[1]*.5,2];});return{base:base,top:top,apex:apex};}
+function solidsDrawFrustum(target,v,kind,extend){var m=solidsFrustum(kind),c=solidsChart(target,v);c.poly(m.base,"base");c.poly(m.top,"top");m.base.forEach(function(p,i){var e=c.line(p,m.top[i],"lateral");e.setAttribute("data-kind",kind);if(extend){var end=kind==="prism"?[p[0],p[1],3.4]:kind==="fake"?m.top[i].map(function(x,j){return x+.6*(x-p[j]);}):m.apex;c.line(m.top[i],end,"extension","4 4");}});if(extend&&kind==="frustum")c.dot(m.apex,"apex","S",12,-10);return m;}
+function solidsSection(vertices,edges){var out=[];edges.forEach(function(e){var a=vertices[e[0]],b=vertices[e[1]],fa=a[0]+a[1]+a[2],fb=b[0]+b[1]+b[2];if(fa*fb<0){var t=fa/(fa-fb),p=a.map(function(x,i){return x+t*(b[i]-x);});out.push(p);}});var u=[1/Math.sqrt(2),-1/Math.sqrt(2),0],v=[1/Math.sqrt(6),1/Math.sqrt(6),-2/Math.sqrt(6)];function angle(p){return Math.atan2(p.reduce(function(s,x,i){return s+x*v[i];},0),p.reduce(function(s,x,i){return s+x*u[i];},0));}out.sort(function(a,b){return angle(a)-angle(b);});return out;}
 (function () {
   "use strict";
 
@@ -600,106 +619,12 @@
     return n;
   }
   function epDraw() {
-    if (!epSvg) return;
-    epSvg.innerHTML = "";
-    var isP = epMode === "prism";
-    // 三个卡片背景框
-    var cards = [
-      { cx: 90, title: "① 标准直四棱柱(粉笔盒)", sub: "侧棱互相平行 ✓ 是棱柱", ok: true, hi: isP },
-      { cx: 260, title: "② 四棱台灯罩(反例1)", sub: "侧棱交于一点 ✗ 非棱柱", ok: false, hi: !isP },
-      { cx: 430, title: "③ 扭曲多面体(反例2)", sub: "侧棱错位歪斜 ✗ 非棱柱", ok: false, hi: !isP }
-    ];
-    cards.forEach(function (c, idx) {
-      var g = epEl("g", { style: "cursor:pointer" }, epSvg);
-      var col = c.ok ? "var(--a)" : "var(--no)";
-      var bg = c.hi ? (c.ok ? "var(--ok-soft)" : "var(--no-soft)") : "var(--card)";
-      epEl("rect", { x: c.cx - 78, y: 8, width: 156, height: 196, rx: 10, fill: bg, stroke: c.hi ? col : "var(--line)", "stroke-width": c.hi ? 2.2 : 1.2 }, g);
-      epEl("text", { x: c.cx, y: 27, "text-anchor": "middle", "font-size": 13, "font-weight": 700, fill: c.hi ? col : "var(--fg)" }, g).textContent = c.title;
-      epEl("text", { x: c.cx, y: 192, "text-anchor": "middle", "font-size": 12.5, "font-weight": 700, fill: col }, g).textContent = c.sub;
-      g.onclick = function () { epMode = idx === 0 ? "prism" : "frustum"; epDraw(); };
-    });
-
-    function quad(pts, fill, stroke, dash) {
-      var s = pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
-      var a = { points: s, fill: fill, stroke: stroke, "stroke-width": 1.8, "stroke-linejoin": "round" };
-      if (dash) a["stroke-dasharray"] = dash;
-      epEl("polygon", a, epSvg);
-    }
-    function seg(p1, p2, stroke, w, dash) {
-      var a = { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: stroke, "stroke-width": w || 2 };
-      if (dash) a["stroke-dasharray"] = dash;
-      epEl("line", a, epSvg);
-    }
-
-    // ① 直四棱柱 (cx=90)
-    var pB = [[44, 162], [112, 162], [134, 142], [66, 142]];
-    var pT = [[44, 86], [112, 86], [134, 66], [66, 66]];
-    quad([pB[0], pB[1], pT[1], pT[0]], "rgba(47,122,86,0.12)", "none");
-    quad([pB[1], pB[2], pT[2], pT[1]], "rgba(47,122,86,0.20)", "none");
-    quad(pT, "rgba(47,122,86,0.26)", "var(--a)");
-    seg(pB[0], pB[3], "var(--muted)", 1.3, "3,3");
-    seg(pB[3], pB[2], "var(--muted)", 1.3, "3,3");
-    seg(pB[3], pT[3], "var(--muted)", 1.5, "3,3");
-    seg(pB[0], pB[1], "var(--a)", 1.8);
-    seg(pB[1], pB[2], "var(--a)", 1.8);
-    [0, 1, 2].forEach(function (i) { seg(pB[i], pT[i], "var(--a)", 2.4); });
-    if (epExt) {
-      [0, 1, 2, 3].forEach(function (i) {
-        seg(pT[i], [pT[i][0], pT[i][1] - 26], "var(--a)", 1.5, "3,3");
-      });
-      epEl("text", { x: 90, y: 52, "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, fill: "var(--a)" }, epSvg).textContent = "延长线永远平行";
-    }
-
-    // ② 四棱台灯罩 (cx=260)
-    var fB = [[210, 164], [288, 164], [312, 142], [234, 142]];
-    var fT = [[232, 102], [274, 102], [287, 90], [245, 90]];
-    var apex = [260, 44];
-    quad([fB[0], fB[1], fT[1], fT[0]], "rgba(217,72,62,0.12)", "none");
-    quad([fB[1], fB[2], fT[2], fT[1]], "rgba(217,72,62,0.20)", "none");
-    quad(fT, "rgba(217,72,62,0.25)", "var(--no)");
-    seg(fB[0], fB[3], "var(--muted)", 1.3, "3,3");
-    seg(fB[3], fB[2], "var(--muted)", 1.3, "3,3");
-    seg(fB[3], fT[3], "var(--muted)", 1.5, "3,3");
-    seg(fB[0], fB[1], "var(--no)", 1.8);
-    seg(fB[1], fB[2], "var(--no)", 1.8);
-    [0, 1, 2].forEach(function (i) { seg(fB[i], fT[i], "var(--no)", 2.4); });
-    if (epExt) {
-      [0, 1, 2, 3].forEach(function (i) { seg(fT[i], apex, "var(--no)", 1.6, "3,3"); });
-      epEl("circle", { cx: apex[0], cy: apex[1], r: 4, fill: "var(--no)" }, epSvg);
-      epEl("text", { x: apex[0] + 8, y: apex[1] + 4, "font-size": 12, "font-weight": 700, fill: "var(--no)" }, epSvg).textContent = "交于一点 S";
-    }
-
-    // ③ 扭曲侧面多面体 (cx=430)：上底平行下底，但水平错位旋转导致侧棱歪斜不平行
-    var tB = [[382, 162], [452, 162], [474, 142], [404, 142]];
-    var tT = [[398, 86], [442, 86], [478, 66], [412, 66]];
-    quad([tB[0], tB[1], tT[1], tT[0]], "rgba(217,72,62,0.12)", "none");
-    quad([tB[1], tB[2], tT[2], tT[1]], "rgba(217,72,62,0.20)", "none");
-    quad(tT, "rgba(217,72,62,0.25)", "var(--no)");
-    seg(tB[0], tB[3], "var(--muted)", 1.3, "3,3");
-    seg(tB[3], tB[2], "var(--muted)", 1.3, "3,3");
-    seg(tB[3], tT[3], "var(--muted)", 1.5, "3,3");
-    seg(tB[0], tB[1], "var(--no)", 1.8);
-    seg(tB[1], tB[2], "var(--no)", 1.8);
-    [0, 1, 2].forEach(function (i) { seg(tB[i], tT[i], "var(--no)", 2.4); });
-    if (epExt) {
-      [0, 1, 2].forEach(function (i) {
-        var dx = tT[i][0] - tB[i][0], dy = tT[i][1] - tB[i][1];
-        seg(tT[i], [tT[i][0] + dx * 0.36, tT[i][1] + dy * 0.36], "var(--no)", 1.6, "3,3");
-      });
-      epEl("text", { x: 430, y: 52, "text-anchor": "middle", "font-size": 11.5, "font-weight": 700, fill: "var(--no)" }, epSvg).textContent = "方向各异不平行";
-    }
-
-    [].forEach.call(epBar.querySelectorAll("button"), function (b) {
-      var m = b.getAttribute("data-mode");
-      if (m) b.classList.toggle("on", m === epMode);
-      else b.classList.toggle("on", epExt);
-    });
-    if (isP) {
-      epNote.innerHTML = "<b>① 标准直四棱柱</b>：上下底面平行，四个侧面都是矩形，更重要的是<b>四条侧棱方向完全一致、互相平行</b>，这才是真正的棱柱！";
-    } else {
-      epNote.innerHTML = "<b>② 四棱台灯罩 & ③ 扭曲多面体</b>：上下底面同样平行，四个侧面也都是四边形（梯形或斜四边形），但<b>侧棱不互相平行</b>（交于一点或各奔东西），所以<b>绝不是棱柱</b>！";
-    }
+    if(!epSvg)return;epSvg.innerHTML="";
+    ["prism","frustum","fake"].forEach(function(kind,i){var x=90+170*i;solidsDrawFrustum(epSvg,{ox:x,oy:169,u:22},kind,epExt);solidsText(epSvg,x,28,["直四棱柱","四棱台灯罩","非棱台体"][i]);solidsText(epSvg,x,199,i===0?"侧棱平行":"侧棱不平行");});
+    [].forEach.call(epBar.querySelectorAll("button"),function(b){var m=b.getAttribute("data-mode");b.classList.toggle("on",m?m===epMode:epExt);});
+    epNote.innerHTML=epMode==="prism"?"<b>直四棱柱</b>：上下底面平行全等，四条侧棱为相等平行线段。所有图形来自三维顶点的同一正交投影。":"<b>两个非棱柱反例</b>：中图为真棱台，其侧棱延长线汇交于同一锥顶；右图上下底长宽缩放比不同，四侧面虽为梯形，侧棱却不汇交于一点，也不是棱台。延长线均沿原侧棱方向计算，没有另接折线。";
   }
+
   if (epBar) {
     [].forEach.call(epBar.querySelectorAll("button"), function (b) {
       b.onclick = function () {
@@ -724,191 +649,25 @@
       epDraw();
     }
   });
-  function initStep2() {
-    var fig = document.getElementById("m-poly-fig");
-    var bar = document.getElementById("m-poly-bar");
-    var status = document.getElementById("m-poly-status");
-    var trap = document.getElementById("m-poly-trap-fig");
-    if (!fig || !bar) return;
-
-    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    var ca = isDark ? "#38bdf8" : "#0284c7";
-    var cb = isDark ? "#f59e0b" : "#d97706";
-    var cc = isDark ? "#10b981" : "#059669";
-    var cd = isDark ? "#ec4899" : "#db2777";
-    var mut = isDark ? "#94a3b8" : "#64748b";
-    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
-    var border = isDark ? "#334155" : "#e2e8f0";
-    var NS = "http://www.w3.org/2000/svg";
-
-    function sEl(parent, tag, attrs) {
-      var el = document.createElementNS(NS, tag);
-      for (var k in attrs) el.setAttribute(k, attrs[k]);
-      parent.appendChild(el);
-      return el;
-    }
-
-    function sTxt(parent, x, y, text, col, sz, fw, anchor) {
-      var t = sEl(parent, "text", {
-        x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
-        "font-weight": fw || 400, "text-anchor": anchor || "start"
-      });
-      t.textContent = text;
-      return t;
-    }
-
-    function drawPoly(mode) {
-      fig.innerHTML = "";
-      if (mode === "prism") {
-        sTxt(fig, 30, 22, "【多面体族】棱柱（侧棱平行） vs 棱锥（聚于一点） vs 棱台（延长汇交）", ca, 12, 700);
-
-        // 1. Prism (x: 40~150)
-        sTxt(fig, 85, 42, "棱柱 (侧棱平行)", ca, 11.5, 700, "middle");
-        sEl(fig, "polygon", { points: "55,70 115,70 125,55 65,55", fill: "none", stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "polygon", { points: "55,140 115,140 125,125 65,125", fill: "none", stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 55, y1: 70, x2: 55, y2: 140, stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 115, y1: 70, x2: 115, y2: 140, stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 125, y1: 55, x2: 125, y2: 125, stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 65, y1: 55, x2: 65, y2: 125, stroke: ca, "stroke-width": 1.2, "stroke-dasharray": "2 2" });
-        sTxt(fig, 85, 160, "侧棱平行且相等", ca, 10.5, 400, "middle");
-
-        // 2. Pyramid (x: 190~300)
-        sTxt(fig, 245, 42, "棱锥 (共顶点)", cb, 11.5, 700, "middle");
-        var topX = 245, topY = 60;
-        sEl(fig, "polygon", { points: "215,140 275,140 285,125 225,125", fill: "none", stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: topX, y1: topY, x2: 215, y2: 140, stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: topX, y1: topY, x2: 275, y2: 140, stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: topX, y1: topY, x2: 285, y2: 125, stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: topX, y1: topY, x2: 225, y2: 125, stroke: cb, "stroke-width": 1.2, "stroke-dasharray": "2 2" });
-        sTxt(fig, 245, 160, "侧棱汇交于顶点", cb, 10.5, 400, "middle");
-
-        // 3. Frustum (x: 350~460)
-        sTxt(fig, 410, 42, "棱台 (截面与延长交点)", cc, 11.5, 700, "middle");
-        sEl(fig, "polygon", { points: "390,85 430,85 438,75 398,75", fill: "none", stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "polygon", { points: "380,140 440,140 450,125 390,125", fill: "none", stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 390, y1: 85, x2: 380, y2: 140, stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 430, y1: 85, x2: 440, y2: 140, stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 438, y1: 75, x2: 450, y2: 125, stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 398, y1: 75, x2: 390, y2: 125, stroke: cc, "stroke-width": 1.2, "stroke-dasharray": "2 2" });
-        // extend lines
-        sEl(fig, "line", { x1: 390, y1: 85, x2: 410, y2: 48, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
-        sEl(fig, "line", { x1: 430, y1: 85, x2: 410, y2: 48, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
-        sEl(fig, "circle", { cx: 410, cy: 48, r: 2.5, fill: cd });
-        sTxt(fig, 410, 160, "侧棱延长汇交于顶点", cc, 10.5, 400, "middle");
-
-        status.textContent = "多面体核心特征：棱柱侧棱全部平行且相等，棱锥共顶点，棱台侧棱延长线汇交于一点。";
-      } else if (mode === "revol") {
-        sTxt(fig, 30, 22, "【旋转体族】圆柱、圆锥、圆台、球：垂直于轴的截面全为圆面", cb, 12, 700);
-
-        // 1. Cylinder
-        sTxt(fig, 85, 42, "圆柱 (矩形绕边)", ca, 11, 700, "middle");
-        sEl(fig, "ellipse", { cx: 85, cy: 65, rx: 30, ry: 10, fill: "none", stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "ellipse", { cx: 85, cy: 135, rx: 30, ry: 10, fill: "none", stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 55, y1: 65, x2: 55, y2: 135, stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 115, y1: 65, x2: 115, y2: 135, stroke: ca, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 85, y1: 55, x2: 85, y2: 145, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
-
-        // 2. Cone
-        sTxt(fig, 205, 42, "圆锥 (Rt△ 绕直角边)", cb, 11, 700, "middle");
-        sEl(fig, "ellipse", { cx: 205, cy: 135, rx: 30, ry: 10, fill: "none", stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 205, y1: 65, x2: 175, y2: 135, stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 205, y1: 65, x2: 235, y2: 135, stroke: cb, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 205, y1: 55, x2: 205, y2: 145, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
-
-        // 3. Truncated cone
-        sTxt(fig, 325, 42, "圆台 (梯形绕腰)", cc, 11, 700, "middle");
-        sEl(fig, "ellipse", { cx: 325, cy: 75, rx: 18, ry: 6, fill: "none", stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "ellipse", { cx: 325, cy: 135, rx: 32, ry: 10, fill: "none", stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 307, y1: 75, x2: 293, y2: 135, stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 343, y1: 75, x2: 357, y2: 135, stroke: cc, "stroke-width": 1.5 });
-        sEl(fig, "line", { x1: 325, y1: 65, x2: 325, y2: 145, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
-
-        // 4. Sphere
-        sTxt(fig, 445, 42, "球 (半圆绕直径)", cd, 11, 700, "middle");
-        sEl(fig, "circle", { cx: 445, cy: 100, r: 35, fill: "none", stroke: cd, "stroke-width": 1.5 });
-        sEl(fig, "ellipse", { cx: 445, cy: 100, rx: 35, ry: 10, fill: "none", stroke: cd, "stroke-width": 1.2, "stroke-dasharray": "3 2" });
-        sEl(fig, "line", { x1: 445, y1: 60, x2: 445, y2: 140, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
-
-        status.textContent = "旋转体结构：母线绕轴高速旋转所得，垂直于旋转轴截面必为圆面，过轴截面为轴截面。";
-      } else {
-        // mode === "sect"
-        sTxt(fig, 30, 22, "【空间截面两规律】边数 ≤ 总面数；相对平行面被截交线必互相平行", cd, 12, 700);
-
-        // Cube with cut plane (x: 50~230)
-        sTxt(fig, 140, 42, "正方体截面 (边数 3~6)", ca, 11, 700, "middle");
-        // Cube outline
-        sEl(fig, "polygon", { points: "90,65 150,65 180,45 120,45", fill: "none", stroke: mut, "stroke-width": 1.2 });
-        sEl(fig, "polygon", { points: "90,135 150,135 180,115 120,115", fill: "none", stroke: mut, "stroke-width": 1.2 });
-        sEl(fig, "line", { x1: 90, y1: 65, x2: 90, y2: 135, stroke: mut, "stroke-width": 1.2 });
-        sEl(fig, "line", { x1: 150, y1: 65, x2: 150, y2: 135, stroke: mut, "stroke-width": 1.2 });
-        sEl(fig, "line", { x1: 180, y1: 45, x2: 180, y2: 115, stroke: mut, "stroke-width": 1.2 });
-
-        // Cut section: hexagon
-        sEl(fig, "polygon", { points: "90,95 120,65 165,55 180,80 150,135 105,125", fill: isDark ? "rgba(236,72,153,0.2)" : "rgba(219,39,119,0.15)", stroke: cd, "stroke-width": 2 });
-        sTxt(fig, 140, 160, "最多截出六边形 (对边必平行)", cd, 10.5, 700, "middle");
-
-        sTxt(fig, 270, 55, "• 截面边数上限：截面多边形边数 ≤ 多面体总面数 F", cc, 12, 700);
-        sTxt(fig, 270, 85, "• 三棱锥（4面）最多截出四边形，绝无五边形！", cd, 12, 700);
-        sTxt(fig, 270, 115, "• 正方体相对面平行，截出的对边必然平行", ca, 12);
-        sTxt(fig, 270, 145, "• 正方体截面绝不可能是正五边形（两组对边平行）", cb, 12, 700);
-
-        status.textContent = "截面规律：截面由平面与多面体各面的交线围成，边数不超面数，平行面交线必平行。";
-      }
-    }
-
-    function drawTrap() {
-      if (!trap) return;
-      trap.innerHTML = "";
-      sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
-      sTxt(trap, 170, 24, "侧棱汇交对比：真正棱台必须汇交于顶点！", cd, 11.5, 700, "middle");
-
-      // Left: True frustum
-      sTxt(trap, 80, 44, "【真棱台】交于一点 P", cc, 10.5, 700, "middle");
-      sEl(trap, "polygon", { points: "65,80 95,80 102,72 72,72", fill: "none", stroke: cc, "stroke-width": 1.2 });
-      sEl(trap, "polygon", { points: "55,125 105,125 115,115 65,115", fill: "none", stroke: cc, "stroke-width": 1.2 });
-      sEl(trap, "line", { x1: 65, y1: 80, x2: 55, y2: 125, stroke: cc, "stroke-width": 1.2 });
-      sEl(trap, "line", { x1: 95, y1: 80, x2: 105, y2: 125, stroke: cc, "stroke-width": 1.2 });
-      // extend lines to P
-      sEl(trap, "line", { x1: 65, y1: 80, x2: 80, y2: 55, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
-      sEl(trap, "line", { x1: 95, y1: 80, x2: 80, y2: 55, stroke: cd, "stroke-width": 1, "stroke-dasharray": "2 2" });
-      sEl(trap, "circle", { cx: 80, cy: 55, r: 2.5, fill: cd });
-      sTxt(trap, 80, 140, "四条侧棱交于 P ✓", cc, 10, 700, "middle");
-
-      sEl(trap, "line", { x1: 165, y1: 35, x2: 165, y2: 140, stroke: border, "stroke-width": 1 });
-
-      // Right: Fake frustum
-      sTxt(trap, 245, 44, "【伪棱台】各奔东西不相交", cd, 10.5, 700, "middle");
-      sEl(trap, "polygon", { points: "230,80 260,80 270,72 240,72", fill: "none", stroke: cd, "stroke-width": 1.2 });
-      sEl(trap, "polygon", { points: "220,125 275,125 282,115 228,115", fill: "none", stroke: cd, "stroke-width": 1.2 });
-      sEl(trap, "line", { x1: 230, y1: 80, x2: 220, y2: 125, stroke: cd, "stroke-width": 1.2 });
-      sEl(trap, "line", { x1: 260, y1: 80, x2: 275, y2: 125, stroke: cd, "stroke-width": 1.2 });
-      // extend lines do not meet
-      sEl(trap, "line", { x1: 230, y1: 80, x2: 240, y2: 52, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
-      sEl(trap, "line", { x1: 260, y1: 80, x2: 250, y2: 52, stroke: mut, "stroke-width": 1, "stroke-dasharray": "2 2" });
-      sTxt(trap, 245, 140, "不交于同点 ✗ 不是棱台", cd, 10, 700, "middle");
-    }
-
-    var currMode = "prism";
-    [].forEach.call(bar.querySelectorAll("button"), function (b) {
-      b.onclick = function () {
-        var m = b.getAttribute("data-poly");
-        if (m) {
-          currMode = m;
-          [].forEach.call(bar.querySelectorAll("button"), function (btn) {
-            btn.classList.toggle("active", btn === b);
-          });
-          drawPoly(currMode);
-        }
-      };
-    });
-
-    drawPoly("prism");
-    drawTrap();
-  }
-
-  initStep2();
   epDraw();
 })();
+/* solids-semantic-micro polyhedra */
+(function(){var fig=document.getElementById("m-poly-fig"),bar=document.getElementById("m-poly-bar"),status=document.getElementById("m-poly-status"),trap=document.getElementById("m-poly-trap-fig");if(!fig||!bar)return;
+ function draw(mode){fig.innerHTML="";
+ if(mode==="prism"){
+  solidsDrawFrustum(fig,{ox:90,oy:228,u:30},"prism",true);solidsText(fig,90,280,"棱柱");
+  var p=solidsChart(fig,{ox:260,oy:228,u:30}),m=solidsFrustum("frustum");p.poly(m.base,"base");m.base.forEach(function(b){p.line(b,m.apex,"pyramid-edge");});p.dot(m.apex,"apex","S",12,-10);solidsText(fig,260,280,"棱锥");
+  solidsDrawFrustum(fig,{ox:430,oy:228,u:30},"frustum",true);solidsText(fig,430,280,"棱台");
+  status.textContent="同一三维模型投影：棱柱侧棱平行且相等；棱锥共顶点；棱台是棱锥被平行底面截取后剩下的部分，侧棱及其延长线严格共线并交于S。";
+ }else if(mode==="revol"){
+  [[65,1,1],[195,0,1],[325,.5,1]].forEach(function(a){var p=solidsChart(fig,{ox:a[0],oy:215,u:32});[0,2].forEach(function(z){var r=z?a[1]:a[2],pts=[];for(var i=0;i<=80;i++){var t=2*Math.PI*i/80;pts.push([r*Math.cos(t),r*Math.sin(t),z]);}p.curve(pts,"circle-section");});for(var i=0;i<8;i++){var t=2*Math.PI*i/8;p.line([Math.cos(t),Math.sin(t),0],[a[1]*Math.cos(t),a[1]*Math.sin(t),2],"generator");}});
+  solidsAdd(fig,"circle",{cx:455,cy:178,r:46,fill:"none",stroke:"var(--a)","stroke-width":2,"data-role":"sphere-outline"});
+  ["圆柱","圆锥","圆台","球"].forEach(function(t,i){solidsText(fig,[65,195,325,455][i],280,t);});status.textContent="圆柱由矩形绕一边、圆锥由直角三角形绕一直角边、圆台由直角梯形绕垂直于底的腰旋转形成。垂直于旋转轴的非退化内部截面是圆面；顶点等边界可退化为点。";
+ }else{var verts=solidsCube(2),edges=solidsEdges(),p=solidsChart(fig,{ox:260,oy:160,u:68});edges.forEach(function(e){p.line(verts[e[0]],verts[e[1]],"cube-edge");});var sect=solidsSection(verts,edges);p.poly(sect,"cube-section","var(--ok-soft)");sect.forEach(function(v){p.dot(v,"section-vertex");});status.textContent="正方体取顶点(±1,±1,±1)，用真实平面x+y+z=0逐棱求交，所得六边形六点共面且三对对边平行。截面一般不超过六边；平行面的截交线必平行，但不能把任意截面都称作三对对边平行。";}
+ }
+ [].forEach.call(bar.querySelectorAll("button"),function(b){b.onclick=function(){[].forEach.call(bar.querySelectorAll("button"),function(t){t.classList.toggle("on",t===b);});draw(b.getAttribute("data-poly"));};});draw("prism");
+ if(trap){solidsDrawFrustum(trap,{ox:130,oy:210,u:32},"frustum",true);solidsDrawFrustum(trap,{ox:390,oy:210,u:32},"fake",true);solidsText(trap,130,270,"真棱台");solidsText(trap,390,270,"非棱台");}
+})();
+
 </script>
-</body>
-</html>
+</body></html>

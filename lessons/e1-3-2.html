@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -69,7 +69,7 @@
       <button type="button" class="micro-tab" data-mode="asymp">② 渐近线 y=±(b/a)x 几何贴近</button>
       <button type="button" class="micro-tab" data-mode="axis">③ 正项定焦点原则</button>
     </div>
-    <svg id="m-hyper-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="双曲线几何直观图解"></svg>
+    <svg id="m-hyper-fig" class="micro-fig" viewBox="0 0 540 300" role="img" aria-label="双曲线几何直观图解"></svg>
     <div class="micro-caption" id="m-hyper-cap"></div>
   </div>
 
@@ -427,7 +427,7 @@
 <footer>培玉智能 · 按人教 A 版章节编排，内容为自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="../assets/iso-bench.js"></script>
+<script src="../assets/iso-bench.js?v=vs-b03c46885f5f"></script>
 <script>
 (function () {
   "use strict";
@@ -487,6 +487,7 @@
 
   function render(keepFocus) {
     var c = Math.sqrt(a * a + b * b);
+    SCALE = Math.min(22, 125 / Math.max(c, a * Math.cosh(t), b * Math.abs(Math.sinh(t))));
     var eVal = a > 0 ? c / a : 0;
 
     if (valAOut) valAOut.textContent = f2(a);
@@ -735,7 +736,7 @@
     if (Math.abs(a - b) < 0.01) {
       badge = '<span class="tag-status tag-acute" style="margin-left:8px">等轴双曲线：\\(a=b\\)，离心率 \\(e = \\sqrt{2} \\approx 1.414\\)，两渐近线互相垂直（夹角 90°）！</span>';
     } else if (axis === "y") {
-      badge = '<span class="tag-status tag-obtuse" style="margin-left:8px">正项定焦点反例：虽有 \\(a &lt; b\\)，但正项为 \\(y^2\\)，实轴仍在 \\(y\\) 轴！绝不能按「分母大小」判断！</span>';
+      badge = '<span class="tag-status tag-obtuse" style="margin-left:8px">正项定焦点：正项为 \\(y^2\\)，实轴仍在 \\(y\\) 轴！绝不能按「分母大小」判断！</span>';
     }
 
     var diff = Math.abs(d1 - d2);
@@ -853,7 +854,7 @@
     // 右支（实线，|PF1|-|PF2| = +6）
     h.push('<path d="' + rPts.join(" ") + '" fill="none" stroke="var(--a)" stroke-width="3.2"/>');
     // 选右支上一点 P (x=4.5, y=4*sqrt(2.25-1)=4.47 => |PF1|=9.5, |PF2|=3.5)
-    var px = ox + 4.2 * u, py = oy - 3.92 * u;
+    var px = ox + 3.6 * u, py = oy - 4 * Math.sqrt((3.6/3) * (3.6/3) - 1) * u;
     if (mode === "wave") {
       // 声波同心圆示意
       h.push('<circle cx="' + px + '" cy="' + py + '" r="18" fill="none" stroke="var(--hl)" stroke-opacity="0.55" stroke-dasharray="3 2"/>');
@@ -901,155 +902,49 @@
 })();
 
 
-function initMHyperFig(){
-  var svgEl = document.getElementById("m-hyper-fig");
-  var capEl = document.getElementById("m-hyper-cap");
-  if (!svgEl) return;
-  var mode = "def";
-  var NS = "http://www.w3.org/2000/svg";
-  var caps = {
-    def: "双曲线定义：||PF1| - |PF2|| = 2a (2a < 2c)。加绝对值包含左右两支。特征矩形边长 2a, 2b，对角线即为渐近线。",
-    asymp: "渐近线几何贴近：令标准方程右侧为 0，即得渐近线 y = ±(b/a)x。曲线沿渐近线向无穷远处延伸无限逼近。",
-    axis: "正项定焦点：x²/a² - y²/b² = 1 焦点在 x 轴；y²/a² - x²/b² = 1 焦点在 y 轴。正项分母恒为 a²。"
-  };
+/* conics-semantic-micro hyperbola */
+(function(){
+  var fig=document.getElementById("m-hyper-fig"),cap=document.getElementById("m-hyper-cap"),mode="def";
+  if(!fig)return;
 
-  function s(el, tag, attrs, txt){
-    var e = document.createElementNS(NS, tag);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
-    if (txt) e.textContent = txt;
-    el.appendChild(e);
-    return e;
+  function add(target, tag, attrs, label) {
+    var n=document.createElementNS("http://www.w3.org/2000/svg",tag);
+    for(var k in attrs)n.setAttribute(k,attrs[k]);
+    if(label!==undefined)n.textContent=label; target.appendChild(n);return n;
   }
-  function ln(el, x1, y1, x2, y2, c, w, d){
-    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
-    if (d) a["stroke-dasharray"] = d;
-    return s(el, "line", a);
-  }
-  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
-  function tx(el, x, y, txt, c, sz, b, anch){
-    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
-    if (b) a["font-weight"] = "bold";
-    if (anch) a["text-anchor"] = anch;
-    return s(el, "text", a, txt);
+  function text(target,x,y,label,anchor){return add(target,"text",{x:x,y:y,fill:"var(--fg)","font-size":24,"text-anchor":anchor||"middle"},label);}
+  function chart(target,m,v){
+    function X(x){return v.ox+x*v.u;} function Y(y){return v.oy-y*v.u;}
+    function attrs(extra){var a={"data-model":m.kind,"data-a":m.a||0,"data-b":m.b||0,"data-p":m.p||0,"data-axis":m.axis||"x","data-direction":m.dir||"right","data-ox":v.ox,"data-oy":v.oy,"data-u":v.u};for(var k in extra)a[k]=extra[k];return a;}
+    function at(t,branch){var x,y;if(m.kind==="ellipse"){x=m.a*Math.cos(t);y=m.b*Math.sin(t);}else if(m.kind==="hyperbola"){x=(branch||1)*m.a*Math.cosh(t);y=m.b*Math.sinh(t);}else{x=t*t/(2*m.p);y=t;if(m.dir==="left")x=-x;if(m.dir==="up"){var q=x;x=y;y=q;}else if(m.dir==="down"){var q2=x;x=y;y=-q2;}}if(m.kind!=="parabola"&&m.axis==="y"){var z=x;x=y;y=z;}return{x:x,y:y};}
+    function line(x1,y1,x2,y2,role,dash){return add(target,"line",attrs({x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:role==="asymptote"||role==="directrix"?"var(--b)":"var(--muted)","stroke-width":1.7,"stroke-dasharray":dash||"none","data-role":role||"segment"}));}
+    function dot(x,y,role,label,dx,dy){add(target,"circle",attrs({cx:X(x),cy:Y(y),r:5,fill:role==="focus"?"var(--b)":"var(--a)","data-role":role,"data-x":x,"data-y":y}));if(label)text(target,X(x)+(dx||0),Y(y)+(dy||-16),label);}
+    function curve(lo,hi,branch){var d="";for(var i=0;i<=240;i++){var p=at(lo+(hi-lo)*i/240,branch);d+=(i?" L":"M")+X(p.x).toFixed(6)+" "+Y(p.y).toFixed(6);}return add(target,"path",attrs({d:d,fill:"none",stroke:"var(--a)","stroke-width":3,"data-role":"curve","data-branch":branch||1}));}
+    return {X:X,Y:Y,at:at,line:line,dot:dot,curve:curve,meta:attrs};
   }
 
-  function draw(){
-    svgEl.innerHTML = "";
-    if (mode === "def") {
-      tx(svgEl, 270, 24, "双曲线特征矩形与渐近线：c² = a² + b² (c 最长)", "#0f172a", "12.5", true, "middle");
-      // Axes
-      ln(svgEl, 40, 115, 260, 115, "#64748b", 1.5);
-      ln(svgEl, 150, 180, 150, 45, "#64748b", 1.5);
-
-      // Feature rectangle: center (150, 115), a = 40, b = 30
-      rc(svgEl, 110, 85, 80, 60, "none", "#94a3b8", 0);
-      s(svgEl, "line", {x1:110, y1:85, x2:190, y2:85, stroke:"#94a3b8", "stroke-dasharray":"3 3"});
-
-      // Asymptotes (diagonals)
-      ln(svgEl, 70, 55, 230, 175, "#93c5fd", 1.5, "3 3");
-      ln(svgEl, 70, 175, 230, 55, "#93c5fd", 1.5, "3 3");
-
-      // Hyperbola branches
-      s(svgEl, "path", {d:"M 190 115 Q 195 85 240 60 M 190 115 Q 195 145 240 170", fill:"none", stroke:"#2563eb", "stroke-width":2.5});
-      s(svgEl, "path", {d:"M 110 115 Q 105 85 60 60 M 110 115 Q 105 145 60 170", fill:"none", stroke:"#2563eb", "stroke-width":2.5});
-
-      // Vertices
-      s(svgEl, "circle", {cx:190, cy:115, r:3.5, fill:"#2563eb"});
-      tx(svgEl, 194, 128, "A2(a,0)", "#2563eb", "9.5");
-      s(svgEl, "circle", {cx:110, cy:115, r:3.5, fill:"#2563eb"});
-
-      // Foci F1(100, 115), F2(200, 115) -> c = 50
-      s(svgEl, "circle", {cx:200, cy:115, r:4, fill:"#dc2626"});
-      tx(svgEl, 204, 110, "F2(c,0)", "#dc2626", "10", true);
-      s(svgEl, "circle", {cx:100, cy:115, r:4, fill:"#dc2626"});
-
-      // Labels a, b, c
-      tx(svgEl, 170, 110, "a", "#2563eb", "10", true, "middle");
-      tx(svgEl, 155, 98, "b", "#059669", "10", true);
-      ln(svgEl, 150, 115, 190, 85, "#dc2626", 1.5);
-      tx(svgEl, 172, 94, "c", "#dc2626", "10", true);
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "双曲线特征矩形", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 矩形宽 2a、高 2b", "#2563eb", "11");
-      tx(svgEl, 325, 120, "• 对角线半长恒等于 c", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "• 勾股定理：c² = a² + b²", "#059669", "11");
-      tx(svgEl, 325, 164, "• 对角线即为渐近线！", "#d97706", "10.5");
-    } else if (mode === "asymp") {
-      tx(svgEl, 270, 24, "渐近线 y = ±(b/a)x 几何贴近演示", "#0f172a", "12.5", true, "middle");
-      ln(svgEl, 40, 115, 260, 115, "#64748b", 1.5);
-      ln(svgEl, 150, 180, 150, 45, "#64748b", 1.5);
-
-      // Asymptotes
-      ln(svgEl, 60, 50, 240, 180, "#dc2626", 1.5, "3 3");
-      tx(svgEl, 245, 180, "y = -(b/a)x", "#dc2626", "9.5");
-      ln(svgEl, 60, 180, 240, 50, "#dc2626", 1.5, "3 3");
-      tx(svgEl, 245, 52, "y = (b/a)x", "#dc2626", "9.5");
-
-      // Right branch
-      s(svgEl, "path", {d:"M 185 115 Q 190 85 240 54 M 185 115 Q 190 145 240 176", fill:"none", stroke:"#2563eb", "stroke-width":2.5});
-      s(svgEl, "circle", {cx:185, cy:115, r:3.5, fill:"#2563eb"});
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "渐近线求法口诀", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 右端 1 换 0，因式分解", "#2563eb", "11", true);
-      tx(svgEl, 325, 120, "• 焦点在 x 轴：y = ±(b/a)x", "#059669", "11");
-      tx(svgEl, 325, 142, "• 焦点在 y 轴：y = ±(a/b)x", "#dc2626", "11", true);
-      tx(svgEl, 325, 164, "• 无限贴近，永不相交！", "#64748b", "10.5");
-    } else if (mode === "axis") {
-      tx(svgEl, 270, 24, "正项定焦点原则：看正负号，不看分母大小", "#0f172a", "12.5", true, "middle");
-      // Horizontal
-      s(svgEl, "path", {d:"M 95 110 Q 100 85 125 65 M 95 110 Q 100 135 125 155", fill:"none", stroke:"#2563eb", "stroke-width":2});
-      s(svgEl, "path", {d:"M 65 110 Q 60 85 35 65 M 65 110 Q 60 135 35 155", fill:"none", stroke:"#2563eb", "stroke-width":2});
-      tx(svgEl, 80, 165, "x²/a² - y²/b² = 1", "#2563eb", "10.5", true, "middle");
-      tx(svgEl, 80, 180, "x² 为正 ⟹ 焦点在 x 轴", "#0f172a", "9.5", false, "middle");
-
-      // Vertical
-      s(svgEl, "path", {d:"M 210 95 Q 185 100 165 125 M 210 95 Q 235 100 255 125", fill:"none", stroke:"#059669", "stroke-width":2});
-      s(svgEl, "path", {d:"M 210 125 Q 185 120 165 95 M 210 125 Q 235 120 255 95", fill:"none", stroke:"#059669", "stroke-width":2});
-      tx(svgEl, 210, 165, "y²/a² - x²/b² = 1", "#059669", "10.5", true, "middle");
-      tx(svgEl, 210, 180, "y² 为正 ⟹ 焦点在 y 轴", "#0f172a", "9.5", false, "middle");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "轴向判别法则", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 椭圆：比分母大小", "#64748b", "10.5");
-      tx(svgEl, 325, 120, "• 双曲线：看正项所在轴", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "• 正项分母必为 a²", "#2563eb", "11");
-      tx(svgEl, 325, 164, "• 即使 a < b 也是正常的！", "#059669", "10.5");
+  function scene(axis,v,a,b){var m={kind:"hyperbola",a:a,b:b,axis:axis},p=chart(fig,m,v),c=Math.hypot(a,b);p.line(-6,0,6,0,"axis");p.line(0,-5.5,0,5.5,"axis");var k=axis==="x"?b/a:a/b;p.line(-5,-5*k,5,5*k,"asymptote","5 4");p.line(-5,5*k,5,-5*k,"asymptote","5 4");p.curve(-.95,.95,1);p.curve(-.95,.95,-1);p.dot(axis==="x"?-c:0,axis==="x"?0:-c,"focus");p.dot(axis==="x"?c:0,axis==="x"?0:c,"focus");return p;}
+  function draw(){fig.innerHTML="";
+    if(mode==="def"){
+      var p=scene("x",{ox:270,oy:155,u:20},3,4);
+      p.line(-3,-4,3,-4);p.line(3,-4,3,4);p.line(3,4,-3,4);p.line(-3,4,-3,-4);p.line(0,0,3,4,"diagonal");
+      text(fig,p.X(1.5),p.Y(-.8),"a=3");text(fig,p.X(3.8),p.Y(2),"b=4");text(fig,p.X(1.1),p.Y(3.3),"c=5");
+      cap.textContent="双曲线x²/9−y²/16=1，a=3、b=4、c=√(a²+b²)=5。矩形宽2a、高2b，半对角线长c；矩形对角线所在直线是渐近线y=±(4/3)x。焦点在(±5,0)，两焦半径之差绝对值恒为2a=6。";
+    }else if(mode==="asymp"){
+      var p=scene("x",{ox:270,oy:155,u:20},3,4),t=.85,P=p.at(t,1),k=4/3,A=k,B=-1,dot=A*P.x+B*P.y,qx=P.x-A*dot/(A*A+B*B),qy=P.y-B*dot/(A*A+B*B);
+      p.dot(P.x,P.y,"point","P",13,-15);p.dot(qx,qy,"foot","Q",-15,-15);p.line(P.x,P.y,qx,qy,"projection");
+      cap.textContent="同一条双曲线与渐近线按真实方程绘制。P到渐近线的垂足Q由向量投影计算，PQ垂直该渐近线。沿单支趋向无穷远时距离趋于0；曲线始终在对应渐近线的一侧，不相交。";
+    }else{
+      scene("x",{ox:135,oy:154,u:12},3,4);scene("y",{ox:405,oy:154,u:12},3,4);
+      text(fig,135,282,"x²为正：左右支");text(fig,405,282,"y²为正：上下支");
+      cap.textContent="左图x²/9−y²/16=1，焦点在x轴；右图y²/9−x²/16=1，焦点在y轴。两支均由参数方程cosh/sinh生成且彼此分离。焦点轴由正项决定，不能比较分母大小来判断。";
     }
-
-    if (capEl) capEl.textContent = caps[mode];
-    if (window.renderMathInElement) window.renderMathInElement(capEl);
   }
-
-  var tabs = document.querySelectorAll(".micro-box .micro-tab");
-  tabs.forEach(function(tab){
-    tab.addEventListener("click", function(){
-      tabs.forEach(function(t){ t.classList.remove("active"); });
-      tab.classList.add("active");
-      mode = tab.getAttribute("data-mode");
-      draw();
-    });
-  });
-  draw();
-
-  var trapEl = document.getElementById("m-hyper-trap-fig");
-  if (trapEl) {
-    trapEl.innerHTML = "";
-    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
-    tx(trapEl, 142, 42, "❌ 误解：无绝对值当全双曲", "#dc2626", "11.5", true, "middle");
-    tx(trapEl, 142, 70, "|PF1| - |PF2| = 2a", "#dc2626", "10.5", false, "middle");
-    tx(trapEl, 142, 94, "仅表示靠近 F2 的右单一支！", "#b91c1c", "11", true, "middle");
-    tx(trapEl, 142, 130, "漏掉左支答案扣一半！", "#64748b", "9.5", false, "middle");
-
-    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
-    tx(trapEl, 397, 42, "✔ 正解：绝对值囊括双支", "#15803d", "11.5", true, "middle");
-    tx(trapEl, 397, 70, "||PF1| - |PF2|| = 2a", "#059669", "10.5", true, "middle");
-    tx(trapEl, 397, 94, "加绝对值才表示完整的左右双支", "#15803d", "10.5", true, "middle");
-    tx(trapEl, 397, 130, "定义必带绝对值！", "#047857", "10", true, "middle");
+  document.querySelectorAll(".micro-box .micro-tab").forEach(function(b){b.addEventListener("click",function(){mode=b.getAttribute("data-mode");document.querySelectorAll(".micro-box .micro-tab").forEach(function(t){t.classList.toggle("active",t===b);});draw();});});draw();
+  var trap=document.getElementById("m-hyper-trap-fig");if(trap){
+    [135,405].forEach(function(ox,i){var p=chart(trap,{kind:"hyperbola",a:3,b:4},{ox:ox,oy:98,u:12});p.curve(-.8,.8,1);if(i)p.curve(-.8,.8,-1);p.dot(-5,0,"focus");p.dot(5,0,"focus");text(trap,ox,27,i?"绝对值：两支":"差为+6：右支");});
   }
-}
+})();
 
-initMHyperFig();
 </script>
 </body></html>

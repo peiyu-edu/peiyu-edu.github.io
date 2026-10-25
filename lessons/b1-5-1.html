@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -77,11 +77,11 @@
   <p class="small">要用到：初中的角与度、圆周长 \(2\pi r\)、平面直角坐标系的四个象限；1.1 集合的描述法（<a href="b1-1-1.html">回看 1.1</a>）。先看下面这幅微图解：</p>
 
   <div class="micro-box">
-    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>任意角旋转、弧度定义与扇形面积底高类比</b></p>
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>任意角旋转、弧度定义与扇形细分求和</b></p>
     <div class="entry-bar" id="m-angle-bar" role="group" aria-label="任意角微图解切换">
       <button type="button" class="on" data-m="rot">① 逆正顺负与终边相同角 (逆时针为正，顺时针为负，相差 2kπ 终边重合)</button>
       <button type="button" data-m="rad">② 弧度制几何本质 (弧长等于半径所对圆心角为 1 rad ≈ 57.3°)</button>
-      <button type="button" data-m="sec">③ 扇形面积底高类比 (弧长 l 为底、半径 r 为高，S = ½·l·r = ½·α·r²)</button>
+      <button type="button" data-m="sec">③ 扇形细分求和（内接三角形逼近：S = ½lr）</button>
     </div>
     <svg class="micro-fig" id="m-angle-fig" viewBox="0 0 520 160" role="img" aria-label="任意角与弧度制微图解"></svg>
     <p class="entry-note" id="m-angle-note"></p>
@@ -99,6 +99,7 @@
   </div>
 
   <h3>2. 核心数学公式与角集合表达</h3>
+  <p class="small">普通扇形的圆心角大小取非负弧度 θ，0≤θ≤2π，面积 S=θr²/2。任意角转过多圈时，r|α|表示累计弧长；重叠扫过的区域不能按圈数重复算作一个普通扇形的面积。</p>
   <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
     <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\beta = \alpha + 2k\pi,\ k\in\mathbb{Z}\quad (\text{角度制：}\beta = \alpha + k\cdot 360^\circ)}_{\text{终边相同角集合：相差整数圈}}}\)</span>
     <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{180^\circ = \pi\text{ rad},\ 1\text{ rad} = \left(\frac{180}{\pi}\right)^\circ \approx 57.30^\circ}_{\text{角度与弧度互化核心桥梁}}}\)</span>
@@ -615,6 +616,7 @@
 
     function drawAngle(mode) {
       aFig.innerHTML = "";
+      aFig.setAttribute("viewBox", mode === "sec" ? "0 0 520 250" : "0 0 520 160");
       var cx = 100, cy = 80, r = 58;
 
       if (mode === "rot") {
@@ -658,7 +660,7 @@
         mk("line", { x1: cx, y1: cy, x2: cx + rRad, y2: cy, stroke: "var(--hl)", "stroke-width": 2.5 }, aFig);
         mk("text", { x: cx + rRad / 2, y: cy + 14, fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }, aFig).textContent = "r (半径)";
 
-        var rad1 = 57.3 * Math.PI / 180;
+        var rad1 = 1; // 精确1弧度，57.3°仅是近似读数
         var ex1 = cx + rRad * Math.cos(rad1), ey1 = cy - rRad * Math.sin(rad1);
         mk("line", { x1: cx, y1: cy, x2: ex1, y2: ey1, stroke: "var(--hl)", "stroke-width": 2.5 }, aFig);
         mk("text", { x: cx + 18, y: cy - 28, fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }, aFig).textContent = "r (半径)";
@@ -680,35 +682,25 @@
 
         if (aNote) aNote.innerHTML = "<b>弧度制几何本质</b>：用半径 \\(r\\) 当作尺子量圆弧，弧长 \\(l=r\\) 对应的圆心角为 <b>1 弧度（1 rad ≈ 57.30°）</b>；角度化实数，摆脱 360 进制！";
       } else {
-        // ③ 扇形面积底高类比
-        var rSec = 52, radSec = 60 * Math.PI / 180;
-        var exS = 70 + rSec * Math.cos(radSec), eyS = 110 - rSec * Math.sin(radSec);
-        var pathSec = "M 70 110 L " + (70 + rSec) + " 110 A " + rSec + " " + rSec + " 0 0 0 " + exS.toFixed(1) + " " + eyS.toFixed(1) + " Z";
-        mk("path", { d: pathSec, fill: "rgba(47, 122, 86, 0.15)", stroke: "var(--a)", "stroke-width": 2 }, aFig);
-        mk("text", { x: 95, y: 104, fill: "var(--a)", "font-size": 11, "font-weight": 700 }, aFig).textContent = "S 扇形";
-        mk("text", { x: 70 + rSec / 2, y: 124, fill: "var(--hl)", "font-size": 10.5 }, aFig).textContent = "r";
-        mk("text", { x: 70 + rSec + 4, y: 88, fill: "var(--a)", "font-size": 11, "font-weight": 700 }, aFig).textContent = "弧 l = αr";
-
-        // 等号箭头
-        mk("text", { x: 175, y: 85, fill: "var(--muted)", "font-size": 18, "font-weight": 700 }, aFig).textContent = "↔";
-        mk("text", { x: 162, y: 105, fill: "var(--muted)", "font-size": 10.5 }, aFig).textContent = "展平展开";
-
-        // 右边：三角形底高
-        var tx0 = 230, ty0 = 110, tBase = 65, tH = 52;
-        var pathTri = "M " + tx0 + " " + ty0 + " L " + (tx0 + tBase) + " " + ty0 + " L " + (tx0 + tBase / 2) + " " + (ty0 - tH) + " Z";
-        mk("path", { d: pathTri, fill: "rgba(62, 92, 118, 0.15)", stroke: "var(--b)", "stroke-width": 2 }, aFig);
-        mk("line", { x1: tx0 + tBase / 2, y1: ty0, x2: tx0 + tBase / 2, y2: ty0 - tH, stroke: "var(--hl)", "stroke-width": 1.5, "stroke-dasharray": "3 2" }, aFig);
-        mk("text", { x: tx0 + tBase / 2 + 4, y: ty0 - tH / 2, fill: "var(--hl)", "font-size": 10.5, "font-weight": 700 }, aFig).textContent = "高 = r";
-        mk("text", { x: tx0 + tBase / 2, y: ty0 + 16, "text-anchor": "middle", fill: "var(--a)", "font-size": 11, "font-weight": 700 }, aFig).textContent = "底 = 弧长 l";
-
-        // 终极公式卡
-        mk("rect", { x: 335, y: 22, width: 170, height: 115, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1 }, aFig);
-        mk("text", { x: 350, y: 50, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, aFig).textContent = "扇形面积公式：";
-        mk("text", { x: 350, y: 76, fill: "var(--a)", "font-size": 13, "font-weight": 700 }, aFig).textContent = "S = ½ · l · r";
-        mk("text", { x: 350, y: 98, fill: "var(--b)", "font-size": 12 }, aFig).textContent = "= ½ · α · r²";
-        mk("text", { x: 350, y: 120, fill: "var(--warn)", "font-size": 10.5 }, aFig).textContent = "(α 必须用纯弧度！)";
-
-        if (aNote) aNote.innerHTML = "<b>扇形面积的三角形底高类比</b>：把弧长 \\(l\\) 看作底、半径 \\(r\\) 看作高，面积就是 <b>\\(\\frac{1}{2} \\times \\text{底} \\times \\text{高} = \\frac{1}{2}lr = \\frac{1}{2}\\alpha r^2\\)</b>，好记不易忘！";
+        // 普通扇形由内接三角形求和逼近，有限次细分不是精确展开。
+        var rSec = 96, alpha = Math.PI / 3, count = 8, ox = 70, oy = 170;
+        var points = [];
+        for (var j = 0; j <= count; j++) {
+          var t = alpha * j / count;
+          points.push({ x: ox + rSec * Math.cos(t), y: oy - rSec * Math.sin(t) });
+        }
+        for (var n = 0; n < count; n++) {
+          mk("path", { "data-sector-piece": n, "data-angle": alpha / count, d: "M " + ox + " " + oy + " L " + points[n].x + " " + points[n].y + " L " + points[n + 1].x + " " + points[n + 1].y + " Z", fill: n % 2 ? "var(--hl-soft)" : "var(--ok-soft)", stroke: "var(--a)", "stroke-width": 1 }, aFig);
+        }
+        mk("path", { "data-sector-arc": "true", "data-radius": rSec, "data-angle": alpha, d: "M " + points[0].x + " " + points[0].y + " A " + rSec + " " + rSec + " 0 0 0 " + points[count].x + " " + points[count].y, fill: "none", stroke: "var(--b)", "stroke-width": 3 }, aFig);
+        mk("text", { x: 110, y: 208, "text-anchor": "middle", fill: "var(--a)", "font-size": 22 }, aFig).textContent = "8 个内接三角形";
+        mk("text", { x: 96, y: 155, fill: "var(--a)", "font-size": 22 }, aFig).textContent = "r";
+        mk("text", { x: 172, y: 120, fill: "var(--b)", "font-size": 22 }, aFig).textContent = "弧 l";
+        mk("text", { x: 250, y: 62, fill: "var(--fg)", "font-size": 22, "font-weight": 700 }, aFig).textContent = "弦在弧内，面积略小";
+        mk("text", { x: 250, y: 106, fill: "var(--fg)", "font-size": 22 }, aFig).textContent = "继续细分：弦趋近弧";
+        mk("text", { x: 250, y: 150, fill: "var(--a)", "font-size": 22 }, aFig).textContent = "面积和趋近扇形面积";
+        mk("text", { x: 250, y: 198, fill: "var(--a)", "font-size": 22, "font-weight": 700 }, aFig).textContent = "S = ½lr = ½αr²";
+        if (aNote) aNote.innerHTML = "<b>细分求和的极限</b>：把半径 r、圆心角 α=π/3 的扇形分成 n 份，每个内接三角形面积为 r²sin(α/n)/2，所以面积和 Sₙ=nr²sin(α/n)/2。有限 n 时 Sₙ 小于扇形面积；n 越大，弦越接近弧，面积和趋近 αr²/2=lr/2。<b>扇形不能直接展成一个有限三角形。</b>这里 α 为非负弧度，普通扇形取 0≤α≤2π。";
       }
 
       if (aBar) {

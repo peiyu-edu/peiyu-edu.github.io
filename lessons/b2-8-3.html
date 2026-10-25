@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -65,7 +65,7 @@
         <button data-m="sphere">球与长方体外接球</button>
       </div>
     </div>
-    <svg id="m-vol-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <svg id="m-vol-fig" viewBox="0 0 520 300" class="micro-fig"></svg>
     <div class="micro-status" id="m-vol-status">柱体 V=Sh，等底等高锥体体积为三分之一；台体为其平截过渡通式。</div>
   </div>
 
@@ -224,7 +224,7 @@
 
   <div class="card" style="margin-top:12px">
     <div class="small" style="font-weight:700;color:var(--no, #dc2626);margin-bottom:6px">反例微图解：圆锥轴截面中高 \(h\) 与母线 \(l\) 的根本差异</div>
-    <svg id="m-vol-trap-fig" viewBox="0 0 520 150" class="micro-fig"></svg>
+    <svg id="m-vol-trap-fig" viewBox="0 0 520 250" class="micro-fig"></svg>
     <p class="small" style="color:var(--mut, #64748b);margin-top:4px">母线 \(l=5\) 是斜边（决定侧面扇形面积），垂直高 \(h=4\) 是直角边（决定体积）。误把母线当高会使体积虚胖 25%！</p>
   </div>
 
@@ -373,8 +373,27 @@
 <footer>培玉智能 · 自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="../assets/iso-bench.js"></script>
+<script src="../assets/iso-bench.js?v=vs-b03c46885f5f"></script>
 <script>
+
+/* Solid models use one orthonormal camera; every geometric primitive keeps its source coordinates. */
+function solidsAdd(target,tag,attrs,label){var n=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in attrs)n.setAttribute(k,attrs[k]);if(label!==undefined)n.textContent=label;target.appendChild(n);return n;}
+function solidsText(target,x,y,label){return solidsAdd(target,"text",{x:x,y:y,fill:"var(--fg)","font-size":24,"text-anchor":"middle"},label);}
+function solidsChart(target,v){
+ var yaw=(v.yaw===undefined?35:v.yaw)*Math.PI/180,pitch=(v.pitch===undefined?20:v.pitch)*Math.PI/180,cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+ function P(p){return[v.ox+v.u*(cy*p[0]-sy*p[1]),v.oy+v.u*(sp*(sy*p[0]+cy*p[1])-cp*p[2])];}
+ function meta(a,xyz,role){a["data-xyz"]=JSON.stringify(xyz);a["data-role"]=role;a["data-ox"]=v.ox;a["data-oy"]=v.oy;a["data-u"]=v.u;a["data-yaw"]=yaw;a["data-pitch"]=pitch;return a;}
+ function line(a,b,role,dash){var A=P(a),B=P(b);return solidsAdd(target,"line",meta({x1:A[0],y1:A[1],x2:B[0],y2:B[1],stroke:role==="extension"?"var(--b)":"var(--a)","stroke-width":2,"stroke-dasharray":dash||"none"},[a,b],role||"edge"));}
+ function poly(points,role,fill){return solidsAdd(target,"polygon",meta({points:points.map(P).map(function(p){return p.join(",");}).join(" "),fill:fill||"none",stroke:"var(--muted)","stroke-width":1.5},points,role||"face"));}
+ function dot(p,role,label,dx,dy){var q=P(p);var e=solidsAdd(target,"circle",meta({cx:q[0],cy:q[1],r:4,fill:"var(--b)"},p,role||"point"));if(label)solidsText(target,q[0]+(dx||0),q[1]+(dy||-15),label);return e;}
+ function curve(points,role,dash){return solidsAdd(target,"path",meta({d:points.map(function(p,i){var q=P(p);return(i?"L":"M")+q[0]+" "+q[1];}).join(" "),fill:"none",stroke:"var(--a)","stroke-width":2,"stroke-dasharray":dash||"none"},points,role||"curve"));}
+ return{P:P,line:line,poly:poly,dot:dot,curve:curve,meta:meta};
+}
+function solidsCube(s){var q=[];for(var i=0;i<8;i++)q.push([(i&1?1:-1)*s/2,(i&2?1:-1)*s/2,(i&4?1:-1)*s/2]);return q;}
+function solidsEdges(){var q=[];for(var i=0;i<8;i++)for(var bit=1;bit<=4;bit*=2)if(!(i&bit))q.push([i,i|bit]);return q;}
+function solidsFrustum(kind){var base=[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],apex=[0,0,4],top=base.map(function(p){return kind==="prism"?[p[0],p[1],2.2]:kind==="fake"?[p[0]*.5,p[1]*.8,2]:[p[0]*.5,p[1]*.5,2];});return{base:base,top:top,apex:apex};}
+function solidsDrawFrustum(target,v,kind,extend){var m=solidsFrustum(kind),c=solidsChart(target,v);c.poly(m.base,"base");c.poly(m.top,"top");m.base.forEach(function(p,i){var e=c.line(p,m.top[i],"lateral");e.setAttribute("data-kind",kind);if(extend){var end=kind==="prism"?[p[0],p[1],3.4]:kind==="fake"?m.top[i].map(function(x,j){return x+.6*(x-p[j]);}):m.apex;c.line(m.top[i],end,"extension","4 4");}});if(extend&&kind==="frustum")c.dot(m.apex,"apex","S",12,-10);return m;}
+function solidsSection(vertices,edges){var out=[];edges.forEach(function(e){var a=vertices[e[0]],b=vertices[e[1]],fa=a[0]+a[1]+a[2],fb=b[0]+b[1]+b[2];if(fa*fb<0){var t=fa/(fa-fb),p=a.map(function(x,i){return x+t*(b[i]-x);});out.push(p);}});var u=[1/Math.sqrt(2),-1/Math.sqrt(2),0],v=[1/Math.sqrt(6),1/Math.sqrt(6),-2/Math.sqrt(6)];function angle(p){return Math.atan2(p.reduce(function(s,x,i){return s+x*v[i];},0),p.reduce(function(s,x,i){return s+x*u[i];},0));}out.sort(function(a,b){return angle(a)-angle(b);});return out;}
 (function(){
 "use strict";
 var currentTab="compare";
@@ -427,7 +446,7 @@ sliderA.min="25";sliderA.max="45";sliderA.step="1";sliderA.value="36";
 sliderB.min="20";sliderB.max="50";sliderB.step="1";sliderB.value="35";
 }else if(tab==="sphere"){
 lblA.innerHTML="正方体棱长 \\(a = \\)";
-lblB.innerHTML="深度比例 = ";
+lblB.innerHTML="观察方位角 θ = ";
 sliderA.min="20";sliderA.max="50";sliderA.step="1";sliderA.value="38";
 sliderB.min="20";sliderB.max="50";sliderB.step="1";sliderB.value="35";
 }else if(tab==="cavalieri"){
@@ -726,95 +745,18 @@ desc.innerHTML=
 renderMath();
 }
 function renderSphere(valA,valB){
-var a=valA/10;
-outA.textContent=a.toFixed(1);
-outB.textContent="35°";
-var scale=19;
-var s=a*scale;
-var dx=s*0.35;
-var dy=-s*0.25;
-var cx1=140;
-var cy1=145;
-var rOut=(Math.sqrt(3)/2)*a*scale;
-svg.appendChild(el("circle",{
-cx:cx1,cy:cy1,r:rOut,
-fill:"rgba(59,130,246,0.12)",stroke:"var(--a)","stroke-width":"2"
-}));
-svg.appendChild(el("ellipse",{
-cx:cx1,cy:cy1,rx:rOut,ry:rOut*0.32,
-stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.2"
-}));
-function drawCubeEdges(cx,backOnly){
-var flbx=cx-s/2-dx/2,flby=cy1+s/2-dy/2;
-var frbx=cx+s/2-dx/2,frby=flby,frtx=frbx,frty=cy1-s/2-dy/2,fltx=flbx,flty=frty;
-var blbx=flbx+dx,blby=flby+dy,brbx=frbx+dx,brby=frby+dy,brtx=frtx+dx,brty=frty+dy,bltx=fltx+dx,blty=flty+dy;
-var back=[[flbx,flby,blbx,blby],[blbx,blby,brbx,brby],[blbx,blby,bltx,blty]];
-var front=[[flbx,flby,frbx,frby],[frbx,frby,frtx,frty],[frtx,frty,fltx,flty],[fltx,flty,flbx,flby],
-[fltx,flty,bltx,blty],[frtx,frty,brtx,brty],[frbx,frby,brbx,brby],[bltx,blty,brtx,brty],[brtx,brty,brbx,brby]];
-(backOnly?back:front).forEach(function(e){
-svg.appendChild(el("line",backOnly
-?{x1:e[0],y1:e[1],x2:e[2],y2:e[3],stroke:"var(--muted)","stroke-dasharray":"3,3","stroke-width":"1.2"}
-:{x1:e[0],y1:e[1],x2:e[2],y2:e[3],stroke:"var(--fg)","stroke-width":"1.5"}));
-});
-return[blbx,blby,frtx,frty];
+ var a=valA/10,yaw=valB,u=19,R=Math.sqrt(3)*a/2,r=a/2,vertices=solidsCube(a),edges=solidsEdges();outA.textContent=a.toFixed(1);outB.textContent=yaw+"°";
+ [140,405].forEach(function(ox,i){var radius=i?r:R,p=solidsChart(svg,{ox:ox,oy:145,u:u,yaw:yaw,pitch:25});solidsAdd(svg,"circle",{cx:ox,cy:145,r:radius*u,fill:"var(--ok-soft)",stroke:"var(--b)","stroke-width":2,"data-role":i?"insphere":"circumsphere","data-radius":radius,"data-u":u});edges.forEach(function(e){p.line(vertices[e[0]],vertices[e[1]],"cube-edge");});vertices.forEach(function(v){p.dot(v,"cube-vertex");});if(!i)p.line(vertices[0],vertices[7],"body-diagonal");solidsText(svg,ox,30,i?"内切球":"外接球");});
+ desc.innerHTML="<b>统一正交投影</b>：正方体棱长a="+a.toFixed(1)+"，观察方位角为"+yaw+"°（仰角25°）。第二滑块确实改变相机角度，球轮廓和正方体始终使用同一投影。<br>"+
+ "外接球R=√3a/2≈"+R.toFixed(3)+"，八个空间顶点均在球上，它们的屏幕投影均在球轮廓内；体对角线为真实球直径，其投影通常缩短。<br>"+
+ "内切球r=a/2="+r.toFixed(2)+"，与六个面相切。半径比√3:1，表面积比3:1，体积比3√3:1。正方体体积a³="+(a*a*a).toFixed(3)+"。";
+ renderMath();
 }
-var diag=drawCubeEdges(cx1,false);
-drawCubeEdges(cx1,true);
-svg.appendChild(el("line",{x1:diag[0],y1:diag[1],x2:diag[2],y2:diag[3],stroke:"var(--warn)","stroke-width":"2.4"}));
-var tDiag=el("text",{x:cx1-8,y:cy1-10,fill:"var(--warn)","font-size":"12","font-weight":"800"});
-tDiag.textContent="体对角线 2R=√3 a";
-svg.appendChild(tDiag);
-var tOutTitle=el("text",{x:cx1,y:30,"text-anchor":"middle",fill:"var(--fg)","font-size":"13.5","font-weight":"700"});
-tOutTitle.textContent="正方体外接球 (8 顶点在球上)";
-svg.appendChild(tOutTitle);
-var cx2=405,cy2=145,rIn=(a/2)*scale;
-drawCubeEdges(cx2,true);
-svg.appendChild(el("circle",{cx:cx2,cy:cy2,r:rIn,fill:"rgba(16,185,129,0.18)",stroke:"var(--ok)","stroke-width":"2"}));
-svg.appendChild(el("ellipse",{cx:cx2,cy:cy2,rx:rIn,ry:rIn*0.32,stroke:"var(--muted)","stroke-dasharray":"3,3",fill:"none","stroke-width":"1.2"}));
-drawCubeEdges(cx2,false);
-svg.appendChild(el("line",{x1:cx2,y1:cy2-rIn,x2:cx2,y2:cy2+rIn,stroke:"var(--no)","stroke-width":"2.2"}));
-var tDiam=el("text",{x:cx2+6,y:cy2+4,fill:"var(--no)","font-size":"12","font-weight":"800"});
-tDiam.textContent="直径 2r=a";
-svg.appendChild(tDiam);
-var tInTitle=el("text",{x:cx2,y:30,"text-anchor":"middle",fill:"var(--fg)","font-size":"13.5","font-weight":"700"});
-tInTitle.textContent="正方体内切球 (切于 6 个面中心)";
-svg.appendChild(tInTitle);
-var midX=272;
-var bRect=el("rect",{x:midX-44,y:92,width:88,height:96,rx:8,fill:"var(--card)",stroke:"var(--line)","stroke-width":"1.2"});
-svg.appendChild(bRect);
-var mb1=el("text",{x:midX,y:112,"text-anchor":"middle",fill:"var(--muted)","font-size":"11.5","font-weight":"700"});
-mb1.textContent="外接 : 内切";
-svg.appendChild(mb1);
-var mb2=el("text",{x:midX,y:132,"text-anchor":"middle",fill:"var(--a)","font-size":"13","font-weight":"800"});
-mb2.textContent="半径 √3 : 1";
-svg.appendChild(mb2);
-var mb3=el("text",{x:midX,y:152,"text-anchor":"middle",fill:"var(--ok)","font-size":"13","font-weight":"800"});
-mb3.textContent="面积 3 : 1";
-svg.appendChild(mb3);
-var mb4=el("text",{x:midX,y:172,"text-anchor":"middle",fill:"var(--warn)","font-size":"13","font-weight":"800"});
-mb4.textContent="体积 3√3 : 1";
-svg.appendChild(mb4);
-var realR_out=(Math.sqrt(3)/2)*a;
-var realR_in=a/2;
-var sOut=4*Math.PI*realR_out*realR_out;
-var vOut=(4/3)*Math.PI*Math.pow(realR_out,3);
-var sIn=4*Math.PI*realR_in*realR_in;
-var vIn=(4/3)*Math.PI*Math.pow(realR_in,3);
-desc.innerHTML=
-"<b>正方体</b>：棱长 \\(a = "+a.toFixed(1)+"\\)，体积 \\(V_{\\text{方}} = a^3 = "+Math.pow(a,3).toFixed(2)+"\\)；<br>"+
-"<b>外接球</b>：半径 \\(R_{\\text{外}} = \\dfrac{\\sqrt{3}}{2}a = "+realR_out.toFixed(2)+"\\)，"+
-"表面积 \\(S_{\\text{外}} = 3\\pi a^2 = "+sOut.toFixed(2)+"\\)，体积 \\(V_{\\text{外}} = "+vOut.toFixed(2)+"\\)；<br>"+
-"<b>内切球</b>：半径 \\(R_{\\text{内}} = \\dfrac{a}{2} = "+realR_in.toFixed(2)+"\\)，"+
-"表面积 \\(S_{\\text{内}} = \\pi a^2 = "+sIn.toFixed(2)+"\\)，体积 \\(V_{\\text{内}} = "+vIn.toFixed(2)+"\\)；<br>"+
-"<b>比例铁律</b>：半径比 \\(R_{\\text{外}} : R_{\\text{内}} = \\sqrt{3} : 1\\)；"+
-"表面积比 \\(S_{\\text{外}} : S_{\\text{内}} = 3 : 1\\)；"+
-"体积比 \\(V_{\\text{外}} : V_{\\text{内}} = 3\\sqrt{3} : 1\\)。";
-renderMath();
-}
+
 function render(){
 svg.innerHTML="";
-var valA=parseFloat(sliderA.value)||30;
-var valB=parseFloat(sliderB.value)||40;
+var valA=Number.isFinite(Number(sliderA.value))?Number(sliderA.value):30;
+var valB=Number.isFinite(Number(sliderB.value))?Number(sliderB.value):40;
 if(currentTab==="compare"){
 renderCompare(valA,valB);
 }else if(currentTab==="cone"){
@@ -924,106 +866,19 @@ epDraw(3);
 
 
 <script>
-(function(){
-  var fig=document.getElementById("m-vol-fig"),bar=document.getElementById("m-vol-bar"),status=document.getElementById("m-vol-status"),trap=document.getElementById("m-vol-trap-fig");
-  if(!fig||!bar)return;
-  var isDark=document.documentElement.classList.contains("dark")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches),
-      ca=isDark?"#38bdf8":"#0284c7",cb=isDark?"#f59e0b":"#d97706",cc=isDark?"#10b981":"#059669",cd=isDark?"#ec4899":"#db2777",
-      mut=isDark?"#94a3b8":"#64748b",bgCard=isDark?"#1e293b":"#f1f5f9",border=isDark?"#334155":"#e2e8f0",NS="http://www.w3.org/2000/svg";
-  function E(p,t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e;}
-  function T(p,x,y,s,c,sz,w,an){var t=E(p,"text",{x:x,y:y,fill:c||mut,"font-size":sz||11.5,"font-weight":w||400,"text-anchor":an||"start"});t.textContent=s;return t;}
-  function draw(m){
-    fig.innerHTML="";
-    if(m==="sys"){
-      T(fig,65,24,"圆柱: V=Sh",ca,12,700,"middle");
-      E(fig,"ellipse",{cx:65,cy:45,rx:35,ry:10,fill:"rgba(2,132,199,0.08)",stroke:ca,"stroke-width":1.5});
-      E(fig,"line",{x1:30,y1:45,x2:30,y2:125,stroke:ca,"stroke-width":1.5});
-      E(fig,"line",{x1:100,y1:45,x2:100,y2:125,stroke:ca,"stroke-width":1.5});
-      E(fig,"ellipse",{cx:65,cy:125,rx:35,ry:10,fill:"rgba(2,132,199,0.08)",stroke:ca,"stroke-width":1.5});
-      T(fig,65,148,"等底等高标准柱",ca,10.5,400,"middle");
-      T(fig,185,24,"圆锥: V=1/3 Sh",cb,12,700,"middle");
-      E(fig,"line",{x1:185,y1:45,x2:150,y2:125,stroke:cb,"stroke-width":1.5});
-      E(fig,"line",{x1:185,y1:45,x2:220,y2:125,stroke:cb,"stroke-width":1.5});
-      E(fig,"line",{x1:185,y1:45,x2:185,y2:125,stroke:mut,"stroke-width":1.2,"stroke-dasharray":"3 3"});
-      E(fig,"ellipse",{cx:185,cy:125,rx:35,ry:10,fill:"rgba(217,119,6,0.08)",stroke:cb,"stroke-width":1.5});
-      T(fig,185,148,"柱体的 1/3 体积",cb,10.5,700,"middle");
-      T(fig,305,24,"圆台: 通式过渡",cc,12,700,"middle");
-      E(fig,"ellipse",{cx:305,cy:60,rx:20,ry:6,fill:"rgba(16,185,129,0.08)",stroke:cc,"stroke-width":1.5});
-      E(fig,"line",{x1:285,y1:60,x2:270,y2:125,stroke:cc,"stroke-width":1.5});
-      E(fig,"line",{x1:325,y1:60,x2:340,y2:125,stroke:cc,"stroke-width":1.5});
-      E(fig,"ellipse",{cx:305,cy:125,rx:35,ry:10,fill:"rgba(16,185,129,0.08)",stroke:cc,"stroke-width":1.5});
-      T(fig,305,148,"1/3 h(S1+√S1S2+S2)",cc,10,600,"middle");
-      E(fig,"rect",{x:375,y:25,width:135,height:125,rx:6,fill:bgCard,stroke:border});
-      T(fig,385,48,"祖暅原理精要：",cb,11.5,700);
-      T(fig,385,72,"「幂势既同 则积不容异」",mut,10.5);
-      T(fig,385,96,"等高处截面积相等",cc,11,700);
-      T(fig,385,118,"→ 整体体积必相等",ca,11,700);
-    }else if(m==="expand"){
-      T(fig,30,24,"【侧面展开】曲面转平面",ca,12,700);
-      T(fig,70,48,"圆柱侧面: 矩形",ca,11,700);
-      E(fig,"rect",{x:40,y:56,width:130,height:60,fill:"rgba(2,132,199,0.08)",stroke:ca,"stroke-width":1.5});
-      T(fig,105,90,"S = 2πrh",ca,11,600,"middle");
-      T(fig,105,130,"长 2πr (底周长)",mut,10,400,"middle");
-      T(fig,240,48,"圆锥侧面: 扇形",cb,11,700);
-      E(fig,"path",{d:"M 270,115 L 320,55 A 70,70 0 0,1 360,110 Z",fill:"rgba(217,119,6,0.08)",stroke:cb,"stroke-width":1.5});
-      T(fig,290,80,"母线 l",cb,10.5,700);
-      T(fig,370,90,"弧长 2πr",cd,10.5,600);
-      T(fig,320,135,"S = 1/2 · 2πr · l = πrl",cb,11,700,"middle");
-      E(fig,"rect",{x:395,y:25,width:115,height:125,rx:6,fill:bgCard,stroke:border});
-      T(fig,405,48,"展开两要素：",cb,11.5,700);
-      T(fig,405,72,"• 半径 = 母线 l",ca,11,600);
-      T(fig,405,94,"• 弧长 = 2πr",cd,11,600);
-      T(fig,405,118,"• θ = 360° · r/l",cb,11,700);
-      T(fig,405,136,"★ 严禁用高 h！",cd,10,700);
-    }else if(m==="sphere"){
-      T(fig,30,24,"【球体与外接球】墙角模型补形求 2R",cd,12,700);
-      E(fig,"circle",{cx:90,cy:90,r:45,fill:"rgba(236,72,153,0.08)",stroke:cd,"stroke-width":1.8});
-      E(fig,"ellipse",{cx:90,cy:90,rx:45,ry:15,fill:"none",stroke:cd,"stroke-width":1.2,"stroke-dasharray":"3 3"});
-      E(fig,"line",{x1:90,y1:90,x2:125,y2:60,stroke:cd,"stroke-width":1.5});
-      T(fig,115,80,"R",cd,11,700);
-      T(fig,90,150,"S=4πR², V=4/3πR³",cd,11,700,"middle");
-      T(fig,195,50,"三垂侧棱补成长方体：",ca,11.5,700);
-      T(fig,195,75,"体对角线长 = 外接球直径 2R",ca,11,600);
-      T(fig,195,100,"(2R)² = a² + b² + c²",cb,12,700);
-      T(fig,195,125,"R = 1/2 · √(a²+b²+c²)",cc,11.5,700);
-      E(fig,"rect",{x:375,y:25,width:135,height:125,rx:6,fill:bgCard,stroke:border});
-      T(fig,385,48,"经典切接模型：",cb,11.5,700);
-      T(fig,385,70,"• 墙角模型: 补长方体",ca,10.5,600);
-      T(fig,385,90,"• 正方体内切: 2r = a",mut,10.5);
-      T(fig,385,110,"• 正方体棱切: 2R=√2a",mut,10.5);
-      T(fig,385,130,"• 正方体外接: 2R=√3a",cc,10.5,700);
-    }
-  }
-  [].forEach.call(bar.querySelectorAll("button"),function(b){
-    b.onclick=function(){
-      [].forEach.call(bar.querySelectorAll("button"),function(x){x.classList.remove("on");});
-      b.classList.add("on");
-      var m=b.getAttribute("data-m");
-      draw(m);
-      if(m==="sys")status.textContent="柱体 V=Sh，等底等高锥体体积为三分之一；台体为其平截过渡通式。";
-      else if(m==="expand")status.textContent="侧面展开核心：展开扇形半径为母线 l，弧长为底面周长 2πr。";
-      else if(m==="sphere")status.textContent="外接球核心：三垂侧棱补成长方体，体对角线即外接球直径 2R！";
-    };
-  });
-  draw("sys");
-  if(trap){
-    T(trap,30,20,"【圆锥轴截面】母线 l 与垂直高 h 的直角关系",ca,12,700);
-    E(trap,"line",{x1:76,y1:115,x2:196,y2:115,stroke:border,"stroke-width":1.5});
-    E(trap,"line",{x1:136,y1:35,x2:76,y2:115,stroke:border,"stroke-width":1});
-    E(trap,"line",{x1:136,y1:35,x2:136,y2:115,stroke:ca,"stroke-width":2.2});
-    T(trap,128,75,"垂直高 h=4 (算体积)",ca,10.5,700,"end");
-    E(trap,"path",{d:"M 136,105 L 146,105 L 146,115",fill:"none",stroke:mut,"stroke-width":1.2});
-    E(trap,"line",{x1:136,y1:115,x2:196,y2:115,stroke:cc,"stroke-width":2.2});
-    T(trap,166,130,"底面半径 r = 3",cc,11,600,"middle");
-    E(trap,"line",{x1:136,y1:35,x2:196,y2:115,stroke:cd,"stroke-width":2.2});
-    T(trap,172,68,"母线 l = 5 (算侧面)",cd,11,700);
-    E(trap,"rect",{x:270,y:25,width:240,height:105,rx:6,fill:bgCard,stroke:border});
-    T(trap,280,48,"错解代价警示：",cd,12,700);
-    T(trap,280,70,"• 正确体积: V = 1/3 π·3²·4 = 12π",ca,11,600);
-    T(trap,280,92,"• 错代母线: V=⅓π·3²·5=15π (虚胖25%)","#ef4444",10.5,700);
-    T(trap,280,114,"★ 铁律：斜长母线 l 绝不代入体积公式！",cd,10.5,700);
-  }
+/* solids-semantic-micro volume */
+(function(){var fig=document.getElementById("m-vol-fig"),bar=document.getElementById("m-vol-bar"),status=document.getElementById("m-vol-status"),trap=document.getElementById("m-vol-trap-fig");if(!fig||!bar)return;
+ function draw(mode){fig.innerHTML="";if(mode==="sys"){
+  [0,1,.5].forEach(function(top,i){var p=solidsChart(fig,{ox:90+170*i,oy:220,u:34});[0,2].forEach(function(z){var r=z?top:1,pts=[];for(var j=0;j<=80;j++){var t=2*Math.PI*j/80;pts.push([r*Math.cos(t),r*Math.sin(t),z]);}p.curve(pts,"circle-section");});for(var j=0;j<8;j++){var t=2*Math.PI*j/8;p.line([Math.cos(t),Math.sin(t),0],[top*Math.cos(t),top*Math.sin(t),2],"generator");}});solidsText(fig,90,280,"圆锥");solidsText(fig,260,280,"圆柱");solidsText(fig,430,280,"圆台");status.textContent="三图同高h=2，下底半径均为1。圆锥体积为圆柱的三分之一；圆台上下底面积分别π/4与π，体积按h(S₁+√(S₁S₂)+S₂)/3计算。祖暅原理要求两立体同高且每个等高位置的截面积都相等，才能推出体积相等。";
+ }else if(mode==="expand"){
+  var r=1,l=3,theta=2*Math.PI*r/l,cx=365,cy=150,u=27,start=-Math.PI/2,end=start+theta,x1=cx+l*u*Math.cos(start),y1=cy+l*u*Math.sin(start),x2=cx+l*u*Math.cos(end),y2=cy+l*u*Math.sin(end);
+  solidsAdd(fig,"rect",{x:35,y:110,width:2*Math.PI*r*20,height:2*20,fill:"var(--ok-soft)",stroke:"var(--a)","stroke-width":2,"data-role":"cylinder-net","data-r":r,"data-h":2,"data-u":20});
+  solidsAdd(fig,"path",{d:"M "+cx+" "+cy+" L "+x1+" "+y1+" A "+(l*u)+" "+(l*u)+" 0 "+(theta>Math.PI?1:0)+" 1 "+x2+" "+y2+" Z",fill:"var(--ok-soft)",stroke:"var(--b)","stroke-width":2,"data-role":"cone-sector","data-center":JSON.stringify([cx,cy]),"data-r":r,"data-l":l,"data-theta":theta,"data-u":u});
+  solidsText(fig,100,220,"圆柱：2πr×h");solidsText(fig,365,260,"圆锥：半径l");status.textContent="本扇形母线l=3、底面半径r=1，圆心角θ=2πr/l=2π/3（120°）。两条径向边都长3，弧长lθ=2πr，侧面积为πrl=3π。扇形半径不能用垂直高h替代。";
+ }else{var verts=solidsCube(2),p=solidsChart(fig,{ox:260,oy:152,u:56});solidsAdd(fig,"circle",{cx:260,cy:152,r:Math.sqrt(3)*56,fill:"var(--ok-soft)",stroke:"var(--b)","stroke-width":2,"data-role":"circumsphere","data-radius":Math.sqrt(3),"data-u":56});solidsEdges().forEach(function(e){p.line(verts[e[0]],verts[e[1]],"cube-edge");});verts.forEach(function(v){p.dot(v,"cube-vertex");});p.line(verts[0],verts[7],"body-diagonal");status.textContent="边长a=2的正方体与外接球共用同一个正交相机。八顶点到空间球心距离均√3，故外接球半径R=√3，投影点全部位于球的圆形轮廓内。体对角线是空间直径2R，屏幕投影长度通常更短；不能拿屏幕斜线长度当真实长度。";}}
+ [].forEach.call(bar.querySelectorAll("button"),function(b){b.onclick=function(){[].forEach.call(bar.querySelectorAll("button"),function(t){t.classList.toggle("on",t===b);});draw(b.getAttribute("data-m"));};});draw("sys");
+ if(trap){solidsAdd(trap,"polygon",{points:"120,170 210,170 120,50",fill:"none",stroke:"var(--a)","stroke-width":2,"data-role":"cone-axial-triangle","data-r":3,"data-h":4,"data-l":5,"data-u":30});solidsText(trap,85,112,"h=4");solidsText(trap,170,205,"r=3");solidsText(trap,190,100,"l=5");solidsText(trap,375,95,"体积12π");solidsText(trap,375,145,"侧面积15π");}
 })();
+
 </script>
-</body>
-</html>
+</body></html>

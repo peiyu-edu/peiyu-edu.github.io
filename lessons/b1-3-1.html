@@ -7,11 +7,16 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   .fig text { font-size: 20px; }
+  #entry-vend text { font-size: 24px; }
+  #m-fn-fig text { font-size: 24px; }
+  #m-hole-fig text { font-size: 14px; }
+  @media (max-width: 430px) { #pw text { font-size: 22px; } }
+
   .ops button.on { background: var(--a); color: #fff; }
   .info { font-size: 16px; margin: 8px 0; line-height: 1.9; overflow-wrap: anywhere; }
   .info .bad { color: var(--no); font-weight: 600; }
@@ -41,9 +46,9 @@
 </section>
 
 <section class="step" data-title="从例子进入">
-  <p>学校门口有一台饮料机，一个按钮管一种饮料。先亲手按一按下面的按钮（特别是 <b>3 号按钮</b>，多按几次试试），看看每次掉出什么：</p>
+  <p>学校门口有一台饮料机，按设计每个按钮应稳定对应一种饮料。先亲手按一按下面的按钮（特别是 <b>3 号按钮</b>，多按几次试试），看看每次掉出什么：</p>
   <div class="card predict" data-id="entry" data-answer="C">
-    <svg class="entry-fig" id="entry-vend" viewBox="0 0 520 205" role="img" aria-label="自动售货机三个按钮与三种饮料的对应关系演示"></svg>
+    <svg class="entry-fig" id="entry-vend" viewBox="0 0 520 205" role="img" aria-label="自动售货机三个按钮与四种饮料的对应关系演示"></svg>
     <div class="entry-bar" id="entry-vend-bar">
       <button type="button" data-btn="1">按 1 号按钮</button>
       <button type="button" data-btn="2">按 2 号按钮</button>
@@ -58,7 +63,7 @@
     </div>
     <div class="reveal">
       <p><b>C</b>。A、B 都不碍事：按哪个按钮，你都知道会拿到什么。C 不行：按同一个 3 号按钮，出来什么说不准。（要是有个按钮按了什么都不出，也算毛病。）</p>
-      <p>把按钮看成 \(x\)，饮料看成 \(y\)：<b>每个按钮都出东西，而且只出确定的一种</b>。数学里这样的对应就叫<b>函数</b>。看上面的对应图：A 是「两个 \(x\) 对应同一个 \(y\)（多对一）」，B 是「有的 \(y\) 没被用到」，这两种都允许；唯独 C 的「一对多」绝对不行。</p>
+      <p>把按钮看成 \(x\)，饮料看成 \(y\)：<b>每个按钮都出东西，而且只出确定的一种</b>。这说明函数所要求的「每个输入都有唯一输出」。饮料机是帮助理解对应关系的比喻；本节正式研究的函数以实数作为输入和输出。看上面的对应图：A 是「两个 \(x\) 对应同一个 \(y\)（多对一）」，B 是「有的 \(y\) 没被用到」，这两种都允许；唯独 C 的「一对多」绝对不行。</p>
       <p>这一节把这句话说清楚，再学会求定义域、用三种方法表示函数、和分段函数打交道。</p>
     </div>
   </div>
@@ -74,7 +79,7 @@
     <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>函数对应法则：输入 x 唯一映射到输出 y</b></p>
     <div class="entry-bar" id="m-fn-bar" role="group" aria-label="函数映射机制微图解切换">
       <button type="button" class="on" data-k="norm">① 合法函数（多对一 / 一对一：每个 x 都有唯一确定的 y ✓）</button>
-      <button type="button" data-k="many">② 违规 1：一对多劈腿（1 个 x 对应多个 y，垂直线两交点 ✗）</button>
+      <button type="button" data-k="many">② 违规 1：一个输入对应多个输出（1 个 x 对应多个 y，垂直线两交点 ✗）</button>
       <button type="button" data-k="lost">③ 违规 2：定义域被遗弃（集合 A 中有 x 找不到对应 ✗）</button>
     </div>
     <svg class="micro-fig" id="m-fn-fig" viewBox="0 0 520 160" role="img" aria-label="函数输入输出映射微图解"></svg>
@@ -84,7 +89,7 @@
   <div class="concept-grid">
     <div class="card">
       <p style="margin:0 0 6px"><span class="badge-pill badge-a">核心本质</span><b>每个 x 唯一对应 y（垂直线法则）</b></p>
-      <p class="small" style="margin:0">定义域内每一个 \(x\) 都必须有且仅有一个归宿！在坐标系中垂直于 \(x\) 轴的竖线从左向右扫，与图象永远<b>最多一个交点</b>。若出现两个交点（如圆 \(x^2+y^2=1\)）立刻判非函数！</p>
+      <p class="small" style="margin:0">定义域内每一个 \(x\) 都必须有且仅有一个输出。给定定义域后，其中每个 \(x\) 对应的竖线必须与图象<b>恰有一个交点</b>；定义域外的竖线没有交点。若某条竖线出现两个交点，图形就不能作为 \(y=f(x)\) 的图象，例如圆 \(x^2+y^2=1\)。</p>
     </div>
     <div class="card">
       <p style="margin:0 0 6px"><span class="badge-pill badge-no">同一函数铁律</span><b>两同则同：定义域相同 且 对应法则相同</b></p>
@@ -93,9 +98,12 @@
   </div>
 
   <h3>2. 函数的数学定义与三要素</h3>
-  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
-    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{y = f(x),\quad x \in A}_{\text{A 为定义域，f 为对应法则，值域 } \{f(x)\mid x\in A\}\subseteq B}}\)</span>
-    <span style="display:inline-block; margin:0 12px">\(\color{#966524}{\underbrace{\text{同一函数判定：定义域相同 } \wedge \text{ 对应法则相同}}_{\text{自变量用什么字母无所谓：}f(x)=x^2 \text{ 与 } g(t)=t^2 \text{ 完全一致}}}\)</span>
+  <p>设 \(A\)、\(B\) 都是<b>非空实数集</b>。按照确定的对应关系 \(f\)，\(A\) 中每一个 \(x\) 在 \(B\) 中都有唯一的 \(y\) 与之对应，就称 \(f\) 为从 \(A\) 到 \(B\) 的函数，记作 \(y=f(x)\)。\(A\) 是定义域，所有实际输出组成的集合是值域，值域包含于 \(B\)，不必用满 \(B\)。记号 \(f(x)\) 是输入 \(x\) 时的函数值，不能看作 \(f\) 乘 \(x\)。</p>
+  <div class="key" style="padding:12px">
+    <p style="margin:0 0 8px">\(\color{#2F7A56}{\underbrace{x\in A}_{\text{输入范围}}\quad\underbrace{y=f(x)}_{\text{对应关系}}}\)</p>
+    <p style="margin:0 0 8px">值域：\(\{f(x)\mid x\in A\}\subseteq B\)。</p>
+    <p style="margin:0 0 8px"><b>同一函数：</b>定义域相同，且每个输入对应的输出相同。</p>
+    <p style="margin:0">自变量字母不影响函数：在同一定义域上，\(f(x)=x^2\) 与 \(g(t)=t^2\) 相同。</p>
   </div>
 
   <div class="card">
@@ -129,6 +137,14 @@
       <button class="opt" data-v="B"><b>B</b>不是：式子不一样</button>
     </div>
     <div class="reveal"><p><b>A</b>。定义域都是 \(\{-1,1\}\)；对应关系逐个比：\(f(-1)=1=g(-1)\)，\(f(1)=1=g(1)\)，每个 \(x\) 得到的数一样。选 B 的同学只看了式子的样子：比的是「每个 \(x\) 对应谁」，不是式子长得像不像。</p></div>
+  </div>
+
+  <h3 id="step2-representations">三种表示法：规则、数据和图象</h3>
+  <p>同一函数可按任务选择表示法：<b>解析法</b>便于计算，<b>列表法</b>便于逐个读数，<b>图象法</b>便于观察整体变化。列表必须列明全部输入，或明确它只是部分数据；有限样本不能代替整个函数。</p>
+  <div class="card">
+    <p>例如 \(A=\{-1,0,1\}\)，按 \(f(x)=x^2\) 对应。解析法写明规则和定义域；列表如下：</p>
+    <table style="width:100%;text-align:center"><caption>有限定义域内的全部输入与输出</caption><tbody><tr><th scope="row">输入 \(x\)</th><td>−1</td><td>0</td><td>1</td></tr><tr><th scope="row">输出 \(f(x)\)</th><td>1</td><td>0</td><td>1</td></tr></tbody></table>
+    <p>图象是点集 \(\{(x,f(x))\mid x\in A\}\)，在本例中只有 \((-1,1),(0,0),(1,1)\) 三个孤立点，<b>不能连线</b>。若另取定义域为 \(\mathbf R\)，同样的平方规则才得到完整的抛物线；这已是另一个函数。</p>
   </div>
 
   <h3 id="step2-method">3. 三步破题思维链：求定义域与分段函数求值</h3>
@@ -194,14 +210,14 @@
   <h3 id="step2-boundary">4. 用之前必查：三大高频翻车现场</h3>
   <div class="trap-grid">
     <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>原式先约分化简，导致定义域被偷偷扩大</span></div>
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>约分后丢掉原定义域限制</span></div>
       <div class="trap-body">
         <div class="trap-vs">
           <div class="trap-wrong">
             <b>❌ 典型错解</b>：看到 \(f(x)=\dfrac{x^2-1}{x-1}\)，随手约分成 \(x+1\)，断定定义域是全体实数 \(\mathbf{R}\)。
           </div>
           <div class="trap-right">
-            <b>✅ 看右图秒懂真相</b>：求定义域必须<b>原式至上</b>！原式在 \(x=1\) 时分母为 0 毫无意义，图象在 \((1,2)\) 处有一个<b>不可逾越的穿透空心孔洞</b>！
+            <b>✅ 看右图秒懂真相</b>：约分不改变原函数的定义域；化简后仍须保留 \(x\ne1\)。原式在 \(x=1\) 时分母为 0 毫无意义，图象在 \((1,2)\) 处有一个<b>不取的空心点</b>！
           </div>
         </div>
         <div>
@@ -413,6 +429,8 @@
     svg("line", { x1: X(0), y1: PT, x2: X(0), y2: PB, stroke: fg, "stroke-width": 1.5 }, pw);
     for (i = XL; i <= XH; i += 2) if (i) svg("text", { x: X(i), y: Y(0) + 24, "text-anchor": "middle", fill: mu }, pw).textContent = String(i).replace("-", "−");
     for (i = -2; i <= YH; i += 2) if (i) svg("text", { x: X(0) - 8, y: Y(i) + 7, "text-anchor": "end", fill: mu }, pw).textContent = String(i).replace("-", "−");
+    svg("text", { x: PR + 8, y: Y(0) + 7, fill: mu }, pw).textContent = "x";
+    svg("text", { x: X(0) + 8, y: PT - 6, fill: mu }, pw).textContent = "y";
     // 两段
     var g = svg("g", { "clip-path": "url(#pwclip)" }, pw);
     if (P.b > XL) svg("path", { d: curve(f1, XL, P.b), fill: "none", stroke: ca, "stroke-width": 3.5 }, g);
@@ -479,8 +497,11 @@
     var b = tn(P.b);
     var lc = (P.own === "L" || P.own === "both") ? "x\\le " + b : "x<" + b;
     var rc = (P.own === "R" || P.own === "both") ? "x\\ge " + b : "x>" + b;
+    var conflict = P.own === "both" && f1(P.b) !== f2(P.b);
     var dom = P.own === "none" ? "\\{x\\mid x\\ne " + b + "\\}" : "\\mathbf R";
-    var s = "\\(f(x)=\\begin{cases}x+1,&" + lc + ",\\\\ x^2-1,&" + rc + ".\\end{cases}\\)<br>定义域：\\(" + dom + "\\)";
+    var s = "\\(f(x)=\\begin{cases}x+1,&" + lc + ",\\\\ x^2-1,&" + rc + ".\\end{cases}\\)<br>" + (conflict ? "输入范围（此对应不是函数）：" : "定义域：") + "\\(" + dom + "\\)";
+    if (conflict) s += '<br><span class="bad">分界点给出两个不同输出，整个对应不是函数，不能因竖线移开就判为函数。</span>';
+    if (P.own === "none") s += "（这是定义在去掉分界点的集合上的函数；若要求定义域为全体实数，就缺少该点。）";
     if (P.own === "both") s += "（两段在 \\(x=" + b + "\\) 处重叠了）";
     s += "<br>";
     var x0 = tn(P.x0);
@@ -631,7 +652,7 @@
     // 左侧：售货机外壳
     svg("rect", { x: 18, y: 12, width: 176, height: 180, rx: 12, fill: card, stroke: fg, "stroke-width": 2 }, evSvg);
     svg("rect", { x: 30, y: 24, width: 152, height: 42, rx: 6, fill: okS, stroke: ln }, evSvg);
-    svg("text", { x: 106, y: 50, "text-anchor": "middle", "font-weight": 700, fill: ca, "font-size": 15 }, evSvg).textContent = "校园自动饮料机";
+    svg("text", { x: 106, y: 50, "text-anchor": "middle", "font-weight": 700, fill: ca, "font-size": 15 }, evSvg).textContent = "饮料机";
     // 三个机身上的按钮
     [1, 2, 3].forEach(function (n, idx) {
       var bx = 32 + idx * 50, active = btn === n, col = n === 3 ? no : ca;
@@ -641,17 +662,17 @@
       g.onclick = function () { evDraw(n, true); };
     });
     // 出货口
-    var dropName = btn === 1 || btn === 2 ? "矿泉水" : (evToggle3 ? "雪碧 (？)" : "可乐 (？)");
+    var dropName = btn === 1 || btn === 2 ? "矿泉水" : (evToggle3 ? "雪碧？" : "可乐？");
     var dropCol = btn === 3 ? no : ca;
     svg("rect", { x: 32, y: 122, width: 148, height: 56, rx: 8, fill: btn === 3 ? noS : okS, stroke: dropCol, "stroke-width": 1.8 }, evSvg);
     svg("text", { x: 106, y: 144, "text-anchor": "middle", fill: mu, "font-size": 13 }, evSvg).textContent = "出货口掉落：";
     svg("text", { x: 106, y: 167, "text-anchor": "middle", "font-weight": 700, fill: dropCol, "font-size": 16 }, evSvg).textContent = dropName;
 
     // 右侧：集合映射图（按钮 x -> 饮料 y）
-    svg("text", { x: 256, y: 26, "text-anchor": "middle", "font-weight": 700, fill: fg, "font-size": 14.5 }, evSvg).textContent = "输入：按钮 x";
-    svg("text", { x: 448, y: 26, "text-anchor": "middle", "font-weight": 700, fill: fg, "font-size": 14.5 }, evSvg).textContent = "输出：饮料 y";
+    svg("text", { x: 256, y: 26, "text-anchor": "middle", "font-weight": 700, fill: fg, "font-size": 14.5 }, evSvg).textContent = "按钮 x";
+    svg("text", { x: 448, y: 26, "text-anchor": "middle", "font-weight": 700, fill: fg, "font-size": 14.5 }, evSvg).textContent = "饮料 y";
     var byY = [60, 114, 168];
-    var drinks = [["矿泉水", 52], ["橙汁(闲置)", 96], ["可乐", 140], ["雪碧", 182]];
+    var drinks = [["矿泉水", 52], ["橙汁", 96], ["可乐", 140], ["雪碧", 182]];
     // 连线箭头
     var defs = svg("defs", {}, evSvg);
     [["ag", ca], ["ar", no], ["am", ln]].forEach(function (pair) {
@@ -668,7 +689,7 @@
     [1, 2, 3].forEach(function (n, idx) {
       var active = btn === n, col = n === 3 ? no : ca;
       svg("rect", { x: 220, y: byY[idx] - 16, width: 72, height: 32, rx: 16, fill: active ? (n === 3 ? noS : okS) : card, stroke: active ? col : ln, "stroke-width": active ? 2 : 1.2 }, evSvg);
-      svg("text", { x: 256, y: byY[idx] + 5, "text-anchor": "middle", "font-weight": active ? 700 : 400, fill: active ? col : fg, "font-size": 14.5 }, evSvg).textContent = n + " 号按钮";
+      svg("text", { x: 256, y: byY[idx] + 5, "text-anchor": "middle", "font-weight": active ? 700 : 400, fill: active ? col : fg, "font-size": 14.5 }, evSvg).textContent = n + "号";
     });
     drinks.forEach(function (d, idx) {
       var isHit = (btn <= 2 && idx === 0) || (btn === 3 && ((idx === 2 && !evToggle3) || (idx === 3 && evToggle3)));
@@ -719,10 +740,10 @@
     svg("path", { d: "M 0 1.5 L 8 5 L 0 8.5 z", fill: no }, mkNo);
 
     svg("ellipse", { cx: 120, cy: 80, rx: 70, ry: 60, fill: card, stroke: ca, "stroke-width": 2 }, mFnSvg);
-    svg("text", { x: 120, y: 35, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 14 }, mFnSvg).textContent = "输入集 A (定义域)";
+    svg("text", { x: 120, y: 35, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 14 }, mFnSvg).textContent = "A";
 
     svg("ellipse", { cx: 400, cy: 80, rx: 70, ry: 60, fill: card, stroke: cb, "stroke-width": 2 }, mFnSvg);
-    svg("text", { x: 400, y: 35, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 14 }, mFnSvg).textContent = "输出集 B (包含值域)";
+    svg("text", { x: 400, y: 35, "text-anchor": "middle", fill: cb, "font-weight": 700, "font-size": 14 }, mFnSvg).textContent = "B";
 
     var ptsA = [ { n: "x₁", y: 60 }, { n: "x₂", y: 85 }, { n: "x₃", y: 110 } ];
     var ptsB = [ { n: "y₁", y: 60 }, { n: "y₂", y: 85 }, { n: "y₃", y: 110 } ];
@@ -740,20 +761,20 @@
       svg("line", { x1: 125, y1: 60, x2: 392, y2: 60, stroke: ca, "stroke-width": 2.2, "marker-end": "url(#mFnArr)" }, mFnSvg);
       svg("line", { x1: 125, y1: 85, x2: 392, y2: 64, stroke: ca, "stroke-width": 2.2, "marker-end": "url(#mFnArr)" }, mFnSvg);
       svg("line", { x1: 125, y1: 110, x2: 392, y2: 85, stroke: ca, "stroke-width": 2.2, "marker-end": "url(#mFnArr)" }, mFnSvg);
-      svg("text", { x: 260, y: 148, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13 }, mFnSvg).textContent = "✓ 合法：每个 x 都有且仅有 1 个归宿（多对一、B中有闲置均合法）";
+      svg("text", { x: 260, y: 148, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 13 }, mFnSvg).textContent = "每个输入，唯一输出";
       if (mFnNote) mFnNote.innerHTML = "<b>合法函数映射</b>：x₁ 与 x₂ 都对应 y₁（多对一，就像两个按钮都出矿泉水，完全确定）；y₃ 没被用到也没关系！";
     } else if (k === "many") {
       svg("line", { x1: 125, y1: 60, x2: 392, y2: 60, stroke: no, "stroke-width": 2.5, "marker-end": "url(#mFnArrNo)" }, mFnSvg);
       svg("line", { x1: 125, y1: 60, x2: 392, y2: 85, stroke: no, "stroke-width": 2.5, "marker-end": "url(#mFnArrNo)" }, mFnSvg);
       svg("line", { x1: 125, y1: 85, x2: 392, y2: 85, stroke: ca, "stroke-width": 1.6, "marker-end": "url(#mFnArr)" }, mFnSvg);
       svg("line", { x1: 125, y1: 110, x2: 392, y2: 110, stroke: ca, "stroke-width": 1.6, "marker-end": "url(#mFnArr)" }, mFnSvg);
-      svg("text", { x: 260, y: 148, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 13 }, mFnSvg).textContent = "✗ 违规：输入 x₁ 劈腿对应了两个输出（一对多违反唯一性！）";
+      svg("text", { x: 260, y: 148, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 13 }, mFnSvg).textContent = "x₁ 对应两个输出";
       if (mFnNote) mFnNote.innerHTML = "<b>非函数违规（一对多）</b>：输入 x₁ 同时对应 y₁ 和 y₂，就像按 1 号键有时掉可乐有时掉雪碧，输出不唯一，判定<b>不是函数</b>！";
     } else if (k === "lost") {
       svg("line", { x1: 125, y1: 60, x2: 392, y2: 60, stroke: ca, "stroke-width": 2, "marker-end": "url(#mFnArr)" }, mFnSvg);
       svg("line", { x1: 125, y1: 85, x2: 392, y2: 85, stroke: ca, "stroke-width": 2, "marker-end": "url(#mFnArr)" }, mFnSvg);
       svg("circle", { cx: 120, cy: 110, r: 10, fill: "none", stroke: no, "stroke-width": 2, "stroke-dasharray": "3 3" }, mFnSvg);
-      svg("text", { x: 260, y: 148, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 13 }, mFnSvg).textContent = "✗ 违规：元素 x₃ 找不到输出归宿（定义域被遗弃！）";
+      svg("text", { x: 260, y: 148, "text-anchor": "middle", fill: no, "font-weight": 700, "font-size": 13 }, mFnSvg).textContent = "x₃ 没有输出";
       if (mFnNote) mFnNote.innerHTML = "<b>非函数违规（定义域有漏网之鱼）</b>：A 是定义域，A 里的每一个元素都必须参与映射，x₃ 被丢下没有输出，判定<b>不是函数</b>！";
     }
 
@@ -768,23 +789,19 @@
     if (!mHoleSvg) return;
     mHoleSvg.innerHTML = "";
     var fg = css("--fg"), ca = css("--a"), no = css("--no"), card = css("--card"), ln = css("--line"), mu = css("--muted"), hl = css("--hl");
-    svg("line", { x1: 30, y1: 102, x2: 250, y2: 102, stroke: ln, "stroke-width": 1.5 }, mHoleSvg);
-    svg("line", { x1: 80, y1: 122, x2: 80, y2: 16, stroke: ln, "stroke-width": 1.5 }, mHoleSvg);
-    svg("text", { x: 250, y: 116, fill: mu, "font-size": 12 }, mHoleSvg).textContent = "x";
+    svg("line", { x1: 30, y1: 120, x2: 250, y2: 120, stroke: ln, "stroke-width": 1.5 }, mHoleSvg);
+    svg("line", { x1: 80, y1: 136, x2: 80, y2: 12, stroke: ln, "stroke-width": 1.5 }, mHoleSvg);
+    svg("text", { x: 250, y: 135, fill: mu, "font-size": 12 }, mHoleSvg).textContent = "x";
     svg("text", { x: 65, y: 24, fill: mu, "font-size": 12 }, mHoleSvg).textContent = "y";
 
-    svg("line", { x1: 48, y1: 134, x2: 126, y2: 56, stroke: ca, "stroke-width": 2.5 }, mHoleSvg);
-    svg("line", { x1: 134, y1: 48, x2: 170, y2: 12, stroke: ca, "stroke-width": 2.5 }, mHoleSvg);
-
-    svg("line", { x1: 130, y1: 52, x2: 130, y2: 102, stroke: mu, "stroke-dasharray": "2 2", "stroke-width": 1.2 }, mHoleSvg);
-    svg("line", { x1: 80, y1: 52, x2: 130, y2: 52, stroke: mu, "stroke-dasharray": "2 2", "stroke-width": 1.2 }, mHoleSvg);
-    svg("circle", { cx: 130, cy: 52, r: 5, fill: card, stroke: no, "stroke-width": 2.5 }, mHoleSvg);
-
-    svg("text", { x: 130, y: 115, "text-anchor": "middle", fill: fg, "font-size": 11.5 }, mHoleSvg).textContent = "1";
-    svg("text", { x: 70, y: 56, "text-anchor": "end", fill: fg, "font-size": 11.5 }, mHoleSvg).textContent = "2";
-
-    svg("text", { x: 140, y: 42, fill: no, "font-weight": 700, "font-size": 11.5 }, mHoleSvg).textContent = "(1,2) 穿透空心洞！";
-    svg("text", { x: 140, y: 135, "text-anchor": "middle", fill: hl, "font-weight": 700, "font-size": 11.5 }, mHoleSvg).textContent = "求定义域看原式：x=1 分母为0绝不可取！";
+    svg("line", { x1: 40, y1: 126, x2: 110, y2: 56, stroke: ca, "stroke-width": 2.5 }, mHoleSvg);
+    svg("line", { x1: 118, y1: 48, x2: 150, y2: 16, stroke: ca, "stroke-width": 2.5 }, mHoleSvg);
+    svg("line", { x1: 114, y1: 52, x2: 114, y2: 120, stroke: mu, "stroke-dasharray": "2 2" }, mHoleSvg);
+    svg("line", { x1: 80, y1: 52, x2: 114, y2: 52, stroke: mu, "stroke-dasharray": "2 2" }, mHoleSvg);
+    svg("circle", { cx: 114, cy: 52, r: 5, fill: card, stroke: no, "stroke-width": 2.5 }, mHoleSvg);
+    svg("text", { x: 114, y: 137, "text-anchor": "middle", fill: fg, "font-size": 14 }, mHoleSvg).textContent = "1";
+    svg("text", { x: 70, y: 58, "text-anchor": "end", fill: fg, "font-size": 14 }, mHoleSvg).textContent = "2";
+    svg("text", { x: 126, y: 52, fill: no, "font-weight": 700, "font-size": 14 }, mHoleSvg).textContent = "(1,2) 不取";
   }
 
   function initStep2() {

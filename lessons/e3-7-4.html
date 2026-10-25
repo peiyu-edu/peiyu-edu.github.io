@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -76,13 +76,13 @@
 
   <div class="card">
     <p><b>超几何分布与大样本近似</b>：</p>
-    <p>• <b>超几何分布</b>：有限总体（共 \(N\) 件含 \(M\) 件特品），<b>不放回抽样 \(n\) 件</b>，抽到的特品数服从超几何分布；</p>
-    <p>• <b>大样本近似</b>：当总体容量 \(N\) 极大（如批量 \(N \ge 1000\)）且抽样比很小（\(n/N \le 0.1\)）时，抽走几件产品对剩下的总体比例几乎毫无影响，<b>不放回抽样可直接近似看作有放回的二项分布</b>！</p>
+    <p>• <b>超几何分布</b>：从共 \(N\) 件、含 \(M\) 件特品的总体中，<b>等可能地不放回抽取 \(n\) 件</b>，抽到的特品数服从超几何分布。参数为整数，\(N\ge1,\ 0\le M\le N,\ 0\le n\le N\)；通常抽至少1件，\(n=0\) 可作为空抽样的退化情形。</p>
+    <p>• <b>二项近似</b>：关键是<b>抽样比 \(n/N\) 很小</b>，不能只看总体 \(N\) 大。此时每次抽取对剩余特品比例的影响较小，可考虑用 \(B(n,M/N)\) 近似；所求概率的误差仍需核查，没有一个固定总体门槛能保证所有题目都足够准确。</p>
   </div>
 
   <!-- 伴读直觉微图解 -->
   <div class="micro-box" id="micro-binom-hyper">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; margin-bottom:8px;">
       <span style="font-weight:700; color:var(--primary); font-size:14px;">二项分布与超几何分布直觉微图解：抽样机理、大样本近似与期望方差对比</span>
       <div class="micro-tabs" id="m-bh-tabs">
         <button class="micro-tab active" data-tab="1">① 有放回 (独立) vs 不放回 (牵连)</button>
@@ -93,7 +93,7 @@
     <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
       <svg class="micro-fig" id="m-bh-fig" viewBox="0 0 620 220" style="width:100%; max-width:620px; height:auto; display:block; margin:0 auto;"></svg>
     </div>
-    <div class="micro-desc" id="m-bh-desc" style="margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.55;">
+    <div class="micro-desc" id="m-bh-desc" style="margin-top:8px; font-size:15px; color:var(--muted); line-height:1.65;">
       加载中...
     </div>
   </div>
@@ -113,9 +113,9 @@
         <b style="color:#2e7d32;">超几何分布 \(H(N, M, n)\)</b>
         <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:2px 8px; border-radius:10px;">不放回 / 牵连</span>
       </div>
-      <p class="small" style="margin:0 0 4px 0;"><b>抽样机理</b>：不放回抽样，各次试验非独立，各步概率动态变化。</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>抽样机理</b>：不放回抽样，在 \(0&lt;M&lt;N\)、至少抽2件时，各次试验相关；下一次成功概率随已抽结果而变。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>概率公式</b>：\(P(X=k) = \dfrac{C_M^k C_{N-M}^{n-k}}{C_N^n}\)。</p>
-      <p class="small" style="margin:0;"><b>期望与方差</b>：\(E(X) = n\dfrac{M}{N} = np,\quad D(X) = np(1-p)\dfrac{N-n}{N-1}\)。</p>
+      <p class="small" style="margin:0;"><b>期望与方差</b>：\(E(X)=np\)，其中 \(p=M/N\)。\(N&gt;1\) 时 \(D(X)=np(1-p)\dfrac{N-n}{N-1}\)；\(N=1\) 时结果确定，方差为0，不能代入含 \(N-1\) 的式子。</p>
     </div>
   </div>
 
@@ -124,8 +124,9 @@
     <p style="margin:0 0 8px 0; font-weight:700;">二项分布与超几何分布核心对照表：</p>
     <p style="margin:0 0 6px 0;">二项分布公式：\(P(X=k) = \color{#d97706}{C_n^k} \cdot \color{#1976d2}{p^k} \cdot \color{#2e7d32}{(1-p)^{n-k}},\qquad E(X) = \color{#1976d2}{np},\quad D(X) = \color{#2e7d32}{np(1-p)}\)</p>
     <p style="margin:0 0 6px 0;">超几何分布公式：\(P(X=k) = \dfrac{\color{#1976d2}{C_M^k} \cdot \color{#2e7d32}{C_{N-M}^{n-k}}}{\color{#d97706}{C_N^n}},\qquad E(X) = \color{#1976d2}{n \cdot \dfrac{M}{N}} = \color{#1976d2}{np}\)</p>
-    <p style="margin:0;">方差关系：超几何分布方差比二项分布<b>更小</b>（乘上了修正因子 \(\dfrac{N-n}{N-1} < 1\)），因为不放回抽样锁定了部分结果，减小了离散波动！</p>
+    <p style="margin:0;">方差关系：比较同一组 \(n,p=M/N\)。在 \(N&gt;1,\ 1\le n\le N\) 时，\(0\le\dfrac{N-n}{N-1}\le1\)，所以 \(D_{\text{超}}\le D_{\text{二}}\)。<b>严格小于</b>需同时满足 \(n&gt;1\) 且 \(0&lt;p&lt;1\)；\(n=1\) 或 \(p=0,1\) 时两方差相等。</p>
   </div>
+  <p class="small"><b>退化边界另算</b>：\(N=1\) 时只能取 \(M=0\) 或1；合法抽样数为0或1，计数均确定、方差为0。若允许 \(n=0\)，无论总体如何，两种模型都恒为0、方差为0；不要用“修正因子小于1”解释空抽样。</p>
 
   <div class="card predict" data-id="try-1" data-answer="C">
     <p>自己试试：掷一颗均匀的骰子 \(3\) 次，恰好有 \(1\) 次是 \(6\) 点的概率是？</p>
@@ -174,7 +175,7 @@
       </div>
       <div class="think-step" style="padding-left:12px; border-left:2px solid #f59e0b;">
         <b style="color:#f59e0b;">🛡️ 第三步本质洞察与防坑核查</b>：
-        <span class="small">对比惊人规律：\(E(X) = E(Y) = 0.9\)（两种抽样期望完全一样！）；而方差 \(D(Y) = 0.49 < D(X) = 0.63\)！不放回抽样由于每抽走一件就缩减了后期的不确定性，方差恒小于有放回抽样。防坑：切勿把不放回的方差直接套用 \(np(1-p)\)！</span>
+        <span class="small">对比惊人规律：\(E(X) = E(Y) = 0.9\)（两种抽样期望完全一样！）；而方差 \(D(Y) = 0.49 < D(X) = 0.63\)！本例 \(N&gt;1,n=3&gt;1,0&lt;p=0.3&lt;1\)，满足严格小于的条件；抽1件或总体全为同一类时，两种方差相等。防坑：切勿把不放回的方差直接套用 \(np(1-p)\)！</span>
       </div>
     </div>
   </div>
@@ -234,7 +235,7 @@
   </div>
 
   <h3>② 进阶：同一个袋子，放回和不放回</h3>
-  <p class="small">\(N\) 个球里有 \(M\) 个红球（红球比例 \(\dfrac MN\)），摸 \(n\) 个，数红球。蓝柱：放回，\(B\left(n,\dfrac MN\right)\)；金柱：不放回，超几何分布。保持比例，把 \(N\) 调大，看两组柱子怎么靠近；红色三角标出差得最多的 \(k\)。</p>
+  <p class="small">\(N\) 个球里有 \(M\) 个红球（红球比例 \(\dfrac MN\)），摸 \(n\) 个，数红球。蓝柱：放回，\(B\left(n,\dfrac MN\right)\)；金柱：不放回，超几何分布。保持比例和抽样数 \(n\) 不变，把 \(N\) 调大，抽样比 \(n/N\) 变小，看两组柱子怎么靠近；红色三角标出差得最多的 \(k\)。</p>
   <div class="card">
     <svg class="fig" id="hyp" viewBox="0 0 560 340" role="img" aria-label="放回与不放回两种抽法的分布柱状图对比"></svg>
     <div class="ctrl"><label for="Nin">\(N\)</label><input type="range" id="Nin" min="0" max="6" step="1"><output id="Nout"></output></div>
@@ -292,7 +293,7 @@
       <button class="opt" data-v="C"><b>C</b>不放回，所以和二项分布毫无关系，不能拿来算</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。不放回抽取，准确的模型是超几何分布。总体比样本大得多时，抽走几件几乎不改变次品比例，所以二项分布是很好的<b>近似</b>，但两者并不相等（比如 \(P(X=0)\)：超几何约 \(0.77374\)，二项 \(0.95^5\approx0.77378\)）。A 把近似说成了相等；C 太绝对，近似计算是允许的，只要说明是近似、理由是总体足够大。</p>
+      <p><b>B</b>。不放回抽取，准确的模型是超几何分布。总体比样本大得多时，抽走几件几乎不改变次品比例，所以二项分布是很好的<b>近似</b>，但两者并不相等（比如 \(P(X=0)\)：超几何约 \(0.77374\)，二项 \(0.95^5\approx0.77378\)）。A 把近似说成了相等；C 太绝对，近似计算是允许的，只要说明是近似，理由是本题抽样比 \(5/10000=0.0005\) 很小，并核查所需精度。</p>
       <p>顺带一提：两种模型的均值都是 \(5\times0.05=0.25\)，一样。</p>
     </div>
   </div>
@@ -365,6 +366,10 @@
     if (k < Math.max(0, n - N + M) || k > Math.min(n, M)) return 0;
     return comb(M, k) * comb(N - M, n - k) / comb(N, n);
   }
+  function hyperMoments(N, M, n) {
+    var p = M / N, mean = n * p, vb = n * p * (1-p);
+    return { mean: mean, binomial: vb, hypergeometric: N === 1 || n === 0 ? 0 : vb * (N-n) / (N-1) };
+  }
   function niceMax(m) { var s = m <= 0.5 ? 0.1 : 0.2; return Math.min(1, Math.max(s, Math.ceil(m / s - 1e-9) * s)); }
   // 画坐标轴与纵向刻度，返回 y 映射
   function axes(fig, X0, X1, Yt, Yb, ymax) {
@@ -391,14 +396,14 @@
     for (var k = 0; k <= bn; k++) { P.push(binom(bn, p, k)); mx = Math.max(mx, P[k]); }
     var ymax = niceMax(mx);
     var ca = css("--a"), cc = css("--c"), hl = css("--hl"), fg = css("--fg");
-    bin.innerHTML = "";
+    bin.innerHTML = ""; bin.setAttribute("data-selected-k", bk);
     var y = axes(bin, X0, X1, Yt, Yb, ymax);
     var w = (X1 - X0) / (bn + 1);
     function xc(k) { return X0 + w * (k + 0.5); }
     P.forEach(function (v, k) {
       var r = svg("rect", { x: xc(k) - w * 0.36, y: y(v), width: w * 0.72, height: Math.max(0, Yb - y(v)), fill: k === bk ? hl : ca, style: "cursor:pointer" }, bin);
       // 透明的点击区，矮柱子也好点
-      var hit = svg("rect", { x: xc(k) - w / 2, y: Yt, width: w, height: Yb - Yt + 30, fill: "transparent", style: "cursor:pointer" }, bin);
+      var hit = svg("rect", { "data-binomial-choice": k, x: xc(k) - w / 2, y: Yt, width: w, height: Yb - Yt + 30, fill: "transparent", style: "cursor:pointer" }, bin);
       hit.addEventListener("click", function () { bk = k; binDraw(); Peiyu.log("interact", { id: "binom-k", n: bn, p: p, k: k }); });
       r.addEventListener("click", function () { bk = k; binDraw(); });
       if (bn <= 10 || k % 2 === 0) svg("text", { x: xc(k), y: Yb + 24, "text-anchor": "middle", "font-size": 20, "font-weight": k === bk ? 700 : 400 }, bin).textContent = k;
@@ -452,15 +457,19 @@
     if (dmax < 1e-12) dmax = 0;
     var ymax = niceMax(mx);
     var cc = css("--c"), cb = css("--b"), no = css("--no"), muted = css("--muted");
+    var moments = hyperMoments(N, M, n);
     hyp.innerHTML = "";
+    hyp.setAttribute("data-N", N); hyp.setAttribute("data-M", M); hyp.setAttribute("data-n", n);
+    hyp.setAttribute("data-variance-binomial", moments.binomial); hyp.setAttribute("data-variance-hypergeometric", moments.hypergeometric);
+    hyp.setAttribute("data-y0", Yb); hyp.setAttribute("data-sy", (Yb-Yt)/ymax);
     var y = axes(hyp, X0, X1, Yt, Yb, ymax);
     var w = (X1 - X0) / (n + 1);
     function xc(k) { return X0 + w * (k + 0.5); }
     var lo = Math.max(0, n - N + M), up = Math.min(n, M);
     for (k = 0; k <= n; k++) {
       var bw = w * 0.36;
-      svg("rect", { x: xc(k) - bw, y: y(B[k]), width: bw, height: Math.max(0, Yb - y(B[k])), fill: cc }, hyp);
-      svg("rect", { x: xc(k), y: y(H[k]), width: bw, height: Math.max(0, Yb - y(H[k])), fill: cb }, hyp);
+      svg("rect", { "data-distribution": "binomial", "data-k": k, "data-probability": B[k], x: xc(k) - bw, y: y(B[k]), width: bw, height: Math.max(0, Yb - y(B[k])), fill: cc }, hyp);
+      svg("rect", { "data-distribution": "hypergeometric", "data-k": k, "data-probability": H[k], x: xc(k), y: y(H[k]), width: bw, height: Math.max(0, Yb - y(H[k])), fill: cb }, hyp);
       svg("text", { x: xc(k), y: Yb + 24, "text-anchor": "middle", "font-size": 20, fill: k < lo || k > up ? muted : css("--fg") }, hyp).textContent = k;
     }
     if (dmax > 0) {
@@ -479,7 +488,8 @@
     document.getElementById("hnout").textContent = n;
     var lines = [];
     lines.push("\\(N=" + N + "\\)，\\(M=" + M + "\\)，\\(n=" + n + "\\)。放回：\\(X\\sim B(" + n + "," + fx(p, 1) + ")\\)，\\(k\\) 从 \\(0\\) 到 \\(" + n + "\\)；不放回：超几何分布，\\(k\\) 从 \\(" + lo + "\\) 到 \\(" + up + "\\)。");
-    lines.push("均值都是 \\(\\dfrac{nM}{N}=" + fx(n * p, 2) + "\\)。");
+    lines.push("均值都是 \\(\\dfrac{nM}{N}=" + fx(moments.mean, 2) + "\\)。");
+    lines.push("方差：放回 \\(D(X)=" + fx(moments.binomial, 4) + "\\)，不放回 \\(D(Y)=" + fx(moments.hypergeometric, 4) + "\\)。" + (n > 1 && M > 0 && M < N ? "本组满足 n&gt;1 且 0&lt;p&lt;1，不放回方差严格较小。" : "本组为 n=1 或 p=0/1，两方差相等。"));
     if (M === 0 || M === N) {
       lines.push('<span class="eq">退化情形</span>：' + (M === 0 ? "一个红球都没有，两种抽法 \\(X\\) 都恒为 \\(0\\)。" : "全是红球，两种抽法 \\(X\\) 都恒为 \\(" + n + "\\)。"));
     } else if (n === 1) {
@@ -487,8 +497,7 @@
     } else {
       lines.push('两组柱子最多差 <span class="bad">\\(' + fp(dmax) + "\\)</span>（在 \\(k=" + kd + "\\) 处）。" +
         (n === N ? "\\(n=N\\)：不放回就是全部摸完，\\(X\\) 恒为 \\(M=" + M + "\\)，和二项分布差得很远。" :
-          N >= 50 * n ? "\\(N\\) 比 \\(n\\) 大得多，二项分布是很好的近似——但差值仍不是 \\(0\\)，只能说「近似」。" :
-            "\\(N\\) 相对 \\(n\\) 还不够大，不放回明显改变了后面摸红的概率，差别看得出来，不宜用二项分布代替。"));
+          "抽样比 \\(n/N=" + fx(n/N, 4) + "\\)。比例很小是考虑二项近似的关键条件，是否足够准确仍应根据上面的精确概率差与所需精度判断。"));
     }
     var out = document.getElementById("hypout");
     out.innerHTML = lines.join("<br>");
@@ -594,150 +603,48 @@
 
   // === e3-7-4 Micro-box & Trap Interactive Script ===
   (function () {
-    var fig = document.getElementById("m-bh-fig");
-    var desc = document.getElementById("m-bh-desc");
-    var trapFig = document.getElementById("m-bh-trap-fig");
-    var tabs = document.querySelectorAll("#m-bh-tabs .micro-tab");
-    if (!fig || !desc) return;
-
-    function el(t, a, txt) {
-      var e = document.createElementNS("http://www.w3.org/2000/svg", t);
-      for (var k in a) e.setAttribute(k, a[k]);
-      if (txt) e.textContent = txt;
-      return e;
+    var fig=document.getElementById("m-bh-fig"),desc=document.getElementById("m-bh-desc"),trapFig=document.getElementById("m-bh-trap-fig");
+    var tabs=document.querySelectorAll("#m-bh-tabs .micro-tab");
+    if(!fig||!desc)return;
+    function add(target,t,a,text){var e=document.createElementNS("http://www.w3.org/2000/svg",t);for(var k in a)e.setAttribute(k,a[k]);if(text!==undefined)e.textContent=text;target.appendChild(e);return e;}
+    function label(target,x,y,text,color,anchor){return add(target,"text",{x:x,y:y,"text-anchor":anchor||"middle","font-size":24,fill:color||"var(--fg)"},text);}
+    function frame(x,color){add(fig,"rect",{x:x,y:60,width:270,height:220,rx:8,fill:"var(--card)",stroke:color});}
+    function drawTab1(){
+      fig.innerHTML="";fig.setAttribute("viewBox","0 0 620 340");label(fig,310,32,"10件产品中有3件次品：依次抽取");frame(20,"var(--a)");frame(330,"var(--b)");
+      ["有放回","每次成功率 3/10","放回后总体恢复","各次试验独立"].forEach(function(t,i){label(fig,155,100+i*50,t,"var(--a)");});
+      ["不放回","首件次品 → 下次2/9","首件正品 → 下次3/9","条件概率随已抽结果变"].forEach(function(t,i){label(fig,465,100+i*50,t,"var(--b)");});
+      label(fig,310,320,"不放回：N减1，M是否减1取决于抽中哪类");
+      desc.innerHTML="<b>抽样机理</b>：本图N=10、M=3。有放回时恢复总体，概率保持0.3；不放回时N减少1，只有抽到次品时M才减少1。第二次的条件概率为2/9或3/9。一般0&lt;M&lt;N且至少抽2件时抽样相关；全为同一类等退化情况结果确定。";
     }
-
-    function drawTab1() {
-      fig.innerHTML = "";
-      // Tab 1: 有放回 (二项分布) vs 不放回 (超几何分布)
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "抽样机理对比：有放回（独立恒定 p）vs 不放回（动态关联条件概率）"));
-
-      // Left: 有放回 (袋内永远 3红 7白)
-      fig.appendChild(el("rect", {x: 35, y: 38, width: 260, height: 138, rx: 8, fill: "var(--card)", stroke: "#1976d2", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 165, y: 60, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "有放回抽样 ⟹ 二项分布 B(n, p)"));
-
-      fig.appendChild(el("rect", {x: 55, y: 75, width: 90, height: 40, rx: 6, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "1"}));
-      fig.appendChild(el("text", {x: 100, y: 95, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "第 1 次摸球"));
-      fig.appendChild(el("text", {x: 100, y: 108, "text-anchor": "middle", "font-size": "9.5", fill: "#1976d2"}, "P(红)=3/10"));
-
-      // Curved arrow back to bag
-      fig.appendChild(el("path", {d: "M 145 95 Q 185 70 200 90", fill: "none", stroke: "#10b981", "stroke-width": "1.8", "stroke-dasharray": "3 2"}));
-      fig.appendChild(el("text", {x: 185, y: 80, "font-size": "9.5", "font-weight": "700", fill: "#10b981"}, "摸后放回"));
-
-      fig.appendChild(el("rect", {x: 185, y: 95, width: 90, height: 40, rx: 6, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "1"}));
-      fig.appendChild(el("text", {x: 230, y: 95, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "第 2 次摸球"));
-      fig.appendChild(el("text", {x: 230, y: 108, "text-anchor": "middle", "font-size": "9.5", fill: "#1976d2"}, "P(红)仍=3/10"));
-
-      fig.appendChild(el("text", {x: 165, y: 160, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#1976d2"}, "每次试验独立，p 恒定"));
-
-      // Right: 不放回 (抽走后基数缩减)
-      fig.appendChild(el("rect", {x: 325, y: 38, width: 260, height: 138, rx: 8, fill: "var(--card)", stroke: "#2e7d32", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 455, y: 60, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#2e7d32"}, "不放回抽样 ⟹ 超几何分布 H"));
-
-      fig.appendChild(el("rect", {x: 345, y: 75, width: 90, height: 40, rx: 6, fill: "#e8f5e9", stroke: "#2e7d32", "stroke-width": "1"}));
-      fig.appendChild(el("text", {x: 390, y: 95, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#2e7d32"}, "第 1 次摸球"));
-      fig.appendChild(el("text", {x: 390, y: 108, "text-anchor": "middle", "font-size": "9.5", fill: "#2e7d32"}, "P(红)=3/10"));
-
-      fig.appendChild(el("line", {x1: 435, y1: 95, x2: 475, y2: 95, stroke: "#ef4444", "stroke-width": "2"}));
-      fig.appendChild(el("text", {x: 455, y: 88, "text-anchor": "middle", "font-size": "9.5", "font-weight": "700", fill: "#ef4444"}, "不放回"));
-
-      fig.appendChild(el("rect", {x: 475, y: 75, width: 90, height: 40, rx: 6, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": "1"}));
-      fig.appendChild(el("text", {x: 520, y: 95, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "第 2 次摸球"));
-      fig.appendChild(el("text", {x: 520, y: 108, "text-anchor": "middle", "font-size": "9.5", fill: "#ef4444"}, "P(红)=2/9 或 3/9"));
-
-      fig.appendChild(el("text", {x: 455, y: 160, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#2e7d32"}, "样本空间缩水，概率受前一步制约"));
-
-      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "审题第一步：圈出「放回」还是「不放回」，彻底锁死数学模型"));
-      desc.innerHTML = "<b>① 抽样机理本质对比</b>：有放回抽样每次抽取后复原，各次试验相互独立，单次成功率 \(p\) 恒定不变，服从二项分布；不放回抽样每抽走一件产品，袋内总体与特品数同时减少，各步试验相互牵连，服从超几何分布。";
-    }
-
-    function drawTab2() {
-      fig.innerHTML = "";
-      // Tab 2: 大样本近似收敛机理 (N=10000 大海捞针)
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "大样本近似：当总体 N 极大（大海捞针）时，超几何分布收敛于二项分布"));
-
-      // Big warehouse pool
-      fig.appendChild(el("rect", {x: 60, y: 45, width: 220, height: 125, rx: 10, fill: "var(--card)", stroke: "#1976d2", "stroke-width": "2"}));
-      fig.appendChild(el("text", {x: 170, y: 70, "text-anchor": "middle", "font-size": "12.5", "font-weight": "700", fill: "#1976d2"}, "海量产品库 N = 10,000 件"));
-      fig.appendChild(el("text", {x: 170, y: 95, "text-anchor": "middle", "font-size": "11", fill: "var(--fg)"}, "含合格品 9,000 件 (90%)"));
-      fig.appendChild(el("text", {x: 170, y: 115, "text-anchor": "middle", "font-size": "11", fill: "#ef4444"}, "含次品 1,000 件 (10%)"));
-      fig.appendChild(el("text", {x: 170, y: 145, "text-anchor": "middle", "font-size": "10.5", fill: "var(--muted)"}, "抽样比 n/N = 5 / 10000 = 0.05%"));
-
-      // Arrow pointing to extraction
-      fig.appendChild(el("line", {x1: 280, y1: 107, x2: 340, y2: 107, stroke: "#10b981", "stroke-width": "3"}));
-      fig.appendChild(el("polygon", {points: "340,102 350,107 340,112", fill: "#10b981"}));
-
-      // Right: Comparison of probabilities
-      fig.appendChild(el("rect", {x: 360, y: 45, width: 220, height: 125, rx: 8, fill: "#e8f5e9", stroke: "#2e7d32", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 470, y: 70, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#2e7d32"}, "抽取 1 件后的次品率变化"));
-      fig.appendChild(el("text", {x: 470, y: 98, "text-anchor": "middle", "font-size": "11.5", fill: "var(--fg)"}, "抽前：1000 / 10000 = 0.1000"));
-      fig.appendChild(el("text", {x: 470, y: 122, "text-anchor": "middle", "font-size": "11.5", fill: "var(--fg)"}, "抽后：999 / 9999 = 0.0999"));
-      fig.appendChild(el("text", {x: 470, y: 150, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "误差仅 0.0001，完全可忽略！"));
-
-      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "质检常识：当总体容量极大时，不放回抽样直接按二项分布 B(n, p) 计算"));
-      desc.innerHTML = "<b>② 大样本近似原理</b>：在宏观工业质检或全员民调中，总体数量 \(N\) 达上万件。即使不放回抽检 10 件，总体中次品比例从 10% 变成 9.99%，概率波动在万分位以下。此时超几何分布高度逼近二项分布，大幅简化组合数计算。";
-    }
-
-    function drawTab3() {
-      fig.innerHTML = "";
-      // Tab 3: 期望完全一致 vs 方差修正系数
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "数字特征对比：期望 E(X)=E(Y)=np 恒等；超几何方差多了修正因子 (N-n)/(N-1) < 1"));
-
-      // Expectation box (Identical)
-      fig.appendChild(el("rect", {x: 50, y: 45, width: 230, height: 125, rx: 8, fill: "var(--card)", stroke: "#1976d2", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 165, y: 70, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#1976d2"}, "数学期望 E 恒等"));
-      fig.appendChild(el("text", {x: 165, y: 98, "text-anchor": "middle", "font-size": "12", fill: "var(--fg)"}, "二项分布：E(X) = np"));
-      fig.appendChild(el("text", {x: 165, y: 122, "text-anchor": "middle", "font-size": "12", fill: "var(--fg)"}, "超几何：E(Y) = n(M/N) = np"));
-      fig.appendChild(el("text", {x: 165, y: 150, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "两模型平均产出完全相同！"));
-
-      // Variance box (Hyper is smaller)
-      fig.appendChild(el("rect", {x: 340, y: 45, width: 230, height: 125, rx: 8, fill: "var(--card)", stroke: "#2e7d32", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 455, y: 70, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "#2e7d32"}, "方差 D 超几何更小"));
-      fig.appendChild(el("text", {x: 455, y: 98, "text-anchor": "middle", "font-size": "11.5", fill: "var(--fg)"}, "D_超 = D_二 × (N-n)/(N-1)"));
-      fig.appendChild(el("text", {x: 455, y: 122, "text-anchor": "middle", "font-size": "11.5", fill: "#ef4444"}, "修正系数 (N-n)/(N-1) < 1"));
-      fig.appendChild(el("text", {x: 455, y: 150, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#2e7d32"}, "不放回锁定了不确定性，波动更小"));
-
-      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "例：N=10, n=3 时，修正比为 7/9 ≈ 0.78，超几何方差比二项分布小 22%"));
-      desc.innerHTML = "<b>③ 期望方差深刻对比</b>：无论放回与否，平均抽到的件数（期望）完全相等（\(E = np\)）。但由于不放回抽样逐渐耗尽总体，减少了后期的随机摇摆，因此超几何分布的方差恒小于二项分布（相差一个有限总体修正系数 \(\dfrac{N-n}{N-1}\)）。";
-    }
-
-    function drawTrap() {
-      if (!trapFig) return;
-      trapFig.innerHTML = "";
-      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "二项分布必须乘组合数 Cₙᵏ"));
-      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#ef4444"}, "漏乘 Cₙᵏ 只算了一种固定序列"));
-
-      // Left: 3 positions for 1 success
-      var seqs = ["【正】反 反", "反【正】反", "反 反【正】"];
-      seqs.forEach(function(s, i) {
-        var y = 45 + i * 24;
-        trapFig.appendChild(el("rect", {x: 60, y: y - 8, width: 140, height: 20, rx: 4, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "1"}));
-        trapFig.appendChild(el("text", {x: 130, y: y + 5, "text-anchor": "middle", "font-size": "10.5", "font-weight": "700", fill: "#1976d2"}, s));
+    function drawTab2(){
+      fig.innerHTML="";fig.setAttribute("viewBox","0 0 620 350");label(fig,310,32,"同样N=10000：比较抽样比 n/N");
+      [{n:5,y:100},{n:9000,y:230}].forEach(function(c){
+        label(fig,90,c.y+10,"n="+c.n);
+        add(fig,"rect",{x:170,y:c.y-18,width:400,height:36,fill:"var(--line)"});
+        add(fig,"rect",{"data-sample-N":10000,"data-sample-n":c.n,x:170,y:c.y-18,width:400*c.n/10000,height:36,fill:c.n===5?"var(--a)":"var(--no)"});
+        label(fig,370,c.y+58,"n/N="+(c.n/10000),c.n===5?"var(--a)":"var(--no)");
       });
-      trapFig.appendChild(el("text", {x: 140, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "C₃¹ = 3 种排位，乘以 3！"));
-
-      // Separator
-      trapFig.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 135, stroke: "var(--line)", "stroke-width": "1"}));
-
-      // Right: Only 1 fixed sequence
-      trapFig.appendChild(el("rect", {x: 320, y: 55, width: 160, height: 35, rx: 6, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": "1.5"}));
-      trapFig.appendChild(el("text", {x: 400, y: 76, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "只算 (1/6) × (5/6)² = 25/216"));
-      trapFig.appendChild(el("text", {x: 400, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "严重漏乘 C₃¹ = 3 倍概率！"));
+      desc.innerHTML="<b>近似有条件</b>：灰条表示同一个总体，彩条长度严格按抽样比n/N绘制。n=5时抽样比0.0005，彩条很细；n=9000时抽样比0.9，彩条占九成，不能只凭N大套二项模型。保持p=M/N不变且n/N很小时，可考虑二项近似，误差仍需按所求概率和精度核查。例：N=10000、M=1000，抽前次品率0.1；若首件为次品，下一件概率999/9999≈0.099910；若首件为正品，则为1000/9999≈0.100010。抽中哪类会改变条件概率，不能总写999/9999。n=9000时方差修正因子约0.10001，仍与二项分布相差很大。";
     }
-
-    tabs.forEach(function(tab) {
-      tab.addEventListener("click", function() {
-        tabs.forEach(function(t) { t.classList.remove("active"); });
-        tab.classList.add("active");
-        var idx = tab.getAttribute("data-tab");
-        if (idx === "1") drawTab1();
-        else if (idx === "2") drawTab2();
-        else if (idx === "3") drawTab3();
+    function drawTab3(){
+      fig.innerHTML="";fig.setAttribute("viewBox","0 0 620 560");label(fig,310,32,"同n、p比较：超几何方差 ≤ 二项方差");
+      [{n:3,y:90},{n:1,y:260}].forEach(function(c){
+        var p=0.3,vb=c.n*p*(1-p),vh=vb*(10-c.n)/9;
+        label(fig,120,c.y+15,"N=10,M=3,n="+c.n);
+        [["binomial",vb,"var(--c)"],["hypergeometric",vh,"var(--b)"]].forEach(function(a,i){var y=c.y-22+i*60;add(fig,"rect",{"data-variance-case":c.n,"data-distribution":a[0],"data-value":a[1],x:275,y:y,width:240*a[1],height:24,fill:a[2]});label(fig,490,y+20,a[1].toFixed(2),a[2],"start");});
       });
-    });
-
-    drawTab1();
-    drawTrap();
+      label(fig,310,400,"蓝：二项；金：超几何。n=1时相等");
+      label(fig,310,460,"N>1、1≤n≤N；严格小于还需");
+      label(fig,310,520,"n>1 且 0<p<1；p=0或1时都为0","var(--a)");
+      desc.innerHTML="<b>严格与相等要分开</b>：N>1且1≤n≤N时，0≤(N−n)/(N−1)≤1，故D超≤D二。仅n&gt;1且0&lt;p&lt;1时严格小于；n=1或p=0/1时相等。图中N=10、M=3，n=3时0.49<0.63，n=1时0.21=0.21。N=1或允许n=0时计数确定、方差都为0，另按退化情形处理，不代入分母N−1=0的式子。";
+    }
+    function drawTrap(){
+      if(!trapFig)return;trapFig.innerHTML="";trapFig.setAttribute("viewBox","0 0 540 270");label(trapFig,270,32,"恰好1次成功：必须数齐所有位置");
+      ["成功、失败、失败","失败、成功、失败","失败、失败、成功"].forEach(function(t,i){label(trapFig,270,82+i*48,t,"var(--a)");});
+      label(trapFig,270,245,"掷骰子：3 × (1/6) × (5/6)² = 25/72");
+    }
+    tabs.forEach(function(tab){tab.addEventListener("click",function(){tabs.forEach(function(t){t.classList.remove("active");});tab.classList.add("active");[drawTab1,drawTab2,drawTab3][+tab.getAttribute("data-tab")-1]();});});
+    drawTab1();drawTrap();
   })();
 
 </script>

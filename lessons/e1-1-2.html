@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -99,16 +99,16 @@
     </div>
     <div class="concept-card">
       <div class="concept-head"><span class="badge-pill">定理对照</span> 空间基底分解 vs 四点共面条件</div>
-      <p><b>空间分解定理</b>：任意向量 \(\boldsymbol{p} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3\)，实数组 \((x, y, z)\) <b>唯一存在</b>，反映三维自由度。</p>
-      <p><b>四点共面充要条件</b>：同起点下 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)，点 \(P,A,B,C\) 共面当且仅当<b>系数和为 1</b>：\(x+y+z=1\)。</p>
-      <p class="small">提醒：若起点不同，必须先移项化为同一起点，再检验系数之和！</p>
+      <p><b>空间分解定理</b>：对给定空间基底 \(\{\boldsymbol{e}_1,\boldsymbol{e}_2,\boldsymbol{e}_3\}\)，任意向量 \(\boldsymbol{p} = x\boldsymbol{e}_1 + y\boldsymbol{e}_2 + z\boldsymbol{e}_3\)，实数组 \((x, y, z)\) <b>唯一存在</b>，反映三维自由度。</p>
+      <p><b>四点共面充要条件（给定系数版）</b>：先要求 \(\overrightarrow{OA},\overrightarrow{OB},\overrightarrow{OC}\) <b>不共面</b>（等价于 \(A,B,C\) 不共线且 \(O\) 不在平面 \(ABC\) 内）。在同起点关系 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\) 中，点 \(P,A,B,C\) 共面当且仅当<b>系数和为 1</b>：\(x+y+z=1\)。</p>
+      <p class="small">提醒：同起点和基底前提都要满足；仅仅同起点，不能对给定系数断言“共面就和为1”。</p>
     </div>
   </div>
 
   <div class="key" style="text-align:center; font-size:1.02rem; line-height:1.7;">
     空间向量基本定理：\(\boldsymbol{p} = \color{#2563eb}{x\boldsymbol{e}_1} + \color{#059669}{y\boldsymbol{e}_2} + \color{#d97706}{z\boldsymbol{e}_3}\) &nbsp;（实数组 \((x,y,z)\) 唯一存在）<br>
     共面向量充要条件：\(\boldsymbol{p} = \color{#2563eb}{x\boldsymbol{a}} + \color{#059669}{y\boldsymbol{b}}\) &nbsp;（\(\boldsymbol{a}, \boldsymbol{b}\) 不共线）<br>
-    四点共面系数和公式：\(\overrightarrow{OP} = \color{#2563eb}{x}\overrightarrow{OA} + \color{#059669}{y}\overrightarrow{OB} + \color{#d97706}{z}\overrightarrow{OC} \iff \color{#dc2626}{x + y + z = 1}\)
+    四点共面：先有基底 \(\{\overrightarrow{OA},\overrightarrow{OB},\overrightarrow{OC}\}\)，且已知 \(\overrightarrow{OP}=x\overrightarrow{OA}+y\overrightarrow{OB}+z\overrightarrow{OC}\)。<br>此时 \(P\in\text{平面 }ABC\iff\color{#dc2626}{x+y+z=1}\)
   </div>
 
   <h3>2. 基底的条件：三个向量不共面</h3>
@@ -199,7 +199,11 @@
   <p><b>为什么</b>：两边同减 \(\overrightarrow{OC}\)，把 \(\overrightarrow{OA}\)、\(\overrightarrow{OB}\) 改写成 \(\overrightarrow{CA}+\overrightarrow{OC}\)、\(\overrightarrow{CB}+\overrightarrow{OC}\)，得到</p>
   <p>$$\overrightarrow{CP} = x\overrightarrow{CA} + y\overrightarrow{CB} + (x+y+z-1)\overrightarrow{OC}$$</p>
   <p>系数和为 \(1\) 时，最后一项消失，\(\overrightarrow{CP}\) 由平面 \(ABC\) 里的 \(\overrightarrow{CA}, \overrightarrow{CB}\) 合成，\(P\) 在平面上。反过来，\(P\) 在平面上时 \(\overrightarrow{CP}\) 能写成 \(s\overrightarrow{CA}+t\overrightarrow{CB}\)，而 \(\overrightarrow{OC}\) 指出平面外；由分解唯一，最后一项系数只能是 \(0\)。</p>
-  <p>注意：系数可以是负数，负数只说明 \(P\) 在三角形 \(ABC\) 外面，不说明在平面外。</p>
+  <div class="card" id="affine-origin-counterexample">
+    <p><b>为什么不能把 O 换成任意参考点后仍检查给定系数？</b>取 \(O=(0,0,0)\)、\(A=(1,0,0)\)、\(B=(0,1,0)\)、\(C=(1,1,0)\)、\(P=(2,1,0)\)。这些点都在平面 \(z=0\) 上，且 \(A,B,C\) 不共线。但给定表示 \(\overrightarrow{OP}=\overrightarrow{OA}+\overrightarrow{OC}\) 的系数为 \((1,0,1)\)，和是 \(2\)，四点仍共面。</p>
+    <p>同一个点也有另一组表示 \(\overrightarrow{OP}=-\overrightarrow{OB}+2\overrightarrow{OC}\)，系数和为 \(1\)。因此，当 \(A,B,C\) 不共线时，对任意参考点 \(O\)，正确的一般命题是：\(P\) 在平面 \(ABC\) 上，当且仅当<b>存在一组</b>实数系数，同时满足向量表示式与系数和为 \(1\)。这不等于“任意一组给定系数的和都为1”。</p>
+  </div>
+  <p>注意：在系数和为1时，系数可以是负数；出现负数只说明 \(P\) 在三角形 \(ABC\) 外面，不说明在平面外。</p>
 
   <div class="card">
     <p class="small">例 3（用系数和判断、求参数）</p>
@@ -247,14 +251,14 @@
         <b>🔧 第二步套公式/方法</b>
         <p>① 用中点公式 \(\overrightarrow{OM}=\frac12(\overrightarrow{OA}+\overrightarrow{OB})\) 或定比分点公式逐步降维；<br>
         ② 沿几何体棱线折线回路拆分：\(\overrightarrow{MN}=\overrightarrow{ON}-\overrightarrow{OM}\)，化简为 \(x\boldsymbol{e}_1+y\boldsymbol{e}_2+z\boldsymbol{e}_3\)；<br>
-        ③ 四点共面问题：建立同起点关系，列出系数和方程 \(x+y+z=1\) 求解未知参数。</p>
+        ③ 四点共面问题：先确认 \(\overrightarrow{OA},\overrightarrow{OB},\overrightarrow{OC}\) 不共面，再建立同起点关系，列出系数和方程 \(x+y+z=1\) 求解未知参数。</p>
       </div>
     </div>
     <div class="think-step">
       <div class="step-num">3</div>
       <div class="step-body">
         <b>🛡️ 第三步必查防坑结论</b>
-        <p>基底分解系数具有<b>唯一性</b>，两边对应基向量系数可直接相等列方程；四点共面充要条件必须严格保证四个向量<b>同起点</b>；非正交基底求模平方时绝不可遗漏两两夹角交叉项！</p>
+        <p>基底分解系数具有<b>唯一性</b>，两边对应基向量系数可直接相等列方程；给定系数的四点共面充要条件必须严格保证四个向量<b>同起点</b>且 \(\overrightarrow{OA},\overrightarrow{OB},\overrightarrow{OC}\) <b>不共面</b>；非正交基底求模平方时绝不可遗漏两两夹角交叉项！</p>
       </div>
     </div>
   </div>
@@ -333,11 +337,12 @@
 
     <div class="ctrl" style="margin-top:10px">
       <button class="btn" id="btnCoplanar" type="button">四点共面校验与对齐</button>
-      <button class="btn ghost" id="btnCentroid" type="button">设为底面重心</button>
+      <button class="btn ghost" id="btnCentroid" type="button">设为近似重心</button>
       <button class="btn ghost" id="btnIsoGantry" data-iso-tab="1" type="button">三维龙门定位仪（等距 3D）</button>
       <button class="btn ghost" id="reset" type="button">重置</button>
     </div>
 
+    <p class="small">实验固定使用不共面的正交轴基底。近似重心预设为合法滑块值 (0.30,0.35,0.35)，不称精确重心；对齐保持 x、y 并调整 z，若目标 z 超出范围则回到默认共面点。</p>
     <div class="result" id="simDesc" aria-live="polite"></div>
   </div>
 </section>
@@ -371,7 +376,7 @@
       <button class="opt" data-v="D"><b>D</b>\(1\)</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。由四点共面充要定理：对空间任意参考点 \(O\)，若 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)，则 \(P, A, B, C\) 四点共面当且仅当 \(x + y + z = 1\)。</p>
+      <p><b>A</b>。题中 \(A,B,C\) 不共线且 \(O\) 在平面 \(ABC\) 外，所以 \(\overrightarrow{OA},\overrightarrow{OB},\overrightarrow{OC}\) 不共面。在此前提下，若 \(\overrightarrow{OP} = x\overrightarrow{OA} + y\overrightarrow{OB} + z\overrightarrow{OC}\)，则 \(P, A, B, C\) 四点共面当且仅当 \(x + y + z = 1\)。</p>
       <p>直接代入：\(\dfrac{1}{2} + \dfrac{1}{3} + \lambda = 1 \implies \dfrac{5}{6} + \lambda = 1 \implies \lambda = \dfrac{1}{6}\)。</p>
     </div>
   </div>
@@ -445,7 +450,7 @@
 <footer>培玉智能 · 自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="../assets/iso-bench.js"></script>
+<script src="../assets/iso-bench.js?v=vs-b03c46885f5f"></script>
 <script>
 (function(){
 "use strict";
@@ -509,7 +514,8 @@ var ptPx=[oX+x*v1x,oY+x*v1y];
 var ptPxy=[ptPx[0]+y*v2x,ptPx[1]+y*v2y];
 var ptP=[ptPxy[0]+z*v3x,ptPxy[1]+z*v3y];
 var sum=x+y+z;
-var isCoplanar=Math.abs(sum-1.0)<=0.02;
+var eps=1e-9;
+var isCoplanar=Math.abs(sum-1.0)<=eps;
 function drawLine(p1,p2,color,isDash,w,marker){
 var l=document.createElementNS("http://www.w3.org/2000/svg","line");
 l.setAttribute("x1",p1[0].toFixed(1));
@@ -549,7 +555,7 @@ drawLine(ptPx,ptPxy,"var(--c)",true,"1.8");
 if(Math.abs(z)>0.01){
 drawLine(ptPxy,ptP,"var(--a)",true,"1.8");
 }
-drawLine(ptO,ptP,"var(--no)",false,"3.4","arrP");
+if(Math.abs(x)+Math.abs(y)+Math.abs(z)>eps)drawLine(ptO,ptP,"var(--no)",false,"3.4","arrP");
 function drawPoint(pt,fill,label,tx,ty,r){
 var c=document.createElementNS("http://www.w3.org/2000/svg","circle");
 c.setAttribute("cx",pt[0].toFixed(1));
@@ -577,10 +583,14 @@ drawPoint(ptP,"var(--no)","P("+x.toFixed(2)+", "+y.toFixed(2)+", "+z.toFixed(2)+
 var badgeHtml="";
 if(isCoplanar){
 badgeHtml='<span class="badge ok">✔ 四点共面：点 P 位于平面 ABC 内（x + y + z = '+sum.toFixed(2)+' = 1）</span>';
-}else if(sum>1.02){
-badgeHtml='<span class="badge bad">● 不共面：点 P 悬浮在平面 ABC 外侧上方（x + y + z = '+sum.toFixed(2)+' &gt; 1）</span>';
+}else if(sum>1+eps){
+badgeHtml='<span class="badge bad">● 不共面：点 P 与 O 位于平面 ABC 两侧（x + y + z = '+sum.toFixed(2)+' &gt; 1）</span>';
+}else if(sum>eps){
+badgeHtml='<span class="badge bad">● 不共面：P 位于平面 ABC 与过 O 的平行平面之间（0 &lt; x + y + z = '+sum.toFixed(2)+' &lt; 1）</span>';
+}else if(Math.abs(sum)<=eps){
+badgeHtml='<span class="badge bad">● 不共面：P 在过 O 且平行于平面 ABC 的平面上（x + y + z = 0）'+(Math.abs(x)+Math.abs(y)+Math.abs(z)<=eps?'，此时 P=O':'')+'。</span>';
 }else{
-badgeHtml='<span class="badge bad">● 不共面：点 P 位于平面 ABC 与原点 O 之间（x + y + z = '+sum.toFixed(2)+' &lt; 1）</span>';
+badgeHtml='<span class="badge bad">● 不共面：相对过 O 且平行 ABC 的平面，P 与平面 ABC 位于两侧（x + y + z = '+sum.toFixed(2)+' &lt; 0）</span>';
 }
 if(desc){
 desc.innerHTML=
@@ -617,9 +627,9 @@ render();
 }
 if(btnCentroid){
 btnCentroid.addEventListener("click",function(){
-rangeX.value="0.33";
-rangeY.value="0.33";
-rangeZ.value="0.34";
+rangeX.value="0.30";
+rangeY.value="0.35";
+rangeZ.value="0.35";
 render();
 });
 }
@@ -707,9 +717,9 @@ var capEl=document.getElementById("m-basis-cap");
 if(!svgEl)return;
 var mode="basis",NS="http://www.w3.org/2000/svg";
 var caps={
-basis:"三维基底分解定理：任意三个不共面的基向量撑起三维空间，空间任一向量对应唯一的平行六面体体对角线。",
+basis:"三维基底分解定理：任意三个不共面的基向量撑起三维空间，空间任一向量对应唯一一组分解系数；某系数为0时，相应分量为零。",
 coplanar:"共面向量判定：底面两个不共线向量 a, b 线性组合生成的向量必落在该底面内；有纵向分量则戳出平面。",
-sum1:"四点共面系数和为 1：当且仅当 x + y + z = 1 时，由共同原点 O 出发的向量终点 P 恰好落在平面 ABC 上。"
+sum1:"给定系数版的前提：OA、OB、OC 不共面，即 A、B、C 不共线且 O 在平面 ABC 外。在 OP=xOA+yOB+zOC 中，P 在平面 ABC 上当且仅当 x+y+z=1。若 O 在平面内，给定系数的和不一定为1；不能与“存在一组和为1的系数”混淆。"
 };
 function draw(){
 svgEl.innerHTML="";
@@ -721,64 +731,64 @@ svgEl.appendChild(el);
 return el;
 }
 function ln(x1,y1,x2,y2,c,w,d){
-var a={x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5};
+var a={x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"var(--line)","stroke-width":w||1.5};
 if(d)a["stroke-dasharray"]=d;
 return s("line",a);
 }
 function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
 function tx(x,y,txt,c,sz,b,anch){
-var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+var a={x:x,y:y,fill:c||"var(--fg)","font-size":sz||"11"};
 if(b)a["font-weight"]="bold";
 if(anch)a["text-anchor"]=anch;
 return s("text",a,txt);
 }
 if(mode==="basis"){
-tx(270,20,"平行六面体基底分解：p = x e1 + y e2 + z e3","#0f172a","12.5",true,"middle");
-ln(100,174,200,174,"#2563eb",2.5);tx(150,192,"x e1","#2563eb","11",true,"middle");
-ln(100,174,140,124,"#059669",2.5);tx(110,144,"y e2","#059669","11",true);
-ln(100,174,100,84,"#d97706",2.5);tx(82,124,"z e3","#d97706","11",true);
-ln(200,174,240,124,"#cbd5e1",1.5);ln(140,124,240,124,"#cbd5e1",1.5);
-ln(100,84,200,84,"#cbd5e1",1.5);ln(200,174,200,84,"#cbd5e1",1.5);
-ln(140,124,140,34,"#cbd5e1",1.5,"3 3");ln(100,84,140,34,"#cbd5e1",1.5);
-ln(240,124,240,34,"#cbd5e1",1.5);ln(200,84,240,34,"#cbd5e1",1.5);
-ln(100,174,240,34,"#dc2626",2.5);
-tx(180,99,"向量 p (体对角线)","#dc2626","12",true);
-s("circle",{cx:100,cy:174,r:4,fill:"#0f172a"});tx(90,184,"O","#0f172a","11",true);
-s("circle",{cx:240,cy:34,r:4,fill:"#dc2626"});tx(248,42,"P","#dc2626","11",true);
-rc(330,50,185,120,"#f8fafc","#cbd5e1",6);
-tx(345,78,"空间基底唯一性","#0f172a","12",true);
-tx(345,102,"• 三基向量必须不共面","#2563eb","11");
-tx(345,124,"• (x, y, z) 存在且唯一","#059669","11");
-tx(345,146,"• 空间维数 = 3","#dc2626","10.5",true);
+tx(270,20,"平行六面体基底分解：p = x e1 + y e2 + z e3","var(--fg)","12.5",true,"middle");
+ln(100,174,200,174,"var(--c)",2.5);tx(150,192,"x e1","var(--c)","11",true,"middle");
+ln(100,174,140,124,"var(--a)",2.5);tx(110,144,"y e2","var(--a)","11",true);
+ln(100,174,100,84,"var(--hl)",2.5);tx(82,124,"z e3","var(--hl)","11",true);
+ln(200,174,240,124,"var(--line)",1.5);ln(140,124,240,124,"var(--line)",1.5);
+ln(100,84,200,84,"var(--line)",1.5);ln(200,174,200,84,"var(--line)",1.5);
+ln(140,124,140,34,"var(--line)",1.5,"3 3");ln(100,84,140,34,"var(--line)",1.5);
+ln(240,124,240,34,"var(--line)",1.5);ln(200,84,240,34,"var(--line)",1.5);
+ln(100,174,240,34,"var(--no)",2.5);
+tx(180,99,"向量 p (体对角线)","var(--no)","12",true);
+s("circle",{cx:100,cy:174,r:4,fill:"var(--fg)"});tx(90,184,"O","var(--fg)","11",true);
+s("circle",{cx:240,cy:34,r:4,fill:"var(--no)"});tx(248,42,"P","var(--no)","11",true);
+rc(330,50,185,120,"var(--card)","var(--line)",6);
+tx(345,78,"空间基底唯一性","var(--fg)","12",true);
+tx(345,102,"• 三基向量必须不共面","var(--c)","11");
+tx(345,124,"• (x, y, z) 存在且唯一","var(--a)","11");
+tx(345,146,"• 空间维数 = 3","var(--no)","10.5",true);
 }else if(mode==="coplanar"){
-tx(270,24,"共面向量：p = x a + y b 必落在底面内","#0f172a","12.5",true,"middle");
-s("polygon",{points:"80,160 240,160 300,100 140,100",fill:"rgba(37,99,235,0.08)",stroke:"#93c5fd","stroke-width":1.5});
-tx(110,115,"平面 α","#1e3a8a","11",true);
-ln(120,145,200,145,"#2563eb",2);tx(165,160,"向量 a","#2563eb","10.5");
-ln(120,145,160,115,"#059669",2);tx(135,125,"向量 b","#059669","10.5");
-ln(120,145,240,125,"#2563eb",2.5);tx(250,130,"p (共面)","#2563eb","11",true);
-ln(120,145,180,45,"#dc2626",2.5);tx(190,50,"q (戳出平面，不共面)","#dc2626","11",true);
-rc(330,55,185,105,"#f1f5f9","#cbd5e1",6);
-tx(345,82,"共面向量充要条件","#0f172a","12",true);
-tx(345,106,"p = x a + y b ⟺ 共面","#2563eb","11",true);
-tx(345,128,"若无法线性表出","#dc2626","11");
-tx(345,148,"则 q 与 a, b 不共面","#64748b","10");
+tx(270,24,"共面向量：p = x a + y b 必落在底面内","var(--fg)","12.5",true,"middle");
+s("polygon",{points:"80,160 240,160 300,100 140,100",fill:"rgba(37,99,235,0.08)",stroke:"var(--c)","stroke-width":1.5});
+tx(110,115,"平面 α","var(--c)","11",true);
+ln(120,145,200,145,"var(--c)",2);tx(165,160,"向量 a","var(--c)","10.5");
+ln(120,145,160,115,"var(--a)",2);tx(135,125,"向量 b","var(--a)","10.5");
+ln(120,145,240,125,"var(--c)",2.5);tx(250,130,"p (共面)","var(--c)","11",true);
+ln(120,145,180,45,"var(--no)",2.5);tx(190,50,"q (戳出平面，不共面)","var(--no)","11",true);
+rc(330,55,185,105,"var(--card)","var(--line)",6);
+tx(345,82,"共面向量充要条件","var(--fg)","12",true);
+tx(345,106,"p = x a + y b ⟺ 共面","var(--c)","11",true);
+tx(345,128,"若无法线性表出","var(--no)","11");
+tx(345,148,"则 q 与 a, b 不共面","var(--muted)","10");
 }else if(mode==="sum1"){
-tx(270,24,"四点共面充要条件：OP = x OA + y OB + z OC ⟺ x + y + z = 1","#0f172a","12.5",true,"middle");
-s("polygon",{points:"100,140 240,150 170,60",fill:"rgba(5,150,105,0.1)",stroke:"#059669","stroke-width":1.5});
-tx(90,145,"A","#059669","11",true);tx(248,155,"B","#059669","11",true);tx(170,52,"C","#059669","11",true);
-s("circle",{cx:160,cy:120,r:4.5,fill:"#dc2626"});
-tx(170,124,"P (在平面 ABC 上)","#dc2626","11",true);
-s("circle",{cx:60,cy:175,r:4,fill:"#0f172a"});tx(50,185,"O (空间点)","#0f172a","11",true);
-ln(60,175,100,140,"#64748b",1.5,"2 2");
-ln(60,175,240,150,"#64748b",1.5,"2 2");
-ln(60,175,170,60,"#64748b",1.5,"2 2");
-ln(60,175,160,120,"#dc2626",2);
-rc(330,55,185,110,"#f8fafc","#cbd5e1",6);
-tx(345,82,"系数和恒等式","#0f172a","12",true);
-tx(345,106,"x + y + z = 1 ⟺ P 共面","#dc2626","11",true);
-tx(345,128,"• x,y,z>0 ⟹ P 在 △ABC 内","#059669","10.5");
-tx(345,148,"• 有负数 ⟹ P 在 △ABC 外","#2563eb","10.5");
+tx(270,24,"前提：OA、OB、OC 不共面","var(--fg)","18",true,"middle");
+s("polygon",{points:"100,140 240,150 170,60",fill:"rgba(5,150,105,0.1)",stroke:"var(--a)","stroke-width":1.5});
+tx(90,145,"A","var(--a)","11",true);tx(248,155,"B","var(--a)","11",true);tx(170,52,"C","var(--a)","11",true);
+s("circle",{cx:160,cy:120,r:4.5,fill:"var(--no)"});
+tx(170,124,"P (在平面 ABC 上)","var(--no)","11",true);
+s("circle",{cx:60,cy:175,r:4,fill:"var(--fg)"});tx(50,185,"O (平面外)","var(--fg)","11",true);
+ln(60,175,100,140,"var(--muted)",1.5,"2 2");
+ln(60,175,240,150,"var(--muted)",1.5,"2 2");
+ln(60,175,170,60,"var(--muted)",1.5,"2 2");
+ln(60,175,160,120,"var(--no)",2);
+rc(330,55,185,110,"var(--card)","var(--line)",6);
+tx(345,82,"给定 OP=xOA+yOB+zOC","var(--fg)","12",true);
+tx(345,106,"P∈平面ABC ⇔ x+y+z=1","var(--no)","12",true);
+tx(345,128,"• x,y,z>0 ⟹ P 在 △ABC 内","var(--a)","10.5");
+tx(345,148,"• 有负数 ⟹ P 在 △ABC 外","var(--c)","10.5");
 }
 if(capEl)capEl.textContent=caps[mode];
 if(window.renderMathInElement)window.renderMathInElement(capEl);
@@ -806,27 +816,27 @@ if(txt)el.textContent=txt;
 svgEl.appendChild(el);
 return el;
 }
-function ln(x1,y1,x2,y2,c,w){return s("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5});}
+function ln(x1,y1,x2,y2,c,w){return s("line",{x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"var(--line)","stroke-width":w||1.5});}
 function rc(x,y,w,h,f,c,r){return s("rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
 function tx(x,y,txt,c,sz,b,anch){
-var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
+var a={x:x,y:y,fill:c||"var(--fg)","font-size":sz||"11"};
 if(b)a["font-weight"]="bold";
 if(anch)a["text-anchor"]=anch;
 return s("text",a,txt);
 }
-rc(30,20,220,130,"#fef2f2","#fca5a5",6);
-tx(140,40,"❌ 错误直觉：两两不共线即基底","#dc2626","11.5",true,"middle");
-ln(140,95,90,118,"#dc2626",2);tx(76,120,"a","#dc2626","11",true);
-ln(140,95,190,118,"#dc2626",2);tx(198,120,"b","#dc2626","11",true);
-ln(140,95,140,64,"#dc2626",2);tx(152,68,"c","#dc2626","11",true);
-tx(140,143,"全被压在同一平面内，无法撑起空间！","#64748b","9.5",false,"middle");
-rc(290,20,220,130,"#f0fdf4","#86efac",6);
-tx(400,44,"✔ 空间真谛：第三向量必须戳出平面","#15803d","11.5",true,"middle");
-s("polygon",{points:"320,135 440,135 470,105 350,105",fill:"rgba(5,150,105,0.08)",stroke:"#86efac"});
-ln(370,120,430,120,"#2563eb",2);tx(438,124,"e1","#2563eb","10.5");
-ln(370,120,400,108,"#059669",2);tx(406,108,"e2","#059669","10.5");
-ln(370,120,370,55,"#d97706",2.5);tx(360,60,"e3 (脱离平面)","#d97706","10.5",true);
-tx(400,142,"三维立体张成，构成合法基底","#15803d","9.5",false,"middle");
+rc(30,20,220,130,"var(--no-soft)","var(--no)",6);
+tx(140,40,"❌ 错误直觉：两两不共线即基底","var(--no)","11.5",true,"middle");
+ln(140,95,90,118,"var(--no)",2);tx(76,120,"a","var(--no)","11",true);
+ln(140,95,190,118,"var(--no)",2);tx(198,120,"b","var(--no)","11",true);
+ln(140,95,140,64,"var(--no)",2);tx(152,68,"c","var(--no)","11",true);
+tx(140,143,"全被压在同一平面内，无法撑起空间！","var(--muted)","9.5",false,"middle");
+rc(290,20,220,130,"var(--ok-soft)","var(--a)",6);
+tx(400,44,"✔ 空间真谛：第三向量必须戳出平面","var(--a)","11.5",true,"middle");
+s("polygon",{points:"320,135 440,135 470,105 350,105",fill:"rgba(5,150,105,0.08)",stroke:"var(--a)"});
+ln(370,120,430,120,"var(--c)",2);tx(438,124,"e1","var(--c)","10.5");
+ln(370,120,400,108,"var(--a)",2);tx(406,108,"e2","var(--a)","10.5");
+ln(370,120,370,55,"var(--hl)",2.5);tx(360,60,"e3 (脱离平面)","var(--hl)","10.5",true);
+tx(400,142,"三维立体张成，构成合法基底","var(--a)","9.5",false,"middle");
 }
 initMBasisFig();
 initMBasisTrapFig();

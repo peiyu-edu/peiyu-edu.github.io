@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -35,7 +35,7 @@
 <section class="step" data-title="从例子进入">
   <p>在工程制图或美术素描中，我们要把一个水平放置的正方体纸箱（棱长 \(4\)）画在平面的纸张或黑板上。先点下面的两个按钮，亲眼看看顶面画成「正方形」和画成「\(45^\circ\) 平行四边形」的视觉差距：</p>
   <div class="card predict" data-id="entry" data-answer="B">
-    <svg class="entry-fig" id="entry-cube" viewBox="0 0 520 208" role="img" aria-label="正方体顶面画成正方形与斜二测45度平行四边形的立体感对比"></svg>
+    <svg class="entry-fig" id="entry-cube" viewBox="0 0 520 270" role="img" aria-label="正方体顶面画成正方形与斜二测45度平行四边形的立体感对比"></svg>
     <div class="entry-bar" id="entry-cube-bar">
       <button type="button" data-mode="A">A 顶面画成正方形（像正上方俯视平面图，毫无立体感）</button>
       <button type="button" data-mode="B" class="on">B 斜二测画法：顶面画成 45° 平行四边形（立刻立起来！）</button>
@@ -67,7 +67,7 @@
         <button data-m="area">面积换算比（S' = √2/4 · S）</button>
       </div>
     </div>
-    <svg id="m-ortho-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <svg id="m-ortho-fig" viewBox="0 0 520 300" class="micro-fig"></svg>
     <div class="micro-status" id="m-ortho-status">斜二测核心：横向平行不变且长不变，纵向平行 45° 倾斜且长度折半。</div>
   </div>
 
@@ -214,13 +214,13 @@
     <div class="trap-card">
       <div class="trap-head"><span class="trap-tag">翻车点 3</span> 直观图上“看着像直角”就当下结论</div>
       <p class="wrong">❌ 直观图上两条线画成垂直（\(90^\circ\)），就断定原图中也垂直。</p>
-      <p class="right">✔ <b>图上看到的不算数</b>：斜二测是仿射投影变换，<b>不保角</b>！原图垂直在直观图里是 \(45^\circ\)；直观图画成直角，原图夹角必定是钝角或锐角。</p>
+      <p class="right">✔ <b>图上看到的不算数</b>：斜二测是仿射投影变换，<b>不保角</b>！坐标轴上的直角在直观图里常画成45°或135°；其他垂直方向的图上夹角不固定。直观图上量得直角，也不能据此断定原图垂直，必须按映射还原后验证。</p>
     </div>
   </div>
 
   <div class="card" style="margin-top:12px">
     <div class="small" style="font-weight:700;color:var(--no, #dc2626);margin-bottom:6px">反例微图解：正方形两条对角线在斜二测中的剧烈形变</div>
-    <svg id="m-ortho-trap-fig" viewBox="0 0 520 150" class="micro-fig"></svg>
+    <svg id="m-ortho-trap-fig" viewBox="0 0 520 250" class="micro-fig"></svg>
     <p class="small" style="color:var(--mut, #64748b);margin-top:4px">原正方形中相等且垂直的两条对角线 \(AC=BD\)，在直观图中变成一条被严重拉长（\(A'C'\approx 5.60\)）、一条被严重压缩（\(B'D'\approx 2.95\)），且完全不再垂直！</p>
   </div>
 
@@ -352,6 +352,25 @@
 </div>
 
 <script>
+
+/* Solid models use one orthonormal camera; every geometric primitive keeps its source coordinates. */
+function solidsAdd(target,tag,attrs,label){var n=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in attrs)n.setAttribute(k,attrs[k]);if(label!==undefined)n.textContent=label;target.appendChild(n);return n;}
+function solidsText(target,x,y,label){return solidsAdd(target,"text",{x:x,y:y,fill:"var(--fg)","font-size":24,"text-anchor":"middle"},label);}
+function solidsChart(target,v){
+ var yaw=(v.yaw===undefined?35:v.yaw)*Math.PI/180,pitch=(v.pitch===undefined?20:v.pitch)*Math.PI/180,cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);
+ function P(p){return[v.ox+v.u*(cy*p[0]-sy*p[1]),v.oy+v.u*(sp*(sy*p[0]+cy*p[1])-cp*p[2])];}
+ function meta(a,xyz,role){a["data-xyz"]=JSON.stringify(xyz);a["data-role"]=role;a["data-ox"]=v.ox;a["data-oy"]=v.oy;a["data-u"]=v.u;a["data-yaw"]=yaw;a["data-pitch"]=pitch;return a;}
+ function line(a,b,role,dash){var A=P(a),B=P(b);return solidsAdd(target,"line",meta({x1:A[0],y1:A[1],x2:B[0],y2:B[1],stroke:role==="extension"?"var(--b)":"var(--a)","stroke-width":2,"stroke-dasharray":dash||"none"},[a,b],role||"edge"));}
+ function poly(points,role,fill){return solidsAdd(target,"polygon",meta({points:points.map(P).map(function(p){return p.join(",");}).join(" "),fill:fill||"none",stroke:"var(--muted)","stroke-width":1.5},points,role||"face"));}
+ function dot(p,role,label,dx,dy){var q=P(p);var e=solidsAdd(target,"circle",meta({cx:q[0],cy:q[1],r:4,fill:"var(--b)"},p,role||"point"));if(label)solidsText(target,q[0]+(dx||0),q[1]+(dy||-15),label);return e;}
+ function curve(points,role,dash){return solidsAdd(target,"path",meta({d:points.map(function(p,i){var q=P(p);return(i?"L":"M")+q[0]+" "+q[1];}).join(" "),fill:"none",stroke:"var(--a)","stroke-width":2,"stroke-dasharray":dash||"none"},points,role||"curve"));}
+ return{P:P,line:line,poly:poly,dot:dot,curve:curve,meta:meta};
+}
+function solidsCube(s){var q=[];for(var i=0;i<8;i++)q.push([(i&1?1:-1)*s/2,(i&2?1:-1)*s/2,(i&4?1:-1)*s/2]);return q;}
+function solidsEdges(){var q=[];for(var i=0;i<8;i++)for(var bit=1;bit<=4;bit*=2)if(!(i&bit))q.push([i,i|bit]);return q;}
+function solidsFrustum(kind){var base=[[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],apex=[0,0,4],top=base.map(function(p){return kind==="prism"?[p[0],p[1],2.2]:kind==="fake"?[p[0]*.5,p[1]*.8,2]:[p[0]*.5,p[1]*.5,2];});return{base:base,top:top,apex:apex};}
+function solidsDrawFrustum(target,v,kind,extend){var m=solidsFrustum(kind),c=solidsChart(target,v);c.poly(m.base,"base");c.poly(m.top,"top");m.base.forEach(function(p,i){var e=c.line(p,m.top[i],"lateral");e.setAttribute("data-kind",kind);if(extend){var end=kind==="prism"?[p[0],p[1],3.4]:kind==="fake"?m.top[i].map(function(x,j){return x+.6*(x-p[j]);}):m.apex;c.line(m.top[i],end,"extension","4 4");}});if(extend&&kind==="frustum")c.dot(m.apex,"apex","S",12,-10);return m;}
+function solidsSection(vertices,edges){var out=[];edges.forEach(function(e){var a=vertices[e[0]],b=vertices[e[1]],fa=a[0]+a[1]+a[2],fb=b[0]+b[1]+b[2];if(fa*fb<0){var t=fa/(fa-fb),p=a.map(function(x,i){return x+t*(b[i]-x);});out.push(p);}});var u=[1/Math.sqrt(2),-1/Math.sqrt(2),0],v=[1/Math.sqrt(6),1/Math.sqrt(6),-2/Math.sqrt(6)];function angle(p){return Math.atan2(p.reduce(function(s,x,i){return s+x*v[i];},0),p.reduce(function(s,x,i){return s+x*u[i];},0));}out.sort(function(a,b){return angle(a)-angle(b);});return out;}
 (function () {
   "use strict";
 
@@ -709,60 +728,12 @@
     return n;
   }
   function ecRender(t) {
-    if (!ecSvg) return;
-    ecSvg.innerHTML = "";
-    var isB = ecMode === "B";
-    // 左卡：画法 A 俯视平面图；右卡：动态三维变形预演
-    ecEl("rect", { x: 14, y: 10, width: 214, height: 188, rx: 10, fill: !isB ? "var(--no-soft)" : "var(--card)", stroke: !isB ? "var(--no)" : "var(--line)", "stroke-width": !isB ? 2.2 : 1.2 }, ecSvg);
-    ecEl("text", { x: 121, y: 31, "text-anchor": "middle", "font-size": 13.5, "font-weight": 700, fill: !isB ? "var(--no)" : "var(--fg)" }, ecSvg).textContent = "画法 A：顶面照画成正方形";
-    ecEl("rect", { x: 73, y: 50, width: 96, height: 96, fill: "rgba(217,72,62,0.12)", stroke: "var(--no)", "stroke-width": 2.2 }, ecSvg);
-    ecEl("polyline", { points: "73,134 85,134 85,146", fill: "none", stroke: "var(--no)", "stroke-width": 1.5 }, ecSvg);
-    ecEl("text", { x: 92, y: 142, "font-size": 12, fill: "var(--no)", "font-weight": 700 }, ecSvg).textContent = "90°";
-    ecEl("text", { x: 121, y: 164, "text-anchor": "middle", "font-size": 12.5, fill: "var(--fg)", "font-weight": 600 }, ecSvg).textContent = "横边 4，纵边也是 4";
-    ecEl("text", { x: 121, y: 184, "text-anchor": "middle", "font-size": 12.5, fill: "var(--no)", "font-weight": 700 }, ecSvg).textContent = "✗ 像平面方块，看不出高与纵深";
-
-    ecEl("rect", { x: 242, y: 10, width: 264, height: 188, rx: 10, fill: isB ? "var(--ok-soft)" : "var(--card)", stroke: isB ? "var(--a)" : "var(--line)", "stroke-width": isB ? 2.2 : 1.2 }, ecSvg);
-    ecEl("text", { x: 374, y: 31, "text-anchor": "middle", "font-size": 13.5, "font-weight": 700, fill: isB ? "var(--a)" : "var(--fg)" }, ecSvg).textContent = "画法 B：斜二测画法（动态变形）";
-
-    // 右侧动态正方体：t=0 时顶面是正方形且正立面被压扁为 0；t=1 时顶面是 45° 平行四边形(纵边折半)且正立面高度展开为 S
-    var S = 86;
-    var ox = 316, oy = 96; // 顶面左下角 A'
-    // 顶面纵边向量 (dx, dy)：t=0 时为 (0, -52) 正方形感；t=1 时为 (S*0.5*cos45, -S*0.5*sin45) = (30.4, -30.4)
-    var dx = t * (S * 0.5 * 0.7071);
-    var dy = -(1 - t) * 52 - t * (S * 0.5 * 0.7071);
-    var hz = (1 - t) * 0 + t * 72; // 竖直棱高度
-
-    var T0 = [ox, oy], T1 = [ox + S, oy], T2 = [ox + S + dx, oy + dy], T3 = [ox + dx, oy + dy];
-    var B0 = [T0[0], T0[1] + hz], B1 = [T1[0], T1[1] + hz], B2 = [T2[0], T2[1] + hz], B3 = [T3[0], T3[1] + hz];
-
-    function poly(pts, fill, stroke, w) {
-      var s = pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
-      ecEl("polygon", { points: s, fill: fill, stroke: stroke, "stroke-width": w || 2, "stroke-linejoin": "round" }, ecSvg);
-    }
-    function ln(p1, p2, stroke, w, dash) {
-      var a = { x1: p1[0].toFixed(1), y1: p1[1].toFixed(1), x2: p2[0].toFixed(1), y2: p2[1].toFixed(1), stroke: stroke, "stroke-width": w || 2 };
-      if (dash) a["stroke-dasharray"] = dash;
-      ecEl("line", a, ecSvg);
-    }
-
-    if (hz > 2) {
-      // 后方隐藏棱虚线
-      ln(T3, B3, "var(--muted)", 1.4, "3,3");
-      ln(B0, B3, "var(--muted)", 1.4, "3,3");
-      ln(B3, B2, "var(--muted)", 1.4, "3,3");
-      // 正面与右侧面
-      poly([T0, T1, B1, B0], "rgba(47,122,86,0.12)", "var(--a)", 2);
-      poly([T1, T2, B2, B1], "rgba(47,122,86,0.22)", "var(--a)", 2);
-    }
-    // 顶面高亮（平行四边形 vs 正方形）
-    poly([T0, T1, T2, T3], t > 0.5 ? "rgba(217,140,43,0.28)" : "rgba(217,72,62,0.16)", t > 0.5 ? "var(--b)" : "var(--no)", 2.5);
-
-    // 标注顶面内角与边长
-    var degNow = Math.round(90 - 45 * t);
-    ecEl("text", { x: T0[0] + 18, y: T0[1] - 6, "font-size": 12.5, "font-weight": 700, fill: t > 0.5 ? "var(--b)" : "var(--no)" }, ecSvg).textContent = degNow + "°";
-    ecEl("text", { x: (T3[0] + T2[0]) / 2, y: T3[1] - 7, "text-anchor": "middle", "font-size": 12, "font-weight": 700, fill: "var(--fg)" }, ecSvg).textContent = "横不变: 4";
-    ecEl("text", { x: T2[0] + 6, y: (T1[1] + T2[1]) / 2 + 4, "font-size": 12.5, "font-weight": 700, fill: t > 0.5 ? "var(--b)" : "var(--no)" }, ecSvg).textContent = t > 0.5 ? "纵折半: 2" : "纵边: 4";
-    ecEl("text", { x: 374, y: 186, "text-anchor": "middle", "font-size": 12.5, "font-weight": 700, fill: t > 0.5 ? "var(--a)" : "var(--no)" }, ecSvg).textContent = t > 0.5 ? "✓ 顶面画成 45° 平行四边形，正方体立刻立起来！" : "✗ 顶面画成 90° 正方形，丧失立体纵深";
+    if(!ecSvg)return;ecSvg.innerHTML="";var u=20,S=4*u,k=Math.SQRT1_2/2,dx=t*S*k,dy=-(1-t)*S-t*S*k,h=t*S,ox=300,oy=200-h;
+    var raw=[[50,200],[130,200],[130,120],[50,120]],T=[[ox,oy],[ox+S,oy],[ox+S+dx,oy+dy],[ox+dx,oy+dy]],B=T.map(function(p){return[p[0],p[1]+h];});
+    function poly(points,role){return ecEl("polygon",{points:points.map(function(p){return p.join(",");}).join(" "),fill:"var(--ok-soft)",stroke:"var(--a)","stroke-width":2,"data-role":role,"data-animation-t":t},ecSvg);}
+    poly(raw,"original-square");poly(T,"animated-top");if(h>0){poly([T[0],T[1],B[1],B[0]],"animated-front");poly([T[1],T[2],B[2],B[1]],"animated-side");}
+    solidsText(ecSvg,100,35,"原水平正方形");solidsText(ecSvg,375,35,"直观图过渡");
+    solidsText(ecSvg,100,245,"两方向均长4");solidsText(ecSvg,375,245,"顶面角"+Math.round(Math.atan2(-dy,dx)*180/Math.PI)+"°");
   }
 
   function ecSetMode(m) {
@@ -810,173 +781,15 @@
 </script>
 
 <script>
-(function() {
-  "use strict";
-  var fig = document.getElementById("m-ortho-fig");
-  var bar = document.getElementById("m-ortho-bar");
-  var status = document.getElementById("m-ortho-status");
-  var trap = document.getElementById("m-ortho-trap-fig");
-  if (!fig || !bar) return;
-
-  var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-  var ca = isDark ? "#38bdf8" : "#0284c7";
-  var cb = isDark ? "#f59e0b" : "#d97706";
-  var cc = isDark ? "#10b981" : "#059669";
-  var cd = isDark ? "#ec4899" : "#db2777";
-  var mut = isDark ? "#94a3b8" : "#64748b";
-  var bgCard = isDark ? "#1e293b" : "#f1f5f9";
-  var border = isDark ? "#334155" : "#e2e8f0";
-  var NS = "http://www.w3.org/2000/svg";
-
-  function sEl(parent, tag, attrs) {
-    var el = document.createElementNS(NS, tag);
-    for (var k in attrs) el.setAttribute(k, attrs[k]);
-    parent.appendChild(el);
-    return el;
-  }
-
-  function sTxt(parent, x, y, text, col, sz, fw, anchor) {
-    var t = sEl(parent, "text", {
-      x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
-      "font-weight": fw || 400, "text-anchor": anchor || "start"
-    });
-    t.textContent = text;
-    return t;
-  }
-
-  function drawOrtho(mode) {
-    fig.innerHTML = "";
-    if (mode === "plane") {
-      // 原正方形 vs 直观平行四边形
-      sTxt(fig, 30, 24, "【原平面图形】真实正方形", ca, 12, 700);
-      sEl(fig, "rect", { x: 50, y: 40, width: 80, height: 80, fill: "rgba(2,132,199,0.08)", stroke: ca, "stroke-width": 2 });
-      sTxt(fig, 90, 136, "边长 a", ca, 11.5, 400, "middle");
-      sTxt(fig, 42, 84, "边长 a", ca, 11, 400, "end");
-      sTxt(fig, 90, 84, "直角 90°", ca, 12, 700, "middle");
-
-      sEl(fig, "line", { x1: 175, y1: 80, x2: 215, y2: 80, stroke: cb, "stroke-width": 2, "marker-end": "url(#arr)" });
-      sTxt(fig, 195, 72, "斜二测", cb, 11.5, 700, "middle");
-
-      sTxt(fig, 260, 24, "【斜二测直观图】45° 平行四边形", cb, 12, 700);
-      // 原点 A'(260, 120), B'(340, 120), D'(288, 92), C'(368, 92)
-      // dx = 40 * cos(45) = 28.28, dy = 40 * sin(45) = 28.28
-      var pts = "260,120 340,120 368,92 288,92";
-      sEl(fig, "polygon", { points: pts, fill: "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 2 });
-      sTxt(fig, 300, 136, "横不变: a", cb, 11.5, 700, "middle");
-      sTxt(fig, 260, 102, "纵折半: a/2", cb, 11.5, 700, "end");
-      sTxt(fig, 280, 118, "45°", cd, 11.5, 700);
-
-      // 右侧总结
-      sEl(fig, "rect", { x: 395, y: 30, width: 115, height: 110, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 405, 52, "核心规则：", cb, 12, 700);
-      sTxt(fig, 405, 74, "• x 轴平行: 等长", ca, 11, 600);
-      sTxt(fig, 405, 96, "• y 轴平行: 折半", cb, 11, 600);
-      sTxt(fig, 405, 118, "• 夹角: 45°/135°", cd, 11, 600);
-    } else if (mode === "solid") {
-      // 空间立体画法：长方体直观图
-      sTxt(fig, 30, 24, "【立体画法】先底面后立高（z轴真实高度不变）", cc, 12, 700);
-
-      // 底面 ABCD: A(100, 140), B(180, 140), C(210, 115), D(130, 115)
-      // 高 h = 60
-      // 顶面 A1(100, 80), B1(180, 80), C1(210, 55), D1(130, 55)
-      // 虚线棱: DA, DC, DD1
-      sEl(fig, "line", { x1: 130, y1: 115, x2: 100, y2: 140, stroke: mut, "stroke-width": 1.5, "stroke-dasharray": "4 4" });
-      sEl(fig, "line", { x1: 130, y1: 115, x2: 210, y2: 115, stroke: mut, "stroke-width": 1.5, "stroke-dasharray": "4 4" });
-      sEl(fig, "line", { x1: 130, y1: 115, x2: 130, y2: 55, stroke: mut, "stroke-width": 1.5, "stroke-dasharray": "4 4" });
-
-      // 实线棱
-      sEl(fig, "line", { x1: 100, y1: 140, x2: 180, y2: 140, stroke: cc, "stroke-width": 2 });
-      sEl(fig, "line", { x1: 180, y1: 140, x2: 210, y2: 115, stroke: cc, "stroke-width": 2 });
-
-      sEl(fig, "line", { x1: 100, y1: 140, x2: 100, y2: 80, stroke: cc, "stroke-width": 2 });
-      sEl(fig, "line", { x1: 180, y1: 140, x2: 180, y2: 80, stroke: cc, "stroke-width": 2 });
-      sEl(fig, "line", { x1: 210, y1: 115, x2: 210, y2: 55, stroke: cc, "stroke-width": 2 });
-
-      // 顶面
-      sEl(fig, "polygon", { points: "100,80 180,80 210,55 130,55", fill: "rgba(16,185,129,0.1)", stroke: cc, "stroke-width": 2 });
-
-      sTxt(fig, 140, 154, "底长 a (不变)", ca, 11, 600, "middle");
-      sTxt(fig, 218, 132, "宽 b/2", cb, 11, 600);
-      sTxt(fig, 85, 110, "高 h", cc, 11.5, 700, "end");
-      sTxt(fig, 85, 122, "(真实长)", cc, 10, 400, "end");
-
-      // 右侧三步提示
-      sEl(fig, "rect", { x: 260, y: 30, width: 245, height: 115, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 275, 52, "空间立体图形作图三步曲：", cc, 12, 700);
-      sTxt(fig, 275, 74, "1. 选基底画底面：按斜二测画出水平底面", mut, 11.5);
-      sTxt(fig, 275, 96, "2. 沿 z' 轴立高：过各顶点作竖直垂线，原长不变", mut, 11.5);
-      sTxt(fig, 275, 118, "3. 顺次连顶面，看不见的部分画成虚线", mut, 11.5);
-      sTxt(fig, 275, 136, "★ 铁律：只有沿 y 轴方向才折半，z 轴竖高绝对不折半！", cd, 10.5, 700);
-    } else if (mode === "area") {
-      // 面积比例推导
-      sTxt(fig, 30, 24, "【面积换算】S' = (√2 / 4) · S 的几何真谛", cb, 12, 700);
-
-      // 原图三角形 底 a, 高 h
-      sEl(fig, "polygon", { points: "50,130 130,130 90,50", fill: "rgba(2,132,199,0.08)", stroke: ca, "stroke-width": 1.8 });
-      sEl(fig, "line", { x1: 90, y1: 50, x2: 90, y2: 130, stroke: ca, "stroke-width": 1.2, "stroke-dasharray": "3 3" });
-      sTxt(fig, 90, 144, "底 a", ca, 11, 600, "middle");
-      sTxt(fig, 94, 90, "高 h", ca, 11, 600);
-      sTxt(fig, 90, 40, "原面积 S = 1/2 · a · h", ca, 11.5, 700, "middle");
-
-      // 直观图三角形
-      // 底 a 不变: (200, 130) 到 (280, 130)
-      // 原顶点 (90, 50) 沿 y 轴高 h=80 变成倾斜 45° 长度 40: dx=28.28, dy=28.28 => (228.28, 101.72)
-      sEl(fig, "polygon", { points: "200,130 280,130 228,102", fill: "rgba(217,119,6,0.08)", stroke: cb, "stroke-width": 1.8 });
-      sEl(fig, "line", { x1: 228, y1: 102, x2: 228, y2: 130, stroke: cd, "stroke-width": 1.2, "stroke-dasharray": "3 3" });
-      sTxt(fig, 240, 144, "底 a 不变", cb, 11, 600, "middle");
-      sTxt(fig, 232, 118, "h' = h/2 · sin45°", cd, 10, 700);
-      sTxt(fig, 240, 92, "直观图", cb, 11.5, 700, "middle");
-
-      // 右侧换算公式
-      sEl(fig, "rect", { x: 320, y: 30, width: 185, height: 115, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 335, 52, "面积换算核心口诀：", cb, 12, 700);
-      sTxt(fig, 335, 74, "• 正算缩小: S' = (√2 / 4) · S", ca, 11.5, 600);
-      sTxt(fig, 335, 96, "• 逆推放大: S = 2√2 · S'", cb, 11.5, 700);
-      sTxt(fig, 335, 118, "• 倍数系数 ≈ 0.354 (直观)", mut, 11);
-      sTxt(fig, 335, 134, "• 逆推系数 ≈ 2.828 (原图)", mut, 11);
-    }
-  }
-
-  // 绑定 Tab 切换
-  [].forEach.call(bar.querySelectorAll("button"), function(b) {
-    b.onclick = function() {
-      [].forEach.call(bar.querySelectorAll("button"), function(x) { x.classList.remove("on"); });
-      b.classList.add("on");
-      var m = b.getAttribute("data-m");
-      drawOrtho(m);
-      if (m === "plane") status.textContent = "斜二测核心：横向平行不变且长不变，纵向平行 45° 倾斜且长度折半。";
-      else if (m === "solid") status.textContent = "立体几何作图：底面按斜二测画出，竖直高严格按实际长度保持不变！";
-      else if (m === "area") status.textContent = "面积缩放铁律：直观图面积等于原面积乘以 √2 / 4；从直观图逆推原面积乘 2√2。";
-    };
-  });
-  drawOrtho("plane");
-
-  // 绘制反例微图解
-  if (trap) {
-    sTxt(trap, 30, 20, "【原正方形】两对角线相等且垂直", ca, 12, 700);
-    sEl(trap, "rect", { x: 60, y: 35, width: 80, height: 80, fill: "none", stroke: border, "stroke-width": 1.5 });
-    // AC & BD
-    sEl(trap, "line", { x1: 60, y1: 115, x2: 140, y2: 35, stroke: cc, "stroke-width": 2 });
-    sEl(trap, "line", { x1: 60, y1: 35, x2: 140, y2: 115, stroke: cc, "stroke-width": 2 });
-    sTxt(trap, 100, 130, "AC = BD = 4√2 ≈ 5.66 (相等)", cc, 11, 600, "middle");
-    sTxt(trap, 100, 75, "垂直 90°", cc, 11, 700, "middle");
-
-    sEl(trap, "line", { x1: 190, y1: 75, x2: 230, y2: 75, stroke: mut, "stroke-width": 2, "marker-end": "url(#arr)" });
-    sTxt(trap, 210, 68, "斜二测", mut, 11, 600, "middle");
-
-    sTxt(trap, 270, 20, "【直观变形】对角线一长一短，不再垂直！", cd, 12, 700);
-    // 直观图 A'(270, 115), B'(350, 115), C'(378, 87), D'(298, 87)
-    sEl(trap, "polygon", { points: "270,115 350,115 378,87 298,87", fill: "none", stroke: border, "stroke-width": 1.5 });
-    // A'C': (270,115) 到 (378,87) -> 拉长
-    sEl(trap, "line", { x1: 270, y1: 115, x2: 378, y2: 87, stroke: cd, "stroke-width": 2.2 });
-    sTxt(trap, 385, 92, "A'C' ≈ 5.60 (拉长)", cd, 11, 700);
-    // B'D': (350,115) 到 (298,87) -> 缩短
-    sEl(trap, "line", { x1: 350, y1: 115, x2: 298, y2: 87, stroke: "#ef4444", "stroke-width": 2.2 });
-    sTxt(trap, 335, 132, "B'D' ≈ 2.95 (大幅压缩)", "#ef4444", 11, 700);
-    sTxt(trap, 326, 96, "≠ 90°", cd, 11, 700);
-  }
+/* solids-semantic-micro oblique */
+(function(){var fig=document.getElementById("m-ortho-fig"),bar=document.getElementById("m-ortho-bar"),status=document.getElementById("m-ortho-status"),trap=document.getElementById("m-ortho-trap-fig");if(!fig||!bar)return;
+ var k=Math.SQRT1_2/2;
+ function shape(target,points,ox,oy,u,mapped,role){var xy=points.map(function(p){return[ox+u*(p[0]+(mapped?k*p[1]:0)),oy-u*(mapped?k*p[1]:p[1])];});return solidsAdd(target,"polygon",{points:xy.map(function(p){return p.join(",");}).join(" "),fill:"none",stroke:"var(--a)","stroke-width":2,"data-role":role,"data-original":JSON.stringify(points),"data-mapped":mapped,"data-ox":ox,"data-oy":oy,"data-u":u});}
+ function draw(mode){fig.innerHTML="";if(mode==="solid"){var verts=solidsCube(3).map(function(p){return p.map(function(v){return v+1.5;});}),xy=verts.map(function(p){return[160+40*(p[0]+k*p[1]),240-40*(p[2]+k*p[1])];});solidsEdges().forEach(function(e){solidsAdd(fig,"line",{x1:xy[e[0]][0],y1:xy[e[0]][1],x2:xy[e[1]][0],y2:xy[e[1]][1],stroke:"var(--a)","stroke-width":2,"data-role":"oblique-cube-edge","data-xyz":JSON.stringify([verts[e[0]],verts[e[1]]])});});solidsText(fig,260,285,"x长度不变 · y折半 · z高不变");status.textContent="统一三维斜二测映射X=x+(√2/4)y，Y=z+(√2/4)y。沿x及竖直z的长度保留，沿y长度缩半并倾斜45°；所有顶点逐点经过同一线性映射。";
+ }else{var points=mode==="area"?[[0,0],[4,0],[2,4]]:[[0,0],[4,0],[4,4],[0,4]];shape(fig,points,70,230,30,false,"original");shape(fig,points,300,230,30,true,"oblique");solidsText(fig,135,280,mode==="area"?"原面积8":"原正方形");solidsText(fig,400,280,mode==="area"?"图面积2√2":"斜二测图");status.textContent=mode==="area"?"三角形每个顶点都用X=x+(√2/4)y、Y=(√2/4)y映射；原顶点(2,4)的X分量也必须保留。行列式为√2/4，面积8映成2√2，逆向乘2√2。":"平面图统一线性映射：X=x+(√2/4)y、Y=(√2/4)y。它保留共线和平行，通常不保留角度或任意方向长度。";}}
+ [].forEach.call(bar.querySelectorAll("button"),function(b){b.onclick=function(){[].forEach.call(bar.querySelectorAll("button"),function(t){t.classList.toggle("on",t===b);});draw(b.getAttribute("data-m"));};});draw("plane");
+ if(trap){var p=[[0,0],[4,0],[4,4],[0,4]];shape(trap,p,50,180,25,false,"original-square");shape(trap,p,300,180,25,true,"oblique-square");[[50,false],[300,true]].forEach(function(s){[[0,2],[1,3]].forEach(function(e){var a=p[e[0]],b=p[e[1]];solidsAdd(trap,"line",{x1:s[0]+25*(a[0]+(s[1]?k*a[1]:0)),y1:180-25*(s[1]?k*a[1]:a[1]),x2:s[0]+25*(b[0]+(s[1]?k*b[1]:0)),y2:180-25*(s[1]?k*b[1]:b[1]),stroke:"var(--b)","stroke-width":2,"data-role":"diagonal","data-mapped":s[1],"data-original":JSON.stringify([a,b])});});});solidsText(trap,100,225,"等长且垂直");solidsText(trap,405,225,"不等长、不垂直");}
 })();
-</script>
 
-</body>
-</html>
+</script>
+</body></html>

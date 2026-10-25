@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -447,7 +447,7 @@
     var rightY = p2.Y - uy * headLen - ux * headW;
 
     var pts = p2.X + "," + p2.Y + " " + leftX + "," + leftY + " " + rightX + "," + rightY;
-    svg("polygon", { points: pts, fill: color }, parent);
+    svg("polygon", { points: pts, fill: color, "data-vector-from-x": p1.X, "data-vector-from-y": p1.Y, "data-vector-to-x": p2.X, "data-vector-to-y": p2.Y }, parent);
   }
 
   function sq(v) { return (v < 0 ? "(" + v + ")" : String(v)) + "^2"; }
@@ -469,7 +469,7 @@
       if (deg < 0) deg += 360;
       var degStr = deg.toFixed(1);
       lines.push("向量 \\(\\boldsymbol{a} = \\overrightarrow{OA}\\)：终点坐标 \\(A(" + ax + ", " + ay + ")\\)。");
-      lines.push("模长：\\(|\\boldsymbol{a}| = \\sqrt{" + sq(ax) + " + " + sq(ay) + "} = \\sqrt{" + (ax * ax + ay * ay) + "} " + (lenStr.indexOf(".") < 0 ? "=" : "\\approx") + " " + lenStr + "\\)；与 \\(x\\) 轴正向夹角约 \\(" + degStr + "^\\circ\\)。");
+      lines.push("模长：\\(|\\boldsymbol{a}| = \\sqrt{" + sq(ax) + " + " + sq(ay) + "} = \\sqrt{" + (ax * ax + ay * ay) + "} " + (lenStr.indexOf(".") < 0 ? "=" : "\\approx") + " " + lenStr + "\\)；从 \\(x\\) 轴正向逆时针量得的方向角约 \\(" + degStr + "^\\circ\\)。");
     }
 
     if (mode === "equal") {
@@ -725,7 +725,7 @@
     });
     erNote.innerHTML = m === 0
       ? "只报距离 <b>20 km</b>：快艇可能在半径 20 km 圆周上的<b>任意一点</b>，无法拦截！"
-      : (m === 1 ? "同时给出<b>大小（20 km）</b>和<b>方向（东偏北 30°）</b>：有向线段 <b>OP</b> 唯一锁定目标！" : "同样是 <b>20 km</b>，方向改成<b>正西 180°</b>，终点就跑到完全相反的 <b>Q</b> 点。");
+      : (m === 1 ? "同时给出<b>大小（20 km）</b>和<b>方向（东偏北 30°）</b>：有向线段 <b>OP</b> 唯一锁定目标！" : "同样是 <b>20 km</b>，方向改成<b>正西 180°</b>，终点就位于圆周左侧的 <b>Q</b> 点。");
   }
   [].forEach.call(erBar.querySelectorAll("button"), function (b) {
     b.onclick = function () { erDraw(parseInt(b.getAttribute("data-m"), 10)); };
@@ -755,11 +755,15 @@
     svg("circle", { cx: 35, cy: 124, r: 11, fill: cb }, anatFig);
     txt(anatFig, 52, 78, "• 气温 25°C", fg, 0, 13); txt(anatFig, 52, 104, "• 质量 60 kg", fg, 0, 13); txt(anatFig, 52, 130, "• 路程 5 m", fg, 0, 13);
     svg("rect", { x: 180, y: 10, width: 332, height: 154, rx: 8, fill: card, stroke: ln }, anatFig);
-    var A = { X: 252, Y: 132 }, B = { X: 342, Y: 44 }, C = { X: 342, Y: 132 };
+    var unit = 22, origin = { X: 230, Y: 154 };
+    function point(x, y) { return { X: origin.X + x * unit, Y: origin.Y - y * unit }; }
+    var A = point(1, 1), B = point(4, 5), C = point(4, 1);
+    anatFig.setAttribute("data-unit", unit);
+    anatFig.setAttribute("data-origin-x", origin.X); anatFig.setAttribute("data-origin-y", origin.Y);
     svg("line", { x1: A.X, y1: A.Y, x2: C.X, y2: C.Y, stroke: ca, "stroke-dasharray": "4 3", "stroke-width": 1.8 }, anatFig);
     svg("line", { x1: C.X, y1: C.Y, x2: B.X, y2: B.Y, stroke: cb, "stroke-dasharray": "4 3", "stroke-width": 1.8 }, anatFig);
-    txt(anatFig, 297, 150, dir === "ab" ? "横向 +3" : "横向 -3", ca, 700, 13, "middle");
-    txt(anatFig, 348, 94, dir === "ab" ? "纵向 +4" : "纵向 -4", cb, 700, 13);
+    txt(anatFig, (A.X + C.X) / 2, C.Y + 18, dir === "ab" ? "横向 +3" : "横向 -3", ca, 700, 13, "middle");
+    txt(anatFig, C.X + 6, (C.Y + B.Y) / 2 + 6, dir === "ab" ? "纵向 +4" : "纵向 -4", cb, 700, 13);
     if (dir === "ab") drawArrow(A, B, ca, 3.6, anatFig); else drawArrow(B, A, no, 3.6, anatFig);
     svg("circle", { cx: A.X, cy: A.Y, r: 4.5, fill: fg }, anatFig); svg("circle", { cx: B.X, cy: B.Y, r: 4.5, fill: fg }, anatFig);
     txt(anatFig, A.X - 6, A.Y + 4, dir === "ab" ? "起点A(1,1)" : "终点A(1,1)", fg, 700, 13, "end");
@@ -791,7 +795,7 @@
       txt(ex1Fig, pt(-2, 0).X - 4, pt(-2, 0).Y + 15, "CD(右3上4)", ca, 700, 12.5);
     }
     drawArrow(pt(0, 0), pt(4, -3), cb, 2.8, ex1Fig); txt(ex1Fig, pt(4, -3).X + 6, pt(4, -3).Y + 4, "EF(右4下3≠)", cb, 700, 12.5);
-    drawArrow(pt(9, 7), pt(6, 3), no, 2.8, ex1Fig); txt(ex1Fig, pt(9, 7).X, pt(9, 7).Y - 6, "GH(反向)", no, 700, 12.5, "middle");
+    drawArrow(pt(5, 8), pt(2, 4), no, 2.8, ex1Fig); txt(ex1Fig, pt(5, 8).X + 8, pt(5, 8).Y + 4, "GH(反向)", no, 700, 12.5);
     txt(ex1Fig, 320, 55, "✓ CD = AB（模5，同向）", ca, 700, 13.5);
     txt(ex1Fig, 320, 90, "✗ EF：模虽为5，方向不同", cb, 0, 13);
     txt(ex1Fig, 320, 125, "✗ GH：模虽为5，方向相反", no, 0, 13);
@@ -810,9 +814,10 @@
     drawArrow({ X: ox, Y: oy }, P, ca, 3.2, unitFig); txt(unitFig, P.X - 8, P.Y - 8, "P(0.6,0.8) 模=1✓", ca, 700, 12, "end");
     drawArrow({ X: ox, Y: oy }, Q, no, 2.6, unitFig); txt(unitFig, Q.X + 5, Q.Y + 14, "Q(1,1) 模=√2✗", no, 700, 12);
     drawArrow(M, N, cb, 3.2, unitFig); svg("circle", { cx: M.X, cy: M.Y, r: 4, fill: fg }, unitFig);
-    txt(unitFig, N.X, N.Y - 8, "MN(模=1✓)", cb, 700, 12, "middle"); txt(unitFig, M.X, M.Y + 18, "MM=0(零向量)", fg, 700, 12, "middle");
+    txt(unitFig, N.X, N.Y - 8, "MN(平移展示)", cb, 700, 12, "middle"); txt(unitFig, M.X, M.Y + 18, "MM=0(零向量)", fg, 700, 12, "middle");
     txt(unitFig, 304, 48, "• 单位圆半径 = 1", ca, 700, 13.5);
     txt(unitFig, 304, 78, "• OP、MN 模为 1 (单位向量)", ca, 0, 13);
+    txt(unitFig, 252, 30, "MN 已平移，保留方向与长度", cb, 0, 11, "middle");
     txt(unitFig, 304, 108, "• OQ(1,1) 模为 √2 (捅出圆外!)", no, 0, 13);
     txt(unitFig, 304, 138, "• MM 缩成一点 = 零向量 0", fg, 0, 13);
   }

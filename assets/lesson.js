@@ -511,10 +511,10 @@
     fl.src = "../assets/figure-layout.js";
     document.head.appendChild(fl);
     var ws = document.createElement("script");
-    ws.src = "../assets/wiki.js?v=concept-map-20261024-fix1";
+    ws.src = "../assets/wiki.js?v=vs-12d546b3f39c";
     document.head.appendChild(ws);
     var hs = document.createElement("script"); // 交互层（PY-53）
-    hs.src = "../assets/hci.js";
+    hs.src = "../assets/hci.js?v=vs-c5846d8946b2";
     document.head.appendChild(hs);
   });
 })();

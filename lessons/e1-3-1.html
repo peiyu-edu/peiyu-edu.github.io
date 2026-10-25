@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -72,7 +72,7 @@
       <button type="button" class="micro-tab" data-mode="axis">② 焦点轴向判定（大分母原则）</button>
       <button type="button" class="micro-tab" data-mode="ecc">③ 离心率 e 与扁平形态</button>
     </div>
-    <svg id="m-ellipse-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="椭圆几何直观图解"></svg>
+    <svg id="m-ellipse-fig" class="micro-fig" viewBox="0 0 540 300" role="img" aria-label="椭圆几何直观图解"></svg>
     <div class="micro-caption" id="m-ellipse-cap"></div>
   </div>
 
@@ -427,7 +427,7 @@
 <footer>培玉智能 · 自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="../assets/iso-bench.js"></script>
+<script src="../assets/iso-bench.js?v=vs-b03c46885f5f"></script>
 <script>
 (function () {
   "use strict";
@@ -488,6 +488,7 @@
 
   function draw(keepFocus) {
     if (c > a) c = a;
+    SCALE = Math.min(18, 100 / a);
     if (aout) aout.textContent = f2(a);
     if (cout) cout.textContent = f2(c);
 
@@ -667,7 +668,7 @@
 
   if (cin) {
     cin.addEventListener("input", function () {
-      c = parseFloat(cin.value) || 4;
+      c = Number.isFinite(Number(cin.value)) ? Number(cin.value) : 4;
       if (c > a) { a = c; if (ain) ain.value = String(a); }
       draw();
     });
@@ -700,7 +701,7 @@
     if (len === 10) {
       // a=5, b=4, c=3
       h.push('<ellipse cx="' + ox + '" cy="' + oy + '" rx="' + (5 * u) + '" ry="' + (4 * u) + '" fill="var(--ok-soft)" fill-opacity="0.45" stroke="var(--a)" stroke-width="2.6"/>');
-      var px = ox + 1.2 * u, py = oy - 3.88 * u;
+      var px = ox + 1.2 * u, py = oy - 4 * Math.sqrt(1 - (1.2/5) * (1.2/5)) * u;
       h.push('<line x1="' + f1x + '" y1="' + oy + '" x2="' + px + '" y2="' + py + '" stroke="var(--b)" stroke-width="2.6"/>');
       h.push('<line x1="' + f2x + '" y1="' + oy + '" x2="' + px + '" y2="' + py + '" stroke="var(--b)" stroke-width="2.6"/>');
       h.push('<circle cx="' + px + '" cy="' + py + '" r="6" fill="var(--hl)" stroke="var(--fg)" stroke-width="1.8"/>');
@@ -751,146 +752,49 @@
 })();
 
 
-function initMEllipseFig(){
-  var svgEl = document.getElementById("m-ellipse-fig");
-  var capEl = document.getElementById("m-ellipse-cap");
-  if (!svgEl) return;
-  var mode = "def";
-  var NS = "http://www.w3.org/2000/svg";
-  var caps = {
-    def: "椭圆第一定义：平面内 |PF1| + |PF2| = 2a (2a > 2c)。短轴端点到两焦点距离恒为 a，围成 a² = b² + c² 直角三角形。",
-    axis: "焦点轴向大分母原则：x²/a² + y²/b² = 1 (a > b) 焦点在 x 轴；y²/a² + x²/b² = 1 (a > b) 焦点在 y 轴。谁的分母大焦点在谁上。",
-    ecc: "离心率 e = c/a ∈ (0, 1)：刻画椭圆扁平率。e 越接近 1 越扁，e 越接近 0 越接近正圆。"
-  };
+/* conics-semantic-micro ellipse */
+(function(){
+  var fig=document.getElementById("m-ellipse-fig"),cap=document.getElementById("m-ellipse-cap"),mode="def";
+  if(!fig)return;
 
-  function s(el, tag, attrs, txt){
-    var e = document.createElementNS(NS, tag);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
-    if (txt) e.textContent = txt;
-    el.appendChild(e);
-    return e;
+  function add(target, tag, attrs, label) {
+    var n=document.createElementNS("http://www.w3.org/2000/svg",tag);
+    for(var k in attrs)n.setAttribute(k,attrs[k]);
+    if(label!==undefined)n.textContent=label; target.appendChild(n);return n;
   }
-  function ln(el, x1, y1, x2, y2, c, w, d){
-    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
-    if (d) a["stroke-dasharray"] = d;
-    return s(el, "line", a);
-  }
-  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
-  function tx(el, x, y, txt, c, sz, b, anch){
-    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
-    if (b) a["font-weight"] = "bold";
-    if (anch) a["text-anchor"] = anch;
-    return s(el, "text", a, txt);
+  function text(target,x,y,label,anchor){return add(target,"text",{x:x,y:y,fill:"var(--fg)","font-size":24,"text-anchor":anchor||"middle"},label);}
+  function chart(target,m,v){
+    function X(x){return v.ox+x*v.u;} function Y(y){return v.oy-y*v.u;}
+    function attrs(extra){var a={"data-model":m.kind,"data-a":m.a||0,"data-b":m.b||0,"data-p":m.p||0,"data-axis":m.axis||"x","data-direction":m.dir||"right","data-ox":v.ox,"data-oy":v.oy,"data-u":v.u};for(var k in extra)a[k]=extra[k];return a;}
+    function at(t,branch){var x,y;if(m.kind==="ellipse"){x=m.a*Math.cos(t);y=m.b*Math.sin(t);}else if(m.kind==="hyperbola"){x=(branch||1)*m.a*Math.cosh(t);y=m.b*Math.sinh(t);}else{x=t*t/(2*m.p);y=t;if(m.dir==="left")x=-x;if(m.dir==="up"){var q=x;x=y;y=q;}else if(m.dir==="down"){var q2=x;x=y;y=-q2;}}if(m.kind!=="parabola"&&m.axis==="y"){var z=x;x=y;y=z;}return{x:x,y:y};}
+    function line(x1,y1,x2,y2,role,dash){return add(target,"line",attrs({x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),stroke:role==="asymptote"||role==="directrix"?"var(--b)":"var(--muted)","stroke-width":1.7,"stroke-dasharray":dash||"none","data-role":role||"segment"}));}
+    function dot(x,y,role,label,dx,dy){add(target,"circle",attrs({cx:X(x),cy:Y(y),r:5,fill:role==="focus"?"var(--b)":"var(--a)","data-role":role,"data-x":x,"data-y":y}));if(label)text(target,X(x)+(dx||0),Y(y)+(dy||-16),label);}
+    function curve(lo,hi,branch){var d="";for(var i=0;i<=240;i++){var p=at(lo+(hi-lo)*i/240,branch);d+=(i?" L":"M")+X(p.x).toFixed(6)+" "+Y(p.y).toFixed(6);}return add(target,"path",attrs({d:d,fill:"none",stroke:"var(--a)","stroke-width":3,"data-role":"curve","data-branch":branch||1}));}
+    return {X:X,Y:Y,at:at,line:line,dot:dot,curve:curve,meta:attrs};
   }
 
-  function draw(){
-    svgEl.innerHTML = "";
-    if (mode === "def") {
-      tx(svgEl, 270, 24, "第一定义与焦点直角三角形：|PF1| + |PF2| = 2a，a² = b² + c²", "#0f172a", "12.5", true, "middle");
-      // Axes
-      ln(svgEl, 40, 115, 260, 115, "#64748b", 1.5);
-      ln(svgEl, 150, 180, 150, 45, "#64748b", 1.5);
-
-      // Ellipse rx = 75, ry = 45 (a = 75, b = 45, c = 60)
-      s(svgEl, "ellipse", {cx:150, cy:115, rx:75, ry:45, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
-
-      // Foci F1(90, 115), F2(210, 115)
-      s(svgEl, "circle", {cx:90, cy:115, r:4, fill:"#dc2626"});
-      tx(svgEl, 90, 130, "F1(-c,0)", "#dc2626", "10", true, "middle");
-      s(svgEl, "circle", {cx:210, cy:115, r:4, fill:"#dc2626"});
-      tx(svgEl, 210, 130, "F2(c,0)", "#dc2626", "10", true, "middle");
-
-      // Top vertex B(150, 70)
-      s(svgEl, "circle", {cx:150, cy:70, r:4, fill:"#059669"});
-      tx(svgEl, 150, 62, "B(0,b)", "#059669", "10.5", true, "middle");
-
-      // Triangle OB F2: O(150, 115), B(150, 70), F2(210, 115)
-      ln(svgEl, 150, 115, 210, 115, "#dc2626", 2);
-      tx(svgEl, 180, 110, "c", "#dc2626", "10", true, "middle");
-      ln(svgEl, 150, 115, 150, 70, "#059669", 2);
-      tx(svgEl, 142, 92, "b", "#059669", "10", true);
-      ln(svgEl, 150, 70, 210, 115, "#2563eb", 2);
-      tx(svgEl, 185, 88, "a", "#2563eb", "11", true);
-      rc(svgEl, 150, 107, 8, 8, "none", "#64748b");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "a, b, c 核心铁律", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 距离和恒为 2a (2a > 2c)", "#2563eb", "11");
-      tx(svgEl, 325, 120, "• 勾股定理：a² = b² + c²", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "• 顶点端点 BF2 距离恒为 a", "#059669", "11");
-      tx(svgEl, 325, 164, "• a 恒为最长边，绝非 c！", "#b91c1c", "10.5", true);
-    } else if (mode === "axis") {
-      tx(svgEl, 270, 24, "大分母原则：分母谁大焦点就在谁所在轴", "#0f172a", "12.5", true, "middle");
-      // Horizontal ellipse
-      s(svgEl, "ellipse", {cx:90, cy:110, rx:50, ry:28, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
-      s(svgEl, "circle", {cx:60, cy:110, r:3, fill:"#dc2626"});
-      s(svgEl, "circle", {cx:120, cy:110, r:3, fill:"#dc2626"});
-      tx(svgEl, 90, 155, "x²/a² + y²/b² = 1", "#2563eb", "10.5", true, "middle");
-      tx(svgEl, 90, 172, "焦点在 x 轴 (x²分母大)", "#0f172a", "10", false, "middle");
-
-      // Vertical ellipse
-      s(svgEl, "ellipse", {cx:210, cy:110, rx:28, ry:50, fill:"rgba(5,150,105,0.06)", stroke:"#059669", "stroke-width":2});
-      s(svgEl, "circle", {cx:210, cy:80, r:3, fill:"#dc2626"});
-      s(svgEl, "circle", {cx:210, cy:140, r:3, fill:"#dc2626"});
-      tx(svgEl, 210, 155, "y²/a² + x²/b² = 1", "#059669", "10.5", true, "middle");
-      tx(svgEl, 210, 172, "焦点在 y 轴 (y²分母大)", "#0f172a", "10", false, "middle");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "轴向极速判定", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "① 先化右侧常数项为 1", "#2563eb", "11");
-      tx(svgEl, 325, 120, "② 比较 x², y² 分母大小", "#059669", "11");
-      tx(svgEl, 325, 142, "③ 较大分母即为 a²！", "#dc2626", "11", true);
-      tx(svgEl, 325, 164, "④ 焦点随大分母轴定位", "#64748b", "10.5");
-    } else if (mode === "ecc") {
-      tx(svgEl, 270, 24, "离心率 e = c/a 对椭圆扁平形态的控制", "#0f172a", "12.5", true, "middle");
-      // e ~ 0.5
-      s(svgEl, "ellipse", {cx:90, cy:110, rx:45, ry:38, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
-      tx(svgEl, 90, 160, "e = 0.5 (较圆)", "#2563eb", "10.5", true, "middle");
-
-      // e ~ 0.9
-      s(svgEl, "ellipse", {cx:210, cy:110, rx:65, ry:20, fill:"rgba(220,38,38,0.06)", stroke:"#dc2626", "stroke-width":2});
-      tx(svgEl, 210, 160, "e = 0.9 (极扁)", "#dc2626", "10.5", true, "middle");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "离心率 e 性质", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• e = c/a ∈ (0, 1)", "#2563eb", "11");
-      tx(svgEl, 325, 120, "• e 越大 ⟹ 椭圆越扁", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "• e 越小 ⟹ 越接近正圆", "#059669", "11");
-      tx(svgEl, 325, 164, "• b/a = √(1 - e²)", "#64748b", "10.5");
+  function draw(){fig.innerHTML="";
+    if(mode==="def"){
+      var m={kind:"ellipse",a:5,b:4},p=chart(fig,m,{ox:270,oy:162,u:24}),c=Math.sqrt(m.a*m.a-m.b*m.b);
+      p.line(-6,0,6,0,"axis");p.line(0,-4.8,0,4.8,"axis");p.curve(0,2*Math.PI);
+      p.dot(-c,0,"focus","F₁",0,28);p.dot(c,0,"focus","F₂",0,28);p.dot(0,m.b,"point","B",0,-17);
+      p.line(0,0,0,m.b);p.line(0,0,c,0);p.line(0,m.b,c,0);
+      text(fig,p.X(-.5),p.Y(2),"b");text(fig,p.X(1.5),p.Y(-.9),"c");text(fig,p.X(2.1),p.Y(2.2),"a");
+      cap.textContent="本图a=5、b=4、c=3，椭圆x²/25+y²/16=1。短轴端点B(0,4)到F₂(3,0)的距离为5=a，直角三角形给出a²=b²+c²。任意点到两焦点距离之和为2a=10。";
+    }else if(mode==="axis"){
+      ["x","y"].forEach(function(axis,i){var m={kind:"ellipse",a:2,b:1.2,axis:axis},p=chart(fig,m,{ox:i?405:135,oy:154,u:41}),c=Math.sqrt(m.a*m.a-m.b*m.b);p.line(-2.6,0,2.6,0,"axis");p.line(0,-2.6,0,2.6,"axis");p.curve(0,2*Math.PI);p.dot(axis==="x"?-c:0,axis==="x"?0:-c,"focus");p.dot(axis==="x"?c:0,axis==="x"?0:c,"focus");text(fig,i?405:135,282,axis==="x"?"焦点在x轴":"焦点在y轴");});
+      cap.textContent="两图共用a=2、b=1.2，焦距c=√(a²−b²)=1.6。左图x²/4+y²/1.44=1，右图y²/4+x²/1.44=1；较大分母a²所对应的轴是长轴及焦点所在轴。";
+    }else{
+      [.5,.9].forEach(function(e,i){var a=2.5,b=a*Math.sqrt(1-e*e),c=a*e,p=chart(fig,{kind:"ellipse",a:a,b:b},{ox:i?405:135,oy:150,u:36});p.curve(0,2*Math.PI);p.dot(-c,0,"focus");p.dot(c,0,"focus");text(fig,i?405:135,268,"e="+e);});
+      cap.textContent="两图半长轴同为a=2.5。短轴b=a√(1−e²)、焦距c=ae按各自离心率精确计算；e=0.5较圆，e=0.9较扁。0<e<1；c=0时两焦点重合，另作圆的特例。";
     }
-
-    if (capEl) capEl.textContent = caps[mode];
-    if (window.renderMathInElement) window.renderMathInElement(capEl);
   }
-
-  var tabs = document.querySelectorAll(".micro-box .micro-tab");
-  tabs.forEach(function(tab){
-    tab.addEventListener("click", function(){
-      tabs.forEach(function(t){ t.classList.remove("active"); });
-      tab.classList.add("active");
-      mode = tab.getAttribute("data-mode");
-      draw();
-    });
-  });
-  draw();
-
-  var trapEl = document.getElementById("m-ellipse-trap-fig");
-  if (trapEl) {
-    trapEl.innerHTML = "";
-    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
-    tx(trapEl, 142, 42, "❌ 错解：2a=2c 误写成椭圆", "#dc2626", "11.5", true, "middle");
-    tx(trapEl, 142, 70, "|PF1| + |PF2| = 6，F1(-3,0), F2(3,0)", "#dc2626", "10", false, "middle");
-    tx(trapEl, 142, 94, "两焦点间距 2c = 6，2a = 2c！", "#b91c1c", "10.5", true, "middle");
-    tx(trapEl, 142, 130, "轨迹退化为线段 F1F2，非椭圆！", "#64748b", "9.5", false, "middle");
-
-    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
-    tx(trapEl, 397, 42, "✔ 正解：严格核验 2a > 2c", "#15803d", "11.5", true, "middle");
-    tx(trapEl, 397, 70, "① 2a > 2c ⟹ 轨迹为椭圆", "#059669", "10.5", true, "middle");
-    tx(trapEl, 397, 94, "② 2a = 2c ⟹ 轨迹为线段 F1F2", "#15803d", "10.5", true, "middle");
-    tx(trapEl, 397, 130, "③ 2a < 2c ⟹ 无轨迹（空集）", "#047857", "10", true, "middle");
+  document.querySelectorAll(".micro-box .micro-tab").forEach(function(b){b.addEventListener("click",function(){mode=b.getAttribute("data-mode");document.querySelectorAll(".micro-box .micro-tab").forEach(function(t){t.classList.toggle("active",t===b);});draw();});});draw();
+  var trap=document.getElementById("m-ellipse-trap-fig");if(trap){
+    var p=chart(trap,{kind:"ellipse",a:3,b:0},{ox:135,oy:85,u:26});p.line(-3,0,3,0,"degenerate");p.dot(-3,0,"focus","F₁",0,28);p.dot(3,0,"focus","F₂",0,28);text(trap,135,32,"2a=2c=6");
+    text(trap,405,32,"2a=4 < 2c=6");text(trap,405,100,"∅ 无轨迹");
   }
-}
+})();
 
-initMEllipseFig();
 </script>
 </body></html>

@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -65,7 +65,7 @@
       <button type="button" class="micro-tab" data-mode="pos">③ 平行与垂直判定</button>
     </div>
     <svg id="m-slope-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="直线的倾斜角与斜率几何直观"></svg>
-    <div class="micro-caption" id="m-slope-cap"></div>
+    <div class="micro-caption" style="font-size:15px;line-height:1.6" id="m-slope-cap"></div>
   </div>
 
   <div class="card">
@@ -204,7 +204,7 @@
       <div class="step-body">
         <b>🛡️ 第三步必查防坑结论</b>
         <p>① 平行解得参数后，<b>必须代回原方程验证两线是否重合</b>，重合解坚决剔除！<br>
-        ② 倾斜角从锐角跨过 \(90^\circ\) 到钝角时，斜率发生正负突变（从 \(+\infty\) 骤降至 \(-\infty\)），绝不可直接当单调函数处理！</p>
+        ② 倾斜角趋近 \(90^\circ\) 时，左侧斜率趋于 \(+\infty\)，右侧趋于 \(-\infty\)；\(90^\circ\) 处斜率无定义，不能把两侧合成一个递增区间。</p>
       </div>
     </div>
   </div>
@@ -249,7 +249,7 @@
   <div class="micro-box" style="margin-top:14px;">
     <div class="micro-title">反例微图解：正切函数跨越 \(90^\circ\) 的间断突变</div>
     <svg id="m-slope-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="正切函数间断反例图"></svg>
-    <div class="micro-caption">正切在 \([0^\circ, 90^\circ)\) 上从 \(0\) 增至 \(+\infty\)；在 \((90^\circ, 180^\circ)\) 上从 \(-\infty\) 增至 \(0\)。跨越 \(90^\circ\) 绝非整体递增！</div>
+    <div class="micro-caption" style="font-size:15px;line-height:1.6">正切在两个区间\([0^\circ,90^\circ)\)、\((90^\circ,180^\circ)\)内分别严格递增，且都无界。\(90^\circ\)处没有函数值，左右单侧极限分别为正无穷、负无穷；右支趋近\(180^\circ\)时趋于0，但倾斜角不取\(180^\circ\)。图仅裁切显示窗口，未改变函数值。</div>
   </div>
 
   <details class="more">
@@ -602,7 +602,7 @@
   function erDraw(mode, pickId) {
     var h = [], by = 148;
     if (mode === "split") {
-      var sx = 11.5, sy = 36;
+      var sx = 11.5, sy = 11.5;
       RAMPS.forEach(function (r) {
         var w = r.dx * sx, ht = r.dy * sy, x1 = r.x0, x2 = x1 + w, y2 = by - ht;
         var isC = r.id === "C";
@@ -613,7 +613,7 @@
       });
       erNote.innerHTML = "四段坡道按同一比例画出：A 和 C 都升高 <b>2 米</b>，但 C 水平只走 <b>5 米</b>，坡面明显更陡！";
     } else {
-      var ox = 56, oy = 160, ux = 38, uy = 52;
+      var ox = 56, oy = 160, ux = 38, uy = 38;
       h.push('<line x1="' + ox + '" y1="' + oy + '" x2="465" y2="' + oy + '" stroke="var(--line)" stroke-width="1.5"/>');
       for (var m = 2; m <= 10; m += 2) {
         h.push('<line x1="' + (ox + m * ux) + '" y1="' + oy + '" x2="' + (ox + m * ux) + '" y2="' + (oy + 5) + '" stroke="var(--muted)"/>');
@@ -653,143 +653,58 @@
 
 
 function initMSlopeFig(){
-  var svgEl = document.getElementById("m-slope-fig");
-  var capEl = document.getElementById("m-slope-cap");
-  if (!svgEl) return;
-  var mode = "angle";
-  var NS = "http://www.w3.org/2000/svg";
-  var caps = {
-    angle: "倾斜角 α 与斜率 k 对应：锐角 k > 0（往右上走），钝角 k < 0（往右下走），水平 k = 0，竖直 α = 90° 斜率不存在。",
-    coord: "两点求斜率几何意义：k = (y2 - y1) / (x2 - x1) = Δy / Δx = tan α，即直角三角形对边比邻边的坡度。",
-    pos: "位置关系：平行要求斜率相等且不重合；垂直要求 k1 · k2 = -1（互为负倒数）。若含竖直线则单独分析。"
-  };
-
-  function s(el, tag, attrs, txt){
-    var e = document.createElementNS(NS, tag);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
-    if (txt) e.textContent = txt;
-    el.appendChild(e);
-    return e;
+  var fig=document.getElementById("m-slope-fig"),cap=document.getElementById("m-slope-cap"),trap=document.getElementById("m-slope-trap-fig");
+  if(!fig)return;
+  function node(parent,tag,attrs,value){var e=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(value!==undefined)e.textContent=value;parent.appendChild(e);return e;}
+  function text(parent,x,y,value,color){return node(parent,"text",{x:x,y:y,"text-anchor":"middle","font-size":26,fill:color||"var(--fg)"},value);}
+  function inclination(dx,dy){if(dx===0&&dy===0)throw new Error("Two distinct points are required");var a=Math.atan2(dy,dx);a=((a%Math.PI)+Math.PI)%Math.PI;return a;}
+  function angle(parent,cx,cy,dx,dy,index){
+    var a=inclination(dx,dy),r=34,len=Math.hypot(dx,dy),ux=dx/len,uy=-dy/len;
+    var color=["var(--a)","var(--b)","var(--c)"][index];
+    node(parent,"line",{"data-line-role":"angle-line","data-panel":index,x1:cx-65*ux,y1:cy-65*uy,x2:cx+65*ux,y2:cy+65*uy,stroke:color,"stroke-width":3});
+    node(parent,"line",{"data-line-role":"angle-ray","data-panel":index,x1:cx,y1:cy,x2:cx+74,y2:cy,stroke:"var(--muted)","stroke-dasharray":"4 4"});
+    node(parent,"circle",{"data-line-role":"angle-vertex","data-panel":index,cx:cx,cy:cy,r:3,fill:"var(--fg)"});
+    if(a>1e-12){var ex=cx+r*Math.cos(a),ey=cy-r*Math.sin(a);node(parent,"path",{"data-line-role":"inclination-arc","data-panel":index,"data-angle":a,"data-cx":cx,"data-cy":cy,"data-radius":r,d:"M "+(cx+r)+" "+cy+" A "+r+" "+r+" 0 0 0 "+ex+" "+ey,fill:"none",stroke:color,"stroke-width":2});}
+    text(parent,cx,45,Math.round(a*180/Math.PI)+"°",color);
   }
-  function ln(el, x1, y1, x2, y2, c, w, d){
-    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
-    if (d) a["stroke-dasharray"] = d;
-    return s(el, "line", a);
+  function rightAngle(parent,O,u,v,size){
+    var a=Math.hypot(u[0],u[1]),b=Math.hypot(v[0],v[1]);u=[u[0]/a,u[1]/a];v=[v[0]/b,v[1]/b];
+    var pts=[[O[0]+size*u[0],O[1]+size*u[1]],[O[0]+size*(u[0]+v[0]),O[1]+size*(u[1]+v[1])],[O[0]+size*v[0],O[1]+size*v[1]]];
+    node(parent,"polyline",{"data-line-role":"right-angle","data-vertex-x":O[0],"data-vertex-y":O[1],points:pts.map(function(p){return p.join(",");}).join(" "),fill:"none",stroke:"var(--fg)","stroke-width":1.5});
   }
-  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
-  function tx(el, x, y, txt, c, sz, b, anch){
-    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
-    if (b) a["font-weight"] = "bold";
-    if (anch) a["text-anchor"] = anch;
-    return s(el, "text", a, txt);
-  }
-
-  function draw(){
-    svgEl.innerHTML = "";
-    if (mode === "angle") {
-      tx(svgEl, 270, 19, "倾斜角 α 范围 [0°, 180°) 与斜率 k = tan α 对应", "#0f172a", "12.5", true, "middle");
-      // Coordinate axes
-      ln(svgEl, 40, 150, 260, 150, "#64748b", 1.5); // x-axis
-      ln(svgEl, 150, 180, 150, 40, "#64748b", 1.5); // y-axis
-      tx(svgEl, 265, 154, "x", "#64748b", "11", true);
-      tx(svgEl, 160, 44, "y", "#64748b", "11", true);
-      tx(svgEl, 140, 165, "O", "#64748b", "10");
-
-      // Lines
-      ln(svgEl, 70, 170, 230, 70, "#2563eb", 2.5); // acute line (k>0)
-      tx(svgEl, 235, 75, "k > 0 (锐角)", "#2563eb", "10.5", true);
-      s(svgEl, "path", {d:"M 180 150 A 30 30 0 0 0 172 135", fill:"none", stroke:"#2563eb", "stroke-width":1.5});
-      tx(svgEl, 185, 142, "α1", "#2563eb", "10", true);
-
-      ln(svgEl, 70, 70, 230, 170, "#dc2626", 2.5); // obtuse line (k<0)
-      tx(svgEl, 235, 175, "k < 0 (钝角)", "#dc2626", "10.5", true);
-      s(svgEl, "path", {d:"M 180 150 A 30 30 0 0 0 135 158", fill:"none", stroke:"#dc2626", "stroke-width":1.5});
-      tx(svgEl, 130, 140, "α2", "#dc2626", "10", true);
-
-      // Info box
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "倾斜角与斜率特征", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• α = 0° ⟹ k = 0 (水平线)", "#059669", "11");
-      tx(svgEl, 325, 120, "• 0° < α < 90° ⟹ k > 0", "#2563eb", "11");
-      tx(svgEl, 325, 142, "• α = 90° ⟹ 斜率不存在", "#dc2626", "11", true);
-      tx(svgEl, 325, 164, "• 90° < α < 180° ⟹ k < 0", "#d97706", "11");
-    } else if (mode === "coord") {
-      tx(svgEl, 270, 24, "两点斜率几何比值：k = (y2 - y1) / (x2 - x1) = Δy / Δx", "#0f172a", "12.5", true, "middle");
-      ln(svgEl, 40, 160, 260, 160, "#64748b", 1.5);
-      ln(svgEl, 80, 180, 80, 40, "#64748b", 1.5);
-
-      // Points P1(100, 130), P2(220, 60)
-      ln(svgEl, 80, 142, 240, 48, "#2563eb", 2.5);
-      s(svgEl, "circle", {cx:110, cy:124, r:4.5, fill:"#2563eb"});
-      tx(svgEl, 95, 120, "P1(x1, y1)", "#2563eb", "10.5", true);
-      s(svgEl, "circle", {cx:210, cy:65, r:4.5, fill:"#2563eb"});
-      tx(svgEl, 215, 62, "P2(x2, y2)", "#2563eb", "10.5", true);
-
-      // Triangle
-      ln(svgEl, 110, 124, 210, 124, "#059669", 1.5, "3 3");
-      tx(svgEl, 160, 138, "Δx = x2 - x1", "#059669", "10.5", true, "middle");
-      ln(svgEl, 210, 124, 210, 65, "#dc2626", 1.5, "3 3");
-      tx(svgEl, 225, 98, "Δy", "#dc2626", "10.5", true);
-      rc(svgEl, 200, 114, 10, 10, "none", "#64748b");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "两点公式避坑核查", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "① 减法顺序严禁颠倒", "#059669", "11", true);
-      tx(svgEl, 325, 120, "② x1 = x2 时为竖直线", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "③ k = tan α 仅管非竖直", "#2563eb", "11");
-      tx(svgEl, 325, 164, "④ 负倒数即垂直斜率", "#64748b", "10.5");
-    } else if (mode === "pos") {
-      tx(svgEl, 270, 24, "平行 (k1 = k2) 与垂直 (k1 · k2 = -1) 几何图解", "#0f172a", "12.5", true, "middle");
-      // Parallel lines
-      ln(svgEl, 50, 120, 150, 40, "#2563eb", 2);
-      tx(svgEl, 155, 45, "l1: k1 = 1", "#2563eb", "10.5", true);
-      ln(svgEl, 70, 160, 170, 80, "#2563eb", 2);
-      tx(svgEl, 175, 85, "l2: k2 = 1", "#2563eb", "10.5", true);
-      tx(svgEl, 155, 178, "l1 ∥ l2 ⟺ k1 = k2 (不重合)", "#2563eb", "10.5", true, "middle");
-
-      // Perpendicular line
-      ln(svgEl, 180, 50, 260, 150, "#dc2626", 2);
-      tx(svgEl, 265, 155, "l3: k3 = -1", "#dc2626", "10.5", true);
-      rc(svgEl, 140, 95, 10, 10, "none", "#dc2626");
-      tx(svgEl, 155, 198, "l1 ⊥ l3 ⟺ k1 · k3 = -1", "#dc2626", "10.5", true, "middle");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "特殊位置单独判定", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 两线均竖直 ⟹ 平行或重合", "#059669", "11");
-      tx(svgEl, 325, 120, "• 一横一竖 ⟹ 垂直(无斜率积)", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "• 参数平行解 ⟹ 必查重合", "#2563eb", "11", true);
-      tx(svgEl, 325, 164, "• 垂直乘积恒为 -1", "#64748b", "10.5");
+  function draw(mode){
+    fig.innerHTML="";fig.setAttribute("viewBox","0 0 560 300");
+    if(mode==="angle"){
+      angle(fig,80,195,Math.sqrt(3),1,0);angle(fig,265,195,-1,Math.sqrt(3),1);angle(fig,445,195,0,1,2);
+      cap.textContent="三条线分别取真实方向(√3,1)、(−1,√3)、(0,1)，倾斜角从各线上的同一顶点沿正x方向逆时针量起，为30°、120°、90°。斜率分别为1/√3、−√3、不存在；水平线倾斜角0°、斜率0。倾斜角范围为[0°,180°)，k=tan α只适用于非竖直线。";
+    }else if(mode==="coord"){
+      function X(x){return 65+x*45;}function Y(y){return 250-y*45;}
+      var P=[1,1],Q=[5,4],k=(Q[1]-P[1])/(Q[0]-P[0]);
+      node(fig,"line",{"data-line-role":"coordinate-line",x1:X(0),y1:Y(P[1]-k*P[0]),x2:X(6),y2:Y(P[1]+k*(6-P[0])),stroke:"var(--a)","stroke-width":3});
+      [P,Q].forEach(function(p,i){node(fig,"circle",{"data-line-role":"coordinate-point","data-x":p[0],"data-y":p[1],cx:X(p[0]),cy:Y(p[1]),r:5,fill:"var(--b)"});text(fig,X(p[0])-15,Y(p[1])-15,i?"P₂":"P₁");});
+      node(fig,"line",{x1:X(P[0]),y1:Y(P[1]),x2:X(Q[0]),y2:Y(P[1]),stroke:"var(--b)","stroke-dasharray":"5 4"});
+      node(fig,"line",{x1:X(Q[0]),y1:Y(P[1]),x2:X(Q[0]),y2:Y(Q[1]),stroke:"var(--c)","stroke-dasharray":"5 4"});
+      rightAngle(fig,[X(Q[0]),Y(P[1])],[-1,0],[0,-1],12);
+      text(fig,200,280,"Δx=4","var(--b)");text(fig,365,150,"Δy=3","var(--c)");text(fig,430,65,"k=3/4","var(--a)");
+      cap.textContent="P₁=(1,1)、P₂=(5,4)；用相同的单位长度画出横向差4和纵向差3，所以k=3/4。图中整条直线由这两点解析生成，直角记号位于(5,1)。若x₁=x₂且两点不同，得到竖直线，不能套斜率分式。";
+    }else{
+      function segment(O,d,half,color,role){var r=Math.hypot(d[0],d[1]);node(fig,"line",{"data-line-role":role,x1:O[0]-half*d[0]/r,y1:O[1]+half*d[1]/r,x2:O[0]+half*d[0]/r,y2:O[1]-half*d[1]/r,stroke:color,"stroke-width":3});}
+      segment([100,170],[1,1],75,"var(--a)","parallel-one");segment([100,230],[1,1],75,"var(--a)","parallel-two");
+      var O=[410,175],d1=[2,1],d2=[-1,2];segment(O,d1,90,"var(--a)","perpendicular-one");segment(O,d2,90,"var(--b)","perpendicular-two");
+      rightAngle(fig,O,[d1[0],-d1[1]],[d2[0],-d2[1]],15);
+      text(fig,100,45,"k₁=k₂=1","var(--a)");text(fig,410,45,"(1/2)×(−2)=−1","var(--b)");
+      cap.textContent="左图两条不同直线的方向都是(1,1)，斜率都为1，所以平行。右图方向(2,1)与(−1,2)的点积为0，斜率分别为1/2与−2，交点和直角记号使用同一个顶点。两斜率存在时才可用斜率积判垂直；两竖线可能平行或重合，一横一竖也垂直。";
     }
-
-    if (capEl) capEl.textContent = caps[mode];
-    if (window.renderMathInElement) window.renderMathInElement(capEl);
   }
-
-  var tabs = document.querySelectorAll(".micro-box .micro-tab");
-  tabs.forEach(function(tab){
-    tab.addEventListener("click", function(){
-      tabs.forEach(function(t){ t.classList.remove("active"); });
-      tab.classList.add("active");
-      mode = tab.getAttribute("data-mode");
-      draw();
-    });
-  });
-  draw();
-
-  var trapEl = document.getElementById("m-slope-trap-fig");
-  if (trapEl) {
-    trapEl.innerHTML = "";
-    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
-    tx(trapEl, 142, 42, "❌ 误区：认为倾斜角大斜率必大", "#dc2626", "11.5", true, "middle");
-    tx(trapEl, 142, 70, "α从 60° 增至 120° 时", "#dc2626", "10.5", false, "middle");
-    tx(trapEl, 142, 94, "斜率从 √3 骤降至 -√3！", "#b91c1c", "11", true, "middle");
-    tx(trapEl, 142, 130, "跨过 90° 正切断崖式突变！", "#64748b", "9.5", false, "middle");
-
-    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
-    tx(trapEl, 397, 42, "✔ 规律：分段单调有界", "#15803d", "11.5", true, "middle");
-    tx(trapEl, 397, 70, "α ∈ [0°, 90°)：k 从 0 增至 +∞", "#059669", "10.5", true, "middle");
-    tx(trapEl, 397, 94, "α ∈ (90°, 180°)：k 从 -∞ 增至 0", "#15803d", "10.5", true, "middle");
-    tx(trapEl, 397, 130, "同象限单调，跨象限必分段！", "#047857", "10", true, "middle");
+  document.querySelectorAll(".micro-box .micro-tab").forEach(function(tab){tab.addEventListener("click",function(){document.querySelectorAll(".micro-box .micro-tab").forEach(function(t){t.classList.remove("active");});tab.classList.add("active");draw(tab.getAttribute("data-mode"));});});
+  draw("angle");
+  if(trap){
+    trap.innerHTML="";trap.setAttribute("viewBox","0 0 540 300");
+    var defs=node(trap,"defs",{}),clip=node(defs,"clipPath",{id:"slope-tan-clip"});node(clip,"rect",{x:65,y:35,width:400,height:215});
+    function X(a){return 65+a/180*400;}function Y(k){return 145-k*35;}
+    node(trap,"line",{x1:65,y1:Y(0),x2:465,y2:Y(0),stroke:"var(--muted)"});node(trap,"line",{x1:X(90),y1:35,x2:X(90),y2:250,stroke:"var(--b)","stroke-dasharray":"5 4"});
+    [[0,89.8],[90.2,179.8]].forEach(function(range,index){var d="";for(var i=0;i<=160;i++){var a=range[0]+(range[1]-range[0])*i/160;d+=(i?"L":"M")+X(a)+" "+Y(Math.tan(a*Math.PI/180));}node(trap,"path",{"data-line-role":"tangent-branch","data-branch":index,d:d,fill:"none",stroke:index?"var(--c)":"var(--a)","stroke-width":3,"clip-path":"url(#slope-tan-clip)"});});
+    [0,60,90,120,180].forEach(function(a){text(trap,X(a),280,a+"°");});text(trap,30,80,"k");
   }
 }
 

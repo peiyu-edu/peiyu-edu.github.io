@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -190,11 +190,11 @@
       <div class="trap-body">
         <div class="trap-wrong">
           <span class="badge-pill badge-no">错解</span>
-          <p>已知 \(A=30^\circ, b=4, a=2\sqrt{3}\)，由 \(\sin B=\frac{\sqrt{3}}{2}\) 只得出 \(B=60^\circ\)。</p>
+          <p>已知 \(A=30^\circ, b=2\sqrt{3}, a=2\)，由 \(\sin B=\dfrac{b\sin A}{a}=\frac{\sqrt{3}}{2}\) 只得出 \(B=60^\circ\)。</p>
         </div>
         <div class="trap-right">
           <span class="badge-pill badge-ok">正解</span>
-          <p>高 \(h=b\sin A=2\)。由于 \(h &lt; a &lt; b\)，圆规以 \(a\) 为半径与底边相交于两点！\(B\) 可为 \(60^\circ\)（锐角）或 \(120^\circ\)（钝角），<b>恰有两解</b>，遗漏扣一半分。</p>
+          <p>高 \(h=b\sin A=\sqrt{3}\)。已知 \(A\) 为锐角，且 \(h &lt; a &lt; b\)，以 \(C\) 为圆心、\(a\) 为半径的圆与从 \(A\) 出发的底边射线有两个有效交点。\(B\) 可为 \(60^\circ\)（锐角）或 \(120^\circ\)（钝角），两者都满足 \(A+B&lt;180^\circ\)，<b>恰有两解</b>；只取锐角会漏解。</p>
         </div>
       </div>
       <svg class="micro-fig" id="m-ssa-trap-fig" viewBox="0 0 340 160" role="img" aria-label="SSA已知两边及对角两解反例图" style="margin-top:8px"></svg>
@@ -864,24 +864,25 @@
       if (!trap) return;
       trap.innerHTML = "";
       sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
-      sTxt(trap, 170, 26, "SSA 两解直观：圆规画圆交底边于两点！", cd, 12, 700, "middle");
+      sTxt(trap, 170, 26, "SSA 两解：圆与底边射线的两个有效交点", cd, 12, 700, "middle");
 
-      // Angle A at (28, 120), line AC = b along (28, 120) -> (130, 45)
-      var pAx = 28, pAy = 120, pCx = 130, pCy = 45;
+      // One scale for b=2√3, a=2, A=30°: AC=(3,√3), h=√3.
+      var unit = 30, pAx = 28, pAy = 120;
+      var pCx = pAx + 3 * unit, pCy = pAy - Math.sqrt(3) * unit;
       sEl(trap, "line", { x1: pAx, y1: pAy, x2: 290, y2: pAy, stroke: mut, "stroke-width": 1.2 });
       sEl(trap, "line", { x1: pAx, y1: pAy, x2: pCx, y2: pCy, stroke: ca, "stroke-width": 2 });
       sTxt(trap, pAx, pAy - 8, "A(30°)", ca, 10.5, 700);
       sTxt(trap, pCx - 4, pCy - 6, "C", ca, 10.5, 700);
-      sTxt(trap, (pAx+pCx)/2 - 14, (pAy+pCy)/2 - 4, "b=4", ca, 10.5, 700);
+      sTxt(trap, (pAx+pCx)/2 - 14, (pAy+pCy)/2 - 4, "b=2√3", ca, 10.5, 700);
 
-      // altitude h = 2
+      // Altitude h=√3, and the two intersections have equal radius a=2.
       sEl(trap, "line", { x1: pCx, y1: pCy, x2: pCx, y2: pAy, stroke: mut, "stroke-dasharray": "2 2", "stroke-width": 1 });
-      sTxt(trap, pCx + 4, (pCy+pAy)/2, "h=2", mut, 10);
+      sTxt(trap, pCx + 4, (pCy+pAy)/2, "h=√3", mut, 10);
 
-      // two points B1, B2 on bottom line: distance from C is a = 2.6
-      var b1x = 92, b2x = 172;
-      // circular arc around C
-      sEl(trap, "path", { d: "M 75 120 A 85 85 0 0 1 185 120", fill: "none", stroke: cd, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
+      var radius = 2 * unit, dx = unit;
+      var b1x = pCx - dx, b2x = pCx + dx;
+      // The lower arc belongs to this same circle centered at C.
+      sEl(trap, "path", { d: "M " + b1x + " " + pAy + " A " + radius + " " + radius + " 0 0 0 " + b2x + " " + pAy, fill: "none", stroke: cd, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
       sEl(trap, "line", { x1: pCx, y1: pCy, x2: b1x, y2: pAy, stroke: cd, "stroke-width": 2 });
       sEl(trap, "line", { x1: pCx, y1: pCy, x2: b2x, y2: pAy, stroke: cc, "stroke-width": 2 });
 

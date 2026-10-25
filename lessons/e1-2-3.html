@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -64,7 +64,7 @@
       <button type="button" class="micro-tab" data-mode="inter">③ 联立方程与交点对应</button>
     </div>
     <svg id="m-dist-fig" class="micro-fig" viewBox="0 0 540 210" role="img" aria-label="直线交点与距离公式几何直观"></svg>
-    <div class="micro-caption" id="m-dist-cap"></div>
+    <div class="micro-caption" style="font-size:15px;line-height:1.6" id="m-dist-cap"></div>
   </div>
 
   <div class="card">
@@ -203,7 +203,7 @@
       <div class="step-body">
         <b>🛡️ 第三步必查防坑结论</b>
         <p>① 平行线距离千万不可在 \(A, B\) 不同的情况下直接分子相减；<br>
-        ② 动点轨迹到直线距离为定值时，轨迹通常是<b>两条平行直线</b>（绝对值拆出正负两个方程），漏掉一条直接丢分！</p>
+        ② 动点轨迹到直线距离为定值时，当给定距离d&gt;0时，轨迹是<b>两条平行直线</b>；d=0时是原直线，d&lt;0时没有满足条件的点。</p>
       </div>
     </div>
   </div>
@@ -248,7 +248,7 @@
   <div class="micro-box" style="margin-top:14px;">
     <div class="micro-title">反例微图解：平行线距离系数未统一的严重偏差</div>
     <svg id="m-dist-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="平行线距离反例图解"></svg>
-    <div class="micro-caption">\(6x+8y+1=0\) 的常数项 \(1\) 相当于在 \(3x+4y\) 基底下的 \(\frac12\)。直接相减相当于把距离放大了近一倍！</div>
+    <div class="micro-caption" style="font-size:15px;line-height:1.6">\(6x+8y+1=0\) 的常数项 \(1\) 相当于在 \(3x+4y\) 基底下的 \(\frac12\)。未统一系数时错算为0.6，正确是0.5，偏大20%。</div>
   </div>
 
   <details class="more">
@@ -677,129 +677,40 @@
 
 
 function initMDistFig(){
-  var svgEl = document.getElementById("m-dist-fig");
-  var capEl = document.getElementById("m-dist-cap");
-  if (!svgEl) return;
-  var mode = "pldist";
-  var NS = "http://www.w3.org/2000/svg";
-  var caps = {
-    pldist: "点到直线距离：过点 P(x0, y0) 作直线的垂线，垂足为 H，线段 PH 长即为最短垂距 d = |Ax0 + By0 + C| / √(A² + B²)。",
-    paldist: "两平行线间距离：两直线斜率相等，公垂线段长恒定。必须先把 A、B 化为完全相同，再套用 d = |C1 - C2| / √(A² + B²)。",
-    inter: "两直线交点几何对应：方程组唯一解 ⟺ 两线相交；无解 ⟺ 平行；无穷多解 ⟺ 重合。"
-  };
-
-  function s(el, tag, attrs, txt){
-    var e = document.createElementNS(NS, tag);
-    for (var k in attrs) e.setAttribute(k, attrs[k]);
-    if (txt) e.textContent = txt;
-    el.appendChild(e);
-    return e;
+  var fig=document.getElementById("m-dist-fig"),cap=document.getElementById("m-dist-cap"),trap=document.getElementById("m-dist-trap-fig");if(!fig)return;
+  function node(parent,tag,attrs,value){var e=document.createElementNS("http://www.w3.org/2000/svg",tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(value!==undefined)e.textContent=value;parent.appendChild(e);return e;}
+  function text(parent,x,y,value,color){return node(parent,"text",{x:x,y:y,"text-anchor":"middle","font-size":26,fill:color||"var(--fg)"},value);}
+  function projection(P,L){var s=L[0]*L[0]+L[1]*L[1];if(s===0)throw new Error("Nonzero line normal required");var n=L[0]*P[0]+L[1]*P[1]+L[2];return [P[0]-n*L[0]/s,P[1]-n*L[1]/s];}
+  function intersection(L,M){var det=L[0]*M[1]-L[1]*M[0];if(Math.abs(det)<1e-12)return null;return [(L[1]*M[2]-M[1]*L[2])/det,(L[2]*M[0]-M[2]*L[0])/det];}
+  function X(x){return 150+40*x;}function Y(y){return 220-40*y;}
+  function line(parent,L,anchor,role,color){
+    var r=Math.hypot(L[0],L[1]),d=[L[1]/r,-L[0]/r],P=[anchor[0]-3.4*d[0],anchor[1]-3.4*d[1]],Q=[anchor[0]+3.4*d[0],anchor[1]+3.4*d[1]];
+    node(parent,"line",{"data-line-role":role,"data-a":L[0],"data-b":L[1],"data-c":L[2],x1:X(P[0]),y1:Y(P[1]),x2:X(Q[0]),y2:Y(Q[1]),stroke:color||"var(--a)","stroke-width":3});
   }
-  function ln(el, x1, y1, x2, y2, c, w, d){
-    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
-    if (d) a["stroke-dasharray"] = d;
-    return s(el, "line", a);
+  function point(parent,P,role,color){return node(parent,"circle",{"data-line-role":role,"data-x":P[0],"data-y":P[1],cx:X(P[0]),cy:Y(P[1]),r:5,fill:color||"var(--b)"});}
+  function right(parent,H,L,P){
+    var u=[L[1],L[0]],v=[P[0]-H[0],-(P[1]-H[1])],ru=Math.hypot(u[0],u[1]),rv=Math.hypot(v[0],v[1]);if(rv<1e-10)return;
+    u=[u[0]/ru,u[1]/ru];v=[v[0]/rv,v[1]/rv];var O=[X(H[0]),Y(H[1])],r=12;
+    var ps=[[O[0]+r*u[0],O[1]+r*u[1]],[O[0]+r*(u[0]+v[0]),O[1]+r*(u[1]+v[1])],[O[0]+r*v[0],O[1]+r*v[1]]];
+    node(parent,"polyline",{"data-line-role":"right-angle","data-vertex-x":O[0],"data-vertex-y":O[1],points:ps.map(function(p){return p.join(",");}).join(" "),fill:"none",stroke:"var(--fg)","stroke-width":1.5});
   }
-  function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
-  function tx(el, x, y, txt, c, sz, b, anch){
-    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
-    if (b) a["font-weight"] = "bold";
-    if (anch) a["text-anchor"] = anch;
-    return s(el, "text", a, txt);
-  }
-
-  function draw(){
-    svgEl.innerHTML = "";
-    if (mode === "pldist") {
-      tx(svgEl, 270, 24, "点到直线距离公式：d = |Ax0 + By0 + C| / √(A² + B²)", "#0f172a", "12.5", true, "middle");
-      // Line l: 3x + 4y - 12 = 0
-      ln(svgEl, 50, 160, 250, 60, "#2563eb", 2.5);
-      tx(svgEl, 255, 62, "直线 l: Ax + By + C = 0", "#2563eb", "10.5", true);
-
-      // Point P(110, 50)
-      s(svgEl, "circle", {cx:120, cy:50, r:4.5, fill:"#dc2626"});
-      tx(svgEl, 120, 38, "P(x0, y0)", "#dc2626", "11", true, "middle");
-
-      // Perpendicular to H(168, 101)
-      ln(svgEl, 120, 50, 168, 101, "#dc2626", 2);
-      s(svgEl, "circle", {cx:168, cy:101, r:3.5, fill:"#64748b"});
-      tx(svgEl, 178, 112, "垂足 H", "#64748b", "10");
-      tx(svgEl, 135, 78, "d", "#dc2626", "11.5", true);
-      rc(svgEl, 160, 92, 9, 9, "none", "#dc2626");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "点线距离核心要义", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 分子：点坐标代入方程", "#059669", "11");
-      tx(svgEl, 325, 120, "• 必须严格带绝对值！", "#dc2626", "11", true);
-      tx(svgEl, 325, 142, "• 分母：法向量模长 √(A²+B²)", "#2563eb", "11");
-      tx(svgEl, 325, 164, "• 垂足坐标可由向量求得", "#64748b", "10.5");
-    } else if (mode === "paldist") {
-      tx(svgEl, 270, 24, "两条平行线间距离：d = |C1 - C2| / √(A² + B²)", "#0f172a", "12.5", true, "middle");
-      // Parallel lines l1, l2
-      ln(svgEl, 50, 120, 240, 50, "#2563eb", 2);
-      tx(svgEl, 130, 62, "l1: Ax + By + C1 = 0", "#2563eb", "10.5", true, "middle");
-
-      ln(svgEl, 70, 170, 260, 100, "#2563eb", 2);
-      tx(svgEl, 185, 158, "l2: Ax + By + C2 = 0", "#2563eb", "10.5", true, "middle");
-
-      // Distance segment
-      ln(svgEl, 140, 87, 160, 137, "#dc2626", 2);
-      rc(svgEl, 140, 87, 8, 8, "none", "#dc2626");
-      rc(svgEl, 153, 129, 8, 8, "none", "#dc2626");
-      tx(svgEl, 160, 110, "公垂距 d", "#dc2626", "11", true);
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "平行线求距铁律", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "① A、B 必须化为一致！", "#dc2626", "11", true);
-      tx(svgEl, 325, 120, "② 分子为常数项之差绝对值", "#059669", "11");
-      tx(svgEl, 325, 142, "③ 也可在一条线上任取一点", "#2563eb", "11");
-      tx(svgEl, 325, 164, "④ 转化为点线距离同样成立", "#64748b", "10.5");
-    } else if (mode === "inter") {
-      tx(svgEl, 270, 24, "方程组解与两直线几何位置对应", "#0f172a", "12.5", true, "middle");
-      // Intersecting lines
-      ln(svgEl, 60, 150, 220, 60, "#2563eb", 2);
-      ln(svgEl, 70, 60, 210, 150, "#dc2626", 2);
-      s(svgEl, "circle", {cx:140, cy:105, r:4.5, fill:"#059669"});
-      tx(svgEl, 140, 125, "唯一交点 (x, y)", "#059669", "11", true, "middle");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "解与位置几何关系", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 唯一解 ⟺ 两直线相交", "#059669", "11", true);
-      tx(svgEl, 325, 120, "• 无解 ⟺ 两直线平行", "#2563eb", "11");
-      tx(svgEl, 325, 142, "• 无穷多解 ⟺ 两直线重合", "#d97706", "11");
-      tx(svgEl, 325, 164, "• 斜率相等包含平行与重合", "#dc2626", "10.5", true);
+  function segment(parent,P,H,role){node(parent,"line",{"data-line-role":role,"data-distance":Math.hypot(P[0]-H[0],P[1]-H[1]),x1:X(P[0]),y1:Y(P[1]),x2:X(H[0]),y2:Y(H[1]),stroke:"var(--b)","stroke-width":3});}
+  function draw(mode){
+    fig.innerHTML="";fig.setAttribute("viewBox","0 0 560 330");
+    if(mode==="pldist"){
+      var L=[3,4,-8],P=[3,3],H=projection(P,L);line(fig,L,H,"distance-line");point(fig,P,"external-point");point(fig,H,"projection-foot","var(--c)");segment(fig,P,H,"normal-segment");right(fig,H,L,P);
+      text(fig,X(P[0])+18,Y(P[1])-18,"P");text(fig,X(H[0])-25,Y(H[1])+24,"H");text(fig,435,65,"d=2.6","var(--b)");
+      cap.textContent="P=(3,3)，直线3x+4y−8=0，法向量(3,4)。由H=P−[(3x₀+4y₀−8)/25](3,4)算得H=(1.44,0.92)，H在线上且PH垂直于直线，d=13/5=2.6。公式要求A²+B²>0；若P在线上，距离为0、垂足就是P。";
+    }else if(mode==="paldist"){
+      var L1=[3,4,-8],L2=[3,4,2],P=projection([0,0],L1),H=projection(P,L2);line(fig,L1,P,"parallel-first");line(fig,L2,H,"parallel-second");point(fig,P,"parallel-point");point(fig,H,"parallel-foot","var(--c)");segment(fig,P,H,"parallel-normal");right(fig,P,L1,H);right(fig,H,L2,P);text(fig,435,65,"d=2","var(--b)");
+      cap.textContent="两直线3x+4y−8=0与3x+4y+2=0使用同一法向量(3,4)，公垂距|−8−2|/5=2。图中先在第一条线上求出一点，再解析投影到第二条线，两端均为直角。一般式的A、B需统一且不能同时为0；常数也相同时两线重合，距离0。";
+    }else{
+      var L=[1,1,-4],M=[1,-1,0],I=intersection(L,M);line(fig,L,I,"intersect-first");line(fig,M,I,"intersect-second","var(--b)");point(fig,I,"intersection","var(--c)");text(fig,435,65,"I=(2,2)","var(--c)");
+      cap.textContent="联立x+y=4、x−y=0，解析求得唯一交点I=(2,2)，这个点同时满足两式。两条有效直线方程有唯一解时相交；无解时平行；无穷多解时重合。不能把同斜率直接当成两条不同的平行线。";
     }
-
-    if (capEl) capEl.textContent = caps[mode];
-    if (window.renderMathInElement) window.renderMathInElement(capEl);
   }
-
-  var tabs = document.querySelectorAll(".micro-box .micro-tab");
-  tabs.forEach(function(tab){
-    tab.addEventListener("click", function(){
-      tabs.forEach(function(t){ t.classList.remove("active"); });
-      tab.classList.add("active");
-      mode = tab.getAttribute("data-mode");
-      draw();
-    });
-  });
-  draw();
-
-  var trapEl = document.getElementById("m-dist-trap-fig");
-  if (trapEl) {
-    trapEl.innerHTML = "";
-    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
-    tx(trapEl, 142, 42, "❌ 错解：未统系数直接套公式", "#dc2626", "11.5", true, "middle");
-    tx(trapEl, 142, 70, "3x + 4y - 2 = 0 与 6x + 8y + 1 = 0", "#dc2626", "10.5", false, "middle");
-    tx(trapEl, 142, 94, "误算 d = |-2 - 1| / 5 = 3/5！", "#b91c1c", "11", true, "middle");
-    tx(trapEl, 142, 130, "两线系数不一致，公式失效！", "#64748b", "9.5", false, "middle");
-
-    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
-    tx(trapEl, 397, 42, "✔ 正解：先倍化统系数再计算", "#15803d", "11.5", true, "middle");
-    tx(trapEl, 397, 70, "第二条化为 3x + 4y + 0.5 = 0", "#059669", "10.5", true, "middle");
-    tx(trapEl, 397, 94, "正解 d = |-2 - 0.5| / 5 = 1/2", "#15803d", "11", true, "middle");
-    tx(trapEl, 397, 130, "统一 A、B 是平行求距铁律！", "#047857", "10", true, "middle");
-  }
+  document.querySelectorAll(".micro-box .micro-tab").forEach(function(tab){tab.addEventListener("click",function(){document.querySelectorAll(".micro-box .micro-tab").forEach(function(t){t.classList.remove("active");});tab.classList.add("active");draw(tab.getAttribute("data-mode"));});});draw("pldist");
+  if(trap){trap.innerHTML="";trap.setAttribute("viewBox","0 0 540 330");var L=[3,4,-2],M=[3,4,0.5],P=projection([0,0],L),H=projection(P,M);line(trap,L,P,"trap-first");line(trap,M,H,"trap-second","var(--c)");segment(trap,P,H,"trap-distance");point(trap,P,"trap-point");point(trap,H,"trap-foot");text(trap,430,55,"d=1/2","var(--b)");}
 }
 
 initMDistFig();

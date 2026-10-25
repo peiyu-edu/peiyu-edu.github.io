@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -264,8 +264,8 @@
     <div class="ctrl"><button class="btn ghost" id="nreset" type="button">重置</button></div>
   </div>
 
-  <h3>② 进阶：样本越多，直方图越贴近曲线；\(3\sigma\) 外仍会出现</h3>
-  <p class="small">下面的大米重量是电脑按 \(N(500,2^2)\) 模拟出来的（所以我们知道它是正态；真实数据要先看图再决定能不能用正态）。拖动样本量，看直方图怎样贴近曲线；红点是落在 \(\mu\pm3\sigma\)（\(494\sim506\) 克）外面的袋子。</p>
+  <h3>② 进阶：增加样本有助于观察分布；\(3\sigma\) 外也可能出现</h3>
+  <p class="small">下面的大米重量是电脑按 \(N(500,2^2)\) 模拟出来的（所以我们知道它是正态；真实数据要先看图再决定能不能用正态）。拖动样本量，观察直方图的随机波动与整体形状；红点是落在 \(\mu\pm3\sigma\)（\(494\sim506\) 克）外面的袋子。</p>
   <div class="card">
     <svg class="fig" id="hfig" viewBox="0 0 560 310" role="img" aria-label="模拟样本的频率分布直方图和正态曲线"></svg>
     <div class="ctrl"><label for="nin">样本量</label><input type="range" id="nin" min="0" max="4" step="1"><output id="nnout"></output></div>
@@ -332,7 +332,7 @@
       <button class="opt" data-v="B"><b>B</b>这种情况很少见（约 \(0.27\%\)），值得停下来检查，但单凭这一个不能肯定机器坏了</button>
       <button class="opt" data-v="C"><b>C</b>概率是 \(0\)，说明数据一定记错了</button>
     </div>
-    <div class="reveal"><p><b>B</b>。\(\mu\pm3\sigma\) 外的概率约 \(0.0027\)，很小但不是 \(0\)：正常机器做 \(10000\) 个，平均也有二三十个落在外面。「几乎不可能」不等于「绝不发生」，一次异常是警报，不是证明。在「动手」②里把样本量拉到最大，就能看到红点。</p></div>
+    <div class="reveal"><p><b>B</b>。\(\mu\pm3\sigma\) 外的概率约 \(0.0027\)，很小但不是 \(0\)：正常机器做 \(10000\) 个，平均也有二三十个落在外面。「几乎不可能」不等于「绝不发生」，一次异常是警报，不是证明。可以在「动手」②增加样本或换一批观察；有限一批也可能没有红点。</p></div>
   </div>
 
   <h3>挑战</h3>
@@ -360,7 +360,7 @@
 <nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
 <footer>培玉智能 · 自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
-<script src="../assets/iso-bench.js"></script>
+<script src="../assets/iso-bench.js?v=vs-b03c46885f5f"></script>
 <script>
 (function () {
   "use strict";
@@ -580,9 +580,9 @@
     function pc(k) { return (k / n * 100).toFixed(2) + "\\%"; }
     var zf = Math.abs(far - HMU) / HSG;
     var L = [];
-    L.push("\\(n=" + n + "\\)，组距 \\(" + w + "\\) 克。样本越多、组距越小，直方图越贴近曲线。");
+    L.push("\\(n=" + n + "\\)，组距 \\(" + w + "\\) 克。增加样本并选择合适组距，有助于看清总体形状；单次结果仍有随机波动。");
     L.push("落在 \\(\\mu\\pm\\sigma\\)（\\(498\\sim502\\)）内：\\(" + pc(in1) + "\\)，理论约 \\(68.27\\%\\)；\\(\\mu\\pm2\\sigma\\) 内：\\(" + pc(in2) + "\\)，理论约 \\(95.45\\%\\)。");
-    L.push('<span class="bad">\\(\\mu\\pm3\\sigma\\) 外：' + out.length + " 个</span>，占 \\(" + pc(out.length) + "\\)，理论约 \\(0.27\\%\\)（平均约 \\(" + f2(n * 0.0027) + "\\) 个）。" + (out.length ? "很少，但出现了：这些袋子并没有「出错」，正常机器也会装出来。" : "这一批碰巧一个也没有，样本多了就会出现。"));
+    L.push('<span class="bad">\\(\\mu\\pm3\\sigma\\) 外：' + out.length + " 个</span>，占 \\(" + pc(out.length) + "\\)，理论约 \\(0.27\\%\\)（平均约 \\(" + f2(n * 0.0027) + "\\) 个）。" + (out.length ? "很少，但出现了：这些袋子并没有「出错」，正常机器也会装出来。" : "这一批一个也没有；增加样本会提高至少出现一个的概率，但任何有限样本都不保证出现。"));
     L.push("离 \\(500\\) 最远的一袋是 \\(" + far.toFixed(2) + "\\) 克，偏了约 \\(" + zf.toFixed(1) + "\\) 个 \\(\\sigma\\)。");
     var ho = $("hout");
     ho.innerHTML = L.join("<br>");
@@ -672,7 +672,8 @@
 
     function el(t, a, txt) {
       var e = document.createElementNS("http://www.w3.org/2000/svg", t);
-      for (var k in a) e.setAttribute(k, a[k]);
+      var palette = {"#e3f2fd":"var(--hl-soft)", "#1976d2":"var(--c)", "#e8f5e9":"var(--ok-soft)", "#2e7d32":"var(--a)", "#10b981":"var(--a)", "#fee2e2":"var(--no-soft)", "#ef4444":"var(--no)"};
+      for (var k in a) e.setAttribute(k, palette[a[k]] || a[k]);
       if (txt) e.textContent = txt;
       return e;
     }
@@ -680,12 +681,12 @@
     function bellCurvePath(cx, cy, scaleX, scaleY) {
       // Gaussian y = exp(-0.5 * (x/sigma)^2)
       var pts = [];
-      for (var i = -40; i <= 40; i++) {
-        var x = i / 10;
+      for (var i = -80; i <= 80; i++) {
+        var x = i / 20;
         var yVal = Math.exp(-0.5 * x * x);
         var px = cx + x * scaleX;
         var py = cy - yVal * scaleY;
-        pts.push(px.toFixed(1) + "," + py.toFixed(1));
+        pts.push(px.toFixed(6) + "," + py.toFixed(6));
       }
       return pts.join(" ");
     }
@@ -696,26 +697,26 @@
       fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "高斯钟形曲线：μ 决定对称中心，σ 决定高瘦/矮胖（面积守恒为 1）"));
 
       // Base axis
-      fig.appendChild(el("line", {x1: 50, y1: 175, x2: 570, y2: 175, stroke: "var(--line)", "stroke-width": "1.5"}));
+      fig.appendChild(el("line", {x1: 50, y1: 175, x2: 600, y2: 175, stroke: "var(--line)", "stroke-width": "1.5"}));
 
-      // Curve 1: Standard N(0, 1) -> center at 200 (Slim & tall)
-      var pSlim = bellCurvePath(200, 175, 28, 120);
-      fig.appendChild(el("polygon", {points: "88,175 " + pSlim + " 312,175", fill: "#e3f2fd", opacity: "0.6"}));
+      // Common horizontal unit=24; vertical unit=120*sqrt(2*pi), sigma1=1.
+      var pSlim = bellCurvePath(200, 175, 24, 120);
+      fig.appendChild(el("polygon", {points: "104,175 " + pSlim + " 296,175", fill: "#e3f2fd", opacity: "0.6"}));
       fig.appendChild(el("polyline", {points: pSlim, fill: "none", stroke: "#1976d2", "stroke-width": "2.5"}));
-      fig.appendChild(el("line", {x1: 200, y1: 50, x2: 200, y2: 175, stroke: "#1976d2", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
+      fig.appendChild(el("line", {x1: 200, y1: 55, x2: 200, y2: 175, stroke: "#1976d2", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
       fig.appendChild(el("text", {x: 200, y: 45, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "σ 小：瘦高集中"));
       fig.appendChild(el("text", {x: 200, y: 192, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "var(--fg)"}, "x = μ₁"));
 
-      // Curve 2: N(μ2, 2^2) -> center at 420 (Fat & short)
-      var pFat = bellCurvePath(420, 175, 45, 75);
-      fig.appendChild(el("polygon", {points: "240,175 " + pFat + " 600,175", fill: "#e8f5e9", opacity: "0.5"}));
+      // sigma2=5/3: sx=24*sigma2, peak=120/sigma2; same area scale.
+      var pFat = bellCurvePath(420, 175, 40, 72);
+      fig.appendChild(el("polygon", {points: "260,175 " + pFat + " 580,175", fill: "#e8f5e9", opacity: "0.5"}));
       fig.appendChild(el("polyline", {points: pFat, fill: "none", stroke: "#2e7d32", "stroke-width": "2.5"}));
-      fig.appendChild(el("line", {x1: 420, y1: 95, x2: 420, y2: 175, stroke: "#2e7d32", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
+      fig.appendChild(el("line", {x1: 420, y1: 103, x2: 420, y2: 175, stroke: "#2e7d32", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
       fig.appendChild(el("text", {x: 420, y: 90, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#2e7d32"}, "σ 大：矮胖分散"));
       fig.appendChild(el("text", {x: 420, y: 192, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "var(--fg)"}, "x = μ₂"));
 
-      fig.appendChild(el("text", {x: 310, y: 210, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "两曲线下方总面积完全相等（恒等于 1）；峰高与腰宽呈反比例制约"));
-      desc.innerHTML = "<b>① 钟形曲线参数形态直觉</b>：中心对称轴由均值 \(\mu\) 决定（曲线沿轴左右平移）；分散程度由标准差 \(\sigma\) 决定。\(\sigma\) 越小，说明数据紧密团聚在均值周围，峰顶耸拔；\(\sigma\) 越大，数据大幅散开，波峰低伏。总面积始终恒定为 1。";
+      fig.appendChild(el("text", {x: 310, y: 210, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "同一坐标比例：峰高与标准差成反比"));
+      desc.innerHTML = "<b>① 钟形曲线参数形态直觉</b>：均值μ决定中心，标准差σ决定分散程度。两图共用横纵单位，σ越小，峰越高；σ越大，峰越低。完整正态密度的总面积均为1；这里各画到μ±4σ，显示面积约0.99994，省略了极小的两端尾部。";
     }
 
     function drawTab2() {
@@ -723,7 +724,7 @@
       // Tab 2: 3σ 原则与区间概率分配
       fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "3σ 原则：68.27% (1σ) ➔ 95.45% (2σ) ➔ 99.73% (3σ)"));
 
-      var cx = 310, cy = 160, sx = 40, sy = 104;
+      var cx = 310, cy = 160, sx = 70, sy = 104;
       // Axis
       fig.appendChild(el("line", {x1: 60, y1: cy, x2: 560, y2: cy, stroke: "var(--line)", "stroke-width": "1.5"}));
 
@@ -731,7 +732,7 @@
       var pts1 = [];
       for (var i = -10; i <= 10; i++) {
         var x = i / 10;
-        pts1.push((cx + x * sx).toFixed(1) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(1));
+        pts1.push((cx + x * sx).toFixed(6) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(6));
       }
       fig.appendChild(el("polygon", {points: (cx-sx) + "," + cy + " " + pts1.join(" ") + " " + (cx+sx) + "," + cy, fill: "#e3f2fd"}));
 
@@ -751,13 +752,12 @@
         fig.appendChild(el("text", {x: px, y: cy + 16, "text-anchor": "middle", "font-size": "9.5", fill: tk.off === 0 ? "#ef4444" : "var(--muted)"}, tk.label));
       });
 
-      // 1σ bracket
-      fig.appendChild(el("line", {x1: cx - sx, y1: 72, x2: cx + sx, y2: 72, stroke: "#1976d2", "stroke-width": "2"}));
-      fig.appendChild(el("text", {x: cx, y: 67, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "68.27% (1σ 内)"));
+      // The highlighted interval and the prose state its probability.
+      // Keep the density peak unobscured by label backplates.
 
       // 2σ label
       fig.appendChild(el("text", {x: cx, y: 202, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#2e7d32"}, "2σ 内占 95.45%；3σ 内占 99.73%；3σ 之外仅占 0.27%（小概率事件）"));
-      desc.innerHTML = "<b>② 3σ 原则经验黄金率</b>：数据落在 \([\mu-\sigma, \mu+\sigma]\) 占约 68.3%；落在 \([\mu-2\sigma, \mu+2\sigma]\) 占约 95.5%；落在 \([\mu-3\sigma, \mu+3\sigma]\) 占高达 99.73%。落在 \(3\sigma\) 之外的概率几乎为零，是工业质量控制（六西格玛）与异常检测的核心依据。";
+      desc.innerHTML = "<b>② 3σ原则</b>：正态变量落在μ±σ、μ±2σ、μ±3σ内的概率分别约为68.27%、95.45%、99.73%；3σ之外约0.27%，很小但非零。有限样本既可能出现，也可能没有；仅凭一个界外点不能断言总体分布或机器已经改变。";
     }
 
     function drawTab3() {
@@ -772,17 +772,17 @@
       var ptsL = [];
       for (var i = -40; i <= -10; i++) {
         var x = i / 10;
-        ptsL.push((cx + x * sx).toFixed(1) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(1));
+        ptsL.push((cx + x * sx).toFixed(6) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(6));
       }
-      fig.appendChild(el("polygon", {points: "60," + cy + " " + ptsL.join(" ") + " " + (cx-sx) + "," + cy, fill: "#fee2e2"}));
+      fig.appendChild(el("polygon", {points: (cx-4*sx) + "," + cy + " " + ptsL.join(" ") + " " + (cx-sx) + "," + cy, fill: "#fee2e2"}));
 
       // Shaded right tail (x > 1) -> [cx+40, 560]
       var ptsR = [];
       for (var j = 10; j <= 40; j++) {
         var x = j / 10;
-        ptsR.push((cx + x * sx).toFixed(1) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(1));
+        ptsR.push((cx + x * sx).toFixed(6) + "," + (cy - Math.exp(-0.5*x*x)*sy).toFixed(6));
       }
-      fig.appendChild(el("polygon", {points: (cx+sx) + "," + cy + " " + ptsR.join(" ") + " 560," + cy, fill: "#fee2e2"}));
+      fig.appendChild(el("polygon", {points: (cx+sx) + "," + cy + " " + ptsR.join(" ") + " " + (cx+4*sx) + "," + cy, fill: "#fee2e2"}));
 
       // Full curve
       fig.appendChild(el("polyline", {points: bellCurvePath(cx, cy, sx, sy), fill: "none", stroke: "#1976d2", "stroke-width": "2.5"}));
@@ -807,9 +807,9 @@
       var cx1 = 140, cy1 = 100, sx1 = 25, sy1 = 55;
       trapFig.appendChild(el("line", {x1: 40, y1: cy1, x2: 240, y2: cy1, stroke: "var(--line)", "stroke-width": "1"}));
       var ptsR1 = [];
-      for (var j = 10; j <= 35; j++) {
+      for (var j = 10; j <= 40; j++) {
         var x = j / 10;
-        ptsR1.push((cx1 + x * sx1).toFixed(1) + "," + (cy1 - Math.exp(-0.5*x*x)*sy1).toFixed(1));
+        ptsR1.push((cx1 + x * sx1).toFixed(6) + "," + (cy1 - Math.exp(-0.5*x*x)*sy1).toFixed(6));
       }
       trapFig.appendChild(el("polygon", {points: (cx1+sx1) + "," + cy1 + " " + ptsR1.join(" ") + " 240," + cy1, fill: "#e8f5e9"}));
       trapFig.appendChild(el("polyline", {points: bellCurvePath(cx1, cy1, sx1, sy1), fill: "none", stroke: "#10b981", "stroke-width": "1.8"}));
@@ -822,15 +822,15 @@
       var cx2 = 400, cy2 = 100, sx2 = 25, sy2 = 55;
       trapFig.appendChild(el("line", {x1: 300, y1: cy2, x2: 500, y2: cy2, stroke: "var(--line)", "stroke-width": "1"}));
       var ptsL2 = [];
-      for (var i = -35; i <= -10; i++) {
+      for (var i = -40; i <= -10; i++) {
         var x = i / 10;
-        ptsL2.push((cx2 + x * sx2).toFixed(1) + "," + (cy2 - Math.exp(-0.5*x*x)*sy2).toFixed(1));
+        ptsL2.push((cx2 + x * sx2).toFixed(6) + "," + (cy2 - Math.exp(-0.5*x*x)*sy2).toFixed(6));
       }
       trapFig.appendChild(el("polygon", {points: "300," + cy2 + " " + ptsL2.join(" ") + " " + (cx2-sx2) + "," + cy2, fill: "#fee2e2"}));
       var ptsR2 = [];
-      for (var j2 = 10; j2 <= 35; j2++) {
+      for (var j2 = 10; j2 <= 40; j2++) {
         var x2 = j2 / 10;
-        ptsR2.push((cx2 + x2 * sx2).toFixed(1) + "," + (cy2 - Math.exp(-0.5*x2*x2)*sy2).toFixed(1));
+        ptsR2.push((cx2 + x2 * sx2).toFixed(6) + "," + (cy2 - Math.exp(-0.5*x2*x2)*sy2).toFixed(6));
       }
       trapFig.appendChild(el("polygon", {points: (cx2+sx2) + "," + cy2 + " " + ptsR2.join(" ") + " 500," + cy2, fill: "#fee2e2"}));
       trapFig.appendChild(el("polyline", {points: bellCurvePath(cx2, cy2, sx2, sy2), fill: "none", stroke: "#ef4444", "stroke-width": "1.8"}));

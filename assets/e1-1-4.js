@@ -37,7 +37,8 @@ var KY=0.6*0.57357;
 function proj(x,y,z){
 return{
 x:260+x*40+y*40*KX,
-y:200+y*40*KY-z*40
+y:200+y*40*KY-z*40,
+world:[x,y,z]
 };
 }
 function addDefs(){
@@ -69,15 +70,16 @@ svg.appendChild(defs);
 }
 function drawLine(p1,p2,color,w,dash,markerEnd){
 var attrs={
-x1:p1.x.toFixed(1),
-y1:p1.y.toFixed(1),
-x2:p2.x.toFixed(1),
-y2:p2.y.toFixed(1),
+x1:p1.x.toFixed(4),
+y1:p1.y.toFixed(4),
+x2:p2.x.toFixed(4),
+y2:p2.y.toFixed(4),
 stroke:color,
 "stroke-width":w||"1.8"
 };
 if(dash)attrs["stroke-dasharray"]=dash;
 if(markerEnd)attrs["marker-end"]="url(#"+markerEnd+")";
+if(p1.world&&p2.world){attrs["data-world-start"]=JSON.stringify(p1.world);attrs["data-world-end"]=JSON.stringify(p2.world);}
 var line=createSvgEl("line",attrs);
 svg.appendChild(line);
 return line;
@@ -91,6 +93,7 @@ stroke:stroke||"none",
 "stroke-width":w||"1.5"
 };
 if(dash)attrs["stroke-dasharray"]=dash;
+if(pts.every(function(p){return p.world;}))attrs["data-world-points"]=JSON.stringify(pts.map(function(p){return p.world;}));
 var poly=createSvgEl("polygon",attrs);
 svg.appendChild(poly);
 return poly;
@@ -111,7 +114,7 @@ var t=createSvgEl("text",{
 x:(p.x+(dx||0)).toFixed(1),
 y:(p.y+(dy||0)).toFixed(1),
 fill:color||"var(--fg)",
-"font-size":fontSize||"13",
+"font-size":fontSize||"22",
 "font-weight":fontWeight||"600"
 });
 t.textContent=text;
@@ -119,187 +122,67 @@ svg.appendChild(t);
 return t;
 }
 
-function renderDist(){
-svg.innerHTML="";
-addDefs();
-var h=parseFloat(heightRange?heightRange.value:25)/10;
-var offX=parseFloat(offsetRange?offsetRange.value:5)/10;
-if(isNaN(h))h=2.5;
-if(isNaN(offX))offX=0.5;
-if(heightOut)heightOut.textContent=h.toFixed(1);
-if(offsetOut)offsetOut.textContent=offX.toFixed(1);
-var pM1=proj(-3.2,-1.8,0);
-var pM2=proj(3.2,-1.8,0);
-var pM3=proj(2.6,2.2,0);
-var pM4=proj(-3.8,2.2,0);
-drawPolygon([pM1,pM2,pM3,pM4],"rgba(47, 122, 86, 0.08)","var(--a)","1.8");
-drawText(proj(-3.1,-1.5,0),"平面 α (z = 0)","var(--a)",8,12,"13","700");
-var ax=currentPtA[0],ay=currentPtA[1],az=0;
-var ptA=proj(ax,ay,az);
-var px=offX,py=0.4,pz=h;
-var ptP=proj(px,py,pz);
-var ptH=proj(px,py,0);//真正垂足
-drawLine(ptP,ptH,"var(--no)","2.6","4,3");
-var r1=proj(px+0.25,py,0);
-var r2=proj(px+0.25,py,0.25);
-var r3=proj(px,py,0.25);
-drawLine(r1,r2,"var(--no)","1.2");
-drawLine(r2,r3,"var(--no)","1.2");
-drawLine(ptA,ptH,"var(--muted)","1.4","3,3");
-drawLine(ptA,ptP,"var(--c)","2.6",null,"m-arr-c");
-var ptN=proj(ax,ay,az+1.8);
-drawLine(ptA,ptN,"var(--a)","2.8",null,"m-arr-a");
-var n1=proj(ax+0.22,ay,az);
-var n2=proj(ax+0.22,ay,az+0.22);
-var n3=proj(ax,ay,az+0.22);
-drawLine(n1,n2,"var(--a)","1.2");
-drawLine(n2,n3,"var(--a)","1.2");
-var hOnLeft=px<ax-0.1;
-drawCircle(ptA,4.5,"var(--c)");
-drawText(ptA,"A("+ax+","+ay+",0)","var(--c)",-78,20);
-drawCircle(ptP,5,"var(--no)");
-drawText(ptP,"P("+px.toFixed(1)+","+py.toFixed(1)+","+pz.toFixed(1)+")","var(--no)",10,-8);
-drawCircle(ptH,4,"var(--no)");
-drawText(ptH,"垂足 H","var(--no)",hOnLeft?-52:12,20);
-drawText(ptN,"法向量 n = (0, 0, 1.8)","var(--a)",-148,-18);
-drawText(proj(ax+(px-ax)*0.35,ay+(py-ay)*0.35,pz*0.35),"斜向量 AP","var(--c)",hOnLeft?12:-74,-4);
-drawText(proj(px,py,pz/2),"距离 d = "+h.toFixed(1),"var(--no)",hOnLeft?-88:14,10,"13","700");
-if(desc){
-var dx=(px-ax).toFixed(1);
-var dy=(py-ay).toFixed(1);
-var dz=pz.toFixed(1);
-desc.innerHTML=
-"<b>点面距离代数验算</b>：<br>"+
-"当前选定面内参考点 \\(A("+ax+", "+ay+", 0)\\)，斜向量 \\(\\overrightarrow{AP} = ("+dx+", "+dy+", "+dz+")\\)。<br>"+
-"取法向量 \\(\\boldsymbol{n} = (0, 0, 1)\\)，数量积 \\(\\overrightarrow{AP}\\cdot\\boldsymbol{n} = "+dx+"\\times 0 + "+dy+"\\times 0 + "+dz+"\\times 1 = "+dz+"\\)。<br>"+
-"点面距离公式：\\(d = \\dfrac{|\\overrightarrow{AP}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{n}|} = \\dfrac{|"+dz+"|}{1} = "+h.toFixed(1)+"\\)。<br>"+
-"<span class=\"small\" style=\"color:var(--a);font-weight:600\">★ 核心发现：切换不同的参考点 A，向量 AP 的水平分量会变化，但在法向量上的投影高恒为 "+h.toFixed(1)+"，完全不需要寻找垂足 H！</span>";
-if(window.Peiyu&&window.Peiyu.math)window.Peiyu.math(desc);
+
+function role(el,name){el.setAttribute("data-angle-role",name);return el;}
+function dot3(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+function length3(a){return Math.hypot(a[0],a[1],a[2]);}
+function angle3(a,b){return Math.acos(Math.max(-1,Math.min(1,dot3(a,b)/(length3(a)*length3(b)))))*180/Math.PI;}
+function clean(x){return Math.abs(x)<1e-12?0:x;}
+function arc3(origin,u,v,r,start,end,name,color){
+var path="";for(var j=0;j<=48;j++){var t=(start+(end-start)*j/48)*Math.PI/180,p=proj(origin[0]+r*(u[0]*Math.cos(t)+v[0]*Math.sin(t)),origin[1]+r*(u[1]*Math.cos(t)+v[1]*Math.sin(t)),origin[2]+r*(u[2]*Math.cos(t)+v[2]*Math.sin(t)));path+=(j?" L ":"M ")+p.x+" "+p.y;}
+var el=createSvgEl("path",{d:path,fill:"none",stroke:color,"stroke-width":1.8,"data-angle-role":name});svg.appendChild(el);return el;
 }
+function beginMain(){svg.innerHTML="";svg.setAttribute("viewBox","0 0 560 370");addDefs();}
+
+function renderDist(){
+beginMain();
+var h=parseFloat(heightRange?heightRange.value:25)/10,offX=parseFloat(offsetRange?offsetRange.value:5)/10;
+if(!isFinite(h))h=2.5;if(!isFinite(offX))offX=.5;
+if(heightOut)heightOut.textContent=h.toFixed(1);if(offsetOut)offsetOut.textContent=offX.toFixed(1);
+role(drawPolygon([proj(-3.2,-1.8,0),proj(3.2,-1.8,0),proj(2.6,2.2,0),proj(-3.8,2.2,0)],"var(--ok-soft)","var(--a)",1.8),"distance-plane");
+drawText(proj(-3.1,-1.5,0),"α","var(--a)",8,12,22);
+var A=currentPtA,P=[offX,.4,h],H=[offX,.4,0],N=[A[0],A[1],1.8],pa=proj.apply(null,A),pp=proj.apply(null,P),ph=proj.apply(null,H),pn=proj.apply(null,N);
+role(drawLine(pa,ph,"var(--muted)",1.4,"3,3"),"distance-horizontal");
+role(drawLine(pa,pp,"var(--c)",2.6,null,"m-arr-c"),"distance-vector");
+role(drawLine(pa,pn,"var(--a)",2.8,null,"m-arr-a"),"distance-normal");
+if(Math.abs(h)>1e-10){role(drawLine(pp,ph,"var(--no)",2.6,"4,3"),"distance-perpendicular");var s=h>0?1:-1;role(drawLine(proj(P[0]+.22,P[1],0),proj(P[0]+.22,P[1],s*.22),"var(--no)",1.2),"distance-right");role(drawLine(proj(P[0]+.22,P[1],s*.22),proj(P[0],P[1],s*.22),"var(--no)",1.2),"distance-right");}
+drawCircle(pa,4.5,"var(--c)");drawText(pa,"A","var(--c)",-25,24,22);drawCircle(pp,5,"var(--no)");drawText(pp,Math.abs(h)<1e-10?"P=H":"P","var(--no)",10,-9,22);if(Math.abs(h)>1e-10){drawCircle(ph,4,"var(--no)");drawText(ph,"H","var(--no)",10,25,22);}
+drawText(pn,"n","var(--a)",10,-8,22);drawText(proj((A[0]+P[0])/2,(A[1]+P[1])/2,h/2),"AP","var(--c)",-30,-10,22);drawText(proj(P[0],P[1],h/2),"d="+Math.abs(h).toFixed(1),"var(--no)",20,12,22);
+if(desc){var dx=P[0]-A[0],dy=P[1]-A[1],nDot=1.8*h;desc.innerHTML="<b>点面距离代数验算</b>：面内参考点 \\(A("+A[0]+","+A[1]+",0)\\)，点 \\(P("+P[0].toFixed(1)+",0.4,"+h.toFixed(1)+")\\)，垂足 \\(H("+P[0].toFixed(1)+",0.4,0)\\)。<br>图中法向量与计算均取 \\(\\boldsymbol n=(0,0,1.8)\\)，\\(\\overrightarrow{AP}=("+dx.toFixed(1)+","+dy.toFixed(1)+","+h.toFixed(1)+")\\)。<br>\\(d=\\dfrac{|\\overrightarrow{AP}\\cdot\\boldsymbol n|}{|\\boldsymbol n|}=\\dfrac{|"+nDot.toFixed(2)+"|}{1.8}="+Math.abs(h).toFixed(1)+"\\)。"+(Math.abs(h)<1e-10?"<br><b>P已在平面内，P=H、距离0；零垂线段不再画直角记号。</b>":"<br>PH沿法向量方向，故H是真正垂足。")+"<br>切换A只改变AP的水平分量，不改变法向投影高；无需先求H的坐标也能算距离。";if(window.Peiyu&&window.Peiyu.math)window.Peiyu.math(desc);}
 }
 
 function renderLineAngle(){
-svg.innerHTML="";
-addDefs();
-var deg=parseFloat(thetaLineRange?thetaLineRange.value:30);
-if(isNaN(deg))deg=30;
-if(thetaLineOut)thetaLineOut.textContent=Math.round(deg)+"°";
-var invert=invertLineCheck&&invertLineCheck.checked;
-var rad=deg*Math.PI/180;
-var len=3.4;
-var pM1=proj(-3.2,-1.8,0);
-var pM2=proj(3.2,-1.8,0);
-var pM3=proj(2.6,2.2,0);
-var pM4=proj(-3.8,2.2,0);
-drawPolygon([pM1,pM2,pM3,pM4],"rgba(47, 122, 86, 0.08)","var(--a)","1.8");
-drawText(proj(2.7,-1.5,0),"平面 α","var(--a)",4,-4,"13","700");
-var ptO=proj(0,0,0);
-drawCircle(ptO,4.5,"var(--fg)");
-drawText(ptO,"O (交点)","var(--fg)",-72,6);
-var ptN=proj(0,0,2.6);
-drawLine(ptO,ptN,"var(--a)","2.8",null,"m-arr-a");
-drawText(ptN,"法向量 n","var(--a)",8,-2);
-var n1=proj(0.24,0,0);
-var n2=proj(0.24,0,0.24);
-var n3=proj(0,0,0.24);
-drawLine(n1,n2,"var(--a)","1.2");
-drawLine(n2,n3,"var(--a)","1.2");
-var sign=invert?-1:1;
-var ux=len*Math.cos(rad)*0.9;
-var uy=len*Math.cos(rad)*0.43;
-var uz=sign*len*Math.sin(rad);
-var ptU=proj(ux,uy,uz);
-var ptProjH=proj(ux,uy,0);
-drawLine(ptO,ptProjH,"var(--muted)","1.6","4,3");
-drawText(proj(Math.max(1.2,ux*0.65),Math.max(0.55,uy*0.65),0),"斜线在平面内的射影","var(--muted)",10,22,"12");
-drawLine(ptU,ptProjH,"var(--no)","2.0","3,3");
-drawLine(ptO,ptU,"var(--b)","3.0",null,"m-arr-b");
-drawCircle(ptU,4.5,"var(--b)");
-drawText(ptU,invert?"方向向量 u (反向指入下方)":"方向向量 u (斜线 l)","var(--b)",10,invert?14:-6);
-var phiDeg=invert?(90+deg):(90-deg);
-var sinTheta=Math.sin(rad);
-var cosPhi=Math.cos(phiDeg*Math.PI/180);
-if(desc){
-desc.innerHTML=
-"<b>线面角与法向量互余关系实时解析</b>：<br>"+
-"① 斜线与平面所成角：\\(\\theta = "+Math.round(deg)+"^\\circ\\)（范围 \\([0, 90^\\circ]\\)），其正弦值 \\(\\sin\\theta = "+sinTheta.toFixed(3)+"\\)。<br>"+
-"② 方向向量 \\(\\boldsymbol{u}\\) 与法向量 \\(\\boldsymbol{n}\\) 的夹角：\\(\\varphi = "+Math.round(phiDeg)+"^\\circ\\)，其余弦值 \\(\\cos\\varphi = "+cosPhi.toFixed(3)+"\\)。<br>"+
-"③ 数量积绝对值计算：\\(\\dfrac{|\\boldsymbol{u}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{u}||\\boldsymbol{n}|} = |"+cosPhi.toFixed(3)+"| = "+Math.abs(cosPhi).toFixed(3)+" = \\sin\\theta\\)！<br>"+
-"<span style=\"color:var(--no);font-weight:600\">★ 极度警惕：法向量与平面垂直，因此 \\(\\langle\\boldsymbol{u},\\boldsymbol{n}\\rangle\\) 与 \\(\\theta\\) 互余，计算出的是 \\(\\sin\\theta\\) 而非 \\(\\cos\\theta\\)！</span>";
-if(window.Peiyu&&window.Peiyu.math)window.Peiyu.math(desc);
-}
+beginMain();var deg=parseFloat(thetaLineRange?thetaLineRange.value:30);if(!isFinite(deg))deg=30;deg=Math.max(0,Math.min(90,deg));
+var invert=!!(invertLineCheck&&invertLineCheck.checked),sign=invert?-1:1,rad=deg*Math.PI/180,len=3.4,hn=Math.hypot(.9,.43),u=[clean(sign*len*Math.cos(rad)*.9/hn),clean(sign*len*Math.cos(rad)*.43/hn),clean(sign*len*Math.sin(rad))],n=[0,0,2.6],O=[0,0,0],H=[u[0],u[1],0],horizontal=Math.hypot(H[0],H[1]);
+var phi=angle3(u,n),ratio=clean(Math.abs(dot3(u,n))/(length3(u)*length3(n))),theta=Math.asin(Math.min(1,ratio))*180/Math.PI,small=Math.min(phi,180-phi);
+if(thetaLineOut)thetaLineOut.textContent=Math.round(theta)+"°";
+role(drawPolygon([proj(-3.2,-1.8,0),proj(3.2,-1.8,0),proj(2.6,2.2,0),proj(-3.8,2.2,0)],"var(--ok-soft)","var(--a)",1.8),"line-plane");drawText(proj(2.7,-1.5,0),"α","var(--a)",4,-4,22);
+var po=proj(0,0,0),pu=proj.apply(null,u),pn=proj.apply(null,n);drawCircle(po,4.5,"var(--fg)");drawText(po,"O","var(--fg)",-28,14,22);
+role(drawLine(po,pn,"var(--a)",2.8,null,"m-arr-a"),"line-normal");drawText(pn,"n","var(--a)",10,-5,22);
+role(drawLine(proj(-u[0],-u[1],-u[2]),pu,"var(--muted)",1.2,"3,4"),"line-support");
+if(horizontal>1e-10){role(drawLine(po,proj.apply(null,H),"var(--muted)",1.6,"4,3"),"line-projection");drawText(proj.apply(null,H),"H","var(--muted)",u[0]<0?-24:10,25,22);var uh=[u[0]/horizontal,u[1]/horizontal,0];if(theta>1e-10)arc3(O,uh,[0,0,sign],.7,0,theta,"line-theta-arc","var(--b)");}
+if(Math.abs(u[2])>1e-10)role(drawLine(pu,proj.apply(null,H),"var(--no)",1.6,"3,3"),"line-drop");
+role(drawLine(po,pu,"var(--b)",3,null,"m-arr-b"),"line-direction");drawCircle(pu,4.5,"var(--b)");role(drawText(pu,invert?"−u":"u","var(--b)",u[0]<0?-38:12,u[2]<0?25:-8,24),"line-direction-label");
+var tangent=horizontal>1e-10?[u[0]/horizontal,u[1]/horizontal,0]:[sign*.9/hn,sign*.43/hn,0];if(phi>1e-10)arc3(O,[0,0,1],tangent,.95,0,phi,"line-phi-arc","var(--c)");
+drawText({x:370,y:315},"θ="+Math.round(theta)+"°","var(--b)",0,0,22);drawText({x:370,y:345},"φ="+Math.round(phi)+"°","var(--c)",0,0,22);
+if(desc){desc.innerHTML="<b>线面角与有向向量夹角</b>：\\(\\theta="+Math.round(theta)+"^\\circ\\)，\\(\\varphi=\\langle"+(invert?"-\\boldsymbol u":"\\boldsymbol u")+",\\boldsymbol n\\rangle="+Math.round(phi)+"^\\circ\\)。<br>方向向量实际坐标为 \\(("+u.map(function(x){return x.toFixed(3);}).join(",")+")\\)，长度恒为3.4；勾选反向时三个分量同时变号，仍是同一直线。<br>\\(\\sin\\theta=\\dfrac{|\\boldsymbol u\\cdot\\boldsymbol n|}{|\\boldsymbol u||\\boldsymbol n|}="+ratio.toFixed(3)+"=|\\cos\\varphi|\\)。<br>取较小夹角 \\(\\psi=\\min(\\varphi,180^\\circ-\\varphi)="+Math.round(small)+"^\\circ\\)，恒有 \\(\\theta+\\psi=90^\\circ\\)。"+(phi<=90?"本态φ≤90°，θ与φ互余。":"本态φ>90°，θ与180°−φ互余，不能写θ+φ=90°。")+(horizontal<1e-10?"<br><b>θ=90°时射影H与O重合，射影向量为零，不能用它和u求夹角；直线垂直平面。</b>":theta<1e-10?"<br>θ=0°，方向平行平面；因图中经过O，这条直线在平面内。":"<br>H是u端点在平面内的射影；3D斜投影中的屏幕角不代表真实空间角。")+"<br>直线方向或法向量朝向取反后，绝对值保证线面角的正弦不变。";if(window.Peiyu&&window.Peiyu.math)window.Peiyu.math(desc);}
 }
 
 function renderDihedral(){
-svg.innerHTML="";
-addDefs();
-var deg=parseFloat(dihedralRange?dihedralRange.value:120);
-if(isNaN(deg))deg=120;
-if(dihedralOut)dihedralOut.textContent=Math.round(deg)+"°";
-var radios=document.getElementsByName("normDir");
-var mode="out";
-for(var i=0;i<radios.length;i++){
-if(radios[i].checked)mode=radios[i].value;
-}
-var rad=deg*Math.PI/180;
-var cosD=Math.cos(rad);
-var sinD=Math.sin(rad);
-var pEdge1=proj(0,-1.6,0);
-var pEdge2=proj(0,2.0,0);
-var pA1=proj(0,-1.6,0);
-var pA2=proj(2.6,-1.6,0);
-var pA3=proj(2.6,2.0,0);
-var pA4=proj(0,2.0,0);
-drawPolygon([pA1,pA2,pA3,pA4],"rgba(47, 122, 86, 0.08)","var(--a)","1.8");
-drawText(proj(2.3,-1.3,0),"半平面 α","var(--a)",4,14,"13","700");
-var bLen=2.6;
-var bx=bLen*cosD;
-var bz=bLen*sinD;
-var pB1=proj(0,-1.6,0);
-var pB2=proj(bx,-1.6,bz);
-var pB3=proj(bx,2.0,bz);
-var pB4=proj(0,2.0,0);
-drawPolygon([pB1,pB2,pB3,pB4],"rgba(62, 92, 118, 0.09)","var(--c)","1.8");
-drawText(proj(bx*0.9,-1.3,bz*0.9),"半平面 β","var(--c)",-30,-6,"13","700");
-drawLine(pEdge1,pEdge2,"var(--fg)","2.6");
-drawText(proj(0,2.1,0),"二面角的棱 l","var(--fg)",-20,16);
-var ptO=proj(0,0.2,0);
-drawCircle(ptO,4.5,"var(--fg)");
-var ptRayA=proj(1.8,0.2,0);
-drawLine(ptO,ptRayA,"var(--a)","2.0","3,2");
-var ptRayB=proj(1.8*cosD,0.2,1.8*sinD);
-drawLine(ptO,ptRayB,"var(--c)","2.0","3,2");
-var ptN1=proj(0,0.2,1.9);
-drawLine(ptO,ptN1,"var(--a)","2.8",null,"m-arr-a");
-drawText(ptN1,"n₁ ⊥ α","var(--a)",6,-2);
-var n2Sign=(mode==="out")?1:-1;
-var n2x=-n2Sign*1.9*sinD;
-var n2z=n2Sign*1.9*cosD;
-var ptN2=proj(n2x,0.2,n2z);
-drawLine(ptO,ptN2,"var(--c)","2.8",null,"m-arr-c");
-drawText(ptN2,"n₂ ⊥ β","var(--c)",-36,12);
-var isObtuse=deg>90;
-var isRight=deg===90;
-var angleKind=isRight?"直二面角":(isObtuse?"钝二面角":"锐二面角");
-var dot=n2Sign*cosD;
-var nAngleRad=Math.acos(Math.max(-1,Math.min(1,dot)));
-var nAngleDeg=nAngleRad*180/Math.PI;
-if(desc){
-desc.innerHTML=
-"<div class=\"stat-grid\">"+
-"<div class=\"stat-card\"><div class=\"tit\">二面角实际大小</div><div class=\"val\" style=\"color:"+(isObtuse?"var(--no)":"var(--a)")+"\">\\(\\theta = "+Math.round(deg)+"^\\circ\\)（"+angleKind+"）</div></div>"+
-"<div class=\"stat-card\"><div class=\"tit\">真实余弦值 \\(\\cos\\theta\\)</div><div class=\"val\">\\("+cosD.toFixed(3)+"\\)</div></div>"+
-"<div class=\"stat-card\"><div class=\"tit\">两法向量夹角 \\(\\langle\\boldsymbol{n}_1,\\boldsymbol{n}_2\\rangle\\)</div><div class=\"val\">\\("+Math.round(nAngleDeg)+"^\\circ\\)</div></div>"+
-"<div class=\"stat-card\"><div class=\"tit\">法向量数量积比值</div><div class=\"val\">\\("+dot.toFixed(3)+"\\)</div></div>"+
-"</div>"+
-"<b>二面角符号判定结论</b>：<br>"+
-(isObtuse
-?"<span style=\"color:var(--no);font-weight:700\">【致命陷阱警示】当前几何图形明显为【钝二面角】（\\(\\theta = "+Math.round(deg)+"^\\circ &gt; 90^\\circ\\)），其实际余弦值必须为负值（\\(\\cos\\theta = "+cosD.toFixed(3)+" &lt; 0\\)）！</span><br>"+
-"若直接套用绝对值公式算得 \\(|"+dot.toFixed(3)+"| = "+Math.abs(dot).toFixed(3)+"\\)，就会得出 \\(\\theta = "+(180-Math.round(deg))+"^\\circ\\)，把钝二面角活生生错算为锐角，整道立体几何解答题直接丢分！"
-:"<span style=\"color:var(--a);font-weight:700\">当前图形为【锐二面角】（\\(\\theta = "+Math.round(deg)+"^\\circ \\le 90^\\circ\\)），其实际余弦值为正值（\\(\\cos\\theta = "+cosD.toFixed(3)+" &gt; 0\\)）。</span><br>"+
-"无论法向量朝向如何，锐二面角余弦值必为正：\\(\\cos\\theta = +\\dfrac{|\\boldsymbol{n}_1\\cdot\\boldsymbol{n}_2|}{|\\boldsymbol{n}_1||\\boldsymbol{n}_2|}\\)。");
-if(window.Peiyu&&window.Peiyu.math)window.Peiyu.math(desc);
-}
+beginMain();var deg=parseFloat(dihedralRange?dihedralRange.value:120);if(!isFinite(deg))deg=120;deg=Math.max(0,Math.min(180,deg));if(dihedralOut)dihedralOut.textContent=Math.round(deg)+"°";
+var mode="out",radios=document.getElementsByName("normDir");for(var i=0;i<radios.length;i++)if(radios[i].checked)mode=radios[i].value;
+var rad=deg*Math.PI/180,c=clean(Math.cos(rad)),s=clean(Math.sin(rad)),sign=mode==="out"?1:-1,O=[0,.2,0],a=[1.8,0,0],b=[1.8*c,0,1.8*s],n1=[0,0,-1.9],n2=[-sign*1.9*s,0,sign*1.9*c];
+role(drawPolygon([proj(0,-1.6,0),proj(2.6,-1.6,0),proj(2.6,2,0),proj(0,2,0)],"var(--ok-soft)","var(--a)",1.8),"dihedral-plane-a");role(drawPolygon([proj(0,-1.6,0),proj(2.6*c,-1.6,2.6*s),proj(2.6*c,2,2.6*s),proj(0,2,0)],"var(--hl-soft)","var(--c)",1.8),"dihedral-plane-b");
+drawText(proj(2.3,-1.3,0),"α","var(--a)",4,20,22);drawText(proj(2.3*c,-1.3,2.3*s),"β","var(--c)",-25,-10,22);
+role(drawLine(proj(0,-1.6,0),proj(0,2,0),"var(--fg)",2.6),"dihedral-edge");drawText(proj(0,2.1,0),"l","var(--fg)",10,20,22);
+function end(v){return proj(O[0]+v[0],O[1]+v[1],O[2]+v[2]);}var po=proj.apply(null,O);drawCircle(po,4.5,"var(--fg)");
+role(drawLine(po,end(a),"var(--a)",2,"3,2"),"dihedral-ray-a");role(drawLine(po,end(b),"var(--c)",2,"3,2"),"dihedral-ray-b");
+role(drawLine(po,end(n1),"var(--a)",2.8,null,"m-arr-a"),"dihedral-normal-a");drawText(end(n1),"n₁","var(--a)",8,22,22);
+role(drawLine(po,end(n2),"var(--c)",2.8,null,"m-arr-c"),"dihedral-normal-b");drawText(end(n2),"n₂","var(--c)",n2[0]<0?-30:12,n2[2]<0?22:-8,22);
+if(deg>0)arc3(O,[1,0,0],[0,0,1],.7,0,deg,"dihedral-angle-arc","var(--b)");
+var actual=angle3(a,b),normalAngle=angle3(n1,n2),ratio=clean(dot3(n1,n2)/(length3(n1)*length3(n2))),right=Math.abs(actual-90)<1e-9,boundary=actual<1e-9||actual>180-1e-9,kind=boundary?(actual<90?"零角退化边界":"平角边界"):right?"直二面角":actual>90?"钝二面角":"锐二面角";
+drawText({x:385,y:315},"θ="+Math.round(actual)+"°","var(--b)",0,0,22);drawText({x:385,y:345},"φ="+Math.round(normalAngle)+"°","var(--c)",0,0,22);
+if(desc){desc.innerHTML="<b>二面角符号判定</b>：\\(\\theta="+Math.round(actual)+"^\\circ\\)（"+kind+"），\\(\\cos\\theta="+c.toFixed(3)+"\\)。<br>两条截面射线均从棱上的O出发且垂直于棱l，真实夹角是θ；图中xz截面横纵同单位。<br>\\(\\varphi=\\langle\\boldsymbol n_1,\\boldsymbol n_2\\rangle="+Math.round(normalAngle)+"^\\circ\\)，\\(\\dfrac{\\boldsymbol n_1\\cdot\\boldsymbol n_2}{|\\boldsymbol n_1||\\boldsymbol n_2|}="+ratio.toFixed(3)+"\\)。<br>"+(mode==="out"?"n₁、n₂均指向二面角外侧，法向量夹角与二面角互补。":"n₁指向外侧、n₂指向内侧，法向量夹角与二面角相等。")+(boundary?"<br>0°/180°只展示开合的退化边界，内外朝向按邻近非退化角的极限约定。":right?"<br><b>直二面角余弦为0，既不能称锐角，也不能写cosθ>0。</b>":actual>90?"<br><b>钝二面角的余弦为负；机械取绝对值会误算成"+(180-Math.round(actual))+"°的锐角。</b>":"<br>锐二面角余弦为正，但法向量数量积的符号仍随朝向变化。")+"<br>故二面角不能一律给数量积比值加绝对值，需按所求半平面和法向量朝向判断相等或互补。";if(window.Peiyu&&window.Peiyu.math)window.Peiyu.math(desc);}
 }
 function renderIsoDist(){
 var h=parseFloat(heightRange?heightRange.value:25)/10;
@@ -429,111 +312,16 @@ if(ev.detail&&ev.detail.id==="entry")epjDraw("vec");
 });
 epjDraw("vec");
 function initMAppFig(){
-var svgEl=document.getElementById("m-app-fig"),capEl=document.getElementById("m-app-cap");
-if(!svgEl)return;
-var mode="lineplane",NS="http://www.w3.org/2000/svg";
-var caps={
-lineplane:"法向量与线面角：法向量与平面垂直，直线与法向量夹角与线面角互余，计算结果恒为正弦值 sin θ = |cos φ|。",
-dihed:"二面角与法向量：两平面法向量夹角与二面角相等或互补，余弦值正负必须依据图形开口钝锐判定。",
-pldist:"点面距离向量射影：在面内任取一点 A，点 P 到平面的垂线段长恒等于斜向量 AP 在法向量 n 上的射影长度。"
-};
-function s(el,t,a,x){
-var e=document.createElementNS(NS,t);
-for(var k in a)e.setAttribute(k,a[k]);
-if(x)e.textContent=x;
-el.appendChild(e);
-return e;
-}
-function ln(el,x1,y1,x2,y2,c,w,d){
-var a={x1:x1,y1:y1,x2:x2,y2:y2,stroke:c||"#cbd5e1","stroke-width":w||1.5};
-if(d)a["stroke-dasharray"]=d;
-return s(el,"line",a);
-}
-function rc(el,x,y,w,h,f,c,r){return s(el,"rect",{x:x,y:y,width:w,height:h,fill:f||"none",stroke:c||"none",rx:r||0});}
-function tx(el,x,y,t,c,sz,b,anch){
-var a={x:x,y:y,fill:c||"#0f172a","font-size":sz||"11"};
-if(b)a["font-weight"]="bold";
-if(anch)a["text-anchor"]=anch;
-return s(el,"text",a,t);
-}
-function draw(){
-svgEl.innerHTML="";
-if(mode==="lineplane"){
-tx(svgEl,270,24,"线面角与法向量互余原理：sin θ = |u · n| / (|u||n|)","#0f172a","12",true,"middle");
-s(svgEl,"polygon",{points:"60,160 240,160 300,110 120,110",fill:"rgba(37,99,235,0.08)",stroke:"#93c5fd"});
-tx(svgEl,90,125,"平面 α","#1e3a8a","11",true);
-ln(svgEl,150,140,150,50,"#dc2626",2.5);tx(svgEl,140,60,"法向量 n","#dc2626","11",true,"end");
-rc(svgEl,150,130,10,10,"none","#dc2626");
-ln(svgEl,150,140,250,70,"#2563eb",2.5);tx(svgEl,255,75,"方向向量 u","#2563eb","11",true);
-ln(svgEl,150,140,250,140,"#059669",2,"3 3");
-ln(svgEl,250,70,250,140,"#64748b",1.5,"2 2");
-s(svgEl,"path",{d:"M 180 140 A 30 30 0 0 0 175 122",fill:"none",stroke:"#059669","stroke-width":2});
-tx(svgEl,188,134,"θ (线面角)","#059669","11",true);
-s(svgEl,"path",{d:"M 150 110 A 30 30 0 0 1 172 124",fill:"none",stroke:"#d97706","stroke-width":1.5});
-tx(svgEl,166,105,"φ","#d97706","11",true);
-rc(svgEl,330,50,185,120,"#f8fafc","#cbd5e1",6);
-tx(svgEl,345,78,"互余转换公式","#0f172a","12",true);
-tx(svgEl,345,102,"θ + φ = 90°","#dc2626","11.5",true);
-tx(svgEl,345,124,"sin θ = |cos φ|","#2563eb","11.5",true);
-tx(svgEl,345,146,"牢记：算出来是正弦！","#059669","10.5",true);
-}else if(mode==="dihed"){
-tx(svgEl,270,24,"二面角与两法向量夹角：cos θ = ± (n1 · n2) / (|n1||n2|)","#0f172a","12",true,"middle");
-ln(svgEl,150,40,150,160,"#0f172a",2);
-s(svgEl,"polygon",{points:"60,90 150,40 150,160 60,150",fill:"rgba(37,99,235,0.08)",stroke:"#2563eb"});
-tx(svgEl,80,120,"平面 α","#2563eb","11",true);
-s(svgEl,"polygon",{points:"240,90 150,40 150,160 240,150",fill:"rgba(5,150,105,0.08)",stroke:"#059669"});
-tx(svgEl,210,120,"平面 β","#059669","11",true);
-ln(svgEl,105,100,80,50,"#2563eb",2);tx(svgEl,70,50,"n1","#2563eb","11",true);
-ln(svgEl,195,100,220,50,"#059669",2);tx(svgEl,228,50,"n2","#059669","11",true);
-rc(svgEl,330,50,185,120,"#f1f5f9","#cbd5e1",6);
-tx(svgEl,345,78,"钝锐定正负","#0f172a","12",true);
-tx(svgEl,345,102,"• 锐二面角 ⟹ cos θ > 0","#059669","11");
-tx(svgEl,345,124,"• 钝二面角 ⟹ cos θ < 0","#dc2626","11",true);
-tx(svgEl,345,146,"切忌无脑加绝对值！","#b91c1c","10.5",true);
-}else if(mode==="pldist"){
-tx(svgEl,270,24,"点到平面距离公式：d = |AP · n| / |n|","#0f172a","12",true,"middle");
-s(svgEl,"polygon",{points:"60,150 250,150 310,110 120,110",fill:"rgba(37,99,235,0.08)",stroke:"#93c5fd"});
-tx(svgEl,90,125,"平面 α","#1e3a8a","11",true);
-s(svgEl,"circle",{cx:220,cy:45,r:4.5,fill:"#dc2626"});tx(svgEl,228,45,"点 P","#dc2626","11",true);
-s(svgEl,"circle",{cx:220,cy:130,r:3.5,fill:"#64748b"});tx(svgEl,228,140,"垂足 H","#64748b","10");
-ln(svgEl,220,45,220,130,"#dc2626",2.5);tx(svgEl,235,90,"距离 d","#dc2626","11.5",true);
-rc(svgEl,210,120,10,10,"none","#dc2626");
-s(svgEl,"circle",{cx:140,cy:135,r:4,fill:"#059669"});tx(svgEl,128,145,"已知点 A","#059669","11",true);
-ln(svgEl,140,135,220,45,"#059669",2);tx(svgEl,165,80,"斜向量 AP","#059669","11",true);
-ln(svgEl,140,135,140,60,"#2563eb",2);tx(svgEl,125,75,"法向量 n","#2563eb","10.5");
-rc(svgEl,330,50,185,120,"#f8fafc","#cbd5e1",6);
-tx(svgEl,345,78,"向量射影求距法","#0f172a","12",true);
-tx(svgEl,345,102,"免作垂线、免找垂足","#059669","11",true);
-tx(svgEl,345,124,"d = |AP · n| / |n|","#dc2626","11.5",true);
-tx(svgEl,345,146,"任选面内点 A 即可","#2563eb","10.5");
-}
-if(capEl)capEl.textContent=caps[mode];
-if(window.renderMathInElement)window.renderMathInElement(capEl);
-}
-var tabs=document.querySelectorAll(".micro-box .micro-tab");
-tabs.forEach(function(tab){
-tab.addEventListener("click",function(){
-tabs.forEach(function(t){t.classList.remove("active");});
-tab.classList.add("active");
-mode=tab.getAttribute("data-mode");
-draw();
-});
-});
-draw();
-var trapEl=document.getElementById("m-app-trap-fig");
-if(trapEl){
-trapEl.innerHTML="";
-rc(trapEl,30,20,220,130,"#fef2f2","#fca5a5",6);
-tx(trapEl,140,44,"❌ 典型翻车：线面角错当余弦","#dc2626","11.5",true,"middle");
-tx(trapEl,140,75,"算得 |u · n| / (|u||n|) = 1/2","#dc2626","10.5",false,"middle");
-tx(trapEl,140,98,"误把角写成 60° (把公式当 cos)","#b91c1c","11",true,"middle");
-tx(trapEl,140,135,"大题直接扣光答案分！","#64748b","9.5",false,"middle");
-rc(trapEl,290,20,220,130,"#f0fdf4","#86efac",6);
-tx(trapEl,400,44,"✔ 几何真谛：法向量互余求正弦","#15803d","11.5",true,"middle");
-tx(trapEl,400,75,"sin θ = |u · n| / (|u||n|) = 1/2","#059669","11",true,"middle");
-tx(trapEl,400,98,"正解：线面角 θ = 30°！","#15803d","12",true,"middle");
-tx(trapEl,400,135,"牢记：线面角算出来恒为 sin！","#047857","10",true,"middle");
-}
+var fig=document.getElementById("m-app-fig"),cap=document.getElementById("m-app-cap"),trap=document.getElementById("m-app-trap-fig");if(!fig)return;
+function node(parent,tag,attrs,text){var e=createSvgEl(tag,attrs);if(text!==undefined)e.textContent=text;parent.appendChild(e);return e;}
+function line(parent,a,b,color,name,dash){var attrs={x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:color,"stroke-width":2.6,"data-angle-role":name};if(dash)attrs["stroke-dasharray"]="4 3";return node(parent,"line",attrs);}
+function text(parent,x,y,value,color){return node(parent,"text",{x:x,y:y,fill:color||"var(--fg)","font-size":24,"text-anchor":"middle"},value);}
+function arc(parent,O,r,a,b,color,name){var start=[O[0]+r*Math.cos(a),O[1]-r*Math.sin(a)],end=[O[0]+r*Math.cos(b),O[1]-r*Math.sin(b)];return node(parent,"path",{d:"M "+start.join(" ")+" A "+r+" "+r+" 0 "+(b-a>Math.PI?1:0)+" 0 "+end.join(" "),fill:"none",stroke:color,"stroke-width":1.8,"data-angle-role":name,"data-center":JSON.stringify(O)});}
+function right(parent,O){node(parent,"polyline",{points:(O[0]-12)+","+O[1]+" "+(O[0]-12)+","+(O[1]-12)+" "+O[0]+","+(O[1]-12),fill:"none",stroke:"var(--no)","stroke-width":1.5,"data-angle-role":"micro-right"});}
+function angleFigure(parent){var O=[170,225],r=165,a=Math.PI/6,U=[O[0]+r*Math.cos(a),O[1]-r*Math.sin(a)],N=[170,45],H=[U[0],225];line(parent,[65,225],[440,225],"var(--a)","micro-plane");line(parent,O,N,"var(--a)","micro-normal");line(parent,O,U,"var(--b)","micro-direction");line(parent,O,H,"var(--muted)","micro-projection",true);line(parent,U,H,"var(--no)","micro-drop",true);right(parent,H);arc(parent,O,52,0,a,"var(--b)","micro-theta-arc");arc(parent,O,72,a,Math.PI/2,"var(--c)","micro-phi-arc");text(parent,110,50,"n","var(--a)");text(parent,U[0]+30,U[1]-5,"u","var(--b)");text(parent,230,260,"θ=30°","var(--b)");text(parent,250,110,"φ=60°","var(--c)");text(parent,450,70,"sinθ=1/2","var(--fg)");text(parent,80,260,"α","var(--a)");}
+function draw(mode){fig.innerHTML="";fig.setAttribute("viewBox","0 0 560 300");if(mode==="lineplane"){angleFigure(fig);cap.textContent="在包含u和法向量n的正交截面中，平面表现为水平线。图中真实θ=30°、φ=60°，弧的两个端点在实际射线上。一般应取ψ=min(φ,180°−φ)，θ+ψ=90°；φ为钝角时不能直接写θ+φ=90°。";}else if(mode==="dihed"){var O=[260,205],t=2*Math.PI/3,A=[420,205],B=[180,205-80*Math.sqrt(3)],N1=[260,285],N2=[260-80*Math.sqrt(3)/2,245];line(fig,O,A,"var(--a)","micro-dihedral-a");line(fig,O,B,"var(--c)","micro-dihedral-b");line(fig,O,N1,"var(--a)","micro-dihedral-n1",true);line(fig,O,N2,"var(--c)","micro-dihedral-n2",true);arc(fig,O,46,0,t,"var(--b)","micro-dihedral-arc");text(fig,425,235,"α","var(--a)");text(fig,150,65,"β","var(--c)");text(fig,300,280,"n₁","var(--a)");text(fig,160,255,"n₂","var(--c)");text(fig,370,65,"θ=120°","var(--b)");text(fig,385,100,"φ=60°","var(--c)");cap.textContent="取垂直于公共棱l的截面，两半平面给出同顶点两射线，真实开口120°。n₁、n₂都朝外，真实夹角60°，与二面角互补；cos120°=−1/2，不能机械改成正数。";}else{var A=[140,230],H=[290,230],P=[290,80],N=[140,155];line(fig,[65,230],[440,230],"var(--a)","micro-distance-plane");line(fig,A,P,"var(--c)","micro-distance-ap");line(fig,P,H,"var(--no)","micro-distance-ph");line(fig,A,N,"var(--a)","micro-distance-normal");line(fig,A,H,"var(--muted)","micro-distance-ah",true);right(fig,H);text(fig,120,265,"A","var(--c)");text(fig,320,70,"P","var(--no)");text(fig,310,260,"H","var(--no)");text(fig,110,140,"n","var(--a)");text(fig,370,160,"d=2","var(--no)");cap.textContent="截面每单位75px，A=(0,0,0)，H=(2,0,0)，P=(2,0,2)，n=(0,0,1)。AP·n=2、|n|=1，故d=2。H确在线上，PH沿法向量且垂直于平面截线。";}}
+document.querySelectorAll(".micro-box .micro-tab").forEach(function(tab){tab.addEventListener("click",function(){document.querySelectorAll(".micro-box .micro-tab").forEach(function(t){t.classList.remove("active");});tab.classList.add("active");draw(tab.getAttribute("data-mode"));});});draw("lineplane");if(cap)cap.style.fontSize="15px";
+if(trap){trap.innerHTML="";trap.setAttribute("viewBox","0 0 560 300");angleFigure(trap);}
 }
 initMAppFig();
 })();

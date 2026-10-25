@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -93,14 +93,14 @@
   <div class="concept-grid">
     <div class="concept-card">
       <div class="concept-head"><span class="badge-pill">核心对决</span> 相互独立 vs 互斥事件</div>
-      <p><b>相互独立</b>：\(A\) 的发生与否<b>对 \(B\) 的概率毫无影响</b>，充要条件为 \(P(AB) = P(A)P(B)\)。两事件可同时发生，交集非空。</p>
-      <p><b>互斥事件</b>：两事件<b>绝不可能同时发生</b>，\(AB = \varnothing \implies P(AB) = 0\)。若 \(A\) 发生，\(B\) 概率直接归零（极端依赖）！</p>
-      <p class="small">金律：<b>若 \(P(A)>0, P(B)>0\)，互斥必不独立，独立必不互斥！</b>两者水火不容，不可混淆。</p>
+      <p><b>相互独立</b>：用 \(P(AB) = P(A)P(B)\) 定义。若 \(P(A)>0\)，才可等价地说 \(P(B\mid A)=P(B)\)。独立不要求两个概率都为正，也不保证交集非空。</p>
+      <p><b>互斥事件</b>：两事件<b>不可能同时发生</b>，\(AB = \varnothing \implies P(AB) = 0\)。这描述集合关系，独立描述概率的乘积关系。</p>
+      <p class="small"><b>若 \(P(A)>0, P(B)>0\)，互斥必不独立，独立必不互斥。</b>边界例子：\(A=\varnothing\) 时，它与任意 \(B\) 既互斥又独立，因为 \(0=0\cdot P(B)\)。</p>
     </div>
     <div class="concept-card">
       <div class="concept-head"><span class="badge-pill">抽样对比</span> 放回抽样 vs 不放回抽样</div>
-      <p><b>有放回抽样</b>：每次抽取后样本恢复原状，各次试验条件恒定，前后事件<b>严格相互独立</b>，各步概率直接相乘。</p>
-      <p><b>不放回抽样</b>：后次抽样总数与分布因前次结果而变，属于<b>条件依存</b>，事件不独立，不可直接相乘！</p>
+      <p><b>有放回抽样</b>：每次放回后充分混匀，并独立地随机抽取，才可用各次抽取独立的模型，各步概率相乘。</p>
+      <p><b>不放回抽样</b>：后次抽样的总体组成通常因前次结果而变，不能直接假设独立。先计算条件概率；是否独立仍由 \(P(AB)=P(A)P(B)\) 判断。</p>
       <p class="small">提醒：大样本抽样（如数万件中抽数件）虽不放回，但因基数极大，可近似看作相互独立处理。</p>
     </div>
   </div>
@@ -179,7 +179,7 @@
       <div class="step-num">3</div>
       <div class="step-body">
         <b>🛡️ 第三步必查防坑结论</b>
-        <p>核查独立性前提（不放回抽样绝不能直接相乘）；核查加法对象是否互斥（独立事件不可盲目直接相加）；最终算出的概率值必须落在 \([0,1]\) 闭区间内。</p>
+        <p>核查独立性前提（不放回抽样不能把两次原概率原样相乘，先按剩余组成重算后次概率）；核查加法对象是否互斥（独立事件不可盲目直接相加）；最终算出的概率值必须落在 \([0,1]\) 闭区间内。</p>
       </div>
     </div>
   </div>
@@ -224,7 +224,7 @@
   <div class="micro-box" style="margin-top:14px;">
     <div class="micro-title">反例微图解：互斥 vs 独立文氏图（为什么正概率互斥事件一定不独立）</div>
     <svg id="m-indep-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="互斥与相互独立反例图解"></svg>
-    <div class="micro-caption">互斥要求交集面积严格为 0；而当 \(P(A)>0, P(B)>0\) 时，独立要求交集面积严格为 \(P(A)P(B)>0\)，两者在几何上完全互斥！</div>
+    <div class="micro-caption" style="font-size:15px">互斥要求交集为空，故 \(P(AB)=0\)；当 \(P(A)>0, P(B)>0\) 时，独立却要求 \(P(AB)=P(A)P(B)>0\)，所以此时两者不能兼有。文氏图只示意集合关系，不能直接把任意圆的几何面积当成概率。</div>
   </div>
 
   <details class="more" style="margin-top:14px;">
@@ -567,7 +567,7 @@
 
     var caps = {
       mult: "相互独立事件交集概率满足横纵正交分解：\\(P(AB) = P(A) \\times P(B)\\)。全概率矩形面积被精准切分为四块。",
-      vs: "互斥强调交集为空（\\(P(AB)=0\\)，极端依赖）；独立强调互不影响（\\(P(AB)=P(A)P(B)>0\\)）。两者水火不容。",
+      vs: "互斥要求交集为空；独立要求 \\(P(AB)=P(A)P(B)\\)。仅当 \\(P(A)>0\\) 且 \\(P(B)>0\\) 时，两者不能兼有。若 \\(A=\\varnothing\\)，它与任意 \\(B\\) 既互斥又独立（0=0×P(B)）。本图画正概率情形；是否独立应检验等式，不能只看两个圆是否相交。",
       opp: "独立具有对立传递性：若 \\(A\\) 与 \\(B\\) 相互独立，则 \\(A\\) 与 \\(\\overline{B}\\)、\\(\\overline{A}\\) 与 \\(B\\)、\\(\\overline{A}\\) 与 \\(\\overline{B}\\) 全体全部独立！"
     };
 
@@ -588,73 +588,73 @@
         // P(B) = 0.5 -> h = 70, P(B_bar) = 0.5 -> h = 70
 
         // P(AB) = 0.30
-        s("rect", { x: 60, y: 35, width: 168, height: 70, fill: "rgba(37,99,235,0.25)", stroke: "#2563eb", "stroke-width": 1.5 });
-        s("text", { x: 144, y: 72, fill: "#1d4ed8", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0.6 × 0.5 = 0.30");
+        s("rect", { x: 60, y: 35, width: 168, height: 70, fill: "rgba(37,99,235,0.25)", stroke: "var(--c)", "stroke-width": 1.5 });
+        s("text", { x: 144, y: 72, fill: "var(--c)", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0.6 × 0.5 = 0.30");
 
         // P(A B_bar) = 0.30
         s("rect", { x: 60, y: 105, width: 168, height: 70, fill: "rgba(37,99,235,0.08)", stroke: "#93c5fd", "stroke-width": 1.5 });
-        s("text", { x: 144, y: 145, fill: "#2563eb", "font-size": "11", "text-anchor": "middle" }, "P(A B̄) = 0.6 × 0.5 = 0.30");
+        s("text", { x: 144, y: 145, fill: "var(--c)", "font-size": "11", "text-anchor": "middle" }, "P(A B̄) = 0.6 × 0.5 = 0.30");
 
         // P(A_bar B) = 0.20
         s("rect", { x: 228, y: 35, width: 112, height: 70, fill: "rgba(5,150,105,0.12)", stroke: "#86efac", "stroke-width": 1.5 });
-        s("text", { x: 284, y: 72, fill: "#047857", "font-size": "11", "text-anchor": "middle" }, "P(Ā B) = 0.20");
+        s("text", { x: 284, y: 72, fill: "var(--a)", "font-size": "11", "text-anchor": "middle" }, "P(Ā B) = 0.20");
 
         // P(A_bar B_bar) = 0.20
-        s("rect", { x: 228, y: 105, width: 112, height: 70, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1.5 });
-        s("text", { x: 284, y: 145, fill: "#64748b", "font-size": "11", "text-anchor": "middle" }, "P(Ā B̄) = 0.20");
+        s("rect", { x: 228, y: 105, width: 112, height: 70, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
+        s("text", { x: 284, y: 145, fill: "var(--muted)", "font-size": "11", "text-anchor": "middle" }, "P(Ā B̄) = 0.20");
 
         // Dimension brackets
-        s("text", { x: 144, y: 24, fill: "#2563eb", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "P(A) = 0.6");
-        s("text", { x: 284, y: 24, fill: "#64748b", "font-size": "11", "text-anchor": "middle" }, "P(Ā) = 0.4");
-        s("text", { x: 50, y: 75, fill: "#059669", "font-size": "11", "font-weight": "bold", "text-anchor": "end" }, "P(B)=0.5");
-        s("text", { x: 50, y: 145, fill: "#64748b", "font-size": "11", "text-anchor": "end" }, "P(B̄)=0.5");
+        s("text", { x: 144, y: 24, fill: "var(--c)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "P(A) = 0.6");
+        s("text", { x: 284, y: 24, fill: "var(--muted)", "font-size": "11", "text-anchor": "middle" }, "P(Ā) = 0.4");
+        s("text", { x: 50, y: 75, fill: "var(--a)", "font-size": "11", "font-weight": "bold", "text-anchor": "end" }, "P(B)=0.5");
+        s("text", { x: 50, y: 145, fill: "var(--muted)", "font-size": "11", "text-anchor": "end" }, "P(B̄)=0.5");
 
         // Right side info card
-        s("rect", { x: 365, y: 35, width: 155, height: 140, rx: 6, fill: "#f1f5f9", stroke: "#cbd5e1", "stroke-width": 1.5 });
-        s("text", { x: 442, y: 62, fill: "#0f172a", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "正交面积模型");
-        s("text", { x: 442, y: 88, fill: "#2563eb", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "独立 ⟺ 横纵直积");
-        s("text", { x: 442, y: 112, fill: "#475569", "font-size": "10.5", "text-anchor": "middle" }, "面积 = 边长之积");
-        s("text", { x: 442, y: 135, fill: "#059669", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "四块总面积恒为 1");
-        s("text", { x: 442, y: 155, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "无任何耦合畸变");
+        s("rect", { x: 365, y: 35, width: 155, height: 140, rx: 6, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
+        s("text", { x: 442, y: 62, fill: "var(--fg)", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "正交面积模型");
+        s("text", { x: 442, y: 88, fill: "var(--c)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "独立 ⟺ 横纵直积");
+        s("text", { x: 442, y: 112, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "面积 = 边长之积");
+        s("text", { x: 442, y: 135, fill: "var(--a)", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "四块总面积恒为 1");
+        s("text", { x: 442, y: 155, fill: "var(--muted)", "font-size": "9.5", "text-anchor": "middle" }, "无任何耦合畸变");
 
       } else if (mode === "vs") {
         // Left side: Mutex
-        s("rect", { x: 25, y: 20, width: 235, height: 165, rx: 8, fill: "#fef2f2", stroke: "#fca5a5", "stroke-width": 1.5 });
-        s("text", { x: 142, y: 45, fill: "#dc2626", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "互斥事件 (极端排斥)");
+        s("rect", { x: 25, y: 20, width: 235, height: 165, rx: 8, fill: "var(--no-soft)", stroke: "#fca5a5", "stroke-width": 1.5 });
+        s("text", { x: 142, y: 45, fill: "var(--no)", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "正概率互斥事件");
 
-        s("circle", { cx: 85, cy: 95, r: 35, fill: "#ffffff", stroke: "#dc2626", "stroke-width": 1.5 });
-        s("text", { x: 85, y: 100, fill: "#dc2626", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "A");
+        s("circle", { cx: 85, cy: 95, r: 35, fill: "var(--card)", stroke: "var(--no)", "stroke-width": 1.5 });
+        s("text", { x: 85, y: 100, fill: "var(--no)", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "A");
 
-        s("circle", { cx: 195, cy: 95, r: 35, fill: "#ffffff", stroke: "#dc2626", "stroke-width": 1.5 });
-        s("text", { x: 195, y: 100, fill: "#dc2626", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "B");
+        s("circle", { cx: 195, cy: 95, r: 35, fill: "var(--card)", stroke: "var(--no)", "stroke-width": 1.5 });
+        s("text", { x: 195, y: 100, fill: "var(--no)", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "B");
 
-        s("text", { x: 142, y: 148, fill: "#b91c1c", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0");
-        s("text", { x: 142, y: 168, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "A 发生则 B 必不发生（强相关）");
+        s("text", { x: 142, y: 148, fill: "var(--no)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0");
+        s("text", { x: 142, y: 168, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "不能同时发生，故不独立");
 
         // Right side: Independent
-        s("rect", { x: 280, y: 20, width: 235, height: 165, rx: 8, fill: "#f0fdf4", stroke: "#86efac", "stroke-width": 1.5 });
-        s("text", { x: 397, y: 45, fill: "#15803d", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "相互独立事件 (互不干扰)");
+        s("rect", { x: 280, y: 20, width: 235, height: 165, rx: 8, fill: "var(--ok-soft)", stroke: "#86efac", "stroke-width": 1.5 });
+        s("text", { x: 397, y: 45, fill: "var(--a)", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "正概率独立事件");
 
-        s("circle", { cx: 365, cy: 95, r: 38, fill: "rgba(37,99,235,0.15)", stroke: "#2563eb", "stroke-width": 1.5 });
-        s("circle", { cx: 430, cy: 95, r: 38, fill: "rgba(5,150,105,0.15)", stroke: "#059669", "stroke-width": 1.5 });
-        s("text", { x: 345, y: 99, fill: "#1d4ed8", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "A");
-        s("text", { x: 450, y: 99, fill: "#047857", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "B");
+        s("circle", { cx: 365, cy: 95, r: 38, fill: "rgba(37,99,235,0.15)", stroke: "var(--c)", "stroke-width": 1.5 });
+        s("circle", { cx: 430, cy: 95, r: 38, fill: "rgba(5,150,105,0.15)", stroke: "var(--a)", "stroke-width": 1.5 });
+        s("text", { x: 345, y: 99, fill: "var(--c)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "A");
+        s("text", { x: 450, y: 99, fill: "var(--a)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "B");
 
-        s("text", { x: 397, y: 99, fill: "#0f172a", "font-size": "9", "font-weight": "bold", "text-anchor": "middle" }, "AB");
-        s("text", { x: 397, y: 148, fill: "#15803d", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = P(A) · P(B) > 0");
-        s("text", { x: 397, y: 168, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "各自概率毫无影响");
+        s("text", { x: 397, y: 99, fill: "var(--fg)", "font-size": "9", "font-weight": "bold", "text-anchor": "middle" }, "AB");
+        s("text", { x: 397, y: 148, fill: "var(--a)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = P(A) · P(B) > 0");
+        s("text", { x: 397, y: 168, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "各自概率毫无影响");
 
       } else if (mode === "opp") {
         // Transmission of Independence
-        s("rect", { x: 40, y: 25, width: 460, height: 155, rx: 8, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1.5 });
-        s("text", { x: 270, y: 52, fill: "#0f172a", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "对立独立全息四等价群");
+        s("rect", { x: 40, y: 25, width: 460, height: 155, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
+        s("text", { x: 270, y: 52, fill: "var(--fg)", "font-size": "13", "font-weight": "bold", "text-anchor": "middle" }, "对立独立全息四等价群");
 
         // 4 nodes in a 2x2 grid
         var nodes = [
-          { x: 130, y: 85, t: "A 与 B 独立", c: "#2563eb", bg: "rgba(37,99,235,0.1)" },
-          { x: 410, y: 85, t: "A 与 B̄ 独立", c: "#059669", bg: "rgba(5,150,105,0.1)" },
-          { x: 130, y: 140, t: "Ā 与 B 独立", c: "#059669", bg: "rgba(5,150,105,0.1)" },
-          { x: 410, y: 140, t: "Ā 与 B̄ 独立", c: "#d97706", bg: "rgba(217,119,6,0.1)" }
+          { x: 130, y: 85, t: "A 与 B 独立", c: "var(--c)", bg: "rgba(37,99,235,0.1)" },
+          { x: 410, y: 85, t: "A 与 B̄ 独立", c: "var(--a)", bg: "rgba(5,150,105,0.1)" },
+          { x: 130, y: 140, t: "Ā 与 B 独立", c: "var(--a)", bg: "rgba(5,150,105,0.1)" },
+          { x: 410, y: 140, t: "Ā 与 B̄ 独立", c: "var(--b)", bg: "rgba(217,119,6,0.1)" }
         ];
 
         nodes.forEach(function(n) {
@@ -663,12 +663,12 @@
         });
 
         // Double arrows between them
-        s("line", { x1: 215, y1: 85, x2: 325, y2: 85, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
-        s("line", { x1: 215, y1: 140, x2: 325, y2: 140, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
-        s("line", { x1: 130, y1: 106, x2: 130, y2: 119, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
-        s("line", { x1: 410, y1: 106, x2: 410, y2: 119, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 215, y1: 85, x2: 325, y2: 85, stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 215, y1: 140, x2: 325, y2: 140, stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 130, y1: 106, x2: 130, y2: 119, stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("line", { x1: 410, y1: 106, x2: 410, y2: 119, stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
 
-        s("text", { x: 270, y: 115, fill: "#dc2626", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "一真俱真，一假俱假！");
+        s("text", { x: 270, y: 115, fill: "var(--no)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "一真俱真，一假俱假！");
       }
 
       if (capEl) capEl.textContent = caps[mode];
@@ -703,24 +703,24 @@
     }
 
     // Left block: Mutex
-    s("rect", { x: 30, y: 20, width: 220, height: 130, rx: 6, fill: "#ffffff", stroke: "#e2e8f0", "stroke-width": 1.5 });
-    s("text", { x: 140, y: 42, fill: "#dc2626", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "互斥：交集强制为 0");
-    s("circle", { cx: 90, cy: 80, r: 28, fill: "rgba(220,38,38,0.1)", stroke: "#dc2626" });
-    s("text", { x: 90, y: 84, fill: "#dc2626", "font-size": "11", "text-anchor": "middle" }, "A");
-    s("circle", { cx: 190, cy: 80, r: 28, fill: "rgba(220,38,38,0.1)", stroke: "#dc2626" });
-    s("text", { x: 190, y: 84, fill: "#dc2626", "font-size": "11", "text-anchor": "middle" }, "B");
-    s("text", { x: 140, y: 125, fill: "#b91c1c", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0 ≠ P(A)P(B)");
-    s("text", { x: 140, y: 140, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "正概率互斥，一定不独立！");
+    s("rect", { x: 30, y: 20, width: 220, height: 130, rx: 6, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
+    s("text", { x: 140, y: 42, fill: "var(--no)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "互斥：交集强制为 0");
+    s("circle", { cx: 90, cy: 80, r: 28, fill: "rgba(220,38,38,0.1)", stroke: "var(--no)" });
+    s("text", { x: 90, y: 84, fill: "var(--no)", "font-size": "11", "text-anchor": "middle" }, "A");
+    s("circle", { cx: 190, cy: 80, r: 28, fill: "rgba(220,38,38,0.1)", stroke: "var(--no)" });
+    s("text", { x: 190, y: 84, fill: "var(--no)", "font-size": "11", "text-anchor": "middle" }, "B");
+    s("text", { x: 140, y: 125, fill: "var(--no)", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = 0 ≠ P(A)P(B)");
+    s("text", { x: 140, y: 140, fill: "var(--muted)", "font-size": "9.5", "text-anchor": "middle" }, "正概率互斥，一定不独立！");
 
     // Right block: Independent
-    s("rect", { x: 290, y: 20, width: 220, height: 130, rx: 6, fill: "#ffffff", stroke: "#e2e8f0", "stroke-width": 1.5 });
-    s("text", { x: 400, y: 42, fill: "#059669", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "独立：交集恰好等于乘积");
-    s("circle", { cx: 375, cy: 80, r: 30, fill: "rgba(37,99,235,0.15)", stroke: "#2563eb" });
-    s("circle", { cx: 425, cy: 80, r: 30, fill: "rgba(5,150,105,0.15)", stroke: "#059669" });
-    s("text", { x: 355, y: 84, fill: "#1d4ed8", "font-size": "10.5", "text-anchor": "middle" }, "A");
-    s("text", { x: 445, y: 84, fill: "#047857", "font-size": "10.5", "text-anchor": "middle" }, "B");
-    s("text", { x: 400, y: 125, fill: "#047857", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = P(A) · P(B) > 0");
-    s("text", { x: 400, y: 140, fill: "#64748b", "font-size": "9.5", "text-anchor": "middle" }, "正概率独立，交集绝对非空！");
+    s("rect", { x: 290, y: 20, width: 220, height: 130, rx: 6, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
+    s("text", { x: 400, y: 42, fill: "var(--a)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "独立：交集恰好等于乘积");
+    s("circle", { cx: 375, cy: 80, r: 30, fill: "rgba(37,99,235,0.15)", stroke: "var(--c)" });
+    s("circle", { cx: 425, cy: 80, r: 30, fill: "rgba(5,150,105,0.15)", stroke: "var(--a)" });
+    s("text", { x: 355, y: 84, fill: "var(--c)", "font-size": "10.5", "text-anchor": "middle" }, "A");
+    s("text", { x: 445, y: 84, fill: "var(--a)", "font-size": "10.5", "text-anchor": "middle" }, "B");
+    s("text", { x: 400, y: 125, fill: "var(--a)", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "P(AB) = P(A) · P(B) > 0");
+    s("text", { x: 400, y: 140, fill: "var(--muted)", "font-size": "9.5", "text-anchor": "middle" }, "正概率独立，交集绝对非空！");
   }
 
   initMIndepFig();

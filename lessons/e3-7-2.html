@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -774,29 +774,30 @@
     function drawTrap() {
       if (!trapFig) return;
       trapFig.innerHTML = "";
-      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "正确归一：∑ pᵢ = 0.3 + 0.6 + 0.1 = 1.0"));
-      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#ef4444"}, "错误疏漏：求和 ≠ 1（漏项或算错）"));
+      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "var(--a)"}, "正确归一：∑ pᵢ = 0.3 + 0.6 + 0.1 = 1.0"));
+      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "var(--no)"}, "错误疏漏：求和 ≠ 1（漏项或算错）"));
 
       // Left bar (1.0 perfect)
-      trapFig.appendChild(el("rect", {x: 60, y: 40, width: 160, height: 60, rx: 6, fill: "#e8f5e9", stroke: "#10b981", "stroke-width": "2"}));
-      trapFig.appendChild(el("rect", {x: 60, y: 40, width: 48, height: 60, fill: "#e3f2fd", stroke: "#1976d2", "stroke-width": "1"}));
-      trapFig.appendChild(el("text", {x: 84, y: 75, "text-anchor": "middle", "font-size": "11", fill: "#1976d2"}, "0.3"));
-      trapFig.appendChild(el("rect", {x: 108, y: 40, width: 96, height: 60, fill: "#e8f5e9", stroke: "#2e7d32", "stroke-width": "1"}));
-      trapFig.appendChild(el("text", {x: 156, y: 75, "text-anchor": "middle", "font-size": "11", fill: "#2e7d32"}, "0.6"));
-      trapFig.appendChild(el("rect", {x: 204, y: 40, width: 16, height: 60, fill: "#fef3c7", stroke: "#d97706", "stroke-width": "1"}));
-      trapFig.appendChild(el("text", {x: 212, y: 75, "text-anchor": "middle", "font-size": "9", fill: "#d97706"}, "0.1"));
-      trapFig.appendChild(el("text", {x: 140, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "严丝合缝填满 100%"));
+      trapFig.appendChild(el("rect", {x: 60, y: 40, width: 160, height: 60, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": "2"}));
+      trapFig.appendChild(el("rect", {x: 60, y: 40, width: 48, height: 60, fill: "var(--card)", stroke: "var(--c)", "stroke-width": "1"}));
+      trapFig.appendChild(el("text", {x: 84, y: 75, "text-anchor": "middle", "font-size": "11", fill: "var(--c)"}, "0.3"));
+      trapFig.appendChild(el("rect", {x: 108, y: 40, width: 96, height: 60, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": "1"}));
+      trapFig.appendChild(el("text", {x: 156, y: 75, "text-anchor": "middle", "font-size": "11", fill: "var(--a)"}, "0.6"));
+      trapFig.appendChild(el("rect", {x: 204, y: 40, width: 16, height: 60, fill: "var(--hl-soft)", stroke: "var(--b)", "stroke-width": "1"}));
+      trapFig.appendChild(el("text", {x: 212, y: 75, "text-anchor": "middle", "font-size": "9", fill: "var(--b)"}, "0.1"));
+      trapFig.appendChild(el("text", {x: 140, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "var(--a)"}, "严丝合缝填满 100%"));
 
       // Separator
       trapFig.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 135, stroke: "var(--line)", "stroke-width": "1"}));
 
       // Right bar (gap)
-      trapFig.appendChild(el("rect", {x: 320, y: 40, width: 160, height: 60, rx: 6, fill: "#f3f4f6", stroke: "var(--line)", "stroke-width": "1.5"}));
-      trapFig.appendChild(el("rect", {x: 320, y: 40, width: 110, height: 60, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": "1"}));
-      trapFig.appendChild(el("text", {x: 375, y: 75, "text-anchor": "middle", "font-size": "11", fill: "#ef4444"}, "和为 0.85"));
-      trapFig.appendChild(el("rect", {x: 430, y: 40, width: 50, height: 60, fill: "none", stroke: "#ef4444", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
-      trapFig.appendChild(el("text", {x: 455, y: 75, "text-anchor": "middle", "font-size": "10", fill: "#ef4444"}, "缺口 0.15"));
-      trapFig.appendChild(el("text", {x: 400, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "存在漏项或组合数计算失误！"));
+      var unitWidth = 160, total = 0.85, filledWidth = unitWidth * total, gapWidth = unitWidth - filledWidth;
+      trapFig.appendChild(el("rect", {x: 320, y: 40, width: unitWidth, height: 60, fill: "var(--card)", stroke: "var(--line)", "stroke-width": "1.5"}));
+      trapFig.appendChild(el("rect", {x: 320, y: 40, width: filledWidth, height: 60, fill: "var(--no-soft)", stroke: "var(--no)", "stroke-width": "1"}));
+      trapFig.appendChild(el("text", {x: 320 + filledWidth / 2, y: 75, "text-anchor": "middle", "font-size": "11", fill: "var(--no)"}, "和为 " + total));
+      trapFig.appendChild(el("rect", {x: 320 + filledWidth, y: 40, width: gapWidth, height: 60, fill: "none", stroke: "var(--no)", "stroke-width": "1.5", "stroke-dasharray": "3 2"}));
+      trapFig.appendChild(el("text", {x: 320 + filledWidth + gapWidth / 2, y: 115, "text-anchor": "middle", "font-size": "10", fill: "var(--no)"}, "缺口 " + (1 - total).toFixed(2)));
+      trapFig.appendChild(el("text", {x: 400, y: 132, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "var(--no)"}, "存在漏项或计算失误"));
     }
 
     tabs.forEach(function(tab) {

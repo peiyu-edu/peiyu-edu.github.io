@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -890,14 +890,8 @@
     var trap = document.getElementById("m-trig-trap-fig");
     if (!fig || !bar) return;
 
-    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    var ca = isDark ? "#38bdf8" : "#0284c7";
-    var cb = isDark ? "#f59e0b" : "#d97706";
-    var cc = isDark ? "#10b981" : "#059669";
-    var cd = isDark ? "#ec4899" : "#db2777";
-    var mut = isDark ? "#94a3b8" : "#64748b";
-    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
-    var border = isDark ? "#334155" : "#e2e8f0";
+    var ca = "var(--a)", cb = "var(--b)", cc = "var(--c)", cd = "var(--no)";
+    var mut = "var(--muted)", bgCard = "var(--card)", border = "var(--line)";
 
     function sEl(parent, tag, attrs) {
       var el = document.createElementNS(NS, tag);
@@ -930,7 +924,11 @@
 
     function drawTrigComp(mode) {
       fig.innerHTML = "";
-      var cx = 110, cy = 110;
+      var cx = 110, cy = 110, unit = 35;
+      function point(r, deg) {
+        var angle = deg * Math.PI / 180;
+        return {x: cx + unit * r * Math.cos(angle), y: cy - unit * r * Math.sin(angle)};
+      }
       if (mode === "polar") {
         sTxt(fig, 30, 24, "【极坐标与三角形式】z = r(cos θ + i sin θ)，向径 r > 0，辐角 θ", ca, 12.5, 700);
         // circles r = 35, 70
@@ -939,18 +937,18 @@
         sArr(fig, cx - 60, cy, cx + 90, cy, mut, 1.2);
         sArr(fig, cx, cy + 60, cx, cy - 85, mut, 1.2);
 
-        // Vector Z(r=70, theta=45 deg) -> (cx + 49.5, cy - 49.5)
-        sArr(fig, cx, cy, cx + 50, cy - 50, cc, 2.8);
-        sEl(fig, "circle", { cx: cx + 50, cy: cy - 50, r: 4, fill: cc });
-        sTxt(fig, cx + 50, cy - 58, "Z(r, θ)", cc, 12, 700, "middle");
+        var p = point(2, 45); // Common scale: 35 SVG units per modulus unit.
+        sArr(fig, cx, cy, p.x, p.y, cc, 2.8);
+        sEl(fig, "circle", { cx: p.x, cy: p.y, r: 4, fill: cc });
+        sTxt(fig, p.x, p.y - 8, "Z(r, θ)", cc, 12, 700, "middle");
 
         // Angle arc
-        sEl(fig, "path", { d: "M " + (cx + 25) + " " + cy + " A 25 25 0 0 0 " + (cx + 18) + " " + (cy - 18), fill: "none", stroke: cb, "stroke-width": 1.5 });
+        sEl(fig, "path", { d: "M " + (cx + 25) + " " + cy + " A 25 25 0 0 0 " + (cx + 25 / Math.SQRT2) + " " + (cy - 25 / Math.SQRT2), fill: "none", stroke: cb, "stroke-width": 1.5 });
         sTxt(fig, cx + 28, cy - 8, "θ", cb, 12, 700);
         sTxt(fig, cx + 22, cy - 35, "r", ca, 12, 700);
 
         sTxt(fig, 280, 55, "• 向径 r = |z| = √(a² + b²) 必为正数", ca, 12, 700);
-        sTxt(fig, 280, 85, "• 辐角 θ：正实轴顺时针逆时针旋转角", cb, 12);
+        sTxt(fig, 280, 85, "• 辐角 θ：从正实轴起，逆时针为正角、顺时针为负角", cb, 12);
         sTxt(fig, 280, 115, "• 辐角主值 arg z ∈ [0, 2π) 唯一确定", cc, 12, 700);
         sTxt(fig, 280, 145, "• 零向量 0 无确定射线，规定 0 无辐角！", cd, 12, 700);
 
@@ -960,18 +958,16 @@
         sArr(fig, cx - 60, cy, cx + 110, cy, mut, 1.2);
         sArr(fig, cx, cy + 60, cx, cy - 85, mut, 1.2);
 
-        // z1 = 1.2 (30 deg) -> (cx + 42, cy - 24)
-        sArr(fig, cx, cy, cx + 42, cy - 24, ca, 2.2);
-        sTxt(fig, cx + 46, cy - 22, "z₁(r₁, θ₁)", ca, 11, 700);
+        var p1 = point(1.2, 30), p2 = point(1.5, 45), result = point(1.2 * 1.5, 30 + 45);
+        sArr(fig, cx, cy, p1.x, p1.y, ca, 2.2);
+        sTxt(fig, p1.x + 4, p1.y + 2, "z₁(r₁, θ₁)", ca, 11, 700);
 
-        // z2 = 1.5 (45 deg) -> (cx + 37, cy - 37)
-        sArr(fig, cx, cy, cx + 37, cy - 37, cb, 2.2);
-        sTxt(fig, cx + 15, cy - 45, "z₂(r₂, θ₂)", cb, 11, 700);
+        sArr(fig, cx, cy, p2.x, p2.y, cb, 2.2);
+        sTxt(fig, p2.x - 22, p2.y - 8, "z₂(r₂, θ₂)", cb, 11, 700);
 
-        // z1 * z2 = 1.8 (75 deg) -> (cx + 17, cy - 65)
-        sArr(fig, cx, cy, cx + 18, cy - 66, cc, 3.2);
-        sEl(fig, "circle", { cx: cx + 18, cy: cy - 66, r: 4.5, fill: cc });
-        sTxt(fig, cx + 26, cy - 70, "z₁z₂ (r₁r₂, θ₁+θ₂)", cc, 12.5, 700);
+        sArr(fig, cx, cy, result.x, result.y, cc, 3.2);
+        sEl(fig, "circle", { cx: result.x, cy: result.y, r: 4.5, fill: cc });
+        sTxt(fig, result.x + 8, result.y - 4, "z₁z₂ (r₁r₂, θ₁+θ₂)", cc, 12.5, 700);
 
         sTxt(fig, 260, 55, "• 模长：r = r₁ · r₂ (长度相乘伸缩)", ca, 12.5, 700);
         sTxt(fig, 260, 85, "• 辐角：θ = θ₁ + θ₂ (角度相加逆时针转)", cb, 12.5, 700);
@@ -981,29 +977,27 @@
         status.textContent = "几何乘法：复数相乘把两个旋转角相加、两个长度相乘，彻底免去多项式展开的繁琐。";
       } else {
         // mode === "div"
-        sTxt(fig, 30, 24, "【几何除法】模相除、角相减：反向旋转与几何缩短", cc, 12.5, 700);
+        sTxt(fig, 30, 24, "【几何除法】模相除、角相减：旋转与伸缩", cc, 12.5, 700);
         sArr(fig, cx - 60, cy, cx + 110, cy, mut, 1.2);
         sArr(fig, cx, cy + 60, cx, cy - 85, mut, 1.2);
 
-        // z1 = 2 (75 deg) -> (cx + 18, cy - 66)
-        sArr(fig, cx, cy, cx + 18, cy - 66, cc, 2.5);
-        sTxt(fig, cx + 22, cy - 68, "被除数 z₁(r₁, θ₁)", cc, 11, 700);
+        var p1 = point(2, 75), p2 = point(1.5, 45), result = point(2 / 1.5, 75 - 45);
+        sArr(fig, cx, cy, p1.x, p1.y, cc, 2.5);
+        sTxt(fig, p1.x + 4, p1.y - 2, "被除数 z₁(r₁, θ₁)", cc, 11, 700);
 
-        // z2 = 1.5 (45 deg) -> (cx + 37, cy - 37)
-        sArr(fig, cx, cy, cx + 37, cy - 37, cb, 2.2);
-        sTxt(fig, cx + 42, cy - 38, "除数 z₂(r₂, θ₂)", cb, 11, 700);
+        sArr(fig, cx, cy, p2.x, p2.y, cb, 2.2);
+        sTxt(fig, p2.x + 5, p2.y - 1, "除数 z₂(r₂, θ₂)", cb, 11, 700);
 
-        // z1 / z2 = 1.33 (30 deg) -> (cx + 45, cy - 26)
-        sArr(fig, cx, cy, cx + 46, cy - 26, cd, 3);
-        sEl(fig, "circle", { cx: cx + 46, cy: cy - 26, r: 4, fill: cd });
-        sTxt(fig, cx + 52, cy - 24, "商 z₁/z₂ (r₁/r₂, θ₁-θ₂)", cd, 12, 700);
+        sArr(fig, cx, cy, result.x, result.y, cd, 3);
+        sEl(fig, "circle", { cx: result.x, cy: result.y, r: 4, fill: cd });
+        sTxt(fig, result.x + 6, result.y + 2, "商 z₁/z₂ (r₁/r₂, θ₁-θ₂)", cd, 12, 700);
 
         sTxt(fig, 260, 55, "• 模长相除：r = r₁ / r₂ (要求除数 z₂ ≠ 0)", cd, 12.5, 700);
         sTxt(fig, 260, 85, "• 辐角相减：θ = θ₁ - θ₂ (顺时针转回 θ₂)", cc, 12.5, 700);
         sTxt(fig, 260, 115, "• 出现负角：加 2π 规范化为 [0, 2π) 主值", cb, 12);
         sTxt(fig, 260, 145, "• 免去共轭实数化：直接模除角减出答案", ca, 12);
 
-        status.textContent = "几何除法：商的模是模相除，商的辐角是角相减，若结果为负角加上 2π 即可得主值。";
+        status.textContent = "几何除法要求除数非零。相对被除数，除数的模大于1时缩短，等于1时模不变，小于1时反而放大（例如1÷0.5=2）。辐角相减后按2π取模得到[0,2π)中的代表角；零复数没有辐角。";
       }
     }
 

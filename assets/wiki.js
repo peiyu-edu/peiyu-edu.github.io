@@ -187,9 +187,9 @@
       id: "fn-abstract-ineq", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "奇偶性与单调性结合：脱去外层「f」解抽象不等式",
-      keywords: ["抽象函数", "脱f", "奇偶性", "单调性", "定义域", "绝对值"],
+      keywords: ["抽象不等式","脱去外层","奇偶性与单调性结合"],
       trig: "已知 \\(f(x)\\) 的奇偶性和单调性，求解 \\(f(2x-1) < f(x+2)\\) 或 \\(f(x-1)+f(2x) < 0\\)。",
-      key: "<b>分类标准步骤</b>：<br>• <b>奇函数（两侧同单调）</b>：移项变负 \\(f(u)+f(v)<0 \\Rightarrow f(u)<-f(v)=f(-v)\\)，直接由单调性脱去 \\(f\\)；<br>• <b>偶函数（两侧反单调）</b>：先加绝对值 \\(f(u)<f(v) \\iff f(|u|)<f(|v|)\\)，把自变量全转到 \\([0,+\\infty)\\) 上，再由 \\([0,+\\infty)\\) 单调性脱去 \\(f\\) 得 \\(|u|<|v|\\)（两边平方求解）；<br>• <b>必须同步联立定义域</b>：若定义域为 \\([a,b]\\)，脱 \\(f\\) 时必须同时满足 \\(a\\le u\\le b\\) 且 \\(a\\le v\\le b\\)。",
+      key: "<b>分类标准步骤</b>：<br>• <b>奇函数</b>：由奇性将 \\(f(u)+f(v)<0\\) 化为 \\(f(u)<f(-v)\\)。只有当 \\(u,-v\\) 同在一个严格单调区间内，才可按该区间的递增或递减方向脱去 \\(f\\)。<br>• <b>偶函数</b>：在对称定义域内有 \\(f(u)=f(|u|)\\)、\\(f(v)=f(|v|)\\)。若 \\(f\\) 在包含 \\(|u|,|v|\\) 的非负定义域区间上<b>严格递增</b>，则 \\(f(u)<f(v)\\iff |u|<|v|\\)；若在该区间上<b>严格递减</b>，则 \\(f(u)<f(v)\\iff |u|>|v|\\)。<br>• <b>必须同步联立定义域</b>：先要求 \\(u,v\\) 在定义域内，再核查变换后的自变量属于所用的同一单调区间；不可把“单调”一律当成递增。",
       warn: "绝不能只脱 \\(f\\) 而漏掉定义域！高考试题几乎总在定义域端点处设置多解或扣分陷阱。",
       more: "构造函数延伸：若题干给出 \\(x_1 f(x_1) > x_2 f(x_2)\\)，优先构造辅助函数 \\(F(x)=x\\cdot f(x)\\) 并研究其奇偶性与单调性。",
       rel: ["fn-mono-def", "fn-parity-core"]
@@ -241,8 +241,8 @@
       title: "实际应用建模：定义域实际约束与顶点/端点最值",
       keywords: ["应用", "分段", "建模", "最值"],
       trig: "围栏面积、阶梯计费、利润最大化等实际函数建模题。",
-      key: "1. <b>先列实际定义域</b>（边长 \\(>0\\)、墙长限制、整数约束）。<br>2. 二次函数模型求最值时，先看<b>对称轴 \\(x=-\\dfrac{b}{2a}\\) 是否落在允许区间内</b>：在区间内则顶点取最值，不在区间内则由单调性在端点取最值。",
-      warn: "分段计费问题注意各段分界点（如 \\(x=100\\)）的函数值衔接，切勿重复计费或漏掉基础档费用。",
+      key: "1. <b>先列实际定义域</b>：核边长正值、墙长、计费方式及整数可行性；为找最优筛出的区间不等于原定义域。<br>2. <b>二次模型先查任务与开口</b>：\\(f(x)=Ax^2+Bx+C\\)，\\(A\\ne0\\)。在有限闭区间 \\([L,U]\\) 上，开口向下求最大值、或开口向上求最小值时，才先查顶点横坐标 \\(-B/(2A)\\) 是否在区间内；可取时用顶点，不在时比较端点。<b>开口向上求最大、向下求最小，都比较两端值</b>，不能笼统说“顶点在内取顶点”。<br>3. <b>区间与可行性不能省</b>：开区间的端点不可取，可能只有上、下界而没有最值；无界区间还须查是否无界。整数输入应比较顶点附近的允许整数及边界；\\(A=0\\) 则另按一次或常函数处理。",
+      warn: "分段计费先说明按实际时长连续计费，还是按档取整；界点归哪段、是否连续都由题意决定。核对分界处的真实费用，避免重复计费或漏掉基础档，不能默认所有分段函数都连续。",
       rel: ["quad-always-true", "amgm-hook"]
     },
     {
@@ -261,8 +261,8 @@
       title: "指数函数图象性质、定点与底数分类讨论",
       keywords: ["指数函数", "定点", "底数", "复合单调"],
       trig: "求指数型函数定点、值域或解含参指数不等式 \\(a^{f(x)} > a^{g(x)}\\)。",
-      key: "1. <b>恒过定点</b>：令指数整体为 \\(0\\)，利用 \\(a^0=1\\) 求出定点坐标。<br>2. <b>单调性分底数</b>：\\(a>1\\) 时在 \\(\\mathbf R\\) 上递增；\\(0 < a < 1\\) 时在 \\(\\mathbf R\\) 上递减。<br>3. <b>复合单调「同增异减」</b>：\\(y=a^{u(x)}\\) 的单调性由外层底数 \\(a\\) 与内层 \\(u(x)\\) 共同决定。",
-      warn: "求复合函数 \\(y=a^{u(x)}\\) 的值域时，永远记住 \\(a^u > 0\\) 恒有下界 \\(0\\)（如 \\(u\\le 2\\) 且 \\(a=2\\) 时，值域是 \\((0,4]\\) 而不是 \\((-\\infty,4]\\)）！",
+      key: "1. <b>先查定义</b>：\\(y=a^x\\) 中 \\(a>0,a\\ne1\\)，定义域 \\(\\mathbb R\\)，值域 \\((0,+\\infty)\\)。\\(a>1\\) 递增，\\(0&lt;a&lt;1\\) 递减。<br>2. <b>同底与复合</b>：在两边指数都有意义的共同定义域内，递增时比较同向，递减时反向；\\(a^{u(x)}\\) 的增减还须结合 \\(u\\) 在相应区间的单调性。<br>3. <b>公共定点有结构前提</b>：对 \\(y=a^{u(x)}+c\\)，在 \\(u,c\\) 不随底数参数 \\(a\\) 变化的常见结构中，令 \\(u(x_0)=0\\) 即可得公共点 \\((x_0,1+c)\\)。指数外也含参数时另查，不能照搬。<br>4. <b>同指数比较正底数</b>：固定实数 \\(r\\)，若 \\(0&lt;b_1&lt;b_2\\)，则 \\(r>0\\) 时 \\(b_1^r&lt;b_2^r\\)，\\(r=0\\) 时同为 \\(1\\)，\\(r&lt;0\\) 时大小反转。",
+      warn: "完整值域须根据指数的<b>实际取值范围及端点能否取到</b>求。例如 \\(a=2\\) 且仅知 \\(u\\le2\\)，只能推出 \\(0&lt;2^u\\le4\\)，不能据此断定值域恰是 \\((0,4]\\)；若 \\(u\\equiv1\\)，值域其实为 \\(\\{2\\}\\)。\\(a=1\\) 的常函数可作参照，但按本节定义不算指数函数。",
       rel: ["explog-compare", "log-change-base"]
     },
     {
@@ -271,8 +271,8 @@
       title: "对数运算法则、换底公式与连等式指对互化",
       keywords: ["对数", "换底公式", "真数", "指对互化"],
       trig: "不同底对数相乘化简，或已知 \\(2^a=5^b=10\\) 求 \\(\\dfrac1a+\\dfrac1b\\)。",
-      key: "设 \\(a>0,a\\ne 1,\\ M,N>0\\)：<br>• \\(\\log_a(MN)=\\log_a M+\\log_a N\\)，\\(\\log_a\\dfrac{M}{N}=\\log_a M-\\log_a N\\)，\\(\\log_a(M^k)=k\\log_a M\\)。<br>• <b>换底公式及推论</b>：\\(\\log_a b=\\dfrac{\\ln b}{\\ln a}=\\dfrac{1}{\\log_b a}\\)，\\(\\log_{a^m}(b^n)=\\dfrac{n}{m}\\log_a b\\)，\\(a^{\\log_a N}=N\\)。",
-      warn: "拆开 \\(\\log_a(x^2)\\) 前必须看 \\(x\\) 正负（未知正负写成 \\(2\\log_a|x|\\)）；对数没有 \\(\\log_a(M+N)\\) 拆开公式！",
+      key: "设 \\(a>0,a\\ne1,M,N>0,k\\in\\mathbb R\\)：<br>• \\(\\log_a(MN)=\\log_a M+\\log_a N\\)，\\(\\log_a(M/N)=\\log_a M-\\log_a N\\)，\\(\\log_a(M^k)=k\\log_a M\\)。<br>• 换底：\\(\\log_a N=\\dfrac{\\log_c N}{\\log_c a}\\)，另要求 \\(c>0,c\\ne1\\)，分母不为零。<br>• 倒数关系 \\(\\log_a b=1/\\log_b a\\) 还要求 \\(b>0,b\\ne1\\)。<br>• \\(\\log_{a^m}(b^n)=\\dfrac nm\\log_a b\\) 要求 \\(b>0,m\\ne0,m,n\\in\\mathbb R\\)。<br>• \\(a^{\\log_a N}=N\\)（\\(N>0\\)），\\(\\log_a(a^t)=t\\)（\\(t\\in\\mathbb R\\)）。",
+      warn: "拆开 \\(\\log_a(x^2)\\) 必须保留 \\(x\\ne0\\)，一般写作 \\(2\\log_a|x|\\)；只有 \\(x>0\\) 才能写 \\(2\\log_a x\\)。原式每个真数都要正；不存在把 \\(\\log_a(M+N)\\) 拆为两个对数和的通用公式。",
       rel: ["exp-fn-prop", "explog-compare"]
     },
     {
@@ -309,7 +309,7 @@
       id: "trig-know1get2", ch: 5, sec: "b1-5-2", secName: "5.2 三角函数的概念",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "单位圆定义、同角「知一求二」与齐次式弦化切",
-      keywords: ["单位圆", "知一求二", "齐次式", "tan", "sin", "cos"],
+      keywords: ["同角三角函数","同角关系","知一求二","齐次式"],
       trig: "已知 \\(\\sin\\alpha\\pm\\cos\\alpha\\) 与 \\(\\sin\\alpha\\cos\\alpha\\) 之一求其余，或已知 \\(\\tan\\alpha\\) 求齐次式。",
       key: "1. <b>知一求二平方桥</b>：\\((\\sin\\alpha\\pm\\cos\\alpha)^2 = 1 \\pm 2\\sin\\alpha\\cos\\alpha\\)（开方时按象限判断正负）。<br>2. <b>齐次式弦化切</b>（已知 \\(\\tan\\alpha=m\\)）：<br>• 分式 \\(\\dfrac{a\\sin\\alpha+b\\cos\\alpha}{c\\sin\\alpha+d\\cos\\alpha}\\) 上下同除 \\(\\cos\\alpha\\)；<br>• 二次整式 \\(a\\sin^2\\alpha+b\\sin\\alpha\\cos\\alpha+c\\cos^2\\alpha\\) <b>先补除以 \\(\\sin^2\\alpha+\\cos^2\\alpha=1\\)</b>，再上下同除 \\(\\cos^2\\alpha\\)！",
       warn: "单位圆象限符号口诀：「一全正、二正弦、三正切、四余弦」。",
@@ -349,7 +349,7 @@
       id: "trig-shift-scale", lab: "trig-shift-scale", ch: 5, sec: "b1-5-6", secName: "5.6 函数 y=Asin(ωx+φ)",
       kind: "pitfall", kindLabel: "🔴 易错红线",
       title: "正弦型函数 y=Asin(ωx+φ) 伸缩平移铁律与由图求式",
-      keywords: ["平移", "伸缩", "Asin", "初相", "五点法"],
+      keywords: ["图象平移","横坐标伸缩","由图求式","五点法"],
       trig: "函数图象左右平移与横坐标伸缩，或由部分图象求 \\(A,\\omega,\\varphi\\)。",
       key: "1. <b>平移只对单个变量 \\(x\\) 生效</b>：从 \\(\\sin\\omega x\\) 移到 \\(\\sin(\\omega x+\\varphi)=\\sin\\left[\\omega\\left(x+\\dfrac{\\varphi}{\\omega}\\right)\\right]\\)，水平平移量是 <b>\\(\\left|\\dfrac{\\varphi}{\\omega}\\right|\\)</b>！<br>2. <b>由图象定解析式顺序</b>：① 最值定 \\(A\\)；② 相邻最值/零点间距定周期 \\(T\\Rightarrow \\omega=\\dfrac{2\\pi}{T}\\)；③ <b>代最高点或最低点坐标求 \\(\\varphi\\)</b>（比代零点更稳，不会搞错升降相位）。",
       warn: "若两个函数名不同（如 \\(\\cos 2x\\) 平移到 \\(\\sin 2x\\)），必须先用诱导公式化为同名函数再算平移量！若 \\(\\omega < 0\\)，先提负号化为 \\(\\omega > 0\\)。",
@@ -419,7 +419,7 @@
       id: "vec-sine-cosine-law", ch: 6, sec: "b2-6-4", secName: "6.4 平面向量的应用",
       kind: "formula", kindLabel: "🔵 公式与结论",
       title: "正弦定理、余弦定理与解三角形「边角互化」",
-      keywords: ["正弦定理", "余弦定理", "解三角形", "SSA", "面积公式"],
+      keywords: ["正弦定理","余弦定理","解三角形","SSA"],
       trig: "已知三角形部分边角求其余边角、外接圆半径或判断三角形解的个数。",
       key: "在 \\(\\Delta ABC\\) 中（\\(R\\) 为外接圆半径）：<br>• <b>正弦定理</b>：$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R$$（边化角：\\(a=2R\\sin A\\)；角化边：\\(\\sin A = \\dfrac{a}{2R}\\)）。<br>• <b>余弦定理</b>：$$c^2 = a^2 + b^2 - 2ab\\cos C,\\qquad \\cos C = \\frac{a^2+b^2-c^2}{2ab}$$<br>• <b>面积公式</b>：\\(S = \\dfrac12 ab\\sin C = \\dfrac12 bc\\sin A = \\dfrac12 ac\\sin B = \\dfrac{abc}{4R}\\)。",
       warn: "SSA 陷阱：已知两边 \\(a,b\\) 及对角 \\(A\\) 时，若 \\(A\\) 为锐角且 \\(b\\sin A &lt; a &lt; b\\)，三角形有<b>两解</b>（一锐角一钝角），绝不能只取计算出来的锐角！",
@@ -509,7 +509,7 @@
       id: "geo-parallel-circuits", ch: 8, sec: "b2-8-5", secName: "8.5 空间直线、平面的平行",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "空间线面平行与面面平行判定定理及转化回路",
-      keywords: ["线面平行", "面面平行", "线线平行", "判定定理", "性质定理"],
+      keywords: ["线面平行","面面平行","线线平行","平行判定定理","平行性质定理"],
       trig: "证明空间直线与平面平行、证明两个平面平行，或利用平行寻找交线。",
       key: "1. <b>线面平行判定</b>（线线\\(\\to\\)线面）：若 <b>\\(a\\not\\subset\\alpha\\)</b>，\\(b\\subset\\alpha\\)，且 <b>\\(a\\parallel b\\)</b>，则 <b>\\(a\\parallel\\alpha\\)</b>（面外线平行面内线）。<br>2. <b>线面平行性质</b>（线面\\(\\to\\)线线）：若 \\(a\\parallel\\alpha\\)，\\(a\\subset\\beta\\)，\\(\\alpha\\cap\\beta=b\\)，则 <b>\\(a\\parallel b\\)</b>（交线必平行）。<br>3. <b>面面平行判定</b>（线面\\(\\to\\)面面）：一个平面内的<b>两条相交直线</b>分别平行于另一个平面，则两平面平行（\\(a\\subset\\alpha, b\\subset\\alpha, a\\cap b=P, a\\parallel\\beta, b\\parallel\\beta \\Rightarrow \\alpha\\parallel\\beta\\)）。<br>4. <b>面面平行性质</b>（面面\\(\\to\\)线线）：\\(\\alpha\\parallel\\beta\\)，\\(\\gamma\\cap\\alpha=a\\)，\\(\\gamma\\cap\\beta=b \\Rightarrow a\\parallel b\\)。",
       warn: "线面平行判定书写证明时，漏写 \\(a\\not\\subset\\alpha\\) 必扣分！面面平行判定漏写「相交」条件必扣分（两条平行线平行另一平面无法锁定平面方向）！",
@@ -601,7 +601,7 @@
       title: "空间向量基本定理与四点共面充要条件",
       keywords: ["空间基底", "不共面", "四点共面", "基底展开", "x+y+z=1"],
       trig: "选择基底线性表示未知空间向量、证明四点共面或求参数值。",
-      key: "1. <b>空间基底</b>：三个<b>不共面</b>的向量 \\(\\{\\boldsymbol{e}_1,\\boldsymbol{e}_2,\\boldsymbol{e}_3\\}\\) 叫做空间的一个基底，任一向量 \\(\\boldsymbol{p}\\) 存在唯一的有序实数组 \\((x,y,z)\\) 使 \\(\\boldsymbol{p} = x\\boldsymbol{e}_1 + y\\boldsymbol{e}_2 + z\\boldsymbol{e}_3\\)。<br>2. <b>四点共面定理</b>：对空间任意一点 \\(O\\)，\\(P, A, B, C\\) 四点共面的充要条件是：<br>$$\\vec{OP} = x\\vec{OA} + y\\vec{OB} + z\\vec{OC}\\quad \\text{且}\\quad <b>x + y + z = 1</b>$$",
+      key: "1. <b>空间基底</b>：三个<b>不共面</b>的向量 \\(\\{\\boldsymbol{e}_1,\\boldsymbol{e}_2,\\boldsymbol{e}_3\\}\\) 叫做空间的一个基底，任一向量 \\(\\boldsymbol{p}\\) 存在唯一的有序实数组 \\((x,y,z)\\) 使 \\(\\boldsymbol{p} = x\\boldsymbol{e}_1 + y\\boldsymbol{e}_2 + z\\boldsymbol{e}_3\\)。<br>2. <b>四点共面定理</b>：当点 \\(A,B,C\\) 不共线时，对空间任意参考点 \\(O\\)，\\(P, A, B, C\\) 四点共面的充要条件是存在实数 \\(x,y,z\\) 使：<br>$$\\vec{OP} = x\\vec{OA} + y\\vec{OB} + z\\vec{OC}\\quad \\text{且}\\quad <b>x + y + z = 1</b>$$",
       warn: "仅「两两不共线」不能作为基底！三个向量若同在一个平面内，两两不共线但共面，绝不能构成空间基底；斜基底数量积展开必须保留 \\(\\boldsymbol{e}_i\\cdot\\boldsymbol{e}_j\\) 交叉项！",
       rel: ["vec3-ops-coplanar", "vec3-coord-ops", "vec-base-theorem"]
     },
@@ -621,7 +621,7 @@
       title: "空间向量法三大夹角与点面距离公式全景",
       keywords: ["法向量", "点面距离", "异面角", "线面角", "二面角", "sinθ"],
       trig: "用向量法求点到平面距离、异面直线所成角、线面角与二面角大小。",
-      key: "设直线方向向量为 \\(\\boldsymbol{u},\\boldsymbol{v}\\)，平面法向量为 \\(\\boldsymbol{n},\\boldsymbol{n}_1,\\boldsymbol{n}_2\\)：<br>• <b>点 \\(P\\) 到平面 \\(\\alpha\\) 距离</b>：$$d = \\frac{|\\vec{AP}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{n}|}\\quad (A\\in\\alpha)$$<br>• <b>异面直线所成角</b>：$$\\cos\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{v}|}{|\\boldsymbol{u}||\\boldsymbol{v}|}\\in(0,1],\\quad \\theta\\in(0, 90^\\circ]$$<br>• <b>直线与平面所成角</b>：$$\\sin\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{u}||\\boldsymbol{n}|}\\in[0,1],\\quad \\theta\\in[0, 90^\\circ]$$（注意是 <b>\\(\\sin\\theta\\)</b>，因为法向量与斜线的夹角和线面角互余！）。<br>• <b>二面角</b>：$$\\cos\\theta = \\pm\\frac{\\boldsymbol{n}_1\\cdot\\boldsymbol{n}_2}{|\\boldsymbol{n}_1||\\boldsymbol{n}_2|},\\quad \\theta\\in[0, 180^\\circ]$$",
+      key: "设直线方向向量为 \\(\\boldsymbol{u},\\boldsymbol{v}\\)，平面法向量为 \\(\\boldsymbol{n},\\boldsymbol{n}_1,\\boldsymbol{n}_2\\)：<br>• <b>点 \\(P\\) 到平面 \\(\\alpha\\) 距离</b>：$$d = \\frac{|\\vec{AP}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{n}|}\\quad (A\\in\\alpha)$$<br>• <b>异面直线所成角</b>：$$\\cos\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{v}|}{|\\boldsymbol{u}||\\boldsymbol{v}|}\\in[0,1),\\quad \\theta\\in(0, 90^\\circ]$$<br>• <b>直线与平面所成角</b>：$$\\sin\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{u}||\\boldsymbol{n}|}\\in[0,1],\\quad \\theta\\in[0, 90^\\circ]$$（注意是 <b>\\(\\sin\\theta\\)</b>，因为法向量与斜线的夹角和线面角互余！）。<br>• <b>二面角</b>：$$\\cos\\theta = \\pm\\frac{\\boldsymbol{n}_1\\cdot\\boldsymbol{n}_2}{|\\boldsymbol{n}_1||\\boldsymbol{n}_2|},\\quad \\theta\\in[0, 180^\\circ]$$",
       warn: "二面角绝不能机械取绝对值算成锐角！必须结合几何图形观察二面角是钝角（\\(\\cos\\theta&lt;0\\)）还是锐角（\\(\\cos\\theta&gt;0\\)）后确定正负号！",
       rel: ["vec3-coord-ops", "geo-perp-dihedral", "vec-dot-product"]
     },
@@ -679,7 +679,7 @@
       id: "conic-ellipse", lab: "conic-ellipse", ch: 13, sec: "e1-3-1", secName: "3.1 椭圆",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "椭圆严格几何定义、标准方程与几何量关系",
-      keywords: ["椭圆", "2a>2c", "长轴", "短轴", "离心率", "a²=b²+c²"],
+      keywords: ["椭圆","2a>2c","长轴","短轴","椭圆离心率","a²=b²+c²"],
       trig: "求椭圆标准方程、判断焦点所在轴、求离心率或计算焦点三角形面积。",
       key: "1. <b>严格定义</b>：到两焦点距离和 \\(|PF_1|+|PF_2|=2a\\)，必须满足 <b>\\(2a &gt; 2c &gt; 0\\)</b>（若 \\(2a=2c\\) 退化为线段 \\(F_1F_2\\)；若 \\(2a&lt;2c\\) 无轨迹）。<br>2. <b>标准方程看分母大小</b>：<br>• 焦点在 \\(x\\) 轴：\\(\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}=1\\)（\\(a&gt;b&gt;0\\)）；焦点在 \\(y\\) 轴：\\(\\dfrac{y^2}{a^2}+\\dfrac{x^2}{b^2}=1\\)。谁的分母大焦点就在哪个轴！<br>3. <b>几何量铁律</b>：<b>\\(a^2 = b^2 + c^2\\)</b>（\\(a\\) 最大！焦距为 \\(2c\\) 不是 \\(c\\)，长轴长为 \\(2a\\) 不是 \\(a\\)）。<br>4. <b>离心率</b>：\\(e = \\dfrac{c}{a}\\in(0,1)\\)（\\(e\\) 越大越扁，越小越圆）。",
       warn: "焦距是 \\(2c\\) 不是 \\(c\\)；长轴是 \\(2a\\) 不是 \\(a\\)；椭圆中 \\(a\\) 最大（\\(a^2=b^2+c^2\\)），切勿与勾股定理或双曲线混淆！",
@@ -699,7 +699,7 @@
       id: "conic-parabola", ch: 13, sec: "e1-3-3", secName: "3.3 抛物线",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "抛物线四种标准方程、焦半径公式与焦点准线转化法",
-      keywords: ["抛物线", "焦点", "准线", "焦半径", "x0+p/2", "转化法"],
+      keywords: ["抛物线","焦点","准线","抛物线焦半径","x0+p/2","转化法"],
       trig: "求抛物线焦点准线、求抛物线上点到焦点距离最值或焦半径计算。",
       key: "1. <b>严格定义</b>：到定点 \\(F\\) 与定直线 \\(l\\) 距离相等的点的轨迹（\\(F\\notin l\\)）。<br>2. <b>四种标准形式与除以 4 法则</b>：<br>• \\(y^2=2px\\ (p&gt;0)\\)：向右开，焦点 \\((\\dfrac{p}{2},0)\\)，准线 \\(x=-\\dfrac{p}{2}\\)；<br>• \\(y^2=-2px\\)：向左开，焦点 \\((-\\dfrac{p}{2},0)\\)，准线 \\(x=\\dfrac{p}{2}\\)；<br>• \\(x^2=2py\\)：向上开，焦点 \\((0,\\dfrac{p}{2})\\)，准线 \\(y=-\\dfrac{p}{2}\\)；<br>• \\(x^2=-2py\\)：向下开，焦点 \\((0,-\\dfrac{p}{2})\\)，准线 \\(y=\\dfrac{p}{2}\\)。<br>• <b>口诀</b>：一次项定开口方向，<b>一次项系数除以 4 为焦点坐标，除以 2 为 \\(p\\)</b>！<br>3. <b>焦半径转准线神器</b>：对 \\(y^2=2px\\)，曲线上点 \\(P(x_0,y_0)\\) 的焦半径 <b>\\(|PF| = d = x_0 + \\dfrac{p}{2}\\)</b>。",
       warn: "一次项系数除以 4 才是焦点坐标，切勿直接把 \\(2p\\) 当成焦点坐标！到定点的距离求最值，第一直觉必转化为「到准线的垂直距离」！",
@@ -781,8 +781,8 @@
       title: "分类加法与分步乘法两大计数原理核心模型",
       keywords: ["分类加法", "分步乘法", "计数原理", "完成一件事情", "互斥", "连续", "加法", "乘法"],
       trig: "求解涉及多途径、多阶段的方案计数问题，判断何时用加何时用乘。",
-      key: "1. <b>分类加法（或）：各类别相互独立、互不交叉，每一种方法都能独立直接把事情做完</b>。总方案数 \\(N = m_1 + m_2 + \\dots + m_k\\)。<br>2. <b>分步乘法（且）：各个步骤缺一不可、依次推进，只有所有步骤全部走完才算完成事情</b>。总方案数 \\(N = n_1 \\times n_2 \\times \\dots \\times n_k\\)。<br>3. <b>分类讨论原则</b>：不重不漏；分步原则：步与步之间相互独立、步骤连续完整。",
-      warn: "混淆「分类」与「分步」是计数最致命的源头！问自己核心问题：<b>只做其中某一步骤或方法，整件事算不算已经彻底做完了？</b>算（独立直达）则加，不算（只是其中一个阶段）则乘！",
+      key: "1. <b>分类加法（或）</b>：各类互不交叉且覆盖全部方案，每类中的每种方法都能单独完成整件事。总数 \\(N=m_1+\\cdots+m_k\\)。<br>2. <b>分步乘法（且）</b>：各步缺一不可。若每个已完成前缀在第 \\(i\\) 步都恰有固定的 \\(n_i\\) 种合法选择，则总数 \\(N=n_1\\cdots n_k\\)。后一步可选的具体对象可以依赖前一步，<b>不要求概率意义的相互独立</b>。<br>3. <b>核查分支数</b>：各步选择数须适用于每个合法前缀；若分支数不同，应先分类，再分别相乘后相加。",
+      warn: "先问一种方法能否单独完成整件事，再查分类是否不重不漏、每步后续选择数是否固定。例：从3张不同卡中不放回依次取2张，第二步能选哪张依赖第一步，但每次都剩2种，总数仍为 \\(3\\times2=6\\)，不能因“有依赖”就拒绝乘法计数。",
       rel: ["count-perm-comb", "prob-classical-events"]
     },
     {
@@ -829,7 +829,7 @@
       id: "rv-expect-variance", ch: 17, sec: "e3-7-3", secName: "7.3 离散型随机变量的数字特征",
       kind: "method", kindLabel: "🟡 解题方法",
       title: "离散型随机变量数学期望、方差与线性变换性质",
-      keywords: ["分布列", "数学期望", "均值", "方差", "标准差", "线性变换"],
+      keywords: ["数学期望","均值","方差","标准差","线性变换"],
       trig: "求离散型随机变量的分布列、数学期望 \\(E(X)\\)、方差 \\(D(X)\\)，或利用线性性质化简。",
       key: "1. <b>数学期望（加权平均重心）</b>：\\(E(X) = \\sum x_i p_i\\)。<br>2. <b>方差（离散程度）</b>：\\(D(X) = \\sum (x_i - E(X))^2 p_i = E(X^2) - [E(X)]^2\\)。<br>3. <b>线性性质</b>：\\(E(aX+b) = aE(X)+b\\)；<b>方差性质</b>：\\(D(aX+b) = a^2 D(X)\\)（常数 \\(b\\) 平移不改变波动，方差系数平方）。",
       warn: "写出分布列后第一步必先验证各概率之和 \\(\\sum p_i = 1\\)！方差计算切记乘以 \\(a^2\\)，常数 \\(b\\) 在方差中完全抵消。",
@@ -838,11 +838,11 @@
     {
       id: "rv-binomial-hypergeom", ch: 17, sec: "e3-7-4", secName: "7.4-7.5 二项分布、超几何分布与正态分布",
       kind: "concept", kindLabel: "🟢 概念与定义",
-      title: "二项分布（有放回）vs 超几何分布（不放回）核心模型对比",
-      keywords: ["二项分布", "超几何分布", "伯努利试验", "放回与不放回", "正态分布", "3sigma原则"],
-      trig: "判断实际问题属于二项分布还是超几何分布，计算其期望方差，或利用正态分布对称性求概率。",
-      key: "1. <b>二项分布 \\(X\\sim B(n,p)\\)</b>：各次试验相互独立（有放回抽样），\\(P(X=k)=C_n^k p^k (1-p)^{n-k}\\)，期望 \\(E(X)=np\\)，方差 \\(D(X)=np(1-p)\\)。<br>2. <b>超几何分布 \\(X\\sim H(N, M, n)\\)</b>：有限总体不放回抽样，\\(P(X=k)=\\dfrac{C_M^k C_{N-M}^{n-k}}{C_N^n}\\)，期望 \\(E(X)=n\\dfrac{M}{N}\\)。<br>3. <b>两分布联系与区别</b>：抽样后放回是二项分布；不放回是超几何分布。当总体容量 \\(N\\) 极大时，超几何分布近似等于二项分布（此时 \\(p=\\dfrac{M}{N}\\)）。",
-      warn: "判断二项分布还是超几何分布的核心看<b>「放回还是不放回」</b>！超几何分布的期望 \\(E(X)=n\\dfrac{M}{N}\\) 课标要求理解，但方差计算不作高考要求。",
+      title: "二项分布与超几何分布：试验及抽样条件核查",
+      keywords: ["二项分布","超几何分布","伯努利试验","放回与不放回"],
+      trig: "先核查成功次数模型的独立性、成功率与抽样方式，再决定能否套二项或超几何分布。",
+      key: "1. <b>二项分布</b>：\\(X\\) 计数固定 \\(n\\) 次试验中的成功次数；各次只有成功/失败两类，<b>相互独立且成功概率恒为同一个 \\(p\\)</b>，其中 \\(n\\) 为非负整数、\\(0\\le p\\le1\\)。此时 \\(X\\sim B(n,p)\\)，\\(P(X=k)=C_n^k p^k(1-p)^{n-k}\\)，\\(E(X)=np\\)，\\(D(X)=np(1-p)\\)。从同一总体独立等概率地有放回抽样是一个常见实现，<b>“放回”本身并不保证上述条件</b>。<br>2. <b>超几何分布</b>：总体有固定的 \\(N\\) 个个体，其中 \\(M\\) 个属目标类；<b>等概率抽取一个含 \\(n\\) 个个体的样本、且不放回</b>，\\(X\\) 是样本中目标类个数。要求 \\(N\\ge1\\)、\\(0\\le M\\le N\\)、\\(0\\le n\\le N\\) 且均为整数。则 \\(X\\sim H(N,M,n)\\)，\\(P(X=k)=\\dfrac{C_M^k C_{N-M}^{n-k}}{C_N^n}\\)，其中 \\(\\max(0,n-N+M)\\le k\\le\\min(n,M)\\)，\\(E(X)=nM/N\\)。<br>3. <b>近似有条件</b>：令 \\(p=M/N\\)，只有抽样比 \\(n/N\\) 足够小等条件满足、并符合所需精度时，才考虑用 \\(B(n,p)\\) 近似超几何分布；单说“总体很大”不够。",
+      warn: "不能只看放回/不放回。反例①：两次独立有放回试验的成功率分别为 \\(0.2,0.8\\)，成功次数分布为 \\((0.16,0.68,0.16)\\)，不是 \\(B(2,0.5)\\) 的 \\((0.25,0.5,0.25)\\)。反例②：3个个体中仅1个目标类，若有意将目标类必选进一个大小为2的不放回样本，则 \\(X=1\\) 必然发生；均匀抽样的 \\(H(3,1,2)\\) 却有 \\(P(X=1)=2/3\\)。反例③：即使 \\(N\\) 很大，若抽全体 \\(n=N\\)，则 \\(X=M\\) 是常数，不能仅凭 \\(N\\) 大就近似成有正方差的二项分布。",
       rel: ["rv-expect-variance", "rv-normal-distribution", "prob-independence", "count-perm-comb"]
     },
     {
@@ -859,7 +859,7 @@
       id: "bivar-corr-r", ch: 18, sec: "e3-8-1", secName: "8.1 成对数据的统计相关性",
       kind: "formula", kindLabel: "🔵 公式与结论",
       title: "样本相关系数 r 判定线性相关方向与强弱",
-      keywords: ["成对数据", "散点图", "相关系数r", "正相关", "负相关", "线性相关强弱"],
+      keywords: ["相关系数","散点图","相关系数r","正相关","负相关","线性相关强弱"],
       trig: "由散点图或数据计算相关系数 \\(r\\)，定性或定量分析两变量的相关性与强弱。",
       key: "1. <b>样本相关系数公式</b>：\\[r = \\dfrac{\\sum (x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum (x_i-\\bar{x})^2}\\sqrt{\\sum (y_i-\\bar{y})^2}}\\]<br>2. <b>数值意义</b>：分母中两个平方和都须非零，且 \\(|r|\\le 1\\)。\\(r>0\\) 为正相关，\\(r<0\\) 为负相关。<br>3. <b>怎么比强弱</b>：\\(|r|\\) 越接近 1，线性相关越强；越接近 0，线性相关越弱。比较几组数据时比 \\(|r|\\) 的大小。没有一个统一的「强相关」门槛，\\(r=0\\) 也不排除非线性关系。",
       warn: "相关关系绝不等于因果关系！不要用 \\(|r|>0.75\\) 这类无来源的阈值下结论。散点图呈抛物线等非线性趋势时，不能只拿线性相关系数 \\(r\\) 说话。",
@@ -1040,14 +1040,15 @@
     try { logs = JSON.parse(localStorage.getItem("peiyu.hs.log") || "[]"); } catch (e) {}
     var stats = {};
     Object.keys(SEC_META).forEach(function (sid) {
-      stats[sid] = { total: 0, right: 0, wrong: 0, status: "untouched" };
+      stats[sid] = { total: 0, right: 0, wrong: 0, questionTotal: 0, questionRight: 0, questionWrong: 0, status: "untouched" };
     });
     // 按 (sec + 题号 id) 取最新一次作答，避免重做后仍算错，同时记录历史错题数
-    var latest = {};
+    var latest = {}, latestQuestions = {};
     logs.forEach(function (ev) {
       if ((ev.kind === "answer" || ev.kind === "predict" || ev.kind === "cue" || ev.kind === "card" || ev.kind === "lab") && ev.sec && stats[ev.sec]) {
         var key = ev.sec + "::" + (ev.id || stats[ev.sec].total);
         latest[key] = ev;
+        if (ev.kind === "answer" && ev.id !== undefined && ev.id !== null && String(ev.id) !== "") latestQuestions[ev.sec + "::" + ev.id] = ev;
       }
     });
     Object.keys(latest).forEach(function (k) {
@@ -1057,6 +1058,11 @@
       s.total++;
       if (ev.correct) s.right++;
       else s.wrong++;
+    });
+    Object.keys(latestQuestions).forEach(function (key) {
+      var ev = latestQuestions[key], s = stats[ev.sec];
+      s.questionTotal++;
+      if (ev.correct) s.questionRight++; else s.questionWrong++;
     });
     Object.keys(stats).forEach(function (sid) {
       var s = stats[sid];
@@ -1145,6 +1151,41 @@
     document.head.appendChild(s1);
   }
 
+
+  // Trusted card HTML keeps its outer formatting; TeX is encoded as a text run.
+  function protectCardMathHtml(value) {
+    var input = String(value == null ? "" : value), out = "", cursor = 0;
+    var delimiters = [["$$", "$$"], ["\\[", "\\]"], ["\\(", "\\)"], ["$", "$"]];
+    function escaped(at) { var count = 0; for (var j = at - 1; j >= 0 && input[j] === "\\"; j--) count++; return count % 2 === 1; }
+    function entityText(text) {
+      return text.replace(/&(amp|lt|gt|quot|apos|#39|#\d+|#x[\da-f]+);/gi, function (all, name) {
+        var names = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", "#39": "'" }, lower = name.toLowerCase();
+        if (Object.prototype.hasOwnProperty.call(names, lower)) return names[lower];
+        var code = lower[1] === "x" ? parseInt(lower.slice(2), 16) : parseInt(lower.slice(1), 10);
+        return code >= 0 && code <= 0x10ffff ? String.fromCodePoint(code) : all;
+      });
+    }
+    function encode(text) { return text.replace(/[&<>"']/g, function (c) { return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]; }); }
+    while (cursor < input.length) {
+      var at = -1, pair = null;
+      for (var d = 0; d < delimiters.length; d++) {
+        var found = input.indexOf(delimiters[d][0], cursor);
+        while (found >= 0 && escaped(found)) found = input.indexOf(delimiters[d][0], found + 1);
+        if (found >= 0 && (at < 0 || found < at)) { at = found; pair = delimiters[d]; }
+      }
+      if (at < 0) { out += input.slice(cursor); break; }
+      var end = input.indexOf(pair[1], at + pair[0].length);
+      while (end >= 0 && escaped(end)) end = input.indexOf(pair[1], end + 1);
+      if (end < 0) { out += input.slice(cursor); break; } // Remain visible: validation rejects unmatched delimiters.
+      out += input.slice(cursor, at);
+      var tex = input.slice(at + pair[0].length, end), previous;
+      do { previous = tex; tex = tex.replace(/<(b|strong)>([\s\S]*?)<\/\1\s*>/gi, function (_, tag, body) { return "\\mathbf{" + body + "}"; }); } while (tex !== previous);
+      out += pair[0] + encode(entityText(tex)) + pair[1];
+      cursor = end + pair[1].length;
+    }
+    return out;
+  }
+
   function renderCardHtml(c, showJumpLesson) {
     var jump = showJumpLesson
       ? '<div style="margin-top:8px;font-size:13.5px;display:flex;gap:12px;flex-wrap:wrap">' +
@@ -1166,9 +1207,9 @@
     return (
       '<div class="wk-card-inline" data-card-box="' + c.id + '">' +
         "<h4><span>" + c.kindLabel + " · " + c.title + '</span><button type="button" class="wk-close" data-wk-close="1">收起 ✕</button></h4>' +
-        '<p class="small" style="margin:4px 0 8px"><b>🎯 什么时候用：</b>' + c.trig + "</p>" +
-        '<div class="key" style="margin:6px 0">' + c.key + "</div>" +
-        '<div class="warn" style="margin:6px 0"><b>⚠️ 易错红线：</b>' + c.warn + "</div>" +
+        '<p class="small" style="margin:4px 0 8px"><b>🎯 什么时候用：</b>' + protectCardMathHtml(c.trig) + "</p>" +
+        '<div class="key" style="margin:6px 0">' + protectCardMathHtml(c.key) + "</div>" +
+        '<div class="warn" style="margin:6px 0"><b>⚠️ 易错红线：</b>' + protectCardMathHtml(c.warn) + "</div>" +
         relBox +
         jump +
       "</div>"
@@ -1291,36 +1332,47 @@
   }
 
   /* ==================== 触点 2 & 3：课程页 (lessons/*.html) ==================== */
+  // 自动匹配仅用至少三字的术语；宽泛动词/性质也不触发推荐。
+  // textContent 含选项字母、KaTeX 与解析，ASCII 碎片会误拼成 Asin 等词；只放行已审查的术语/记号。
+  var RECO_STOPWORDS = ["包含", "参数", "子集", "向量", "垂直", "最值", "单调", "单调性", "定义域", "值域", "顺序", "互斥", "连续", "加法", "乘法", "均值", "方差", "标准差", "对称轴", "变号", "非负性", "线性变换", "正整数", "绝对值"];
+  var RECO_ASCII_KEYWORDS = ["Venn", "SSA", "x1y2-x2y1", "x+y+z=1", "f(x)+f(-x)", "f(ax+b)", "f'(x)>=0", "A_n^m", "C_n^m"];
+  function isRecoKeyword(kw) {
+    return kw.length >= 3 && RECO_STOPWORDS.indexOf(kw) < 0 &&
+      (!/^[\x00-\x7f]+$/.test(kw) || RECO_ASCII_KEYWORDS.indexOf(kw) >= 0);
+  }
+
   function matchCardsForProblem(secId, text, explicitAttr) {
-    var secCards = BY_SEC[secId] || [];
     var matched = [];
-    // 0. 若题卡显式标了 data-cards="id1,id2"，优先精确命中
-    if (explicitAttr) {
+    // 属性存在即是人工决定；空值或 none 都表示不挂卡。无效 ID 不回退自动匹配。
+    if (explicitAttr !== null && explicitAttr !== undefined) {
+      if (!explicitAttr.trim() || explicitAttr.trim() === "none") return [];
       explicitAttr.split(",").forEach(function (cid) {
         var c = BY_ID[cid.trim()];
         if (c && matched.indexOf(c) < 0) matched.push(c);
       });
-      if (matched.length) return matched;
+      return matched;
     }
-    // 1. 匹配本节和全站关键词
+    // 自动推荐只在同册同章内产生；跨章必须由题目显式标注。
+    var chapter = secId.split("-").slice(0, 2).join("-");
     CARDS.forEach(function (c) {
-      var hit = (c.keywords || []).some(function (kw) { return text.indexOf(kw) >= 0; });
+      if (c.sec.split("-").slice(0, 2).join("-") !== chapter) return;
+      var hit = (c.keywords || []).some(function (kw) { return isRecoKeyword(kw) && text.indexOf(kw) >= 0; });
       if (hit && matched.indexOf(c) < 0) matched.push(c);
     });
     // 2. 本节卡片优先排前面
     matched.sort(function (a, b) {
       return (a.sec === secId ? 0 : 1) - (b.sec === secId ? 0 : 1);
     });
-    if (!matched.length && secCards.length) matched.push(secCards[0]);
     return matched.slice(0, 2);
   }
+
 
   function decorateQuestionCards(secId, cardsList) {
     cardsList.forEach(function (qCard) {
       if (qCard.getAttribute("data-wk-bound")) return;
       qCard.setAttribute("data-wk-bound", "1");
       var text = qCard.textContent || "";
-      var explicitCards = qCard.getAttribute("data-cards") || "";
+      var explicitCards = qCard.getAttribute("data-cards");
       var cards = matchCardsForProblem(secId, text, explicitCards);
       if (!cards.length) return;
       var bar = document.createElement("div");
@@ -1350,7 +1402,7 @@
   function ensureIsoBenchLoaded(cb) {
     if (window.IsoBench) { cb(); return; }
     var s = document.createElement("script");
-    s.src = ROOT + "assets/iso-bench.js";
+    s.src = ROOT + "assets/iso-bench.js?v=vs-b03c46885f5f";
     s.onload = cb;
     document.head.appendChild(s);
   }
@@ -1417,7 +1469,7 @@
     "b1-1-3": {
       title: "多层透明 Venn 布尔光栅叠合与摩根定律实验台", btn: "等距 3D Venn 光栅台", vb: "0 0 560 340",
       sliders: [
-        { label: "圆心间距 \\(d\\)", min: 0, max: 52, step: 4, val: 20, fmt: function (v) { return String(v); } },
+        { label: "圆心间距 \\(d\\)", min: 0, max: 60, step: 4, val: 20, fmt: function (v) { return String(v); } },
         { label: "运算档位 (0=交,1=并,2=并之补,3=交之补)", min: 0, max: 3, step: 1, val: 0, fmt: function (v) { return ["A∩B", "A∪B", "∁(A∪B)", "∁(A∩B)"][v] || "A∩B"; } }
       ],
       render: function (svg, desc, vals, cb) { window.IsoBench.renderVennBench(svg, desc, vals[0], vals[1], cb); }
@@ -1466,7 +1518,7 @@
     "b2-9-2": {
       title: "样本百分位数与五数箱线图游标分拣台", btn: "等距 3D 箱线图分拣台", vb: "0 0 560 340",
       sliders: [
-        { label: "右端极值 \\(x_9\\)", min: 2.0, max: 8.0, step: 0.5, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "可调样本 \\(x_9\\)", min: 2.0, max: 8.0, step: 0.5, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
         { label: "主体离散度 \\(s\\)", min: 0.6, max: 1.5, step: 0.1, val: 1.0, fmt: function (v) { return v.toFixed(1); } }
       ],
       render: function (svg, desc, vals, cb) { window.IsoBench.renderBoxplotBench(svg, desc, vals[0], vals[1], cb); }
@@ -1475,8 +1527,8 @@
       title: "双圆心滑轨距 \\(|O_1O_2|\\) 与 \\(R\\pm r\\) 五档啮合及公切线实验台", btn: "等距 3D 双圆滑轨台", vb: "0 0 560 340",
       sliders: [
         { label: "圆心距 \\(d\\)", min: 0.0, max: 6.5, step: 0.5, val: 3.5, fmt: function (v) { return v.toFixed(1); } },
-        { label: "大圆半径 \\(R\\)", min: 2.0, max: 3.2, step: 0.2, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
-        { label: "小圆半径 \\(r\\)", min: 0.8, max: 1.8, step: 0.2, val: 1.5, fmt: function (v) { return v.toFixed(1); } }
+        { label: "大圆半径 \\(R\\)", min: 2.0, max: 3.2, step: 0.1, val: 2.5, fmt: function (v) { return v.toFixed(1); } },
+        { label: "小圆半径 \\(r\\)", min: 0.8, max: 1.8, step: 0.1, val: 1.5, fmt: function (v) { return v.toFixed(1); } }
       ],
       render: function (svg, desc, vals, cb) { window.IsoBench.renderTwoCirclesBench(svg, desc, vals[0], vals[1], vals[2], cb); }
     },
@@ -1500,7 +1552,7 @@
     "e3-8-1": {
       title: "最小二乘回归「残差弹簧平方和」物理平衡杆实验台", btn: "等距 3D 残差平衡杆", vb: "0 0 560 340",
       sliders: [
-        { label: "斜率 \\(b\\)", min: 0.0, max: 1.4, step: 0.05, val: 0.73, fmt: function (v) { return v.toFixed(2); } },
+        { label: "斜率 \\(b\\)", min: 0.0, max: 1.4, step: 0.01, val: 0.73, fmt: function (v) { return v.toFixed(2); } },
         { label: "截距偏离 \\(\\Delta a\\)", min: -1.0, max: 1.0, step: 0.2, val: 0.0, fmt: function (v) { return v.toFixed(1); } }
       ],
       render: function (svg, desc, vals, cb) { window.IsoBench.renderRegressionBench(svg, desc, vals[0], vals[1], cb); }
@@ -1916,6 +1968,7 @@
     ensureMath(drawer);
   });
 
+  window.PEIYU_WIKI_HTML = protectCardMathHtml;
   window.PEIYU_WIKI_CARDS = CARDS;
   window.PEIYU_SEC_META = SEC_META;
   window.PEIYU_STRANDS = STRANDS;

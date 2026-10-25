@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -68,7 +68,7 @@
   <div class="card">
     <p><b>一元线性回归模型</b>：描述因变量 \(Y\) 随自变量 \(x\) 线性变化并伴随随机波动的数学模型：</p>
     <p>$$Y = bx + a + e$$</p>
-    <p>其中 \(a\) 是截距，\(b\) 是斜率（总体真实参数，未知）；\(e\) 是<b>随机误差项</b>（受测量误差、潜变量扰动等不可控因素产生，满足 \(E(e) = 0\)）。</p>
+    <p>在所研究范围内，假定给定x时的平均趋势可近似表示为bx+a。这里 \(a\) 是截距，\(b\) 是斜率（总体参数，未知）；\(e\) 是<b>随机误差项</b>（受测量误差、潜变量扰动等不可控因素产生，满足 \(E(e) = 0\)）。</p>
   </div>
 
   <div class="card">
@@ -92,7 +92,7 @@
 
   <!-- 伴读直觉微图解 -->
   <div class="micro-box" id="micro-reg">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+    <div style="margin-bottom:8px;">
       <span style="font-weight:700; color:var(--primary); font-size:14px;">线性回归直觉微图解：最小二乘方块面积、样本中心枢轴与残差分析</span>
       <div class="micro-tabs" id="m-reg-tabs">
         <button class="micro-tab active" data-tab="1">① 最小二乘法：竖直残差方块面积最小</button>
@@ -103,7 +103,7 @@
     <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
       <svg class="micro-fig" id="m-reg-fig" viewBox="0 0 620 220" style="width:100%; max-width:620px; height:auto; display:block; margin:0 auto;"></svg>
     </div>
-    <div class="micro-desc" id="m-reg-desc" style="margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.55;">
+    <div class="micro-desc" id="m-reg-desc" style="margin-top:8px; font-size:15px; color:var(--muted); line-height:1.55;">
       加载中...
     </div>
   </div>
@@ -111,11 +111,11 @@
   <div class="concept-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
     <div class="card" style="border-top:3px solid #1976d2; margin:0;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <b style="color:#1976d2;">总体回归模型（理论真理）</b>
+        <b style="color:#1976d2;">总体回归模型（建模假设）</b>
         <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:11px; padding:2px 8px; border-radius:10px;">不可直接测</span>
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>形式</b>：\(Y = bx + a + e\)。</p>
-      <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：宇宙规律本身，参数 \(a, b\) 恒定但未知，含随机误差项 \(e\)。</p>
+      <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：选定情境与范围内的近似模型，参数 \(a, b\) 恒定但未知，含随机误差项 \(e\)。</p>
       <p class="small" style="margin:0;"><b>特质</b>：不同人抽样，估计出来的 \(\hat{b}\) 围绕真值 \(b\) 波动。</p>
     </div>
     <div class="card" style="border-top:3px solid #2e7d32; margin:0;">
@@ -125,7 +125,7 @@
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>形式</b>：\(\hat{y} = \hat{b}x + \hat{a}\)。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：带帽子表示估计值，由最小二乘法计算得出。</p>
-      <p class="small" style="margin:0;"><b>特质</b>：必定经过样本中心点 \((\bar{x}, \bar{y})\)，用于趋势外推预报。</p>
+      <p class="small" style="margin:0;"><b>特质</b>：必定经过样本中心点 \((\bar{x}, \bar{y})\)，主要用于样本范围内估计，外推需另作评估。</p>
     </div>
   </div>
 
@@ -133,8 +133,8 @@
   <div class="key" style="background:var(--card); border-left:4px solid var(--primary); padding:12px 16px; margin:14px 0;">
     <p style="margin:0 0 8px 0; font-weight:700;">回归方程两步求法与核心公式：</p>
     <p style="margin:0 0 6px 0;">经验回归方程：\(\hat{y} = \color{#1976d2}{\hat{b}}x + \color{#2e7d32}{\hat{a}}\)</p>
-    <p style="margin:0 0 6px 0;">第 1 步求斜率：\(\color{#1976d2}{\hat{b}} = \dfrac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \dfrac{\sum x_i y_i - n\bar{x}\bar{y}}{\sum x_i^2 - n\bar{x}^2}\)</p>
-    <p style="margin:0 0 6px 0;">第 2 步求截距（必过样本中心）：\(\color{#2e7d32}{\hat{a}} = \color{#ef4444}{\bar{y}} - \color{#1976d2}{\hat{b}}\color{#ef4444}{\bar{x}}\)</p>
+    <p style="margin:0 0 6px 0;">前提：含截距的普通最小二乘，且x不全相同（分母大于0）。<br>第 1 步求斜率：\(\color{#1976d2}{\hat{b}} = \dfrac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2} = \dfrac{\sum x_i y_i - n\bar{x}\bar{y}}{\sum x_i^2 - n\bar{x}^2}\)</p>
+    <p style="margin:0 0 6px 0;">第 2 步求截距（含截距的最优线必过样本中心）：\(\color{#2e7d32}{\hat{a}} = \color{#ef4444}{\bar{y}} - \color{#1976d2}{\hat{b}}\color{#ef4444}{\bar{x}}\)</p>
     <p style="margin:0;">残差定义式：\(e_i = \color{#1976d2}{y_i} - \color{#2e7d32}{\hat{y}_i} = \text{真实观测值} - \text{模型预报值}\)</p>
   </div>
 
@@ -230,8 +230,8 @@
   <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:12px 0;">
     <div style="font-weight:700; font-size:12.5px; color:var(--fg); margin-bottom:6px;">反例微图解：最小二乘准则（竖直残差方块面积之和最小）直觉示意</div>
     <svg class="micro-fig" id="m-reg-trap-fig" viewBox="0 0 540 140" style="width:100%; max-width:540px; height:auto; display:block; margin:0 auto;"></svg>
-    <div style="font-size:11.5px; color:var(--muted); margin-top:4px; text-align:center;">
-      最小二乘度量的是竖直方向的偏差平方（拼成方块面积），寻找一条让所有残差方块面积总和最小的直线。
+    <div style="font-size:15px; color:var(--muted); margin-top:4px;">
+      左图量测同一x下的竖直残差e；右图由正交投影精确求垂足，虚线确实垂直于基线。普通含截距线性回归最小化竖直残差平方和；它与垂距平方和是不同的优化准则。
     </div>
   </div>
 </section>
@@ -378,7 +378,7 @@
       sxx += dx * dx; sxy += dx * dy; syy += dy * dy;
     }
     var r = { n: n, mx: mx, my: my, sxx: sxx, sxy: sxy, syy: syy, ok: sxx > 1e-9 };
-    if (!r.ok) return r;
+    if (!r.ok) { r.res = ys.map(function(y) { return y - my; }); r.Q = syy; r.R2 = syy > 1e-9 ? 0 : null; return r; }
     r.b = sxy / sxx; r.a = my - r.b * mx;
     r.res = []; r.Q = 0;
     for (i = 0; i < n; i++) { var e = ys[i] - (r.b * xs[i] + r.a); r.res.push(e); r.Q += e * e; }
@@ -470,17 +470,17 @@
     var lines = [];
     lines.push("你的线：\\(" + eqTex("y", L.b, L.a) + "\\)，残差平方和 \\(Q\\approx " + f2(Q) + "\\)。");
     lines.push("样本中心 \\((" + f2(F.mx) + ",\\ " + f2(F.my) + ")\\)；你的线在 \\(x=" + f2(F.mx) + "\\) 处高 \\(" + f2(atC) + "\\)，" +
-      (Math.abs(atC - F.my) < 0.05 ? '<span class="eq">正好过样本中心</span>。' : "没过样本中心（差 \\(" + f2(Math.abs(atC - F.my)) + "\\)）。"));
+      (Math.abs(atC - F.my) < 1e-9 ? '<span class="eq">正好过样本中心</span>。' : "没过样本中心（差 \\(" + f2(Math.abs(atC - F.my)) + "\\)）。"));
     if (showLS) {
       if (!F.ok) {
-        lines.push('<span class="bad">所有 \\(x\\) 都一样</span>：\\(\\sum(x_i-\\bar x)^2=0\\)，\\(\\hat b\\) 的分母是 \\(0\\)，算不出经验回归直线。把某个点左右挪一挪。');
+        lines.push('<span class="bad">所有 \\(x\\) 都一样</span>：\\(\\sum(x_i-\\bar x)^2=0\\)，\\(\\hat b\\) 的分母是 \\(0\\)，斜率与截距不能唯一确定；所有在这个共同x处预测均值的直线，都有相同的最小Q。把某个点左右挪一挪。');
       } else {
         var more = Q - F.Q;
         lines.push("最小二乘直线（蓝虚线）：\\(" + eqTex("\\hat y", F.b, F.a) + "\\)，\\(Q_{\\min}\\approx " + f2(F.Q) + "\\)。" +
           (more < 0.02 ? '<span class="eq">你的线已经和它几乎重合了！</span>' : "你的 \\(Q\\) 比它多 \\(" + f2(more) + "\\)：怎么拖都不会比它小。"));
       }
     } else if (!F.ok) {
-      lines.push('<span class="bad">所有 \\(x\\) 都一样</span>，这时没有最小二乘直线。');
+      lines.push('<span class="bad">所有 \\(x\\) 都一样</span>，这时最优斜率与截距不能唯一确定。');
     }
     var out = $("regout");
     out.innerHTML = lines.join("<br>");
@@ -543,26 +543,24 @@
       svg("line", { x1: px(x0), y1: RB, x2: px(x0), y2: py(x0y), stroke: hlc, "stroke-width": 2, "stroke-dasharray": "3 3" }, g);
       if (D.curve) svg("circle", { cx: px(x0), cy: py(D.curve(x0)), r: 6, fill: "none", stroke: muted, "stroke-width": 2.5 }, g);
       svg("circle", { cx: px(x0), cy: py(x0y), r: 8, fill: hlc }, g);
+    } else {
+      svg("circle", { "data-stat-role": "common-x-fit", "data-fitted-y": F.my, cx: px(F.mx), cy: py(F.my), r: 8, fill: hlc }, g);
     }
     D.xs.forEach(function (x, i) { svg("circle", { cx: px(x), cy: py(D.ys[i]), r: 6, fill: ca }, g); });
     // 下图：残差
     svg("text", { x: R0 + 10, y: ET - 4 }, res).textContent = "残差";
     svg("line", { x1: R0, y1: ET, x2: R0, y2: EB, stroke: fg, "stroke-width": 1.5 }, res);
     var em = 0.5;
-    if (F.ok) F.res.forEach(function (e) { em = Math.max(em, Math.abs(e) * 1.25); });
+    F.res.forEach(function (e) { em = Math.max(em, Math.abs(e) * 1.25); });
     function ey(e) { return (ET + EB) / 2 - e / em * (EB - ET) / 2; }
     svg("line", { x1: R0, y1: ey(0), x2: R1, y2: ey(0), stroke: fg, "stroke-width": 1.5 }, res);
     svg("text", { x: R0 - 9, y: ey(0) + 7, "text-anchor": "end" }, res).textContent = "0";
     svg("text", { x: R1, y: EB + 24, "text-anchor": "end" }, res).textContent = "x";
-    if (F.ok) {
-      F.res.forEach(function (e, i) {
-        var c = e >= 0 ? ca : no;
-        svg("line", { x1: px(D.xs[i]), y1: ey(0), x2: px(D.xs[i]), y2: ey(e), stroke: c, "stroke-width": 2.5 }, res);
-        svg("circle", { cx: px(D.xs[i]), cy: ey(e), r: 6, fill: c }, res);
-      });
-    } else {
-      svg("text", { x: (R0 + R1) / 2, y: ey(0) - 14, "text-anchor": "middle", fill: no }, res).textContent = "没有回归直线，就没有残差";
-    }
+    F.res.forEach(function (e, i) {
+      var c = e >= 0 ? ca : no;
+      svg("line", { x1: px(D.xs[i]), y1: ey(0), x2: px(D.xs[i]), y2: ey(e), stroke: c, "stroke-width": 2.5 }, res);
+      svg("circle", { "data-stat-role": "main-residual", "data-index": i, "data-residual": e, cx: px(D.xs[i]), cy: ey(e), r: 6, fill: c }, res);
+    });
 
     $("x0out").textContent = f2(x0);
     document.querySelectorAll("#dsbtns .btn").forEach(function (b) {
@@ -570,7 +568,9 @@
     });
     var L = [];
     if (!F.ok) {
-      L.push('<span class="bad">所有 \\(x\\) 都是 \\(' + f2(xmin) + "\\)</span>：\\(\\sum(x_i-\\bar x)^2=0\\)，\\(\\hat b\\) 的分母为 \\(0\\)，算不出经验回归方程，也就谈不上残差、\\(R^2\\) 和预测。\\(x\\) 没有变化，就看不出 \\(y\\) 怎样随 \\(x\\) 变。");
+      L.push('<span class="bad">所有x都等于' + f2(F.mx) + '</span>：斜率与截距不能唯一确定；任何在这个共同x处预测均值' + f2(F.my) + '的直线，都达到相同的最小Q。');
+      L.push('图中仍可画出残差：每个观测值减去均值；残差之和约0，Qmin≈' + f2(F.Q) + '，' + (F.R2 === null ? 'y也全相同，R²分母为0，R²无定义。' : 'R²=0。'));
+      L.push(Math.abs(x0-F.mx)<1e-9 ? '当前x₀等于共同x，最优预测唯一为均值' + f2(F.my) + '。' : '当前x₀不等于共同x；斜率无法从这些数据识别，因此该处预测不唯一。');
     } else {
       var signs = F.res.map(function (e) { return e > 1e-9 ? "+" : e < -1e-9 ? "−" : "0"; }).join(" ");
       var runs = 1; for (var i = 1; i < F.res.length; i++) if ((F.res[i] >= 0) !== (F.res[i - 1] >= 0)) runs++;
@@ -667,146 +667,78 @@
 
   // === e3-8-2 Micro-box & Trap Interactive Script ===
   (function () {
-    var fig = document.getElementById("m-reg-fig");
-    var desc = document.getElementById("m-reg-desc");
-    var trapFig = document.getElementById("m-reg-trap-fig");
-    var tabs = document.querySelectorAll("#m-reg-tabs .micro-tab");
-    if (!fig || !desc) return;
-
-    function el(t, a, txt) {
-      var e = document.createElementNS("http://www.w3.org/2000/svg", t);
-      for (var k in a) e.setAttribute(k, a[k]);
-      if (txt) e.textContent = txt;
-      return e;
+    function $(id){return document.getElementById(id);}
+    function Qof(xs,ys,b,a){return xs.reduce(function(q,x,i){return q+Math.pow(ys[i]-b*x-a,2);},0);}
+    function fit(xs,ys){
+      var n=xs.length,mx=0,my=0,sxx=0,sxy=0,syy=0;
+      xs.forEach(function(x,i){mx+=x/n;my+=ys[i]/n;});
+      xs.forEach(function(x,i){var dx=x-mx,dy=ys[i]-my;sxx+=dx*dx;sxy+=dx*dy;syy+=dy*dy;});
+      if(sxx===0)return {ok:false,mx:mx,my:my};
+      var b=sxy/sxx,a=my-b*mx,res=xs.map(function(x,i){return ys[i]-b*x-a;}),Q=Qof(xs,ys,b,a);
+      return {ok:true,mx:mx,my:my,b:b,a:a,res:res,Q:Q,R2:syy>0?1-Q/syy:null};
     }
-
-    function drawTab1() {
-      fig.innerHTML = "";
-      // Tab 1: 最小二乘法：竖直残差方块面积之和最小
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "最小二乘法准则：每个数据点的垂直残差 eᵢ = yᵢ - ŷᵢ，拼成方块面积总和最小"));
-
-      // Regression line: from (80, 160) to (520, 50)
-      fig.appendChild(el("line", {x1: 60, y1: 165, x2: 540, y2: 45, stroke: "#1976d2", "stroke-width": "2.5"}));
-      fig.appendChild(el("text", {x: 520, y: 35, "font-size": "12", "font-weight": "700", fill: "#1976d2"}, "ŷ = bx + a"));
-
-      // Data points & residual squares
-      // Line equation: y_line(x) = 165 - (x-60)*(120/480) = 165 - (x-60)*0.25
-      var pts = [
-        {x: 140, y: 115}, // line is 165 - 80*0.25 = 145 -> residual = 115 - 145 = -30 (above)
-        {x: 240, y: 140}, // line is 165 - 180*0.25 = 120 -> residual = 140 - 120 = +20 (below)
-        {x: 360, y: 65},  // line is 165 - 300*0.25 = 90 -> residual = 65 - 90 = -25 (above)
-        {x: 460, y: 80}   // line is 165 - 400*0.25 = 65 -> residual = 80 - 65 = +15 (below)
-      ];
-
-      pts.forEach(function(p, idx) {
-        var lineY = 165 - (p.x - 60) * 0.25;
-        var diff = Math.abs(p.y - lineY);
-
-        // Vertical residual line
-        fig.appendChild(el("line", {x1: p.x, y1: p.y, x2: p.x, y2: lineY, stroke: "#ef4444", "stroke-width": "1.5"}));
-
-        // Residual square box
-        var sqX = p.x;
-        var sqY = Math.min(p.y, lineY);
-        fig.appendChild(el("rect", {x: sqX, y: sqY, width: diff, height: diff, fill: "#fee2e2", stroke: "#ef4444", "stroke-width": "1", opacity: "0.6"}));
-
-        // Point dot
-        fig.appendChild(el("circle", {cx: p.x, cy: p.y, r: 4.5, fill: "#10b981"}));
+    var fig=$("m-reg-fig"),desc=$("m-reg-desc"),trapFig=$("m-reg-trap-fig");
+    var tabs=document.querySelectorAll("#m-reg-tabs .micro-tab");
+    if(!fig || !desc)return;
+    var microPoints=[[1,2],[3,4],[5,4],[7,5]];
+    function el(t,a,value){var e=document.createElementNS("http://www.w3.org/2000/svg",t);for(var k in a)e.setAttribute(k,a[k]);if(value!==undefined)e.textContent=value;return e;}
+    function text(parent,x,y,value,color){parent.appendChild(el("text",{x:x,y:y,"text-anchor":"middle","font-size":26,fill:color || "var(--fg)"},value));}
+    function model(){return fit(microPoints.map(function(p){return p[0];}),microPoints.map(function(p){return p[1];}));}
+    function X(x){return 65+x*40;}
+    function Y(y){return 270-y*40;}
+    function frame(){
+      fig.innerHTML="";fig.setAttribute("viewBox","0 0 560 320");
+      fig.appendChild(el("line",{x1:X(0),y1:Y(0),x2:X(8),y2:Y(0),stroke:"var(--muted)"}));
+      fig.appendChild(el("line",{x1:X(0),y1:Y(0),x2:X(0),y2:Y(6),stroke:"var(--muted)"}));
+      [0,2,4,6,8].forEach(function(x){text(fig,X(x),302,""+x,"var(--muted)");});
+      [2,4,6].forEach(function(y){text(fig,35,Y(y)+8,""+y,"var(--muted)");});
+    }
+    function points(F){microPoints.forEach(function(p,i){fig.appendChild(el("circle",{"data-stat-role":"reg-point","data-index":i,"data-x":p[0],"data-y":p[1],cx:X(p[0]),cy:Y(p[1]),r:5,fill:"var(--fg)"}));});}
+    function line(F,role,color,dashed){
+      fig.appendChild(el("line",{"data-stat-role":role,"data-slope":F.b,"data-intercept":F.a,"data-sse":F.Q,x1:X(0),y1:Y(F.a),x2:X(8),y2:Y(F.a+8*F.b),stroke:color,"stroke-width":3,"stroke-dasharray":dashed?"6 5":""}));
+    }
+    function drawTab1(){
+      var F=model();frame();line(F,"ols-line","var(--a)");
+      microPoints.forEach(function(p,i){
+        var predicted=F.a+F.b*p[0],e=p[1]-predicted,side=Math.abs(e)*40;
+        fig.appendChild(el("rect",{"data-stat-role":"residual-square","data-index":i,"data-residual":e,x:X(p[0]),y:Math.min(Y(p[1]),Y(predicted)),width:side,height:side,fill:"var(--no-soft)",stroke:"var(--no)",opacity:0.65}));
+        fig.appendChild(el("line",{"data-stat-role":"vertical-residual","data-index":i,"data-residual":e,x1:X(p[0]),y1:Y(p[1]),x2:X(p[0]),y2:Y(predicted),stroke:"var(--no)","stroke-width":2}));
       });
-
-      fig.appendChild(el("text", {x: 310, y: 205, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "Q = ∑ eᵢ² = 红色正方形面积总和 ➔ 最小二乘法使 Q 达到全域极小值"));
-      desc.innerHTML = "<b>① 最小二乘法几何本质</b>：高斯并不是最小化点到直线的垂线距离，而是度量<b>竖直方向上的预测误差 \(e_i = y_i - \hat{y}_i\)</b>。将每个残差画成一个正方形，经验回归直线恰好是让所有这些红色方块的面积之和达到全局最小的那条最优直线。";
+      points(F);text(fig,440,65,"Qmin="+F.Q.toFixed(2),"var(--a)");
+      desc.innerHTML="<b>① 真实最小二乘</b>：四点为(1,2)、(3,4)、(5,4)、(7,5)。由这四点算得斜率0.45、截距1.95，残差依次为−0.40、0.70、−0.20、−0.10；残差平方和Qmin=0.70。每个红方块的边长由竖直残差绝对值计算，没有先画任意线再称它最优。";
     }
-
-    function drawTab2() {
-      fig.innerHTML = "";
-      // Tab 2: 样本中心点 (x̄, ȳ) 旋转枢轴
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "样本中心点 (x̄, ȳ) 是定海神针：无论斜率如何旋转，回归直线必然经过它"));
-
-      var cx = 310, cy = 110;
-
-      // Axis lines crossing at center
-      fig.appendChild(el("line", {x1: 80, y1: cy, x2: 540, y2: cy, stroke: "var(--line)", "stroke-width": "1.2", "stroke-dasharray": "3 3"}));
-      fig.appendChild(el("line", {x1: cx, y1: 35, x2: cx, y2: 185, stroke: "var(--line)", "stroke-width": "1.2", "stroke-dasharray": "3 3"}));
-
-      // Candidate lines through center
-      fig.appendChild(el("line", {x1: cx - 180, y1: cy + 60, x2: cx + 180, y2: cy - 60, stroke: "#1976d2", "stroke-width": "2.5"}));
-      fig.appendChild(el("line", {x1: cx - 180, y1: cy + 30, x2: cx + 180, y2: cy - 30, stroke: "#9ca3af", "stroke-width": "1.2", "stroke-dasharray": "4 2"}));
-      fig.appendChild(el("line", {x1: cx - 180, y1: cy + 90, x2: cx + 180, y2: cy - 90, stroke: "#9ca3af", "stroke-width": "1.2", "stroke-dasharray": "4 2"}));
-
-      // Center Point
-      fig.appendChild(el("circle", {cx: cx, cy: cy, r: 8, fill: "#ef4444"}));
-      fig.appendChild(el("text", {x: cx, y: cy - 14, "text-anchor": "middle", "font-size": "12.5", "font-weight": "700", fill: "#ef4444"}, "样本中心 (x̄, ȳ) 必过！"));
-
-      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "解题捷径：已知 b̂，截距 â = ȳ - b̂x̄ 代入中心点坐标秒杀！"));
-      desc.innerHTML = "<b>② 样本中心点旋转枢轴</b>：由最小二乘一阶导数方程可严格证明，残差之和 \(\sum e_i = 0\)，这必然导致回归直线穿过数据几何重心 \((\bar{x}, \bar{y})\)。在高考做题中，只要看到题目给出平均值，就意味着得到了直线上的一对现成坐标点！";
+    function drawTab2(){
+      var F=model();frame();points(F);
+      [0.2,F.b,0.7].forEach(function(b){var a=F.my-b*F.mx;line({a:a,b:b,Q:Qof(microPoints.map(function(p){return p[0];}),microPoints.map(function(p){return p[1];}),b,a)},b===F.b?"ols-line":"center-candidate",b===F.b?"var(--a)":"var(--muted)",b!==F.b);});
+      fig.appendChild(el("circle",{"data-stat-role":"sample-center","data-x":F.mx,"data-y":F.my,cx:X(F.mx),cy:Y(F.my),r:8,fill:"var(--b)"}));
+      text(fig,435,70,"均值点","var(--b)");
+      desc.innerHTML="<b>② 过样本中心是必要条件</b>：四点均值为(4,3.75)。图中三条线都由a=3.75−4b得到，所以都过这个点；只有绿色实线b=0.45令Q最小。绕中心转动的是候选直线，不能把每条过中心的线都叫作回归直线。这里讨论含截距、x不全相同的普通最小二乘。";
     }
-
-    function drawTab3() {
-      fig.innerHTML = "";
-      // Tab 3: 残差图与决定系数 R^2
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "残差分析与 R²：残差在 0 刻度线两侧均匀带状分布，说明线性模型拟合优良"));
-
-      var baseCy = 110;
-      fig.appendChild(el("line", {x1: 60, y1: baseCy, x2: 560, y2: baseCy, stroke: "#1976d2", "stroke-width": "1.8"}));
-      fig.appendChild(el("text", {x: 75, y: baseCy - 6, "font-size": "11", "font-weight": "700", fill: "#1976d2"}, "残差 e = 0 基准线"));
-
-      // Band lines
-      fig.appendChild(el("line", {x1: 60, y1: baseCy - 35, x2: 560, y2: baseCy - 35, stroke: "var(--line)", "stroke-width": "1", "stroke-dasharray": "2 2"}));
-      fig.appendChild(el("line", {x1: 60, y1: baseCy + 35, x2: 560, y2: baseCy + 35, stroke: "var(--line)", "stroke-width": "1", "stroke-dasharray": "2 2"}));
-      fig.appendChild(el("text", {x: 520, y: baseCy - 40, "font-size": "10", fill: "var(--muted)"}, "+水平边界"));
-      fig.appendChild(el("text", {x: 520, y: baseCy + 45, "font-size": "10", fill: "var(--muted)"}, "-水平边界"));
-
-      // Random residual dots
-      var rVals = [-15, 20, -8, 12, -22, 18, -10, 5, -14, 24, -18, 8];
-      rVals.forEach(function(rv, i) {
-        var x = 110 + i * 36;
-        var y = baseCy - rv;
-        fig.appendChild(el("line", {x1: x, y1: baseCy, x2: x, y2: y, stroke: "#ef4444", "stroke-width": "1"}));
-        fig.appendChild(el("circle", {cx: x, cy: y, r: 3.5, fill: "#ef4444"}));
+    function drawTab3(){
+      var F=model();fig.innerHTML="";fig.setAttribute("viewBox","0 0 560 300");
+      function E(e){return 160-e*120;}
+      fig.appendChild(el("line",{x1:X(0),y1:E(0),x2:X(8),y2:E(0),stroke:"var(--muted)"}));
+      [-0.5,0,0.5].forEach(function(e){text(fig,30,E(e)+8,""+e,"var(--muted)");});
+      F.res.forEach(function(e,i){fig.appendChild(el("line",{x1:X(microPoints[i][0]),y1:E(0),x2:X(microPoints[i][0]),y2:E(e),stroke:"var(--b)"}));fig.appendChild(el("circle",{"data-stat-role":"residual-point","data-x":microPoints[i][0],"data-residual":e,"data-r2":F.R2,cx:X(microPoints[i][0]),cy:E(e),r:5,fill:"var(--a)"}));});
+      text(fig,440,45,"R²≈"+F.R2.toFixed(3),"var(--a)");
+      desc.innerHTML="<b>③ 残差图</b>：图中仍是同一组数据与同一条最优线，Σe=0、Σxe=0，R²=1−0.70/4.75≈0.853。残差图用于寻找弯曲或波动幅度变化等结构；只有4个点，不能凭它证明模型适合。喇叭口提示误差方差可能变化，不意味着必改成二次函数；预测还要看数据范围和情境。";
+    }
+    function drawTrap(){
+      if(!trapFig)return;trapFig.innerHTML="";trapFig.setAttribute("viewBox","0 0 540 260");
+      var A={x:35,y:210},B={x:235,y:110},P={x:120,y:100};
+      var dx=B.x-A.x,dy=B.y-A.y;
+      [0,270].forEach(function(offset,index){
+        trapFig.appendChild(el("line",{"data-stat-role":"trap-baseline","data-panel":index,x1:A.x+offset,y1:A.y,x2:B.x+offset,y2:B.y,stroke:"var(--a)","stroke-width":2}));
+        trapFig.appendChild(el("circle",{"data-stat-role":"trap-observation","data-panel":index,cx:P.x+offset,cy:P.y,r:5,fill:"var(--fg)"}));
+        var t=((P.x-A.x)*dx+(P.y-A.y)*dy)/(dx*dx+dy*dy);
+        var F=index?{x:A.x+t*dx,y:A.y+t*dy}:{x:P.x,y:A.y+(P.x-A.x)*dy/dx};
+        trapFig.appendChild(el("line",{"data-stat-role":index?"orthogonal-distance":"trap-vertical-residual",x1:P.x+offset,y1:P.y,x2:F.x+offset,y2:F.y,stroke:"var(--no)","stroke-width":2,"stroke-dasharray":index?"5 4":""}));
+        trapFig.appendChild(el("circle",{"data-stat-role":index?"orthogonal-foot":"vertical-foot",cx:F.x+offset,cy:F.y,r:3,fill:"var(--b)"}));
+        text(trapFig,index?405:135,45,index?"垂距 d":"竖直 e","var(--fg)");
       });
-
-      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "决定系数 R² = 1 - (∑eᵢ² / ∑(yᵢ-ȳ)²)；带状无弯曲分布表示无需改用曲线模型"));
-      desc.innerHTML = "<b>③ 残差图与决定系数直觉</b>：画出每个样本点的残差图。如果所有残差在水平零线上下均匀、随机散布在一个狭窄水平带内，说明线性模型非常健康；若残差呈现喇叭口或 U 型弯曲，则预示需要改用指数或二次曲线模型。\(R^2\) 越逼近 1，模型拟合精度越高。";
     }
-
-    function drawTrap() {
-      if (!trapFig) return;
-      trapFig.innerHTML = "";
-      trapFig.appendChild(el("text", {x: 140, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#10b981"}, "正确：竖直残差平方和最小"));
-      trapFig.appendChild(el("text", {x: 400, y: 22, "text-anchor": "middle", "font-size": "11.5", "font-weight": "700", fill: "#ef4444"}, "误解：点到直线的垂线距离"));
-
-      // Left: vertical distance
-      trapFig.appendChild(el("line", {x1: 40, y1: 110, x2: 230, y2: 50, stroke: "#1976d2", "stroke-width": "2"}));
-      trapFig.appendChild(el("circle", {cx: 130, cy: 50, r: 4, fill: "#10b981"}));
-      trapFig.appendChild(el("line", {x1: 130, y1: 50, x2: 130, y2: 82, stroke: "#ef4444", "stroke-width": "2"}));
-      trapFig.appendChild(el("text", {x: 145, y: 70, "font-size": "10.5", "font-weight": "700", fill: "#ef4444"}, "竖直偏差 eᵢ"));
-      trapFig.appendChild(el("text", {x: 140, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#10b981"}, "因变量预测误差 yᵢ - ŷᵢ"));
-
-      // Separator
-      trapFig.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 135, stroke: "var(--line)", "stroke-width": "1"}));
-
-      // Right: perpendicular distance
-      trapFig.appendChild(el("line", {x1: 310, y1: 110, x2: 500, y2: 50, stroke: "#1976d2", "stroke-width": "2"}));
-      trapFig.appendChild(el("circle", {cx: 400, cy: 50, r: 4, fill: "#ef4444"}));
-      trapFig.appendChild(el("line", {x1: 400, y1: 50, x2: 385, y2: 85, stroke: "#ef4444", "stroke-width": "1.5", "stroke-dasharray": "2 2"}));
-      trapFig.appendChild(el("text", {x: 415, y: 72, "font-size": "10", fill: "#ef4444"}, "倾斜垂距"));
-      trapFig.appendChild(el("text", {x: 400, y: 125, "text-anchor": "middle", "font-size": "11", "font-weight": "700", fill: "#ef4444"}, "普通最小二乘法不量测垂线距离！"));
-    }
-
-    tabs.forEach(function(tab) {
-      tab.addEventListener("click", function() {
-        tabs.forEach(function(t) { t.classList.remove("active"); });
-        tab.classList.add("active");
-        var idx = tab.getAttribute("data-tab");
-        if (idx === "1") drawTab1();
-        else if (idx === "2") drawTab2();
-        else if (idx === "3") drawTab3();
-      });
-    });
-
-    drawTab1();
-    drawTrap();
+    tabs.forEach(function(tab){tab.addEventListener("click",function(){tabs.forEach(function(t){t.classList.remove("active");});tab.classList.add("active");var i=tab.getAttribute("data-tab");if(i==="1")drawTab1();else if(i==="2")drawTab2();else drawTab3();});});
+    drawTab1();drawTrap();
   })();
 
 </script>

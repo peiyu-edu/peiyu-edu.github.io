@@ -11,7 +11,7 @@
      {t:"hline"|"vline", y|x, color, dash, label} / {t:"region", x0, x1, color} / {t:"seg", x1,y1,x2,y2, color, w, dash}
      {t:"text", x, y, text, color, size, anchor, bold}
    颜色只用 site.css 变量名：a（松绿，正确 / 目标）、no（赤红，错误）、b（赤金，高亮）、c（黛蓝，参考）、muted。
-   图上文字 font-size ≥ 20（viewBox 宽 560，375px 手机上仍 ≥ 12px）。 */
+   图中文字至少19 SVG单位；Wiki用独立可滚动图框保证CSS实际字号≥12px。 */
 (function () {
   "use strict";
 
@@ -120,16 +120,17 @@
   var uid = 0;
 
   function draw(svg, view, prims) {
+    var height = view.height || H;
     while (svg.firstChild) svg.removeChild(svg.firstChild);
-    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.setAttribute("viewBox", "0 0 " + W + " " + height);
     var x0 = view.x[0], x1 = view.x[1], y0 = view.y[0], y1 = view.y[1];
     var left = view.noY ? 14 : PL;
     var cx = function (x) { return left + (x - x0) / (x1 - x0) * (W - left - PR); };
-    var cy = function (y) { return PT + (y1 - y) / (y1 - y0) * (H - PT - PB); };
+    var cy = function (y) { return PT + (y1 - y) / (y1 - y0) * (height - PT - PB); };
     var id = "labclip" + (++uid);
     var defs = el("defs", {}, svg);
     var cp = el("clipPath", { id: id }, defs);
-    el("rect", { x: left, y: PT, width: W - left - PR, height: H - PT - PB }, cp);
+    el("rect", { x: left, y: PT, width: W - left - PR, height: height - PT - PB }, cp);
     var FS = 20;
     var muted = color("muted"), lineC = color("line");
 
@@ -144,7 +145,7 @@
     });
     if (!view.noY) {
       var axX = (x0 <= 0 && x1 >= 0) ? cx(0) : cx(x0);
-      el("line", { x1: axX, y1: H - PB, x2: axX, y2: PT, stroke: muted, "stroke-width": 1.5 }, svg);
+      el("line", { x1: axX, y1: height - PB, x2: axX, y2: PT, stroke: muted, "stroke-width": 1.5 }, svg);
       el("polygon", { points: axX + "," + PT + " " + (axX - 4) + "," + (PT + 9) + " " + (axX + 4) + "," + (PT + 9), fill: muted }, svg);
       (view.yt || []).forEach(function (t) {
         var Y = cy(t);
@@ -163,6 +164,8 @@
         "paint-order": "stroke", stroke: css("--bg") || "#fff", "stroke-width": 4, "stroke-linejoin": "round"
       }, labels);
       tn.textContent = s;
+      tn._labLabel = { x:x, y:y, text:s };
+      if (opt.point) { tn.setAttribute("data-point-x", opt.point[0]); tn.setAttribute("data-point-y", opt.point[1]); }
       return tn;
     }
 
@@ -170,7 +173,7 @@
       if (!p) return;
       var col = color(p.color || "a");
       if (p.t === "region") {
-        el("rect", { x: cx(p.x0), y: PT, width: Math.max(0, cx(p.x1) - cx(p.x0)), height: H - PT - PB, fill: col, opacity: p.opacity || 0.12 }, g);
+        el("rect", { x: cx(p.x0), y: PT, width: Math.max(0, cx(p.x1) - cx(p.x0)), height: height - PT - PB, fill: col, opacity: p.opacity || 0.12 }, g);
         if (p.label) text((cx(p.x0) + cx(p.x1)) / 2, PT + 22, p.label, { anchor: "middle", color: p.color || "a", size: 19 });
       } else if (p.t === "curve") {
         var n = 240, d = "", on = false, span = (y1 - y0);
@@ -181,23 +184,83 @@
           on = true;
         }
         el("path", { d: d, fill: "none", stroke: col, "stroke-width": p.w || 3, "stroke-dasharray": p.dash ? "6 5" : "none", "stroke-linecap": "round" }, g);
-        if (p.label) text(cx(p.label.x) + (p.label.dx || 6), cy(p.f(p.label.x)) + (p.label.dy || -8), p.label.text, { color: p.color || "a", bold: true });
+        if (p.label) text(cx(p.label.x) + (p.label.dx || 6), cy(p.f(p.label.x)) + (p.label.dy || -8), p.label.text, { color: p.color || "a", bold: true, point: [cx(p.label.x), cy(p.f(p.label.x))] });
       } else if (p.t === "pt") {
         el("circle", { cx: cx(p.x), cy: cy(p.y), r: p.r || 6, fill: p.hollow ? (css("--bg") || "#fff") : col, stroke: col, "stroke-width": 3 }, labels);
-        if (p.label) text(cx(p.x) + (p.dx === undefined ? 10 : p.dx), cy(p.y) + (p.dy === undefined ? -10 : p.dy), p.label, { color: p.color || "a", bold: true, anchor: p.anchor });
+        if (p.label) text(cx(p.x) + (p.dx === undefined ? 10 : p.dx), cy(p.y) + (p.dy === undefined ? -10 : p.dy), p.label, { color: p.color || "a", bold: true, anchor: p.anchor, point: [cx(p.x), cy(p.y)] });
       } else if (p.t === "hline") {
         el("line", { x1: left, y1: cy(p.y), x2: W - PR, y2: cy(p.y), stroke: col, "stroke-width": p.w || 2, "stroke-dasharray": p.dash === false ? "none" : "6 5" }, g);
         if (p.label) text(W - PR - 6, cy(p.y) + (p.dy || -8), p.label, { anchor: "end", color: p.color || "a" });
       } else if (p.t === "vline") {
-        el("line", { x1: cx(p.x), y1: PT, x2: cx(p.x), y2: H - PB, stroke: col, "stroke-width": p.w || 2, "stroke-dasharray": p.dash === false ? "none" : "6 5" }, g);
+        el("line", { x1: cx(p.x), y1: PT, x2: cx(p.x), y2: height - PB, stroke: col, "stroke-width": p.w || 2, "stroke-dasharray": p.dash === false ? "none" : "6 5" }, g);
         if (p.label) text(cx(p.x) + 6, PT + 22, p.label, { color: p.color || "a" });
       } else if (p.t === "seg") {
         el("line", { x1: cx(p.x1), y1: cy(p.y1), x2: cx(p.x2), y2: cy(p.y2), stroke: col, "stroke-width": p.w || 3, "stroke-dasharray": p.dash ? "6 5" : "none", "stroke-linecap": "round" }, g);
-        if (p.label) text((cx(p.x1) + cx(p.x2)) / 2 + (p.dx || 0), (cy(p.y1) + cy(p.y2)) / 2 + (p.dy || -10), p.label, { anchor: "middle", color: p.color || "a", bold: true });
+        if (p.label) text((cx(p.x1) + cx(p.x2)) / 2 + (p.dx || 0), (cy(p.y1) + cy(p.y2)) / 2 + (p.dy || -10), p.label, { anchor: "middle", color: p.color || "a", bold: true, point: [(cx(p.x1) + cx(p.x2)) / 2, (cy(p.y1) + cy(p.y2)) / 2] });
       } else if (p.t === "text") {
         text(cx(p.x) + (p.dx || 0), cy(p.y) + (p.dy || 0), p.text, { color: p.color, size: p.size, anchor: p.anchor, bold: p.bold });
       }
     });
+    // Hidden tabs have zero text boxes: wait for a real layout before fitting.
+    function fitVisibleLabels() {
+      if (!labels.isConnected || !svg.getClientRects().length) return;
+      Array.prototype.forEach.call(svg.querySelectorAll('[data-label-leader]'), function (n) { n.remove(); });
+      var occupied = [], axisTexts = [];
+      Array.prototype.forEach.call(svg.children, function (n) {
+        if (n.tagName !== 'text') return;
+        if (!n._labLabel) {
+          var tx = Number(n.getAttribute('x')), ty = Number(n.getAttribute('y')), isX = n.getAttribute('text-anchor') === 'middle';
+          n._labLabel = { x:tx, y:ty, text:n.textContent };
+          n.setAttribute('data-point-x', isX ? tx : axX); n.setAttribute('data-point-y', isX ? axY : ty - 7);
+        }
+        axisTexts.push(n);
+      });
+      Array.prototype.forEach.call(labels.querySelectorAll('circle'), function (n) { occupied.push(n.getBBox()); });
+      var offsets = [];
+      for (var ox = -Math.ceil(W / 24); ox <= Math.ceil(W / 24); ox++) for (var oy = -Math.ceil(height / 24); oy <= Math.ceil(height / 24); oy++) offsets.push([ox * 24, oy * 24]);
+      offsets.sort(function (a, b) { return Math.abs(a[0]) + Math.abs(a[1]) - Math.abs(b[0]) - Math.abs(b[1]) || Math.abs(a[0]) - Math.abs(b[0]) || a[1] - b[1] || a[0] - b[0]; });
+      function overlap(box) {
+        return occupied.reduce(function (area, other) { return area + Math.max(0, Math.min(box.x + box.width + 1, other.x + other.width + 1) - Math.max(box.x - 1, other.x - 1)) * Math.max(0, Math.min(box.y + box.height + 1, other.y + other.height + 1) - Math.max(box.y - 1, other.y - 1)); }, 0);
+      }
+      Array.prototype.forEach.call(axisTexts.concat(Array.prototype.slice.call(labels.querySelectorAll("text"))), function (tn) {
+      var base = tn._labLabel, x = base.x, y = base.y, pad = 6;
+      tn.textContent = base.text; tn.setAttribute("x", x); tn.setAttribute("y", y);
+      if (tn.getBBox().width > W - 2 * pad) {
+        var content = tn.textContent, line = "", rows = [], measure = el("tspan", { x: x }, tn);
+        tn.firstChild.remove();
+        Array.from(content).forEach(function (ch) {
+          measure.textContent = line + ch;
+          if (line && measure.getComputedTextLength() > W - 2 * pad) { rows.push(line); line = ch; } else line += ch;
+        });
+        rows.push(line); tn.textContent = "";
+        rows.forEach(function (row, i) { el("tspan", { x: x, dy: i ? 24 : 0 }, tn).textContent = row; });
+      }
+      var b = tn.getBBox(), best = null;
+      offsets.some(function (o) {
+        var left = Math.max(pad, Math.min(W - pad - b.width, b.x + o[0])), top = Math.max(pad, Math.min(height - pad - b.height, b.y + o[1]));
+        var box = { x:left, y:top, width:b.width, height:b.height }, area = overlap(box);
+        if (!best || area < best.area) best = { dx:left - b.x, dy:top - b.y, area:area, box:box };
+        return area === 0;
+      });
+      var dx = best.dx, dy = best.dy;
+      tn.setAttribute("x", x + dx); tn.setAttribute("y", y + dy);
+      tn.setAttribute("data-layout-overlap", best.area.toFixed(3));
+      Array.prototype.forEach.call(tn.querySelectorAll("tspan"), function (t) { t.setAttribute("x", x + dx); });
+      occupied.push(tn.getBBox());
+      if ((dx || dy) && tn.hasAttribute("data-point-x")) {
+        var px = Number(tn.getAttribute("data-point-x")), py = Number(tn.getAttribute("data-point-y")), moved = tn.getBBox();
+        var lead = el("line", { x1: px, y1: py, x2: Math.max(moved.x, Math.min(px, moved.x + moved.width)), y2: Math.max(moved.y, Math.min(py, moved.y + moved.height)), stroke: tn.getAttribute("fill"), "stroke-width": 1, "stroke-dasharray": "3 3", "data-label-leader": "true" }, tn.parentNode);
+        tn.parentNode.insertBefore(lead, tn);
+      }
+      });
+    }
+    svg._labRelayout = fitVisibleLabels;
+    if (!svg._labSizeObserver) {
+      svg._labSizeObserver = new ResizeObserver(function () { if (svg._labRelayout) svg._labRelayout(); });
+      svg._labSizeObserver.observe(svg);
+    }
+    fitVisibleLabels();
+    requestAnimationFrame(fitVisibleLabels);
   }
 
   /* ---------- 实验外壳 ---------- */
@@ -243,6 +306,7 @@
 
     var svg = wrap.querySelector("svg.lab-fig"), out = wrap.querySelector(".lab-out"), body = wrap.querySelector(".lab-body");
     var state = def.tpl === "slider" ? Number(def.ctrl.init) : def.ctrl.init;
+    body.inert = true;
     function paint() {
       draw(svg, def.view, def.scene(state));
       out.innerHTML = def.info(state);
@@ -284,12 +348,12 @@
         fb.innerHTML = (ok ? "<b>✓ 预测对了。</b>" : "<b>✗ 预测错了，正是这条红线。</b>") + def.ask.why + " 现在拨开关亲眼看一遍。";
         math(fb);
         var sk = wrap.querySelector("[data-lab-skip]"); if (sk) sk.remove();
-        body.classList.remove("locked");
+        body.classList.remove("locked"); body.inert = false;
         log(sec, "lab", { id: def.id, card: def.card, choice: "ABC".charAt(i), correct: ok });
         return;
       }
       if (t.closest("[data-lab-skip]")) {
-        body.classList.remove("locked");
+        body.classList.remove("locked"); body.inert = false;
         t.closest("[data-lab-skip]").remove();
       }
     });
@@ -312,15 +376,15 @@
       ask: { q: "\\(A\\subseteq B\\) 时，\\(a\\) 的取值范围是？", opts: ["\\(1\\le a\\le 2\\)", "\\(a\\le 2\\)（含 \\(a\\lt 1\\) 时 \\(A=\\varnothing\\)）", "\\(0\\le a\\le 2\\)"], ans: 1,
         why: "\\(a\\lt 1\\) 时右端点 \\(2a-1\\) 跑到左端点 \\(a\\) 左边，\\(A\\) 是空集；空集是任何集合的子集，这一段不能丢。\\(a\\ge 1\\) 时再列端点不等式得 \\(1\\le a\\le 2\\)，合起来 \\(a\\le 2\\)。" },
       ctrl: { label: "\\(a=\\)", min: -1, max: 3, step: 0.25, init: 1.5, quick: [{ label: "a=0.5（空集区）", v: 0.5 }, { label: "a=1.5", v: 1.5 }, { label: "a=2.5（越界）", v: 2.5 }] },
-      view: { x: [-1.6, 4.2], y: [-1, 1], noY: true, xt: [-1, 0, 1, 2, 3, 4] },
+      view: { x: [-3.8, 5.8], y: [-1, 1], noY: true, xt: [-3, -2, -1, 0, 1, 2, 3, 4, 5] },
       scene: function (a) {
         var r = 2 * a - 1, P = [];
         P.push({ t: "seg", x1: 0, y1: 0.45, x2: 3, y2: 0.45, color: "b", w: 8, label: "B = [0, 3]", dy: -14 });
         P.push({ t: "pt", x: 0, y: 0.45, color: "b", r: 5 }, { t: "pt", x: 3, y: 0.45, color: "b", r: 5 });
         if (r < a) {
-          P.push({ t: "text", x: a, y: -0.35, text: "A = ∅（右端点 2a−1 在左端点 a 左边）", color: "a", anchor: "middle", bold: true });
-          P.push({ t: "pt", x: a, y: -0.35, color: "muted", r: 4, hollow: true, label: "a", dy: 28, dx: -6 });
-          P.push({ t: "pt", x: r, y: -0.35, color: "muted", r: 4, hollow: true, label: "2a−1", dy: 28, dx: -28 });
+          P.push({ t: "text", x: 1, y: -0.96, text: "A = ∅（右端点 2a−1 在左端点 a 左边）", color: "a", anchor: "middle", bold: true });
+          P.push({ t: "pt", x: a, y: -0.35, color: "muted", r: 4, hollow: true, label: "a", dy: 28, dx: 10 });
+          P.push({ t: "pt", x: r, y: -0.35, color: "muted", r: 4, hollow: true, label: "2a−1", dy: 28, dx: -10, anchor: "end" });
         } else {
           var ok = a >= 0 && r <= 3;
           P.push({ t: "seg", x1: a, y1: -0.35, x2: r, y2: -0.35, color: ok ? "a" : "no", w: 8, label: "A = [a, 2a−1]", dy: 30 });
@@ -354,13 +418,13 @@
         if (m <= 2) P.push({ t: "pt", x: 2, y: 4, color: "a", label: "等号点 (2, 4) 取得到", dy: -12 });
         else {
           P.push({ t: "pt", x: 2, y: 4, color: "no", hollow: true, label: "(2, 4) 被挡在禁区外", anchor: "end", dx: -12, dy: 30 });
-          P.push({ t: "pt", x: m, y: f(m), color: "b", label: "真正最小值 (" + f2(m) + ", " + f2(f(m)) + ")", dy: -12 });
+          P.push({ t: "pt", x: m, y: f(m), color: "b", label: "真正最小值 ≈ " + f2(f(m)) + "（x=" + f2(m) + "）", dy: -12 });
         }
         return P;
       },
       info: function (m) {
         if (m <= 2) return '<span class="ok">✓ 等号成立：</span>\\(x=2\\) 在 \\([' + f2(m) + ',+\\infty)\\) 内，最小值就是基本不等式给的 \\(4\\)。';
-        return '<span class="bad">✗ 等号失效：</span>\\(x=2\\) 不在 \\([' + f2(m) + ',+\\infty)\\) 内，\\(4\\) 只是取不到的下界。对勾函数在 \\((2,+\\infty)\\) 递增，最小值在左端点：\\(f(' + f2(m) + ')=' + f2(m + 4 / m) + '\\)。';
+        return '<span class="bad">✗ 等号失效：</span>\\(x=2\\) 不在 \\([' + f2(m) + ',+\\infty)\\) 内，\\(4\\) 只是取不到的下界。对勾函数在 \\((2,+\\infty)\\) 递增，最小值在左端点：\\(f(' + f2(m) + ')=' + f2(m) + '+\\dfrac4{' + f2(m) + '}\\approx ' + f2(m + 4 / m) + '\\)。';
       }
     },
     {
@@ -370,7 +434,7 @@
       ask: { q: "这题能直接令 \\(\\Delta\\lt 0\\) 求 \\(a\\) 吗？", opts: ["能，\\(\\Delta\\lt 0\\) 得 \\(a\\lt 2\\sqrt2\\)", "不能，区间上要看最小值，答案比 \\(a\\lt 2\\sqrt2\\) 宽", "不能，答案比 \\(a\\lt 2\\sqrt2\\) 窄"], ans: 1,
         why: "\\(\\Delta\\lt 0\\) 保证的是在整个 \\(\\mathbf R\\) 上为正，题目只要求 \\([3,5]\\) 上为正：抛物线可以有根，只要根落在区间外。正确做法是分离参数 \\(a\\lt x+\\dfrac2x\\) 在 \\([3,5]\\) 上的最小值 \\(\\dfrac{11}{3}\\)。" },
       ctrl: { label: "\\(a=\\)", min: 2, max: 5, step: 0.25, init: 3, quick: [{ label: "a=3（Δ>0 却成立）", v: 3 }, { label: "a=4（真失败）", v: 4 }] },
-      view: { x: [0, 6.2], y: [-3, 9], xt: [1, 2, 3, 4, 5, 6], yt: [4, 8] },
+      view: { x: [0, 6.2], y: [-5.5, 18.5], xt: [1, 2, 3, 4, 5, 6], yt: [4, 8] },
       scene: function (a) {
         var f = function (x) { return x * x - a * x + 2; }, P = [];
         P.push({ t: "region", x0: 3, x1: 5, color: "b", opacity: 0.16, label: "题目只看 [3, 5]" });
@@ -378,8 +442,8 @@
         var D = a * a - 8;
         if (D >= 0) {
           var r1 = (a - Math.sqrt(D)) / 2, r2 = (a + Math.sqrt(D)) / 2;
-          P.push({ t: "pt", x: r1, y: 0, color: "no", label: "根 " + f2(r1), dy: 28, dx: -16 });
-          P.push({ t: "pt", x: r2, y: 0, color: "no", label: "根 " + f2(r2), dy: 28, dx: -16 });
+          P.push({ t: "pt", x: r1, y: 0, color: "no", label: "根≈" + f2(r1), dy: 28, dx: -16 });
+          P.push({ t: "pt", x: r2, y: 0, color: "no", label: "根≈" + f2(r2), dy: 28, dx: -16 });
         }
         var mn = (a / 2 >= 3 && a / 2 <= 5) ? f(a / 2) : Math.min(f(3), f(5));
         var mx = (a / 2 >= 3 && a / 2 <= 5) ? a / 2 : (f(3) <= f(5) ? 3 : 5);
@@ -390,7 +454,7 @@
         var D = a * a - 8, f = function (x) { return x * x - a * x + 2; };
         var mn = (a / 2 >= 3 && a / 2 <= 5) ? f(a / 2) : Math.min(f(3), f(5));
         var dOK = D < 0, real = mn > 0;
-        return "「套 \\(\\Delta\\lt 0\\)」说：" + (dOK ? '<span class="ok">成立</span>' : '<span class="bad">不成立</span>') + "（\\(\\Delta=" + f2(D) + "\\)）；区间上的真相：最小值 \\(" + f2(mn) + "\\)，" +
+        return "「套 \\(\\Delta\\lt 0\\)」说：" + (dOK ? '<span class="ok">成立</span>' : '<span class="bad">不成立</span>') + "（\\(\\Delta=" + String(D) + "\\)）；区间上的真相：最小值 \\(" + f2(mn) + "\\)，" +
           (real ? '<span class="ok">恒成立 ✓</span>' : '<span class="bad">有 \\(x\\in[3,5]\\) 使 \\(f(x)\\le 0\\) ✗</span>') +
           (dOK !== real ? "。<b>两种判断不一致，这就是被 \\(\\Delta\\) 冤枉掉的一段</b>：正确范围 \\(a\\lt\\dfrac{11}{3}\\approx 3.67\\)。" : "。");
       }
@@ -400,8 +464,8 @@
       id: "fn-dom-same", card: "fn-dom-same", tpl: "toggle",
       title: "约分之前先看定义域：\\(\\dfrac{x^2-1}{x-1}\\) 和 \\(x+1\\) 差在哪一个点？",
       intro: "解析式化简前后看似一样，图象上却少了一个点。切换看一看。",
-      ask: { q: "\\(f(x)=\\dfrac{x^2-1}{x-1}\\) 与 \\(g(x)=x+1\\) 是同一函数吗？", opts: ["是，约分后完全一样", "不是，\\(f\\) 的定义域少了 \\(x=1\\)", "不是，值域不同"], ans: 1,
-        why: "同一函数要定义域相同且对应关系一致。约分前分母不能为 \\(0\\)，\\(f\\) 的定义域是 \\(x\\ne 1\\)；\\(g\\) 在 \\(x=1\\) 有定义。少一个点就不是同一函数。" },
+      ask: { q: "\\(f(x)=\\dfrac{x^2-1}{x-1}\\) 与 \\(g(x)=x+1\\) 是同一函数吗？", opts: ["是，约分后完全一样", "不是，\\(f\\) 的定义域少了 \\(x=1\\)", "是，去掉一个点不会影响是否为同一函数"], ans: 1,
+        why: "同一函数要定义域相同且对应关系一致。约分前分母不能为 \\(0\\)，\\(f\\) 的定义域是 \\(x\\ne 1\\)；\\(g\\) 在 \\(x=1\\) 有定义。本例 \\(f\\) 的值域还少了 \\(2\\)，而 \\(g\\) 的值域为 \\(\\mathbf R\\)。定义域或对应关系不同，就不是同一函数。" },
       ctrl: { init: "f", states: [{ key: "f", label: "\\(f(x)=\\dfrac{x^2-1}{x-1}\\)" }, { key: "g", label: "\\(g(x)=x+1\\)" }] },
       view: { x: [-2.2, 3.2], y: [-1.5, 4.5], xt: [-2, -1, 1, 2, 3], yt: [1, 2, 3, 4] },
       scene: function (s) {
@@ -473,10 +537,10 @@
       id: "fn-model-app", card: "fn-model-app", tpl: "slider",
       title: "闭区间上的二次函数最值：对称轴出了区间，顶点就不算数",
       intro: "\\(f(x)=(x-a)^2+1\\)，只在 \\(x\\in[0,2]\\) 上取值。拖动对称轴 \\(x=a\\)。",
-      ask: { q: "\\(f(x)=(x-a)^2+1\\) 在 \\([0,2]\\) 上的最小值一定是 \\(1\\) 吗？", opts: ["是，顶点就是最小值", "不一定，对称轴 \\(x=a\\) 不在 \\([0,2]\\) 内时最小值在端点", "不一定，最小值可能在 \\(x=1\\)"], ans: 1,
+      ask: { q: "\\(f(x)=(x-a)^2+1\\) 在 \\([0,2]\\) 上的最小值一定是 \\(1\\) 吗？", opts: ["是，顶点就是最小值", "不一定，对称轴 \\(x=a\\) 不在 \\([0,2]\\) 内时最小值在端点", "不一定，最小值总在 \\(x=1\\)"], ans: 1,
         why: "顶点的纵坐标 \\(1\\) 只有在 \\(x=a\\) 落进 \\([0,2]\\) 时才取得到；对称轴在区间左边时函数在区间上递增，最小值在 \\(x=0\\)；在右边时递减，最小值在 \\(x=2\\)。应用题先列实际定义域，就是为了这一步。" },
       ctrl: { label: "对称轴 \\(a=\\)", min: -1, max: 3, step: 0.25, init: 1, quick: [{ label: "a=1（顶点在内）", v: 1 }, { label: "a=3（顶点在外）", v: 3 }] },
-      view: { x: [-1.6, 3.6], y: [0, 9], xt: [-1, 1, 2, 3], yt: [1, 4, 8] },
+      view: { x: [-1.6, 3.6], y: [0, 11], xt: [-1, 1, 2, 3], yt: [1, 4, 8] },
       scene: function (a) {
         var f = function (x) { return (x - a) * (x - a) + 1; }, P = [];
         P.push({ t: "region", x0: 0, x1: 2, color: "b", opacity: 0.16, label: "允许区间 [0, 2]" });
@@ -491,7 +555,7 @@
       info: function (a) {
         if (a >= 0 && a <= 2) return '<span class="ok">✓ 对称轴在区间内：</span>最小值就是顶点 \\(f(' + f2(a) + ')=1\\)。';
         var xm = a < 0 ? 0 : 2, v = (xm - a) * (xm - a) + 1;
-        return '<span class="bad">✗ 对称轴 x=' + f2(a) + ' 在区间' + (a < 0 ? "左" : "右") + '边：</span>\\(f\\) 在 \\([0,2]\\) 上单调' + (a < 0 ? "递增" : "递减") + '，最小值在端点 \\(f(' + xm + ')=' + f2(v) + '\\)，不是 \\(1\\)。';
+        return '<span class="bad">✗ 对称轴 x=' + f2(a) + ' 在区间' + (a < 0 ? "左" : "右") + '边：</span>\\(f\\) 在 \\([0,2]\\) 上单调' + (a < 0 ? "递增" : "递减") + '，最小值在端点 \\(f(' + xm + ')=' + String(v) + '\\)，不是 \\(1\\)。';
       }
     },
     /* ---- 第 4 章 ---- */
@@ -510,12 +574,12 @@
         P.push({ t: "curve", f: f, from: m, to: 4, color: "muted", dash: true, w: 2 });
         P.push({ t: "hline", y: 0, color: "no", label: "y = 0 取不到（下界）", dy: 24 });
         P.push({ t: "pt", x: m, y: f(m), color: "b", label: "(m, 2^m) 取得到", dy: -12 });
-        P.push({ t: "seg", x1: -4.1, y1: 0.02, x2: -4.1, y2: f(m), color: "b", w: 9, label: "值域", dx: 40, dy: 0 });
+        P.push({ t: "seg", x1: -4.1, y1: 0, x2: -4.1, y2: f(m), color: "b", w: 9, label: "值域", dx: 40, dy: 0 });
         P.push({ t: "pt", x: -4.1, y: 0, color: "no", hollow: true, r: 5 });
         return P;
       },
       info: function (m) {
-        return '值域 <span class="ok">\\((0,\\ ' + f2(Math.pow(2, m)) + ']\\)</span>：上端 \\(2^{' + f2(m) + '}\\) 取得到（闭），下端 \\(0\\) 只能无限接近（开）。写成 \\((-\\infty,' + f2(Math.pow(2, m)) + ']\\) 就把负数都算进去了，<span class="bad">错</span>。';
+        return '值域 <span class="ok">\\((0,\\ 2^{' + f2(m) + '}]\\)</span>：上端 \\(2^{' + f2(m) + '}\\approx ' + f2(Math.pow(2, m)) + '\\) 取得到（闭），近似小数不代替精确端点；下端 \\(0\\) 只能无限接近（开）。写成 \\((-\\infty,2^{' + f2(m) + '}]\\) 就把负数都算进去了，<span class="bad">错</span>。';
       }
     },
     {
@@ -523,8 +587,8 @@
       title: "零点存在定理只说「有」，不说「没有」，也离不开连续",
       intro: "定理：\\(f\\) 在 \\([a,b]\\) 上连续且 \\(f(a)f(b)\\lt 0\\Rightarrow\\) \\((a,b)\\) 内有零点。切换三种情形，看哪些结论不能反着用。",
       ask: { q: "\\(f(a)\\cdot f(b)\\gt 0\\)，能断定 \\(f(x)\\) 在 \\((a,b)\\) 内没有零点吗？", opts: ["能", "不能，\\(f(x)=x^2-1\\) 在 \\([-2,2]\\) 上 \\(f(-2)f(2)\\gt 0\\) 却有两个零点", "能，但要求 \\(f\\) 连续"], ans: 1,
-        why: "定理是单向的：异号 \\(\\Rightarrow\\) 有零点。同号时可能穿过 \\(x\\) 轴偶数次。另外去掉「连续」，异号也可能没有零点（\\(\\dfrac1x\\) 在 \\([-1,1]\\)）。" },
-      ctrl: { init: "ok", states: [{ key: "ok", label: "连续且异号：\\(x-1\\) 在 \\([0,2]\\)" }, { key: "even", label: "同号却有零点：\\(x^2-1\\) 在 \\([-2,2]\\)" }, { key: "disc", label: "异号却无零点：\\(\\dfrac1x\\) 在 \\([-1,1]\\)" }] },
+        why: "定理是单向的：异号 \\(\\Rightarrow\\) 有零点。同号时内部仍可能有零点。另外，若去掉连续性，定义完整的跳跃函数也能两端异号而没有零点：左侧取 \\(-1\\)、右侧含 \\(0\\) 取 \\(1\\)。" },
+      ctrl: { init: "ok", states: [{ key: "ok", label: "连续且异号：\\(x-1\\) 在 \\([0,2]\\)" }, { key: "even", label: "同号却有零点：\\(x^2-1\\) 在 \\([-2,2]\\)" }, { key: "disc", label: "异号却无零点：区间内跳跃的函数" }] },
       view: { x: [-2.6, 2.6], y: [-3.2, 3.6], xt: [-2, -1, 1, 2], yt: [-2, -1, 1, 2, 3] },
       scene: function (s) {
         var P = [];
@@ -540,16 +604,17 @@
           P.push({ t: "pt", x: -1, y: 0, color: "no", label: "零点", dy: 28, dx: -20 }, { t: "pt", x: 1, y: 0, color: "no", label: "零点", dy: 28, dx: -20 });
         } else {
           P.push({ t: "region", x0: -1, x1: 1, color: "b", opacity: 0.14, label: "[−1, 1]" });
-          P.push({ t: "curve", f: function (x) { return 1 / x; }, from: -2.6, to: -0.25, color: "a", w: 3.5 }, { t: "curve", f: function (x) { return 1 / x; }, from: 0.25, to: 2.6, color: "a", w: 3.5 });
-          P.push({ t: "pt", x: -1, y: -1, color: "c", label: "f(−1)=−1", dy: 30, dx: -40 }, { t: "pt", x: 1, y: 1, color: "c", label: "f(1)=1", dy: -12 });
-          P.push({ t: "text", x: 0, y: 2.6, text: "x=0 处断开，没有零点", color: "no", anchor: "middle", bold: true });
+          P.push({ t: "curve", f: function () { return -1; }, from: -2.6, to: 0, color: "a", w: 3.5 }, { t: "curve", f: function () { return 1; }, from: 0, to: 2.6, color: "a", w: 3.5 });
+          P.push({ t: "pt", x: 0, y: -1, color: "no", hollow: true }, { t: "pt", x: 0, y: 1, color: "a" });
+          P.push({ t: "pt", x: -1, y: -1, color: "c", label: "h(−1)=−1", dy: 30, dx: -40 }, { t: "pt", x: 1, y: 1, color: "c", label: "h(1)=1", dy: -12 });
+          P.push({ t: "text", x: 0, y: 2.6, text: "x=0 跳跃，h(x) 始终≠0", color: "no", anchor: "middle", bold: true });
         }
         return P;
       },
       info: function (s) {
         if (s === "ok") return '<span class="ok">✓ 定理正用：</span>连续 + \\(f(0)f(2)=-1\\lt 0\\Rightarrow(0,2)\\) 内有零点，确实在 \\(x=1\\)。';
-        if (s === "even") return '<span class="bad">✗ 逆命题假：</span>\\(f(-2)f(2)=9\\gt 0\\)，可 \\(x=\\pm1\\) 是两个零点。同号只说明穿过 \\(x\\) 轴偶数次（含 0 次），不能断定「没有」。';
-        return '<span class="bad">✗ 丢了连续性：</span>\\(f(-1)f(1)=-1\\lt 0\\)，但 \\(\\dfrac1x\\) 在 \\(x=0\\) 处不连续，整个区间上没有零点。用定理前先写「\\(f\\) 连续」。';
+        if (s === "even") return '<span class="bad">✗ 逆命题假：</span>\\(f(-2)f(2)=9\\gt 0\\)，可 \\(x=\\pm1\\) 是两个零点。这个例子两端同号却有两个零点，不能断定「没有」。';
+        return '<span class="bad">✗ 丢了连续性：</span>\\(h(-1)h(1)=-1\\lt 0\\)，但本例 \\(h(x)=-1\\)（\\(x\\lt0\\)）、\\(h(x)=1\\)（\\(x\\ge0\\)），在 \\(0\\) 跳跃；它在整个区间都有定义且从不等于 \\(0\\)。用定理前须核在整个闭区间连续。';
       }
     },
     /* ---- 第 5 章 ---- */
@@ -584,7 +649,7 @@
       ask: { q: "倾斜角 \\(\\alpha\\) 从 \\(0^\\circ\\) 增大到接近 \\(180^\\circ\\)，斜率 \\(k\\) 一直在增大吗？", opts: ["是，\\(k\\) 随 \\(\\alpha\\) 单调递增", "不是，\\(\\alpha=90^\\circ\\) 时 \\(k\\) 不存在，两侧各自递增", "不是，\\(k\\) 单调递减"], ans: 1,
         why: "\\(\\tan\\alpha\\) 在 \\([0^\\circ,90^\\circ)\\) 和 \\((90^\\circ,180^\\circ)\\) 上分别递增，但 \\(90^\\circ\\) 处无定义，从 \\(89^\\circ\\) 到 \\(91^\\circ\\) 斜率从很大的正数跳到很小的负数。由 \\(k\\) 的范围求 \\(\\alpha\\) 要分两段。" },
       ctrl: { label: "倾斜角 \\(\\alpha=\\)", min: 0, max: 175, step: 5, init: 45, fmt: function (v) { return v + "°"; }, quick: [{ label: "45°", v: 45 }, { label: "90°", v: 90 }, { label: "135°", v: 135 }] },
-      view: { x: [-3.2, 3.2], y: [-2.6, 2.6], xt: [-2, -1, 1, 2], yt: [-2, -1, 1, 2] },
+      view: { height: PT + PB + (W - PL - PR) * (5.2 / 6.4), x: [-3.2, 3.2], y: [-2.6, 2.6], xt: [-2, -1, 1, 2], yt: [-2, -1, 1, 2] },
       scene: function (deg) {
         var a = deg * PI / 180, c = Math.cos(a), s = Math.sin(a), P = [];
         var T = Math.min(Math.abs(c) > 1e-9 ? 3.2 / Math.abs(c) : 1e9, Math.abs(s) > 1e-9 ? 2.6 / Math.abs(s) : 1e9);
@@ -592,13 +657,13 @@
         P.push({ t: "seg", x1: -T * c, y1: -T * s, x2: T * c, y2: T * s, color: vertical ? "no" : "a", w: 3.5 });
         P.push({ t: "seg", x1: 0, y1: 0, x2: 1.2, y2: 0, color: "c", w: 2 });
         P.push({ t: "text", x: 1.35, y: 0.35, text: "α = " + deg + "°", color: "c", bold: true });
-        P.push({ t: "text", x: -3.1, y: 2.3, text: vertical ? "k 不存在" : "k = tan α = " + f2(Math.tan(a)), color: vertical ? "no" : "a", bold: true });
+        P.push({ t: "text", x: -3.1, y: 2.3, text: vertical ? "k 不存在" : "k = tan α ≈ " + f2(Math.tan(a)), color: vertical ? "no" : "a", bold: true });
         return P;
       },
       info: function (deg) {
         if (Math.abs(deg - 90) < 1e-9) return '<span class="bad">α = 90°：直线垂直于 x 轴，斜率不存在。</span>斜率公式 \\(\\dfrac{y_2-y_1}{x_2-x_1}\\) 分母为 \\(0\\)，不能套；由 \\(k\\) 求 \\(\\alpha\\) 的范围时这个角要单独写。';
         var k = Math.tan(deg * PI / 180);
-        return 'α = ' + deg + '°，\\(k=\\tan\\alpha=' + f2(k) + '\\)（' + (deg < 90 ? '锐角，\\(k\\gt 0\\)' : (deg === 0 ? '水平，\\(k=0\\)' : '钝角，\\(k\\lt 0\\)')) + '）。' + (deg === 85 || deg === 95 ? '<b>再拨 5°：k 从一端跳到另一端。</b>' : '');
+        return 'α = ' + deg + '°，\\(k=\\tan\\alpha\\approx ' + f2(k) + '\\)（' + (deg === 0 ? '水平，\\(k=0\\)' : (deg < 90 ? '锐角，\\(k\\gt 0\\)' : '钝角，\\(k\\lt 0\\)')) + '）。' + (deg === 85 || deg === 95 ? '<b>跨过 90° 时要分别看两侧；90° 本身斜率不存在。</b>' : '');
       }
     },
     /* ---- 选必一 第 3 章 ---- */
@@ -609,7 +674,7 @@
       ask: { q: "动点 \\(P\\) 满足 \\(|PF_1|+|PF_2|=4\\)，而 \\(|F_1F_2|=4\\)，\\(P\\) 的轨迹是？", opts: ["椭圆", "线段 \\(F_1F_2\\)", "不存在"], ans: 1,
         why: "三角形两边之和大于第三边，\\(|PF_1|+|PF_2|\\gt|F_1F_2|\\) 才能构成三角形；恰好相等时 \\(P\\) 只能落在线段 \\(F_1F_2\\) 上；小于时根本不存在。定义里的 \\(2a\\gt 2c\\) 不是摆设。" },
       ctrl: { label: "定长 \\(2a=\\)", min: 2.5, max: 9, step: 0.5, init: 6, quick: [{ label: "2a=6（椭圆）", v: 6 }, { label: "2a=4（线段）", v: 4 }, { label: "2a=3（不存在）", v: 3 }] },
-      view: { x: [-6.4, 6.4], y: [-2.9, 2.9], xt: [-4, -2, 2, 4], yt: [-2, 2] },
+      view: { height: PT + PB + (W - PL - PR) * (10.2 / 12.8), x: [-6.4, 6.4], y: [-5.1, 5.1], xt: [-4, -2, 2, 4], yt: [-2, 2] },
       scene: function (twoA) {
         var a = twoA / 2, c = 2, P = [];
         P.push({ t: "pt", x: -2, y: 0, color: "no", label: "F₁", dy: 30, dx: -10 }, { t: "pt", x: 2, y: 0, color: "no", label: "F₂", dy: 30, dx: -10 });
@@ -617,7 +682,7 @@
           var b = Math.sqrt(a * a - c * c);
           var up = function (x) { return b * Math.sqrt(Math.max(0, 1 - x * x / (a * a))); };
           P.push({ t: "curve", f: up, from: -a, to: a, color: "a", w: 3.5 }, { t: "curve", f: function (x) { return -up(x); }, from: -a, to: a, color: "a", w: 3.5 });
-          P.push({ t: "text", x: 0, y: b, text: "椭圆 a=" + f2(a) + ", b=" + f2(b), color: "a", anchor: "middle", dy: -10, bold: true });
+          P.push({ t: "text", x: 0, y: b, text: "椭圆 a=" + f2(a) + ", b≈" + f2(b), color: "a", anchor: "middle", dy: -10, bold: true });
         } else if (Math.abs(a - c) < 1e-9) {
           P.push({ t: "seg", x1: -2, y1: 0, x2: 2, y2: 0, color: "b", w: 8, label: "退化成线段 F₁F₂", dy: -14 });
         } else {
@@ -626,7 +691,7 @@
         return P;
       },
       info: function (twoA) {
-        if (twoA > 4) return '<span class="ok">✓ \\(2a=' + f2(twoA) + '\\gt 2c=4\\)：</span>是椭圆，\\(b^2=a^2-c^2=' + f2(twoA * twoA / 4 - 4) + '\\)。\\(2a\\) 越接近 \\(4\\)，椭圆越扁。';
+        if (twoA > 4) return '<span class="ok">✓ \\(2a=' + f2(twoA) + '\\gt 2c=4\\)：</span>是椭圆，\\(b^2=a^2-c^2=' + String(twoA * twoA / 4 - 4) + '\\)。\\(2a\\) 越接近 \\(4\\)，椭圆越扁。';
         if (Math.abs(twoA - 4) < 1e-9) return '<span class="bad">✗ \\(2a=2c\\)：</span>\\(|PF_1|+|PF_2|=|F_1F_2|\\)，\\(P\\) 只能在线段 \\(F_1F_2\\) 上，不是椭圆。';
         return '<span class="bad">✗ \\(2a=' + f2(twoA) + '\\lt 2c=4\\)：</span>两边之和小于第三边，没有这样的点。';
       }
@@ -636,8 +701,8 @@
       id: "seq-arith-geom", card: "seq-arith-geom", tpl: "toggle",
       title: "等比数列求和：\\(q=1\\) 时公式的分母是 \\(0\\)",
       intro: "\\(a_1=2\\)，求前 \\(4\\) 项和。切换公比 \\(q\\)，比较「直接相加」和「套公式 \\(S_n=\\dfrac{a_1(1-q^n)}{1-q}\\)」。",
-      ask: { q: "等比数列 \\(a_1=2\\)，公比 \\(q\\) 是未知参数，求 \\(S_4\\) 的第一步是？", opts: ["直接套 \\(\\dfrac{a_1(1-q^4)}{1-q}\\)", "先分 \\(q=1\\) 与 \\(q\\ne 1\\) 讨论", "先求通项再相加"], ans: 1,
-        why: "公式的分母是 \\(1-q\\)，\\(q=1\\) 时为 \\(0\\)，公式作废，此时 \\(S_n=na_1\\)。只要公比含参数，第一句话就是「当 \\(q=1\\) 时……当 \\(q\\ne 1\\) 时……」。" },
+      ask: { q: "公比 \\(q\\) 含参数，直接套分式求和公式前必须先核查什么？", opts: ["直接套 \\(\\dfrac{a_1(1-q^4)}{1-q}\\)", "先分 \\(q=1\\) 与 \\(q\\ne 1\\) 讨论", "只求通项即可省略分母为零的检查"], ans: 1,
+        why: "公式的分母是 \\(1-q\\)，\\(q=1\\) 时为 \\(0\\)，公式作废，此时 \\(S_n=na_1\\)。使用这个分式前须分 \\(q=1\\) 与 \\(q\\ne1\\)。也可直接相加写成 \\(S_4=2(1+q+q^2+q^3)\\)，此多项式在 \\(q=1\\) 仍有效；这不等于能把 \\(1\\) 直接代进原分式。" },
       ctrl: { init: "2", states: [{ key: "2", label: "\\(q=2\\)" }, { key: "1", label: "\\(q=1\\)" }, { key: "-1", label: "\\(q=-1\\)" }] },
       view: { x: [0, 5], y: [-4, 18], xt: [1, 2, 3, 4], yt: [-2, 2, 8, 16] },
       scene: function (s) {
@@ -685,10 +750,10 @@
     },
     {
       id: "calc-monot-extrema", card: "calc-monot-extrema", tpl: "toggle",
-      title: "\\(f'(x_0)=0\\) 不够：导数不变号，就不是极值点",
+      title: "\\(f'(x_0)=0\\) 不够：\\(x^2\\) 与 \\(x^3\\) 的极值为什么不同",
       intro: "比较 \\(y=x^2\\) 和 \\(y=x^3\\) 在 \\(x=0\\) 处：导数都为 \\(0\\)（蓝色虚线是 \\(f'\\)）。切换看导数两侧的符号。",
-      ask: { q: "\\(f'(x_0)=0\\) 是「\\(x_0\\) 为极值点」的什么条件？", opts: ["充要条件", "必要不充分（还要 \\(f'\\) 在 \\(x_0\\) 两侧变号）", "充分不必要"], ans: 1,
-        why: "可导函数在极值点处导数必为 \\(0\\)（必要），但 \\(y=x^3\\) 在 \\(x=0\\) 处 \\(f'(0)=0\\) 而两侧 \\(f'\\ge 0\\) 不变号，函数一路递增，\\(0\\) 不是极值点。求极值点必须检验变号。" },
+      ask: { q: "已知 \\(f\\) 在内点 \\(x_0\\) 的邻域内可导，\\(f'(x_0)=0\\) 是其为极值点的什么条件？", opts: ["充要条件", "必要不充分：驻点不一定是极值点", "充分不必要"], ans: 1,
+        why: "函数在内点邻域内可导，且该点为极值点时，导数必为 \\(0\\)（必要），但 \\(y=x^3\\) 在 \\(x=0\\) 处 \\(f'(0)=0\\) 而两侧 \\(f'\\ge 0\\) 不变号，函数一路递增，\\(0\\) 不是极值点。本实验两例在驻点两侧各有固定导数符号，可用变号这个常用充分判据比较；不能把解出驻点直接当作已求出极值点。" },
       ctrl: { init: "x2", states: [{ key: "x2", label: "\\(y=x^2\\)：\\(f'=2x\\) 两侧变号" }, { key: "x3", label: "\\(y=x^3\\)：\\(f'=3x^2\\) 两侧不变号" }] },
       view: { x: [-2.1, 2.1], y: [-3.2, 3.6], xt: [-2, -1, 1, 2], yt: [-2, 2] },
       scene: function (s) {
@@ -702,14 +767,14 @@
           P.push({ t: "curve", f: function (x) { return x * x * x; }, from: -2.1, to: 2.1, color: "a", w: 3.5, label: { x: 1.2, text: "f=x³", dy: -8 } });
           P.push({ t: "curve", f: function (x) { return 3 * x * x; }, from: -2.1, to: 2.1, color: "c", dash: true, w: 2.5, label: { x: 0.8, text: "f'=3x²", dy: -8 } });
           P.push({ t: "text", x: -1.2, y: -1.6, text: "f' ≥ 0", color: "a", anchor: "middle", bold: true }, { t: "text", x: 1.2, y: -1.6, text: "f' ≥ 0", color: "a", anchor: "middle", bold: true });
-          P.push({ t: "pt", x: 0, y: 0, color: "no", hollow: true, label: "f'(0)=0 但不是极值点", dy: 28, dx: 8 });
+          P.push({ t: "pt", x: 0, y: 0, color: "no", hollow: false, label: "f'(0)=0 但不是极值点", dy: 28, dx: 8 });
         }
         return P;
       },
       info: function (s) {
         return s === "x2"
           ? '<span class="ok">✓ 变号：</span>\\(f\'\\) 在 \\(0\\) 左负右正，函数先减后增，\\(x=0\\) 是极小值点。'
-          : '<span class="bad">✗ 不变号：</span>\\(f\'(0)=0\\)，但 \\(f\'=3x^2\\) 在 \\(0\\) 两侧都 \\(\\ge 0\\)，函数一直递增，\\(x=0\\) 不是极值点。解出 \\(f\'(x)=0\\) 的根之后，列表看符号是必做的一步。';
+          : '<span class="bad">✗ 不变号：</span>\\(f\'(0)=0\\)，但 \\(f\'=3x^2\\) 在 \\(0\\) 两侧都 \\(\\ge 0\\)，函数一直递增，\\(x=0\\) 不是极值点。本例由两侧非负且除驻点外为正，得出严格递增，因而不是极值点。';
       }
     }
   ];

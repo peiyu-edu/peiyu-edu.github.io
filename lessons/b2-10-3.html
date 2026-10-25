@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -95,7 +95,7 @@
     </div>
     <div class="concept-card">
       <div class="concept-head"><span class="badge-pill">思维清障</span> 大数定律稀释 vs 赌徒谬误补偿</div>
-      <p><b>大数稀释机理</b>：试验次数 \(n\) 极大时，前期的局部绝对偏差 \(\Delta\) 被分母海量试验<b>稀释平摊</b>：\(\frac{n_A + \Delta}{n} \to P(A)\)。</p>
+      <p><b>前期偏差会被稀释</b>：例如前5次全出反面，正面频数相对期望 \(5\times0.5=2.5\) 少了2.5。总次数到 \(n\) 时，这一小段对总频率的固定影响为 \(-2.5/n\)，其绝对值随 \(n\) 增大而减小；后续试验本身仍有随机波动，不能据此保证每轮频率都接近0.5。</p>
       <p><b>赌徒谬误妄想</b>：误以为试验系统会“主动记忆与纠错”（连出 5 次反面，第 6 次出正面概率变大）。<b>试验无记忆</b>，单次概率恒为 \(\frac12\)！</p>
       <p class="small">警惕：大数定律绝非事后补偿，而是未来海量试验对过往偏差的稀释！</p>
     </div>
@@ -263,7 +263,7 @@
   <div class="micro-box" style="margin-top:14px;">
     <div class="micro-title">反例微图解：大数稀释 vs 赌徒补偿真实机理</div>
     <svg id="m-freq-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="大数稀释与赌徒谬误机理对比反例图"></svg>
-    <div class="micro-caption">大数定律靠分母增长稀释前期绝对偏差（5/1000 趋向于 0），分子不需要任何神秘力量逆势“补偿”！</div>
+    <div class="micro-caption">前5次全反面的固定偏移是 \(\Delta=-2.5\)；它对总频率的影响为 \(-2.5/n\)。后续仍有随机波动，无需也不会“主动补偿”，更不保证有限次的频率一定接近概率。</div>
   </div>
 
   <details class="more" style="margin-top:14px;">
@@ -366,15 +366,15 @@
 
   <h3>挑战</h3>
   <div class="card predict" data-id="p-challenge" data-answer="B">
-    <p>6. 同时抛两枚均匀硬币，看是不是「一正一反」。这样抛 \(1000\) 次，「一正一反」的频率最可能在哪个数附近？</p>
+    <p>6. 同时抛两枚相互独立的均匀硬币，看是不是「一正一反」。各轮也相互独立，这样抛 \(1000\) 次，「一正一反」的频率最可能在哪个数附近？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(\dfrac13\)</button>
       <button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button>
       <button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。把两枚硬币分成甲、乙，等可能的结果有 \(4\) 种：正正、正反、反正、反反。「一正一反」占 \(2\) 种，概率 \(=\dfrac24=\dfrac12\)。\(1000\) 次不算少，频率会稳在 \(0.5\) 附近。</p>
-      <p>选 A 的同学把结果分成「两正、两反、一正一反」三种，当成等可能了；其实「一正一反」有两种来路。真做 \(1000\) 次，频率不会在 \(0.33\) 附近——这正是用频率检验理论的例子。</p>
+      <p><b>B</b>。把两枚硬币分成甲、乙，等可能的结果有 \(4\) 种：正正、正反、反正、反反。「一正一反」占 \(2\) 种，概率 \(=\dfrac24=\dfrac12\)。做 \(1000\) 次时，频率通常在 \(0.5\) 附近。</p>
+      <p>选 A 的同学把结果分成「两正、两反、一正一反」三种，当成等可能了；其实「一正一反」有两种来路。\(1000\) 次得到约 \(0.33\) 的频率极不常见，但仍可能出现；有限次试验不能给出绝对保证。</p>
     </div>
   </div>
 </section>
@@ -584,13 +584,13 @@
     svg("text", { x: rx + 76, y: 50, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14.5 }, efSvg).textContent = "第 " + (idx + 1) + " 轮（抛100次）";
     svg("text", { x: rx + 14, y: 82, fill: ca, "font-weight": 700, "font-size": 14.5 }, efSvg).textContent = "• 正面：" + curH + " 次";
     svg("text", { x: rx + 14, y: 108, fill: fg, "font-size": 13.5 }, efSvg).textContent = "• 反面：" + (100 - curH) + " 次";
-    svg("text", { x: rx + 14, y: 136, fill: cc, "font-weight": 700, "font-size": 14 }, efSvg).textContent = "频率 = " + (curH / 100).toFixed(2) + " ≈ 0.50";
-    svg("text", { x: rx + 14, y: 162, fill: mu, "font-size": 12 }, efSvg).textContent = "始终围绕 50 次上下微调";
+    svg("text", { x: rx + 14, y: 136, fill: cc, "font-weight": 700, "font-size": 14 }, efSvg).textContent = "频率 = " + (curH / 100).toFixed(2);
+    svg("text", { x: rx + 14, y: 162, fill: mu, "font-size": 12 }, efSvg).textContent = "单轮仍可能明显偏离";
 
     [].forEach.call(efBar.querySelectorAll("button"), function (b, bi) {
       b.classList.toggle("on", (bi === 0 && idx === 0) || (bi === 1 && idx === 1) || (bi === 2 && idx >= 2));
     });
-    efNote.innerHTML = "第 <b>" + (idx + 1) + "</b> 轮 100 次硬币：正面朝上 <b>" + curH + " 次</b>（频率 <b>" + (curH / 100).toFixed(2) + "</b>），总是稳稳落在 <b>50 次（频率 0.5）</b>附近！";
+    efNote.innerHTML = "第 <b>" + (idx + 1) + "</b> 轮 100 次硬币：正面朝上 <b>" + curH + " 次</b>（频率 <b>" + (curH / 100).toFixed(2) + "</b>）。均匀硬币的正面概率是 <b>0.5</b>；100 次的结果通常在 50 次附近，但单轮仍可能明显偏离，不保证每轮都接近。";
   }
   [].forEach.call(efBar.querySelectorAll("button"), function (b) {
     b.onclick = function () {
@@ -624,9 +624,9 @@
     var mode = "converge";
 
     var caps = {
-      converge: "大数定律收敛曲线：试验次数充分大时，频率的振荡幅度剧烈衰减，紧密稳定在客观概率 P=0.5 附近。",
-      fluc: "小样本随机波动：样本容量 n=10 时，每次试验由于纯偶然性产生 0.3~0.8 的宽幅偏离，绝非概率发生改变。",
-      monte: "蒙特卡洛模拟：向单位正方形内随机投点，落在 1/4 圆内的频率以极大概率收敛于面积之比 π/4。"
+      converge: "示意走势：独立抛均匀硬币，次数增多时频率通常更靠近概率0.5，但仍会波动，不保证每一步更近或某个有限次数必定接近。",
+      fluc: "图中展示几组10次试验的频率；真实10次试验还可能得到0或1。样本频率发生波动，并不表示均匀硬币的概率0.5改变。",
+      monte: "蒙特卡洛模拟：向单位正方形内独立、均匀随机投点，落在1/4圆内的频率通常随次数增多而接近面积比π/4；有限次估计仍有误差。"
     };
 
     function draw() {
@@ -644,48 +644,48 @@
         // Convergence line chart
         // Box: x: 60, y: 30, w: 420, h: 140
         // Axis
-        s("line", { x1: 60, y1: 170, x2: 480, y2: 170, stroke: "#64748b", "stroke-width": 1.5 });
-        s("line", { x1: 60, y1: 170, x2: 60, y2: 30, stroke: "#64748b", "stroke-width": 1.5 });
+        s("line", { x1: 60, y1: 170, x2: 480, y2: 170, stroke: "var(--muted)", "stroke-width": 1.5 });
+        s("line", { x1: 60, y1: 170, x2: 60, y2: 30, stroke: "var(--muted)", "stroke-width": 1.5 });
 
         // Ticks
-        s("text", { x: 50, y: 35, fill: "#64748b", "font-size": "10", "text-anchor": "end" }, "1.0");
-        s("text", { x: 50, y: 103, fill: "#dc2626", "font-size": "10.5", "font-weight": "bold", "text-anchor": "end" }, "P=0.5");
-        s("text", { x: 50, y: 173, fill: "#64748b", "font-size": "10", "text-anchor": "end" }, "0.0");
+        s("text", { x: 50, y: 35, fill: "var(--muted)", "font-size": "10", "text-anchor": "end" }, "1.0");
+        s("text", { x: 50, y: 103, fill: "var(--no)", "font-size": "10.5", "font-weight": "bold", "text-anchor": "end" }, "P=0.5");
+        s("text", { x: 50, y: 173, fill: "var(--muted)", "font-size": "10", "text-anchor": "end" }, "0.0");
 
-        s("text", { x: 60, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "n=10");
-        s("text", { x: 180, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "100");
-        s("text", { x: 320, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "1000");
-        s("text", { x: 460, y: 185, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "10000");
+        s("text", { x: 60, y: 185, fill: "var(--muted)", "font-size": "10", "text-anchor": "middle" }, "n=10");
+        s("text", { x: 180, y: 185, fill: "var(--muted)", "font-size": "10", "text-anchor": "middle" }, "100");
+        s("text", { x: 320, y: 185, fill: "var(--muted)", "font-size": "10", "text-anchor": "middle" }, "1000");
+        s("text", { x: 460, y: 185, fill: "var(--muted)", "font-size": "10", "text-anchor": "middle" }, "10000");
 
         // Target Probability line y = 100
-        s("line", { x1: 60, y1: 100, x2: 480, y2: 100, stroke: "#dc2626", "stroke-width": 1.5, "stroke-dasharray": "4 4" });
+        s("line", { x1: 60, y1: 100, x2: 480, y2: 100, stroke: "var(--no)", "stroke-width": 1.5, "stroke-dasharray": "4 4" });
 
         // Convergence curve points
         var pathD = "M 60 70 L 90 140 L 120 80 L 150 120 L 180 92 L 230 108 L 280 96 L 330 102 L 380 99 L 430 101 L 480 100";
-        s("path", { d: pathD, fill: "none", stroke: "#2563eb", "stroke-width": 2 });
+        s("path", { d: pathD, fill: "none", stroke: "var(--c)", "stroke-width": 2 });
 
         // Callout at start: 剧烈摆动
-        s("rect", { x: 80, y: 40, width: 90, height: 22, rx: 4, fill: "#fef2f2", stroke: "#fca5a5" });
-        s("text", { x: 125, y: 55, fill: "#b91c1c", "font-size": "10", "font-weight": "bold", "text-anchor": "middle" }, "小样本大摆动");
+        s("rect", { x: 80, y: 40, width: 90, height: 22, rx: 4, fill: "var(--no-soft)", stroke: "#fca5a5" });
+        s("text", { x: 125, y: 55, fill: "var(--no)", "font-size": "10", "font-weight": "bold", "text-anchor": "middle" }, "小样本大摆动");
 
         // Callout at end: 高度收敛稳定
-        s("rect", { x: 350, y: 70, width: 110, height: 22, rx: 4, fill: "#f0fdf4", stroke: "#86efac" });
-        s("text", { x: 405, y: 85, fill: "#15803d", "font-size": "10", "font-weight": "bold", "text-anchor": "middle" }, "大样本紧随 P=0.5");
+        s("rect", { x: 350, y: 70, width: 110, height: 22, rx: 4, fill: "var(--ok-soft)", stroke: "#86efac" });
+        s("text", { x: 405, y: 85, fill: "var(--a)", "font-size": "10", "font-weight": "bold", "text-anchor": "middle" }, "大样本紧随 P=0.5");
 
       } else if (mode === "fluc") {
         // Fluctuation bars
-        s("text", { x: 270, y: 32, fill: "#0f172a", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "4 名同学各抛 10 次硬币的正面试验结果对比");
+        s("text", { x: 270, y: 32, fill: "var(--fg)", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "4 名同学各抛 10 次硬币的正面试验结果对比");
 
         var students = [
-          { name: "小明", k: 7, f: "0.7", c: "#2563eb" },
-          { name: "小红", k: 4, f: "0.4", c: "#059669" },
-          { name: "小亮", k: 6, f: "0.6", c: "#d97706" },
-          { name: "小华", k: 3, f: "0.3", c: "#dc2626" }
+          { name: "小明", k: 7, f: "0.7", c: "var(--c)" },
+          { name: "小红", k: 4, f: "0.4", c: "var(--a)" },
+          { name: "小亮", k: 6, f: "0.6", c: "var(--b)" },
+          { name: "小华", k: 3, f: "0.3", c: "var(--no)" }
         ];
 
         // Baseline P = 0.5 at y: 110
-        s("line", { x1: 60, y1: 110, x2: 480, y2: 110, stroke: "#64748b", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
-        s("text", { x: 50, y: 114, fill: "#64748b", "font-size": "10.5", "text-anchor": "end" }, "P=0.5");
+        s("line", { x1: 60, y1: 110, x2: 480, y2: 110, stroke: "var(--muted)", "stroke-width": 1.5, "stroke-dasharray": "3 3" });
+        s("text", { x: 50, y: 114, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "end" }, "P=0.5");
 
         students.forEach(function(stu, idx) {
           var bx = 100 + idx * 95;
@@ -696,17 +696,17 @@
           s("text", { x: bx + 22, y: 186, fill: "#334155", "font-size": "11", "text-anchor": "middle" }, stu.name);
         });
 
-        s("line", { x1: 60, y1: 170, x2: 480, y2: 170, stroke: "#cbd5e1", "stroke-width": 1 });
-        s("text", { x: 270, y: 202, fill: "#64748b", "font-size": "10.5", "text-anchor": "middle" }, "每个人频率各不相同，纯属随机偶然，绝非硬币本身改变！");
+        s("line", { x1: 60, y1: 170, x2: 480, y2: 170, stroke: "var(--line)", "stroke-width": 1 });
+        s("text", { x: 270, y: 202, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "每个人频率各不相同，纯属随机偶然，绝非硬币本身改变！");
 
       } else if (mode === "monte") {
         // Monte Carlo square & quadrant
-        s("text", { x: 270, y: 32, fill: "#0f172a", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "蒙特卡洛随机投点估计圆周率 π");
+        s("text", { x: 270, y: 32, fill: "var(--fg)", "font-size": "12.5", "font-weight": "bold", "text-anchor": "middle" }, "蒙特卡洛随机投点估计圆周率 π");
 
         // Square: x: 100, y: 45, w: 120, h: 120
-        s("rect", { x: 100, y: 45, width: 120, height: 120, fill: "#f8fafc", stroke: "#64748b", "stroke-width": 1.5 });
+        s("rect", { x: 100, y: 45, width: 120, height: 120, fill: "var(--card)", stroke: "var(--muted)", "stroke-width": 1.5 });
         // Quadrant arc: center (100, 165), r = 120
-        s("path", { d: "M 100 165 L 220 165 A 120 120 0 0 0 100 45 Z", fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 1.5 });
+        s("path", { d: "M 100 165 L 220 165 A 120 120 0 0 0 100 45 Z", fill: "rgba(37,99,235,0.18)", stroke: "var(--c)", "stroke-width": 1.5 });
 
         // Random dots
         var dots = [
@@ -715,15 +715,15 @@
           { x: 200, y: 60, inQ: false }, { x: 210, y: 80, inQ: false }, { x: 185, y: 55, inQ: false }
         ];
         dots.forEach(function(d) {
-          s("circle", { cx: d.x, cy: d.y, r: 3, fill: d.inQ ? "#2563eb" : "#ef4444" });
+          s("circle", { cx: d.x, cy: d.y, r: 3, fill: d.inQ ? "var(--c)" : "#ef4444" });
         });
 
         // Right side formula box
-        s("rect", { x: 260, y: 45, width: 230, height: 120, rx: 6, fill: "#f1f5f9", stroke: "#cbd5e1" });
+        s("rect", { x: 260, y: 45, width: 230, height: 120, rx: 6, fill: "var(--card)", stroke: "var(--line)" });
         s("text", { x: 275, y: 72, fill: "#1e3a8a", "font-size": "11.5", "font-weight": "bold" }, "几何测度与概率映射");
-        s("text", { x: 285, y: 95, fill: "#2563eb", "font-size": "11" }, "圆内频率: f = N_in / N_总 ≈ π / 4");
-        s("text", { x: 285, y: 120, fill: "#059669", "font-size": "11", "font-weight": "bold" }, "反解: π ≈ 4 × (N_in / N_总)");
-        s("text", { x: 285, y: 145, fill: "#64748b", "font-size": "10" }, "用计算机产生百万随机点，精度随 n 提升");
+        s("text", { x: 285, y: 95, fill: "var(--c)", "font-size": "11" }, "圆内频率: f = N_in / N_总 ≈ π / 4");
+        s("text", { x: 285, y: 120, fill: "var(--a)", "font-size": "11", "font-weight": "bold" }, "反解: π ≈ 4 × (N_in / N_总)");
+        s("text", { x: 285, y: 145, fill: "var(--muted)", "font-size": "10" }, "用计算机产生百万随机点，精度随 n 提升");
       }
 
       if (capEl) capEl.textContent = caps[mode];
@@ -758,18 +758,19 @@
     }
 
     // Left: Fallacy
-    s("rect", { x: 30, y: 20, width: 225, height: 130, rx: 6, fill: "#fef2f2", stroke: "#fca5a5", "stroke-width": 1.5 });
-    s("text", { x: 142, y: 44, fill: "#dc2626", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "❌ 赌徒谬误：主动平衡补偿");
-    s("text", { x: 142, y: 72, fill: "#475569", "font-size": "10.5", "text-anchor": "middle" }, "前 5 次全出反面 (亏欠 5 次正面)");
-    s("text", { x: 142, y: 98, fill: "#b91c1c", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "妄想：第 6 次必出正面补偿！");
-    s("text", { x: 142, y: 125, fill: "#64748b", "font-size": "10", "text-anchor": "middle" }, "事实：硬币无记忆，P 恒为 0.5");
+    s("rect", { x: 30, y: 20, width: 225, height: 130, rx: 6, fill: "var(--no-soft)", stroke: "#fca5a5", "stroke-width": 1.5 });
+    s("text", { x: 142, y: 44, fill: "var(--no)", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "❌ 赌徒谬误：主动平衡补偿");
+    s("text", { x: 142, y: 72, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "前 5 次全出反面 (亏欠 5 次正面)");
+    s("text", { x: 142, y: 98, fill: "var(--no)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "妄想：第 6 次必出正面补偿！");
+    s("text", { x: 142, y: 125, fill: "var(--muted)", "font-size": "10", "text-anchor": "middle" }, "事实：硬币无记忆，P 恒为 0.5");
 
     // Right: Large numbers dilution
-    s("rect", { x: 285, y: 20, width: 225, height: 130, rx: 6, fill: "#f0fdf4", stroke: "#86efac", "stroke-width": 1.5 });
-    s("text", { x: 397, y: 44, fill: "#15803d", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "✔ 大数稀释：海量分母平摊");
-    s("text", { x: 397, y: 72, fill: "#475569", "font-size": "10.5", "text-anchor": "middle" }, "前 5 次偏差 Δ = -5");
-    s("text", { x: 397, y: 98, fill: "#047857", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "当总次数 n 扩大至 10000 次时：");
-    s("text", { x: 397, y: 125, fill: "#15803d", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "Δ / n = 5 / 10000 = 0.0005 ≈ 0");
+    s("rect", { x: 285, y: 20, width: 225, height: 130, rx: 6, fill: "var(--ok-soft)", stroke: "#86efac", "stroke-width": 1.5 });
+    s("text", { x: 397, y: 44, fill: "var(--a)", "font-size": "12", "font-weight": "bold", "text-anchor": "middle" }, "✔ 大数稀释：海量分母平摊");
+    var initialDelta = 0 - 5 * 0.5;
+    s("text", { x: 397, y: 72, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "初期偏移 Δ = " + initialDelta);
+    s("text", { x: 397, y: 98, fill: "var(--a)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "当总次数 n 扩大至 10000 次时：");
+    s("text", { x: 397, y: 125, fill: "var(--a)", "font-size": "10.5", "font-weight": "bold", "text-anchor": "middle" }, "|Δ| / 10000 = " + Math.abs(initialDelta) / 10000);
   }
 
   initMFreqFig();

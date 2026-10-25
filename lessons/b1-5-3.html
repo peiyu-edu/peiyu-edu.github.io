@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -80,7 +80,7 @@
     <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>对称翻折几何本质与奇变偶不变法则</b></p>
     <div class="entry-bar" id="m-ind-bar" role="group" aria-label="诱导公式微图解切换">
       <button type="button" class="on" data-m="sym">① 原点与轴对称 (π±α, -α 坐标未对调，函数名绝对不变)</button>
-      <button type="button" data-m="rot">② 对角线对称 (π/2±α 翻折横纵对调 (x,y)↔(y,x)，sin与cos名互换)</button>
+      <button type="button" data-m="rot">② 分清减号与加号（π/2−α：(y,x)；π/2+α：(−y,x)）</button>
       <button type="button" data-m="rule">③ 口诀总纲 (「奇变偶不变，符号看象限」实战判定全景)</button>
     </div>
     <svg class="micro-fig" id="m-ind-fig" viewBox="0 0 520 160" role="img" aria-label="诱导公式对称与口诀微图解"></svg>
@@ -94,7 +94,7 @@
     </div>
     <div class="card">
       <p style="margin:0 0 6px"><span class="badge-pill badge-no">理解认知</span><b>「暂当锐角」仅为定号，公式实数全普适</b></p>
-      <p class="small" style="margin:0">把 \(\alpha\) 暂时当作锐角纯粹是为了快速排查正负符号；等式是基于单位圆几何对称推导出来的，对任意钝角、负角乃至任意实数完全普适有效！</p>
+      <p class="small" style="margin:0">把 \(\alpha\) 暂时当作锐角纯粹是为了快速排查正负符号；等式是基于单位圆几何对称推导出来的，正余弦公式对任意实数都成立；含正切或倒数的公式，必须先确保两边都有定义。</p>
     </div>
   </div>
 
@@ -604,31 +604,20 @@
 
     function drawInd(mode) {
       indSvg.innerHTML = "";
+      indSvg.setAttribute("viewBox", mode === "rule" ? "0 0 520 180" : "0 0 520 160");
       var cx = 86, cy = 80, r = 46;
       if (mode === "rule") {
-        mk("rect", { x: 10, y: 20, width: 140, height: 120, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
-        mk("text", { x: 22, y: 44, fill: "var(--a)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "第一步：看 k·π/2";
-        mk("text", { x: 22, y: 72, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• k 为奇数：正余互变";
-        mk("text", { x: 30, y: 92, fill: "var(--muted)", "font-size": 11 }, indSvg).textContent = "sin ↔ cos, tan ↔ cot";
-        mk("text", { x: 22, y: 114, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• k 为偶数：函数名不变";
-        mk("text", { x: 30, y: 130, fill: "var(--muted)", "font-size": 11 }, indSvg).textContent = "sin 保持 sin, cos 保持 cos";
-
-        mk("line", { x1: 155, y1: 80, x2: 180, y2: 80, stroke: "var(--a)", "stroke-width": 2 }, indSvg);
-        mk("polygon", { points: "180,76 186,80 180,84", fill: "var(--a)" }, indSvg);
-
-        mk("rect", { x: 190, y: 20, width: 140, height: 120, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
-        mk("text", { x: 202, y: 44, fill: "var(--b)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "第二步：看原函数";
-        mk("text", { x: 202, y: 72, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• 视 α 为第一象限锐角";
-        mk("text", { x: 202, y: 94, fill: "var(--fg)", "font-size": 12 }, indSvg).textContent = "• 判断角所在的新象限";
-        mk("text", { x: 202, y: 116, fill: "var(--hl)", "font-size": 12, "font-weight": 700 }, indSvg).textContent = "• 查原函数在该象限符号";
-        mk("text", { x: 202, y: 132, fill: "var(--muted)", "font-size": 11 }, indSvg).textContent = "（绝不看变出的新名！）";
-
-        mk("rect", { x: 345, y: 15, width: 165, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--hl)", "stroke-width": 1.5 }, indSvg);
-        mk("text", { x: 357, y: 38, fill: "var(--hl)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "⚡ 口诀判定全实战";
-        mk("text", { x: 357, y: 64, fill: "var(--fg)", "font-size": 11.5 }, indSvg).textContent = "例: cos(π/2 + α)";
-        mk("text", { x: 357, y: 84, fill: "var(--a)", "font-size": 11 }, indSvg).textContent = "① k=1 奇数 → 变名成 sin";
-        mk("text", { x: 357, y: 104, fill: "var(--b)", "font-size": 11 }, indSvg).textContent = "② 二象限原余弦 cos 为负";
-        mk("text", { x: 357, y: 128, fill: "var(--hl)", "font-size": 12.5, "font-weight": 700 }, indSvg).textContent = "→ 结论：-sin α";
+        var cards = [
+          { x: 10, color: "var(--a)", rows: ["k 的奇偶", "奇：正余换", "偶：名字留"] },
+          { x: 185, color: "var(--b)", rows: ["原函数定号", "α 暂当锐角", "查新角象限"] },
+          { x: 360, color: "var(--hl)", rows: ["cos(π/2+α)", "二象限 cos 负", "= −sin α"] }
+        ];
+        cards.forEach(function(card) {
+          mk("rect", { x: card.x, y: 15, width: 150, height: 150, rx: 8, fill: "var(--card)", stroke: card.color, "stroke-width": 1.5 }, indSvg);
+          card.rows.forEach(function(row,i) {
+            mk("text", { x: card.x+75, y: 52+i*43, "text-anchor": "middle", fill: i===2 ? card.color : "var(--fg)", "font-size": 22, "font-weight": i===0 ? 700 : 400 }, indSvg).textContent=row;
+          });
+        });
       } else {
         mk("circle", { cx: cx, cy: cy, r: r, fill: "none", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
         mk("line", { x1: cx - r - 10, y1: cy, x2: cx + r + 10, y2: cy, stroke: "var(--muted)", "stroke-width": 1.2 }, indSvg);
@@ -637,7 +626,7 @@
         var a = 35 * Math.PI / 180;
         var p0x = cx + r * Math.cos(a), p0y = cy - r * Math.sin(a);
         mk("line", { x1: cx, y1: cy, x2: p0x, y2: p0y, stroke: "var(--a)", "stroke-width": 2.2 }, indSvg);
-        mk("circle", { cx: p0x, cy: p0y, r: 4, fill: "var(--a)" }, indSvg);
+        mk("circle", { "data-angle-point": "original", cx: p0x, cy: p0y, r: 4, fill: "var(--a)" }, indSvg);
         mk("text", { x: p0x + 4, y: p0y - 3, fill: "var(--a)", "font-size": 10, "font-weight": 700 }, indSvg).textContent = "P(x,y)";
 
         if (mode === "sym") {
@@ -663,19 +652,19 @@
           var rotA = (90 - 35) * Math.PI / 180;
           var rx1 = cx + r * Math.cos(rotA), ry1 = cy - r * Math.sin(rotA);
           mk("line", { x1: cx, y1: cy, x2: rx1, y2: ry1, stroke: "var(--b)", "stroke-width": 1.8, "stroke-dasharray": "3 2" }, indSvg);
-          mk("circle", { cx: rx1, cy: ry1, r: 3.5, fill: "var(--b)" }, indSvg);
+          mk("circle", { "data-angle-point": "minus", cx: rx1, cy: ry1, r: 3.5, fill: "var(--b)" }, indSvg);
           mk("text", { x: rx1 - 4, y: ry1 - 6, fill: "var(--b)", "font-size": 9.5 }, indSvg).textContent = "π/2-α(y,x)";
 
           var rotB = (90 + 35) * Math.PI / 180;
           var rx2 = cx + r * Math.cos(rotB), ry2 = cy - r * Math.sin(rotB);
           mk("line", { x1: cx, y1: cy, x2: rx2, y2: ry2, stroke: "var(--hl)", "stroke-width": 1.8, "stroke-dasharray": "3 2" }, indSvg);
-          mk("circle", { cx: rx2, cy: ry2, r: 3.5, fill: "var(--hl)" }, indSvg);
+          mk("circle", { "data-angle-point": "plus", cx: rx2, cy: ry2, r: 3.5, fill: "var(--hl)" }, indSvg);
           mk("text", { x: 6, y: ry2 - 4, fill: "var(--hl)", "font-size": 9.5 }, indSvg).textContent = "π/2+α(-y,x)";
 
           mk("rect", { x: 164, y: 15, width: 348, height: 130, rx: 8, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 }, indSvg);
-          mk("text", { x: 174, y: 40, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "奇数倍 π/2 (如 π/2±α)：翻折对调横纵轴";
-          mk("text", { x: 174, y: 68, fill: "var(--a)", "font-size": 10.5, "font-weight": 600 }, indSvg).textContent = "• 几何翻折：关于 y=x 对称，新横标=旧纵标，新纵标=旧横标";
-          mk("text", { x: 174, y: 92, fill: "var(--b)", "font-size": 10.5 }, indSvg).textContent = "• 函数名：新纵坐标(sin)来自旧横坐标(cos) → 正余互换！";
+          mk("text", { x: 174, y: 40, fill: "var(--fg)", "font-size": 13, "font-weight": 700 }, indSvg).textContent = "π/2−α 与 π/2+α：交换坐标并查符号";
+          mk("text", { x: 174, y: 68, fill: "var(--a)", "font-size": 10.5, "font-weight": 600 }, indSvg).textContent = "• π/2−α：关于 y=x 对称，(x,y) → (y,x)";
+          mk("text", { x: 174, y: 92, fill: "var(--b)", "font-size": 10.5 }, indSvg).textContent = "• π/2+α：逆时针转90°，(x,y) → (−y,x)";
           mk("text", { x: 174, y: 116, fill: "var(--hl)", "font-size": 10.5 }, indSvg).textContent = "• 实例：sin(π/2+α)=cos α，cos(π/2+α)=-sin α";
         }
       }
@@ -685,8 +674,8 @@
       });
       var noteMap = {
         sym: "偶数倍 π/2 对称不换轴：纵坐标依旧是纵坐标，横坐标依旧是横坐标，<b>函数名绝对不变</b>！",
-        rot: "奇数倍 π/2 绕对角线 y=x 翻折：横纵坐标互换，新正弦来自旧余弦，<b>函数名必须正余互换</b>！",
-        rule: "<b>实战八字真诀：</b>「奇变偶不变」看 π/2 奇偶定函数名；「符号看象限」视 α 为锐角由原函数定符号！"
+        rot: "<b>π/2−α</b>是关于 y=x 的反射：(x,y)→(y,x)；<b>π/2+α</b>是逆时针90°旋转：(x,y)→(−y,x)。两式都交换正余弦，但符号不同，不能都叫对角线反射。",
+        rule: "<b>奇变偶不变，符号看象限</b>：先看 kπ/2 中 k 的奇偶，决定正余弦是否互换；再暂把 α 当锐角，按新角所在象限检查原函数的符号。例 cos(π/2+α) 的原函数是余弦，在第二象限取负，所以结果为 −sin α。含正切或倒数时还需两边都有定义。"
       };
       if (indNote) indNote.innerHTML = noteMap[mode] || "";
     }

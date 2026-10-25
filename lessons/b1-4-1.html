@@ -7,13 +7,14 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .grid { stroke: var(--line); stroke-width: 1; }
   .fig text.num { font-size: 20px; fill: var(--muted); text-anchor: middle; }
+  .fig text.num, .fig text.rootl { paint-order: stroke; stroke: var(--card); stroke-width: 5px; stroke-linejoin: round; }
   .fig .curve { fill: none; stroke: var(--a); stroke-width: 3; }
   .fig .lvl { stroke: var(--b); stroke-width: 2.5; }
   .fig .guide { stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 4; }
@@ -25,7 +26,7 @@
   .fig .knob { fill: var(--b); stroke: var(--card); stroke-width: 2; cursor: grab; outline: none; }
   .fig .knob:focus-visible { stroke: var(--hl); stroke-width: 5; }
   .fig .hit { fill: transparent; cursor: grab; }
-  .fig .bar { stroke-width: 10; stroke-linecap: round; }
+  .fig .bar { stroke-width: 8; stroke-linecap: butt; }
   .fig text.rowl { font-size: 20px; fill: var(--fg); }
   .fig .target { stroke: var(--no); stroke-width: 2; stroke-dasharray: 5 4; }
   .rd { font-size: 16px; line-height: 1.75; }
@@ -42,15 +43,16 @@
 <header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
 <p class="crumb">必修第一册 · 第 4 章 指数函数与对数函数</p>
 <h1>4.1 指数</h1>
-<p class="lead">「开 \(n\) 次方」是乘方倒过来。从它出发，指数从整数推广到分数、再到任意实数——每推广一步，都要看清底数允许取什么。先从一个翻倍的例子开始。</p>
+<p class="lead">从方根和根式认识分数指数，再用有理数逼近理解无理数指数。统一的实指数运算先取正底数；遇到零或负底数，要按相应定义单独核对。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>一种细菌，每过 \(1\) 小时，数量变成原来的 \(2\) 倍。那每过<b>半小时</b>呢，变成原来的几倍？先点下面的按钮，拿不同的倍率 \(x\) 连乘两次（两个半小时 \(=1\) 小时）试试看：</p>
+  <p>用一个理想的连续增长模型描述细菌相对数量：<b>相同时长总乘相同倍数</b>，每过 \(1\) 小时变成 \(2\) 倍。那每过<b>半小时</b>呢？仅知道整点翻倍还不足以确定半小时，下面使用上述模型假设。先点下面的按钮，拿不同的倍率 \(x\) 连乘两次（两个半小时 \(=1\) 小时）试试看：</p>
   <div class="card predict" data-id="entry" data-answer="B">
-    <svg class="entry-fig" id="entry-bact" viewBox="0 0 520 205" role="img" aria-label="培养皿细菌每半小时乘x倍，连续两个半小时变成x平方倍的示意图"></svg>
+    <svg class="entry-fig" id="entry-bact" viewBox="0 0 520 370" role="img" aria-label="相对数量的倍数连乘模型，不把非整数倍数当作细菌个数"></svg>
     <div class="entry-bar" id="entry-bact-bar">
       <button type="button" data-x="1.5" class="on">试 x = 1.5 (1h变2.25倍，偏大)</button>
-      <button type="button" data-x="1.414">试 x = 1.414 = √2 (1h刚好2倍！)</button>
+      <button type="button" data-x="root">试 x = √2（约1.414）</button>
+      <button type="button" data-x="1.414">试有限小数 x = 1.414</button>
       <button type="button" data-x="1.2">试 x = 1.2 (1h变1.44倍，偏小)</button>
     </div>
     <div class="entry-note" id="entry-bact-note"></div>
@@ -63,7 +65,7 @@
     </div>
     <div class="reveal">
       <p>试一试：\(1.5\times1.5=2.25\)，多了；\(1.41\times1.41\approx1.99\)，差不多正好；\(1\times1=1\)、\(2\times2=4\) 都不对。<b>B</b>。</p>
-      <p>要找的数满足 \(x^2=2\)，就是 \(\sqrt2\approx1.414\)。</p>
+      <p>增长倍数为正，要找的数满足 \(x^2=2\)，取 \(x=\sqrt2\approx1.414\)。有限小数 \(1.414\) 不是 \(\sqrt2\) 的精确值；\(1.414^2=1.999396\)，仍略小于 \(2\)。</p>
       <p>\(1\) 小时乘 \(2^1\)，\(2\) 小时乘 \(2^2\)，那半小时自然想写成 \(2^{\frac12}\)。这一节就讲：\(2^{\frac12}\)、\(8^{\frac23}\) 甚至 \(2^{\sqrt2}\) 是什么意思，又该怎么算。</p>
     </div>
   </div>
@@ -71,24 +73,24 @@
 
 <section class="step" data-title="讲清楚">
   <div class="vid" data-video="concept"></div>
-  <h3>1. 先认识几个词：从「开方运算」到「分数指数」的认知跃迁</h3>
+  <h3>1. 先认识几个词：方根、根式与底数条件</h3>
   <p class="small">要用到：初中的整数指数幂、平方根、立方根和绝对值；3.3 的幂函数图象（<a href="b1-3-3.html">回看 3.3</a>）。先看下面这幅微图解：</p>
 
   <div class="micro-box">
-    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>分数指数幂与根式的精准映射流水线</b></p>
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>分数指数与根式：先看条件，再做运算</b></p>
     <div class="entry-bar" id="m-exp-bar" role="group" aria-label="指数微图解切换">
-      <button type="button" class="on" data-m="frac">① 分数指数流水线 (分母开方、分子乘方：27^(2/3)=9)</button>
-      <button type="button" data-m="root">② 奇次根 vs 偶次根 (奇次独一无二，偶次必须加绝对值护甲)</button>
-      <button type="button" data-m="neg">③ 负指数的本质 (负号只管翻转倒数，结果依然为正！)</button>
+      <button type="button" class="on" data-m="frac">① 正底数：先开方，再乘方</button>
+      <button type="button" data-m="root">② 方程的根与根式记号</button>
+      <button type="button" data-m="neg">③ 正底数的负指数：取倒数</button>
     </div>
-    <svg class="micro-fig" id="m-exp-fig" viewBox="0 0 520 160" role="img" aria-label="指数与根式微图解"></svg>
+    <svg class="micro-fig" id="m-exp-fig" viewBox="0 0 520 320" role="img" aria-label="指数与根式微图解"></svg>
     <p class="entry-note" id="m-exp-note"></p>
   </div>
 
   <div class="concept-grid">
     <div class="card">
       <p style="margin:0 0 6px"><span class="badge-pill badge-a">根次与奇偶</span><b>奇次方根（来去自由）vs 偶次方根（双根与绝对值）</b></p>
-      <p class="small" style="margin:0">奇次方程 \(x^n=a\) 对任意实数 \(a\) 有且仅有一个实根，正负原样保留；偶次方程正数有相反数两根，根式 \(\sqrt[n]{a}\) 专指非负根，且 \(\sqrt[n]{a^n}=|a|\) 必须戴绝对值！</p>
+      <p class="small" style="margin:0">这里 \(n>1\) 为整数。奇数 \(n\) 时，\(x^n=a\) 对任意实数 \(a\) 有唯一实根。偶数 \(n\) 时，正数有两个相反数根，零有根零，负数没有实根；偶次根式只表示非负根。对实数 \(a\)，\(\sqrt[n]{a^n}\) 在奇数 \(n\) 时为 \(a\)，偶数 \(n\) 时为 \(|a|\)。</p>
     </div>
     <div class="card">
       <p style="margin:0 0 6px"><span class="badge-pill badge-no">符号陷阱</span><b>指数负号（取倒数指令）vs 数值负号（正负性质）</b></p>
@@ -97,10 +99,14 @@
   </div>
 
   <h3>2. 核心数学运算法则与根式幂化总览表</h3>
-  <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
-    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{a^{\frac{m}{n}} = \sqrt[n]{a^m} = (\sqrt[n]{a})^m}_{\text{分母 } n \text{ 开方，分子 } m \text{ 乘方（先开方数更小）}}}\)</span>
-    <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{\sqrt[n]{a^n} = \begin{cases} a, &amp; n\text{ 为奇数} \\ |a|, &amp; n\text{ 为偶数} \end{cases}}_{\text{抵消律：偶次开方自带绝对值护甲}}}\)</span>
-    <span style="display:inline-block">\(\color{#3E5C76}{\underbrace{a^{-\frac{m}{n}} = \dfrac{1}{a^{\frac{m}{n}}}}_{\text{负指数：纯取倒数，底数必须 } a&gt;0}}\)</span>
+  <div class="key">
+    <p>统一分数指数先取 \(a>0\)、整数 \(m\)、整数 \(n>1\)：</p>
+    <p>\(a^{m/n}=\sqrt[n]{a^m}=(\sqrt[n]{a})^m\)。分母开方、分子乘方。</p>
+    <p>\(a,b>0\)，\(r,s\in\mathbb R\) 时：\(a^r a^s=a^{r+s}\)，\(a^r/a^s=a^{r-s}\)；\((a^r)^s=a^{rs}\)，\((ab)^r=a^r b^r\)。</p>
+  </div>
+  <div class="card">
+    <p><b>零与负底数单独核对</b>：非零实数 \(a\) 满足 \(a^0=1\)、\(a^{-n}=1/a^n\)（正整数 \(n\)），例如 \((-2)^{-3}=-1/8\)。</p>
+    <p>零的正分数指数幂约定为零；\(0^0\) 和零的负指数幂在本节不定义。负底数的整数幂、负数的奇次根仍可直接按各自定义计算；不能无条件套用上面的统一实指数法则。</p>
   </div>
 
   <div class="card">
@@ -120,7 +126,7 @@
     </div>
     <div class="reveal">
       <p><b>C</b>。\(2^4=16\)，\((-2)^4=16\)，所以 \(16\) 的 \(4\) 次方根有两个：\(\pm2\)。</p>
-      <p>根式 \(\sqrt[4]{16}\) 是一个确定的数，只取非负的那个，等于 \(2\)。偶次方根「有两个」，偶次根式「只取一个」。</p>
+      <p>根式 \(\sqrt[4]{16}\) 是一个确定的数，只取非负的那个，等于 \(2\)。本题被开方数为正，所以偶次方根有两个；被开方数为零时只有零这一个根。偶次根式始终只表示非负的那个数。</p>
     </div>
   </div>
 
@@ -193,7 +199,7 @@
 
   <div class="card">
     <p class="small" style="margin:0 0 4px"><b>例 5（无理数指数幂：有理数夹逼）</b></p>
-    <p>由 \(1.4&lt;\sqrt2&lt;1.5\)，得 \(2^{1.4}&lt;2^{\sqrt2}&lt;2^{1.5}\)。其中 \(2^{1.5}=2^{\frac32}=2\sqrt2\approx2.83\)，\(2^{1.4}=2^{\frac75}\approx2.64\)。所以 \(2^{\sqrt2}\) 在 \(2.64\) 和 \(2.83\) 之间。小数位越精确，两头夹逼越贴近！</p>
+    <p>由 \(1.4&lt;\sqrt2&lt;1.5\)，得 \(2^{1.4}&lt;2^{\sqrt2}&lt;2^{1.5}\)。其中 \(2^{1.5}=2^{\frac32}=2\sqrt2\approx2.83\)，\(2^{1.4}=2^{\frac75}\approx2.64\)。目标被前面两个精确的幂值夹住；小数是它们的近似读数，不把四舍五入后的数当作严格界。继续细分有理数指数，夹逼就更贴近。</p>
   </div>
 
   <div class="card predict" data-id="try-irr" data-answer="B">
@@ -220,19 +226,20 @@
           </div>
         </div>
         <div>
-          <svg class="micro-fig" id="m-abs-fig" viewBox="0 0 280 140" role="img" aria-label="绝对值护甲微图解"></svg>
+          <svg class="micro-fig" id="m-abs-fig" viewBox="0 0 520 290" role="img" aria-label="真实函数y等于绝对值x减1，在x小于1的绿支与错误直线比较"></svg>
+          <p class="small">给定 \(x&lt;1\) 只看绿支：\(y=|x-1|=1-x\)。在 \(x=0\) 时正确值为 \(1\)，错式 \(x-1\) 给 \(-1\)。空心点 \((1,0)\) 不属于给定区间。</p>
         </div>
       </div>
     </div>
 
     <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>给负底数套用分数指数幂，导致多值逻辑灾难</span></div>
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>把正底数的根式互化规则套到负底数</span></div>
       <div class="trap-body">
         <div class="trap-wrong">
           <b>❌ 典型错解</b>：写出 \((-8)^{\frac{1}{3}} = (-8)^{\frac{2}{6}} = \sqrt[6]{(-8)^2} = 2\)。
         </div>
         <div class="trap-right">
-          <b>✅ 一眼看清真相</b>：同一个数换个约分居然从 \(-2\) 变 \(+2\)！这就是为什么<b>数学上严禁对负数定义分数指数幂</b>！遇到负数开奇次根，必须严格用根式 \(\sqrt[3]{-8}\) 书写！
+          <b>✅ 一眼看清真相</b>：这里混淆了两个不同的根式：\(\sqrt[3]{-8}=-2\)，\(\sqrt[6]{(-8)^2}=2\)。它们不是同一个幂的两个值。<b>本节统一实指数体系用正底数</b>；负数奇次根直接用根式求，不把正底数下的全部互化法则搬过去。
         </div>
       </div>
     </div>
@@ -252,7 +259,7 @@
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>负底数的整数次幂没问题</b>：\((-2)^3=-8\)，\((-2)^{-2}=\dfrac14\)，\((-2)^2\cdot(-2)^3=(-2)^5=-32\)。整数指数的法则对不为 \(0\) 的底数都成立，有问题的只是分数指数。</p>
+    <p><b>负底数的整数次幂没问题</b>：\((-2)^3=-8\)，\((-2)^{-2}=\dfrac14\)，\((-2)^2\cdot(-2)^3=(-2)^5=-32\)。整数幂可以另按定义计算；不能因此把正底数下对任意实数指数成立的全部规则推广到负底数。</p>
     <p><b>为什么同一个分数换写法，正底数不会出两个值</b>：\(a&gt;0\) 时 \(\sqrt[6]{a^2}\) 和 \(\sqrt[3]{a}\) 都是正数，六次方都等于 \(a^2\)，而正数的六次方根只有一个正的，所以相等。负底数时 \(\sqrt[3]{-8}\) 是负的，\(\sqrt[6]{64}\) 是正的，这条论证就断了。</p>
     <p><b>无理数指数</b>：逼近 \(\sqrt2\) 的分数越精确，\(2\) 的这些次幂就越接近同一个数——这件事需要大学里的「极限」才能严格说清，高中只要求会用。「动手」②可以一位一位看它被夹出来。</p>
   </details>
@@ -268,7 +275,7 @@
   </div>
 
   <h3>② 进阶：把 \(2^{\sqrt2}\) 夹出来</h3>
-  <p class="small">拖动滑块（或选中后按方向键），多取一位 \(\sqrt2\) 的小数。每一行是一对分数指数 \(r_1&lt;\sqrt2&lt;r_2\)，条形从 \(2^{r_1}\) 画到 \(2^{r_2}\)，红色虚线是 \(2^{\sqrt2}\)。</p>
+  <p class="small">拖动滑块（或选中后按方向键），多取一位 \(\sqrt2\) 的小数。每一行是一对分数指数 \(r_1&lt;\sqrt2&lt;r_2\)，条形从 \(2^{r_1}\) 画到 \(2^{r_2}\)，红色虚线是 \(2^{\sqrt2}\) 的位置。区间窄于一个图坐标单位时只画位置细刻线，严格上下界以下方指数为准，不放大成假区间。</p>
   <div class="card">
     <svg class="fig" id="fig2" viewBox="0 0 560 320" role="img" aria-label="用有理数逼近 2 的根号 2 次方，区间越来越短"></svg>
     <div class="ctrl"><label for="digits">小数位数：<b id="dv">1</b></label><input type="range" id="digits" min="1" max="6" step="1" value="1"><button class="btn ghost" id="reset2" type="button">重置</button></div>
@@ -280,7 +287,7 @@
   <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
 
   <h3>直接用</h3>
-  <div class="card predict" data-id="p-basic-1" data-answer="C">
+  <div class="card predict" data-id="p-basic-1" data-cards="exp-root-power" data-answer="C">
     <p>1. \(27^{\frac23}+16^{-\frac12}=\)？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(5\)</button>
@@ -289,7 +296,7 @@
     </div>
     <div class="reveal"><p><b>C</b>。\(27^{\frac23}=\left(\sqrt[3]{27}\right)^2=9\)，\(16^{-\frac12}=\dfrac1{\sqrt{16}}=\dfrac14\)，和是 \(\dfrac{37}{4}\)。选 A 的同学把 \(16^{-\frac12}\) 算成了 \(-4\)；选 B 的把 \(27^{\frac23}\) 算成了 \(27\times\dfrac23=18\)。</p></div>
   </div>
-  <div class="card predict" data-id="p-basic-2" data-answer="B">
+  <div class="card predict" data-id="p-basic-2" data-cards="exp-root-power" data-answer="B">
     <p>2. \(a&gt;0\)，化简 \(\dfrac{a^2}{\sqrt a\cdot\sqrt[3]{a^2}}\)。</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(a^{\frac53}\)</button>
@@ -300,7 +307,7 @@
   </div>
 
   <h3>易错</h3>
-  <div class="card predict" data-id="warmup" data-answer="C">
+  <div class="card predict" data-id="warmup" data-cards="exp-root-power" data-answer="C">
     <p>3. \(x\) 是任意实数，\(\sqrt{x^2}\) 化简后等于什么？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(x\)</button>
@@ -313,19 +320,19 @@
       <p>选 B 是把「\(9\) 的平方根是 \(\pm3\)」和「\(\sqrt9\)」混了：\(\sqrt{x^2}\) 一定 \(\ge0\)，\(x\ge0\) 时是 \(x\)，\(x&lt;0\) 时是 \(-x\)，合起来就是 \(|x|\)。</p>
     </div>
   </div>
-  <div class="card predict" data-id="trap-neg-base" data-answer="B">
+  <div class="card predict" data-id="trap-neg-base" data-cards="exp-root-power" data-answer="B">
     <p>4. 小明这样算：\((-8)^{\frac13}=(-8)^{\frac26}=\sqrt[6]{(-8)^2}=\sqrt[6]{64}=2\)。问题出在哪？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>没问题，\(\frac13=\frac26\)，结果就是 \(2\)</button>
-      <button class="opt" data-v="B"><b>B</b>分数指数幂只对正底数定义，负底数不能这样换写法；\(\sqrt[3]{-8}=-2\)</button>
+      <button class="opt" data-v="B"><b>B</b>统一实指数法则使用正底数，此处不能直接换成六次根式；\(\sqrt[3]{-8}=-2\)</button>
       <button class="opt" data-v="C"><b>C</b>最后一步错了，\(\sqrt[6]{64}=\pm2\)</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。对应「负底数不写成分数指数幂」这一条。\(\frac13=\frac26\) 没错，错在把正底数下才成立的规则用到了 \(-8\) 上。</p>
+      <p><b>B</b>。对应「互化之前先查底数条件」这一条。\(\frac13=\frac26\) 没错，错在把正底数下才成立的规则用到了 \(-8\) 上。</p>
       <p>\(-8\) 的立方根回到根式去算：\(\sqrt[3]{-8}=-2\)。C 也不对：\(\sqrt[6]{64}\) 是偶次根式，只取 \(2\)。</p>
     </div>
   </div>
-  <div class="card predict" data-id="trap-zero" data-answer="D">
+  <div class="card predict" data-id="trap-zero" data-cards="exp-root-power" data-answer="D">
     <p>5. \(0^{\frac23}\) 和 \(0^{-\frac23}\) 各是多少？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>都等于 \(0\)</button>
@@ -338,11 +345,12 @@
       <p>\(0^{-\frac23}=\dfrac{1}{0^{\frac23}}=\dfrac10\)，分母为 \(0\)，没有意义。选 C 的同学可能想到了 \(a^0=1\)，但这里指数是 \(-\frac23\)，不是 \(0\)。</p>
     </div>
   </div>
+  <p class="small">再看三层嵌套根式，练习从里往外化指数；下面是一道同类例题。</p>
   <div class="vid" data-video="ex-rad"></div>
 
   <h3>挑战</h3>
-  <div class="card predict" data-id="p-challenge" data-answer="A">
-    <p>6. 已知 \(a^{\frac12}+a^{-\frac12}=3\)，求 \(a+a^{-1}\)。</p>
+  <div class="card predict" data-id="p-challenge" data-cards="exp-root-power" data-answer="A">
+    <p>6. 已知 \(a>0\) 且 \(a^{\frac12}+a^{-\frac12}=3\)，求 \(a+a^{-1}\)。</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(7\)</button>
       <button class="opt" data-v="B"><b>B</b>\(9\)</button>
@@ -350,14 +358,15 @@
     </div>
     <div class="reveal">
       <p><b>A</b>。不用解出 \(a\)，两边平方：\(\left(a^{\frac12}+a^{-\frac12}\right)^2=a+2\,a^{\frac12}a^{-\frac12}+a^{-1}=a+2+a^{-1}=9\)，所以 \(a+a^{-1}=7\)。</p>
-      <p>中间项 \(a^{\frac12}\cdot a^{-\frac12}=a^0=1\)。选 B 的同学平方时漏了中间的 \(2\)。（题里出现 \(a^{\frac12}\)，已经默认 \(a&gt;0\)。）</p>
+      <p>中间项 \(a^{\frac12}\cdot a^{-\frac12}=a^0=1\)。选 B 的同学平方时漏了中间的 \(2\)。（根式要求 \(a\ge0\)，而负二分之一次幂还要求分母非零，两者合起来才是 \(a>0\)。）</p>
     </div>
   </div>
+  <p class="small">视频先求本题的 \(7\)，再追加 \(a^2+a^{-2}\) 得 \(47\)，练习指数继续翻倍。</p>
   <div class="vid" data-video="ex-pow"></div>
 </section>
 
 <section class="step" data-title="高考真题">
-  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <p class="small">选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
   <div id="practice" data-fold-later></div>
 </section>
 
@@ -412,6 +421,8 @@
     mk(svg, "line", { x1: sx(0), y1: PY0, x2: sx(0), y2: PY1, "class": "axis" });
     [-3, -2, -1, 1, 2, 3].forEach(function (x) { mk(svg, "text", { x: sx(x), y: sy(0) + 22, "class": "num" }).textContent = x; });
     [-8, -4, 4, 8].forEach(function (y) { mk(svg, "text", { x: sx(0) - 20, y: sy(y) + 7, "class": "num" }).textContent = y; });
+    mk(svg, "text", { x: PX1 + 17, y: sy(0) + 7, "class": "num" }).textContent = "x";
+    mk(svg, "text", { x: sx(0) + 16, y: PY0 + 18, "class": "num" }).textContent = "y";
     G.curve = mk(svg, "path", { "class": "curve", "clip-path": "url(#plotclip)" });
     G.guides = mk(svg, "g", {});
     G.lvl = mk(svg, "line", { x1: PX0, x2: PX1, "class": "lvl" });
@@ -433,7 +444,7 @@
     var n = st.n, a = st.a, i, d = "";
     for (i = 0; i <= 300; i++) {
       var x = XMIN + (XMAX - XMIN) * i / 300, y = Math.pow(x, n);
-      y = Math.max(Math.min(y, YMAX + 3), YMIN - 3);
+      // Keep actual function values; the SVG clipPath handles the finite viewing window.
       d += (i ? "L" : "M") + sx(x).toFixed(1) + " " + sy(y).toFixed(1);
     }
     G.curve.setAttribute("d", d);
@@ -453,9 +464,9 @@
       mk(svg, "line", { x1: sx(r), y1: ly, x2: sx(r), y2: sy(0), "class": "guide" }, G.guides);
       mk(svg, "circle", { cx: sx(r), cy: ly, r: 7, "class": "root" }, G.roots);
       var ty = a >= 0 ? sy(0) + 46 : sy(0) - 32;
-      mk(svg, "text", { x: Math.min(Math.max(sx(r), PX0 + 30), PX1 - 30), y: ty, "class": "rootl" }, G.roots).textContent = froot(r).s;
+      mk(svg, "text", { x: Math.min(Math.max(sx(r) + (r === 0 ? 30 : 0), PX0 + 30), PX1 - 30), y: ty, "class": "rootl" }, G.roots).textContent = (froot(r).eq === "=" ? "" : "≈") + froot(r).s;
     });
-    if (!rs.length) mk(svg, "text", { x: sx(0), y: sy(0) + 50, "class": "none" }, G.roots).textContent = "没有交点";
+    if (!rs.length) mk(svg, "text", { x: sx(0) + 80, y: sy(0) + 50, "class": "none" }, G.roots).textContent = "没有交点";
 
     var as = fa(a), rt = rootTex(n, as), h = "";
     h += '<div class="row">\\(n=' + n + "\\)（" + (n % 2 ? "奇数" : "偶数") + "），\\(a=" + as + "\\)：解方程 \\(x^{" + n + "}=" + as + "\\)。</div>";
@@ -476,7 +487,7 @@
     } else if (a === 0) {
       h += '<div class="row">\\(0^{\\frac{1}{' + n + "}}=0\\)：0 的正分数指数幂是 0。</div>";
     } else if (n % 2 === 1) {
-      h += '<div class="row">注意：\\(' + rt + "\\) 有意义，但教材不把它写成 \\((" + as + ")^{\\frac{1}{" + n + "}}\\)——分数指数幂只对正底数定义。</div>";
+      h += '<div class="row">注意：\\(' + rt + "\\) 有意义，但教材不把它写成 \\((" + as + ")^{\\frac{1}{" + n + "}}\\)；统一实指数法则用正底数，负数奇次根在这里直接按根式计算。</div>";
     }
     out.innerHTML = h;
     typeset(out);
@@ -535,7 +546,12 @@
       mk(svg2, "text", { x: 6, y: y + 7, "class": "rowl", opacity: on ? 1 : 0.25 }).textContent = b.lo.toFixed(k) + "…";
       if (!on) continue;
       var x1 = qx(b.vlo), x2 = qx(b.vhi);
-      if (x2 - x1 < 1) { x1 -= 0.5; x2 += 0.5; }
+      // Never enlarge an interval into false endpoints. A thin location tick
+      // represents intervals narrower than one display coordinate unit.
+      if (x2 - x1 < 1) {
+        mk(svg2, "line", { x1: (x1+x2)/2, y1: y-6, x2: (x1+x2)/2, y2: y+6, stroke: "var(--b)", "stroke-width": 1 });
+        continue;
+      }
       mk(svg2, "line", { x1: x1, y1: y, x2: x2, y2: y, "class": "bar", stroke: k === kmax ? "var(--b)" : "var(--a)", opacity: k === kmax ? 1 : 0.55 });
     }
     var c = bounds(kmax), w = c.vhi - c.vlo;
@@ -568,51 +584,29 @@
   document.getElementById("reset2").addEventListener("click", function () { reset2(); plog({ fig: "approx", how: "reset" }); });
   /* ---------- 0 从例子进入：培养皿细菌半小时倍率 ---------- */
   var ebSvg = document.getElementById("entry-bact"), ebBar = document.getElementById("entry-bact-bar"), ebNote = document.getElementById("entry-bact-note");
-  function ebDraw(x) {
-    var x2 = Math.round(x * x * 100) / 100, ok = Math.abs(x - 1.414) < 0.02;
-    var col = ok ? "var(--a)" : (x2 > 2 ? "var(--no)" : "var(--b)");
-    var soft = ok ? "var(--ok-soft)" : (x2 > 2 ? "var(--no-soft)" : "var(--card)");
-    ebSvg.innerHTML = "";
-    var defs = mk(ebSvg, "defs", {});
-    var mrk = mk(defs, "marker", { id: "eb-arr", viewBox: "0 0 10 10", refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto" });
-    mk(mrk, "path", { d: "M0 1 L9 5 L0 9 z", fill: "var(--hl)" });
-    var xs = [86, 260, 434], cy = 88;
-    [[0, "0 小时", "1 个", 1], [1, "0.5 小时", x + " 个", x], [2, "1 小时 (2个半小时)", x2 + " 个", x2]].forEach(function (d, i) {
-      var cx = xs[i], r = 42;
-      mk(ebSvg, "circle", { cx: cx, cy: cy, r: r, fill: i === 2 ? soft : "var(--card)", stroke: i === 2 ? col : "var(--line)", "stroke-width": i === 2 ? 2.5 : 1.6 });
-      if (i === 2) {
-        mk(ebSvg, "circle", { cx: cx, cy: cy, r: 30, fill: "none", stroke: "var(--a)", "stroke-width": 1.6, "stroke-dasharray": "4 3" });
-      }
-      var br = Math.min(36, 15 * Math.sqrt(d[3]));
-      mk(ebSvg, "circle", { cx: cx, cy: cy, r: br, fill: i === 2 ? col : "var(--a)", opacity: 0.28 });
-      mk(ebSvg, "circle", { cx: cx - 5, cy: cy - 3, r: 5, fill: i === 2 ? col : "var(--a)" });
-      if (d[3] > 1.1) mk(ebSvg, "circle", { cx: cx + 7, cy: cy + 4, r: 4.5, fill: i === 2 ? col : "var(--a)", opacity: Math.min(1, d[3] - 0.8) });
-      if (d[3] > 2.1) mk(ebSvg, "circle", { cx: cx + 2, cy: cy - 11, r: 4, fill: col });
-      mk(ebSvg, "text", { x: cx, y: 24, "text-anchor": "middle", fill: "var(--muted)", "font-size": 14, "font-weight": 600 }).textContent = d[1];
-      mk(ebSvg, "text", { x: cx, y: cy + 62, "text-anchor": "middle", fill: i === 2 ? col : "var(--fg)", "font-size": 16, "font-weight": 700 }).textContent = d[2];
+  function ebValue(value) { return value === "root" ? Math.SQRT2 : Number(value); }
+  function ebDraw(value) {
+    var x=ebValue(value), exact=value==="root", x2=x*x;
+    var shown=exact?"√2":String(x), result=exact?"2":String(Number(x2.toFixed(6)));
+    var col=exact?"var(--a)":(x2>2?"var(--no)":"var(--b)");
+    ebSvg.innerHTML="";
+    ["0小时","半小时","1小时"].forEach(function(label,i){
+      var y=15+i*120, valueText=i===0?"1 倍":i===1?shown+" 倍":result+" 倍";
+      mk(ebSvg,"text",{x:10,y:y+44,"font-size":22,fill:"var(--muted)"}).textContent=label;
+      mk(ebSvg,"rect",{x:100,y:y,width:390,height:80,rx:8,fill:"var(--card)",stroke:i===2?col:"var(--line)","stroke-width":2});
+      mk(ebSvg,"text",{x:295,y:y+36,"text-anchor":"middle","font-size":28,fill:i===2?col:"var(--fg)","font-weight":700}).textContent=valueText;
+      mk(ebSvg,"text",{x:295,y:y+64,"text-anchor":"middle","font-size":20,fill:"var(--muted)"}).textContent=i===0?"相对当前数量":i===1?(exact?"√2 ≈ 1.414214":"候选增长倍数"):(exact?"√2 × √2 = 2":shown+" × "+shown+" = "+result);
+      if(i<2)mk(ebSvg,"text",{x:295,y:y+105,"text-anchor":"middle","font-size":22,fill:col}).textContent="↓ 乘 "+shown;
     });
-    mk(ebSvg, "path", { d: "M132 72 Q173 42 212 72", fill: "none", stroke: "var(--hl)", "stroke-width": 2.2, "marker-end": "url(#eb-arr)" });
-    mk(ebSvg, "text", { x: 173, y: 50, "text-anchor": "middle", fill: "var(--hl)", "font-size": 14.5, "font-weight": 700 }).textContent = "× " + x;
-    mk(ebSvg, "path", { d: "M306 72 Q347 42 386 72", fill: "none", stroke: "var(--hl)", "stroke-width": 2.2, "marker-end": "url(#eb-arr)" });
-    mk(ebSvg, "text", { x: 347, y: 50, "text-anchor": "middle", fill: "var(--hl)", "font-size": 14.5, "font-weight": 700 }).textContent = "× " + x;
-    // 底部刻度条对比 x^2 与目标 2
-    var bx0 = 60, bx1 = 460, by = 176, w2 = (2 / 4) * (bx1 - bx0), wx = Math.min(1, x2 / 4) * (bx1 - bx0);
-    mk(ebSvg, "rect", { x: bx0, y: by - 8, width: bx1 - bx0, height: 12, rx: 6, fill: "var(--line)" });
-    mk(ebSvg, "rect", { x: bx0, y: by - 8, width: wx, height: 12, rx: 6, fill: col });
-    mk(ebSvg, "line", { x1: bx0 + w2, y1: by - 14, x2: bx0 + w2, y2: by + 8, stroke: "var(--a)", "stroke-width": 2.5 });
-    mk(ebSvg, "text", { x: bx0 + w2, y: by + 20, "text-anchor": "middle", fill: "var(--a)", "font-size": 13, "font-weight": 700 }).textContent = "1h 目标：2 倍";
-    [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
-      b.classList.toggle("on", Math.abs(parseFloat(b.getAttribute("data-x")) - x) < 0.01);
-    });
-    var tag = ok ? "<b>刚好等于 2 倍</b>（这就是 √2 = 2^(1/2)！）" : (x2 > 2 ? "比 2 倍<b>偏大</b>了" : "比 2 倍<b>偏小</b>了");
-    ebNote.innerHTML = "半小时乘 <b>" + x + "</b>，连乘两次：<b>" + x + " × " + x + " = " + x2 + " 倍</b> → " + tag;
+    [].forEach.call(ebBar.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-x")===String(value));});
+    ebNote.textContent=exact?"精确增长倍数是√2，两个半小时连乘正好为2；1.414只是近似值。":shown+"² = "+result+"，"+(x2>2?"比2偏大。":"比2偏小；不能把四舍五入后的2当作精确相等。");
   }
   [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
-    b.addEventListener("click", function () { ebDraw(parseFloat(b.getAttribute("data-x"))); });
+    b.addEventListener("click", function () { ebDraw(b.getAttribute("data-x")); });
   });
   document.addEventListener("predict:pick", function (ev) {
     if (ev.detail && ev.detail.id === "entry") {
-      var m = { A: 1.5, B: 1.414, C: 1, D: 2 };
+      var m = { A: 1.5, B: "root", C: 1, D: 2 };
       if (m[ev.detail.choice]) ebDraw(m[ev.detail.choice]);
     }
   });
@@ -620,7 +614,8 @@
     if (ev.detail && ev.detail.id === "entry") ebDraw(1.5);
   });
 
-  function start() { ebDraw(1.5); reset(); reset2(); initStep2(); }
+  var started=false;
+  function start() { if(started)return;started=true;ebDraw(1.5); reset(); reset2(); initStep2(); }
   document.addEventListener("DOMContentLoaded", start);
   if (document.readyState !== "loading") start();
 
@@ -641,69 +636,32 @@
     }
 
     function drawExp(mode) {
-      eFig.innerHTML = "";
-      if (mode === "frac") {
-        el("rect", { x: 40, y: 35, width: 90, height: 65, rx: 8, fill: "var(--card)", stroke: "var(--b)", "stroke-width": "2" }, eFig);
-        el("text", { x: 85, y: 58, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, eFig).textContent = "原底数 a";
-        el("text", { x: 85, y: 85, "text-anchor": "middle", fill: "var(--b)", "font-size": "20", "font-weight": "800" }, eFig).textContent = "27";
-
-        el("path", { d: "M135 67 L195 67", stroke: "var(--a)", "stroke-width": "2.5", "stroke-linecap": "round" }, eFig);
-        el("polygon", { points: "195,63 205,67 195,71", fill: "var(--a)" }, eFig);
-        el("text", { x: 170, y: 55, "text-anchor": "middle", fill: "var(--a)", "font-size": "11", "font-weight": "700" }, eFig).textContent = "① 分母 3 开方";
-        el("text", { x: 170, y: 85, "text-anchor": "middle", fill: "var(--a)", "font-size": "11" }, eFig).textContent = "³√27";
-
-        el("rect", { x: 210, y: 35, width: 90, height: 65, rx: 8, fill: "var(--ok-soft)", stroke: "var(--a)", "stroke-width": "2" }, eFig);
-        el("text", { x: 255, y: 58, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, eFig).textContent = "中间根值";
-        el("text", { x: 255, y: 85, "text-anchor": "middle", fill: "var(--a)", "font-size": "20", "font-weight": "800" }, eFig).textContent = "3";
-
-        el("path", { d: "M305 67 L365 67", stroke: "var(--hl)", "stroke-width": "2.5", "stroke-linecap": "round" }, eFig);
-        el("polygon", { points: "365,63 375,67 365,71", fill: "var(--hl)" }, eFig);
-        el("text", { x: 340, y: 55, "text-anchor": "middle", fill: "var(--hl)", "font-size": "11", "font-weight": "700" }, eFig).textContent = "② 分子 2 乘方";
-        el("text", { x: 340, y: 85, "text-anchor": "middle", fill: "var(--hl)", "font-size": "11" }, eFig).textContent = "3²";
-
-        el("rect", { x: 380, y: 35, width: 90, height: 65, rx: 8, fill: "var(--card)", stroke: "var(--hl)", "stroke-width": "2" }, eFig);
-        el("text", { x: 425, y: 58, "text-anchor": "middle", fill: "var(--muted)", "font-size": "11" }, eFig).textContent = "最终幂值";
-        el("text", { x: 425, y: 85, "text-anchor": "middle", fill: "var(--hl)", "font-size": "20", "font-weight": "800" }, eFig).textContent = "9";
-
-        el("text", { x: 260, y: 130, "text-anchor": "middle", fill: "var(--fg)", "font-size": "12", "font-weight": "700" }, eFig).textContent = "核心秘诀：先开方将数化小，再乘方极好算！27^(2/3) = (³√27)² = 3² = 9";
-      } else if (mode === "root") {
-        el("rect", { x: 20, y: 18, width: 155, height: 115, rx: 6, fill: "var(--card)", stroke: "var(--ok)", "stroke-width": "1.5" }, eFig);
-        el("text", { x: 97, y: 40, "text-anchor": "middle", fill: "var(--ok)", "font-size": "12", "font-weight": "700" }, eFig).textContent = "奇次方程 x³ = -8";
-        el("text", { x: 97, y: 66, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13", "font-weight": "700" }, eFig).textContent = "x = ³√(-8) = -2";
-        el("text", { x: 97, y: 90, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10.5" }, eFig).textContent = "唯一实根！负数照样能开方";
-        el("text", { x: 97, y: 112, "text-anchor": "middle", fill: "var(--ok)", "font-size": "10.5", "font-weight": "700" }, eFig).textContent = "³√(a³) = a 无需绝对值";
-
-        el("rect", { x: 185, y: 18, width: 155, height: 115, rx: 6, fill: "var(--card)", stroke: "var(--b)", "stroke-width": "1.5" }, eFig);
-        el("text", { x: 262, y: 40, "text-anchor": "middle", fill: "var(--b)", "font-size": "12", "font-weight": "700" }, eFig).textContent = "偶次方程 x² = 4";
-        el("text", { x: 262, y: 66, "text-anchor": "middle", fill: "var(--fg)", "font-size": "13", "font-weight": "700" }, eFig).textContent = "x = ±√4 = ±2";
-        el("text", { x: 262, y: 90, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10.5" }, eFig).textContent = "根有两个！根式 √4 专指 +2";
-        el("text", { x: 262, y: 112, "text-anchor": "middle", fill: "var(--b)", "font-size": "10.5", "font-weight": "700" }, eFig).textContent = "√(a²) = |a| 必带绝对值";
-
-        el("rect", { x: 350, y: 18, width: 150, height: 115, rx: 6, fill: "var(--card)", stroke: "var(--no)", "stroke-width": "1.5" }, eFig);
-        el("text", { x: 425, y: 40, "text-anchor": "middle", fill: "var(--no)", "font-size": "12", "font-weight": "700" }, eFig).textContent = "偶次负数 x² = -4";
-        el("text", { x: 425, y: 66, "text-anchor": "middle", fill: "var(--no)", "font-size": "13", "font-weight": "800" }, eFig).textContent = "实数范围内无解！";
-        el("text", { x: 425, y: 90, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10.5" }, eFig).textContent = "任何实数平方 ≥ 0";
-        el("text", { x: 425, y: 112, "text-anchor": "middle", fill: "var(--no)", "font-size": "10.5", "font-weight": "700" }, eFig).textContent = "√(-4) 违背定义无意义";
-      } else if (mode === "neg") {
-        el("rect", { x: 60, y: 30, width: 140, height: 50, rx: 6, fill: "var(--card)", stroke: "var(--hl)", "stroke-width": "1.8" }, eFig);
-        el("text", { x: 130, y: 61, "text-anchor": "middle", fill: "var(--hl)", "font-size": "18", "font-weight": "800" }, eFig).textContent = "8^(-2/3)";
-
-        el("path", { d: "M205 55 L285 55", stroke: "var(--fg)", "stroke-width": "2" }, eFig);
-        el("polygon", { points: "285,51 295,55 285,59", fill: "var(--fg)" }, eFig);
-        el("text", { x: 245, y: 45, "text-anchor": "middle", fill: "var(--fg)", "font-size": "11", "font-weight": "700" }, eFig).textContent = "指数负号";
-        el("text", { x: 245, y: 70, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10.5" }, eFig).textContent = "翻转取倒数";
-
-        el("rect", { x: 300, y: 20, width: 160, height: 70, rx: 6, fill: "var(--ok-soft)", stroke: "var(--ok)", "stroke-width": "1.8" }, eFig);
-        el("text", { x: 380, y: 47, "text-anchor": "middle", fill: "var(--ok)", "font-size": "15", "font-weight": "700" }, eFig).textContent = "1 / 8^(2/3) = 1 / 4";
-        el("text", { x: 380, y: 71, "text-anchor": "middle", fill: "var(--ok)", "font-size": "11.5", "font-weight": "700" }, eFig).textContent = "结果依然为正数 (1/4 > 0)";
-
-        el("text", { x: 260, y: 130, "text-anchor": "middle", fill: "var(--fg)", "font-size": "12", "font-weight": "700" }, eFig).textContent = "切记：指数上的负号代表在分母上相乘，绝对不是在前面添负号！";
-      }
-
-      var notes = {
-        frac: "<b>分数指数运算</b>：分母为根指数，分子为方幂次数。先开方再乘方（\\((^3\\sqrt{27})^2 = 3^2 = 9\\)），算起来最轻松！",
-        root: "<b>奇偶根式大不同</b>：奇次根任何实数唯一开方；偶次根负数无实根，且 \\(\\sqrt[2k]{a^{2k}} = |a|\\) 必须戴绝对值护甲！",
-        neg: "<b>负指数的本质</b>：\\(a^{-r} = \\dfrac{1}{a^r}\\)。负号是「取倒数」的操作指令，计算结果正负不变！"
+      eFig.innerHTML="";
+      var rows=mode==="frac"?[
+        ["正底数 27，指数 2/3","27^(2/3) = (³√27)²"],
+        ["先按分母开三次方","³√27 = 3"],
+        ["再按分子平方","3² = 9"]
+      ]:mode==="root"?[
+        ["奇数次：x³ = −8","唯一实根 −2；³√(−8) = −2"],
+        ["偶数次：x² = 4","实根 ±2；根式 √4 = 2"],
+        ["偶数次：x² = −4","实数范围无解"]
+      ]:[
+        ["这里底数 8 > 0","8^(−2/3) = 1 / 8^(2/3)"],
+        ["先算正指数幂","8^(2/3) = 4"],
+        ["再取倒数","结果 1/4 > 0"]
+      ];
+      rows.forEach(function(row,i){
+        var y=8+104*i;
+        el("rect",{x:18,y:y,width:484,height:90,rx:8,fill:"var(--card)",stroke:i===2?"var(--b)":"var(--a)","stroke-width":2},eFig);
+        var heading=el("text",{x:260,y:y+29,"text-anchor":"middle","font-size":22,fill:"var(--muted)"},eFig);
+        el("tspan",{},heading).textContent=row[0];
+        var value=el("text",{x:260,y:y+65,"text-anchor":"middle","font-size":26,"font-weight":700,fill:"var(--fg)"},eFig);
+        el("tspan",{},value).textContent=row[1];
+      });
+      var notes={
+        frac:"<b>条件先行</b>：正底数时，\\(27^{2/3}=(\\sqrt[3]{27})^2=9\\)。",
+        root:"<b>方根与根式不同</b>：偶数次时，正数两个根、零一个根、负数没有实根；偶次根式只取非负根。",
+        neg:"<b>负指数取倒数</b>：\\(a>0\\)、\\(r\\in\\mathbb R\\) 时，\\(a^{-r}=1/a^r\\)。负底数的负整数幂另按定义计算，例如 \\((-2)^{-3}=-1/8\\)。"
       };
       if (eNote) {
         eNote.innerHTML = notes[mode] || "";
@@ -723,24 +681,23 @@
     }
 
     function drawAbsTrap() {
-      if (!aFig) return;
-      aFig.innerHTML = "";
-      var oy = 70;
-      el("line", { x1: 20, y1: oy, x2: 260, y2: oy, stroke: "var(--line)", "stroke-width": "1.5" }, aFig);
-      el("text", { x: 265, y: oy + 4, fill: "var(--muted)", "font-size": "10" }, aFig).textContent = "x";
-
-      el("line", { x1: 180, y1: oy - 6, x2: 180, y2: oy + 6, stroke: "var(--muted)", "stroke-width": "1.5" }, aFig);
-      el("text", { x: 180, y: oy + 18, "text-anchor": "middle", fill: "var(--muted)", "font-size": "10" }, aFig).textContent = "1";
-
-      el("line", { x1: 30, y1: oy, x2: 180, y2: oy, stroke: "var(--a)", "stroke-width": "3" }, aFig);
-      el("circle", { cx: 180, cy: oy, r: "4", fill: "#fff", stroke: "var(--a)", "stroke-width": "2" }, aFig);
-      el("text", { x: 105, y: oy - 12, "text-anchor": "middle", fill: "var(--a)", "font-size": "11", "font-weight": "700" }, aFig).textContent = "已知区间 x < 1";
-
-      el("circle", { cx: 110, cy: oy, r: "3", fill: "var(--fg)" }, aFig);
-      el("text", { x: 110, y: oy + 16, "text-anchor": "middle", fill: "var(--fg)", "font-size": "9.5" }, aFig).textContent = "例 x=0 (x-1 = -1 < 0)";
-
-      el("text", { x: 140, y: 22, "text-anchor": "middle", fill: "var(--no)", "font-size": "9.5", "font-weight": "700" }, aFig).textContent = "❌ 错解：√((x-1)²) = x - 1 漏绝对值！";
-      el("text", { x: 140, y: 122, "text-anchor": "middle", fill: "var(--ok)", "font-size": "9.5", "font-weight": "700" }, aFig).textContent = "✅ 正解：√((x-1)²) = |x - 1| = 1 - x";
+      if(!aFig)return;aFig.innerHTML="";
+      function px(x){return 60+(x+1)*100;}function py(y){return 150-y*50;}
+      el("line",{x1:60,y1:150,x2:470,y2:150,stroke:"var(--muted)","stroke-width":1.5},aFig);
+      el("line",{x1:px(0),y1:30,x2:px(0),y2:260,stroke:"var(--muted)","stroke-width":1.5},aFig);
+      el("text",{x:480,y:155,fill:"var(--muted)","font-size":22},aFig).textContent="x";
+      el("text",{x:px(0)+12,y:28,fill:"var(--muted)","font-size":22},aFig).textContent="y";
+      [-1,0,1,2,3].forEach(function(x){el("text",{x:px(x),y:176,"text-anchor":"middle","font-size":20,fill:"var(--muted)"},aFig).textContent=x;});
+      var d="",q="";for(var i=0;i<=80;i++){var x=-1+4*i/80;d+=(i?"L":"M")+px(x)+" "+py(Math.abs(x-1));}
+      for(var j=0;j<=40;j++){var x=-1+2*j/40;q+=(j?"L":"M")+px(x)+" "+py(x-1);}
+      el("path",{d:d,fill:"none",stroke:"var(--muted)","stroke-width":2,"stroke-dasharray":"5 5"},aFig);
+      el("path",{d:"M60 50 L260 150",fill:"none",stroke:"var(--a)","stroke-width":4},aFig);
+      el("path",{d:q,fill:"none",stroke:"var(--no)","stroke-width":2.5},aFig);
+      el("circle",{cx:260,cy:150,r:6,fill:"var(--card)",stroke:"var(--a)","stroke-width":2.5},aFig);
+      [[0,1,"var(--a)","A(0,1)",110,50],[0,-1,"var(--no)","B(0,−1)",205,218]].forEach(function(v){
+        el("circle",{cx:px(v[0]),cy:py(v[1]),r:5,fill:v[2]},aFig);
+        el("text",{x:v[4],y:v[5],fill:v[2],"font-size":22,"text-anchor":"middle"},aFig).textContent=v[3];
+      });
     }
 
     drawExp("frac");

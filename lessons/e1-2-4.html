@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -499,8 +499,6 @@
     draggable(circ, P, function (x, y) {
       if (moveP(rnd(x - OX), rnd(OY - y))) circDraw("P");
     }, function () { Peiyu.log("interact", { id: "circle-P", a: ca, b: cb, r2: (px - ca) * (px - ca) + (py - cb) * (py - cb) }); });
-    if (focus) { var h = focus === "C" ? C : P; if (h.focus) h.focus(); }
-
     var D = -2 * ca, E = -2 * cb, F = ca * ca + cb * cb - r2, rt = rootFrac(r2, 1);
     var lines = [];
     lines.push("圆心 \\(C(" + ca + "," + cb + ")\\)，\\(P(" + px + "," + py + ")\\)，\\(r^2=|CP|^2=" + neg(px - ca) + "^2+" + neg(py - cb) + "^2=" + r2 + "\\)，\\(r=" + rt + "\\)。");
@@ -511,6 +509,11 @@
     var out = document.getElementById("circout");
     out.innerHTML = lines.join("<br>");
     Peiyu.math(out);
+    // The camera wrapper reparents SVG children; finish it before restoring keyboard focus.
+    if (focus) {
+      if (window.Peiyu && typeof window.Peiyu.layoutNow === "function") window.Peiyu.layoutNow();
+      var h = focus === "C" ? C : P; if (h.focus) h.focus({preventScroll:true});
+    }
   }
   document.getElementById("circreset").onclick = function () { circReset(); Peiyu.log("interact", { id: "circle-reset" }); };
 
@@ -653,7 +656,7 @@ function initMCircleFig(){
   var caps = {
     std: "圆的标准方程：圆心 C(a, b)，半径 r，圆上动点 P(x, y) 到圆心距离恒等于 r，两边平方即 (x - a)² + (y - b)² = r²。",
     gen: "判别式三态：D² + E² - 4F > 0 为圆；= 0 退化为单点；< 0 无实数点。这是含参圆题目的必考考点。",
-    geom: "求圆方程双路径：已知圆心/切线/距离选标准式；已知不共线三点坐标选一般式解线性方程组。"
+    geom: "图中 A、B、D 是同一解析圆上的三个不共线点。红虚线分别过弦 AB、BD 的中点且与弦垂直，两线交点就是圆心 C；直角标记由真实垂直方向计算。已知不共线三点可用一般式解 D、E、F，得到同一个圆；三个互不相同的点若共线，则不存在过这三点的圆。"
   };
 
   function s(el, tag, attrs, txt){
@@ -664,13 +667,13 @@ function initMCircleFig(){
     return e;
   }
   function ln(el, x1, y1, x2, y2, c, w, d){
-    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"#cbd5e1", "stroke-width":w||1.5};
+    var a = {x1:x1, y1:y1, x2:x2, y2:y2, stroke:c||"var(--line)", "stroke-width":w||1.5};
     if (d) a["stroke-dasharray"] = d;
     return s(el, "line", a);
   }
   function rc(el, x, y, w, h, f, c, r){ return s(el, "rect", {x:x, y:y, width:w, height:h, fill:f||"none", stroke:c||"none", rx:r||0}); }
   function tx(el, x, y, txt, c, sz, b, anch){
-    var a = {x:x, y:y, fill:c||"#0f172a", "font-size":sz||"11"};
+    var a = {x:x, y:y, fill:c||"var(--fg)", "font-size":sz||"11"};
     if (b) a["font-weight"] = "bold";
     if (anch) a["text-anchor"] = anch;
     return s(el, "text", a, txt);
@@ -679,80 +682,84 @@ function initMCircleFig(){
   function draw(){
     svgEl.innerHTML = "";
     if (mode === "std") {
-      tx(svgEl, 270, 24, "圆的标准方程：(x - a)² + (y - b)² = r² (r > 0)", "#0f172a", "12.5", true, "middle");
-      ln(svgEl, 40, 160, 260, 160, "#64748b", 1.5);
-      ln(svgEl, 70, 180, 70, 40, "#64748b", 1.5);
+      tx(svgEl, 270, 24, "圆的标准方程：(x - a)² + (y - b)² = r² (r > 0)", "var(--fg)", "12.5", true, "middle");
+      ln(svgEl, 40, 160, 260, 160, "var(--muted)", 1.5);
+      ln(svgEl, 70, 180, 70, 40, "var(--muted)", 1.5);
 
       // Circle at C(150, 110), r = 50
-      s(svgEl, "circle", {cx:150, cy:110, r:50, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
-      s(svgEl, "circle", {cx:150, cy:110, r:4, fill:"#dc2626"});
-      tx(svgEl, 150, 126, "C(a, b)", "#dc2626", "10.5", true, "middle");
+      s(svgEl, "circle", {cx:150, cy:110, r:50, fill:"rgba(37,99,235,0.06)", stroke:"var(--c)", "stroke-width":2});
+      s(svgEl, "circle", {cx:150, cy:110, r:4, fill:"var(--no)"});
+      tx(svgEl, 150, 126, "C(a, b)", "var(--no)", "10.5", true, "middle");
 
       // Point P on circle at angle 35 deg
-      var px = 150 + 50 * 0.819;
-      var py = 110 - 50 * 0.573;
-      s(svgEl, "circle", {cx:px, cy:py, r:4, fill:"#2563eb"});
-      tx(svgEl, px + 8, py - 4, "P(x, y)", "#2563eb", "10.5", true);
-      ln(svgEl, 150, 110, px, py, "#dc2626", 2);
-      tx(svgEl, 166, 92, "r", "#dc2626", "11", true);
+      var angle = 35 * Math.PI / 180;
+      var px = 150 + 50 * Math.cos(angle);
+      var py = 110 - 50 * Math.sin(angle);
+      s(svgEl, "circle", {cx:px, cy:py, r:4, fill:"var(--c)"});
+      tx(svgEl, px + 8, py - 4, "P(x, y)", "var(--c)", "10.5", true);
+      ln(svgEl, 150, 110, px, py, "var(--no)", 2);
+      tx(svgEl, 166, 92, "r", "var(--no)", "11", true);
 
       // Triangle for dx, dy
-      ln(svgEl, 150, 110, px, 110, "#059669", 1.5, "3 3");
-      ln(svgEl, px, 110, px, py, "#059669", 1.5, "3 3");
-      tx(svgEl, 170, 120, "x - a", "#059669", "9.5");
-      tx(svgEl, px + 4, 100, "y - b", "#059669", "9.5");
+      ln(svgEl, 150, 110, px, 110, "var(--a)", 1.5, "3 3");
+      ln(svgEl, px, 110, px, py, "var(--a)", 1.5, "3 3");
+      tx(svgEl, 170, 120, "x - a", "var(--a)", "9.5");
+      tx(svgEl, px + 4, 100, "y - b", "var(--a)", "9.5");
 
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "标准方程速记要诀", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 圆心：(a, b) 注意反号", "#2563eb", "11");
-      tx(svgEl, 325, 120, "• 半径：r = √右边常数", "#059669", "11");
-      tx(svgEl, 325, 142, "• 点圆位置：代入与 r² 比", "#dc2626", "11", true);
-      tx(svgEl, 325, 164, "• 大于在圆外，小于在圆内", "#64748b", "10.5");
+      rc(svgEl, 310, 48, 205, 132, "var(--card)", "var(--line)", 6);
+      tx(svgEl, 325, 74, "标准方程速记要诀", "var(--fg)", "12", true);
+      tx(svgEl, 325, 98, "• 圆心：(a, b) 注意反号", "var(--c)", "11");
+      tx(svgEl, 325, 120, "• 半径：r = √右边常数", "var(--a)", "11");
+      tx(svgEl, 325, 142, "• 点圆位置：代入与 r² 比", "var(--no)", "11", true);
+      tx(svgEl, 325, 164, "• 大于在圆外，小于在圆内", "var(--muted)", "10.5");
     } else if (mode === "gen") {
-      tx(svgEl, 270, 24, "一般方程 x² + y² + Dx + Ey + F = 0 判别式三态", "#0f172a", "12.5", true, "middle");
+      tx(svgEl, 270, 24, "一般方程 x² + y² + Dx + Ey + F = 0 判别式三态", "var(--fg)", "12.5", true, "middle");
       // 3 states visual
       // State 1: Circle
-      s(svgEl, "circle", {cx:75, cy:110, r:35, fill:"rgba(37,99,235,0.08)", stroke:"#2563eb", "stroke-width":2});
-      s(svgEl, "circle", {cx:75, cy:110, r:3, fill:"#2563eb"});
-      tx(svgEl, 75, 160, "① Δ>0 (正常圆)", "#2563eb", "10.5", true, "middle");
+      s(svgEl, "circle", {cx:75, cy:110, r:35, fill:"rgba(37,99,235,0.08)", stroke:"var(--c)", "stroke-width":2});
+      s(svgEl, "circle", {cx:75, cy:110, r:3, fill:"var(--c)"});
+      tx(svgEl, 75, 160, "① Δ>0 (正常圆)", "var(--c)", "10.5", true, "middle");
 
       // State 2: Point
-      s(svgEl, "circle", {cx:175, cy:110, r:4, fill:"#dc2626"});
-      tx(svgEl, 175, 160, "② Δ=0 (单点)", "#dc2626", "10.5", true, "middle");
+      s(svgEl, "circle", {cx:175, cy:110, r:4, fill:"var(--no)"});
+      tx(svgEl, 175, 160, "② Δ=0 (单点)", "var(--no)", "10.5", true, "middle");
 
       // State 3: Empty
-      tx(svgEl, 262, 115, "∅", "#64748b", "24", true, "middle");
-      tx(svgEl, 262, 160, "③ Δ<0 (无实点)", "#64748b", "10.5", true, "middle");
+      tx(svgEl, 262, 115, "∅", "var(--muted)", "24", true, "middle");
+      tx(svgEl, 262, 160, "③ Δ<0 (无实点)", "var(--muted)", "10.5", true, "middle");
 
-      rc(svgEl, 320, 48, 200, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 335, 74, "Δ = D² + E² - 4F 判据", "#0f172a", "11.5", true);
-      tx(svgEl, 335, 98, "• Δ > 0 ⟹ 是圆，半径 > 0", "#2563eb", "10.5");
-      tx(svgEl, 335, 120, "• Δ = 0 ⟹ 点 (-D/2, -E/2)", "#dc2626", "10.5", true);
-      tx(svgEl, 335, 142, "• Δ < 0 ⟹ 不表示任何图形", "#64748b", "10.5");
-      tx(svgEl, 335, 164, "• x², y² 系数必须严格相同", "#059669", "10");
+      rc(svgEl, 320, 48, 200, 132, "var(--card)", "var(--line)", 6);
+      tx(svgEl, 335, 74, "Δ = D² + E² - 4F 判据", "var(--fg)", "11.5", true);
+      tx(svgEl, 335, 98, "• Δ > 0 ⟹ 是圆，半径 > 0", "var(--c)", "10.5");
+      tx(svgEl, 335, 120, "• Δ = 0 ⟹ 点 (-D/2, -E/2)", "var(--no)", "10.5", true);
+      tx(svgEl, 335, 142, "• Δ < 0 ⟹ 不表示任何图形", "var(--muted)", "10.5");
+      tx(svgEl, 335, 164, "• x², y² 系数必须严格相同", "var(--a)", "10");
     } else if (mode === "geom") {
-      tx(svgEl, 270, 24, "三点确定圆：弦的垂直平分线交于圆心", "#0f172a", "12.5", true, "middle");
-      s(svgEl, "circle", {cx:150, cy:110, r:55, fill:"rgba(37,99,235,0.06)", stroke:"#2563eb", "stroke-width":2});
-      s(svgEl, "circle", {cx:150, cy:110, r:4, fill:"#dc2626"});
-      tx(svgEl, 150, 124, "圆心 C", "#dc2626", "10.5", true, "middle");
-
-      // Points A, B, O
-      s(svgEl, "circle", {cx:100, cy:85, r:4, fill:"#059669"});
-      tx(svgEl, 90, 85, "A", "#059669", "11", true);
-      s(svgEl, "circle", {cx:200, cy:90, r:4, fill:"#059669"});
-      tx(svgEl, 210, 90, "B", "#059669", "11", true);
-      s(svgEl, "circle", {cx:150, cy:165, r:4, fill:"#059669"});
-      tx(svgEl, 150, 178, "O", "#059669", "11", true, "middle");
-
-      ln(svgEl, 100, 85, 200, 90, "#93c5fd", 1.5);
-      ln(svgEl, 150, 50, 150, 150, "#dc2626", 1.5, "3 3");
-
-      rc(svgEl, 310, 48, 205, 132, "#f8fafc", "#cbd5e1", 6);
-      tx(svgEl, 325, 74, "两套解法对决", "#0f172a", "12", true);
-      tx(svgEl, 325, 98, "• 几何法：求弦中垂线交点", "#059669", "11");
-      tx(svgEl, 325, 120, "• 代数法：代入一般式解 D,E,F", "#2563eb", "11");
-      tx(svgEl, 325, 142, "• 三点共线 ⟹ 垂直平分线平行", "#dc2626", "11", true);
-      tx(svgEl, 325, 164, "• 无解，不能成圆", "#64748b", "10.5");
+      tx(svgEl, 270, 24, "三点不共线：两条弦中垂线交于圆心", "var(--fg)", "14", true, "middle");
+      var C = {x:150, y:110}, R = 55;
+      // Three exact points on one analytic circle; use a scaled 3-4-5 direction.
+      var points = [{name:"A",x:C.x-3*R/5,y:C.y-4*R/5},
+        {name:"B",x:C.x+4*R/5,y:C.y-3*R/5}, {name:"D",x:C.x,y:C.y+R}];
+      s(svgEl, "circle", {"data-analytic-circle":"geom",cx:C.x,cy:C.y,r:R,fill:"rgba(37,99,235,0.06)",stroke:"var(--c)","stroke-width":2});
+      function bisector(a,b,name){
+        var mx=(a.x+b.x)/2,my=(a.y+b.y)/2,dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);
+        var ux=dx/L,uy=dy/L,nx=-uy,ny=ux;
+        var chord=ln(svgEl,a.x,a.y,b.x,b.y,"var(--muted)",1.5);chord.setAttribute("data-chord",name);
+        // Equal distances put C on this perpendicular bisector; no guessed endpoints.
+        var line=ln(svgEl,C.x-62*nx,C.y-62*ny,C.x+62*nx,C.y+62*ny,"var(--no)",1.5,"3 3");
+        line.setAttribute("data-bisector",name);
+        s(svgEl,"circle",{"data-midpoint":name,cx:mx,cy:my,r:2.5,fill:"var(--hl)"});
+        var k=6;s(svgEl,"polyline",{"data-right-angle":name,points:(mx+k*ux)+","+(my+k*uy)+" "+(mx+k*ux+k*nx)+","+(my+k*uy+k*ny)+" "+(mx+k*nx)+","+(my+k*ny),fill:"none",stroke:"var(--no)","stroke-width":1});
+      }
+      bisector(points[0],points[1],"AB");bisector(points[1],points[2],"BD");
+      s(svgEl,"circle",{cx:C.x,cy:C.y,r:4,fill:"var(--no)"});tx(svgEl,C.x-4,C.y+18,"圆心 C","var(--no)","11",true,"middle");
+      points.forEach(function(p){s(svgEl,"circle",{"data-circle-point":p.name,cx:p.x,cy:p.y,r:4,fill:"var(--a)"});tx(svgEl,p.x+(p.name==="A"?-14:8),p.y+(p.name==="D"?13:-5),p.name,"var(--a)","12",true);});
+      rc(svgEl,310,48,205,132,"var(--card)","var(--line)",6);
+      tx(svgEl,325,74,"两套解法，同一个圆","var(--fg)","12",true);
+      tx(svgEl,325,98,"• 三点不共线：圆唯一","var(--a)","11");
+      tx(svgEl,325,120,"• 几何：弦中垂线交点","var(--c)","11");
+      tx(svgEl,325,142,"• 代数：解 D、E、F","var(--fg)","11");
+      tx(svgEl,325,164,"• 不同三点共线：无圆","var(--no)","11");
     }
 
     if (capEl) capEl.textContent = caps[mode];
@@ -773,17 +780,17 @@ function initMCircleFig(){
   var trapEl = document.getElementById("m-circle-trap-fig");
   if (trapEl) {
     trapEl.innerHTML = "";
-    rc(trapEl, 25, 18, 235, 134, "#fef2f2", "#fca5a5", 6);
-    tx(trapEl, 142, 42, "❌ 错解：误认 Δ=0 是圆", "#dc2626", "11.5", true, "middle");
-    tx(trapEl, 142, 70, "x² + y² - 2x + 4y + 5 = 0", "#dc2626", "10.5", false, "middle");
-    tx(trapEl, 142, 94, "配方得 (x-1)² + (y+2)² = 0", "#b91c1c", "11", true, "middle");
-    tx(trapEl, 142, 130, "半径为 0 仅为一个点！", "#64748b", "9.5", false, "middle");
+    rc(trapEl, 25, 18, 235, 134, "var(--no-soft)", "var(--no)", 6);
+    tx(trapEl, 142, 42, "❌ 错解：误认 Δ=0 是圆", "var(--no)", "11.5", true, "middle");
+    tx(trapEl, 142, 70, "x² + y² - 2x + 4y + 5 = 0", "var(--no)", "10.5", false, "middle");
+    tx(trapEl, 142, 94, "配方得 (x-1)² + (y+2)² = 0", "var(--no)", "11", true, "middle");
+    tx(trapEl, 142, 130, "半径为 0 仅为一个点！", "var(--muted)", "9.5", false, "middle");
 
-    rc(trapEl, 280, 18, 235, 134, "#f0fdf4", "#86efac", 6);
-    tx(trapEl, 397, 42, "✔ 正解：严格要求 Δ > 0", "#15803d", "11.5", true, "middle");
-    tx(trapEl, 397, 70, "D² + E² - 4F 必须严格大于 0", "#059669", "10.5", true, "middle");
-    tx(trapEl, 397, 94, "此时半径 r = ½√(D²+E²-4F) > 0", "#15803d", "11", true, "middle");
-    tx(trapEl, 397, 130, "只有大于 0 时才是真正的圆！", "#047857", "10", true, "middle");
+    rc(trapEl, 280, 18, 235, 134, "var(--ok-soft)", "var(--a)", 6);
+    tx(trapEl, 397, 42, "✔ 正解：严格要求 Δ > 0", "var(--a)", "11.5", true, "middle");
+    tx(trapEl, 397, 70, "D² + E² - 4F 必须严格大于 0", "var(--a)", "10.5", true, "middle");
+    tx(trapEl, 397, 94, "此时半径 r = ½√(D²+E²-4F) > 0", "var(--a)", "11", true, "middle");
+    tx(trapEl, 397, 130, "只有大于 0 时才是真正的圆！", "var(--a)", "10", true, "middle");
   }
 }
 

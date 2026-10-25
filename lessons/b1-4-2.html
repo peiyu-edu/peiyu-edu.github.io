@@ -7,14 +7,14 @@
 <link rel="stylesheet" href="../assets/site.css">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=vs-1ce74623d1ca"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   .fig .axis { stroke: var(--muted); stroke-width: 1.5; }
   .fig .grid { stroke: var(--line); stroke-width: 1; }
-  .fig text { font-size: 20px; }
-  .fig text.num { fill: var(--muted); text-anchor: middle; }
+  .fig text { font-size: 20px; paint-order:stroke; stroke:var(--card); stroke-width:3px; stroke-linejoin:round; }
+  .fig text.num { fill: var(--muted); text-anchor: middle; paint-order:stroke; stroke:var(--card); stroke-width:4px; stroke-linejoin:round; }
   .fig .cur { fill: none; stroke: var(--a); stroke-width: 3.5; }
   .fig .mir { fill: none; stroke: var(--c); stroke-width: 3; stroke-dasharray: 9 6; }
   .fig .one { fill: none; stroke: var(--no); stroke-width: 3.5; }
@@ -40,12 +40,12 @@
 <header class="top"><img src="../assets/logo.svg" alt=""><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
 <p class="crumb">必修第一册 · 第 4 章 指数函数与对数函数</p>
 <h1>4.2 指数函数</h1>
-<p class="lead">自变量跑到了指数上：\(y=a^x\) 长什么样？底数 \(a\) 为什么要限制？底数大于 1 和小于 1 有什么不同？先从折纸开始。</p>
+<p class="lead">从折纸的整数倍增出发，认识实数指数上的函数：先查正底数且不等于一，再看增减、定点和值域，用来比较大小和解不等式。</p>
 
 <section class="step" data-title="从例子进入">
   <p>一张纸对折一次变成 \(2\) 层，再对折变成 \(4\) 层，再对折变成 \(8\) 层……先点下面的按钮，一步步对折，放在放大镜下看纸堆层数怎么蹿上去：</p>
   <div class="card predict" data-id="entry" data-answer="D">
-    <svg class="entry-fig" id="entry-fold" viewBox="0 0 520 210" role="img" aria-label="折纸层数放大镜与指数增长柱状图，展示对折0到5次层数从1翻倍到32"></svg>
+    <svg class="entry-fig" id="entry-fold" viewBox="0 0 520 440" role="img" aria-label="折纸层数放大镜与指数增长柱状图，展示对折0到5次层数从1翻倍到32"></svg>
     <div class="entry-bar" id="entry-fold-bar">
       <button type="button" data-k="0">折 0 次=1层</button>
       <button type="button" data-k="1">折 1 次=2层</button>
@@ -64,25 +64,25 @@
     </div>
     <div class="reveal">
       <p>每折一次，层数<b>乘 \(2\)</b>：\(2,4,8,16,32\)。折 \(5\) 次是 \(2^5=32\) 层，选 <b>D</b>。</p>
-      <p>折 \(x\) 次就是 \(2^x\) 层。这里次数 \(x\) 在<b>指数</b>上：\(x\) 每加 \(1\)，层数就乘同一个数 \(2\)。</p>
-      <p>这一节讲的就是这种函数 \(y=a^x\)：它长什么样，底数 \(a\) 大于 \(1\) 和小于 \(1\) 有什么不同，怎么用它比大小、解不等式。</p>
+      <p>折 \(x\) 次就是 \(2^x\) 层，这里 \(x\) 只能取非负整数。这里次数 \(x\) 在<b>指数</b>上：\(x\) 每加 \(1\)，层数就乘同一个数 \(2\)。</p>
+      <p>把整数点的倍增规律按4.1的实指数推广后，才得到定义在全体实数上的函数 \(y=a^x\)。负数或非整数输入不再表示真实折纸次数。这一节讲这种推广函数：它长什么样，底数 \(a\) 大于 \(1\) 和小于 \(1\) 有什么不同，怎么用它比大小、解不等式。</p>
     </div>
   </div>
 </section>
 
 <section class="step" data-title="讲清楚">
   <div class="vid" data-video="concept"></div>
-  <h3>1. 先认识几个词：底数以 1 为界的形态跃迁与定点 (0,1)</h3>
+  <h3>1. 先认识几个词：底数条件、增减与定点</h3>
   <p class="small">要用到：4.1 的分数指数幂、负指数幂（<a href="b1-4-1.html">回看 4.1</a>）；3.1 的值域与 3.2 的单调性（<a href="b1-3-1.html">回看 3.1</a>、<a href="b1-3-2.html">回看 3.2</a>）。先看下面这幅微图解：</p>
 
   <div class="micro-box">
-    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>底数以 1 为界的分水岭形态跃迁</b></p>
+    <p style="margin:0 0 6px"><span class="badge-pill badge-a">直觉微图解 ①</span><b>同一坐标尺度下比较递增、递减与对称</b></p>
     <div class="entry-bar" id="m-expfn-bar" role="group" aria-label="指数函数微图解切换">
-      <button type="button" class="on" data-m="inc">① 底数 a > 1 爆炸增长 (递增，左贴渐近线 y=0，右冲云霄)</button>
-      <button type="button" data-m="dec">② 底数 0 < a < 1 指数衰减 (递减，左高右低，渐近于正半轴)</button>
-      <button type="button" data-m="sym">③ 定点 (0,1) 与对称 (y=a^x 与 y=(1/a)^x 关于 y 轴镜像)</button>
+      <button type="button" class="on" data-m="inc">① a > 1：递增</button>
+      <button type="button" data-m="dec">② 0 < a < 1：递减</button>
+      <button type="button" data-m="sym">③ 倒数底数：关于 y 轴对称</button>
     </div>
-    <svg class="micro-fig" id="m-expfn-fig" viewBox="0 0 520 160" role="img" aria-label="指数函数图象形态微图解"></svg>
+    <svg class="micro-fig" id="m-expfn-fig" viewBox="0 0 520 330" role="img" aria-label="指数函数图象形态微图解"></svg>
     <p class="entry-note" id="m-expfn-note"></p>
   </div>
 
@@ -97,7 +97,9 @@
     </div>
   </div>
 
+  <div class="card"><p><b>定义与范围</b>：固定底数 \(a>0\) 且 \(a\ne1\)，函数 \(y=a^x\) 叫指数函数，定义域 \(\mathbb R\)，值域 \((0,+\infty)\)。这里的标准形式是 \(y=a^x\)；例如 \(2\cdot3^x\) 是指数型表达式，与该基本形式要区分。</p><p>值域是整个正实数区间，不只是“永远大于零”。 \(y=0\) 是渐近线，图象不会碰到它。</p></div>
   <h3>2. 核心数学性质与脱底数解不等式法则</h3>
+  <p class="small">下列等价变形都在两边指数有意义的共同定义域内进行；如果指数含根式、分式，最后还要与原定义域取交集。</p>
   <div class="key" style="text-align:center; padding:12px; overflow-x:auto">
     <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{a&gt;1:\ a^{f(x)} &gt; a^{g(x)} \iff f(x) &gt; g(x)}_{\text{递增：脱去底数，不等号保持同向}}}\)</span>
     <span style="display:inline-block; margin:0 8px">\(\color{#966524}{\underbrace{0&lt;a&lt;1:\ a^{f(x)} &gt; a^{g(x)} \iff f(x) &lt; g(x)}_{\text{递减：脱去底数，不等号必须反转！}}}\)</span>
@@ -191,7 +193,7 @@
           </div>
         </div>
         <div>
-          <svg class="micro-fig" id="m-ineq-fig" viewBox="0 0 280 140" role="img" aria-label="指数不等式反转微图解"></svg>
+          <svg class="micro-fig" id="m-ineq-fig" viewBox="0 0 520 320" role="img" aria-label="指数不等式反转微图解"></svg>
         </div>
       </div>
     </div>
@@ -203,19 +205,19 @@
           <b>❌ 典型错解</b>：解 \(a^{2x} &gt; a^{x+1}\)，直接得出 \(2x &gt; x+1 \implies x &gt; 1\)。
         </div>
         <div class="trap-right">
-          <b>✅ 一眼看清真相</b>：底数未定必须分两类！\(a&gt;1\) 时 \(x&gt;1\)；\(0&lt;a&lt;1\) 时必须反号得 \(x&lt;1\)！漏讨论直接扣一半分！
+          <b>✅ 一眼看清真相</b>：题设先给 \(a>0\) 且 \(a\ne1\)，再分两类：\(a&gt;1\) 时 \(x&gt;1\)；\(0&lt;a&lt;1\) 时必须反号得 \(x&lt;1\)！两类结果必须分别保留。
         </div>
       </div>
     </div>
 
     <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>不同底数比大小硬套单调性，不用中间量 1</span></div>
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>不同底数直接按指数大小排序</span></div>
       <div class="trap-body">
         <div class="trap-wrong">
           <b>❌ 典型错解</b>：看到 \(2^{0.1}\) 和 \(0.5^{0.2}\)，误以为指数 \(0.2&gt;0.1\) 所以后者大。
         </div>
         <div class="trap-right">
-          <b>✅ 一眼看清真相</b>：不在同一底数曲线上绝不能乱套指数单调性！借助 \(a^0=1\)：\(2^{0.1}&gt;1\)，\(0.5^{0.2}&lt;1\)，立见高下！
+          <b>✅ 一眼看清真相</b>：本题两数分居1两边，适合借助 \(a^0=1\)：\(2^{0.1}&gt;1\)，\(0.5^{0.2}&lt;1\)，立见高下！
         </div>
       </div>
     </div>
@@ -224,7 +226,7 @@
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
     <p><b>\(y=\left(\tfrac1a\right)^x\) 和 \(y=a^x\) 关于 \(y\) 轴对称</b>：因为 \(\left(\tfrac1a\right)^x=a^{-x}\)，前一个在 \(x\) 处的值，就是后一个在 \(-x\) 处的值。会画 \(a&gt;1\) 的图，翻过去就得到 \(0&lt;a&lt;1\) 的图。「动手」①里勾选一下就能看到。</p>
-    <p><b>底数大小怎样影响图象</b>：在 \(y\) 轴右边（\(x&gt;0\)），底数越大，曲线越高、越陡；在 \(y\) 轴左边（\(x&lt;0\)），顺序反过来；所有曲线都在 \((0,1)\) 交在一起。「动手」②可以拖着看。</p>
+    <p><b>底数大小怎样影响图象</b>：在 \(y\) 轴右边（\(x&gt;0\)），底数越大，函数值越大、曲线越高；在 \(y\) 轴左边（\(x&lt;0\)），顺序反过来；所有曲线都在 \((0,1)\) 交在一起。「动手」②可以拖着看。</p>
     <p><b>同指数、不同底</b>：比如 \(2^{0.3}\) 和 \(3^{0.3}\)，指数是正数，看 \(y\) 轴右边，底大的高，\(2^{0.3}&lt;3^{0.3}\)；指数是负数时反过来。</p>
     <p><b>长得有多快</b>：\(2^x\) 每次乘 \(2\)，\(x=10\) 时已经是 \(1024\)，\(x=20\) 时超过一百万。它和 \(y=2x\) 这类一次函数比谁长得快，要说清在哪一段 \(x\) 上比，4.4 会专门讲。</p>
   </details>
@@ -236,6 +238,7 @@
   <div class="card">
     <svg class="fig" id="fig" viewBox="0 0 560 380" role="group" aria-label="指数函数 y=a^x 的图象，底数可调，曲线上的点可拖动"></svg>
     <label class="sl"><span>底数 \(a\)</span><input type="range" id="sa" min="0.1" max="4" step="0.05" aria-label="底数 a"><output id="oa"></output></label>
+    <label class="sl"><span>P的 \(x\)</span><input type="range" id="sx" min="-3" max="3" step="0.1" aria-label="P的横坐标 x"><output id="ox"></output></label>
     <div class="ctrl">
       <span class="small">试试：</span>
       <button class="btn ghost" type="button" data-a="2">\(a=2\)</button>
@@ -263,7 +266,7 @@
   <p class="small">从易到难排好了。前两道直接用，中间三道是最常见的错，最后一道是挑战。</p>
 
   <h3>直接用</h3>
-  <div class="card predict" data-id="p-basic-1" data-answer="A">
+  <div class="card predict" data-id="p-basic-1" data-cards="exp-fn-prop" data-answer="A">
     <p>1. 不等式 \(2^x\ge\tfrac14\) 的解集是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(x\ge-2\)</button>
@@ -273,7 +276,7 @@
     </div>
     <div class="reveal"><p><b>A</b>。先化成同底：\(\tfrac14=2^{-2}\)，不等式是 \(2^x\ge2^{-2}\)。底数 \(2&gt;1\)，递增，不等号不变，\(x\ge-2\)。选 C 的同学把 \(\tfrac14\) 写成了 \(2^2\)；选 D 是直接把 \(\tfrac14\) 当成了指数。</p></div>
   </div>
-  <div class="card predict" data-id="p-basic-2" data-answer="C">
+  <div class="card predict" data-id="p-basic-2" data-cards="exp-fn-prop" data-answer="C">
     <p>2. \(a&gt;0\) 且 \(a\ne1\)。函数 \(y=a^{x-1}+2\) 的图象一定经过哪个点？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\((0,1)\)</button>
@@ -284,8 +287,11 @@
     <div class="reveal"><p><b>C</b>。不管 \(a\) 是多少，\(a^0=1\)。让指数 \(x-1=0\)，即 \(x=1\)，这时 \(y=1+2=3\)。选 A 是照搬 \(y=a^x\) 的定点；选 B 是忘了 \(a^0\) 是 \(1\) 不是 \(0\)。</p></div>
   </div>
 
+  <p class="small">视频对应上面第2题的公共定点，再追加“已知定点反求常数”的一问。</p>
+  <div class="vid" data-video="ex-point"></div>
+
   <h3>易错</h3>
-  <div class="card predict" data-id="trap-def" data-answer="D">
+  <div class="card predict" data-id="trap-def" data-cards="exp-fn-prop" data-answer="D">
     <p>3. 下面哪一个是指数函数？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>\(y=(-2)^x\)</button>
@@ -300,7 +306,7 @@
     </div>
   </div>
 
-  <div class="card predict" data-id="trap-ineq" data-answer="B">
+  <div class="card predict" data-id="trap-ineq" data-cards="exp-fn-prop" data-answer="B">
     <p>4. 不等式 \(\left(\tfrac12\right)^x&gt;\left(\tfrac12\right)^3\) 的解集是？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>\(x&gt;3\)</button>
@@ -313,7 +319,7 @@
     </div>
   </div>
 
-  <div class="card predict" data-id="warmup" data-answer="B">
+  <div class="card predict" data-id="warmup" data-cards="exp-fn-prop" data-answer="B">
     <p>5. 当 \(x=-2\) 时，\(2^x\) 和 \(3^x\) 哪个大？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>\(3^x\) 大，底数大的当然大</button>
@@ -326,10 +332,12 @@
       <p>「底数大，值就大」只在 \(x&gt;0\) 时对。指数是负数时，\(a^{-2}=\tfrac{1}{a^2}\)，底数越大，分母越大，值反而越小。在「动手」②里把竖线拖到 \(x=-2\) 就能看到：\(y\) 轴左边两条曲线的上下正好反过来。</p>
     </div>
   </div>
-  <div class="vid" data-video="ex-point"></div>
+
+  <p class="small">下面用三个幂练习同底单调与跨1比较，并回看第5题的固定负指数反例。</p>
+  <div class="vid" data-video="ex-comp"></div>
 
   <h3>挑战</h3>
-  <div class="card predict" data-id="p-challenge" data-answer="C">
+  <div class="card predict" data-id="p-challenge" data-cards="exp-fn-prop" data-answer="C">
     <p>6. \(a&gt;0\) 且 \(a\ne1\)，函数 \(y=a^x\) 在 \([1,2]\) 上的最大值比最小值大 \(\tfrac a2\)。\(a\) 等于？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(\tfrac32\)</button>
@@ -344,11 +352,10 @@
       <p>两个都对。选 A 的同学默认了 \(a&gt;1\)，漏掉了递减的情况。</p>
     </div>
   </div>
-  <div class="vid" data-video="ex-comp"></div>
 </section>
 
 <section class="step" data-title="高考真题">
-  <p class="small">这一节的真题还在整理。选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
+  <p class="small">选择题点选项自动判对错；填空题写法不同时，看答案自己判。要用到后面章节的题收在最后，学到那里再做。</p>
   <div id="practice" data-fold-later></div>
 </section>
 
@@ -361,7 +368,7 @@
   "use strict";
   var NS = "http://www.w3.org/2000/svg";
   var svg = document.getElementById("fig"), info = document.getElementById("info");
-  var sa = document.getElementById("sa"), oa = document.getElementById("oa"), mirBox = document.getElementById("mir");
+  var sa = document.getElementById("sa"), oa = document.getElementById("oa"), pxSlider = document.getElementById("sx"), pxOut = document.getElementById("ox"), mirBox = document.getElementById("mir");
   var XMIN = -3, XMAX = 3, YMIN = -1, YMAX = 8;
   var L = 40, R = 540, T = 20, B = 350;
   var DEF = { a: 2, x: 1.5, mir: false };
@@ -375,7 +382,6 @@
     for (var k in attrs) e.setAttribute(k, attrs[k]);
     (parent || svg).appendChild(e); return e;
   }
-  function clampY(y) { return Math.max(YMIN - 2, Math.min(YMAX + 2, y)); }
   function trim(s) { return s.indexOf(".") >= 0 ? s.replace(/0+$/, "").replace(/\.$/, "") : s; }
   function fa(a) { return trim(a.toFixed(2)); }
   function fx(x) { var s = trim(x.toFixed(1)); return s === "-0" ? "0" : s; }
@@ -408,14 +414,14 @@
     g.cur = mk("path", { "class": "cur" }, plot);
     g.guides = mk("g", {}, plot);
     g.fix = mk("circle", { cx: sx(0), cy: sy(1), r: 7, "class": "fix" });
-    g.fixl = mk("text", { x: sx(0) + 12, y: sy(1) + 24 }); g.fixl.textContent = "(0, 1)";
+    g.fixl = mk("text", { x: L + 8, y: B + 25 }); g.fixl.textContent = "共同点 (0, 1)";
     g.lab = mk("text", { x: L + 8, y: T + 30, style: "font-size:24px" });
     g.labA = mk("tspan", {}, g.lab);
     var sup = mk("tspan", { dy: -11, style: "font-size:20px" }, g.lab); sup.textContent = "x";
-    g.p2 = mk("circle", { r: 8, "class": "hdl2" });
-    g.hit = mk("circle", { r: 22, fill: "transparent", style: "cursor:grab" });
+    g.p2 = mk("circle", { r: 8, "class": "hdl2" }, plot);
+    g.hit = mk("circle", { r: 22, fill: "transparent", style: "cursor:grab" }, plot);
     g.p = mk("circle", { r: 9, "class": "hdl", tabindex: "0", role: "slider", "aria-label": "曲线上的点 P 的横坐标",
-      "aria-valuemin": XMIN, "aria-valuemax": XMAX });
+      "aria-valuemin": XMIN, "aria-valuemax": XMAX }, plot);
     g.pl = mk("text", {});
   }
 
@@ -423,7 +429,7 @@
     var d = "", n = 240;
     for (var i = 0; i <= n; i++) {
       var x = XMIN + (XMAX - XMIN) * i / n;
-      d += (i ? "L" : "M") + sx(x).toFixed(1) + " " + sy(clampY(pow(a, x))).toFixed(1);
+      d += (i ? "L" : "M") + sx(x).toFixed(1) + " " + sy(pow(a, x)).toFixed(1);
     }
     return d;
   }
@@ -436,13 +442,15 @@
     g.labA.textContent = "y = " + fa(a);
     g.lab.setAttribute("fill", isOne ? "var(--no)" : "var(--a)");
 
-    // 点 P（出了图就停在边上）
-    var py = sy(Math.min(y, YMAX)), cx = sx(x);
+    // Plot uses the real function coordinates; clip the finite viewing window.
+    var py = sy(y), cx = sx(x);
     g.p.setAttribute("cx", cx); g.p.setAttribute("cy", py);
     g.hit.setAttribute("cx", cx); g.hit.setAttribute("cy", py);
     g.p.setAttribute("aria-valuenow", x);
     g.p.setAttribute("aria-valuetext", "x=" + fx(x) + "，y≈" + fy(y));
-    g.pl.textContent = y > YMAX ? "P ↑" : "P";
+    g.pl.textContent = "P";
+    g.pl.style.display = y > YMAX ? "none" : "";
+    pxSlider.value = x; pxOut.textContent = fx(x);
     g.pl.setAttribute("x", Math.min(Math.max(cx + 12, L + 4), R - 50));
     g.pl.setAttribute("y", Math.max(py - 12, T + 40));
     g.pl.setAttribute("fill", "var(--b)");
@@ -452,7 +460,7 @@
       mk("line", { x1: sx(0), y1: py, x2: cx, y2: py, "class": "guide" }, g.guides);
     }
     var y2 = pow(1 / a, -x), show2 = st.mir && !isOne;
-    g.p2.setAttribute("cx", sx(-x)); g.p2.setAttribute("cy", sy(Math.min(y2, YMAX)));
+    g.p2.setAttribute("cx", sx(-x)); g.p2.setAttribute("cy", sy(y2));
     g.p2.style.display = show2 ? "" : "none";
 
     oa.textContent = fa(a);
@@ -463,15 +471,15 @@
     } else {
       h += "<div>\\(y=" + fa(a) + "^x\\)：" + (a > 1 ? "\\(a&gt;1\\)，在 \\(\\R\\) 上<b>递增</b>" : "\\(0&lt;a&lt;1\\)，在 \\(\\R\\) 上<b>递减</b>") + "；值域 \\((0,+\\infty)\\)，过 \\((0,1)\\)。</div>";
       var cmp, why;
-      if (Math.abs(x) < 1e-9) { cmp = "\\(=1\\)"; why = "任何底数的 0 次方都是 1"; }
+      if (Math.abs(x) < 1e-9) { cmp = "\\(=1\\)"; why = "任何正底数的 0 次方都是 1"; }
       else {
         var big = (a > 1) === (x > 0);
         cmp = big ? "\\(&gt;1\\)" : "\\(&lt;1\\)";
         why = (a > 1 ? "\\(a&gt;1\\)" : "\\(0&lt;a&lt;1\\)") + "，且 \\(x" + (x > 0 ? "&gt;" : "&lt;") + "0\\)";
       }
-      h += "<div>点 P：\\(" + fa(a) + "^{" + fx(x) + "}\\approx" + fy(y) + "\\) " + cmp + "（" + why + "）" + (y > YMAX ? "，已经高出图外" : "") + "。</div>";
+      h += "<div>点 P：\\(" + fa(a) + "^{" + fx(x) + "}\\approx" + fy(y) + "\\) " + cmp + "（" + why + "）" + (y > YMAX ? "，点P在当前图窗上方，可调横坐标查看" : "") + "。</div>";
       if (st.mir) {
-        h += '<div><span class="cc">虚线</span> \\(y=\\left(\\tfrac1a\\right)^x=' + fy(1 / a) + "^x\\)：在 \\(x=" + fx(-x) + "\\) 处的值也是 \\(" + fy(y2) + "\\)，两条曲线关于 \\(y\\) 轴对称。</div>";
+        h += '<div><span class="cc">虚线</span> \\(y=(1/a)^x\\)，底数 \\(1/' + fa(a) + "\\approx" + fy(1 / a) + "\\)。在 \\(x=" + fx(-x) + "\\) 处的值约为 \\(" + fy(y2) + "\\)，两条曲线关于 \\(y\\) 轴对称。</div>";
       }
     }
     info.innerHTML = h;
@@ -490,6 +498,9 @@
     st.x = Math.min(XMAX, Math.max(XMIN, v));
     if (Math.abs(st.x) < 1e-9) st.x = 0;
   }
+  pxSlider.addEventListener("input", function () { setX(parseFloat(pxSlider.value)); draw(); });
+  pxSlider.addEventListener("change", function () { logIt("x-slider"); });
+
   function logIt(how) { if (window.Peiyu) Peiyu.log("interact", { how: how, a: st.a, x: st.x, mir: st.mir }); }
 
   build();
@@ -560,8 +571,8 @@
     h2.cb = mk("path", { "class": "cur2" }, plot);
     h2.ca = mk("path", { "class": "cur" }, plot);
     h2.v = mk("line", { y1: T, y2: B, "class": "guide" }, f2);
-    h2.pb = mk("circle", { r: 8, fill: "var(--c)", stroke: "var(--card)", "stroke-width": 2 }, f2);
-    h2.pa = mk("circle", { r: 8, fill: "var(--a)", stroke: "var(--card)", "stroke-width": 2 }, f2);
+    h2.pb = mk("circle", { r: 8, fill: "var(--c)", stroke: "var(--card)", "stroke-width": 2 }, plot);
+    h2.pa = mk("circle", { r: 8, fill: "var(--a)", stroke: "var(--card)", "stroke-width": 2 }, plot);
     function legend(yy, color) {
       var tx = mk("text", { x: L + 8, y: yy, fill: color, style: "font-size:22px" }, f2);
       var base = mk("tspan", {}, tx);
@@ -577,8 +588,8 @@
     h2.cb.setAttribute("d", curvePath(b));
     var cx = sx(x);
     h2.v.setAttribute("x1", cx); h2.v.setAttribute("x2", cx);
-    h2.pa.setAttribute("cx", cx); h2.pa.setAttribute("cy", sy(Math.min(ya, YMAX + 0.3)));
-    h2.pb.setAttribute("cx", cx); h2.pb.setAttribute("cy", sy(Math.min(yb, YMAX + 0.3)));
+    h2.pa.setAttribute("cx", cx); h2.pa.setAttribute("cy", sy(ya));
+    h2.pb.setAttribute("cx", cx); h2.pb.setAttribute("cy", sy(yb));
     h2.la.textContent = "y = " + fa(a);
     h2.lb.textContent = "y = " + fa(b);
     s2a.value = a; s2b.value = b; s2x.value = x;
@@ -601,6 +612,7 @@
         : '<span class="bad">\\(x&lt;0\\)（\\(y\\) 轴左边）：底数大的，值反而小</span>，「底数大就大」在这里不成立。') + "</div>";
     }
     if (Math.abs(a - 1) < 1e-9 || Math.abs(b - 1) < 1e-9) h += '<div class="small">底数是 \\(1\\) 的那条是水平线 \\(y=1\\)，不算指数函数，这里只当参照。</div>';
+    if (ya > YMAX || yb > YMAX) h += "<div>" + (ya > YMAX ? "a 曲线对应点在图窗上方。" : "") + (yb > YMAX ? "b 曲线对应点在图窗上方。" : "") + "数值仍按真实函数计算；可调x回到图窗。</div>";
     info2.innerHTML = h;
     if (window.Peiyu) Peiyu.math(info2);
   }
@@ -635,35 +647,23 @@
   /* ===== 0 从例子进入：折纸层数放大镜 ===== */
   var efSvg = document.getElementById("entry-fold"), efBar = document.getElementById("entry-fold-bar"), efNote = document.getElementById("entry-fold-note");
   function efDraw(k) {
-    var layers = Math.pow(2, k), by = 176;
-    efSvg.innerHTML = "";
-    // 左侧：纸堆厚度放大镜
-    mk("rect", { x: 18, y: 16, width: 176, height: 180, rx: 12, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.6 }, efSvg);
-    mk("text", { x: 106, y: 38, "text-anchor": "middle", fill: "var(--muted)", "font-size": 14, "font-weight": 600 }, efSvg).textContent = "纸堆截面放大镜";
-    for (var i = 0; i < layers; i++) {
-      var ly = 160 - i * 3.4;
-      mk("line", { x1: 44, y1: ly, x2: 168, y2: ly, stroke: i >= layers / 2 && k > 0 ? "var(--hl)" : "var(--a)", "stroke-width": k >= 4 ? 2.1 : 2.6, "stroke-linecap": "round" }, efSvg);
+    var layers=2**k; efSvg.innerHTML="";
+    mk("rect",{x:20,y:10,width:480,height:210,rx:10,fill:"var(--card)",stroke:"var(--line)"},efSvg);
+    mk("text",{x:260,y:40,"text-anchor":"middle","font-size":22,fill:"var(--muted)"},efSvg).textContent="纸堆截面（层距尺度固定）";
+    for(var i=0;i<layers;i++)mk("line",{x1:90,y1:180-i*3.4,x2:430,y2:180-i*3.4,stroke:i>=layers/2&&k>0?"var(--b)":"var(--a)","stroke-width":2},efSvg);
+    mk("text",{x:260,y:207,"text-anchor":"middle","font-size":26,fill:"var(--a)","font-weight":700},efSvg).textContent="折"+k+"次 → "+layers+"层";
+    mk("text",{x:260,y:246,"text-anchor":"middle","font-size":20,fill:"var(--muted)"},efSvg).textContent="仅表示非负整数次数的层数";
+    mk("line",{x1:30,y1:385,x2:490,y2:385,stroke:"var(--muted)"},efSvg);
+    for(var j=0;j<=5;j++){
+      var v=2**j,bx=45+j*75,top=385-v*3.5,on=j===k;
+      var group=mk("g",{style:"cursor:pointer"},efSvg);
+      mk("rect",{x:bx,y:top,width:44,height:v*3.5,fill:on?"var(--a)":"var(--card)",stroke:"var(--a)","stroke-width":2},group);
+      mk("text",{x:bx+22,y:top-8,"text-anchor":"middle","font-size":22,fill:"var(--fg)"},group).textContent=v;
+      mk("text",{x:bx+22,y:414,"text-anchor":"middle","font-size":20,fill:"var(--muted)"},group).textContent=j+"次";
+      (function(jj){group.onclick=function(){efDraw(jj);};})(j);
     }
-    mk("text", { x: 106, y: 185, "text-anchor": "middle", fill: "var(--a)", "font-size": 16, "font-weight": 700 }, efSvg).textContent = "折 " + k + " 次 → " + layers + " 层";
-    // 右侧：指数柱状条与曲线 2^x
-    mk("text", { x: 356, y: 26, "text-anchor": "middle", fill: "var(--muted)", "font-size": 14, "font-weight": 600 }, efSvg).textContent = "层数增长 y = 2ˣ（每次翻倍）";
-    mk("line", { x1: 218, y1: by, x2: 502, y2: by, stroke: "var(--fg)", "stroke-width": 1.5 }, efSvg);
-    var dPath = "";
-    for (var j = 0; j <= 5; j++) {
-      var v = Math.pow(2, j), bh = v * 4.1, bx = 230 + j * 45, topY = by - bh, on = j === k;
-      var g = mk("g", { style: "cursor:pointer" }, efSvg);
-      mk("rect", { x: bx, y: topY, width: 28, height: bh, rx: 4, fill: on ? "var(--hl)" : (j < k ? "var(--ok-soft)" : "var(--card)"), stroke: on ? "var(--hl)" : (j <= k ? "var(--a)" : "var(--line)"), "stroke-width": on ? 2.2 : 1.4 }, g);
-      mk("text", { x: bx + 14, y: topY - 6, "text-anchor": "middle", fill: on ? "var(--fg)" : "var(--muted)", "font-size": 14, "font-weight": on ? 700 : 500 }, g).textContent = v;
-      mk("text", { x: bx + 14, y: by + 20, "text-anchor": "middle", fill: on ? "var(--fg)" : "var(--muted)", "font-size": 13.5, "font-weight": on ? 700 : 400 }, g).textContent = j + "次";
-      (function (jj) { g.onclick = function () { efDraw(jj); }; })(j);
-      dPath += (j === 0 ? "M" : "L") + (bx + 14) + " " + topY.toFixed(1);
-    }
-    mk("path", { d: dPath, fill: "none", stroke: "var(--a)", "stroke-width": 2.2, "stroke-dasharray": "4 3" }, efSvg);
-    [].forEach.call(efBar.querySelectorAll("button"), function (b) {
-      b.classList.toggle("on", parseInt(b.getAttribute("data-k"), 10) === k);
-    });
-    var mult = k === 0 ? "1（还没折）" : Array(k + 1).join("2×").slice(0, -1) + " = " + layers;
-    efNote.innerHTML = "对折 <b>x = " + k + "</b> 次：层数 <b>2^" + k + " = " + mult + " 层</b>" + (k === 5 ? "（<b>注意不是 2×5=10，也不是 5²=25，而是连乘 5 个 2 得 32 层！</b>）" : "（每多折 1 次，整叠纸厚度直接翻倍）");
+    [].forEach.call(efBar.querySelectorAll("button"),function(b){b.classList.toggle("on",+b.getAttribute("data-k")===k);});
+    efNote.textContent="对折"+k+"次，共"+layers+"层。这里每多一次乘2，次数只取非负整数；一般实数指数是数学推广，不是半次折纸或半层纸。";
   }
   [].forEach.call(efBar.querySelectorAll("button"), function (b) {
     b.addEventListener("click", function () { efDraw(parseInt(b.getAttribute("data-k"), 10)); });
@@ -678,6 +678,7 @@
     if (ev.detail && ev.detail.id === "entry") efDraw(3);
   });
 
+  var microStarted=false;
   function reset2() { t2.a = DEF2.a; t2.b = DEF2.b; t2.x = DEF2.x; draw2(); }
   document.getElementById("reset2").addEventListener("click", function () { reset2(); log2("reset"); });
   reset2();
@@ -685,109 +686,50 @@
   document.addEventListener("DOMContentLoaded", function () { efDraw(3); draw2(); initStep2(); });
   if (document.readyState !== "loading") { efDraw(3); draw2(); initStep2(); }
 
-  // Step 2 Vivid Visualizations
   function initStep2() {
-    var fnFig = document.getElementById("m-expfn-fig");
-    var fnBar = document.getElementById("m-expfn-bar");
-    var fnNote = document.getElementById("m-expfn-note");
-    var inFig = document.getElementById("m-ineq-fig");
-    if (!fnFig) return;
-
-    var NS = "http://www.w3.org/2000/svg";
-    function el(tag, attrs, parent) {
-      var elem = document.createElementNS(NS, tag);
-      for (var k in attrs) elem.setAttribute(k, attrs[k]);
-      if (parent) parent.appendChild(elem);
-      return elem;
+    if(microStarted)return; microStarted=true;
+    var fig=document.getElementById("m-expfn-fig"),bar=document.getElementById("m-expfn-bar"),note=document.getElementById("m-expfn-note"),trap=document.getElementById("m-ineq-fig");
+    function el(tag,attrs,parent){return mk(tag,attrs,parent);}
+    function path(base,lo,hi,ox,oy,ux,uy){var d="";for(var i=0;i<=240;i++){var x=lo+(hi-lo)*i/240;d+=(i?"L":"M")+(ox+x*ux)+" "+(oy-base**x*uy);}return d;}
+    function clip(fig,id,x,y,w,h){var df=el("defs",{},fig),cp=el("clipPath",{id:id},df);el("rect",{x:x,y:y,width:w,height:h},cp);return el("g",{"clip-path":"url(#"+id+")"},fig);}
+    function label(fig,x,y,t,color,size,anchor){el("text",{x:x,y:y,fill:color||"var(--muted)","font-size":size||20,"text-anchor":anchor||"start","paint-order":"stroke",stroke:"var(--card)","stroke-width":3},fig).textContent=t;}
+    function drawFn(mode){
+      fig.innerHTML="";var ox=260,oy=275,ux=65,uy=55;
+      el("line",{x1:45,y1:oy,x2:475,y2:oy,stroke:"var(--muted)"},fig);
+      el("line",{x1:ox,y1:oy,x2:ox,y2:35,stroke:"var(--muted)"},fig);
+      [-3,-2,-1,1,2,3].forEach(function(x){label(fig,ox+x*ux,300,x,null,18,"middle");});
+      [1,2,3,4].forEach(function(y){label(fig,ox-14,oy-y*uy+6,y,null,18,"end");});
+      label(fig,488,280,"x");label(fig,272,48,"y");
+      var group=clip(fig,"micro-exp-clip",45,35,430,240);
+      if(mode!=="dec")el("path",{d:path(2,-3.2,3.2,ox,oy,ux,uy),fill:"none",stroke:"var(--a)","stroke-width":3},group);
+      if(mode!=="inc")el("path",{d:path(.5,-3.2,3.2,ox,oy,ux,uy),fill:"none",stroke:"var(--b)","stroke-width":3},group);
+      if(mode!=="dec")label(fig,45,23,"y = 2ˣ", "var(--a)",22);
+      if(mode!=="inc")label(fig,330,23,"y = (1/2)ˣ", "var(--b)",22);
+      el("circle",{cx:ox,cy:oy-uy,r:5,fill:"var(--b)",stroke:"var(--card)","stroke-width":2},fig);
+      label(fig,260,325,"共同点 (0,1)","var(--fg)",20,"middle");
+      var notes={inc:"底数大于1，在全体实数上递增；向左趋近横轴，函数值仍为正。",dec:"底数介于0和1，在全体实数上递减；向右趋近横轴，函数值仍为正。",sym:"两个底数互为倒数，函数值满足 a 的负x次方等于倒数底数的x次方；图象关于纵轴对称。"};
+      note.textContent=notes[mode];
+      [].forEach.call(bar.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-m")===mode);});
     }
-
-    function drawFn(mode) {
-      fnFig.innerHTML = "";
-      var ox = 260, oy = 125, ux = 60, uy = 25;
-      el("line", { x1: 30, y1: oy, x2: 490, y2: oy, stroke: "var(--line)", "stroke-width": "1.5" }, fnFig);
-      el("line", { x1: ox, y1: oy + 10, x2: ox, y2: 15, stroke: "var(--line)", "stroke-width": "1.5" }, fnFig);
-      el("text", { x: 495, y: oy + 4, fill: "var(--muted)", "font-size": "10" }, fnFig).textContent = "x";
-      el("text", { x: ox - 8, y: 15, fill: "var(--muted)", "font-size": "10" }, fnFig).textContent = "y";
-      el("text", { x: ox - 10, y: oy + 12, fill: "var(--muted)", "font-size": "10" }, fnFig).textContent = "0";
-
-      el("line", { x1: ox - 5, y1: oy - uy, x2: ox + 5, y2: oy - uy, stroke: "var(--muted)", "stroke-width": "1.2" }, fnFig);
-      el("text", { x: ox - 10, y: oy - uy + 4, fill: "var(--muted)", "font-size": "10", "text-anchor": "end" }, fnFig).textContent = "1";
-
-      if (mode === "inc" || mode === "sym") {
-        var pd = "";
-        for (var x = -3.2; x <= 2.2; x += 0.1) {
-          var y = Math.pow(2, x);
-          pd += (x === -3.2 ? "M" : " L") + (ox + x * ux).toFixed(1) + " " + (oy - y * uy).toFixed(1);
-        }
-        el("path", { d: pd, fill: "none", stroke: "var(--ok)", "stroke-width": mode === "inc" ? "3" : "2" }, fnFig);
-        el("text", { x: ox + 2.2 * ux + 6, y: oy - 4.6 * uy + 10, fill: "var(--ok)", "font-size": "11", "font-weight": "700" }, fnFig).textContent = "y = 2ˣ (a > 1)";
-      }
-
-      if (mode === "dec" || mode === "sym") {
-        var pd2 = "";
-        for (var x2 = -2.2; x2 <= 3.2; x2 += 0.1) {
-          var y2 = Math.pow(0.5, x2);
-          pd2 += (x2 === -2.2 ? "M" : " L") + (ox + x2 * ux).toFixed(1) + " " + (oy - y2 * uy).toFixed(1);
-        }
-        el("path", { d: pd2, fill: "none", stroke: "var(--warn)", "stroke-width": mode === "dec" ? "3" : "2" }, fnFig);
-        el("text", { x: ox - 2.2 * ux - 8, y: oy - 4.6 * uy + 10, "text-anchor": "end", fill: "var(--warn)", "font-size": "11", "font-weight": "700" }, fnFig).textContent = "y = (1/2)ˣ (0 < a < 1)";
-      }
-
-      el("circle", { cx: ox, cy: oy - uy, r: "6", fill: "var(--hl)", stroke: "#fff", "stroke-width": "1.5" }, fnFig);
-      el("text", { x: ox + 10, y: oy - uy - 6, fill: "var(--hl)", "font-size": "12", "font-weight": "800" }, fnFig).textContent = "定点 (0, 1)";
-
-      var notes = {
-        inc: "<b>底数 a &gt; 1（递增爆炸）</b>：在整个 \\(\\mathbf{R}\\) 上严格递增！\\(x \\to -\\infty\\) 无限贴近渐近线 \\(y=0\\)；\\(x&gt;0\\) 飞速起飞！",
-        dec: "<b>底数 0 &lt; a &lt; 1（衰减贴地）</b>：在整个 \\(\\mathbf{R}\\) 上严格递减！自变量越大，函数值越小并贴近渐近线 \\(y=0\\)！",
-        sym: "<b>镜像对称</b>：\\(y=a^x\\) 与 \\(y=(1/a)^x = a^{-x}\\) 关于 \\(y\\) 轴完全对称，两线相交于枢纽定点 <b>(0, 1)</b>！"
-      };
-      if (fnNote) {
-        fnNote.innerHTML = notes[mode] || "";
-        if (window.Peiyu) Peiyu.math(fnNote);
-      }
-      if (fnBar) {
-        [].forEach.call(fnBar.querySelectorAll("button"), function (b) {
-          b.classList.toggle("on", b.getAttribute("data-m") === mode);
-        });
-      }
+    [].forEach.call(bar.querySelectorAll("button"),function(b){b.onclick=function(){drawFn(b.getAttribute("data-m"));};});
+    function drawTrap(){
+      trap.innerHTML="";var ox=160,oy=260,ux=90,uy=90,x2=ox+2*ux,y2=oy-.25*uy;
+      el("line",{x1:60,y1:oy,x2:485,y2:oy,stroke:"var(--muted)"},trap);
+      el("line",{x1:ox,y1:oy,x2:ox,y2:40,stroke:"var(--muted)"},trap);
+      [-1,0,1,2,3].forEach(function(x){label(trap,ox+x*ux,286,x,null,18,"middle");});
+      label(trap,ox-12,oy-uy+5,"1",null,18,"end");label(trap,492,265,"x");label(trap,171,48,"y");
+      var group=clip(trap,"micro-ineq-clip",60,40,425,220);
+      el("path",{d:path(.5,-1.1,3.6,ox,oy,ux,uy),fill:"none",stroke:"var(--muted)","stroke-width":3},group);
+      el("path",{d:path(.5,-1.1,2,ox,oy,ux,uy),fill:"none",stroke:"var(--a)","stroke-width":4},group);
+      el("line",{x1:60,y1:y2,x2:485,y2:y2,stroke:"var(--b)","stroke-dasharray":"4 4"},group);
+      el("circle",{cx:x2,cy:y2,r:5,fill:"var(--fg)"},trap);
+      label(trap,x2+10,y2-14,"(2,0.25)","var(--fg)",18);
+      el("line",{x1:60,y1:oy,x2:x2,y2:oy,stroke:"var(--a)","stroke-width":4},trap);
+      el("circle",{cx:x2,cy:oy,r:5,fill:"var(--card)",stroke:"var(--a)","stroke-width":2},trap);
+      label(trap,80,23,"(1/2)ˣ > (1/2)²  ⇔  x < 2", "var(--a)",22);
+      label(trap,70,310,"黑点是比较基准；空心端点不取2",null,19);
     }
-
-    if (fnBar) {
-      [].forEach.call(fnBar.querySelectorAll("button"), function (b) {
-        b.onclick = function () { drawFn(b.getAttribute("data-m")); };
-      });
-    }
-
-    function drawIneqTrap() {
-      if (!inFig) return;
-      inFig.innerHTML = "";
-      var ox = 50, oy = 110, ux = 45, uy = 18;
-      el("line", { x1: 20, y1: oy, x2: 260, y2: oy, stroke: "var(--line)", "stroke-width": "1.2" }, inFig);
-      el("line", { x1: ox, y1: oy + 5, x2: ox, y2: 15, stroke: "var(--line)", "stroke-width": "1.2" }, inFig);
-      el("text", { x: 265, y: oy + 4, fill: "var(--muted)", "font-size": "10" }, inFig).textContent = "x";
-      el("text", { x: ox - 8, y: 15, fill: "var(--muted)", "font-size": "10" }, inFig).textContent = "y";
-
-      var pd = "M" + ox + " 25 Q" + (ox + 50) + " 75 " + (ox + 180) + " 105";
-      el("path", { d: pd, fill: "none", stroke: "var(--warn)", "stroke-width": "2" }, inFig);
-      el("text", { x: 255, y: 102, "text-anchor": "end", fill: "var(--warn)", "font-size": "9.5", "font-weight": "700" }, inFig).textContent = "y = 0.5ˣ";
-
-      var x2 = ox + 2 * ux;
-      el("line", { x1: x2, y1: oy, x2: x2, y2: 78, stroke: "var(--line)", "stroke-dasharray": "2 2" }, inFig);
-      el("circle", { cx: x2, cy: 78, r: "4", fill: "var(--fg)" }, inFig);
-      el("text", { x: x2, y: oy + 12, "text-anchor": "middle", fill: "var(--muted)", "font-size": "9" }, inFig).textContent = "2";
-      el("text", { x: x2 + 6, y: 78, fill: "var(--fg)", "font-size": "9.5" }, inFig).textContent = "(2, 0.25)";
-
-      el("rect", { x: ox, y: 25, width: 2 * ux, height: oy - 25, fill: "var(--ok-soft)", opacity: "0.35" }, inFig);
-      el("line", { x1: ox, y1: 78, x2: x2, y2: 78, stroke: "var(--ok)", "stroke-dasharray": "2 2" }, inFig);
-
-      el("text", { x: ox + ux, y: 55, "text-anchor": "middle", fill: "var(--ok)", "font-size": "10", "font-weight": "700" }, inFig).textContent = "值更大在上方";
-      el("text", { x: ox + ux, y: oy - 8, "text-anchor": "middle", fill: "var(--ok)", "font-size": "10", "font-weight": "700" }, inFig).textContent = "自变量更靠左 (x < 2) ✅";
-
-      el("text", { x: 150, y: 20, "text-anchor": "middle", fill: "var(--no)", "font-size": "9.5", "font-weight": "700" }, inFig).textContent = "❌ 错解直接同向：x > 2 颠倒黑白！";
-    }
-
-    drawFn("inc");
-    drawIneqTrap();
+    drawFn("inc");drawTrap();
   }
 })();
 </script>

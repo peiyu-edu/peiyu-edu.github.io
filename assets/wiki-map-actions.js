@@ -55,6 +55,10 @@
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
   function mastery() { try { return window.PEIYU_COMPUTE_MASTERY ? window.PEIYU_COMPUTE_MASTERY() : {}; } catch (e) { return {}; } }
   function status(mst, sid) { return (mst[sid] && mst[sid].status) || "untouched"; }
+  function weakLabel(item) {
+    if (item && Number.isFinite(item.questionWrong)) return item.questionWrong > 0 ? "真题错 " + item.questionWrong + " 题" : "自评或练习需复习";
+    return "作答或自评需复习";
+  }
   function cueCount(sid) { return window.PEIYU_CUE_TRAINER && window.PEIYU_CUE_TRAINER.cueCount ? window.PEIYU_CUE_TRAINER.cueCount(sid) : 0; }
   function chCueCount(ch) { return (window.PEIYU_CUES || []).filter(function (c) { return c.ch === ch; }).length; }
   function secCh(sid) { var c = CARDS.filter(function (x) { return x.sec === sid; })[0]; return c ? c.ch : (SEC_META[sid] && SEC_META[sid].ch); }
@@ -123,17 +127,17 @@
     // 1. 路径
     html += '<div class="kga-hd"><b>🧭 先补哪节</b>';
     if (path.all.length) {
-      html += '<span class="small">按你的错题记录，先修链上有 ' + path.all.length + " 节薄弱，地基在前：</span></div>";
+      html += '<span class="small">按你的作答与自评反馈，先修链上有 ' + path.all.length + " 节薄弱，地基在前：</span></div>";
       html += '<div class="kga-path">';
       path.all.forEach(function (p, i) {
-        html += stepHtml(p, "weak", (i === 0 ? "先补" : "再补") + "（错 " + (mst[p].wrong || 0) + " 题）") + '<span class="kga-arr">→</span>';
+        html += stepHtml(p, "weak", (i === 0 ? "先补" : "再补") + "（" + weakLabel(mst[p]) + "）") + '<span class="kga-arr">→</span>';
       });
-      html += stepHtml(sid, "cur", cur === "weak" ? "最后回到本节（错 " + (mst[sid].wrong || 0) + " 题）" : "最后回到本节");
+      html += stepHtml(sid, "cur", cur === "weak" ? "最后回到本节（" + weakLabel(mst[sid]) + "）" : "最后回到本节");
       html += "</div>";
       html += '<p class="kga-why">薄弱先修不补，本节的错会反复出现。每节点「练一练」做 4–6 道，答对后图谱会自动点亮。</p>';
     } else if (cur === "weak") {
       html += '<span class="small">先修链上没有薄弱节，问题就在本节自己：</span></div>';
-      html += '<div class="kga-path">' + stepHtml(sid, "cur", "本节（错 " + (mst[sid].wrong || 0) + " 题）") + "</div>";
+      html += '<div class="kga-path">' + stepHtml(sid, "cur", "本节（" + weakLabel(mst[sid]) + "）") + "</div>";
       html += '<p class="kga-why">先看本节的方法卡和红线，再回「练一练」把做错的那道重做一遍。</p>';
     } else if (cur === "mastered") {
       var nextUnl = (meta.unlocks || []).filter(function (u) { return SEC_META[u] && status(mst, u) !== "mastered"; }).slice(0, 2);

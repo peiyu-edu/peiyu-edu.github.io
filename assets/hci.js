@@ -403,6 +403,7 @@
         if (!window.confirm("确定清空？做题记录和学习进度都会删掉，找不回来。\n要交给老师的话，先点「复制记录」。")) return;
         try {
           localStorage.removeItem("peiyu.hs.log");
+          localStorage.removeItem("peiyu.hs.cards");
           Object.keys(localStorage).forEach(function (k) { if (k.indexOf("peiyu.hs.hci.") === 0) localStorage.removeItem(k); });
         } catch (e) { /* ignore */ }
         location.reload();

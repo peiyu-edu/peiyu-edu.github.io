@@ -95,10 +95,10 @@
         <button class="btn btn-sm" onclick="setMDerTab(2)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">③ 在点处 vs 过点</button>
       </div>
     </div>
-    <div style="position:relative;width:100%;height:220px;background:var(--bg-subtle,#f8fafc);border-radius:8px;overflow:hidden">
-      <svg id="m-der-fig" viewBox="0 0 540 220" style="width:100%;height:100%;display:block"></svg>
+    <div style="position:relative;width:100%;background:var(--bg-subtle,#f8fafc);border-radius:8px">
+      <svg id="m-der-fig" viewBox="0 0 540 310" role="img" aria-label="同源函数的割线切线与过外点双切线" style="width:100%;height:auto;display:block"></svg>
     </div>
-    <div id="m-der-desc" style="font-size:13px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
+    <div id="m-der-desc" style="font-size:15px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
   </div>
 
   <!-- 组件二：概念对比双卡 -->
@@ -260,8 +260,8 @@
 
   <div style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:14px;margin:12px 0">
     <div style="font-weight:700;font-size:13px;color:var(--text,#1e293b);margin-bottom:8px">🔍 反例微图解：过曲线外一点双切线 vs 拐点切线穿透</div>
-    <div style="width:100%;height:150px;background:var(--bg-subtle,#f8fafc);border-radius:6px;overflow:hidden">
-      <svg id="m-der-trap-fig" viewBox="0 0 540 150" style="width:100%;height:100%;display:block"></svg>
+    <div style="width:100%;background:var(--bg-subtle,#f8fafc);border-radius:6px">
+      <svg id="m-der-trap-fig" viewBox="0 0 540 260" role="img" aria-label="过原点向抛物线作两条切线与三次函数原点的水平切线" style="width:100%;height:auto;display:block"></svg>
     </div>
     <div style="font-size:12px;color:var(--text-subtle,#64748b);margin-top:6px">
       左图：过原点向 \(y=x^2+1\) 引切线，对称产生两条切线 \(y=\pm2x\)；右图：\(y=x^3\) 在原点的切线 \(y=0\) 直接穿越拐点。
@@ -272,7 +272,7 @@
 
   <details class="more">
     <summary>再深一点（可以先跳过）</summary>
-    <p><b>不可导的典型反例</b>：\(f(x)=|x|\) 在 \(x=0\) 处的左右变化率分别为 \(1\) 和 \(-1\)，左右极限不相等，故不可导（几何上为尖点）。</p>
+    <p><b>不可导的典型反例</b>：\(f(x)=|x|\) 在 \(x=0\) 处的左侧变化率为 \(-1\)，右侧变化率为 \(1\)，左右极限不相等，故不可导（几何上为尖点）。</p>
     <p><b>以直代曲的现代意义</b>：在微小邻域内将复杂非线性曲线近似为直线切线，是微积分进行数值计算、物理建模和优化算法的根本基石。</p>
   </details>
 </section>
@@ -350,7 +350,7 @@
       <button class="opt" data-v="D"><b>D</b>切线绝对不能穿过曲线</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。A 选项准确表达了导数切线的几何本质；B 选项错误，例如直线 \(x = 1\) 与抛物线 \(y = x^2\) 只有一个公共点，但它与对称轴平行，是割线而不是切线；C 选项导数可以是任意实数；D 选项切线可以穿过曲线（如拐点处的切线）。</p>
+      <p><b>A</b>。A 选项准确表达了导数切线的几何本质；B 选项错误，例如直线 \(x = 1\) 与抛物线 \(y = x^2\) 只有一个公共点，但它与对称轴平行，不是切线；C 选项导数可以是任意实数；D 选项切线可以穿过曲线（如拐点处的切线）。</p>
     </div>
   </div>
 
@@ -551,7 +551,7 @@
       h.push('<path d="' + spts.join(" ") + '" fill="none" stroke="var(--c)" stroke-width="2.6"/>');
       var topY = sy0 - suy;
       h.push('<line x1="24" y1="' + topY + '" x2="300" y2="' + topY + '" stroke="var(--a)" stroke-width="3"/>');
-      [-4.71, 1.57].forEach(function (pk) {
+      [-3 * Math.PI / 2, Math.PI / 2].forEach(function (pk) {
         var px = 160 + pk * sux;
         h.push('<circle cx="' + px.toFixed(1) + '" cy="' + topY + '" r="6" fill="var(--hl)" stroke="var(--a)" stroke-width="2"/>');
       });
@@ -585,159 +585,104 @@
 /* --- 伴读微图解 JS: 导数概念 --- */
 (function(){
   var curTab = 0;
+  var colors = { curve: "var(--a)", tangent: "var(--b)", secant: "var(--c)", muted: "var(--muted)", line: "var(--line)", ink: "var(--fg)" };
   function el(t, a, txt) {
     var e = document.createElementNS("http://www.w3.org/2000/svg", t);
     for (var k in a) e.setAttribute(k, a[k]);
     if (txt) e.textContent = txt;
     return e;
   }
+  function add(svg, tag, attrs, text) { var n = el(tag, attrs, text); svg.appendChild(n); return n; }
+  function label(svg, x, y, text, color, anchor) {
+    return add(svg, "text", {x:x, y:y, fill:color || colors.ink, "font-size":24, "text-anchor":anchor || "middle"}, text);
+  }
+  function value(model, x) { return model === "cubic" ? x*x*x : model === "half-square" ? x*x/2 : x*x+1; }
+  function slope(model, x) { return model === "cubic" ? 3*x*x : model === "half-square" ? x : 2*x; }
+  function project(v, x, y) { return {x:v.ox+x*v.sx, y:v.oy-y*v.sy}; }
+  function metadata(v, model, role) { return {"data-role":role, "data-model":model, "data-ox":v.ox, "data-oy":v.oy, "data-sx":v.sx, "data-sy":v.sy}; }
+  function axes(svg, v, lo, hi) {
+    var a=project(v,lo,0), b=project(v,hi,0);
+    add(svg,"line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:colors.line,"stroke-width":1.5});
+  }
+  function curve(svg, model, v, lo, hi, keys) {
+    var xs=[];
+    for(var i=0;i<=120;i++) xs.push(lo+(hi-lo)*i/120);
+    (keys || []).forEach(function(x){xs.push(x);});
+    xs.sort(function(a,b){return a-b;});
+    var d=xs.map(function(x,i){var p=project(v,x,value(model,x));return (i?"L":"M")+p.x+","+p.y;}).join(" ");
+    var attrs=metadata(v,model,"curve");
+    attrs.d=d;attrs.fill="none";attrs.stroke=colors.curve;attrs["stroke-width"]=3;
+    add(svg,"path",attrs);
+  }
+  function point(svg, model, v, x, role, color) {
+    var y=value(model,x),p=project(v,x,y),attrs=metadata(v,model,role);
+    attrs.cx=p.x;attrs.cy=p.y;attrs.r=5;attrs.fill=color || colors.curve;
+    add(svg,"circle",attrs);return p;
+  }
+  function straight(svg, model, v, x0, y0, k, lo, hi, role, color) {
+    var a=project(v,lo,y0+k*(lo-x0)),b=project(v,hi,y0+k*(hi-x0));
+    var attrs=metadata(v,model,role);
+    attrs.x1=a.x;attrs.y1=a.y;attrs.x2=b.x;attrs.y2=b.y;attrs.stroke=color || colors.tangent;attrs["stroke-width"]=2;
+    if(role === "secant") attrs["stroke-dasharray"]="7 5";
+    add(svg,"line",attrs);
+  }
+  function tangent(svg, model, v, x, lo, hi) { straight(svg,model,v,x,value(model,x),slope(model,x),lo,hi,"tangent"); }
   function drawTab0(svg) {
-    // Tab 0: 割线逼近切线极限动态
-    var ox = 60, oy = 180;
-    svg.appendChild(el("line", {x1: 40, y1: oy, x2: 480, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    svg.appendChild(el("line", {x1: ox, y1: 20, x2: ox, y2: 200, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    // Curve y = 0.005 x^2
-    var d = "M " + ox + " " + oy;
-    for (var x = 0; x <= 380; x += 10) {
-      var y = oy - 0.001 * x * x;
-      d += " L " + (ox + x) + " " + y;
-    }
-    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-    // Fixed point P(100, f(100))
-    var px = ox + 100, py = oy - 0.001 * 100 * 100; // oy - 10
-    svg.appendChild(el("circle", {cx: px, cy: py, r: 5, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: px - 18, y: py - 8, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "P(x₀)"));
-
-    // Tangent line at P (k = 0.2)
-    svg.appendChild(el("line", {x1: px - 80, y1: py + 16, x2: px + 200, y2: py - 40, stroke: "#16a34a", "stroke-width": 2}));
-    svg.appendChild(el("text", {x: px + 170, y: py - 46, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "极限切线 (k = f'(x₀))"));
-
-    // Secant Q1
-    var q1x = ox + 260, q1y = oy - 0.001 * 260 * 260; // oy - 67.6
-    svg.appendChild(el("circle", {cx: q1x, cy: q1y, r: 4, fill: "#94a3b8"}));
-    svg.appendChild(el("line", {x1: px - 40, y1: py + (py-q1y)/(px-q1x)*40, x2: q1x + 40, y2: q1y - (py-q1y)/(px-q1x)*40, stroke: "#94a3b8", "stroke-width": 1.5, "stroke-dasharray": "3,3"}));
-    svg.appendChild(el("text", {x: q1x + 8, y: q1y, fill: "#94a3b8", "font-size": 10}, "割线 Q₁ (Δx大)"));
-
-    // Secant Q2
-    var q2x = ox + 170, q2y = oy - 0.001 * 170 * 170;
-    svg.appendChild(el("circle", {cx: q2x, cy: q2y, r: 4, fill: "#3b82f6"}));
-    svg.appendChild(el("line", {x1: px - 40, y1: py + (py-q2y)/(px-q2x)*40, x2: q2x + 60, y2: q2y - (py-q2y)/(px-q2x)*60, stroke: "#3b82f6", "stroke-width": 1.5, "stroke-dasharray": "3,2"}));
-    svg.appendChild(el("text", {x: q2x - 8, y: q2y - 16, "text-anchor": "end", fill: "#3b82f6", "font-size": 10}, "割线 Q₂ (Δx小)"));
-
-    // Motion arrow Q -> P
-    svg.appendChild(el("path", {d: "M " + (q1x - 10) + " " + (q1y + 8) + " Q " + (q2x + 15) + " " + (q2y + 6) + " " + (px + 15) + " " + (py + 4), fill: "none", stroke: "#dc2626", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 235, y: 168, fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "Q 沿曲线滑向 P (Δx -> 0)"));
-  }
-
-  function drawTab1(svg) {
-    // Tab 1: 局部以直代曲放大镜
-    var cx = 270, cy = 110, r = 85;
-    // Outer big circle lens
-    svg.appendChild(el("circle", {cx: cx, cy: cy, r: r, fill: "#f8fafc", stroke: "#0284c7", "stroke-width": 3}));
-    svg.appendChild(el("circle", {cx: cx, cy: cy, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: cx + 8, y: cy - 6, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "切点 P"));
-
-    // Curve inside lens
-    svg.appendChild(el("path", {d: "M " + (cx - 70) + " " + (cy + 45) + " Q " + cx + " " + cy + " " + (cx + 70) + " " + (cy - 48), fill: "none", stroke: "#0284c7", "stroke-width": 3}));
-    // Tangent line inside lens
-    svg.appendChild(el("line", {x1: cx - 75, y1: cy + 50, x2: cx + 75, y2: cy - 50, stroke: "#16a34a", "stroke-width": 2, "stroke-dasharray": "4,3"}));
-
-    // Labels
-    svg.appendChild(el("text", {x: 80, y: 80, fill: "#0284c7", "font-size": 12, "font-weight": "bold"}, "蓝线：原非线性曲线 y=f(x)"));
-    svg.appendChild(el("text", {x: 80, y: 140, fill: "#16a34a", "font-size": 12, "font-weight": "bold"}, "绿虚线：切线 y-y₀=k(x-x₀)"));
-    svg.appendChild(el("rect", {x: 375, y: 85, width: 140, height: 48, rx: 6, fill: "#ecfdf5", stroke: "#10b981", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 445, y: 105, "text-anchor": "middle", fill: "#065f46", "font-size": 11, "font-weight": "bold"}, "极小微元局部"));
-    svg.appendChild(el("text", {x: 445, y: 122, "text-anchor": "middle", fill: "#065f46", "font-size": 11, "font-weight": "bold"}, "曲线几乎就是直线！"));
-  }
-
-  function drawTab2(svg) {
-    // Tab 2: 在点处 vs 过点
-    // Left: 在点处
-    svg.appendChild(el("text", {x: 135, y: 25, "text-anchor": "middle", fill: "#0369a1", "font-size": 13, "font-weight": "bold"}, "「在点 P 处的切线」"));
-    svg.appendChild(el("path", {d: "M 40 160 Q 135 150 230 40", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-    svg.appendChild(el("circle", {cx: 140, cy: 110, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 152, y: 114, fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "P 在曲线上 (切点)"));
-    svg.appendChild(el("line", {x1: 65, y1: 170, x2: 215, y2: 50, stroke: "#16a34a", "stroke-width": 2}));
-    svg.appendChild(el("text", {x: 135, y: 195, "text-anchor": "middle", fill: "#15803d", "font-size": 11, "font-weight": "bold"}, "唯一切线：k = f'(x_P)"));
-
-    // Divider
-    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 205, stroke: "#e2e8f0", "stroke-width": 1}));
-
-    // Right: 过点 P
-    svg.appendChild(el("text", {x: 405, y: 25, "text-anchor": "middle", fill: "#b91c1c", "font-size": 13, "font-weight": "bold"}, "「过点 P 的切线」"));
-    svg.appendChild(el("path", {d: "M 320 80 Q 405 180 490 80", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-    var extX = 405, extY = 195;
-    svg.appendChild(el("circle", {cx: extX, cy: extY, r: 4, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: extX, y: extY + 16, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "P 在曲线外"));
-
-    // Tangents from external P to curve
-    svg.appendChild(el("circle", {cx: 350, cy: 115, r: 3, fill: "#16a34a"}));
-    svg.appendChild(el("circle", {cx: 460, cy: 115, r: 3, fill: "#16a34a"}));
-    svg.appendChild(el("line", {x1: extX, y1: extY, x2: 335, y2: 95, stroke: "#16a34a", "stroke-width": 1.5}));
-    svg.appendChild(el("line", {x1: extX, y1: extY, x2: 475, y2: 95, stroke: "#16a34a", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 405, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "两条切线 (切点待解)"));
-  }
-
-  function renderFig() {
-    var svg = document.getElementById("m-der-fig");
-    var desc = document.getElementById("m-der-desc");
-    if (!svg) return;
-    svg.innerHTML = "";
-    if (curTab === 0) {
-      drawTab0(svg);
-      if (desc) desc.innerHTML = "<b>① 割线旋转逼近切线</b>：割线 PQ 斜率表示平均变化率，当 Q 沿曲线逼近 P（Δx -> 0）时，割线绕 P 旋转的最终极限姿态即为切线。";
-    } else if (curTab === 1) {
-      drawTab1(svg);
-      if (desc) desc.innerHTML = "<b>② 局部以直代曲原理</b>：在切点 P 的极小微观邻域内，弯曲的非线性曲线与平直切线几乎完全重叠，这也是微积分线性化的核心思想。";
-    } else {
-      drawTab2(svg);
-      if (desc) desc.innerHTML = "<b>③ 切线语义精准辨析</b>：「在点处」切线仅有 1 条，斜率直取导数；「过某点」该点可位于曲线外部，可能引出多条切线。";
-    }
-  }
-
-  window.setMDerTab = function(idx) {
-    curTab = idx;
-    var btns = document.querySelectorAll("#m-der-tabs button");
-    btns.forEach(function(b, i){
-      b.style.borderColor = (i === idx) ? "#0284c7" : "var(--border,#cbd5e1)";
-      b.style.background = (i === idx) ? "#0284c7" : "transparent";
-      b.style.color = (i === idx) ? "#fff" : "var(--text,#475569)";
+    var model="half-square",v={ox:68,oy:248,sx:110,sy:30},px=1;
+    axes(svg,v,-0.3,3.8);curve(svg,model,v,-0.3,3.6,[1,1.6,3]);
+    tangent(svg,model,v,px,-0.2,3.8);
+    [3,1.6].forEach(function(qx,i){
+      var k=(value(model,qx)-value(model,px))/(qx-px);
+      straight(svg,model,v,px,value(model,px),k,0.6,qx+0.2,"secant",i?colors.secant:colors.muted);
+      var q=point(svg,model,v,qx,"Q"+(i+1),i?colors.secant:colors.muted);
+      label(svg,q.x+(i?8:12),q.y-16,"Q"+(i+1),i?colors.secant:colors.muted,"start");
     });
-    renderFig();
-  };
-
+    var p=point(svg,model,v,px,"P");label(svg,p.x,p.y+34,"P(1, 0.5)",colors.curve);
+    label(svg,112,32,"y = x²/2",colors.curve);label(svg,415,186,"切线 k=1",colors.tangent);
+  }
+  function drawTab1(svg) {
+    var model="half-square",v={ox:-90,oy:350,sx:360,sy:360};
+    add(svg,"circle",{cx:270,cy:170,r:118,fill:"var(--card)",stroke:colors.line,"stroke-width":2});
+    curve(svg,model,v,0.76,1.24,[1]);tangent(svg,model,v,1,0.74,1.26);
+    var p=point(svg,model,v,1,"P");label(svg,p.x-13,p.y-14,"P",colors.curve,"end");
+    label(svg,270,28,"放大 P 附近",colors.ink);label(svg,270,294,"切线 y = x − 0.5",colors.tangent);
+  }
+  function externalTangents(svg,v) {
+    var model="square-plus-one";
+    curve(svg,model,v,-1.6,1.6,[-1,1]);
+    [-1,1].forEach(function(x){tangent(svg,model,v,x,Math.min(0,x*1.6),Math.max(0,x*1.6));point(svg,model,v,x,"contact");});
+    var o=project(v,0,0);add(svg,"circle",{cx:o.x,cy:o.y,r:5,fill:colors.secant,"data-role":"external"});
+    label(svg,o.x,o.y+31,"O(0,0)",colors.secant);
+  }
+  function drawTab2(svg) {
+    var left={ox:60,oy:240,sx:70,sy:45};
+    curve(svg,"half-square",left,-0.3,2.5,[1]);tangent(svg,"half-square",left,1,-0.3,2.4);
+    var p=point(svg,"half-square",left,1,"P");label(svg,p.x+10,p.y-14,"P",colors.curve,"start");
+    label(svg,135,30,"在 P 处",colors.ink);label(svg,135,63,"y=x²/2",colors.curve);
+    add(svg,"line",{x1:270,y1:18,x2:270,y2:285,stroke:colors.line});
+    externalTangents(svg,{ox:405,oy:245,sx:60,sy:40});
+    label(svg,405,30,"过 O 点",colors.ink);label(svg,405,63,"y=x²+1",colors.curve);
+  }
+  function renderFig() {
+    var svg=document.getElementById("m-der-fig"),desc=document.getElementById("m-der-desc");
+    if(!svg)return;svg.innerHTML="";
+    if(curTab===0){drawTab0(svg);if(desc)desc.innerHTML="<b>① 割线逼近切线</b>：同一条曲线 y=x²/2 上固定 P(1,0.5)，取 Q₁ 的横坐标为 3、Q₂ 为 1.6。两条割线都经过 P 和各自的 Q；斜率从 2 降至 1.3，继续逼近切线斜率 f′(1)=1。";}
+    else if(curTab===1){drawTab1(svg);if(desc)desc.innerHTML="<b>② 局部以直代曲</b>：放大同一个切点 P(1,0.5) 附近，曲线仍为 y=x²/2，切线为 y=x−0.5。它们在 P 处相遇且斜率相同；差值为 (x−1)²/2，越靠近 P 越小。";}
+    else{drawTab2(svg);if(desc)desc.innerHTML="<b>③ 在点处与过点</b>：左图是在曲线上的 P(1,0.5) 处作切线；右图的 O(0,0) 不在 y=x²+1 上。设切点横坐标 t，切线过 O 得 1−t²=0，所以切点为 (−1,2)、(1,2)，两条切线为 y=−2x、y=2x。";}
+  }
+  window.setMDerTab=function(idx){curTab=idx;document.querySelectorAll("#m-der-tabs button").forEach(function(b,i){b.style.borderColor=i===idx?"var(--a)":"var(--line)";b.style.background=i===idx?"var(--a)":"transparent";b.style.color=i===idx?"var(--card)":"var(--fg)";});renderFig();};
   function drawTrapFig() {
-    var svg = document.getElementById("m-der-trap-fig");
-    if (!svg) return;
-    svg.innerHTML = "";
-    // Left: external point tangents
-    svg.appendChild(el("text", {x: 135, y: 22, "text-anchor": "middle", fill: "#0369a1", "font-size": 12, "font-weight": "bold"}, "误区一：过原点向 y=x²+1 切线误取 k=0"));
-    svg.appendChild(el("path", {d: "M 45 40 Q 135 120 225 40", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 135, cy: 135, r: 3, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 135, y: 147, "text-anchor": "middle", fill: "#dc2626", "font-size": 10}, "原点 (0,0) 不在曲线上"));
-    svg.appendChild(el("line", {x1: 135, y1: 135, x2: 75, y2: 45, stroke: "#16a34a", "stroke-width": 1.5}));
-    svg.appendChild(el("line", {x1: 135, y1: 135, x2: 195, y2: 45, stroke: "#16a34a", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 135, y: 80, "text-anchor": "middle", fill: "#16a34a", "font-size": 10, "font-weight": "bold"}, "正解：y = ±2x (两条切线)"));
-
-    // Divider
-    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 140, stroke: "#e2e8f0", "stroke-width": 1}));
-
-    // Right: inflection tangent crosses curve
-    svg.appendChild(el("text", {x: 405, y: 22, "text-anchor": "middle", fill: "#b91c1c", "font-size": 12, "font-weight": "bold"}, "误区二：认为切线不能穿过曲线"));
-    svg.appendChild(el("path", {d: "M 320 120 Q 380 120 405 80 T 490 40", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
-    // Tangent at inflection
-    svg.appendChild(el("line", {x1: 330, y1: 80, x2: 480, y2: 80, stroke: "#dc2626", "stroke-width": 2}));
-    svg.appendChild(el("circle", {cx: 405, cy: 80, r: 4, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 405, y: 70, "text-anchor": "middle", fill: "#dc2626", "font-size": 10}, "y=x³ 原点切线 y=0 直接穿透曲线"));
-    svg.appendChild(el("text", {x: 405, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "切线是由极限定义的，穿透完全合法"));
+    var svg=document.getElementById("m-der-trap-fig");if(!svg)return;svg.innerHTML="";
+    externalTangents(svg,{ox:135,oy:190,sx:55,sy:40});label(svg,135,28,"y=x²+1",colors.curve);
+    label(svg,135,245,"y=±2x",colors.tangent);
+    add(svg,"line",{x1:270,y1:15,x2:270,y2:240,stroke:colors.line});
+    var v={ox:405,oy:135,sx:62,sy:27};
+    curve(svg,"cubic",v,-1.4,1.4,[0]);tangent(svg,"cubic",v,0,-1.55,1.55);
+    var p=point(svg,"cubic",v,0,"P");label(svg,p.x+10,p.y-14,"O",colors.curve,"start");
+    label(svg,405,28,"y=x³",colors.curve);label(svg,405,245,"f′(0)=0，切线 y=0",colors.tangent);
   }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function(){ renderFig(); drawTrapFig(); });
-  } else {
-    renderFig();
-    drawTrapFig();
-  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){renderFig();drawTrapFig();});
+  else{renderFig();drawTrapFig();}
 })();
 
 </script>

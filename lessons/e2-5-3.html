@@ -42,7 +42,7 @@
     <div class="reveal">
       <p><b>B</b>。必须排除局部常数区间！</p>
       <p>例如常数函数 \(f(x) = 5\)，其导数 \(f'(x) \equiv 0 \ge 0\)，但函数值始终是 5，没有发生任何递增。</p>
-      <p>严格的数学定理是：若 \(f'(x) &gt; 0\)，则函数必定单调递增；而当 \(f'(x) \ge 0\) 时，只有在<b>导数等于 0 的点只是孤立散点</b>（如 \(f(x) = x^3\) 在 \(x=0\)）的前提下，才能断言函数严格单调递增！</p>
+      <p>严格的数学定理是：若 \(f'(x) &gt; 0\)，则函数必定单调递增；而当 \(f'(x) \ge 0\) 时，还需排除任何恒为常数的小区间。<b>导数为 0 的点只是孤立点</b>（如 \(f(x)=x^3\) 的 \(x=0\)）是一个常用的充分情形，不能说它是唯一可能情形。</p>
       <p>这一节我们就来系统建立单调性判定法则、极值点搜寻机制与闭区间最值求解标准程序。</p>
     </div>
   </div>
@@ -86,10 +86,10 @@
         <button class="btn btn-sm" onclick="setMAppTab(2)" style="padding:4px 10px;font-size:12px;border-radius:6px;border:1px solid var(--border,#cbd5e1);background:transparent;color:var(--text,#475569);cursor:pointer">③ 闭区间最值竞争</button>
       </div>
     </div>
-    <div style="position:relative;width:100%;height:220px;background:var(--bg-subtle,#f8fafc);border-radius:8px;overflow:hidden">
-      <svg id="m-app-fig" viewBox="0 0 540 220" style="width:100%;height:100%;display:block"></svg>
+    <div style="position:relative;width:100%;aspect-ratio:540/300;background:var(--card);border-radius:8px;overflow:hidden">
+      <svg id="m-app-fig" viewBox="0 0 540 300" role="img" aria-label="由真实三次函数计算的导数符号、极值和闭区间最值图" style="width:100%;height:100%;display:block"></svg>
     </div>
-    <div id="m-app-desc" style="font-size:13px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
+    <div id="m-app-desc" style="font-size:15px;color:var(--text-subtle,#64748b);margin-top:10px;line-height:1.6"></div>
   </div>
 
   <!-- 组件二：概念对比双卡 -->
@@ -101,7 +101,7 @@
       </div>
       <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
         <li><b>驻点 \(f'(x)=0\)</b>：切线水平，仅是可导函数极值的<b>候选点</b>。</li>
-        <li><b>极值点必要充要</b>：导数不仅要等于 0，且两侧导数符号必须<b>发生跳变</b>（正变负为极大，负变正为极小）。</li>
+        <li><b>导数变号判定</b>：对本节可导且驻点两侧导数分别保持固定符号的函数，正变负得极大值，负变正得极小值；不能只凭导数为 0 下结论。</li>
         <li><b>经典反例</b>：\(y=x^3\) 在 \(x=0\) 处 \(f'(0)=0\)，但两侧导数均为正，非极值点！</li>
       </ul>
     </div>
@@ -113,7 +113,7 @@
       <ul style="margin:0;padding-left:18px;font-size:13px;color:#0f172a;line-height:1.7">
         <li><b>极值属局部</b>：只与邻近局部点比；极大值<b>未必大于</b>极小值（如 \(x+\frac1x\) 极大值 \(-2 &lt;\) 极小值 \(2\)）。</li>
         <li><b>最值属全局</b>：在整个给定闭区间上比较，必须包含<b>所有内部极值与两侧端点值</b>。</li>
-        <li><b>端点参与度</b>：端点只能竞选最值，绝不能充当极值点。</li>
+        <li><b>端点参与度</b>：本节把极值点定义在函数定义域的内点；闭区间端点另列为最值候选。</li>
       </ul>
     </div>
   </div>
@@ -230,7 +230,7 @@
       <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区一：驻点直接当极值点</div>
       <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：求出 \(f'(x)=0\) 立即断言必为极值点</div>
       <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
-        ✅ 正确：导数两侧必须严格变号！\(y=x^3\) 在 \(x=0\) 导数为 0 但两侧皆正，非极值点。
+        ✅ 正确：本节用导数两侧变号判定极值，不能只看驻点！\(y=x^3\) 在 \(x=0\) 导数为 0 但两侧皆正，非极值点。
       </div>
     </div>
     <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
@@ -242,17 +242,17 @@
     </div>
     <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
       <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区三：单调区间用并集 ∪ 连接</div>
-      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：写出 \((-\infty,0)\cup(0,+\infty)\) 单调递减</div>
+      <div style="font-size:12px;color:#991b1b;margin-bottom:4px">❌ 错误：因为 \(1/x\) 在两边分别递减，就断言它在整个非零实数集上递减</div>
       <div style="font-size:12px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
-        ✅ 正确：在并集跨断点处不满足单调定义！必须用「和」或逗号分别书写各区间。
+        ✅ 正确：对 \(1/x\)，跨零比较 \(-1&lt;1\)，却有 \(f(-1)&lt;f(1)\)，所以只能分别说两段递减。其他函数是否能合并，仍需按单调定义另验。
       </div>
     </div>
   </div>
 
   <div style="background:var(--card,#fff);border:1px solid var(--border,#e2e8f0);border-radius:10px;padding:14px;margin:12px 0">
     <div style="font-weight:700;font-size:13px;color:var(--text,#1e293b);margin-bottom:8px">🔍 反例微图解：拐点驻点单调上升 vs 反比例并集跨断点违例</div>
-    <div style="width:100%;height:150px;background:var(--bg-subtle,#f8fafc);border-radius:6px;overflow:hidden">
-      <svg id="m-app-trap-fig" viewBox="0 0 540 150" style="width:100%;height:100%;display:block"></svg>
+    <div style="width:100%;aspect-ratio:540/330;background:var(--card);border-radius:6px;overflow:hidden">
+      <svg id="m-app-trap-fig" viewBox="0 0 540 330" role="img" aria-label="三次函数真实水平切线与反比例函数跨零反例" style="width:100%;height:100%;display:block"></svg>
     </div>
     <div style="font-size:12px;color:var(--text-subtle,#64748b);margin-top:6px">
       左图：\(y=x^3\) 在原点导数为 0 但全程单调递增；右图：\(y=1/x\) 在 \(x=-1\) 与 \(x=1\) 处值从 \(-1\) 升到 \(1\)，并集不递减。
@@ -342,7 +342,7 @@
       <button class="opt" data-v="D"><b>D</b>不是极值点</button>
     </div>
     <div class="reveal">
-      <p><b>D</b>。求导 \(f'(x) = 3x^2\)。当 \(x \ne 0\) 时恒有 \(f'(x) &gt; 0\)。\(x = 0\) 两侧导数均为正数，导数并没有发生变号！因此函数在 \(x=0\) 处一直在递增爬升，不是极值点。必须死守：<b>导数等于 0 且变号才是极值点</b>！</p>
+      <p><b>D</b>。求导 \(f'(x) = 3x^2\)。当 \(x \ne 0\) 时恒有 \(f'(x) &gt; 0\)。\(x = 0\) 两侧导数均为正数，导数并没有发生变号！因此函数在 \(x=0\) 处一直在递增爬升，不是极值点。本题应检查<b>驻点两侧的导数符号</b>，不能只看 \(f'(0)=0\)。</p>
     </div>
   </div>
 
@@ -401,98 +401,50 @@
   var scaleY = 18;
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
+  function cubicModel(a, left, right) {
+    function f(x) { return x * x * x / 3 - a * x; }
+    var roots = a > 0 ? [-Math.sqrt(a), Math.sqrt(a)] : [0];
+    var candidates = [{ x: left, y: f(left), type: "左端点" }, { x: right, y: f(right), type: "右端点" }];
+    roots.forEach(function (x) { if (x > left && x < right) candidates.push({ x: x, y: f(x), type: a > 0 ? (x < 0 ? "极大值点" : "极小值点") : "驻点（非极值）" }); });
+    candidates.sort(function (p, q) { return p.y - q.y; });
+    var extent = Math.max(1, Math.abs(f(-3.2)), Math.abs(f(3.2)));
+    roots.forEach(function (x) { extent = Math.max(extent, Math.abs(f(x))); });
+    return { f: f, roots: roots, min: candidates[0], max: candidates[candidates.length - 1], extent: extent * 1.08 };
+  }
   function render() {
-    var rawA = (parseInt(aIn.value, 10) || 16) / 10; // 0.0 到 4.0
-    var rawL = (parseInt(leftIn.value, 10) || -22) / 10; // -3.0 到 -0.5
-    var rawR = (parseInt(rightIn.value, 10) || 24) / 10; // 0.5 到 3.0
-
-    aOut.textContent = rawA.toFixed(1);
-    leftOut.textContent = rawL.toFixed(1);
-    rightOut.textContent = rawR.toFixed(1);
-
-    function f(x) { return (1/3) * x * x * x - rawA * x; }
-
+    var aValue = Number(aIn.value), leftValue = Number(leftIn.value), rightValue = Number(rightIn.value);
+    var rawA = (Number.isFinite(aValue) ? aValue : 16) / 10;
+    var rawL = (Number.isFinite(leftValue) ? leftValue : -22) / 10;
+    var rawR = (Number.isFinite(rightValue) ? rightValue : 24) / 10;
+    var model = cubicModel(rawA, rawL, rawR);
+    scaleY = 108 / model.extent;
+    function sx(x) { return oX + x * scaleX; }
+    function sy(y) { return oY - y * scaleY; }
+    aOut.textContent = rawA.toFixed(1); leftOut.textContent = rawL.toFixed(1); rightOut.textContent = rawR.toFixed(1);
     var h = [];
-    h.push('<defs><clipPath id="cubClip"><rect x="25" y="18" width="510" height="262"/></clipPath></defs>');
-
-    // 坐标轴
-    h.push('<line x1="30" y1="' + oY + '" x2="530" y2="' + oY + '" stroke="var(--line)" stroke-width="1.2"/>');
-    h.push('<line x1="' + oX + '" y1="20" x2="' + oX + '" y2="278" stroke="var(--line)" stroke-width="1.2"/>');
-    h.push('<text x="535" y="' + (oY + 4) + '" font-size="12" fill="var(--muted)">x</text>');
-    h.push('<text x="' + (oX + 6) + '" y="28" font-size="12" fill="var(--muted)">y</text>');
-    h.push('<text x="' + (oX + 4) + '" y="' + (oY + 14) + '" font-size="11" fill="var(--muted)">O</text>');
-
-    // 绘制闭区间 [L, R] 背景阴影带
-    var pL = oX + rawL * scaleX;
-    var pR = oX + rawR * scaleX;
-    h.push('<rect x="' + pL + '" y="24" width="' + (pR - pL) + '" height="246" fill="rgba(59, 130, 246, 0.06)"/>');
-    h.push('<line x1="' + pL + '" y1="24" x2="' + pL + '" y2="270" stroke="#94a3b8" stroke-dasharray="3 3"/>');
-    h.push('<line x1="' + pR + '" y1="24" x2="' + pR + '" y2="270" stroke="#94a3b8" stroke-dasharray="3 3"/>');
-    h.push('<text x="' + pL + '" y="286" font-size="11" fill="var(--muted)" text-anchor="middle">L=' + rawL.toFixed(1) + '</text>');
-    h.push('<text x="' + pR + '" y="286" font-size="11" fill="var(--muted)" text-anchor="middle">R=' + rawR.toFixed(1) + '</text>');
-
-    // 绘制曲线 f(x)
-    var pts = [];
-    for (var x = -3.2; x <= 3.2; x += 0.05) {
-      var y = f(x);
-      var cx = oX + x * scaleX;
-      var cy = oY - y * scaleY;
-      pts.push((pts.length === 0 ? "M" : "L") + cx.toFixed(1) + "," + cy.toFixed(1));
-    }
-    h.push('<g clip-path="url(#cubClip)"><path d="' + pts.join(" ") + '" fill="none" stroke="#2563eb" stroke-width="2.5"/></g>');
-
-    // 驻点与极值判定
-    var hasRoots = rawA > 0.05;
-    var r1 = hasRoots ? -Math.sqrt(rawA) : 0;
-    var r2 = hasRoots ? Math.sqrt(rawA) : 0;
-
-    var candidates = [];
-    var fL = f(rawL), fR = f(rawR);
-    candidates.push({ x: rawL, y: fL, type: "左端点" });
-    candidates.push({ x: rawR, y: fR, type: "右端点" });
-
-    var ptMax = null, ptMin = null;
-    if (hasRoots) {
-      var fMaxLocal = f(r1);
-      var fMinLocal = f(r2);
-
-      // 极大值点 r1
-      if (r1 >= rawL && r1 <= rawR) candidates.push({ x: r1, y: fMaxLocal, type: "极大值" });
-      ptMax = { x: oX + r1 * scaleX, y: clamp(oY - fMaxLocal * scaleY, 34, 260) };
-      h.push('<circle cx="' + ptMax.x + '" cy="' + ptMax.y + '" r="5" fill="#f59e0b"/>');
-      h.push('<text x="' + clamp(ptMax.x - 8, 95, 455) + '" y="' + Math.max(28, ptMax.y - 12) + '" font-size="11" font-weight="700" fill="#f59e0b" text-anchor="end">极大(' + r1.toFixed(1) + ', ' + fMaxLocal.toFixed(2) + ')</text>');
-
-      // 极小值点 r2
-      if (r2 >= rawL && r2 <= rawR) candidates.push({ x: r2, y: fMinLocal, type: "极小值" });
-      ptMin = { x: oX + r2 * scaleX, y: clamp(oY - fMinLocal * scaleY, 34, 260) };
-      h.push('<circle cx="' + ptMin.x + '" cy="' + ptMin.y + '" r="5" fill="#10b981"/>');
-      h.push('<text x="' + clamp(ptMin.x - 8, 95, 455) + '" y="' + Math.min(268, ptMin.y + 18) + '" font-size="11" font-weight="700" fill="#10b981" text-anchor="end">极小(' + r2.toFixed(1) + ', ' + fMinLocal.toFixed(2) + ')</text>');
-    }
-
-    // 寻找区间内最大值与最小值
-    candidates.sort(function (a, b) { return a.y - b.y; });
-    var minItem = candidates[0];
-    var maxItem = candidates[candidates.length - 1];
-
-    // 高亮最大值光环（放在点右侧或下方，绝不与左侧「极大」重叠）
-    var ptGlobMax = { x: oX + maxItem.x * scaleX, y: clamp(oY - maxItem.y * scaleY, 34, 260) };
-    h.push('<circle cx="' + ptGlobMax.x + '" cy="' + ptGlobMax.y + '" r="9" fill="none" stroke="#e11d48" stroke-width="2.5"/>');
-    var maxAnchor = ptGlobMax.x > 410 ? "end" : "start";
-    var maxLx = ptGlobMax.x + (maxAnchor === "end" ? -12 : 12);
-    var maxLy = clamp(ptGlobMax.y + (maxAnchor === "end" ? -12 : 4), 30, 262);
-    h.push('<text x="' + maxLx + '" y="' + maxLy + '" font-size="12" font-weight="700" fill="#e11d48" text-anchor="' + maxAnchor + '">最大值 Max=' + maxItem.y.toFixed(2) + '</text>');
-
-    // 高亮最小值光环（放在点右侧或上方，绝不与左侧「极小」重叠）
-    var ptGlobMin = { x: oX + minItem.x * scaleX, y: clamp(oY - minItem.y * scaleY, 34, 260) };
-    h.push('<circle cx="' + ptGlobMin.x + '" cy="' + ptGlobMin.y + '" r="9" fill="none" stroke="#2563eb" stroke-width="2.5"/>');
-    var minAnchor = ptGlobMin.x > 410 ? "end" : "start";
-    var minLx = ptGlobMin.x + (minAnchor === "end" ? -12 : 12);
-    var minLy = clamp(ptGlobMin.y + (minAnchor === "end" ? -12 : -6), 34, 262);
-    h.push('<text x="' + minLx + '" y="' + minLy + '" font-size="12" font-weight="700" fill="#2563eb" text-anchor="' + minAnchor + '">最小值 Min=' + minItem.y.toFixed(2) + '</text>');
-
+    h.push('<rect x="' + sx(rawL) + '" y="28" width="' + ((rawR - rawL) * scaleX) + '" height="238" fill="var(--ok-soft)" opacity="0.65"/>');
+    h.push('<line x1="40" y1="' + oY + '" x2="520" y2="' + oY + '" stroke="var(--muted)"/>');
+    h.push('<line x1="' + oX + '" y1="28" x2="' + oX + '" y2="266" stroke="var(--muted)"/>');
+    h.push('<text x="523" y="147" font-size="22" fill="var(--fg)">x</text><text x="288" y="27" font-size="22" fill="var(--fg)">y</text>');
+    var d = "";
+    for (var i = 0; i <= 256; i++) { var x = -3.2 + i / 40; d += (i ? " L" : "M") + sx(x).toFixed(6) + " " + sy(model.f(x)).toFixed(6); }
+    h.push('<path data-curve="cubic" data-a="' + rawA + '" data-ox="' + oX + '" data-oy="' + oY + '" data-sx="' + scaleX + '" data-sy="' + scaleY + '" d="' + d + '" fill="none" stroke="var(--a)" stroke-width="3"/>');
+    model.roots.forEach(function (x, i) {
+      var y = model.f(x), color = i ? "var(--b)" : "var(--c)";
+      h.push('<line data-tangent="' + x + '" x1="' + (sx(x) - 23) + '" y1="' + sy(y) + '" x2="' + (sx(x) + 23) + '" y2="' + sy(y) + '" stroke="' + color + '" stroke-width="2"/>');
+      h.push('<circle data-role="stationary" data-x="' + x + '" data-y="' + y + '" cx="' + sx(x) + '" cy="' + sy(y) + '" r="5" fill="' + color + '"/>');
+      h.push('<text x="' + sx(x) + '" y="' + (sy(y) + (i ? 28 : -16)) + '" font-size="22" text-anchor="middle" fill="var(--fg)">' + (rawA === 0 ? "驻点" : (i ? "极小" : "极大")) + '</text>');
+    });
+    [[rawL, "L"], [rawR, "R"]].forEach(function (p) {
+      h.push('<line x1="' + sx(p[0]) + '" y1="28" x2="' + sx(p[0]) + '" y2="266" stroke="var(--muted)" stroke-dasharray="4 4"/>');
+      h.push('<circle data-role="endpoint" data-x="' + p[0] + '" data-y="' + model.f(p[0]) + '" cx="' + sx(p[0]) + '" cy="' + sy(model.f(p[0])) + '" r="4" fill="var(--fg)"/>');
+      h.push('<text x="' + sx(p[0]) + '" y="292" font-size="22" text-anchor="middle" fill="var(--fg)">' + p[1] + '=' + p[0].toFixed(1) + '</text>');
+    });
+    [[model.max, "maximum", "var(--no)"], [model.min, "minimum", "var(--c)"]].forEach(function (p) {
+      h.push('<circle data-role="' + p[1] + '" data-x="' + p[0].x + '" data-y="' + p[0].y + '" cx="' + sx(p[0].x) + '" cy="' + sy(p[0].y) + '" r="10" fill="none" stroke="' + p[2] + '" stroke-width="3"/>');
+    });
     svg.innerHTML = h.join("");
-
-    desc.innerHTML = '<b>最值全景透视</b>：在闭区间 [' + rawL.toFixed(1) + ', ' + rawR.toFixed(1) + '] 上，候选池对比结果：<b>最大值 = ' + maxItem.y.toFixed(2) + '</b>（取在 ' + maxItem.type + ' x=' + maxItem.x.toFixed(1) + ' 处）；<b>最小值 = ' + minItem.y.toFixed(2) + '</b>（取在 ' + minItem.type + ' x=' + minItem.x.toFixed(1) + ' 处）。当 a=' + rawA.toFixed(1) + ' 时，驻点为 x=±' + Math.sqrt(rawA).toFixed(2) + '。';
+    desc.innerHTML = '<b>真实函数 f(x)=x³/3−' + rawA.toFixed(1) + 'x</b>，图中纵轴随参数统一缩放。闭区间 [' + rawL.toFixed(1) + ', ' + rawR.toFixed(1) + '] 的<b>最大值 ' + model.max.y.toFixed(3) + '</b>（红圈，' + model.max.type + ' x=' + model.max.x.toFixed(3) + '），<b>最小值 ' + model.min.y.toFixed(3) + '</b>（蓝圈，' + model.min.type + ' x=' + model.min.x.toFixed(3) + '）。' + (rawA === 0 ? '此时只有驻点 x=0，导数 x² 在两侧均为正，无极值。' : '驻点 x=±√a≈±' + Math.sqrt(rawA).toFixed(3) + '；其是否进入给定区间须另行筛选。');
   }
 
   resetBtn.addEventListener("click", function () {
@@ -549,12 +501,12 @@
       h.push('<circle cx="' + cx0 + '" cy="' + cy0 + '" r="6" fill="var(--hl)" stroke="var(--a)" stroke-width="2"/>');
       h.push('<text x="' + cx0 + '" y="' + (cy0 - 12) + '" text-anchor="middle" font-weight="700" fill="var(--a)" font-size="13.5">仅在 x=1.5 孤立一点 f\'=0（瞬时水平，立刻继续爬升）</text>');
       h.push('<rect x="318" y="34" width="188" height="132" rx="9" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="1.8"/>');
-      h.push('<text x="330" y="60" font-weight="700" fill="var(--a)" font-size="14">真正严格递增的条件：</text>');
+      h.push('<text x="330" y="60" font-weight="700" fill="var(--a)" font-size="14">本例：严格递增</text>');
       h.push('<text x="330" y="86" fill="var(--fg)" font-size="13.5">f\'(x) ≥ 0，且 f\'(x) = 0</text>');
       h.push('<text x="330" y="110" font-weight="700" fill="var(--a)" font-size="13.5">只在孤立点处出现</text>');
-      h.push('<text x="330" y="134" fill="var(--fg)" font-size="13.5">（不在任何小区间恒为0）</text>');
+      h.push('<text x="330" y="134" fill="var(--fg)" font-size="13.5">本例没有恒为0的小区间</text>');
       h.push('<text x="330" y="156" fill="var(--muted)" font-size="12.5">海拔永远越往右越高！</text>');
-      etrNote.innerHTML = "当 <b>f'(x) ≥ 0</b> 且 <b>f'(x) = 0 仅在孤立点出现</b>（没有水平平台区间）时，函数才真正<b>严格单调递增</b>！";
+      etrNote.innerHTML = "当 <b>f'(x) ≥ 0</b> 且 <b>f'(x) = 0 仅在孤立点出现</b>（没有水平平台区间）时，足以断言函数<b>严格单调递增</b>；孤立点条件是充分情形。";
     }
     etrSvg.innerHTML = h.join("");
     [].forEach.call(etrBar.querySelectorAll("button"), function (b) {
@@ -575,164 +527,83 @@
   etrDraw("flat");
 })();
 
-/* --- 伴读微图解 JS: 导数应用 --- */
-(function(){
+/* --- 伴读微图解 JS: 导数应用，函数、点位与切线同源 --- */
+(function () {
   var curTab = 0;
   function el(t, a, txt) {
     var e = document.createElementNS("http://www.w3.org/2000/svg", t);
     for (var k in a) e.setAttribute(k, a[k]);
-    if (txt) e.textContent = txt;
+    if (txt !== undefined) e.textContent = txt;
     return e;
   }
+  function add(svg, t, a, txt) { var e = el(t, a, txt); svg.appendChild(e); return e; }
+  function text(svg, x, y, t, color, anchor) { return add(svg, "text", { x: x, y: y, "font-size": 22, fill: color || "var(--fg)", "text-anchor": anchor || "middle" }, t); }
+  function plot(svg, f, df, cfg, id) {
+    function sx(x) { return cfg.ox + x * cfg.sx; }
+    function sy(y) { return cfg.oy - y * cfg.sy; }
+    add(svg, "line", { x1: sx(cfg.left), y1: cfg.oy, x2: sx(cfg.right), y2: cfg.oy, stroke: "var(--muted)" });
+    add(svg, "line", { x1: cfg.ox, y1: cfg.top, x2: cfg.ox, y2: cfg.bottom, stroke: "var(--muted)" });
+    var d = "";
+    for (var i = 0; i <= 240; i++) { var x = cfg.left + (cfg.right - cfg.left) * i / 240; d += (i ? " L" : "M") + sx(x).toFixed(6) + " " + sy(f(x)).toFixed(6); }
+    add(svg, "path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 3, "data-curve": id, "data-ox": cfg.ox, "data-oy": cfg.oy, "data-sx": cfg.sx, "data-sy": cfg.sy });
+    return {
+      sx: sx, sy: sy,
+      point: function (x, label, role, dy) {
+        var y = f(x);
+        add(svg, "circle", { cx: sx(x), cy: sy(y), r: 5, fill: "var(--b)", "data-role": role, "data-x": x, "data-y": y });
+        if (label) text(svg, sx(x), sy(y) + (dy || -18), label);
+      },
+      tangent: function (x) {
+        var half = 0.3, y = f(x), k = df(x);
+        add(svg, "line", { x1: sx(x - half), y1: sy(y - half * k), x2: sx(x + half), y2: sy(y + half * k), stroke: "var(--c)", "stroke-width": 2, "data-tangent": x, "data-slope": k });
+      }
+    };
+  }
   function drawTab0(svg) {
-    // Tab 0: 导数符号与升降
-    var ox = 40, oy = 110;
-    svg.appendChild(el("line", {x1: 20, y1: oy, x2: 500, y2: oy, stroke: "#cbd5e1", "stroke-width": 1.5}));
-    // Cubic curve with peak and trough
-    var d = "M 50 170 Q 150 20 250 110 T 450 50";
-    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2.5}));
-
-    // Tangent 1 (rising): x=90, y=105
-    svg.appendChild(el("line", {x1: 60, y1: 145, x2: 120, y2: 65, stroke: "#16a34a", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 90, cy: 105, r: 3, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: 80, y: 55, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "f'(x)>0 单调递增"));
-
-    // Peak: x=175, y=55
-    svg.appendChild(el("line", {x1: 145, y1: 55, x2: 205, y2: 55, stroke: "#0284c7", "stroke-width": 2}));
-    svg.appendChild(el("circle", {cx: 175, cy: 55, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 175, y: 42, "text-anchor": "middle", fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "f'=0 极大值"));
-
-    // Tangent 2 (falling): x=245, y=105
-    svg.appendChild(el("line", {x1: 220, y1: 75, x2: 270, y2: 135, stroke: "#dc2626", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 245, cy: 105, r: 3, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 235, y: 155, fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "f'(x)<0 单调递减"));
-
-    // Trough: x=315, y=155
-    svg.appendChild(el("line", {x1: 285, y1: 155, x2: 345, y2: 155, stroke: "#0284c7", "stroke-width": 2}));
-    svg.appendChild(el("circle", {cx: 315, cy: 155, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 315, y: 175, "text-anchor": "middle", fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "f'=0 极小值"));
-
-    // Tangent 3 (rising again)
-    svg.appendChild(el("text", {x: 400, y: 105, fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "f'(x)>0 递增"));
+    var p = plot(svg, function (x) { return x*x*x-3*x; }, function (x) { return 3*x*x-3; }, { ox:270, oy:155, sx:90, sy:21, left:-2.25, right:2.25, top:48, bottom:256 }, "sign-cubic");
+    [-1.8, 0, 1.8].forEach(p.tangent);
+    p.tangent(-1); p.tangent(1);
+    p.point(-1, "极大 (−1,2)", "maximum", -21);
+    p.point(1, "极小 (1,−2)", "minimum", 32);
+    text(svg, 91, 282, "增 +", "var(--a)"); text(svg, 270, 282, "减 −", "var(--no)"); text(svg, 450, 282, "增 +", "var(--a)");
   }
-
   function drawTab1(svg) {
-    // Tab 1: 极值变号机制
-    var cy = 100;
-    // Axis line
-    svg.appendChild(el("line", {x1: 40, y1: cy, x2: 480, y2: cy, stroke: "#cbd5e1", "stroke-width": 2}));
-    // Point x1 (Peak: + to -)
-    svg.appendChild(el("circle", {cx: 170, cy: cy, r: 5, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 170, y: cy + 22, "text-anchor": "middle", fill: "#0f172a", "font-size": 12, "font-weight": "bold"}, "x₁"));
-    svg.appendChild(el("text", {x: 105, y: cy - 15, "text-anchor": "middle", fill: "#16a34a", "font-size": 16, "font-weight": "bold"}, "+"));
-    svg.appendChild(el("text", {x: 105, y: cy + 20, "text-anchor": "middle", fill: "#16a34a", "font-size": 11}, "增 ↗"));
-    svg.appendChild(el("text", {x: 235, y: cy - 15, "text-anchor": "middle", fill: "#dc2626", "font-size": 16, "font-weight": "bold"}, "—"));
-    svg.appendChild(el("text", {x: 235, y: cy + 20, "text-anchor": "middle", fill: "#dc2626", "font-size": 11}, "减 ↘"));
-    svg.appendChild(el("rect", {x: 125, y: cy - 65, width: 90, height: 28, rx: 6, fill: "#e0f2fe", stroke: "#0284c7", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 170, y: cy - 47, "text-anchor": "middle", fill: "#0369a1", "font-size": 11, "font-weight": "bold"}, "极大值 (+转-)"));
-
-    // Point x2 (Trough: - to +)
-    svg.appendChild(el("circle", {cx: 310, cy: cy, r: 5, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: 310, y: cy + 22, "text-anchor": "middle", fill: "#0f172a", "font-size": 12, "font-weight": "bold"}, "x₂"));
-    svg.appendChild(el("text", {x: 385, y: cy - 15, "text-anchor": "middle", fill: "#16a34a", "font-size": 16, "font-weight": "bold"}, "+"));
-    svg.appendChild(el("text", {x: 385, y: cy + 20, "text-anchor": "middle", fill: "#16a34a", "font-size": 11}, "增 ↗"));
-    svg.appendChild(el("rect", {x: 265, y: cy - 65, width: 90, height: 28, rx: 6, fill: "#dcfce7", stroke: "#16a34a", "stroke-width": 1.5}));
-    svg.appendChild(el("text", {x: 310, y: cy - 47, "text-anchor": "middle", fill: "#15803d", "font-size": 11, "font-weight": "bold"}, "极小值 (-转+)"));
-
-    // Bottom note
-    svg.appendChild(el("text", {x: 270, y: 175, "text-anchor": "middle", fill: "#475569", "font-size": 12, "font-weight": "bold"}, "核心准则：导数必须在分界点两侧改变正负号，方构成极值！"));
-  }
-
-  function drawTab2(svg) {
-    // Tab 2: 闭区间最值竞争
-    var ox = 40, oy = 110;
-    // Interval [a, b] background
-    svg.appendChild(el("rect", {x: 80, y: 25, width: 380, height: 160, fill: "#f8fafc", stroke: "#cbd5e1", "stroke-width": 1}));
-    // Curve
-    var d = "M 80 130 Q 150 40 230 110 T 360 145 L 460 35";
-    svg.appendChild(el("path", {d: d, fill: "none", stroke: "#0284c7", "stroke-width": 2.5}));
-
-    // Point a (left boundary)
-    svg.appendChild(el("circle", {cx: 80, cy: 130, r: 4, fill: "#64748b"}));
-    svg.appendChild(el("text", {x: 80, y: 150, "text-anchor": "middle", fill: "#64748b", "font-size": 11}, "端点 f(a)"));
-
-    // Local max x1
-    svg.appendChild(el("circle", {cx: 170, cy: 68, r: 4, fill: "#0284c7"}));
-    svg.appendChild(el("text", {x: 170, y: 55, "text-anchor": "middle", fill: "#0284c7", "font-size": 11, "font-weight": "bold"}, "极大值 16"));
-
-    // Local min x2
-    svg.appendChild(el("circle", {cx: 340, cy: 145, r: 4, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: 340, y: 165, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "极小值(最小值 -16)"));
-
-    // Point b (right boundary - global max)
-    svg.appendChild(el("circle", {cx: 460, cy: 35, r: 5, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 440, y: 28, fill: "#dc2626", "font-size": 12, "font-weight": "bold"}, "★ 端点最大值 65！"));
-
-    svg.appendChild(el("text", {x: 270, y: 205, "text-anchor": "middle", fill: "#0f172a", "font-size": 11, "font-weight": "bold"}, "候选库：比较所有极值点与两端点 -> 端点 65 击败极大值 16 斩获全局最大"));
-  }
-
-  function renderFig() {
-    var svg = document.getElementById("m-app-fig");
-    var desc = document.getElementById("m-app-desc");
-    if (!svg) return;
-    svg.innerHTML = "";
-    if (curTab === 0) {
-      drawTab0(svg);
-      if (desc) desc.innerHTML = "<b>① 导数符号与函数升降</b>：切线斜率正负直接锁定函数走势，f'(x) > 0 曲线爬升，f'(x) < 0 曲线跌落，f'=0 水平驻点。";
-    } else if (curTab === 1) {
-      drawTab1(svg);
-      if (desc) desc.innerHTML = "<b>② 极值变号机制</b>：驻点仅是候选。只有当导数从正变负（左增右减）才形成极大值，从负变正（左减右增）才形成极小值。";
-    } else {
-      drawTab2(svg);
-      if (desc) desc.innerHTML = "<b>③ 闭区间最值决胜</b>：最值在「内部极值」与「边界端点」中比试得出，端点往往超越内部极大值斩获全局最大。";
-    }
-  }
-
-  window.setMAppTab = function(idx) {
-    curTab = idx;
-    var btns = document.querySelectorAll("#m-app-tabs button");
-    btns.forEach(function(b, i){
-      b.style.borderColor = (i === idx) ? "#0284c7" : "var(--border,#cbd5e1)";
-      b.style.background = (i === idx) ? "#0284c7" : "transparent";
-      b.style.color = (i === idx) ? "#fff" : "var(--text,#475569)";
+    add(svg, "line", { x1:40, y1:150, x2:500, y2:150, stroke:"var(--muted)", "stroke-width":2 });
+    [[180,"−1","极大：+ → −"],[360,"1","极小：− → +"]].forEach(function (p) {
+      add(svg,"circle",{cx:p[0],cy:150,r:5,fill:"var(--b)"}); text(svg,p[0],185,p[1]); text(svg,p[0],107,p[2]);
     });
-    renderFig();
+    text(svg,100,145,"+", "var(--a)"); text(svg,270,145,"−", "var(--no)"); text(svg,450,145,"+", "var(--a)");
+  }
+  function drawTab2(svg) {
+    var p=plot(svg,function(x){return x*x*x-12*x;},function(x){return 3*x*x-12;},{ox:215,oy:220,sx:51,sy:2.35,left:-3,right:5,top:46,bottom:270},"closed-cubic");
+    p.point(-3,"9","left",-20); p.point(-2,"极大 16","local-maximum",-19);
+    p.point(2,"最小 −16","minimum",31); p.point(5,"最大 65","maximum",-19);
+    p.tangent(-2); p.tangent(2);
+  }
+  function renderFig() {
+    var svg=document.getElementById("m-app-fig"),desc=document.getElementById("m-app-desc"); if(!svg)return;
+    svg.innerHTML=""; [drawTab0,drawTab1,drawTab2][curTab](svg);
+    var captions=["函数 f(x)=x³−3x，导数 f′(x)=3x²−3。曲线、五条切线与两个极值点由同一解析式计算，左增、中减、右增。", "同一函数的导数 f′(x)=3(x+1)(x−1)，在 −1 两侧由正变负、在 1 两侧由负变正，因此分别取得极大、极小值。驻点只是候选，需要判断两侧走势。", "函数 f(x)=x³−12x 在区间 [−3,5] 上的四个候选值为 f(−3)=9、f(−2)=16、f(2)=−16、f(5)=65。比较后最大值65在右端点，最小值−16在内点2。"];
+    if(desc)desc.textContent=captions[curTab];
+  }
+  window.setMAppTab=function(idx){
+    curTab=idx;
+    document.querySelectorAll("#m-app-tabs button").forEach(function(b,i){b.style.background=i===idx?"var(--a)":"transparent";b.style.color=i===idx?"var(--card)":"var(--fg)";}); renderFig();
   };
-
   function drawTrapFig() {
-    var svg = document.getElementById("m-app-trap-fig");
-    if (!svg) return;
-    svg.innerHTML = "";
-    // Left: y = x^3 inflection
-    svg.appendChild(el("text", {x: 135, y: 22, "text-anchor": "middle", fill: "#0369a1", "font-size": 12, "font-weight": "bold"}, "误区一：驻点必为极值点 (y=x³)"));
-    svg.appendChild(el("path", {d: "M 45 125 Q 120 120 135 80 T 225 35", fill: "none", stroke: "#0284c7", "stroke-width": 2}));
-    svg.appendChild(el("line", {x1: 95, y1: 80, x2: 175, y2: 80, stroke: "#dc2626", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 135, cy: 80, r: 4, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 135, y: 70, "text-anchor": "middle", fill: "#dc2626", "font-size": 10}, "f'(0)=0 但两侧皆正"));
-    svg.appendChild(el("text", {x: 135, y: 135, "text-anchor": "middle", fill: "#16a34a", "font-size": 11, "font-weight": "bold"}, "全域单调递增，无极值！"));
-
-    // Divider
-    svg.appendChild(el("line", {x1: 270, y1: 15, x2: 270, y2: 140, stroke: "#e2e8f0", "stroke-width": 1}));
-
-    // Right: y = 1/x split
-    svg.appendChild(el("text", {x: 405, y: 22, "text-anchor": "middle", fill: "#b91c1c", "font-size": 12, "font-weight": "bold"}, "误区二：递减区间用 ∪ 强行并集"));
-    svg.appendChild(el("path", {d: "M 290 85 Q 350 88 355 135", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
-    svg.appendChild(el("path", {d: "M 455 35 Q 460 82 520 85", fill: "none", stroke: "#0284c7", "stroke-width": 1.5}));
-    svg.appendChild(el("circle", {cx: 340, cy: 95, r: 3, fill: "#dc2626"}));
-    svg.appendChild(el("text", {x: 340, y: 110, "text-anchor": "middle", fill: "#dc2626", "font-size": 9}, "f(-1)=-1"));
-    svg.appendChild(el("circle", {cx: 470, cy: 75, r: 3, fill: "#16a34a"}));
-    svg.appendChild(el("text", {x: 470, y: 65, "text-anchor": "middle", fill: "#16a34a", "font-size": 9}, "f(1)=1"));
-    svg.appendChild(el("text", {x: 405, y: 135, "text-anchor": "middle", fill: "#dc2626", "font-size": 11, "font-weight": "bold"}, "-1 < 1 但 f(-1) < f(1)！不能写 ∪"));
+    var svg=document.getElementById("m-app-trap-fig"); if(!svg)return; svg.innerHTML="";
+    text(svg,135,26,"y=x³：驻点非极值"); text(svg,405,26,"y=1/x：跨零比较");
+    var p=plot(svg,function(x){return x*x*x;},function(x){return 3*x*x;},{ox:135,oy:143,sx:62,sy:32,left:-1.3,right:1.3,top:52,bottom:240},"trap-cubic");
+    p.point(0,"f′(0)=0","stationary",-21); p.tangent(0);
+    var a=plot(svg,function(x){return 1/x;},function(x){return -1/(x*x);},{ox:405,oy:143,sx:55,sy:32,left:-1.6,right:-0.4,top:52,bottom:240},"reciprocal-negative");
+    var b=plot(svg,function(x){return 1/x;},function(x){return -1/(x*x);},{ox:405,oy:143,sx:55,sy:32,left:0.4,right:1.6,top:52,bottom:240},"reciprocal-positive");
+    a.point(-1,"(−1,−1)","negative",32); b.point(1,"(1,1)","positive",-20);
+    add(svg,"line",{x1:270,y1:45,x2:270,y2:262,stroke:"var(--line)"});
+    text(svg,135,282,"两侧都增，无极值"); text(svg,405,282,"−1 < 1，−1 < 1");
+    text(svg,405,315,"整个非零域不递减");
   }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", function(){ renderFig(); drawTrapFig(); });
-  } else {
-    renderFig();
-    drawTrapFig();
-  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",function(){renderFig();drawTrapFig();}); else {renderFig();drawTrapFig();}
 })();
-
 </script>
 </body>
 </html>

@@ -74,8 +74,8 @@
 
   <div class="concept-grid">
     <div class="card">
-      <p style="margin:0 0 6px"><span class="badge-pill badge-a">存在性 vs 唯一性</span><b>定理只保「至少一个」，唯一必加「单调性」</b></p>
-      <p class="small" style="margin:0">\(f(a)f(b)&lt;0\) 且连续只保证<b>至少有一个零点</b>（非单调函数可能来回穿梭多次产生奇数个零点）；若要锁定<b>「有且仅有一个零点」</b>，必须追加<b>函数在区间上严格单调</b>！</p>
+      <p style="margin:0 0 6px"><span class="badge-pill badge-a">存在性 vs 唯一性</span><b>定理只保「至少一个」，严格单调可助证唯一</b></p>
+      <p class="small" style="margin:0">\(f(a)f(b)&lt;0\) 且连续只保证<b>至少有一个零点</b>（还可能有多个零点）；若要锁定<b>「有且仅有一个零点」</b>，可再证明<b>函数在区间上严格单调</b>（这是充分条件）！</p>
     </div>
     <div class="card">
       <p style="margin:0 0 6px"><span class="badge-pill badge-no">概念红线</span><b>零点是「数」不是「点」</b></p>
@@ -638,13 +638,16 @@
     function tempAt(u) {
       if (m === 0) return -2 + 7 * u;
       if (m === 1) return -2 + 7 * u * u * u;
-      return -2 + 7 * u + 1.9 * Math.sin(2.5 * Math.PI * u) * (1 - u);
+      return (144 / 5) * (u - 1 / 6) * (u - 1 / 2) * (u - 5 / 6) * (1 + 1.5 * u);
     }
     var d = "", zeros = [], prevC = -2;
     for (var i = 0; i <= 120; i++) {
       var u = i / 120, h = 6 + 6 * u, c = tempAt(u);
       d += (i ? "L" : "M") + tx(h).toFixed(1) + " " + ty(c).toFixed(1);
-      if (i > 0 && prevC * c <= 0) zeros.push(6 + 6 * (u - 0.5 / 120 * (c / (c - prevC))));
+      if (i > 0 && (prevC * c < 0 || c === 0)) {
+        var zh = 6 + 6 * (c === 0 ? u : u - c / (c - prevC) / 120);
+        if (!zeros.length || Math.abs(zh - zeros[zeros.length - 1]) > 1e-6) zeros.push(zh);
+      }
       prevC = c;
     }
     svg("path", { d: d, fill: "none", stroke: "var(--a)", "stroke-width": 3.2 }, etmSvg);
@@ -659,7 +662,7 @@
     [].forEach.call(etmBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
     });
-    var desc = ["匀速升温（穿过 0°C <b>1 次</b>）", "先慢后快（9点半左右穿过 0°C <b>1 次</b>）", "中途小幅反复（来回穿过 0°C <b>3 次</b>）"][m];
+    var desc = ["匀速升温（穿过 0°C <b>1 次</b>）", "先慢后快（约 9:57 穿过 0°C <b>1 次</b>）", "中途小幅反复（在 7、9、11 点穿过 0°C <b>3 次</b>）"][m];
     etmNote.innerHTML = "当前天气：" + desc + "——只要曲线<b>一笔不断开</b>，从 0°C 以下到 0°C 以上<b>必然至少穿过 0°C 一次</b>！";
   }
   [].forEach.call(etmBar.querySelectorAll("button"), function (b) {
@@ -685,6 +688,7 @@
 
     function drawZero(mode) {
       zFig.innerHTML = "";
+      zFig.setAttribute("viewBox", mode === "growth" ? "0 0 520 520" : "0 0 520 160");
       if (mode === "exist") {
         // 零点存在定理：[a, b] 连续穿过 x 轴
         var yAx = 80, ax0 = 40, ax1 = 480;
@@ -713,7 +717,7 @@
 
         // 穿过 x 轴处交点
         svg("circle", { cx: x0, cy: yAx, r: 6.5, fill: "var(--hl)", stroke: "var(--fg)", "stroke-width": 2 }, zFig);
-        txt("零点 (x₀, 0)", { x: x0, y: yAx - 12, "text-anchor": "middle", fill: "var(--hl)", "font-size": 12.5, "font-weight": 700 }, zFig);
+        txt("交点 (x₀, 0)", { x: x0, y: yAx - 12, "text-anchor": "middle", fill: "var(--hl)", "font-size": 12.5, "font-weight": 700 }, zFig);
         txt("f(x₀) = 0", { x: x0, y: yAx + 20, "text-anchor": "middle", fill: "var(--fg)", "font-size": 11 }, zFig);
 
         if (zNote) zNote.innerHTML = "<b>定理直观解释</b>：只要图象一笔画成（连续），从 \\(x\\) 轴下方 \\(f(a)&lt;0\\) 走到上方 \\(f(b)&gt;0\\)，<b>中途必然至少穿过 \\(x\\) 轴一次</b>产生零点！";
@@ -755,57 +759,47 @@
 
         if (zNote) zNote.innerHTML = "<b>二分法核心机制</b>：每次取中点算值，<b>只留端点异号的那一半</b>；步步减半 \\(\\dfrac{b-a}{2^n}\\)，漏斗状极速将零点圈入目标精度内！";
       } else {
-        // growth: 2^x vs x^2 vs log2 x
-        var ox = 60, oy = 135;
-        svg("line", { x1: 20, y1: oy, x2: 490, y2: oy, stroke: "var(--muted)", "stroke-width": 1.4 }, zFig);
-        svg("polygon", { points: "490," + (oy - 4) + " 498," + oy + " 490," + (oy + 4), fill: "var(--muted)" }, zFig);
-        txt("x", { x: 496, y: oy + 16, fill: "var(--muted)", "font-size": 12 }, zFig);
-
-        svg("line", { x1: ox, y1: oy + 10, x2: ox, y2: 12, stroke: "var(--muted)", "stroke-width": 1.4 }, zFig);
-        svg("polygon", { points: (ox - 4) + ",12 " + ox + ",4 " + (ox + 4) + ",12", fill: "var(--muted)" }, zFig);
-        txt("y", { x: ox - 14, y: 16, fill: "var(--muted)", "font-size": 12 }, zFig);
-        txt("O", { x: ox - 14, y: oy + 16, fill: "var(--muted)", "font-size": 12 }, zFig);
-
-        function gx(x) { return ox + x * 65; }
-        function gy(y) { return oy - y * 1.8; }
-
-        // 1. y = 2^x (指数爆炸) 绿色
-        var dExp = "";
-        for (var i = 0; i <= 100; i++) {
-          var xv = i / 100 * 6.2;
-          var yv = Math.pow(2, xv);
-          dExp += (i === 0 ? "M" : "L") + gx(xv).toFixed(1) + " " + Math.max(14, gy(yv)).toFixed(1);
-        }
-        svg("path", { d: dExp, fill: "none", stroke: "var(--a)", "stroke-width": 2.8 }, zFig);
-        txt("y = 2ˣ (指数爆炸)", { x: 380, y: 26, fill: "var(--a)", "font-size": 12.5, "font-weight": 700 }, zFig);
-
-        // 2. y = x^2 (二次幂) 蓝色
-        var dPow = "";
-        for (var j = 0; j <= 100; j++) {
-          var xv2 = j / 100 * 6.2;
-          var yv2 = xv2 * xv2;
-          dPow += (j === 0 ? "M" : "L") + gx(xv2).toFixed(1) + " " + Math.max(14, gy(yv2)).toFixed(1);
-        }
-        svg("path", { d: dPow, fill: "none", stroke: "var(--b)", "stroke-width": 2.5 }, zFig);
-        txt("y = x² (幂增长)", { x: 420, y: 70, fill: "var(--b)", "font-size": 12, "font-weight": 700 }, zFig);
-
-        // 3. y = log2 x (对数平缓) 金色
-        var dLog = "";
-        for (var k = 1; k <= 100; k++) {
-          var xv3 = 0.2 + k / 100 * 6.0;
-          var yv3 = Math.max(0, Math.log(xv3) / Math.LN2 * 12);
-          dLog += (k === 1 ? "M" : "L") + gx(xv3).toFixed(1) + " " + gy(yv3).toFixed(1);
-        }
-        svg("path", { d: dLog, fill: "none", stroke: "var(--hl)", "stroke-width": 2.5 }, zFig);
-        txt("y = log₂x (极度平缓)", { x: 410, y: oy - 14, fill: "var(--hl)", "font-size": 12, "font-weight": 700 }, zFig);
-
-        // 关键对比交汇刻度 x=2, x=4
-        [2, 4].forEach(function (cv) {
-          svg("line", { x1: gx(cv), y1: oy - 3, x2: gx(cv), y2: oy + 3, stroke: "var(--muted)", "stroke-width": 1 }, zFig);
-          txt(cv, { x: gx(cv), y: oy + 15, "text-anchor": "middle", fill: "var(--muted)", "font-size": 11 }, zFig);
+        // 两个视窗使用同一真实纵坐标；只裁切，不改变函数值。
+        var defs = svg("defs", {}, zFig);
+        var models = [
+          { id: "exp", label: "2ˣ", f: function (x) { return Math.pow(2, x); }, color: "var(--a)" },
+          { id: "square", label: "x²", f: function (x) { return x * x; }, color: "var(--b)" },
+          { id: "log", label: "log₂x", f: function (x) { return Math.log(x) / Math.LN2; }, color: "var(--hl)" }
+        ];
+        models.forEach(function (model, i) {
+          svg("line", { x1: 62 + i * 148, y1: 20, x2: 86 + i * 148, y2: 20, stroke: model.color, "stroke-width": 3 }, zFig);
+          txt(model.label, { x: 94 + i * 148, y: 27, fill: model.color, "font-size": 21, "font-weight": 700 }, zFig);
         });
-
-        if (zNote) zNote.innerHTML = "<b>增长快慢终极规律</b>：在区间 (2, 4) 上二次抛物线 \\(x^2\\) 一度反超 \\(2^x\\)；但只要 <b>\\(x &gt; 4\\) 足够大</b>，指数函数 \\(2^x\\) 必然一骑绝尘，把幂函数和对数函数远远甩在身后！";
+        function panel(id, top, bottom, xmax, ymin, ymax, xTicks, yTicks, title) {
+          var left = 64, right = 480;
+          function X(x) { return left + x / xmax * (right - left); }
+          function Y(y) { return bottom - (y - ymin) / (ymax - ymin) * (bottom - top); }
+          txt(title, { x: left, y: top - 16, fill: "var(--fg)", "font-size": 20, "font-weight": 700 }, zFig);
+          var cp = svg("clipPath", { id: id }, defs);
+          svg("rect", { x: left, y: top, width: right - left, height: bottom - top }, cp);
+          xTicks.forEach(function (x) {
+            svg("line", { x1: X(x), y1: top, x2: X(x), y2: bottom, stroke: "var(--line)", "stroke-width": 1 }, zFig);
+            txt(x, { x: X(x), y: bottom + 23, "text-anchor": "middle", fill: "var(--muted)", "font-size": 20 }, zFig);
+          });
+          yTicks.forEach(function (y) {
+            svg("line", { x1: left, y1: Y(y), x2: right, y2: Y(y), stroke: "var(--line)", "stroke-width": 1 }, zFig);
+            txt(y, { x: left - 10, y: Y(y) + 6, "text-anchor": "end", fill: "var(--muted)", "font-size": 20 }, zFig);
+          });
+          svg("line", { x1: left, y1: Y(0), x2: right + 8, y2: Y(0), stroke: "var(--fg)", "stroke-width": 1.5 }, zFig);
+          svg("line", { x1: left, y1: bottom, x2: left, y2: top, stroke: "var(--fg)", "stroke-width": 1.5 }, zFig);
+          txt("x", { x: right + 15, y: Y(0) + 6, fill: "var(--fg)", "font-size": 20 }, zFig);
+          models.forEach(function (model) {
+            var d = "", start = model.id === "log" ? 0.02 : 0;
+            for (var i = 0; i <= 360; i++) {
+              var x = start + (xmax - start) * i / 360;
+              d += (i ? "L" : "M") + X(x).toFixed(2) + " " + Y(model.f(x)).toFixed(2);
+            }
+            svg("path", { d: d, fill: "none", stroke: model.color, "stroke-width": 3, "clip-path": "url(#" + id + ")", "data-model": model.id }, zFig);
+          });
+        }
+        panel("growth-wide", 82, 246, 6.2, -4, 80, [0, 2, 4, 6], [0, 16, 32, 64], "全景：横纵刻度对所有曲线一致");
+        panel("growth-close", 326, 478, 4, -2, 6, [0, 1, 2, 3, 4], [-2, 0, 2, 4, 6], "近景：看清对数与横轴的关系");
+        if (zNote) zNote.innerHTML = "两幅图都画真实函数值，近景只改变显示范围。\\(\\log_2 x\\) 在 \\(0&lt;x&lt;1\\) 时为负；\\(x=2,4\\) 时 \\(2^x=x^2\\)，对应对数值分别为 1、2。在 \\((2,4)\\) 上 \\(x^2&gt;2^x\\)；当 \\(x&gt;4\\) 时，\\(2^x&gt;x^2&gt;\\log_2x\\)。";
       }
 
       if (zBar) {

@@ -1561,10 +1561,17 @@
     }
 
     // 4. 固定安全区文字标注
-    const fmtC = (re, im) => `${re.toFixed(2)}${im >= 0 ? "+" : ""}${im.toFixed(2)}i`;
+    const fixed2 = value => {
+      const text = value.toFixed(2);
+      return text === "-0.00" ? "0.00" : text;
+    };
+    const fmtC = (re, im) => {
+      const realText = fixed2(re), imagText = fixed2(im);
+      return `${realText}${Number(imagText) >= 0 ? "+" : ""}${imagText}i`;
+    };
     parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">复平面乘 i 旋转陀螺台 · z·i^${kPow} 逆时针旋转 ${kPow * 90}°</text>`);
-    parts.push(`<text x="102" y="328" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">初始 z=${fmtC(a1, b1)} (|z|=${r.toFixed(1)})</text>`);
-    parts.push(`<text x="318" y="328" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">旋转后 z·i^${kPow}=${fmtC(a2, b2)}</text>`);
+    parts.push(`<text x="102" y="328" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">初始 z≈${fmtC(a1, b1)} (|z|=${r})</text>`);
+    parts.push(`<text x="318" y="328" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">旋转后 z·i^${kPow}≈${fmtC(a2, b2)}</text>`);
 
     // 5. 右侧双千分表：模长守恒 |z·i^k| 与 旋转角 k×90°
     parts.push(dialGaugeSvg(490, 82, 33, r, 4.0, "模长守恒 |z·iᵏ|", ""));
@@ -1575,8 +1582,8 @@
 
     if (desc) {
       desc.innerHTML =
-        `<b>复平面乘 \\(\\mathrm{i}\\) 相位陀螺台</b>：初始复数 \\(z = ${fmtC(a1, b1)}\\)（模长 \\(|z|=${r.toFixed(2)}\\)，辐角 \\(${Math.round(deg)}^\\circ\\)），共轭复数 \\(\\overline{z} = ${fmtC(a1, -b1)}\\)。<br>` +
-        `<b>几何旋转定律</b>：每乘一次虚数单位 \\(\\mathrm{i}\\)，模长保持 \\(|z\\cdot\\mathrm{i}^{${kPow}}|=${r.toFixed(2)}\\) 不变，向量逆时针旋转 \\(${kPow}\\times 90^\\circ = ${kPow * 90}^\\circ\\) 至 \\(z\\cdot\\mathrm{i}^{${kPow}} = ${fmtC(a2, b2)}\\)（当 \\(k=4\\) 时转满 \\(360^\\circ\\) 回到 \\(z\\)）。`;
+        `<b>复平面乘 \\(\\mathrm{i}\\) 相位陀螺台</b>：初始复数 \\(z \\approx ${fmtC(a1, b1)}\\)（模长 \\(|z|=${r}\\)，辐角 \\(${deg}^\\circ\\)），共轭复数 \\(\\overline{z} \\approx ${fmtC(a1, -b1)}\\)。<br>` +
+        `<b>几何旋转定律</b>：每乘一次虚数单位 \\(\\mathrm{i}\\)，模长保持 \\(|z\\cdot\\mathrm{i}^{${kPow}}|=${r}\\) 不变，向量逆时针旋转 \\(${kPow}\\times 90^\\circ = ${kPow * 90}^\\circ\\) 至 \\(z\\cdot\\mathrm{i}^{${kPow}} \\approx ${fmtC(a2, b2)}\\)（当 \\(k=4\\) 时转满 \\(360^\\circ\\) 回到 \\(z\\)）。<br><b>读数约定</b>：坐标保留两位小数，以约等号表示；图中向量仍按未舍入坐标绘制。`;
       if (renderMath) renderMath();
     }
   }

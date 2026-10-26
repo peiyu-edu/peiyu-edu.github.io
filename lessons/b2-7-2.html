@@ -9,10 +9,17 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-62308ba8592150cf">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-45616b6a78aafb65"></script>
+<script defer src="../assets/lesson.js?v=sha256-8e09ac3c2cec5702"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-e57faaae32b7"></script>
 <style>
+  .op-micro-head { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; }
+  #plane { touch-action:none; }
+  #plane text { font-size:24px; }
+  #entry-cadd { max-width:520px; }
+  #m-compop-fig { max-width:520px; }
+  #m-div-trap-fig { max-width:420px; }
+  #planeout .math-line { overflow-wrap:anywhere; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--c); font-weight: 700; }
   .result .bad { color: var(--no); font-weight: 700; }
@@ -36,7 +43,7 @@
   <p>初中我们做多项式运算时，遇到含字母的式子如 \((2 + 3x) + (4 - x)\)，只需要把同类项合并，就得到 \(6 + 2x\)。</p>
   <p>在复数中，复数由实部和虚部组成。如果把两个复数加起来，运算法则也是这样自然：</p>
   <div class="card predict" data-id="entry" data-answer="A">
-    <svg class="entry-fig" id="entry-cadd" viewBox="0 0 520 205" role="img" aria-label="复数(1+2i)+(3+4i)=4+6i的实部虚部积木合并与复平面向量相加"></svg>
+    <svg class="entry-fig" id="entry-cadd" data-figure-label-fixed="1" viewBox="0 0 360 250" role="img" aria-label="复数(1+2i)+(3+4i)=4+6i，实部与虚部系数分别合并"></svg>
     <div class="entry-bar" id="entry-cadd-bar">
       <button type="button" data-m="0">看两个复数 (1+2i) 与 (3+4i)</button>
       <button type="button" data-m="1" class="on">实部合实部(1+3=4)，虚部合虚部(2i+4i=6i)</button>
@@ -63,15 +70,15 @@
   <p class="small">要用到：7.1 复数的概念与复平面（<a href="b2-7-1.html">回看 7.1</a>）；初中多项式乘法与平方差公式；平面向量的加减法则。</p>
 
   <div class="micro-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <div class="op-micro-head">
       <span class="badge-pill">直觉微图解</span>
       <div class="toggles" id="m-compop-bar" style="margin:0" role="group" aria-label="复数四则运算模式切换">
         <button class="btn ghost active" type="button" data-op="addsub">加减法（向量合成）</button>
-        <button class="btn ghost" type="button" data-op="mult">乘法（i²=-1 旋转）</button>
+        <button class="btn ghost" type="button" data-op="mult">乘法（i²=-1）</button>
         <button class="btn ghost" type="button" data-op="div">除法（共轭实数化）</button>
       </div>
     </div>
-    <svg class="micro-fig" id="m-compop-fig" viewBox="0 0 520 180" role="img" aria-label="复数四则运算几何与代数直观图"></svg>
+    <svg class="micro-fig" id="m-compop-fig" data-figure-label-fixed="1" viewBox="0 0 360 230" role="img" aria-label="复数四则运算几何与代数直观图"></svg>
     <p class="small" id="m-compop-status" style="margin:6px 0 0 0;min-height:20px;color:var(--text-dim)"></p>
   </div>
 
@@ -82,7 +89,7 @@
     </div>
     <div class="concept-card">
       <div class="concept-head"><span class="badge-pill badge-no">乘除本质 ②</span><b>乘除法：遇见 i² 换成 -1，除法借共轭化实</b></div>
-      <p><b>多项式与实数化</b>：展开后遇 \(i^2=-1\) 合并同类项；除法分子分母同乘分母共轭 \((c-di)\)，分母平方差必出非负实数 \(c^2+d^2\)。</p>
+      <p><b>多项式与实数化</b>：展开后遇 \(i^2=-1\) 合并同类项；除法分子分母同乘分母共轭 \((c-di)\)，先要求 \(c+di\ne0\)，这时分母为正实数 \(c^2+d^2>0\)。</p>
     </div>
   </div>
 
@@ -96,11 +103,12 @@
 
   <h3>2. 核心公式与运算法则</h3>
   <div class="key">
+    以下 \(a,b,c,d\in\mathbb R\)；③ 中设 \(z=c+di\)。除法另要求除数非零。<br>
     ① <b>加法与减法</b>：\((a+bi) \pm (c+di) = (a\pm c) + (b\pm d)i\)；<br>
     ② <b>乘法法则</b>：\((a+bi)(c+di) = (ac - bd) + (ad + bc)i\)（\(bd\cdot i^2 = -bd\) 变号！）；<br>
     ③ <b>共轭乘积</b>：\(z \cdot \overline{z} = (c+di)(c-di) = c^2 + d^2 = |z|^2\)（中间是<b>加号</b>，恒为非负实数！）；<br>
-    ④ <b>除法分母实数化</b>：\(\dfrac{a+bi}{c+di} = \dfrac{(a+bi)(c-di)}{c^2+d^2} = \dfrac{ac+bd}{c^2+d^2} + \dfrac{bc-ad}{c^2+d^2}i\)；<br>
-    ⑤ <b>模的乘除性质与 i 周期性</b>：\(|z_1 z_2| = |z_1||z_2|\)，\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)；\(i^1=i, i^2=-1, i^3=-i, i^4=1\)（周期为 4）。
+    ④ <b>除法分母实数化</b>（\(c+di\ne0\)，等价于 \(c^2+d^2>0\)）：\(\dfrac{a+bi}{c+di} = \dfrac{(a+bi)(c-di)}{c^2+d^2} = \dfrac{ac+bd}{c^2+d^2} + \dfrac{bc-ad}{c^2+d^2}i\)；<br>
+    ⑤ <b>模的乘除性质与 i 周期性</b>：\(|z_1 z_2| = |z_1||z_2|\)，\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)（商式要求 \(z_2\ne0\)）；\(i^1=i, i^2=-1, i^3=-i, i^4=1\)（周期为 4）。
   </div>
 
   <div class="card">
@@ -123,6 +131,7 @@
       <p><b>B</b>。实部相减：\(2 - 4 = -2\)；虚部相减：\(3 - (-1) = 4\)，所以结果为 \(-2 + 4i\)。选 A 的同学把虚部算成了 \(3 - 1 = 2\)（漏掉负负得正）。</p>
     </div>
   </div>
+  <details class="more video-question"><summary>例题视频：复数加减与两点距离（完整题面）</summary><p>已知 \(z_1=3-i\)、\(z_2=-1+2i\)，求 \(z_1+z_2\)、\(z_1-z_2\) 及 \(|z_1-z_2|\)。</p><p><b>核对答案</b>：和为 \(2+i\)，差为 \(4-3i\)，差的模为 \(5\)。</p></details>
   <div class="vid" data-video="ex-calc"></div>
 
   <div class="card">
@@ -146,6 +155,7 @@
     </div>
   </div>
 
+  <details class="more video-question"><summary>例题视频：乘法与共轭乘积（完整题面）</summary><p>已知 \(z_1=1+2i\)、\(z_2=2-i\)；① 求 \(z_1z_2\)；② 求 \(z_1\overline{z_1}\)，并说明它与 \(|z_1|\) 的关系。</p><p><b>核对答案</b>：\(z_1z_2=4+3i\)；\(z_1\overline{z_1}=5=|z_1|^2\)，其中 \(|z_1|=\sqrt5\)。</p></details>
   <div class="vid" data-video="ex-conj"></div>
 
   <h3>3. 典型例题：三步思维链精讲</h3>
@@ -205,21 +215,21 @@
         </div>
         <div class="trap-right">
           <span class="badge-pill badge-ok">正解</span>
-          <p>\((c+di)(c-di) = c^2 - d^2 i^2 = c^2 + d^2\)！中间是<b>加号</b>，分母恒正不为 0。</p>
+          <p>\((c+di)(c-di) = c^2 - d^2 i^2 = c^2 + d^2\)！中间是<b>加号</b>，原除数 \(c+di\ne0\) 时，分母才恒正不为 0。</p>
         </div>
       </div>
-      <svg class="micro-fig" id="m-div-trap-fig" viewBox="0 0 340 160" role="img" aria-label="复数除法分母平方差正确与错误对比图" style="margin-top:8px"></svg>
+      <svg class="micro-fig" id="m-div-trap-fig" data-figure-label-fixed="1" viewBox="0 0 340 200" role="img" aria-label="复数除法分母平方差正确与错误对比图" style="margin-top:8px"></svg>
     </div>
     <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>负数开方相乘套用实数乘法漏负号</b></div>
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><b>含虚数单位的乘积漏掉 i² 的负号</b></div>
       <div class="trap-body">
         <div class="trap-wrong">
           <span class="badge-pill badge-no">错解</span>
-          <p>\(\sqrt{-2}\times\sqrt{-3} = \sqrt{(-2)\times(-3)} = \sqrt{6}\)。</p>
+          <p>\((\sqrt2 i)(\sqrt3 i)=\sqrt6\)。</p>
         </div>
         <div class="trap-right">
           <span class="badge-pill badge-ok">正解</span>
-          <p>必须先化为虚数单位：\(\sqrt{2}i \times \sqrt{3}i = \sqrt{6}i^2 = -\sqrt{6}\)！相差负号。</p>
+          <p>实数根号均取非负值；先保留虚数单位：\(\sqrt{2}i \times \sqrt{3}i = \sqrt{6}i^2 = -\sqrt{6}\)！相差负号。</p>
         </div>
       </div>
     </div>
@@ -244,7 +254,7 @@
     <ul>
       <li>\((1+i)^2 = 2i\)，\((1-i)^2 = -2i\)（计算高次幂时先平方秒杀）。</li>
       <li>\(\dfrac{1+i}{1-i} = i\)；\(\dfrac{1-i}{1+i} = -i\)。</li>
-      <li><b>模的乘除法性质</b>：\(|z_1 \cdot z_2| = |z_1| \cdot |z_2|\)；\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)。只求模长时先取模后乘除，速度翻倍！</li>
+      <li><b>模的乘除法性质</b>：\(|z_1 \cdot z_2| = |z_1| \cdot |z_2|\)；\(\left|\dfrac{z_1}{z_2}\right| = \dfrac{|z_1|}{|z_2|}\)（\(z_2\ne0\)）。只求模长时先取模后乘除，速度翻倍！</li>
     </ul>
   </details>
 </section>
@@ -255,14 +265,16 @@
   <div class="card">
     <div class="ctrl ops" id="mode-ctrl">
       <button class="btn op-btn" type="button" data-mode="add">加法 z1+z2（平行四边形）</button>
+      <button class="btn ghost op-btn" type="button" data-mode="sub">减法 z1−z2</button>
+      <button class="btn ghost op-btn" type="button" data-mode="div">除法 z1÷z2</button>
       <button class="btn ghost op-btn" type="button" data-mode="mul">乘法 z1·z2</button>
       <button class="btn ghost op-btn" type="button" data-mode="conj">共轭 z̄1</button>
     </div>
-    <svg class="fig" id="plane" viewBox="0 0 560 360" role="img" aria-label="复平面，可拖动复数 z1 与 z2 观察四则运算与共轭的几何意义"></svg>
+    <svg class="fig" id="plane" viewBox="0 0 560 360" role="group" aria-label="复平面，两个可用键盘操作的复数控制点，坐标以实部和虚部系数表示"></svg>
     <div class="result" id="planeout" aria-live="polite"></div>
     <div class="ctrl">
       <button class="btn ghost" id="reset" type="button">重置</button>
-      <span class="small" id="planehint">方向键微调选中点坐标；拖动可自由改变位置。</span>
+      <span class="small" id="planehint">方向键每次半格，Home 归零，PageUp / PageDown 上下各一格。图窗外的结果只示方向，代数结果见下方。</span>
     </div>
   </div>
 </section>
@@ -301,7 +313,7 @@
 
   <h3>易错</h3>
   <div class="card predict" data-id="p-trap-1" data-answer="B">
-    <p>3. 计算 \(\sqrt{-3} \times \sqrt{-12}\) 的结果是？</p>
+    <p>3. 计算 \((\sqrt3 i)(2\sqrt3 i)\) 的结果是？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(6\)</button>
       <button class="opt" data-v="B"><b>B</b>\(-6\)</button>
@@ -309,9 +321,9 @@
       <button class="opt" data-v="D"><b>D</b>\(-6i\)</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。在复数范围内，负数根式乘法<b>不能</b>套用实数乘法公式 \(\sqrt{a}\cdot\sqrt{b} = \sqrt{ab}\)！</p>
-      <p>必须先提虚数单位 \(i\)：\(\sqrt{-3} = \sqrt{3}i\)，\(\sqrt{-12} = 2\sqrt{3}i\)。相乘得 \((\sqrt{3}i)(2\sqrt{3}i) = 6i^2 = -6\)。</p>
-      <p>若直接算 \(\sqrt{(-3)\times(-12)} = \sqrt{36} = 6\) 就中了经典负号陷阱！</p>
+      <p><b>B</b>。实数根式的乘法公式 \(\sqrt{a}\sqrt{b}=\sqrt{ab}\) 要求 \(a,b\ge0\)；本题两个因子中的 \(i\) 不能丢掉。</p>
+      <p>两因子已写明是 \(\sqrt3 i\) 与 \(2\sqrt3 i\)。相乘得 \((\sqrt{3}i)(2\sqrt{3}i) = 6i^2 = -6\)。</p>
+      <p>若只算 \(\sqrt3\cdot2\sqrt3=6\) 而漏掉 \(i^2=-1\)，就会误得正六。这里不引入负数根式的主值约定。</p>
     </div>
   </div>
 
@@ -446,208 +458,91 @@
     }
   }
 
+  function opResult(mode, a, b) {
+    if (mode === "add") return {x:a.x+b.x,y:a.y+b.y};
+    if (mode === "sub") return {x:a.x-b.x,y:a.y-b.y};
+    if (mode === "mul") return {x:a.x*b.x-a.y*b.y,y:a.x*b.y+a.y*b.x};
+    if (mode === "conj") return {x:a.x,y:-a.y};
+    var den=b.x*b.x+b.y*b.y;
+    return den===0 ? null : {x:(a.x*b.x+a.y*b.y)/den,y:(a.y*b.x-a.x*b.y)/den};
+  }
+  var dragPointer=null;
+  function finishDrag(ev) {
+    if (dragPointer===null || (ev && ev.pointerId!==dragPointer)) return;
+    var id=dragPointer,which=activeHandle; dragPointer=null;activeHandle=null;
+    try { if(fig.hasPointerCapture(id)) fig.releasePointerCapture(id); } catch(e) {}
+    var focus=document.getElementById("h-"+which);if(focus)focus.focus({preventScroll:true});
+  }
+  function drawResult(result,label,col) {
+    if (!result) return false;
+    var p=toScreen(result.x,result.y),inside=Math.abs(result.x)<=7&&Math.abs(result.y)<=4.3;
+    if(inside) {
+      drawArrow(fig,OX,OY,p.sx,p.sy,col,3);
+      svg("circle",{cx:p.sx,cy:p.sy,r:5,fill:col},fig);
+
+    } else {
+      // Clip a ray to the fixed view. This is explicitly a direction marker, never a fake endpoint.
+      var scale=Math.min(7/Math.max(.001,Math.abs(result.x)),4/Math.max(.001,Math.abs(result.y)));
+      var q=toScreen(result.x*scale,result.y*scale);drawArrow(fig,OX,OY,q.sx,q.sy,col,2.5,"5 4");
+    }
+    return !inside;
+  }
   function renderPlane(keepFocusId) {
-    fig.innerHTML = "";
-    var fg = css("--fg") || "#1A2822";
-    var muted = css("--muted") || "#5E6B64";
-    var lineCol = css("--line") || "#E2DCD0";
-    var card = css("--card") || "#FFFFFF";
-    var ca = css("--a") || "#2F7A56";
-    var cb = css("--b") || "#966524";
-    var cc = css("--c") || "#3E5C76";
-    var chl = css("--hl") || "#D9A441";
-
-    for (var gx = -7; gx <= 7; gx++) {
-      var sgx = toScreen(gx, 0);
-      svg("line", { x1: sgx.sx, y1: 20, x2: sgx.sx, y2: 340, stroke: lineCol, "stroke-width": 1, opacity: 0.6 }, fig);
+    fig.innerHTML="";
+    var fg=css("--fg"),muted=css("--muted"),lineCol=css("--line"),card=css("--card"),ca=css("--a"),cb=css("--b"),cc=css("--c");
+    for(var gx=-7;gx<=7;gx++){var px=toScreen(gx,0).sx;svg("line",{x1:px,y1:35,x2:px,y2:325,stroke:lineCol,"stroke-width":1},fig);}
+    for(var gy=-4;gy<=4;gy++){var py=toScreen(0,gy).sy;svg("line",{x1:35,y1:py,x2:525,y2:py,stroke:lineCol,"stroke-width":1},fig);}
+    drawArrow(fig,25,OY,542,OY,fg,1.5);drawArrow(fig,OX,330,OX,28,fg,1.5);
+    svg("text",{x:540,y:OY-14,"text-anchor":"end",fill:fg},fig).textContent="实轴";
+    svg("text",{x:OX-14,y:30,"text-anchor":"end",fill:fg},fig).textContent="虚轴";
+    [-6,-3,3,6].forEach(function(v){svg("text",{x:toScreen(v,0).sx,y:OY+25,"text-anchor":"middle",fill:muted},fig).textContent=v;});
+    [-3,3].forEach(function(v){svg("text",{x:OX-14,y:toScreen(0,v).sy+6,"text-anchor":"end",fill:muted},fig).textContent=v+"i";});
+    svg("text",{x:OX-12,y:OY+25,"text-anchor":"end",fill:muted},fig).textContent="0";
+    var p1=toScreen(z1.x,z1.y),p2=toScreen(z2.x,z2.y),result=opResult(curMode,z1,z2);
+    var labels={add:"z₁+z₂",sub:"z₁−z₂",mul:"z₁·z₂",div:"z₁÷z₂",conj:"共轭"};
+    if(curMode==="add"&&result&&Math.abs(result.x)<=7&&Math.abs(result.y)<=4.3){
+      var sum=toScreen(result.x,result.y);drawArrow(fig,p1.sx,p1.sy,sum.sx,sum.sy,cb,1.5,"4 4");drawArrow(fig,p2.sx,p2.sy,sum.sx,sum.sy,ca,1.5,"4 4");
     }
-    for (var gy = -4; gy <= 4; gy++) {
-      var sgy = toScreen(0, gy);
-      svg("line", { x1: 20, y1: sgy.sy, x2: 540, y2: sgy.sy, stroke: lineCol, "stroke-width": 1, opacity: 0.6 }, fig);
+    if(curMode==="sub") drawArrow(fig,p2.sx,p2.sy,p1.sx,p1.sy,cc,2,"4 4");
+    if(curMode==="conj") {var cj=toScreen(z1.x,-z1.y);svg("line",{x1:p1.sx,y1:p1.sy,x2:cj.sx,y2:cj.sy,stroke:muted,"stroke-dasharray":"4 4"},fig);}
+    var outside=drawResult(result,labels[curMode],cc);
+    drawArrow(fig,OX,OY,p1.sx,p1.sy,ca,2.5);
+    if(curMode!=="conj")drawArrow(fig,OX,OY,p2.sx,p2.sy,cb,2.5);
+    function handle(z,which,col) {
+      var p=toScreen(z.x,z.y),name=which==="z1"?"z₁":"z₂",h=svg("circle",{id:"h-"+which,cx:p.sx,cy:p.sy,r:11,fill:card,stroke:col,"stroke-width":3,tabindex:0,role:"group","aria-label":name+"：实部 "+z.x+"，虚部 "+z.y+"；方向键半格，Home归零",style:"cursor:grab"},fig);
+
+      attachEvents(h,which);
     }
-
-    drawArrow(fig, 20, OY, 545, OY, fg, 2);
-    drawArrow(fig, OX, 340, OX, 15, fg, 2);
-    var tRe = svg("text", { x: 546, y: OY - 8, "text-anchor": "end", "font-weight": 700, "font-size": 15 }, fig);
-    tRe.textContent = "实轴 (Re)";
-    var tIm = svg("text", { x: OX - 10, y: 24, "text-anchor": "end", "font-weight": 700, "font-size": 15 }, fig);
-    tIm.textContent = "虚轴 (Im)";
-    var tO = svg("text", { x: OX - 14, y: OY + 18, "font-size": 16, fill: muted }, fig);
-    tO.textContent = "O";
-
-    [-6, -4, -2, 2, 4, 6].forEach(function (v) {
-      var pos = toScreen(v, 0);
-      svg("line", { x1: pos.sx, y1: OY - 3, x2: pos.sx, y2: OY + 3, stroke: fg, "stroke-width": 1.5 }, fig);
-      var txt = svg("text", { x: pos.sx, y: OY + 16, "text-anchor": "middle", "font-size": 13, fill: muted }, fig);
-      txt.textContent = v;
-    });
-    [-3, -2, -1, 1, 2, 3].forEach(function (v) {
-      var pos = toScreen(0, v);
-      svg("line", { x1: OX - 3, y1: pos.sy, x2: OX + 3, y2: pos.sy, stroke: fg, "stroke-width": 1.5 }, fig);
-      var txt = svg("text", { x: OX - 10, y: pos.sy + 4, "text-anchor": "end", "font-size": 13, fill: muted }, fig);
-      txt.textContent = v + "i";
-    });
-
-    var p1 = toScreen(z1.x, z1.y);
-    var p2 = toScreen(z2.x, z2.y);
-    var outHtml = "";
-
-    if (curMode === "add") {
-      var sx = z1.x + z2.x, sy = z1.y + z2.y;
-      var pSum = toScreen(sx, sy);
-
-      svg("line", { x1: p1.sx, y1: p1.sy, x2: pSum.sx, y2: pSum.sy, stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "4 4" }, fig);
-      svg("line", { x1: p2.sx, y1: p2.sy, x2: pSum.sx, y2: pSum.sy, stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "4 4" }, fig);
-
-      drawArrow(fig, OX, OY, p1.sx, p1.sy, ca, 2.5);
-      drawArrow(fig, OX, OY, p2.sx, p2.sy, cb, 2.5);
-      drawArrow(fig, OX, OY, pSum.sx, pSum.sy, cc, 3.5);
-
-      svg("circle", { cx: pSum.sx, cy: pSum.sy, r: 6, fill: cc }, fig);
-      var tSum = svg("text", { x: pSum.sx + 10, y: pSum.sy - 8, fill: cc, "font-weight": 700, "font-size": 18 }, fig);
-      tSum.textContent = "z₁ + z₂ (" + f1(sx) + ", " + f1(sy) + ")";
-
-      var mod1 = Math.hypot(z1.x, z1.y);
-      var mod2 = Math.hypot(z2.x, z2.y);
-      var modSum = Math.hypot(sx, sy);
-      outHtml = "<div><b>加法运算</b>：\\( z_1 = " + texComplex(z1.x, z1.y) + ",\\quad z_2 = " + texComplex(z2.x, z2.y) + " \\)</div>" +
-        "<div>\\( z_1 + z_2 = (" + z1.x + " + " + texParen(z2.x, 0) + ") + (" + z1.y + " + " + texParen(z2.y, 0) + ")i = \\) " +
-        '<span class="eq">\\(' + texComplex(sx, sy) + "\\)</span></div>" +
-        '<div class="small">向量模长：\\( |z_1| \\approx ' + f2(mod1) + ',\\ |z_2| \\approx ' + f2(mod2) +
-        ',\\ |z_1+z_2| \\approx ' + f2(modSum) + ' \\)。几何上对应以 \\( \\overrightarrow{OZ_1} \\) 与 \\( \\overrightarrow{OZ_2} \\) 为邻边的<b>平行四边形法则</b>（满足三角不等式 \\( |z_1+z_2| \\le |z_1|+|z_2| \\)）。</div>';
-
-    } else if (curMode === "mul") {
-      var px = z1.x * z2.x - z1.y * z2.y;
-      var py = z1.x * z2.y + z1.y * z2.x;
-      px = Math.round(px * 100) / 100;
-      py = Math.round(py * 100) / 100;
-      var pProd = toScreen(px, py);
-
-      drawArrow(fig, OX, OY, p1.sx, p1.sy, ca, 2.5);
-      drawArrow(fig, OX, OY, p2.sx, p2.sy, cb, 2.5);
-
-      var isInside = pProd.sx >= 10 && pProd.sx <= 550 && pProd.sy >= 10 && pProd.sy <= 350;
-      if (isInside) {
-        drawArrow(fig, OX, OY, pProd.sx, pProd.sy, cc, 3.5);
-        svg("circle", { cx: pProd.sx, cy: pProd.sy, r: 6, fill: cc }, fig);
-        var tProdY = pProd.sy < 32 ? pProd.sy + 18 : pProd.sy - 8;
-        var tProd = svg("text", { x: pProd.sx + 10, y: tProdY, fill: cc, "font-weight": 700, "font-size": 16 }, fig);
-        tProd.textContent = "z₁ · z₂";
-      } else {
-        var angle = Math.atan2(OY - pProd.sy, pProd.sx - OX);
-        var edgeX = OX + Math.cos(angle) * 150;
-        var edgeY = OY - Math.sin(angle) * 150;
-        drawArrow(fig, OX, OY, edgeX, edgeY, cc, 2.5, "4 4");
-        var tOut = svg("text", { x: edgeX + 8, y: edgeY, fill: cc, "font-weight": 700, "font-size": 15 }, fig);
-        tOut.textContent = "z₁·z₂ 方向↑";
-      }
-
-      var m1 = Math.hypot(z1.x, z1.y);
-      var m2 = Math.hypot(z2.x, z2.y);
-      var mProd = Math.hypot(px, py);
-      outHtml = "<div><b>乘法运算</b>：\\( (" + texComplex(z1.x, z1.y) + ")(" + texComplex(z2.x, z2.y) + ") \\)</div>" +
-        "<div>按多项式展开代入 \\( i^2=-1 \\)：\\( (" + f2(z1.x * z2.x) + " - " + f2(z1.y * z2.y) + ") + (" + f2(z1.x * z2.y) + " + " + f2(z1.y * z2.x) + ")i = \\) " +
-        '<span class="eq">\\(' + texComplex(px, py) + "\\)</span></div>" +
-        '<div class="small">模长关系：\\( |z_1| \\approx ' + f2(m1) + ',\\ |z_2| \\approx ' + f2(m2) +
-        ',\\ |z_1 \\cdot z_2| = |z_1| \\times |z_2| \\approx ' + f2(mProd) + ' \\)。几何上乘法对应<b>模长相乘、辐角相加</b>（绕原点旋转并伸缩）。</div>';
-
-    } else if (curMode === "conj") {
-      var conjX = z1.x, conjY = -z1.y;
-      var pConj = toScreen(conjX, conjY);
-      var modSq = Math.round((z1.x * z1.x + z1.y * z1.y) * 100) / 100;
-      var pModSq = toScreen(modSq, 0);
-
-      svg("line", { x1: p1.sx, y1: p1.sy, x2: pConj.sx, y2: pConj.sy, stroke: muted, "stroke-width": 1.5, "stroke-dasharray": "3 3" }, fig);
-
-      drawArrow(fig, OX, OY, p1.sx, p1.sy, ca, 2.5);
-      drawArrow(fig, OX, OY, pConj.sx, pConj.sy, cc, 2.5);
-
-      svg("circle", { cx: pConj.sx, cy: pConj.sy, r: 6, fill: cc }, fig);
-      var tConj = svg("text", { x: pConj.sx + 10, y: pConj.sy + 18, fill: cc, "font-weight": 700, "font-size": 18 }, fig);
-      tConj.textContent = "z̄₁ (" + f1(conjX) + ", " + f1(conjY) + ")";
-
-      if (pModSq.sx <= 540) {
-        svg("circle", { cx: pModSq.sx, cy: OY, r: 5, fill: chl }, fig);
-        var tMSq = svg("text", { x: pModSq.sx, y: OY - 12, fill: chl, "font-weight": 700, "font-size": 16, "text-anchor": "middle" }, fig);
-        tMSq.textContent = "|z₁|²=" + f2(modSq);
-      }
-
-      outHtml = "<div><b>共轭复数</b>：\\( z_1 = " + texComplex(z1.x, z1.y) + " \\implies \\overline{z}_1 = \\) " +
-        '<span class="eq">\\(' + texComplex(conjX, conjY) + "\\)</span>（实部不变，虚部变相反数）</div>" +
-        "<div><b>共轭乘积</b>：\\( z_1 \\cdot \\overline{z}_1 = (" + z1.x + ")^2 + (" + z1.y + ")^2 = \\)" +
-        '<span class="eq">\\(' + f2(modSq) + "\\)</span>\\( = |z_1|^2 \\ge 0 \\)</div>" +
-        '<div class="small">几何上 \\( z_1 \\) 与 \\( \\overline{z}_1 \\) <b>关于实轴对称</b>。因为 \\( z \\cdot \\overline{z} \\) 永远是非负实数，所以复数除法通过分子分母同乘分母的共轭来实现「分母实数化」。</div>';
-    }
-
-    var h1 = svg("circle", {
-      id: "h-z1", cx: p1.sx, cy: p1.sy, r: 10, fill: card, stroke: ca, "stroke-width": 3.5,
-      tabindex: 0, role: "slider", "aria-label": "复数 z1 控制点", style: "cursor: grab;"
-    }, fig);
-    var tz1 = svg("text", { x: p1.sx - 12, y: p1.sy - 12, fill: ca, "font-weight": 700, "font-size": 18 }, fig);
-    tz1.textContent = "z₁ (" + f1(z1.x) + ", " + f1(z1.y) + ")";
-    attachEvents(h1, "z1");
-
-    if (curMode !== "conj") {
-      var h2 = svg("circle", {
-        id: "h-z2", cx: p2.sx, cy: p2.sy, r: 10, fill: card, stroke: cb, "stroke-width": 3.5,
-        tabindex: 0, role: "slider", "aria-label": "复数 z2 控制点", style: "cursor: grab;"
-      }, fig);
-      var tz2 = svg("text", { x: p2.sx + 10, y: p2.sy - 10, fill: cb, "font-weight": 700, "font-size": 18 }, fig);
-      tz2.textContent = "z₂ (" + f1(z2.x) + ", " + f1(z2.y) + ")";
-      attachEvents(h2, "z2");
-    }
-
-    out.innerHTML = outHtml;
-    if (window.Peiyu && window.Peiyu.math) Peiyu.math(out);
-
-    if (keepFocusId) {
-      var target = document.getElementById(keepFocusId);
-      if (target && target.focus) target.focus();
-    }
+    handle(z1,"z1",ca);if(curMode!=="conj")handle(z2,"z2",cb);
+    var symbols={add:"+",sub:"-",mul:"\\cdot",div:"\\div"},titles={add:"加法",sub:"减法",mul:"乘法",div:"除法",conj:"共轭"};
+    var input="\\(z_1="+texComplex(z1.x,z1.y)+(curMode==="conj"?"":",\\quad z_2="+texComplex(z2.x,z2.y))+"\\)";
+    var exact=curMode==="conj"?"\\overline{z_1}":"z_1"+symbols[curMode]+" z_2";
+    var answer=result?(curMode==="div"?"\\approx":"=")+texComplex(result.x,result.y):"\\text{未定义}";
+    var detail={add:"和是首尾相接；也可补成平行四边形。",sub:"差的箭头从减数终点指向被减数终点，差的模是两点距离。",mul:"展开并代入 i²=-1。非零复数的旋转伸缩规律在7.3选学。",div:"先查 z₂≠0，再同乘分母共轭；商的显示值取两位小数，用约等号。",conj:"实部不变，虚部变号；关于实轴对称。共轭乘积一定非负，但得到实数不必只乘共轭。"}[curMode];
+    var html='<div class="math-line"><b>'+titles[curMode]+'：</b>'+input+'</div><div class="math-line">\\('+exact+answer+'\\)</div>';
+    if(curMode==="mul")html+='<div class="small">\\( |z_1z_2|=|z_1||z_2|\\approx '+f2(Math.hypot(result.x,result.y))+'\\)。模一致只是必要检验。</div>';
+    if(curMode==="sub")html+='<div>\\( |z_1-z_2|\\approx '+f2(Math.hypot(result.x,result.y))+'\\)</div>';
+    if(curMode==="conj")html+='<div>\\(z_1\\overline{z_1}='+f2(z1.x*z1.x+z1.y*z1.y)+'=|z_1|^2\\ge0\\)</div>';
+    if(!result)html+='<p class="warn-box">除数 z₂=0，原商没有定义，不能同乘共轭后除以零。</p>';
+    if(outside)html+='<p class="small">结果在图窗外：虚线仅示方向，不是结果的真实端点；精确计算使用原坐标。</p>';
+    if(z1.x===z2.x&&z1.y===z2.y&&curMode!=="conj")html+='<p class="small">两个输入点重合；可用 Tab 分别选中控制点。</p>';
+    out.innerHTML='<div class="small"><span style="color:var(--a)">绿点 z₁</span>'+(curMode==="conj"?"":' · <span style="color:var(--b)">金点 z₂</span>')+' · <span style="color:var(--c)">蓝箭头为结果</span></div>'+html+'<p class="small">'+detail+'</p>';if(window.Peiyu&&Peiyu.math)Peiyu.math(out);
+    if(keepFocusId){var focus=document.getElementById(keepFocusId);if(focus)focus.focus({preventScroll:true});}
   }
-
-  function attachEvents(handle, which) {
-    handle.addEventListener("keydown", function (ev) {
-      var d = { ArrowLeft: [-0.5, 0], ArrowRight: [0.5, 0], ArrowUp: [0, 0.5], ArrowDown: [0, -0.5] }[ev.key];
-      if (!d) return;
-      ev.preventDefault();
-      var target = which === "z1" ? z1 : z2;
-      target.x = clamp(Math.round((target.x + d[0]) * 2) / 2, -6, 6);
-      target.y = clamp(Math.round((target.y + d[1]) * 2) / 2, -4, 4);
-      renderPlane("h-" + which);
-      if (window.Peiyu && window.Peiyu.log) {
-        Peiyu.log("interact", { handle: which, x: target.x, y: target.y, key: ev.key });
-      }
+  function attachEvents(handle,which) {
+    handle.addEventListener("keydown",function(ev){
+      var d={ArrowLeft:[-.5,0],ArrowRight:[.5,0],ArrowUp:[0,.5],ArrowDown:[0,-.5],PageUp:[0,1],PageDown:[0,-1]}[ev.key];
+      if(!d&&ev.key!=="Home")return;ev.preventDefault();finishDrag();var z=which==="z1"?z1:z2;
+      z.x=ev.key==="Home"?0:clamp(Math.round((z.x+d[0])*2)/2,-6,6);z.y=ev.key==="Home"?0:clamp(Math.round((z.y+d[1])*2)/2,-4,4);renderPlane("h-"+which);
     });
-
-    handle.addEventListener("pointerdown", function (ev) {
-      ev.preventDefault();
-      activeHandle = which;
-      try { handle.setPointerCapture(ev.pointerId); } catch (e) {}
-      function onMove(e) {
-        var rect = fig.getBoundingClientRect();
-        var clientX = e.clientX, clientY = e.clientY;
-        var relX = (clientX - rect.left) * (560 / rect.width);
-        var relY = (clientY - rect.top) * (360 / rect.height);
-        var m = toMath(relX, relY);
-        var target = activeHandle === "z1" ? z1 : z2;
-        target.x = clamp(Math.round(m.x * 2) / 2, -6, 6);
-        target.y = clamp(Math.round(m.y * 2) / 2, -4, 4);
-        renderPlane();
-      }
-      function onUp() {
-        window.removeEventListener("pointermove", onMove);
-        window.removeEventListener("pointerup", onUp);
-        if (window.Peiyu && window.Peiyu.log) {
-          var target = activeHandle === "z1" ? z1 : z2;
-          Peiyu.log("interact", { handle: activeHandle, x: target.x, y: target.y });
-        }
-        activeHandle = null;
-      }
-      window.addEventListener("pointermove", onMove);
-      window.addEventListener("pointerup", onUp);
-    });
+    handle.addEventListener("pointerdown",function(ev){ev.preventDefault();activeHandle=which;dragPointer=ev.pointerId;try{fig.setPointerCapture(ev.pointerId);}catch(e){}});
   }
+  fig.addEventListener("pointermove",function(ev){
+    if(dragPointer===null||ev.pointerId!==dragPointer)return;
+    var pt=fig.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;var m=pt.matrixTransform(fig.getScreenCTM().inverse()),z=activeHandle==="z1"?z1:z2;
+    z.x=clamp(Math.round(((m.x-OX)/U)*2)/2,-6,6);z.y=clamp(Math.round(((OY-m.y)/U)*2)/2,-4,4);renderPlane();
+  });
+  fig.addEventListener("pointerup",finishDrag);fig.addEventListener("pointercancel",finishDrag);fig.addEventListener("lostpointercapture",finishDrag);
 
   var modeButtons = modeCtrl.querySelectorAll(".op-btn");
   modeButtons.forEach(function (btn) {
@@ -680,64 +575,23 @@
   var eaSvg = document.getElementById("entry-cadd"), eaBar = document.getElementById("entry-cadd-bar"), eaNote = document.getElementById("entry-cadd-note");
   var eaMode = 1;
   function eaDraw(m) {
-    eaMode = m;
-    var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
-    eaSvg.innerHTML = "";
-    // 左侧：实部积木 vs 虚部 i 积木分仓
-    svg("rect", { x: 16, y: 16, width: 256, height: 174, rx: 10, fill: card, stroke: ln, "stroke-width": 1.4 }, eaSvg);
-    svg("text", { x: 144, y: 38, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 14.5 }, eaSvg).textContent = m === 0 ? "分装托盘：实数砖 vs 虚数 i 砖" : "同类合并：(1+3) + (2+4)i = 4+6i";
-
-    function drawBricks(x0, y0, nRe, nIm, label) {
-      svg("text", { x: x0, y: y0 - 6, fill: mu, "font-size": 12.5, "font-weight": 700 }, eaSvg).textContent = label;
-      for (var i = 0; i < nRe; i++) {
-        svg("rect", { x: x0 + i * 26, y: y0, width: 22, height: 22, rx: 4, fill: okS, stroke: ca, "stroke-width": 1.6 }, eaSvg);
-        svg("text", { x: x0 + i * 26 + 11, y: y0 + 15, "text-anchor": "middle", fill: ca, "font-size": 12, "font-weight": 700 }, eaSvg).textContent = "1";
-      }
-      var ix0 = x0 + nRe * 26 + 8;
-      for (var j = 0; j < nIm; j++) {
-        svg("rect", { x: ix0 + j * 24, y: y0, width: 21, height: 22, rx: 4, fill: card, stroke: cb, "stroke-width": 1.6 }, eaSvg);
-        svg("text", { x: ix0 + j * 24 + 10.5, y: y0 + 15, "text-anchor": "middle", fill: cb, "font-size": 12, "font-weight": 700 }, eaSvg).textContent = "i";
+    eaMode=m;eaSvg.innerHTML="";
+    var ca=css("--a"),cb=css("--b"),fg=css("--fg"),card=css("--card"),ln=css("--line");
+    svg("text",{x:18,y:28,fill:fg,"font-size":18,"font-weight":700},eaSvg).textContent=m?"同类合并：4 + 6i":"实部、虚部系数分别相加";
+    function bricks(y,re,im,label){
+      svg("text",{x:18,y:y-10,fill:fg,"font-size":16},eaSvg).textContent=label;
+      for(var j=0;j<re+im;j++){
+        var imaginary=j>=re,x=18+j*34,col=imaginary?cb:ca;
+        svg("rect",{x:x,y:y,width:28,height:32,rx:4,fill:card,stroke:col,"stroke-width":2},eaSvg);
+        svg("text",{x:x+14,y:y+23,"text-anchor":"middle",fill:col,"font-size":19},eaSvg).textContent=imaginary?"i":"1";
       }
     }
-    if (m === 0) {
-      drawBricks(28, 66, 1, 2, "第一个复数 z₁ = 1 + 2i：");
-      drawBricks(28, 130, 3, 4, "第二个复数 z₂ = 3 + 4i：");
-    } else {
-      drawBricks(28, 66, 4, 0, "实部仓合并：1 + 3 = 4");
-      drawBricks(28, 130, 0, 6, "虚部仓合并：2i + 4i = 6i");
-      svg("text", { x: 162, y: 82, fill: ca, "font-weight": 700, "font-size": 14.5 }, eaSvg).textContent = "→ 实部 4";
-      svg("text", { x: 196, y: 146, fill: cb, "font-weight": 700, "font-size": 14.5 }, eaSvg).textContent = "→ + 6i";
-    }
-
-    // 右侧：复平面向量首尾相加
-    var ox = 310, oy = 172, ux = 34, uy = 22;
-    svg("line", { x1: ox - 10, y1: oy, x2: 498, y2: oy, stroke: fg, "stroke-width": 1.5 }, eaSvg);
-    svg("line", { x1: ox, y1: oy + 10, x2: ox, y2: 20, stroke: fg, "stroke-width": 1.5 }, eaSvg);
-    svg("text", { x: 498, y: oy + 16, "text-anchor": "end", fill: mu, "font-size": 12 }, eaSvg).textContent = "Re";
-    svg("text", { x: ox + 8, y: 30, fill: mu, "font-size": 12 }, eaSvg).textContent = "Im";
-
-    var x1 = ox + 1 * ux, y1 = oy - 2 * uy;
-    var x2 = ox + 3 * ux, y2 = oy - 4 * uy;
-    var xs = ox + 4 * ux, ys = oy - 6 * uy;
-    drawArrow(eaSvg, ox, oy, x1, y1, ca, 2.6);
-    svg("text", { x: x1 - 4, y: y1 - 6, "text-anchor": "end", fill: ca, "font-weight": 700, "font-size": 12.5 }, eaSvg).textContent = "1+2i";
-    drawArrow(eaSvg, ox, oy, x2, y2, cb, 2.6);
-    svg("text", { x: x2 + 6, y: y2 + 12, fill: cb, "font-weight": 700, "font-size": 12.5 }, eaSvg).textContent = "3+4i";
-    if (m === 1) {
-      drawArrow(eaSvg, x1, y1, xs, ys, cb, 2, "4 3");
-      drawArrow(eaSvg, x2, y2, xs, ys, ca, 2, "4 3");
-      drawArrow(eaSvg, ox, oy, xs, ys, cc, 3.2);
-      svg("circle", { cx: xs, cy: ys, r: 5, fill: cc }, eaSvg);
-      svg("text", { x: xs + 6, y: ys + 4, fill: cc, "font-weight": 700, "font-size": 14 }, eaSvg).textContent = "4+6i";
-    }
-
-    [].forEach.call(eaBar.querySelectorAll("button"), function (b) {
-      b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
-    });
-    eaNote.innerHTML = m === 0
-      ? "拆分看：<b>1 + 2i</b>（1 块实数砖 + 2 块 i 砖）与 <b>3 + 4i</b>（3 块实数砖 + 4 块 i 砖）。"
-      : "合并同类项：实部 <b>1 + 3 = 4</b>，虚部 <b>2i + 4i = 6i</b>，结果为 <b>4 + 6i</b>（不能把实部和 i 混加成 10i）！";
+    if(m){bricks(76,4,0,"实部：1+3=4");bricks(160,0,6,"虚部系数：2+4=6");}
+    else{bricks(76,1,2,"z₁=1+2i");bricks(160,3,4,"z₂=3+4i");}
+    [].forEach.call(eaBar.querySelectorAll("button"),function(b){b.classList.toggle("on",Number(b.getAttribute("data-m"))===m);});
+    eaNote.textContent=m?"实部 1+3=4，虚部 2+4=6，得到4+6i。i砖表示虚部项，不把两类直接混加。":"两种颜色分别表示实部项与虚部项，先按同类分开。";
   }
+
   [].forEach.call(eaBar.querySelectorAll("button"), function (b) {
     b.onclick = function () { eaDraw(parseInt(b.getAttribute("data-m"), 10)); };
   });
@@ -748,156 +602,41 @@
     if (ev.detail && ev.detail.id === "entry") eaDraw(0);
   });
 
+  var compOpMode="addsub";
   function initStep2() {
-    var fig = document.getElementById("m-compop-fig");
-    var bar = document.getElementById("m-compop-bar");
-    var status = document.getElementById("m-compop-status");
-    var trap = document.getElementById("m-div-trap-fig");
-    if (!fig || !bar) return;
-
-    var isDark = document.documentElement.classList.contains("dark") || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
-    var ca = isDark ? "#38bdf8" : "#0284c7";
-    var cb = isDark ? "#f59e0b" : "#d97706";
-    var cc = isDark ? "#10b981" : "#059669";
-    var cd = isDark ? "#ec4899" : "#db2777";
-    var mut = isDark ? "#94a3b8" : "#64748b";
-    var bgCard = isDark ? "#1e293b" : "#f1f5f9";
-    var border = isDark ? "#334155" : "#e2e8f0";
-
-    function sEl(parent, tag, attrs) {
-      var el = document.createElementNS(NS, tag);
-      for (var k in attrs) el.setAttribute(k, attrs[k]);
-      parent.appendChild(el);
-      return el;
-    }
-
-    function sArr(parent, x1, y1, x2, y2, color, w, dashed) {
-      var dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
-      var lineAttrs = { x1: x1, y1: y1, x2: x2, y2: y2, stroke: color, "stroke-width": w || 2.5 };
-      if (dashed) lineAttrs["stroke-dasharray"] = dashed;
-      sEl(parent, "line", lineAttrs);
-      if (len > 8) {
-        var ux = dx / len, uy = dy / len, hl = Math.min(10, len * 0.35), hw = hl * 0.5;
-        var bx = x2 - hl * ux, by = y2 - hl * uy;
-        var d = "M " + x2 + " " + y2 + " L " + (bx - hw * uy) + " " + (by + hw * ux) + " L " + (bx + hw * uy) + " " + (by - hw * ux) + " Z";
-        sEl(parent, "path", { d: d, fill: color });
+    var fig=document.getElementById("m-compop-fig"),bar=document.getElementById("m-compop-bar"),status=document.getElementById("m-compop-status"),trap=document.getElementById("m-div-trap-fig");
+    if(!fig||!bar)return;
+    var ca=css("--a"),cb=css("--b"),cc=css("--c"),fg=css("--fg"),mut=css("--muted"),no=css("--no");
+    function txt(parent,x,y,text,col,size){svg("text",{x:x,y:y,fill:col||fg,"font-size":size||17},parent).textContent=text;}
+    function draw(mode){
+      fig.innerHTML="";
+      if(mode==="addsub"){
+        var ox=72,oy=192,u=42,p1={x:ox+2*u,y:oy-u},p2={x:ox+u,y:oy-2*u},sum={x:ox+3*u,y:oy-3*u};
+        drawArrow(fig,35,oy,330,oy,mut,1.5);drawArrow(fig,ox,214,ox,25,mut,1.5);
+        txt(fig,286,oy-10,"实轴",mut,15);txt(fig,25,30,"虚轴",mut,15);
+        drawArrow(fig,ox,oy,p1.x,p1.y,ca);drawArrow(fig,ox,oy,p2.x,p2.y,cb);
+        drawArrow(fig,p1.x,p1.y,sum.x,sum.y,cb,2,"4 4");drawArrow(fig,p2.x,p2.y,sum.x,sum.y,ca,2,"4 4");
+        drawArrow(fig,ox,oy,sum.x,sum.y,cc,3);drawArrow(fig,p2.x,p2.y,p1.x,p1.y,no,2,"3 3");
+        txt(fig,p1.x+12,p1.y+20,"z₁",ca);txt(fig,p2.x-32,p2.y-8,"z₂",cb);txt(fig,sum.x+10,sum.y,"和",cc);
+        status.textContent="本图 z₁=2+i，z₂=1+2i；和为3+3i。差箭头从z₂终点指向z₁终点，差为1−i，长度√2。横纵每单位均42图元。";
+      }else if(mode==="mult"){
+        txt(fig,18,35,"乘法：先展开，再代 i²=−1",cb,18);
+        txt(fig,18,85,"(2+i)(1+i)",ca,21);txt(fig,18,130,"= 2+2i+i+i²",fg,21);txt(fig,18,175,"= 2+3i−1 = 1+3i",cc,21);
+        status.textContent="一般式(ac−bd)+(ad+bc)i，a,b,c,d为实数。共轭乘积是模的平方；模相符只作必要检验。代数展开不需要坐标轴。";
+      }else{
+        txt(fig,18,32,"除数 1+i≠0，同乘分母共轭",cc,17);txt(fig,18,78,"(1+3i) / (1+i)",ca,21);txt(fig,18,122,"= (1+3i)(1−i) / 2",fg,20);txt(fig,18,166,"= (4+2i) / 2 = 2+i",cc,20);txt(fig,18,208,"分母：(1+i)(1−i)=2",cb,17);
+        status.textContent="一般除法先要求c+di≠0，才有c²+d²>0。分子、分母都同乘c−di，不能只乘分子。";
       }
     }
-
-    function sTxt(parent, x, y, text, col, sz, fw, anchor) {
-      var t = sEl(parent, "text", {
-        x: x, y: y, fill: col || mut, "font-size": sz || 12.5,
-        "font-weight": fw || 400, "text-anchor": anchor || "start"
-      });
-      t.textContent = text;
-      return t;
-    }
-
-    function drawCompOp(mode) {
-      fig.innerHTML = "";
-      var cx = 100, cy = 142;
-      if (mode === "addsub") {
-        sTxt(fig, 24, 22, "【加减几何】平行四边形合成加法，差模长 |z₁ - z₂| 为两点距离", ca, 12, 700);
-        // z1 = 2 + i -> (cx + 46, cy - 26)
-        sArr(fig, cx, cy, cx + 46, cy - 26, ca, 2.5);
-        sTxt(fig, cx + 52, cy - 24, "z₁", ca, 12, 700);
-
-        // z2 = 1 + 2.5i -> (cx + 22, cy - 64)
-        sArr(fig, cx, cy, cx + 22, cy - 64, cb, 2.5);
-        sTxt(fig, cx + 14, cy - 68, "z₂", cb, 12, 700, "end");
-
-        // sum z1 + z2 -> (cx + 68, cy - 90)
-        sEl(fig, "line", { x1: cx + 46, y1: cy - 26, x2: cx + 68, y2: cy - 90, stroke: mut, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
-        sEl(fig, "line", { x1: cx + 22, y1: cy - 64, x2: cx + 68, y2: cy - 90, stroke: mut, "stroke-dasharray": "3 2", "stroke-width": 1.2 });
-        sArr(fig, cx, cy, cx + 68, cy - 90, cc, 3.2);
-        sTxt(fig, cx + 74, cy - 88, "z₁ + z₂", cc, 12.5, 700);
-
-        // diff z1 - z2 from z2 to z1
-        sArr(fig, cx + 22, cy - 64, cx + 46, cy - 26, cd, 2.5);
-        sTxt(fig, cx + 46, cy - 48, "z₁ - z₂", cd, 11, 700);
-
-        sTxt(fig, 248, 55, "• 加法：向量平行四边形对角线", cc, 12, 700);
-        sTxt(fig, 248, 85, "• 减法：由减数终点指向被减数终点", cd, 12, 700);
-        sTxt(fig, 248, 115, "• 距离本质：|z₁ - z₂| 即为两点间直线距离", ca, 11.5);
-        sTxt(fig, 248, 145, "• 三角不等式：||z₁|-|z₂|| ≤ |z₁±z₂| ≤ |z₁|+|z₂|", mut, 11);
-
-        status.textContent = "复数加减几何本质：完全等价于复平面内对应向量的加减，模长遵循三角形三边关系。";
-      } else if (mode === "mult") {
-        sTxt(fig, 24, 22, "【乘法展开】多项式十字相乘，遇见 i² 换为 -1", cb, 12, 700);
-        // Step box
-        sEl(fig, "rect", { x: 24, y: 40, width: 215, height: 115, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
-        sTxt(fig, 36, 65, "(a + bi)(c + di)", cb, 12.5, 700);
-        sTxt(fig, 36, 90, "= ac + adi + bci + bdi²", mut, 11.5);
-        sTxt(fig, 36, 115, "= ac + (ad + bc)i + bd(-1)", cd, 11.5, 700);
-        sTxt(fig, 36, 140, "= (ac - bd) + (ad + bc)i", cc, 12.5, 700);
-
-        sTxt(fig, 255, 55, "• 核心关键：最后项 bdi² 变成实数 -bd", cd, 11.5, 700);
-        sTxt(fig, 255, 85, "• 共轭乘积：(a+bi)(a-bi) = a² + b² (无虚部)", cc, 11.5, 700);
-        sTxt(fig, 255, 115, "• 乘 i 旋转：z · i 相当于逆时针旋转 90°", ca, 11.5);
-        sTxt(fig, 255, 145, "• 模长性质：|z₁ · z₂| = |z₁| · |z₂| (模相乘)", mut, 11.5);
-
-        status.textContent = "复数乘法法则：展开多项式后只需牢记 i² = -1，共轭相乘虚部消除得 a² + b²。";
-      } else {
-        // mode === "div"
-        sTxt(fig, 24, 22, "【除法实数化】分子分母同乘分母共轭，分母必化为正实数 c² + d²", cc, 12, 700);
-        sEl(fig, "rect", { x: 24, y: 40, width: 222, height: 115, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
-        sTxt(fig, 36, 65, "① 原式：(a + bi) / (c + di)", ca, 12, 700);
-        sTxt(fig, 36, 92, "② 同乘共轭：× (c - di) / (c - di)", cb, 11.5, 700);
-        sTxt(fig, 36, 120, "③ 分母成实数：分母变 c² + d²", cd, 11.5, 700);
-        sTxt(fig, 36, 144, "④ 拆分实虚部：A + Bi 代数形式", cc, 12, 700);
-
-        sTxt(fig, 260, 55, "• 桥梁：分母共轭为 c - di", ca, 11.5);
-        sTxt(fig, 260, 85, "• 分母恒正：(c+di)(c-di) = c² + d² > 0", cc, 11.5, 700);
-        sTxt(fig, 260, 115, "• 高频秒杀：(1+i)/(1-i)=i，(1-i)/(1+i)=-i", cb, 11.5, 700);
-        sTxt(fig, 260, 145, "• 模长性质：|z₁ / z₂| = |z₁| / |z₂|", mut, 11.5);
-
-        status.textContent = "除法化简法：分母有虚数？分子分母同乘分母共轭，分母立刻成为实数 c² + d²！";
-      }
-    }
-
-    function drawTrap() {
-      if (!trap) return;
-      trap.innerHTML = "";
-      sEl(trap, "rect", { x: 8, y: 8, width: 324, height: 144, rx: 8, fill: bgCard, stroke: border, "stroke-width": 1.2 });
-      sTxt(trap, 170, 26, "分母平方差对比：中间永远是加号！", cd, 12, 700, "middle");
-
-      // Wrong
-      sTxt(trap, 80, 52, "【常见错解】", cd, 11, 700, "middle");
-      sTxt(trap, 80, 75, "(1+i)(1-i)", mut, 11.5, 400, "middle");
-      sTxt(trap, 80, 96, "= 1² - 1² = 0 ✗", cd, 12.5, 700, "middle");
-      sTxt(trap, 80, 120, "算成分母为 0 崩溃！", cd, 10, 400, "middle");
-
-      sEl(trap, "line", { x1: 165, y1: 40, x2: 165, y2: 135, stroke: border, "stroke-width": 1 });
-
-      // Right
-      sTxt(trap, 245, 52, "【严谨正解】", cc, 11, 700, "middle");
-      sTxt(trap, 245, 75, "(1+i)(1-i) = 1² - i²", mut, 11.5, 400, "middle");
-      sTxt(trap, 245, 96, "= 1 - (-1) = 2 ✓", cc, 12.5, 700, "middle");
-      sTxt(trap, 245, 120, "i² = -1 负负得正变加号", cc, 10, 400, "middle");
-    }
-
-    var currMode = "addsub";
-    [].forEach.call(bar.querySelectorAll("button"), function (b) {
-      b.onclick = function () {
-        var m = b.getAttribute("data-op");
-        if (m) {
-          currMode = m;
-          [].forEach.call(bar.querySelectorAll("button"), function (btn) {
-            btn.classList.toggle("active", btn === b);
-          });
-          drawCompOp(currMode);
-        }
-      };
-    });
-
-    drawCompOp("addsub");
-    drawTrap();
+    [].forEach.call(bar.querySelectorAll("button"),function(b){b.classList.toggle("active",b.getAttribute("data-op")===compOpMode);b.onclick=function(){compOpMode=b.getAttribute("data-op");initStep2();};});
+    draw(compOpMode);
+    if(trap){trap.innerHTML="";txt(trap,16,28,"先查除数非零，再用平方差",fg,16);txt(trap,16,70,"误：(1+i)(1−i)=1−1=0",no,17);txt(trap,16,114,"正：1−i²=1−(−1)=2",ca,18);txt(trap,16,157,"一般：c²+d² > 0",cc,18);txt(trap,16,186,"前提：c+di≠0，c,d为实数",mut,15);}
   }
 
   eaDraw(1);
   renderPlane();
   initStep2();
-  if (window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { eaDraw(eaMode); renderPlane(); initStep2(); });
+  new MutationObserver(function () { eaDraw(eaMode); renderPlane(); initStep2(); }).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme","class"]});
 })();
 </script>
 </body></html>

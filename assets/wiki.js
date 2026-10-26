@@ -451,8 +451,8 @@
       title: "复数四则运算、共轭复数与 \\(i\\) 的周期性",
       keywords: ["共轭", "分母实数化", "i周期", "四则运算"],
       trig: "复数化简为 \\(A+Bi\\) 标准型、乘除法运算与共轭求模。",
-      key: "1. <b>乘法按多项式乘</b>：\\((a+bi)(c+di) = (ac-bd) + (ad+bc)i\\)（代入 \\(i^2=-1\\)）。<br>2. <b>共轭复数</b>：\\(z=a+bi\\) 的共轭为 \\(\\overline{z}=a-bi\\)，有 <b>\\(z\\overline{z} = a^2+b^2 = |z|^2\\)</b>（实数）。<br>3. <b>除法分母实数化（先要求 \\(z_2\\ne0\\)）</b>：分子分母同乘分母的共轭复数 \\(\\overline{z}_2\\)：<br>$$\\frac{z_1}{z_2} = \\frac{z_1\\overline{z}_2}{z_2\\overline{z}_2} = \\frac{z_1\\overline{z}_2}{|z_2|^2}$$<br>4. <b>\\(i\\) 的 4 周期性</b>：\\(i^1=i,\\ i^2=-1,\\ i^3=-i,\\ i^4=1\\)；\\(i^{4k+n}=i^n\\)；且 \\(i+i^2+i^3+i^4=0\\)。",
-      warn: "负数开平方运算必须先写成虚数单位形式：\\(\\sqrt{-a} = \\sqrt{a}i\\)（\\(a>0\\)）。切忌直接套实数根式法则！",
+      key: "以下 \\(a,b,c,d\\in\\mathbb R\\)。<br>1. <b>乘法按多项式乘</b>：\\((a+bi)(c+di) = (ac-bd) + (ad+bc)i\\)（代入 \\(i^2=-1\\)）。<br>2. <b>共轭复数</b>：\\(z=a+bi\\) 的共轭为 \\(\\overline{z}=a-bi\\)，有 <b>\\(z\\overline{z} = a^2+b^2 = |z|^2\\)</b>（实数）。<br>3. <b>除法分母实数化（先要求 \\(z_2\\ne0\\)）</b>：分子分母同乘分母的共轭复数 \\(\\overline{z}_2\\)：<br>$$\\frac{z_1}{z_2} = \\frac{z_1\\overline{z}_2}{z_2\\overline{z}_2} = \\frac{z_1\\overline{z}_2}{|z_2|^2}$$<br>4. <b>\\(i\\) 的 4 周期性</b>：\\(i^1=i,\\ i^2=-1,\\ i^3=-i,\\ i^4=1\\)；\\(i^{4k+n}=i^n\\)（\\(k,n\\in\\mathbb Z\\)）；且 \\(i+i^2+i^3+i^4=0\\)。",
+      warn: "先保留虚数单位再计算：\\((\\sqrt2\\,i)(\\sqrt3\\,i)=\\sqrt6\\,i^2=-\\sqrt6\\)，不是 \\(\\sqrt6\\)。实数根式乘法 \\(\\sqrt a\\sqrt b=\\sqrt{ab}\\) 要求 \\(a,b\\ge0\\)，本节不另引入负数根号的取值约定。",
       rel: ["complex-def-pure", "complex-plane-mod"]
     },
     {
@@ -1402,7 +1402,7 @@
   function ensureIsoBenchLoaded(cb) {
     if (window.IsoBench) { cb(); return; }
     var s = document.createElement("script");
-    s.src = ROOT + "assets/iso-bench.js?v=vs-9165b6bc9594";
+    s.src = ROOT + "assets/iso-bench.js?v=vs-f06df1e3f1d5";
     s.onload = cb;
     document.head.appendChild(s);
   }

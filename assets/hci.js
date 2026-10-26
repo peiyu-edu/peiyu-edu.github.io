@@ -441,6 +441,10 @@
       var l = el("link"); l.rel = "stylesheet"; l.href = ROOT + "assets/hci.css"; document.head.appendChild(l);
     }
     setupNav();
+    if (!document.querySelector('script[data-peiyu-theme]')) {
+      var themeStyle = el("link"); themeStyle.rel = "stylesheet"; themeStyle.href = ROOT + "assets/theme-switch.css"; document.head.appendChild(themeStyle);
+      var themeScript = el("script"); themeScript.src = ROOT + "assets/theme-switch.js"; themeScript.setAttribute("data-peiyu-theme", ""); document.head.appendChild(themeScript);
+    }
     setupLandmarks();
     if (PAGE === "lesson") { setupGuide(); setupPredicts(); setupSteps(); }
     if (PAGE === "home") setupHome();

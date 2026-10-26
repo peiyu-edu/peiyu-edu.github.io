@@ -296,6 +296,25 @@
       };
     }
     card.appendChild(fb); card.appendChild(sol);
+    if (p.part) {
+      var partLine = card.querySelector(".small");
+      if (!partLine) throw new Error("真题标题节点缺失");
+      var partTag = document.createElement("span");
+      partTag.className = "tag";
+      partTag.textContent = "小问 " + p.part;
+      partLine.appendChild(partTag);
+    }
+    if (!window.PeiyuGaokaoSolutions || typeof window.PeiyuGaokaoSolutions.enhance !== "function" || typeof window.PeiyuGaokaoSolutions.renderFigures !== "function") {
+      throw new Error("高考分步解析资源未加载");
+    }
+    var problemFigures = window.PeiyuGaokaoSolutions.renderFigures(p, "problem");
+    if (!problemFigures || problemFigures.nodeType !== 11) throw new Error("真题图库未返回图形片段");
+    if (problemFigures.childNodes.length) {
+      var problemStem = card.querySelector(".stem");
+      if (!problemStem) throw new Error("真题题干节点缺失");
+      problemStem.parentNode.insertBefore(problemFigures, problemStem.nextSibling);
+    }
+    window.PeiyuGaokaoSolutions.enhance(card, p);
     return card;
   }
   function markRight(box, ans) {
@@ -315,7 +334,7 @@
     var host = document.getElementById("practice");
     if (!host || !sec) return;
     host.innerHTML = '<p class="small">题目加载中…</p>';
-    fetch("../data/sections/" + sec + ".json").then(function (r) { return r.json(); }).then(function (probs) {
+    fetch("../data/sections/" + sec + ".json?v=" + encodeURIComponent(document.body.getAttribute("data-gaokao-bank-revision") || document.body.getAttribute("data-bank-revision") || "")).then(function (r) { return r.json(); }).then(function (probs) {
       host.innerHTML = "";
       if (!probs.length) { host.innerHTML = '<p class="small">这一节的真题还在整理。</p>'; return; }
       // <div id="practice" data-fold-later>：note 写了「要用到 <节号>」、且那一节在本节之后的题，收进最后一个折叠块。
@@ -514,7 +533,7 @@
     ws.src = "../assets/wiki.js?v=vs-12d546b3f39c";
     document.head.appendChild(ws);
     var hs = document.createElement("script"); // 交互层（PY-53）
-    hs.src = "../assets/hci.js?v=vs-c5846d8946b2";
+    hs.src = "../assets/hci.js?v=vs-cc67e9632160";
     document.head.appendChild(hs);
   });
 })();

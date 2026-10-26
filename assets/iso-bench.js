@@ -476,15 +476,28 @@
     if (outA) outA.textContent = R.toFixed(1);
     if (outB) outB.textContent = h.toFixed(2) + " (" + Math.round(ratio * 100) + "%)";
 
-    const P = { scale: 1.42, origin: [210, 194], azimuth: 38, elevation: 26 };
-    const W = R * 12.2; // world radius ~ 24..55
+    // PY65 Cavalieri separated-stations v1
+    // Both models retain one common world scale and camera. Their full
+    // radius-R footprints are disjoint, not merely separate bounding boxes.
+    const W = R * 12.2;
     const H = W;
     const Zh = ratio * H;
     const rSecW = Math.sqrt(Math.max(0, W * W - Zh * Zh));
+    const stationGap = 12;
+    const cx1 = -(W + stationGap / 2), cy1 = 4;
+    const cx2 = W + stationGap / 2, cy2 = 4;
+    const minX = cx1 - W - 8, maxX = cx2 + W + 8;
+    const minY = Math.min(-44, cy1 - W - 8);
+    const maxY = Math.max(44, cy1 + W + 8);
+    const bounds = [];
+    for (const x of [minX, maxX]) for (const y of [minY, maxY])
+      for (const z of [-8, H + 10]) bounds.push([x, y, z]);
+    const P = fitProjection(bounds, 410, 218, { azimuth: 38, elevation: 26, pad: 8 });
+    P.origin[1] += 36;
 
     const parts = [];
     // 1. 精密实验台底座 (Base Plate + Feet + Corner Screws)
-    const basePlan = { x: -82, y: -44, w: 164, d: 88, r: 6 };
+    const basePlan = { x: minX, y: minY, w: maxX - minX, d: maxY - minY, r: 6 };
     parts.push(solidSvg(slabOf(basePlan, -8, 8, P, 6, 1.0), { tone: "lo" }));
 
     // 2. 立柱标尺 (Vertical Height Ruler Post at back-center)
@@ -495,7 +508,7 @@
     parts.push(lineSvg(ticks.major, { tone: "hi", width: 1.3 }));
 
     // 3. 左工位：半球体 (分层车削近似 + 截面圆盘)
-    const cx1 = -42, cy1 = 4;
+    // The left center is shared with the real-radius camera bounds above.
     const bands = 8;
     for (let b = 0; b < bands; b++) {
       const z0 = (b / bands) * H;
@@ -512,7 +525,7 @@
     }
 
     // 4. 右工位：圆柱挖去倒圆锥 (外圆柱半透明 + 内部倒锥虚线 + 截面圆环)
-    const cx2 = 42, cy2 = 4;
+    // The right center uses the same scale and has a full twelve-unit gap.
     if (Zh > 0.5) {
       parts.push(solidSvg(cylinder(cx2, cy2, W, 0, Zh, P, 36, 0), { tone: "mid", opacity: 0.78 }));
     }
@@ -522,7 +535,7 @@
     parts.push(segmentSvg([cx2, cy2, 0], [cx2 + W, cy2, H], P, { warn: true, dashed: true, width: 1.3 }));
 
     // 5. 激光等高切面框 (Horizontal Laser Slicing Frame at Z = Zh)
-    const slicePts = roundedPlan({ x: -76, y: -34, w: 152, d: 76, r: 4 }, 4).map(([x, y]) => iso([x, y, Zh], P));
+    const slicePts = roundedPlan({ x: cx1 - W - 4, y: cy1 - W - 4, w: cx2 - cx1 + 2 * W + 8, d: 2 * W + 8, r: 4 }, 4).map(([x, y]) => iso([x, y, Zh], P));
     parts.push(`<path d="${pathOf(slicePts, true)}" fill="var(--iso-accent)" fill-opacity="0.08" stroke="var(--iso-accent)" stroke-width="1.3" stroke-dasharray="4 3"/>`);
 
     // 6. 左截面（实心圆盘）与右截面（同面积圆环）高亮
@@ -649,7 +662,7 @@
     svg.classList.add("iso-fig");
     const az = Number.isFinite(Number(rotYVal)) ? Number(rotYVal) : 35;
     const elRaw = Number.isFinite(Number(rotXVal)) ? Number(rotXVal) : 20;
-    const el = Math.max(14, Math.min(52, Math.abs(elRaw) < 14 ? 22 : Math.abs(elRaw)));
+    const el = elRaw;
     if (outY) outY.textContent = Math.round(az) + "°";
     if (outX) outX.textContent = Math.round(elRaw) + "°";
 
@@ -689,7 +702,7 @@
 
     // 6. 右侧双表盘：水平旋转角 θ 与俯仰观察角
     parts.push(dialGaugeSvg(492, 78, 33, az, 360, "方位角 θ", "°"));
-    parts.push(dialGaugeSvg(492, 218, 33, el, 60, "俯仰角 |φ|", "°"));
+    parts.push(dialGaugeSvg(492, 218, 33, el, 60, "俯仰角 φ", "°", {signed:true}));
     parts.push(`<text x="492" y="150" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">三工位同轴车削</text>`);
 
     svg.innerHTML = parts.join("\n");
@@ -712,11 +725,18 @@
     injectStyles();
     svg.classList.add("iso-fig");
     const deg = Math.max(0, Math.min(180, Number.isFinite(Number(thetaVal)) ? Number(thetaVal) : 40));
-    const F = Math.max(0.5, Math.min(6, Number(forceVal) || 4.0));
-    const S = Math.max(0.5, Math.min(6, Number(dispVal) || 4.0));
-    const rad = deg * RAD;
-    const cosT = Math.cos(rad);
-    const sinT = Math.sin(rad);
+    const rawF = Number(forceVal), rawS = Number(dispVal);
+    const F = Number.isFinite(rawF) ? Math.max(0, rawF) : 4;
+    const S = Number.isFinite(rawS) ? Math.max(0, rawS) : 4;
+    const hasAngle = F > 0 && S > 0;
+    // With zero displacement there is no reference direction for an angle.
+    // Show the remaining force upright solely to retain its true magnitude.
+    const rad = hasAngle ? deg * RAD : (S === 0 && F > 0 ? Math.PI / 2 : 0);
+    const cosT = hasAngle ? (deg === 90 ? 0 : Math.cos(rad)) : 0;
+    const sinT = hasAngle ? (deg === 0 || deg === 180 ? 0 : Math.sin(rad)) : (S === 0 && F > 0 ? 1 : 0);
+    const angleText = hasAngle ? String(deg) + "°" : "未定义（含零向量）";
+    // One common drawing scale preserves both true lengths and their ratio.
+    const vectorScale = 15 * Math.min(1, 6 / Math.max(6, F, S));
     const projVal = F * cosT;
     const projLen = Math.abs(projVal);
     const work = F * S * cosT;
@@ -733,26 +753,26 @@
 
     // 2. 滑块小车 (Carriage at origin X = -24, moving +S along +X)
     const ox = -24;
-    const sx = ox + S * 15;
+    const sx = ox + S * vectorScale;
     parts.push(solidSvg(slabOf({ x: ox - 12, y: -14, w: 24, d: 28, r: 3 }, 4, 10, P, 4, 0.5), { tone: "mid" }));
 
     // 3. 位移向量 b (沿导轨 +X 方向)
     parts.push(segmentSvg([ox, 0, 14], [sx, 0, 14], P, { accent: true, width: 2.8 }));
 
     // 4. 拉力向量 a (从滑块中心 [ox, 0, 14] 以夹角 deg 斜拉，位于 X-Z 平面)
-    const fScale = 15;
+    const fScale = vectorScale;
     const fx = ox + F * fScale * cosT;
     const fz = 14 + F * fScale * sinT;
     parts.push(segmentSvg([ox, 0, 14], [fx, 0, fz], P, { warn: true, width: 2.8 }));
 
     // 5. 铅垂正交投影线与有向投影段 (|a| cos θ)
-    if (Math.abs(sinT) > 0.04) {
+    if (hasAngle && Math.abs(sinT) > 0.04) {
       parts.push(segmentSvg([fx, 0, fz], [fx, 0, 14], P, { warn: true, dashed: true, width: 1.5 }));
     }
-    parts.push(segmentSvg([ox, 0, 11], [fx, 0, 11], P, { warn: cosT < 0, accent: cosT >= 0, width: 3.2 }));
+    if (S > 0) parts.push(segmentSvg([ox, 0, 11], [fx, 0, 11], P, { warn: cosT < 0, accent: cosT >= 0, width: 3.2 }));
 
     // 6. 夹角量角弧
-    if (deg >= 3) {
+    if (hasAngle && deg >= 3) {
       const arcPts = [];
       for (let i = 0; i <= 18; i++) {
         const a = (deg * i / 18) * RAD;
@@ -762,15 +782,16 @@
     }
 
     // 7. 固定安全区文字标注
-    const kind = deg === 0 ? "同向正功 (θ=0°, W > 0)" : deg === 180 ? "反向负功 (θ=180°, W < 0)" : Math.abs(deg-90)<1e-12 ? "垂直零功 (W = 0)" : (deg < 90 ? "锐角正功 (W > 0)" : "钝角负功 (W < 0)");
+    const kind = !hasAngle ? (S === 0 && F > 0 ? "位移为零：夹角未定义，W=0（力方向仅示意）" : "含零向量：夹角未定义，W=0") : deg === 0 ? "同向正功 (θ=0°, W > 0)" : deg === 180 ? "反向负功 (θ=180°, W < 0)" : Math.abs(deg-90)<1e-12 ? "垂直零功 (W = 0)" : (deg < 90 ? "锐角正功 (W > 0)" : "钝角负功 (W < 0)");
     parts.push(`<text x="216" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">滑轨拉车向量数量积测功台 · ${kind}</text>`);
-    parts.push(`<text x="115" y="${vh - 22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-warn)">拉力 |a|=${F.toFixed(1)}, 夹角 θ=${String(deg)}°</text>`);
-    parts.push(`<text x="305" y="${vh - 22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-accent)">有向投影 |a|cosθ=${projVal.toFixed(2)} (投影长 ${projLen.toFixed(2)})</text>`);
+    parts.push(`<text x="115" y="${vh - 22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-warn)">拉力 |a|=${dialNumberText(F)}, 夹角 θ=${angleText}</text>`);
+    parts.push(`<text x="305" y="${vh - 22}" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-accent)">${S > 0 ? "有向投影=" + dialNumberText(projVal) + "（投影长 " + dialNumberText(projLen) + "）" : "位移为零：有向投影未定义"}</text>`);
 
     // 8. 右侧双千分表：有向投影与数量积做功
-    parts.push(dialGaugeSvg(490, 82, 34, projVal, F, "有向投影 |a|cosθ", "", {signed:true,zeroTolerance:1e-12}));
-    parts.push(dialGaugeSvg(490, 226, 34, work, F * S, "数量积 a·b (功 W)", "", {signed:true,zeroTolerance:1e-12}));
-    parts.push(`<text x="490" y="156" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">W = |a||b|cosθ</text>`);
+    if (S > 0) parts.push(dialGaugeSvg(490, 82, 34, projVal, F, "有向投影", "", {signed:true}));
+    else parts.push(`<text x="490" y="82" text-anchor="middle" font-size="12" fill="var(--iso-hi)">投影未定义（b=0）</text>`);
+    parts.push(dialGaugeSvg(490, 226, 34, work, F * S, "数量积 a·b (功 W)", "", {signed:true}));
+    parts.push(`<text x="490" y="156" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">${hasAngle ? "W = |a||b|cosθ" : "含零向量：W=0"}</text>`);
 
     svg.innerHTML = parts.join("\n");
   }
@@ -816,27 +837,27 @@
     parts.push(segmentSvg(B, S, P, { dashed: true, width: 1.4 }));
     parts.push(segmentSvg(G, S, P, { warn: true, dashed: true, width: 1.5 }));
 
-    // 3. 向量 a、向量 b 与体对角线合向量 a+b
+    // 3. 向量 a、向量 b 与对角线合向量 a+b
     parts.push(segmentSvg(O, A, P, { accent: true, width: 2.6 }));
     parts.push(segmentSvg(O, B, P, { width: 2.6 }));
     parts.push(segmentSvg(O, S, P, { warn: true, width: 3.2 }));
 
     // 4. 固定安全区标注
-    parts.push(`<text x="212" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">三维平行六面体合成台 · a+b = (${sx}, ${sy}, ${sz})</text>`);
+    parts.push(`<text x="212" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">空间平行四边形合成台 · a+b = (${sx}, ${sy}, ${sz})</text>`);
     parts.push(`<text x="112" y="306" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-accent)">向量 a=(${ax},${ay},${az}), |a|=${lenA.toFixed(2)}</text>`);
     parts.push(`<text x="304" y="306" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-warn)">合向量 |a+b|=${lenS.toFixed(2)}, a·b=${dot.toFixed(1)}</text>`);
 
     // 5. 右侧双千分表：合向量模长与数量积
     parts.push(dialGaugeSvg(490, 80, 34, lenS, 14, "合模长 |a+b|", ""));
     parts.push(dialGaugeSvg(490, 224, 34, dot, 40, "数量积 a·b", "", {signed:true,zeroTolerance:1e-12}));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">空间平行四边形/体对角线</text>`);
+    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">空间平行四边形对角线</text>`);
 
     svg.innerHTML = parts.join("\n");
 
     if (desc) {
       desc.innerHTML =
-        `<b>等距平行六面体合成台</b>：\\(\\boldsymbol{a}=(${ax},${ay},${az})\\)，\\(\\boldsymbol{b}=(${bx},${by},${bz})\\)。<br>` +
-        `① <b>三维对角线合成</b>：\\(\\boldsymbol{a}+\\boldsymbol{b}=(${sx},${sy},${sz})\\)，模长 \\(|\\boldsymbol{a}+\\boldsymbol{b}|=\\sqrt{${sx}^2+${sy}^2+${sz}^2}=${lenS.toFixed(2)}\\)；<br>` +
+        `<b>空间平行四边形合成台</b>：\\(\\boldsymbol{a}=(${ax},${ay},${az})\\)，\\(\\boldsymbol{b}=(${bx},${by},${bz})\\)。<br>` +
+        `① <b>平行四边形对角线合成</b>：\\(\\boldsymbol{a}+\\boldsymbol{b}=(${sx},${sy},${sz})\\)，模长 \\(|\\boldsymbol{a}+\\boldsymbol{b}|=\\sqrt{(${sx})^2+(${sy})^2+(${sz})^2}=${lenS.toFixed(2)}\\)；<br>` +
         `② <b>空间数量积验证</b>：\\(\\boldsymbol{a}\\cdot\\boldsymbol{b}=${dot.toFixed(2)}\\)，满足 \\(|\\boldsymbol{a}+\\boldsymbol{b}|^2 = |\\boldsymbol{a}|^2 + |\\boldsymbol{b}|^2 + 2\\boldsymbol{a}\\cdot\\boldsymbol{b} = ${(lenS * lenS).toFixed(1)}\\)。`;
       if (renderMath) renderMath();
     }
@@ -949,13 +970,13 @@
     const wP = [px * k, py * k, 4 + h * k];
 
     // 法向量立柱基座与刻度尺
-    parts.push(solidSvg(cylinder(wA[0], wA[1], 4, 10, 6.5, P, 14), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wA[0], wA[1], 4, 4, 6.5, P, 14), { tone: "hi", accent: true }));
     parts.push(segmentSvg(wA, wNTop, P, { accent: true, width: 2.8 }));
     // 投影套环 Q
     parts.push(solidSvg(cylinder(wQ[0], wQ[1], 5.2, wQ[2] - 2.5, 5, P, 14), { tone: "hi", accent: true }));
 
     // 3. 垂足 H 靶标、真实垂线 PH 与水平等高激光线 QP
-    parts.push(solidSvg(cylinder(wH[0], wH[1], 4, 6.5, 5.5, P, 14), { tone: "mid" }));
+    parts.push(solidSvg(cylinder(wH[0], wH[1], 4, 3.5, 1, P, 14), { tone: "mid" }));
     parts.push(segmentSvg(wA, wH, P, { dashed: true, width: 1.4 }));
     parts.push(segmentSvg(wH, wP, P, { warn: true, dashed: true, width: 2.2 }));
     parts.push(segmentSvg(wQ, wP, P, { accent: true, dashed: true, width: 1.8 }));
@@ -1099,11 +1120,11 @@
     const wF2 = [c * k, 0, 12];
     const wP = [px * k, py * k, 12];
 
-    parts.push(solidSvg(cylinder(-c * k, 0, 6, 20, 4.5, P, 14), { tone: "hi", accent: true }));
-    parts.push(solidSvg(cylinder(c * k, 0, 6, 20, 4.5, P, 14), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(-c * k, 0, 6, 6.5, 5.5, P, 14), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(c * k, 0, 6, 6.5, 5.5, P, 14), { tone: "hi", accent: true }));
     parts.push(segmentSvg(wF1, wP, P, { accent: true, width: 2.6 }));
     parts.push(segmentSvg(wF2, wP, P, { warn: true, width: 2.6 }));
-    parts.push(solidSvg(cylinder(px * k, py * k, 6, 28, 4.2, P, 14), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(px * k, py * k, 6, 6.5, 5.5, P, 14), { tone: "hi" }));
 
     // 4. 固定安全区文字标注
     const stateTag = isDegen ? "2a=2c 退化为线段 F₁F₂" : (isCircle ? "c=0 正圆极限 (e=0)" : `椭圆轨迹 b=${b.toFixed(2)}, e=${e.toFixed(2)}`);
@@ -1310,7 +1331,7 @@
 
       desc.innerHTML =
         `<b>高尔顿钉板等距正态落球仪</b>：\\(X\\sim N(${numberText(mu)},\\,${numberText(sg)}^2)\\)，最高点密度 \\(f(\\mu)\\approx ${peak.toFixed(3)}\\)。灰柱高度与连续曲线高度均表示<b>概率密度</b>，高度可以超过 1，不能当作概率。<br>` +
-        `<b>连续密度面积与闸门读数</b>：亮绿色区域是同一密度曲线在真实区间 \\([${numberText(lo)},\\,${numberText(hi)}]\\) 下的面积，\\(P(${numberText(lo)} &lt; X &lt; ${numberText(hi)})=\\int_{${numberText(lo)}}^{${numberText(hi)}}f(x)\\,dx\\approx ${prob.toFixed(5)}\\)。可视横轴为 \\(x\\in[${numberText(xMin)},${numberText(xMax)}]\\)，纵向高度为密度 \\(f(x)\\)；常用范围内横轴与密度尺度固定，便于比较 \\(\\sigma\\) 改变时的宽窄与峰高。`;
+        `<b>连续密度面积与闸门读数</b>：亮绿色区域是同一密度曲线在真实区间 \\([${numberText(lo)},\\,${numberText(hi)}]\\) 下的面积。下式积分记号仅作拓展表达，本课用面积理解概率，不要求积分计算：\\(P(${numberText(lo)} &lt; X &lt; ${numberText(hi)})=\\int_{${numberText(lo)}}^{${numberText(hi)}}f(x)\\,dx\\approx ${prob.toFixed(5)}\\)。可视横轴为 \\(x\\in[${numberText(xMin)},${numberText(xMax)}]\\)，纵向高度为密度 \\(f(x)\\)；常用范围内横轴与密度尺度固定，便于比较 \\(\\sigma\\) 改变时的宽窄与峰高。`;
 
       if (renderMath) renderMath();
     }
@@ -1360,8 +1381,8 @@
     const mSlope = ry / rx;
     const xLim = rx * trackExtent;
     const yLim = xLim * mSlope;
-    parts.push(segmentSvg([-xLim, -yLim, 7], [xLim, yLim, 7], P, { warn: true, dashed: true, width: 1.6 }));
-    parts.push(segmentSvg([-xLim, yLim, 7], [xLim, -yLim, 7], P, { warn: true, dashed: true, width: 1.6 }));
+    parts.push(segmentSvg([-xLim, -yLim, 12], [xLim, yLim, 12], P, { warn: true, dashed: true, width: 1.6 }));
+    parts.push(segmentSvg([-xLim, yLim, 12], [xLim, -yLim, 12], P, { warn: true, dashed: true, width: 1.6 }));
 
     // 3. 双曲线两支刻槽轨迹
     [-1, 1].forEach((br) => {
@@ -1372,7 +1393,7 @@
         const shT = (Math.exp(tv) - Math.exp(-tv)) / 2;
         const wx = (axis === "x" ? br * a * chT : b * shT) * k;
         const wy = (axis === "x" ? b * shT : br * a * chT) * k;
-        pts.push(iso([wx, wy, 7.5], P));
+        pts.push(iso([wx, wy, 12], P));
       }
       if (pts.length > 1) {
         parts.push(`<path d="${pathOf(pts, false)}" fill="none" stroke="${br === sgn ? "var(--iso-accent)" : "var(--iso-mid)"}" stroke-width="${br === sgn ? "2.6" : "1.8"}"/>`);
@@ -1383,11 +1404,11 @@
     const wF1 = [f1[0] * k, f1[1] * k, 12];
     const wF2 = [f2[0] * k, f2[1] * k, 12];
     const wP = [px * k, py * k, 12];
-    parts.push(solidSvg(cylinder(wF1[0], wF1[1], 5, 19, 4.2, P, 12), { tone: "hi", accent: true }));
-    parts.push(solidSvg(cylinder(wF2[0], wF2[1], 5, 19, 4.2, P, 12), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wF1[0], wF1[1], 5, wF1[2] - 2.1, 4.2, P, 12), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wF2[0], wF2[1], 5, wF2[2] - 2.1, 4.2, P, 12), { tone: "hi", accent: true }));
     parts.push(segmentSvg(wF1, wP, P, { accent: true, width: 2.4 }));
     parts.push(segmentSvg(wF2, wP, P, { warn: true, width: 2.4 }));
-    parts.push(solidSvg(cylinder(wP[0], wP[1], 5, 25, 4.0, P, 12), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(wP[0], wP[1], 5, wP[2] - 2, 4.0, P, 12), { tone: "hi" }));
 
     // 5. 固定安全区文字标注
     const eqTag = axis === "x" ? "x²/a² - y²/b² = 1" : "y²/a² - x²/b² = 1";
@@ -1439,7 +1460,7 @@
     for (let yv = -3.4; yv <= 3.4; yv += 0.17) {
       const xv = (yv * yv) / (2 * p);
       if (xv * k <= 108) {
-        parPts.push(iso([xv * k, yv * k, 8], P));
+        parPts.push(iso([xv * k, yv * k, 12], P));
       }
     }
     parts.push(`<path d="${pathOf(parPts, false)}" fill="none" stroke="var(--iso-accent)" stroke-width="2.8"/>`);
@@ -1449,9 +1470,9 @@
     const wF = [fx * k, 0, 12];
     const wP = [x0 * k, y0 * k, 12];
 
-    parts.push(solidSvg(slabOf({ x: wDx - 6, y: y0 * k - 7, w: 12, d: 14, r: 2 }, 8, 16, P, 4, 0.3), { tone: "hi", accent: true }));
-    parts.push(solidSvg(cylinder(wF[0], wF[1], 5, 22, 4.8, P, 14), { tone: "hi", accent: true }));
-    parts.push(solidSvg(cylinder(wP[0], wP[1], 5, 26, 4.2, P, 14), { tone: "hi" }));
+    parts.push(solidSvg(slabOf({ x: wDx - 6, y: y0 * k - 7, w: 12, d: 14, r: 2 }, wH[2] - 2, 4, P, 4, 0.3), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wF[0], wF[1], 5, wF[2] - 2.4, 4.8, P, 14), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wP[0], wP[1], 5, wP[2] - 2.1, 4.2, P, 14), { tone: "hi" }));
 
     // 4. 等长焦半径拉线 PF 与准线垂尺 PH (|PF| = |PH| = x0 + p/2)
     parts.push(segmentSvg(wH, wP, P, { accent: true, width: 2.6 }));
@@ -1506,27 +1527,27 @@
 
     // 1. 等距仪器底板与圆形复平面分度转盘 (Granite Base + Graduated Complex Turntable)
     parts.push(solidSvg(slabOf({ x: -88, y: -82, w: 176, d: 164, r: 7 }, -10, 4, P, 6, 1.0), { tone: "lo" }));
-    parts.push(annulusSvg(0, 0, r * k, 0, 5, P, 40, { tone: "mid" }));
+    parts.push(annulusSvg(0, 0, r * k, 0, 10, P, 40, { tone: "mid" }));
 
     // 实轴 Re 与虚轴 Im 基准刻线
-    parts.push(segmentSvg([-78, 0, 6], [78, 0, 6], P, { dashed: true, width: 1.4 }));
-    parts.push(segmentSvg([0, -74, 6], [0, 74, 6], P, { dashed: true, width: 1.4 }));
+    parts.push(segmentSvg([-78, 0, 10], [78, 0, 10], P, { dashed: true, width: 1.4 }));
+    parts.push(segmentSvg([0, -74, 10], [0, 74, 10], P, { dashed: true, width: 1.4 }));
 
     // 2. 原点主轴 O、初始复向量 z、共轭镜像 z̄ 与旋转后复向量 z·i^k
     const wO = [0, 0, 10];
     const wZ1 = [a1 * k, b1 * k, 10];
     const wZConj = [a1 * k, -b1 * k, 10];
-    const wZ2 = [a2 * k, b2 * k, 12];
+    const wZ2 = [a2 * k, b2 * k, 10];
 
-    parts.push(solidSvg(cylinder(0, 0, 5, 18, 5.2, P, 14), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(wO[0], wO[1], 5, wO[2] - 2.6, 5.2, P, 14), { tone: "hi" }));
     // 共轭复数向量 z̄ (关于实轴对称)
     parts.push(segmentSvg(wO, wZConj, P, { dashed: true, width: 1.8 }));
     // 初始复数向量 z
     parts.push(segmentSvg(wO, wZ1, P, { accent: true, width: 2.8 }));
-    parts.push(solidSvg(cylinder(wZ1[0], wZ1[1], 5, 19, 4.2, P, 12), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wZ1[0], wZ1[1], 5, wZ1[2] - 2.1, 4.2, P, 12), { tone: "hi", accent: true }));
     // 乘 i^k 旋转后向量 z·i^k
     parts.push(segmentSvg(wO, wZ2, P, { warn: true, width: 3.0 }));
-    parts.push(solidSvg(cylinder(wZ2[0], wZ2[1], 5, 23, 4.5, P, 12), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(wZ2[0], wZ2[1], 5, wZ2[2] - 2.25, 4.5, P, 12), { tone: "hi" }));
 
     // 3. 逆时针旋转 k×90° 轨迹弧
     if (kPow > 0) {
@@ -1534,7 +1555,7 @@
       const steps = kPow * 12;
       for (let s = 0; s <= steps; s++) {
         const ang = (deg + (kPow * 90 * s) / steps) * RAD;
-        arcPts.push(iso([0.62 * r * k * Math.cos(ang), 0.62 * r * k * Math.sin(ang), 11], P));
+        arcPts.push(iso([0.62 * r * k * Math.cos(ang), 0.62 * r * k * Math.sin(ang), 10], P));
       }
       parts.push(`<path d="${pathOf(arcPts, false)}" fill="none" stroke="var(--iso-warn)" stroke-width="2.2"/>`);
     }
@@ -1688,8 +1709,8 @@
     parts.push(solidSvg(extrude(oblPoly, 4, 13, P, 0.2), { tone: "hi", accent: true }));
     // 高 h' = (a/2) sin α 虚线标尺与顶点立柱
     parts.push(segmentSvg([bx + dx, by, 14], [bx + dx, by + dy, 14], P, { warn: true, dashed: true, width: 2.4 }));
-    parts.push(solidSvg(cylinder(bx, by, 4, 18, 2.8, P, 10), { tone: "hi" }));
-    parts.push(solidSvg(cylinder(bx + dx, by + dy, 4, 18, 2.8, P, 10), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(bx, by, 4, 15.6, 2.8, P, 10), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(bx + dx, by + dy, 4, 15.6, 2.8, P, 10), { tone: "hi", accent: true }));
 
     // 4. 固定安全区文字标注
     parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">斜二测画法投影夹具台 · x'=x, y'=y/2, ∠x'O'y'=${Math.round(deg)}°</text>`);
@@ -1736,9 +1757,9 @@
     const L = 58;
     parts.push(segmentSvg([-L, 0, 7.5], [L, 0, 7.5], P, { accent: true, width: 3.0 }));
 
-    // 3. 公垂线立柱 (x=0, y=0, z from 7.5 to zTop)
+    // 3. 公垂线段与上端点标记（小圆柱不表示整段长度）
     const zTop = 7.5 + d * k;
-    parts.push(solidSvg(cylinder(0, 0, 6.5, zTop, 3.2, P, 12), { tone: "mid" }));
+    parts.push(solidSvg(cylinder(0, 0, 6.5, zTop - 1.6, 3.2, P, 12), { tone: "mid" }));
     parts.push(segmentSvg([0, 0, 7.5], [0, 0, zTop], P, { warn: true, width: 2.6 }));
 
     // 4. 上方异面直线 b (在高度 zTop 处，方向角 rawDeg) 與底面平移虚线 b' (在 z=7.5 处)
@@ -1771,7 +1792,7 @@
 
     if (desc) {
       desc.innerHTML =
-        `<b>异面直线平移造角机架</b>：上方直线 \\(b\\) 与底面直线 \\(a\\) 不同在任何平面内（公垂线段距离 \\(d=${d.toFixed(1)}>0\\)）。将 \\(b\\) 沿公垂线平移至底面得 \\(b'\\)（虚线），使 \\(a\\) 与 \\(b'\\) 相交于点 \\(O\\)。<br>` +
+        `<b>异面直线平移造角机架</b>：橙色竖线表示公垂线段，小圆柱仅标记上端点。上方直线 \\(b\\) 与底面直线 \\(a\\) 不同在任何平面内（公垂线段距离 \\(d=${d.toFixed(1)}>0\\)）。将 \\(b\\) 沿公垂线平移至底面得 \\(b'\\)（虚线），使 \\(a\\) 与 \\(b'\\) 相交于点 \\(O\\)。<br>` +
         `<b>易错红线（必取锐角或直角）</b>：两直线方向向量夹角为 \\(${Math.round(rawDeg)}^\\circ\\)，${isObtuseRaw ? `因超过 \\(90^\\circ\\)，<b>必须取其补角</b> \\(180^\\circ-${Math.round(rawDeg)}^\\circ=${Math.round(skewDeg)}^\\circ\\)` : `异面直线所成角 \\(\\theta=${Math.round(skewDeg)}^\\circ\\)`}，异面直线夹角严格满足 \\(\\theta\\in(0^\\circ,90^\\circ]\\)。`;
       if (renderMath) renderMath();
     }
@@ -1866,7 +1887,7 @@
     const parts = [];
 
     // 1. 等距基准机座与 xOy 坐标透明圆盘 (z = 0)
-    parts.push(solidSvg(slabOf({ x: -86, y: -62, w: 172, d: 124, r: 7 }, -46, -40, P, 6, 1.0), { tone: "lo" }));
+    parts.push(solidSvg(slabOf({ x: -86, y: -62, w: 172, d: 124, r: 7 }, -46, 6, P, 6, 1.0), { tone: "lo" }));
     parts.push(annulusSvg(0, 0, 56, 0, 0, P, 32, { tone: "mid" }));
 
     // 2. 右手空间直角坐标轴 Ox, Oy, Oz
@@ -1989,78 +2010,72 @@
 
   /**
    * 2.2 基本不等式：赵爽弦图三维升降块与均值不等式链 (H≤G≤A≤Q) 天平台 (Isometric Zhao Shuang Windmill & Mean-Chain Pillar Rig)
-   * viewBox: 0 0 560 340
+   * viewBox: 0 -60 560 400 (separate heading band; mathematical coordinates unchanged)
    */
   function renderAmGmBench(svg, desc, aVal, bVal, renderMath) {
     injectStyles();
     svg.classList.add("iso-fig");
-    const a = Math.max(1.0, Math.min(5.0, Number.isFinite(Number(aVal)) ? Number(aVal) : 4.0));
-    const b = Math.max(1.0, Math.min(5.0, Number.isFinite(Number(bVal)) ? Number(bVal) : 1.5));
-    const H = (2 * a * b) / (a + b);
-    const G = Math.sqrt(a * b);
-    const A = 0.5 * (a + b);
-    const Q = Math.sqrt(0.5 * (a * a + b * b));
-    const sqGap = (a - b) * (a - b);
-
-    const P = { scale: 1.42, origin: [198, 194], azimuth: 28, elevation: 25 };
-    const parts = [];
-
-    // 1. 等距双工位底座：左侧赵爽弦图台 + 右侧四均值测高柱台
-    parts.push(solidSvg(slabOf({ x: -96, y: -56, w: 204, d: 112, r: 7 }, -10, 4, P, 6, 1.0), { tone: "lo" }));
-
-    // 2. 左侧工位 (cx = -52)：赵爽弦图外正方形 (边长 √(a²+b²) 缩放适配) 与 中心差方柱 |a-b|²
-    const kS = 6.8;
-    const cSide = Math.hypot(a, b) * kS;
-    const holeSide = Math.abs(a - b) * kS;
-    const cx = -50, cy = 0;
-    const outerPoly = [
-      [cx - cSide * 0.5, cy - cSide * 0.5],
-      [cx + cSide * 0.5, cy - cSide * 0.5],
-      [cx + cSide * 0.5, cy + cSide * 0.5],
-      [cx - cSide * 0.5, cy + cSide * 0.5]
-    ];
-    parts.push(solidSvg(extrude(outerPoly, 4, 15, P, 0.2), { tone: "mid", accent: true }));
-    if (holeSide > 1.2) {
-      const holePoly = [
-        [cx - holeSide * 0.5, cy - holeSide * 0.5],
-        [cx + holeSide * 0.5, cy - holeSide * 0.5],
-        [cx + holeSide * 0.5, cy + holeSide * 0.5],
-        [cx - holeSide * 0.5, cy + holeSide * 0.5]
-      ];
-      parts.push(solidSvg(extrude(holePoly, 15, 28, P, 0.2), { tone: "hi" }));
+    // Keep headings in their own band instead of letting annotation fitting move them over the dissection.
+    svg.setAttribute("viewBox", "0 -60 560 400");
+    const bounded = (v, fallback) => Math.max(1, Math.min(5, Number.isFinite(Number(v)) ? Number(v) : fallback));
+    const a = bounded(aVal, 4), b = bounded(bVal, 1.5);
+    const H = 2 * a * b / (a + b), G = Math.sqrt(a * b), A = (a + b) / 2;
+    const Q = Math.sqrt((a * a + b * b) / 2), gap = (a - b) ** 2, triArea = a * b / 2;
+    const O = [[0, 0], [a, b], [a - b, a + b], [-b, a]];
+    const C = [[0, b], [a - b, b], [a - b, a], [0, a]];
+    const scale = 220 / (a + b), tx = 34 + b * scale, ty = 76;
+    const points = p => p.map(q => q.join(',')).join(' ');
+    const text = (x, y, value, fill = 'var(--iso-hi)', size = 22) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" font-weight="650" fill="${fill}" stroke="var(--iso-card)" stroke-width="3" paint-order="stroke">${value}</text>`;
+    const map = p => [tx + p[0] * scale, ty + p[1] * scale];
+    const parts = ['<g data-figure-label-fixed="1">' + text(150, -20, '赵爽弦图：面积相加') + text(433, -20, '均值大小') + '</g>'];
+    parts.push('<path d="M45 55H70" stroke="var(--iso-warn)" stroke-width="3"/>', text(112, 61, 'a = ' + a));
+    parts.push('<path d="M166 55H191" stroke="var(--iso-accent)" stroke-width="3"/>', text(238, 61, 'b = ' + b));
+    parts.push(`<g data-model="amgm-dissection" data-a="${a}" data-b="${b}" transform="translate(${tx} ${ty}) scale(${scale})">`);
+    for (let i = 0; i < 4; i++) {
+      const ring = [O[i], O[(i + 1) % 4], C[i]];
+      parts.push(`<polygon data-amgm-piece="triangle" data-index="${i + 1}" points="${points(ring)}" fill="${i % 2 ? 'var(--iso-warn)' : 'var(--iso-accent)'}" fill-opacity="0.22" stroke="var(--iso-mid)" stroke-width="${1.8 / scale}"/>`);
     }
-
-    // 3. 右侧工位 (x from 14 to 86)：四根均值测量立柱 H ≤ G ≤ A ≤ Q
-    const means = [
-      { v: H, x: 18, tone: "mid" },
-      { v: G, x: 40, tone: "hi", accent: true },
-      { v: A, x: 62, tone: "hi", accent: true },
-      { v: Q, x: 84, tone: "mid" }
-    ];
-    const hScale = 11.5;
-    for (const m of means) {
-      parts.push(solidSvg(cylinder(m.x, 0, 4, 4 + m.v * hScale, 6.8, P, 16), { tone: m.tone, accent: m.accent }));
+    parts.push(`<polygon data-amgm-piece="gap" points="${points(C)}" fill="var(--iso-accent)" fill-opacity="0.55" stroke="var(--iso-hi)" stroke-width="${2.2 / scale}"/>`);
+    parts.push(`<polygon data-amgm-piece="outer" points="${points(O)}" fill="none" stroke="var(--iso-hi)" stroke-width="${2.5 / scale}"/>`);
+    // The square marker follows the two actual perpendicular legs of triangle 1.
+    const mark = Math.min(a, b) * 0.12;
+    parts.push(`<path d="M0 ${b - mark}H${mark}V${b}" fill="none" stroke="var(--iso-hi)" stroke-width="${1.5 / scale}"/>`);
+    parts.push('</g>');
+    const center = map([(a - b) / 2, (a + b) / 2]);
+    if (Math.abs(a - b) > 1e-9) parts.push(`<path d="M${center[0]} ${center[1]}L289 309" fill="none" stroke="var(--iso-accent)" stroke-width="1.4"/>`);
+    for (let i = 0; i < 4; i++) {
+      const u = O[i], v = O[(i + 1) % 4], w = C[i];
+      const len = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]);
+      const lu = len(v, w), lv = len(u, w), lw = len(u, v), sum = lu + lv + lw;
+      const p = map([(lu * u[0] + lv * v[0] + lw * w[0]) / sum, (lu * u[1] + lv * v[1] + lw * w[1]) / sum]);
+      parts.push(text(p[0], p[1] + 7, ['①', '②', '③', '④'][i]));
     }
-    // 阶梯包络线连接四柱顶心
-    const topPts = means.map((m) => iso([m.x, 0, 4 + m.v * hScale + 2], P));
-    parts.push(`<path d="${pathOf(topPts, false)}" fill="none" stroke="var(--iso-warn)" stroke-width="2.4"/>`);
-
-    // 4. 固定安全区文字标注
-    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">赵爽弦图与均值不等式链实验台 · H ≤ G ≤ A ≤ Q (${Math.abs(a - b) < 1e-6 ? "a=b 取等锁死!" : "a≠b 严格不等"})</text>`);
-    parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">弦图差方 (a-b)² = ${sqGap.toFixed(2)} ≥ 0</text>`);
-    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">H=${H.toFixed(2)} ≤ G=${G.toFixed(2)} ≤ A=${A.toFixed(2)} ≤ Q=${Q.toFixed(2)}</text>`);
-
-    // 5. 右侧双千分表：算术平均 A=(a+b)/2 与 几何平均 G=√(ab)
-    parts.push(dialGaugeSvg(490, 80, 33, A, 5.0, "算术均值 A", ""));
-    parts.push(dialGaugeSvg(490, 226, 33, G, 5.0, "几何均值 G", ""));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">一正二定三相等</text>`);
-
-    svg.innerHTML = parts.join("\n");
-
+    const corner = map(C[0]), aEnd = map(O[1]), bEnd = map(O[0]);
+    parts.push(`<path d="M${corner[0]} ${corner[1]}L${aEnd[0]} ${aEnd[1]}" fill="none" stroke="var(--iso-warn)" stroke-width="3"/>`);
+    parts.push(`<path d="M${corner[0]} ${corner[1]}L${bEnd[0]} ${bEnd[1]}" fill="none" stroke="var(--iso-accent)" stroke-width="3"/>`);
+    if (Math.abs(a - b) > 1e-9) {
+      // The leader was drawn before the numbered labels, preserving their halo.
+      parts.push(text(283, 332, '中心', 'var(--iso-accent)'));
+    } else {
+      parts.push(`<circle cx="${center[0]}" cy="${center[1]}" r="3" fill="var(--iso-accent)"/>`);
+      parts.push(text(150, 329, 'a = b：中心面积为 0'));
+    }
+    const meanScale = 32, baseY = 262, leftX = 353;
+    const means = [{name:'H',v:H},{name:'G',v:G},{name:'A',v:A},{name:'Q',v:Q}];
+    parts.push(`<path d="M343 ${baseY}H523M343 ${baseY}V64" fill="none" stroke="var(--iso-mid)" stroke-width="1.4"/>`);
+    parts.push(`<g data-model="amgm-means" transform="translate(${leftX} ${baseY}) scale(${meanScale} -${meanScale})">`);
+    means.forEach((m, i) => parts.push(`<rect data-mean="${m.name}" x="${i * 1.3}" y="0" width="0.65" height="${m.v}" fill="${i % 2 ? 'var(--iso-warn)' : 'var(--iso-accent)'}" fill-opacity="0.6" stroke="var(--iso-mid)" stroke-width="${1 / meanScale}"/>`));
+    parts.push('</g>');
+    means.forEach((m, i) => parts.push(text(leftX + (i * 1.3 + .325) * meanScale, 291, m.name)));
+    parts.push(text(433, 329, '同一底线、同一尺度'));
+    svg.innerHTML = parts.join('\n');
     if (desc) {
-      desc.innerHTML =
-        `<b>赵爽弦图与均值链测高台</b>：左侧外正方形面积 \\(a^2+b^2=${(a * a + b * b).toFixed(2)}\\)，四个全等直角三角形面积和 \\(2ab=${(2 * a * b).toFixed(2)}\\)，中心凸起小正方形面积即为差值 \\((a-b)^2=${sqGap.toFixed(2)}\\ge 0\\)。<br>` +
-        `<b>均值不等式链</b>：调和均值 \\(H=${H.toFixed(2)}\\le\\) 几何均值 \\(G=\\sqrt{ab}=${G.toFixed(2)}\\le\\) 算术均值 \\(A=\\dfrac{a+b}{2}=${A.toFixed(2)}\\le\\) 平方均值 \\(Q=${Q.toFixed(2)}\\)，当且仅当 \\(a=b\\) 时中心小正方形消失、四柱平齐取等号！`;
+      const exact = value => Number.isInteger(value) ? String(value) : String(value);
+      desc.innerHTML = `<b>平面拼图怎样读：</b>四块有编号的三角形全等。①的橙色直角边为a、绿色直角边为b；两条直角边分别是 \\(a=${exact(a)}\\)、\\(b=${exact(b)}\\)。外正方形的四条边是它们的斜边，所以外方面积为 \\(a^2+b^2=${exact(a*a+b*b)}\\)。<br>` +
+        `<b>逐块数面积：</b>①、②、③、④每块都是 \\(\\dfrac{ab}{2}=${exact(triArea)}\\)，四块合计 \\(2ab=${exact(2*a*b)}\\)。绿色中心正方形的边长为 \\(|a-b|=${exact(Math.abs(a-b))}\\)，面积为 \\((a-b)^2=${exact(gap)}\\)。这些区域在同一平面内，恰好铺满外方：<br>` +
+        `\\[\\underbrace{${exact(a*a+b*b)}}_{\\text{外方}}=\\underbrace{4\\times${exact(triArea)}}_{\\text{四个三角形}}+\\underbrace{${exact(gap)}}_{\\text{中心小方}}.\\]` +
+        `<b>由面积看不等式：</b>中心面积非负，故 \\(a^2+b^2\\ge2ab\\)，也就是 \\((a+b)^2\\ge4ab\\)。因 \\(a,b&gt;0\\)，得到 \\(\\dfrac{a+b}{2}\\ge\\sqrt{ab}\\)。当 \\(a=b\\) 时中心退化为一个点，四个三角形仍铺满外方。<br>` +
+        `<b>右图均值：</b>同底同尺度的条长表示 \\(H=\\dfrac{2ab}{a+b}\\approx${H.toFixed(3)}\\)、\\(G=\\sqrt{ab}\\approx${G.toFixed(3)}\\)、\\(A=\\dfrac{a+b}{2}=${exact(A)}\\)、\\(Q=\\sqrt{\\dfrac{a^2+b^2}{2}}\\approx${Q.toFixed(3)}\\)，满足 \\(H\\le G\\le A\\le Q\\)。等号同时成立当且仅当 \\(a=b\\)。`;
       if (renderMath) renderMath();
     }
   }
@@ -2086,8 +2101,8 @@
     // 1. 等距对称检验底座与坐标轴
     parts.push(solidSvg(slabOf({ x: -86, y: -56, w: 172, d: 112, r: 7 }, -10, 4, P, 6, 1.0), { tone: "lo" }));
     parts.push(solidSvg(slabOf({ x: -74, y: -44, w: 148, d: 88, r: 4 }, 4, 6.5, P, 4, 0.3), { tone: "mid" }));
-    parts.push(segmentSvg([-68, 0, 7.2], [68, 0, 7.2], P, { width: 1.6 }));
-    parts.push(segmentSvg([0, -40, 7.2], [0, 40, 7.2], P, { accent: !isOdd, width: 2.2 }));
+    parts.push(segmentSvg([-68, 0, 8], [68, 0, 8], P, { width: 1.6 }));
+    parts.push(segmentSvg([0, -40, 8], [0, 40, 8], P, { accent: !isOdd, width: 2.2 }));
 
     // 2. 绘制左半支目标基准曲线 (x in [-2.6, 0], dashed) 与 右半支原曲线 (x in [0, 2.6], solid)
     const leftPts = [], rightPts = [], movPts = [];
@@ -2101,7 +2116,7 @@
         // 偶函数：绕 y 轴在三维空间翻折角 deg
         const mx = u * kX * Math.cos(rad);
         const my = fu * kY;
-        const mz = 8 + u * kX * Math.sin(rad) * 0.65;
+        const mz = 8 + u * kX * Math.sin(rad);
         movPts.push(iso([mx, my, mz], P));
       } else {
         // 奇函数：绕原点 O 在平面内中心旋转角 deg
@@ -2113,7 +2128,7 @@
     parts.push(`<path d="${pathOf(leftPts, false)}" fill="none" stroke="var(--iso-ink-muted)" stroke-width="2.2" stroke-dasharray="4 3"/>`);
     parts.push(`<path d="${pathOf(rightPts, false)}" fill="none" stroke="var(--iso-accent)" stroke-width="2.8"/>`);
     parts.push(`<path d="${pathOf(movPts, false)}" fill="none" stroke="var(--iso-warn)" stroke-width="3.0"/>`);
-    parts.push(solidSvg(cylinder(0, 0, 6.5, 16, 4.0, P, 12), { tone: "hi", accent: isOdd }));
+    parts.push(solidSvg(cylinder(0, 0, 3.2, 6, 4, P, 12), { tone: "hi", accent: isOdd }));
 
     // 3. 固定安全区文字标注
     parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">${isOdd ? "奇函数 180° 中心旋转台 · f(-x) = -f(x)" : "偶函数 y 轴对称三维折叠镜台 · f(-x) = f(x)"}</text>`);
@@ -2141,64 +2156,60 @@
    */
   function renderExpLogBench(svg, desc, baseVal, x0Val, renderMath) {
     injectStyles();
-    svg.classList.add("iso-fig");
+    svg.classList.add('iso-fig');
     const a = Math.max(1.4, Math.min(3.0, Number.isFinite(Number(baseVal)) ? Number(baseVal) : 2.0));
     const x0 = Math.max(-1.0, Math.min(1.6, Number.isFinite(Number(x0Val)) ? Number(x0Val) : 1.0));
     const y0 = Math.pow(a, x0);
     const chordDist = Math.SQRT2 * Math.abs(y0 - x0);
-
-    const P = { scale: 1.42, origin: [198, 196], azimuth: 28, elevation: 25 };
-    const k = 14;
+    const k = 14, ox = -24, oy = -18, planeZ = 12;
+    const uMin = -1.2, uMax = 1.7, valueMax = Math.pow(a, uMax);
+    const plotMin = uMin - 0.25, plotMax = Math.max(uMax, valueMax) + 0.25;
+    const minX = ox + plotMin * k - 9, maxX = ox + plotMax * k + 9;
+    const minY = oy + plotMin * k - 9, maxY = oy + plotMax * k + 9;
+    const bounds = [];
+    for (const x of [minX, maxX]) for (const y of [minY, maxY]) for (const z of [-6, 35]) bounds.push([x, y, z]);
+    const P = fitProjection(bounds, 410, 250, {azimuth: 28, elevation: 25, pad: 10});
+    P.origin[1] += 42;
     const parts = [];
+    parts.push('<g data-model="exp-log-plane" data-z="' + planeZ + '">');
+    parts.push(solidSvg(slabOf({x: minX, y: minY, w: maxX-minX, d: maxY-minY, r: 5}, -6, 4, P, 6, 0.5), {tone: 'lo'}));
+    parts.push(segmentSvg([ox+plotMin*k, oy, planeZ], [ox+plotMax*k, oy, planeZ], P, {width: 1.4}));
+    parts.push(segmentSvg([ox, oy+plotMin*k, planeZ], [ox, oy+plotMax*k, planeZ], P, {width: 1.4}));
+    const mirrorStart = [ox+plotMin*k, oy+plotMin*k, planeZ];
+    const mirrorEnd = [ox+plotMax*k, oy+plotMax*k, planeZ];
+    parts.push(segmentSvg(mirrorStart, mirrorEnd, P, {dashed: true, width: 1.6}));
+    parts.push(labelSvg(mirrorEnd, 'y=x', P, {dx: 4, dy: -5, size: 12}));
+    parts.push(labelSvg([ox+plotMax*k, oy, planeZ], 'x', P, {dx: 5, size: 12}));
+    parts.push(labelSvg([ox, oy+plotMax*k, planeZ], 'y', P, {dy: -5, size: 12}));
 
-    // 1. 等距坐标底板
-    parts.push(solidSvg(slabOf({ x: -84, y: -58, w: 168, d: 116, r: 7 }, -10, 4, P, 6, 1.0), { tone: "lo" }));
-    parts.push(solidSvg(slabOf({ x: -72, y: -46, w: 144, d: 92, r: 4 }, 4, 6.5, P, 4, 0.3), { tone: "mid" }));
-    const ox = -24, oy = -18;
-    parts.push(segmentSvg([ox - 36, oy, 7], [ox + 84, oy, 7], P, { width: 1.6 }));
-    parts.push(segmentSvg([ox, oy - 24, 7], [ox, oy + 58, 7], P, { width: 1.6 }));
-
-    // 2. 沿 y = x 竖立的 45° 半透光学反射镜板
-    const m0 = [ox - 20, oy - 20], m1 = [ox + 54, oy + 54];
-    const mirrorBase = [m0, [m0[0] + 1.5, m0[1] - 1.5], [m1[0] + 1.5, m1[1] - 1.5], m1];
-    parts.push(solidSvg(extrude(mirrorBase, 6.5, 22, P, 0.1), { tone: "hi" }));
-
-    // 3. 指数曲线 y = a^x 与 对数曲线 y = log_a(x)
+    const knots = Array.from({length: 97}, (_, i) => uMin + i/96*(uMax-uMin));
+    knots.push(0, x0);
+    const xs = knots.sort((x,y) => x-y).filter((x,i,all) => !i || x-all[i-1] > 1e-12);
     const expPts = [], logPts = [];
-    for (let i = 0; i <= 24; i++) {
-      const u = -1.2 + (i / 24) * 2.9;
+    for (const u of xs) {
       const v = Math.pow(a, u);
-      if (v <= 4.0) {
-        expPts.push(iso([ox + u * k, oy + v * k, 8], P));
-        logPts.push(iso([ox + v * k, oy + u * k, 8], P));
-      }
+      expPts.push(iso([ox+u*k, oy+v*k, planeZ], P));
+      logPts.push(iso([ox+v*k, oy+u*k, planeZ], P));
     }
-    parts.push(`<path d="${pathOf(expPts, false)}" fill="none" stroke="var(--iso-accent)" stroke-width="2.8"/>`);
-    parts.push(`<path d="${pathOf(logPts, false)}" fill="none" stroke="var(--iso-warn)" stroke-width="2.8"/>`);
-
-    // 4. 对称点对 P(x0, a^x0) 与 P'(a^x0, x0) 及垂直对称弦
-    const wP = [ox + x0 * k, oy + y0 * k, 10];
-    const wQ = [ox + y0 * k, oy + x0 * k, 10];
-    parts.push(segmentSvg(wP, wQ, P, { warn: true, dashed: true, width: 2.2 }));
-    parts.push(solidSvg(cylinder(wP[0], wP[1], 6.5, 16, 3.4, P, 10), { tone: "hi", accent: true }));
-    parts.push(solidSvg(cylinder(wQ[0], wQ[1], 6.5, 16, 3.4, P, 10), { tone: "hi" }));
-
-    // 5. 固定安全区文字标注
-    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">指对反函数 y=x 反射镜台 · 底数 a=${a.toFixed(1)} (y=a^x ↔ y=log_a x)</text>`);
-    parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">指数点 P(${x0.toFixed(1)}, ${y0.toFixed(2)})</text>`);
-    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">镜像对数点 P'(${y0.toFixed(2)}, ${x0.toFixed(1)})</text>`);
-
-    // 6. 右侧双千分表：指数值 y0=a^x0 与 镜像弦长 |PP'|
-    parts.push(dialGaugeSvg(490, 80, 33, y0, 6.0, "函数值 y₀=aˣ⁰", ""));
-    parts.push(dialGaugeSvg(490, 226, 33, chordDist, 6.0, "镜像弦长 |PP'|", ""));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">关于直线 y=x 对称</text>`);
-
-    svg.innerHTML = parts.join("\n");
-
+    parts.push('<path data-curve="exp" d="' + pathOf(expPts, false) + '" fill="none" stroke="var(--iso-accent)" stroke-width="2.8"/>');
+    parts.push('<path data-curve="log" d="' + pathOf(logPts, false) + '" fill="none" stroke="var(--iso-warn)" stroke-width="2.8"/>');
+    const wP = [ox+x0*k, oy+y0*k, planeZ], wQ = [ox+y0*k, oy+x0*k, planeZ];
+    parts.push(segmentSvg(wP, wQ, P, {warn: true, dashed: true, width: 2.2}));
+    parts.push(solidSvg(cylinder(wP[0], wP[1], 2.8, planeZ-2, 4, P, 12), {tone: 'hi', accent: true}));
+    parts.push(solidSvg(cylinder(wQ[0], wQ[1], 2.8, planeZ-2, 4, P, 12), {tone: 'hi'}));
+    parts.push(labelSvg(wP, 'P', P, {dx: 5, dy: -7, size: 12, accent: true}));
+    parts.push(labelSvg(wQ, "P′", P, {dx: 5, dy: 13, size: 12, warn: true}));
+    parts.push('</g>');
+    parts.push('<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">指数与对数互为反函数 · 底数 a=' + a.toFixed(1) + '</text>');
+    parts.push('<text x="102" y="318" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">P≈(' + x0.toFixed(1) + ', ' + y0.toFixed(2) + ')</text>');
+    parts.push('<text x="318" y="318" text-anchor="middle" font-size="11.5" fill="var(--iso-warn)">P′≈(' + y0.toFixed(2) + ', ' + x0.toFixed(1) + ')</text>');
+    parts.push(dialGaugeSvg(490, 80, 33, y0, 6, '函数值 y₀=aˣ⁰', ''));
+    parts.push(dialGaugeSvg(490, 226, 33, chordDist, 6, '镜像弦长 |PP′|', ''));
+    parts.push('<text x="490" y="154" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">关于直线 y=x 对称</text>');
+    svg.innerHTML = parts.join('\n');
     if (desc) {
-      desc.innerHTML =
-        `<b>指对反函数 \\(y=x\\) 半透反射镜台</b>：同底数的指数函数 \\(y=${a.toFixed(1)}^x\\)（必过定点 \\((0,1)\\)）与对数函数 \\(y=\\log_{${a.toFixed(1)}}x\\)（必过定点 \\((1,0)\\)）互为反函数，图象关于 \\(45^\\circ\\) 反射镜 \\(y=x\\) 严格对称。<br>` +
-        `<b>坐标互换定律</b>：指数曲线上点 \\(P(${x0.toFixed(1)}, ${y0.toFixed(2)})\\) 经 \\(y=x\\) 镜面反射后，横纵坐标互换落在对数曲线点 \\(P'(${y0.toFixed(2)}, ${x0.toFixed(1)})\\)，连线 \\(PP'\\) 被直线 \\(y=x\\) 垂直平分（弦长 \\(${chordDist.toFixed(2)}\\)）。`;
+      desc.innerHTML = '<b>指数与对数镜像台</b>：同底指数函数 \\(y=' + a.toFixed(1) + '^x\\) 与对数函数 \\(y=\\log_{' + a.toFixed(1) + '}x\\) 互为反函数；它们分别经过 \\((0,1)\\)、\\((1,0)\\)。<br>' +
+        '<b>坐标互换</b>：\\(P=(' + x0.toFixed(1) + ',' + y0.toFixed(2) + ')\\)（纵坐标为近似值）与 \\(P^{\\prime}=(' + y0.toFixed(2) + ',' + x0.toFixed(1) + ')\\) 关于 \\(y=x\\) 对称，\\(PP^{\\prime}\\) 被这条直线垂直平分，长度约为 \\(' + chordDist.toFixed(2) + '\\)。两条曲线、连线与点标采用同一数学平面；画面随范围调整，点不会被钳到边界。';
       if (renderMath) renderMath();
     }
   }
@@ -2307,19 +2318,19 @@
     const rWorld = Math.min(46, R * k);
     const scaleFit = rWorld / (R * k);
     const fitW = (lx, ly, z) => [(lx - oxLoc) * k * scaleFit, (ly - oyLoc) * k * scaleFit, z];
-    parts.push(annulusSvg(0, 0, rWorld, Math.max(0, rWorld - 2.6), 7.2, P, 36, { tone: "mid" }));
+    parts.push(annulusSvg(0, 0, rWorld, Math.max(0, rWorld - 2.6), 12, P, { tone: "mid" }));
 
-    const wA = fitW(0, 0, 10);
-    const wB = fitW(c, 0, 10);
-    const wC = fitW(b * Math.cos(radA), b * Math.sin(radA), 10);
+    const wA = fitW(0, 0, 12);
+    const wB = fitW(c, 0, 12);
+    const wC = fitW(b * Math.cos(radA), b * Math.sin(radA), 12);
 
     // 铰链双臂 b, c 与 余弦对边 a
     parts.push(segmentSvg(wA, wB, P, { accent: true, width: 3.0 }));
     parts.push(segmentSvg(wA, wC, P, { accent: true, width: 3.0 }));
     parts.push(segmentSvg(wB, wC, P, { warn: true, width: 3.2 }));
-    parts.push(solidSvg(cylinder(wA[0], wA[1], 6.5, 16, 4.0, P, 12), { tone: "hi", accent: true }));
-    parts.push(solidSvg(cylinder(wB[0], wB[1], 6.5, 15, 3.4, P, 10), { tone: "hi" }));
-    parts.push(solidSvg(cylinder(wC[0], wC[1], 6.5, 15, 3.4, P, 10), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(wA[0], wA[1], 3.4, 10, 4, P, 12), { tone: "hi", accent: true }));
+    parts.push(solidSvg(cylinder(wB[0], wB[1], 3.0, 10, 4, P, 10), { tone: "hi" }));
+    parts.push(solidSvg(cylinder(wC[0], wC[1], 3.0, 10, 4, P, 10), { tone: "hi" }));
 
     // 4. 固定安全区文字标注
     parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">正余弦定理铰链与外接圆卡尺台 · b=${b.toFixed(1)}, c=${c.toFixed(1)}, A=${Math.round(degA)}°</text>`);
@@ -2410,72 +2421,64 @@
    */
   function renderTwoCirclesBench(svg, desc, dVal, r1Val, r2Val, renderMath) {
     injectStyles();
-    svg.classList.add("iso-fig");
-    const d = Math.max(0.0, Math.min(6.5, Number.isFinite(Number(dVal)) ? Number(dVal) : 3.5));
-    const R = Math.max(2.0, Math.min(3.2, Number.isFinite(Number(r1Val)) ? Number(r1Val) : 2.5));
+    svg.classList.add('iso-fig');
+    const d = Math.max(0, Math.min(6.5, Number.isFinite(Number(dVal)) ? Number(dVal) : 3.5));
+    const R = Math.max(2, Math.min(3.2, Number.isFinite(Number(r1Val)) ? Number(r1Val) : 2.5));
     const r = Math.max(0.8, Math.min(1.8, Number.isFinite(Number(r2Val)) ? Number(r2Val) : 1.5));
-    const sumR = R + r;
-    const diffR = Math.abs(R - r);
-
-    let stateName = "相交", tanCount = 2;
-    if (d > sumR + 0.08) { stateName = "外离"; tanCount = 4; }
-    else if (Math.abs(d - sumR) <= 0.08) { stateName = "外切"; tanCount = 3; }
-    else if (d > diffR + 0.08) { stateName = "相交"; tanCount = 2; }
-    else if (Math.abs(d - diffR) <= 0.08 && d > 0) { stateName = "内切"; tanCount = 1; }
-    else { stateName = "内含"; tanCount = 0; }
-
-    const P = { scale: 1.42, origin: [192, 192], azimuth: 28, elevation: 25 };
-    const k = 12.5;
+    const sumR = R+r, diffR = R-r, epsilon = 1e-9;
+    let stateName, tanCount;
+    if (d > sumR+epsilon) {stateName='外离';tanCount=4;}
+    else if (Math.abs(d-sumR)<=epsilon) {stateName='外切';tanCount=3;}
+    else if (d > diffR+epsilon) {stateName='相交';tanCount=2;}
+    else if (Math.abs(d-diffR)<=epsilon) {stateName='内切';tanCount=1;}
+    else {stateName='内含';tanCount=0;}
+    const P = {scale: 1.42, origin: [192,192], azimuth: 28, elevation: 25};
+    const k = 12.5, planeZ = 12, x1 = -28, x2 = x1+d*k, wR = R*k, wr = r*k;
     const parts = [];
-
-    // 1. 等距线性滑轨机座
-    parts.push(solidSvg(slabOf({ x: -86, y: -56, w: 184, d: 112, r: 7 }, -10, 4, P, 6, 1.0), { tone: "lo" }));
-    parts.push(solidSvg(slabOf({ x: -76, y: -44, w: 164, d: 88, r: 4 }, 4, 6.5, P, 4, 0.3), { tone: "mid" }));
-
-    // 2. 圆 O1 (固定于 x1 = -28) 与 滑块圆 O2 (x2 = x1 + d*k)
-    const x1 = -28, x2 = x1 + d * k;
-    const wR = R * k, wr = r * k;
-    parts.push(annulusSvg(x1, 0, wR, Math.max(0, wR - 3), 8, P, 32, { tone: "mid" }));
-    parts.push(annulusSvg(x2, 0, wr, Math.max(0, wr - 3), 10, P, 28, { tone: "hi", accent: true }));
-    parts.push(segmentSvg([x1, 0, 11], [x2, 0, 11], P, { accent: true, width: 2.2 }));
-    parts.push(solidSvg(cylinder(x1, 0, 6.5, 16, 3.2, P, 10), { tone: "hi" }));
-    parts.push(solidSvg(cylinder(x2, 0, 6.5, 18, 3.2, P, 10), { tone: "hi", accent: true }));
-
-    // 3. 公切线或公共弦激光线绘制
-    if (tanCount >= 2 && d > diffR) {
-      // 两条外公切线
-      const sinAlpha = Math.min(0.99, (R - r) / Math.max(0.1, d));
-      const cosAlpha = Math.sqrt(Math.max(0, 1 - sinAlpha * sinAlpha));
-      for (const sgn of [-1, 1]) {
-        const p1 = [x1 + wR * sinAlpha, sgn * wR * cosAlpha, 11];
-        const p2 = [x2 + wr * sinAlpha, sgn * wr * cosAlpha, 11];
-        parts.push(segmentSvg(p1, p2, P, { warn: true, width: 2.0 }));
+    parts.push('<g data-model="two-circles-plane" data-z="' + planeZ + '">');
+    parts.push(solidSvg(slabOf({x:-86,y:-56,w:184,d:112,r:7}, -10,4,P,6,1), {tone:'lo'}));
+    parts.push(annulusSvg(x1,0,wR,Math.max(0,wR-2),planeZ,P,{tone:'mid'}));
+    parts.push(annulusSvg(x2,0,wr,Math.max(0,wr-2),planeZ,P,{tone:'hi',accent:true}));
+    parts.push(segmentSvg([x1,0,planeZ],[x2,0,planeZ],P,{accent:true,width:1.6}));
+    parts.push(solidSvg(cylinder(x1,0,2.6,planeZ-2,4,P,10),{tone:'hi'}));
+    parts.push(solidSvg(cylinder(x2,0,2.6,planeZ-2,4,P,10),{tone:'hi',accent:true}));
+    const drawTangents = (sign) => {
+      if (d <= epsilon) return;
+      const normalX = (R-sign*r)/d;
+      if (Math.abs(normalX) > 1+epsilon) return;
+      const nx = Math.max(-1,Math.min(1,normalX));
+      const nyAbs = Math.sqrt(Math.max(0,1-nx*nx));
+      const signs = nyAbs <= 1e-7 ? [1] : [-1,1];
+      for (const branch of signs) {
+        const ny = branch*nyAbs;
+        const p1 = [x1+wR*nx,wR*ny,planeZ];
+        const p2 = [x2+sign*wr*nx,sign*wr*ny,planeZ];
+        const length = Math.hypot(p2[0]-p1[0],p2[1]-p1[1]);
+        const dx = length>1e-7 ? (p2[0]-p1[0])/length : -ny;
+        const dy = length>1e-7 ? (p2[1]-p1[1])/length : nx;
+        const start = [p1[0]-8*dx,p1[1]-8*dy,planeZ], end = [p2[0]+8*dx,p2[1]+8*dy,planeZ];
+        parts.push('<g data-common-tangent="' + (sign===1?'outer':'inner') + '">' + segmentSvg(start,end,P,{warn:true,width:2}) + '</g>');
       }
+    };
+    drawTangents(1);
+    drawTangents(-1);
+    if (stateName==='相交') {
+      const along = (d*d+R*R-r*r)/(2*d), half = Math.sqrt(Math.max(0,R*R-along*along));
+      parts.push(segmentSvg([x1+along*k,-half*k,planeZ],[x1+along*k,half*k,planeZ],P,{accent:true,width:3}));
     }
-    if (stateName === "相交" && d > 0.05) {
-      // 公共弦长垂径定理勾股
-      const xChord = (d * d + R * R - r * r) / (2 * d);
-      const halfChord = Math.sqrt(Math.max(0, R * R - xChord * xChord));
-      const wxC = x1 + xChord * k, wyC = halfChord * k;
-      parts.push(segmentSvg([wxC, -wyC, 12], [wxC, wyC, 12], P, { accent: true, width: 3.0 }));
-    }
-
-    // 4. 固定安全区文字标注
-    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">双圆位置关系与公切线滑轨台 · d=${d.toFixed(1)}, R+r=${sumR.toFixed(1)}, |R-r|=${diffR.toFixed(1)}</text>`);
-    parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">当前位置：${stateName} (圆心距 d=${d.toFixed(1)})</text>`);
-    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">公切线条数 = ${tanCount} 条</text>`);
-
-    // 5. 右侧双千分表：圆心距 d 与 公切线条数
-    parts.push(dialGaugeSvg(490, 80, 33, d, 6.5, "圆心距 |O₁O₂|", ""));
-    parts.push(dialGaugeSvg(490, 226, 33, tanCount, 4, "公切线条数", "条"));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">比对 |R-r| 与 R+r</text>`);
-
-    svg.innerHTML = parts.join("\n");
-
+    parts.push(labelSvg([x1,0,planeZ],'O₁',P,{dx:-5,dy:13,size:12}));
+    parts.push(labelSvg([x2,0,planeZ],'O₂',P,{dx:5,dy:13,size:12}));
+    parts.push('</g>');
+    parts.push('<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">双圆位置与公切线 · d=' + d.toFixed(1) + ', R+r=' + sumR.toFixed(1) + ', R-r=' + diffR.toFixed(1) + '</text>');
+    parts.push('<text x="102" y="318" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">当前位置：' + stateName + '</text>');
+    parts.push('<text x="318" y="318" text-anchor="middle" font-size="11.5" fill="var(--iso-warn)">图中公切线：' + tanCount + ' 条</text>');
+    parts.push(dialGaugeSvg(490,80,33,d,6.5,'圆心距 |O₁O₂|',''));
+    parts.push(dialGaugeSvg(490,226,33,tanCount,4,'公切线条数','条'));
+    parts.push('<text x="490" y="154" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">比对 R-r 与 R+r</text>');
+    svg.innerHTML = parts.join('\n');
     if (desc) {
-      desc.innerHTML =
-        `<b>双圆心滑轨五档啮合台</b>：大圆半径 \\(R=${R.toFixed(1)}\\)，小圆半径 \\(r=${r.toFixed(1)}\\)，两分界阈值为 \\(|R-r|=${diffR.toFixed(1)}\\) 与 \\(R+r=${sumR.toFixed(1)}\\)。<br>` +
-        `<b>五档判定与公切线</b>：当前圆心距 \\(d=|O_1O_2|=${d.toFixed(1)}\\)，两圆处于<b>${stateName}</b>状态，共有 <b>${tanCount} 条</b>公切线（外离 4 条、外切 3 条、相交 2 条、内切 1 条、内含 0 条；相交时两圆方程相减即得公共弦所在直线方程）。`;
+      desc.innerHTML = '<b>双圆位置与公切线</b>：\\(R=' + R.toFixed(1) + ',r=' + r.toFixed(1) + ',d=' + d.toFixed(1) + '\\)，当前为<b>' + stateName + '</b>，图中画出全部 <b>' + tanCount + ' 条</b>公切线。圆、切线和公共弦位于同一数学平面，点标覆盖真实圆心。<br>' +
+        '<b>五种关系</b>：外离4条、外切3条、相交2条、内切1条、内含0条；相切时，退化的切点处仍有一条垂直于圆心连线的公切线。相交时另画绿色公共弦，它不是公切线。';
       if (renderMath) renderMath();
     }
   }
@@ -2584,7 +2587,7 @@
       const val = comb(n - 1, k);
       const isParent = k === r - 1 || k === r;
       const xk = startPrev + k * stepX;
-      parts.push(solidSvg(cylinder(xk, -18, 4, 6 + val * hScale, 6.2, P, 14), { tone: isParent ? "hi" : "mid", accent: isParent }));
+      parts.push(solidSvg(cylinder(xk, -18, 4, 6, val * hScale, P, 14), { tone: isParent ? "hi" : "mid", accent: isParent }));
     }
 
     // 当前层 n
@@ -2593,19 +2596,19 @@
       const val = comb(n, k);
       const isTarget = k === r;
       const xk = startCur + k * stepX;
-      parts.push(solidSvg(cylinder(xk, 18, 4, 6 + val * hScale, 6.8, P, 14), { tone: isTarget ? "hi" : "mid", accent: isTarget }));
+      parts.push(solidSvg(cylinder(xk, 18, 4, 6, val * hScale, P, 14), { tone: isTarget ? "hi" : "mid", accent: isTarget }));
     }
 
     // 3. 帕斯卡递推分流连杆：C(n-1, r-1) + C(n-1, r) -> C(n, r)
     const xTarget = startCur + r * stepX;
-    const zTarget = 7 + cnr * hScale;
+    const zTarget = 6 + cnr * hScale;
     if (r - 1 >= 0) {
       const xL = startPrev + (r - 1) * stepX;
-      parts.push(segmentSvg([xL, -18, 7 + pLeft * hScale], [xTarget, 18, zTarget], P, { warn: true, width: 2.6 }));
+      parts.push(segmentSvg([xL, -18, 6 + pLeft * hScale], [xTarget, 18, zTarget], P, { warn: true, width: 2.6 }));
     }
     if (r <= n - 1) {
       const xR = startPrev + r * stepX;
-      parts.push(segmentSvg([xR, -18, 7 + pRight * hScale], [xTarget, 18, zTarget], P, { warn: true, width: 2.6 }));
+      parts.push(segmentSvg([xR, -18, 6 + pRight * hScale], [xTarget, 18, zTarget], P, { warn: true, width: 2.6 }));
     }
 
     // 4. 固定安全区文字标注
@@ -2621,9 +2624,9 @@
     svg.innerHTML = parts.join("\n");
 
     if (desc) {
-      desc.innerHTML =
-        `<b>杨辉三角三维帕斯卡分流台</b>：展开式第 \\(r+1=${r + 1}\\) 项的二项式系数为 \\(\\mathrm{C}_{${n}}^{${r}}=${cnr}\\)（与对称项 \\(\\mathrm{C}_{${n}}^{${n - r}}=${cnr}\\) 高度相等）。<br>` +
-        `<b>帕斯卡递推与赋值法</b>：后排两父柱之和恰好汇流为前排目标柱 \\(\\mathrm{C}_{${n - 1}}^{${r - 1}}+\\mathrm{C}_{${n - 1}}^{${r}}=${pLeft}+${pRight}=${cnr}=\\mathrm{C}_{${n}}^{${r}}\\)；令 \\(x=1\\) 得第 \\(${n}\\) 层所有二项式系数之和恒为 \\(2^{${n}}=${rowSum}\\)（奇数项系数和 = 偶数项系数和 = \\(2^{${n - 1}}=${rowSum / 2}\\)）。`;
+      const parentText = r===0 ? '\\(\\mathrm{C}_{'+(n-1)+'}^{0}=1\\)' : r===n ? '\\(\\mathrm{C}_{'+(n-1)+'}^{'+(n-1)+'}=1\\)' : '\\(\\mathrm{C}_{'+(n-1)+'}^{'+(r-1)+'}+\\mathrm{C}_{'+(n-1)+'}^{'+r+'}='+pLeft+'+'+pRight+'='+cnr+'\\)';
+      desc.innerHTML = '<b>杨辉三角系数台</b>：第 \\(r+1='+(r+1)+'\\) 项的系数为 \\(\\mathrm{C}_{'+n+'}^{'+r+'}='+cnr+'\\)。两排柱从同一底面起，真实柱高按系数同比例变化；连杆连接对应柱顶。<br>' +
+        '<b>帕斯卡递推</b>：'+(r===0||r===n?'端点系数为1，只连接唯一有效父项 ':'内部系数等于两个父项之和 ')+parentText+'。令 \\(x=1\\)，本层系数和为 \\(2^{'+n+'}='+rowSum+'\\)，奇数项与偶数项系数和均为 \\(2^{'+(n-1)+'}='+(rowSum/2)+'\\)。';
       if (renderMath) renderMath();
     }
   }

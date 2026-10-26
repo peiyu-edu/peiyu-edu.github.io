@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -85,11 +85,11 @@
   <!-- 伴读直觉微图解 -->
   <div class="micro-box" id="micro-binom-hyper">
     <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <span style="font-weight:700; color:var(--primary); font-size:14px;">二项分布与超几何分布直觉微图解：抽样机理、大样本近似与期望方差对比</span>
+      <span style="font-weight:700; color:var(--primary); font-size:14px;">二项与超几何模型：抽样、近似与均值（方差比较为拓展）</span>
       <div class="micro-tabs" id="m-bh-tabs">
         <button class="micro-tab active" data-tab="1">① 有放回 (独立) vs 不放回 (牵连)</button>
         <button class="micro-tab" data-tab="2">② 大样本近似逼近机理</button>
-        <button class="micro-tab" data-tab="3">③ 期望完全一致 vs 方差修正系数</button>
+        <button class="micro-tab" data-tab="3">③ 拓展：方差比较</button>
       </div>
     </div>
     <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
@@ -117,18 +117,22 @@
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>抽样机理</b>：不放回抽样，在 \(0&lt;M&lt;N\)、至少抽2件时，各次试验相关；下一次成功概率随已抽结果而变。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>概率公式</b>：\(P(X=k) = \dfrac{C_M^k C_{N-M}^{n-k}}{C_N^n}\)。</p>
-      <p class="small" style="margin:0;"><b>期望与方差</b>：\(E(X)=np\)，其中 \(p=M/N\)。\(N&gt;1\) 时 \(D(X)=np(1-p)\dfrac{N-n}{N-1}\)；\(N=1\) 时结果确定，方差为0，不能代入含 \(N-1\) 的式子。</p>
+      <p class="small" style="margin:0;"><b>均值</b>：\(E(X)=np\)，其中 \(p=M/N\)。超几何方差计算不作本节要求，见下方可跳过拓展。</p>
     </div>
   </div>
 
-  <h3>2. 两大分布核心主公式与特征对比</h3>
+  <h3>2. 本节主公式与模型对比</h3>
   <div class="key" style="background:var(--card); border-left:4px solid var(--primary); padding:12px 16px; margin:14px 0;">
     <p style="margin:0 0 8px 0; font-weight:700;">二项分布与超几何分布核心对照表：</p>
     <p style="margin:0 0 6px 0;">二项分布公式：\(P(X=k) = \color{#d97706}{C_n^k} \cdot \color{#1976d2}{p^k} \cdot \color{#2e7d32}{(1-p)^{n-k}},\qquad E(X) = \color{#1976d2}{np},\quad D(X) = \color{#2e7d32}{np(1-p)}\)</p>
     <p style="margin:0 0 6px 0;">超几何分布公式：\(P(X=k) = \dfrac{\color{#1976d2}{C_M^k} \cdot \color{#2e7d32}{C_{N-M}^{n-k}}}{\color{#d97706}{C_N^n}},\qquad E(X) = \color{#1976d2}{n \cdot \dfrac{M}{N}} = \color{#1976d2}{np}\)</p>
-    <p style="margin:0;">方差关系：比较同一组 \(n,p=M/N\)。在 \(N&gt;1,\ 1\le n\le N\) 时，\(0\le\dfrac{N-n}{N-1}\le1\)，所以 \(D_{\text{超}}\le D_{\text{二}}\)。<b>严格小于</b>需同时满足 \(n&gt;1\) 且 \(0&lt;p&lt;1\)；\(n=1\) 或 \(p=0,1\) 时两方差相等。</p>
   </div>
-  <p class="small"><b>退化边界另算</b>：\(N=1\) 时只能取 \(M=0\) 或1；合法抽样数为0或1，计数均确定、方差为0。若允许 \(n=0\)，无论总体如何，两种模型都恒为0、方差为0；不要用“修正因子小于1”解释空抽样。</p>
+  <details class="card">
+    <summary>拓展（教师参考，可跳过）：超几何方差</summary>
+    <p>本节要求掌握二项分布的数字特征、了解超几何分布及均值；<b>超几何方差计算不作要求</b>。下面的公式与比较只供进一步观察。</p>
+    <p>当 \(N&gt;1\) 时，\(D(X)=np(1-p)\dfrac{N-n}{N-1}\)，其中 \(p=M/N\)。同一组 \(n,p\) 下，若 \(1\le n\le N\)，则 \(D_{\text{超}}\le D_{\text{二}}\)；严格小于需 \(n&gt;1\) 且 \(0&lt;p&lt;1\)。\(n=1\) 或 \(p=0,1\) 时相等。</p>
+    <p>\(N=1\) 时计数确定，方差为0，不代入分母 \(N-1\) 为0的式子。若允许 \(n=0\)，两模型也都恒为0、方差为0。</p>
+  </details>
 
   <div class="card predict" data-id="try-1" data-answer="C">
     <p>自己试试：掷一颗均匀的骰子 \(3\) 次，恰好有 \(1\) 次是 \(6\) 点的概率是？</p>
@@ -158,7 +162,7 @@
   <div class="card" style="border-left:4px solid #10b981;">
     <p><b>典型例题</b>：某箱中有 10 件产品，其中 3 件次品，7 件正品。从中随机抽取 3 件产品。<br>
     ① 若「有放回地连续抽取 3 次」，求抽到的次品件数 \(X\) 的期望与方差；<br>
-    ② 若「一次性不放回抽取 3 件」，求抽到的次品件数 \(Y\) 的期望与方差，并对比两者的离散稳定性。</p>
+    ② 若「一次性不放回抽取 3 件」，求抽到的次品件数 \(Y\) 的均值。方差比较另作可跳过拓展。</p>
     <div class="think-steps" style="margin-top:10px;">
       <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #2563eb;">
         <b style="color:#2563eb;">👀 第一眼破题信号</b>：
@@ -171,13 +175,13 @@
           期望：\(E(X) = np = 3 \times 0.3 = 0.9\)；<br>
           方差：\(D(X) = np(1-p) = 3 \times 0.3 \times 0.7 = 0.63\)。<br>
           • <b>② 不放回（超几何分布）</b>：\(N = 10,\; M = 3,\; n = 3\)。<br>
-          期望：\(E(Y) = n \dfrac{M}{N} = 3 \times \dfrac{3}{10} = 0.9\)；<br>
-          方差：\(D(Y) = np(1-p) \times \dfrac{N-n}{N-1} = 0.63 \times \dfrac{10-3}{10-1} = 0.63 \times \dfrac{7}{9} = 0.49\)。
+          期望：\(E(Y) = n \dfrac{M}{N} = 3 \times \dfrac{3}{10} = 0.9\)。
         </div>
       </div>
       <div class="think-step" style="padding-left:12px; border-left:2px solid #f59e0b;">
         <b style="color:#f59e0b;">🛡️ 第三步本质洞察与防坑核查</b>：
-        <span class="small">对比惊人规律：\(E(X) = E(Y) = 0.9\)（两种抽样期望完全一样！）；而方差 \(D(Y) = 0.49 < D(X) = 0.63\)！本例 \(N&gt;1,n=3&gt;1,0&lt;p=0.3&lt;1\)，满足严格小于的条件；抽1件或总体全为同一类时，两种方差相等。防坑：切勿把不放回的方差直接套用 \(np(1-p)\)！</span>
+        <span class="small">两种抽样的均值都为 \(0.9\)，但均值相同不表示分布相同。有放回满足独立且概率恒定，可用二项方差公式；不放回不能直接套用该公式。</span>
+        <details style="margin-top:8px;"><summary>拓展（可跳过）：比较本例方差</summary><p class="small">\(D(Y)=0.63\times\dfrac{10-3}{10-1}=0.49&lt;0.63=D(X)\)。本例 \(n&gt;1\) 且 \(0&lt;p&lt;1\)，为严格小于；抽1件或总体全为同类时相等。这项计算不作本节要求。</p></details>
       </div>
     </div>
   </div>
@@ -237,7 +241,7 @@
   </div>
 
   <h3>② 进阶：同一个袋子，放回和不放回</h3>
-  <p class="small">\(N\) 个球里有 \(M\) 个红球（红球比例 \(\dfrac MN\)），摸 \(n\) 个，数红球。蓝柱：放回，\(B\left(n,\dfrac MN\right)\)；金柱：不放回，超几何分布。保持比例和抽样数 \(n\) 不变，把 \(N\) 调大，抽样比 \(n/N\) 变小，看两组柱子怎么靠近；红色三角标出差得最多的 \(k\)。</p>
+  <p class="small">\(N\) 个球里有 \(M\) 个红球（红球比例 \(\dfrac MN\)），摸 \(n\) 个，数红球。蓝柱：放回，\(B\left(n,\dfrac MN\right)\)；金柱：不放回，超几何分布。保持比例和抽样数 \(n\) 不变，把 \(N\) 调大，抽样比 \(n/N\) 变小，看两组柱子怎么靠近；红色三角标出差得最多的 \(k\)。下方方差读数属于可跳过拓展，不作本节要求。</p>
   <div class="card">
     <svg class="fig" id="hyp" viewBox="0 0 560 340" role="img" aria-label="放回与不放回两种抽法的分布柱状图对比"></svg>
     <div class="ctrl"><label for="Nin">\(N\)</label><input type="range" id="Nin" min="0" max="6" step="1"><output id="Nout"></output></div>
@@ -491,7 +495,7 @@
     var lines = [];
     lines.push("\\(N=" + N + "\\)，\\(M=" + M + "\\)，\\(n=" + n + "\\)。放回：\\(X\\sim B(" + n + "," + fx(p, 1) + ")\\)，\\(k\\) 从 \\(0\\) 到 \\(" + n + "\\)；不放回：超几何分布，\\(k\\) 从 \\(" + lo + "\\) 到 \\(" + up + "\\)。");
     lines.push("均值都是 \\(\\dfrac{nM}{N}=" + fx(moments.mean, 2) + "\\)。");
-    lines.push("方差：放回 \\(D(X)=" + fx(moments.binomial, 4) + "\\)，不放回 \\(D(Y)=" + fx(moments.hypergeometric, 4) + "\\)。" + (n > 1 && M > 0 && M < N ? "本组满足 n&gt;1 且 0&lt;p&lt;1，不放回方差严格较小。" : "本组为 n=1 或 p=0/1，两方差相等。"));
+    lines.push("拓展（可跳过）方差：放回 \\(D(X)=" + fx(moments.binomial, 4) + "\\)，不放回 \\(D(Y)=" + fx(moments.hypergeometric, 4) + "\\)。" + (n > 1 && M > 0 && M < N ? "本组满足 n&gt;1 且 0&lt;p&lt;1，不放回方差严格较小。" : "本组为 n=1 或 p=0/1，两方差相等。"));
     if (M === 0 || M === N) {
       lines.push('<span class="eq">退化情形</span>：' + (M === 0 ? "一个红球都没有，两种抽法 \\(X\\) 都恒为 \\(0\\)。" : "全是红球，两种抽法 \\(X\\) 都恒为 \\(" + n + "\\)。"));
     } else if (n === 1) {
@@ -638,7 +642,7 @@
       label(fig,310,400,"蓝：二项；金：超几何。n=1时相等");
       label(fig,310,460,"N>1、1≤n≤N；严格小于还需");
       label(fig,310,520,"n>1 且 0<p<1；p=0或1时都为0","var(--a)");
-      desc.innerHTML="<b>严格与相等要分开</b>：N>1且1≤n≤N时，0≤(N−n)/(N−1)≤1，故D超≤D二。仅n&gt;1且0&lt;p&lt;1时严格小于；n=1或p=0/1时相等。图中N=10、M=3，n=3时0.49<0.63，n=1时0.21=0.21。N=1或允许n=0时计数确定、方差都为0，另按退化情形处理，不代入分母N−1=0的式子。";
+      desc.innerHTML="<b>拓展（教师参考，可跳过）</b>：超几何方差计算不作本节要求。进一步观察时，要分清严格与相等：N>1且1≤n≤N时，D超≤D二；仅n&gt;1且0&lt;p&lt;1时严格小于。n=1或p=0/1时相等。图中N=10、M=3，n=3时0.49<0.63，n=1时0.21=0.21。N=1或允许n=0时计数确定、方差都为0，不代入分母N−1为0的式子。";
     }
     function drawTrap(){
       if(!trapFig)return;trapFig.innerHTML="";trapFig.setAttribute("viewBox","0 0 540 270");label(trapFig,270,32,"恰好1次成功：必须数齐所有位置");

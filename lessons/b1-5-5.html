@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -414,10 +414,10 @@
     var rhs = ca * cb + sa * sb;
     var h = "";
     h += '<div class="row">\\(\\alpha=' + a + '^\\circ\\)，\\(\\beta=' + b + '^\\circ\\)，\\(\\alpha-\\beta=' + (a - b) + '^\\circ\\)</div>';
-    h += '<div class="row"><span class="ca">\\(|P_1P_2|^2=(\\cos\\alpha-\\cos\\beta)^2+(\\sin\\alpha-\\sin\\beta)^2=' + f3(L1) + '\\)</span></div>';
-    h += '<div class="row"><span class="cc">\\(|AP|^2=(\\cos(\\alpha-\\beta)-1)^2+\\sin^2(\\alpha-\\beta)=' + f3(L2) + '\\)</span></div>';
-    h += '<div class="row">\\(\\cos\\alpha\\cos\\beta+\\sin\\alpha\\sin\\beta=' + p3(ca) + '\\times' + p3(cb) + '+' + p3(sa) + '\\times' + p3(sb) + '=' + f3(rhs) + '\\)</div>';
-    h += '<div class="verdict">\\(\\cos(\\alpha-\\beta)=\\cos' + (a - b) + '^\\circ=' + f3(cd) + '\\)　<span class="eq">两边相等 ✓</span></div>';
+    h += '<div class="row"><span class="ca">\\(|P_1P_2|^2=(\\cos\\alpha-\\cos\\beta)^2+(\\sin\\alpha-\\sin\\beta)^2\\approx' + f3(L1) + '\\)</span></div>';
+    h += '<div class="row"><span class="cc">\\(|AP|^2=(\\cos(\\alpha-\\beta)-1)^2+\\sin^2(\\alpha-\\beta)\\approx' + f3(L2) + '\\)</span></div>';
+    h += '<div class="row">\\(\\cos\\alpha\\cos\\beta+\\sin\\alpha\\sin\\beta\\approx' + f3(rhs) + '\\)（先用完整精度计算，再保留三位小数）</div>';
+    h += '<div class="verdict">\\(\\cos(\\alpha-\\beta)=\\cos' + (a - b) + '^\\circ\\approx' + f3(cd) + '\\)　<span class="eq">精确恒等式成立 ✓</span></div>';
     rdC.innerHTML = h; math(rdC);
   }
   function setC(k, v) { sc[k] = Math.round(norm(v)) % 360; }
@@ -548,15 +548,17 @@
     var phiS = (Math.round(phi * 10) / 10).toString();
     h += '<div class="row">\\(f(x)=' + f + '\\)，\\(a=' + a + '\\)，\\(b=' + b + '\\)</div>';
     h += '<div class="row">\\(R=\\sqrt{a^2+b^2}=\\sqrt{' + n + '}' + (Rt === "\\sqrt{" + n + "}" ? "" : "=" + Rt) + (R % 1 ? "\\approx" + (Math.round(R * 1000) / 1000) : "") + '\\)</div>';
-    h += '<div class="row">\\(\\cos\\varphi=\\dfrac{a}{R}=' + f3(a / R) + '\\)，\\(\\sin\\varphi=\\dfrac{b}{R}=' + f3(b / R) + '\\)，取 \\(\\varphi\\approx' + phiS + '^\\circ\\)</div>';
+    h += '<div class="row">\\(\\cos\\varphi=\\dfrac{a}{R}\\approx' + f3(a / R) + '\\)，\\(\\sin\\varphi=\\dfrac{b}{R}\\approx' + f3(b / R) + '\\)，取 \\(\\varphi\\approx' + phiS + '^\\circ\\)</div>';
     if (a < 0 && b !== 0) {
       var t = Math.atan(b / a) * 180 / Math.PI;
-      h += '<div class="row small">只看 \\(\\tan\\varphi=\\frac ba=' + f3(b / a) + '\\) 会得到 \\(' + (Math.round(t * 10) / 10) + '^\\circ\\)，可它的余弦是正的，和 \\(a&lt;0\\) 不符，差了 \\(180^\\circ\\)。</div>';
+      h += '<div class="row small">只看 \\(\\tan\\varphi=\\frac ba\\approx' + f3(b / a) + '\\) 会得到约 \\(' + (Math.round(t * 10) / 10) + '^\\circ\\)，可它的余弦是正的，和 \\(a&lt;0\\) 不符，差了 \\(180^\\circ\\)。</div>';
     } else if (a === 0) {
       h += '<div class="row small">\\(a=0\\) 时 \\(\\tan\\varphi\\) 没有意义，只能用 \\(\\cos\\varphi\\)、\\(\\sin\\varphi\\) 定角。</div>';
     }
     var inner = phi === 0 ? "x" : "(x" + (phi < 0 ? "-" + phiS.slice(1) : "+" + phiS) + "^\\circ)";
-    h += '<div class="verdict">\\(' + f + '=' + (Rt === "1" ? "" : Rt) + '\\sin' + (phi === 0 ? " " : "") + inner + '\\)</div>';
+    var amp = Rt === "1" ? "" : Rt;
+    h += '<div class="verdict">\\(' + f + '=' + amp + (phi === 0 ? '\\sin x' : '\\sin(x+\\varphi)\\approx' + amp + '\\sin' + inner) + '\\)</div>';
+    if (phi !== 0) h += '<div class="small">\\(\\varphi\\) 由上面的正弦、余弦及象限确定；小数角度是近似值，代入后的数值式也用近似号。</div>';
     h += '<div class="row">最大值 \\(' + Rt + '\\)，最小值 \\(-' + Rt + '\\)</div>';
     rdA.innerHTML = h; math(rdA);
   }

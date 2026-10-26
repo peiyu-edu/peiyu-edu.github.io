@@ -9,9 +9,9 @@
 <link rel="stylesheet" href="assets/site.css">
 <script defer src="assets/katex/katex.min.js"></script>
 <script defer src="assets/katex/auto-render.min.js"></script>
-<script src="assets/iso-bench.js?v=vs-b03c46885f5f"></script>
-<script defer src="assets/wiki.js?v=vs-12d546b3f39c"></script>
-<script defer src="assets/figure-layout.js"></script>
+<script src="assets/iso-bench.js?v=vs-9165b6bc9594"></script>
+<script defer src="assets/wiki.js?v=vs-e008258e32ef"></script>
+<script defer src="assets/figure-layout.js?v=vs-c76a05f5a617"></script>
 <style>
   .wrap-wide { max-width: 1120px; margin: 0 auto; padding: 20px 20px 64px; }
   .hero-banner {
@@ -244,7 +244,7 @@
       <div class="bench-head">
         <div>
           <span class="small" style="color:var(--muted)">选择性必修第一册 · 1.1 空间向量及其运算</span>
-          <h3>⑤ 空间向量三维平行六面体合成台</h3>
+          <h3>⑤ 空间向量平行四边形合成台</h3>
         </div>
       </div>
       <svg class="fig iso-fig" id="svg-e1-1-1" viewBox="0 0 560 330"></svg>
@@ -587,7 +587,7 @@
       <div class="bench-head">
         <div>
           <span class="small" style="color:var(--muted)">必修第一册 · 2.2 基本不等式</span>
-          <h3>㉑ 赵爽弦图三维升降块与均值不等式链测高台</h3>
+          <h3>㉑ 赵爽弦图平面拼图与均值比较</h3>
         </div>
       </div>
       <svg class="fig iso-fig" id="svg-b1-2-2" viewBox="0 0 560 340"></svg>
@@ -629,7 +629,7 @@
       <div class="bench-head">
         <div>
           <span class="small" style="color:var(--muted)">必修第一册 · 4.4 对数函数</span>
-          <h3>㉓ 指对互为反函数 \(y=x\) \(45^\circ\) 半透反射镜对称台</h3>
+          <h3>㉓ 指数与对数坐标互换镜像台</h3>
         </div>
       </div>
       <svg class="fig iso-fig" id="svg-b1-4-4" viewBox="0 0 560 340"></svg>
@@ -810,6 +810,7 @@
       window.renderMathInElement(el, {
         delimiters: [
           { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
           { left: "\\(", right: "\\)", display: false }
         ],
         throwOnError: false
@@ -1075,6 +1076,11 @@
       var desc = document.getElementById(descId);
       var ins = inputIds.map(function (id) { return document.getElementById(id); });
       function up() {
+        if (svgId === "svg-e3-6-3") {
+          var maxR = Math.round(parseFloat(ins[0].value));
+          ins[1].max = String(maxR);
+          ins[1].value = String(Math.min(maxR, Math.round(parseFloat(ins[1].value))));
+        }
         var vals = ins.map(function (el) { return parseFloat(el.value); });
         renderFn(svg, desc, vals, function () { renderMath(desc); });
       }
@@ -1099,8 +1105,29 @@
     bindBench("svg-e3-8-1", "desc-e3-8-1", ["c30-b", "c30-da"], function (s, d, v, cb) { window.IsoBench.renderRegressionBench(s, d, v[0], v[1], cb); });
   }
 
+  function bindGalleryResets() {
+    document.querySelectorAll(".bench-card").forEach(function (card) {
+      var controls = card.querySelector(".bench-ctrl");
+      if (!controls) return;
+      var initial = Array.from(controls.querySelectorAll('input[type="range"]')).map(function (input) {
+        return { input: input, min: input.min, max: input.max, step: input.step, value: input.value };
+      });
+      if (!initial.length) return;
+      var reset = document.createElement("button");
+      reset.type = "button"; reset.className = "btn ghost"; reset.textContent = "重置本实验台";
+      reset.addEventListener("click", function () {
+        initial.forEach(function (s) { s.input.min = s.min; s.input.max = s.max; s.input.step = s.step; });
+        initial.forEach(function (s) { s.input.value = s.value; });
+        initial.forEach(function (s) { s.input.dispatchEvent(new Event("input", { bubbles: true })); });
+        layoutGallery();
+      });
+      controls.appendChild(reset);
+    });
+  }
+
   window.addEventListener("DOMContentLoaded", function () {
     initGallery();
+    bindGalleryResets();
     var grid = document.getElementById("all-sheets-grid");
     if (grid && window.PEIYU_SEC_META) {
       var meta = window.PEIYU_SEC_META;

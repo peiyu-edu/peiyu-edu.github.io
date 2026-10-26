@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -176,7 +176,7 @@
       <div class="step-num">3</div>
       <div class="step-body">
         <b>🛡️ 第三步必查防坑结论：</b>
-        ① 严禁直接简单平均各层样本均值（\(\frac{6.5+5.0+3.5}{3} = 5.0\)，这是大错！因为高一人数远多于高三，高一权重更高，真实均值为 5.2）；<br>
+        ① 这里不能直接简单平均各层样本均值（\(\frac{6.5+5.0+3.5}{3} = 5.0\)），因为各层总体人数不同；按各层总体比例加权，估计总体均值为 5.2；<br>
         ② 核算各层抽取人数必须全为整数，且总和等于 60。
       </div>
     </div>
@@ -677,28 +677,30 @@
       // 总体池
       sEl(fig, "rect", { x: 35, y: 40, width: 140, height: 95, rx: 8, fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
       sTxt(fig, 105, 58, "总体 N = 40", ca, 11, 700, "middle");
-      // 模拟圆点个体
-      var pts = [[55,80],[75,80],[95,80],[115,80],[135,80],[155,80],[65,105],[85,105],[105,105],[125,105],[145,105]];
+      // One possible sample: draw every population member and its five picks.
+      var pts = [];
+      for (var row = 0; row < 5; row++) for (var col = 0; col < 8; col++) pts.push([49 + col * 16, 72 + row * 13]);
+      var picked = [2, 7, 14, 24, 36];
       pts.forEach(function(pt, idx) {
-        var isPicked = idx === 2 || idx === 7;
-        sEl(fig, "circle", { cx: pt[0], cy: pt[1], r: 5, fill: isPicked ? cd : ca, opacity: isPicked ? 1 : 0.4 });
+        var isPicked = picked.indexOf(idx) !== -1;
+        sEl(fig, "circle", { cx: pt[0], cy: pt[1], r: 3.4, fill: isPicked ? cd : ca, opacity: isPicked ? 1 : 0.4, "data-sampling-role": "population", "data-population-index": idx });
       });
 
       // 抽取箭头
       sEl(fig, "line", { x1: 185, y1: 85, x2: 235, y2: 85, stroke: cb, "stroke-width": 2, "marker-end": "url(#arr)" });
-      sTxt(fig, 210, 75, "随机抽 n=5", cb, 10.5, 700, "middle");
+      sTxt(fig, 210, 75, "抽取一例 n=5", cb, 10.5, 700, "middle");
 
       // 样本池
       sEl(fig, "rect", { x: 245, y: 40, width: 100, height: 95, rx: 8, fill: "rgba(217,119,6,0.06)", stroke: cb, "stroke-width": 1.5 });
       sTxt(fig, 295, 58, "样本 n = 5", cb, 11, 700, "middle");
       [65, 80, 95, 110, 125].forEach(function(cy, i) {
-        sEl(fig, "circle", { cx: 295, cy: cy, r: 4.5, fill: cd });
+        sEl(fig, "circle", { cx: 295, cy: cy, r: 4.5, fill: cd, "data-sampling-role": "sample", "data-population-index": picked[i] });
       });
 
       // 右侧总结
       sEl(fig, "rect", { x: 360, y: 25, width: 150, height: 125, rx: 6, fill: bgCard, stroke: border });
       sTxt(fig, 372, 48, "简单随机核心：", cb, 11.5, 700);
-      sTxt(fig, 372, 70, "• 机会均等无偏见", ca, 10.5);
+      sTxt(fig, 372, 70, "• 每组5人等可能", ca, 10.5);
       sTxt(fig, 372, 90, "• P(入样) = n / N", cd, 11, 700);
       sTxt(fig, 372, 112, "• 抽签法 / 随机数法", mut, 10.5);
       sTxt(fig, 372, 132, "★ 适用个体差异小", cc, 10.5, 600);

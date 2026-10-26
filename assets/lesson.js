@@ -527,10 +527,10 @@
     math(document.body);
     log("open", {});
     var fl = document.createElement("script");
-    fl.src = "../assets/figure-layout.js";
+    fl.src = "../assets/figure-layout.js?v=vs-c76a05f5a617";
     document.head.appendChild(fl);
     var ws = document.createElement("script");
-    ws.src = "../assets/wiki.js?v=vs-12d546b3f39c";
+    ws.src = "../assets/wiki.js?v=vs-e008258e32ef";
     document.head.appendChild(ws);
     var hs = document.createElement("script"); // 交互层（PY-53）
     hs.src = "../assets/hci.js?v=vs-cc67e9632160";

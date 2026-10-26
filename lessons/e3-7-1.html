@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -93,11 +93,11 @@
   <!-- 伴读直觉微图解 -->
   <div class="micro-box" id="micro-cond">
     <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <span style="font-weight:700; color:var(--primary); font-size:14px;">条件概率与全概率微图解：缩小的样本空间、拼图全概率与贝叶斯逆推</span>
+      <span style="font-weight:700; color:var(--primary); font-size:14px;">条件概率与全概率微图解：缩小样本空间、分支求和与反查来源</span>
       <div class="micro-tabs" id="m-cond-tabs">
         <button class="micro-tab active" data-tab="1">① 缩小的样本空间（韦恩图视角）</button>
         <button class="micro-tab" data-tab="2">② 全概率公式（拼图化整为零）</button>
-        <button class="micro-tab" data-tab="3">③ 贝叶斯逆推（由果溯因）</button>
+        <button class="micro-tab" data-tab="3">③ 已知次品，反查来源</button>
       </div>
     </div>
     <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
@@ -129,14 +129,19 @@
     </div>
   </div>
 
-  <h3>2. 条件概率、全概率与贝叶斯主公式</h3>
+  <h3>2. 条件概率、乘法与全概率公式</h3>
   <div class="key" style="background:var(--card); border-left:4px solid var(--primary); padding:12px 16px; margin:14px 0;">
-    <p style="margin:0 0 8px 0; font-weight:700;">核心公式全家桶：</p>
+    <p style="margin:0 0 8px 0; font-weight:700;">本节核心公式：</p>
     <p style="margin:0 0 6px 0;">条件概率定义：\(P(B|A) = \color{#1976d2}{\dfrac{P(AB)}{P(A)}}\quad (\color{#1976d2}{\text{分母换成新世界 } A})\)，要求 \(P(A)&gt;0\)。有限等可能时可用个数比 \(n(AB)/n(A)\)。</p>
     <p style="margin:0 0 6px 0;">乘法公式：\(P(AB) = \color{#1976d2}{P(A)} \cdot \color{#2e7d32}{P(B|A)}\)</p>
     <p style="margin:0 0 6px 0;">全概率公式（化整为零）：\(P(B) = \sum_{i=1}^n \color{#1976d2}{P(A_i)} \cdot \color{#2e7d32}{P(B|A_i)}\quad (\text{划分 } A_1,\dots,A_n \text{ 互斥且穷尽})\)</p>
-    <p style="margin:0;">贝叶斯公式（由果溯因）：\(P(A_k|B) = \dfrac{\color{#1976d2}{P(A_k)} \cdot \color{#2e7d32}{P(B|A_k)}}{\sum_{i=1}^n \color{#1976d2}{P(A_i)} \cdot \color{#2e7d32}{P(B|A_i)}} = \dfrac{\text{该条分支概率}}{\text{全概率综合}}\)，要求 \(P(B)&gt;0\)，即分母的全概率之和大于 0；若 \(P(B)=0\)，\(P(A_k|B)\) 没有定义。</p>
+    <p style="margin:0;">已知结果反查来源：先用定义 \(P(A_k|B)=\dfrac{P(A_k\cap B)}{P(B)}\)，要求 \(P(B)&gt;0\)；分子用乘法公式，分母用全概率公式。具体后验题可以这样逐步求解，不必先背一般贝叶斯公式。</p>
   </div>
+  <details class="card">
+    <summary>选学（可跳过）：贝叶斯一般公式</summary>
+    <p>一般贝叶斯公式是教材带星号的选学内容，不作为本节必背或考试要求；条件概率定义、乘法公式和全概率公式仍是本节核心。</p>
+    <p>当 \(A_1,\ldots,A_n\) 两两互斥、并为全集，各 \(P(A_i)&gt;0\) 时，贝叶斯公式（由果溯因）：\[P(A_k|B)=\dfrac{P(A_k)P(B|A_k)}{\sum_{i=1}^nP(A_i)P(B|A_i)}.\]要求 \(P(B)&gt;0\)，即分母的全概率之和大于 0；若 \(P(B)=0\)，该条件概率没有定义。</p>
+  </details>
 
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：掷一颗均匀的骰子，已知点数大于 \(2\)，点数是偶数的概率是？</p>
@@ -170,14 +175,14 @@
     <div class="think-steps" style="margin-top:10px;">
       <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #2563eb;">
         <b style="color:#2563eb;">👀 第一眼破题信号</b>：
-        <span class="small">设事件 \(A_1\) = 甲车间生产，\(A_2\) = 乙车间生产，\(B\) = 产品是次品。注意到 \(A_1, A_2\) 构成全集的完备划分（互斥且和为 1）。问①是<b>正向求整体结果 \(P(B)\)（全概率公式）</b>；问②是<b>已知结果 \(B\) 反推原因 \(A_1\)（贝叶斯公式）</b>！</span>
+        <span class="small">设事件 \(A_1\) = 甲车间生产，\(A_2\) = 乙车间生产，\(B\) = 产品是次品。\(A_1,A_2\) 互斥且覆盖全部来源。问①用<b>全概率公式求 \(P(B)\)</b>；问②从<b>条件概率定义 \(P(A_1|B)=P(A_1\cap B)/P(B)\)</b>反查来源。</span>
       </div>
       <div class="think-step" style="margin-bottom:8px; padding-left:12px; border-left:2px solid #10b981;">
         <b style="color:#10b981;">🔧 第二步两阶段套公式求解</b>：
         <div class="small" style="margin-top:4px;">
           • <b>① 全概率公式计算综合次品率 \(P(B)\)</b>：<br>
           $$P(B) = P(A_1)P(B|A_1) + P(A_2)P(B|A_2) = 0.6 \times 0.02 + 0.4 \times 0.01 = 0.012 + 0.004 = 0.016$$
-          • <b>② 贝叶斯公式逆推归因 \(P(A_1|B)\)</b>：<br>
+          • <b>② 用条件概率定义求 \(P(A_1|B)\)</b>：<br>
           $$P(A_1|B) = \dfrac{P(A_1 B)}{P(B)} = \dfrac{P(A_1)P(B|A_1)}{P(B)} = \dfrac{0.012}{0.016} = \dfrac{3}{4} = 0.75$$
         </div>
       </div>
@@ -212,7 +217,7 @@
     <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
       <b style="color:#ef4444;">翻车现场 2：因果倒置，混淆 \(P(B|A)\) 与 \(P(A|B)\)（经典检测悖论）</b>
       <p class="small" style="margin:4px 0;"><span style="color:#ef4444;">❌ 翻车</span>：某疾病检出率为 99%（真病人呈阳性概率 \(P(+|D) = 0.99\)），便误以为「某人体检呈阳性，他有病的概率 \(P(D|+)\) 也是 99%」。</p>
-      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：因果方向不可逆！若人群患病率很低（如 0.1%），绝大多数阳性其实是健康人的假阳性。必须使用贝叶斯公式将先验概率与假阳性率综合折算，\(P(D|+)\) 往往只有百分之十几，绝非 99%！</p>
+      <p class="small" style="margin:4px 0;"><span style="color:#10b981;">✔ 正确</span>：不能把两个条件概率互换，还必须知道患病率和健康人的假阳性率。例如患病率为 \(0.1\%\)、病人阳性率为 \(99\%\)、健康人假阳性率为 \(1\%\)：十万人中约有真阳性 \(99\) 人、假阳性 \(999\) 人，故 \(P(D|+)=\dfrac{99}{99+999}\approx9.02\%\)。这是这组完整参数的结果；若假阳性率为 \(0\)，后验可为 \(1\)。只给检出率和患病率，不能确定阳性者的患病概率。</p>
     </div>
 
     <div class="trap-card" style="background:var(--card); border:1px solid var(--line); border-left:4px solid #ef4444; border-radius:6px; padding:10px 14px;">
@@ -709,7 +714,7 @@
       fig.appendChild(el("text", {x: 465, y: 154, "text-anchor": "middle", "font-size": "26", "font-weight": "700", fill: "#ef4444"}, "0.004"));
 
       fig.appendChild(el("text", {x: 310, y: 198, "text-anchor": "middle", "font-size": "26", "font-weight": "700", fill: "#1976d2"}, "甲来源占 75%"));
-      desc.innerHTML = "<b>③ 贝叶斯逆推直觉</b>：甲车间占 60%，次品率为 2%；乙车间占 40%，次品率为 1%。甲、乙次品的联合概率分别为 0.6×0.02=0.012、0.4×0.01=0.004，全厂次品总概率为 0.012+0.004=0.016。当质检查出某件是次品时，我们在所有的次品堆中反查来源：甲车间贡献了 0.012（占 75%），乙车间贡献了 0.004（占 25%）。所以该次品来自甲车间的后验概率高达 <b>75%</b>。";
+      desc.innerHTML = "<b>③ 用条件概率定义反查来源</b>：甲车间占60%，次品率2%；乙车间占40%，次品率1%。两条次品分支的联合概率是0.012与0.004，全概率为0.016。已知是次品，按定义只在全部次品中比较：来自甲的概率为0.012/0.016=<b>75%</b>，来自乙为25%。具体计算只用条件概率、乘法与全概率；贝叶斯一般公式另列为选学。";
     }
 
     function drawTrap() {

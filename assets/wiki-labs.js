@@ -638,7 +638,7 @@
       info: function (s) {
         if (s === "A") return '<span class="ok">✓ 重合：</span>\\(\\sin x\\xrightarrow{\\text{左移 }\\pi/3}\\sin\\left(x+\\dfrac\\pi3\\right)\\xrightarrow{\\text{缩半}}\\sin\\left(2x+\\dfrac\\pi3\\right)\\)。先平移时，移的就是 \\(\\varphi\\) 本身。';
         if (s === "B") return '<span class="ok">✓ 重合：</span>\\(\\sin x\\xrightarrow{\\text{缩半}}\\sin 2x\\xrightarrow{\\text{左移 }\\pi/6}\\sin 2\\left(x+\\dfrac\\pi6\\right)=\\sin\\left(2x+\\dfrac\\pi3\\right)\\)。先伸缩时，平移量要除以 \\(\\omega\\)。';
-        return '<span class="bad">✗ 错位：</span>\\(\\sin 2x\\xrightarrow{\\text{左移 }\\pi/3}\\sin 2\\left(x+\\dfrac\\pi3\\right)=\\sin\\left(2x+\\dfrac{2\\pi}3\\right)\\)，红线比目标多移了 \\(\\dfrac\\pi6\\)。记住：平移量永远是 \\(\\left|\\dfrac{\\varphi}{\\omega}\\right|\\)。';
+        return '<span class="bad">✗ 错位：</span>\\(\\sin 2x\\xrightarrow{\\text{左移 }\\pi/3}\\sin 2\\left(x+\\dfrac\\pi3\\right)=\\sin\\left(2x+\\dfrac{2\\pi}3\\right)\\)，红线比目标多移了 \\(\\dfrac\\pi6\\)。可取 \\(\\left|\\dfrac{\\varphi}{\\omega}\\right|\\) 作为一个代表距离，方向另核；本题还可多左移整数个周期 \\(\\pi\\)。';
       }
     },
     /* ---- 选必一 第 2 章 ---- */

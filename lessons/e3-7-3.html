@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -671,44 +671,55 @@
 
     function drawTab2() {
       fig.innerHTML = "";
-      // Tab 2: 均值相同但方差悬殊 (方案 A vs 方案 B)
-      fig.appendChild(el("text", {x: 310, y: 22, "text-anchor": "middle", "font-size": "13", "font-weight": "700", fill: "var(--fg)"}, "均值同为 10 万元：方案 A (D=160 高风险大波动) vs 方案 B (D=60 低风险稳健)"));
-
-      // Left: Scheme A (spread out: -10, 10, 30)
-      fig.appendChild(el("rect", {x: 40, y: 40, width: 250, height: 135, rx: 8, fill: "var(--card)", stroke: "#ef4444", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 165, y: 62, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#ef4444"}, "方案 A：D(X) = 160（离散度极大）"));
-
-      // Dots on axis
-      fig.appendChild(el("line", {x1: 55, y1: 110, x2: 275, y2: 110, stroke: "var(--line)", "stroke-width": "1.5"}));
-      fig.appendChild(el("circle", {cx: 75, cy: 110, r: 8, fill: "#ef4444"}));
-      fig.appendChild(el("text", {x: 75, y: 132, "text-anchor": "middle", "font-size": "10", fill: "#ef4444"}, "-10万"));
-
-      fig.appendChild(el("circle", {cx: 165, cy: 110, r: 12, fill: "#1976d2"}));
-      fig.appendChild(el("text", {x: 165, y: 132, "text-anchor": "middle", "font-size": "10", "font-weight": "700", fill: "#1976d2"}, "均值10"));
-
-      fig.appendChild(el("circle", {cx: 255, cy: 110, r: 8, fill: "#ef4444"}));
-      fig.appendChild(el("text", {x: 255, y: 132, "text-anchor": "middle", "font-size": "10", fill: "#ef4444"}, "+30万"));
-
-      fig.appendChild(el("text", {x: 165, y: 160, "text-anchor": "middle", "font-size": "11", fill: "var(--muted)"}, "极差跨度达 40 万元，面临亏损"));
-
-      // Right: Scheme B (concentrated: 0, 10, 20)
-      fig.appendChild(el("rect", {x: 330, y: 40, width: 250, height: 135, rx: 8, fill: "var(--card)", stroke: "#10b981", "stroke-width": "1.5"}));
-      fig.appendChild(el("text", {x: 455, y: 62, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "#10b981"}, "方案 B：D(Y) = 60（紧密聚拢）"));
-
-      fig.appendChild(el("line", {x1: 345, y1: 110, x2: 565, y2: 110, stroke: "var(--line)", "stroke-width": "1.5"}));
-      fig.appendChild(el("circle", {cx: 395, cy: 110, r: 9, fill: "#10b981"}));
-      fig.appendChild(el("text", {x: 395, y: 132, "text-anchor": "middle", "font-size": "10", fill: "#10b981"}, "0万"));
-
-      fig.appendChild(el("circle", {cx: 455, cy: 110, r: 12, fill: "#1976d2"}));
-      fig.appendChild(el("text", {x: 455, y: 132, "text-anchor": "middle", "font-size": "10", "font-weight": "700", fill: "#1976d2"}, "均值10"));
-
-      fig.appendChild(el("circle", {cx: 515, cy: 110, r: 9, fill: "#10b981"}));
-      fig.appendChild(el("text", {x: 515, y: 132, "text-anchor": "middle", "font-size": "10", fill: "#10b981"}, "+20万"));
-
-      fig.appendChild(el("text", {x: 455, y: 160, "text-anchor": "middle", "font-size": "11", fill: "var(--muted)"}, "紧密收拢在均值两侧，不亏损"));
-
-      fig.appendChild(el("text", {x: 310, y: 202, "text-anchor": "middle", "font-size": "12", "font-weight": "700", fill: "var(--fg)"}, "期望决定平均收获，方差决定风险稳定性；理性决策必须期望方差并重"));
-      desc.innerHTML = "<b>② 方差度量波动风险</b>：两个方案的期望收益完全相同（都是 10 万元），但方案 A 的数据点极度分散，方差高达 160，甚至有 20% 的概率亏损 10 万元；方案 B 数据聚拢，方差仅为 60，保本稳定。方差是量化不确定性与风险的标尺。";
+      fig.setAttribute("viewBox", "0 0 620 540");
+      var schemes = [
+        {id: "A", values: [-10, 10, 30], probs: [0.2, 0.6, 0.2], color: "var(--a)", base: 250},
+        {id: "B", values: [0, 10, 20], probs: [0.3, 0.4, 0.3], color: "var(--b)", base: 480}
+      ];
+      var xMin = -10, xMax = 30, left = 96, right = 560, pScale = 180;
+      function sx(value) { return left + (value - xMin) / (xMax - xMin) * (right - left); }
+      var model = el("g", {"data-model": "variance-comparison", "data-figure-label-fixed": "1"});
+      fig.appendChild(model);
+      function add(tag, attrs, text) { var node = el(tag, attrs, text); model.appendChild(node); return node; }
+      function label(x, y, text, color, weight, anchor) {
+        return add("text", {x: x, y: y, fill: color || "var(--fg)", "font-size": 26, "font-weight": weight || 500, "text-anchor": anchor || "middle"}, text);
+      }
+      label(310, 29, "相同均值，方差来自完整分布", "var(--fg)", 700);
+      label(310, 64, "横轴：收益（万元）　纵轴：概率", "var(--muted)");
+      schemes.forEach(function(scheme) {
+        var mean = scheme.values.reduce(function(total, value, i) { return total + value * scheme.probs[i]; }, 0);
+        var variance = scheme.values.reduce(function(total, value, i) { return total + Math.pow(value - mean, 2) * scheme.probs[i]; }, 0);
+        scheme.mean = mean; scheme.variance = variance;
+        var row = el("g", {"data-variance-scheme": scheme.id});
+        model.appendChild(row);
+        function node(tag, attrs, text) { var n = el(tag, attrs, text); row.appendChild(n); return n; }
+        function text(x, y, value, color, role) { return node("text", {x: x, y: y, fill: color || "var(--fg)", "font-size": 26, "text-anchor": "middle", "data-variance-role": role || "label"}, value); }
+        text(310, scheme.base - 152, scheme.id + "：E = " + mean + "，D = " + variance, scheme.color, "moments");
+        node("line", {x1: 64, y1: scheme.base - 126, x2: 64, y2: scheme.base, stroke: "var(--muted)", "stroke-width": 1.5});
+        [0, 0.3, 0.6].forEach(function(prob) {
+          var y = scheme.base - prob * pScale;
+          node("line", {x1: 64, y1: y, x2: 578, y2: y, stroke: "var(--line)", "stroke-width": 1.5, "stroke-dasharray": prob ? "4 4" : "none"});
+          node("text", {x: 53, y: y + 8, fill: "var(--muted)", "font-size": 26, "text-anchor": "end", "data-variance-role": "p-tick"}, String(prob));
+        });
+        [-10, 0, 10, 20, 30].forEach(function(value) {
+          var x = sx(value);
+          node("line", {x1: x, y1: scheme.base, x2: x, y2: scheme.base + 6, stroke: "var(--muted)", "stroke-width": 1.5});
+          text(x, scheme.base + 36, String(value), "var(--muted)", "x-tick");
+        });
+        scheme.values.forEach(function(value, i) {
+          var probability = scheme.probs[i], height = probability * pScale, x = sx(value);
+          node("rect", {x: x - 22, y: scheme.base - height, width: 44, height: height, fill: scheme.color, "data-variance-role": "probability-bar"});
+          // Put A's low-bar labels between the .3 and .6 guides, clear of both.
+          var labelOffset = scheme.id === "A" && probability === 0.2 ? 32 : 12;
+          text(x, scheme.base - height - labelOffset, String(probability), scheme.color, "probability");
+        });
+      });
+      var details = schemes.map(function(scheme) {
+        var meanTerms = scheme.values.map(function(value, i) { return "(" + value + ")×" + scheme.probs[i]; }).join(" + ");
+        var varianceTerms = scheme.values.map(function(value, i) { return "(" + value + "−" + scheme.mean + ")²×" + scheme.probs[i]; }).join(" + ");
+        return "<p><b>方案 " + scheme.id + "</b>：各概率之和为 " + scheme.probs.reduce(function(total, prob) { return total + prob; }, 0) + "。E = " + meanTerms + " = <b>" + scheme.mean + " 万元</b>；D = " + varianceTerms + " = <b>" + scheme.variance + " 万元²</b>。</p>";
+      });
+      desc.innerHTML = "<b>② 完整分布，才能计算方差。</b>每根柱高就是该收益的概率，两图的收益刻度和概率刻度完全相同。" + details.join("") + "A 有 0.2 的概率亏损 10 万元，B 的三个收益都不为负；在这些完整分布下，两者均值相同，A 的方差更大。不能只看点散得开，就直接给出方差数值。";
     }
 
     function drawTab3() {
@@ -770,6 +781,7 @@
         tabs.forEach(function(t) { t.classList.remove("active"); });
         tab.classList.add("active");
         var idx = tab.getAttribute("data-tab");
+        fig.setAttribute("viewBox", "0 0 620 220");
         if (idx === "1") drawTab1();
         else if (idx === "2") drawTab2();
         else if (idx === "3") drawTab3();

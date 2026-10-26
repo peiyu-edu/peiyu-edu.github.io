@@ -77,7 +77,7 @@
       var style=getComputedStyle(t), content=t.textContent.trim();
       if(!content||t.children.length||style.display==='none'||style.visibility==='hidden'||Number(style.opacity)<0.1||!t.getBoundingClientRect().width)return;
       for(var parent=t.parentElement;parent&&parent!==svg;parent=parent.parentElement){var ps=getComputedStyle(parent);if(ps.display==='none'||ps.visibility==='hidden'||Number(ps.opacity)<0.1)return;}
-      if(t.closest('defs,.tri-cell,.hd[data-k="c"],[role="button"]')){if(!t.closest('defs'))placed.push(rect(t,inv));return;}
+      if(t.closest('defs,.tri-cell,.hd[data-k="c"],[role="button"],[data-figure-label-fixed="1"]')){if(!t.closest('defs'))placed.push(rect(t,inv));return;}
       var previous=s.labels.get(t), order=previous?previous.order:++s.nextOrder;s.labels.set(t,{order:order});
       var matrix=inv.multiply(t.getScreenCTM()), clone=t.cloneNode(true);
       clone.removeAttribute('id');clone.setAttribute('data-figure-label','1');

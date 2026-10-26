@@ -149,6 +149,11 @@
 
   /* ---------- 渲染 ---------- */
   function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function mathHtml(s) {
+    var html = String(s);
+    // Protect TeX before the browser parses comparison signs as HTML tags.
+    return window.PEIYU_WIKI_HTML ? window.PEIYU_WIKI_HTML(html) : esc(html);
+  }
   function secName(sid) { return SEC_META[sid] ? SEC_META[sid].name : sid; }
   function chLabel(ch) { return (CH_NAMES[ch] || ("第 " + ch + " 章")).replace(/（.*$/, ""); }
 
@@ -185,7 +190,7 @@
       "</div>" +
       '<div class="ct-card" id="ctCard">' +
         '<span class="ct-tag">🎯 题干信号' + (curCh !== "all" ? " · " + esc(chLabel(c.ch)) : "") + "</span>" +
-        '<p class="ct-cue">' + c.cue + "</p>";
+        '<p class="ct-cue">' + mathHtml(c.cue) + "</p>";
     if (!revealed) {
       html +=
         '<p class="ct-ask">先别往下看。在心里说出：<b>第一步做什么、用哪条工具</b>。想好了再揭晓。</p>' +
@@ -197,7 +202,7 @@
     } else {
       var card = BY_ID[c.card];
       html +=
-        '<div class="key ct-act"><b>该怎么想：</b>' + c.act + "</div>" +
+        '<div class="key ct-act"><b>该怎么想：</b>' + mathHtml(c.act) + "</div>" +
         '<div class="ct-src">' +
           "<span>出自 " + esc(secName(c.sec)) + "</span>" +
           (card ? '<button type="button" class="w-rel" data-goto="' + c.card + '">🔗 ' + esc(c.label) + "</button>" : "") +
@@ -237,7 +242,7 @@
     } else {
       html += '<p class="small">没想到的这几条，建议点卡片看一遍「什么时候用」，再回来重练：</p><ul>';
       missed.forEach(function (c) {
-        html += "<li>" + c.cue + ' <button type="button" class="w-rel" data-goto="' + c.card + '">🔗 ' + esc(c.label) + "</button></li>";
+        html += "<li>" + mathHtml(c.cue) + ' <button type="button" class="w-rel" data-goto="' + c.card + '">🔗 ' + esc(c.label) + "</button></li>";
       });
       html += "</ul>";
     }
@@ -259,9 +264,9 @@
       byCh[ch].forEach(function (c) {
         html +=
           '<div class="tree-row">' +
-            "<div>" + c.cue + "</div>" +
+            "<div>" + mathHtml(c.cue) + "</div>" +
             '<span class="tree-arr">⟶</span>' +
-            "<div>" + c.act + ' <button type="button" class="w-rel" data-goto="' + c.card + '">查看：' + esc(c.label) + "</button>" +
+            "<div>" + mathHtml(c.act) + ' <button type="button" class="w-rel" data-goto="' + c.card + '">查看：' + esc(c.label) + "</button>" +
               '<span class="ct-src-sec">' + esc(secName(c.sec)) + "</span></div>" +
           "</div>";
       });

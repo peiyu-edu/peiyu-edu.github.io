@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -123,27 +123,42 @@
   </div>
 
   <h3>3. 招式一：积一定，求和的最小值（分子分母互消型）</h3>
-  <div class="card">
+  <p class="small">试着用波利亚四问走一遍：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示，也可以直接看示范；发现条件不合适，就返回重新选方法。</p>
+  <div class="card" id="polya-amgm">
     <p class="small" style="margin:0 0 6px;"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
     <p style="font-size:16.5px;margin:0 0 8px;">已知 \(x&gt;0\)，求 \(x+\dfrac4x\) 的最小值。</p>
+    <p><b>① 读懂题意：</b>\(x\) 可以取任意正数。我们既要找一个所有这些值都不低于的数，还要说明它<b>确实能取到</b>。只代几个数，能保证没有更小的吗？</p>
+    <details class="more" id="polya-amgm-hint-1">
+      <summary>提示 1：先找不变量</summary>
+      <p>把式子看成两项。\(x\) 增大时，一项变大，另一项变小；试算两项的积，未知数能消掉吗？</p>
+    </details>
+    <details class="more" id="polya-amgm-hint-2">
+      <summary>提示 2：从结构选方法</summary>
+      <p>两项都为正、积又固定，哪个结论能把它们的和压在一个常数上方？先写出不等式，再想两项相等时是否符合 \(x&gt;0\)。</p>
+    </details>
+    <details class="more" id="polya-amgm-solution">
+      <summary>看完整示范：选方法、计算与检验</summary>
     <div class="think-steps">
       <div class="think-step">
-        <span class="ts-tag ca">👀 第一眼看破题信号（一正二定）：</span>
+        <span class="ts-tag ca">② 想办法：为什么选基本不等式？</span>
         题目给了 \(x&gt;0\)（<b>正数</b>✓）；要求<b>和</b>的最小值，而两项一乘：<b class="ca">\(x\)</b> \(\cdot\) <b class="cb">\(\dfrac{4}{x}\)</b> \(= 4\)，分子分母的 \(x\) 恰好约掉变成<b>定值 \(4\)</b>（<b>定值</b>✓）！
       </div>
       <div class="think-step step-op">
-        <span class="ts-tag cb">🔧 第二步套基本不等式：</span>
+        <span class="ts-tag cb">③ 执行计划：用基本不等式求下界</span>
         直接代入 \(a+b \ge 2\sqrt{ab}\)：<br>
         <span style="display:block;text-align:center;margin:4px 0;">\(\color{#2F7A56}{x} + \color{#966524}{\dfrac{4}{x}} \;\ge\; 2\sqrt{\color{#2F7A56}{x}\cdot\color{#966524}{\dfrac{4}{x}}} = 2\sqrt{4} = \mathbf{4}\)。</span>
       </div>
       <div class="think-step step-chk">
-        <span class="ts-tag cc">🛡️ 第三步必查等号（三相等）：</span>
+        <span class="ts-tag cc">执行中检查：下界能取到吗？</span>
         <b>没验等号不准交卷！</b>当且仅当两项相等，即 \(x = \dfrac{4}{x} \implies x^2=4 \implies x=2\) 时取等号。因为 \(x=2\) 满足 \(x&gt;0\)（<b>真能取到</b>✓），所以最小值为 \(4\)。
       </div>
     </div>
+    <p><b>④ 回头看：</b>换个角度验算：\(x+\dfrac4x-4=\dfrac{(x-2)^2}{x}\ge0\)，等号恰在 \(x=2\)。本题的关键是<b>两正项的积固定，且相等时的取值合法</b>。若增加限制 \(x\ge3\)，原来的等号还能成立吗？到「练一练」第 4 题检验你的判断。</p>
+    </details>
   </div>
   <div class="card predict" data-id="try-1" data-answer="B">
     <p>自己试试：\(x&gt;0\)，\(x+\dfrac9x\) 的最小值是？</p>
+    <details class="more" id="polya-amgm-try-hint"><summary>需要一点方向？</summary><p>与例 1 比较：哪项条件没变？先找两项的积，再检验相等时的 \(x\) 是否在允许范围内。</p></details>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(3\)</button>
       <button class="opt" data-v="B"><b>B</b>\(6\)</button>
@@ -300,14 +315,17 @@
       <p>A 只在 \(x>0\) 时对。B 的 \(-2\) 是 \(x&lt;0\) 时的<b>最大值</b>，不是最小值。</p>
     </div>
   </div>
-  <div class="card predict" data-id="p-trap-eq" data-answer="B">
+  <div class="card predict" data-id="p-trap-eq" data-answer="B" id="polya-amgm-transfer">
     <p>4. \(x\ge 3\)，\(x+\dfrac4x\) 的最小值是？</p>
+    <p class="small"><b>先回顾例 1：</b>式子相同，只有取值范围改变。原解答中的哪一步需要重新检查？先独立判断，卡住再看提示。</p>
+    <details class="more" id="polya-amgm-transfer-hint-1"><summary>提示 1：下界还是最小值？</summary><p>先解两项相等的方程，再与 \(x\ge3\) 比较。某个下界取不到，并不代表函数没有最小值。</p></details>
+    <details class="more" id="polya-amgm-transfer-hint-2"><summary>提示 2：换一条路线找候选值</summary><p>在「动手」②中设 \(k=4,m=3\)，观察允许范围内的最低处。图只能帮助猜测；还要把原式减去候选值，证明差对所有 \(x\ge3\) 都非负。</p></details>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(4\)</button>
       <button class="opt" data-v="B"><b>B</b>\(\dfrac{13}{3}\)</button>
       <button class="opt" data-v="C"><b>C</b>没有最小值</button>
     </div>
-    <div class="reveal"><p><b>B</b>。「等」这一条不满足：\(x+\dfrac4x\ge 4\) 没错，但等号要 \(x=2\)，不在 \(x\ge3\) 里，\(4\) 只是下界。在「动手」②里把 \(k\) 调成 \(4\)、\(m\) 调成 \(3\)：这一段一直往上走，最低点在端点 \(x=3\)，值是 \(3+\dfrac43=\dfrac{13}{3}\)。代数验证不需要等到后面章节：当 \(x\ge3\) 时，\[x+\frac4x-\frac{13}{3}=\frac{(x-3)(3x-4)}{3x}\ge0.\]分母为正，分子两因式非负，且等号当且仅当 \(x=3\)，所以这就是最小值。</p></div>
+    <div class="reveal"><p><b>B</b>。「等」这一条不满足：\(x+\dfrac4x\ge 4\) 没错，但等号要 \(x=2\)，不在 \(x\ge3\) 里，\(4\) 只是下界。在「动手」②里把 \(k\) 调成 \(4\)、\(m\) 调成 \(3\)：这一段一直往上走，最低点在端点 \(x=3\)，值是 \(3+\dfrac43=\dfrac{13}{3}\)。代数验证不需要等到后面章节：当 \(x\ge3\) 时，\[x+\frac4x-\frac{13}{3}=\frac{(x-3)(3x-4)}{3x}\ge0.\]分母为正，分子两因式非负，且等号当且仅当 \(x=3\)，所以这就是最小值。</p><p><b>回顾与迁移：</b>改条件后，基本不等式仍成立，失效的是「下界能够取到」这一步。下次遇到范围限制，先检验等号；必要时回到计划，用图找候选、用代数证明，别照搬上一题的最小值。</p></div>
   </div>
   <div class="vid" data-video="ex-cons"></div>
 
@@ -422,7 +440,7 @@
     var d = "", n = 160;
     for (var i = 0; i <= n; i++) {
       var x = lo + (hi - lo) * i / n, y = f(x);
-      d += (i ? "L" : "M") + cx(x).toFixed(1) + " " + cy(Math.min(y, YMAX + 2)).toFixed(1);
+      d += (i ? "L" : "M") + cx(x).toFixed(1) + " " + cy(y).toFixed(1);
     }
     return d;
   }
@@ -430,6 +448,9 @@
     var m = m10 / 10, rk = Math.sqrt(k), lb = 2 * rk;
     p10 = clamp(p10, m10, 80);
     var px = p10 / 10;
+    // Keep P at its true function value; enlarge the common vertical scale when needed.
+    YMAX = Math.max(14, Math.ceil(f(px) / 10) * 10);
+    var yStep = YMAX <= 20 ? 2 : YMAX <= 50 ? 10 : 20;
     var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), muted = css("--muted"), line = css("--line"), card = css("--card"), no = css("--no");
     cv.innerHTML = "";
     var defs = svg("defs", {}, cv), clip = svg("clipPath", { id: "cvclip" }, defs);
@@ -443,7 +464,7 @@
       svg("line", { x1: cx(t), y1: Yb, x2: cx(t), y2: Yb + 5, stroke: fg }, cv);
       svg("text", { x: cx(t), y: Yb + 22, "text-anchor": "middle" }, cv).textContent = t;
     }
-    for (var s = 2; s <= YMAX; s += 2) {
+    for (var s = yStep; s <= YMAX; s += yStep) {
       svg("line", { x1: X0 - 5, y1: cy(s), x2: X0, y2: cy(s), stroke: fg }, cv);
       svg("text", { x: X0 - 9, y: cy(s) + 5, "text-anchor": "end" }, cv).textContent = s;
     }
@@ -465,11 +486,11 @@
     svg("line", { x1: cx(m), y1: Yt, x2: cx(m), y2: Yb, stroke: muted, "stroke-dasharray": "4 4" }, cv);
     svg("text", { x: cx(m) + 4, y: Yt + 14 }, cv).textContent = "m";
     // P
-    var py = f(px), pyc = cy(Math.min(py, YMAX));
+    var py = f(px), pyc = cy(py);
     svg("line", { x1: cx(px), y1: pyc, x2: cx(px), y2: Yb, stroke: hl, "stroke-dasharray": "2 3" }, cv);
     var P = svg("circle", { cx: cx(px), cy: pyc, r: 10, fill: card, stroke: hl, "stroke-width": 3.5, tabindex: 0, role: "slider",
       "aria-label": "曲线上的点 P 的横坐标", "aria-valuemin": m, "aria-valuemax": XMAX, "aria-valuenow": px, style: "cursor:grab" }, cv);
-    svg("text", { x: cx(px) + 14, y: pyc - 10 }, cv).textContent = py > YMAX ? "P↑" : "P";
+    svg("text", { x: cx(px) + 14, y: pyc - 10 }, cv).textContent = "P";
     P.addEventListener("keydown", function (ev) {
       var d = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 }[ev.key];
       if (!d) return;
@@ -492,6 +513,7 @@
       lines.push('<span class="bad">\\(' + kt + "<" + f2(m) + "\\)，等号取不到</span>：\\(" + lt + "\\) 只是下界。范围内最低点在端点，最小值 \\(=f(" + f2(m) + ")\\approx " + f2(ymin) + "\\)。");
     }
     lines.push("点 \\(P\\)：\\(f(" + f2(px) + ")\\approx " + f2(py) + "\\)，比下界多 \\(" + f2(py - lb) + "\\)。");
+    lines.push("纵轴会随点 P 的高度调整；曲线与点始终使用同一刻度，图窗外的部分裁去。");
     var out = document.getElementById("curveout");
     out.innerHTML = lines.join("<br>");
     Peiyu.math(out);

@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -34,14 +34,15 @@
 <section class="step" data-title="从例子进入">
   <p>学校想知道：高一年级的同学，上学日一晚大概睡多久？全年级 \(1000\) 人，一个个问太费事，打算只问一部分人。点下面的按钮看看四种找人办法在全年级人群中的分布：</p>
   <div class="card predict" data-id="entry" data-answer="B">
-    <svg class="entry-fig" id="entry-surv" viewBox="0 0 520 205" role="img" aria-label="高一年级1000人分布网格：对比晚自习留堂、全年级随机抽50人、自愿填表、只问一班的抽样覆盖度"></svg>
+    <svg class="entry-fig" id="entry-surv" viewBox="0 0 520 205" role="img" aria-label="抽样方案示意：网点不是实际随机样本，对比留堂、全年级名单随机抽样、自愿填表、只问一班四种方案"></svg>
     <div class="entry-bar" id="entry-surv-bar">
       <button type="button" data-m="A">A 晚自习留堂20人（全偏晚睡区）</button>
-      <button type="button" data-m="B" class="on">B 全年级随机抽50人（均匀覆盖）</button>
+      <button type="button" data-m="B" class="on">B 全年级名单随机抽50人</button>
       <button type="button" data-m="C">C 群里自愿填表（扎堆偏差）</button>
       <button type="button" data-m="D">D 只问一个班</button>
     </div>
     <div class="entry-note" id="entry-surv-note"></div>
+    <p class="small">网点只用于比较抽样方案，不表示人数比例或一次实际抽样的结果。简单随机抽样不保证每班都有同学入样，也不保证走读、住校人数恰好按总体比例分配。</p>
     <p>下面哪种找人的办法，得到的数据最能代表全年级？</p>
     <div class="opts">
       <button class="opt" data-v="A"><b>A</b>晚自习结束后，问还留在教室的 \(20\) 个人</button>
@@ -50,7 +51,7 @@
       <button class="opt" data-v="D"><b>D</b>只问自己班的同学</button>
     </div>
     <div class="reveal">
-      <p><b>B</b>。A 里留到最后的人可能本来就睡得晚；C 是愿意填的人才填，他们未必像全年级；D 只有一个班。只有 B 让每个人被抽到的机会一样。</p>
+      <p><b>B</b>。A 里留到最后的人可能本来就睡得晚；C 是愿意填的人才填，他们未必像全年级；D 只有一个班。B 从完整名单中简单随机抽样，让每个人被抽到的机会一样；实际样本仍有随机波动，估计总体时仍可能有抽样误差。</p>
       <p>可这只是第一步。拿到 \(50\) 个数之后，还要整理成表和图，算平均数、方差、百分位数，最后写出结论和建议。这一节就把这一整套流程走一遍。</p>
     </div>
   </div>
@@ -85,7 +86,7 @@
       <div class="concept-head"><span class="badge-pill accent">总体估计</span> 推断未测全体（或然概率）</div>
       <p><b>话语性质</b>：由局部样本根据统计模型对未知总体的<b>推断性估计</b>。</p>
       <p><b>规范措辞</b>：必须使用「<b>估计</b>总体平均值<b>约为</b>……，存在抽样误差」。</p>
-      <p><b>界限警示</b>：绝不可写成「全校平均值就是……」，换一次抽样数值必然波动！</p>
+      <p><b>界限警示</b>：绝不可写成「全校平均值就是……」，换一次抽样，数值可能波动。</p>
     </div>
   </div>
 
@@ -226,7 +227,7 @@
     <div class="trap-card">
       <div class="trap-head"><span class="trap-tag">翻车点 2</span> 把推断估计写成确凿事实</div>
       <p class="wrong">❌ 直接断言「全校学生平均睡眠时间正好是 7.4 小时」。</p>
-      <p class="right">✔ <b>统计结论具有或然性</b>：换一批样本结果必然波动，报告必须说「估计全校均值约为 7.4 小时」。</p>
+      <p class="right">✔ <b>统计结论具有或然性</b>：换一批样本，统计量可能改变，也可能恰好相同；报告应说「估计全校均值约为 7.4 小时」，并说明抽样方式与误差。</p>
     </div>
     <div class="trap-card">
       <div class="trap-head"><span class="trap-tag">翻车点 3</span> 混淆相关性与因果决策</div>
@@ -522,7 +523,7 @@
   nin.addEventListener("change", function () { Peiyu.log("interact", { id: "strata-n", n1: n1 }); });
   document.getElementById("stratareset").onclick = strataReset;
 
-  /* ================= 0 从例子进入：高一睡眠调查抽样覆盖图 ================= */
+  /* ================= 0 从例子进入：高一睡眠调查抽样方案示意 ================= */
   var esvSvg = document.getElementById("entry-surv"), esvBar = document.getElementById("entry-surv-bar"), esvNote = document.getElementById("entry-surv-note");
   var esvMode = "B";
   function esvDraw(m) {
@@ -531,13 +532,13 @@
     esvSvg.innerHTML = "";
     var gx = 24, gy = 34, cols = 20, rows = 10, dx = 13, dy = 14;
     svg("rect", { x: gx - 10, y: gy - 18, width: cols * dx + 8, height: rows * dy + 26, rx: 8, fill: card, stroke: ln, "stroke-width": 1.4 }, esvSvg);
-    svg("text", { x: gx + (cols * dx) / 2 - 4, y: gy - 4, "text-anchor": "middle", fill: mu, "font-size": 12.5, "font-weight": 700 }, esvSvg).textContent = "全年级 1000 人缩略分布（20 个班 × 走读/住校）";
+    svg("text", { x: gx + (cols * dx) / 2 - 4, y: gy - 4, "text-anchor": "middle", fill: mu, "font-size": 12.5, "font-weight": 700 }, esvSvg).textContent = "抽样方案示意（非实际样本）";
 
     for (var r = 0; r < rows; r++) {
       for (var c = 0; c < cols; c++) {
         var idx = r * cols + c, picked = false;
         if (m === "A") picked = (r >= 8 && c >= 15); // 右下角晚自习留堂区
-        else if (m === "B") picked = ((idx * 37 + 11) % 100 < 25); // 均匀随机撒点
+        else if (m === "B") picked = ((idx * 37 + 11) % 100 < 25); // 固定示意点，不是随机抽样实验结果
         else if (m === "C") picked = ((r >= 3 && r <= 6 && c >= 6 && c <= 11) && (r + c) % 2 === 0); // 群里活跃扎堆
         else if (m === "D") picked = (c === 2); // 只问第3列一个班
         var col = m === "B" ? ca : no;
@@ -550,7 +551,7 @@
     svg("rect", { x: rx, y: 22, width: 202, height: 162, rx: 10, fill: good ? okS : noS, stroke: mainCol, "stroke-width": 1.6 }, esvSvg);
     var info = {
       A: ["A 晚自习留堂 20 人", "• 采样挤在右下角熬夜区", "• 留堂同学普遍睡得更晚", "→ 样本平均睡眠严重偏低！"],
-      B: ["B 全年级随机抽 50 人", "• 采样点均匀散布全部班级", "• 走读生与住校生按比例覆盖", "→ 无偏代表全年级真实水平！"],
+      B: ["B 名单中随机抽 50 人", "• 每人被抽到的机会相等", "• 各班、各层人数可能波动", "→ 仍可能有抽样误差"],
       C: ["C 群里发问卷自愿填", "• 只有常看手机/热心者填表", "• 形成自选择偏差（扎堆）", "→ 无法代表不看群的同学！"],
       D: ["D 只问自己班的同学", "• 采样仅限单列（1 个班级）", "• 作息受本班作业量影响大", "→ 忽略了其余 19 个班差异！"]
     }[m];
@@ -563,7 +564,7 @@
       b.classList.toggle("on", b.getAttribute("data-m") === m);
     });
     esvNote.innerHTML = good
-      ? "<b>B 最具代表性</b>：全年级随机抽样让每个同学被抽到的机会相等，绿点均匀覆盖全年级！"
+      ? "<b>B 的抽样设计较合理</b>：从全年级完整名单中简单随机抽 50 人，每人被抽到的机会相等。固定网点只是方案示意；一次样本的各层比例与平均数仍可能偏离总体。"
       : "<b>" + info[0] + "</b>：" + info[2].slice(2) + "，" + info[3].slice(2);
   }
   [].forEach.call(esvBar.querySelectorAll("button"), function (b) {

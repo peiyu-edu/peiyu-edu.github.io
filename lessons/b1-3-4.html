@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -113,39 +113,52 @@
   </div>
 
   <h3>3. 二次函数建模：实际范围、最值与整数限制</h3>
-  <div class="card">
-    <p class="small" style="margin:0 0 4px"><b>例 2（示范：二次函数实际建模三步法思维链）</b></p>
+  <div class="card" id="polya-model">
+    <p class="small" style="margin:0 0 4px"><b>例 2：靠墙围菜园，先想办法再计算</b></p>
     <p style="margin:0 0 8px">用 \(24\) 米篱笆靠长 \(10\) 米的旧墙围矩形菜园（靠墙边不用篱笆）。求菜园面积的最大值及对应的长宽。</p>
+    <p class="small">波利亚四问：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时可以回到前一问；下面的提示按需展开。</p>
+    <p><b>先读懂</b>：\(24\) 米围的是哪几条边？\(10\) 米限制哪条边？求的是面积，最后还要报出哪两个长度？先在纸上画个矩形，标出已知量。</p>
+    <details class="more" id="polya-model-hint-1">
+      <summary>提示 1：怎样只用一个变量？</summary>
+      <p>设垂直于墙的两边各长 \(x\) 米。篱笆只围三边，平行于墙的一边该从 \(24\) 米中扣掉几个 \(x\)？再把两种边长相乘，看看得到哪类函数。</p>
+    </details>
+    <details class="more" id="polya-model-hint-2">
+      <summary>提示 2：有了函数，为什么还不能直接取顶点？</summary>
+      <p>把 \(S=x(24-2x)\) 配方，找出开口方向和顶点；同时写下 \(x&gt;0\)、\(24-2x&gt;0\) 与 \(24-2x\le10\)。顶点代表的菜园能靠这面墙围出来吗？若不能，想想函数在允许范围内怎样变化。</p>
+    </details>
+    <details class="more" id="polya-model-solution">
+      <summary>看完整示范：怎样选方法、求解并检验？</summary>
     <div class="think-steps">
       <div class="think-step">
-        <span class="ts-tag ca">👀 第一步物理设列并严求定义域：</span>
+        <span class="ts-tag ca">👀 读题：把三边与墙长分别写进条件：</span>
         设垂直于墙的两边各为 \(x\) 米，则平行于墙的一边为 \((24-2x)\) 米。<br>
-        面积 \(S=x(24-2x)=-2x^2+24x\)。<br>
-        <b>关键定域</b>：墙长仅 10 米，故必须同时满足 \(x&gt;0\) 且 \(0 &lt; 24-2x \le 10\)！解得物理有效定义域为 \([7, 12)\)！
+        面积 \(S=x(24-2x)=-2x^2+24x\)；同时 \(x&gt;0\)、\(0&lt;24-2x\le10\)，所以 \(7\le x&lt;12\)。
       </div>
       <div class="think-step step-op">
-        <span class="ts-tag cb">🔧 第二步配方定位对称轴与开口方向：</span>
-        配方得 \(S=-2(x-6)^2+72\)，开口向下，对称轴为 \(x=6\)。
+        <span class="ts-tag cb">🔧 想办法：为什么选二次函数？</span>
+        面积已写成一个变量的二次式，配方能看出顶点，再用实际定义域筛选，正好回答“最大值在哪里”。因此先配方，再比较顶点与允许范围。
       </div>
       <div class="think-step step-chk">
-        <span class="ts-tag cc">🛡️ 第三步轴与区间位置防坑校验：</span>
-        对称轴 \(x=6\) <b>不在</b>定义域 \([7, 12)\) 内（\(6 &lt; 7\)）！<br>
-        在区间 \([7, 12)\) 上，抛物线处于对称轴右侧，函数<b>单调递减</b>！<br>
-        故最大值必然在左端点 \(x=7\) 处取得：\(S_{\max} = 7 \times (24-14) = 70\) 平方米！<br>
-        （若盲目代入顶点 \(x=6\) 得到 72 ㎡，此时边长需 12 米，超过墙长 10 米，现实根本搭不出来！）
+        <span class="ts-tag cc">🛡️ 执行并检查：求出的方案真能围吗？</span>
+        \(S=-2(x-6)^2+72\) 开口向下，顶点 \(x=6\) 不在 \([7,12)\) 内。在这个区间上函数递减，最大值在允许的左端点 \(x=7\) 取得。<br>
+        此时另一边 \(24-2\times7=10\) 米，\(S_{\max}=7\times10=70\) 平方米。检查：两边均为正，\(2\times7+10=24\)，靠墙边恰好不超过 \(10\) 米。
       </div>
     </div>
+    <p><b>回头看：只把墙长改成 \(20\) 米，会变什么？</b>面积式不变，范围变为 \(2\le x&lt;12\)。顶点 \(x=6\) 现在可行，另一边 \(12\) 米，最大面积 \(72\) 平方米。可以在「动手」②验证。可迁移的是“先建模、定范围，再找最值”，不能照搬上一题的端点或数值。</p>
+    </details>
   </div>
 
   <div class="card predict" data-id="try-quad" data-answer="A">
     <p>自己试试：某商品进价 \(40\) 元。售价定为 \(x\) 元（\(50\le x\le80\)）时，每天能卖 \((100-x)\) 件。每天的利润最大是多少元？</p>
+    <details class="more" id="polya-profit-hint-1"><summary>提示 1：先分清收入与利润</summary><p>每件的利润是售价减进价。每天总利润应是“每件赚多少”乘“卖出多少件”，先自己写出关于 \(x\) 的函数。</p></details>
+    <details class="more" id="polya-profit-hint-2"><summary>提示 2：怎样判断最大值能否取得？</summary><p>展开或配方得到二次函数，找顶点，再与题目给的售价范围比较。最后核对求出的是利润还是售价，以及销量是否为正。</p></details>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(900\)</button>
       <button class="opt" data-v="B"><b>B</b>\(2500\)</button>
       <button class="opt" data-v="C"><b>C</b>\(70\)</button>
       <button class="opt" data-v="D"><b>D</b>\(1000\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。每件赚 \(x-40\) 元，利润 \(y=(x-40)(100-x)=-(x-70)^2+900\)。顶点 \(x=70\) 在 \([50,80]\) 里，最大利润 \(900\) 元，售价 \(70\) 元。选 B 的同学用了「售价 \(\times\) 销量」，那是收入，忘了减进价；选 C 答的是售价，不是利润。</p></div>
+    <div class="reveal"><p><b>A</b>。每件赚 \(x-40\) 元，利润 \(y=(x-40)(100-x)=-(x-70)^2+900\)。顶点 \(x=70\) 在 \([50,80]\) 里，最大利润 \(900\) 元，售价 \(70\) 元。选 B 的同学用了「售价 \(\times\) 销量」，那是收入，忘了减进价；选 C 答的是售价，不是利润。</p><p><b>回头看</b>：若售价上限改为 \(65\) 元，先自己判断：还能用顶点值作答案吗？</p><details class="more"><summary>核对变式：函数没变，范围变了</summary><p>顶点 \(70\) 不在 \([50,65]\) 内；利润在这个区间递增，故售价 \(65\) 元时最大，利润为 \((65-40)(100-65)=875\) 元。和菜园题一样，方法可以迁移，顶点能否取到必须重查。</p></details></div>
   </div>
 
   <h3>4. 分段函数与反比例模型</h3>
@@ -282,13 +295,14 @@
   </div>
   <div class="card predict" data-id="p-basic-2" data-cards="fn-model-app" data-answer="A">
     <p>2. 用 \(40\) 米栅栏沿河岸围一块矩形场地，靠河一边不用栅栏，河岸足够长。场地面积最大是多少平方米？</p>
+    <details class="more" id="polya-river-hint"><summary>卡住了？与菜园例题比较一下</summary><p>仍只围三边，但栅栏总长变了，河岸也足够长。设垂直河岸的一边为 \(x\)，重新写另一边、面积式和允许范围；原来的“墙长限制”还需要保留吗？</p></details>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(200\)</button>
       <button class="opt" data-v="B"><b>B</b>\(400\)</button>
       <button class="opt" data-v="C"><b>C</b>\(100\)</button>
       <button class="opt" data-v="D"><b>D</b>\(160\)</button>
     </div>
-    <div class="reveal"><p><b>A</b>。垂直于河岸的两边各 \(x\) 米，另一边 \(40-2x\) 米，\(0&lt;x&lt;20\)。\(S=x(40-2x)=-2(x-10)^2+200\)，顶点 \(x=10\) 在定义域里，最大 \(200\) 平方米（这时平行河岸的一边 \(20\) 米）。选 B 的同学把三边当成两边，写成了 \(x(40-x)\)。</p></div>
+    <div class="reveal"><p><b>A</b>。垂直于河岸的两边各 \(x\) 米，另一边 \(40-2x\) 米，\(0&lt;x&lt;20\)。\(S=x(40-2x)=-2(x-10)^2+200\)，顶点 \(x=10\) 在定义域里，最大 \(200\) 平方米（这时平行河岸的一边 \(20\) 米）。选 B 的同学把三边当成两边，写成了 \(x(40-x)\)。</p><p><b>复盘迁移</b>：仍用“一变量建模、定范围、查顶点”的计划；河岸足够长，少了墙长限制，所以顶点可以取到。迁移时保留思路，重新列本题的条件。</p></div>
   </div>
 
   <h3>易错</h3>

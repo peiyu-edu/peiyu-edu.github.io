@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js"></script>
 <style>
@@ -523,7 +523,6 @@
       var v = clamp(Math.round((OY1 - y) / U1 * 4), -24, 24);
       if (v !== b4) { b4 = v; lcDraw(true); }
     }, function () { Peiyu.log("interact", { id: "line-circle", k: KS[ki], b: b4 / 4 }); });
-    if (keepFocus) { var hh = lc.querySelector("[role=slider]"); if (hh) hh.focus(); }
 
     document.getElementById("kout").textContent = f2(k);
     document.getElementById("bout").textContent = f2(b);
@@ -542,6 +541,11 @@
     var out = document.getElementById("lcout");
     out.innerHTML = lines.join("<br>");
     Peiyu.math(out);
+    if (keepFocus) {
+      if (Peiyu.layoutNow) Peiyu.layoutNow();
+      var nextHandle = lc.querySelector("[role=slider]");
+      if (nextHandle) nextHandle.focus({ preventScroll: true });
+    }
   }
   kin.addEventListener("input", function () { ki = clamp(parseInt(kin.value, 10) || 0, 0, KS.length - 1); lcDraw(); });
   bin.addEventListener("input", function () { var v = parseInt(bin.value, 10); b4 = clamp(isNaN(v) ? 0 : v, -24, 24); lcDraw(); });

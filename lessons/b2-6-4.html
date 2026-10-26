@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-9a806c68ca0777f3">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-da070fc17081a9d6"></script>
+<script defer src="../assets/lesson.js?v=sha256-509520f45c9417da"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -432,6 +432,8 @@
       ev.preventDefault();
       setPt(clamp(cur.x + dx, 25, 535), clamp(cur.y + dy, 25, 305));
       triDraw();
+      var nextHandle = trifig.querySelector('circle[aria-label="' + handle.getAttribute("aria-label") + '"]');
+      if (nextHandle) nextHandle.focus({ preventScroll: true });
     });
   }
 
@@ -467,7 +469,8 @@
     var angA = Math.acos(cosA), angB = Math.acos(cosB), angC = Math.acos(cosC);
     var degA = angA * 180 / Math.PI, degB = angB * 180 / Math.PI, degC = angC * 180 / Math.PI;
     var sinA = Math.sin(angA), sinB = Math.sin(angB), sinC = Math.sin(angC);
-    var twoR = (!isDegen && sinA > 0.01) ? a / sinA : 0;
+    // 2R=abc/(2Δ), evaluated from the true area to avoid rounding a small sin A to zero.
+    var twoR = isDegen ? 0 : La * Lb * Lc / (2 * area_px * SCALE1);
 
     // 外接圆
     var D = 2 * (ptA.x * (ptB.y - ptC.y) + ptB.x * (ptC.y - ptA.y) + ptC.x * (ptA.y - ptB.y));
@@ -534,29 +537,30 @@
         var ratioA = a / sinA, ratioB = b / sinB, ratioC = c / sinC;
         var c2 = c * c;
         var cosRhs = a * a + b * b - 2 * a * b * Math.cos(angC);
-        var triType = "锐角三角形";
-        if (Math.abs(degA - 90) < 1 || Math.abs(degB - 90) < 1 || Math.abs(degC - 90) < 1) triType = "直角三角形";
-        else if (degA > 90 || degB > 90 || degC > 90) triType = "钝角三角形";
+        var sideSq = [La * La, Lb * Lb, Lc * Lc].sort(function (x, y) { return x - y; });
+        var rightDiff = sideSq[2] - sideSq[0] - sideSq[1];
+        var rightTol = 1e-10 * Math.max(1, sideSq[2]);
+        var triType = Math.abs(rightDiff) <= rightTol ? "直角三角形" : rightDiff > 0 ? "钝角三角形" : "锐角三角形";
 
-        var cosCStatus = (Math.abs(degC - 90) < 1)
-          ? "cos C ≈ 0（即勾股定理）"
+        var cosCStatus = (Math.abs(La * La + Lb * Lb - Lc * Lc) <= 1e-10 * Math.max(1, Lc * Lc, La * La + Lb * Lb))
+          ? "cos C = 0（勾股定理）"
           : (degC > 90 ? "cos C &lt; 0（减负得正，对边拉长）" : "cos C &gt; 0（减去正数，对边缩短）");
 
         triout.innerHTML =
           '<div class="grid-2">' +
           '  <div class="box">' +
           '    <b>正弦定理与外接圆</b>：<br>' +
-          '    \\(\\dfrac{a}{\\sin A}=\\dfrac{' + f2(a) + '}{\\sin ' + f2(degA) + '^\\circ}\\approx' + f2(ratioA) + '\\)<br>' +
-          '    \\(\\dfrac{b}{\\sin B}=\\dfrac{' + f2(b) + '}{\\sin ' + f2(degB) + '^\\circ}\\approx' + f2(ratioB) + '\\)<br>' +
-          '    \\(\\dfrac{c}{\\sin C}=\\dfrac{' + f2(c) + '}{\\sin ' + f2(degC) + '^\\circ}\\approx' + f2(ratioC) + '\\)<br>' +
+          '    \\(\\dfrac{a}{\\sin A}\\approx\\dfrac{' + f2(a) + '}{\\sin ' + f2(degA) + '^\\circ}\\approx' + f2(ratioA) + '\\)<br>' +
+          '    \\(\\dfrac{b}{\\sin B}\\approx\\dfrac{' + f2(b) + '}{\\sin ' + f2(degB) + '^\\circ}\\approx' + f2(ratioB) + '\\)<br>' +
+          '    \\(\\dfrac{c}{\\sin C}\\approx\\dfrac{' + f2(c) + '}{\\sin ' + f2(degC) + '^\\circ}\\approx' + f2(ratioC) + '\\)<br>' +
           '    外接圆直径 \\(2R\\approx' + f2(twoR) + '\\)（<span class="eq">比值恒等</span>）' +
           '  </div>' +
           '  <div class="box">' +
           '    <b>余弦定理（以边 \\(c\\) 为例）</b>：<br>' +
-          '    左边 \\(c^2=' + f2(c) + '^2=' + f2(c2) + '\\)<br>' +
+          '    左边 \\(c^2\\approx' + f2(c2) + '\\)<br>' +
           '    右边 \\(a^2+b^2-2ab\\cos C\\approx' + f2(cosRhs) + '\\)<br>' +
           '    两边检验：<span class="eq">完全相等</span><br>' +
-          '    角 \\(C=' + f2(degC) + '^\\circ\\)，' + cosCStatus + '（当前为' + triType + '）' +
+          '    角 \\(C\\approx' + f2(degC) + '^\\circ\\)，' + cosCStatus + '（当前为' + triType + '）' +
           '  </div>' +
           '</div>';
         Peiyu.math(triout);

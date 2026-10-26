@@ -530,7 +530,7 @@
     fl.src = "../assets/figure-layout.js?v=vs-c76a05f5a617";
     document.head.appendChild(fl);
     var ws = document.createElement("script");
-    ws.src = "../assets/wiki.js?v=vs-e008258e32ef";
+    ws.src = "../assets/wiki.js?v=vs-c4e9d9132919";
     document.head.appendChild(ws);
     var hs = document.createElement("script"); // 交互层（PY-53）
     hs.src = "../assets/hci.js?v=vs-cc67e9632160";

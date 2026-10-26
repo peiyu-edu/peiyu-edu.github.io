@@ -126,6 +126,14 @@
       var base = new URL(data.base || "", listUrl).href;
       Array.prototype.forEach.call(slots, function (box) {
         var id = box.getAttribute("data-video"), v = mine[id];
+        if (v && v.reviewStatus === "withdrawn") {
+          var notice = document.createElement("p");
+          notice.className = "small";
+          notice.textContent = "这段视频正在复核，请先阅读本节图文。";
+          box.textContent = "";
+          box.appendChild(notice);
+          return;
+        }
         if (!v || !v.src) { box.remove(); return; }
         var subtitleUrl = typeof v.vtt === "string" && v.vtt ? new URL(v.vtt, base).href : "";
         button(box, id, v, new URL(v.src, base).href, subtitleUrl);

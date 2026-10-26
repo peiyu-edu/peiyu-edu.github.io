@@ -1,7 +1,7 @@
 /* 培玉 · 高中数学互动站 — 讲解视频（点了才加载）。
    页面里放占位 <div class="vid" data-video="concept"></div>，并引入本脚本。
-   视频清单在 ../data/videos.json：sections[<节 id>][<占位名>] = {label, title, src, dur}。
-   src 相对 base，base 相对 videos.json。清单里没有的占位直接去掉，页面照常。
+   视频清单在 ../data/videos.json：sections[<节 id>][<占位名>] = {label, title, src, dur, vtt?}。
+   src 和可选 vtt 相对 base，base 相对 videos.json。字幕由学生在播放器控件中选择，本脚本不强制开启。清单里没有的占位直接去掉，页面照常。
    播放记进 lesson.js 同一个做题记录（kind "video"，choice 为 "play" 或 "watch:<看到第几秒>/<总秒数>"）。 */
 (function () {
   "use strict";
@@ -40,7 +40,7 @@
 
   function minutes(s) { return s ? "约 " + Math.max(1, Math.round(s / 60)) + " 分钟" : ""; }
 
-  function button(box, id, v, url) {
+  function button(box, id, v, url, subtitleUrl) {
     box.innerHTML = "";
     var b = document.createElement("button");
     b.type = "button";
@@ -54,11 +54,11 @@
       m.textContent = (v.title ? " · " : "") + minutes(v.dur);
       sub.appendChild(m);
     }
-    b.onclick = function () { player(box, id, v, url); };
+    b.onclick = function () { player(box, id, v, url, subtitleUrl); };
     box.appendChild(b);
   }
 
-  function player(box, id, v, url) {
+  function player(box, id, v, url, subtitleUrl) {
     box.innerHTML = "";
     var wrap = document.createElement("div");
     wrap.className = "vid-box";
@@ -68,6 +68,14 @@
     el.setAttribute("playsinline", "");
     el.preload = "metadata";
     el.src = url;
+    if (subtitleUrl) {
+      var track = document.createElement("track");
+      track.kind = "subtitles";
+      track.srclang = "zh";
+      track.label = "中文字幕";
+      track.src = subtitleUrl;
+      el.appendChild(track);
+    }
     wrap.appendChild(el);
     box.appendChild(wrap);
 
@@ -102,7 +110,7 @@
       el.pause();
       el.removeAttribute("src");
       el.load();
-      button(box, id, v, url);
+      button(box, id, v, url, subtitleUrl);
     };
 
     var p = el.play();
@@ -119,7 +127,8 @@
       Array.prototype.forEach.call(slots, function (box) {
         var id = box.getAttribute("data-video"), v = mine[id];
         if (!v || !v.src) { box.remove(); return; }
-        button(box, id, v, new URL(v.src, base).href);
+        var subtitleUrl = typeof v.vtt === "string" && v.vtt ? new URL(v.vtt, base).href : "";
+        button(box, id, v, new URL(v.src, base).href, subtitleUrl);
       });
     });
   }

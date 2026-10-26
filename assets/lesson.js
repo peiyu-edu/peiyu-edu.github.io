@@ -274,7 +274,7 @@
       }
     } else if (/填空/.test(p.type) && p.answer) {
       var row = el("div", "ctrl");
-      var inp = el("input"); inp.type = "text"; inp.placeholder = "填答案，如 3 或 \\frac{1}{2}"; inp.setAttribute("aria-label", "答案");
+      var inp = el("input"); inp.type = "text"; inp.placeholder = "填答案，如 3 或 1/2"; inp.setAttribute("aria-label", "答案");
       var chk = el("button", "btn", "对答案"); chk.type = "button";
       row.appendChild(inp); row.appendChild(chk); card.appendChild(row);
       chk.onclick = function () {

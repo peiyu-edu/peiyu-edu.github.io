@@ -37,7 +37,7 @@ body {
   font: 16px/1.8 -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
 }
 a { color: var(--a); }
-.wrap { max-width: 860px; margin: 0 auto; padding: 0 16px 64px; }
+.wrap { max-width: clamp(860px, 85vw, 1440px); margin: 0 auto; padding: 0 16px 64px; }
 button { font: inherit; color: inherit; }
 
 /* 顶栏 */
@@ -51,7 +51,10 @@ button { font: inherit; color: inherit; }
 
 /* 与高中站一致的太阳／月亮双态控件，状态不只依靠文字表达。 */
 .top:has(.theme-switch)::after { content: ""; flex-basis: 100%; height: 0; order: 1; }
-.top:has(.theme-switch) > a.pill { order: 2; }
+.main-nav { display: flex; gap: 8px; flex-basis: 100%; order: 2; }
+.main-nav .pill { justify-content: center; }
+[aria-current="page"] { border-color: var(--a); color: var(--a); background: var(--ok-soft); }
+.practice-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
 .theme-switch.pill { position: relative; isolation: isolate; display: inline-grid; grid-template-columns: 1fr 1fr;
   flex: 0 0 84px; width: 84px; height: 44px; padding: 3px; background: var(--bg); color: var(--muted); }
 .theme-switch::before { content: ""; position: absolute; z-index: -1; top: 4px; bottom: 4px; left: 4px;
@@ -67,7 +70,7 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) { .theme-switch::before { transition: none; } }
 @media (max-width: 640px) {
   .top:has(.theme-switch) { gap: 8px; }
-  .top:has(.theme-switch) > a.pill { flex: 1 0 calc((100% - 24px) / 4); min-width: 0;
+  .main-nav > a.pill { flex: 1; min-width: 0;
     justify-content: center; padding-inline: 8px; white-space: nowrap; }
 }
 
@@ -310,4 +313,20 @@ a.btn { display: inline-flex; align-items: center; text-decoration: none; }
   .study-home { grid-template-columns: 1fr; gap: 20px; }
   .study-return { padding: 18px 0 0; border-left: 0; border-top: 1px solid var(--line); }
   .study-route > h2 { font-size: 21px; }
+}
+
+/* 首页把开始与回访放在同一位置，四块入门入口与专题地图对应。 */
+#home-state h2 { margin: 0 0 12px; font-size: 20px; }
+.home-starters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.home-starters article { border-left: 2px solid var(--line); padding-left: 12px; }
+.home-starters h3 { font-size: 16px; margin: 4px 0 12px; }
+.home-starters .muted { font-size: 13px; }
+#home-state .study-start { margin-bottom: 0; }
+.home-followup { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; border-top: 1px solid var(--line); margin-top: 20px; padding-top: 20px; }
+.home-followup p { font-size: 14px; color: var(--muted); }
+.topic-guided { color: var(--a); font-size: 12px; margin: 6px 0; }
+.home-guide { font-size: 14px; margin: 0 0 24px; }
+@media (max-width: 600px) {
+  .home-starters { grid-template-columns: 1fr 1fr; gap: 18px 10px; }
+  .home-followup { grid-template-columns: 1fr; }
 }

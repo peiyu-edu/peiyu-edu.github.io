@@ -103,9 +103,9 @@
       help: { origin: mode === "guided", verify: false },
       prior: { origin: seen(origin) }, background: { origin: mode === "guided" || background(origin) },
       attempts: { origin: [], verify: [] }, checks: {}, opened: [], draft: {}, place: mode === "guided" ? "graph" : "problem" };
-    activeId = r.id; activePhase = "origin"; saveRun(r);
-    if (mode === "challenge") setLocation(r, "problem");
-    else { updateURL(r); openNode(D.entry_node || "sign", true); render(); }
+    saveRun(r);
+    if (mode === "challenge") { render(); setLocation(r, "problem"); }
+    else { activeId = r.id; activePhase = "origin"; updateURL(r); openNode(D.entry_node || "sign", true); render(); }
   }
   function updateURL(r) {
     // 只从受验证的题号构造站内路径，不采纳 return/href 等任意参数。
@@ -148,7 +148,7 @@
         var title = document.createElement("h3"); title.textContent = "把这一点用到题目里"; practice.append(title);
         var tasks = D.problems.filter(function (p) { return p.nodes.includes(id); });
         var explanation = document.createElement("p"); explanation.className = "hint-text";
-        explanation.textContent = tasks.length ? "带着刚学的基础试题，会保留相关学习背景；不会算作完全未提示方法的挑战。" :
+        explanation.textContent = tasks.length ? "带着刚学的基础去试一道真题，做完可以回来继续。" :
           "这个节点先用上面的条件辨析检查。本样板暂未配置直接对应的真题。";
         practice.append(explanation);
         tasks.forEach(function (p) {
@@ -194,13 +194,13 @@
   function evidence(container, r, doc) {
     doc = doc || D;
     container.replaceChildren();
-    var h = document.createElement("h3"); h.textContent = "这次练习留下的证据"; container.append(h);
+    var h = document.createElement("h3"); h.textContent = "这次练习的记录"; container.append(h);
     ["origin", "verify"].forEach(function (phase) {
       var p = document.createElement("p");
       p.textContent = (phase === "origin" ? "原题：" : "换题：") + description(r, phase); container.append(p);
     });
     var note = document.createElement("p"); note.className = "hint-text";
-    note.textContent = "带练与直接挑战分开记录；本组已知" + (doc.topic_title || doc.title_text || "当前") + "专题。阅读和辨析不计真题做对率，换题完成也不代表整个知识点已掌握。";
+    note.textContent = "带练与直接挑战分开记录；这里的节点阅读和辨析不计入真题做对率。";
     container.append(note);
   }
   function render() {
@@ -211,8 +211,8 @@
       put("graph-context", r ? (r.mode === "guided" ? "带练" : "直接挑战") + " · " +
         (r.phase === "verify" ? "正在为换题补基础" : "补完后回到原题") + "：" + problem(r.target).label :
         activeId ? "这条路线的记录已清除或内容已更新。可以重新选择带练或挑战。" : "选择一个节点探索，或选一种方式开始。节点之间可以自由切换。" );
-      put("graph-save-message", temporary ? "当前无法保存路线。仍可用下方按钮返回题目；刷新后练习证据可能丢失。" :
-        r ? "路线与基础辨析保存在本机，可从首页或我的学习继续。" : "阅读与辨析不会增加真题成绩。" );
+      put("graph-save-message", temporary ? "当前无法保存路线。仍可用下方按钮返回题目；刷新后练习记录可能丢失。" :
+        r ? "路线与基础辨析保存在本机，可从首页或我的学习继续。" : "这里的节点阅读与辨析不计入真题成绩。" );
       var ret = document.getElementById("graph-return");
       if (ret) { ret.hidden = !r; if (r) { ret.href = routeURL(r, "problem"); ret.textContent = r.phase === "verify" ? "返回正在验证的题" : r.mode === "guided" && !outcome(r, "origin") ? "回到原题，自己试一试" : "返回原题继续"; } }
       var v = document.getElementById("graph-verify");
@@ -282,21 +282,29 @@
       attempts: { origin: [], verify: [] }, checks: {}, opened: [], draft: {}, place: "problem" };
     activeId = r.id; activePhase = "origin"; temporary = null; saveRun(r);
   }
+  function recent(data) {
+    var positions = [];
+    catalog.forEach(function (doc) {
+      state(data, doc).runs.forEach(function (r) {
+        var completed = r.phase === "verify" && outcome(r, "verify");
+        if (completed && ["ok", "no", "part"].includes(completed.result)) return;
+        positions.push({ at: r.at, fr: doc.fr, href: routeURL(r, r.place === "graph" ? "graph" : "problem", r.node, doc),
+          text: doc.topic_title + " · " + (r.phase === "verify" ? "换题验证" : "原题练习") });
+      });
+    });
+    return positions;
+  }
   function renderResume() {
     var data = api.load(), runs = [];
     catalog.forEach(function (doc) {
       state(data, doc).runs.forEach(function (r) { runs.push({ run: r, doc: doc }); });
     });
     runs.sort(function (a, b) { return String(b.run.at).localeCompare(String(a.run.at)); });
-    ["graph-resume", "graph-home-resume", "graph-record"].forEach(function (id) {
+    ["graph-resume", "graph-record"].forEach(function (id) {
       var box = document.getElementById(id); if (!box) return;
       var available = id === "graph-resume" ? runs.filter(function (x) { return x.doc.fr === D.fr && x.run.id !== activeId; }) : runs;
-      if (id === "graph-home-resume") {
-        var included = new Set();
-        available = available.filter(function (x) { if (included.has(x.doc.fr)) return false; included.add(x.doc.fr); return true; });
-      }
       box.replaceChildren(); box.hidden = !available.length;
-      available.slice(0, id === "graph-record" ? 30 : id === "graph-home-resume" ? catalog.length : 1).forEach(function (x) {
+      available.slice(0, id === "graph-record" ? 30 : 1).forEach(function (x) {
         var r = x.run, doc = x.doc;
         var section = document.createElement("section"), h = document.createElement("h3");
         section.dataset.graphRecord = doc.fr;
@@ -362,6 +370,7 @@
     D = catalog[0];
     var script = Array.from(document.scripts).find(function (s) { return /\/graph\.js(?:\?|$)/.test(s.src); });
     base = new URL("../", script.src);
+    window.PeiyuGraph = { context: context, recent: recent };
     if (Array.isArray(parsed.graphs)) {
       renderResume();
       window.addEventListener("pageshow", renderResume);
@@ -370,7 +379,6 @@
     }
     var pd = document.getElementById("pdata"); pageProblem = pd ? JSON.parse(pd.textContent).id : null;
     if (pageProblem && !problem(pageProblem)) return;
-    window.PeiyuGraph = { context: context };
     restore();
     document.addEventListener("peiyu-record", onRecord);
     if (pageProblem) {
@@ -399,19 +407,27 @@
         }); render();
       });
     });
-    document.getElementById("graph-start-guided")?.addEventListener("click", function () { start("guided"); });
-    document.getElementById("graph-start-challenge")?.addEventListener("click", function () { start("challenge"); });
+    document.querySelector("button#graph-start-guided")?.addEventListener("click", function () { start("guided"); });
+    document.querySelector("button#graph-start-challenge")?.addEventListener("click", function () { start("challenge"); });
     document.getElementById("graph-verify")?.addEventListener("click", verify);
-    if (params.get("start") === "challenge" && document.getElementById("knowledge-graph")) { start("challenge"); return; }
-    if (params.get("start") === "guided" && document.getElementById("knowledge-graph")) start("guided");
-    else if (node(params.get("node")) && document.getElementById("knowledge-graph")) openNode(params.get("node"), false);
-    render();
     function sync(e) {
       if (e.type === "storage" && e.key !== STORE && e.key !== null) return;
       if (e.type === "storage" && (e.key === null || e.newValue === null)) temporary = null;
       render();
     }
     window.addEventListener("pageshow", sync); window.addEventListener("storage", sync);
+    var startMode = params.get("start");
+    if ((startMode === "challenge" || startMode === "guided") && document.getElementById("knowledge-graph")) {
+      params.delete("start");
+      try {
+        var clean = new URL(location.href); clean.searchParams.delete("start");
+        history.replaceState(null, "", clean.href);
+        if (startMode === "challenge" && document.readyState !== "complete") history.pushState(null, "", clean.href);
+      } catch (e) { /* file: 浏览器仍可用实际按钮返回 */ }
+      if (startMode === "challenge") { start("challenge"); return; }
+      start("guided");
+    } else if (node(params.get("node")) && document.getElementById("knowledge-graph")) openNode(params.get("node"), false);
+    render();
   }
   // 本脚本以defer加载；等app.js的作答控件初始化后再恢复选择，避免只恢复外观而未恢复作答状态。
   if (document.readyState === "complete") init();

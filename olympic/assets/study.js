@@ -6,42 +6,16 @@
   function object(x) { return !!x && typeof x === "object" && !Array.isArray(x); }
   function time(x) { var n = Date.parse(x); return Number.isFinite(n) ? n : 0; }
 
-  function initHome(api, meta) {
-    var description = document.getElementById("home-review-description");
-    if (!description) return;
-    var data = api.load(), result = window.PeiyuLearning.plan(meta, data, Date.now(), 8);
-    var reviewLink = document.getElementById("home-review-link");
-    if (result.studied) {
-      description.textContent = result.due ? "有 " + result.due + " 道真题到期了，先试着独立重做。" : "今天暂无到期题，可以从学过的专题中交错练习。";
-      reviewLink.href = "today.html";
-      reviewLink.textContent = result.due ? "开始到期复习" : "看看今日练习";
-    } else {
-      description.textContent = "完成几道真题后，这里会提醒到期复习。";
-      reviewLink.href = document.querySelector(".study-start a").getAttribute("href");
-      reviewLink.textContent = "先开始学习";
-    }
-    var candidates = [];
-    Object.keys(data.problems || {}).forEach(function (id) {
-      var p = data.problems[id];
-      if (!meta[id] || !object(p) || !time(p.at)) return;
-      candidates.push({ at: time(p.at), href: "p/" + id + ".html", text: meta[id].topic + "：" + meta[id].label,
-        action: p.reviewAwaitingSelf ? "继续上次自评" : "回到上次题目" });
-    });
+  function recent(data) {
     var position = data.studyPosition, home = document.querySelector("[data-home-study-revision]");
-    if (object(position) && position.fr === "FR008" && Object.hasOwn(steps, position.step) &&
-        home && position.revision === home.dataset.homeStudyRevision && time(position.at)) {
-      candidates.push({ at: time(position.at), href: "t/FR008.html#study-" + position.step,
-        text: "不等式的证明 · " + steps[position.step], action: "继续学习" });
-    }
-    candidates.sort(function (a, b) { return b.at - a.at; });
-    document.getElementById("home-resume").hidden = true;
-    if (candidates.length) {
-      var latest = candidates[0], link = document.getElementById("home-resume-link");
-      document.getElementById("home-resume-description").textContent = latest.text;
-      link.href = latest.href; link.textContent = latest.action;
-      document.getElementById("home-resume").hidden = false;
-    }
+    if (!object(position) || position.fr !== "FR008" || !Object.hasOwn(steps, position.step) ||
+        !home || position.revision !== home.dataset.homeStudyRevision || !time(position.at)) return [];
+    var ids = home.dataset.studyPractice.split(" ");
+    if (position.step === "practice" && ids.every(function (id) { return data.problems[id] && ["ok", "no", "part"].includes(data.problems[id].status); })) return [];
+    return [{ at: position.at, fr: position.fr, href: "s/FR008.html#study-" + position.step,
+      text: "不等式的证明 · " + steps[position.step] }];
   }
+  window.PeiyuStudy = { recent: recent };
 
   function initRoute(api) {
     var route = document.querySelector("[data-study-route]");
@@ -53,7 +27,7 @@
       var message = document.getElementById("study-save-message");
       try {
         localStorage.setItem(STORE, JSON.stringify(data));
-        message.textContent = "已记住位置：" + steps[step] + "。可从首页继续；这不是掌握度或做对记录。";
+        message.textContent = "已记住位置：" + steps[step] + "，下次可从首页接着看。";
       } catch (e) {
         message.textContent = "当前浏览器无法保存位置。可以继续练习，下次请从学习路线重新进入。";
       }
@@ -95,16 +69,20 @@
     saveHash();
   }
 
+  function redirectLegacy() {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target && target.dataset.studyRedirect) {
+      location.replace(new URL(target.dataset.studyRedirect, location.href).href);
+    }
+  }
+  window.addEventListener("hashchange", redirectLegacy);
+
   function init() {
+    redirectLegacy();
     var api = window.PeiyuOlympic, meta = window.PEIYU_PROBLEMS;
     if (!api) return;
     initRoute(api);
     if (meta && window.PeiyuLearning) {
-      initHome(api, meta);
-      if (document.getElementById("home-review-description")) {
-        window.addEventListener("pageshow", function () { initHome(api, meta); });
-        window.addEventListener("storage", function (event) { if (event.key === STORE || event.key === null) initHome(api, meta); });
-      }
       var starter = document.getElementById("today-start");
       if (starter) starter.hidden = window.PeiyuLearning.plan(meta, api.load(), Date.now(), 8).studied > 0;
     }

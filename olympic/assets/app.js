@@ -66,8 +66,13 @@
     var hadFirst = !!p.first, training;
     if (window.PeiyuGraph && typeof window.PeiyuGraph.context === "function") {
       var context = window.PeiyuGraph.context(id);
+      if (!context && window.PeiyuTraining && typeof window.PeiyuTraining.context === "function") context = window.PeiyuTraining.context(id);
       // The graph owns context validation; keep immutable JSON snapshots in evidence.
       if (context && typeof context === "object" && !Array.isArray(context)) training = JSON.parse(JSON.stringify(context));
+    }
+    if (!training && window.PeiyuTraining && typeof window.PeiyuTraining.context === "function") {
+      var goalContext = window.PeiyuTraining.context(id);
+      if (goalContext && typeof goalContext === "object" && !Array.isArray(goalContext)) training = JSON.parse(JSON.stringify(goalContext));
     }
     var now = new Date().toISOString();
     var pendingAge = Date.parse(now) - Date.parse(p.reviewAttemptAt);
@@ -78,9 +83,12 @@
         ? JSON.parse(JSON.stringify(submittedTraining)) : undefined;
     }
     if ((kind.indexOf("view-") === 0 || kind === "reveal-link" || kind === "compare") && !p.first) p.helped = true;
-    if (kind.indexOf("view-") === 0 || kind === "reveal-link" || kind === "compare") { p.reviewHelped = true; p.reviewHelpedAt = now; }
+    // 相关学习背景保留在首次证据中，不把它当成本次新开的提示重置复习阶梯。
+    if ((kind.indexOf("view-") === 0 && kind !== "view-training-background") || kind === "reveal-link" || kind === "compare") { p.reviewHelped = true; p.reviewHelpedAt = now; }
+    var goalHelped = !!(training && training.source === "goal-training" && training.foundationViewed);
+    if ((kind === "attempt" || kind === "self") && goalHelped && !p.first) p.helped = true;
     if (kind === "attempt") {
-      p.reviewAttemptHelped = !!p.reviewHelped && (!p.reviewDueAt || Date.parse(p.reviewHelpedAt) >= Date.parse(p.reviewDueAt));
+      p.reviewAttemptHelped = goalHelped || (!!p.reviewHelped && (!p.reviewDueAt || Date.parse(p.reviewHelpedAt) >= Date.parse(p.reviewDueAt)));
       p.reviewAwaitingSelf = !result || result === "unsure";
       p.reviewAttemptAt = now;
       p.reviewAttemptTraining = training || null;
@@ -90,7 +98,7 @@
     }
     if (kind === "self") {
       if (!p.reviewAwaitingSelf || Date.parse(now) - Date.parse(p.reviewAttemptAt) >= 86400000) {
-        p.reviewAttemptHelped = !!p.reviewHelped && (!p.reviewDueAt || Date.parse(p.reviewHelpedAt) >= Date.parse(p.reviewDueAt));
+        p.reviewAttemptHelped = goalHelped || (!!p.reviewHelped && (!p.reviewDueAt || Date.parse(p.reviewHelpedAt) >= Date.parse(p.reviewDueAt)));
       }
       p.reviewAwaitingSelf = false;
       p.self = result;

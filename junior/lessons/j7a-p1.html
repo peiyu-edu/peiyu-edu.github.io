@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>综合与实践 进位制的认识与探究 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/junior-consolidation.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .range-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; font-size: 15px; }
+  .range-row input[type="range"] { flex: 1; min-width: 160px; accent-color: var(--a); }
+  .ladder { border-collapse: collapse; margin: 6px auto; font-size: 15px; }
+  .ladder td { padding: 2px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+  .ladder td.r { color: var(--no); font-weight: 700; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-sec="j7a-p1" data-stage="junior" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">七年级上册 · 综合与实践（第二章后）</p>
+<h1>综合与实践 进位制的认识与探究</h1>
+<p class="lead">我们天天用「满十进一」，可钟表是「满六十进一」，电脑里只有 0 和 1。同样写成「101」，在不同的进制里代表的数并不一样。这一页用乘方把「位值」说清楚，学会几种进制之间怎样互相换算。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：2.3 有理数的乘方 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：乘方 \(10^3\)、\(2^5\) 的意义（<a href="j2-3.html">回看 2.3</a>）；有理数的乘法和加法（<a href="j2-2.html">回看 2.2</a>）；小学的「带余数除法」。</p>
+  <ol class="small">
+    <li>从一排灯进入：几盏灯能表示几个不同的数？</li>
+    <li>把十进制数拆开：每一位的数码 × 这一位的位值，再相加。</li>
+    <li>换成「满 \(k\) 进一」：认识二进制、五进制等，把它们化成十进制。</li>
+    <li>反过来：用「除以 \(k\) 取余数，再倒着写」把十进制数化成 \(k\) 进制，并说清为什么。</li>
+    <li>看生活：时、分、秒里的六十进制；先查清「数码必须小于基数」等边界。</li>
+    <li>动手拨灯、换算，再做练习与巩固题。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <div class="card predict" data-id="entry" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPuS4gOaOkuWwj+eBr++8jOavj+ebj+WPquacieOAjOS6ruOAjeOAjOeBreOAjeS4pOenjeeKtuaAgeOAguaKiuS6ruiusOaIkCAx44CB54Gt6K6w5oiQIDDvvIzkuIDnp43kuq7nga3mlrnlvI/lsLHku6PooajkuIDkuKrmlbDjgILlhYjngrnmjInpkq7vvIznnIsgMSDnm4/jgIEyIOebj+OAgTMg55uP54Gv5ZCE5pyJ5Yeg56eN5Lqu54Gt5pa55byP77yaPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIzMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Yeg55uP54Gv55qE5YWo6YOo5Lqu54Gt5pa55byPXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIueBr+eahOebj+aVsFwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1uPVwiMVwiPjEg55uP54GvPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLW49XCIyXCI+MiDnm4/nga88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGNsYXNzPVwib25cIiBkYXRhLW49XCIzXCI+MyDnm4/nga88L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+54Wn6L+Z5Liq6KeE5b6L77yMPGI+NCDnm4/nga88L2I+5LiA5YWx5pyJ5aSa5bCR56eN5LiN5ZCM55qE5Lqu54Gt5pa55byP77yI5YWo54Gt5Lmf566X5LiA56eN77yJ77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNFxcKSDnp408L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoOFxcKSDnp408L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMTVcXCkg56eNPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDE2XFwpIOenjTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5EPC9iPuOAguavj+WkmuS4gOebj+eBr++8jOWOn+adpeeahOavj+enjeaWueW8j+mDveiDveWGjemFjeOAjOS6ruOAjeaIluOAjOeBreOAje+8jOenjeaVsOe/u+S4gOWAje+8mlxcKDJcXHRpbWVzMlxcdGltZXMyXFx0aW1lczI9Ml40PTE2XFwp44CCQSDlj6rmlbDkuobnga/nmoTnm4/mlbDvvJtCIOaYryAzIOebj+eBr+eahOenjeaVsO+8m0Mg5ryP5o6J5LqG44CM5YWo54Gt44CN44CC5oqK6L+ZIDE2IOenjeaWueW8j+S+neasoeWvueW6lCBcXCgwLDEsMixcXGRvdHMsMTVcXCnvvIzlsLHmmK/mnKzpobXnmoTkuLvop5LigJTigJQ8Yj7kuozov5vliLY8L2I+44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>一排小灯，每盏只有「亮」「灭」两种状态。把亮记成 1、灭记成 0，一种亮灭方式就代表一个数。先点按钮，看 1 盏、2 盏、3 盏灯各有几种亮灭方式：</p>
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 230" role="img" aria-label="几盏灯的全部亮灭方式"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="灯的盏数">
+      <button type="button" data-n="1">1 盏灯</button>
+      <button type="button" data-n="2">2 盏灯</button>
+      <button type="button" class="on" data-n="3">3 盏灯</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>照这个规律，<b>4 盏灯</b>一共有多少种不同的亮灭方式（全灭也算一种）？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(4\) 种</button><button class="opt" data-v="B"><b>B</b>\(8\) 种</button><button class="opt" data-v="C"><b>C</b>\(15\) 种</button><button class="opt" data-v="D"><b>D</b>\(16\) 种</button></div>
+    <div class="reveal"><p><b>D</b>。每多一盏灯，原来的每种方式都能再配「亮」或「灭」，种数翻一倍：\(2\times2\times2\times2=2^4=16\)。A 只数了灯的盏数；B 是 3 盏灯的种数；C 漏掉了「全灭」。把这 16 种方式依次对应 \(0,1,2,\dots,15\)，就是本页的主角——<b>二进制</b>。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：位值、进制、基数、数码</h3>
+  <p class="small">前置知识：乘方（<a href="j2-3.html">回看 2.3</a>）。\(10^3=1000\)，\(2^4=16\)；另外规定任何一个数位最右边那一位的位值是 \(1\)。</p>
+  <ul>
+    <li><b>数码</b>：写数时用的单个符号。十进制用 \(0\sim9\) 这十个数码。</li>
+    <li><b>位值</b>：同一个数码放在不同的位置上，代表的大小不同。十进制从右往左，各位的位值依次是 \(1,\ 10,\ 10^2,\ 10^3,\ \dots\)。</li>
+    <li><b>进制与基数</b>：「满几进一」就叫几进制，这个「几」叫<b>基数</b>。满二进一是二进制，满五进一是五进制。本页的基数都是不小于 \(2\) 的整数，只讨论 \(0\) 和正整数。</li>
+    <li><b>记法</b>：为了不和十进制混淆，把五进制的「213」写成 \((213)_5\)，二进制的「1011」写成 \((1011)_2\)。不加括号和下标的数，都是十进制。</li>
+  </ul>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>十进制数「拆开」：数码 × 位值，再相加</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="选一个十进制数">
+        <button type="button" class="on" data-v="2026">2026</button>
+        <button type="button" data-v="305">305</button>
+        <button type="button" data-v="7040">7040</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 170" role="img" aria-label="各位数码和位值"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>满 \(k\) 进一</b></p>
+      <p class="small" style="margin:0">\(k\) 进制只用 \(0,1,\dots,k-1\) 这 \(k\) 个数码；从右往左各位的位值是 \(1,\ k,\ k^2,\ k^3,\ \dots\)。二进制只有 \(0\)、\(1\)，位值是 \(1,2,4,8,16,\dots\)。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>数码相同，数可以不同</b></p>
+      <p class="small" style="margin:0">「\(101\)」在十进制里是一百零一；在二进制里是 \(1\times4+0\times2+1=5\)。读 \((101)_2\) 时要读成「二进制的一零一」，不能读成「一百零一」。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：\(k\) 进制化成十进制——按位展开</h3>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    <span style="display:inline-block">\((213)_5=\underbrace{2\times5^2}_{\text{第三位}}+\underbrace{1\times5}_{\text{第二位}}+\underbrace{3\times1}_{\text{第一位}}=50+5+3=58\)</span>
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">每一位的数码乘这一位的位值，全部加起来，就是这个数在十进制里的值。</p>
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>同一串数码「121」，换个进制换个数</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="选进制">
+        <button type="button" class="on" data-k="3">三进制</button>
+        <button type="button" data-k="4">四进制</button>
+        <button type="button" data-k="5">五进制</button>
+        <button type="button" data-k="10">十进制</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 170" role="img" aria-label="121 在不同进制下的值"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p>把 \((10110)_2\) 和 \((3021)_4\) 化成十进制数。</p>
+    <p class="small">① 读懂题意：第一个是二进制，位值 \(1,2,4,8,16\)；第二个是四进制，位值 \(1,4,16,64\)。</p>
+    <details class="more"><summary>提示 1：先给每一位标位值</summary><p>从<b>最右边</b>开始标：最右一位的位值是 \(1\)，往左每一位都乘一次基数。\((10110)_2\) 有 5 位，最左一位的位值是 \(2^4=16\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>数码 × 位值，再相加；数码是 \(0\) 的位可以跳过。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>\((10110)_2=1\times16+0\times8+1\times4+1\times2+0\times1=22\)；\((3021)_4=3\times64+0\times16+2\times4+1=192+8+1=201\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>\(4^3=64\)，不是 \(4\times3=12\)；四进制的数码 \(3,0,2,1\) 都小于 \(4\)，写法合法 ✓。</div>
+      </div>
+      <p class="small">④ 回头看：二进制位数多但数不大——5 位二进制最大才 \((11111)_2=31\)。基数越小，写同一个数要的位数越多。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuiHquW3seivleivlSAxPC9iPu+8mlxcKCgxMTAxKV8yXFwpIOetieS6juWNgei/m+WItueahOWkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDEzXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDExMDFcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMTFcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoMTRcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXCgxXFx0aW1lczgrMVxcdGltZXM0KzBcXHRpbWVzMisxXFx0aW1lczE9MTNcXCnjgIJCIOaYr+ayoeaNoueul++8jOebtOaOpeW9k+WNgei/m+WItuivu+S6hu+8m0Mg5piv5oqK5L2N5YC86aG65bqP5byE5Y+N77yI5LuO5bem6L655byA5aeL5qCHIFxcKDFcXCnvvInvvIznrpfmiJAgXFwoMSsyKzg9MTFcXCnvvJtEIOaYr+aKiuacgOWPs+S4gOS9jeeahOS9jeWAvOW9k+aIkOS6hiBcXCgyXFwp44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p><b>自己试试 1</b>：\((1101)_2\) 等于十进制的多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(13\)</button><button class="opt" data-v="B"><b>B</b>\(1101\)</button><button class="opt" data-v="C"><b>C</b>\(11\)</button><button class="opt" data-v="D"><b>D</b>\(14\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(1\times8+1\times4+0\times2+1\times1=13\)。B 是没换算，直接当十进制读了；C 是把位值顺序弄反（从左边开始标 \(1\)），算成 \(1+2+8=11\)；D 是把最右一位的位值当成了 \(2\)。</p></div>
+  </div>
+
+  <h3>3. 核心点：十进制化成 \(k\) 进制——除以 \(k\) 取余，倒着写</h3>
+  <p>想象有 \(45\) 颗珠子，每 \(2\) 颗装一小袋：装成 \(22\) 袋，余 \(1\) 颗——这个 \(1\) 就是二进制的最右一位。再把 \(22\) 袋每 \(2\) 袋装一盒：\(11\) 盒，余 \(0\) 袋——这是第二位（每袋 \(2\) 颗）。一直装下去，直到装不满为止。<b>先得到的余数是低位，后得到的是高位</b>，所以要倒着写。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>45 连续除以基数，余数倒着读</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="化成几进制">
+        <button type="button" class="on" data-k="2">化成二进制</button>
+        <button type="button" data-k="3">化成三进制</button>
+        <button type="button" data-k="5">化成五进制</button>
+      </div>
+      <table class="ladder" id="m3-table" aria-label="除法过程"></table>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 120" role="img" aria-label="余数倒着排成结果"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范）</b></p>
+    <p>把 \(100\) 化成三进制数，并检验。</p>
+    <details class="more"><summary>提示：什么时候停</summary><p>一直除以 \(3\)，直到<b>商为 \(0\)</b> 才停；每一步记下余数，余数只能是 \(0\)、\(1\)、\(2\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step step-op"><span class="ts-tag cb">执行：</span>\(100\div3=33\cdots\cdots1\)；\(33\div3=11\cdots\cdots0\)；\(11\div3=3\cdots\cdots2\)；\(3\div3=1\cdots\cdots0\)；\(1\div3=0\cdots\cdots1\)。余数从下往上读：\(100=(10201)_3\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">检验：</span>\((10201)_3=1\times81+0\times27+2\times9+0\times3+1=81+18+1=100\) ✓。</div>
+      </div>
+      <p class="small">回头看：如果从上往下读成 \((10201)_3\) 碰巧一样——这是因为它左右对称！换成 \(45=(1200)_3\) 就看得出：顺着读成 \((0021)_3\) 就错了。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuiHquW3seivleivlSAyPC9iPu+8muaKiiBcXCgyMFxcKSDljJbmiJDkuozov5vliLbmlbDjgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoMTAxMDApXzJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoKDAwMTAxKV8yXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKCgxMDAxMClfMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoMTEwMDApXzJcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXCgyMFxcdG8xMFxcdG81XFx0bzJcXHRvMVxcdG8wXFwp77yM5L2Z5pWw5L6d5qyh5pivIFxcKDAsMCwxLDAsMVxcKe+8jOWAkuedgOWGmSBcXCgxMDEwMFxcKe+8m+ajgOmqjCBcXCgxNis0PTIwXFwpIOKck+OAgkIg5piv5rKh5YCS6L+H5p2l77ybQyDmmK8gXFwoMTYrMj0xOFxcKe+8m0Qg5pivIFxcKDE2Kzg9MjRcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p><b>自己试试 2</b>：把 \(20\) 化成二进制数。</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((10100)_2\)</button><button class="opt" data-v="B"><b>B</b>\((00101)_2\)</button><button class="opt" data-v="C"><b>C</b>\((10010)_2\)</button><button class="opt" data-v="D"><b>D</b>\((11000)_2\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(20\to10\to5\to2\to1\to0\)，余数依次是 \(0,0,1,0,1\)，倒着写 \(10100\)；检验 \(16+4=20\) ✓。B 是没倒过来；C 是 \(16+2=18\)；D 是 \(16+8=24\)。</p></div>
+  </div>
+
+  <h3>4. 生活里的进制：时、分、秒</h3>
+  <p>\(60\) 秒进 \(1\) 分，\(60\) 分进 \(1\) 时——计时用的是六十进制；而 \(24\) 时进 \(1\) 天、\(12\) 个月进 \(1\) 年，又是别的进制。所以「时间」是几种进制混在一起用的。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ④</span><b>把秒数换成「几时几分几秒」</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m4-bar" role="group" aria-label="秒数">
+        <button type="button" class="on" data-s="200">200 秒</button>
+        <button type="button" data-s="3725">3725 秒</button>
+        <button type="button" data-s="10000">10000 秒</button>
+      </div>
+      <svg class="micro-fig" id="m4-fig" viewBox="0 0 380 130" role="img" aria-label="时分秒三格"></svg>
+      <p class="entry-note" id="m4-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjxiPuiHquW3seivleivlSAzPC9iPu+8muS4i+mdouWTquS4gOS4qjxiPuS4jeWPr+iDvTwvYj7mmK/lm5vov5vliLbmlbDnmoTlhpnms5XvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoMzAyMSlfNFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgoMTIzMClfNFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgoMjEwMylfNFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoMTQyNSlfNFxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5EPC9iPuOAguWbm+i/m+WItua7oSBcXCg0XFwpIOWwseimgei/m+S4gO+8jOaVsOeggeWPquiDveaYryBcXCgwLDEsMiwzXFwp77ybRCDph4zlh7rnjrDkuoYgXFwoNFxcKSDlkowgXFwoNVxcKeOAgkHjgIFC44CBQyDnmoTmr4/kuKrmlbDnoIHpg73lsI/kuo4gXFwoNFxcKe+8jOmDveWPr+S7peOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p><b>自己试试 3</b>：下面哪一个<b>不可能</b>是四进制数的写法？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((3021)_4\)</button><button class="opt" data-v="B"><b>B</b>\((1230)_4\)</button><button class="opt" data-v="C"><b>C</b>\((2103)_4\)</button><button class="opt" data-v="D"><b>D</b>\((1425)_4\)</button></div>
+    <div class="reveal"><p><b>D</b>。四进制满 \(4\) 就要进一，数码只能是 \(0,1,2,3\)；D 里出现了 \(4\) 和 \(5\)。A、B、C 的每个数码都小于 \(4\)，都可以。</p></div>
+  </div>
+
+  <h3>5. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>除 \(k\) 取余忘了倒着写</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：\(6\div2=3\cdots0\)，\(3\div2=1\cdots1\)，\(1\div2=0\cdots1\)，写成 \((011)_2\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：第一个余数是「个位」，要写在最右边：\(6=(110)_2\)，检验 \(4+2=6\) ✓。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>数码不小于基数</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：把 \(7\) 写成五进制的「\(7\)」，或者认为 \((12)_2\) 是个二进制数。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：五进制里 \(7=5+2=(12)_5\)；二进制只有 \(0\) 和 \(1\)，\((12)_2\) 这种写法不存在。<b>「12」只有在基数至少是 \(3\) 时才是合法写法。</b></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>位值从左边开始标</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：\((110)_2=1\times1+1\times2+0\times4=3\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：位值从<b>最右边</b>的 \(1\) 开始：\((110)_2=1\times4+1\times2+0=6\)。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>边界与前提：本页约定了什么</summary>
+    <p class="small">① 基数是不小于 \(2\) 的整数（「满一进一」没有意义）；② 只讨论 \(0\) 和正整数，不讨论负数和小数在其他进制下的写法；③ 一个正整数在 \(k\) 进制下的写法是<b>唯一</b>的，前提是最高位不写 \(0\)（\((0101)_2\) 和 \((101)_2\) 是同一个数，习惯上写后者）；④ 每个数码都要小于基数。</p>
+  </details>
+  <details class="more"><summary>再深一点（可以先跳过）：电脑为什么用二进制</summary>
+    <p class="small">电路里「通电/断电」「高电压/低电压」天然是两种状态，正好对应 \(1\) 和 \(0\)。只要两种状态分得清，就不容易出错。我们在电脑上看到的十进制数字，是电脑算完以后换算给人看的。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拨灯：六盏二进制灯</h3>
+  <p class="small">点灯（或点下面的按钮）让它亮或灭。每盏灯上方是它的位值；亮的灯把位值加起来，就是这排灯代表的十进制数。</p>
+  <div class="card">
+    <svg class="fig" id="fig-lamp" viewBox="0 0 560 230" role="img" aria-label="六盏二进制灯"></svg>
+    <div class="entry-bar" id="lamp-bar" role="group" aria-label="开关每盏灯"></div>
+    <div class="result" id="out-lamp" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-lamp" type="button">重置</button></div>
+  </div>
+  <h3>② 进阶：任选一个数，化成任意进制</h3>
+  <p class="small">拖动滑块选数 \(n\)（\(0\sim255\)）和基数 \(k\)（\(2\sim9\)）。表格是「除以 \(k\) 取余」的过程，图里把结果的每一位、位值和乘积排好，用来检验。</p>
+  <div class="card">
+    <div class="range-row"><label for="rng-n">数 \(n\)：</label><input type="range" id="rng-n" min="0" max="255" step="1" value="45"><b id="val-n">45</b></div>
+    <div class="range-row"><label for="rng-k">基数 \(k\)：</label><input type="range" id="rng-k" min="2" max="9" step="1" value="2"><b id="val-k">2</b></div>
+    <table class="ladder" id="conv-table" aria-label="除法过程"></table>
+    <svg class="fig" id="fig-conv" viewBox="0 0 560 220" role="img" aria-label="结果的各位、位值和乘积"></svg>
+    <div class="result" id="out-conv" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-conv" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIFxcKCgxMTAwMSlfMlxcKSDljJbmiJDljYHov5vliLbmmK/lpJrlsJHvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgyNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgxMTAwMVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgxOVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgyNlxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKDE2KzgrMT0yNVxcKeOAgkIg5rKh5o2i566X77ybQyDmmK/kvY3lgLzku47lt6bovrnlvIDlp4vmoIfvvJpcXCgxKzIrMTY9MTlcXCnvvJtEIOaYr+aKiuacgOWPs+S4gOS9jeeahOS9jeWAvOW9k+aIkCBcXCgyXFwp44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>1. \((11001)_2\) 化成十进制是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(25\)</button><button class="opt" data-v="B"><b>B</b>\(11001\)</button><button class="opt" data-v="C"><b>C</b>\(19\)</button><button class="opt" data-v="D"><b>D</b>\(26\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(16+8+1=25\)。B 没换算；C 是位值从左边开始标：\(1+2+16=19\)；D 是把最右一位的位值当成 \(2\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjIuIOaKiiBcXCgzN1xcKSDljJbmiJDkuozov5vliLbmlbDjgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoMTAwMTAxKV8yXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKCgxMDEwMDEpXzJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoKDEwMDExMClfMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoMTEwMDAxKV8yXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoMzc9MzIrNCsxXFwp77yM5omA5Lul5pivIFxcKCgxMDAxMDEpXzJcXCnjgIJCIOaYr+S9meaVsOayoeWAkui/h+adpeWGme+8iFxcKD00MVxcKe+8ie+8m0Mg5pivIFxcKDMyKzQrMj0zOFxcKe+8m0Qg5pivIFxcKDMyKzE2KzE9NDlcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>2. 把 \(37\) 化成二进制数。</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((100101)_2\)</button><button class="opt" data-v="B"><b>B</b>\((101001)_2\)</button><button class="opt" data-v="C"><b>C</b>\((100110)_2\)</button><button class="opt" data-v="D"><b>D</b>\((110001)_2\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(37=32+4+1\)，所以是 \((100101)_2\)。B 是余数没倒过来写（\(=41\)）；C 是 \(32+4+2=38\)；D 是 \(32+16+1=49\)。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjMuIOafkOS4qui/m+WItumHjOWGmeS9nCBcXCgoMTIpX2tcXCkg55qE5pWw77yM562J5LqO5Y2B6L+b5Yi255qEIFxcKDdcXCnjgILln7rmlbAgXFwoa1xcKSDmmK/lpJrlsJHvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPlxcKCgxMilfa1xcKSDmmK/jgIxcXCgxXFwpIOS4qiBcXChrXFwpIOWGjeWKoCBcXCgyXFwp44CN44CC5ZOq5Liq5pWw5YqgIFxcKDJcXCkg5b6XIFxcKDdcXCnvvJ/nrpflh7rmnaXku6XlkI7vvIzlho3mn6XkuIDmn6XmlbDnoIEgXFwoMlxcKSDlnKjov5nkuKrov5vliLbph4zog73kuI3og73nlKjjgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCg3XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiN5a2Y5Zyo6L+Z5qC355qEIFxcKGtcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXCgxXFx0aW1lcyBrKzI9N1xcKe+8jOaJgOS7pSBcXChrPTVcXCnvvJvkupTov5vliLbnmoTmlbDnoIHlj6/ku6XmmK8gXFwoMFxcc2ltNFxcKe+8jFxcKDJcXCkg5ZCI5rOVIOKck+OAgkIg5oqKIFxcKDdcXCkg5b2T5oiQ5LqG5Z+65pWw77ybQyDmmK/kuozov5vliLbvvIzkvYbkuozov5vliLbmsqHmnInmlbDnoIEgXFwoMlxcKe+8m0TvvJpcXChrPTVcXCkg5piv56ym5ZCI6KaB5rGC55qE44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>3. 某个进制里写作 \((12)_k\) 的数，等于十进制的 \(7\)。基数 \(k\) 是多少？</p>
+    <details class="more"><summary>提示</summary><p>\((12)_k\) 是「\(1\) 个 \(k\) 再加 \(2\)」。哪个数加 \(2\) 得 \(7\)？算出来以后，再查一查数码 \(2\) 在这个进制里能不能用。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(5\)</button><button class="opt" data-v="B"><b>B</b>\(7\)</button><button class="opt" data-v="C"><b>C</b>\(2\)</button><button class="opt" data-v="D"><b>D</b>不存在这样的 \(k\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(1\times k+2=7\)，所以 \(k=5\)；五进制的数码可以是 \(0\sim4\)，\(2\) 合法 ✓。B 把 \(7\) 当成了基数；C 是二进制，但二进制没有数码 \(2\)；D：\(k=5\) 是符合要求的。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjQuIOS4iei/m+WItumHjOeahDxiPuS4ieS9jeaVsDwvYj7vvIjmnIDpq5jkvY3kuI3kuLogXFwoMFxcKe+8ie+8jOacgOWkp+eahOWSjOacgOWwj+eahOWMluaIkOWNgei/m+WItuWIhuWIq+aYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5LiJ6L+b5Yi25q+P5L2N5pyA5aSn5pivIFxcKDJcXCnvvJvkuInkvY3mlbDnmoTmnIDpq5jkvY3kuI3og73mmK8gXFwoMFxcKe+8jOacgOWwj+WPquiDveaYryBcXCgxXFwp44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgyNlxcKSDlkowgXFwoOVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgyMjJcXCkg5ZKMIFxcKDEwMFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgyN1xcKSDlkowgXFwoOVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgyNlxcKSDlkowgXFwoMFxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguacgOWkpyBcXCgoMjIyKV8zPTE4KzYrMj0yNlxcKe+8jOacgOWwjyBcXCgoMTAwKV8zPTlcXCnjgIJCIOayoeaNoueul++8m0Mg55qEIFxcKDI3PSgxMDAwKV8zXFwpIOW3sue7j+aYr+Wbm+S9jeaVsO+8m0Qg5oqKIFxcKCgwMDApXzNcXCkg5b2T5oiQ5LiJ5L2N5pWw77yM5L2G5pyA6auY5L2N5Li6IFxcKDBcXCkg5LiN566X5LiJ5L2N5pWw44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>4. 三进制里的<b>三位数</b>（最高位不为 \(0\)），最大的和最小的化成十进制分别是多少？</p>
+    <details class="more"><summary>提示</summary><p>三进制每位最大是 \(2\)；三位数的最高位不能是 \(0\)，最小只能是 \(1\)。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(26\) 和 \(9\)</button><button class="opt" data-v="B"><b>B</b>\(222\) 和 \(100\)</button><button class="opt" data-v="C"><b>C</b>\(27\) 和 \(9\)</button><button class="opt" data-v="D"><b>D</b>\(26\) 和 \(0\)</button></div>
+    <div class="reveal"><p><b>A</b>。最大 \((222)_3=18+6+2=26\)，最小 \((100)_3=9\)。B 没换算；C 的 \(27=(1000)_3\) 已经是四位数；D 把 \((000)_3\) 当成三位数，但最高位为 \(0\) 不算三位数。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p5" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjUuIOaciSBcXCgxXFwpIOWFi+OAgVxcKDJcXCkg5YWL44CBXFwoNFxcKSDlhYvjgIFcXCg4XFwpIOWFi+OAgVxcKDE2XFwpIOWFi+eahOegneeggeWQhOS4gOS4qu+8jOWPquiDveaUvuWcqOWkqeW5s+eahOWQjOS4gOi+ueOAgueUqOWug+S7rOacgOWkmuiDveensOWHuuS7jiBcXCgxXFwpIOWFi+WIsOWkmuWwkeWFi+eahDxiPuavj+S4gOS4qjwvYj7mlbTlhYvmlbDvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDHvvJrmr4/kuKrnoJ3noIHlj6rmnInkuKTnp43mg4XlhrU8L3N1bW1hcnk+PHA+5q+P5Liq56Cd56CB44CM55So44CN5oiW44CM5LiN55So44CN4oCU4oCU5YOP54Gv55qE44CM5Lqu44CN5ZKM44CM54Gt44CN44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMu+8muacgOWkp+iDveensOWkmuWwkTwvc3VtbWFyeT48cD7lhajnlKjkuIrmmK8gXFwoKDExMTExKV8yXFwp44CC5LuOIFxcKDFcXCkg5Yiw5a6D5LmL6Ze055qE5q+P5Liq5pWw77yM6YO96IO95YaZ5oiQ5LqM6L+b5Yi25ZCX77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDMxXFwpIOWFizwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgxNlxcKSDlhYs8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMzJcXCkg5YWLPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDVcXCkg5YWLPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoMVxcc2ltMzFcXCkg5LmL6Ze055qE5q+P5Liq5pW05pWw6YO96IO95ZSv5LiA5Zyw5YaZ5oiQIDUg5L2N5Lul5YaF55qE5LqM6L+b5Yi25pWw77yM44CM5pivIFxcKDFcXCkg55qE5L2N44CN5a+55bqU6KaB55So55qE56Cd56CB77yM5L6L5aaCIFxcKDEzPSgxMTAxKV8yPTgrNCsxXFwp44CC5YWo6YOo55So5LiK5pivIFxcKDErMis0KzgrMTY9MzFcXCnvvIznp7DkuI3lh7ogXFwoMzJcXCnjgIJCIOaYr+acgOWkp+eahOWNleS4quegneegge+8m0Mg6KaBIFxcKCgxMDAwMDApXzJcXCnvvIzpnIDopoEgXFwoMzJcXCkg5YWL56Cd56CB77ybRCDmmK/noJ3noIHkuKrmlbDjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>5. 有 \(1\) 克、\(2\) 克、\(4\) 克、\(8\) 克、\(16\) 克的砝码各一个，只能放在天平的同一边。用它们最多能称出从 \(1\) 克到多少克的<b>每一个</b>整克数？</p>
+    <details class="more"><summary>提示 1：每个砝码只有两种情况</summary><p>每个砝码「用」或「不用」——像灯的「亮」和「灭」。</p></details>
+    <details class="more"><summary>提示 2：最大能称多少</summary><p>全用上是 \((11111)_2\)。从 \(1\) 到它之间的每个数，都能写成二进制吗？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(31\) 克</button><button class="opt" data-v="B"><b>B</b>\(16\) 克</button><button class="opt" data-v="C"><b>C</b>\(32\) 克</button><button class="opt" data-v="D"><b>D</b>\(5\) 克</button></div>
+    <div class="reveal"><p><b>A</b>。\(1\sim31\) 之间的每个整数都能唯一地写成 5 位以内的二进制数，「是 \(1\) 的位」对应要用的砝码，例如 \(13=(1101)_2=8+4+1\)。全部用上是 \(1+2+4+8+16=31\)，称不出 \(32\)。B 是最大的单个砝码；C 要 \((100000)_2\)，需要 \(32\) 克砝码；D 是砝码个数。</p></div>
+  </div>
+
+  <div class="card predict" data-id="consolidate-j7a-p1-gg-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuW3qeWbuue7g+S5oCAxPC9iPu+8muaKiuWbm+i/m+WItuaVsCBcXCgoMjEwMylfNFxcKSDljJbmiJDljYHov5vliLbmlbDvvIznu5PmnpzmmK/vvIjjgIDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDE0N1xcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDIxMDNcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgzOVxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDEzNVxcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguWbm+i/m+WItuS7juWPs+W+gOW3puWQhOS9jeeahOS9jeWAvOS+neasoeaYryBcXCgxLDQsNF4yPTE2LDReMz02NFxcKeOAglxcKCgyMTAzKV80PTJcXHRpbWVzNjQrMVxcdGltZXMxNiswXFx0aW1lczQrM1xcdGltZXMxPTEyOCsxNiswKzM9MTQ3XFwp77yM5pWF6YCJIEHjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p><b>巩固练习 1</b>：把四进制数 \((2103)_4\) 化成十进制数，结果是（　）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(147\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(2103\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(39\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(135\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。四进制从右往左各位的位值依次是 \(1,4,4^2=16,4^3=64\)。\((2103)_4=2\times64+1\times16+0\times4+3\times1=128+16+0+3=147\)，故选 A。</p></div>
+  </div>
+
+  <div class="card" data-consolidation-id="consolidate-j7a-p1-gg-2">
+    <p><b>巩固练习 2</b>：把十进制数 \(100\) 化成五进制数，结果是________．</p>
+    <details class="more"><summary>查看答案与解析，自行核对</summary><p><b>答案：</b>\((400)_5\)</p><p>\(100\div5=20\)，余 \(0\)；\(20\div5=4\)，余 \(0\)；\(4\div5=0\)，余 \(4\)。余数倒着写，得 \(100=(400)_5\)。</p></details>
+  </div>
+
+  <div class="card predict" data-id="consolidate-j7a-p1-gg-3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuW3qeWbuue7g+S5oCAzPC9iPu+8muafkOS4quaVsOWcqCBcXChrXFwpIOi/m+WItuS4i+WGmeS9nCBcXCgoMzMpX2tcXCnvvIzlroPnrYnkuo7ljYHov5vliLbnmoQgXFwoMjdcXCnvvIzpgqPkuYggXFwoa1xcKSDnrYnkuo7vvIjjgIDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDhcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCg5XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNlxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDNcXCk8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXCgoMzMpX2s9M1xcdGltZXMgayszXFwp44CC55SxIFxcKDNcXHRpbWVzIGsrMz0yN1xcKSDlvpcgXFwoM1xcdGltZXMgaz0yNFxcKe+8jFxcKGs9OFxcKeOAguWGjeajgOafpe+8muaVsOeggSBcXCgzXFwpIOWwj+S6jiBcXCg4XFwp77yM5YaZ5rOV5ZCI5rOV44CC5pWF6YCJIEHjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p><b>巩固练习 3</b>：某个数在 \(k\) 进制下写作 \((33)_k\)，它等于十进制的 \(27\)，那么 \(k\) 等于（　）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(9\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(6\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(3\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\((33)_k=3\times k+3\)。由 \(3\times k+3=27\) 得 \(3\times k=24\)，\(k=8\)。再检查：数码 \(3\) 小于 \(8\)，写法合法。故选 A。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-from-primary" aria-labelledby="stage-bridge-prev-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-prev-title">先修回顾 · 小学数学</h2><p class="small">学这一节之前，如果下面的小学基础还有点生疏，可以先回去温习：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../primary/lessons/p2b-u1.html">小学 · 二下第1单元 · 有余数的除法</a><span class="bridge-why">带余除法 $a=bq+r\ (0\le r&lt;b)$ 反复取余的过程，正是将十进制数转化为二进制或 $k$ 进制数的“除基取余法”。</span></li></ul><p class="bridge-all"><a href="../../primary/courses.html">打开小学数学课程目录</a></p></section>
+<section class="card stage-bridge" data-bridge="junior-to-olympiad" aria-labelledby="stage-bridge-olympiad-title"><h2 id="stage-bridge-olympiad-title">一试延伸（入门 F1–F2）</h2><p class="small">学有余力可以试试竞赛入门。下面的一试专题（限定 F1–F2 入门梯度）可以直接从本节出发：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../olympic/intro/FR030.html">一试 · 数论（F1–F2）</a><span class="bridge-why">进位制展开式与带余除法是初等数论中整除判别法（如 $3,9,11$ 的整除特征）、数位和及同余分析的直接入门台阶。</span></li></ul><p class="bridge-all"><a href="../../olympic/index.html#topic-map">打开一试专题地图</a></p></section>
+<footer>培玉智能 · 自编讲解；巩固练习为原创题，不是中考原题。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function C() { return { fg: css("--fg"), muted: css("--muted"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), hl: css("--hl"), card: css("--card"), line: css("--line"), hls: css("--hl-soft"), oks: css("--ok-soft") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function onOf(id, attr) { var t = document.querySelector("#" + id + " .on"); return +t.getAttribute(attr); }
+  // n 化成 k 进制：返回 { digits: 高位在前, steps: [[被除数, 商, 余数]] }
+  function toBase(n, k) {
+    var steps = [], d = [], m = n;
+    if (m === 0) return { digits: [0], steps: steps };
+    while (m > 0) { var q = Math.floor(m / k), r = m - q * k; steps.push([m, q, r]); d.unshift(r); m = q; }
+    return { digits: d, steps: steps };
+  }
+  function sub(k) { return String(k).replace(/\d/g, function (d) { return "₀₁₂₃₄₅₆₇₈₉".charAt(+d); }); }
+  function pow(k, e) { var v = 1; for (var i = 0; i < e; i++) v *= k; return v; }
+  function lamp(p, x, y, w, h, on, c) { el("rect", { x: x, y: y, width: w, height: h, rx: 6, fill: on ? c.hl : c.card, stroke: on ? c.b : c.muted, "stroke-width": 2 }, p); }
+
+  /* 从例子进入：几盏灯的全部亮灭方式 */
+  var ef = document.getElementById("entry-fig"), en = document.getElementById("entry-note");
+  function drawEntry() {
+    var c = C(), n = onOf("entry-bar", "data-n"), total = pow(2, n); ef.innerHTML = "";
+    var cols = total > 4 ? 4 : total, cw = 520 / cols, s = 24, g = 6;
+    for (var i = 0; i < total; i++) {
+      var col = i % cols, row = Math.floor(i / cols), w = n * s + (n - 1) * g;
+      var x0 = col * cw + (cw - w) / 2, y0 = 30 + row * 110;
+      var bits = toBase(i, 2).digits; while (bits.length < n) bits.unshift(0);
+      for (var j = 0; j < n; j++) lamp(ef, x0 + j * (s + g), y0, s, s, bits[j] === 1, c);
+      txt(ef, col * cw + cw / 2, y0 + 62, "第 " + (i + 1) + " 种", c.fg, 400, 18);
+    }
+    en.textContent = n + " 盏灯共有 " + total + " 种亮灭方式" + (n > 1 ? "，是 " + (n - 1) + " 盏时的 2 倍：新加的一盏灯，对原来的每一种方式都可以亮或灭。" : "：亮或灭。");
+  }
+  bar("entry-bar", drawEntry);
+
+  /* 微图解 ①：十进制按位展开 */
+  var m1 = document.getElementById("m1-fig"), m1n = document.getElementById("m1-note");
+  function drawM1() {
+    var c = C(), v = onOf("m1-bar", "data-v"), ds = String(v).split("").map(Number), L = ds.length; m1.innerHTML = "";
+    var bw = 80, x0 = (380 - L * bw) / 2, parts = [];
+    for (var i = 0; i < L; i++) {
+      var pv = pow(10, L - 1 - i), x = x0 + i * bw;
+      el("rect", { x: x + 8, y: 14, width: bw - 16, height: 56, rx: 8, fill: ds[i] ? c.hls : c.card, stroke: c.b, "stroke-width": 2 }, m1);
+      txt(m1, x + bw / 2, 54, String(ds[i]), c.fg, 700, 28);
+      txt(m1, x + bw / 2, 104, "×" + pv, c.c, 400, 17);
+      txt(m1, x + bw / 2, 148, String(ds[i] * pv), ds[i] ? c.a : c.muted, 700, 18);
+      if (ds[i]) parts.push(ds[i] + "×" + (pv === 1 ? "1" : pv));
+    }
+    m1n.textContent = v + " = " + parts.join(" + ") + "。第二行是位值（从右往左 1、10、100、1000），第三行是数码 × 位值；数码是 0 的位乘出来是 0，可以不写，但这一位必须用 0 占住。";
+  }
+  bar("m1-bar", drawM1);
+
+  /* 微图解 ②：121 在不同进制 */
+  var m2 = document.getElementById("m2-fig"), m2n = document.getElementById("m2-note");
+  function drawM2() {
+    var c = C(), k = onOf("m2-bar", "data-k"), ds = [1, 2, 1], pv = [k * k, k, 1], sum = 0; m2.innerHTML = "";
+    for (var i = 0; i < 3; i++) {
+      var x = 40 + i * 100; sum += ds[i] * pv[i];
+      el("rect", { x: x + 10, y: 14, width: 80, height: 56, rx: 8, fill: c.hls, stroke: c.b, "stroke-width": 2 }, m2);
+      txt(m2, x + 50, 54, String(ds[i]), c.fg, 700, 28);
+      txt(m2, x + 50, 104, "×" + pv[i], c.c, 400, 17);
+      txt(m2, x + 50, 148, String(ds[i] * pv[i]), c.a, 700, 18);
+    }
+    m2n.textContent = (k === 10 ? "十进制：121 就是一百二十一。" : "(121)" + sub(k) + " = 1×" + (k * k) + " + 2×" + k + " + 1 = " + sum + "。") + "四种结果 16、25、36、121 分别是 4²、5²、6²、11²——都比基数大 1 再平方，换个进制这个规律还在。注意 121 里有数码 2，所以基数至少是 3，二进制里不能写「121」。";
+  }
+  bar("m2-bar", drawM2);
+
+  /* 微图解 ③：45 除 k 取余 */
+  var m3 = document.getElementById("m3-fig"), m3t = document.getElementById("m3-table"), m3n = document.getElementById("m3-note");
+  function ladder(tb, n, k, res) {
+    var h = "";
+    res.steps.forEach(function (s) { h += "<tr><td>" + s[0] + " ÷ " + k + "</td><td>= " + s[1] + "</td><td class=\"r\">余 " + s[2] + "</td></tr>"; });
+    tb.innerHTML = h || "<tr><td>0 不用除：结果就是 0</td></tr>";
+  }
+  function drawM3() {
+    var c = C(), k = onOf("m3-bar", "data-k"), res = toBase(45, k), L = res.digits.length; m3.innerHTML = "";
+    ladder(m3t, 45, k, res);
+    var bw = Math.min(56, 340 / L), x0 = (380 - L * bw) / 2, check = [];
+    for (var i = 0; i < L; i++) {
+      var x = x0 + i * bw, pv = pow(k, L - 1 - i);
+      el("rect", { x: x + 4, y: 10, width: bw - 8, height: 48, rx: 6, fill: c.hls, stroke: c.no, "stroke-width": 2 }, m3);
+      txt(m3, x + bw / 2, 44, String(res.digits[i]), c.fg, 700, 24);
+      txt(m3, x + bw / 2, 96, "×" + pv, c.c, 400, 16);
+      if (res.digits[i]) check.push(res.digits[i] + "×" + pv);
+    }
+    m3n.textContent = "余数从下往上读：45 = (" + res.digits.join("") + ")" + sub(k) + "。检验：" + check.join(" + ") + " = 45 ✓。最后一个余数是最高位，第一个余数是最低位。";
+  }
+  bar("m3-bar", drawM3);
+
+  /* 微图解 ④：秒数 → 时分秒 */
+  var m4 = document.getElementById("m4-fig"), m4n = document.getElementById("m4-note");
+  function drawM4() {
+    var c = C(), s = onOf("m4-bar", "data-s"), h = Math.floor(s / 3600), mi = Math.floor((s - h * 3600) / 60), se = s - h * 3600 - mi * 60; m4.innerHTML = "";
+    var vals = [h, mi, se], names = ["时", "分", "秒"], pvs = ["×3600", "×60", "×1"];
+    for (var i = 0; i < 3; i++) {
+      var x = 30 + i * 110;
+      el("rect", { x: x + 6, y: 12, width: 98, height: 56, rx: 8, fill: vals[i] ? c.hls : c.card, stroke: c.b, "stroke-width": 2 }, m4);
+      txt(m4, x + 55, 50, vals[i] + " " + names[i], c.fg, 700, 22);
+      txt(m4, x + 55, 108, pvs[i], c.c, 400, 17);
+    }
+    m4n.textContent = s + " 秒：先除以 60 得 " + Math.floor(s / 60) + " 分余 " + se + " 秒；" + (Math.floor(s / 60) >= 60 ? "分再除以 60 得 " + h + " 时余 " + mi + " 分。" : "分不满 60，不进时。") + "检验：" + h + "×3600 + " + mi + "×60 + " + se + " = " + (h * 3600 + mi * 60 + se) + " ✓。";
+  }
+  bar("m4-bar", drawM4);
+
+  /* 动手 ①：六盏灯 */
+  var fl = document.getElementById("fig-lamp"), ol = document.getElementById("out-lamp"), lb = document.getElementById("lamp-bar"), bits = [1, 0, 1, 1, 0, 1];
+  var PV = [32, 16, 8, 4, 2, 1];
+  PV.forEach(function (v, i) {
+    var b = document.createElement("button"); b.type = "button"; b.textContent = "位值 " + v;
+    b.addEventListener("click", function () { bits[i] = 1 - bits[i]; drawLamp(); });
+    lb.appendChild(b);
+  });
+  function drawLamp() {
+    var c = C(), sum = 0, parts = []; fl.innerHTML = "";
+    for (var i = 0; i < 6; i++) {
+      var x = 22 + i * 88;
+      txt(fl, x + 35, 38, String(PV[i]), c.c, 700, 20);
+      var r = el("rect", { x: x, y: 58, width: 70, height: 70, rx: 12, fill: bits[i] ? c.hl : c.card, stroke: bits[i] ? c.b : c.muted, "stroke-width": 3, style: "cursor:pointer" }, fl);
+      (function (j) { r.addEventListener("click", function () { bits[j] = 1 - bits[j]; drawLamp(); }); })(i);
+      txt(fl, x + 35, 105, bits[i] ? "亮" : "灭", bits[i] ? c.fg : c.muted, 700, 20);
+      txt(fl, x + 35, 176, String(bits[i]), bits[i] ? c.no : c.muted, 700, 26);
+      if (bits[i]) { sum += PV[i]; parts.push(PV[i]); }
+      lb.children[i].classList.toggle("on", !!bits[i]); lb.children[i].setAttribute("aria-pressed", bits[i] ? "true" : "false");
+    }
+    txt(fl, 280, 218, "= " + sum, c.no, 700, 22);
+    var s = bits.join("").replace(/^0+(?=.)/, "");
+    ol.innerHTML = "这排灯读作 (" + bits.join("") + ")₂" + (s !== bits.join("") ? "，去掉最高位前面的 0 写成 (" + s + ")₂" : "") + "。亮灯的位值相加：" + (parts.length ? parts.join(" + ") : "没有灯亮") + " = <span class=\"sum\">" + sum + "</span>。六盏灯能表示 0 到 63 共 64 个数：全亮是 32+16+8+4+2+1 = 63。";
+  }
+  document.getElementById("reset-lamp").onclick = function () { bits = [1, 0, 1, 1, 0, 1]; drawLamp(); };
+
+  /* 动手 ②：进阶换算 */
+  var rn = document.getElementById("rng-n"), rk = document.getElementById("rng-k"), fc = document.getElementById("fig-conv"), oc = document.getElementById("out-conv"), ct = document.getElementById("conv-table");
+  function drawConv() {
+    var c = C(), n = +rn.value, k = +rk.value, res = toBase(n, k), L = res.digits.length; fc.innerHTML = "";
+    document.getElementById("val-n").textContent = n; document.getElementById("val-k").textContent = k;
+    ladder(ct, n, k, res);
+    var bw = Math.min(90, 520 / L), x0 = (560 - L * bw) / 2, sum = 0, parts = [];
+    for (var i = 0; i < L; i++) {
+      var x = x0 + i * bw, pv = pow(k, L - 1 - i), pr = res.digits[i] * pv; sum += pr;
+      el("rect", { x: x + 4, y: 14, width: bw - 8, height: 58, rx: 8, fill: c.hls, stroke: c.no, "stroke-width": 2 }, fc);
+      txt(fc, x + bw / 2, 54, String(res.digits[i]), c.fg, 700, 26);
+      txt(fc, x + bw / 2, 120, String(pv), c.c, 400, 19);
+      txt(fc, x + bw / 2, 180, String(pr), pr ? c.a : c.muted, 700, 19);
+      if (pr) parts.push(res.digits[i] + "×" + pv);
+    }
+    oc.innerHTML = n + " 化成 " + k + " 进制是 <span class=\"sum\">(" + res.digits.join("") + ")" + sub(k) + "</span>，共 " + L + " 位。图中第二行是各位的位值，第三行是数码 × 位值；检验：" + (parts.length ? parts.join(" + ") : "0") + " = " + sum + (sum === n ? " ✓" : "") + "。每一位都小于 " + k + "，因为它是除以 " + k + " 的余数。";
+  }
+  rn.addEventListener("input", drawConv); rk.addEventListener("input", drawConv);
+  document.getElementById("reset-conv").onclick = function () { rn.value = 45; rk.value = 2; drawConv(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawM4(); drawLamp(); drawConv(); }
+  drawAll();
+  // 切换深浅色时重画，图里的颜色跟着变
+  new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

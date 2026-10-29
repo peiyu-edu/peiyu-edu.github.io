@@ -1,7 +1,7 @@
 /* 按目标训练：独立任务背景、按需补救、证据复盘，复用真题到期日期。 */
 (function () {
   "use strict";
-  var api, D, base, pd, active = null, bound = null, temporary = null, lastNotice = "";
+  var api, D, catalog = [], base, pd, active = null, bound = null, temporary = null, lastNotice = "";
   var qs = new URLSearchParams(location.search), STORE = "peiyu.olympic.v1";
   function obj(x) { return !!x && typeof x === "object" && !Array.isArray(x); }
   function date() { return new Date().toISOString(); }
@@ -15,7 +15,10 @@
   }
   function result(r, step) { var items = events(r, step); return items.length ? items[items.length - 1] : null; }
   function done(r, step) { var a = result(r, step); return !!a && ["ok", "no", "part"].includes(a.result); }
-  var CHECKS = { bound: "界的依据是否成立", equality: "取等条件是否完整", feasible: "取等条件是否满足原约束" };
+  var LEGACY_CHECKS = { bound: "界的依据是否成立", equality: "取等条件是否完整", feasible: "取等条件是否满足原约束" };
+  function checks() { return D.self_checks ? Object.fromEntries(D.self_checks.map(function (c) { return [c.id, c.label]; })) : LEGACY_CHECKS; }
+  // Catalog aggregation is synchronous; each route keeps its own validation and URL context.
+  function withRoute(doc, fn) { var previous = D; D = doc; try { return fn(); } finally { D = previous; } }
   function ready(r, step) { var check = r.explanations[step]; return done(r, step) && obj(check) && check.pid === r.selected[step]; }
   function valid(r) {
     if (!obj(r) || !/^t[a-z0-9]{8,60}$/.test(r.id) || r.revision !== D.revision ||
@@ -32,7 +35,7 @@
     if (!Object.values(r.attempts).every(function (a) {
       return Array.isArray(a) && a.length <= 30 && a.every(function (v) { return obj(v) && meta(v.pid) && ["ok", "no", "part", "unsure"].includes(v.result); });
     }) || !Object.values(r.usedNodes).every(function (a) { return Array.isArray(a) && a.every(function (id) { return !!node(id); }); })) return false;
-    if (!Object.values(r.explanations).every(function (c) { return obj(c) && meta(c.pid) && Array.isArray(c.keys) && c.keys.every(function (k) { return Object.hasOwn(CHECKS, k); }); })) return false;
+    if (!Object.values(r.explanations).every(function (c) { return obj(c) && meta(c.pid) && Array.isArray(c.keys) && c.keys.every(function (k) { return Object.hasOwn(checks(), k); }); })) return false;
     if (r.finished && !r.partial && !D.stages.every(function (s) { return ready(r, s.id); })) return false;
     return r.stage !== "review" || !!r.finished;
   }
@@ -167,7 +170,7 @@
       var p = meta(r.selected[s.id]); lines.push(s.title + "：" + (p ? p.label + "；" + evidenceText(r, s.id) : "尚未安排"));
       if (p && done(r, s.id)) lines.push("  本题用途：" + p.focus);
       var check = r.explanations[s.id];
-      if (check) lines.push("  学生自检：" + Object.keys(CHECKS).map(function (k) { return (check.keys.includes(k) ? "已核对：" : "仍有缺口：") + CHECKS[k]; }).join("；"));
+      if (check) lines.push("  学生自检：" + Object.keys(checks()).map(function (k) { return (check.keys.includes(k) ? "已核对：" : "仍有缺口：") + checks()[k]; }).join("；"));
       var nodes = (r.usedNodes[s.id] || []).map(function (id) { return node(id).title; });
       if (nodes.length) lines.push("  补过：" + nodes.join("、"));
     });
@@ -196,7 +199,7 @@
       else li.append(el("p", "尚未安排"));
       if (p && done(r, s.id)) li.append(el("p", p.focus, "hint-text"));
       var check = r.explanations[s.id];
-      if (check) li.append(el("p", "学生自检：" + Object.keys(CHECKS).map(function (k) { return (check.keys.includes(k) ? "已核对：" : "仍有缺口：") + CHECKS[k]; }).join("；"), "hint-text"));
+      if (check) li.append(el("p", "学生自检：" + Object.keys(checks()).map(function (k) { return (check.keys.includes(k) ? "已核对：" : "仍有缺口：") + checks()[k]; }).join("；"), "hint-text"));
       var ns = (r.usedNodes[s.id] || []).map(function (id) { return node(id).title; });
       if (ns.length) li.append(el("p", "补过：" + ns.join("、"), "hint-text"));
       list.append(li);
@@ -222,7 +225,10 @@
     box.replaceChildren();
     if (!r) {
       var details = el("details"), sm = el("summary", active ? "这条目标训练已清除或失效" : "按目标训练（会提示目标）");
-      details.append(sm, link("去目标训练：" + D.title_text, new URL("train/" + D.id + ".html", base).href)); box.append(details);
+      details.append(sm);
+      catalog.filter(function (doc) { return !pd || doc.problems.some(function (p) { return p.id === pd.id; }); }).forEach(function (doc) {
+        details.append(link("去目标训练：" + doc.title_text, new URL("train/" + doc.id + ".html", base).href));
+      }); box.append(details);
       document.body.classList.remove("training-active"); return;
     }
     document.body.classList.add("training-active");
@@ -247,9 +253,9 @@
     if (done(r, r.stage)) {
       var form = el("form", undefined, "training-explanation"), fs = el("fieldset");
       fs.append(el("legend", "除了答案，再对照下面三步检查自己的过程"));
-      Object.keys(CHECKS).forEach(function (key) {
+      Object.keys(checks()).forEach(function (key) {
         var lab = el("label"), input = el("input"); input.type = "checkbox"; input.value = key;
-        input.checked = !!r.explanations[r.stage]?.keys.includes(key); lab.append(input, document.createTextNode(" 我已检查" + CHECKS[key])); fs.append(lab);
+        input.checked = !!r.explanations[r.stage]?.keys.includes(key); lab.append(input, document.createTextNode(" 我已检查" + checks()[key])); fs.append(lab);
       });
       var save = el("button", "记下自检（有缺口也可继续）", "btn ghost"); save.type = "submit"; save.id = "training-save-check";
       form.append(fs, save); form.addEventListener("submit", function (e) {
@@ -268,27 +274,47 @@
     box.append(el("p", "正在为「" + D.title_text + "」补基础：" + meta(r.selected[r.stage]).label));
     box.append(link("返回当前训练题", url(r, "task"), "training-return"));
   }
-  function recent(data) {
+  function recentRoute(data) {
     return state(data).runs.filter(function (r) { return !r.finished || (r.stage === "review" && !r.reviewCompletedAt); })
       .map(function (r) {
         return { at: r.at, fr: D.fr, href: url(r, r.place === "foundation" ? "foundation" : "task"),
           text: D.title_text + " · " + (r.stage === "review" ? "延后重做" : "第 " + (D.stages.findIndex(function (s) { return s.id === r.stage; }) + 1) + " / " + D.stages.length + " 题") };
       });
   }
+  function recent(data) {
+    return catalog.flatMap(function (doc) { return withRoute(doc, function () { return recentRoute(data); }); });
+  }
   function renderHistory() {
-    var runs = state(api.load()).runs.slice().sort(function (a, b) { return b.at.localeCompare(a.at); });
-    ["training-history", "training-record", "training-today"].forEach(function (id) {
+    var data = api.load();
+    ["training-history", "training-record"].forEach(function (id) {
       var box = document.getElementById(id); if (!box) return;
+      var docs = id === "training-history" ? [D] : catalog;
+      var runs = docs.flatMap(function (doc) {
+        return withRoute(doc, function () { return state(data).runs.map(function (run) { return { doc: doc, run: run }; }); });
+      }).sort(function (a, b) { return b.run.at.localeCompare(a.run.at); });
       box.replaceChildren(); box.hidden = !runs.length;
-      runs.slice(0, id === "training-record" ? 8 : 1).forEach(function (r) {
-        var article = el("article"); article.append(el("h3", D.title_text + " · " + new Date(r.at).toLocaleDateString("zh-CN")));
-        var d = due(r), action = r.finished ? "查看复盘" : "继续目标训练";
-        if (r.finished && d && d.at <= Date.now()) action = "有任务到期，查看复盘并重做";
-        article.append(link(action, url(r, r.finished ? "recap" : r.place === "foundation" ? "foundation" : "task")));
-        if (id === "training-record") article.append(el("p", "已完成 " + D.stages.filter(function (s) { return done(r, s.id); }).length + "/4 个任务的核对。", "hint-text"));
-        box.append(article);
+      runs.slice(0, id === "training-record" ? 8 : 1).forEach(function (entry) {
+        withRoute(entry.doc, function () {
+          var r = entry.run;
+          var article = el("article"); article.append(el("h3", D.title_text + " · " + new Date(r.at).toLocaleDateString("zh-CN")));
+          var d = due(r), action = r.finished ? "查看复盘" : "继续目标训练";
+          if (r.finished && d && d.at <= Date.now()) action = "有任务到期，查看复盘并重做";
+          article.append(link(action, url(r, r.finished ? "recap" : r.place === "foundation" ? "foundation" : "task")));
+          if (id === "training-record") article.append(el("p", "已完成 " + D.stages.filter(function (s) { return done(r, s.id); }).length + "/4 个任务的核对。", "hint-text"));
+          box.append(article);
+        });
       });
     });
+    // Today resumes unfinished work; completed runs stay in history and review scheduling.
+    var panel = document.getElementById("training-today-panel"), host = panel?.querySelector("[data-training-today]");
+    if (host) {
+      var pending = recent(data).sort(function (a, b) { return b.at.localeCompare(a.at); })[0];
+      host.replaceChildren(); panel.hidden = !pending;
+      if (pending) {
+        var article = el("article"); article.id = "training-today";
+        article.append(el("h3", pending.text), link("继续目标训练", pending.href)); host.append(article);
+      }
+    }
   }
   function render() {
     var r = live(), box = document.getElementById("training-current");
@@ -328,7 +354,9 @@
   }
   function init() {
     var raw = document.getElementById("training-data"); api = window.PeiyuOlympic; if (!raw || !api) return;
-    D = JSON.parse(raw.textContent);
+    var payload = JSON.parse(raw.textContent);
+    catalog = Array.isArray(payload.routes) ? payload.routes : [payload];
+    D = catalog.find(function (doc) { return doc.id === qs.get("training"); }) || catalog[0];
     var script = Array.from(document.scripts).find(function (s) { return /\/training\.js(?:\?|$)/.test(s.src); });
     base = new URL("../", script.src); var data = document.getElementById("pdata"); pd = data ? JSON.parse(data.textContent) : null;
     active = qs.get("training") === D.id && /^t[a-z0-9]{8,60}$/.test(qs.get("run") || "") ? qs.get("run") : null;

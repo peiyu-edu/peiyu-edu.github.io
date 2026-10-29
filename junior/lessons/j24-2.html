@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>24.2 数据的离散程度 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j24-2" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">八年级下册 · 第二十四章 数据的分析</p>
+<h1>24.2 数据的离散程度</h1>
+<p class="lead">两个人平均成绩一样，一个次次差不多，一个忽高忽低。平均数说不出这种区别。这一节用「离差」「离差平方和」「方差」给数据的波动大小一个数。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：24.1 平均数、乘方 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：平均数（<a href="j24-1.html">回看 24.1</a>）；有理数的减法和乘方（<a href="j2-1.html">回看 2.1</a>）；用样本估计总体（<a href="j12-1.html">回看 12.1</a>）。</p>
+  <ol class="small">
+    <li>从「平均数一样，谁更稳」进入。</li>
+    <li>离差：每个数据减去平均数；离差加起来总是 \(0\)。</li>
+    <li>离差平方和 \(d^2\)：把离差平方再相加。</li>
+    <li>方差 \(s^2\)：离差平方的平均数，分母是数据个数 \(n\)。</li>
+    <li>用方差比较波动；离差平方和只能在个数相同时比。</li>
+    <li>练习与中考真题：先看平均水平，再看稳不稳。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>甲、乙两位同学各投 6 轮篮，每轮投 10 个，命中数如下。甲：\(5,6,7,7,8,9\)；乙：\(2,10,7,9,4,10\)。点按钮，一步步看两人的成绩：</p>
+  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIzMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55Sy5LmZ5Lik5Lq65YWt6L2u5oqV56+u5ZG95Lit5pWw5LiO5bmz5Z2H5pWw57q/XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIueci+WbvuaWueW8j1wiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjBcIj7lj6rnnIvlubPlnYfmlbA8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjFcIj7nnIvmr4/ova7miJDnu6k8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjJcIj7nlLvlh7rnprvlubPlnYfmlbDlpJrov5w8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+6LCB55qE5Y+R5oyl5pu056iz5a6a77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7nlLI8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuZk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7kuIDmoLfnqLPvvIzlubPlnYfmlbDpg73mmK8gXFwoN1xcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkE8L2I+44CC5Lik5Lq65bmz5Z2H5pWw6YO95pivIFxcKDQyXFxkaXY2PTdcXCnvvIzlj6/nlLLnmoTngrnpg73mjKjnnYDlubPlnYfmlbDnur/vvIzkuZnnmoTngrnnprvlvpfov5zvvIjmnIDkvY4gXFwoMlxcKeOAgeacgOmrmCBcXCgxMFxcKe+8ieOAgumAiSBDIOaYr+WPqueci+S6huW5s+Wdh+aVsOOAgjwvcD5cbiAgICAgIDxwPuOAjOemu+W+l+i/nOi/keOAjeimgeWPmOaIkOS4gOS4quaVsOaJjeWlveavlOi+g+OAgui/meS4gOiKguimgeWbnuetlO+8mjxiPuaAjuagt+eUqOS4gOS4quaVsOWIu+eUu+aVsOaNrueahOazouWKqO+8iOemu+aVo+eoi+W6pu+8ie+8nzwvYj48L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 230" role="img" aria-label="甲乙两人六轮投篮命中数与平均数线"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="看图方式">
+      <button type="button" class="on" data-k="0">只看平均数</button>
+      <button type="button" data-k="1">看每轮成绩</button>
+      <button type="button" data-k="2">画出离平均数多远</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>谁的发挥更稳定？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>甲</button>
+      <button class="opt" data-v="B"><b>B</b>乙</button>
+      <button class="opt" data-v="C"><b>C</b>一样稳，平均数都是 \(7\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。两人平均数都是 \(42\div6=7\)，可甲的点都挨着平均数线，乙的点离得远（最低 \(2\)、最高 \(10\)）。选 C 是只看了平均数。</p>
+      <p>「离得远近」要变成一个数才好比较。这一节要回答：<b>怎样用一个数刻画数据的波动（离散程度）？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：离散程度、离差</h3>
+  <p class="small">前置知识：平均数（<a href="j24-1.html">回看 24.1</a>）。数据分布越分散，数据和平均数的差异越大，我们说它的<b>离散程度</b>（波动）越大。</p>
+  <p>\(n\) 个数据 \(x_1,x_2,\dots,x_n\) 的平均数是 \(\bar x\)，把 \(x_i-\bar x\)（\(i=1,2,\dots,n\)）叫作 \(x_i\) 关于平均数 \(\bar x\) 的<b>离差</b>。比平均数大，离差为正；比平均数小，离差为负。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>离差：从平均数出发，走到这个数据</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="三组数据">
+        <button type="button" class="on" data-d="3,5,6,10">3, 5, 6, 10</button>
+        <button type="button" data-d="2,4,6,8,10">2, 4, 6, 8, 10</button>
+        <button type="button" data-d="6,6,6,6">6, 6, 6, 6</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 200" role="img" aria-label="每个数据相对平均数的离差箭头"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>离差有正有负</b></p>
+      <p class="small" style="margin:0">离差的正负只说在平均数的哪一边，大小（绝对值）才说离得多远。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>都等于平均数，就没有波动</b></p>
+      <p class="small" style="margin:0">\(6,6,6,6\) 每个离差都是 \(0\)：数据完全不分散。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：离差加起来，总是 \(0\)</h3>
+  <p>能不能把离差加起来表示波动？试几组就会发现，<b>离差的和总是 \(0\)</b>：</p>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \((x_1-\bar x)+\cdots+(x_n-\bar x)=\color{#2F7A56}{\underbrace{(x_1+\cdots+x_n)}_{\text{总和}=n\bar x}}-\color{#B5452F}{\underbrace{n\bar x}_{n\text{ 个 }\bar x}}=0\)
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>正离差和负离差，像跷跷板两边一样重</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="数据组">
+        <button type="button" class="on" data-d="5,6,7,7,8,9">甲 5, 6, 7, 7, 8, 9</button>
+        <button type="button" data-d="2,10,7,9,4,10">乙 2, 10, 7, 9, 4, 10</button>
+        <button type="button" data-d="1,2,9">1, 2, 9</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 210" role="img" aria-label="正负离差条形，合计为零"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p>所以「离差的平均数」总是 \(0\)，不能区分甲和乙。办法是先把离差<b>平方</b>：平方后都不是负数，离得越远，平方越大。</p>
+  <div class="card predict" data-id="try-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muaVsOaNriBcXCgzLDcsOCwxMCwxMlxcKSDnmoTlkITkuKrnprvlt67liqDotbfmnaXnrYnkuo7lpJrlsJHvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgwXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDEyXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDhcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+566X5LiN5Ye65p2lPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5bmz5Z2H5pWwIFxcKDQwXFxkaXY1PThcXCnvvIznprvlt64gXFwoLTUsLTEsMCwyLDRcXCnvvIzlkozkuLogXFwoMFxcKe+8m+S4jeeul+S5n+efpemBk+aYryBcXCgwXFwp44CCQiDmmK/miornprvlt67nmoTnu53lr7nlgLzliqDotbfmnaXkuobvvJtDIOaYr+W5s+Wdh+aVsOOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：数据 \(3,7,8,10,12\) 的各个离差加起来等于多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(0\)</button><button class="opt" data-v="B"><b>B</b>\(12\)</button><button class="opt" data-v="C"><b>C</b>\(8\)</button><button class="opt" data-v="D"><b>D</b>算不出来</button></div>
+    <div class="reveal"><p><b>A</b>。平均数 \(40\div5=8\)，离差 \(-5,-1,0,2,4\)，和为 \(0\)；不算也知道是 \(0\)。B 是把离差的绝对值加起来了；C 是平均数。</p></div>
+  </div>
+
+  <h3>3. 核心点：离差平方和 \(d^2\) 与方差 \(s^2\)</h3>
+  <p>各离差的平方的和 \((x_1-\bar x)^2+(x_2-\bar x)^2+\cdots+(x_n-\bar x)^2\) 叫<b>离差平方和</b>，记作 \(d^2\)。再除以数据个数 \(n\)，得到离差平方的平均数，叫<b>方差</b>，记作 \(s^2\)：</p>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(s^2=\dfrac{\color{#2F7A56}{\overbrace{(x_1-\bar x)^2+(x_2-\bar x)^2+\cdots+(x_n-\bar x)^2}^{\text{离差平方和 } d^2}}}{\color{#B5452F}{\underbrace{n}_{\text{数据个数}}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)"><b>方差越大，数据越分散（波动越大）；方差越小，数据越集中（越稳定）。</b>分母是 \(n\)。</p>
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>离差平方就是一个正方形的面积</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="甲乙两组">
+        <button type="button" class="on" data-d="5,6,7,7,8,9">甲的 6 轮</button>
+        <button type="button" data-d="2,10,7,9,4,10">乙的 6 轮</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 210" role="img" aria-label="以离差为边长的正方形，面积和为离差平方和"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">求「从例子进入」中甲、乙两人命中数的方差，并说明谁更稳定。</p>
+    <p><b>① 读懂题意：</b>平均数已经知道都是 \(7\)。方差要三步：离差 → 平方相加 → 除以个数。</p>
+    <details class="more"><summary>提示 1：列出离差</summary><p>甲：\(-2,-1,0,0,1,2\)。乙呢？写完先检查离差和是不是 \(0\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>按定义分三步算，列离差时顺手验算「离差和为 0」。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>甲：\(d^2=4+1+0+0+1+4=10\)，\(s^2_{\text{甲}}=\dfrac{10}{6}=\dfrac53\approx1.67\)。乙：离差 \(-5,3,0,2,-3,3\)，\(d^2=25+9+0+4+9+9=56\)，\(s^2_{\text{乙}}=\dfrac{56}{6}=\dfrac{28}{3}\approx9.33\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>甲的离差和 \(-2-1+0+0+1+2=0\) ✓；乙的离差和 \(-5+3+0+2-3+3=0\) ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>平均数相同，\(s^2_{\text{甲}}&lt;s^2_{\text{乙}}\)，所以甲更稳定，和看图的感觉一致。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muaxguaVsOaNriBcXCg0LDYsOCw2XFwpIOeahOaWueW3ruOAgjwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoOFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgwXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKFxcdGZyYWM4M1xcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKFxcYmFyIHg9NlxcKe+8jOemu+W3riBcXCgtMiwwLDIsMFxcKe+8jFxcKGReMj00KzArNCswPThcXCnvvIxcXChzXjI9OFxcZGl2ND0yXFwp44CCQiDmmK/nprvlt67lubPmlrnlkozvvIzlv5jkuobpmaTku6UgXFwoNFxcKe+8m0Mg5piv56a75beu55qE5bmz5Z2H5pWw77ybRCDmmK/pmaTku6XkuoYgXFwoM1xcKe+8jOivvuacrOeahOaWueW3ruWIhuavjeaYryBcXChuXFwp44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：求数据 \(4,6,8,6\) 的方差。</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(2\)</button><button class="opt" data-v="B"><b>B</b>\(8\)</button><button class="opt" data-v="C"><b>C</b>\(0\)</button><button class="opt" data-v="D"><b>D</b>\(\tfrac83\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(\bar x=6\)，离差 \(-2,0,2,0\)，\(d^2=4+0+4+0=8\)，\(s^2=8\div4=2\)。B 是离差平方和，忘了除以 \(4\)；C 是离差的平均数；D 是除以了 \(3\)，课本的方差分母是 \(n\)。</p></div>
+  </div>
+
+  <h3>4. 核心点：比波动，比方差</h3>
+  <p>离差平方和也能刻画波动，但数据越多，它往往越大。两组<b>个数相同</b>时，比 \(d^2\) 和比 \(s^2\) 结论一样；个数不同时，要比方差。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ④</span><b>个数不同，离差平方和会「骗人」</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m4-bar" role="group" aria-label="比较方式">
+        <button type="button" class="on" data-k="0">比离差平方和</button>
+        <button type="button" data-k="1">比方差</button>
+      </div>
+      <svg class="micro-fig" id="m4-fig" viewBox="0 0 380 200" role="img" aria-label="三个数和八个数两组的点图与比较"></svg>
+      <p class="entry-note" id="m4-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：既看平均，也看波动）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">小周、小吴 5 天的 1 分钟跳绳个数。小周：\(160,165,170,175,180\)；小吴：\(168,172,170,171,169\)。谁的成绩更稳定？比赛要「稳拿 170 左右」，派谁？</p>
+    <details class="more"><summary>提示：先比什么</summary><p>先算两人平均数，平均数相近时比方差才有意义。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">平均数：</span>两人都是 \(850\div5=170\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">方差：</span>小周离差 \(-10,-5,0,5,10\)，\(s^2=\dfrac{250}{5}=50\)；小吴离差 \(-2,2,0,1,-1\)，\(s^2=\dfrac{10}{5}=2\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">结论：</span>平均数相同，\(s^2_{\text{小吴}}&lt;s^2_{\text{小周}}\)，小吴更稳定，派小吴。</div>
+      </div>
+      <p><b>回头看：</b>方差只说稳不稳，不说高不高。如果比赛要「冲 180」，小周反而有机会——结论要结合平均数和问题要什么。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mkEg57uEIDQg5Liq5pWw5o2u77yM56a75beu5bmz5pa55ZKM5pivIFxcKDEyXFwp77ybQiDnu4QgMTIg5Liq5pWw5o2u77yM56a75beu5bmz5pa55ZKM5pivIFxcKDI0XFwp44CC5ZOq57uE5pWw5o2u5pu05YiG5pWj77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+QSDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+QiDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5LiA5qC3PC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5Liq5pWw5LiN5ZCM6KaB5q+U5pa55beu77yaQSDnu4QgXFwoMTJcXGRpdjQ9M1xcKe+8jEIg57uEIFxcKDI0XFxkaXYxMj0yXFwp77yMQSDnu4Tmlrnlt67lpKfvvIzmm7TliIbmlaPjgILpgIkgQiDmmK/nm7TmjqXmr5Tkuobnprvlt67lubPmlrnlkozjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：A 组 4 个数据，离差平方和是 \(12\)；B 组 12 个数据，离差平方和是 \(24\)。哪组数据更分散？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>A 组</button><button class="opt" data-v="B"><b>B</b>B 组</button><button class="opt" data-v="C"><b>C</b>一样</button></div>
+    <div class="reveal"><p><b>A</b>。个数不同要比方差：A 组 \(12\div4=3\)，B 组 \(24\div12=2\)，A 组方差大，更分散。选 B 是直接比了离差平方和。</p></div>
+  </div>
+  <p><b>用样本方差估计总体方差：</b>由随机抽取的样本算出的方差叫样本方差，可以用它估计总体方差，比如「抽查 20 袋，方差很小，可以推测这批产品的重量比较稳定」。</p>
+
+  <h3>5. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>方差算成离差平方和，或分母用错</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：\(3,5,9,7\) 的方差是 \(20\)，或 \(20\div3\)。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：四个正方形面积加起来是 \(d^2=20\)；方差是「平均每个」的面积，\(20\div4=5\)。分母是个数 \(4\)。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 190" role="img" aria-label="四个离差正方形，总面积二十，平均五"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>方差大，成绩就差（或好）</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：「\(s^2_{\text{甲}}=24&gt;s^2_{\text{乙}}=6\)，所以甲成绩更好。」</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：方差只说波动大小：乙更整齐、更稳定。成绩高低要看平均数。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>离差平方和大，方差就一定大</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：「B 组 \(d^2=12\) 比 A 组 \(d^2=8\) 大，B 组更分散。」</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：A 组 3 个数，\(s^2\approx2.67\)；B 组 8 个数，\(s^2=1.5\)。个数不同，比方差。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：为什么要把离差平方？</summary>
+    <p>离差有正有负，直接相加会互相抵消，和总是 \(0\)。平方以后每一项都不小于 \(0\)，不会抵消；而且离得越远，平方长得越快：离差是 \(2\)，平方是 \(4\)；离差是 \(4\)，平方是 \(16\)。所以方差对离平均数远的数据特别敏感。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖动数据：离差有正有负，和总是 0</h3>
+  <p class="small">6 个数据各占一行。拖动圆点（或点一下再用方向键）改变数据；红色竖线是平均数，彩色横条是离差（绿为正、红为负）。</p>
+  <div class="card">
+    <svg class="fig" id="fig-dev" viewBox="0 0 560 280" role="img" aria-label="六个数据的离差条"></svg>
+    <div class="result" id="out-dev" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-dev" type="button">重置</button></div>
+  </div>
+  <h3>② 离差方块：方差是平均每块的面积</h3>
+  <p class="small">拖动数轴上的 5 个点。下面每个正方形的边长是一个离差的绝对值，面积是离差的平方；面积加起来是 \(d^2\)，再除以 \(5\) 是 \(s^2\)。</p>
+  <div class="card">
+    <svg class="fig" id="fig-sq" viewBox="0 0 560 330" role="img" aria-label="五个数据的离差正方形"></svg>
+    <div class="result" id="out-sq" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-sq" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：整体平移、加一个「平均数」，方差怎么变？</h3>
+  <p class="small">原数据 \(3,5,6,8,13\)。拖动滑轨上的圆点，让每个数据都加上 \(k\)；点按钮在数据里加入一个等于平均数的数。自己算一算，再看读数。</p>
+  <div class="card">
+    <svg class="fig" id="fig-sh" viewBox="0 0 560 250" role="img" aria-label="数据整体平移与加入平均数后的方差"></svg>
+    <div class="result" id="out-sh" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="add-sh" type="button" aria-pressed="false">加入一个等于平均数的数</button> <button class="btn ghost" id="reset-sh" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIOaxguaVsOaNriBcXCgyLDQsNiw4LDEwXFwpIOeahOaWueW3ruOAgjwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDhcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoNDBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMTBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoMFxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKFxcYmFyIHg9NlxcKe+8jFxcKGReMj0xNis0KzArNCsxNj00MFxcKe+8jFxcKHNeMj00MFxcZGl2NT04XFwp44CCQiDmmK/nprvlt67lubPmlrnlkozvvJtDIOaYr+mZpOS7peS6hiBcXCg0XFwp77ybRCDmmK/nprvlt67nmoTlubPlnYfmlbDjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>1. 求数据 \(2,4,6,8,10\) 的方差。</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(8\)</button><button class="opt" data-v="B"><b>B</b>\(40\)</button><button class="opt" data-v="C"><b>C</b>\(10\)</button><button class="opt" data-v="D"><b>D</b>\(0\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(\bar x=6\)，\(d^2=16+4+0+4+16=40\)，\(s^2=40\div5=8\)。B 是离差平方和；C 是除以了 \(4\)；D 是离差的平均数。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjIuIOS4pOWPsOacuuWZqOWMheijhemjn+ebkO+8jOWQhOaKvSAxMCDooovvvIzlubPlnYfph43ph4/pg73mmK8gXFwoNTAwXFwpIGfvvIzmlrnlt67liIbliKvmmK8gXFwoc14yX3tcXHRleHR755SyfX09MC44XFwp77yMXFwoc14yX3tcXHRleHR75LmZfX09Mi4xXFwp44CC5ZOq5Y+w5py65Zmo5YyF6KOF55qE6YeN6YeP5pu056iz5a6a77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+55SyPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS5mTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7kuIDmoLc8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5peg5rOV5Yik5patPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5bmz5Z2H5pWw55u45ZCM77yM5pa55beu5bCP55qE5rOi5Yqo5bCP77yM55Sy5pu056iz5a6a44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>2. 两台机器包装食盐，各抽 10 袋，平均重量都是 \(500\) g，方差分别是 \(s^2_{\text{甲}}=0.8\)，\(s^2_{\text{乙}}=2.1\)。哪台机器包装的重量更稳定？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>甲</button><button class="opt" data-v="B"><b>B</b>乙</button><button class="opt" data-v="C"><b>C</b>一样</button><button class="opt" data-v="D"><b>D</b>无法判断</button></div>
+    <div class="reveal"><p><b>A</b>。平均数相同，方差小的波动小，甲更稳定。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjMuIOS4gOePrSA0MCDkurrouqvpq5jnmoTnprvlt67lubPmlrnlkozmmK8gXFwoMTYwMFxcKe+8jOS6jOePrSA1MCDkurrouqvpq5jnmoTnprvlt67lubPmlrnlkozmmK8gXFwoMTgwMFxcKe+8iOWNleS9je+8mmNtwrLvvInjgILlk6rkuKrnj63nmoTouqvpq5jmm7TmlbTpvZDvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuS6uuaVsOS4jeWQjO+8jOWFiOaKiuemu+W3ruW5s+aWueWSjOaNouaIkOaWueW3ruOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5LiA54+t77yM5Zug5Li6IFxcKDE2MDAmbHQ7MTgwMFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuoznj608L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5LiA5qC35pW06b2QPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC5LiA54+tIFxcKHNeMj0xNjAwXFxkaXY0MD00MFxcKe+8jOS6jOePrSBcXChzXjI9MTgwMFxcZGl2NTA9MzZcXCnvvIzkuoznj63mlrnlt67lsI/vvIzmm7TmlbTpvZDjgIJBIOaYr+ebtOaOpeavlOemu+W3ruW5s+aWueWSjO+8iOe/u+i9pueOsOWcuiDikaLvvInjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>3. 一班 40 人身高的离差平方和是 \(1600\)，二班 50 人身高的离差平方和是 \(1800\)（单位：cm²）。哪个班的身高更整齐？</p>
+    <details class="more"><summary>提示</summary><p>人数不同，先把离差平方和换成方差。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>一班，因为 \(1600&lt;1800\)</button><button class="opt" data-v="B"><b>B</b>二班</button><button class="opt" data-v="C"><b>C</b>一样整齐</button></div>
+    <div class="reveal"><p><b>B</b>。一班 \(s^2=1600\div40=40\)，二班 \(s^2=1800\div50=36\)，二班方差小，更整齐。A 是直接比离差平方和（翻车现场 ③）。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjQuIOaVsOaNriBcXCgxLDIsM1xcKSDnmoTmlrnlt67mmK8gXFwoXFx0ZnJhYzIzXFwp44CC5oqK5q+P5Liq5pWw6YO95Yqg5LiKIFxcKDEwXFwp77yM5b6XIFxcKDExLDEyLDEzXFwp77yM5paw5pWw5o2u55qE5pa55beu5piv5aSa5bCR77yfPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekujwvc3VtbWFyeT48cD7liKvnjJzvvIzmjInlrprkuYnnrpfvvJrmlrDlubPlnYfmlbDmmK/lpJrlsJHvvJ/mr4/kuKrnprvlt67lj5jkuoblkJfvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoXFx0ZnJhYzIzXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDEwXFx0ZnJhYzIzXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDEwMFxcdGZyYWMyM1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgwXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5paw5bmz5Z2H5pWwIFxcKDEyXFwp77yM56a75beu5LuN5pivIFxcKC0xLDAsMVxcKe+8jFxcKHNeMj1cXHRmcmFjezJ9ezN9XFwp44CC5pWw5o2u6YO95Y+Y5aSn5LqG77yM5L2G56a75bmz5Z2H5pWw55qE6L+c6L+R5rKh5Y+Y44CCQuOAgUMg5piv5Lul5Li644CM5pWw5o2u5aSn77yM5pa55beu5bCx5aSn44CN44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>4. 数据 \(1,2,3\) 的方差是 \(\tfrac23\)。把每个数都加上 \(10\)，得 \(11,12,13\)，新数据的方差是多少？</p>
+    <details class="more"><summary>提示</summary><p>别猜，按定义算：新平均数是多少？每个离差变了吗？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\tfrac23\)</button><button class="opt" data-v="B"><b>B</b>\(10\tfrac23\)</button><button class="opt" data-v="C"><b>C</b>\(100\tfrac23\)</button><button class="opt" data-v="D"><b>D</b>\(0\)</button></div>
+    <div class="reveal"><p><b>A</b>。新平均数 \(12\)，离差仍是 \(-1,0,1\)，\(s^2=\tfrac{2}{3}\)。数据都变大了，但离平均数的远近没变。B、C 是以为「数据大，方差就大」。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjUuIOeUsuOAgeS5meS4pOe7hOeahOaVsOWtpuW5s+Wdh+WIhumDveaYryBcXCg4NVxcKe+8jFxcKHNeMl97XFx0ZXh0e+eUsn19PTI0XFwp77yMXFwoc14yX3tcXHRleHR75LmZfX09NlxcKeOAguS4i+mdouivtOazleato+ehrueahOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5pa55beu5Zue562U55qE5piv44CM6auY5LiN6auY44CN6L+Y5piv44CM6b2Q5LiN6b2Q44CN77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7nlLLnu4TmiJDnu6nmr5TkuZnnu4Tlpb08L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5LmZ57uE5oiQ57up5q+U55Sy57uE5aW9PC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS5mee7hOaIkOe7qeavlOeUsue7hOaVtOm9kDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7nlLLnu4TmiJDnu6nmr5TkuZnnu4TmlbTpvZA8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgILlubPlnYfliIbnm7jlkIzvvIzkuZnnu4Tmlrnlt67lsI/vvIzmiJDnu6nmm7TmlbTpvZDjgILmlrnlt67kuI3or7TmmI7miJDnu6npq5jkvY7vvIxB44CBQiDpg73msqHmnInmoLnmja7vvIjnv7vovabnjrDlnLog4pGh77yJ77ybRCDmiormlrnlt67lpKflsI/nmoTmhI/kuYnlvITlj43kuobjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>5. 甲、乙两组的数学平均分都是 \(85\)，\(s^2_{\text{甲}}=24\)，\(s^2_{\text{乙}}=6\)。下面说法正确的是：</p>
+    <details class="more"><summary>提示</summary><p>方差回答的是「高不高」还是「齐不齐」？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>甲组成绩比乙组好</button><button class="opt" data-v="B"><b>B</b>乙组成绩比甲组好</button><button class="opt" data-v="C"><b>C</b>乙组成绩比甲组整齐</button><button class="opt" data-v="D"><b>D</b>甲组成绩比乙组整齐</button></div>
+    <div class="reveal"><p><b>C</b>。平均分相同，乙组方差小，成绩更整齐。方差不说明成绩高低，A、B 都没有根据（翻车现场 ②）；D 把方差大小的意义弄反了。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjYuIOaVsOaNriBcXCgzLDUseCw3LDlcXCkg55qE5bmz5Z2H5pWw5pivIFxcKDZcXCnvvIzmsYLov5nnu4TmlbDmja7nmoTmlrnlt67jgII8L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDHvvJrlhYjmsYIgeDwvc3VtbWFyeT48cD41IOS4quaVsOeahOWSjOaYryBcXCg2XFx0aW1lczU9MzBcXCnjgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAy77ya5YaN5oyJ5LiJ5q2l566X5pa55beuPC9zdW1tYXJ5PjxwPuemu+W3ruOAgeW5s+aWueebuOWKoOOAgemZpOS7pSBcXCg1XFwp44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDRcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMjBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgyXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoeD0zMC0yND02XFwp77yb56a75beuIFxcKC0zLC0xLDAsMSwzXFwp77yMXFwoZF4yPTkrMSswKzErOT0yMFxcKe+8jFxcKHNeMj0yMFxcZGl2NT00XFwp44CCQiDmsqHpmaTku6UgXFwoNVxcKe+8m0Mg5piv6Zmk5Lul5LqGIFxcKDRcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>6. 数据 \(3,5,x,7,9\) 的平均数是 \(6\)，求这组数据的方差。</p>
+    <details class="more"><summary>提示 1：先求 x</summary><p>5 个数的和是 \(6\times5=30\)。</p></details>
+    <details class="more"><summary>提示 2：再按三步算方差</summary><p>离差、平方相加、除以 \(5\)。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(4\)</button><button class="opt" data-v="B"><b>B</b>\(20\)</button><button class="opt" data-v="C"><b>C</b>\(5\)</button><button class="opt" data-v="D"><b>D</b>\(2\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(x=30-24=6\)；离差 \(-3,-1,0,1,3\)，\(d^2=9+1+0+1+9=20\)，\(s^2=20\div5=4\)。B 没除以 \(5\)；C 是除以了 \(4\)。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">中考常把平均数、中位数、众数、方差放在一张表里，再让你「从稳定性的角度」做选择。做完看解析。</p>
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-to-high" aria-labelledby="stage-bridge-next-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-next-title">往后学 · 高中数学</h2><p class="small">把这一节学透，到了高中就能直接迁移到下面的课程：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../lessons/b2-9-2.html">高中 · 用样本估计总体</a><span class="bridge-why">初中引入的方差与标准差公式，在高中直接用于衡量总体稳定性并推导分层抽样的总体方差公式。</span></li></ul><p class="bridge-all"><a href="../../courses.html">打开高中数学课程目录</a></p></section>
+<footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function f(v, d) { var k = Math.pow(10, d == null ? 2 : d), r = Math.round(v * k) / k; if (r === 0) return "0"; var s = String(Math.abs(r)); return r < 0 ? "−" + s : s; }
+  function fp(v) { return v < 0 ? "(" + f(v) + ")" : f(v); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function nums(s) { return s.split(",").map(Number); }
+  function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+  function mean(a) { return sum(a) / a.length; }
+  function d2(a) { var m = mean(a); return sum(a.map(function (x) { return (x - m) * (x - m); })); }
+  function axis(p, lo, hi, x0, x1, y, every, sz, off) {
+    var c = C(), u = (x1 - x0) / (hi - lo);
+    function X(v) { return x0 + (v - lo) * u; }
+    el("line", { x1: x0 - 8, y1: y, x2: x1 + 12, y2: y, stroke: c.fg, "stroke-width": 2 }, p);
+    el("path", { d: "M" + (x1 + 20) + " " + y + " l-12 -6 v12 z", fill: c.fg }, p);
+    for (var v = lo; v <= hi; v++) {
+      el("line", { x1: X(v), y1: y - 5, x2: X(v), y2: y + 5, stroke: c.fg, "stroke-width": 1.5 }, p);
+      if ((v - lo) % every === 0) txt(p, X(v), y + (off || 28), String(v), c.fg, 400, sz || 16);
+    }
+    return X;
+  }
+  function arrow(p, xa, xb, y, col, w) {
+    if (Math.abs(xb - xa) < 1) return;
+    var d = xb > xa ? 1 : -1, hl = Math.min(12, Math.abs(xb - xa));
+    el("line", { x1: xa, y1: y, x2: xb - d * hl * 0.7, y2: y, stroke: col, "stroke-width": w || 4, "stroke-linecap": "round" }, p);
+    el("path", { d: "M" + xb + " " + y + " l" + (-d * hl) + " -7 v14 z", fill: col }, p);
+  }
+  function dot(p, x, y, col, r) { el("circle", { cx: x, cy: y, r: r || 7, fill: col }, p); }
+  function stackY(arr, i, y0, gap) { var k = 0; for (var j = 0; j < i; j++) if (arr[j] === arr[i]) k++; return y0 - k * gap; }
+  function handle(svg, x, y, col, label, val, lo, hi, step, toVal, cb) {
+    var c = C();
+    var h = el("circle", { cx: x, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": f(val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + step, ArrowUp: val + step, ArrowLeft: val - step, ArrowDown: val - step, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(clamp(Math.round(nv / step) * step, lo, hi), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        cb(clamp(Math.round(toVal(pt.matrixTransform(m.inverse()).x) / step) * step, lo, hi), false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+
+  /* 从例子进入：两人六轮 */
+  var JIA = [5, 6, 7, 7, 8, 9], YI = [2, 10, 7, 9, 4, 10], entryK = 0, ef = document.getElementById("entry-fig");
+  function panel(p, d, x0, name, col) {
+    var c = C(), Y = function (v) { return 190 - v * 15; }, m = mean(d);
+    el("line", { x1: x0, y1: 190, x2: x0 + 220, y2: 190, stroke: c.fg, "stroke-width": 1.5 }, p);
+    el("line", { x1: x0, y1: 190, x2: x0, y2: 30, stroke: c.fg, "stroke-width": 1.5 }, p);
+    [0, 5, 10].forEach(function (v) { txt(p, x0 - 8, Y(v) + 6, String(v), c.muted, 400, 16, "end"); });
+    txt(p, x0 + 110, 220, name, col, 700, 19);
+    el("line", { x1: x0, y1: Y(m), x2: x0 + 220, y2: Y(m), stroke: c.no, "stroke-width": 2.5, "stroke-dasharray": "6 4" }, p);
+    if (entryK === 0) { txt(p, x0 + 110, Y(m) - 12, "平均 " + f(m), c.no, 700, 18); return; }
+    d.forEach(function (v, i) {
+      var x = x0 + 25 + i * 34;
+      if (entryK === 2 && v !== m) el("line", { x1: x, y1: Y(m), x2: x, y2: Y(v), stroke: col, "stroke-width": 4 }, p);
+      dot(p, x, Y(v), col, 7);
+    });
+  }
+  function drawEntry() {
+    var c = C(); ef.innerHTML = "";
+    panel(ef, JIA, 40, "甲", c.a); panel(ef, YI, 290, "乙", c.b);
+    var sa = sum(JIA.map(function (v) { return Math.abs(v - 7); })), sb = sum(YI.map(function (v) { return Math.abs(v - 7); }));
+    document.getElementById("entry-note").textContent = entryK === 0 ? "只看平均数：甲 42 ÷ 6 = 7，乙 42 ÷ 6 = 7，完全一样。" : entryK === 1 ? "看每轮：甲在 5 到 9 之间，乙从 2 跳到 10，起伏大得多。" : "竖线是每轮离平均数线多远：甲的竖线总长 " + sa + "，乙的总长 " + sb + "。乙离平均数远得多。";
+  }
+  bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
+
+  /* 微图解 ①：离差箭头 */
+  var m1d = [3, 5, 6, 10];
+  function drawM1() {
+    var p = document.getElementById("m1-fig"), c = C(), m = mean(m1d); p.innerHTML = "";
+    var X = axis(p, 0, 12, 30, 346, 168, 2, 16, 26);
+    el("line", { x1: X(m), y1: 20, x2: X(m), y2: 168, stroke: c.no, "stroke-width": 2.5, "stroke-dasharray": "5 4" }, p);
+    m1d.forEach(function (v, i) {
+      var y = 34 + i * 30, dv = v - m;
+      arrow(p, X(m), X(v), y, dv > 0 ? c.a : c.no, 4);
+      dot(p, X(v), y, c.c, 6);
+      if (dv === 0) txt(p, X(m) + 12, y + 6, "0", c.muted, 700, 16, "start");
+    });
+    document.getElementById("m1-note").textContent = m1d.join("，") + "：平均数 " + f(m) + "，离差依次是 " + m1d.map(function (v) { return f(v - m); }).join("，") + "。" + (d2(m1d) === 0 ? "每个都等于平均数，离差全是 0，没有波动。" : "绿色朝右（正）、红色朝左（负）。");
+  }
+  bar("m1-bar", function (t) { m1d = nums(t.getAttribute("data-d")); drawM1(); });
+
+  /* 微图解 ②：正负离差条 */
+  var m2d = [5, 6, 7, 7, 8, 9];
+  function drawM2() {
+    var p = document.getElementById("m2-fig"), c = C(), m = mean(m2d), n = m2d.length, mid = 100, k = 14; p.innerHTML = "";
+    el("line", { x1: 20, y1: mid, x2: 360, y2: mid, stroke: c.fg, "stroke-width": 2 }, p);
+    var w = 300 / n;
+    m2d.forEach(function (v, i) {
+      var dv = v - m, x = 40 + i * w, h = Math.abs(dv) * k;
+      if (dv) el("rect", { x: x, y: dv > 0 ? mid - h : mid, width: w - 10, height: h, rx: 3, fill: dv > 0 ? c.a : c.no }, p);
+      txt(p, x + (w - 10) / 2, dv >= 0 ? mid + 22 : mid - 8, f(dv), dv > 0 ? c.a : dv < 0 ? c.no : c.muted, 700, 15);
+    });
+    var pos = sum(m2d.map(function (v) { return Math.max(0, v - m); })), neg = sum(m2d.map(function (v) { return Math.min(0, v - m); }));
+    txt(p, 190, 200, "合计 0", c.fg, 700, 17);
+    document.getElementById("m2-note").textContent = m2d.join("，") + "：平均数 " + f(m) + "。正离差共 " + f(pos) + "，负离差共 " + f(neg) + "，加起来正好是 0。";
+  }
+  bar("m2-bar", function (t) { m2d = nums(t.getAttribute("data-d")); drawM2(); });
+
+  /* 微图解 ③、翻车现场 ①：离差正方形 */
+  function squares(p, d, k, x0, base, col, stroke) {
+    var m = mean(d), x = x0;
+    d.forEach(function (v) { var s = Math.abs(v - m) * k; if (s > 0) { el("rect", { x: x, y: base - s, width: s, height: s, fill: col, "fill-opacity": 0.35, stroke: stroke, "stroke-width": 2 }, p); x += s + 6; } });
+    return x;
+  }
+  var m3d = [5, 6, 7, 7, 8, 9];
+  function drawM3() {
+    var p = document.getElementById("m3-fig"), c = C(), m = mean(m3d), D2 = d2(m3d); p.innerHTML = "";
+    var col = m3d[0] === 5 ? c.a : c.b;
+    squares(p, m3d, 13, 20, 150, col, col);
+    el("line", { x1: 14, y1: 150, x2: 366, y2: 150, stroke: c.fg, "stroke-width": 1.5 }, p);
+    var avg = Math.sqrt(D2 / m3d.length) * 13;
+    el("rect", { x: 300, y: 196 - avg, width: avg, height: avg, fill: c.no, "fill-opacity": 0.3, stroke: c.no, "stroke-width": 2 }, p);
+    txt(p, 292, 190, "平均块", c.no, 700, 16, "end");
+    document.getElementById("m3-note").textContent = "离差 " + m3d.map(function (v) { return f(v - m); }).join("，") + "：正方形面积依次 " + m3d.map(function (v) { return f((v - m) * (v - m)); }).join("，") + "，合计 d² = " + D2 + "；平均每块 s² = " + D2 + " ÷ 6 ≈ " + f(D2 / 6) + "（右下红块）。";
+  }
+  bar("m3-bar", function (t) { m3d = nums(t.getAttribute("data-d")); drawM3(); });
+  function drawTrap() {
+    var p = document.getElementById("m-trap"), c = C(), d = [3, 5, 9, 7]; p.innerHTML = "";
+    squares(p, d, 16, 14, 100, c.b, c.b);
+    el("line", { x1: 8, y1: 100, x2: 292, y2: 100, stroke: c.fg, "stroke-width": 1.5 }, p);
+    txt(p, 150, 132, "d² = 20", c.b, 700, 18);
+    var s = Math.sqrt(5) * 16;
+    el("rect", { x: 60, y: 180 - s, width: s, height: s, fill: c.no, "fill-opacity": 0.3, stroke: c.no, "stroke-width": 2 }, p);
+    txt(p, 110, 172, "s² = 5", c.no, 700, 18, "start");
+  }
+
+  /* 微图解 ④：个数不同 */
+  var m4k = 0, GA = [4, 6, 8], GB = [5, 6, 6, 7, 7, 8, 8, 9];
+  function drawM4() {
+    var p = document.getElementById("m4-fig"), c = C(); p.innerHTML = "";
+    var X = axis(p, 3, 10, 70, 346, 160, 1, 16, 26);
+    txt(p, 14, 76, "A", c.a, 700, 18, "start"); txt(p, 14, 136, "B", c.b, 700, 18, "start");
+    GA.forEach(function (v) { dot(p, X(v), 70, c.a, 8); });
+    GB.forEach(function (v, i) { dot(p, X(v), stackY(GB, i, 130, 18), c.b, 8); });
+    var a = m4k ? f(d2(GA) / 3) : f(d2(GA)), b = m4k ? f(d2(GB) / 8) : f(d2(GB));
+    txt(p, 360, 76, a, c.a, 700, 17, "end"); txt(p, 360, 120, b, c.b, 700, 17, "end");
+    document.getElementById("m4-note").textContent = m4k ? "方差：A 组 8 ÷ 3 ≈ 2.67，B 组 12 ÷ 8 = 1.5。A 组更分散——和图上看到的一致。" : "离差平方和：A 组 3 个数 d² = 8，B 组 8 个数 d² = 12。B 大，但只是因为 B 的数据多。";
+  }
+  bar("m4-bar", function (t) { m4k = +t.getAttribute("data-k"); drawM4(); });
+
+  /* 动手 ①：离差条 */
+  var V0 = [4, 7, 9, 10, 12, 18], V = V0.slice(), focusV = -1, fdv = document.getElementById("fig-dev");
+  function drawDev() {
+    var c = C(), m = mean(V), hs = []; fdv.innerHTML = "";
+    var X = axis(fdv, 0, 20, 40, 516, 222, 2, 19, 36);
+    el("line", { x1: X(m), y1: 14, x2: X(m), y2: 222, stroke: c.no, "stroke-width": 3, "stroke-dasharray": "7 5" }, fdv);
+    V.forEach(function (v, i) {
+      var y = 30 + i * 30, dv = v - m;
+      if (Math.abs(dv) > 1e-9) el("line", { x1: X(m), y1: y, x2: X(v), y2: y, stroke: dv > 0 ? c.a : c.no, "stroke-width": 8, "stroke-linecap": "round", opacity: 0.8 }, fdv);
+      hs.push(handle(fdv, X(v), y, c.c, "第 " + (i + 1) + " 个数据", v, 0, 20, 1, function (x) { return (x - 40) / 23.8; },
+        function (nv, key) { V[i] = nv; focusV = key ? i : -1; drawDev(); }));
+    });
+    var devs = V.map(function (v) { return v - m; }), pos = sum(devs.filter(function (x) { return x > 0; })), neg = sum(devs.filter(function (x) { return x < 0; }));
+    document.getElementById("out-dev").innerHTML = "平均数 " + sum(V) + " ÷ 6 ≈ " + f(m) + "。离差：" + devs.map(function (x) { return f(x); }).join("，") + "。正的共 " + f(pos) + "，负的共 " + f(neg) + "，和为 <span class=\"sum\">0</span>：数据怎么拖都一样，因为总和正好等于 6 个平均数。" + (pos === 0 ? "所有点都在平均数上，没有波动。" : "所以要看波动，得先把离差平方。");
+    if (focusV >= 0) hs[focusV].focus();
+  }
+  document.getElementById("reset-dev").onclick = function () { V = V0.slice(); focusV = -1; drawDev(); };
+
+  /* 动手 ②：离差方块 */
+  var Q0 = [2, 4, 5, 7, 7], Q = Q0.slice(), focusQ = -1, fq = document.getElementById("fig-sq");
+  function drawSq() {
+    var c = C(), m = mean(Q), D2 = d2(Q), hs = []; fq.innerHTML = "";
+    var X = axis(fq, 0, 10, 40, 516, 110, 1, 19, 36);
+    el("line", { x1: X(m), y1: 10, x2: X(m), y2: 110, stroke: c.no, "stroke-width": 3, "stroke-dasharray": "7 5" }, fq);
+    squares(fq, Q, 13, 40, 318, c.b, c.b);
+    el("line", { x1: 34, y1: 318, x2: 526, y2: 318, stroke: c.fg, "stroke-width": 1.5 }, fq);
+    Q.forEach(function (v, i) {
+      hs.push(handle(fq, X(v), stackY(Q, i, 110, 24), c.c, "第 " + (i + 1) + " 个数据", v, 0, 10, 1, function (x) { return (x - 40) / 47.6; },
+        function (nv, key) { Q[i] = nv; focusQ = key ? i : -1; drawSq(); }));
+    });
+    document.getElementById("out-sq").innerHTML = "平均数 " + f(m) + "；离差平方 " + Q.map(function (v) { return f((v - m) * (v - m)); }).join(" + ") + " = d² = " + f(D2) + "；方差 s² = " + f(D2) + " ÷ 5 = <span class=\"sum\">" + f(D2 / 5) + "</span>。" + (D2 === 0 ? "所有点重合，没有方块，方差为 0。" : "拖一个点离平均数远一倍，它的方块面积变成 4 倍：离得远的数据对方差影响特别大。");
+    if (focusQ >= 0) hs[focusQ].focus();
+  }
+  document.getElementById("reset-sq").onclick = function () { Q = Q0.slice(); focusQ = -1; drawSq(); };
+
+  /* 动手 ③：平移与加入平均数 */
+  var B0 = [3, 5, 6, 8, 13], K = 0, addM = false, focusK = false, fh = document.getElementById("fig-sh"), addBtn = document.getElementById("add-sh");
+  function drawSh() {
+    var c = C(), d = B0.map(function (v) { return v + K; }), m = mean(d); fh.innerHTML = "";
+    if (addM) d = d.concat([m]);
+    var X = axis(fh, 0, 20, 40, 516, 120, 2, 19, 36);
+    el("line", { x1: X(m), y1: 20, x2: X(m), y2: 120, stroke: c.no, "stroke-width": 3, "stroke-dasharray": "7 5" }, fh);
+    d.forEach(function (v, i) { dot(fh, X(v), 100, i === 5 ? c.no : c.c, 9); });
+    txt(fh, 20, 217, "加上 k", c.fg, 700, 19, "start");
+    el("line", { x1: 150, y1: 210, x2: 470, y2: 210, stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, fh);
+    txt(fh, 548, 217, "k = " + f(K), c.b, 700, 19, "end");
+    var h = handle(fh, 150 + (K + 3) * 40, 210, c.b, "每个数据加上 k", K, -3, 5, 1, function (x) { return (x - 150) / 40 - 3; }, function (v, key) { K = v; focusK = key; drawSh(); });
+    var D2 = d2(d), n = d.length;
+    document.getElementById("out-sh").innerHTML = "数据：" + d.map(function (v) { return f(v); }).join("，") + "。平均数 " + f(m) + "，d² = " + f(D2) + "，s² = " + f(D2) + " ÷ " + n + " ≈ <span class=\"sum\">" + f(D2 / n) + "</span>。" + (K ? "每个数都加 " + f(K) + "，平均数也加 " + f(K) + "，离差一个没变，所以 d² 和 s² 不变。" : "") + (addM ? "加入的数正好等于平均数，离差为 0，d² 不变；个数从 5 变 6，方差从 11.6 变小。" : "");
+    if (focusK) h.focus();
+  }
+  addBtn.onclick = function () { addM = !addM; addBtn.setAttribute("aria-pressed", addM ? "true" : "false"); addBtn.textContent = addM ? "去掉加入的平均数" : "加入一个等于平均数的数"; focusK = false; drawSh(); };
+  document.getElementById("reset-sh").onclick = function () { K = 0; addM = true; addBtn.onclick(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawTrap(); drawM4(); drawDev(); drawSq(); drawSh(); }
+  drawAll();
+  new MutationObserver(function () { focusV = focusQ = -1; focusK = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

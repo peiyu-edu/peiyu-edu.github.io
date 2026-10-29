@@ -6,7 +6,11 @@
   if (root && root.document) {
     var storage;
     try { storage = root.localStorage; } catch (_) { storage = null; }
-    root.PeiyuLearningState = api.createStore({ storage: storage, eventTarget: root });
+    // 学段：初中页（body data-stage="junior" 或 data-sec 为 j<章>-<节>）、小学页（data-stage="primary" 或 p[1-6][ab]-…）的证据单独存，不混进高中记录
+    var body = root.document.body, junior = !!body && (body.getAttribute("data-stage") === "junior" || /^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(body.getAttribute("data-sec") || ""));
+    var primary = !!body && (body.getAttribute("data-stage") === "primary" || /^p[1-6][ab]-/.test(body.getAttribute("data-sec") || ""));
+    var stage = primary ? "primary" : (junior ? "junior" : "high");
+    root.PeiyuLearningState = api.createStore({ storage: storage, eventTarget: root, stage: stage });
   }
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
@@ -37,6 +41,11 @@
     var base = JSON.stringify([questionType, owner || "", questionId || ""]);
     return { pointId: pointId, sectionId: sectionId, questionId: questionId, questionType: questionType,
       contentVersion: contentVersion, base: base, identity: questionId ? JSON.stringify([questionType, owner || "", questionId, contentVersion || "?"]) : null };
+  }
+  // identity is JSON [questionType, owner, questionId, contentVersion]; anything else is not a question identity.
+  function identityParts(identity) {
+    var parts; try { parts = JSON.parse(identity); } catch (err) { return null; }
+    return Array.isArray(parts) && parts.length === 4 && parts.every(function (p) { return typeof p === "string"; }) && TYPES.indexOf(parts[0]) >= 0 && parts[2] ? parts : null;
   }
   function normalize(input, now, legacy) {
     if (!obj(input) || KINDS.indexOf(input.kind) < 0) return null;
@@ -140,7 +149,7 @@
     });
     Object.keys(s.marks).forEach(function (k) {
       var m = s.marks[k]; if (!obj(m) || k.length > 100 || KINDS.indexOf(m.kind) < 0) return;
-      out.marks[k] = { kind: m.kind, identity: str(m.identity, 1000), base: str(m.base, 700), time: time(m.time), choice: str(m.choice, 300), sectionId: str(m.sectionId), pointId: str(m.pointId),
+      out.marks[k] = { kind: m.kind, identity: identityParts(str(m.identity, 1000)) ? m.identity : null, base: str(m.base, 700), time: time(m.time), choice: str(m.choice, 300), sectionId: str(m.sectionId), pointId: str(m.pointId),
         correct: typeof m.correct === "boolean" ? m.correct : null, attemptKind: str(m.attemptKind, 20), legacy: m.legacy === true };
       if (m.kind === "answer" && (!out.questions[m.identity] || !out.questions[m.identity].firstAnswer)) out.historyIncomplete = true;
     });
@@ -149,6 +158,13 @@
   }
   function createStore(options) {
     options = options || {};
+    var stage = options.stage === "primary" ? "primary" : options.stage === "junior" ? "junior" : "high";
+    var KEY = stage === "primary" ? "peiyu.ps.learning.v1" : stage === "junior" ? "peiyu.jh.learning.v1" : "peiyu.hs.learning.v1";
+    var LOG = stage === "primary" ? "peiyu.ps.log" : stage === "junior" ? "peiyu.jh.log" : "peiyu.hs.log";
+    function sectionStage(sec) {
+      return /^p[1-6][ab]-/.test(sec) ? "primary" : /^j(?:\d+-(?:\d+|test)|[789][ab]-p\d+)$/.test(sec) ? "junior" : "high";
+    }
+    function ownSection(sec) { return typeof sec !== "string" || !sec || sectionStage(sec) === stage; }
     var storage = options.storage || null, now = options.now || Date.now, maxEvents = Number.isInteger(options.maxEvents) ? Math.max(1, options.maxEvents) : 1500;
     var state = blank(), loaded = false, blockedWrite = false, memoryOnly = !storage, problems = [], listeners = [], updating = false;
     function problem(msg) { if (problems.indexOf(msg) < 0) problems.push(msg); }
@@ -215,13 +231,21 @@
       state.marks[e.id] = { kind: e.kind, identity: e.identity, base: e.base, time: e.time, choice: e.choice, sectionId: e.sectionId, pointId: e.pointId, correct: e.correct, attemptKind: e.attemptKind, legacy: e.legacy };
       return e;
     }
+    // Marks keep the persisted schema (no questionId field); type and id come from identity [type, owner, questionId, version].
+    // Old peiyu.ps.log entries carry no question type, so the cross-type fallback only pairs kinds that can record that type.
+    var LOG_KIND_TYPES = { fill: ["predict", "lab"], eq: ["lab"], lab: ["lab"], predict: ["predict"], peek: ["predict"] };
+    function primaryFallback(n, ids, logKind) {
+      var parts = identityParts(n.identity), types = LOG_KIND_TYPES[logKind] || [ids.questionType];
+      return !!parts && n.sectionId === ids.sectionId && parts[2] === ids.questionId && types.indexOf(parts[0]) >= 0;
+    }
     function legacyNativeMatch(e) {
       if (e.kind !== "answer") return false;
       var ids = identifiers(e);
       return Object.keys(state.marks).some(function (id) {
         var n = state.marks[id];
-        return !n.legacy && n.kind === "answer" && n.base === ids.base && n.choice === (e.choice || null) &&
-          n.correct === e.correct && Math.abs(n.time - e.time) <= 2000;
+        return !n.legacy && n.kind === "answer" &&
+          (n.base === ids.base || (stage === "primary" && primaryFallback(n, ids, e.logKind))) &&
+          n.choice === (e.choice || null) && n.correct === e.correct && Math.abs(n.time - e.time) <= 2000;
       });
     }
     function nativeKnowledgeHistory(h) {
@@ -237,17 +261,22 @@
       if (e) insert(e);
     }
     function importLegacy() {
-      var log = json("peiyu.hs.log"), knowledge = json("peiyu.hs.knowledge.v1"), cards = json("peiyu.hs.cards");
+      var high = stage === "high";
+      var log = json(LOG), knowledge = high ? json("peiyu.hs.knowledge.v1") : null, cards = high ? json("peiyu.hs.cards") : null;
       if (Array.isArray(log)) log.forEach(function (e) {
-        if (!obj(e)) return;
-        var t = time(e.t), type = { predict: "predict", answer: "exam", lab: "lab", cue: "cue", card: "card" }[e.kind];
-        var item = { source: "legacy-log", sectionId: str(e.sec), questionId: str(e.id), questionType: type, time: t,
-          correct: e.correct, choice: e.choice, step: e.step, rating: e.grade, feedbackSeen: !!type };
-        if (type === "card") { item.kind = "self-rating"; item.correct = null; }
+        if (!obj(e) || !ownSection(e.sec)) return;
+        if (e.kind === "fill" && e.hint === "tip") return;
+        var isLabFill = e.kind === "fill" && (e.slot !== undefined || e.first !== undefined);
+        var t = time(e.t), type = { predict: "predict", fill: isLabFill ? "lab" : "predict", eq: "lab", answer: "exam", lab: "lab", cue: "cue", card: "card", peek: stage === "primary" ? "predict" : null }[e.kind];
+        var choice = e.choice !== undefined ? e.choice : (e.value !== undefined ? String(e.value) : (e.v !== undefined ? String(e.v) : undefined));
+        var item = { source: "legacy-log", logKind: e.kind, sectionId: str(e.sec), questionId: str(e.id), questionType: type, time: t,
+          correct: e.correct, choice: choice, step: e.step, rating: e.grade, feedbackSeen: !!type };
+        if (e.kind === "peek" && type) { item.kind = "feedback"; item.source = "legacy-peek"; }
+        else if (type === "card") { item.kind = "self-rating"; item.correct = null; }
         else if (type) item.kind = "answer";
         else if (e.kind === "open" || e.kind === "step") item.kind = "view";
         else return;
-        legacy(item, type === "card" ? ["card", e.id, t, e.grade].join("|") : ["log", e.kind, e.sec, e.id, t, e.choice, e.correct, e.grade].join("|"));
+        legacy(item, type === "card" ? ["card", e.id, t, e.grade].join("|") : ["log", e.kind, e.sec, e.id, t, choice, e.correct, e.grade].join("|"));
       });
       if (obj(knowledge) && knowledge.version === 1 && obj(knowledge.points)) {
         Object.keys(knowledge.points).forEach(function (id) {
@@ -277,7 +306,7 @@
       var keys = [];
       try { if (storage) { for (var i = 0; i < storage.length; i++) keys.push(storage.key(i)); } } catch (_) { problem("legacy-keys-unavailable"); }
       keys.forEach(function (key) {
-        var match = /^peiyu\.hs\.hci\.ans\.(.+)$/.exec(key || ""); if (!match) return;
+        var match = /^peiyu\.hs\.hci\.ans\.(.+)$/.exec(key || ""); if (!match || !ownSection(match[1])) return;
         var saved = json(key); if (!obj(saved)) return;
         Object.keys(saved).forEach(function (id) {
           var qid = id.replace(/#\d+$/, ""), base = identifiers({ questionType: "predict", sectionId: match[1], questionId: qid }).base;
@@ -289,7 +318,7 @@
         });
       });
       var last = json("peiyu.hs.hci.last");
-      if (obj(last)) legacy({ kind: "resume", source: "legacy-hci", sectionId: last.sec, step: last.step, time: time(last.t) }, "hci-last:" + last.t + ":" + last.sec);
+      if (obj(last) && ownSection(last.sec)) legacy({ kind: "resume", source: "legacy-hci", sectionId: last.sec, step: last.step, time: time(last.t) }, "hci-last:" + last.t + ":" + last.sec);
     }
     function ensure() {
       if (loaded) return;
@@ -319,6 +348,35 @@
       return q;
     }
     function emptyCounts() { return { views: 0, independentAnswers: 0, independentCorrect: 0, retries: 0, otherAnswers: 0, legacyAnswers: 0, selfRatings: 0, reviewVisits: 0 }; }
+    function answers(identity) {
+      ensure(); sync();
+      if (typeof identity !== "string" || !identity) return [];
+      var marks = Object.keys(state.marks).map(function (id, order) { return { id: id, mark: state.marks[id], order: order }; })
+        .filter(function (entry) { return entry.mark.identity === identity && (entry.mark.kind === "answer" || entry.mark.kind === "review"); })
+        .sort(function (a, b) { return a.mark.time - b.mark.time || a.order - b.order; });
+      var q = state.questions[identity], consumed = q && state.marks[q.reviewConsumedId], priorReview = false, result = [];
+      for (var start = 0; start < marks.length;) {
+        var end = start, reviewAtTime = false, answerCount = 0;
+        while (end < marks.length && marks[end].mark.time === marks[start].mark.time) {
+          if (marks[end].mark.kind === "review") reviewAtTime = true; else answerCount++;
+          end++;
+        }
+        for (var i = start; i < end; i++) {
+          var entry = marks[i], m = entry.mark, afterReview = null;
+          if (m.kind !== "answer") continue;
+          // Marks retain history, but neither their key order nor timestamps prove cross-tab causality.
+          // Only the existing schedule/consumption pair can confirm a review; ties remain unknown.
+          if (!m.legacy && !state.historyIncomplete && !reviewAtTime) {
+            if (!priorReview) afterReview = false;
+            else if (answerCount === 1 && q && q.reviewScheduleId === entry.id && consumed &&
+              consumed.kind === "review" && consumed.identity === identity && consumed.time < m.time) afterReview = true;
+          }
+          result.push({ time: m.time, correct: m.correct, attemptKind: m.attemptKind, afterReview: afterReview });
+        }
+        priorReview = priorReview || reviewAtTime; start = end;
+      }
+      return result;
+    }
     function addCount(c, m) {
       if (m.kind === "view") c.views++;
       if (m.kind === "self-rating") c.selfRatings++;
@@ -358,10 +416,10 @@
         evidence: s }, null, 2);
     }
     if (options.eventTarget && options.eventTarget.addEventListener) options.eventTarget.addEventListener("storage", function (e) {
-      if (e.key !== KEY && e.key !== null && !(typeof e.key === "string" && /^peiyu\.hs\.(log|knowledge\.v1|cards|hci\.)/.test(e.key))) return;
+      if (e.key !== KEY && e.key !== null && !(typeof e.key === "string" && (e.key === LOG || /^peiyu\.hs\.(knowledge\.v1|cards|hci\.)/.test(e.key)))) return;
       ensure(); sync(); if (e.key !== KEY) importLegacy(); persist(); notify();
     });
-    return { key: KEY, load: function () { ensure(); return snapshot(); }, record: record, snapshot: snapshot, question: question,
+    return { key: KEY, stage: stage, load: function () { ensure(); return snapshot(); }, record: record, snapshot: snapshot, question: question, answers: answers,
       exportJSON: exportJSON, subscribe: function (fn) { if (typeof fn !== "function") return function () {}; listeners.push(fn);
         return function () { listeners = listeners.filter(function (f) { return f !== fn; }); }; } };
   }

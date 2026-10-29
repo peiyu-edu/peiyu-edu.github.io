@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>综合与实践 最短路径问题 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .ctrl input[type="range"] { flex: 1; min-width: 140px; accent-color: var(--a); }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-sec="j8a-p2" data-stage="junior" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">八年级上册 · 综合与实践（第十五章后）</p>
+<h1>综合与实践 最短路径问题</h1>
+<p class="lead">两个村子在公路同一侧，公交站建在公路上哪一点，两村到车站的路程之和最短？河上要建一座和河岸垂直的桥，桥建在哪里，过河的路最短？只用「两点之间线段最短」和轴对称、平移，就能把弯弯折折的路「拉直」，找到最短的那一条。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：13.2 三角形的三边关系 · 15.1 图形的轴对称 · 7.4 平移 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：三角形两边之和大于第三边（<a href="j13-2.html">回看 13.2</a>）；对称轴是对应点连线的垂直平分线、线段垂直平分线上的点到两端距离相等（<a href="j15-1.html">回看 15.1</a>）；平移（<a href="j7-4.html">回看 7.4</a>）。</p>
+  <ol class="small">
+    <li>从选公交站进入：同侧两点到直线上一点的距离和；</li>
+    <li>认识词语：折线路程、对称点，以及「最短」成立的前提；</li>
+    <li>异侧：直接连线；同侧：先作对称点，把折线「翻」成异侧；</li>
+    <li>用三角形三边关系证明它真的最短，而且最短点唯一；</li>
+    <li>造桥选址：桥长固定，先平移再连线；</li>
+    <li>动手拖动验证，并看清各种边界情况。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDI1MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5YWs6Lev5ZCM5L6n5Lik5Liq5p2R5a2Q5Yiw5YWs5Lqk56uZ55qE6Lev57q/XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuWFrOS6pOermeS9jee9rlwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEteD1cIjBcIj7nq5nlnKggKDAsIDApPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLXg9XCIzXCI+56uZ5ZyoICgzLCAwKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS14PVwiNlwiPuermeWcqCAoNiwgMCk8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+5YWs6Lev5pivIFxcKHhcXCkg6L2077yM5p2R5a2QIFxcKEEoMCwyKVxcKeOAgVxcKEIoNiw0KVxcKSDpg73lnKjlhazot6/kuIrmlrnvvIjljZXkvY3vvJrnmb7nsbPvvInjgILlhazkuqTnq5kgXFwoUFxcKSDlu7rlnKjlhazot6/kuIrvvIzopoHkvb8gXFwoUEErUEJcXCkg5pyA55+t44CC5LiL6Z2i5Zub5Liq5L2N572u6YeM77yM5ZOq5Liq5pyA5aW977yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoMCwwKVxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKCgyLDApXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoKDMsMClcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoNiwwKVxcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAgumHj+W+l++8muermeWcqCBcXCgoMCwwKVxcKSDnuqYgXFwoOS4yMVxcKe+8jFxcKCgyLDApXFwpIOe6piBcXCg4LjQ5XFwp77yMXFwoKDMsMClcXCkg57qmIFxcKDguNjFcXCnvvIxcXCgoNiwwKVxcKSDnuqYgXFwoMTAuMzJcXCnvvIjljZXkvY3vvJrnmb7nsbPvvInjgIJcXCgoMywwKVxcKSDlnKjkuKTmnZHmraPkuK3pl7TnmoTkuIvmlrnvvIznnIvnnYDjgIzlhazlubPjgI3vvIzljbTkuI3mmK/mnIDnn63jgIJcXCgoMiwwKVxcKSDmmK/mgI7kuYjmib7liLDnmoTvvJ/lhbPplK7mmK/kvZwgXFwoQVxcKSDlhbPkuo7lhazot6/nmoTlr7nnp7DngrnigJTigJTkuIvpnaLorrLjgII8L3A+PC9kaXY+XG4gICJ9">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 250" role="img" aria-label="公路同侧两个村子到公交站的路线"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="公交站位置">
+      <button type="button" class="on" data-x="0">站在 (0, 0)</button>
+      <button type="button" data-x="3">站在 (3, 0)</button>
+      <button type="button" data-x="6">站在 (6, 0)</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>公路是 \(x\) 轴，村子 \(A(0,2)\)、\(B(6,4)\) 都在公路上方（单位：百米）。公交站 \(P\) 建在公路上，要使 \(PA+PB\) 最短。下面四个位置里，哪个最好？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((0,0)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((2,0)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((3,0)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((6,0)\)</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。量得：站在 \((0,0)\) 约 \(9.21\)，\((2,0)\) 约 \(8.49\)，\((3,0)\) 约 \(8.61\)，\((6,0)\) 约 \(10.32\)（单位：百米）。\((3,0)\) 在两村正中间的下方，看着「公平」，却不是最短。\((2,0)\) 是怎么找到的？关键是作 \(A\) 关于公路的对称点——下面讲。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：折线路程、对称点</h3>
+  <p class="small">前置知识：两点之间，线段最短；三角形两边之和大于第三边（<a href="j13-2.html">回看 13.2</a>）。</p>
+  <ul>
+    <li><b>折线路程</b>：从 \(A\) 走到直线 \(l\) 上一点 \(P\)，再走到 \(B\)，路程是 \(PA+PB\)。\(P\) 动，路程就变。</li>
+    <li><b>对称点</b>：点 \(A\) 关于直线 \(l\) 的对称点 \(A'\)，满足 \(l\) 是线段 \(AA'\) 的垂直平分线。于是 \(l\) 上任意一点 \(P\) 都有 \(PA=PA'\)。</li>
+  </ul>
+  <div class="key"><b>前提（边界）</b>：① 在同一个平面里，路线可以走直线，没有障碍物；② \(P\) 只能在直线 \(l\) 上；③ 造桥问题中两岸是平行直线，桥必须和河岸垂直，桥长等于河宽。前提变了（比如有房子挡路、只能沿街道走），结论就要重新想。</div>
+
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>异侧直接连；同侧先「翻」过去</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="两点的位置">
+        <button type="button" class="on" data-k="opp">异侧</button>
+        <button type="button" data-k="same">同侧</button>
+        <button type="button" data-k="flip">作对称点</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 220" role="img" aria-label="两点在直线异侧或同侧时的最短路线"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mlxcKEEoMiwzKVxcKSDlnKggXFwoeFxcKSDovbTkuIrmlrnvvIxcXChCKDYsLTEpXFwpIOWcqCBcXCh4XFwpIOi9tOS4i+aWueOAglxcKHhcXCkg6L205LiK55qE54K5IFxcKFBcXCkg5Zyo5ZOq6YeM5pe2IFxcKFBBK1BCXFwpIOacgOWwj++8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKCgyLDApXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKCg0LDApXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKCg1LDApXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKCg2LDApXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkM8L2I+44CC5byC5L6n5pe255u05o6l6L+eIFxcKEFCXFwp77ya5LuOIFxcKEEoMiwzKVxcKSDmr4/lkJHlj7MgMSDmoLzlkJHkuIsgMSDmoLzvvIzliLAgXFwoKDUsMClcXCkg5pe256Kw5YiwIFxcKHhcXCkg6L2077yM5q2k5pe2IFxcKFBBK1BCPUFCXFwpIOacgOefreOAgkIg5pivIFxcKEFcXCnjgIFcXChCXFwpIOaoquWdkOagh+eahOS4remXtO+8jEHjgIFEIOaYr+S4pOeCueato+S4i+aWueaIluato+S4iuaWueeahOeCue+8jOmDveS8muiuqei3r+e6v+aLkOW8r+OAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：\(A(2,3)\) 在 \(x\) 轴上方，\(B(6,-1)\) 在 \(x\) 轴下方。\(x\) 轴上的点 \(P\) 在哪里时 \(PA+PB\) 最小？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((2,0)\)</button><button class="opt" data-v="B"><b>B</b>\((4,0)\)</button><button class="opt" data-v="C"><b>C</b>\((5,0)\)</button><button class="opt" data-v="D"><b>D</b>\((6,0)\)</button></div>
+    <div class="reveal"><p><b>C</b>。异侧时直接连 \(AB\)：从 \(A(2,3)\) 每向右 1 格向下 1 格，到 \((5,0)\) 时碰到 \(x\) 轴，此时 \(PA+PB=AB\) 最短。B 是 \(A\)、\(B\) 横坐标的中间，A、D 是两点正下方或正上方的点，都会让路线拐弯。</p></div>
+  </div>
+
+  <h3>2. 为什么作对称点就最短</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-b">直觉微图解 ②</span><b>\(PA\) 总等于 \(PA'\)：路程 \(PA+PB\) 变成 \(PA'+PB\)</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="P 的位置">
+        <button type="button" class="on" data-x="0.5">P 偏左</button>
+        <button type="button" data-x="2">P 在交点</button>
+        <button type="button" data-x="4.5">P 偏右</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 230" role="img" aria-label="对称点把折线变成从 A' 到 B 的路线"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="key">设 \(A'\) 是 \(A\) 关于 \(l\) 的对称点，\(A'B\) 交 \(l\) 于 \(P\)。对 \(l\) 上任意另一点 \(Q\)：
+    \[QA+QB=QA'+QB\ \gt\ A'B=PA'+PB=PA+PB.\]
+    中间的「\(\gt\)」来自 \(\triangle A'QB\) 中两边之和大于第三边（\(Q\) 不在 \(A'B\) 上，三点不共线）。所以 \(P\) 是唯一的最短点。</div>
+
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：找出公交站的位置）</b></p>
+    <p>回到开头：\(A(0,2)\)、\(B(6,4)\) 在 \(x\) 轴同侧。在 \(x\) 轴上找点 \(P\)，使 \(PA+PB\) 最小。</p>
+    <details class="more"><summary>提示 1：先翻哪个点</summary><p>翻 \(A\) 或翻 \(B\) 都可以。\(A(0,2)\) 关于 \(x\) 轴的对称点是 \((0,-2)\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">① 读懂题意：</span>同侧，不能直接连；\(P\) 必须在 \(x\) 轴上。</div>
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>作 \(A'(0,-2)\)，连 \(A'B\)，与 \(x\) 轴的交点就是 \(P\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>从 \(A'(0,-2)\) 到 \(B(6,4)\)：向右 6 格、向上 6 格，即每向右 1 格向上 1 格。向上 2 格到达 \(x\) 轴时，向右走了 2 格，所以 \(P(2,0)\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>换成翻 \(B\)：\(B'(6,-4)\)，从 \(A(0,2)\) 每向右 1 格向下 1 格，也在 \((2,0)\) 碰到 \(x\) 轴 ✓。</div>
+      </div>
+      <p class="small">④ 回头看：最小值等于线段 \(A'B\) 的长。量得约 \(8.49\) 百米，比开头的其他三个位置都短。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mlxcKEEoMSwzKVxcKeOAgVxcKEIoNSwxKVxcKSDlnKggXFwoeFxcKSDovbTlkIzkvqfvvIxcXCh4XFwpIOi9tOS4iuS9vyBcXChQQStQQlxcKSDmnIDlsI/nmoTngrkgXFwoUFxcKSDmmK/vvJo8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoNCwwKVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgoMywwKVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgoMSwwKVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoNSwwKVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKEEnKDEsLTMpXFwpIOWIsCBcXChCKDUsMSlcXCkg5q+P5ZCR5Y+zIDEg5qC85ZCR5LiKIDEg5qC877yM5ZCR5LiKIDMg5qC85YiwIFxcKHhcXCkg6L2077yM5qiq5Z2Q5qCHIFxcKDErMz00XFwp44CCQiDmmK/kuKTngrnmqKrlnZDmoIfnmoTkuK3pl7TvvIzlj6rlnKjkuKTngrnliLAgXFwobFxcKSDot53nprvnm7jnrYnml7bmiY3lr7nvvJtD44CBRCDmmK/kuKTngrnnmoTmraPkuIvmlrnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：\(A(1,3)\)、\(B(5,1)\) 在 \(x\) 轴同侧，\(x\) 轴上使 \(PA+PB\) 最小的点 \(P\) 是：</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((4,0)\)</button><button class="opt" data-v="B"><b>B</b>\((3,0)\)</button><button class="opt" data-v="C"><b>C</b>\((1,0)\)</button><button class="opt" data-v="D"><b>D</b>\((5,0)\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(A'(1,-3)\) 到 \(B(5,1)\) 每向右 1 格向上 1 格，向上 3 格到 \(x\) 轴，横坐标 \(1+3=4\)。B 是两点横坐标的中间，只在两点到 \(l\) 距离相等时才对；C、D 是两点的正下方。</p></div>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS+iyAxIOS4rSBcXChQQStQQlxcKSDnmoTmnIDlsI/lgLznrYnkuo7lk6rmnaHnur/mrrXnmoTplb/vvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChBQlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChBQSdcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoUEJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoQSdCXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkQ8L2I+44CCXFwoUEErUEI9UEEnK1BCPUEnQlxcKeOAgkHvvJpcXChBQlxcKSDmmK/kuI3nu4/ov4flhazot6/nmoTnm7Tnur/ot53nprvvvIzmr5TmnIDlsI/ot6/nqIvnn63vvIzlgZrkuI3liLDvvJtCIOaYryBcXChBXFwpIOWIsOWFrOi3r+i3neemu+eahCAyIOWAje+8m0Mg5Y+q5piv5YW25Lit5LiA5q6144CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：例 1 中 \(PA+PB\) 的最小值等于哪条线段的长？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(AB\)</button><button class="opt" data-v="B"><b>B</b>\(AA'\)</button><button class="opt" data-v="C"><b>C</b>\(PB\)</button><button class="opt" data-v="D"><b>D</b>\(A'B\)</button></div>
+    <div class="reveal"><p><b>D</b>。\(PA+PB=PA'+PB=A'B\)。A：\(AB\) 是不经过公路的直线距离，比最小路程短，做不到；B 是 \(A\) 到公路距离的 2 倍；C 只是其中一段。</p></div>
+  </div>
+
+  <h3>3. 造桥选址：桥长固定，先平移</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-c">直觉微图解 ③</span><b>把 \(A\) 向河对岸平移一个河宽，再连线</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="桥的位置">
+        <button type="button" class="on" data-x="1">桥在 A 正上方</button>
+        <button type="button" data-x="5">桥在 B 正下方</button>
+        <button type="button" data-x="3">先平移再连线</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 230" role="img" aria-label="河两岸之间建垂直的桥"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <details class="more">
+    <summary>例 2（造桥）完整示范</summary>
+    <div class="think-steps">
+      <div class="think-step"><span class="ts-tag ca">① 读懂题意：</span>\(A(1,0)\) 在南岸下方，\(B(5,6)\) 在北岸上方，河的两岸是 \(y=2\) 和 \(y=4\)，桥 \(MN\) 要和河岸垂直（竖直），长度固定为 \(2\)。路程 \(AM+MN+NB\)。</div>
+      <div class="think-step"><span class="ts-tag ca">② 想办法：</span>\(MN=2\) 不变，只需让 \(AM+NB\) 最小。把 \(A\) 向上平移 \(2\) 得 \(A_1(1,2)\)，则 \(AMNA_1\) 的对边平行且相等，\(AM=A_1N\)。问题变成「\(A_1N+NB\) 最小」——连 \(A_1B\)。</div>
+      <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>\(A_1(1,2)\) 到 \(B(5,6)\) 每向右 1 格向上 1 格，向上 2 格到达北岸 \(y=4\)，此时横坐标为 \(3\)。桥建在 \(x=3\)：\(M(3,2)\)、\(N(3,4)\)。</div>
+      <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>最短路程 \(=A_1B+2\)。动手 ② 里拖动桥的位置，读数在 \(x=3\) 时最小。</div>
+    </div>
+  </details>
+
+  <h3>4. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>同侧时直接连 AB 再延长</span></div>
+      <div class="trap-body"><div class="trap-wrong"><b>❌ 典型错解</b>：连 \(AB\) 并延长交 \(l\) 于 \(P\)。</div><div class="trap-right"><b>✅ 看清</b>：这样 \(P\)、\(A\)、\(B\) 在一条线上，路线要先走到 \(P\) 再折回来，路程反而很长。同侧必须先作对称点。</div></div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>关于错误的直线作对称</span></div>
+      <div class="trap-body"><div class="trap-wrong"><b>❌ 典型错解</b>：作 \(A\) 关于 \(AB\) 的垂直平分线的对称点。</div><div class="trap-right"><b>✅ 看清</b>：要关于 \(P\) 所在的直线 \(l\) 作对称，才能保证 \(l\) 上每一点都有 \(PA=PA'\)。</div></div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>忽略特殊位置</span></div>
+      <div class="trap-body"><div class="trap-wrong"><b>❌ 典型错解</b>：任何情况都作对称点。</div><div class="trap-right"><b>✅ 看边界</b>：\(A\) 在 \(l\) 上时，\(P=A\)，最小值就是 \(AB\)；\(A\)、\(B\) 到 \(l\) 距离相等时，\(P\) 才恰好在两点正中间的下方。</div></div>
+    </div>
+  </div>
+  <details class="more">
+    <summary>延伸：角里的一点，到两边再回来</summary>
+    <p class="small">点 \(P\) 在 \(\angle MON\) 内部，要在 \(OM\)、\(ON\) 上各找一点 \(E\)、\(F\)，使 \(PE+EF+FP\) 最小：作 \(P\) 关于 \(OM\) 的对称点 \(P_1\)、关于 \(ON\) 的对称点 \(P_2\)，连 \(P_1P_2\) 交两边于 \(E\)、\(F\)，最小值就是 \(P_1P_2\) 的长（角要小于平角的一半时才交得到两边，这里不展开）。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖动公交站 P，看路程怎样变</h3>
+  <p class="small">\(A(0,2)\)、\(B(6,4)\)，\(l\) 是 \(x\) 轴。拖动滑块移动 \(P\)；下方小图是 \(PA+PB\) 随 \(P\) 的位置变化的情况。点「显示对称点」看 \(A'\)。</p>
+  <div class="card">
+    <div class="entry-bar" id="h1-bar" role="group" aria-label="是否显示对称点">
+      <button type="button" class="on" data-k="0">不显示</button>
+      <button type="button" data-k="1">显示对称点</button>
+    </div>
+    <svg class="fig" id="fig-bus" viewBox="0 0 560 500" role="img" aria-label="直线上的点到两点距离之和"></svg>
+    <div class="ctrl"><label for="h1-x">P 的横坐标</label><input type="range" id="h1-x" min="-2" max="8" step="0.1" value="5"><button class="btn ghost" id="reset-bus" type="button">重置</button></div>
+    <div class="result" id="out-bus" aria-live="polite"></div>
+  </div>
+  <h3>② 进阶：造桥选址</h3>
+  <p class="small">\(A(1,0)\)、\(B(5,6)\)，河岸 \(y=2\) 和 \(y=4\)，桥竖直、长 \(2\)。拖动滑块改变桥的位置。</p>
+  <div class="card">
+    <svg class="fig" id="fig-bridge" viewBox="0 0 560 380" role="img" aria-label="河上建垂直桥的路线"></svg>
+    <div class="ctrl"><label for="h2-x">桥的横坐标</label><input type="range" id="h2-x" min="0" max="7" step="0.1" value="1"><button class="btn ghost" id="reset-bridge" type="button">重置</button></div>
+    <div class="result" id="out-bridge" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">题中的直线 \(l\) 都是 \(x\) 轴（除非另外说明），只用方格读点，不用算长度。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIFxcKEEoMSw0KVxcKeOAgVxcKEIoNywtMilcXCnvvIxcXCh4XFwpIOi9tOS4iuS9vyBcXChQQStQQlxcKSDmnIDlsI/nmoTngrkgXFwoUFxcKSDmmK/vvJo8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoNSwwKVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgoNCwwKVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgoMSwwKVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoNywwKVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguW8guS+p++8jOebtOaOpei/niBcXChBQlxcKe+8muavj+WQkeWPsyAxIOagvOWQkeS4iyAxIOagvO+8jOWQkeS4iyA0IOagvOWIsCBcXCh4XFwpIOi9tO+8jOaoquWdkOaghyBcXCgxKzQ9NVxcKeOAgkIg5piv5Lik54K55qiq5Z2Q5qCH55qE5Lit54K577yMQ+OAgUQg5piv5Lik54K555qE5q2j5LiL5pa544CB5q2j5LiK5pa577yM6YO95Lya6K6p6Lev57q/5ouQ5byv44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>1. \(A(1,4)\)、\(B(7,-2)\)，\(x\) 轴上使 \(PA+PB\) 最小的点 \(P\) 是：</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((5,0)\)</button><button class="opt" data-v="B"><b>B</b>\((4,0)\)</button><button class="opt" data-v="C"><b>C</b>\((1,0)\)</button><button class="opt" data-v="D"><b>D</b>\((7,0)\)</button></div>
+    <div class="reveal"><p><b>A</b>。异侧，直接连 \(AB\)：每向右 1 格向下 1 格，向下 4 格到 \(x\) 轴，横坐标 \(1+4=5\)。B 是两点横坐标的中点，C、D 是两点的正下方、正上方，都会让路线拐弯。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjIuIFxcKEEoMCw0KVxcKeOAgVxcKEIoNiwyKVxcKe+8jFxcKHhcXCkg6L205LiK5L2/IFxcKFBBK1BCXFwpIOacgOWwj+eahOeCuSBcXChQXFwpIOaYr++8mjwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKCgzLDApXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKCg0LDApXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKCgyLDApXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKCg2LDApXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC5L2cIFxcKEInKDYsLTIpXFwp77yM5LuOIFxcKEEoMCw0KVxcKSDliLAgXFwoQidcXCkg5q+P5ZCR5Y+zIDEg5qC85ZCR5LiLIDEg5qC877yM5ZCR5LiLIDQg5qC85YiwIFxcKHhcXCkg6L2077yM5qiq5Z2Q5qCHIFxcKDRcXCnjgIJcXChQXFwpIOabtOmdoOi/keemuyBcXChsXFwpIOi/keeahOeCuSBcXChCXFwp44CCQSDmmK/mraPkuK3pl7TvvIzlj6rmnInkuKTngrnliLAgXFwobFxcKSDot53nprvnm7jnrYnmiY3lr7njgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>2. \(A(0,4)\)、\(B(6,2)\)，\(x\) 轴上使 \(PA+PB\) 最小的点 \(P\) 是：</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\((3,0)\)</button><button class="opt" data-v="B"><b>B</b>\((4,0)\)</button><button class="opt" data-v="C"><b>C</b>\((2,0)\)</button><button class="opt" data-v="D"><b>D</b>\((6,0)\)</button></div>
+    <div class="reveal"><p><b>B</b>。作 \(B'(6,-2)\)，从 \(A(0,4)\) 到 \(B'\) 每向右 1 格向下 1 格，向下 4 格到 \(x\) 轴，横坐标 \(4\)。\(P\) 更靠近离 \(l\) 近的点 \(B\)。A 是正中间，只有两点到 \(l\) 距离相等才对。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjMuIFxcKEFcXCnjgIFcXChCXFwpIOWcqOebtOe6vyBcXChsXFwpIOWQjOS+p++8jOimgeWcqCBcXChsXFwpIOS4iuaJviBcXChQXFwpIOS9vyBcXChQQStQQlxcKSDmnIDlsI/jgILmraPnoa7nmoTkvZzms5XmmK/vvJo8L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuaDs+S4gOaDs+e/u+i9pueOsOWcuiDikaDvvJrlk6rnp43kvZzms5Xog73miormipjnur/lj5jmiJDkuIDmnaHnur/mrrXvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPui/niBcXChBQlxcKSDlubblu7bplb/vvIzkuqQgXFwobFxcKSDkuo4gXFwoUFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kvZwgXFwoQUJcXCkg55qE5Z6C55u05bmz5YiG57q/77yM5LqkIFxcKGxcXCkg5LqOIFxcKFBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5L2cIFxcKEFcXCkg5YWz5LqOIFxcKGxcXCkg55qE5a+556ew54K5IFxcKEEnXFwp77yM6L+eIFxcKEEnQlxcKSDkuqQgXFwobFxcKSDkuo4gXFwoUFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7ov4cgXFwoQUJcXCkg5Lit54K55L2cIFxcKGxcXCkg55qE5Z6C57q/77yM5Z6C6Laz5Li6IFxcKFBcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgIJBIOW+l+WIsOeahOeCueiuqSBcXChQQVxcKSDkuI4gXFwoUEJcXCkg6YeN5Y+g6LWw5Zue5aS06Lev77ybQiDlvpfliLDnmoTmmK8gXFwoUEE9UEJcXCkg55qE54K577yM5LiN5piv5ZKM5pyA5bCP55qE54K577ybRCDlj6rlnKjkuKTngrnliLAgXFwobFxcKSDot53nprvnm7jnrYnml7bmiY3norDlt6flr7njgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>3. \(A\)、\(B\) 在直线 \(l\) 同侧，要在 \(l\) 上找 \(P\) 使 \(PA+PB\) 最小。正确的作法是：</p>
+    <details class="more"><summary>提示</summary><p>想一想翻车现场 ①：哪种作法能把折线变成一条线段？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>连 \(AB\) 并延长，交 \(l\) 于 \(P\)</button><button class="opt" data-v="B"><b>B</b>作 \(AB\) 的垂直平分线，交 \(l\) 于 \(P\)</button><button class="opt" data-v="C"><b>C</b>作 \(A\) 关于 \(l\) 的对称点 \(A'\)，连 \(A'B\) 交 \(l\) 于 \(P\)</button><button class="opt" data-v="D"><b>D</b>过 \(AB\) 中点作 \(l\) 的垂线，垂足为 \(P\)</button></div>
+    <div class="reveal"><p><b>C</b>。A 得到的点让 \(PA\) 与 \(PB\) 重叠走回头路；B 得到的是 \(PA=PB\) 的点，不是和最小的点；D 只在两点到 \(l\) 距离相等时才碰巧对。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjQuIFxcKEFcXCkg5oGw5aW95Zyo55u057q/IFxcKGxcXCkg5LiK77yMXFwoQlxcKSDkuI3lnKggXFwobFxcKSDkuIrjgIJcXChsXFwpIOS4iuS9vyBcXChQQStQQlxcKSDmnIDlsI/nmoTngrkgXFwoUFxcKSDmmK/vvJo8L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPlxcKFBBK1BCXFxnZSBBQlxcKSDlr7kgXFwobFxcKSDkuIrku7vmhI8gXFwoUFxcKSDmiJDnq4vlkJfvvJ/ku4DkuYjml7blgJnlj5bnrYnlj7fvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKEJcXCkg5ZyoIFxcKGxcXCkg5LiK55qE5Z6C6LazPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPueCuSBcXChBXFwpIOacrOi6qzwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXChBXFwpIOS4juWegui2s+eahOS4reeCuTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuI3lrZjlnKjmnIDlsI/lgLw8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgILkuKTngrnkuYvpl7Tnur/mrrXmnIDnn63vvJpcXChQQStQQlxcZ2UgQUJcXCnvvIzlj5YgXFwoUD1BXFwpIOaXtuetieWPt+aIkOeri+OAgui/meaXtuS9nOWvueensOeCueS5n+W+l+WIsOWQjOS4gOS4queCue+8iFxcKEEnPUFcXCnvvInjgIJBIOaYr+WPqumhvuiuqSBcXChQQlxcKSDmnIDnn63vvJtEIOS4jeWvue+8jOacgOWwj+WAvOWwseaYryBcXChBQlxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>4. \(A\) 恰好在直线 \(l\) 上，\(B\) 不在 \(l\) 上。\(l\) 上使 \(PA+PB\) 最小的点 \(P\) 是：</p>
+    <details class="more"><summary>提示</summary><p>\(PA+PB\ge AB\) 对 \(l\) 上任意 \(P\) 成立吗？什么时候取等号？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(B\) 在 \(l\) 上的垂足</button><button class="opt" data-v="B"><b>B</b>点 \(A\) 本身</button><button class="opt" data-v="C"><b>C</b>\(A\) 与垂足的中点</button><button class="opt" data-v="D"><b>D</b>不存在最小值</button></div>
+    <div class="reveal"><p><b>B</b>。两点之间线段最短：\(PA+PB\ge AB\)，取 \(P=A\) 时等号成立。这时作对称点也得到同一个点（\(A'=A\)）。A 是只顾让 \(PB\) 最短；D 不对，最小值就是 \(AB\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjUuIOmAoOahpemXrumimOS4re+8jOS4uuS7gOS5iOimgeWFiOaKiiBcXChBXFwpIOWQkeWvueWyuOW5s+enu+S4gOS4quays+Wuve+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5qGl6ZW/IFxcKE1OXFwpIOS8muWPmOWQl++8n+W5s+enu+WQjuWTquS4pOadoee6v+auteebuOetie+8nzwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5qGl6ZW/5LiN5Y+Y77yM5bmz56e75ZCOIFxcKEFNPUFfMU5cXCnvvIzot6/nqIvlj5jmiJAgXFwoQV8xTitOQlxcKSDliqDkuIrlrprlgLw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5Li65LqG6K6p5qGl5bC96YeP55+tPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4uuS6huiuqeahpeW7uuWcqOS4pOadkeato+S4remXtDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7lubPnp7vlkI7lj6/ku6XkuI3lu7rmoaU8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILmoaXlv4XpobvlnoLnm7TmsrPlsrjvvIzplb/luqblm7rlrprkuLrmsrPlrr3vvJvlubPnp7vmioogXFwoQU1cXCkg5pCs5YiwIFxcKEFfMU5cXCnvvIzliankuIvnmoTlsLHmmK/jgIzkuKTngrnkuYvpl7Tnur/mrrXmnIDnn63jgI3jgIJC77ya5qGl6ZW/5pys5p2l5bCx5Zu65a6a77ybQ++8muacgOS9s+S9jee9ruS4gOiIrOS4jeWcqOato+S4remXtO+8m0Qg5LiN5Y+v6IO944CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>5. 造桥问题中，为什么要先把 \(A\) 向对岸平移一个河宽？</p>
+    <details class="more"><summary>提示</summary><p>桥长 \(MN\) 会变吗？平移后哪两条线段相等？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>桥长不变，平移后 \(AM=A_1N\)，路程变成 \(A_1N+NB\) 加上定值</button><button class="opt" data-v="B"><b>B</b>为了让桥尽量短</button><button class="opt" data-v="C"><b>C</b>为了让桥建在两村正中间</button><button class="opt" data-v="D"><b>D</b>平移后可以不建桥</button></div>
+    <div class="reveal"><p><b>A</b>。桥必须垂直河岸，长度固定为河宽；平移把 \(AM\) 搬到 \(A_1N\)，剩下的就是「两点之间线段最短」。B：桥长本来就固定；C：最佳位置一般不在正中间；D 不可能。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjYuIOeCuSBcXChQXFwpIOWcqOmUkOinkiBcXChcXGFuZ2xlIE1PTlxcKSDlhoXpg6jvvIxcXChQXzFcXCnjgIFcXChQXzJcXCkg5YiG5Yir5pivIFxcKFBcXCkg5YWz5LqOIFxcKE9NXFwp44CBXFwoT05cXCkg55qE5a+556ew54K544CC5ZyoIFxcKE9NXFwp44CBXFwoT05cXCkg5LiK5ZCE5Y+W5LiA54K5IFxcKEVcXCnjgIFcXChGXFwp77yMXFwoXFx0cmlhbmdsZSBQRUZcXCkg5ZGo6ZW/55qE5pyA5bCP5YC8562J5LqO77yaPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAxPC9zdW1tYXJ5PjxwPlxcKFBFPVBfMUVcXCnvvIxcXChQRj1QXzJGXFwp44CC5ZGo6ZW/5Y+Y5oiQ5ZOq5LiJ5q615LmL5ZKM77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMjwvc3VtbWFyeT48cD7ku44gXFwoUF8xXFwpIOe7jyBcXChFXFwp44CBXFwoRlxcKSDliLAgXFwoUF8yXFwpIOeahOaKmOe6v++8jOS7gOS5iOaXtuWAmeacgOefre+8nzwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChPUFxcKSDnmoTplb88L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoUFBfMVxcKSDnmoTplb88L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoUFBfMStQUF8yXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKFBfMVBfMlxcKSDnmoTplb88L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+RDwvYj7jgILlkajplb8gXFwoPVBFK0VGK0ZQPVBfMUUrRUYrRlBfMlxcZ2UgUF8xUF8yXFwp77yM5b2TIFxcKEVcXCnjgIFcXChGXFwpIOWcqOe6v+autSBcXChQXzFQXzJcXCkg5LiK5pe25Y+W562J5Y+344CCQuOAgUMg5piv5a+556ew54K55YiwIFxcKFBcXCkg55qE6Led56a777yM5ZKM5ZGo6ZW/5peg5YWz77ybQSDlj6rmmK/kuIDmnaHnur/mrrXjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>6. 点 \(P\) 在锐角 \(\angle MON\) 内部，\(P_1\)、\(P_2\) 分别是 \(P\) 关于 \(OM\)、\(ON\) 的对称点。在 \(OM\)、\(ON\) 上各取一点 \(E\)、\(F\)，\(\triangle PEF\) 周长的最小值等于：</p>
+    <details class="more"><summary>提示 1</summary><p>\(PE=P_1E\)，\(PF=P_2F\)。周长变成哪三段之和？</p></details>
+    <details class="more"><summary>提示 2</summary><p>从 \(P_1\) 经 \(E\)、\(F\) 到 \(P_2\) 的折线，什么时候最短？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(OP\) 的长</button><button class="opt" data-v="B"><b>B</b>\(PP_1\) 的长</button><button class="opt" data-v="C"><b>C</b>\(PP_1+PP_2\)</button><button class="opt" data-v="D"><b>D</b>\(P_1P_2\) 的长</button></div>
+    <div class="reveal"><p><b>D</b>。周长 \(=PE+EF+FP=P_1E+EF+FP_2\ge P_1P_2\)，当 \(E\)、\(F\) 在线段 \(P_1P_2\) 上时取等号。B、C 是对称点到 \(P\) 的距离，和周长无关；A 只是一条线段。</p></div>
+  </div>
+
+  <div class="card predict" data-id="consolidate-j8a-p2-gg-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuW3qeWbuue7g+S5oCAxPC9iPu+8muWcqOW5s+mdouebtOinkuWdkOagh+ezu+S4re+8jOeCuSBcXChBKDIsMSlcXCnjgIFcXChCKDYsMylcXCnvvIzngrkgXFwoUFxcKSDlnKggXFwoeFxcKSDovbTkuIrjgILlvZMgXFwoUEErUEJcXCkg5pyA5bCP5pe277yM54K5IFxcKFBcXCkg55qE5Z2Q5qCH5piv77yI44CA77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoMywwKVxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKCg0LDApXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoKDIsMClcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoNiwwKVxcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKEFcXCnjgIFcXChCXFwpIOWcqCBcXCh4XFwpIOi9tOWQjOS+p+OAguS9nCBcXChBXFwpIOWFs+S6jiBcXCh4XFwpIOi9tOeahOWvueensOeCuSBcXChBJygyLC0xKVxcKe+8jOi/niBcXChBJ0JcXCnvvJrku44gXFwoKDIsLTEpXFwpIOWIsCBcXCgoNiwzKVxcKSDmr4/lkJHlj7MgMSDmoLzlkJHkuIogMSDmoLzvvIzlkJHkuIogMSDmoLzliLAgXFwoeFxcKSDovbTvvIzmqKrlnZDmoIfkuLogM+OAguaJgOS7pSBcXChQKDMsMClcXCnvvIzmlYXpgIkgQeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p><b>巩固练习 1</b>：在平面直角坐标系中，点 \(A(2,1)\)、\(B(6,3)\)，点 \(P\) 在 \(x\) 轴上。当 \(PA+PB\) 最小时，点 \(P\) 的坐标是（　）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((3,0)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((4,0)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((2,0)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((6,0)\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(A\)、\(B\) 在 \(x\) 轴同侧。作 \(A\) 关于 \(x\) 轴的对称点 \(A&#x27;(2,-1)\)，连 \(A&#x27;B\)：从 \((2,-1)\) 到 \((6,3)\) 每向右 1 格向上 1 格，向上 1 格到 \(x\) 轴，横坐标为 3。所以 \(P(3,0)\)，故选 A。</p></div>
+  </div>
+
+  <div class="card predict" data-id="consolidate-j8a-p2-gg-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuW3qeWbuue7g+S5oCAyPC9iPu+8mueCuSBcXChBKDEsMilcXCnjgIFcXChCKDMsNilcXCnvvIzngrkgXFwoUFxcKSDlnKggXFwoeVxcKSDovbTkuIrjgILlvZMgXFwoUEErUEJcXCkg5pyA5bCP5pe277yM54K5IFxcKFBcXCkg55qE5Z2Q5qCH5piv77yI44CA77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgoMCwzKVxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKCgwLDQpXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoKDAsMilcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgoMCw2KVxcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKEFcXCnjgIFcXChCXFwpIOmDveWcqCBcXCh5XFwpIOi9tOWPs+S+p+OAguS9nCBcXChBXFwpIOWFs+S6jiBcXCh5XFwpIOi9tOeahOWvueensOeCuSBcXChBJygtMSwyKVxcKe+8jOi/niBcXChBJ0JcXCnvvJrku44gXFwoKC0xLDIpXFwpIOWIsCBcXCgoMyw2KVxcKSDmr4/lkJHlj7MgMSDmoLzlkJHkuIogMSDmoLzvvIzlkJHlj7MgMSDmoLzliLAgXFwoeVxcKSDovbTml7bnurXlnZDmoIfkuLogM++8jOaJgOS7pSBcXChQKDAsMylcXCnvvIzmlYXpgIkgQeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p><b>巩固练习 2</b>：点 \(A(1,2)\)、\(B(3,6)\)，点 \(P\) 在 \(y\) 轴上。当 \(PA+PB\) 最小时，点 \(P\) 的坐标是（　）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\((0,3)\)</button>
+      <button class="opt" data-v="B"><b>B</b>\((0,4)\)</button>
+      <button class="opt" data-v="C"><b>C</b>\((0,2)\)</button>
+      <button class="opt" data-v="D"><b>D</b>\((0,6)\)</button>
+    </div>
+    <div class="reveal"><p><b>A</b>。\(A\)、\(B\) 都在 \(y\) 轴右侧。作 \(A\) 关于 \(y\) 轴的对称点 \(A&#x27;(-1,2)\)，连 \(A&#x27;B\)：从 \((-1,2)\) 到 \((3,6)\) 每向右 1 格向上 1 格，向右 1 格到 \(y\) 轴时纵坐标为 3，所以 \(P(0,3)\)，故选 A。</p></div>
+  </div>
+
+  <div class="card" data-consolidation-id="consolidate-j8a-p2-gg-3">
+    <p><b>巩固练习 3</b>：一条河的两岸是直线 \(y=1\) 和 \(y=3\)，村庄 \(A(0,0)\) 在南岸下方，村庄 \(B(4,6)\) 在北岸上方。要建一座与河岸垂直的桥 \(MN\)（\(M\) 在南岸，\(N\) 在北岸），使从 \(A\) 经桥到 \(B\) 的路程 \(AM+MN+NB\) 最短，则桥应建在直线 \(x=\)______上，此时点 \(N\) 的坐标是______。</p>
+    <details class="more"><summary>查看答案与解析，自行核对</summary><p><b>答案：</b>1；\((1,3)\)</p><p>桥长 \(MN=2\) 固定。把 \(A\) 向上平移 2 得 \(A_1(0,2)\)，则 \(AM=A_1N\)，路程 \(=A_1N+NB+2\)。连 \(A_1B\)：从 \((0,2)\) 到 \((4,6)\) 每向右 1 格向上 1 格，向上 1 格到北岸 \(y=3\) 时横坐标为 1。所以桥建在 \(x=1\)，\(N(1,3)\)、\(M(1,1)\)。</p></details>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <div id="practice"></div>
+</section>
+
+<footer>培玉智能 · 自编讲解；巩固练习为原创题，不是中考原题。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), dim: css("--dim"), card: css("--card"), line: css("--line"), hl: css("--hl"), hls: css("--hl-soft") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function on(id, k) { return document.querySelector("#" + id + " .on").getAttribute(k); }
+  function f(v) { var r = Math.round(v * 100) / 100; if (r === 0) return "0"; var s = r.toFixed(2).replace(/\.?0+$/, ""); return r < 0 ? "−" + s.slice(1) : s; }
+  function line(p, P, Q, col, w, dash) { var a = { x1: P[0], y1: P[1], x2: Q[0], y2: Q[1], stroke: col, "stroke-width": w || 2 }; if (dash) a["stroke-dasharray"] = dash; return el("line", a, p); }
+  function dot(p, P, col, r) { el("circle", { cx: P[0], cy: P[1], r: r || 6, fill: col }, p); }
+  function d(P, Q) { return Math.hypot(P[0] - Q[0], P[1] - Q[1]); }
+  // 坐标格：x 从 x0 到 x1、y 从 y0 到 y1，左上角放在 (L,T)，每格 u
+  function frame(p, x0, x1, y0, y1, L, T, u, c, sz, axis) {
+    function P(x, y) { return [L + (x - x0) * u, T + (y1 - y) * u]; }
+    for (var i = x0; i <= x1; i++) line(p, P(i, y0), P(i, y1), c.line, 1);
+    for (var j = y0; j <= y1; j++) line(p, P(x0, j), P(x1, j), c.line, 1);
+    if (axis) { line(p, P(x0, 0), P(x1, 0), c.fg, 2.5); for (i = x0 + 1; i < x1; i++) if (i % 2 === 0) txt(p, P(i, 0)[0], P(i, 0)[1] + sz + 14, String(i), c.muted, 400, sz); }
+    return P;
+  }
+  function lbl(p, Q, s, col, dx, dy, sz) { txt(p, Q[0] + dx, Q[1] + dy, s, col, 700, sz, dx < 0 ? "end" : dx > 0 ? "start" : "middle"); }
+
+  var A = [0, 2], B = [6, 4];
+
+  /* 从例子进入 */
+  var ef = document.getElementById("entry-fig"), en = document.getElementById("entry-note");
+  function drawEntry() {
+    var c = C(), x = +on("entry-bar", "data-x"), Pp = [x, 0]; ef.innerHTML = "";
+    var P = frame(ef, -1, 8, -1, 5, 40, 20, 34, c, 17, true);
+    line(ef, P(A[0], A[1]), P(x, 0), c.b, 3.5); line(ef, P(x, 0), P(B[0], B[1]), c.b, 3.5);
+    dot(ef, P(A[0], A[1]), c.a, 7); dot(ef, P(B[0], B[1]), c.a, 7); dot(ef, P(x, 0), c.no, 7);
+    lbl(ef, P(A[0], A[1]), "A", c.a, -10, -8, 18); lbl(ef, P(B[0], B[1]), "B", c.a, 10, -8, 18); lbl(ef, P(x, 0), "P", c.no, 0, -12, 18);
+    txt(ef, 505, 40, "≈" + f(d(A, Pp) + d(Pp, B)), c.no, 700, 20, "end");
+    en.textContent = "P(" + x + ", 0)：量得 PA + PB ≈ " + f(d(A, Pp) + d(Pp, B)) + " 百米。" + (x === 3 ? "站在两村正中间的下方，并不是最短。" : "试试另外两个位置，再看选项。");
+  }
+  bar("entry-bar", drawEntry);
+
+  /* 微图解 ①：异侧 / 同侧 / 作对称点 */
+  var m1 = document.getElementById("m1-fig"), m1n = document.getElementById("m1-note");
+  function drawM1() {
+    var c = C(), k = on("m1-bar", "data-k"); m1.innerHTML = "";
+    var ly = 120; line(m1, [20, ly], [360, ly], c.fg, 2.5); txt(m1, 360, ly - 10, "l", c.fg, 700, 17, "end");
+    var a = [80, 50], b = k === "opp" ? [300, 190] : [300, 70], a1 = [80, 190];
+    if (k === "opp") {
+      var px = a[0] + (b[0] - a[0]) * (ly - a[1]) / (b[1] - a[1]);
+      line(m1, a, b, c.b, 3); dot(m1, [px, ly], c.no, 6); lbl(m1, [px, ly], "P", c.no, 10, -10, 16);
+      m1n.textContent = "A、B 在 l 两侧：连 AB，与 l 的交点 P 就是最短点（两点之间线段最短）。";
+    } else if (k === "same") {
+      line(m1, a, [190, ly], c.dim, 2, "6 5"); line(m1, [190, ly], b, c.dim, 2, "6 5");
+      line(m1, a, [140, ly], c.dim, 2, "6 5"); line(m1, [140, ly], b, c.dim, 2, "6 5");
+      m1n.textContent = "A、B 在 l 同侧：线段 AB 碰不到 l，路线必须先拐到 l 上。拐在哪里最好？";
+    } else {
+      var px2 = a1[0] + (b[0] - a1[0]) * (ly - a1[1]) / (b[1] - a1[1]);
+      line(m1, a, a1, c.dim, 1.5, "4 4"); line(m1, a1, [px2, ly], c.c, 2.5, "7 5");
+      line(m1, a, [px2, ly], c.b, 3); line(m1, [px2, ly], b, c.b, 3);
+      dot(m1, a1, c.c, 6); lbl(m1, a1, "A'", c.c, -10, 6, 16); dot(m1, [px2, ly], c.no, 6); lbl(m1, [px2, ly], "P", c.no, 6, 24, 16);
+      m1n.textContent = "作 A 关于 l 的对称点 A'，就把同侧变成了异侧：连 A'B 交 l 于 P。";
+    }
+    dot(m1, a, c.a, 6); dot(m1, b, c.a, 6); lbl(m1, a, "A", c.a, -10, 0, 16); lbl(m1, b, "B", c.a, 10, 0, 16);
+  }
+  bar("m1-bar", drawM1);
+
+  /* 微图解 ②：PA = PA' */
+  var m2 = document.getElementById("m2-fig"), m2n = document.getElementById("m2-note");
+  function drawM2() {
+    var c = C(), x = +on("m2-bar", "data-x"), Pp = [x, 0], A1 = [0, -2]; m2.innerHTML = "";
+    var P = frame(m2, -1, 7, -3, 5, 50, 10, 26, c, 16, true);
+    line(m2, P(A1[0], A1[1]), P(B[0], B[1]), c.dim, 2, "6 5");
+    line(m2, P(A[0], A[1]), P(x, 0), c.b, 3); line(m2, P(A1[0], A1[1]), P(x, 0), c.c, 3, "7 4"); line(m2, P(x, 0), P(B[0], B[1]), c.b, 3);
+    dot(m2, P(A[0], A[1]), c.a, 6); dot(m2, P(A1[0], A1[1]), c.c, 6); dot(m2, P(B[0], B[1]), c.a, 6); dot(m2, P(x, 0), c.no, 6);
+    lbl(m2, P(A[0], A[1]), "A", c.a, -8, 0, 16); lbl(m2, P(A1[0], A1[1]), "A'", c.c, -10, 24, 16); lbl(m2, P(B[0], B[1]), "B", c.a, 8, 0, 16);
+    var s = d(A, Pp) + d(Pp, B), best = d(A1, B);
+    m2n.textContent = "P(" + f(x) + ", 0)：PA = PA' ≈ " + f(d(A, Pp)) + "，PA + PB ≈ " + f(s) + "；A'B ≈ " + f(best) + "。" + (Math.abs(x - 2) < 1e-9 ? "P 在 A'B 上，折线拉成了直线，路程最短。" : "P 不在 A'B 上，A'、P、B 组成三角形，路程比 A'B 长。");
+  }
+  bar("m2-bar", drawM2);
+
+  /* 微图解 ③：造桥 */
+  var BA = [1, 0], BB = [5, 6];
+  function bridgeLen(x) { return d(BA, [x, 2]) + 2 + d([x, 4], BB); }
+  var m3 = document.getElementById("m3-fig"), m3n = document.getElementById("m3-note");
+  function drawM3() {
+    var c = C(), x = +on("m3-bar", "data-x"); m3.innerHTML = "";
+    var P = frame(m3, 0, 7, 0, 6, 70, 26, 30, c, 16, false);
+    el("rect", { x: P(0, 4)[0], y: P(0, 4)[1], width: 7 * 30, height: 2 * 30, fill: c.c, opacity: 0.25 }, m3);
+    line(m3, P(0, 2), P(7, 2), c.c, 2.5); line(m3, P(0, 4), P(7, 4), c.c, 2.5);
+    if (x === 3) { line(m3, P(1, 0), P(1, 2), c.dim, 1.5, "4 4"); dot(m3, P(1, 2), c.c, 5); lbl(m3, P(1, 2), "A₁", c.c, -8, -6, 16); line(m3, P(1, 2), P(3, 4), c.dim, 2, "6 5"); }
+    line(m3, P(1, 0), P(x, 2), c.b, 3); line(m3, P(x, 2), P(x, 4), c.no, 5); line(m3, P(x, 4), P(5, 6), c.b, 3);
+    dot(m3, P(1, 0), c.a, 6); dot(m3, P(5, 6), c.a, 6); lbl(m3, P(1, 0), "A", c.a, -8, 0, 16); lbl(m3, P(5, 6), "B", c.a, 8, 6, 16);
+    m3n.textContent = "桥在 x = " + x + "：量得总路程 ≈ " + f(bridgeLen(x)) + "。" + (x === 3 ? "先把 A 上移一个河宽到 A₁，连 A₁B 交北岸，正下方建桥，最短。" : "最短是 ≈ " + f(bridgeLen(3)) + "（桥在 x = 3）。");
+  }
+  bar("m3-bar", drawM3);
+
+  /* 动手 ①：公交站 */
+  var fb = document.getElementById("fig-bus"), ob = document.getElementById("out-bus"), hx = document.getElementById("h1-x");
+  function S(x) { return d(A, [x, 0]) + d([x, 0], B); }
+  function drawBus() {
+    var c = C(), x = Math.round(+hx.value * 10) / 10, show = on("h1-bar", "data-k") === "1", Pp = [x, 0]; fb.innerHTML = "";
+    var P = frame(fb, -2, 8, -3, 5, 60, 15, 44, c, 19, true);
+    if (show) {
+      line(fb, P(0, 2), P(0, -2), c.dim, 1.5, "4 4");
+      line(fb, P(0, -2), P(6, 4), c.c, 2, "7 5"); line(fb, P(0, -2), P(x, 0), c.c, 3, "7 4");
+      dot(fb, P(0, -2), c.c, 7); lbl(fb, P(0, -2), "A'", c.c, -10, 6, 19);
+    }
+    line(fb, P(0, 2), P(x, 0), c.b, 3.5); line(fb, P(x, 0), P(6, 4), c.b, 3.5);
+    dot(fb, P(0, 2), c.a, 7); dot(fb, P(6, 4), c.a, 7); dot(fb, P(x, 0), c.no, 8);
+    lbl(fb, P(0, 2), "A", c.a, -10, -6, 19); lbl(fb, P(6, 4), "B", c.a, 10, -6, 19); lbl(fb, P(x, 0), "P", c.no, 0, -22, 19);
+    // 下方小图：PA+PB 随 x 的变化
+    var top = 395, h = 90, lo = 8, hi = 14;
+    function Y(v) { return top + h - (Math.min(v, hi) - lo) * h / (hi - lo); }
+    line(fb, [P(-2, 0)[0], top + h], [P(8, 0)[0], top + h], c.fg, 1.5);
+    var pts = []; for (var t = -2; t <= 8.0001; t += 0.1) pts.push(P(t, 0)[0] + "," + Y(S(t)));
+    el("polyline", { points: pts.join(" "), fill: "none", stroke: c.a, "stroke-width": 3 }, fb);
+    line(fb, [P(2, 0)[0], top], [P(2, 0)[0], top + h], c.dim, 1.5, "4 4");
+    dot(fb, [P(x, 0)[0], Y(S(x))], c.no, 7);
+    txt(fb, P(-2, 0)[0], top - 8, "PA+PB", c.muted, 400, 19, "start");
+    var best = S(2), more = S(x) - best;
+    ob.innerHTML = "P(" + f(x) + ", 0)：量得 PA ≈ " + f(d(A, Pp)) + "，PB ≈ " + f(d(Pp, B)) + "，<span class=\"sum\">PA + PB ≈ " + f(S(x)) + "</span>。<br>" +
+      (Math.abs(x - 2) < 1e-9 ? "这就是最短点 P(2, 0)：A'、P、B 在一条直线上，PA + PB = A'B ≈ " + f(best) + "。" : "比最短（P 在 (2, 0) 时 ≈ " + f(best) + "）多约 " + f(more) + "。因为 PA = PA'，而 A'、P、B 不共线，两边之和大于第三边。");
+  }
+  bar("h1-bar", drawBus);
+  hx.addEventListener("input", drawBus);
+  document.getElementById("reset-bus").onclick = function () { hx.value = 5; drawBus(); };
+
+  /* 动手 ②（进阶）：造桥 */
+  var fr = document.getElementById("fig-bridge"), orr = document.getElementById("out-bridge"), bx = document.getElementById("h2-x");
+  function drawBridge() {
+    var c = C(), x = Math.round(+bx.value * 10) / 10; fr.innerHTML = "";
+    var P = frame(fr, 0, 7, 0, 6, 110, 20, 48, c, 19, false);
+    for (var i = 0; i <= 7; i += 1) txt(fr, P(i, 0)[0], P(i, 0)[1] + 36, String(i), c.muted, 400, 19);
+    el("rect", { x: P(0, 4)[0], y: P(0, 4)[1], width: 7 * 48, height: 2 * 48, fill: c.c, opacity: 0.25 }, fr);
+    line(fr, P(0, 2), P(7, 2), c.c, 2.5); line(fr, P(0, 4), P(7, 4), c.c, 2.5);
+    line(fr, P(1, 0), P(1, 2), c.dim, 1.5, "4 4"); line(fr, P(1, 2), P(5, 6), c.dim, 2, "6 5");
+    dot(fr, P(1, 2), c.c, 6); lbl(fr, P(1, 2), "A₁", c.c, -14, -12, 19);
+    line(fr, P(1, 0), P(x, 2), c.b, 3.5); line(fr, P(x, 2), P(x, 4), c.no, 6); line(fr, P(x, 4), P(5, 6), c.b, 3.5);
+    dot(fr, P(1, 0), c.a, 7); dot(fr, P(5, 6), c.a, 7);
+    lbl(fr, P(1, 0), "A", c.a, -14, -8, 19); lbl(fr, P(5, 6), "B", c.a, 10, 6, 19);
+    lbl(fr, P(x, 2), "M", c.no, 14, 28, 19); lbl(fr, P(x, 4), "N", c.no, 10, -10, 19);
+    var L = bridgeLen(x), best = bridgeLen(3);
+    orr.innerHTML = "桥在 x = " + f(x) + "：量得 AM ≈ " + f(d(BA, [x, 2])) + "，桥 MN = 2，NB ≈ " + f(d([x, 4], BB)) + "，<span class=\"sum\">总路程 ≈ " + f(L) + "</span>。<br>" +
+      (Math.abs(x - 3) < 1e-9 ? "最短：N 在 A₁B 上。AM = A₁N（平移），所以 AM + NB = A₁B ≈ " + f(d([1, 2], BB)) + "。" : "比最短（桥在 x = 3，≈ " + f(best) + "）多约 " + f(L - best) + "。虚线 A₁B 和北岸的交点正上方，就是最佳桥位。");
+  }
+  bx.addEventListener("input", drawBridge);
+  document.getElementById("reset-bridge").onclick = function () { bx.value = 1; drawBridge(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawBus(); drawBridge(); }
+  drawAll();
+  // 切换深浅色时重画，图里的颜色跟着变
+  new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

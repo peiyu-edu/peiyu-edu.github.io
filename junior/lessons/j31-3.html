@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>31.3 用频率估计概率 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+  .tb { border-collapse: collapse; margin: 6px 0; font-size: 15px; }
+  .tb th, .tb td { border: 1px solid var(--line); padding: 3px 8px; text-align: center; }
+  .tbw { overflow-x: auto; }
+  .ctrl { display: flex; flex-wrap: wrap; gap: 8px; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j31-3" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">九年级下册（旧版目录占位）· 第三十一章 概率初步</p>
+<h1>31.3 用频率估计概率</h1>
+<p class="lead">掷骰子、摸球，结果等可能，可以一个个列出来算概率。可瓶盖、图钉落地，「朝上」「朝下」并不等可能，列举法用不上。办法是：做大量重复试验，看事件发生的频率稳定在哪个数附近。</p>
+<p class="small">说明：新版九下 2027 春才出版，本节先按旧版教材（原九上第二十五章 25.3）编排，出版后再对表。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：31.1 概率、31.2 列举法、12.2 频率 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：概率的意义、\(0\le P(A)\le1\)（<a href="j31-1.html">回看 31.1</a>）；结果有限且等可能时用列举法求概率（<a href="j31-2.html">回看 31.2</a>）；频数、频率 = 频数 ÷ 总数（<a href="j12-2.html">回看 12.2</a>）；用样本估计总体（<a href="j24-1.html">回看 24.1</a>）。</p>
+  <ol class="small">
+    <li>从「瓶盖落地」进入：两种结果，但不等可能。</li>
+    <li>频率：试验做出来的数，每组都可能不同。</li>
+    <li>频率的稳定性：大量重复试验，频率稳定在某个常数附近。</li>
+    <li>用频率估计概率：读频率表，取次数多时频率稳定的值。</li>
+    <li>用估计的概率算数量：成活率、估计个数，结论带「大约」。</li>
+    <li>三个误区：频率当概率、以为次数多就一定更近、赌徒谬误。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>把一个瓶盖随手往桌上抛，落下后要么<b>口朝上</b>，要么<b>口朝下</b>。点按钮看抛了不同次数后，「口朝上」占多少（同一串试验，只是看到的次数不同）：</p>
+  <div class="card predict" data-id="entry" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIyMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55O255uW5Y+j5pyd5LiK5ZKM5Y+j5pyd5LiL5omA5Y2g5q+U5L6L55qE5p2h5b2iXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuaKm+eahOasoeaVsFwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjEwXCI+5oqbIDEwIOasoTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1rPVwiMTAwXCI+5oqbIDEwMCDmrKE8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjEwMDBcIj7mipsgMTAwMCDmrKE8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+55O255uW6JC95Zyw5Y+q5pyJ5Lik56eN57uT5p6c44CC44CM5Y+j5pyd5LiK44CN55qE5qaC546H5pivIFxcKFxcZGZyYWMxMlxcKSDlkJfvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7mmK/vvJrlj6rmnInkuKTnp43nu5PmnpzvvIzmiYDku6XlkITljaAgXFwoXFxkZnJhYzEyXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5oqbIDEwIOasoeW+l+WIsOeahOmikeeOh+WwseaYr+Wug+eahOamgueOhzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4jeS4gOWumu+8muS4pOenjee7k+aenOS4jeetieWPr+iDve+8jOimgemdoOWkp+mHj+ivlemqjOeahOmikeeOh+adpeS8sOiuoTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuWug+eahOamgueOh+ayoeazleefpemBk++8jOS5n+ayoeazleS8sOiuoTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkM8L2I+44CC55O255uW5Lik6Z2i5b2i54q25LiN5ZCM77yM6JC95Zyw5pe244CM5Y+j5pyd5LiK44CN44CM5Y+j5pyd5LiL44CN5bm25LiN562J5Y+v6IO977yM5LiN6IO955SoIFxcKFxcZGZyYWMgbW5cXCkg5Y675pWw77yIQSDplJnvvInjgILmipsgMTAg5qyh5pe26aKR546H5b+96auY5b+95L2O77yM6K+05piO5LiN5LqG5LuA5LmI77yIQiDplJnvvInvvJvkvYbmipvliLDlh6Dnmb7jgIHkuIrljYPmrKHvvIzpopHnjoflsLHnqLPlnKjkuIDkuKrmlbDpmYTov5HvvIzlj6/ku6Xmi7/lroPlvZPmpoLnjofnmoTkvLDorqHvvIhEIOmUme+8ieOAgjwvcD5cbiAgICAgIDxwPui/meS4gOiKguimgeWbnuetlO+8mjxiPumikeeOh+S4uuS7gOS5iOiDveS8sOiuoeamgueOh++8n+aAjuS5iOivu+OAgeaAjuS5iOeUqO+8nzwvYj48L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 220" role="img" aria-label="瓶盖口朝上和口朝下所占比例的条形"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="抛的次数">
+      <button type="button" class="on" data-k="10">抛 10 次</button>
+      <button type="button" data-k="100">抛 100 次</button>
+      <button type="button" data-k="1000">抛 1000 次</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>瓶盖落地只有两种结果。「口朝上」的概率是 \(\dfrac12\) 吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>是：只有两种结果，所以各占 \(\dfrac12\)</button>
+      <button class="opt" data-v="B"><b>B</b>抛 10 次得到的频率就是它的概率</button>
+      <button class="opt" data-v="C"><b>C</b>不一定：两种结果不等可能，要靠大量试验的频率来估计</button>
+      <button class="opt" data-v="D"><b>D</b>它的概率没法知道，也没法估计</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。瓶盖两面形状不同，落地时「口朝上」「口朝下」并不等可能，不能用 \(\dfrac mn\) 去数（A 错）。抛 10 次时频率忽高忽低，说明不了什么（B 错）；但抛到几百、上千次，频率就稳在一个数附近，可以拿它当概率的估计（D 错）。</p>
+      <p>这一节要回答：<b>频率为什么能估计概率？怎么读、怎么用？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：频率、重复试验</h3>
+  <p class="small">前置提醒：频率在七下学过（<a href="j12-2.html">回看 12.2</a>）；概率是刻画事件发生可能性大小的数（<a href="j31-1.html">回看 31.1</a>）。</p>
+  <p>在<b>相同条件</b>下把同一个试验做 \(n\) 次，每次结果互不影响，叫<b>重复试验</b>。如果事件 \(A\) 发生了 \(m\) 次，比值 \(\dfrac mn\) 叫事件 \(A\) 发生的<b>频率</b>。频率是做出来的<b>数据</b>：同样抛 20 次硬币，每组得到的频率一般不一样。点三组看看：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>同样抛 20 次，三组的频率各不相同</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="三组试验">
+        <button type="button" class="on" data-g="0">第 1 组</button>
+        <button type="button" data-g="1">第 2 组</button>
+        <button type="button" data-g="2">第 3 组</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 150" role="img" aria-label="二十次抛硬币的结果方块，实心为正面"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">频率</span><b>试验做出来的数</b></p>
+      <p class="small" style="margin:0">随试验而变，有偶然性；再做一遍，一般就不一样。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">概率</span><b>事件本身的属性</b></p>
+      <p class="small" style="margin:0">是一个确定的数，不随你做不做试验而变。均匀硬币正面朝上的概率就是 \(\dfrac12\)。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：频率的稳定性</h3>
+  <p>次数少时频率摆得厉害；次数一多，频率就在某个数附近小幅摆动。下面是同一串抛硬币试验，点按钮看前 10、100、1000、5000 次里频率怎么变（横轴是次数，纵轴是正面朝上的频率）：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>次数越多，频率越「安静」</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="试验次数">
+        <button type="button" class="on" data-n="10">10 次</button>
+        <button type="button" data-n="100">100 次</button>
+        <button type="button" data-n="1000">1000 次</button>
+        <button type="button" data-n="5000">5000 次</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 200" role="img" aria-label="正面朝上的频率随次数变化的折线"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(P(A)\approx\color{#2F7A56}{\underbrace{\dfrac{m}{n}}_{\text{大量重复试验中 A 发生的频率}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">在大量重复试验中，事件 \(A\) 发生的频率会<b>稳定在某个常数附近</b>，这个常数就是 \(P(A)\)。所以可以用频率<b>估计</b>概率。注意是「约等于」：估计值不是概率本身。</p>
+  </div>
+  <p>「稳定在附近」不是「越来越近、最后相等」：次数多时摆动范围通常变小，但仍有起伏，某一段离得稍远一点也正常。</p>
+  <div class="card predict" data-id="try-1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muWwj+aYjuaKm+S4gOaemuehrOW4gSAyMCDmrKHvvIzmraPpnaLmnJ3kuIogMTMg5qyh44CC6L+ZIDIwIOasoemHjOato+mdouacneS4iueahDxiPumikeeOhzwvYj7mmK/lpJrlsJHvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgwLjVcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMC42NVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgxM1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgwLjM1XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC6aKR546HIFxcKD1cXGRmcmFjezEzfXsyMH09MC42NVxcKeOAgkEg5piv5qaC546H77yM5LiN5piv6L+Z5qyh6K+V6aqM55qE6aKR546H77ybQyDmmK/popHmlbDvvIjmrKHmlbDvvInvvJtEIOaYr+WPjemdouacneS4iueahOmikeeOhyBcXChcXGRmcmFjezd9ezIwfVxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：小明抛一枚硬币 20 次，正面朝上 13 次。这 20 次里正面朝上的<b>频率</b>是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(0.5\)</button><button class="opt" data-v="B"><b>B</b>\(0.65\)</button><button class="opt" data-v="C"><b>C</b>\(13\)</button><button class="opt" data-v="D"><b>D</b>\(0.35\)</button></div>
+    <div class="reveal"><p><b>B</b>。频率 \(=\dfrac{13}{20}=0.65\)。A 是概率，不是这次试验的频率；C 是频数（次数）；D 是反面朝上的频率 \(\dfrac{7}{20}\)。</p></div>
+  </div>
+
+  <h3>3. 核心点：读频率表，用频率估计概率</h3>
+  <p>实际问题里，常把试验结果整理成表：次数 \(n\)、发生次数 \(m\)、频率 \(\dfrac mn\)。估计概率时看<b>次数最多的那几行</b>，频率在哪个数上下摆动，就用它（按题目要求的精度）。点按钮看表读到不同位置时的估计：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>一种种子的发芽试验：频率越来越贴着同一个数</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="看到表的第几行">
+        <button type="button" class="on" data-r="2">只看前 2 行</button>
+        <button type="button" data-r="4">看前 4 行</button>
+        <button type="button" data-r="5">看全部 5 行</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 200" role="img" aria-label="不同粒数下发芽频率的点"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">林场对一种树苗做移植试验，结果如下。估计这种树苗移植成活的概率（精确到 \(0.1\)）。如果要成活 \(1800\) 棵，大约要移植多少棵？</p>
+    <div class="tbw"><table class="tb"><tr><th>移植棵数 \(n\)</th><td>100</td><td>400</td><td>1000</td><td>2000</td><td>5000</td></tr><tr><th>成活棵数 \(m\)</th><td>86</td><td>357</td><td>893</td><td>1794</td><td>4495</td></tr><tr><th>成活频率 \(\dfrac mn\)</th><td>0.86</td><td>0.8925</td><td>0.893</td><td>0.897</td><td>0.899</td></tr></table></div>
+    <p><b>① 读懂题意：</b>「成活」「不成活」不等可能，概率要靠试验估计；第二问是已知成活数求移植数。</p>
+    <details class="more"><summary>提示 1：看哪几行</summary><p>次数最多的 2000、5000 两行，频率在 \(0.9\) 上下。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>用频率稳定的值估计成活概率；成活棵数 ≈ 移植棵数 × 成活概率，反过来求移植棵数。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>次数增多时频率稳定在 \(0.9\) 附近，估计成活概率约为 \(0.9\)。移植棵数 \(\approx1800\div0.9=2000\)（棵）。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>表中 \(n=2000\) 时恰好成活 \(1794\) 棵，接近 \(1800\)，结果合理 ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>答案要写「<b>大约</b>移植 \(2000\) 棵」：概率是估计的，真实移植时成活数还会有起伏。用 \(1800\times0.9\) 是把方向弄反了。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muW3peWOguaKveajgOS4gOenjembtuS7tu+8jFxcKDIwMFxcKSDku7bkuK3lkIjmoLwgXFwoMTg4XFwpIOS7tu+8jFxcKDUwMFxcKSDku7bkuK3lkIjmoLwgXFwoNDc2XFwpIOS7tu+8jFxcKDEwMDBcXCkg5Lu25Lit5ZCI5qC8IFxcKDk0OVxcKSDku7bvvIxcXCgyMDAwXFwpIOS7tuS4reWQiOagvCBcXCgxOTAyXFwpIOS7tuOAguS8sOiuoei/meenjembtuS7tuWQiOagvOeahOamgueOh+e6puS4uu+8iOeyvuehruWIsCBcXCgwLjAxXFwp77yJ77yaPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekujwvc3VtbWFyeT48cD7lm5vkuKrpopHnjofkvp3mrKHmmK8gXFwoMC45NCxcXCAwLjk1MixcXCAwLjk0OSxcXCAwLjk1MVxcKe+8m+asoeaVsOWkmueahOWHoOihjOWcqOWTquS4quaVsOS4iuS4i++8nzwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgwLjk0XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDAuNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgwLjA1XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDAuOTVcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+RDwvYj7jgILlkI7kuInooYzpopHnjocgXFwoMC45NTIsMC45NDksMC45NTFcXCkg6YO95ZyoIFxcKDAuOTVcXCkg6ZmE6L+R44CCQSDlj6rnnIvkuobmrKHmlbDmnIDlsJHnmoTnrKzkuIDooYwgXFwoMTg4XFxkaXYyMDBcXCnvvJtCIOaYr+S7peS4uuOAjOWQiOagvOOAgeS4jeWQiOagvOS4pOenjee7k+aenOWQhOS4gOWNiuOAje+8m0Mg5piv5LiN5ZCI5qC855qE5qaC546H44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：工厂抽检一种零件，\(200\) 件中合格 \(188\) 件，\(500\) 件中合格 \(476\) 件，\(1000\) 件中合格 \(949\) 件，\(2000\) 件中合格 \(1902\) 件。估计这种零件合格的概率约为（精确到 \(0.01\)）：</p>
+    <details class="more"><summary>提示</summary><p>四个频率依次是 \(0.94,\ 0.952,\ 0.949,\ 0.951\)；次数多的几行在哪个数上下？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(0.94\)</button><button class="opt" data-v="B"><b>B</b>\(0.5\)</button><button class="opt" data-v="C"><b>C</b>\(0.05\)</button><button class="opt" data-v="D"><b>D</b>\(0.95\)</button></div>
+    <div class="reveal"><p><b>D</b>。后三行频率 \(0.952,0.949,0.951\) 都在 \(0.95\) 附近。A 只看了次数最少的第一行 \(188\div200\)；B 是以为「合格、不合格两种结果各一半」；C 是不合格的概率。</p></div>
+  </div>
+
+  <h3>4. 用估计的概率反推数量</h3>
+  <p>频率还能反过来估计「有多少」。只要每次试验条件相同，「在样本里占几成」就能估计「在总体里大约占几成」（<a href="j24-1.html">回看 24.1 用样本估计总体</a>）。</p>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：估计池塘里有多少条鱼）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">从池塘里捞出 \(120\) 条鱼，做上标记后放回。几天后鱼混匀了，再捞 \(150\) 条，其中有标记的 \(9\) 条。估计池塘里大约有多少条鱼？</p>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">想办法：</span>第二次捞到「有标记的鱼」的频率 \(\dfrac{9}{150}=0.06\)，用它估计全池里有标记的鱼所占的比例。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">计算：</span>设全池约 \(x\) 条，\(\dfrac{120}{x}\approx0.06\)，\(x\approx120\div0.06=2000\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">检查：</span>\(2000\) 条里有标记的 \(120\) 条，占 \(6\%\)；\(150\) 条里约 \(9\) 条，对得上 ✓。</div>
+      </div>
+      <p><b>回头看：</b>前提是「混匀了」，每条鱼被捞到的机会一样；答「大约 \(2000\) 条」。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS4jemAj+aYjuiii+S4reaciee6oueQg+OAgeeZveeQg+WFsSBcXCg0MFxcKSDkuKrvvIzpmaTpopzoibLlpJbpg73nm7jlkIzjgILmr4/mrKHmkbjlh7rkuIDkuKrorrDkuIvpopzoibLlho3mlL7lm57vvIzmkbjkuoYgXFwoMjAwXFwpIOasoe+8jOWFtuS4ree6oueQgyBcXCg0OFxcKSDmrKHjgILkvLDorqHooovkuK3nuqLnkIPlpKfnuqbmnInlh6DkuKrvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7nuqYgXFwoMTBcXCkg5LiqPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPue6piBcXCgyMFxcKSDkuKo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNDhcXCkg5LiqPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPue6piBcXCgzMFxcKSDkuKo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILmkbjliLDnuqLnkIPnmoTpopHnjocgXFwoXFxkZnJhY3s0OH17MjAwfT0wLjI0XFwp77yM57qi55CD57qmIFxcKDQwXFx0aW1lczAuMjQ9OS42XFxhcHByb3gxMFxcKSDkuKrjgIJCIOaYr+S7peS4uuOAjOS4pOenjeminOiJsuWQhOS4gOWNiuOAje+8m0Mg5oqK5pG45Yiw55qE5qyh5pWw5b2T5oiQ5LqG5Liq5pWw77ybRCDmmK/nmb3nkIPnmoTkuKrmlbAgXFwoNDBcXHRpbWVzMC43NlxcYXBwcm94MzBcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：不透明袋中有红球、白球共 \(40\) 个，除颜色外都相同。每次摸出一个记下颜色再放回，摸了 \(200\) 次，其中红球 \(48\) 次。估计袋中红球大约有几个？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>约 \(10\) 个</button><button class="opt" data-v="B"><b>B</b>约 \(20\) 个</button><button class="opt" data-v="C"><b>C</b>\(48\) 个</button><button class="opt" data-v="D"><b>D</b>约 \(30\) 个</button></div>
+    <div class="reveal"><p><b>A</b>。摸到红球的频率 \(\dfrac{48}{200}=0.24\)，红球约 \(40\times0.24=9.6\approx10\) 个。B 是以为「两种颜色各一半」；C 把摸到的次数当成了个数；D 是白球的个数 \(40\times0.76\approx30\)。</p></div>
+  </div>
+
+  <h3>5. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>把几次试验的频率当成概率</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：抛硬币 10 次，6 次正面，就说「正面朝上的概率是 \(0.6\)」。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：右图是三组各抛 10 次的频率，每组都不同。10 次太少，频率只是这一次试验的数据；均匀硬币正面朝上的概率是 \(0.5\)。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 200" role="img" aria-label="三组各十次抛硬币的频率条形，和零点五的虚线"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>以为次数越多，频率一定越接近概率</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：抛 500 次频率 \(0.502\)，抛 1000 次频率 \(0.507\)，「离 \(0.5\) 远了，试验做错了」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：频率是「稳定在附近、小幅摆动」，不保证每多做一次就更近一点。看微图解 ②：折线一直在上下起伏。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>赌徒谬误：前面的结果会「补回来」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：连续 5 次正面，「下一次该出反面了，反面概率更大」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：硬币不记得前面的结果，每次试验互不影响，下一次正面朝上的概率仍是 \(\dfrac12\)。频率稳定，靠的是次数多后少数几次被「冲淡」，不是被「补回」。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：历史上真有人抛几千、几万次硬币</summary>
+    <p>历史上有数学家亲手抛过几千次、甚至两万多次硬币，记录正面朝上的频率，结果都在 \(0.5\) 附近。今天用计算机，几秒钟就能模拟几百万次。不管谁来做，次数少时频率都可能离 \(0.5\) 很远；次数多时都稳在 \(0.5\) 附近。规律是一样的，具体数字每次不同。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <p class="small">下面的试验由计算机用伪随机数模拟：每次结果不同，规律相同。「重置」回到同一组开头，「再来一组」换一串新结果。</p>
+  <h3>① 抛硬币：看频率怎么稳下来</h3>
+  <p class="small">每点一次就接着往后抛。折线是正面朝上的频率，虚线是概率 \(0.5\)。横轴是次数（刻度随次数自动放大）。</p>
+  <div class="card">
+    <svg class="fig" id="fig-coin" viewBox="0 0 560 300" role="img" aria-label="抛硬币正面朝上频率的折线"></svg>
+    <div class="result" id="out-coin" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn" id="coin-10" type="button">抛 10 次</button><button class="btn" id="coin-100" type="button">抛 100 次</button><button class="btn ghost" id="coin-new" type="button">再来一组</button><button class="btn ghost" id="reset-coin" type="button">重置</button></div>
+  </div>
+  <h3>② 摸球：已知概率，看频率追不追得上</h3>
+  <p class="small">袋中 10 个球，拖动滑轨圆点（或点一下再用方向键）改红球个数。每次摸一个记下颜色再放回。虚线是摸到红球的概率 \(\dfrac{\text{红球数}}{10}\)。</p>
+  <div class="card">
+    <svg class="fig" id="fig-ball" viewBox="0 0 560 400" role="img" aria-label="袋中红球个数与摸到红球的频率折线"></svg>
+    <div class="result" id="out-ball" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn" id="ball-50" type="button">摸 50 次</button><button class="btn" id="ball-200" type="button">摸 200 次</button><button class="btn ghost" id="reset-ball" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：图钉的概率只能估计</h3>
+  <p class="small">图钉落地「钉尖朝上」「钉尖着地」不等可能，没法列举。多抛几次，拖下面滑轨上的圆点写下你的估计（灰虚线），最后点「揭晓」看看计算机设定的概率。</p>
+  <div class="card">
+    <svg class="fig" id="fig-tack" viewBox="0 0 560 380" role="img" aria-label="图钉钉尖朝上的频率折线和你的估计"></svg>
+    <div class="result" id="out-tack" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn" id="tack-100" type="button">抛 100 次</button><button class="btn" id="tack-1000" type="button">抛 1000 次</button><button class="btn" id="tack-show" type="button" aria-pressed="false">揭晓</button><button class="btn ghost" id="tack-new" type="button">再来一组</button><button class="btn ghost" id="reset-tack" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjEuIOS4gOWQjeWwhOWHu+i/kOWKqOWRmOe7g+S5oCBcXCg0MDBcXCkg5qyh77yM5ZG95LitIDEwIOeOryBcXCgxMjhcXCkg5qyh44CC5LuW5ZG95LitIDEwIOeOr+eahOmikeeOh+aYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDAuNjhcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMTI4XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDAuMzJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoMy4xMjVcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgIJcXCgxMjhcXGRpdjQwMD0wLjMyXFwp44CCQSDmmK/msqHlkb3kuK0gMTAg546v55qE6aKR546HIFxcKDI3MlxcZGl2NDAwXFwp77ybQiDmmK/popHmlbDvvJtEIOaYr+aKiumZpOazleWAkui/h+adpSBcXCg0MDBcXGRpdjEyOFxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>1. 一名射击运动员练习 \(400\) 次，命中 10 环 \(128\) 次。他命中 10 环的频率是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(0.68\)</button><button class="opt" data-v="B"><b>B</b>\(128\)</button><button class="opt" data-v="C"><b>C</b>\(0.32\)</button><button class="opt" data-v="D"><b>D</b>\(3.125\)</button></div>
+    <div class="reveal"><p><b>C</b>。\(128\div400=0.32\)。A 是没命中 10 环的频率 \(272\div400\)；B 是频数；D 是把除法倒过来 \(400\div128\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjIuIOWkp+mHj+ivlemqjOihqOaYju+8jOS4gOenjeenjeWtkOeahOWPkeiKveamgueOh+e6puS4uiBcXCgwLjg1XFwp44CC5pKt5LiLIFxcKDIwMDBcXCkg57KS77yM5Lyw6K6h5Y+R6Iq955qE56eN5a2Q77yaPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuWkp+e6piBcXCgyMzUzXFwpIOeykjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7lpKfnuqYgXFwoMTcwMFxcKSDnspI8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5aSn57qmIFxcKDMwMFxcKSDnspI8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiA5a6a5q2j5aW9IFxcKDE3MDBcXCkg57KSPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCXFwoMjAwMFxcdGltZXMwLjg1PTE3MDBcXCnvvIzmmK/kvLDorqHlgLzjgIJBIOaYr+mUmeeUqOmZpOazlSBcXCgyMDAwXFxkaXYwLjg1XFxhcHByb3gyMzUzXFwp77ybQyDmmK/kuI3lj5Hoir3nmoQgXFwoMjAwMFxcdGltZXMwLjE1XFwp77ybRCDmiorkvLDorqHor7TmiJDkuoblv4XnhLbjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>2. 大量试验表明，一种种子的发芽概率约为 \(0.85\)。播下 \(2000\) 粒，估计发芽的种子：</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>大约 \(2353\) 粒</button><button class="opt" data-v="B"><b>B</b>大约 \(1700\) 粒</button><button class="opt" data-v="C"><b>C</b>大约 \(300\) 粒</button><button class="opt" data-v="D"><b>D</b>一定正好 \(1700\) 粒</button></div>
+    <div class="reveal"><p><b>B</b>。\(2000\times0.85=1700\)，是估计值。A 是错用除法 \(2000\div0.85\approx2353\)；C 是不发芽的 \(2000\times0.15\)；D 把估计说成了必然。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjMuIOaKm+S4gOaemui0qOWcsOWdh+WMgOeahOehrOW4ge+8jOW3sue7j+i/nue7rSA0IOasoeWPjemdouacneS4iuOAguesrCA1IOasoeato+mdouacneS4iueahOamgueOh++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5q+P5qyh5oqb56Gs5biB5LqS5LiN5b2x5ZON77yb56Gs5biB5Lya44CM6K6w5b6X44CN5YmN6Z2i55qE57uT5p6c5ZCX77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuWkp+S6jiBcXChcXGRmcmFjMTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5bCP5LqOIFxcKFxcZGZyYWMxMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7ml6Dms5Xnoa7lrpo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+562J5LqOIFxcKFxcZGZyYWMxMlxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5EPC9iPuOAguavj+asoeivlemqjOS6kuS4jeW9seWTje+8jOS7jeaYryBcXChcXGRmcmFjMTJcXCnjgIJBIOaYr+i1jOW+kuiwrOivr+OAjOivpeihpeato+mdouS6huOAje+8iOe/u+i9pueOsOWcuiDikaLvvInvvJtCIOaYr+OAjOaJi+awlOWcqOWPjemdouOAje+8m0Mg5piv6KKr5YmNIDQg5qyh5pCe57OK5raC5LqG44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>3. 抛一枚质地均匀的硬币，已经连续 4 次反面朝上。第 5 次正面朝上的概率：</p>
+    <details class="more"><summary>提示</summary><p>每次抛硬币互不影响；硬币会「记得」前面的结果吗？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>大于 \(\dfrac12\)</button><button class="opt" data-v="B"><b>B</b>小于 \(\dfrac12\)</button><button class="opt" data-v="C"><b>C</b>无法确定</button><button class="opt" data-v="D"><b>D</b>等于 \(\dfrac12\)</button></div>
+    <div class="reveal"><p><b>D</b>。每次试验互不影响，仍是 \(\dfrac12\)。A 是赌徒谬误「该补正面了」（翻车现场 ③）；B 是「手气在反面」；C 是被前 4 次搞糊涂了。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjQuIOS4i+mdouivtOazleato+ehrueahOaYr+WTquS4gOS4qu+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5YiG5riF44CM6aKR546H44CN77yI5YGa5Ye65p2l55qE5pWw77yJ5ZKM44CM5qaC546H44CN77yI56Gu5a6a55qE5pWw77yJ77yb44CM56iz5a6a5Zyo6ZmE6L+R44CN5ZKM44CM5LiA5a6a6LaK5p2l6LaK6L+R44CN5LiA5qC35ZCX77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuaKm+ehrOW4gSAxMCDmrKHmnIkgNyDmrKHmraPpnaLvvIzmiYDku6XmraPpnaLmnJ3kuIrnmoTmpoLnjofmmK8gXFwoMC43XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+6K+V6aqM5qyh5pWw6LaK5aSa77yM6aKR546H5LiA5a6a6LaK5o6l6L+R5qaC546HPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5aSn6YeP6YeN5aSN6K+V6aqM5Lit77yM6aKR546H5Lya56iz5a6a5Zyo5qaC546H6ZmE6L+R77yM5Y+v5Lul55So6aKR546H5Lyw6K6h5qaC546HPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5q2j6Z2i5pyd5LiK55qE5qaC546H5pivIFxcKDAuNVxcKe+8jOaJgOS7peaKmyAxMDAg5qyh5LiA5a6a5pyJIDUwIOasoeato+mdojwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAgkEg5oqKIDEwIOasoeeahOmikeeOh+W9k+aIkOamgueOh++8m0Ig6ZSZ5Zyo44CM5LiA5a6a44CN77yM6aKR546H5LuN5Lya5LiK5LiL5pGG5Yqo77ybRCDmiormpoLnjoflvZPmiJDlv4XnhLbnmoTmrKHmlbDvvIzmipsgMTAwIOasoeato+mdouWPr+iDveaYryA0NyDmrKHjgIE1MyDmrKHjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>4. 下面说法正确的是哪一个？</p>
+    <details class="more"><summary>提示</summary><p>分清「频率」（做出来的数）和「概率」（确定的数）；「稳定在附近」和「一定越来越近」一样吗？</p></details>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>抛硬币 10 次有 7 次正面，所以正面朝上的概率是 \(0.7\)</button>
+      <button class="opt" data-v="B"><b>B</b>试验次数越多，频率一定越接近概率</button>
+      <button class="opt" data-v="C"><b>C</b>大量重复试验中，频率会稳定在概率附近，可以用频率估计概率</button>
+      <button class="opt" data-v="D"><b>D</b>正面朝上的概率是 \(0.5\)，所以抛 100 次一定有 50 次正面</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。A 把 10 次的频率当成概率；B 错在「一定」，频率仍会上下摆动；D 把概率当成必然的次数，抛 100 次正面可能是 47 次、53 次。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjUuIOS4gOenjeiKseiLl+enu+akjeeahOaIkOa0u+eOh+e6puS4uiBcXCgwLjlcXCnjgILlhazlm63mg7PopoHmiJDmtLsgXFwoOTAwXFwpIOagqu+8jOWkp+e6puimgeenu+akjeWkmuWwkeagqu+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+56e75qSN5qCq5pWwIMOXIOaIkOa0u+eOhyDiiYgg5oiQ5rS75qCq5pWw44CC5bey55+l55qE5piv5ZOq5LiA5Liq77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPue6piBcXCgxMDAwXFwpIOagqjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7nuqYgXFwoODEwXFwpIOagqjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7nuqYgXFwoOTkwXFwpIOagqjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCg5MDBcXCkg5qCqPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoOTAwXFxkaXYwLjk9MTAwMFxcKeOAgkIg5piv5pa55ZCR5byE5Y+N77yM566X5oiQIFxcKDkwMFxcdGltZXMwLjlcXCnvvJtDIOaYr+S7peS4uuOAjOatu+S6huS4gOaIkOWwseWkmuenjeS4gOaIkOOAjVxcKDkwMFxcdGltZXMxLjFcXCnvvIzkvYblpJrnp43nmoTpgqPpg6jliIbkuZ/kvJrmnInkuI3miJDmtLvnmoTvvJtEIOW/mOS6huacieS4jeaIkOa0u+eahOOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>5. 一种花苗移植的成活率约为 \(0.9\)。公园想要成活 \(900\) 株，大约要移植多少株？</p>
+    <details class="more"><summary>提示</summary><p>移植株数 × 成活率 ≈ 成活株数。已知的是哪一个？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>约 \(1000\) 株</button><button class="opt" data-v="B"><b>B</b>约 \(810\) 株</button><button class="opt" data-v="C"><b>C</b>约 \(990\) 株</button><button class="opt" data-v="D"><b>D</b>\(900\) 株</button></div>
+    <div class="reveal"><p><b>A</b>。\(900\div0.9=1000\)。B 是方向弄反，算成 \(900\times0.9\)；C 是以为「死了一成就多种一成」\(900\times1.1\)，但多种的那部分也会有不成活的；D 忘了有不成活的。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjYuIOS4jemAj+aYjuiii+S4reaciSBcXCgzXFwpIOS4que6oueQg+WSjOiLpeW5suS4queZveeQg++8jOmZpOminOiJsuWklumDveebuOWQjOOAguavj+asoeaRuOWHuuS4gOS4quiusOS4i+minOiJsuWGjeaUvuWbnu+8jOWkp+mHj+mHjeWkjeWQjuWPkeeOsOaRuOWIsOe6oueQg+eahOmikeeOh+eos+WumuWcqCBcXCgwLjJcXCkg6ZmE6L+R44CC5Lyw6K6h6KKL5Lit55m955CD5aSn57qm5pyJ5Yeg5Liq77yfPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAx77ya5YWI5Lyw6K6h5LuA5LmIPC9zdW1tYXJ5PjxwPuaRuOWIsOe6oueQg+eahOamgueOh+e6piBcXCgwLjJcXCnvvIzogIzlroPnrYnkuo4gXFwoXFxkZnJhY3tcXHRleHR757qi55CD5pWwfX17XFx0ZXh0e+eQg+eahOaAu+aVsH19XFwp44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMu+8muWIq+WBnOWcqOaAu+aVsDwvc3VtbWFyeT48cD7mgLvmlbDnuqYgXFwoM1xcZGl2MC4yXFwp44CC6aKY55uu6Zeu55qE5piv55m955CD44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPue6piBcXCgxNVxcKSDkuKo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+57qmIFxcKDEyXFwpIOS4qjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7nuqYgXFwoMC42XFwpIOS4qjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7nuqYgXFwoNFxcKSDkuKo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgILnkIPnmoTmgLvmlbDnuqYgXFwoM1xcZGl2MC4yPTE1XFwpIOS4qu+8jOeZveeQg+e6piBcXCgxNS0zPTEyXFwpIOS4quOAgkEg5YGc5Zyo5LqG5oC75pWw77ybQyDmmK/plJnnrpfmiJAgXFwoM1xcdGltZXMwLjJcXCnvvJtEIOaYr+aKiuOAjOavjyA1IOasoee6puaciSAxIOasoeaRuOWIsOe6oueQg+OAjeebtOaOpeW9k+aIkOiii+mHjOOAjDEg5Liq57qi55CD44CBNCDkuKrnmb3nkIPjgI3vvIzlv5jkuobnuqLnkIPlhbblrp7mnIkgXFwoM1xcKSDkuKrvvJrnuqLjgIHnmb3kuYvmr5TnuqYgXFwoMTo0XFwp77yM55m955CD5bqU5pivIFxcKDNcXHRpbWVzND0xMlxcKSDkuKrjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>6. 不透明袋中有 \(3\) 个红球和若干个白球，除颜色外都相同。每次摸出一个记下颜色再放回，大量重复后发现摸到红球的频率稳定在 \(0.2\) 附近。估计袋中白球大约有几个？</p>
+    <details class="more"><summary>提示 1：先估计什么</summary><p>摸到红球的概率约 \(0.2\)，而它等于 \(\dfrac{\text{红球数}}{\text{球的总数}}\)。</p></details>
+    <details class="more"><summary>提示 2：别停在总数</summary><p>总数约 \(3\div0.2\)。题目问的是白球。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>约 \(15\) 个</button><button class="opt" data-v="B"><b>B</b>约 \(12\) 个</button><button class="opt" data-v="C"><b>C</b>约 \(0.6\) 个</button><button class="opt" data-v="D"><b>D</b>约 \(4\) 个</button></div>
+    <div class="reveal"><p><b>B</b>。球的总数约 \(3\div0.2=15\) 个，白球约 \(15-3=12\) 个。A 停在了总数；C 是错算成 \(3\times0.2\)；D 是把「每 5 次约有 1 次摸到红球」直接当成袋里「1 个红球、4 个白球」，忘了红球其实有 \(3\) 个：红、白之比约 \(1:4\)，白球应是 \(3\times4=12\) 个。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">这一节按旧版目录占位；核不到原卷的题不放，真题待在有原卷库的机器上补。</p>
+  <div id="practice"></div>
+</section>
+
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function f(v, d) { var k = Math.pow(10, d == null ? 3 : d), r = Math.round(v * k) / k; return r === 0 ? "0" : String(r); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function logi(id, choice) { if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: choice }); }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t); logi(id, t.textContent.trim());
+    });
+  }
+  function handle(svg, x, y, col, label, val, lo, hi, step, toVal, cb, vt) {
+    var c = C();
+    var h = el("circle", { cx: x, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": vt || String(val), style: "cursor:grab;touch-action:none" }, svg);
+    function snap(v) { return clamp(Math.round(Math.round(v / step) * step * 1000) / 1000, lo, hi); }
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + step, ArrowUp: val + step, ArrowLeft: val - step, ArrowDown: val - step, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(snap(nv), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        cb(snap(toVal(pt.matrixTransform(m.inverse()).x)), false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); logi(svg.id, label); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+  // 带种子的伪随机数（mulberry32）：同一种子得到同一串结果，便于复现和验收
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function Sim(seed, p) { this.p = p; this.reset(seed); }
+  Sim.prototype.reset = function (seed) { this.seed = seed; this.r = rng(seed); this.seq = []; this.m = 0; };
+  Sim.prototype.add = function (k) { for (var i = 0; i < k; i++) { var hit = this.r() < this.p ? 1 : 0; this.seq.push(hit); this.m += hit; } };
+  function cum(seq) { var s = 0; return seq.map(function (v) { return (s += v); }); }
+  function swing(seq) { // 后一半试验里频率的最小值、最大值
+    var c = cum(seq), n = seq.length, lo = 1, hi = 0;
+    for (var i = Math.floor(n / 2) + 1; i <= n; i++) { var v = c[i - 1] / i; lo = Math.min(lo, v); hi = Math.max(hi, v); }
+    return [lo, hi, Math.floor(n / 2) + 1];
+  }
+  var SCALES = [20, 50, 100, 200, 500, 1000, 2000, 5000], MAXN = 5000;
+  // 频率折线：顶点 i（第 i 次）在 x = ox + sx·i，y = oy − sy·(m_i / i)；只画一条开放 path
+  function graph(svg, seq, p, oy, refs) {
+    var c = C(), n = seq.length, N = SCALES.filter(function (s) { return s >= n; })[0], ox = 70, x1 = 530, sy = 220, sx = (x1 - ox) / N;
+    svg.setAttribute("data-seq", seq.join(""));
+    svg.setAttribute("data-p", String(p));
+    svg.setAttribute("data-map", [ox, oy, sx, sy].join(","));
+    el("line", { x1: ox, y1: oy, x2: x1 + 8, y2: oy, stroke: c.fg, "stroke-width": 2 }, svg);
+    el("line", { x1: ox, y1: oy, x2: ox, y2: oy - sy - 8, stroke: c.fg, "stroke-width": 2 }, svg);
+    [0, 0.5, 1].forEach(function (v) { el("line", { x1: ox - 6, y1: oy - sy * v, x2: ox, y2: oy - sy * v, stroke: c.fg, "stroke-width": 2 }, svg); txt(svg, ox - 12, oy - sy * v + 7, String(v), c.fg, 400, 19, "end"); });
+    [N / 2, N].forEach(function (v) { el("line", { x1: ox + sx * v, y1: oy, x2: ox + sx * v, y2: oy + 6, stroke: c.fg, "stroke-width": 2 }, svg); txt(svg, ox + sx * v, oy + 30, String(v), c.fg, 400, 19); });
+    (refs || []).forEach(function (r) {
+      el("line", { x1: ox, y1: oy - sy * r.v, x2: x1, y2: oy - sy * r.v, stroke: r.col, "stroke-width": 2.5, "stroke-dasharray": "8 5" }, svg);
+      if (r.label) txt(svg, x1 + 26, oy - sy * r.v + (r.dy || 7), r.label, r.col, 700, 19, "end");
+    });
+    if (n >= 2) {
+      var s = 0, d = "";
+      for (var i = 1; i <= n; i++) { s += seq[i - 1]; d += (i === 1 ? "M" : "L") + (ox + sx * i).toFixed(2) + " " + (oy - sy * s / i).toFixed(2); }
+      el("path", { d: d, fill: "none", stroke: c.c, "stroke-width": 2.5, "stroke-linejoin": "round" }, svg);
+    }
+  }
+  function readout(n, m, what) { return "共 " + n + " 次，发生 " + m + " 次，频率 " + m + "/" + n + " ≈ <span class=\"sum\">" + f(m / n) + "</span>（事件：" + what + "）。"; }
+
+  /* 从例子进入：瓶盖口朝上（设定概率 0.38，同一串试验看前 k 次） */
+  var CAP = new Sim(17, 0.38); CAP.add(1000); var capK = 10;
+  function drawEntry() {
+    var p = document.getElementById("entry-fig"), c = C(), m = cum(CAP.seq)[capK - 1], fr = m / capK, x0 = 40, W = 440; p.innerHTML = "";
+    txt(p, 260, 34, "抛 " + capK + " 次", c.fg, 700, 20);
+    el("rect", { x: x0, y: 60, width: W * fr, height: 56, fill: c.a }, p);
+    el("rect", { x: x0 + W * fr, y: 60, width: W * (1 - fr), height: 56, fill: c.card, stroke: c.muted, "stroke-width": 2 }, p);
+    el("line", { x1: x0 + W / 2, y1: 50, x2: x0 + W / 2, y2: 126, stroke: c.no, "stroke-width": 2.5, "stroke-dasharray": "6 4" }, p);
+    txt(p, x0 + W / 2, 150, "一半", c.no, 700, 18);
+    txt(p, x0, 196, "朝上 " + m, c.a, 700, 20, "start");
+    txt(p, x0 + W, 196, "朝下 " + (capK - m), c.fg, 700, 20, "end");
+    document.getElementById("entry-note").textContent = "抛 " + capK + " 次：口朝上 " + m + " 次，频率 " + m + "/" + capK + " = " + f(fr) + "。" +
+      (capK === 10 ? "只抛 10 次，再抛一组 10 次结果可能很不一样，说明不了什么。" : "次数多了，口朝上的频率在 " + f(fr, 2) + " 左右，和「一半」差 " + f(Math.abs(fr - 0.5), 2) + "。");
+  }
+  bar("entry-bar", function (t) { capK = +t.getAttribute("data-k"); drawEntry(); });
+
+  /* 微图解 ①：三组各 20 次 */
+  var M1 = [12, 13, 14].map(function (s) { var x = new Sim(s, 0.5); x.add(20); return x; }), m1g = 0;
+  function drawM1() {
+    var p = document.getElementById("m1-fig"), c = C(), g = M1[m1g]; p.innerHTML = "";
+    g.seq.forEach(function (v, i) { el("rect", { x: 22 + i * 17, y: 34, width: 15, height: 26, rx: 3, fill: v ? c.a : c.card, stroke: v ? c.a : c.muted, "stroke-width": 1.5 }, p); });
+    txt(p, 190, 98, "正面 " + g.m + " 次", c.a, 700, 18);
+    txt(p, 190, 140, "频率 " + f(g.m / 20, 2), c.fg, 700, 18);
+    document.getElementById("m1-note").textContent = "第 " + (m1g + 1) + " 组：实心是正面，共 " + g.m + " 个，频率 " + g.m + "/20 = " + f(g.m / 20, 2) + "。三组的频率分别是 " +
+      M1.map(function (x) { return f(x.m / 20, 2); }).join("、") + "：同一枚硬币、同样 20 次，频率却不同——频率是试验结果，带偶然性。";
+  }
+  bar("m1-bar", function (t) { m1g = +t.getAttribute("data-g"); drawM1(); });
+
+  /* 微图解 ②：同一串抛硬币，看前 n 次 */
+  var M2 = new Sim(21, 0.5); M2.add(5000); var m2n = 10;
+  function drawM2() {
+    var p = document.getElementById("m2-fig"), c = C(), ox = 50, x1 = 360, oy = 160, sy = 130, sx = (x1 - ox) / m2n, seq = M2.seq.slice(0, m2n), cm = cum(seq), stp = Math.ceil(m2n / 600), d = ""; p.innerHTML = "";
+    el("line", { x1: ox, y1: oy, x2: x1, y2: oy, stroke: c.fg, "stroke-width": 2 }, p);
+    el("line", { x1: ox, y1: oy, x2: ox, y2: oy - sy, stroke: c.fg, "stroke-width": 2 }, p);
+    [0, 0.5, 1].forEach(function (v) { txt(p, ox - 8, oy - sy * v + 6, String(v), c.fg, 400, 16, "end"); });
+    txt(p, x1, oy + 26, String(m2n), c.fg, 400, 16, "end");
+    el("line", { x1: ox, y1: oy - sy / 2, x2: x1, y2: oy - sy / 2, stroke: c.no, "stroke-width": 2, "stroke-dasharray": "6 4" }, p);
+    for (var i = 1; i <= m2n; i += (i === 1 ? 1 : stp)) d += (d ? "L" : "M") + (ox + sx * i).toFixed(2) + " " + (oy - sy * cm[i - 1] / i).toFixed(2);
+    if (m2n % stp) d += "L" + (ox + sx * m2n).toFixed(2) + " " + (oy - sy * cm[m2n - 1] / m2n).toFixed(2);
+    el("path", { d: d, fill: "none", stroke: c.c, "stroke-width": 2 }, p);
+    var w = swing(seq);
+    document.getElementById("m2-note").textContent = "前 " + m2n + " 次：正面 " + cm[m2n - 1] + " 次，频率 " + f(cm[m2n - 1] / m2n) + "。后一半（第 " + w[2] + "～" + m2n + " 次）里频率在 " + f(w[0]) + "～" + f(w[1]) + " 之间，摆动幅度 " + f(w[1] - w[0]) + "。" +
+      (m2n <= 10 ? "次数少，折线大起大落。" : "次数越多，折线通常越贴近 0.5 的虚线，但始终有小起伏。");
+  }
+  bar("m2-bar", function (t) { m2n = +t.getAttribute("data-n"); drawM2(); });
+
+  /* 微图解 ③：发芽试验表（自编数据） */
+  var GN = [50, 200, 1000, 5000, 10000], GM = [44, 182, 897, 4489, 8996], GL = ["50", "200", "1000", "5000", "1万"], m3r = 2;
+  function drawM3() {
+    var p = document.getElementById("m3-fig"), c = C(), Y = function (v) { return 160 - (v - 0.85) / 0.1 * 130; }; p.innerHTML = "";
+    el("line", { x1: 60, y1: 160, x2: 370, y2: 160, stroke: c.fg, "stroke-width": 2 }, p);
+    [0.85, 0.9, 0.95].forEach(function (v) { txt(p, 52, Y(v) + 6, String(v), c.fg, 400, 16, "end"); });
+    el("line", { x1: 60, y1: Y(0.9), x2: 370, y2: Y(0.9), stroke: c.no, "stroke-width": 2, "stroke-dasharray": "6 4" }, p);
+    var fr = [];
+    for (var i = 0; i < 5; i++) {
+      var x = 90 + i * 66, v = GM[i] / GN[i];
+      txt(p, x, 188, GL[i], i < m3r ? c.fg : c.muted, 400, 16);
+      if (i < m3r) { fr.push(f(v, 4)); el("rect", { x: x - 7, y: Y(v) - 7, width: 14, height: 14, rx: 2, fill: c.a }, p); }
+    }
+    var last = GM[m3r - 1] / GN[m3r - 1];
+    document.getElementById("m3-note").textContent = "看到 " + GN[m3r - 1] + " 粒为止，发芽频率依次是 " + fr.join("、") + "。" +
+      (m3r === 2 ? "只有两行、次数又少，估计还不太可靠。" : "次数越多，频率越贴近 0.9（最后一行 " + f(last, 4) + "），估计发芽的概率约为 0.9。");
+  }
+  bar("m3-bar", function (t) { m3r = +t.getAttribute("data-r"); drawM3(); });
+
+  /* 翻车现场 ①：三组各 10 次 */
+  function drawTrap() {
+    var p = document.getElementById("m-trap"), c = C(), oy = 160, h = 130; p.innerHTML = "";
+    el("line", { x1: 30, y1: oy, x2: 290, y2: oy, stroke: c.fg, "stroke-width": 2 }, p);
+    [34, 33, 35].forEach(function (s, i) {
+      var g = new Sim(s, 0.5); g.add(10); var x = 70 + i * 80, v = g.m / 10;
+      el("rect", { x: x - 18, y: oy - h * v, width: 36, height: h * v, fill: c.a }, p);
+      txt(p, x, oy - h * v - 8, f(v, 1), c.a, 700, 17);
+      txt(p, x, 188, "第" + (i + 1) + "组", c.fg, 400, 16);
+    });
+    el("line", { x1: 30, y1: oy - h / 2, x2: 290, y2: oy - h / 2, stroke: c.no, "stroke-width": 2, "stroke-dasharray": "6 4" }, p);
+    txt(p, 26, oy - h / 2 + 6, "0.5", c.no, 700, 16, "end");
+  }
+
+  /* 动手 ①：抛硬币 */
+  var COIN0 = 101, coin = new Sim(COIN0, 0.5); coin.add(100);
+  function drawCoin() {
+    var svg = document.getElementById("fig-coin"), c = C(), n = coin.seq.length; svg.innerHTML = "";
+    graph(svg, coin.seq, 0.5, 260, [{ v: 0.5, col: c.no, label: "0.5", dy: -8 }]);
+    var o = document.getElementById("out-coin");
+    if (!n) { o.innerHTML = "还没有抛。点「抛 10 次」开始。"; return; }
+    var w = swing(coin.seq);
+    o.innerHTML = readout(n, coin.m, "正面朝上") + (n < 50 ? "次数还少，频率可能离 0.5 较远，这很正常，不能说概率就是 " + f(coin.m / n) + "。" :
+      "后一半（第 " + w[2] + "～" + n + " 次）里频率在 " + f(w[0]) + "～" + f(w[1]) + " 之间摆动，" + (w[0] < 0.5 && w[1] > 0.5 ? "围着 0.5 上下" : "这一段都" + (w[0] >= 0.5 ? (w[0] > 0.5 ? "在 0.5 上方" : "不低于 0.5（最低正好碰到 0.5）") : (w[1] < 0.5 ? "在 0.5 下方" : "不高于 0.5（最高正好碰到 0.5）")) + "，也是正常的起伏") + "。次数越多摆动通常越小，但不保证一直靠近。") +
+      (n >= MAXN ? "已到 " + MAXN + " 次上限，点「再来一组」重新开始。" : "");
+  }
+  function coinAdd(k) { coin.add(Math.min(k, MAXN - coin.seq.length)); drawCoin(); logi("fig-coin", "抛 " + k + " 次"); }
+  document.getElementById("coin-10").onclick = function () { coinAdd(10); };
+  document.getElementById("coin-100").onclick = function () { coinAdd(100); };
+  document.getElementById("coin-new").onclick = function () { coin.reset(coin.seed + 1); drawCoin(); logi("fig-coin", "再来一组"); };
+  document.getElementById("reset-coin").onclick = function () { coin.reset(COIN0); coin.add(100); drawCoin(); };
+
+  /* 动手 ②：摸球（10 个球，红球 r 个；改 r 时从同一种子重新摸） */
+  var BALL0 = 202, R0 = 3, ballR = R0, ballN = 200, ball, focusB = false;
+  function ballRun() { ball = new Sim(BALL0, ballR / 10); ball.add(ballN); }
+  function drawBall() {
+    var svg = document.getElementById("fig-ball"), c = C(), p = ballR / 10, n = ball.seq.length; svg.innerHTML = "";
+    for (var k = 0; k < 10; k++) el("rect", { x: 20 + k * 40, y: 14, width: 32, height: 32, rx: 16, fill: k < ballR ? c.no : c.card, stroke: k < ballR ? c.no : c.muted, "stroke-width": 2 }, svg);
+    txt(svg, 548, 38, "红球 " + ballR + " 个", c.no, 700, 19, "end");
+    txt(svg, 20, 97, "红球数", c.fg, 700, 19, "start");
+    el("line", { x1: 150, y1: 90, x2: 470, y2: 90, stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, svg);
+    graph(svg, ball.seq, p, 350, [{ v: p, col: c.no, label: f(p, 1), dy: p > 0.5 ? 24 : -8 }]);
+    var h = handle(svg, 150 + (ballR - 1) * 40, 90, c.no, "红球个数", ballR, 1, 9, 1, function (x) { return 1 + (x - 150) / 40; },
+      function (nv, key) { if (nv !== ballR) { ballR = nv; ballN = 200; ballRun(); } focusB = key; drawBall(); }, ballR + " 个");
+    var fr = ball.m / n, gap = Math.abs(fr - p);
+    document.getElementById("out-ball").innerHTML = "袋里 10 个球，红球 " + ballR + " 个，摸到红球的概率 " + ballR + "/10 = <span class=\"ok\">" + f(p, 1) + "</span>。" + readout(n, ball.m, "摸到红球") +
+      "频率和概率差 " + f(gap) + "。" + (gap < 0.05 ? "频率已经在概率附近。" : "还差得较多，多摸一些看看。") + "红球越多，虚线越高，频率也跟着稳在更高的位置。" + (n >= MAXN ? "已到 " + MAXN + " 次上限。" : "");
+    if (focusB) h.focus();
+  }
+  function ballAdd(k) { ballN = Math.min(MAXN, ballN + k); ball.add(ballN - ball.seq.length); focusB = false; drawBall(); logi("fig-ball", "摸 " + k + " 次"); }
+  document.getElementById("ball-50").onclick = function () { ballAdd(50); };
+  document.getElementById("ball-200").onclick = function () { ballAdd(200); };
+  document.getElementById("reset-ball").onclick = function () { ballR = R0; ballN = 200; ballRun(); focusB = false; drawBall(); };
+
+  /* 动手 ③：图钉（设定概率 0.62，揭晓前不显示） */
+  var TP = 0.62, TACK0 = 303, G0 = 0.5, tack = new Sim(TACK0, TP), guess = G0, shown = false, focusT = false; tack.add(100);
+  function drawTack() {
+    var svg = document.getElementById("fig-tack"), c = C(), n = tack.seq.length, refs = [{ v: guess, col: c.muted, label: "估计", dy: guess > TP || !shown ? -8 : 24 }]; svg.innerHTML = "";
+    if (shown) refs.push({ v: TP, col: c.no, label: String(TP), dy: guess > TP ? 24 : -8 });
+    graph(svg, tack.seq, TP, 260, refs);
+    txt(svg, 20, 337, "我的估计", c.fg, 700, 19, "start");
+    el("line", { x1: 150, y1: 330, x2: 470, y2: 330, stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, svg);
+    txt(svg, 548, 337, guess.toFixed(2), c.fg, 700, 19, "end");
+    var h = handle(svg, 150 + guess * 320, 330, c.b, "我的估计", guess, 0, 1, 0.01, function (x) { return (x - 150) / 320; },
+      function (nv, key) { guess = nv; focusT = key; drawTack(); }, guess.toFixed(2));
+    var o = document.getElementById("out-tack"), fr = n ? tack.m / n : 0;
+    o.innerHTML = (n ? readout(n, tack.m, "钉尖朝上") + "你的估计 " + guess.toFixed(2) + "，和当前频率差 " + f(Math.abs(guess - fr)) + "。" +
+      (n < 200 ? "次数还少，先多抛一些再估计。" : "大量试验后频率稳在 " + f(fr, 2) + " 附近，用它作估计比较可靠。") : "还没有抛。") +
+      (shown ? "揭晓：计算机设定的概率是 " + TP + "，你的估计相差 " + f(Math.abs(guess - TP), 2) + "。" : "图钉两种落法不等可能，列举法算不出，只能用频率估计。") + (n >= MAXN ? "已到 " + MAXN + " 次上限。" : "");
+    if (focusT) h.focus();
+  }
+  function tackAdd(k) { tack.add(Math.min(k, MAXN - tack.seq.length)); focusT = false; drawTack(); logi("fig-tack", "抛 " + k + " 次"); }
+  var showBtn = document.getElementById("tack-show");
+  function setShown(v) { shown = v; showBtn.setAttribute("aria-pressed", v ? "true" : "false"); showBtn.textContent = v ? "收起" : "揭晓"; }
+  document.getElementById("tack-100").onclick = function () { tackAdd(100); };
+  document.getElementById("tack-1000").onclick = function () { tackAdd(1000); };
+  showBtn.onclick = function () { setShown(!shown); focusT = false; drawTack(); logi("fig-tack", shown ? "揭晓" : "收起"); };
+  document.getElementById("tack-new").onclick = function () { tack.reset(tack.seed + 1); focusT = false; drawTack(); logi("fig-tack", "再来一组"); };
+  document.getElementById("reset-tack").onclick = function () { tack.reset(TACK0); tack.add(100); guess = G0; setShown(false); focusT = false; drawTack(); };
+
+  ballRun();
+  function drawAll() { focusB = focusT = false; drawEntry(); drawM1(); drawM2(); drawM3(); drawTrap(); drawCoin(); drawBall(); drawTack(); }
+  drawAll();
+  new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

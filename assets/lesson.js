@@ -5,11 +5,15 @@
 (function () {
   "use strict";
 
-  /* ---------- 记录 ---------- */
-  var LOG_KEY = "peiyu.hs.log", NAME_KEY = "peiyu.hs.name";
+  /* ---------- 学段与记录 ---------- */
+  // 学段：<body data-stage> 优先；否则节号 j<章>-<节> 是初中，其余是高中。
+  // 初中记录单独存 peiyu.jh.log，高中照旧 peiyu.hs.log，两边的记录页互不混入。
+  var sec = document.body.getAttribute("data-sec") || "";
+  var STAGE = document.body.getAttribute("data-stage") || (/^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(sec) ? "junior" : "high");
+  var EXAM_NAME = STAGE === "junior" ? "中考真题" : "高考真题";
+  var LOG_KEY = STAGE === "junior" ? "peiyu.jh.log" : "peiyu.hs.log", NAME_KEY = "peiyu.hs.name";
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
   function readLog() { try { return JSON.parse(store(LOG_KEY) || "[]"); } catch (e) { return []; } }
-  var sec = document.body.getAttribute("data-sec") || "";
   function log(kind, data) {
     var ev = Object.assign({ t: Date.now(), sec: sec, kind: kind }, data || {});
     var all = readLog(); all.push(ev);
@@ -178,7 +182,7 @@
     if (year) parts.push(year);
     if (paper) parts.push(paper);
     if (no != null && no !== "") parts.push("第" + no + "题");
-    return parts.length ? parts.join(" ") : "高考真题";
+    return parts.length ? parts.join(" ") : EXAM_NAME;
   }
 
   function renderProblem(p, idx) {
@@ -343,10 +347,13 @@
       var BOOK_ORDER = { b1: 1, b2: 2, e1: 3, e2: 4, e3: 5 };
       function parseSecOrder(sid) {
         var m = /^(b1|b2|e1|e2|e3)-(\d+)-(\d+)$/.exec(sid || "");
-        return m ? [BOOK_ORDER[m[1]] || 0, Number(m[2]), Number(m[3])] : null;
+        if (m) return [BOOK_ORDER[m[1]] || 0, Number(m[2]), Number(m[3])];
+        // 初中 j<章>-<节>：章号七上到九下连续编号，排在高中各册之前
+        m = /^j(\d+)-(\d+)$/.exec(sid || "");
+        return m ? [0, Number(m[1]), Number(m[2])] : null;
       }
       var meOrd = parseSecOrder(sec);
-      var me = (sec.match(/-(\d+)-(\d+)$/) || []).slice(1).map(Number);
+      var me = meOrd ? meOrd.slice(1) : [];
       function isLaterProblem(p) {
         // 1. 优先支持图谱受控字段 prereq_secs: ["e2-5-3", ...]
         if (meOrd && p.prereq_secs && Array.isArray(p.prereq_secs)) {
@@ -520,20 +527,22 @@
   }
 
   /* ---------- 公共接口给页面里的互动图用 ---------- */
-  window.Peiyu = { log: log, math: math, readLog: readLog, store: store, LOG_KEY: LOG_KEY, NAME_KEY: NAME_KEY, layout: queueFit, layoutNow: function () { fitFigText(); fitWide(); } };
+  window.Peiyu = { log: log, math: math, readLog: readLog, store: store, LOG_KEY: LOG_KEY, NAME_KEY: NAME_KEY, stage: STAGE, examName: EXAM_NAME, layout: queueFit, layoutNow: function () { fitFigText(); fitWide(); } };
 
   document.addEventListener("DOMContentLoaded", function () {
     setupSteps(); setupPredict(); setupPractice(); setupFigText();
     math(document.body);
     log("open", {});
     var fl = document.createElement("script");
-    fl.src = "../assets/figure-layout.js?v=vs-c76a05f5a617";
+    fl.src = "../assets/figure-layout.js?v=vs-a4abfb4cced8";
     document.head.appendChild(fl);
-    var ws = document.createElement("script");
-    ws.src = "../assets/wiki.js?v=vs-dee5f49939b4";
-    document.head.appendChild(ws);
+    if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
+      var ws = document.createElement("script");
+      ws.src = "../assets/wiki.js?v=vs-cad72bae0c22";
+      document.head.appendChild(ws);
+    }
     var hs = document.createElement("script"); // 交互层（PY-53）
-    hs.src = "../assets/hci.js?v=vs-cc67e9632160";
+    hs.src = "../assets/hci.js?v=vs-f3cb689fbc60";
     document.head.appendChild(hs);
   });
 })();

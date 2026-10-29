@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10.2 消元——解二元一次方程组 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j10-2" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">七年级下册 · 第十章 二元一次方程组</p>
+<h1>10.2 消元——解二元一次方程组</h1>
+<p class="lead">两个未知数一起解不出来？先想办法<b>消掉一个</b>，变成会解的一元一次方程。消元有两种手段：<b>代入</b>和<b>加减</b>。这一节学会它们，也学会挑更省事的那一种。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：5.2 解一元一次方程、10.1 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：等式的性质、解一元一次方程（<a href="j5-2.html">回看 5.2</a>）；二元一次方程组和它的解（<a href="j10-1.html">回看 10.1</a>）；去括号、合并同类项（<a href="j4-2.html">回看 4.2</a>）。</p>
+  <ol class="small">
+    <li>从两盘水果称重进入：比一比，一个未知数就「消失」了。</li>
+    <li>消元思想：二元 → 一元，先求一个，再求另一个。</li>
+    <li>代入消元法：变形、代入<b>另一个</b>方程、回代。</li>
+    <li>加减消元法：系数相等就减，互为相反数就加。</li>
+    <li>系数都不对齐时先乘数；怎样选方法更省事。</li>
+    <li>练习与中考真题，回看「哪一步最容易错」。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>两个盘子放在秤上：第一盘是 \(1\) 个苹果和 \(1\) 个梨，共 \(400\) g；第二盘是 \(2\) 个苹果和 \(1\) 个梨，共 \(650\) g。（同一种水果一样重。）点下面几步，比一比两盘：</p>
+  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIwMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Lik55uY5rC05p6c55qE6YeN6YeP5q+U6L6DXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIueci+WTquS4gOebmFwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjFcIj7nnIvnrKzkuIDnm5g8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjJcIj7nnIvnrKzkuoznm5g8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjNcIj7kuKTnm5jmr5TkuIDmr5Q8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+5LiA5Liq6Iu55p6c6YeN5aSa5bCR5YWL77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgyNTBcXCkgZzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDMyNVxcKSBnPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMTUwXFwpIGc8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgyMDBcXCkgZzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkE8L2I+44CC5Lik55uY55u45ZCM55qE6YOo5YiG77yIXFwoMVxcKSDkuKroi7nmnpwgXFwoMVxcKSDkuKrmoqjvvInmirXmjonvvIznrKzkuoznm5jlj6rlpJrlh7ogXFwoMVxcKSDkuKroi7nmnpzvvIzlpJrlh7ogXFwoNjUwLTQwMD0yNTBcXCkgZ+OAguaiqOWwseaYryBcXCg0MDAtMjUwPTE1MFxcKSBn44CC6YCJIEIg5piv5oqKIFxcKDY1MFxcKSDlubPlnYfliIbnu5nkuobkuKTkuKroi7nmnpzvvIzlv5jkuobnm5jph4zov5jmnInmoqjjgII8L3A+XG4gICAgICA8cD7orr7oi7nmnpwgXFwoeFxcKSBn44CB5qKoIFxcKHlcXCkgZ++8mlxcKFxcYmVnaW57Y2FzZXN9eCt5PTQwMFxcXFwyeCt5PTY1MFxcZW5ke2Nhc2VzfVxcKeOAguOAjOS4pOebmOavlOS4gOavlOOAjeWwseaYr+esrOS6jOS4quaWueeoi+WHj+esrOS4gOS4qu+8jFxcKHlcXCkg5LiA5LiL5a2Q5rKh5LqG77yM5Y+q5YmpIFxcKHg9MjUwXFwp44CC6L+Z5LiA6IqC6KaB5Zue562U77yaPGI+5oCO5qC35pyJ6K6h5YiS5Zyw5oqK5LiA5Liq5pyq55+l5pWw5raI5o6J77yfPC9iPjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 200" role="img" aria-label="两盘水果的重量比较"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="看哪一盘">
+      <button type="button" class="on" data-k="1">看第一盘</button>
+      <button type="button" data-k="2">看第二盘</button>
+      <button type="button" data-k="3">两盘比一比</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>一个苹果重多少克？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(250\) g</button>
+      <button class="opt" data-v="B"><b>B</b>\(325\) g</button>
+      <button class="opt" data-v="C"><b>C</b>\(150\) g</button>
+      <button class="opt" data-v="D"><b>D</b>\(200\) g</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。两盘相同的部分（\(1\) 个苹果 \(1\) 个梨）抵掉，第二盘只多出 \(1\) 个苹果，多出 \(650-400=250\) g。梨就是 \(400-250=150\) g。选 B 是把 \(650\) 平均分给了两个苹果，忘了盘里还有梨。</p>
+      <p>设苹果 \(x\) g、梨 \(y\) g：\(\begin{cases}x+y=400\\2x+y=650\end{cases}\)。「两盘比一比」就是第二个方程减第一个，\(y\) 一下子没了，只剩 \(x=250\)。这一节要回答：<b>怎样有计划地把一个未知数消掉？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：消元</h3>
+  <p class="small">前置知识：解一元一次方程（<a href="j5-2.html">回看 5.2</a>）、方程组的解（<a href="j10-1.html">回看 10.1</a>）。两个未知数的方程组，我们还不会直接解；但一个未知数的方程，我们会。所以思路是：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>二元 → 一元 → 回代：先求一个，再求另一个</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="消元的步骤">
+        <button type="button" class="on" data-k="1">二元方程组</button>
+        <button type="button" data-k="2">消去 y</button>
+        <button type="button" data-k="3">求 x，再回代</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 194" role="img" aria-label="消元的三个阶段"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <ul>
+    <li><b>消元</b>：把方程组里的一个未知数消去，二元一次方程组就化成了一元一次方程。这种「未知数由多化少、逐个解决」的想法叫<b>消元思想</b>。</li>
+    <li><b>代入消元法</b>（代入法）：从一个方程里把某个未知数用含另一个未知数的式子表示出来，<b>代入另一个方程</b>。</li>
+    <li><b>加减消元法</b>（加减法）：让某个未知数在两个方程里的系数相等或互为相反数，再把两个方程的两边分别相减或相加。</li>
+  </ul>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>代入：同一个字母，同一个量</b></p>
+      <p class="small" style="margin:0">两个方程里的 \(y\) 表示同一个数。第一个方程说 \(y\) 等于 \(2x-1\)，第二个方程里的 \(y\) 就可以整体换成 \(2x-1\)。依据是<b>等量代换</b>。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>加减：两个等式相加减，仍是等式</b></p>
+      <p class="small" style="margin:0">「\(\textcircled{2}-\textcircled{1}\)」是用 ② 的左边减 ① 的左边，② 的右边减 ① 的右边。等量减等量，差仍相等，这就是两盘水果比一比。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：代入消元法</h3>
+  <p>挑一个容易变形的方程（最好有系数是 \(1\) 或 \(-1\) 的未知数），把它写成「\(y=\)含 \(x\) 的式子」或「\(x=\)含 \(y\) 的式子」，再代入<b>另一个</b>方程。代进去的式子要<b>整体加括号</b>。</p>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{y=7-2x}_{\text{由\textcircled{1}变形}}}\ \Rightarrow\ 3x-2\color{#966524}{\underbrace{(7-2x)}_{\text{整体代入\textcircled{2}}}}=7\ \Rightarrow\ \color{#B5452F}{\underbrace{x=3}_{\text{一元}}}\ \Rightarrow\ \underbrace{y=1}_{\text{回代}}\)</span>
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>代到哪里去？只能代入另一个方程</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="代入的方式">
+        <button type="button" class="on" data-k="0">用 y 表示 x</button>
+        <button type="button" data-k="1">用 x 表示 y</button>
+        <button type="button" data-k="2">代回原方程 ①</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 180" role="img" aria-label="代入的去向"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">用代入法解方程组 \(\begin{cases}2x+y=7\ \textcircled{1}\\3x-2y=7\ \textcircled{2}\end{cases}\)。</p>
+    <p><b>① 读懂题意：</b>两个未知数、两个方程。哪个未知数最容易单独拿出来？</p>
+    <details class="more"><summary>提示 1：看系数</summary><p>① 里 \(y\) 的系数是 \(1\)，移项就得 \(y=7-2x\)，不出分数。</p></details>
+    <details class="more"><summary>提示 2：代到哪里</summary><p>把 \(y=7-2x\) 代入 ②，并把 \(7-2x\) 整体加括号。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>由 ① 得 \(y=7-2x\) ③，代入 ② 消去 \(y\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>把 ③ 代入 ②：\(3x-2(7-2x)=7\)，去括号 \(3x-14+4x=7\)，\(7x=21\)，\(x=3\)。把 \(x=3\) 代入 ③：\(y=7-6=1\)。所以 \(\begin{cases}x=3\\y=1\end{cases}\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>去括号时 \(-2\) 要乘括号里每一项：\(-2\times(-2x)=+4x\)。最后代回<b>两个</b>原方程：① \(6+1=7\) ✓，② \(9-2=7\) ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>回代时选 ③ 最省事，因为它已经是「\(y=\)」的样子。如果先表示 \(x\)，会得到 \(x=\tfrac{7-y}{2}\)，也能做，只是要算分数。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mueUqOS7o+WFpeazleinoyBcXChcXGJlZ2lue2Nhc2VzfXg9M3ktMVxcXFwyeCt5PTEyXFxlbmR7Y2FzZXN9XFwp77yM57uT5p6c5piv5ZOq5LiA5Liq77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoXFxiZWdpbntjYXNlc314PTVcXFxceT0yXFxlbmR7Y2FzZXN9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKFxcYmVnaW57Y2FzZXN9eD0yXFxcXHk9NVxcZW5ke2Nhc2VzfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXChcXGJlZ2lue2Nhc2VzfXg9OFxcXFx5PTNcXGVuZHtjYXNlc31cXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXCgyKDN5LTEpK3k9MTJcXCnvvIxcXCg3eT0xNFxcKe+8jFxcKHk9MlxcKe+8jFxcKHg9M1xcdGltZXMyLTE9NVxcKeOAgkIg5oqKIFxcKHhcXCnjgIFcXCh5XFwpIOWGmeWPjeS6hu+8m0Mg5Y+q5ruh6Laz56ys5LiA5Liq5pa556iL77yIXFwoMTYrMz0xOVxcbmUxMlxcKe+8ieOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：用代入法解 \(\begin{cases}x=3y-1\\2x+y=12\end{cases}\)，结果是哪一个？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\begin{cases}x=5\\y=2\end{cases}\)</button><button class="opt" data-v="B"><b>B</b>\(\begin{cases}x=2\\y=5\end{cases}\)</button><button class="opt" data-v="C"><b>C</b>\(\begin{cases}x=8\\y=3\end{cases}\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(2(3y-1)+y=12\)，\(7y=14\)，\(y=2\)，\(x=3\times2-1=5\)。B 把 \(x\)、\(y\) 写反了；C 只满足第一个方程（\(16+3=19\ne12\)）。</p></div>
+  </div>
+
+  <h3>3. 核心点：加减消元法</h3>
+  <p>先看同一个未知数在两个方程里的系数：<b>相等就相减，互为相反数就相加</b>。都不是时，先给一个或两个方程的<b>两边</b>同乘一个数，把系数「对齐」，就像通分。</p>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    <span style="display:inline-block">\(\color{#2F7A56}{\underbrace{\begin{matrix}5x-3y=9\\2x+3y=12\end{matrix}}_{y\ \text{的系数互为相反数}}}\ \xrightarrow{\ \textcircled{1}+\textcircled{2}\ }\ \color{#B5452F}{\underbrace{7x=21}_{y\ \text{没了}}}\)</span>
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>对齐一列，相加或相减，那一列就变成 0</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="加减消元的三种情形">
+        <button type="button" class="on" data-k="0">系数相等：相减</button>
+        <button type="button" data-k="1">互为相反数：相加</button>
+        <button type="button" data-k="2">都不是：先乘</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 190" role="img" aria-label="把方程按列对齐后相加减"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：系数都不对齐时）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">用加减法解方程组 \(\begin{cases}3x+4y=2\ \textcircled{1}\\2x-3y=7\ \textcircled{2}\end{cases}\)。</p>
+    <p><b>① 读懂题意：</b>\(x\) 的系数 \(3\) 和 \(2\)，\(y\) 的系数 \(4\) 和 \(-3\)，都既不相等也不相反。怎么办？</p>
+    <details class="more"><summary>提示 1：消哪一个</summary><p>\(y\) 的系数一正一负，乘成 \(12\) 和 \(-12\) 后直接相加，不用担心减号变号。</p></details>
+    <details class="more"><summary>提示 2：乘几</summary><p>① 两边乘 \(3\)，② 两边乘 \(4\)。右边的常数也要乘！</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>\(\textcircled{1}\times3\)：\(9x+12y=6\) ③；\(\textcircled{2}\times4\)：\(8x-12y=28\) ④。\(y\) 的系数成了 \(12\) 和 \(-12\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>\(\textcircled{3}+\textcircled{4}\)：\(17x=34\)，\(x=2\)。把 \(x=2\) 代入 ①：\(6+4y=2\)，\(y=-1\)。所以 \(\begin{cases}x=2\\y=-1\end{cases}\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>\(\textcircled{1}\times3\) 时右边 \(2\) 也乘成了 \(6\)；代回 ②：\(4+3=7\) ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>先消 \(x\) 也行（\(\textcircled{1}\times2-\textcircled{2}\times3\)），结果一样，只是要做减法，更容易在符号上出错。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muaWueeoi+e7hCBcXChcXGJlZ2lue2Nhc2VzfTR4KzN5PTExXFwgXFx0ZXh0Y2lyY2xlZHsxfVxcXFw0eC15PTdcXCBcXHRleHRjaXJjbGVkezJ9XFxlbmR7Y2FzZXN9XFwpIOS4re+8jFxcKFxcdGV4dGNpcmNsZWR7MX0tXFx0ZXh0Y2lyY2xlZHsyfVxcKSDlvpfliLDnmoTmlrnnqIvmmK/lk6rkuIDkuKrvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgyeT00XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDR5PTRcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNHk9MThcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoMnk9MThcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgIJcXCgzeS0oLXkpPTR5XFwp77yMXFwoMTEtNz00XFwp77yM5omA5LulIFxcKDR5PTRcXCnvvIxcXCh5PTFcXCnvvIzlho3lvpcgXFwoeD0yXFwp44CCQSDmmK8gXFwoLXlcXCkg5rKh5Y+Y5Y+377yI566X5oiQIFxcKDN5LXlcXCnvvInvvJtD44CBRCDmmK/lj7PovrnliqDkuobotbfmnaXjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：方程组 \(\begin{cases}4x+3y=11\ \textcircled{1}\\4x-y=7\ \textcircled{2}\end{cases}\) 中，\(\textcircled{1}-\textcircled{2}\) 得到的方程是哪一个？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(2y=4\)</button><button class="opt" data-v="B"><b>B</b>\(4y=4\)</button><button class="opt" data-v="C"><b>C</b>\(4y=18\)</button><button class="opt" data-v="D"><b>D</b>\(2y=18\)</button></div>
+    <div class="reveal"><p><b>B</b>。\(3y-(-y)=4y\)，\(11-7=4\)，所以 \(4y=4\)，\(y=1\)，再得 \(x=2\)。A 是 \(-y\) 没变号（算成 \(3y-y\)）；C、D 是右边加了起来。</p></div>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuWGjeivleS4gOS4qu+8muinoyBcXChcXGJlZ2lue2Nhc2VzfTJ4LXk9NVxcIFxcdGV4dGNpcmNsZWR7MX1cXFxcN3grM3k9MjRcXCBcXHRleHRjaXJjbGVkezJ9XFxlbmR7Y2FzZXN9XFwp77yM55SoIFxcKFxcdGV4dGNpcmNsZWR7MX1cXHRpbWVzMytcXHRleHRjaXJjbGVkezJ9XFwpIOa2iOWOuyBcXCh5XFwp77yM5b6X5Yiw5ZOq5Liq5pa556iL77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoMTN4PTM5XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDEzeD0yOVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg5eD0yOVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgxM3g9MTlcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXChcXHRleHRjaXJjbGVkezF9XFx0aW1lczNcXCnvvJpcXCg2eC0zeT0xNVxcKe+8jOWKoCDikaHvvJpcXCgxM3g9MzlcXCnvvIxcXCh4PTNcXCnvvIxcXCh5PTFcXCnjgIJCIOaYr+WPquS5mOS6huW3pui+ueOAgeWPs+i+ueeahCBcXCg1XFwpIOayoeS5mO+8iFxcKDUrMjQ9MjlcXCnvvInvvJtDIOaYr+ayoeS5mCBcXCgzXFwpIOWwseebuOWKoO+8jOW+lyBcXCg5eCsyeT0yOVxcKe+8jOWPiOaKiiBcXCgyeVxcKSDlvZPmiJDmirXmtojmjonkuobvvJtEIOaYr+W3pui+ueS5mCBcXCgzXFwpIOWQjuebuOWKoO+8jOWPs+i+ueWNtOeul+aIkOS6hiBcXCgyNC01PTE5XFwp44CC6L+Z6YGT6aKY55So5Luj5YWl5rOV77yI55SxIOKRoCDlvpcgXFwoeT0yeC01XFwp77yJ5Lmf5b6I6aG65omL44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>再试一个：解 \(\begin{cases}2x-y=5\ \textcircled{1}\\7x+3y=24\ \textcircled{2}\end{cases}\)，用 \(\textcircled{1}\times3+\textcircled{2}\) 消去 \(y\)，得到哪个方程？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(13x=39\)</button><button class="opt" data-v="B"><b>B</b>\(13x=29\)</button><button class="opt" data-v="C"><b>C</b>\(9x=29\)</button><button class="opt" data-v="D"><b>D</b>\(13x=19\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(\textcircled{1}\times3\)：\(6x-3y=15\)，加 ②：\(13x=39\)，\(x=3\)，\(y=1\)。B 是只乘了左边、右边的 \(5\) 没乘（\(5+24=29\)）；C 是没乘 \(3\) 就相加，得 \(9x+2y=29\)，又把 \(2y\) 当成抵消掉了；D 是左边乘 \(3\) 后相加，右边却算成了 \(24-5=19\)。这道题用代入法（由 ① 得 \(y=2x-5\)）也很顺手。</p></div>
+  </div>
+  <p><b>怎样选方法：</b>有系数是 \(\pm1\) 的未知数，代入法往往省事；某个未知数的系数相等、互为相反数或者容易乘成这样，加减法省事。方程里有分母、括号的，先去分母、去括号，整理成 \(ax+by=c\) 的样子再选。两种方法对任何二元一次方程组都能用，先消哪个元，解都一样。</p>
+
+  <h3>4. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>乘数只乘了一边</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：\(2x+3y=4\) 两边乘 \(2\)，写成 \(4x+6y=4\)。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：等式两边要乘同一个数，<b>每一项</b>都乘，右边的 \(4\) 变成 \(8\)：\(4x+6y=8\)。漏乘后解出的数代不回原方程。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 280 172" role="img" aria-label="方程两边每一项都乘二"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>相减时符号错</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：\((2x+y)-(x-3y)\) 写成 \(x-2y\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：先写出带括号的一步，再去括号：\(2x+y-x+3y=x+4y\)。减去 \(-3y\) 等于加 \(3y\)。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>把变形的式子代回了原方程</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：由 \(x-2y=1\) 得 \(x=2y+1\)，又代回 \(x-2y=1\)，得到 \(1=1\)，以为「有无数个解」或「做错了」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：\(x=2y+1\) 就是 ① 本身换了个写法，代回 ① 等于什么都没做。要代入<b>另一个</b>方程。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：古人的「互乘相消」</summary>
+    <p>我国古代算书在解这类问题时，用算筹把各个系数排成方阵，让两行的系数交叉相乘，再整行相减，消去一个未知数——这和我们「先乘数、再加减」是同一个道理。《九章算术》里的「方程」二字，指的正是这种按行排列的算筹方阵。</p>
+    <p>另外，题目给出方程组的解、让你求方程里的字母系数，也是本节常见题：把解代进每个方程，字母系数就成了新的未知数，再解它们组成的方程（组）。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 代入：x 一确定，一切都确定</h3>
+  <p class="small">方程组 \(\begin{cases}y=2x-3\ \textcircled{1}\\3x+2y=22\ \textcircled{2}\end{cases}\)。拖动 \(x\)（或点一下圆点再用方向键），\(y\) 按 ① 跟着变；条形是 ② 的左边 \(3x+2y\)，竖线是 \(22\)。</p>
+  <div class="card">
+    <svg class="fig" id="fig-sub" viewBox="0 0 560 230" role="img" aria-label="代入后第二个方程的左边随 x 变化"></svg>
+    <div class="result" id="out-sub" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-sub" type="button">重置</button></div>
+  </div>
+  <h3>② 加减：给两个方程各乘一个数</h3>
+  <p class="small">先选一个方程组，再拖动乘数 \(m\)、\(n\)：上两行是 \(\textcircled{1}\times m\)、\(\textcircled{2}\times n\)，下面是两行相加。乘数取负数，就相当于相减。让某一列变成 \(0\)！</p>
+  <div class="card">
+    <div class="entry-bar" id="sys-bar" role="group" aria-label="选方程组">
+      <button type="button" class="on" data-k="0">3x+2y=16，x+y=6</button>
+      <button type="button" data-k="1">2x+3y=12，3x−2y=5</button>
+      <button type="button" data-k="2">5x−3y=9，2x+3y=12</button>
+    </div>
+    <svg class="fig" id="fig-mul" viewBox="0 0 560 300" role="img" aria-label="两个方程乘数后相加"></svg>
+    <div class="result" id="out-mul" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-mul" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：不求 x、y，也能求 x + y</h3>
+  <p class="small">方程组 \(\begin{cases}2x+y=p\ \textcircled{1}\\x+2y=q\ \textcircled{2}\end{cases}\)。拖动 \(p\)、\(q\)，看 \(\textcircled{1}+\textcircled{2}\) 和 \(\textcircled{1}-\textcircled{2}\) 各得到什么。</p>
+  <div class="card">
+    <svg class="fig" id="fig-whole" viewBox="0 0 560 320" role="img" aria-label="两个方程整体相加相减"></svg>
+    <div class="result" id="out-whole" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-whole" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIOaWueeoi+e7hCBcXChcXGJlZ2lue2Nhc2VzfXgreT01XFxcXHgteT0xXFxlbmR7Y2FzZXN9XFwpIOeahOino+aYr+WTquS4gOS4qu+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcYmVnaW57Y2FzZXN9eD0zXFxcXHk9MlxcZW5ke2Nhc2VzfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXGJlZ2lue2Nhc2VzfXg9MlxcXFx5PTNcXGVuZHtjYXNlc31cXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoXFxiZWdpbntjYXNlc314PTRcXFxceT0xXFxlbmR7Y2FzZXN9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKFxcYmVnaW57Y2FzZXN9eD0yXFxcXHk9MVxcZW5ke2Nhc2VzfVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguS4pOW8j+ebuOWKoO+8mlxcKDJ4PTZcXCnvvIxcXCh4PTNcXCnvvIzku6PlhaXlvpcgXFwoeT0yXFwp44CCQiDlhpnlj43kuobvvIhcXCgyLTM9LTFcXCnvvInvvJtDIOWPqua7oei2s+esrOS4gOS4qu+8iFxcKDQtMT0zXFxuZTFcXCnvvInvvJtEIOWPqua7oei2s+esrOS6jOS4qu+8iFxcKDItMT0xXFwp77yM5L2GIFxcKDIrMT0zXFxuZTVcXCnvvInjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>1. 方程组 \(\begin{cases}x+y=5\\x-y=1\end{cases}\) 的解是哪一个？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\begin{cases}x=3\\y=2\end{cases}\)</button><button class="opt" data-v="B"><b>B</b>\(\begin{cases}x=2\\y=3\end{cases}\)</button><button class="opt" data-v="C"><b>C</b>\(\begin{cases}x=4\\y=1\end{cases}\)</button><button class="opt" data-v="D"><b>D</b>\(\begin{cases}x=2\\y=1\end{cases}\)</button></div>
+    <div class="reveal"><p><b>A</b>。两式相加：\(2x=6\)，\(x=3\)，代入得 \(y=2\)。B 写反了（\(2-3=-1\)）；C 只满足第一个（\(4-1=3\ne1\)）；D 只满足第二个（\(2-1=1\)，但 \(2+1=3\ne5\)）。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjIuIOeUqOS7o+WFpeazleinoyBcXChcXGJlZ2lue2Nhc2VzfXk9eCsyXFxcXDN4LXk9NFxcZW5ke2Nhc2VzfVxcKe+8jOaKiuesrOS4gOS4quaWueeoi+S7o+WFpeesrOS6jOS4qu+8jOato+ehrueahOaYr+WTquS4gOS4qu+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDN4LXgrMj00XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDN4LSh4KzIpPTRcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMyh4KzIpLXk9NFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgzeCsoeCsyKT00XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCXFwoeVxcKSDmlbTkvZPmjaLmiJAgXFwoKHgrMilcXCnvvIzmi6zlj7fkuI3og73kuKLjgILop6PlvpcgXFwoMngtMj00XFwp77yMXFwoeD0zXFwp77yMXFwoeT01XFwp44CCQSDkuKLkuobmi6zlj7fvvIxcXCgrMlxcKSDmsqHlj5jlj7fvvJtDIOaYr+aKiiBcXCh4KzJcXCkg5Luj6ZSZ5LqG5L2N572u77ybRCDmmK/lh4/lj7fkuKLkuobjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>2. 用代入法解 \(\begin{cases}y=x+2\\3x-y=4\end{cases}\)，把第一个方程代入第二个，正确的是哪一个？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(3x-x+2=4\)</button><button class="opt" data-v="B"><b>B</b>\(3x-(x+2)=4\)</button><button class="opt" data-v="C"><b>C</b>\(3(x+2)-y=4\)</button><button class="opt" data-v="D"><b>D</b>\(3x+(x+2)=4\)</button></div>
+    <div class="reveal"><p><b>B</b>。\(y\) 整体换成 \((x+2)\)，括号不能丢。解得 \(2x-2=4\)，\(x=3\)，\(y=5\)。A 丢了括号，\(+2\) 没变号；C 是把 \(x+2\) 代错了位置；D 是减号丢了。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjMuIOinoyBcXChcXGJlZ2lue2Nhc2VzfTJ4LTN5PTFcXCBcXHRleHRjaXJjbGVkezF9XFxcXDR4KzV5PTEzXFwgXFx0ZXh0Y2lyY2xlZHsyfVxcZW5ke2Nhc2VzfVxcKe+8jOimgea2iOWOuyBcXCh4XFwp77yM5YWI5oqKIOKRoCDkuKTovrnkuZggXFwoMlxcKe+8jOW+l+WIsOeahOaYr+WTquS4quaWueeoi++8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5bem6L655q+P5LiA6aG55LmYIFxcKDJcXCnvvIzlj7PovrnkuZ/kuZggXFwoMlxcKeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg0eC02eT0xXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDR4LTZ5PTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNHgtM3k9MlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCg0eCs2eT0yXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC5YaN55SoIFxcKFxcdGV4dGNpcmNsZWR7Mn0tXFx0ZXh0Y2lyY2xlZHszfVxcKe+8mlxcKDExeT0xMVxcKe+8jFxcKHk9MVxcKe+8jFxcKHg9MlxcKeOAgkEg5ryP5LmY5Y+z6L6577yI57+76L2m546w5Zy6IOKRoO+8ie+8m0Mg5ryP5LmYIFxcKHlcXCkg6YKj5LiA6aG577ybRCDmiornrKblj7fkuZjkuKLkuobjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>3. 解 \(\begin{cases}2x-3y=1\ \textcircled{1}\\4x+5y=13\ \textcircled{2}\end{cases}\)，要消去 \(x\)，先把 ① 两边乘 \(2\)，得到的是哪个方程？</p>
+    <details class="more"><summary>提示</summary><p>左边每一项乘 \(2\)，右边也乘 \(2\)。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(4x-6y=1\)</button><button class="opt" data-v="B"><b>B</b>\(4x-6y=2\)</button><button class="opt" data-v="C"><b>C</b>\(4x-3y=2\)</button><button class="opt" data-v="D"><b>D</b>\(4x+6y=2\)</button></div>
+    <div class="reveal"><p><b>B</b>。再用 \(\textcircled{2}-\textcircled{3}\)：\(11y=11\)，\(y=1\)，\(x=2\)。A 漏乘右边（翻车现场 ①）；C 漏乘 \(y\) 那一项；D 把符号乘丢了。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjQuIOaWueeoi+e7hCBcXChcXGJlZ2lue2Nhc2VzfTN4KzJ5PTdcXCBcXHRleHRjaXJjbGVkezF9XFxcXDN4LTR5PTFcXCBcXHRleHRjaXJjbGVkezJ9XFxlbmR7Y2FzZXN9XFwpIOS4re+8jFxcKFxcdGV4dGNpcmNsZWR7MX0tXFx0ZXh0Y2lyY2xlZHsyfVxcKSDlvpfliLDlk6rkuKrmlrnnqIvvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuWFiOWGmSBcXCgoM3grMnkpLSgzeC00eSk9Ny0xXFwp77yM5YaN5Y675ous5Y+344CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKC0yeT02XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDZ5PTZcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoLTJ5PThcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoNnk9OFxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAglxcKDJ5LSgtNHkpPTZ5XFwp77yMXFwoNy0xPTZcXCnjgILkuo7mmK8gXFwoeT0xXFwp77yMXFwoeD1cXHRmcmFjNTNcXCnjgIJBIOaYryBcXCgtNHlcXCkg5rKh5Y+Y5Y+377ybQ+OAgUQg5piv5Y+z6L655YGa6ZSZ5LqG6L+Q566X44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>4. 方程组 \(\begin{cases}3x+2y=7\ \textcircled{1}\\3x-4y=1\ \textcircled{2}\end{cases}\) 中，\(\textcircled{1}-\textcircled{2}\) 得到哪个方程？</p>
+    <details class="more"><summary>提示</summary><p>先写 \((3x+2y)-(3x-4y)=7-1\)，再去括号。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(-2y=6\)</button><button class="opt" data-v="B"><b>B</b>\(6y=6\)</button><button class="opt" data-v="C"><b>C</b>\(-2y=8\)</button><button class="opt" data-v="D"><b>D</b>\(6y=8\)</button></div>
+    <div class="reveal"><p><b>B</b>。\(2y-(-4y)=6y\)，\(7-1=6\)。于是 \(y=1\)，\(x=\tfrac53\)。A 是 \(-4y\) 没变号；C、D 是右边做错了运算。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjUuIOW3suefpSBcXChcXGJlZ2lue2Nhc2VzfXg9MVxcXFx5PTJcXGVuZHtjYXNlc31cXCkg5piv5pa556iL57uEIFxcKFxcYmVnaW57Y2FzZXN9YXgreT01XFxcXHgrYnk9N1xcZW5ke2Nhc2VzfVxcKSDnmoTop6PvvIzpgqPkuYggXFwoYStiXFwpIOetieS6juWkmuWwke+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5oqKIFxcKHg9MSxcXCB5PTJcXCkg5Luj6L+b5q+P5Liq5pa556iL77yMXFwoYVxcKeOAgVxcKGJcXCkg5bCx5oiQ5LqG6KaB5rGC55qE5pyq55+l5pWw44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDZcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg3XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDlcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgIJcXChhKzI9NVxcKe+8jFxcKGE9M1xcKe+8m1xcKDErMmI9N1xcKe+8jFxcKGI9M1xcKeOAglxcKGErYj02XFwp44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>5. 已知 \(\begin{cases}x=1\\y=2\end{cases}\) 是方程组 \(\begin{cases}ax+y=5\\x+by=7\end{cases}\) 的解，那么 \(a+b\) 等于多少？</p>
+    <details class="more"><summary>提示</summary><p>把 \(x=1,\ y=2\) 代进每个方程，\(a\)、\(b\) 就成了要求的未知数。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(6\)</button><button class="opt" data-v="B"><b>B</b>\(5\)</button><button class="opt" data-v="C"><b>C</b>\(7\)</button><button class="opt" data-v="D"><b>D</b>\(9\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(a+2=5\)，\(a=3\)；\(1+2b=7\)，\(b=3\)。\(a+b=6\)。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjYuIOW3suefpSBcXCgzeCsyeT0xMVxcKe+8jFxcKDJ4KzN5PTlcXCnvvIzpgqPkuYggXFwoeCt5XFwpIOWSjCBcXCh4LXlcXCkg5YiG5Yir5piv5aSa5bCR77yfPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAx77ya5Lik5byP55u45YqgPC9zdW1tYXJ5PjxwPlxcKDV4KzV5PTIwXFwp77yM5Lik6L656Zmk5LulIFxcKDVcXCnjgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAy77ya5Lik5byP55u45YePPC9zdW1tYXJ5PjxwPuesrOS4gOS4quWHj+esrOS6jOS4qu+8jFxcKHhcXCkg5ZKMIFxcKHlcXCkg55qE57O75pWw5ZCE5piv5aSa5bCR77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDRcXCkg5ZKMIFxcKDJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoNFxcKSDlkowgXFwoLTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMjBcXCkg5ZKMIFxcKDJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoNVxcKSDlkowgXFwoMVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguebuOWKoO+8mlxcKDUoeCt5KT0yMFxcKe+8jFxcKHgreT00XFwp77yb55u45YeP77yaXFwoeC15PTJcXCnjgILkuI3nlKjlhYjmsYIgXFwoeFxcKeOAgVxcKHlcXCnvvIjlhbblrp4gXFwoeD0zLFxcIHk9MVxcKe+8ieOAgkIg5piv55u45YeP5pe25pa55ZCR5byE5Y+N5LqG77ybQyDmmK/lv5jkuobpmaTku6UgXFwoNVxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>6. 已知 \(3x+2y=11\)，\(2x+3y=9\)，那么 \(x+y\) 和 \(x-y\) 分别是多少？</p>
+    <details class="more"><summary>提示 1：两式相加</summary><p>\(5x+5y=20\)，两边除以 \(5\)。</p></details>
+    <details class="more"><summary>提示 2：两式相减</summary><p>第一个减第二个，\(x\) 和 \(y\) 的系数各是多少？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(4\) 和 \(2\)</button><button class="opt" data-v="B"><b>B</b>\(4\) 和 \(-2\)</button><button class="opt" data-v="C"><b>C</b>\(20\) 和 \(2\)</button><button class="opt" data-v="D"><b>D</b>\(5\) 和 \(1\)</button></div>
+    <div class="reveal"><p><b>A</b>。相加：\(5(x+y)=20\)，\(x+y=4\)；相减：\(x-y=2\)。不用先求 \(x\)、\(y\)（其实 \(x=3,\ y=1\)）。B 是相减时方向弄反了；C 是忘了除以 \(5\)。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">各地中考常考：直接解方程组、已知解求系数、整体加减。</p>
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-to-high" aria-labelledby="stage-bridge-next-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-next-title">往后学 · 高中数学</h2><p class="small">把这一节学透，到了高中就能直接迁移到下面的课程：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../lessons/e1-3-1.html">高中 · 椭圆</a><span class="bridge-why">初中解二元一次方程组的“代入消元法”，在高中解析几何中直接用于联立直线方程与椭圆（及双曲线、抛物线）方程，消去 $y$ 化归为一元二次方程并应用韦达定理。</span></li></ul><p class="bridge-all"><a href="../../courses.html">打开高中数学课程目录</a></p></section>
+<footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function f(v) { var r = Math.round(v * 100) / 100; if (r === 0) return "0"; var s = String(Math.abs(r)); return r < 0 ? "−" + s : s; }
+  function fp(v) { return v < 0 ? "(" + f(v) + ")" : f(v); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  // 单项式：系数 k、字母 v；first 为真时是式子的第一项
+  function term(k, v, first) {
+    if (Math.abs(k) < 1e-9) return "";
+    var a = Math.abs(k), s = (a === 1 && v ? "" : f(a)) + v;
+    return k < 0 ? (first ? "−" : " − ") + s : (first ? "" : " + ") + s;
+  }
+  function poly(ks, vs) { var out = ""; for (var i = 0; i < ks.length; i++) out += term(ks[i], vs[i], out === ""); return out || "0"; }
+  // 横向滑块：o = {x0, x1, y, lo, hi, step, val, col, name, label}；cb(新值, 是否键盘)
+  function slider(svg, o, cb) {
+    var c = C(), u = (o.x1 - o.x0) / (o.hi - o.lo);
+    function X(v) { return o.x0 + (v - o.lo) * u; }
+    function snap(v) { var s = Math.round((v - o.lo) / o.step) * o.step + o.lo; return clamp(Math.round(s * 1000) / 1000, o.lo, o.hi); }
+    el("line", { x1: o.x0, y1: o.y, x2: o.x1, y2: o.y, stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, svg);
+    el("line", { x1: o.x0, y1: o.y, x2: X(o.val), y2: o.y, stroke: o.col, "stroke-width": 6, "stroke-linecap": "round" }, svg);
+    if (o.name) txt(svg, o.x0 - 22, o.y + 7, o.name, o.col, 700, 20, "end");
+    txt(svg, o.x1 + 22, o.y + 7, f(o.val), o.col, 700, 20, "start");
+    var h = el("circle", { cx: X(o.val), cy: o.y, r: 12, fill: c.card, stroke: o.col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": o.label,
+      "aria-valuemin": o.lo, "aria-valuemax": o.hi, "aria-valuenow": o.val, "aria-valuetext": f(o.val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: o.val + o.step, ArrowUp: o.val + o.step, ArrowLeft: o.val - o.step, ArrowDown: o.val - o.step, Home: o.lo, End: o.hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(snap(nv), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        cb(snap(o.lo + (pt.matrixTransform(m.inverse()).x - o.x0) / u), false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: o.label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function frac(n, d) { if (d < 0) { n = -n; d = -d; } var g = gcd(n, d); n /= g; d /= g; return d === 1 ? f(n) : (n < 0 ? "−" : "") + Math.abs(n) + "/" + d; }
+  function arrowV(p, x, y1, y2, col) { el("line", { x1: x, y1: y1, x2: x, y2: y2 - 10, stroke: col, "stroke-width": 3 }, p); el("path", { d: "M" + x + " " + y2 + " l-7 -12 h14 z", fill: col }, p); }
+
+  /* 从例子进入：两盘水果 */
+  var ef = document.getElementById("entry-fig"), en = document.getElementById("entry-note"), entryK = 1;
+  function fruit(p, x, kind, col) {
+    if (kind === "a") el("circle", { cx: x, cy: 72, r: 17, fill: col }, p);
+    else el("ellipse", { cx: x, cy: 70, rx: 15, ry: 22, fill: col }, p);
+  }
+  function drawEntry() {
+    var c = C(), k = entryK; ef.innerHTML = "";
+    var o1 = k === 2 ? 0.3 : 1, o2 = k === 1 ? 0.3 : 1;
+    var g1 = el("g", { opacity: o1 }, ef), g2 = el("g", { opacity: o2 }, ef);
+    fruit(g1, 80, "a", c.no); fruit(g1, 130, "p", c.b);
+    el("line", { x1: 40, y1: 100, x2: 200, y2: 100, stroke: c.fg, "stroke-width": 4, "stroke-linecap": "round" }, g1);
+    txt(g1, 120, 140, "400 g", c.fg, 700, 21);
+    fruit(g2, 320, "a", c.no); fruit(g2, 370, "p", c.b); fruit(g2, 430, "a", c.no);
+    el("line", { x1: 280, y1: 100, x2: 470, y2: 100, stroke: c.fg, "stroke-width": 4, "stroke-linecap": "round" }, g2);
+    txt(g2, 375, 140, "650 g", c.fg, 700, 21);
+    if (k === 3) {
+      el("rect", { x: 56, y: 40, width: 98, height: 56, rx: 8, fill: "none", stroke: c.a, "stroke-width": 2.5, "stroke-dasharray": "6 4" }, ef);
+      el("rect", { x: 296, y: 40, width: 98, height: 56, rx: 8, fill: "none", stroke: c.a, "stroke-width": 2.5, "stroke-dasharray": "6 4" }, ef);
+      txt(ef, 430, 184, "多出的", c.no, 700, 19);
+      txt(ef, 230, 184, "虚线框：一样", c.a, 700, 19);
+    }
+    en.textContent = k === 1 ? "第一盘：1 个苹果 + 1 个梨 = 400 g。只看这一盘，苹果、梨各多重分不出来：可以是 200 和 200，也可以是 300 和 100……" : k === 2 ? "第二盘：2 个苹果 + 1 个梨 = 650 g。只看这一盘也分不出来。" : "两盘都有「1 个苹果 + 1 个梨」（虚线框），这部分一样重，抵掉；第二盘多出来的只有 1 个苹果。多出的重量是多少？";
+  }
+  bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
+
+  /* 微图解 ①：消元三阶段 */
+  var m1k = 1;
+  function drawM1() {
+    var c = C(), k = m1k, p = document.getElementById("m1-fig"); p.innerHTML = "";
+    el("rect", { x: 20, y: 12, width: 160, height: 46, rx: 8, fill: "none", stroke: c.b, "stroke-width": 2 }, p);
+    el("rect", { x: 200, y: 12, width: 160, height: 46, rx: 8, fill: "none", stroke: c.b, "stroke-width": 2 }, p);
+    txt(p, 100, 42, "y = 2x − 1", c.fg, 700, 18); txt(p, 280, 42, "3x + y = 14", c.fg, 700, 18);
+    if (k >= 2) { arrowV(p, 190, 64, 96, c.a); txt(p, 206, 86, "消去 y", c.a, 700, 16, "start"); txt(p, 190, 128, "5x − 1 = 14", c.b, 700, 18); }
+    if (k >= 3) { arrowV(p, 190, 138, 160, c.a); txt(p, 190, 180, "x = 3，y = 5", c.no, 700, 18); }
+    document.getElementById("m1-note").textContent = k === 1 ? "方程组 { y = 2x − 1 ①，3x + y = 14 ② }：两个方程各有两个未知数，直接解不了。" : k === 2 ? "① 说 y 就是 2x − 1。把 ② 里的 y 整体换成 (2x − 1)：3x + (2x − 1) = 14，即 5x − 1 = 14。只剩 x 了，这是一元一次方程。" : "解 5x − 1 = 14 得 x = 3；回代 ①：y = 2×3 − 1 = 5。检验 ②：9 + 5 = 14 ✓。解是 { x = 3，y = 5 }。";
+  }
+  bar("m1-bar", function (t) { m1k = +t.getAttribute("data-k"); drawM1(); });
+
+  /* 微图解 ②：代入的去向 */
+  var M2 = [
+    { d: "x = 2y + 1", back: false, r: "只剩 y ✓", note: "方程组 { x − 2y = 1 ①，3x + 4y = 13 ② }。由 ① 得 x = 2y + 1，代入 ②：3(2y + 1) + 4y = 13，10y = 10，y = 1，再得 x = 3。" },
+    { d: "y=(x−1)/2", back: false, r: "只剩 x ✓", note: "由 ① 得 y = (x − 1)/2，代入 ②：3x + 4·(x − 1)/2 = 13，即 3x + 2(x − 1) = 13，5x = 15，x = 3，y = 1。结果一样，只是多了分数，所以 ① 里先表示 x 更顺手。" },
+    { d: "x = 2y + 1", back: true, r: "1 = 1 ✗", note: "由 ① 得 x = 2y + 1，又代回 ①：(2y + 1) − 2y = 1，得 1 = 1。y 也没了，什么都求不出来——这一步等于把 ① 抄了一遍。要代入另一个方程 ②。" }
+  ], m2k = 0;
+  function drawM2() {
+    var c = C(), d = M2[m2k], p = document.getElementById("m2-fig"); p.innerHTML = "";
+    el("rect", { x: 14, y: 12, width: 160, height: 44, rx: 8, fill: "none", stroke: c.b, "stroke-width": 2 }, p);
+    el("rect", { x: 206, y: 12, width: 160, height: 44, rx: 8, fill: "none", stroke: d.back ? c.line : c.b, "stroke-width": 2 }, p);
+    txt(p, 94, 41, "x − 2y = 1", c.fg, 700, 18); txt(p, 286, 41, "3x + 4y = 13", d.back ? c.muted : c.fg, 700, 18);
+    arrowV(p, 94, 60, 90, c.muted);
+    txt(p, 94, 116, d.d, c.b, 700, 18);
+    var col = d.back ? c.no : c.a;
+    if (d.back) { el("path", { d: "M30 108 C 0 90, 0 50, 14 40", fill: "none", stroke: col, "stroke-width": 3 }, p); el("path", { d: "M14 40 l-2 14 l12 -6 z", fill: col }, p); }
+    else { el("path", { d: "M170 108 C 230 108, 280 96, 286 64", fill: "none", stroke: col, "stroke-width": 3 }, p); el("path", { d: "M286 58 l-7 13 h14 z", fill: col }, p); }
+    txt(p, d.back ? 94 : 260, d.back ? 150 : 128, "代入", col, 700, 16, d.back ? "middle" : "start");
+    txt(p, 286, 168, d.r, col, 700, 18);
+    document.getElementById("m2-note").textContent = d.note;
+  }
+  bar("m2-bar", function (t) { m2k = +t.getAttribute("data-k"); drawM2(); });
+
+  /* 按列画方程：ks=[x 系数, y 系数, 常数] */
+  function cols(p, y, ks, xs, sz, zcol, haloLast) {
+    var c = C();
+    txt(p, xs[0], y, ks[0] === 0 ? "0" : term(ks[0], "x", true), ks[0] === 0 ? zcol : c.fg, 700, sz, "end");
+    txt(p, xs[1], y, (ks[1] < 0 ? "− " : "+ ") + (ks[1] === 0 ? "0" : (Math.abs(ks[1]) === 1 ? "" : f(Math.abs(ks[1]))) + "y"), ks[1] === 0 ? zcol : c.fg, 700, sz, "end");
+    txt(p, xs[2], y, "=", c.fg, 400, sz);
+    var t = txt(p, xs[3], y, f(ks[2]), c.fg, 700, sz, "end");
+    if (haloLast) { t.setAttribute("paint-order", "stroke fill"); t.setAttribute("stroke", "var(--card)"); t.setAttribute("stroke-width", "4px"); }
+  }
+
+  /* 微图解 ③：加减 */
+  var M3 = [
+    { r: [[3, 2, 16], [1, 2, 8]], op: ["", "−"], out: [2, 0, 8], hl: 1, note: "y 的系数都是 2，相等。用 ① − ②（① 的左边减 ② 的左边，右边减右边）：(3x + 2y) − (x + 2y) = 16 − 8，得 2x = 8，x = 4；代回 ② 得 y = 2。" },
+    { r: [[3, 2, 16], [1, -2, 0]], op: ["", "+"], out: [4, 0, 16], hl: 1, note: "y 的系数是 2 和 −2，互为相反数。① + ②：4x = 16，x = 4；代回 ② 得 4 − 2y = 0，y = 2。" },
+    { r: [[3, 2, 16], [2, 2, 12]], op: ["", "−"], out: [1, 0, 4], hl: 1, note: "原来的 ② 是 x + y = 6，系数和 ① 都对不上。② 两边同乘 2，得 2x + 2y = 12（右边的 6 也要乘）。现在 y 的系数相等，① − 新方程：x = 4，y = 2。" }
+  ], m3k = 0;
+  function drawM3() {
+    var c = C(), d = M3[m3k], p = document.getElementById("m3-fig"), xs = [130, 214, 250, 330]; p.innerHTML = "";
+    el("rect", { x: 150, y: 14, width: 74, height: 160, rx: 8, fill: "none", stroke: c.a, "stroke-width": 2, "stroke-dasharray": "5 4" }, p);
+    cols(p, 44, d.r[0], xs, 19, c.a); cols(p, 92, d.r[1], xs, 19, c.a);
+    txt(p, 40, 92, d.op[1], c.no, 700, 24);
+    el("line", { x1: 40, y1: 116, x2: 350, y2: 116, stroke: c.fg, "stroke-width": 2 }, p);
+    cols(p, 152, d.out, xs, 19, c.a);
+    document.getElementById("m3-note").textContent = d.note;
+  }
+  bar("m3-bar", function (t) { m3k = +t.getAttribute("data-k"); drawM3(); });
+
+  /* 翻车现场 ①：每一项都乘 */
+  function drawTrap() {
+    var p = document.getElementById("m-trap"), c = C(); p.innerHTML = "";
+    var xs = [92, 168, 196, 252];
+    cols(p, 36, [2, 3, 4], xs, 18, c.a); txt(p, 20, 36, "原", c.muted, 400, 16, "start");
+    el("line", { x1: 222, y1: 98, x2: 262, y2: 72, stroke: c.no, "stroke-width": 3 }, p);
+    cols(p, 92, [4, 6, 4], xs, 18, c.a, true); txt(p, 20, 92, "错", c.no, 700, 16, "start");
+    cols(p, 148, [4, 6, 8], xs, 18, c.a); txt(p, 20, 148, "对", c.a, 700, 16, "start");
+  }
+
+  /* 一行条形读数：值 val，范围 lo..hi，目标 target */
+  function gauge(p, y, val, lo, hi, target, label) {
+    var c = C(), x0 = 120, w = 400, Z = function (v) { return x0 + (clamp(v, lo, hi) - lo) / (hi - lo) * w; };
+    el("rect", { x: x0, y: y - 14, width: w, height: 28, rx: 6, fill: "none", stroke: c.line, "stroke-width": 2 }, p);
+    var a = Z(Math.min(0, val)), b = Z(Math.max(0, val));
+    if (b - a > 0.5) el("rect", { x: a, y: y - 14, width: b - a, height: 28, rx: 4, fill: val === target ? c.a : c.b, opacity: val === target ? 1 : 0.75 }, p);
+    if (lo < 0) el("line", { x1: Z(0), y1: y - 18, x2: Z(0), y2: y + 18, stroke: c.muted, "stroke-width": 2 }, p);
+    el("line", { x1: Z(target), y1: y - 24, x2: Z(target), y2: y + 24, stroke: c.no, "stroke-width": 3 }, p);
+    txt(p, Z(target), y - 32, "要 " + target, c.no, 700, 19);
+    txt(p, x0 - 16, y + 7, label, c.fg, 700, 20, "end");
+  }
+
+  /* 动手 ①：代入试值 */
+  var fs = document.getElementById("fig-sub"), os = document.getElementById("out-sub"), SX = 1, focusS = false;
+  function drawSub() {
+    var c = C(), x = SX, y = 2 * x - 3, L = 3 * x + 2 * y; fs.innerHTML = "";
+    gauge(fs, 80, L, -10, 50, 22, "② 左边");
+    var h = slider(fs, { x0: 110, x1: 450, y: 180, lo: 0, hi: 8, step: 0.5, val: x, col: c.b, name: "x", label: "x 的值" }, function (v, key) { SX = v; focusS = key; drawSub(); });
+    os.innerHTML = "x = " + f(x) + "，由 ①：y = 2×" + f(x) + " − 3 = " + f(y) + "；② 的左边 3×" + f(x) + " + 2×" + fp(y) + " = <span class=\"sum\">" + f(L) + "</span>" + (L === 22 ? "，正好是 22 ✓。解是 {x = " + f(x) + "，y = " + f(y) + "}。" : (L < 22 ? "，比 22 小。" : "，比 22 大。")) +
+      " 为什么只有一个 x 合适？代入后 ② 的左边是 3x + 2(2x − 3) = 7x − 6，只含 x：x 每增加 0.5，左边增加 3.5，要等于 22 只能 7x = 28，x = 4。";
+    if (focusS) h.focus();
+  }
+  document.getElementById("reset-sub").onclick = function () { SX = 1; focusS = false; drawSub(); };
+
+  /* 动手 ②：乘数 */
+  var SYS = [[[3, 2, 16], [1, 1, 6]], [[2, 3, 12], [3, -2, 5]], [[5, -3, 9], [2, 3, 12]]], SOL = [[4, 2], [3, 2], [3, 2]];
+  var fm = document.getElementById("fig-mul"), om = document.getElementById("out-mul"), sysK = 0, MM = 1, NN = 1, focusM = null;
+  function drawMul() {
+    var c = C(), S = SYS[sysK], m = MM, n = NN, xs = [260, 370, 410, 500]; fm.innerHTML = "";
+    var r1 = S[0].map(function (v) { return v * m; }), r2 = S[1].map(function (v) { return v * n; }), s = [r1[0] + r2[0], r1[1] + r2[1], r1[2] + r2[2]];
+    txt(fm, 40, 46, "①×" + fp(m), c.b, 700, 20, "start"); cols(fm, 46, r1, xs, 21, c.a);
+    txt(fm, 40, 98, "②×" + fp(n), c.c, 700, 20, "start"); cols(fm, 98, r2, xs, 21, c.a);
+    el("line", { x1: 40, y1: 120, x2: 520, y2: 120, stroke: c.fg, "stroke-width": 2 }, fm);
+    txt(fm, 40, 158, "相加", c.no, 700, 20, "start"); cols(fm, 158, s, xs, 21, c.a);
+    var hm = slider(fm, { x0: 110, x1: 450, y: 220, lo: -4, hi: 4, step: 1, val: m, col: c.b, name: "m", label: "① 的乘数 m" }, function (v, key) { MM = v; focusM = key ? "m" : null; drawMul(); });
+    var hn = slider(fm, { x0: 110, x1: 450, y: 270, lo: -4, hi: 4, step: 1, val: n, col: c.c, name: "n", label: "② 的乘数 n" }, function (v, key) { NN = v; focusM = key ? "n" : null; drawMul(); });
+    var sol = SOL[sysK], msg;
+    if (m === 0 && n === 0) msg = "两个乘数都是 0，什么都没剩下（0 = 0），没有用。";
+    else if (m === 0 || n === 0) msg = "有一个乘数是 0，等于只用了一个方程，消不掉什么。两个方程都要用上。";
+    else if (s[0] === 0 && s[1] === 0) msg = "两列都成了 0。";
+    else if (s[0] === 0) msg = "<span class=\"ok\">x 这一列成了 0，消去了 x！</span>剩下 " + poly([s[1]], ["y"]) + " = " + f(s[2]) + "，y = " + f(s[2]) + " ÷ " + fp(s[1]) + " = " + f(sol[1]) + "，回代得 x = " + f(sol[0]) + "。";
+    else if (s[1] === 0) msg = "<span class=\"ok\">y 这一列成了 0，消去了 y！</span>剩下 " + poly([s[0]], ["x"]) + " = " + f(s[2]) + "，x = " + f(s[2]) + " ÷ " + fp(s[0]) + " = " + f(sol[0]) + "，回代得 y = " + f(sol[1]) + "。";
+    else msg = "相加后 x、y 都还在：" + poly(s.slice(0, 2), ["x", "y"]) + " = " + f(s[2]) + "。想消 x，要让 " + fp(S[0][0]) + "×m 和 " + fp(S[1][0]) + "×n 互为相反数；想消 y，看 y 那一列。";
+    om.innerHTML = msg + (m * n < 0 ? " （一个乘正数、一个乘负数，相当于两式相减。）" : "");
+    if (focusM) (focusM === "m" ? hm : hn).focus();
+  }
+  bar("sys-bar", function (t) { sysK = +t.getAttribute("data-k"); MM = 1; NN = 1; drawMul(); });
+  document.getElementById("reset-mul").onclick = function () { MM = 1; NN = 1; focusM = null; drawMul(); };
+
+  /* 动手 ③：整体加减 */
+  var fw = document.getElementById("fig-whole"), ow = document.getElementById("out-whole"), PP = 7, QQ = 5, focusW = null;
+  function drawWhole() {
+    var c = C(), p = PP, q = QQ, xs = [260, 370, 410, 500]; fw.innerHTML = "";
+    txt(fw, 40, 40, "①", c.b, 700, 20, "start"); cols(fw, 40, [2, 1, p], xs, 21, c.a);
+    txt(fw, 40, 84, "②", c.c, 700, 20, "start"); cols(fw, 84, [1, 2, q], xs, 21, c.a);
+    el("line", { x1: 40, y1: 104, x2: 520, y2: 104, stroke: c.fg, "stroke-width": 2 }, fw);
+    txt(fw, 40, 140, "①+②", c.no, 700, 20, "start"); cols(fw, 140, [3, 3, p + q], xs, 21, c.a);
+    txt(fw, 40, 184, "①−②", c.no, 700, 20, "start"); cols(fw, 184, [1, -1, p - q], xs, 21, c.a);
+    var hp = slider(fw, { x0: 110, x1: 450, y: 240, lo: -6, hi: 15, step: 1, val: p, col: c.b, name: "p", label: "① 的右边 p" }, function (v, key) { PP = v; focusW = key ? "p" : null; drawWhole(); });
+    var hq = slider(fw, { x0: 110, x1: 450, y: 290, lo: -6, hi: 15, step: 1, val: q, col: c.c, name: "q", label: "② 的右边 q" }, function (v, key) { QQ = v; focusW = key ? "q" : null; drawWhole(); });
+    ow.innerHTML = "①+②：3x + 3y = " + f(p + q) + "，所以 x + y = <span class=\"sum\">" + frac(p + q, 3) + "</span>；①−②：x − y = <span class=\"sum\">" + f(p - q) + "</span>。" +
+      "两个方程里 x、y 的系数「交叉对称」（2 和 1、1 和 2），相加时系数一样多，相减时正好剩 1 和 −1，所以能整体求出 x + y、x − y。顺带：x = " + frac(2 * p - q, 3) + "，y = " + frac(2 * q - p, 3) + "。";
+    if (focusW) (focusW === "p" ? hp : hq).focus();
+  }
+  document.getElementById("reset-whole").onclick = function () { PP = 7; QQ = 5; focusW = null; drawWhole(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawTrap(); drawSub(); drawMul(); drawWhole(); }
+  drawAll();
+  new MutationObserver(function () { focusS = false; focusM = focusW = null; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

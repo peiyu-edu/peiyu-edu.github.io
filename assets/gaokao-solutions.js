@@ -299,6 +299,7 @@
     if (!card || card.getAttribute("data-gaokao-enhanced") === "true") return card;
     var solution = card.querySelector(".sol");
     if (!solution) return card;
+    if (text(problem.id)) card.setAttribute("data-question-id", problem.id);
     card.setAttribute("data-gaokao-enhanced", "true");
     card.classList.add("gs-problem");
     var questionStem = card.querySelector(".stem");

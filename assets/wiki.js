@@ -469,7 +469,7 @@
       id: "geo-polyhedron-rot", ch: 8, sec: "b2-8-1", secName: "8.1 基本立体图形",
       kind: "concept", kindLabel: "🟢 概念与定义",
       title: "多面体与旋转体的严格结构定义及特征识别",
-      keywords: ["棱柱", "棱锥", "棱台", "圆柱", "圆锥", "圆台", "球", "多面体", "旋转体"],
+      keywords: ["棱柱", "棱锥", "棱台", "圆柱", "圆锥", "圆台", "球", "多面体", "旋转体", "空间几何体", "四面体"],
       trig: "判断空间几何体类型、识别棱柱底面侧棱性质或几何体截面性质。",
       key: "1. <b>棱柱</b>：有两个面互相平行（底面），其余各面都是平行四边形，且每相邻两个四边形的公共边互相平行。<br>2. <b>棱锥与棱台</b>：有一个面是多边形，其余各面是有公共顶点的三角形为棱锥；棱台是用<b>平行于底面的平面截棱锥</b>所得底面与截面之间的部分。<br>3. <b>旋转体</b>：矩形绕边旋转得圆柱、直角三角形绕直角边旋转得圆锥、直角梯形绕垂直于底的腰旋转得圆台、半圆绕直径旋转得球。",
       warn: "不是「有两个平行面」就叫棱柱（侧棱必须互相平行！）；棱台的上下底必须相似且侧棱延长线必交于一点，不能把任意截切多面体叫棱台！",
@@ -491,7 +491,7 @@
       title: "柱、锥、台、球的表面积与体积公式全景",
       keywords: ["体积", "表面积", "母线", "祖暅原理", "球", "组合体"],
       trig: "计算空间几何体侧面积、表面积、体积，或计算组合体与内切外接球体积。",
-      key: "设高为 \\(h\\)。<b>母线先分图形</b>：直圆锥底面半径为 \\(r\\) 时，\\(l=\\sqrt{r^2+h^2}\\)；直圆台上下底半径为 \\(R,r\\) 时，\\(l=\\sqrt{(R-r)^2+h^2}\\)。<br>• <b>柱体</b>：\\(V = Sh\\)；圆柱侧面积 \\(S_{\\text{侧}} = 2\\pi rh\\)。<br>• <b>锥体</b>：\\(V = \\dfrac13 Sh\\)（等底等高圆柱体积的三分之一！）；圆锥侧面积 <b>\\(S_{\\text{侧}} = \\pi rl\\)</b>（注意用母线 \\(l\\)，不是高 \\(h\\)！）。<br>• <b>台体</b>：\\(V = \\dfrac13 h(S_1 + \\sqrt{S_1 S_2} + S_2)\\)；圆台侧面积 \\(S_{\\text{侧}} = \\pi(r_1+r_2)l\\)。<br>• <b>球体</b>：表面积 \\(S = 4\\pi R^2\\)，体积 <b>\\(V = \\dfrac43 \\pi R^3\\)</b>。<br>• <b>祖暅原理</b>：「幂势既同，则积不容异」（截面积处处相等则体积相等）。",
+      key: "设高为 \\(h\\)。<b>母线先分图形</b>：直圆锥底面半径为 \\(r\\) 时，\\(l=\\sqrt{r^2+h^2}\\)；直圆台上下底半径为 \\(R,r\\) 时，\\(l=\\sqrt{(R-r)^2+h^2}\\)。<br>• <b>柱体</b>：\\(V = Sh\\)；圆柱侧面积 \\(S_{\\text{侧}} = 2\\pi rh\\)。<br>• <b>锥体</b>：\\(V = \\dfrac13 Sh\\)（等底等高圆柱体积的三分之一！）；圆锥侧面积 <b>\\(S_{\\text{侧}} = \\pi rl\\)</b>（注意用母线 \\(l\\)，不是高 \\(h\\)！）。<br>• <b>台体</b>：\\(V = \\dfrac13 h(S_1 + \\sqrt{S_1 S_2} + S_2)\\)；圆台侧面积 \\(S_{\\text{侧}} = \\pi(r_1+r_2)l\\)。<br>• <b>球体</b>：表面积 \\(S = 4\\pi R^2\\)，体积 <b>\\(V = \\dfrac43 \\pi R^3\\)</b>。<br>• <b>祖暅原理（拓展，可跳过）</b>：两立体等高，且每个等高位置的截面积都相等，则体积相等。",
       warn: "组合体的表面积陷阱：接合面被封在几何体内部，计算表面积时<b>必须扣除接合面</b>，绝不能直接相加原几何体表面积！",
       rel: ["geo-polyhedron-rot"]
     },
@@ -791,7 +791,7 @@
       title: "排列数、组合数运算性质与捆绑法插空法",
       keywords: ["排列数", "组合数", "顺序", "捆绑法", "插空法", "隔板法", "A_n^m", "C_n^m"],
       trig: "求解元素排队、分组、选拔问题，以及相邻、不相邻等受限排队计数。",
-      key: "1. <b>核心辨析：是否有顺序</b>。选出并讲求顺序（排队、职务不同）为排列 \\(A_n^m = \\dfrac{n!}{(n-m)!}\\)；只选出不讲顺序（握手、结伴）为组合 \\(C_n^m = \\dfrac{n!}{m!(n-m)!} = \\dfrac{A_n^m}{m!}\\)。<br>2. <b>两个可现场推出的关系（探究，不要求预记）</b>：对称 \\(C_n^m = C_n^{n-m}\\)（选走 \\(m\\) 个等于留下 \\(n-m\\) 个）；递推 \\(C_{n+1}^m = C_n^m + C_n^{m-1}\\)（按某一个元素选或不选分类）。用的时候从定义或计数推一步，不要当成必须背过的公式。<br>3. <b>受限排队的两种组织方式</b>：<br>• <b>相邻</b>：把相邻元素捆成一个大元素再排，<b>再乘捆内的内部排列</b>。<br>• <b>不相邻</b>：先排其余元素，再往空位里插（首尾都有空）。",
+      key: "1. <b>核心辨析：是否有顺序</b>。选出并讲求顺序（排队、职务不同）为排列 \\(A_n^m = \\dfrac{n!}{(n-m)!}\\)；只选出不讲顺序（握手、结伴）为组合 \\(C_n^m = \\dfrac{n!}{m!(n-m)!} = \\dfrac{A_n^m}{m!}\\)。<br>2. <b>两个可现场推出的关系（选学探究，不要求预记）</b>：对称 \\(C_n^m = C_n^{n-m}\\)（选走 \\(m\\) 个等于留下 \\(n-m\\) 个）；递推 \\(C_{n+1}^m = C_n^m + C_n^{m-1}\\)（按某一个元素选或不选分类）。用的时候从定义或计数推一步，不要当成必须背过的公式。<br>3. <b>受限排队的两种组织方式</b>：<br>• <b>相邻</b>：把相邻元素捆成一个大元素再排，<b>再乘捆内的内部排列</b>。<br>• <b>不相邻</b>：先排其余元素，再往空位里插（首尾都有空）。",
       warn: "捆绑法千万不要漏乘捆内元素的内部排列（如 \\(m!\\)）；插空法必须先排好其余元素，明确空位数等于无限制元素个数加 1！",
       rel: ["count-principles", "count-binomial", "prob-classical-events", "rv-binomial-hypergeom"]
     },
@@ -886,6 +886,202 @@
       rel: ["bivar-corr-r", "stat-sampling"]
     }
   ];
+
+  /* ==================== 源卡追溯与教学层级 ====================
+     sourceCards：高中教学约束与方法指引库（内部教研资料）的源卡编号；源卡总表在 tools/source-cards.json。
+     evidenceLevel：卡片主体内容的依据层级（见 EVIDENCE_LEVELS）。
+     optional：整张卡是带星号的选学内容，不作考试要求；目录、SEC_META、课页标题都要标「（选学）」。
+     requiredPrereqs：讲这张卡前学生必须已学的卡，只能指向同节或更早的节，非选学卡不能依赖选学卡。
+     electiveParts：卡里夹带的选学/拓展片段；卡面和课页在关键词附近都要写明。
+     notes：[层级, 说明]，把课标、教师用书和整理建议分开标。
+     mapNote：一张卡对应多张源卡时，写明合并原因。
+     这里只放编号和我们自己写的边界说明，不放教材、课标或教师用书原文。 */
+  var EVIDENCE_LEVELS = {
+    standard: "课标要求",
+    textbook: "教材要求",
+    teacher: "教师用书建议",
+    elective: "选学/拓展",
+    synthesis: "整理建议"
+  };
+
+  var TRACE = {
+    "set-def-distinct": { sourceCards: ["M1-01-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "set-empty-trap": { sourceCards: ["M1-01-A"], evidenceLevel: "textbook", requiredPrereqs: ["set-def-distinct"],
+      notes: [["synthesis", "「含参子集先查空集」是整理的检查顺序，依据是空集是任何集合的子集。"]] },
+    "set-ops-demorgan": { sourceCards: ["M1-01-A"], evidenceLevel: "textbook", requiredPrereqs: ["set-def-distinct"] },
+    "logic-subset": { sourceCards: ["M1-01-B"], evidenceLevel: "textbook", requiredPrereqs: ["set-empty-trap"],
+      notes: [["synthesis", "用集合包含判断条件关系是辅助方法，先统一变量和论域；箭头方向要能用命题解释，不只背口诀。"]] },
+    "logic-negation": { sourceCards: ["M1-01-C"], evidenceLevel: "textbook", requiredPrereqs: [],
+      notes: [["synthesis", "本节只处理含一个量词的命题。恒成立转最值要等学完 3.2 函数的最值再用。"]] },
+    "ineq-props-diff": { sourceCards: ["M1-02-A"], evidenceLevel: "textbook", requiredPrereqs: [],
+      notes: [["synthesis", "待定系数整体代换是整理的方法，用来避免范围被放大。"]] },
+    "amgm-const-one": { sourceCards: ["M1-02-B"], evidenceLevel: "synthesis", requiredPrereqs: ["amgm-core"],
+      notes: [["teacher", "基本不等式以简单最值为主，不刻意加大变形难度；乘「1」法是常见题型的整理。"]] },
+    "amgm-core": { sourceCards: ["M1-02-B"], evidenceLevel: "textbook", requiredPrereqs: ["ineq-props-diff"],
+      notes: [["synthesis", "教材主体是两正数的 √ab ≤ (a+b)/2 和任意实数的 a²+b² ≥ 2ab；两端的调和平均、平方平均是整理拓展。"]] },
+    "amgm-hook": { sourceCards: ["M1-02-B", "M1-03-B"], evidenceLevel: "synthesis", requiredPrereqs: ["amgm-core"],
+      mapNote: "等号取不到的处理来自基本不等式卡，x+k/x 的单调性要到函数单调性一节才能用定义证明，所以挂两张源卡。",
+      notes: [["synthesis", "在 2.2 只用来提醒等号点不在范围内时不能断言最小值；单调性的严格证明放到 3.2。"]] },
+    "amgm-shift": { sourceCards: ["M1-02-B"], evidenceLevel: "synthesis", requiredPrereqs: ["amgm-core"] },
+    "quad-always-true": { sourceCards: ["M1-02-C", "M1-03-B"], evidenceLevel: "synthesis", requiredPrereqs: ["quad-param"],
+      mapNote: "在 R 上恒成立只用二次函数图象；在区间上恒成立要用函数最值，所以挂两张源卡。",
+      notes: [["synthesis", "区间上恒成立用到的最值方法在 3.2 学；2.3 先只做在 R 上恒成立。"]] },
+    "quad-param": { sourceCards: ["M1-02-C"], evidenceLevel: "textbook", requiredPrereqs: ["ineq-props-diff"] },
+    "fn-dom-same": { sourceCards: ["M1-03-A"], evidenceLevel: "textbook", requiredPrereqs: ["set-def-distinct"],
+      notes: [["standard", "定义域题避免偏题怪题和繁琐技巧；抽象复合定义域只做简单情形。"]] },
+    "fn-abstract-ineq": { sourceCards: ["M1-03-B", "M1-03-C"], evidenceLevel: "synthesis", requiredPrereqs: ["fn-mono-def", "fn-parity-core"],
+      mapNote: "这类题同时用单调性和奇偶性，两张源卡缺一不可。",
+      notes: [["standard", "函数性质题避免繁琐技巧训练；构造辅助函数只在能用已学性质说明时使用。"]] },
+    "fn-mono-def": { sourceCards: ["M1-03-B"], evidenceLevel: "textbook", requiredPrereqs: ["fn-dom-same"] },
+    "fn-odd-plus-c": { sourceCards: ["M1-03-C"], evidenceLevel: "synthesis", requiredPrereqs: ["fn-parity-core"] },
+    "fn-parity-core": { sourceCards: ["M1-03-C"], evidenceLevel: "textbook", requiredPrereqs: ["fn-dom-same"],
+      notes: [["synthesis", "含指数、对数的奇函数例子要学完第 4 章再用，是常见例子，不是必背清单。"]] },
+    "fn-power-five": { sourceCards: ["M1-03-D"], evidenceLevel: "textbook", requiredPrereqs: ["fn-mono-def", "fn-parity-core"],
+      notes: [["teacher", "只研究 α=1,2,3,1/2,-1 这五个幂函数，不拓展到一般幂函数的分类。"]] },
+    "fn-model-app": { sourceCards: ["M1-03-D", "M1-02-C"], evidenceLevel: "textbook", requiredPrereqs: ["fn-mono-def", "quad-param"],
+      mapNote: "函数应用属于 3.4；常见模型是二次函数，求最值要用二次函数与方程的联系。" },
+    "exp-root-power": { sourceCards: ["M1-04-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "exp-fn-prop": { sourceCards: ["M1-04-B"], evidenceLevel: "textbook", requiredPrereqs: ["exp-root-power", "fn-mono-def"],
+      notes: [["synthesis", "「同增异减」是整理的结论，用的时候要能按单调性定义说清楚。"]] },
+    "log-change-base": { sourceCards: ["M1-04-C"], evidenceLevel: "textbook", requiredPrereqs: ["exp-root-power"],
+      notes: [["synthesis", "log_{a^m} b^n = (n/m) log_a b 等推论由换底公式推出，现场能推即可。"]] },
+    "explog-compare": { sourceCards: ["M1-04-B", "M1-04-C"], evidenceLevel: "synthesis", requiredPrereqs: ["exp-fn-prop", "log-change-base", "fn-power-five"],
+      mapNote: "比大小同时用指对函数单调性和对数运算，合成一张方法卡。",
+      notes: [["teacher", "只要求知道同底指数、对数函数互为反函数，不要求一般反函数的定义和求法。"]] },
+    "zero-theorem": { sourceCards: ["M1-04-D", "M1-04-B"], evidenceLevel: "textbook", requiredPrereqs: ["fn-mono-def"],
+      mapNote: "4.5 同时讲零点和函数增长差异，卡里的增长比较对应指对函数那张源卡。",
+      notes: [["standard", "二分法要会画流程框图（判断、取中点、更新区间、判停）。"], ["teacher", "增长快慢借助图象和数表认识，不作严格证明。"]] },
+    "trig-rad-sector": { sourceCards: ["M1-05-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "trig-know1get2": { sourceCards: ["M1-05-B"], evidenceLevel: "textbook", requiredPrereqs: ["trig-rad-sector"],
+      notes: [["teacher", "已知 tanα 等于字母参数 m 再求其余值这类参数化题不作要求；具体数值可以做。"], ["synthesis", "齐次式弦化切是整理的方法。"]] },
+    "trig-unit-induce": { sourceCards: ["M1-05-B"], evidenceLevel: "textbook", requiredPrereqs: ["trig-know1get2"],
+      notes: [["synthesis", "「奇变偶不变」是整理的记法；教材用单位圆对称推导，先懂推导再用口诀。"]] },
+    "trig-graph-prop": { sourceCards: ["M1-05-C"], evidenceLevel: "textbook", requiredPrereqs: ["trig-unit-induce", "fn-parity-core"] },
+    "trig-aux-angle": { sourceCards: ["M1-05-D"], evidenceLevel: "textbook", requiredPrereqs: ["trig-know1get2"],
+      notes: [["teacher", "积化和差、和差化积、半角公式会推导即可，不要求记忆。"], ["synthesis", "辅助角公式由两角和的正弦公式推出。"]] },
+    "trig-shift-scale": { sourceCards: ["M1-05-E"], evidenceLevel: "textbook", requiredPrereqs: ["trig-graph-prop"] },
+    "trig-periodic-model": { sourceCards: ["M1-05-E"], evidenceLevel: "textbook", requiredPrereqs: ["trig-shift-scale"] },
+    "vec-concept-equiv": { sourceCards: ["M2-06-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "vec-add-sub-tri": { sourceCards: ["M2-06-A"], evidenceLevel: "textbook", requiredPrereqs: ["vec-concept-equiv"] },
+    "vec-dot-product": { sourceCards: ["M2-06-B"], evidenceLevel: "textbook", requiredPrereqs: ["vec-add-sub-tri", "trig-know1get2"] },
+    "vec-base-theorem": { sourceCards: ["M2-06-C"], evidenceLevel: "textbook", requiredPrereqs: ["vec-add-sub-tri"],
+      notes: [["standard", "非正交分解只要求一般了解，不做系统的斜基底分解计算。"], ["synthesis", "三点共线的 x+y=1 由基本定理推出，是整理结论。"]] },
+    "vec-coord-ops": { sourceCards: ["M2-06-C"], evidenceLevel: "textbook", requiredPrereqs: ["vec-base-theorem", "vec-dot-product"] },
+    "vec-sine-cosine-law": { sourceCards: ["M2-06-D"], evidenceLevel: "textbook", requiredPrereqs: ["vec-dot-product", "trig-unit-induce"] },
+    "complex-def-pure": { sourceCards: ["M2-07-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "complex-plane-mod": { sourceCards: ["M2-07-A"], evidenceLevel: "textbook", requiredPrereqs: ["complex-def-pure", "vec-coord-ops"] },
+    "complex-ops-conj": { sourceCards: ["M2-07-B"], evidenceLevel: "textbook", requiredPrereqs: ["complex-def-pure"],
+      notes: [["standard", "复数注重表示和几何意义，避免繁琐计算与技巧训练。"]] },
+    "complex-trig-form": { sourceCards: ["M2-07-C"], evidenceLevel: "elective", optional: true,
+      requiredPrereqs: ["complex-plane-mod", "complex-ops-conj", "trig-aux-angle"],
+      notes: [["standard", "带星号的选学内容，不作考试要求；确认学生选学后才能当作已学。"]] },
+    "geo-polyhedron-rot": { sourceCards: ["M2-08-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "geo-oblique-drawing": { sourceCards: ["M2-08-B"], evidenceLevel: "textbook", requiredPrereqs: ["geo-polyhedron-rot"],
+      notes: [["synthesis", "面积比 √2/4 由斜二测规则推出，是整理结论；教材要求的是会画直观图。"]] },
+    "geo-surface-volume": { sourceCards: ["M2-08-B"], evidenceLevel: "textbook", requiredPrereqs: ["geo-polyhedron-rot"],
+      electiveParts: [{ part: "祖暅原理", kw: "祖暅" }],
+      notes: [["teacher", "多数体积公式直接给出，会用即可；祖暅原理是拓展材料，不作基本要求。"]] },
+    "geo-basic-facts-skew": { sourceCards: ["M2-08-C"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "geo-parallel-circuits": { sourceCards: ["M2-08-D"], evidenceLevel: "textbook", requiredPrereqs: ["geo-basic-facts-skew"] },
+    "geo-perp-dihedral": { sourceCards: ["M2-08-E"], evidenceLevel: "textbook", requiredPrereqs: ["geo-parallel-circuits"],
+      notes: [["synthesis", "这一章用综合几何推理，空间向量和法向量到选择性必修第一册才学。"]] },
+    "stat-sampling": { sourceCards: ["M2-09-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "stat-percentile-var": { sourceCards: ["M2-09-B", "M2-09-C"], evidenceLevel: "textbook", requiredPrereqs: ["stat-sampling"],
+      mapNote: "9.2 同时讲百分位数和方差，卡里两部分各对应一张源卡。" },
+    "stat-merge-var": { sourceCards: ["M2-09-A", "M2-09-C"], evidenceLevel: "textbook", requiredPrereqs: ["stat-percentile-var"],
+      mapNote: "分层样本的均值、方差计算属于抽样那张源卡，用方差做统计决策属于数字特征那张源卡。" },
+    "prob-classical-events": { sourceCards: ["M2-10-A"], evidenceLevel: "textbook", requiredPrereqs: ["set-ops-demorgan"] },
+    "prob-independence": { sourceCards: ["M2-10-B"], evidenceLevel: "textbook", requiredPrereqs: ["prob-classical-events"],
+      notes: [["synthesis", "必修阶段用 P(AB)=P(A)P(B) 定义独立，不依赖条件概率。"]] },
+    "prob-freq-sim": { sourceCards: ["M2-10-C"], evidenceLevel: "textbook", requiredPrereqs: ["prob-classical-events"] },
+    "vec3-ops-coplanar": { sourceCards: ["E1-01-A"], evidenceLevel: "textbook", requiredPrereqs: ["vec-add-sub-tri", "vec-dot-product"] },
+    "vec3-base-theorem": { sourceCards: ["E1-01-A"], evidenceLevel: "textbook", requiredPrereqs: ["vec3-ops-coplanar", "vec-base-theorem"],
+      notes: [["synthesis", "四点共面的 x+y+z=1 由共面向量定理推出，是整理结论。"]] },
+    "vec3-coord-ops": { sourceCards: ["E1-01-B"], evidenceLevel: "textbook", requiredPrereqs: ["vec3-base-theorem", "vec-coord-ops"] },
+    "vec3-distance-angles": { sourceCards: ["E1-01-C", "E1-01-D"], evidenceLevel: "textbook", requiredPrereqs: ["vec3-coord-ops", "geo-perp-dihedral"],
+      mapNote: "1.4 一节讲距离和夹角，卡片把两者的向量公式放在一起对照。" },
+    "geom-line-slope-eq": { sourceCards: ["E1-02-A"], evidenceLevel: "textbook", requiredPrereqs: ["trig-graph-prop"] },
+    "geom-line-five-forms": { sourceCards: ["E1-02-A", "E1-02-B"], evidenceLevel: "textbook", requiredPrereqs: ["geom-line-slope-eq"],
+      mapNote: "直线方程的各种形式属于方程那张源卡，用一般式判平行垂直属于位置关系那张源卡。" },
+    "geom-line-dist-intersect": { sourceCards: ["E1-02-B"], evidenceLevel: "textbook", requiredPrereqs: ["geom-line-five-forms"],
+      notes: [["synthesis", "过交点的直线系是整理的方法，教材没有单列。"]] },
+    "geom-circle-line-rel": { sourceCards: ["E1-02-C"], evidenceLevel: "textbook", requiredPrereqs: ["geom-line-dist-intersect"] },
+    "geom-circle-pos-rel": { sourceCards: ["E1-02-C", "E1-02-B"], evidenceLevel: "textbook", requiredPrereqs: ["geom-circle-line-rel", "geom-line-dist-intersect"],
+      mapNote: "判位置关系的几何法要用点到直线距离，所以也挂直线距离那张源卡。",
+      notes: [["synthesis", "两圆方程相减得公共弦、切线长公式是整理结论。"]] },
+    "conic-ellipse": { sourceCards: ["E1-03-A"], evidenceLevel: "textbook", requiredPrereqs: ["geom-circle-line-rel"] },
+    "conic-hyperbola": { sourceCards: ["E1-03-B"], evidenceLevel: "textbook", requiredPrereqs: ["conic-ellipse"],
+      notes: [["teacher", "双曲线是「了解」层级，不要把椭圆的深化题型照搬过来。"]] },
+    "conic-parabola": { sourceCards: ["E1-03-C", "E1-03-D"], evidenceLevel: "textbook", requiredPrereqs: ["geom-line-dist-intersect"],
+      mapNote: "焦点准线互相转化是坐标法里的方法选择，对应方法选择那张源卡。",
+      notes: [["teacher", "抛物线是「了解」层级；控制代数运算难度，技巧繁多的定点定值题不作常规要求。"]] },
+    "seq-an-sn-relation": { sourceCards: ["E2-04-A"], evidenceLevel: "textbook", requiredPrereqs: ["fn-dom-same"] },
+    "seq-arith-geom": { sourceCards: ["E2-04-B", "E2-04-C"], evidenceLevel: "textbook", requiredPrereqs: ["seq-an-sn-relation"],
+      mapNote: "等差、等比两张源卡放进一张卡对照，便于比较通项、求和与下标性质。" },
+    "seq-sum-methods": { sourceCards: ["E2-04-B", "E2-04-C"], evidenceLevel: "synthesis", requiredPrereqs: ["seq-arith-geom"],
+      mapNote: "错位相减依赖等比求和，裂项相消常见于等差数列的倒数积，两张源卡都用到。",
+      notes: [["synthesis", "只做前 n 项的有限和，不涉及无穷级数。"]] },
+    "seq-math-induction": { sourceCards: ["E2-04-D"], evidenceLevel: "elective", optional: true, requiredPrereqs: ["seq-arith-geom"],
+      notes: [["standard", "带星号的选学内容，不作考试要求；其他卡不能把归纳法当作学生已学。"]] },
+    "calc-derivative-def": { sourceCards: ["E2-05-A"], evidenceLevel: "textbook", requiredPrereqs: ["geom-line-five-forms"] },
+    "calc-rules-composite": { sourceCards: ["E2-05-B"], evidenceLevel: "textbook", requiredPrereqs: ["calc-derivative-def", "exp-fn-prop", "log-change-base", "trig-graph-prop"],
+      notes: [["teacher", "简单复合函数求导限于 f(ax+b)；一般链式关系教材展示过，但不作为学生运用要求。"]] },
+    "calc-monot-extrema": { sourceCards: ["E2-05-C", "E2-05-D"], evidenceLevel: "textbook", requiredPrereqs: ["calc-rules-composite", "fn-mono-def"],
+      mapNote: "单调性和极值最值在解题时连在一起用，合成一张卡。",
+      notes: [["teacher", "多项式的单调区间、闭区间最值明确到不超过三次；不要求中值定理，洛必达、泰勒不作依据。"]] },
+    "count-principles": { sourceCards: ["E3-06-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
+    "count-perm-comb": { sourceCards: ["E3-06-B"], evidenceLevel: "textbook", requiredPrereqs: ["count-principles"],
+      electiveParts: [{ part: "组合数的对称式与递推式", kw: "递推" }],
+      notes: [["teacher", "组合数两个性质在探究栏目里，属选学，会用定义现场推出即可。"], ["synthesis", "捆绑法、插空法是整理的组织方式。"]] },
+    "count-binomial": { sourceCards: ["E3-06-C"], evidenceLevel: "textbook", requiredPrereqs: ["count-perm-comb"],
+      notes: [["teacher", "二项式定理用计数原理说明；数学归纳法证明不要求学生掌握。"]] },
+    "rv-cond-bayes": { sourceCards: ["E3-07-A"], evidenceLevel: "textbook", requiredPrereqs: ["prob-classical-events", "prob-independence"],
+      electiveParts: [{ part: "一般贝叶斯公式", kw: "贝叶斯" }],
+      notes: [["standard", "一般贝叶斯公式带星号，选学不考；乘法公式、全概率公式不是选学。"]] },
+    "rv-distrib-table": { sourceCards: ["E3-07-B", "E3-07-C"], evidenceLevel: "textbook", requiredPrereqs: ["prob-classical-events"],
+      mapNote: "两点分布的均值方差属于数字特征那张源卡，放在分布列卡里作为最简单的例子。" },
+    "rv-expect-variance": { sourceCards: ["E3-07-C"], evidenceLevel: "textbook", requiredPrereqs: ["rv-distrib-table", "stat-percentile-var"] },
+    "rv-binomial-hypergeom": { sourceCards: ["E3-07-D"], evidenceLevel: "textbook", requiredPrereqs: ["rv-expect-variance", "count-perm-comb", "prob-independence"],
+      notes: [["teacher", "掌握二项分布及其数字特征；超几何分布了解均值即可，方差计算不作要求。"]] },
+    "rv-normal-distribution": { sourceCards: ["E3-07-E"], evidenceLevel: "textbook", requiredPrereqs: ["rv-expect-variance", "stat-percentile-var"],
+      notes: [["synthesis", "其他区间概率靠对称性、给定数据或计算工具，不用积分。"]] },
+    "bivar-corr-r": { sourceCards: ["E3-08-A"], evidenceLevel: "textbook", requiredPrereqs: ["stat-percentile-var"] },
+    "bivar-regression-fit": { sourceCards: ["E3-08-B"], evidenceLevel: "textbook", requiredPrereqs: ["bivar-corr-r"] },
+    "bivar-chi-square": { sourceCards: ["E3-08-C"], evidenceLevel: "textbook", requiredPrereqs: ["prob-independence", "stat-sampling"],
+      notes: [["synthesis", "α 描述零假设为真时检验规则的误拒风险，近似模型下不能理解为本次结论正确的概率。"], ["teacher", "教师用书中观测频数不小于 5 是应用建议；本卡采用期望频数条件说明大样本近似，不是独立性的定义。"]] }
+  };
+
+  CARDS.forEach(function (c) {
+    var t = TRACE[c.id] || {};
+    c.sourceCards = t.sourceCards || [];
+    c.evidenceLevel = t.evidenceLevel || "";
+    c.optional = !!t.optional;
+    c.requiredPrereqs = t.requiredPrereqs || [];
+    c.electiveParts = t.electiveParts || [];
+    c.notes = t.notes || [];
+    if (t.mapNote) c.mapNote = t.mapNote;
+  });
+
+
+  function traceHtml(c) {
+    function text(value) {
+      return String(value).replace(/[&<>"']/g, function (ch) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+      });
+    }
+    var scope = c.optional ? " · 选学，不作考试要求" :
+      (c.electiveParts.length ? " · 含选学/拓展片段" : "");
+    var notes = c.notes.map(function (n) {
+      return "<li>" + text(EVIDENCE_LEVELS[n[0]]) + "：" + text(n[1]) + "</li>";
+    }).join("");
+    var parts = c.electiveParts.length ? "<p>选学/拓展片段：" +
+      c.electiveParts.map(function (p) { return text(p.part); }).join("、") + "。</p>" : "";
+    return '<details class="small wk-trace" data-source-cards="' + c.sourceCards.join(" ") +
+      '" style="margin:8px 0;color:var(--muted)"><summary>学习范围：' +
+      text(EVIDENCE_LEVELS[c.evidenceLevel]) + scope + "</summary>" + parts +
+      (notes ? "<ul>" + notes + "</ul>" : "") +
+      "<p>源卡编号：" + c.sourceCards.join("、") + "。依据层级说明本卡主体内容，不把整理方法或拓展变成必学要求。</p></details>";
+  }
 
   /* 四大课程主线定义 */
   var STRANDS = {
@@ -1017,6 +1213,11 @@
   Object.keys(SEC_META).forEach(function (sid) {
     SEC_META[sid].id = sid;
     SEC_META[sid].prereqs = SEC_META[sid].prereqs || [];
+    var cards = CARDS.filter(function (c) { return c.sec === sid; });
+    SEC_META[sid].optional = cards.length > 0 && cards.every(function (c) { return c.optional; });
+    SEC_META[sid].electiveParts = cards.reduce(function (parts, c) {
+      return parts.concat(c.electiveParts.map(function (p) { return p.part; }));
+    }, []);
     SEC_META[sid].unlocks = [];
   });
   Object.keys(SEC_META).forEach(function (sid) {
@@ -1081,29 +1282,29 @@
     st.textContent = [
       ".wk-topbtn{display:inline-flex;align-items:center;min-height:36px;font-size:14px;font-weight:600;color:var(--a);text-decoration:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);}",
       ".wk-topbtn:hover{border-color:var(--a);background:var(--ok-soft);}",
-      ".wk-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:0 0 14px;}",
+      ".wk-chain{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:0 0 14px;}",
       ".wk-chain a{display:inline-flex;align-items:center;min-height:28px;padding:2px 4px;color:var(--c);text-decoration:none;font-weight:600;}",
       ".wk-chain a:hover{text-decoration:underline;}",
       ".wk-box{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin:14px 0;}",
       ".wk-box-hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14.5px;font-weight:600;margin-bottom:8px;}",
       ".wk-pills{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}",
-      ".wk-pill{display:inline-flex;align-items:center;gap:4px;min-height:34px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:13.5px;cursor:pointer;transition:all .15s;}",
-      ".wk-pill:hover,.wk-pill.on{border-color:var(--a);background:var(--ok-soft);color:var(--a);font-weight:600;}",
+      ".wk-pill{display:inline-flex;align-items:center;gap:4px;min-height:34px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:5px 12px;font:inherit;font-size:14px;cursor:pointer;transition:all .15s;}",
+      ".wk-pill:hover,.wk-pill.on{border-color:var(--a);background:var(--ok-soft);color:var(--wk-pill-active-fg,var(--a));font-weight:600;}",
       ".wk-pill.method:hover,.wk-pill.method.on{border-color:var(--c);}",
       ".wk-pill.pitfall:hover,.wk-pill.pitfall.on{border-color:var(--no);background:var(--no-soft);color:var(--no);}",
       ".wk-drawer{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;}",
       ".wk-card-inline{color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;font-size:15px;}",
       ".wk-card-inline h4{margin:0 0 6px;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:8px;}",
-      ".wk-close{border:none;background:transparent;color:var(--muted);font-size:13px;cursor:pointer;padding:2px 6px;}",
+      ".wk-close{border:none;background:transparent;color:var(--muted);font-size:14px;cursor:pointer;padding:2px 6px;}",
       ".wk-close:hover{color:var(--fg);}",
       ".wk-prob-bar{margin:6px 0 4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;}",
-      ".wk-chap-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px 8px;font-size:13px;color:var(--muted);border-top:1px dashed var(--line);margin-top:4px;}",
+      ".wk-chap-bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px 10px 8px;font-size:14px;color:var(--muted);border-top:1px dashed var(--line);margin-top:4px;}",
       ".wk-home-search{position:relative;margin:12px 0 18px;}",
       ".wk-home-search input{width:100%;font:inherit;font-size:15px;padding:10px 16px;border:1.5px solid var(--line);border-radius:999px;background:var(--card);color:var(--fg);}",
       ".wk-home-search input:focus{outline:3px solid var(--hl);border-color:var(--a);}",
       ".wk-search-drop{margin-top:8px;background:var(--card);border:1.5px solid var(--a);border-radius:var(--radius);padding:10px 12px;}",
       ".wk-sec-pills{display:inline-flex;gap:5px;align-items:center;margin-left:6px;flex-wrap:wrap;vertical-align:middle;}",
-      ".wk-sec-pill{display:inline-flex;align-items:center;min-height:24px;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;text-decoration:none;border:1px solid var(--line);background:var(--bg);color:var(--muted);line-height:1.3;}",
+      ".wk-sec-pill{display:inline-flex;align-items:center;min-height:24px;padding:1px 8px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none;border:1px solid var(--line);background:var(--bg);color:var(--muted);line-height:1.3;}",
       ".wk-sec-pill.iso{color:var(--a);border-color:var(--a);background:var(--ok-soft);}",
       ".wk-sec-pill:hover{border-color:var(--a);color:var(--a);text-decoration:none;}"
     ].join("\n");
@@ -1188,25 +1389,26 @@
 
   function renderCardHtml(c, showJumpLesson) {
     var jump = showJumpLesson
-      ? '<div style="margin-top:8px;font-size:13.5px;display:flex;gap:12px;flex-wrap:wrap">' +
+      ? '<div style="margin-top:8px;font-size:14px;display:flex;gap:12px;flex-wrap:wrap">' +
           '<a href="' + ROOT + "lessons/" + c.sec + '.html#step3" style="font-weight:600">👉 去 ' + c.secName + " 动手拖图</a>" +
           '<a href="' + ROOT + "lessons/" + c.sec + '.html#step2">📖 看完整讲解</a>' +
           '<a href="' + ROOT + "wiki.html#card-" + c.id + '">⚡ 在 Wiki 页查看</a>' +
         "</div>"
-      : '<div style="margin-top:8px;font-size:13.5px;display:flex;gap:12px;flex-wrap:wrap">' +
+      : '<div style="margin-top:8px;font-size:14px;display:flex;gap:12px;flex-wrap:wrap">' +
           '<a href="' + ROOT + "wiki.html#card-" + c.id + '">⚡ 在 Wiki 知识库中打开</a>' +
         "</div>";
     var relPills = (c.rel || []).map(function (rid) {
       var target = BY_ID[rid];
       return target
-        ? '<button type="button" class="wk-pill" data-wk-card="' + rid + '" style="font-size:12px;padding:2px 8px;margin:2px 4px 2px 0">🔗 ' + target.title + '</button>'
+        ? '<button type="button" class="wk-pill" data-wk-card="' + rid + '" style="font-size:14px;padding:2px 8px;margin:2px 4px 2px 0">🔗 ' + target.title + '</button>'
         : "";
     }).join("");
-    var relBox = relPills ? '<div style="margin:8px 0 4px;font-size:12.5px;color:var(--muted)"><b>🕸️ 关联知识网络：</b>' + relPills + '</div>' : '';
+    var relBox = relPills ? '<div style="margin:8px 0 4px;font-size:14px;color:var(--muted)"><b>🕸️ 关联知识网络：</b>' + relPills + '</div>' : '';
 
     return (
       '<div class="wk-card-inline" data-card-box="' + c.id + '">' +
         "<h4><span>" + c.kindLabel + " · " + c.title + '</span><button type="button" class="wk-close" data-wk-close="1">收起 ✕</button></h4>' +
+        traceHtml(c) +
         '<p class="small" style="margin:4px 0 8px"><b>🎯 什么时候用：</b>' + protectCardMathHtml(c.trig) + "</p>" +
         '<div class="key" style="margin:6px 0">' + protectCardMathHtml(c.key) + "</div>" +
         '<div class="warn" style="margin:6px 0"><b>⚠️ 易错红线：</b>' + protectCardMathHtml(c.warn) + "</div>" +
@@ -1354,9 +1556,11 @@
     }
     // 自动推荐只在同册同章内产生；跨章必须由题目显式标注。
     var chapter = secId.split("-").slice(0, 2).join("-");
+    var nonContrastText = text.replace(/[^。；！？\n]*混为一谈[^。；！？\n]*/g, "");
     CARDS.forEach(function (c) {
       if (c.sec.split("-").slice(0, 2).join("-") !== chapter) return;
-      var hit = (c.keywords || []).some(function (kw) { return isRecoKeyword(kw) && text.indexOf(kw) >= 0; });
+      var hay = c.sec === secId ? text : nonContrastText;
+      var hit = (c.keywords || []).some(function (kw) { return isRecoKeyword(kw) && hay.indexOf(kw) >= 0; });
       if (hit && matched.indexOf(c) < 0) matched.push(c);
     });
     // 2. 本节卡片优先排前面
@@ -1375,6 +1579,9 @@
       var explicitCards = qCard.getAttribute("data-cards");
       var cards = matchCardsForProblem(secId, text, explicitCards);
       if (!cards.length) return;
+      if (explicitCards === null || explicitCards === undefined) {
+        qCard.setAttribute("data-cards", cards.map(function (c) { return c.id; }).join(","));
+      }
       var bar = document.createElement("div");
       bar.className = "wk-prob-bar";
       bar.innerHTML =
@@ -1402,7 +1609,7 @@
   function ensureIsoBenchLoaded(cb) {
     if (window.IsoBench) { cb(); return; }
     var s = document.createElement("script");
-    s.src = ROOT + "assets/iso-bench.js?v=vs-f06df1e3f1d5";
+    s.src = ROOT + "assets/iso-bench.js?v=vs-0c6393f7be55";
     s.onload = cb;
     document.head.appendChild(s);
   }
@@ -1799,7 +2006,9 @@
       });
       var prevHtml = prereqLinks.length
         ? '<span>⬅️ 硬先修：' + prereqLinks.join(" · ") + "</span><span>→</span>"
-        : (meta.prev && SEC_META[meta.prev] ? '<span>前置：<a href="' + meta.prev + '.html">' + SEC_META[meta.prev].name + "</a></span><span>→</span>" : "");
+        : (secId === "b2-8-1"
+          ? "<span>无跨章硬先修 · 本节路线</span><span>→</span>"
+          : (meta.prev && SEC_META[meta.prev] ? '<span>前置：<a href="' + meta.prev + '.html">' + SEC_META[meta.prev].name + "</a></span><span>→</span>" : ""));
 
       var unlockList = (meta.unlocks && meta.unlocks.length) ? meta.unlocks.slice(0, 3) : (meta.next ? [meta.next] : []);
       var unlockLinks = unlockList.filter(function (uid) { return SEC_META[uid]; }).map(function (uid) {
@@ -1826,7 +2035,12 @@
           '<a href="../wiki.html#map=' + secId + '">🗺️ 图谱定位</a>' +
           '<a href="../wiki.html#ch=' + secCards[0].ch + '">⚡ 本章方法卡 →</a>' +
         "</span>";
+      if (secId === "b2-8-1") {
+        chain.setAttribute("data-guide-summary", "无跨章硬先修 · 本节路线");
+      }
       lead.parentNode.insertBefore(chain, lead.nextSibling);
+      // HCI may arrive before or after Wiki; keep the summary on the chain as well as announcing it.
+      document.dispatchEvent(new Event("peiyu:wiki-chain-ready"));
       var isoJump = chain.querySelector("[data-wk-iso-jump]");
       if (isoJump) {
         isoJump.addEventListener("click", function (ev) {
@@ -1983,6 +2197,8 @@
   });
 
   window.PEIYU_WIKI_HTML = protectCardMathHtml;
+  window.PEIYU_WIKI_TRACE_HTML = traceHtml;
+  window.PEIYU_WIKI_EVIDENCE_LEVELS = EVIDENCE_LEVELS;
   window.PEIYU_WIKI_CARDS = CARDS;
   window.PEIYU_SEC_META = SEC_META;
   window.PEIYU_STRANDS = STRANDS;

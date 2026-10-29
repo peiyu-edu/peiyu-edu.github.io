@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>31.1 随机事件与概率 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j31-1" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">九年级下册（旧版目录占位）· 第三十一章 概率初步</p>
+<h1>31.1 随机事件与概率</h1>
+<p class="lead">有些事一定发生，有些事一定不发生，还有很多事「说不准」。说不准的事也有「更可能」和「不太可能」之分，这一节学怎么用一个 \(0\) 到 \(1\) 之间的数把「可能性有多大」说清楚。</p>
+<p class="small">说明：新版九下 2027 春才出版，本节先按旧版教材（原九上第二十五章 25.1）编排，出版后再对表。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：分数、12.2 频数与频率 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：分数的意义、约分和比较大小；频数、频率（<a href="j12-2.html">回看 12.2</a>）。不需要小学学过「可能性」。</p>
+  <ol class="small">
+    <li>从抽卡片进入：同样是「抽到 1」，换个盒子，结论就变了。</li>
+    <li>三类事件：必然事件、不可能事件、随机事件；判断时一定带上条件。</li>
+    <li>随机事件的可能性有大有小。</li>
+    <li>概率：刻画可能性大小的数 \(P(A)\)；结果有限且等可能时 \(P(A)=\dfrac mn\)。</li>
+    <li>不等可能时先拆成等可能的小份（不等分的转盘）。</li>
+    <li>概率的范围 \(0\le P(A)\le 1\)，以及概率「保证不了」什么。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>三个盒子里各有 5 张卡片，大小、手感完全一样，闭着眼睛抽一张。点按钮看看每个盒子里的卡片：</p>
+  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDE3MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55uS5a2Q6YeM5LqU5byg5Y2h54mH5LiK5YaZ55qE5pWwXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIumAieaLqeebkuWtkFwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtYm94PVwiMSwxLDEsMSwxXCI+55uS5a2Q55SyPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLWJveD1cIjEsMiwxLDIsMVwiPuebkuWtkOS5mTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1ib3g9XCIyLDIsMiwyLDJcIj7nm5LlrZDkuJk8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+5LuO5ZOq5Liq55uS5a2Q6YeM5oq977yM44CM5oq95Yiw5YaZ552AIDEg55qE5Y2h54mH44CN6L+Z5Lu25LqLPGI+5Y+v6IO95Y+R55Sf44CB5Lmf5Y+v6IO95LiN5Y+R55SfPC9iPu+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+55uS5a2Q55SyPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+55uS5a2Q5LmZPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+55uS5a2Q5LiZPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiJ5Liq6YO95pivPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QjwvYj7jgILnm5LlrZDnlLLlhajmmK8gMe+8jOS4gOWumuaKveWIsCAx77yb55uS5a2Q5LiZ5rKh5pyJIDHvvIzkuIDlrprmir3kuI3liLDvvJvlj6rmnInnm5LlrZDkuZnjgIzor7TkuI3lh4bjgI3jgILpgIkgRCDmmK/miorjgIzmir3ljaHniYfjgI3mnKzouqvlvZPmiJDkuobor7TkuI3lh4bigJTigJTlhbblrp7opoHnnIvnm5LlrZDph4zoo4XnmoTmmK/ku4DkuYjvvIzkuZ/lsLHmmK88Yj7mnaHku7Y8L2I+44CCPC9wPlxuICAgICAgPHA+55uS5a2Q5LmZ6YeMIDUg5byg5pyJIDMg5byg5pivIDHvvIzmir3liLAgMSDnmoTlj6/og73mgKfmr5Tmir3liLAgMiDlpKfjgILlpKflpJrlsJHvvJ/ov5nkuIDoioLopoHlm57nrZTvvJo8Yj7mgI7kuYjnu5njgIzlj6/og73mgKfjgI3kuIDkuKrmlbDvvJ88L2I+PC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 170" role="img" aria-label="盒子里五张卡片上写的数"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="选择盒子">
+      <button type="button" class="on" data-box="1,1,1,1,1">盒子甲</button>
+      <button type="button" data-box="1,2,1,2,1">盒子乙</button>
+      <button type="button" data-box="2,2,2,2,2">盒子丙</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>从哪个盒子里抽，「抽到写着 1 的卡片」这件事<b>可能发生、也可能不发生</b>？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>盒子甲</button>
+      <button class="opt" data-v="B"><b>B</b>盒子乙</button>
+      <button class="opt" data-v="C"><b>C</b>盒子丙</button>
+      <button class="opt" data-v="D"><b>D</b>三个都是</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。盒子甲全是 1，一定抽到 1；盒子丙没有 1，一定抽不到；只有盒子乙「说不准」。选 D 是把「抽卡片」本身当成了说不准——其实要看盒子里装的是什么，也就是<b>条件</b>。</p>
+      <p>盒子乙里 5 张有 3 张是 1，抽到 1 的可能性比抽到 2 大。大多少？这一节要回答：<b>怎么给「可能性」一个数？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：必然事件、不可能事件、随机事件</h3>
+  <p class="small">不需要小学学过「可能性」。下面说的「事件」就是「一件事的某种结果」，例如「掷一枚骰子，朝上的点数是 3」。</p>
+  <p>在<b>一定条件下</b>，<b>必然会</b>发生的事件叫<b>必然事件</b>；<b>必然不会</b>发生的事件叫<b>不可能事件</b>；二者合称<b>确定性事件</b>。在一定条件下<b>可能发生、也可能不发生</b>的事件叫<b>随机事件</b>。掷一枚普通骰子（六个面分别是 1 到 6 点），点下面的事件，看 6 种结果里有几种符合：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>数一数：6 种结果里有几种让事件发生</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="骰子事件">
+        <button type="button" class="on" data-ev="le6">点数 ≤ 6</button>
+        <button type="button" data-ev="eq7">点数是 7</button>
+        <button type="button" data-ev="even">点数是偶数</button>
+        <button type="button" data-ev="gt4">点数大于 4</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 130" role="img" aria-label="骰子六个点数中符合事件的格子被涂色"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>确定性事件：结果事先就能断定</b></p>
+      <p class="small" style="margin:0">6 种结果全符合 → 必然事件；一种都不符合 → 不可能事件。「点数是 7」不是「很难」，是<b>不可能</b>。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>说事件，必须连条件一起说</b></p>
+      <p class="small" style="margin:0">「抽到 1」在盒子甲是必然事件，在盒子丙是不可能事件。「水烧到 100 ℃ 沸腾」要加上「在标准大气压下」才是必然事件。</p>
+    </div>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS4i+mdouWTquS4quaYrzxiPumaj+acuuS6i+S7tjwvYj7vvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+MTMg5Liq5Lq66YeM77yM6Iez5bCR5pyJIDIg5Lq655qE5Ye655Sf5pyI5Lu955u45ZCMPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuaOt+S4gOaemuaZrumAmumqsOWtkO+8jOeCueaVsOWkp+S6jiAwPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS7juWPquijheedgOe6oueQg+eahOiii+WtkOmHjOaRuOWHuuS4gOS4queZveeQgzwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7ov5DliqjlkZjlsITlh7vkuIDmrKHvvIzlkb3kuK0gMTAg546vPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkQ8L2I+44CC5bCE5Ye75Y+v6IO95LitIDEwIOeOr++8jOS5n+WPr+iDveS4jeS4reOAgkEg5piv5b+F54S25LqL5Lu277ya5LiA5bm05Y+q5pyJIDEyIOS4quaciO+8jDEzIOS4quS6uuS4jeWPr+iDveaciOS7veWFqOS4jeWQjO+8m0Ig5Lmf5piv5b+F54S25LqL5Lu277yI54K55pWw5pyA5bCP5pivIDHvvInvvJtDIOaYr+S4jeWPr+iDveS6i+S7tuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：下面哪个是<b>随机事件</b>？</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>13 个人里，至少有 2 人的出生月份相同</button><button class="opt" data-v="B"><b>B</b>掷一枚普通骰子，点数大于 0</button><button class="opt" data-v="C"><b>C</b>从只装着红球的袋子里摸出一个白球</button><button class="opt" data-v="D"><b>D</b>运动员射击一次，命中 10 环</button></div>
+    <div class="reveal"><p><b>D</b>。射击可能中 10 环，也可能不中。A 是必然事件：一年只有 12 个月，13 个人不可能月份全不同；B 也是必然事件（点数最小是 1）；C 是不可能事件。</p></div>
+  </div>
+
+  <h3>2. 核心点：随机事件的可能性有大有小</h3>
+  <p>同样是随机事件，「可能性」并不一样大。袋子里放大小、质地相同的红球和白球，搅匀后摸一个，点按钮换袋子：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>哪种球多，摸到它的可能性就大</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="袋中红球和白球个数">
+        <button type="button" class="on" data-rw="3,1">红 3 白 1</button>
+        <button type="button" data-rw="2,2">红 2 白 2</button>
+        <button type="button" data-rw="1,4">红 1 白 4</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 120" role="img" aria-label="袋中的红球和白球"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p>只比大小时，数一数就行。但要回答「可能性<b>多大</b>」，就需要一个数。一般地，对于一个随机事件 \(A\)，把刻画它发生的可能性大小的数值，叫作随机事件 \(A\) 发生的<b>概率</b>，记作 \(P(A)\)。</p>
+
+  <h3>3. 核心点：结果等可能时，\(P(A)=\dfrac mn\)</h3>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(P(A)=\dfrac{\color{#2F7A56}{\underbrace{m}_{\text{事件 A 包含的结果数}}}}{\color{#B5452F}{\underbrace{n}_{\text{所有可能的结果数}}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">前提有两个，缺一不可：① 一次试验所有可能的结果<b>只有有限个</b>（\(n\) 个）；② 每种结果出现的<b>可能性相等</b>。</p>
+  </div>
+  <p>「等可能」从哪来？骰子做得均匀、六个面一样，所以六个点数等可能；球大小质地相同又搅匀了，所以每个球等可能被摸到。转盘也一样：只有<b>等分</b>的转盘，每一格才等可能。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>两种颜色 ≠ 两种等可能的结果</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="转盘">
+        <button type="button" class="on" data-s="0">8 等分，红 3 格</button>
+        <button type="button" data-s="1">不等分：红占四分之一</button>
+        <button type="button" data-s="2">拆成 4 等份</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 170" role="img" aria-label="转盘的分格和红色区域"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">一个不透明的袋子里有 2 个红球、3 个黄球、5 个蓝球，它们除颜色外都相同。搅匀后摸出一个球。求：(1) 摸到红球的概率；(2) 摸到的<b>不是</b>蓝球的概率。</p>
+    <p><b>① 读懂题意：</b>一次试验是「摸一个球」。要先数清一共几种等可能的结果。</p>
+    <details class="more"><summary>提示 1：为什么不是「3 种颜色，各 1/3」</summary><p>三种颜色的球个数不同，「红、黄、蓝」三种结果不等可能。等可能的是「摸到第几个球」：共 \(2+3+5=10\) 种。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>给 10 个球编号，每个球被摸到的可能性相等，\(n=10\)；再数各事件包含几个球。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>(1) 红球 2 个，\(P(\text{红})=\dfrac{2}{10}=\dfrac15\)。(2) 不是蓝球 = 红或黄，共 \(2+3=5\) 个，\(P=\dfrac{5}{10}=\dfrac12\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>蓝球 5 个，\(P(\text{蓝})=\dfrac12\)；「是蓝」和「不是蓝」合起来是全部 10 种，\(\dfrac12+\dfrac12=1\) ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>先问「等可能的结果是什么」，再数。颜色只是给结果分类，不是等可能的结果本身。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muaOt+S4gOaemuaZrumAmumqsOWtkO+8jOacneS4iueahOeCueaVsOaYryAzIOeahOWAjeaVsOeahOamgueOh+aYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcZGZyYWMxNlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXGRmcmFjMTNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoXFxkZnJhYzIzXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCNiDnp43ngrnmlbDnrYnlj6/og73vvIwzIOeahOWAjeaVsOaciSAzIOWSjCA2IOS4pOenje+8jFxcKFA9XFxkZnJhYzI2PVxcZGZyYWMxM1xcKeOAgkEg5piv5Y+q5pWw5LqGIDPvvIzmvI/kuoYgNu+8m0Mg5pWw55qE5piv44CM5LiN5pivIDMg55qE5YCN5pWw44CN55qEIDQg56eN44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：掷一枚普通骰子，朝上的点数是 3 的倍数的概率是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\dfrac16\)</button><button class="opt" data-v="B"><b>B</b>\(\dfrac13\)</button><button class="opt" data-v="C"><b>C</b>\(\dfrac23\)</button></div>
+    <div class="reveal"><p><b>B</b>。6 种点数等可能，3 的倍数有 3 和 6 两种，\(P=\dfrac26=\dfrac13\)。A 是只数了 3，漏了 6；C 数的是「不是 3 的倍数」的 4 种。</p></div>
+  </div>
+
+  <h3>4. 核心点：概率在 0 和 1 之间</h3>
+  <p>因为 \(0\le m\le n\)，所以 \(0\le P(A)\le 1\)。<b>必然事件</b>包含全部 \(n\) 种结果，概率是 \(1\)；<b>不可能事件</b>一种也不包含，概率是 \(0\)；随机事件的概率在 \(0\) 和 \(1\) 之间。概率越接近 \(1\)，事件越可能发生；越接近 \(0\)，越不可能发生。</p>
+  <div class="card predict" data-id="try-3" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muWwj+WImueul+WHuuWbm+S4quS6i+S7tueahOamgueOh++8jOWFtuS4reacieS4gOS4qjxiPuS4gOWumueul+mUmeS6hjwvYj7vvIzmmK/lk6rkuKrvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgwXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDFcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoXFxkZnJhYzY1XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDAuOTk5XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkM8L2I+44CC5qaC546H5LiN5Lya6LaF6L+HIFxcKDFcXCnvvJpcXChtXFwpIOaYryBcXChuXFwpIOenjee7k+aenOS4reeahOS4gOmDqOWIhu+8jOS4jeS8muavlCBcXChuXFwpIOi/mOWkmuOAgkEg5Y+v5Lul5piv5LiN5Y+v6IO95LqL5Lu255qE5qaC546H77yMQiDlj6/ku6XmmK/lv4XnhLbkuovku7bnmoTmpoLnjofvvIxEIOWPquaYr+OAjOmdnuW4uOWPr+iDveOAjeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：小刚算出四个事件的概率，其中有一个<b>一定算错了</b>，是哪个？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(0\)</button><button class="opt" data-v="B"><b>B</b>\(1\)</button><button class="opt" data-v="C"><b>C</b>\(\dfrac65\)</button><button class="opt" data-v="D"><b>D</b>\(0.999\)</button></div>
+    <div class="reveal"><p><b>C</b>。概率不会超过 \(1\)：\(m\) 是 \(n\) 种结果中的一部分，不会比 \(n\) 还多。A 可以是不可能事件的概率，B 可以是必然事件的概率，D 只是「非常可能」。</p></div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：不等分的转盘）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">一个转盘分成红、黄、蓝三块扇形，圆心角分别是 \(90^\circ\)、\(120^\circ\)、\(150^\circ\)。转动转盘，求指针落在红色区域的概率（指针落在分界线上就重转）。</p>
+    <details class="more"><summary>提示：怎样变成等可能</summary><p>三块不一样大，不能说「三块各 \(\dfrac13\)」。三个角都是 \(30^\circ\) 的倍数，把整个转盘等分成每份 \(30^\circ\) 的小扇形。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">拆：</span>\(360^\circ\div30^\circ=12\)，转盘等分成 12 份，每份等可能。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">数：</span>红色 \(90^\circ\) 占 \(3\) 份，\(P(\text{红})=\dfrac{3}{12}=\dfrac14\)。同理黄 \(\dfrac4{12}=\dfrac13\)，蓝 \(\dfrac5{12}\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">检查：</span>\(\dfrac3{12}+\dfrac4{12}+\dfrac5{12}=1\) ✓；红色的角最小，概率也最小 ✓。</div>
+      </div>
+      <p><b>回头看：</b>结果就是「圆心角 ÷ \(360^\circ\)」。道理仍是 \(\dfrac mn\)：先拆成等可能的小份，再数。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muaKm+S4gOaemuWdh+WMgOeahOehrOW4ge+8jOOAjOato+mdouacneS4iuOAjeeahOamgueOh+aYryBcXChcXGRmcmFjMTJcXCnjgILov5nlj6Xor53nmoTmhI/mgJ3mmK/vvJo8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5q+P5oqb5LiA5qyh77yM5q2j6Z2i5pyd5LiK5ZKM5Y+N6Z2i5pyd5LiK55qE5Y+v6IO95oCn5LiA5qC35aSnPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuaKm+S4pOasoe+8jOS4gOWumuacieS4gOasoeato+mdouacneS4ijwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7mipsgMTAwIOasoe+8jOS4gOWumuato+WlvSA1MCDmrKHmraPpnaLmnJ3kuIo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5bey57uP6L+e57ut5Lik5qyh5q2j6Z2i77yM56ys5LiJ5qyh5LiA5a6a5piv5Y+N6Z2iPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5qaC546H6K+055qE5pivPGI+5q+P5LiA5qyhPC9iPueahOWPr+iDveaAp+Wkp+Wwj++8jOS4jeS/neivgeafkOWHoOasoeeahOe7k+aenOOAguaKm+S4pOasoeWPr+iDveS4pOasoemDveaYr+WPjemdou+8iEIg6ZSZ77yJ77ybMTAwIOasoemHjOato+WlvSA1MCDmrKHlj6rmmK/lj6/og73kuYvkuIDvvIhDIOmUme+8ie+8m+ehrOW4geS4jeiusOW+l+WJjemdoueahOe7k+aenO+8jOesrOS4ieasoeato+mdoueahOamgueOh+i/mOaYryBcXChcXGRmcmFjMTJcXCnvvIhEIOmUme+8ieOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：抛一枚均匀的硬币，「正面朝上」的概率是 \(\dfrac12\)。这句话的意思是：</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>每抛一次，正面朝上和反面朝上的可能性一样大</button><button class="opt" data-v="B"><b>B</b>抛两次，一定有一次正面朝上</button><button class="opt" data-v="C"><b>C</b>抛 100 次，一定正好 50 次正面朝上</button><button class="opt" data-v="D"><b>D</b>已经连续两次正面，第三次一定是反面</button></div>
+    <div class="reveal"><p><b>A</b>。概率说的是<b>每一次</b>的可能性大小，不保证某几次的结果。抛两次可能两次都是反面（B 错）；100 次里正好 50 次只是可能之一（C 错）；硬币不记得前面的结果，第三次正面的概率还是 \(\dfrac12\)（D 错）。</p></div>
+  </div>
+
+  <h3>5. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>结果不等可能，也直接数个数</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：转盘只有红、蓝两块，「两种结果，落在红色的概率是 \(\dfrac12\)」。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：红色只占四分之一圆。等分成 4 份，红占 1 份，\(P(\text{红})=\dfrac14\)。先问「这几种结果等可能吗」。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 200" role="img" aria-label="红色只占四分之一的转盘"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>把概率当成「一定会出现的次数」</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：掷出 6 点的概率是 \(\dfrac16\)，所以「掷 6 次一定有一次 6 点」；连着 4 次反面，「下次该正面了」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：每一次试验，6 点的概率都是 \(\dfrac16\)，与前面掷出什么无关。掷 6 次可能一次 6 点都没有。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>判断事件类型时丢了条件</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：「抽到写着 1 的卡片」是随机事件（不看盒子里装的是什么）；「掷骰子得 7 点」是「可能性很小的随机事件」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：先写清条件：盒子甲里全是 1，就是必然事件。骰子没有 7 点，是不可能事件，\(P=0\)。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：骰子要是做歪了呢？</summary>
+    <p>\(P(A)=\dfrac mn\) 靠的是「等可能」：骰子均匀、球搅匀、转盘等分。如果骰子的一角被削掉一块，六个点数就不再等可能，\(\dfrac16\) 就不对了，而且没法靠数格子求概率。这时只能大量重复地掷，看各点数出现的频率——这是 <a href="j31-3.html">31.3 用频率估计概率</a> 要讲的事。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 设计一个 8 等分的转盘</h3>
+  <p class="small">拖动下方滑轨上的圆点（或点一下圆点再用方向键），改变涂红的格数 \(r\)。指针落在红色区域的概率跟着变。拖到两端看看会出现哪两类事件。</p>
+  <div class="card">
+    <svg class="fig" id="fig-spin" viewBox="0 0 560 330" role="img" aria-label="八等分转盘，红色格数可调"></svg>
+    <div class="result" id="out-spin" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-spin" type="button">重置</button></div>
+  </div>
+  <h3>② 摸球袋：红球、白球各放几个</h3>
+  <p class="small">两条滑轨分别调红球、白球的个数（0 到 6）。下面的 0 到 1 刻度尺上，红三角是「摸到红球」的概率，蓝三角是「摸到白球」的概率。</p>
+  <div class="card">
+    <svg class="fig" id="fig-bag" viewBox="0 0 560 330" role="img" aria-label="袋中红球白球个数和摸到红球的概率"></svg>
+    <div class="result" id="out-bag" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-bag" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：不等分的转盘，按角度拆成等份</h3>
+  <p class="small">拖动圆周上的圆点（或用方向键，每次 \(15^\circ\)），改变红色扇形的圆心角。虚线把转盘等分成 24 份（每份 \(15^\circ\)），红色占几份，概率就是二十四分之几。</p>
+  <div class="card">
+    <svg class="fig" id="fig-angle" viewBox="0 0 560 330" role="img" aria-label="红色扇形圆心角可调的转盘"></svg>
+    <div class="result" id="out-angle" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-angle" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjEuIDIwIOW8oOWNoeeJh+WIhuWIq+WGmeedgCAxIOWIsCAyMO+8jOS7juS4remaj+acuuaKveS4gOW8oO+8jOaKveWIsCA1IOeahOWAjeaVsOeahOamgueOh+aYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcZGZyYWMxezIwfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCg0XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFxcZGZyYWMxNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXChcXGRmcmFjMTRcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgII1IOeahOWAjeaVsOaciSA144CBMTDjgIExNeOAgTIwIOWFsSA0IOW8oO+8jFxcKFA9XFxkZnJhYzR7MjB9PVxcZGZyYWMxNVxcKeOAgkEg5piv5Lul5Li644CM5Y+q5pyJIDUg5LiA5byg44CN77ybQiDlhpnnmoTmmK/lvKDmlbDvvIzkuI3mmK/mpoLnjofvvIjmpoLnjofkuI3otoXov4cgMe+8ie+8m0Qg5piv5oqK5Liq5pWw5pWw5oiQ5LqGIDUg5Liq77yI5aSa566X5LqGIDI177yM5Y+vIDI1IOS4jeWcqOWNoeeJh+mHjO+8ieOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>1. 20 张卡片分别写着 1 到 20，从中随机抽一张，抽到 5 的倍数的概率是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\dfrac1{20}\)</button><button class="opt" data-v="B"><b>B</b>\(4\)</button><button class="opt" data-v="C"><b>C</b>\(\dfrac15\)</button><button class="opt" data-v="D"><b>D</b>\(\dfrac14\)</button></div>
+    <div class="reveal"><p><b>C</b>。5 的倍数有 5、10、15、20 共 4 张，\(P=\dfrac4{20}=\dfrac15\)。A 是以为「只有 5 一张」；B 写的是张数，不是概率（概率不超过 1）；D 是把个数数成了 5 个（多算了 25，可 25 不在卡片里）。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjIuIOS4i+WIl+S6i+S7tuS4re+8jOWTquS4quaYrzxiPuW/heeEtuS6i+S7tjwvYj7vvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5Lu75oSP55S75LiA5Liq5LiJ6KeS5b2i77yM5a6D55qE5YaF6KeS5ZKM5pivIFxcKDE4MF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5Lmw5LiA5byg55S15b2x56Wo77yM5bqn5L2N5Y+35piv5YG25pWwPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS7u+aEj+aKm+S4gOaemuehrOW4ge+8jOato+mdouacneS4ijwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7mn5DkurrnmoTouqvpq5jovr7liLAgXFwoM1xcKSDnsbM8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILkuInop5LlvaLlhoXop5LlkozmgLvmmK8gXFwoMTgwXlxcY2lyY1xcKeOAgkLjgIFDIOaYr+maj+acuuS6i+S7tu+8m0Qg5piv5LiN5Y+v6IO95LqL5Lu244CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>2. 下列事件中，哪个是<b>必然事件</b>？</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>任意画一个三角形，它的内角和是 \(180^\circ\)</button><button class="opt" data-v="B"><b>B</b>买一张电影票，座位号是偶数</button><button class="opt" data-v="C"><b>C</b>任意抛一枚硬币，正面朝上</button><button class="opt" data-v="D"><b>D</b>某人的身高达到 \(3\) 米</button></div>
+    <div class="reveal"><p><b>A</b>。三角形内角和总是 \(180^\circ\)。B、C 是随机事件；D 是不可能事件。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjMuIOi9rOebmOWIhuaIkOe6ouOAgem7hOOAgeiTneS4ieWdl+aJh+W9ou+8jOWchuW/g+inkuS+neasoeaYryBcXCgxNTBeXFxjaXJjXFwp44CBXFwoOTBeXFxjaXJjXFwp44CBXFwoMTIwXlxcY2lyY1xcKeOAguaMh+mSiOiQveWcqOm7hOiJsuWMuuWfn+eahOamgueOh+aYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5LiJ5Z2X5LiN5LiA5qC35aSn44CC5q+P5Z2X5Y2g5pW05Liq5ZyG55qE5Yeg5YiG5LmL5Yeg77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcZGZyYWMxM1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXGRmcmFjNXsxMn1cXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoOTBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoXFxkZnJhYzE0XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkQ8L2I+44CCXFwoXFxkZnJhY3s5MF5cXGNpcmN9ezM2MF5cXGNpcmN9PVxcZGZyYWMxNFxcKeOAgkEg5piv5oqK5LiJ5Z2X5b2T5oiQ562J5Y+v6IO977yI57+76L2m546w5Zy6IOKRoO+8ie+8m0Ig5piv57qi6Imy55qE5qaC546HIFxcKFxcZGZyYWN7MTUwfXszNjB9XFwp77yM55yL6ZSZ5LqG6aKc6Imy77ybQyDmmK/lnIblv4Pop5LnmoTluqbmlbDvvIzkuI3mmK/mpoLnjofjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>3. 转盘分成红、黄、蓝三块扇形，圆心角依次是 \(150^\circ\)、\(90^\circ\)、\(120^\circ\)。指针落在黄色区域的概率是多少？</p>
+    <details class="more"><summary>提示</summary><p>三块不一样大。每块占整个圆的几分之几？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\dfrac13\)</button><button class="opt" data-v="B"><b>B</b>\(\dfrac5{12}\)</button><button class="opt" data-v="C"><b>C</b>\(90\)</button><button class="opt" data-v="D"><b>D</b>\(\dfrac14\)</button></div>
+    <div class="reveal"><p><b>D</b>。\(\dfrac{90^\circ}{360^\circ}=\dfrac14\)。A 是把三块当成等可能（翻车现场 ①）；B 是红色的概率 \(\dfrac{150}{360}\)，看错了颜色；C 是圆心角的度数，不是概率。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjQuIOWwj+mbquaKm+S4gOaemuWdh+WMgOeahOehrOW4ge+8jOWJjSA0IOasoemDveaYr+ato+mdouacneS4iuOAguWlueaKm+esrCA1IOasoeaXtu+8jOato+mdouacneS4iueahOamgueOh+aYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+56Gs5biB44CM6K6w5b6X44CN5YmN6Z2iIDQg5qyh5ZCX77yf56ysIDUg5qyh55qE562J5Y+v6IO957uT5p6c5pyJ5Yeg56eN77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcZGZyYWMxNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXGRmcmFjMTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5aSn5LqOIFxcKFxcZGZyYWMxMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7lsI/kuo4gXFwoXFxkZnJhYzEyXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC56ysIDUg5qyh5LuN5piv44CM5q2j44CB5Y+N44CN5Lik56eN562J5Y+v6IO957uT5p6c77yM5LiO5YmN6Z2i5peg5YWz44CCQSDmmK/miorjgIw1IOasoeS4reeahCAxIOasoeOAjeW9k+aIkOS6huamgueOh++8m0Mg5piv5Lul5Li644CM5omL5rCU5q2j5pe644CN77ybRCDmmK/ku6XkuLrjgIzor6Xova7liLDlj43pnaLkuobjgI3vvIjnv7vovabnjrDlnLog4pGh77yJ44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>4. 小雪抛一枚均匀的硬币，前 4 次都是正面朝上。她抛第 5 次时，正面朝上的概率是多少？</p>
+    <details class="more"><summary>提示</summary><p>硬币「记得」前面 4 次吗？第 5 次的等可能结果有几种？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\dfrac15\)</button><button class="opt" data-v="B"><b>B</b>\(\dfrac12\)</button><button class="opt" data-v="C"><b>C</b>大于 \(\dfrac12\)</button><button class="opt" data-v="D"><b>D</b>小于 \(\dfrac12\)</button></div>
+    <div class="reveal"><p><b>B</b>。第 5 次仍是「正、反」两种等可能结果，与前面无关。A 是把「5 次中的 1 次」当成了概率；C 是以为「手气正旺」；D 是以为「该轮到反面了」（翻车现场 ②）。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjUuIOiii+S4reacieiLpeW5suS4que6oueQg+WSjCA0IOS4queZveeQg++8jOWug+S7rOmZpOminOiJsuWklumDveebuOWQjOOAguaQheWMgOWQjuaRuOS4gOS4qu+8jOaRuOWIsOe6oueQg+eahOamgueOh+aYryBcXChcXGRmcmFjMjNcXCnjgILooovkuK3mnInlh6DkuKrnuqLnkIPvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuaRuOWIsOeZveeQg+eahOamgueOh+aYryBcXCgxLVxcZGZyYWMyMz1cXGRmcmFjMTNcXCnvvIw0IOS4queZveeQg+WNoOaAu+aVsOeahCBcXChcXGRmcmFjMTNcXCnvvIzmgLvmlbDmmK/lpJrlsJHvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoMTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg4XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDZcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgILnmb3nkIPljaAgXFwoXFxkZnJhYzEzXFwp77yM5oC75pWwIFxcKDRcXGRpdlxcZGZyYWMxMz0xMlxcKe+8jOe6oueQgyBcXCgxMi00PThcXCnvvJvmo4DpqowgXFwoXFxkZnJhYzh7MTJ9PVxcZGZyYWMyM1xcKSDinJPjgIJBIOaYr+aAu+aVsO+8jOW/mOS6huWHj+WOu+eZveeQg++8m0Ig5piv5Lul5Li644CMXFwoXFxkZnJhYzIzXFwpIOWwseaYryAyIOS4que6oueQg+OAje+8m0Qg5piv5oqKIFxcKFxcZGZyYWMyM1xcKSDlvZPmiJDjgIznmb3nkIMgOiDnuqLnkIMgXFwoPTI6M1xcKeOAje+8jOW+lyBcXCg0XFxkaXYyXFx0aW1lczM9NlxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>5. 袋中有若干个红球和 4 个白球，它们除颜色外都相同。搅匀后摸一个，摸到红球的概率是 \(\dfrac23\)。袋中有几个红球？</p>
+    <details class="more"><summary>提示</summary><p>摸到白球的概率是 \(1-\dfrac23=\dfrac13\)，4 个白球占总数的 \(\dfrac13\)，总数是多少？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(12\)</button><button class="opt" data-v="B"><b>B</b>\(2\)</button><button class="opt" data-v="C"><b>C</b>\(8\)</button><button class="opt" data-v="D"><b>D</b>\(6\)</button></div>
+    <div class="reveal"><p><b>C</b>。白球占 \(\dfrac13\)，总数 \(4\div\dfrac13=12\)，红球 \(12-4=8\)；检验 \(\dfrac8{12}=\dfrac23\) ✓。A 是总数，忘了减去白球；B 是以为「\(\dfrac23\) 就是 2 个红球」；D 是把 \(\dfrac23\) 当成「白球 : 红球 \(=2:3\)」，得 \(4\div2\times3=6\)。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjYuIOeUqOS4gOS4qiAxMiDnrYnliIbnmoTovaznm5jorr7orqHmuLjmiI/vvJrmjIfpkojokL3lnKjnuqLoibLljLrln5/nmoTmpoLnjofmmK8gXFwoXFxkZnJhYzEzXFwp77yM6JC95Zyo6buE6Imy5Yy65Z+f55qE5qaC546H5piv6JC95Zyo57qi6Imy5Yy65Z+f55qE5LiA5Y2K77yM5YW25L2Z5qC85a2Q5raC6JOd6Imy44CC6JOd6Imy5pyJ5Yeg5qC877yfPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAx77ya57qi6Imy5Yeg5qC8PC9zdW1tYXJ5PjxwPjEyIOagvOetieWPr+iDve+8jOamgueOhyBcXChcXGRmcmFjMTNcXCkg5a+55bqUIFxcKDEyXFx0aW1lc1xcZGZyYWMxMz00XFwpIOagvOOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDLvvJrpu4ToibLlh6DmoLw8L3N1bW1hcnk+PHA+6buE6Imy55qE5qaC546H5pivIFxcKFxcZGZyYWMxM1xcKSDnmoTkuIDljYrvvIzljbMgXFwoXFxkZnJhYzE2XFwp77yM5a+55bqU5Yeg5qC877yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDRcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg4XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDZcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+RDwvYj7jgILnuqIgNCDmoLzvvIzpu4QgXFwoMTJcXHRpbWVzXFxkZnJhYzE2PTJcXCkg5qC877yM6JOdIFxcKDEyLTQtMj02XFwpIOagvO+8jFxcKFAoXFx0ZXh0e+iTnX0pPVxcZGZyYWM2ezEyfT1cXGRmcmFjMTJcXCnjgIJBIOaYr+e6ouiJsueahOagvOaVsO+8m0Ig5piv6buE6Imy55qE5qC85pWw77ybQyDmmK/lj6rlh4/kuobnuqLoibIgXFwoMTItNFxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>6. 用一个 12 等分的转盘设计游戏：指针落在红色区域的概率是 \(\dfrac13\)，落在黄色区域的概率是落在红色区域的一半，其余格子涂蓝色。蓝色有几格？</p>
+    <details class="more"><summary>提示 1：红色几格</summary><p>12 格等可能，概率 \(\dfrac13\) 对应 \(12\times\dfrac13=4\) 格。</p></details>
+    <details class="more"><summary>提示 2：黄色几格</summary><p>黄色的概率是 \(\dfrac13\) 的一半，即 \(\dfrac16\)，对应几格？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(4\)</button><button class="opt" data-v="B"><b>B</b>\(2\)</button><button class="opt" data-v="C"><b>C</b>\(8\)</button><button class="opt" data-v="D"><b>D</b>\(6\)</button></div>
+    <div class="reveal"><p><b>D</b>。红 4 格，黄 \(12\times\dfrac16=2\) 格，蓝 \(12-4-2=6\) 格，\(P(\text{蓝})=\dfrac6{12}=\dfrac12\)。A 是红色的格数；B 是黄色的格数；C 是只减了红色 \(12-4\)。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">这一节按旧版目录占位；核不到原卷的题不放，真题待在有原卷库的机器上补。</p>
+  <div id="practice"></div>
+</section>
+
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  // 约分后的分数文字：0、1 直接写整数
+  function fr(m, n) { if (m === 0) return "0"; if (m === n) return "1"; var g = gcd(m, n); return (m / g) + "/" + (n / g); }
+  function kind(m, n) { return m === 0 ? "不可能事件" : m === n ? "必然事件" : "随机事件"; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function nums(s) { return s.split(",").map(Number); }
+  // 滑轨：x0..x1 对应 lo..hi 的整数；拖动 + 方向键
+  function slider(svg, x0, x1, y, lo, hi, val, col, label, cb) {
+    var c = C(), u = (x1 - x0) / (hi - lo);
+    el("line", { x1: x0, y1: y, x2: x1, y2: y, stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, svg);
+    var h = el("circle", { cx: x0 + (val - lo) * u, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": String(val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + 1, ArrowUp: val + 1, ArrowLeft: val - 1, ArrowDown: val - 1, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(clamp(nv, lo, hi), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        var nv = clamp(Math.round(lo + (pt.matrixTransform(m.inverse()).x - x0) / u), lo, hi);
+        if (nv !== val) cb(nv, false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+  // 扇形：圆心 (cx, cy)，半径 r，从 a0 到 a1（度，0 指正上方，顺时针）
+  function pt(cx, cy, r, deg) { var t = (deg - 90) * Math.PI / 180; return [cx + r * Math.cos(t), cy + r * Math.sin(t)]; }
+  function wedge(p, cx, cy, r, a0, a1, fill, stroke, extra) {
+    var e;
+    if (a1 - a0 >= 360) e = el("circle", { cx: cx, cy: cy, r: r, fill: fill, stroke: stroke, "stroke-width": 2 }, p);
+    else {
+      var s = pt(cx, cy, r, a0), t = pt(cx, cy, r, a1);
+      e = el("path", { d: "M" + cx + " " + cy + " L" + s[0].toFixed(2) + " " + s[1].toFixed(2) + " A" + r + " " + r + " 0 " + (a1 - a0 > 180 ? 1 : 0) + " 1 " + t[0].toFixed(2) + " " + t[1].toFixed(2) + " Z", fill: fill, stroke: stroke, "stroke-width": 2 }, p);
+    }
+    for (var k in extra || {}) e.setAttribute(k, extra[k]);
+    return e;
+  }
+  function pointer(p, cx, cy, col) { el("path", { d: "M" + (cx - 9) + " " + (cy - 128) + " h18 l-9 22 z", fill: col }, p); }
+  function tri(p, x, y, col) { el("path", { d: "M" + x + " " + y + " l-9 -15 h18 z", fill: col }, p); }
+
+  /* 从例子进入：抽卡片 */
+  var box = [1, 1, 1, 1, 1], BOXN = { "1,1,1,1,1": "盒子甲", "1,2,1,2,1": "盒子乙", "2,2,2,2,2": "盒子丙" };
+  function drawEntry() {
+    var p = document.getElementById("entry-fig"), c = C(); p.innerHTML = "";
+    box.forEach(function (v, i) {
+      var x = 40 + i * 92;
+      el("rect", { x: x, y: 30, width: 72, height: 100, rx: 10, fill: v === 1 ? c.a : c.card, stroke: v === 1 ? c.a : c.muted, "stroke-width": 2.5 }, p);
+      txt(p, x + 36, 95, String(v), v === 1 ? c.card : c.fg, 700, 44);
+    });
+    var m = box.filter(function (v) { return v === 1; }).length;
+    document.getElementById("entry-note").textContent = BOXN[box.join(",")] + "：5 张里有 " + m + " 张写着 1。" + (m === 5 ? "不管抽哪张都是 1，「抽到 1」一定发生。" : m === 0 ? "一张 1 都没有，「抽到 1」一定不发生。" : "可能抽到 1，也可能抽到 2，说不准；写着 1 的有 " + m + " 张、写着 2 的有 " + (5 - m) + " 张，抽到 1 的可能性更大。");
+  }
+  bar("entry-bar", function (t) { box = nums(t.getAttribute("data-box")); drawEntry(); });
+
+  /* 微图解 ①：骰子事件 */
+  var EV = { le6: [function (k) { return k <= 6; }, "点数 ≤ 6"], eq7: [function (k) { return k === 7; }, "点数是 7"], even: [function (k) { return k % 2 === 0; }, "点数是偶数"], gt4: [function (k) { return k > 4; }, "点数大于 4"] }, ev = "le6";
+  function drawM1() {
+    var p = document.getElementById("m1-fig"), c = C(), m = 0; p.innerHTML = "";
+    for (var k = 1; k <= 6; k++) {
+      var on = EV[ev][0](k), x = 22 + (k - 1) * 58; if (on) m++;
+      el("rect", { x: x, y: 24, width: 48, height: 48, rx: 8, fill: on ? c.a : c.card, stroke: on ? c.a : c.muted, "stroke-width": 2.5 }, p);
+      txt(p, x + 24, 57, String(k), on ? c.card : c.fg, 700, 24);
+    }
+    txt(p, 190, 110, "符合 " + m + " 种", m ? c.a : c.no, 700, 18);
+    document.getElementById("m1-note").textContent = "「" + EV[ev][1] + "」：6 种点数里有 " + m + " 种符合。" + (m === 6 ? "每一种都符合，一定发生 → 必然事件。" : m === 0 ? "一种都不符合，一定不发生 → 不可能事件（不是「很难」）。" : "有的符合、有的不符合，掷之前说不准 → 随机事件。");
+  }
+  bar("m1-bar", function (t) { ev = t.getAttribute("data-ev"); drawM1(); });
+
+  /* 微图解 ②：红白球 */
+  var rw = [3, 1];
+  function drawM2() {
+    var p = document.getElementById("m2-fig"), c = C(), n = rw[0] + rw[1], x0 = 190 - (n * 44 - 8) / 2; p.innerHTML = "";
+    for (var i = 0; i < n; i++) el("circle", { cx: x0 + i * 44 + 18, cy: 50, r: 18, fill: i < rw[0] ? c.no : c.card, stroke: i < rw[0] ? c.no : c.fg, "stroke-width": 2 }, p);
+    txt(p, 120, 104, "红 " + rw[0] + " 个", c.no, 700, 18);
+    txt(p, 260, 104, "白 " + rw[1] + " 个", c.fg, 700, 18);
+    var cmp = rw[0] > rw[1] ? "红球多，摸到红球的可能性比摸到白球大。" : rw[0] === rw[1] ? "一样多，摸到红球和白球的可能性一样大。" : "白球多，摸到红球的可能性比摸到白球小。";
+    document.getElementById("m2-note").textContent = "共 " + n + " 个球，每个被摸到的可能性相同。红 " + rw[0] + " 个、白 " + rw[1] + " 个：" + cmp + "两个都是随机事件。";
+  }
+  bar("m2-bar", function (t) { rw = nums(t.getAttribute("data-rw")); drawM2(); });
+
+  /* 微图解 ③ 与翻车现场 ①：转盘 */
+  var m3s = 0;
+  function drawPie(p, cx, cy, r, s) {
+    var c = C();
+    if (s === 0) for (var i = 0; i < 8; i++) wedge(p, cx, cy, r, i * 45, i * 45 + 45, i < 3 ? c.no : c.card, c.fg);
+    else {
+      wedge(p, cx, cy, r, 0, 90, c.no, c.fg); wedge(p, cx, cy, r, 90, 360, c.card, c.fg);
+      if (s === 2) [180, 270].forEach(function (d) { var q = pt(cx, cy, r, d); el("line", { x1: cx, y1: cy, x2: q[0], y2: q[1], stroke: c.fg, "stroke-width": 2, "stroke-dasharray": "6 5" }, p); });
+    }
+    pointer(p, cx, cy + (128 - r - 6), c.fg);
+  }
+  function drawM3() {
+    var p = document.getElementById("m3-fig"), c = C(); p.innerHTML = "";
+    drawPie(p, 110, 90, 70, m3s);
+    var lab = m3s === 0 ? ["8 格等可能", "红 3 格", "概率 3/8"] : m3s === 1 ? ["只有两块", "不一样大", "不是 1/2"] : ["4 份等可能", "红占 1 份", "概率 1/4"];
+    lab.forEach(function (s, i) { txt(p, 280, 50 + i * 40, s, i === 2 ? (m3s === 1 ? c.no : c.a) : c.fg, i === 2 ? 700 : 400, 18); });
+    document.getElementById("m3-note").textContent = m3s === 0 ? "8 格一样大，指针落在每一格的可能性相等，n = 8；红色占 3 格，m = 3，P(红) = 3/8。" : m3s === 1 ? "只看颜色是「红、白」两种结果，但红色只占四分之一圆，两种结果不等可能，不能用 1/2。" : "沿虚线把转盘等分成 4 份，每份等可能，红色正好占 1 份：P(红) = 1/4。";
+  }
+  bar("m3-bar", function (t) { m3s = +t.getAttribute("data-s"); drawM3(); });
+  function drawTrap() {
+    var p = document.getElementById("m-trap"), c = C(); p.innerHTML = "";
+    drawPie(p, 150, 95, 72, 2);
+    txt(p, 150, 188, "红：1/4", c.no, 700, 18);
+  }
+
+  /* 动手 ①：8 等分转盘 */
+  var R0 = 3, R = R0, focusR = false, fs = document.getElementById("fig-spin");
+  function drawSpin() {
+    var c = C(); fs.innerHTML = ""; fs.setAttribute("data-n", "8"); fs.setAttribute("data-r", String(R));
+    for (var i = 0; i < 8; i++) wedge(fs, 150, 150, 110, i * 45, i * 45 + 45, i < R ? c.no : c.card, c.fg, { "data-sector": String(i), "data-hit": i < R ? "1" : "0" });
+    pointer(fs, 150, 150 + (128 - 116), c.fg);
+    txt(fs, 310, 80, "共 8 格", c.fg, 400, 20, "start");
+    txt(fs, 310, 125, "红 " + R + " 格", c.no, 700, 20, "start");
+    txt(fs, 310, 170, "概率 " + fr(R, 8), c.no, 700, 22, "start");
+    txt(fs, 310, 240, "红格数", c.fg, 400, 19, "start");
+    var h = slider(fs, 310, 530, 285, 0, 8, R, c.no, "红格数", function (v, key) { R = v; focusR = key; drawSpin(); });
+    var why = R === 0 ? "一格红色都没有，指针不可能落在红色：P = 0，是不可能事件。" : R === 8 ? "8 格全是红色，指针一定落在红色：P = 1，是必然事件。" : "8 格一样大，每格等可能；红色占 " + R + " 格，所以可能落在红色、也可能不落，是随机事件。" + (R === 4 ? "红、白各 4 格，可能性一样大。" : R > 4 ? "红格多于一半，落在红色的可能性大于不落在红色。" : "红格少于一半，落在红色的可能性小于不落在红色。");
+    document.getElementById("out-spin").innerHTML = "n = 8，m = " + R + "：P(红) = " + R + "/8 = <span class=\"sum\">" + fr(R, 8) + "</span>，" + kind(R, 8) + "。" + why;
+    if (focusR) h.focus();
+  }
+  document.getElementById("reset-spin").onclick = function () { R = R0; focusR = false; drawSpin(); };
+
+  /* 动手 ②：摸球袋 */
+  var B0 = [2, 3], B = B0.slice(), focusB = -1, fb = document.getElementById("fig-bag");
+  function drawBag() {
+    var c = C(), n = B[0] + B[1], hs = []; fb.innerHTML = ""; fb.setAttribute("data-red", String(B[0])); fb.setAttribute("data-white", String(B[1]));
+    el("rect", { x: 20, y: 20, width: 260, height: 150, rx: 24, fill: "none", stroke: c.muted, "stroke-width": 2.5 }, fb);
+    for (var i = 0; i < n; i++) el("circle", { cx: 52 + (i % 6) * 39, cy: 62 + Math.floor(i / 6) * 50, r: 16, fill: i < B[0] ? c.no : c.card, stroke: i < B[0] ? c.no : c.fg, "stroke-width": 2, "data-ball": i < B[0] ? "red" : "white" }, fb);
+    [["红球", 0, c.no, 60], ["白球", 1, c.c, 130]].forEach(function (g) {
+      txt(fb, 300, g[3] + 7, g[0], g[2], 700, 19, "start");
+      txt(fb, 548, g[3] - 18, B[g[1]] + " 个", g[2], 700, 19, "end");
+      hs.push(slider(fb, 370, 530, g[3], 0, 6, B[g[1]], g[2], g[0] + "个数", function (v, key) { B[g[1]] = v; focusB = key ? g[1] : -1; drawBag(); }));
+    });
+    var x0 = 40, x1 = 520, y = 260;
+    el("line", { x1: x0, y1: y, x2: x1, y2: y, stroke: c.fg, "stroke-width": 2 }, fb);
+    [0, 0.5, 1].forEach(function (v) { var x = x0 + v * (x1 - x0); el("line", { x1: x, y1: y - 6, x2: x, y2: y + 6, stroke: c.fg, "stroke-width": 2 }, fb); txt(fb, x, y + 36, String(v), c.fg, 400, 19); });
+    var o = document.getElementById("out-bag");
+    if (!n) o.innerHTML = "袋子里一个球都没有，「摸一个球」这个试验做不成，谈不上概率（n = 0，不能作分母）。至少放进一个球。";
+    else {
+      var pr = B[0] / n;
+      tri(fb, x0 + pr * (x1 - x0), y - 8, c.no);
+      tri(fb, x0 + (1 - pr) * (x1 - x0), y - 8, c.c);
+      var cmp = B[0] > B[1] ? "红球多，摸到红球的可能性更大" : B[0] === B[1] ? "红白一样多，可能性一样大" : "白球多，摸到白球的可能性更大";
+      o.innerHTML = "共 " + n + " 个球，每个等可能。P(红) = " + B[0] + "/" + n + " = <span class=\"sum\">" + fr(B[0], n) + "</span>（" + kind(B[0], n) + "），P(白) = " + B[1] + "/" + n + " = " + fr(B[1], n) + "（" + kind(B[1], n) + "）。" + cmp + "；两个概率加起来是 1，因为摸到的球不是红就是白。";
+    }
+    if (focusB >= 0) hs[focusB].focus();
+  }
+  document.getElementById("reset-bag").onclick = function () { B = B0.slice(); focusB = -1; drawBag(); };
+
+  /* 动手 ③：不等分转盘 */
+  var A0 = 135, A = A0, focusA = false, fa = document.getElementById("fig-angle");
+  function drawAngle() {
+    var c = C(), cx = 150, cy = 165, r = 120; fa.innerHTML = ""; fa.setAttribute("data-deg", String(A));
+    if (A > 0) wedge(fa, cx, cy, r, 0, A, c.no, c.fg, { "data-region": "red" });
+    if (A < 360) wedge(fa, cx, cy, r, A, 360, c.card, c.fg, { "data-region": "other" });
+    for (var d = 0; d < 360; d += 15) { var q = pt(cx, cy, r, d); el("line", { x1: cx, y1: cy, x2: q[0].toFixed(2), y2: q[1].toFixed(2), stroke: c.muted, "stroke-width": 1, "stroke-dasharray": "3 4" }, fa); }
+    var k = A / 15;
+    txt(fa, 310, 80, "圆心角 " + A + "°", c.no, 700, 20, "start");
+    txt(fa, 310, 125, "红 " + k + " 份", c.no, 700, 20, "start");
+    txt(fa, 310, 170, "共 24 份", c.fg, 400, 20, "start");
+    txt(fa, 310, 215, "概率 " + fr(k, 24), c.no, 700, 22, "start");
+    var hp = pt(cx, cy, r, A);
+    var h = el("circle", { cx: hp[0], cy: hp[1], r: 12, fill: c.card, stroke: c.no, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": "红色圆心角",
+      "aria-valuemin": 0, "aria-valuemax": 360, "aria-valuenow": A, "aria-valuetext": A + "°", style: "cursor:grab;touch-action:none" }, fa);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: A + 15, ArrowUp: A + 15, ArrowLeft: A - 15, ArrowDown: A - 15, Home: 0, End: 360 }[e.key];
+      if (nv === undefined) return; e.preventDefault(); A = clamp(nv, 0, 360); focusA = true; drawAngle();
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = fa.getScreenCTM(); if (!m) return;
+        var p0 = fa.createSVGPoint(); p0.x = ev.clientX; p0.y = ev.clientY; var q = p0.matrixTransform(m.inverse());
+        var deg = (Math.atan2(q.y - cy, q.x - cx) * 180 / Math.PI + 90 + 360) % 360, nv = Math.round(deg / 15) * 15;
+        if (nv === 0 && A > 180) nv = 360;
+        if (Math.abs(nv - A) > 180) return;
+        if (nv !== A) { A = nv; focusA = false; drawAngle(); }
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: "fig-angle", choice: String(A) }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    var why = A === 0 ? "没有红色：P = 0，不可能事件。" : A === 360 ? "整个转盘都是红色：P = 1，必然事件。" : "只看颜色是「红、白」两种结果，但两块" + (A === 180 ? "正好一样大，这时才是 1/2。" : "不一样大，不能说 1/2；要按等分的 24 份来数。");
+    document.getElementById("out-angle").innerHTML = "红色 " + A + "° = " + k + " 份（每份 15°），共 24 份：P(红) = " + k + "/24 = <span class=\"sum\">" + fr(k, 24) + "</span>，也就是 " + A + "° ÷ 360°。" + why;
+    if (focusA) h.focus();
+  }
+  document.getElementById("reset-angle").onclick = function () { A = A0; focusA = false; drawAngle(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawTrap(); drawSpin(); drawBag(); drawAngle(); }
+  drawAll();
+  new MutationObserver(function () { focusR = focusA = false; focusB = -1; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

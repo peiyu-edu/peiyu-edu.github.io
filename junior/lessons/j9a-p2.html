@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>综合与实践 生活中的优化问题 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
+  .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-sec="j9a-p2" data-stage="junior" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">九年级上册 · 第三十章 直线与圆的位置关系 · 综合与实践</p>
+<h1>综合与实践 生活中的优化问题</h1>
+<p class="lead">大自然与现代物流的数学优化密码！从蜜蜂为什么要将蜂房建造成正六边形，到快递集散点物流箱周转与材料最省方案，综合运用二次函数极值、等周定理与正多边形密铺，探究周长一定时面积最大、容积一定时耗材最省的黄金法则。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：26.4 实际问题与二次函数 · 30.1 直线与圆 · 30.2 内切圆 · 30.3 正多边形与圆 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：二次函数最值（<a href="j26-4.html">回看 26.4</a>）、正多边形边心距与面积公式（<a href="j30-3.html">回看 30.3</a>）。</p>
+  <ol class="small">
+    <li>从蜂房六边形与快递物流箱切入：为什么工业设计与生物演化都偏爱特定几何形态？</li>
+    <li>探究一：平面密铺的数学条件——拼接处各角之和必须为 \(360^\circ\)（唯正三、正四、正六能单种密铺）；</li>
+    <li>探究二：容纳等大蜜蜂时材料最省模型——内切圆半径相等时，正六边形周长最短、耗蜂蜡最省；</li>
+    <li>探究三：耗材相同时空间最大模型——周长相等时，正六边形截面面积最大、活动空间最大；</li>
+    <li>探究四：仓储快递箱的长宽优化——周长固定时矩形底面积的二次函数极值（正方形最优）；</li>
+    <li>动手交互实验：蜂房密铺与周长极值台、进阶等周定理面积逼近台（含重置按钮）；</li>
+    <li>中考真题演练，吃透密铺与生活优化建模。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <div class="card predict" data-id="entry" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTAwIDIyMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5b+r6YCS566x5bqV6Z2i6ZW/5a695LyY5YyW56S65oSP5Zu+XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuW/q+mAkueusemVv+WuveavlOS+i+WIh+aNolwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS13PVwiMTBcIj7nu4bplb/lnosgKOmVvyA3MCwg5a69IDEwLCDpnaLnp68gNzAwKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS13PVwiMzBcIj7ljIDnp7DlnosgKOmVvyA1MCwg5a69IDMwLCDpnaLnp68gMTUwMCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGNsYXNzPVwib25cIiBkYXRhLXc9XCI0MFwiPuato+aWueW9oiAo6ZW/IDQwLCDlrr0gNDAsIOmdouenryAxNjAwKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxwIGNsYXNzPVwiZW50cnktbm90ZVwiIGlkPVwiZW50cnktbm90ZVwiIGFyaWEtbGl2ZT1cInBvbGl0ZVwiPjwvcD5cbiAgICA8cD7mn5Dku5PlgqjnianmtYHkuK3lv4PorqLliLbkuIDmibnmoIflh4bljJblv6vpgJLlkajovaznrrHvvIzkuLrmlrnkvr/lnKjkvKDpgIHluKbkuIrovpPpgIHvvIznrrHlrZDlupXpnaLlkajplb/kuKXmoLzpmZDlrprkuLogXFwoMTYwXFx0ZXh0eyBjbX1cXCnjgILorr7lupXpnaLlrr3kuLogXFwoeFxcdGV4dHsgY219XFwp77yM6ZW/5Li6IFxcKCg4MCAtIHgpXFx0ZXh0eyBjbX1cXCnvvIzkuLrkuobkvb/nrrHlupXlrrnnurPotKfniannmoTlupXpnaLnp6/mnIDlpKfvvIzplb/lkozlrr3lupTorr7orqHkuLrvvIgg77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+6ZW/IDYwIGNt77yM5a69IDIwIGNtPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPumVvyA1MCBjbe+8jOWuvSAzMCBjbTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj7plb8gNDAgY23vvIzlrr0gNDAgY208L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+6ZW/IDQ1IGNt77yM5a69IDM1IGNtPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QzwvYj7jgILlu7rnq4vkuozmrKHlh73mlbDpnaLnp6/mqKHlnovvvJpcXChTID0geCg4MCAtIHgpID0gLXheMiArIDgweCA9IC0oeCAtIDQwKV4yICsgMTYwMFxcKeOAgjwvcD5cbiAgICAgIDxwPuWboOS4uuS6jOasoemhueezu+aVsCBcXCgtMSBcXGx0IDBcXCnvvIzmipvniannur/lvIDlj6PlkJHkuIvvvIzlvZMgXFwoeCA9IDQwXFx0ZXh0eyBjbX1cXCkg5pe277yM5Y+W5b6X5pyA5aSn5YC8IFxcKDE2MDBcXHRleHR7IGNtfV4yXFwp77yB5q2k5pe26ZW/5LiO5a695Z2H5Li6IFxcKDQwXFx0ZXh0eyBjbX1cXCnvvIzlupXpnaLlkYjlroznvo7mraPmlrnlvaLjgILlnKjlkajplb/kuIDlrprml7bvvIzplb/mlrnlvaLnmoTplb/kuI7lrr3otormjqXov5HvvIzpnaLnp6/otorlpKfvvJvlvZPplb/lrr3nm7jnrYnvvIjmraPmlrnlvaLvvInml7bpnaLnp6/ovr7liLDmnIDpq5jls7DjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 500 220" role="img" aria-label="快递箱底面长宽优化示意图"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="快递箱长宽比例切换">
+      <button type="button" data-w="10">细长型 (长 70, 宽 10, 面积 700)</button>
+      <button type="button" data-w="30">匀称型 (长 50, 宽 30, 面积 1500)</button>
+      <button type="button" class="on" data-w="40">正方形 (长 40, 宽 40, 面积 1600)</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>某仓储物流中心订制一批标准化快递周转箱，为方便在传送带上输送，箱子底面周长严格限定为 \(160\text{ cm}\)。设底面宽为 \(x\text{ cm}\)，长为 \((80 - x)\text{ cm}\)，为了使箱底容纳货物的底面积最大，长和宽应设计为（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">长 60 cm，宽 20 cm</button>
+      <button class="opt" data-v="B">长 50 cm，宽 30 cm</button>
+      <button class="opt" data-v="C">长 40 cm，宽 40 cm</button>
+      <button class="opt" data-v="D">长 45 cm，宽 35 cm</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。建立二次函数面积模型：\(S = x(80 - x) = -x^2 + 80x = -(x - 40)^2 + 1600\)。</p>
+      <p>因为二次项系数 \(-1 \lt 0\)，抛物线开口向下，当 \(x = 40\text{ cm}\) 时，取得最大值 \(1600\text{ cm}^2\)！此时长与宽均为 \(40\text{ cm}\)，底面呈完美正方形。在周长一定时，长方形的长与宽越接近，面积越大；当长宽相等（正方形）时面积达到最高峰。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <p class="intro">
+    在现实生活与现代工程中，我们经常遇到这样的决策抉择：如何用最少的钢材制造容量最大的储油罐？
+    如何用最少的包装材料打包最多的货物？小小的蜜蜂为什么在亿万年演化中选择了正六边形的蜂巢，而不是正三角形或正方形？
+    这背后蕴藏着数学中极其美妙的分支——<b>优化与极值理论</b>。
+  </p>
+
+  <h3>1. 先认识几个词：优化问题、平面密铺与等周定理</h3>
+  <p>在开展探究前，我们先建立统一的数学语言：</p>
+  <ul>
+    <li><b>优化问题（optimization problem）</b>：在给定资源与边界约束下，寻求某种关键指标（如成本最低、用料最省、容积最大）达到最优值的数学建模过程。</li>
+    <li><b>平面密铺（tessellation）</b>：用大小、形状完全相同的平面图形彼此无缝隙、无重叠地铺满整个平面的几何排列方式。</li>
+    <li><b>等周定理（isoperimetric theorem）</b>：在周长固定的所有平面图形中，圆的面积最大；在周长相同的正多边形中，边数越多面积越大。</li>
+  </ul>
+
+  <div class="micro-box">
+    <b>探究法则 1：平面单种正多边形密铺的数学条件</b>
+    <p>在一个拼接公共顶点处，各内角之和必须恰好拼满一个周角：
+      \[k \times \alpha = 360^\circ \iff \alpha \text{ 能整除 } 360^\circ\]
+      在所有正多边形中，只有 3 种能够独立完成密铺：
+      <ol style="margin:4px 0 0;padding-left:20px;">
+        <li>正三角形（内角 \(60^\circ\)，\(360/60 = 6\) 个共点）；</li>
+        <li>正方形（内角 \(90^\circ\)，\(360/90 = 4\) 个共点）；</li>
+        <li>正六边形（内角 \(120^\circ\)，\(360/120 = 3\) 个共点）。</li>
+      </ol>
+      正五边形内角 \(108^\circ\)，\(360/108 = 3.33...\)，无法密铺！
+    </p>
+  </div>
+
+  <div class="micro-box">
+    <b>探究结论 2：蜜蜂视角的“材料最省模型”</b>
+    <p>蜜蜂的身体近似为圆柱体。当蜂房刚好容纳一只蜜蜂（内切圆半径均为 \(r = 1\)）时：
+      <ol style="margin:4px 0 0;padding-left:20px;">
+        <li>正三角形周长：\(P = 6\sqrt{3} \approx 10.39\)；</li>
+        <li>正方形周长：\(P = 8\)；</li>
+        <li>正六边形周长：\(P = 4\sqrt{3} \approx 6.93\)。</li>
+      </ol>
+      <b>惊人结论</b>：\(6.93 \lt 8 \lt 10.39\)！建造正六边形蜂房所耗费的珍贵蜂蜡材料<b>最少</b>！
+    </p>
+  </div>
+
+  <div class="micro-box">
+    <b>探究结论 3：蜜蜂视角的“活动空间最大模型”</b>
+    <p>假设蜜蜂消耗相同的蜂蜡材料（即截面周长均为 \(P = 12\)）：
+      <ol style="margin:4px 0 0;padding-left:20px;">
+        <li>正三角形面积：\(S = 4\sqrt{3} \approx 6.93\)；</li>
+        <li>正方形面积：\(S = 9\)；</li>
+        <li>正六边形面积：\(S = 6\sqrt{3} \approx 10.39\)。</li>
+      </ol>
+      <b>惊人结论</b>：\(10.39 \gt 9 \gt 6.93\)！正六边形蜂房给蜜蜂提供了<b>最大的活动空间与储蜜容积</b>！
+    </p>
+  </div>
+
+  <h3>2. 核心数学模型与推演</h3>
+  <p>通过实际情境加深对生活优化模型的理解：</p>
+
+  <div class="card predict" data-id="c1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjxiPuiHquW3seivleivlSAxPC9iPu+8muWmguaenOWPqueUqOS4gOenjeato+Wkmui+ueW9ouWcsOeglumTuua7oeaVtOS4quWcsOmdou+8jOS4i+WIl+ato+Wkmui+ueW9ouS4reaXoOazlemTuua7oeeahOaYr++8iCDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj7mraPkuInop5LlvaI8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+5q2j5pa55b2iPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPuato+S6lOi+ueW9ojwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj7mraPlha3ovrnlvaI8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5DPC9iPuOAguato+S6lOi+ueW9ouavj+S4quWGheinkuaYryBcXCgxMDheXFxjaXJjXFwp44CC5Zug5Li6IFxcKDM2MF5cXGNpcmNcXCkg5LiN6IO96KKrIFxcKDEwOF5cXGNpcmNcXCkg5pW06Zmk77yIXFwoMyBcXHRpbWVzIDEwOF5cXGNpcmMgPSAzMjReXFxjaXJjIFxcbHQgMzYwXlxcY2lyYywgNCBcXHRpbWVzIDEwOF5cXGNpcmMgPSA0MzJeXFxjaXJjIFxcZ3QgMzYwXlxcY2lyY1xcKe+8ie+8jOaLvOaOpeWkhOW/heeEtueVmeS4i+epuumameaIluWPkeeUn+mHjeWPoO+8jOaXoOazleWNleeLrOWvhumTuuOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <p><b>自己试试 1</b>：如果只用一种正多边形地砖铺满整个地面，下列正多边形中无法铺满的是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">正三角形</button>
+      <button class="opt" data-v="B">正方形</button>
+      <button class="opt" data-v="C">正五边形</button>
+      <button class="opt" data-v="D">正六边形</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。正五边形每个内角是 \(108^\circ\)。因为 \(360^\circ\) 不能被 \(108^\circ\) 整除（\(3 \times 108^\circ = 324^\circ \lt 360^\circ, 4 \times 108^\circ = 432^\circ \gt 360^\circ\)），拼接处必然留下空隙或发生重叠，无法单独密铺。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="c2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjxiPuiHquW3seivleivlSAyPC9iPu+8mueUqOmVv+S4uiAyMCDnsbPnmoTnr7HnrIblm7TmiJDkuIDkuKrplb/mlrnlvaLlhbvpuKHlnLrvvIzlm7TmiJDnmoTmnIDlpKfpnaLnp6/mmK/vvIgg77yJ5bmz5pa557GzPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+MjA8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+MjU8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+MzA8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+MTAwPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QjwvYj7jgILlkajplb/kuLogMjDvvIzplb/lrr3kuYvlkozkuLogMTDjgILorr7plb/kuLogXFwoeFxcKe+8jOWuveS4uiBcXCgxMCAtIHhcXCnvvIzpnaLnp68gXFwoUyA9IHgoMTAgLSB4KSA9IC0oeCAtIDUpXjIgKyAyNVxcKeOAguW9k+mVv+WuveWdh+S4uiA1IOexs++8iOato+aWueW9ou+8ieaXtu+8jOmdouenr+WPluW+l+acgOWkp+WAvCAyNSDlubPmlrnnsbPjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <p><b>自己试试 2</b>：用长为 20 米的篱笆围成一个长方形养鸡场，围成的最大面积是（ ）平方米</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">20</button>
+      <button class="opt" data-v="B">25</button>
+      <button class="opt" data-v="C">30</button>
+      <button class="opt" data-v="D">100</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。周长为 20，长宽之和为 10。设长为 \(x\)，宽为 \(10 - x\)，面积 \(S = x(10 - x) = -(x - 5)^2 + 25\)。当长宽均为 5 米（正方形）时，面积取得最大值 25 平方米。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="c3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuiHquW3seivleivlSAzPC9iPu+8muiHquadpeawtOi+k+awtOeuoemBk+WSjOefs+ayuei/kOi+k+euoemBk+eahOaoquaIqumdouWHoOS5juWFqOiuvuiuoeaIkOWchuW9ou+8jOS4u+imgeaVsOWtpuWOn+WboOaYr++8iCDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj7lkajplb/nm7jnrYnml7blnIbpnaLnp6/mnIDlpKfvvIznrqHlo4HogJfmnZDmnIDnnIHkuJTmtYHpgJ/pmLvlipvmnIDlsI88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+5ZyG5b2i566h6YGT5Yi26YCg5pyA566A5Y2VPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPumVv+aWueW9oueuoemBk+aXoOazleWfi+WFpeWcsOS4izwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj7kuInop5LlvaLnrqHpgZPlrrnmmJPlj5jlvaI8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5BPC9iPuOAgueUseetieWRqOWumueQhu+8jOWRqOmVv+S4gOWumuaXtu+8jOWchueahOmdouenr+acgOWkp+OAgui/meaEj+WRs+edgOeUqOebuOWQjOi0qOmHj+eahOmSouadkOWItumAoOeuoemBk++8jOWchuaIqumdouWGhemDqOaoquaIqumdouenr+acgOWkp++8jOS4jeS7heiDvei+k+mAgeacgOWkp+a1gemHj+eahOa1geS9k++8jOiAjOS4lOWPl+WKm+acgOWdh+WMgO+8gTwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <p><b>自己试试 3</b>：自来水输水管道和石油运输管道的横截面几乎全设计成圆形，主要数学原因是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">周长相等时圆面积最大，管壁耗材最省且流速阻力最小</button>
+      <button class="opt" data-v="B">圆形管道制造最简单</button>
+      <button class="opt" data-v="C">长方形管道无法埋入地下</button>
+      <button class="opt" data-v="D">三角形管道容易变形</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。由等周定理，周长一定时，圆的面积最大。这意味着用相同质量的钢材制造管道，圆截面内部横截面积最大，不仅能输送最大流量的流体，而且受力最均匀！</p>
+    </div>
+  </div>
+
+  <details class="more">
+    <summary>自然奇迹：蜜蜂究竟是如何实现正六边形最优化建筑的？</summary>
+    <p class="small">18世纪法国数学家马拉尔迪测量了蜂巢的底角，发现每个菱形钝角为 \(109^\circ 28'\)，锐角为 \(70^\circ 32'\)。后来著名数学家柯尼希用微积分精确计算出“用料最省、容积最大的几何体”，所得角度竟然与蜜蜂建造的蜂巢一模一样！大自然在千万年生存竞争的物竞天择中，用数学最优解完成了生命的奇迹。</p>
+  </details>
+
+  <details class="more">
+    <summary>等周不等式深入：为什么越接近圆，面积越大？</summary>
+    <p class="small">数学上著名的等周不等式表明：对于周长为 \(L\)、面积为 \(A\) 的任意平面简单闭曲线，永远满足：
+    \[L^2 \ge 4\pi A \iff A \le \frac{L^2}{4\pi}\]
+    等号当且仅当图形是<b>圆</b>时成立！正多边形随着边数 \(n\) 的不断增多，形状越来越饱满圆润，面积也从正三角形的 \(0.048 L^2\) 逐步逼近圆的上限 \(0.0796 L^2\)。</p>
+  </details>
+
+  <details class="more">
+    <summary>现代物流集散中的箱体装载与装箱优化</summary>
+    <p class="small">现代物流运输（如顺丰、京东仓储）的标准化周转箱设计不仅要考虑单箱容积最大化，还要考虑集装箱内多箱堆叠的“密铺率”。正方体或接近 \(1:1:1\) 的长方体既具备单体表面积与容积的最优比，又能在标准集装箱内实现零空隙平铺，大幅降低干线运输物流成本。</p>
+  </details>
+
+  <details class="more">
+    <summary>中考综合与实践探究题的标准解题步骤</summary>
+    <p class="small">中考压轴综合与实践题通常分为三幕：<br>
+    1. <b>阅读与提炼</b>：从冗长生活背景（蜂房、货箱、菜地）中剥离出数学变量（边长、周长、面积）；<br>
+    2. <b>设元与建模</b>：设立自变量，列出关于面积或成本的函数解析式（多为二次函数或反比例函数）；<br>
+    3. <b>配方与结论</b>：利用顶点公式或不等式求极值，并对照实际物理意义说明“在何种条件下达到最优”。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <div class="card">
+    <p><span class="badge-pill badge-a">实验 1</span><b>蜂房密铺与周长极值动态台</b></p>
+    <p class="small">在能够密铺的正三角形、正方形、正六边形中，固定容纳蜜蜂的内切圆半径为 \(r = 1\)，观察三者周长的大小对比条形图，体验正六边形最省蜂蜡材料的几何直觉。</p>
+    <div class="range-box">
+      <button type="button" class="btn on" id="btn-tri">正三角形 (周长 10.39)</button>
+      <button type="button" class="btn" id="btn-squ" style="margin-left:8px;">正方形 (周长 8.00)</button>
+      <button type="button" class="btn" id="btn-hex" style="margin-left:8px;">正六边形 (周长 6.93)</button>
+    </div>
+    <svg class="fig" id="fig1" viewBox="0 0 500 260" role="img" aria-label="蜂房周长对比图"></svg>
+    <div class="result" id="res1" aria-live="polite"></div>
+  </div>
+
+  <div class="card">
+    <p><span class="badge-pill badge-b">实验 2</span><b>进阶：等周定理周长恒定面积逼近台</b></p>
+    <p class="small">固定图形周长为 \(P = 120\text{ cm}\)，拖动滑块调节正多边形的边数 \(n\)（从 3 边到 12 边乃至圆），观察截面面积随边数增加不断扩张的过程，体会等周定理的极致之美。</p>
+    <div class="range-box">
+      <label for="iso-n">边数 n：</label>
+      <input type="range" id="iso-n" min="3" max="12" value="6" step="1">
+      <span id="iso-n-val" style="font-weight:700;min-width:35px">6</span>
+      <button type="button" class="btn" id="reset-btn" style="margin-left:auto">重置参数</button>
+    </div>
+    <svg class="fig" id="fig2" viewBox="0 0 500 270" role="img" aria-label="等周定理面积逼近进阶图"></svg>
+    <div class="result" id="res2" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <div class="card predict" data-id="p1" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjxiPue7g+S5oCAxPC9iPu+8muS4i+WIl+Wkmui+ueW9ouS4re+8jOS4jeiDveWNleeLrOWvhumTuuWcsOmdoueahOaYr++8iCDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj7mraPkuInop5LlvaI8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+5q2j5pa55b2iPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPuato+WFrei+ueW9ojwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj7mraPlhavovrnlvaI8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5EPC9iPuOAguato+WFq+i+ueW9ouavj+S4quWGheinkuS4uiBcXCgxMzVeXFxjaXJjXFwp44CCXFwoMzYwIC8gMTM1ID0gMi42N1xcKe+8jOS4jeiDveiiq+aVtOmZpO+8jOaVheS4jeiDveWNleeLrOWvhumTuu+8iOS9huato+WFq+i+ueW9ouS4juWwj+ato+aWueW9oue7hOWQiOWPr+S7peiBlOWQiOWvhumTuu+8ieOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <p><b>练习 1</b>：下列多边形中，不能单独密铺地面的是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">正三角形</button>
+      <button class="opt" data-v="B">正方形</button>
+      <button class="opt" data-v="C">正六边形</button>
+      <button class="opt" data-v="D">正八边形</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。正八边形每个内角为 \(135^\circ\)。\(360 / 135 = 2.67\)，不能被整除，故不能单独密铺（但正八边形与小正方形组合可以联合密铺）。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjxiPue7g+S5oCAyPC9iPu+8muiLpeS4ieS4quiDveWvhumTuueahOato+Wkmui+ueW9ou+8iOato+S4ieinkuW9ouOAgeato+aWueW9ouOAgeato+WFrei+ueW9ou+8ieeahOWRqOmVv+Wdh+S4uiAxMu+8jOWImemdouenr+acgOWkp+eahOaYr++8iCDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj7mraPkuInop5LlvaI8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+5q2j5pa55b2iPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPuato+WFrei+ueW9ojwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj7kuInogIXpnaLnp6/kuIDmoLflpKc8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5DPC9iPuOAguWRqOmVv+S4uiAxMiDml7bvvJrmraPkuInop5LlvaLpnaLnp6/kuLogXFwoNFxcc3FydHszfSBcXGFwcHJveCA2LjkzXFwp77yb5q2j5pa55b2i6Z2i56ev5Li6IDnvvJvmraPlha3ovrnlvaLpnaLnp6/kuLogXFwoNlxcc3FydHszfSBcXGFwcHJveCAxMC4zOVxcKeOAguato+WFrei+ueW9oumdouenr+acgOWkp+OAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <p><b>练习 2</b>：若三个能密铺的正多边形（正三角形、正方形、正六边形）的周长均为 12，则面积最大的是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">正三角形</button>
+      <button class="opt" data-v="B">正方形</button>
+      <button class="opt" data-v="C">正六边形</button>
+      <button class="opt" data-v="D">三者面积一样大</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。周长为 12 时：正三角形面积为 \(4\sqrt{3} \approx 6.93\)；正方形面积为 9；正六边形面积为 \(6\sqrt{3} \approx 10.39\)。正六边形面积最大。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjxiPue7g+S5oCAzPC9iPu+8muafkOWGnOaIt+WHhuWkh+eUqCAyNCDnsbPplb/nmoTpk4HkuJ3nvZHpnaDkuIDpnaLnm7Tlopnlm7TmiJDkuIDkuKrnn6nlvaLoj5zlm63vvIjnm7TlopnnmoTkuIDkvqfkuI3pnIDopoHpk4HkuJ3nvZHvvInjgILkuLrkuobkvb/oj5zlm63pnaLnp6/mnIDlpKfvvIzlubPooYzkuo7lopnnmoTkuIDovrnplb/luqblupTkuLrvvIgg77yJ57GzPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+NjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj4xMjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj44PC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjE2PC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QjwvYj7jgILorr7lnoLnm7Tkuo7lopnnmoTkuKTovrnplb/kuLogXFwoeFxcKe+8jOWImeW5s+ihjOS6juWimeeahOi+uemVv+S4uiBcXCgyNCAtIDJ4XFwp44CC6Z2i56evIFxcKFMgPSB4KDI0IC0gMngpID0gLTJ4XjIgKyAyNHggPSAtMih4IC0gNileMiArIDcyXFwp44CC5b2TIFxcKHggPSA2XFwpIOaXtu+8jOmdouenr+WPluW+l+acgOWkp+WAvCA3MiDlubPmlrnnsbPvvIzmraTml7blubPooYzkuo7lopnnmoTovrnplb/kuLogXFwoMjQgLSAyKDYpID0gMTJcXCkg57Gz44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <p><b>练习 3</b>：某农户准备用 24 米长的铁丝网靠一面直墙围成一个矩形菜园（直墙的一侧不需要铁丝网）。为了使菜园面积最大，平行于墙的一边长度应为（ ）米</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">6</button>
+      <button class="opt" data-v="B">12</button>
+      <button class="opt" data-v="C">8</button>
+      <button class="opt" data-v="D">16</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。设垂直于墙的两边长为 \(x\)，则平行于墙的边长为 \(24 - 2x\)。面积 \(S = x(24 - 2x) = -2x^2 + 24x = -2(x - 6)^2 + 72\)。当 \(x = 6\) 时，面积取得最大值 72 平方米，此时平行于墙的边长为 \(24 - 2(6) = 12\) 米。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPue7g+S5oCA0PC9iPu+8muWcqOWRqOmVv+Wdh+S4uiAxMDAgY20g55qE6ZW/5pa55b2i5Lit77yM6Z2i56ev5pyA5aSn55qE5Zu+5b2i5YW35pyJ55qE5Yeg5L2V54m55b6B5piv77yIIO+8iTwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPumVv+S4juWuveebuOetie+8iOWRiOato+aWueW9ou+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj7plb/mmK/lrr3nmoQgMiDlgI08L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+6ZW/5piv5a6955qEIDMg5YCNPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPuWvueinkue6v+acgOmVvzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkE8L2I+44CC55Sx5LqM5qyh5Ye95pWw5p6B5YC857uT6K6677ya5ZGo6ZW/5LiA5a6a55qE5omA5pyJ6ZW/5pa55b2i5Lit77yM5q2j5pa55b2i55qE6Z2i56ev5pyA5aSn44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <p><b>练习 4</b>：在周长均为 100 cm 的长方形中，面积最大的图形具有的几何特征是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A">长与宽相等（呈正方形）</button>
+      <button class="opt" data-v="B">长是宽的 2 倍</button>
+      <button class="opt" data-v="C">长是宽的 3 倍</button>
+      <button class="opt" data-v="D">对角线最长</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。由二次函数极值结论：周长一定的所有长方形中，正方形的面积最大。</p>
+    </div>
+  </div>
+
+  <details class="more">
+    <summary>易错总结：靠墙围矩形与四面全围矩形的最优比例区别</summary>
+    <p class="small">
+      • <b>四面全围矩形</b>：四边都需要材料，当长宽比为 \(1:1\)（正方形）时面积最大；<br>
+      • <b>靠一面直墙围矩形</b>：只需围三面（两宽一长），当长宽比为 \(2:1\)（平行于墙的一边长等于垂直于墙的边长的 2 倍）时面积最大！审题时务必看清是否靠墙！
+    </p>
+  </details>
+</section>
+
+<section class="step" data-title="中考真题">
+  <div id="practice"></div>
+</section>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "$", right: "$", display: false},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false
+    });
+  }
+
+  if (typeof initGaoKaoSolutions === "function") {
+    initGaoKaoSolutions("practice", "../data/sections/j9a-p2.json");
+  }
+
+  // Step 1: 快递箱底面长宽切换
+  var entryFig = document.getElementById("entry-fig");
+  var entryBar = document.getElementById("entry-bar");
+  var entryNote = document.getElementById("entry-note");
+
+  function renderEntry(w) {
+    if (!entryFig) return;
+    var l = 80 - w;
+    var ox = 250, oy = 110;
+    var scale = 2.2;
+    var pw = w * scale, pl = l * scale;
+    var x = ox - pl / 2, y = oy - pw / 2;
+
+    var h = '';
+    h += '<rect x="' + x + '" y="' + y + '" width="' + pl + '" height="' + pw + '" fill="#fed7aa" opacity="0.6" stroke="#ea580c" stroke-width="2.5"/>';
+    h += '<text x="' + ox + '" y="' + (y - 8) + '" font-size="12" fill="#ea580c" text-anchor="middle" font-weight="700">长 l = ' + l + ' cm</text>';
+    h += '<text x="' + (x - 8) + '" y="' + oy + '" font-size="12" fill="#ea580c" text-anchor="end" font-weight="700">宽 w = ' + w + ' cm</text>';
+    h += '<text x="' + ox + '" y="' + (oy + 6) + '" font-size="14" fill="#9a3412" text-anchor="middle" font-weight="700">底面积 S = ' + (l * w) + ' cm²</text>';
+
+    entryFig.innerHTML = h;
+
+    if (entryNote) {
+      entryNote.textContent = '当前长 ' + l + ' cm，宽 ' + w + ' cm（周长固定 160 cm）。底面积 = ' + (l * w) + ' cm²。正方形时达到峰值 1600 cm²！';
+    }
+  }
+
+  if (entryBar) {
+    var btns = entryBar.querySelectorAll("button");
+    btns.forEach(function(b) {
+      b.addEventListener("click", function() {
+        btns.forEach(function(x) { x.classList.remove("on"); });
+        b.classList.add("on");
+        renderEntry(parseInt(b.getAttribute("data-w"), 10));
+      });
+    });
+  }
+  renderEntry(40);
+
+  // Step 3: 动手实验 1 - 蜂房周长极值台
+  var btnTri = document.getElementById("btn-tri");
+  var btnSqu = document.getElementById("btn-squ");
+  var btnHex = document.getElementById("btn-hex");
+  var fig1 = document.getElementById("fig1");
+  var res1 = document.getElementById("res1");
+
+  function renderFig1(type) {
+    if (!fig1) return;
+    var ox = 150, oy = 130, rInPix = 60;
+    var h = '';
+    // 内切圆蜜蜂
+    h += '<circle cx="' + ox + '" cy="' + oy + '" r="' + rInPix + '" fill="#fef08a" stroke="#eab308" stroke-width="2"/>';
+    h += '<circle cx="' + ox + '" cy="' + oy + '" r="3" fill="#ca8a04"/>';
+    h += '<text x="' + ox + '" y="' + (oy + 5) + '" font-size="12" fill="#ca8a04" text-anchor="middle">蜜蜂 (r=1)</text>';
+
+    var peri = 0, name = "";
+    if (type === "tri") {
+      name = "正三角形";
+      var R = rInPix * 2;
+      var pts = [];
+      for (var i = 0; i < 3; i++) {
+        var rad = -Math.PI / 2 + i * 2 * Math.PI / 3;
+        pts.push((ox + R * Math.cos(rad)) + ',' + (oy + R * Math.sin(rad)));
+      }
+      h += '<polygon points="' + pts.join(' ') + '" fill="none" stroke="#2563eb" stroke-width="3"/>';
+      peri = 10.39;
+    } else if (type === "squ") {
+      name = "正方形";
+      h += '<rect x="' + (ox - rInPix) + '" y="' + (oy - rInPix) + '" width="' + (2 * rInPix) + '" height="' + (2 * rInPix) + '" fill="none" stroke="#059669" stroke-width="3"/>';
+      peri = 8.00;
+    } else {
+      name = "正六边形";
+      var Rhex = rInPix / (Math.sqrt(3) / 2);
+      var ptsH = [];
+      for (var j = 0; j < 6; j++) {
+        var radH = -Math.PI / 2 + j * 2 * Math.PI / 6;
+        ptsH.push((ox + Rhex * Math.cos(radH)) + ',' + (oy + Rhex * Math.sin(radH)));
+      }
+      h += '<polygon points="' + ptsH.join(' ') + '" fill="none" stroke="#ea580c" stroke-width="3"/>';
+      peri = 6.93;
+    }
+
+    // 右侧周长对比直方图
+    var barX = 300, barBaseY = 200;
+    h += '<line x1="' + barX + '" y1="' + barBaseY + '" x2="470" y2="' + barBaseY + '" stroke="#64748b" stroke-width="2"/>';
+
+    // 三根条形柱
+    var triH = 10.39 * 12, squH = 8.00 * 12, hexH = 6.93 * 12;
+    h += '<rect x="' + (barX + 20) + '" y="' + (barBaseY - triH) + '" width="30" height="' + triH + '" fill="' + (type === "tri" ? "#2563eb" : "#cbd5e1") + '"/>';
+    h += '<text x="' + (barX + 35) + '" y="' + (barBaseY + 18) + '" font-size="11" text-anchor="middle">正三角</text>';
+    h += '<text x="' + (barX + 35) + '" y="' + (barBaseY - triH - 6) + '" font-size="11" text-anchor="middle" font-weight="700">10.39</text>';
+
+    h += '<rect x="' + (barX + 70) + '" y="' + (barBaseY - squH) + '" width="30" height="' + squH + '" fill="' + (type === "squ" ? "#059669" : "#cbd5e1") + '"/>';
+    h += '<text x="' + (barX + 85) + '" y="' + (barBaseY + 18) + '" font-size="11" text-anchor="middle">正方形</text>';
+    h += '<text x="' + (barX + 85) + '" y="' + (barBaseY - squH - 6) + '" font-size="11" text-anchor="middle" font-weight="700">8.00</text>';
+
+    h += '<rect x="' + (barX + 120) + '" y="' + (barBaseY - hexH) + '" width="30" height="' + hexH + '" fill="' + (type === "hex" ? "#ea580c" : "#cbd5e1") + '"/>';
+    h += '<text x="' + (barX + 135) + '" y="' + (barBaseY + 18) + '" font-size="11" text-anchor="middle">正六边</text>';
+    h += '<text x="' + (barX + 135) + '" y="' + (barBaseY - hexH - 6) + '" font-size="11" text-anchor="middle" font-weight="700">6.93</text>';
+
+    fig1.innerHTML = h;
+
+    if (res1) {
+      res1.innerHTML = '当前选择：<span class="sum">' + name + '</span>（容纳等大蜜蜂，内切圆半径 r = 1）：<br>' +
+        '• 围成该形状所需周长为：<span class="sum">' + peri + '</span><br>' +
+        '• 优化分析：正六边形周长 6.93 &lt; 正方形 8.00 &lt; 正三角形 10.39，正六边形最省蜂蜡材料！';
+    }
+  }
+
+  if (btnTri) {
+    btnTri.addEventListener("click", function() {
+      [btnTri, btnSqu, btnHex].forEach(function(b) { b.classList.remove("on"); });
+      btnTri.classList.add("on");
+      renderFig1("tri");
+    });
+  }
+  if (btnSqu) {
+    btnSqu.addEventListener("click", function() {
+      [btnTri, btnSqu, btnHex].forEach(function(b) { b.classList.remove("on"); });
+      btnSqu.classList.add("on");
+      renderFig1("squ");
+    });
+  }
+  if (btnHex) {
+    btnHex.addEventListener("click", function() {
+      [btnTri, btnSqu, btnHex].forEach(function(b) { b.classList.remove("on"); });
+      btnHex.classList.add("on");
+      renderFig1("hex");
+    });
+  }
+  renderFig1("tri");
+
+  // Step 3: 动手实验 2 - 等周定理面积逼近进阶台
+  var isoN = document.getElementById("iso-n");
+  var isoNVal = document.getElementById("iso-n-val");
+  var resetBtn = document.getElementById("reset-btn");
+  var fig2 = document.getElementById("fig2");
+  var res2 = document.getElementById("res2");
+  var periFixed = 120; // 固定周长
+
+  function renderFig2() {
+    if (!fig2 || !isoN) return;
+    var n = parseInt(isoN.value, 10);
+    if (isoNVal) isoNVal.textContent = n;
+
+    // 计算边长 a = P / n
+    var a = periFixed / n;
+    var halfAng = (180 / n) * Math.PI / 180;
+    var R = (a / 2) / Math.sin(halfAng);
+    var rIn = (a / 2) / Math.tan(halfAng);
+    var area = 0.5 * periFixed * rIn;
+
+    // 圆的极限面积: P² / (4π)
+    var circleArea = (periFixed * periFixed) / (4 * Math.PI);
+
+    var ox = 250, oy = 135;
+    var scale = 2.4;
+    var Rpix = R * scale;
+
+    var pts = [];
+    for (var i = 0; i < n; i++) {
+      var rad = -Math.PI / 2 + i * 2 * Math.PI / n;
+      pts.push((ox + Rpix * Math.cos(rad)) + ',' + (oy + Rpix * Math.sin(rad)));
+    }
+
+    var h = '';
+    // 极限圆虚线
+    var rCirclePix = (periFixed / (2 * Math.PI)) * scale;
+    h += '<circle cx="' + ox + '" cy="' + oy + '" r="' + rCirclePix + '" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>';
+
+    // 正多边形
+    h += '<polygon points="' + pts.join(' ') + '" fill="#fed7aa" opacity="0.6" stroke="#ea580c" stroke-width="2.5"/>';
+    h += '<circle cx="' + ox + '" cy="' + oy + '" r="3" fill="#ea580c"/>';
+
+    fig2.innerHTML = h;
+
+    if (res2) {
+      res2.innerHTML = '周长固定为 <span class="sum">P = 120 cm</span>，正 <span class="sum">' + n + '</span> 边形：<br>' +
+        '• 截面面积为：<span class="sum">' + area.toFixed(1) + ' cm²</span><br>' +
+        '• 等周极限值（圆面积）：S_max = P² / (4π) ≈ <span class="sum">' + circleArea.toFixed(1) + ' cm²</span><br>' +
+        '• 等周定理直观：边数从 3 增加到 12，截面面积从 692.8 稳步扩张到 1113.8，不断逼近圆的极致容量！';
+    }
+  }
+
+  if (isoN) isoN.addEventListener("input", renderFig2);
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function() {
+      isoN.value = "6";
+      renderFig2();
+    });
+  }
+
+  renderFig2();
+});
+</script>
+</body>
+</html>

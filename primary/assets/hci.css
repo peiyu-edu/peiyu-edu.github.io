@@ -1,0 +1,134 @@
+/* 培玉 · 高中数学 — 交互层样式（PY-53，配合 hci.js）。只用 site.css 的变量。 */
+
+/* 跳到正文：平时藏起来，Tab 到它时出现 */
+.skip { position: absolute; left: 8px; top: -60px; z-index: 50; background: var(--a); color: #fff; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+.skip:focus { top: 8px; }
+main:focus { outline: none; }
+
+/* 顶栏：一行；当前页实心 */
+.top.hci-top { flex-wrap: nowrap; gap: 10px; }
+.hci-nav { display: flex; gap: 6px; flex-wrap: nowrap; }
+.hci-nav a.hci-link { white-space: nowrap; }
+.hci-nav a[aria-current="page"] { background: var(--a); border-color: var(--a); color: #fff; }
+.hci-nav a[aria-current="true"] { border-color: var(--a); background: var(--ok-soft); } /* 课时页属于「课程」 */
+.hci-nav .hci-short { display: none; }
+.hci-nav a:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+
+@media (max-width: 720px) {
+  .hci-nav .hci-full { display: none; }
+  .hci-nav .hci-short { display: inline; }
+}
+@media (max-width: 480px) {
+  .top.hci-top { gap: 6px; padding: 10px 0; margin-bottom: 14px; }
+  .top.hci-top .brand { display: none; }
+  .hci-nav { gap: 4px; }
+  .top.hci-top .hci-nav a.hci-link { min-height: 40px; padding: 6px 10px; font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto !important; } }
+
+/* ---------- 课内步骤（H-2） ---------- */
+.hci-steps .hci-s { display: none; }
+.hci-steps button { position: relative; }
+.hci-steps .hci-ck { margin-left: 4px; font-weight: 700; color: var(--a); }
+.hci-steps button[aria-selected="true"] .hci-ck { color: #fff; }
+.hci-steps button.hci-done:not([aria-selected="true"]) { border-color: var(--a); }
+section.step { scroll-margin-top: 64px; }
+.hci-resume { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: -6px 0 14px; padding: 8px 12px; font-size: 14px; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+.hci-linkbtn { appearance: none; background: none; border: 0; padding: 6px 4px; min-height: 36px; font: inherit; font-size: 14px; color: var(--a); text-decoration: underline; cursor: pointer; }
+.hci-linkbtn:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; border-radius: 4px; }
+
+@media (max-width: 560px) {
+  /* 手机：五个标签一行放下，用短名；全名在读屏标签里 */
+  nav.steps.hci-steps { flex-wrap: nowrap; overflow: visible; gap: 4px; padding: 6px 0; margin: 10px 0 14px; }
+  .hci-steps button { flex: 1 1 0; min-width: 0; min-height: 40px; padding: 4px 2px; font-size: 14px; white-space: nowrap; }
+  .hci-steps .hci-t { display: none; }
+  .hci-steps .hci-s { display: inline; }
+  .hci-steps .hci-ck { margin-left: 1px; }
+  section.step { scroll-margin-top: 58px; }
+}
+
+/* ---------- 做题进度（H-3） ---------- */
+.hci-sec-progress { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 8px 0 -6px; color: var(--muted); }
+.hci-sec-progress button[hidden] { display: none; }
+.hci-progress { margin: 0 0 10px; color: var(--muted); }
+.predict .reveal:focus { outline: none; }
+.predict .reveal:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+
+/* ---------- 本节导读（H-4） ---------- */
+.hci-guide { margin: 0 0 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.hci-guide > summary { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-height: 44px; padding: 10px 14px; cursor: pointer; list-style: none; }
+.hci-guide > summary::-webkit-details-marker { display: none; }
+.hci-guide > summary::before { content: "▸"; color: var(--a); margin-right: -4px; transition: transform .15s; }
+.hci-guide[open] > summary::before { transform: rotate(90deg); }
+.hci-guide-t { font-weight: 700; }
+.hci-guide-s { color: var(--muted); }
+.hci-guide > summary:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; border-radius: 12px; }
+.hci-guide-b { padding: 0 12px 12px; }
+.hci-guide-b > .wk-chain { margin-bottom: 10px; }
+.hci-guide-b > aside.student-route { margin: 0; }
+.hci-video-cta { display: inline-flex; margin: 0 0 12px; }
+.hci-guide-b > .concept-map { margin: 10px 0 0 !important; }
+/* 概念地图里的四张小卡是 <a>，默认行内，手机上会叠在一起 */
+.concept-grid > a.card { display: block; min-width: 0; }
+
+/* ---------- 首页进度（H-5） ---------- */
+.secs .done.hci-sec-tag { color: var(--muted); white-space: nowrap; }
+.secs .done.hci-full { color: var(--a); font-weight: 600; }
+.hci-chap-n { margin-left: 8px; font-size: 14px; font-weight: 600; color: var(--a); background: var(--ok-soft); border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+
+/* 手机上节目录：标题占满一行，主线说明和讲义按钮换到下一行（原来标题被挤成一字一行） */
+@media (max-width: 560px) {
+  .secs li { flex-wrap: wrap; row-gap: 4px; column-gap: 8px; }
+  .secs li > .no { min-width: 2.4em; }
+  .secs li > a:not([class]) { flex: 1 1 0; min-width: 0; }
+  .secs li > .done { order: 2; }
+  .secs li > .student-hint { order: 3; flex: 1 1 100%; padding-left: calc(2.4em + 8px); }
+  .secs li > .wk-sec-pills { order: 4; flex: 1 1 100%; margin-left: 0; padding-left: calc(2.4em + 8px); display: flex; flex-wrap: wrap; gap: 6px; }
+  .secs li > .wk-sec-pills * { writing-mode: horizontal-tb; }
+}
+
+/* ---------- 我的记录（H-6） ---------- */
+input.hci-name { min-height: 40px; min-width: 12em; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
+input.hci-name.hci-need { border-color: var(--no); box-shadow: 0 0 0 2px var(--no-soft); }
+.hci-raw { margin: 6px 0 12px; }
+.hci-raw > summary { cursor: pointer; color: var(--muted); font-size: 14px; min-height: 36px; display: flex; align-items: center; }
+.hci-danger-zone { margin-top: 28px; padding-top: 14px; border-top: 1px dashed var(--line); }
+@media (max-width: 560px) {
+  table.hci-cards, table.hci-cards tbody, table.hci-cards tr, table.hci-cards td { display: block; width: 100%; }
+  table.hci-cards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  table.hci-cards tr { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; margin: 0 0 10px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  table.hci-cards td { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; border: 0; text-align: right; width: auto; font-size: 14px; }
+  table.hci-cards td:first-child, table.hci-cards td[colspan] { grid-column: 1 / -1; }
+  table.hci-cards td[data-label]::before { content: attr(data-label); color: var(--muted); text-align: left; }
+  table.hci-cards td:first-child { display: block; text-align: left; font-weight: 600; padding-bottom: 6px; }
+  table.hci-cards td:first-child::before { content: none; }
+}
+
+/* Wiki 四个大标签：手机上一行短名（原来竖排四行，吸顶时挡住小半屏） */
+nav#mainTabs .hci-s { display: none; }
+@media (max-width: 560px) {
+  nav#mainTabs.steps { display: flex; flex-wrap: nowrap; gap: 4px; padding: 6px 0; overflow: visible; }
+  nav#mainTabs.steps button { flex: 1 1 0; min-width: 0; min-height: 40px; padding: 4px 2px; font-size: 14px; white-space: nowrap; }
+  nav#mainTabs .hci-t { display: none; }
+  nav#mainTabs .hci-s { display: inline; }
+}
+.hci-name-hint { margin: 8px 0 0; color: var(--no); }
+.hci-name-hint[hidden] { display: none; }
+
+/* 合并 main 后：多数节有概念课视频按钮，和进度放一行；导读摘要手机上只占一行 */
+.hci-sec-progress.hci-has-cta { justify-content: space-between; flex-wrap: wrap; row-gap: 6px; margin-top: 0; }
+.hci-sec-progress.hci-has-cta > a.hci-video-cta { margin: 0 auto 0 0; }
+.hci-sec-progress.hci-has-cta > .hci-prog-r { margin-left: auto; }
+.hci-prog-r { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+@media (max-width: 560px) {
+  /* 旁边有视频按钮时：文字在上、「重做本节」在下，叠在右侧，和按钮同一行 */
+  .hci-sec-progress.hci-has-cta { flex-wrap: nowrap; }
+  .hci-sec-progress.hci-has-cta > .hci-prog-r { flex-direction: column; align-items: flex-end; gap: 0; }
+  .hci-sec-progress.hci-has-cta .hci-linkbtn { min-height: 32px; padding: 4px 0; }
+}
+@media (max-width: 560px) {
+  .hci-guide > summary { flex-wrap: nowrap; }
+  .hci-guide-s { flex: 1 1 0; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hci-guide-t { flex: none; }
+}

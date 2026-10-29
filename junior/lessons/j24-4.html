@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>24.4 数据的分组 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+  .tb { border-collapse: collapse; margin: 6px 0; font-size: 15px; }
+  .tb th, .tb td { border: 1px solid var(--line); padding: 3px 8px; text-align: center; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j24-4" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">八年级下册 · 第二十四章 数据的分析</p>
+<h1>24.4 数据的分组</h1>
+<p class="lead">把一组数据分成「高的一组、低的一组」，按名次切、按分数线切，都可能把挨得很近的两个数拆开。这一节换一个标准：让每组里的数据尽量接近，用「组内离差平方和」来量。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：24.2 离差平方和、16.3 完全平方公式 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：平均数（<a href="j24-1.html">回看 24.1</a>）；离差、离差平方和 \(d^2\)（<a href="j24-2.html">回看 24.2</a>）；完全平方公式（<a href="j16-3.html">回看 16.3</a>）；七下按组距分组的直方图（<a href="j12-2.html">回看 12.2</a>），这一节的「分组」和它不一样。</p>
+  <ol class="small">
+    <li>从「怎样分两组才合理」进入。</li>
+    <li>分组原则：组内差异最小，用组内离差平方和刻画。</li>
+    <li>先排序，只在相邻两个数之间切：\(n\) 个数有 \(n-1\) 种分法。</li>
+    <li>逐一计算、列表比较，选组内离差平方和最小的。</li>
+    <li>知道：离差平方和 \(=\) 组内 \(+\) 组间。</li>
+    <li>把分组结果还原成对象，说说合不合理。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>体育课上 7 名同学 1 分钟仰卧起坐的个数是 \(28,31,33,45,47,50,52\)。老师想把他们分成两组分别训练。点按钮试三种分法：</p>
+  <div class="card predict" data-id="entry" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDE3MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5LiD5Liq5Luw5Y2n6LW35Z2Q5oiQ57up5oyJ5LiN5ZCM5pa55rOV5YiG5oiQ5Lik57uEXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuWIhue7hOaWueazlVwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjBcIj7liY3kuInlkI3kuIDnu4Q8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjFcIj4zMCDkuKrkuLrnlYw8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjJcIj7nnIvosIHlkozosIHmjqXov5E8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+5ZOq56eN5YiG5rOV6K6p5q+P5LiA57uE6YeM55qE5oiQ57up5b285q2k5pyA5o6l6L+R77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5YmN5LiJ5ZCNIFxcKFxcezQ3LDUwLDUyXFx9XFwpIOS4gOe7hO+8jOWFtuS9meS4gOe7hDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDMwXFwpIOS4quS4uueVjO+8mlxcKFxcezI4XFx9XFwpIOS4gOe7hO+8jOWFtuS9meS4gOe7hDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFxcezI4LDMxLDMzXFx9XFwpIOS4gOe7hO+8jFxcKFxcezQ1LDQ3LDUwLDUyXFx9XFwpIOS4gOe7hDwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkM8L2I+44CCQSDmiorlj6rlt64gMiDkuKrnmoQgXFwoNDVcXCkg5ZKMIFxcKDQ3XFwpIOaLhuW8gOS6hu+8m0Ig5oqKIFxcKDMxXFwpIOWSjCBcXCg0NVxcKeOAgVxcKDUyXFwpIOaUvuWcqOS4gOe7hO+8jOe7hOmHjOW3ruW+l+W+iOi/nOOAgkMg55qE5Lik57uE5ZCE6Ieq5oyk5Zyo5LiA6LW377yM5Lit6Ze05pyJ5LiA5aSn5q6156m66ZqZ44CCPC9wPlxuICAgICAgPHA+5ZCN5qyh44CB5YiG5pWw57q/6YO95piv5Lq65a6a55qE5qCH5YeG77yM5rKh55yL5pWw5o2u6Ieq5bex6ZW/5LuA5LmI5qC344CC6L+Z5LiA6IqC6KaB5Zue562U77yaPGI+5oCO5qC355So5LiA5Liq5pWw6KGh6YeP44CM57uE6YeM5o6l5LiN5o6l6L+R44CN77yM5bm25o2u5q2k5om+5Ye65pyA5aW955qE5YiG5rOV77yfPC9iPjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 170" role="img" aria-label="七个仰卧起坐成绩按不同方法分成两组"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="分组方法">
+      <button type="button" class="on" data-k="0">前三名一组</button>
+      <button type="button" data-k="1">30 个为界</button>
+      <button type="button" data-k="2">看谁和谁接近</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>哪种分法让每一组里的成绩彼此最接近？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>前三名 \(\{47,50,52\}\) 一组，其余一组</button>
+      <button class="opt" data-v="B"><b>B</b>\(30\) 个为界：\(\{28\}\) 一组，其余一组</button>
+      <button class="opt" data-v="C"><b>C</b>\(\{28,31,33\}\) 一组，\(\{45,47,50,52\}\) 一组</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。A 把只差 2 个的 \(45\) 和 \(47\) 拆开了；B 把 \(31\) 和 \(45\)、\(52\) 放在一组，组里差得很远。C 的两组各自挤在一起，中间有一大段空隙。</p>
+      <p>名次、分数线都是人定的标准，没看数据自己长什么样。这一节要回答：<b>怎样用一个数衡量「组里接不接近」，并据此找出最好的分法？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：组内差异、组内离差平方和</h3>
+  <p class="small">前置知识：离差平方和 \(d^2\)（<a href="j24-2.html">回看 24.2</a>），它越大，数据越分散。七下画直方图时也分过组（<a href="j12-2.html">回看 12.2</a>），但那是先定组距、按固定区间归类，不看组里的数接不接近。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>两种分组：按固定区间，还是按接近程度</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="分组思想">
+        <button type="button" class="on" data-k="0">按组距 10 分</button>
+        <button type="button" data-k="1">按接近程度分两组</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 150" role="img" aria-label="同一组数据的两种分组"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p>这一节的原则是<b>组内差异最小</b>：把取值相近的数据分到同一组。一组数据的差异用它的离差平方和来量（每组用自己的平均数）。两组的离差平方和分别记作 \(d_1^2,d_2^2\)，它们的和</p>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(\color{#2F7A56}{\underbrace{d_1^2}_{\text{第一组的离差平方和}}}+\color{#3E5C76}{\underbrace{d_2^2}_{\text{第二组的离差平方和}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">叫<b>组内离差平方和</b>。比较各种分法，选它<b>最小</b>的那一种。只有一个数据的组，离差平方和是 \(0\)。</p>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>组是由数据决定的</b></p>
+      <p class="small" style="margin:0">不事先规定分数线，也不规定每组几人；两组可以一多一少。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>每组用自己的平均数</b></p>
+      <p class="small" style="margin:0">算 \(d_1^2\) 时用第一组的平均数 \(\bar x_1\)，算 \(d_2^2\) 时用 \(\bar x_2\)，不用全部数据的平均数。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：先排序，只在相邻两个数之间切一刀</h3>
+  <p>数据从小到大排好后，接近的数挨在一起。把挨着的数拆到两组、却把远的数凑到一组，不会更好。所以只要考虑「在第几个间隔切一刀」：<b>\(n\) 个数据有 \(n-1\) 个间隔，就有 \(n-1\) 种分法</b>，逐一算出组内离差平方和，比较即可。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>跳着分，组内差异大得多</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="分法">
+        <button type="button" class="on" data-k="0">跳着分</button>
+        <button type="button" data-k="1">排好序，切一刀</button>
+        <button type="button" data-k="2">一共几种切法</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 150" role="img" aria-label="六个数据跳着分与相邻切分的对比"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">按组内离差平方和最小的原则，把 \(2,3,5,10,12\) 分成两组。</p>
+    <p><b>① 读懂题意：</b>5 个数已排好序，有 4 个间隔，也就有 4 种分法。</p>
+    <details class="more"><summary>提示 1：一种分法怎么算</summary><p>例如切在 \(3\) 和 \(5\) 之间：第一组 \(2,3\)，平均数 \(2.5\)，\(d_1^2=0.25+0.25=0.5\)；第二组 \(5,10,12\)，平均数 \(9\)，\(d_2^2=16+1+9=26\)。合计 \(26.5\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>列表，把 4 种分法的 \(d_1^2,d_2^2\) 和它们的和都算出来。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>
+          <table class="tb"><tr><th>分法</th><th>\(d_1^2\)</th><th>\(d_2^2\)</th><th>组内</th></tr>
+          <tr><td>\(2\mid3,5,10,12\)</td><td>\(0\)</td><td>\(53\)</td><td>\(53\)</td></tr>
+          <tr><td>\(2,3\mid5,10,12\)</td><td>\(0.5\)</td><td>\(26\)</td><td>\(26.5\)</td></tr>
+          <tr><td>\(2,3,5\mid10,12\)</td><td>\(\tfrac{14}{3}\)</td><td>\(2\)</td><td>\(\approx6.67\)</td></tr>
+          <tr><td>\(2,3,5,10\mid12\)</td><td>\(38\)</td><td>\(0\)</td><td>\(38\)</td></tr></table></div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>第三种里 \(2,3,5\) 的平均数是 \(\tfrac{10}{3}\)，离差平方 \(\tfrac{16}{9}+\tfrac19+\tfrac{25}{9}=\tfrac{14}{3}\) ✓；每一行的组内离差平方和都比全部数据的 \(d^2=77.2\) 小 ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>最小的是第三种：\(\{2,3,5\}\) 和 \(\{10,12\}\)，这一组数据里它恰好也在空隙最大的地方（\(5\) 到 \(10\)）。但最优切点不一定总在最大空隙处（「动手」① 就有反例），要靠逐一计算比较。数据多时，这些计算交给计算器或电子表格。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muaMiee7hOWGheemu+W3ruW5s+aWueWSjOacgOWwj+eahOWOn+WIme+8jFxcKDEsMiw0LDksMTAsMTFcXCkg5bqU6K+l5oCO5LmI5YiG77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcezEsMiw0XFx9XFwpIOWSjCBcXChcXHs5LDEwLDExXFx9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKFxcezEsMlxcfVxcKSDlkowgXFwoXFx7NCw5LDEwLDExXFx9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFxcezEsMiw0LDlcXH1cXCkg5ZKMIFxcKFxcezEwLDExXFx9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKFxcezEsNCwxMFxcfVxcKSDlkowgXFwoXFx7Miw5LDExXFx9XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCQSDnmoTnu4TlhoXnprvlt67lubPmlrnlkowgXFwoXFx0ZnJhY3sxNH17M30rMlxcYXBwcm94Ni42N1xcKe+8m0Ig5pivIFxcKDAuNSsyOT0yOS41XFwp77ybQyDmmK8gXFwoMzgrMC41PTM4LjVcXCnvvJtEIOi3s+edgOWIhu+8jFxcKDQyK1xcdGZyYWN7MTM0fXszfVxcYXBwcm94ODYuNjdcXCnvvIzmnIDlt67jgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：按组内离差平方和最小的原则，\(1,2,4,9,10,11\) 应该怎么分？</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(\{1,2,4\}\) 和 \(\{9,10,11\}\)</button><button class="opt" data-v="B"><b>B</b>\(\{1,2\}\) 和 \(\{4,9,10,11\}\)</button><button class="opt" data-v="C"><b>C</b>\(\{1,2,4,9\}\) 和 \(\{10,11\}\)</button><button class="opt" data-v="D"><b>D</b>\(\{1,4,10\}\) 和 \(\{2,9,11\}\)</button></div>
+    <div class="reveal"><p><b>A</b>。A 的组内离差平方和 \(\tfrac{14}{3}+2\approx6.67\)；B 是 \(0.5+29=29.5\)；C 是 \(38+0.5=38.5\)；D 跳着分，\(42+\tfrac{134}{3}\approx86.67\)，最差。</p></div>
+  </div>
+
+  <h3>3. 核心点：比较所有切法，选最小</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>例 1 的四刀：哪一刀让组内离差平方和最小</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="切在第几个间隔">
+        <button type="button" data-m="1">第 1 刀</button>
+        <button type="button" data-m="2">第 2 刀</button>
+        <button type="button" class="on" data-m="3">第 3 刀</button>
+        <button type="button" data-m="4">第 4 刀</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 210" role="img" aria-label="四种切法与组内离差平方和条形图"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：还原成对象）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">六个社团的报名人数：书法 12，围棋 35，摄影 15，机器人 38，合唱 14，篮球 33。按组内离差平方和最小，把社团分成「报名多」「报名少」两组。</p>
+    <details class="more"><summary>提示：先排序，并带上名字</summary><p>书法 12，合唱 14，摄影 15，篮球 33，围棋 35，机器人 38。5 个间隔，5 种分法。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">列表：</span>用计算器算出 5 种分法的组内离差平方和，依次约为 \(534\)、\(324.75\)、\(17.33\)、\(289.5\)、\(502.8\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">选最小：</span>第 3 种最小：\(\{12,14,15\}\) 与 \(\{33,35,38\}\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">还原：</span>「报名少」：书法、合唱、摄影；「报名多」：篮球、围棋、机器人。</div>
+      </div>
+      <p><b>回头看：</b>答案要写成社团，不能只写「第 3 个间隔」。这组数据里 15 和 33 之间空隙最大，算出来的最优分法也恰好在这里；判断还是要以计算比较为准。</p>
+    </details>
+  </div>
+
+  <h3>4. 核心点：离差平方和 = 组内 + 组间</h3>
+  <p>\(n\) 个数据的平均数为 \(\bar x\)，离差平方和为 \(d^2\)。分成前 \(m\) 个和后 \(n-m\) 个两组，平均数分别为 \(\bar x_1,\bar x_2\)。把每一项写成 \((x_i-\bar x_1+\bar x_1-\bar x)^2\) 用完全平方公式展开、整理（中间项因为离差和为 \(0\) 而消去），可以得到：</p>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(d^2=\color{#2F7A56}{\underbrace{d_1^2+d_2^2}_{\text{组内离差平方和}}}+\color{#966524}{\underbrace{m(\bar x_1-\bar x)^2+(n-m)(\bar x_2-\bar x)^2}_{\text{组间离差平方和}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">组间离差平方和表示两组之间的差异。<b>不管怎么切，\(d^2\) 都不变</b>，所以「组内最小」和「组间最大」是同一件事。这个式子知道就行，不要求自己推导。</p>
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ④</span><b>总长不变：组内少一点，组间就多一点</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m4-bar" role="group" aria-label="切在第几个间隔">
+        <button type="button" class="on" data-m="1">第 1 刀</button>
+        <button type="button" data-m="2">第 2 刀</button>
+        <button type="button" data-m="3">第 3 刀</button>
+        <button type="button" data-m="4">第 4 刀</button>
+      </div>
+      <svg class="micro-fig" id="m4-fig" viewBox="0 0 380 140" role="img" aria-label="离差平方和分成组内和组间两段"></svg>
+      <p class="entry-note" id="m4-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS4gOe7hOaVsOaNrueahOemu+W3ruW5s+aWueWSjCBcXChkXjI9MTAwXFwp44CC5p+Q56eN5YiG5rOV55qE57uE5YaF56a75beu5bmz5pa55ZKM5pivIFxcKDM2XFwp77yM5a6D55qE57uE6Ze056a75beu5bmz5pa55ZKM5piv5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNjRcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMTM2XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDM2XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuaXoOazleehruWumjwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAgue7hOWGhSBcXCgrXFwpIOe7hOmXtCBcXCg9ZF4yXFwp77yM57uE6Ze0IFxcKD0xMDAtMzY9NjRcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：一组数据的离差平方和 \(d^2=100\)。某种分法的组内离差平方和是 \(36\)，它的组间离差平方和是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(64\)</button><button class="opt" data-v="B"><b>B</b>\(136\)</button><button class="opt" data-v="C"><b>C</b>\(36\)</button><button class="opt" data-v="D"><b>D</b>无法确定</button></div>
+    <div class="reveal"><p><b>A</b>。组内 \(+\) 组间 \(=d^2\)，组间 \(=100-36=64\)。</p></div>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuWGjeaDs+S4gOS4qu+8muaMiei/meS4quWOn+WImeWIhuS4pOe7hO+8jOS4pOe7hOeahOS6uuaVsOS4gOWumuebuOetieWQl++8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kuIDlrprnm7jnrYnvvIzmiJblj6rlt64gMSDkuKo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5LiN5LiA5a6a77yM5Y+v6IO95LiA5aSa5LiA5bCRPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4gOWumuS7juS4reS9jeaVsOWkhOWIhuW8gDwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAguS+iyAxIOWIhuaIkCAzIOS4quWSjCAyIOS4qu+8m1xcKDMsNCwyMCwyMSwyMiwyMywyNFxcKSDmnIDlpb3nmoTliIbms5XmmK8gXFwoXFx7Myw0XFx9XFwpIOWSjOWFtuS9mSA1IOS4quOAguS7juS4reS9jeaVsOWIh+W8gOWPjeiAjOaKiiBcXCgyMFxcKSDlkowgXFwoMjFcXCkg5ouG5pWj5LqG44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>再想一个：按这个原则分两组，两组的人数一定相等吗？</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>一定相等，或只差 1 个</button><button class="opt" data-v="B"><b>B</b>不一定，可能一多一少</button><button class="opt" data-v="C"><b>C</b>一定从中位数处分开</button></div>
+    <div class="reveal"><p><b>B</b>。例 1 分成 3 个和 2 个；\(3,4,20,21,22,23,24\) 最好的分法是 \(\{3,4\}\) 和其余 5 个。从中位数切开反而把 \(20\) 和 \(21\) 拆散了。</p></div>
+  </div>
+
+  <h3>5. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>以为两组要一样多，从中间切</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：\(3,4,20,21,22,23,24\) 从中位数切：\(\{3,4,20\}\)、\(\{21,22,23,24\}\)。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：这样组内离差平方和是 \(187\)；切在 \(4\) 和 \(20\) 之间只有 \(10.5\)。组的大小由数据决定。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 180" role="img" aria-label="从中间切与按差异最小切的对比"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>不排序就切，或跳着分</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：在原始顺序 \(9,2,10,3,4\) 上切成 \(\{9,2,10\}\)、\(\{3,4\}\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：先排序 \(2,3,4,9,10\)，再在相邻间隔里找：\(\{2,3,4\}\)、\(\{9,10\}\)，组内离差平方和 \(2.5\)。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>用组内「方差」之和代替离差平方和</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：\(1,2,3,6,10\) 比较两组方差之和，选出 \(\{1,2,3,6\}\)、\(\{10\}\)（\(3.5\) 最小）。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：课本原则用离差平方和：\(\{1,2,3\}\)、\(\{6,10\}\) 是 \(2+8=10\)，比 \(\{1,2,3,6\}\)、\(\{10\}\) 的 \(14\) 小。两组个数不同时，两种算法结果可能不同。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：分成三组、大数据里的「聚类」</summary>
+    <p>要分成三组，就切两刀，比较所有「两刀」的切法，原理一样（「动手」③可以试）。网购平台把顾客按消费习惯分群、地图把相近的地点归成一片，用的都是「组内相近、组间不同」的思想，叫聚类，只是数据多得多，要靠计算机。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖动切刀：找组内离差平方和最小的一刀</h3>
+  <p class="small">8 名同学的身高（cm）已排好序。拖动上方的圆点（或点一下再用方向键）把切刀移到不同的间隔，下面的条形是 7 种切法各自的组内离差平方和，金色是当前这一刀。</p>
+  <div class="card">
+    <svg class="fig" id="fig-cut" viewBox="0 0 560 335" role="img" aria-label="八个身高数据的切分与各切法组内离差平方和"></svg>
+    <div class="result" id="out-cut" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-cut" type="button">重置</button></div>
+  </div>
+  <h3>② 拖动数据：最好的分法会跳到哪</h3>
+  <p class="small">拖动 7 个数据点，计算机自动比较 6 种切法，把最好的两组涂成两种颜色。下面的长条是离差平方和 \(d^2\)：绿色是组内，金色是组间。</p>
+  <div class="card">
+    <svg class="fig" id="fig-auto" viewBox="0 0 560 260" role="img" aria-label="可拖动数据的最优两组划分"></svg>
+    <div class="result" id="out-auto" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-auto" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：切两刀，分成三组</h3>
+  <p class="small">还是 8 名同学的身高。拖动两把切刀（第一刀总在第二刀左边），看三组的组内离差平方和；计算机也会告诉你所有切法里最小的是哪一种。</p>
+  <div class="card">
+    <svg class="fig" id="fig-three" viewBox="0 0 560 190" role="img" aria-label="切两刀把八个数据分成三组"></svg>
+    <div class="result" id="out-three" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-three" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIOaMiee7hOWGheemu+W3ruW5s+aWueWSjOacgOWwj+eahOWOn+WIme+8jOaKiiBcXCg0LDYsNywxNSwxOFxcKSDliIbmiJDkuKTnu4TjgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoXFx7NCw2LDdcXH1cXCkg5ZKMIFxcKFxcezE1LDE4XFx9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKFxcezQsNlxcfVxcKSDlkowgXFwoXFx7NywxNSwxOFxcfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXChcXHs0LDYsNywxNVxcfVxcKSDlkowgXFwoXFx7MThcXH1cXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILlm5vnp43liIfms5XnmoTnu4TlhoXnprvlt67lubPmlrnlkozkvp3mrKHmmK8gXFwoMTA1XFwp44CBXFwoXFxhcHByb3g2Ni42N1xcKeOAgVxcKFxcYXBwcm94OS4xN1xcKeOAgVxcKDcwXFwp77yM56ys5LiJ56eN5pyA5bCP44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>1. 按组内离差平方和最小的原则，把 \(4,6,7,15,18\) 分成两组。</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(\{4,6,7\}\) 和 \(\{15,18\}\)</button><button class="opt" data-v="B"><b>B</b>\(\{4,6\}\) 和 \(\{7,15,18\}\)</button><button class="opt" data-v="C"><b>C</b>\(\{4,6,7,15\}\) 和 \(\{18\}\)</button></div>
+    <div class="reveal"><p><b>A</b>。四种切法的组内离差平方和依次是 \(105\)、\(\approx66.67\)、\(\approx9.17\)、\(70\)，第三种最小。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjIuIOaKiiBcXCgyLDQsOSwxMCwxMVxcKSDliIbmiJAgXFwoXFx7Miw0XFx9XFwpIOWSjCBcXChcXHs5LDEwLDExXFx9XFwp77yM57uE5YaF56a75beu5bmz5pa55ZKM5piv5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXHRmcmFjNTNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNjIuOFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgwXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoXFx7Miw0XFx9XFwp77ya5bmz5Z2H5pWwIFxcKDNcXCnvvIxcXChkXzFeMj0xKzE9MlxcKe+8m1xcKFxcezksMTAsMTFcXH1cXCnvvJpcXChkXzJeMj0xKzArMT0yXFwp77yb5ZKM5Li6IFxcKDRcXCnjgIJCIOaYr+S4pOe7hOaWueW3ruS5i+WSjCBcXCgxK1xcdGZyYWMyM1xcKe+8m0Mg5piv5YWo6YOoIDUg5Liq5pWw55qE56a75beu5bmz5pa55ZKM44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>2. 把 \(2,4,9,10,11\) 分成 \(\{2,4\}\) 和 \(\{9,10,11\}\)，组内离差平方和是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(4\)</button><button class="opt" data-v="B"><b>B</b>\(\tfrac53\)</button><button class="opt" data-v="C"><b>C</b>\(62.8\)</button><button class="opt" data-v="D"><b>D</b>\(0\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(\{2,4\}\)：平均数 \(3\)，\(d_1^2=1+1=2\)；\(\{9,10,11\}\)：\(d_2^2=1+0+1=2\)；和为 \(4\)。B 是两组方差之和 \(1+\tfrac23\)；C 是全部 5 个数的离差平方和。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjMuIOaVsOaNriBcXCg5LDIsMTAsMyw0XFwpIOaMiee7hOWGheemu+W3ruW5s+aWueWSjOacgOWwj+WIhuaIkOS4pOe7hO+8jOe7k+aenOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+56ys5LiA5q2l5YGa5LuA5LmI77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChcXHs5LDIsMTBcXH1cXCkg5ZKMIFxcKFxcezMsNFxcfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXHsyLDMsNFxcfVxcKSDlkowgXFwoXFx7OSwxMFxcfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXChcXHsyLDNcXH1cXCkg5ZKMIFxcKFxcezQsOSwxMFxcfVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAguWFiOaOkuW6jyBcXCgyLDMsNCw5LDEwXFwp44CCQiDnmoTnu4TlhoXnprvlt67lubPmlrnlkowgXFwoMiswLjU9Mi41XFwp77ybQyDmmK8gXFwoMC41K1xcdGZyYWN7NjJ9ezN9XFxhcHByb3gyMS4xN1xcKe+8m0Eg5piv5Zyo5rKh5o6S5bqP55qE5Y6f5aeL6aG65bqP5LiK5YiH55qE77yI57+76L2m546w5Zy6IOKRoe+8ieOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>3. 数据 \(9,2,10,3,4\) 按组内离差平方和最小分成两组，结果是：</p>
+    <details class="more"><summary>提示</summary><p>第一步做什么？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(\{9,2,10\}\) 和 \(\{3,4\}\)</button><button class="opt" data-v="B"><b>B</b>\(\{2,3,4\}\) 和 \(\{9,10\}\)</button><button class="opt" data-v="C"><b>C</b>\(\{2,3\}\) 和 \(\{4,9,10\}\)</button></div>
+    <div class="reveal"><p><b>B</b>。先排序 \(2,3,4,9,10\)。B 的组内离差平方和 \(2+0.5=2.5\)；C 是 \(0.5+\tfrac{62}{3}\approx21.17\)；A 是在没排序的原始顺序上切的（翻车现场 ②）。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjQuIOaKiiBcXCgxLDMsNiw4LDEwXFwpIOWIhuaIkCBcXChcXHsxLDNcXH1cXCkg5ZKMIFxcKFxcezYsOCwxMFxcfVxcKeOAgui/meenjeWIhuazleeahOe7hOmXtOemu+W3ruW5s+aWueWSjOaYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5Y+v5Lul55u05o6l55So57uE6Ze05YWs5byP77yb5Lmf5Y+v5Lul5YWI566X5pW05L2TIFxcKGReMlxcKSDlkoznu4TlhoXvvIzlho3nm7jlh4/jgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNDMuMlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgzNlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgxMFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCg1My4yXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoXFxiYXIgeD01LjZcXCnvvIxcXChcXGJhciB4XzE9MlxcKe+8jFxcKFxcYmFyIHhfMj04XFwp77yM57uE6Ze0IFxcKD0yXFx0aW1lczMuNl4yKzNcXHRpbWVzMi40XjI9MjUuOTIrMTcuMjg9NDMuMlxcKeOAgumqjOeul++8muaVtOS9kyBcXChkXjI9NTMuMlxcKe+8jOe7hOWGhSBcXCgyKzg9MTBcXCnvvIxcXCg1My4yLTEwPTQzLjJcXCkg4pyT44CCQiDmmK/miorjgIzkuKTnu4TlubPlnYfmlbDkuYvlt67nmoTlubPmlrnjgI1cXCgoOC0yKV4yXFwpIOW9k+aIkOS6hue7hOmXtO+8m0Mg5piv57uE5YaF77ybRCDmmK/mlbTkvZPjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>4. 把 \(1,3,6,8,10\) 分成 \(\{1,3\}\) 和 \(\{6,8,10\}\)。这种分法的组间离差平方和是多少？</p>
+    <details class="more"><summary>提示</summary><p>可以直接用组间公式；也可以先算整体 \(d^2\) 和组内，再相减。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(43.2\)</button><button class="opt" data-v="B"><b>B</b>\(36\)</button><button class="opt" data-v="C"><b>C</b>\(10\)</button><button class="opt" data-v="D"><b>D</b>\(53.2\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(\bar x=5.6\)，\(\bar x_1=2\)，\(\bar x_2=8\)，组间 \(=2\times3.6^2+3\times2.4^2=25.92+17.28=43.2\)。验算：整体 \(d^2=53.2\)，组内 \(2+8=10\)，\(53.2-10=43.2\) ✓。B 是把「两组平均数之差的平方」\((8-2)^2\) 当成了组间；C 是组内；D 是整体。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjUuIOS4i+mdouWFs+S6juacrOiKguWIhue7hOaWueazleeahOivtOazle+8jOato+ehrueahOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5Zue5oOz5L6LIDEg5Lik57uE5ZCE5Yeg5Liq44CB566XIFxcKGRfMV4yXFwpIOeUqOeahOaYr+WTquS4quW5s+Wdh+aVsOOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5Lik57uE55qE5pWw5o2u5Liq5pWw5b+F6aG755u4562JPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPueul+avj+e7hOeahOemu+W3ruW5s+aWueWSjO+8jOmDveeUqOWFqOmDqOaVsOaNrueahOW5s+Wdh+aVsDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7nu4TlhoXnprvlt67lubPmlrnlkozmnIDlsI/nmoTliIbms5XvvIznu4Tpl7Tnprvlt67lubPmlrnlkozmnIDlpKc8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5a6D5ZKM5LiD5LiL5oyJ57uE6Led55S755u05pa55Zu+55qE5YiG57uE5piv5LiA5Zue5LqLPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkM8L2I+44CC57uE5YaFIFxcKCtcXCkg57uE6Ze0IFxcKD1kXjJcXCkg5LiN5Y+Y44CCQe+8muWPr+S7peS4gOWkmuS4gOWwke+8m0LvvJrmr4/nu4TnlKjoh6rlt7HnmoTlubPlnYfmlbDvvJtE77ya55u05pa55Zu+5oyJ5Zu65a6a5Yy66Ze05YiG77yM5LiN55yL57uE5YaF5o6l6L+R56iL5bqm44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>5. 下面关于本节分组方法的说法，正确的是：</p>
+    <details class="more"><summary>提示</summary><p>回想例 1 两组各几个、算 \(d_1^2\) 用的是哪个平均数。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>两组的数据个数必须相等</button><button class="opt" data-v="B"><b>B</b>算每组的离差平方和，都用全部数据的平均数</button><button class="opt" data-v="C"><b>C</b>组内离差平方和最小的分法，组间离差平方和最大</button><button class="opt" data-v="D"><b>D</b>它和七下按组距画直方图的分组是一回事</button></div>
+    <div class="reveal"><p><b>C</b>。组内 \(+\) 组间 \(=d^2\) 不变。A：可以一多一少；B：每组用自己的平均数；D：直方图按固定区间分，不看组内接近程度。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjYuIDUg5ZCN5ZCM5a2m55qE6Lez57uz5oiQ57up5pivIFxcKDEwLDExLDEyLDEzLDMwXFwp77yI5Y2V5L2N77ya5LiqLzEwIOenku+8ieOAguaMiee7hOWGheemu+W3ruW5s+aWueWSjOacgOWwj+WIhuaIkOS4pOe7hO+8jOe7k+aenOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMe+8muS4gOS4quaVsOS5n+iDveWNleeLrOaIkOe7hDwvc3VtbWFyeT48cD7lj6rmnInkuIDkuKrmlbDmja7nmoTnu4TvvIznprvlt67lubPmlrnlkozmmK8gXFwoMFxcKeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDLvvJrnrpflm5vnp43liIfms5U8L3N1bW1hcnk+PHA+5L6L5aaCIFxcKFxcezEwLDExLDEyLDEzXFx9XFwp44CBXFwoXFx7MzBcXH1cXCnvvJpcXChkXzFeMj0yLjI1KzAuMjUrMC4yNSsyLjI1PTVcXCnvvIxcXChkXzJeMj0wXFwp44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChcXHsxMCwxMSwxMiwxM1xcfVxcKSDlkowgXFwoXFx7MzBcXH1cXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoXFx7MTAsMTFcXH1cXCkg5ZKMIFxcKFxcezEyLDEzLDMwXFx9XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFxcezEwLDExLDEyXFx9XFwpIOWSjCBcXChcXHsxMywzMFxcfVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuI3og73mioogMzAg5Y2V54us5YiG5Ye65Y6777yM5Lik57uE6KaB5beu5LiN5aSa5aSnPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5Zub56eN5YiH5rOV5L6d5qyh5pivIFxcKDI0NVxcKeOAgVxcKDAuNStcXHRmcmFjezYxNH17M31cXGFwcHJveDIwNS4xN1xcKeOAgVxcKDIrMTQ0LjU9MTQ2LjVcXCnjgIFcXCg1XFwp77yM5pyA5ZCO5LiA56eN5pyA5bCP44CCQuOAgUMg6YO95oqKIFxcKDEzXFwpIOWSjCBcXCgzMFxcKSDmlL7ov5vkuIDnu4TvvJtEIOaYr+S7peS4uuS4pOe7hOimgeS4gOagt+Wkp++8iOe/u+i9pueOsOWcuiDikaDvvInjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>6. 5 名同学的跳绳成绩是 \(10,11,12,13,30\)（单位：个/10 秒）。按组内离差平方和最小分成两组，结果是：</p>
+    <details class="more"><summary>提示 1：一个数也能单独成组</summary><p>只有一个数据的组，离差平方和是 \(0\)。</p></details>
+    <details class="more"><summary>提示 2：算四种切法</summary><p>例如 \(\{10,11,12,13\}\)、\(\{30\}\)：\(d_1^2=2.25+0.25+0.25+2.25=5\)，\(d_2^2=0\)。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(\{10,11,12,13\}\) 和 \(\{30\}\)</button><button class="opt" data-v="B"><b>B</b>\(\{10,11\}\) 和 \(\{12,13,30\}\)</button><button class="opt" data-v="C"><b>C</b>\(\{10,11,12\}\) 和 \(\{13,30\}\)</button><button class="opt" data-v="D"><b>D</b>不能把 30 单独分出去，两组要差不多大</button></div>
+    <div class="reveal"><p><b>A</b>。四种切法依次是 \(245\)、\(0.5+\tfrac{614}{3}\approx205.17\)、\(2+144.5=146.5\)、\(5\)，最后一种最小。B、C 都把 \(13\) 和 \(30\) 放进一组；D 是以为两组要一样大（翻车现场 ①）。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">下面三道中考统计题练习离差平方和、方差与数据波动比较；解析中再联系本节的分组方法。按组内离差平方和选择分组是解析的延伸，不是原题的设问。</p>
+  <div id="practice"></div>
+</section>
+
+<footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function f(v, d) { var k = Math.pow(10, d == null ? 2 : d), r = Math.round(v * k) / k; if (r === 0) return "0"; var s = String(Math.abs(r)); return r < 0 ? "−" + s : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+  function mean(a) { return sum(a) / a.length; }
+  function d2(a) { if (!a.length) return 0; var m = mean(a); return sum(a.map(function (x) { return (x - m) * (x - m); })); }
+  function srt(a) { return a.slice().sort(function (x, y) { return x - y; }); }
+  // 排好序的 s 切在第 m 个间隔（前 m 个一组）：组内离差平方和
+  function within(s, m) { return d2(s.slice(0, m)) + d2(s.slice(m)); }
+  function best(s) { var bm = 1; for (var m = 2; m < s.length; m++) if (within(s, m) < within(s, bm) - 1e-9) bm = m; return bm; }
+  function axis(p, lo, hi, x0, x1, y, ts, every, sz, off) {
+    var c = C(), u = (x1 - x0) / (hi - lo), n = Math.round((hi - lo) / ts);
+    function X(v) { return x0 + (v - lo) * u; }
+    el("line", { x1: x0 - 8, y1: y, x2: x1 + 12, y2: y, stroke: c.fg, "stroke-width": 2 }, p);
+    el("path", { d: "M" + (x1 + 20) + " " + y + " l-12 -6 v12 z", fill: c.fg }, p);
+    for (var k = 0; k <= n; k++) {
+      var v = lo + k * ts;
+      el("line", { x1: X(v), y1: y - 5, x2: X(v), y2: y + 5, stroke: c.fg, "stroke-width": 1.5 }, p);
+      if (Math.round((v - lo) / every * 1000) % 1000 === 0) txt(p, X(v), y + (off || 28), String(v), c.fg, 400, sz || 16);
+    }
+    return X;
+  }
+  function dot(p, x, y, col, r) { el("circle", { cx: x, cy: y, r: r || 7, fill: col }, p); }
+  function stackY(arr, i, y0, gap) { var k = 0; for (var j = 0; j < i; j++) if (arr[j] === arr[i]) k++; return y0 - k * gap; }
+  function cutLine(p, x, y1, y2, col) { el("line", { x1: x, y1: y1, x2: x, y2: y2, stroke: col, "stroke-width": 3, "stroke-dasharray": "6 4" }, p); }
+  function handle(svg, x, y, col, label, val, lo, hi, step, toVal, cb) {
+    var c = C();
+    var h = el("circle", { cx: x, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": f(val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + step, ArrowUp: val + step, ArrowLeft: val - step, ArrowDown: val - step, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(clamp(Math.round(nv / step) * step, lo, hi), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        cb(clamp(Math.round(toVal(pt.matrixTransform(m.inverse()).x) / step) * step, lo, hi), false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+  // 按排序后的名次给每个原始数据分组：前 m 名为 0 组
+  function groupOf(d, m) { var idx = d.map(function (v, i) { return i; }).sort(function (i, j) { return d[i] - d[j] || i - j; }), g = []; idx.forEach(function (i, r) { g[i] = r < m ? 0 : 1; }); return g; }
+
+  /* 从例子进入 */
+  var SIT = [28, 31, 33, 45, 47, 50, 52], entryK = 0, ef = document.getElementById("entry-fig");
+  function drawEntry() {
+    var c = C(), m = [4, 1, 3][entryK]; ef.innerHTML = "";
+    var X = axis(ef, 25, 55, 30, 486, 110, 1, 5, 18, 32);
+    cutLine(ef, (X(SIT[m - 1]) + X(SIT[m])) / 2, 30, 120, c.no);
+    SIT.forEach(function (v, i) { dot(ef, X(v), 92, i < m ? c.c : c.a, 9); });
+    var a = SIT.slice(0, m), b = SIT.slice(m);
+    document.getElementById("entry-note").textContent = "第一组 " + a.join("，") + "；第二组 " + b.join("，") + "。" + (entryK === 0 ? "45 和 47 只差 2 个，却被拆开了。" : entryK === 1 ? "28 单独一组，31 和 52 却在一组。" : "切在 33 和 45 之间：这里空隙最大，两组各自很紧凑。");
+  }
+  bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
+
+  /* 微图解 ①：按组距 vs 按接近 */
+  var m1k = 0;
+  function drawM1() {
+    var p = document.getElementById("m1-fig"), c = C(); p.innerHTML = "";
+    var X = axis(p, 20, 60, 30, 346, 104, 1, 10, 16, 28);
+    if (m1k === 0) { [30, 40, 50].forEach(function (v) { cutLine(p, X(v), 36, 112, c.muted); }); }
+    else cutLine(p, (X(33) + X(45)) / 2, 36, 112, c.no);
+    var cols = [c.c, c.a, c.b, c.no];
+    SIT.forEach(function (v) { dot(p, X(v), 84, m1k ? (v < 40 ? c.c : c.a) : cols[Math.floor(v / 10) - 2], 8); });
+    document.getElementById("m1-note").textContent = m1k === 0 ? "按组距 10：28 | 31、33 | 45、47 | 50、52。区间是先定好的，47 和 50 只差 3 也被分开。" : "按接近程度：28、31、33 一组，45、47、50、52 一组，组的边界由数据的空隙决定。";
+  }
+  bar("m1-bar", function (t) { m1k = +t.getAttribute("data-k"); drawM1(); });
+
+  /* 微图解 ②：跳着分 vs 相邻切 */
+  var SIX = [1, 2, 4, 9, 10, 11], m2k = 0;
+  function drawM2() {
+    var p = document.getElementById("m2-fig"), c = C(); p.innerHTML = "";
+    var X = axis(p, 0, 12, 30, 346, 104, 1, 2, 16, 28);
+    var g = m2k === 0 ? [0, 1, 0, 1, 0, 1] : [0, 0, 0, 1, 1, 1];
+    SIX.forEach(function (v, i) { dot(p, X(v), 84, m2k === 2 ? c.muted : g[i] ? c.a : c.c, 8); });
+    if (m2k === 1) cutLine(p, (X(4) + X(9)) / 2, 36, 112, c.no);
+    if (m2k === 2) for (var i = 1; i < 6; i++) { var x = (X(SIX[i - 1]) + X(SIX[i])) / 2; el("line", { x1: x, y1: 58, x2: x, y2: 112, stroke: c.no, "stroke-width": 2 }, p); txt(p, x, 48, String(i), c.no, 700, 15); }
+    var A = SIX.filter(function (v, i) { return !g[i]; }), B = SIX.filter(function (v, i) { return g[i]; });
+    document.getElementById("m2-note").textContent = m2k === 2 ? "6 个数排好序有 5 个间隔，一刀只能切在其中一个：一共 5 种分法，逐一比较就行。" : "{" + A.join(", ") + "} 和 {" + B.join(", ") + "}：d₁² = " + f(d2(A)) + "，d₂² = " + f(d2(B)) + "，组内离差平方和 " + f(d2(A) + d2(B)) + "。" + (m2k === 0 ? "每组都混进了远处的数。" : "相邻的数在一起，小得多。");
+  }
+  bar("m2-bar", function (t) { m2k = +t.getAttribute("data-k"); drawM2(); });
+
+  /* 微图解 ③、④：例 1 的四刀 */
+  var EX = [2, 3, 5, 10, 12], m3m = 3, m4m = 1;
+  function drawM3() {
+    var p = document.getElementById("m3-fig"), c = C(); p.innerHTML = "";
+    var X = axis(p, 0, 14, 30, 346, 70, 1, 2, 16, 26), bm = best(EX);
+    EX.forEach(function (v, i) { dot(p, X(v), 52, i < m3m ? c.c : c.a, 8); });
+    cutLine(p, (X(EX[m3m - 1]) + X(EX[m3m])) / 2, 24, 78, c.no);
+    for (var m = 1; m <= 4; m++) {
+      var w = within(EX, m), h = w * 1.2, x = 60 + (m - 1) * 80;
+      el("rect", { x: x, y: 178 - h, width: 40, height: h, rx: 3, fill: m === m3m ? c.b : c.muted, opacity: m === m3m ? 1 : 0.5 }, p);
+      txt(p, x + 20, 198, "第" + m + "刀", m === bm ? c.no : c.fg, m === bm ? 700 : 400, 15);
+    }
+    var a = EX.slice(0, m3m), b = EX.slice(m3m);
+    document.getElementById("m3-note").textContent = "第 " + m3m + " 刀：{" + a.join(", ") + "} 和 {" + b.join(", ") + "}，组内离差平方和 " + f(d2(a)) + " + " + f(d2(b)) + " ≈ " + f(within(EX, m3m)) + "。" + (m3m === bm ? "这是四根条里最矮的，就选它。" : "比第 " + bm + " 刀的 " + f(within(EX, bm)) + " 大。");
+  }
+  bar("m3-bar", function (t) { m3m = +t.getAttribute("data-m"); drawM3(); });
+  function drawM4() {
+    var p = document.getElementById("m4-fig"), c = C(), T = d2(EX), w = within(EX, m4m), L = 320 * w / T; p.innerHTML = "";
+    el("rect", { x: 30, y: 50, width: L, height: 36, fill: c.a }, p);
+    el("rect", { x: 30 + L, y: 50, width: 320 - L, height: 36, fill: c.b }, p);
+    txt(p, 30, 36, "组内", c.a, 700, 16, "start"); txt(p, 350, 36, "组间", c.b, 700, 16, "end");
+    txt(p, 190, 120, "d² = " + f(T), c.fg, 700, 17);
+    var mx = mean(EX), a = EX.slice(0, m4m), b = EX.slice(m4m);
+    document.getElementById("m4-note").textContent = "第 " + m4m + " 刀：组内 " + f(w) + "，组间 " + a.length + "×(" + f(mean(a)) + " − " + f(mx) + ")² + " + b.length + "×(" + f(mean(b)) + " − " + f(mx) + ")² ≈ " + f(T - w) + "，加起来总是 d² = " + f(T) + "。";
+  }
+  bar("m4-bar", function (t) { m4m = +t.getAttribute("data-m"); drawM4(); });
+
+  /* 翻车现场 ① */
+  function drawTrap() {
+    var p = document.getElementById("m-trap"), c = C(), s = [3, 4, 20, 21, 22, 23, 24]; p.innerHTML = "";
+    var X = axis(p, 0, 25, 64, 274, 140, 1, 5, 15, 26);
+    [[3, 46, "中间切"], [2, 100, "最小"]].forEach(function (r) {
+      txt(p, 6, r[1] + 6, r[2], r[0] === 2 ? c.a : c.no, 700, 15, "start");
+      s.forEach(function (v, i) { dot(p, X(v), r[1], i < r[0] ? c.c : c.a, 4.5); });
+      cutLine(p, (X(s[r[0] - 1]) + X(s[r[0]])) / 2, r[1] - 16, r[1] + 16, r[0] === 2 ? c.a : c.no);
+    });
+  }
+
+  /* 动手 ①：拖动切刀 */
+  var H = [148, 150, 153, 155, 162, 164, 167, 175], CUT0 = 2, cut = CUT0, focusC = false, fc = document.getElementById("fig-cut");
+  function nearestGap(X, s, x, lo, hi) { var bm = lo, bd = 1e9; for (var m = lo; m <= hi; m++) { var d = Math.abs((X(s[m - 1]) + X(s[m])) / 2 - x); if (d < bd) { bd = d; bm = m; } } return bm; }
+  function drawCut() {
+    var c = C(), bm = best(H); fc.innerHTML = "";
+    var X = axis(fc, 145, 180, 40, 516, 120, 1, 5, 19, 36);
+    H.forEach(function (v, i) { dot(fc, X(v), 104, i < cut ? c.c : c.a, 9); });
+    var gx = (X(H[cut - 1]) + X(H[cut])) / 2;
+    cutLine(fc, gx, 40, 126, c.no);
+    var vals = [], mx = 0;
+    for (var m = 1; m < 8; m++) { vals.push(within(H, m)); mx = Math.max(mx, vals[m - 1]); }
+    vals.forEach(function (w, i) {
+      var h = 110 * w / mx, x = 72 + i * 62;
+      el("rect", { x: x, y: 300 - h, width: 36, height: h, rx: 3, fill: i + 1 === cut ? c.b : c.muted, opacity: i + 1 === cut ? 1 : 0.45, stroke: i + 1 === bm ? c.no : "none", "stroke-width": 3 }, fc);
+      txt(fc, x + 18, 324, String(i + 1), i + 1 === bm ? c.no : c.fg, i + 1 === bm ? 700 : 400, 19);
+    });
+    txt(fc, 20, 324, "刀", c.fg, 700, 19, "start");
+    var h = handle(fc, gx, 40, c.no, "切刀位置", cut, 1, 7, 1, function (x) { return nearestGap(X, H, x, 1, 7); }, function (v, key) { cut = v; focusC = key; drawCut(); });
+    var a = H.slice(0, cut), b = H.slice(cut), gi = 1;
+    for (var k = 2; k < 8; k++) if (H[k] - H[k - 1] > H[gi] - H[gi - 1]) gi = k;
+    document.getElementById("out-cut").innerHTML = "第 " + cut + " 刀：{" + a.join(", ") + "} 和 {" + b.join(", ") + "}。d₁² ≈ " + f(d2(a)) + "，d₂² ≈ " + f(d2(b)) + "，组内离差平方和 ≈ <span class=\"sum\">" + f(vals[cut - 1]) + "</span>。" + (cut === bm ? "这就是 7 种里最小的（红框）。注意：最大的空隙在 " + H[gi - 1] + " 和 " + H[gi] + " 之间（差 " + (H[gi] - H[gi - 1]) + "），从那里切并不是最好；最优位置要把全部切法的组内离差平方和算出来比较才知道。" : "还不是最小的：最小在第 " + bm + " 刀（红框），约 " + f(vals[bm - 1]) + "。");
+    if (focusC) h.focus();
+  }
+  document.getElementById("reset-cut").onclick = function () { cut = CUT0; focusC = false; drawCut(); };
+
+  /* 动手 ②：拖动数据，自动找最好分法 */
+  var A0 = [2, 3, 5, 9, 10, 11, 15], AD = A0.slice(), focusA = -1, fa = document.getElementById("fig-auto");
+  function drawAuto() {
+    var c = C(), s = srt(AD), bm = best(s), g = groupOf(AD, bm), T = d2(s), w = within(s, bm), hs = []; fa.innerHTML = "";
+    var X = axis(fa, 0, 20, 40, 516, 130, 1, 2, 19, 36);
+    cutLine(fa, (X(s[bm - 1]) + X(s[bm])) / 2, 20, 136, c.no);
+    AD.forEach(function (v, i) {
+      hs.push(handle(fa, X(v), stackY(AD, i, 130, 18), g[i] ? c.a : c.c, "第 " + (i + 1) + " 个数据", v, 0, 20, 1, function (x) { return (x - 40) / 23.8; },
+        function (nv, key) { AD[i] = nv; focusA = key ? i : -1; drawAuto(); }));
+    });
+    var L = T ? 440 * w / T : 0;
+    txt(fa, 60, 214, "组内", c.a, 700, 19, "start"); txt(fa, 500, 214, "组间", c.b, 700, 19, "end");
+    if (T) { el("rect", { x: 60, y: 224, width: L, height: 24, fill: c.a }, fa); el("rect", { x: 60 + L, y: 224, width: 440 - L, height: 24, fill: c.b }, fa); }
+    var a = s.slice(0, bm), b = s.slice(bm), o = document.getElementById("out-auto");
+    if (!T) o.innerHTML = "所有数据都相等，d² = 0，怎么分组内离差平方和都是 0，分组没有意义。";
+    else o.innerHTML = "排序：" + s.join("，") + "。6 种切法里最小的是第 " + bm + " 刀：{" + a.join(", ") + "} 和 {" + b.join(", ") + "}，组内 ≈ <span class=\"sum\">" + f(w) + "</span>，组间 ≈ " + f(T - w) + "，合计 d² = " + f(T) + "。" + (a.length === 1 || b.length === 1 ? "有一组只有 1 个数：它离别的数太远，单独成组最好。" : "两组 " + a.length + " 个和 " + b.length + " 个，组的大小由数据决定。");
+    if (focusA >= 0) hs[focusA].focus();
+  }
+  document.getElementById("reset-auto").onclick = function () { AD = A0.slice(); focusA = -1; drawAuto(); };
+
+  /* 动手 ③：切两刀 */
+  var T0 = [2, 5], TC = T0.slice(), focusT = -1, ft = document.getElementById("fig-three");
+  function w3(s, i, j) { return d2(s.slice(0, i)) + d2(s.slice(i, j)) + d2(s.slice(j)); }
+  function drawThree() {
+    var c = C(), hs = []; ft.innerHTML = "";
+    var X = axis(ft, 145, 180, 40, 516, 130, 1, 5, 19, 36), cols = [c.c, c.b, c.a];
+    H.forEach(function (v, k) { dot(ft, X(v), 114, cols[k < TC[0] ? 0 : k < TC[1] ? 1 : 2], 9); });
+    TC.forEach(function (m, i) {
+      var gx = (X(H[m - 1]) + X(H[m])) / 2;
+      cutLine(ft, gx, 40, 136, c.no);
+      hs.push(handle(ft, gx, 40, c.no, "第 " + (i + 1) + " 把切刀", m, i ? 2 : 1, i ? 7 : 6, 1, function (x) { return nearestGap(X, H, x, i ? 2 : 1, i ? 7 : 6); },
+        function (v, key) { TC[i] = v; if (i === 0 && TC[1] <= v) TC[1] = v + 1; if (i === 1 && TC[0] >= v) TC[0] = v - 1; focusT = key ? i : -1; drawThree(); }));
+    });
+    var bi = 1, bj = 2;
+    for (var i = 1; i < 7; i++) for (var j = i + 1; j < 8; j++) if (w3(H, i, j) < w3(H, bi, bj) - 1e-9) { bi = i; bj = j; }
+    var g = [H.slice(0, TC[0]), H.slice(TC[0], TC[1]), H.slice(TC[1])], cur = w3(H, TC[0], TC[1]);
+    document.getElementById("out-three").innerHTML = "三组：{" + g.map(function (x) { return x.join(", "); }).join("}、{") + "}，组内离差平方和 ≈ " + g.map(function (x) { return f(d2(x)); }).join(" + ") + " ≈ <span class=\"sum\">" + f(cur) + "</span>。" + (TC[0] === bi && TC[1] === bj ? "这就是所有 21 种两刀切法里最小的。" : "所有 21 种两刀切法里，最小的是 {" + H.slice(0, bi).join(", ") + "}、{" + H.slice(bi, bj).join(", ") + "}、{" + H.slice(bj).join(", ") + "}，约 " + f(w3(H, bi, bj)) + "。");
+    if (focusT >= 0) hs[focusT].focus();
+  }
+  document.getElementById("reset-three").onclick = function () { TC = T0.slice(); focusT = -1; drawThree(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawM4(); drawTrap(); drawCut(); drawAuto(); drawThree(); }
+  drawAll();
+  new MutationObserver(function () { focusC = false; focusA = focusT = -1; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

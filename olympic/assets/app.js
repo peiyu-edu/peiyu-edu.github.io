@@ -1,4 +1,4 @@
-/* 培玉 · 竞赛数学站：主题切换、作答判分、解析逐层展开、本地记录。 */
+/* 培玉 · 一试站：主题切换、作答判分、解析逐层展开、本地记录。 */
 (function () {
   "use strict";
   var STORE = "peiyu.olympic.v1";
@@ -132,8 +132,6 @@
     var b = document.querySelector("[data-theme-toggle]");
     if (!b) return;
     b.classList.add("theme-switch");
-    var spacer = b.parentNode.querySelector(".sp");
-    if (spacer) b.parentNode.insertBefore(b, spacer.nextSibling);
     b.setAttribute("role", "switch");
     b.setAttribute("aria-label", "深色模式");
     b.innerHTML = '<span class="theme-icon theme-sun" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42m0-14.14-1.42 1.42m-11.3 11.3-1.42 1.42"/></svg></span><span class="theme-icon theme-moon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.9 13.3A9 9 0 0 1 10.7 3.1 9 9 0 1 0 20.9 13.3Z"/></svg></span>';
@@ -189,12 +187,55 @@
     return s;
   }
 
+  function splitTop(s, sep) {
+    var out = [], cur = "", d = 0;
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      if (c === "(" || c === "[" || c === "{") d++;
+      else if (c === ")" || c === "]" || c === "}") d = Math.max(0, d - 1);
+      if (c === sep && d === 0) { out.push(cur); cur = ""; }
+      else cur += c;
+    }
+    out.push(cur);
+    return out;
+  }
+
+  function closeVal(u, v) { return Math.abs(u - v) <= 1e-9 * Math.max(1, Math.abs(v)); }
+
+  function normSeg(s, keepLabel) {
+    s = s.replace(/^\((.*)\)$/, function (m, inner) { return balanced(inner) && splitTop(inner, ",").length === 1 ? inner : m; });
+    if (s.indexOf("=") >= 0 && !/[<>]=/.test(s)) {
+      var eqs = splitTop(s, "=");
+      if (eqs.length >= 3) {
+        try {
+          var vLast = evaluate(eqs[eqs.length - 1]);
+          var startIdx = (!keepLabel && /^[a-zA-Z](?:_[a-zA-Z0-9]+)?$/.test(eqs[0])) ? 1 : 0;
+          var allEq = true;
+          for (var k = startIdx; k < eqs.length - 1; k++) {
+            if (!closeVal(evaluate(eqs[k]), vLast)) { allEq = false; break; }
+          }
+          if (allEq) s = eqs[eqs.length - 1];
+        } catch (e) { /* keep full chain when non-numeric or unequal */ }
+      } else if (eqs.length === 2) {
+        var lhs = eqs[0], rhs = eqs[1];
+        if (!keepLabel && /^[a-zA-Z](?:_[a-zA-Z0-9]+)?$/.test(lhs)) {
+          try { evaluate(rhs); s = rhs; } catch (e) { /* keep lhs=rhs for variable/locus equations */ }
+        } else {
+          try { if (closeVal(evaluate(lhs), evaluate(rhs))) s = rhs; } catch (e) { /* keep lhs=rhs for relational equations */ }
+        }
+      }
+    }
+    return s.replace(/^\((.*)\)$/, function (m, inner) { return balanced(inner) && splitTop(inner, ",").length === 1 ? inner : m; });
+  }
+
   function norm(s) {
     s = String(s || "");
+    var isPairTuple = /^\s*[（(][^()（）]+[，,][^()（）]+[)）]\s*$/.test(s);
     s = s.replace(/[（]/g, "(").replace(/[）]/g, ")").replace(/[［]/g, "[").replace(/[］]/g, "]")
       .replace(/[，]/g, ",").replace(/[−–—]/g, "-").replace(/[×·]/g, "*").replace(/÷/g, "/")
-      .replace(/π/g, "\\pi").replace(/√/g, "\\sqrt").replace(/∞/g, "\\infty").replace(/≤/g, "<=").replace(/≥/g, ">=");
-    s = s.replace(/\\(left|right|displaystyle|,|;|!|quad|qquad)/g, "").replace(/\\(mathrm|text|textup|mathbf)\s*/g, "");
+      .replace(/π/g, "\\pi").replace(/√/g, "\\sqrt").replace(/∞/g, "\\infty").replace(/≤/g, "<=").replace(/≥/g, ">=").replace(/∪/g, "\\cup");
+    s = s.replace(/\\(?:quad|qquad)+/g, ",");
+    s = s.replace(/\\(left|right|displaystyle|,|;|!)/g, "").replace(/\\(mathrm|text|textup|mathbf)\s*/g, "");
     s = s.replace(/\\[dt]frac/g, "\\frac");
     s = s.replace(/\\sqrt\s*(\d+)/g, "\\sqrt{$1}");
     s = unwrap(s, "frac", function (a, b) { return "(" + a + ")/(" + b + ")"; });
@@ -206,8 +247,18 @@
       .replace(/\\(leqslant|leq|le)\b/g, "<=").replace(/\\(geqslant|geq|ge)\b/g, ">=").replace(/\\cup/g, "U");
     s = s.replace(/[{}]/g, function (c) { return c === "{" ? "(" : ")"; }).replace(/\s+/g, "").replace(/[。.]$/, "");
     s = s.replace(/\((或|和|及|与)\)|或|和|及|、|；|;/g, ",");
-    if (s.indexOf("=") >= 0 && !/[<>]=/.test(s)) s = s.slice(s.lastIndexOf("=") + 1);
-    return s.replace(/^\((.*)\)$/, function (m, inner) { return balanced(inner) && inner.indexOf(",") < 0 ? inner : m; });
+    s = s.replace(/^\((.*)\)$/, function (m, inner) { return balanced(inner) && splitTop(inner, ",").length === 1 ? inner : m; });
+    if (isPairTuple) return s;
+    var branches = splitTop(s, ",").filter(Boolean);
+    if (branches.length > 1) {
+      var labels = branches.map(function (b) {
+        var m = /^([a-zA-Z](?:_[a-zA-Z0-9]+)?)=/.exec(b.replace(/^\((.*)\)$/, "$1"));
+        return m ? m[1] : null;
+      }).filter(Boolean);
+      var hasDistinctLabels = new Set(labels).size > 1;
+      return branches.map(function (b) { return normSeg(b, hasDistinctLabels); }).join(",");
+    }
+    return normSeg(s, false);
   }
   function balanced(s) { var d = 0; for (var i = 0; i < s.length; i++) { if (s[i] === "(") d++; else if (s[i] === ")" && --d < 0) return false; } return d === 0; }
 
@@ -253,19 +304,88 @@
     if (i !== s.length || !isFinite(v)) throw new Error("x");
     return v;
   }
+  function canonEq(s) {
+    // Compare expression trees: deleting fraction parentheses can join factors
+    // or turn (a^b)^c into a^(b^c). No algebraic identities are assumed here.
+    function expressionTree(text) {
+      var i = 0;
+      function atom() {
+        if (text[i] === "(") {
+          i++; var inner = expr();
+          if (text[i++] !== ")") throw new Error("group");
+          return inner;
+        }
+        if (text.startsWith("sqrt(", i)) { i += 4; return ["sqrt", atom()]; }
+        var m = /^(\d+(?:\.\d+)?|\.\d+|pi|[a-zA-Z](?:_[a-zA-Z0-9]+)?)/.exec(text.slice(i));
+        if (!m) throw new Error("atom");
+        i += m[0].length;
+        if (/^\d|^\./.test(m[0])) {
+          var number = Number(m[0]);
+          if (!isFinite(number)) throw new Error("non-finite");
+          return ["number", number];
+        }
+        return ["symbol", m[0]];
+      }
+      function power() {
+        var base = atom();
+        if (text[i] === "^") { i++; return ["^", base, signed()]; }
+        return base;
+      }
+      function signed() {
+        if (text[i] === "+") { i++; return signed(); }
+        if (text[i] === "-") { i++; return ["neg", signed()]; }
+        return power();
+      }
+      function term() {
+        var value = signed();
+        for (;;) {
+          var c = text[i];
+          if (c === "*" || c === "/") { i++; value = [c, value, signed()]; }
+          else if (c && /[\d.a-zA-Z(]/.test(c)) value = ["*", value, signed()];
+          else return value;
+        }
+      }
+      function expr() {
+        var value = term();
+        while (text[i] === "+" || text[i] === "-") {
+          var op = text[i++]; value = [op, value, term()];
+        }
+        return value;
+      }
+      var tree = expr();
+      if (i !== text.length) throw new Error("trailing token");
+      return tree;
+    }
+    try { return JSON.stringify(splitTop(s, "=").map(expressionTree)); }
+    catch (e) { return null; }
+  }
   function same(a, b) {
     var x = norm(a), y = norm(b);
     if (!x) return false;
     if (x === y) return true;
-    // 多个值、没有区间括号：当作集合比较，不计顺序
-    if (x.indexOf(",") >= 0 && !/[\[\]()]/.test(x + y)) {
-      var xs = x.split(",").filter(Boolean), ys = y.split(",").filter(Boolean);
+    var cx = canonEq(x), cy = canonEq(y);
+    if (cx !== null && cx === cy) return true;
+    var isTuple = /^\([^,]+,[^,]+\)$/.test(x) || /^\([^,]+,[^,]+\)$/.test(y);
+    if (isTuple) return false;
+    var xs = splitTop(x, ",").filter(Boolean), ys = splitTop(y, ",").filter(Boolean);
+    if (xs.length > 1 || ys.length > 1) {
       if (xs.length !== ys.length) return false;
-      return xs.every(function (a) { var i = ys.findIndex(function (b) { return same(a, b); }); if (i < 0) return false; ys.splice(i, 1); return true; });
+      var rem = ys.slice();
+      return xs.every(function (u) {
+        var idx = rem.findIndex(function (v) {
+          var mu = /^([a-zA-Z](?:_[a-zA-Z0-9]+)?)=(.+)$/.exec(u);
+          var mv = /^([a-zA-Z](?:_[a-zA-Z0-9]+)?)=(.+)$/.exec(v);
+          if (mu && mv) return mu[1] === mv[1] && same(mu[2], mv[2]);
+          if (mu || mv) return false;
+          return same(u, v);
+        });
+        if (idx < 0) return false;
+        rem.splice(idx, 1);
+        return true;
+      });
     }
-    function close(u, v) { return Math.abs(u - v) <= 1e-9 * Math.max(1, Math.abs(v)); }
     // 非同形的含字母表达式交给自评；有限正数代入不能证明恒等或覆盖定义域。
-    try { return close(evaluate(x), evaluate(y)); } catch (e) { return false; }
+    try { return closeVal(evaluate(x), evaluate(y)); } catch (e) { return false; }
   }
 
   // ---------- 题目页 ----------
@@ -523,7 +643,7 @@
 
       function summary() {
         var name = nameInput.value.trim() || "（未填姓名）";
-        var lines = ["培玉竞赛数学 · 学习记录", "学生：" + name, "导出时间：" + new Date().toLocaleString("zh-CN"), "",
+        var lines = ["培玉一试 · 学习记录", "学生：" + name, "导出时间：" + new Date().toLocaleString("zh-CN"), "",
           "做过 " + tried.length + " 题；首次独立做对 " + indep.length + "；看过提示后做对 " + helped.length + "；重做后做对 " + later.length + "；待重做 " + todo.length + "。", ""];
         Object.keys(by).sort().forEach(function (fr) { var r = by[fr]; lines.push(r.name + "：做过 " + r.n + "，首次独立做对 " + r.indep + "，待重做 " + r.todo); });
         var graded = ids.filter(function (id) { var r = d.problems[id].rubric; return r && typeof r.score === "number" && typeof r.total === "number"; });

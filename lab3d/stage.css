@@ -1,0 +1,153 @@
+/* 培玉 · 3D 舞台（PY-331 试点，PY-337 推广）。配色沿用 site.css 的变量，深浅色自动切换。 */
+html, body { height: 100%; }
+/* 实心绿底按钮上的字：浅色用白字；深色模式绿色变亮，改用深底色（对比度 ≥ 4.5） */
+:root { --on-a: #fff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --on-a: #10201A; } }
+:root[data-theme="dark"] { --on-a: #10201A; }
+body.l3 { margin: 0; background: var(--bg); color: var(--fg); overflow-x: hidden; }
+
+.l3-top { display: flex; align-items: center; gap: 12px; padding: 10px 18px; border-bottom: 1px solid var(--line); background: var(--bg); }
+.l3-top img { width: 30px; height: 30px; }
+.l3-title { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.l3-title b { font-size: 17px; letter-spacing: .04em; }
+.l3-title span { font-size: 14px; color: var(--muted); letter-spacing: .12em; }
+.l3-top .sp { flex: 1; }
+.l3-top a.pill { display: inline-flex; align-items: center; min-height: 34px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--fg); font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.l3-top a.pill:hover, .l3-top a.pill:focus-visible { border-color: var(--a); color: var(--a); }
+.l3-badge { font-size: 14px; padding: 2px 8px; border-radius: 999px; background: var(--hl-soft); color: var(--fg); font-weight: 600; white-space: nowrap; }
+
+.l3-main { display: grid; grid-template-columns: minmax(0, 1fr) 390px; grid-template-rows: minmax(0, 1fr) auto; gap: 14px; padding: 14px 18px 0; height: calc(100vh - 57px - 118px); min-height: 560px; }
+
+/* 舞台：方格纸背景 */
+.l3-stage { position: relative; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; min-height: 0;
+  background-color: color-mix(in srgb, var(--bg) 70%, var(--card));
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 70%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px; touch-action: none; }
+.l3-stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; outline: none; }
+.l3-stage svg.l3-leaders { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.l3-leaders path { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.l3-leaders circle { fill: var(--card); stroke: var(--a); stroke-width: 2.5; }
+.l3-leaders circle.hot { fill: var(--hl); stroke: var(--fg); }
+
+.l3-callouts { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.l3-co { position: absolute; left: 0; top: 0; max-width: 210px; padding: 7px 10px 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 2px 0 color-mix(in srgb, var(--line) 80%, transparent); font-size: 14px; line-height: 1.5; pointer-events: auto; cursor: default; transition: opacity .2s, border-color .15s; will-change: transform; }
+.l3-co b { display: block; font-size: 15px; color: var(--fg); }
+.l3-co .n { display: none; }
+.l3-co span { color: var(--muted); }
+.l3-co:hover, .l3-co.hot { border-color: var(--hl); }
+.l3-co.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.l3-co .n, .l3-legend .n { font-style: normal; font-weight: 700; font-size: 14px; }
+/* 手机：卡片收成编号圆点，说明进舞台下方图例 */
+.l3-stage.compact .l3-co { max-width: none; padding: 0; width: 28px; height: 28px; border-radius: 50%; border-width: 1.5px; border-color: var(--a); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.l3-stage.compact .l3-co b, .l3-stage.compact .l3-co span { display: none; }
+.l3-stage.compact .l3-co .n { display: inline; color: var(--fg); }
+.l3-stage.compact .l3-co.hot { background: var(--hl); border-color: var(--fg); }
+.l3-legend { display: none; list-style: none; margin: 0; padding: 0; gap: 6px; }
+.l3-legend.on { display: grid; grid-template-columns: 1fr 1fr; }
+.l3-legend li.hidden { display: none; }
+.l3-legend button { width: 100%; height: 100%; text-align: left; font: inherit; font-size: 14px; line-height: 1.45; padding: 6px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--fg); cursor: pointer; display: grid; grid-template-columns: 24px 1fr; column-gap: 6px; }
+.l3-legend .n { grid-row: span 2; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--a); display: inline-flex; align-items: center; justify-content: center; }
+.l3-legend b { font-size: 14px; }
+.l3-legend span { color: var(--muted); grid-column: 2; }
+.l3-legend li.hot button { border-color: var(--hl); background: var(--hl-soft); }
+@media (max-width: 400px) { .l3-legend.on { grid-template-columns: 1fr; } }
+
+/* 点名、平面名等小标签（无引线） */
+.l3-tags { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.l3-tag { position: absolute; left: 0; top: 0; font-size: 15px; font-weight: 700; font-style: italic; font-family: "Times New Roman", "STIX Two Text", serif; color: var(--fg); white-space: nowrap; will-change: transform;
+  text-shadow: 0 0 3px var(--bg), 0 0 3px var(--bg), 0 0 2px var(--bg); }
+.l3-tag.up { font-style: normal; font-family: inherit; font-size: 14px; }
+.l3-tag.a { color: var(--a); } .l3-tag.b { color: var(--b); } .l3-tag.c { color: var(--c); } .l3-tag.no { color: var(--no); }
+.l3-tag.hidden { visibility: hidden; }
+
+.l3-chips { position: absolute; z-index: 3; left: 12px; top: 12px; right: 12px; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
+.l3-chips button { pointer-events: auto; font: inherit; font-size: 14px; padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; }
+.l3-chips button.on { background: var(--a); border-color: var(--a); color: var(--on-a); font-weight: 600; }
+.l3-chips .grp { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.l3-chips .gap { width: 10px; }
+
+.l3-tools { position: absolute; z-index: 3; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; align-items: center; gap: 2px; padding: 4px 6px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 2px 0 color-mix(in srgb, var(--line) 80%, transparent); }
+.l3-tools button { width: 34px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.l3-tools button:hover { background: var(--hl-soft); }
+.l3-tools button.on { background: color-mix(in srgb, var(--a) 18%, transparent); color: var(--a); }
+.l3-tools .sep { width: 1px; height: 18px; background: var(--line); margin: 0 4px; }
+.l3-tools svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.l3-hint { position: absolute; right: 12px; bottom: 16px; font-size: 14px; color: var(--muted); pointer-events: none; }
+
+/* 右侧面板 */
+.l3-legend { grid-column: 1; }
+.l3-panel { grid-column: 2; grid-row: 1 / span 2; }
+.l3-panel { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: auto; padding-bottom: 6px; }
+.l3-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+.l3-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line); margin: -4px -4px 10px; }
+.l3-tabs button { font: inherit; font-size: 14px; padding: 6px 10px 8px; border: 0; background: none; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.l3-tabs button.on { color: var(--fg); font-weight: 700; border-bottom-color: var(--fg); }
+.l3-pane { display: none; font-size: 14.5px; line-height: 1.75; }
+.l3-pane.on { display: block; }
+.l3-pane h3 { font-size: 17px; margin: 2px 0 6px; }
+.l3-pane p { margin: 6px 0; }
+.l3-pane .def { background: color-mix(in srgb, var(--hl-soft) 55%, transparent); border-left: 3px solid var(--hl); padding: 6px 10px; border-radius: 0 8px 8px 0; }
+.l3-pane ol.l3-steps { list-style: none; padding: 0; margin: 8px 0; counter-reset: s; }
+.l3-pane ol.l3-steps li { counter-increment: s; position: relative; padding: 2px 0 6px 30px; }
+.l3-pane ol.l3-steps li::before { content: counter(s); position: absolute; left: 0; top: 4px; width: 20px; height: 20px; border: 1px solid var(--line); border-radius: 6px; font-size: 14px; text-align: center; line-height: 19px; color: var(--muted); }
+.l3-term { font-weight: 700; color: var(--a); cursor: help; border-bottom: 1px dashed currentColor; }
+.l3-term:hover { color: var(--b); }
+
+.l3-ctl { display: grid; grid-template-columns: 80px 1fr 64px; align-items: center; gap: 8px; margin: 6px 0; font-size: 14px; }
+.l3-ctl input[type=range] { width: 100%; accent-color: var(--a); }
+.l3-ctl output { font-variant-numeric: tabular-nums; text-align: right; font-weight: 600; }
+.l3-ctl.sel { grid-template-columns: 80px 1fr; }
+.l3-ctl select { font: inherit; font-size: 15px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--card); color: var(--fg); min-width: 0; width: 100%; }
+.l3-ctl select:focus-visible { outline: 2px solid var(--a); outline-offset: 1px; }
+.l3-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
+.l3-btn { font: inherit; font-size: 14px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; }
+.l3-btn:hover { border-color: var(--a); color: var(--a); }
+.l3-btn.primary { background: var(--a); border-color: var(--a); color: var(--on-a); font-weight: 600; }
+.l3-btn.on { background: color-mix(in srgb, var(--a) 15%, transparent); border-color: var(--a); color: var(--a); }
+.l3-btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+.l3-readout { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font-size: 14px; align-items: baseline; }
+.l3-readout dt { color: var(--muted); }
+.l3-readout dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.l3-readout dd b { font-size: 15.5px; }
+.l3-readout .f { color: var(--muted); font-size: 14px; }
+.l3-note { font-size: 14px; color: var(--muted); margin: 6px 0 0; }
+
+.l3-quiz .q { margin: 10px 0 4px; font-weight: 600; }
+.l3-quiz .opts { display: flex; flex-direction: column; gap: 6px; }
+.l3-quiz .opt { text-align: left; font: inherit; font-size: 14px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--fg); cursor: pointer; }
+.l3-quiz .opt.ok { border-color: var(--a); background: var(--ok-soft); }
+.l3-quiz .opt.no { border-color: var(--no); background: var(--no-soft); }
+.l3-quiz .why { display: none; font-size: 14px; margin: 6px 0 0; padding: 6px 10px; border-radius: 8px; background: color-mix(in srgb, var(--hl-soft) 60%, transparent); }
+.l3-quiz .why.on { display: block; }
+.l3-quiz .why .show-btn { margin-top: 4px; }
+
+/* 底部课程条 */
+.l3-course { padding: 10px 18px 14px; }
+.l3-course h2 { font-size: 16px; margin: 0 0 8px; }
+.l3-strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x proximity; }
+.l3-lesson { flex: 0 0 auto; scroll-snap-align: start; display: flex; align-items: center; gap: 10px; min-width: 200px; padding: 8px 12px 8px 8px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--fg); text-decoration: none; font-size: 14px; line-height: 1.35; }
+.l3-lesson svg { width: 44px; height: 40px; flex: none; }
+.l3-lesson small { display: block; color: var(--muted); font-size: 14px; }
+.l3-lesson.on { border-color: var(--a); box-shadow: inset 0 0 0 1px var(--a); font-weight: 700; }
+.l3-lesson:hover { border-color: var(--a); }
+
+@media (max-width: 980px) {
+  .l3-main { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; min-height: 0; }
+  .l3-panel, .l3-legend { grid-column: auto; grid-row: auto; }
+  .l3-stage { height: 64vh; min-height: 380px; }
+  .l3-panel { overflow: visible; }
+  .l3-top .l3-badge { display: none; }
+}
+@media (max-width: 560px) {
+  .l3-top { padding: 8px 12px; gap: 8px; }
+  .l3-main { padding: 10px 12px 0; }
+  .l3-course { padding: 10px 12px 14px; }
+  .l3-title span { display: none; }
+  .l3-hint { display: none; }
+  .l3-tools { bottom: 8px; }
+  .l3-tools button { width: 30px; }
+}
+@media (prefers-reduced-motion: reduce) { .l3-co { transition: none; } }

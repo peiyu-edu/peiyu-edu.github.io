@@ -83,7 +83,7 @@
       clone.removeAttribute('id');clone.setAttribute('data-figure-label','1');
       clone.setAttribute('transform','matrix('+[matrix.a,matrix.b,matrix.c,matrix.d,matrix.e,matrix.f].join(' ')+')');
       ['fontSize','fontFamily','fontWeight','fontStyle','fill','fillOpacity','stroke','strokeWidth','strokeOpacity','textAnchor','dominantBaseline','letterSpacing'].forEach(function(k){clone.style[k]=style[k];});
-      clone.style.fontSize=Math.max(parseFloat(style.fontSize),12/Math.hypot(t.getScreenCTM().a,t.getScreenCTM().b))+'px';
+      clone.style.fontSize=Math.max(parseFloat(style.fontSize),14/Math.hypot(t.getScreenCTM().a,t.getScreenCTM().b))+'px';
       clone.style.visibility='visible';clone.style.pointerEvents='none';layer.appendChild(clone);
       var original={text:t.textContent,transform:clone.getAttribute('transform'),marker:null,placedTransform:null,order:order};
       labels.push({el:clone,original:original,base:rect(clone,inv)});

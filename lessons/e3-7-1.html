@@ -4,15 +4,19 @@
 <title>7.1 条件概率与全概率公式 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=b155721e85c0">
+<link rel="stylesheet" href="../assets/site.css?v=0346bdf6f187">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-62308ba8592150cf">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-44e493d1f33aec00"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
+<script defer src="../assets/gaokao-solutions.js?v=sha256-e68606ab30c2ca25"></script>
+<script defer src="../assets/lesson.js?v=sha256-f5854593a033282a"></script>
 <script defer src="../assets/student-textbook.js"></script>
-  <script defer src="../assets/video.js?v=vs-157bbe6abfc8"></script>
+  <script defer src="../assets/video.js?v=vs-bc840972e87d"></script>
 <style>
+  .micro-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .micro-tab { font-size: 14px; }
+  #entry-cond { max-width: 360px; }
+  @media (min-width: 760px) { #entry-cond { max-width: 640px; } }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .eq { color: var(--a); font-weight: 700; }
   .result .bad { color: var(--no); font-weight: 700; }
@@ -27,7 +31,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=e4a83d05f4b6"><link rel="stylesheet" href="../assets/learning-course.css?v=b8a36277ecb1"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=ab1fd38fe53b"></script><script defer src="../assets/learning-data.js?v=4e255d69b3cd"></script><script defer src="../assets/learning-shell.js?v=2eb3130a1b07"></script><script defer src="../assets/learning-course.js?v=c5e965152295"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="e3-7-1" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -44,7 +48,7 @@
     <tr><th>女生</th><td>18</td><td>12</td><td>30</td></tr>
   </table>
   <div class="card predict" data-id="entry" data-answer="B">
-    <svg class="entry-fig" id="entry-cond" viewBox="0 0 520 205" role="img" aria-label="50人兴趣小组方格图：左侧20名男生中15人会游泳，右侧30名女生中18人会游泳"></svg>
+    <svg class="entry-fig" id="entry-cond" viewBox="0 0 320 640" data-figure-label-fixed="1" role="img" aria-label="50人兴趣小组方格图：20名男生中15人会游泳，30名女生中18人会游泳"></svg>
     <div class="entry-bar" id="entry-cond-bar">
       <button type="button" data-m="all">看全组 50 人</button>
       <button type="button" data-m="boy" class="on">加上条件「已知叫到的是男生」（女生区变暗，只剩 20 名男生里亮起 15 人 = 15/20）</button>
@@ -109,20 +113,20 @@
     </div>
   </div>
 
-  <div class="concept-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
+  <div class="concept-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr)); gap:12px; margin:16px 0;">
     <div class="card" style="border-top:3px solid #1976d2; margin:0;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <b style="color:#1976d2;">条件概率 \(P(B|A)\)</b>
-        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:11px; padding:2px 8px; border-radius:10px;">局部世界</span>
+        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:14px; padding:2px 8px; border-radius:10px;">局部世界</span>
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>参照基准</b>：以已知条件 \(A\) 为全集（分母为 \(P(A)\) 或 \(n(A)\)）。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>提问方式</b>：「已知甲先中奖，乙再中奖的概率是多少？」</p>
       <p class="small" style="margin:0;"><b>算式形态</b>：\(P(B|A) = \dfrac{P(AB)}{P(A)}\)</p>
     </div>
     <div class="card" style="border-top:3px solid #2e7d32; margin:0;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <b style="color:#2e7d32;">联合概率 \(P(AB)\)</b>
-        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:2px 8px; border-radius:10px;">全局世界</span>
+        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:14px; padding:2px 8px; border-radius:10px;">全局世界</span>
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>参照基准</b>：以最初的大样本空间 \(\Omega\) 为全集（分母为 \(1\) 或 \(n(\Omega)\)）。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>提问方式</b>：「甲和乙两个人都中奖的概率是多少？」</p>
@@ -347,6 +351,7 @@
   <div id="practice" data-fold-later></div>
 </section>
 
+<section class="card olympiad-bridge" aria-labelledby="olympiad-bridge-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="olympiad-bridge-title">一试延伸</h2><p class="small">学有余力可以接着挑战。下面的竞赛专题以这一节为先修，题目来自全国高中数学联赛、各省预赛和强基、自主招生真题。</p><p class="bridge-links"><a href="../olympic/t/FR029.html">概率</a></p><p class="bridge-all"><a href="../olympic/index.html#topic-map">打开一试专题地图</a></p></section>
 <nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
 <footer>培玉智能 · 自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
@@ -565,48 +570,54 @@
     ecMode = mode;
     var fg = css("--fg"), ca = css("--a"), cc = css("--c"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft");
     ecSvg.innerHTML = "";
+    // Stack the groups on phones; native labels stay inside their larger cells.
+    var stacked = window.innerWidth < 760;
+    ecSvg.setAttribute("viewBox", stacked ? "0 0 320 640" : "0 0 640 330");
     // 全组50人外框（joint模式高亮全组作为分母）
     if (mode === "joint") {
-      svg("rect", { x: 8, y: 6, width: 504, height: 192, rx: 10, fill: "none", stroke: hl, "stroke-width": 2.4, "stroke-dasharray": "6 4" }, ecSvg);
+      svg("rect", { x: 8, y: 6, width: stacked ? 304 : 624, height: stacked ? 628 : 318, rx: 10, fill: "none", stroke: hl, "stroke-width": 2.4, "stroke-dasharray": "6 4" }, ecSvg);
     }
     // 男生区：4列×5行 = 20人
-    var bx0 = 18, by0 = 38, cell = 24, gap = 5;
+    var bx0 = stacked ? 67 : 36, by0 = 88, cell = 36, gap = 6;
     var boyW = 4 * cell + 3 * gap + 24, boyH = 5 * cell + 4 * gap + 20;
     svg("rect", { x: bx0, y: by0 - 8, width: boyW, height: boyH, rx: 8, fill: mode === "boy" ? okS : card, stroke: mode === "boy" ? hl : ca, "stroke-width": mode === "boy" ? 2.6 : 1.5 }, ecSvg);
-    svg("text", { x: bx0, y: 23, "text-anchor": "start", fill: ca, "font-weight": 700, "font-size": 12.5 }, ecSvg).textContent = "男生 20 人（15会游 + 5不会）";
+    svg("text", { x: bx0 + boyW / 2, y: by0 - 54, "text-anchor": "middle", fill: ca, "font-weight": 700, "font-size": 18 }, ecSvg).textContent = "男生 20 人";
+    svg("text", { x: bx0 + boyW / 2, y: by0 - 22, "text-anchor": "middle", fill: ca, "font-size": 18 }, ecSvg).textContent = "15会游 + 5不会";
     for (var i = 0; i < 20; i++) {
       var r = Math.floor(i / 4), c = i % 4, x = bx0 + 12 + c * (cell + gap), y = by0 + 2 + r * (cell + gap);
       var swim = i < 15;
       var dimB = mode === "joint" && !swim;
       svg("rect", { x: x, y: y, width: cell, height: cell, rx: 5, fill: swim ? ca : card, stroke: swim ? ca : ln, "stroke-width": 1.5, opacity: dimB ? 0.35 : 1 }, ecSvg);
-      svg("text", { x: x + cell / 2, y: y + 16, "text-anchor": "middle", fill: swim ? "#fff" : mu, "font-size": 11, "font-weight": swim ? 700 : 400, opacity: dimB ? 0.4 : 1 }, ecSvg).textContent = swim ? "游" : "否";
+      svg("text", { x: x + cell / 2, y: y + cell / 2, "dominant-baseline": "central", "text-anchor": "middle", fill: swim ? "#fff" : mu, "font-size": 18, "font-weight": swim ? 700 : 400, opacity: dimB ? 0.4 : 1 }, ecSvg).textContent = swim ? "游" : "否";
     }
 
     // 女生区：6列×5行 = 30人
-    var gx0 = 224, girlW = 6 * cell + 5 * gap + 24;
+    var gx0 = stacked ? 25 : 338, gy0 = stacked ? 408 : by0, girlW = 6 * cell + 5 * gap + 24;
     var girlDim = mode === "boy";
     var gGirl = svg("g", { opacity: girlDim ? 0.08 : 1 }, ecSvg);
-    svg("rect", { x: gx0, y: by0 - 8, width: girlW, height: boyH, rx: 8, fill: card, stroke: cc, "stroke-width": 1.5 }, gGirl);
-    svg("text", { x: gx0 + girlW / 2, y: 23, "text-anchor": "middle", fill: cc, "font-weight": 700, "font-size": 13.5 }, gGirl).textContent = "女生 30 人（18会游 + 12不会）";
+    svg("rect", { x: gx0, y: gy0 - 8, width: girlW, height: boyH, rx: 8, fill: card, stroke: cc, "stroke-width": 1.5 }, gGirl);
+    svg("text", { x: gx0 + girlW / 2, y: gy0 - 54, "text-anchor": "middle", fill: girlDim ? mu : cc, "font-weight": 700, "font-size": 18 }, ecSvg).textContent = "女生 30 人";
+    svg("text", { x: gx0 + girlW / 2, y: gy0 - 22, "text-anchor": "middle", fill: girlDim ? mu : cc, "font-size": 18 }, ecSvg).textContent = "18会游 + 12不会";
     for (var j = 0; j < 30; j++) {
-      var gr = Math.floor(j / 6), gc = j % 6, gx = gx0 + 12 + gc * (cell + gap), gy = by0 + 2 + gr * (cell + gap);
+      var gr = Math.floor(j / 6), gc = j % 6, gx = gx0 + 12 + gc * (cell + gap), gy = gy0 + 2 + gr * (cell + gap);
       var gSwim = j < 18;
       var dimG = mode === "joint";
       svg("rect", { x: gx, y: gy, width: cell, height: cell, rx: 5, fill: gSwim ? cc : card, stroke: gSwim ? cc : ln, "stroke-width": 1.5, opacity: dimG ? 0.28 : 1 }, gGirl);
       if (!girlDim) {
-        svg("text", { x: gx + cell / 2, y: gy + 16, "text-anchor": "middle", fill: gSwim ? "#fff" : mu, "font-size": 11, "font-weight": gSwim ? 700 : 400, opacity: dimG ? 0.35 : 1 }, gGirl).textContent = gSwim ? "游" : "否";
+        svg("text", { x: gx + cell / 2, y: gy + cell / 2, "dominant-baseline": "central", "text-anchor": "middle", fill: gSwim ? "#fff" : mu, "font-size": 18, "font-weight": gSwim ? 700 : 400, opacity: dimG ? 0.35 : 1 }, gGirl).textContent = gSwim ? "游" : "否";
       }
     }
     if (girlDim) {
-      svg("rect", { x: gx0 + 34, y: 96, width: girlW - 68, height: 34, rx: 6, fill: card, stroke: ln, "stroke-width": 1.5 }, ecSvg);
-      svg("text", { x: gx0 + girlW / 2, y: 118, "text-anchor": "middle", fill: mu, "font-weight": 700, "font-size": 13.5 }, ecSvg).textContent = "已知是男生 → 女生30人排除";
+      svg("rect", { x: gx0 + 15, y: gy0 + 76, width: girlW - 30, height: 80, rx: 6, fill: card, stroke: ln, "stroke-width": 1.5 }, ecSvg);
+      svg("text", { x: gx0 + girlW / 2, y: gy0 + 104, "text-anchor": "middle", fill: mu, "font-weight": 700, "font-size": 18 }, ecSvg).textContent = "已知是男生";
+      svg("text", { x: gx0 + girlW / 2, y: gy0 + 136, "text-anchor": "middle", fill: mu, "font-weight": 700, "font-size": 18 }, ecSvg).textContent = "→ 女生30人排除";
     }
 
     [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", b.getAttribute("data-m") === mode);
     });
     if (mode === "all") {
-      ecNote.innerHTML = "全组共 <b>50 人</b>：左侧男生 20 人（15 人会游），右侧女生 30 人（18 人会游），合计 33 人会游泳。";
+      ecNote.innerHTML = "全组共 <b>50 人</b>：男生 20 人（15 人会游），女生 30 人（18 人会游），合计 33 人会游泳。";
     } else if (mode === "boy") {
       ecNote.innerHTML = "条件概率 <b>P(会游 | 男生)</b>：已知叫到男生，女生区变暗排除，分母缩成 <b>20 名男生</b>，其中 <b>15 人</b>会游 → <b>15 / 20 = 3/4</b>！";
     } else {
@@ -616,6 +627,7 @@
   [].forEach.call(ecBar.querySelectorAll("button"), function (b) {
     b.onclick = function () { ecDraw(b.getAttribute("data-m")); };
   });
+  window.addEventListener("resize", function () { ecDraw(ecMode); });
   document.addEventListener("predict:pick", function (ev) {
     if (ev.detail && ev.detail.id === "entry") {
       var map = { A: "joint", B: "boy", C: "all", D: "all" };

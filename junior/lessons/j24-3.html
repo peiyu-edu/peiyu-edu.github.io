@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>24.3 数据的四分位数 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j24-3" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">八年级下册 · 第二十四章 数据的分析</p>
+<h1>24.3 数据的四分位数</h1>
+<p class="lead">平均数说「一般水平」，方差说「波动大小」，可它们都回答不了：大部分数据落在哪个范围？把排好序的数据切成四份，就看得清了；再画成箱线图，几组数据一眼就能比。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：24.1 中位数、24.2 方差 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：中位数的求法，奇数个、偶数个两种情形（<a href="j24-1.html">回看 24.1</a>）；方差与波动（<a href="j24-2.html">回看 24.2</a>）；直方图（<a href="j12-2.html">回看 12.2</a>）。</p>
+  <ol class="small">
+    <li>从「12 个跳绳成绩切四份」进入。</li>
+    <li>百分位数的意义；四分位数 \(Q_1,Q_2,Q_3\)。</li>
+    <li>求法：先求中位数 \(Q_2\)，再求左、右两半各自的中位数。</li>
+    <li>数据个数是奇数时，中位数本身不放进两半。</li>
+    <li>箱线图：最小值、\(Q_1\)、\(Q_2\)、\(Q_3\)、最大值；四分位距。</li>
+    <li>读箱线图、比较两组数据。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>12 名同学 1 分钟跳绳的个数已经从小到大排好：\(98,105,112,118,120,126,131,135,140,146,152,170\)。点按钮，一刀一刀地切：</p>
+  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDE5MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Y2B5LqM5Liq6Lez57uz5oiQ57up55qE54K55Zu+5LiO5Zub5YiG5L2N57q/XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuWIh+WIhuatpemqpFwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjBcIj7mjpLlpb3luo88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjFcIj7ku47kuK3pl7TliIfkuIDliIA8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjJcIj7kuKTljYrlho3lkITliIfkuIDliIA8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+5YiH5a6M5Lul5ZCO77yM56ys5LiA5YiA5ZKM56ys5LiJ5YiA5LmL6Ze077yIXFwoUV8xXFwpIOWIsCBcXChRXzNcXCnvvInlpKfnuqbmnInlpJrlsJHlkIzlrabvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPue6puS4gOWNijwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPue6puWbm+WIhuS5i+S4gDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPue6puWbm+WIhuS5i+S4iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuWFqOmDqDwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkE8L2I+44CC5LiJ5YiA5oqKIDEyIOS4quaVsOWIhuaIkCA0IOS7ve+8jOavj+S7vSAzIOS4quOAglxcKFFfMT0xMTVcXCkg5YiwIFxcKFFfMz0xNDNcXCkg5LmL6Ze05piv5Lit6Ze05Lik5Lu977yM5YWxIDYg5Lq677yM5q2j5aW95LiA5Y2K44CC6YCJIEQg5piv5oqK5Lit6Ze06L+Z5q615b2T5oiQ5LqG5YWo6YOo5pWw5o2u55qE6IyD5Zu044CCPC9wPlxuICAgICAgPHA+6L+Z5qC35YiH5Ye65p2l55qE5LiJ5Liq5pWw5Y+rPGI+5Zub5YiG5L2N5pWwPC9iPuOAgui/meS4gOiKguimgeWbnuetlO+8mjxiPuWbm+WIhuS9jeaVsOaAjuS5iOaxgu+8n+aAjuagt+eUqOWug+eUu+eusee6v+WbvuOAgeavlOi+g+WHoOe7hOaVsOaNru+8nzwvYj48L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 190" role="img" aria-label="十二个跳绳成绩的点图与四分位线"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="切分步骤">
+      <button type="button" class="on" data-k="0">排好序</button>
+      <button type="button" data-k="1">从中间切一刀</button>
+      <button type="button" data-k="2">两半再各切一刀</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>切完以后，第一刀和第三刀之间（\(Q_1\) 到 \(Q_3\)）大约有多少同学？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>约一半</button>
+      <button class="opt" data-v="B"><b>B</b>约四分之一</button>
+      <button class="opt" data-v="C"><b>C</b>约四分之三</button>
+      <button class="opt" data-v="D"><b>D</b>全部</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。三刀把 12 个数分成 4 份，每份 3 个。\(Q_1=115\) 到 \(Q_3=143\) 之间是中间两份，共 6 人，正好一半。选 D 是把中间这段当成了全部数据的范围。</p>
+      <p>这样切出来的三个数叫<b>四分位数</b>。这一节要回答：<b>四分位数怎么求？怎样用它画箱线图、比较几组数据？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：百分位数、四分位数</h3>
+  <p class="small">前置知识：中位数（<a href="j24-1.html">回看 24.1</a>）。中位数从中间把排好序的数据分成 2 等份。</p>
+  <p>把一组数据按从小到大排列，<b>将数据分成 100 等份的每一个分点处的值</b>，叫作这组数据的<b>百分位数</b>。比如「身高的 90% 分位数」，意思是大约 \(90\%\) 的人身高不超过它。其中最常用的是三个：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>分点左边，大约占百分之几</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="百分位">
+        <button type="button" class="on" data-p="25">25% 分位数 \(Q_1\)</button>
+        <button type="button" data-p="50">50% 分位数 \(Q_2\)</button>
+        <button type="button" data-p="75">75% 分位数 \(Q_3\)</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 150" role="img" aria-label="二十个排好序的数据格子与分点"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>三个四分位数</b></p>
+      <p class="small" style="margin:0">\(Q_1,Q_2,Q_3\) 从小到大叫<b>第一、第二、第三四分位数</b>。\(Q_2\) 就是中位数；\(Q_1\) 又叫<b>下四分位数</b>（25% 分位数），\(Q_3\) 又叫<b>上四分位数</b>（75% 分位数）。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>「大致」四等份</b></p>
+      <p class="small" style="margin:0">约 25% 的数据小于 \(Q_1\)，约一半小于 \(Q_2\)，约 25% 大于 \(Q_3\)。数据个数是奇数或有重复时，不一定恰好四等份，所以说「约」。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：求四分位数——先求中位数，再求两半的中位数</h3>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(\underbrace{\text{排序}}_{\text{从小到大}}\ \to\ \color{#966524}{\underbrace{Q_2=\text{中位数}}_{\text{先切中间}}}\ \to\ \color{#2F7A56}{\underbrace{Q_1=\text{左半的中位数}}_{\text{中位数左侧的数据}}},\ \color{#3E5C76}{\underbrace{Q_3=\text{右半的中位数}}_{\text{中位数右侧的数据}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">数据个数是<b>奇数</b>时，中位数本身是一个数据，它<b>不放进</b>左右两半。</p>
+  </div>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>奇数个、偶数个，两半各是哪几个</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="数据个数">
+        <button type="button" class="on" data-n="8">8 个</button>
+        <button type="button" data-n="9">9 个</button>
+        <button type="button" data-n="10">10 个</button>
+        <button type="button" data-n="11">11 个</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 170" role="img" aria-label="数据卡片分成左右两半求四分位数"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">11 名同学一周做家务的时间（单位：分钟）：\(20,35,15,40,60,25,30,45,30,50,90\)。求这组数据的四分位数。</p>
+    <p><b>① 读懂题意：</b>要求 \(Q_1,Q_2,Q_3\)。数据没排序，个数 11 是奇数。</p>
+    <details class="more"><summary>提示 1：中位数是第几个</summary><p>11 个数，中位数是第 6 个。它左边 5 个、右边 5 个，它自己不进两边。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>排序 → 第 6 个是 \(Q_2\) → 前 5 个的中位数是 \(Q_1\)，后 5 个的中位数是 \(Q_3\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>排序：\(15,20,25,30,30,\boxed{35},40,45,50,60,90\)。\(Q_2=35\)；左侧 \(15,20,25,30,30\)，\(Q_1=25\)；右侧 \(40,45,50,60,90\)，\(Q_3=50\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>左右两半各 5 个、个数相等 ✓；\(35\) 没有被算进任何一半 ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>如果错把 \(35\) 也放进左半（6 个数），会得到 \(Q_1=\dfrac{25+30}{2}=27.5\)，和课本的取法不同。初中一律按「中位数不进两半」来求。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mjEyIOS4quaVsOaNriBcXCgyLDMsNSw2LDcsOCw5LDEwLDEyLDEzLDE1LDE4XFwp77yI5bey5o6S5bqP77yJ77yMXFwoUV8zXFwpIOaYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDEyLjVcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMTNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoOC41XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CC5YG25pWw5Liq77yM5Y+z5Y2K5piv5ZCOIDYg5LiqIFxcKDksMTAsMTIsMTMsMTUsMThcXCnvvIzlroPku6znmoTkuK3kvY3mlbAgXFwoXFxkZnJhY3sxMisxM317Mn09MTIuNVxcKeOAgkLjgIFDIOaYr+WBtuaVsOS4quWPquWPluS6huS4gOS4qu+8m0Qg5pivIFxcKFFfMlxcKeOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：12 个数据 \(2,3,5,6,7,8,9,10,12,13,15,18\)（已排序），\(Q_3\) 是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(12.5\)</button><button class="opt" data-v="B"><b>B</b>\(12\)</button><button class="opt" data-v="C"><b>C</b>\(13\)</button><button class="opt" data-v="D"><b>D</b>\(8.5\)</button></div>
+    <div class="reveal"><p><b>A</b>。偶数个，右半是后 6 个 \(9,10,12,13,15,18\)，它们的中位数 \(\dfrac{12+13}{2}=12.5\)。B、C 是偶数个只取了一个；D 是 \(Q_2\)。</p></div>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuWGjeivleS4gOS4qu+8mjkg5Liq5pWw5o2uIFxcKDQsNywxLDksNiwzLDgsNSwxMFxcKSDnmoQgXFwoUV8xXFwpIOaYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDMuNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCg0XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDNcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILmjpLluo8gXFwoMSwzLDQsNSw2LDcsOCw5LDEwXFwp77yMXFwoUV8yPTZcXCnvvIjnrKwgNSDkuKrvvInvvIzlt6bljYogXFwoMSwzLDQsNVxcKe+8jFxcKFFfMT1cXGRmcmFjezMrNH17Mn09My41XFwp44CCQiDmmK/miorkuK3kvY3mlbAgXFwoNlxcKSDkuZ/mlL7ov5vkuoblt6bljYrvvIhcXCgxLDMsNCw1LDZcXCkg55qE5Lit5L2N5pWw77yJ77ybQyDmmK/lgbbmlbDkuKrlj6rlj5bkuobkuIDkuKrjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>再试一个：9 个数据 \(4,7,1,9,6,3,8,5,10\) 的 \(Q_1\) 是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(3.5\)</button><button class="opt" data-v="B"><b>B</b>\(4\)</button><button class="opt" data-v="C"><b>C</b>\(3\)</button></div>
+    <div class="reveal"><p><b>A</b>。排序 \(1,3,4,5,6,7,8,9,10\)，\(Q_2=6\)（第 5 个），左半 \(1,3,4,5\)，\(Q_1=\dfrac{3+4}{2}=3.5\)。B 是把中位数 \(6\) 也放进了左半（\(1,3,4,5,6\) 的中位数）；C 是偶数个只取了一个。</p></div>
+  </div>
+
+  <h3>3. 核心点：箱线图——五个数画一张图</h3>
+  <p>用<b>最小值、\(Q_1\)、\(Q_2\)、\(Q_3\)、最大值</b>五个数可以画<b>箱线图</b>：从 \(Q_1\) 到 \(Q_3\) 画一个矩形<b>箱体</b>，箱体里在 \(Q_2\) 处画一条线；从箱体两端各画一条线段（<b>须线</b>）伸到最小值和最大值，两端各画一条短竖线。整个箱体的长度 \(Q_3-Q_1\) 叫<b>四分位距</b>。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>三步画出例 1 的箱线图</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="画图步骤">
+        <button type="button" class="on" data-k="0">标出五个数</button>
+        <button type="button" data-k="1">画箱体</button>
+        <button type="button" data-k="2">加须线</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 170" role="img" aria-label="例一数据的箱线图画法"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：读箱线图）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">从例 1 的箱线图，你能说出哪些信息？说不出什么？</p>
+    <details class="more"><summary>提示：按五个数逐个说</summary><p>范围、中间水平、中间一半在哪、左右两边对不对称。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">能读出：</span>所有时间在 \(15\) 到 \(90\) 分钟之间；中位数 \(35\)；中间约一半的同学在 \(25\) 到 \(50\) 分钟之间，四分位距 \(25\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">形状：</span>右须线（\(50\to90\)）比左须线（\(15\to25\)）长得多，箱体里中位线也偏左：数据往大的一边拖得长，不对称。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">读不出：</span>一共几个数据、每个数据是多少、平均数是多少——箱线图只保留五个数。</div>
+      </div>
+      <p><b>回头看：</b>描述时用「约」：「约 25% 的同学超过 50 分钟」。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muWPqueci+S4gOW8oOeusee6v+Wbvu+8jOiDveivu+WHuuS4i+mdouWTquS4gOmhue+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kuIDlhbHmnInlpJrlsJHkuKrmlbDmja48L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5bmz5Z2H5pWwPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4remXtOe6puS4gOWNiuaVsOaNruaJgOWcqOeahOiMg+WbtDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7mr4/kuIDkuKrmlbDmja48L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgILnrrHkvZPku44gXFwoUV8xXFwpIOWIsCBcXChRXzNcXCnvvIzoo4XnnYDkuK3pl7TnuqbkuIDljYrnmoTmlbDmja7jgILnrrHnur/lm77lj6rmnInkupTkuKrmlbDvvIzkuKrmlbDjgIHlubPlnYfmlbDjgIHmr4/kuKrmlbDmja7pg73or7vkuI3lh7rjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：只看一张箱线图，能读出下面哪一项？</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>一共有多少个数据</button><button class="opt" data-v="B"><b>B</b>平均数</button><button class="opt" data-v="C"><b>C</b>中间约一半数据所在的范围</button><button class="opt" data-v="D"><b>D</b>每一个数据</button></div>
+    <div class="reveal"><p><b>C</b>。箱体从 \(Q_1\) 到 \(Q_3\)，装着中间约一半的数据。箱线图只有五个数，个数、平均数、每个数据都读不出。</p></div>
+  </div>
+
+  <h3>4. 核心点：用箱线图比较两组数据</h3>
+  <p>几组数据的箱线图画在同一条数轴上，比较的顺序是：先比<b>中位线</b>（中间水平）；再比<b>箱体和须线的长短</b>（越长越分散。箱体只反映中间约一半数据的分散程度，方差用到全部数据，两者看的不完全是同一件事，不一定总给出同样的结论）；最后看<b>对不对称</b>和特殊位置。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ④</span><b>两个班的测验成绩，三个角度比一比</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m4-bar" role="group" aria-label="比较角度">
+        <button type="button" class="on" data-k="0">比中位数</button>
+        <button type="button" data-k="1">比箱体长短</button>
+        <button type="button" data-k="2">看对称</button>
+      </div>
+      <svg class="micro-fig" id="m4-fig" viewBox="0 0 380 180" role="img" aria-label="两个班成绩的箱线图对比"></svg>
+      <p class="entry-note" id="m4-note" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <h3>5. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>奇数个数据，把中位数也放进两半</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：例 1 的 11 个数，左半取 6 个 \(15,\dots,35\)，得 \(Q_1=27.5\)。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：中位数 \(35\) 是分界，它两边各 5 个；左半 \(15,20,25,30,30\) 的中位数是 \(Q_1=25\)。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 150" role="img" aria-label="中位数不放进左右两半"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>箱体当成全部数据的范围</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：「箱体从 25 到 50，所以所有同学都在 25 到 50 分钟之间。」把须线端点当成 \(Q_1,Q_3\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：箱体只装中间约一半；全部数据的范围是须线两端（最小值到最大值）。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>不排序；混用别的取法</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：直接在原始顺序上找中间；或用电子表格的函数算出一个和课本不同的 \(Q_1\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：先排序。四分位数有好几种约定，软件结果要和课本取法核对，不一致以课本为准。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：体检单上的「百分位」</summary>
+    <p>儿童体检有时会写「身高在同龄人的第 80 百分位」，意思是同龄人里大约 \(80\%\) 的人比他矮。它说的是位置，不是分数：第 80 百分位不等于「考了 80 分」。四分位数就是第 25、50、75 这三个百分位数。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖动数据点，箱线图跟着变</h3>
+  <p class="small">拖动下面的圆点（或点一下再用方向键）改变数据，上面的箱线图按课本取法实时重画。用按钮在 9 个和 10 个数据之间切换，看奇偶两种取法。</p>
+  <div class="card">
+    <svg class="fig" id="fig-box" viewBox="0 0 560 250" role="img" aria-label="可拖动的数据点与对应箱线图"></svg>
+    <div class="result" id="out-box" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="n-box" type="button" aria-pressed="false">加入第 10 个数据</button> <button class="btn ghost" id="reset-box" type="button">重置</button></div>
+  </div>
+  <h3>② 拖动五个数，读箱线图</h3>
+  <p class="small">直接拖动箱线图的五个位置（最小值、\(Q_1\)、\(Q_2\)、\(Q_3\)、最大值；拖过旁边的点会把它一起推走，顺序始终保持从小到大）。读数告诉你这张图在说什么。</p>
+  <div class="card">
+    <svg class="fig" id="fig-five" viewBox="0 0 560 200" role="img" aria-label="可拖动五个数的箱线图"></svg>
+    <div class="result" id="out-five" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-five" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：两个班比一比</h3>
+  <p class="small">一班 12 人的跳绳成绩固定。二班由一班的成绩变化得到：拖动「平移」整体加减，拖动「伸缩」让成绩离中间更远或更近。比较两张箱线图，再和方差对照。</p>
+  <div class="card">
+    <svg class="fig" id="fig-two" viewBox="0 0 560 300" role="img" aria-label="两个班成绩的箱线图与调节滑轨"></svg>
+    <div class="result" id="out-two" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-two" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjEuIOaxguaVsOaNriBcXCgxMiwxNSwxOCwyMCwyMiwyNSwyOCwzMFxcKSDnmoTlm5vliIbkvY3mlbDjgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoUV8xPTE1LFxcIFFfMj0yMSxcXCBRXzM9MjhcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoUV8xPTE2LjUsXFwgUV8yPTIxLFxcIFFfMz0yNi41XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFFfMT0xOCxcXCBRXzI9MjAsXFwgUV8zPTI1XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCOCDkuKrvvIxcXChRXzI9XFxkZnJhY3syMCsyMn17Mn09MjFcXCnvvJvlt6bljYogXFwoMTIsMTUsMTgsMjBcXCnvvIxcXChRXzE9MTYuNVxcKe+8m+WPs+WNiiBcXCgyMiwyNSwyOCwzMFxcKe+8jFxcKFFfMz0yNi41XFwp44CCQeOAgUMg5piv5YG25pWw5Liq5Y+q5Y+W5LqG5LiA5Liq5pWw44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>1. 求数据 \(12,15,18,20,22,25,28,30\) 的四分位数。</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(Q_1=15,\ Q_2=21,\ Q_3=28\)</button><button class="opt" data-v="B"><b>B</b>\(Q_1=16.5,\ Q_2=21,\ Q_3=26.5\)</button><button class="opt" data-v="C"><b>C</b>\(Q_1=18,\ Q_2=20,\ Q_3=25\)</button></div>
+    <div class="reveal"><p><b>B</b>。8 个，\(Q_2=\dfrac{20+22}{2}=21\)；左半 \(12,15,18,20\)，\(Q_1=16.5\)；右半 \(22,25,28,30\)，\(Q_3=26.5\)。A、C 是偶数个只取了一个数。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjIuIOS4gOW8oOeusee6v+WbvueahOS6lOS4quaVsOS+neasoeaYryBcXCgzMCw0NSw1Miw2MCw4MFxcKeOAguWbm+WIhuS9jei3neaYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDE1XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDUwXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDdcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoNTJcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILlm5vliIbkvY3ot53mmK/nrrHkvZPplb/luqYgXFwoUV8zLVFfMT02MC00NT0xNVxcKeOAgkIg5piv5pyA5aSn5YC85YeP5pyA5bCP5YC877ybQyDmmK8gXFwoUV8yLVFfMVxcKe+8m0Qg5piv5Lit5L2N5pWw44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>2. 一张箱线图的五个数依次是 \(30,45,52,60,80\)。四分位距是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(15\)</button><button class="opt" data-v="B"><b>B</b>\(50\)</button><button class="opt" data-v="C"><b>C</b>\(7\)</button><button class="opt" data-v="D"><b>D</b>\(52\)</button></div>
+    <div class="reveal"><p><b>A</b>。四分位距是箱体长度 \(Q_3-Q_1=60-45=15\)。B 是最大值减最小值；C 是 \(Q_2-Q_1\)；D 是中位数。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjMuIDcg5Liq5pWw5o2uIFxcKDMsNCw2LDcsOSwxMSwxMlxcKe+8iOW3suaOkuW6j++8ie+8jOaxgiBcXChRXzFcXCkg5ZKMIFxcKFFfM1xcKeOAgjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5Lit5L2N5pWwIFxcKDdcXCkg5piv56ysIDQg5Liq77yM5a6D6L+b5LiN6L+b5Lik5Y2K77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChRXzE9NCxcXCBRXzM9MTFcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoUV8xPTUsXFwgUV8zPTEwXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFFfMT0zLjUsXFwgUV8zPTExLjVcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILlt6bljYogXFwoMyw0LDZcXCkg55qE5Lit5L2N5pWwIFxcKDRcXCnvvIzlj7PljYogXFwoOSwxMSwxMlxcKSDnmoTkuK3kvY3mlbAgXFwoMTFcXCnjgIJCIOaYr+aKiiBcXCg3XFwpIOaUvui/m+S6huS4pOWNiu+8iOe/u+i9pueOsOWcuiDikaDvvInvvJtDIOaYr+aKiuS4pOWNiuW9k+aIkOS6hiBcXCgzLDRcXCkg5ZKMIFxcKDExLDEyXFwp44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>3. 7 个数据 \(3,4,6,7,9,11,12\)（已排序），求 \(Q_1\) 和 \(Q_3\)。</p>
+    <details class="more"><summary>提示</summary><p>中位数 \(7\) 是第 4 个，它进不进两半？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(Q_1=4,\ Q_3=11\)</button><button class="opt" data-v="B"><b>B</b>\(Q_1=5,\ Q_3=10\)</button><button class="opt" data-v="C"><b>C</b>\(Q_1=3.5,\ Q_3=11.5\)</button></div>
+    <div class="reveal"><p><b>A</b>。左半 \(3,4,6\) 的中位数 \(4\)，右半 \(9,11,12\) 的中位数 \(11\)。B 是把 \(7\) 放进了两半（翻车现场 ①）；C 是把两半当成了 \(3,4\) 和 \(11,12\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjQuIOWFs+S6jueusee6v+Wbvu+8jOS4i+mdouivtOazleato+ehrueahOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+566x5L2T5Lik56uv44CB6aG757q/5Lik56uv5YiG5Yir5piv5ZOq5Lik5Liq5pWw77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7nrrHkvZPph4zljIXlkKvkuoblhajpg6jmlbDmja48L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+6aG757q/55qE5Lik5Liq56uv54K55pivIFxcKFFfMVxcKSDlkowgXFwoUV8zXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuWkp+e6puS4gOWNiueahOaVsOaNruWcqOeuseS9k+iMg+WbtOWGhTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7ku47nrrHnur/lm77og73nnIvlh7rmlbDmja7mnInlpJrlsJHkuKo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgILnrrHkvZPmmK8gXFwoUV8xXFwpIOWIsCBcXChRXzNcXCnvvIznuqbkuIDljYrmlbDmja7jgIJB44CBQiDmiornrrHkvZPlkozpobvnur/lvITmt7fkuobvvIjnv7vovabnjrDlnLog4pGh77yJ77ybRO+8mueusee6v+WbvuWPquacieS6lOS4quaVsO+8jOeci+S4jeWHuuS4quaVsOOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>4. 关于箱线图，下面说法正确的是：</p>
+    <details class="more"><summary>提示</summary><p>箱体两端、须线两端分别是哪两个数？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>箱体里包含了全部数据</button><button class="opt" data-v="B"><b>B</b>须线的两个端点是 \(Q_1\) 和 \(Q_3\)</button><button class="opt" data-v="C"><b>C</b>大约一半的数据在箱体范围内</button><button class="opt" data-v="D"><b>D</b>从箱线图能看出数据有多少个</button></div>
+    <div class="reveal"><p><b>C</b>。箱体是 \(Q_1\) 到 \(Q_3\)，约一半数据。A、B 把箱体和须线弄混了（翻车现场 ②）；D：箱线图只有五个数，看不出个数。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjUuIOeUsuePreaIkOe7qeeusee6v+WbvueahOS6lOS4quaVsOaYryBcXCg2MCw3MCw3OCw4NSw5OFxcKe+8jOS5meePreaYryBcXCg1NSw3NSw4MCw4Myw5MFxcKeOAguS4i+mdouivtOazleato+ehrueahOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5YWI5q+U5Lit5L2N5pWw77yM5YaN5q+U566x5L2T6ZW/5bqm77yM5YaN55yL55Sy54+tIFxcKFFfM1xcKSDlkozkuZnnj63mnIDlpKflgLzjgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPueUsuePreS4remXtOS4gOWNiueahOaIkOe7qeabtOmbhuS4rTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuZnnj63miJDnu6nnmoTkuK3kvY3mlbDmm7Tpq5g8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+55Sy54+t57qmIDI1JSDnmoTlkIzlrabpq5jkuo7kuZnnj63mnIDpq5jliIY8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LmZ54+t5oiQ57up5YWo6YOo5ZyoIDc1IOWIsCA4MyDkuYvpl7Q8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgIJcXCg4MCZndDs3OFxcKeOAgkHvvJrnlLLnj63nrrHkvZPplb8gXFwoMTVcXCnvvIzkuZnnj60gXFwoOFxcKe+8jOS5meePreabtOmbhuS4re+8m0PvvJrnlLLnj60gXFwoUV8zPTg1XFwpIOS9juS6juS5meePreacgOmrmOWIhiBcXCg5MFxcKe+8jOivtOS4jeWHuui/meS4gOeCue+8m0TvvJpcXCg3NVxcKSDliLAgXFwoODNcXCkg5Y+q5piv5LmZ54+t5Lit6Ze057qm5LiA5Y2K44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>5. 甲班成绩箱线图的五个数是 \(60,70,78,85,98\)，乙班是 \(55,75,80,83,90\)。下面说法正确的是：</p>
+    <details class="more"><summary>提示</summary><p>先比中位数，再比箱体长度，再看甲班 \(Q_3\) 和乙班最大值。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>甲班中间一半的成绩更集中</button><button class="opt" data-v="B"><b>B</b>乙班成绩的中位数更高</button><button class="opt" data-v="C"><b>C</b>甲班约 25% 的同学高于乙班最高分</button><button class="opt" data-v="D"><b>D</b>乙班成绩全部在 75 到 83 之间</button></div>
+    <div class="reveal"><p><b>B</b>。\(80&gt;78\)。A：甲班箱体长 \(15\)，乙班 \(8\)，乙班更集中；C：甲班 \(Q_3=85\) 低于乙班最高分 \(90\)，说不出这一点；D：\(75\) 到 \(83\) 只是乙班中间约一半。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjYuIDIwIOWQjeWQjOWtpueahOa1i+mqjOaIkOe7qeaOkuWlveW6j+WQju+8jFxcKFFfMT02OFxcKe+8jFxcKFFfMz04NlxcKeOAguS4i+mdouWTquS4quivtOazlTxiPuS4gOWumjwvYj7mraPnoa7vvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDHvvJpR4oKBIOaYr+WTquS4pOS4quaVsOeahOW5s+Wdhzwvc3VtbWFyeT48cD4yMCDkuKrmlbDvvIzlt6bljYrmmK/liY0gMTAg5Liq77yMXFwoUV8xXFwpIOaYr+esrCA144CB56ysIDYg5Liq55qE5bmz5Z2H5pWw44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMu+8muS4pOS4quaVsOeahOW5s+Wdh+aVsOaYryA2OCDor7TmmI7ku4DkuYg8L3N1bW1hcnk+PHA+56ysIDUg5Liq5LiN6LaF6L+HIFxcKDY4XFwp77yM56ysIDYg5Liq5LiN5bCP5LqOIFxcKDY4XFwp44CC5a6D5Lus5Y+v6IO96YO9562J5LqOIFxcKDY4XFwp44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kvY7kuo4gNjgg5YiG55qE5q2j5aW9IDUg5Lq6PC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS9juS6jiA2OCDliIbnmoTmnIDlpJogNSDkuro8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+6auY5LqOIDg2IOWIhueahOiHs+WwkSA1IOS6ujwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7mnInkuIDljYrlkIzlrabpq5jkuo4gODYg5YiGPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC56ysIDYg5Liq5Y+K5Lul5ZCO6YO95LiN5bCP5LqOIFxcKDY4XFwp77yM5omA5Lul5L2O5LqOIFxcKDY4XFwpIOeahOWPquWPr+iDveWcqOWJjSA1IOS4qumHjO+8jOacgOWkmiA1IOS6uuOAgkEg5LiN5LiA5a6a77ya56ysIDUg5Liq5Y+v6IO95q2j5aW95pivIFxcKDY4XFwp77ybQyDkuI3kuIDlrprvvJrnrKwgMTYg5Liq5Y+v6IO95q2j5aW95pivIFxcKDg2XFwp77ybRO+8mumrmOS6jiBcXChRXzNcXCkg55qE57qm5Zub5YiG5LmL5LiA77yM5LiN5piv5LiA5Y2K44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>6. 20 名同学的测验成绩排好序后，\(Q_1=68\)，\(Q_3=86\)。下面哪个说法<b>一定</b>正确？</p>
+    <details class="more"><summary>提示 1：Q₁ 是哪两个数的平均</summary><p>20 个数，左半是前 10 个，\(Q_1\) 是第 5、第 6 个的平均数。</p></details>
+    <details class="more"><summary>提示 2：两个数的平均数是 68 说明什么</summary><p>第 5 个不超过 \(68\)，第 6 个不小于 \(68\)。它们可能都等于 \(68\)。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>低于 68 分的正好 5 人</button><button class="opt" data-v="B"><b>B</b>低于 68 分的最多 5 人</button><button class="opt" data-v="C"><b>C</b>高于 86 分的至少 5 人</button><button class="opt" data-v="D"><b>D</b>有一半同学高于 86 分</button></div>
+    <div class="reveal"><p><b>B</b>。第 6 个及以后都不小于 \(68\)，所以低于 \(68\) 的只可能在前 5 个里，最多 5 人。A 不一定：第 5 个可能正好是 \(68\)；C 不一定：第 16 个可能正好是 \(86\)；D：高于 \(Q_3\) 的约四分之一，不是一半。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">下面三道中考统计题练习排序、中位数和数据比较；解析中再用四分位数分析数据分布。四分位数、箱线图是解析的延伸，不是原题的设问。</p>
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-to-high" aria-labelledby="stage-bridge-next-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-next-title">往后学 · 高中数学</h2><p class="small">把这一节学透，到了高中就能直接迁移到下面的课程：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../lessons/b2-9-2.html">高中 · 用样本估计总体</a><span class="bridge-why">新版初中教材新增的四分位数（下四分位数、中位数、上四分位数），在高中直接推广为任意第 $p$ 百分位数。</span></li></ul><p class="bridge-all"><a href="../../courses.html">打开高中数学课程目录</a></p></section>
+<footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function f(v, d) { var k = Math.pow(10, d == null ? 2 : d), r = Math.round(v * k) / k; if (r === 0) return "0"; var s = String(Math.abs(r)); return r < 0 ? "−" + s : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+  function srt(a) { return a.slice().sort(function (x, y) { return x - y; }); }
+  function med(s) { var n = s.length, m = n >> 1; return n % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+  // 课本取法：先求中位数；奇数个时中位数不进两半
+  function quart(a) {
+    var s = srt(a), n = s.length, h = n >> 1;
+    return { s: s, min: s[0], q1: med(s.slice(0, h)), q2: med(s), q3: med(s.slice(n - h)), max: s[n - 1], left: s.slice(0, h), right: s.slice(n - h) };
+  }
+  function vari(a) { var m = sum(a) / a.length; return sum(a.map(function (x) { return (x - m) * (x - m); })) / a.length; }
+  // 数轴：每 ts 一个刻度，每 every 标一个数
+  function axis(p, lo, hi, x0, x1, y, ts, every, sz, off) {
+    var c = C(), u = (x1 - x0) / (hi - lo), n = Math.round((hi - lo) / ts);
+    function X(v) { return x0 + (v - lo) * u; }
+    el("line", { x1: x0 - 8, y1: y, x2: x1 + 12, y2: y, stroke: c.fg, "stroke-width": 2 }, p);
+    el("path", { d: "M" + (x1 + 20) + " " + y + " l-12 -6 v12 z", fill: c.fg }, p);
+    for (var k = 0; k <= n; k++) {
+      var v = lo + k * ts;
+      el("line", { x1: X(v), y1: y - 5, x2: X(v), y2: y + 5, stroke: c.fg, "stroke-width": 1.5 }, p);
+      if (Math.round((v - lo) / every * 1000) % 1000 === 0) txt(p, X(v), y + (off || 28), String(v), c.fg, 400, sz || 16);
+    }
+    return X;
+  }
+  function dot(p, x, y, col, r) { el("circle", { cx: x, cy: y, r: r || 7, fill: col }, p); }
+  function stackY(arr, i, y0, gap) { var k = 0; for (var j = 0; j < i; j++) if (arr[j] === arr[i]) k++; return y0 - k * gap; }
+  // 箱线图：q = {min,q1,q2,q3,max}；y 为中线，h 为箱高；step 0 只画五条线，1 加箱体，2 全画
+  function box(p, q, X, y, h, col, step) {
+    var c = C(), st = step == null ? 2 : step;
+    [q.min, q.q1, q.q2, q.q3, q.max].forEach(function (v) { el("line", { x1: X(v), y1: y - h / 2, x2: X(v), y2: y + h / 2, stroke: col, "stroke-width": 3 }, p); });
+    if (st >= 1) el("rect", { x: X(q.q1), y: y - h / 2, width: Math.max(0, X(q.q3) - X(q.q1)), height: h, fill: col, "fill-opacity": 0.18, stroke: col, "stroke-width": 3 }, p);
+    if (st >= 2) {
+      el("line", { x1: X(q.min), y1: y, x2: X(q.q1), y2: y, stroke: col, "stroke-width": 2.5 }, p);
+      el("line", { x1: X(q.q3), y1: y, x2: X(q.max), y2: y, stroke: col, "stroke-width": 2.5 }, p);
+    }
+  }
+  function handle(svg, x, y, col, label, val, lo, hi, step, toVal, cb) {
+    var c = C();
+    var h = el("circle", { cx: x, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": f(val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + step, ArrowUp: val + step, ArrowLeft: val - step, ArrowDown: val - step, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(clamp(Math.round(nv / step) * step, lo, hi), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        cb(clamp(Math.round(toVal(pt.matrixTransform(m.inverse()).x) / step) * step, lo, hi), false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+
+  /* 从例子进入 */
+  var JUMP = [98, 105, 112, 118, 120, 126, 131, 135, 140, 146, 152, 170], entryK = 0, ef = document.getElementById("entry-fig");
+  function drawEntry() {
+    var c = C(), q = quart(JUMP); ef.innerHTML = "";
+    var X = axis(ef, 90, 180, 30, 486, 120, 5, 10, 17, 30);
+    if (entryK === 2) el("rect", { x: X(q.q1), y: 54, width: X(q.q3) - X(q.q1), height: 66, fill: c.a, "fill-opacity": 0.15 }, ef);
+    JUMP.forEach(function (v) { dot(ef, X(v), 104, c.c, 7); });
+    var cuts = entryK === 0 ? [] : entryK === 1 ? [["Q₂", q.q2, c.b]] : [["Q₁", q.q1, c.a], ["Q₂", q.q2, c.b], ["Q₃", q.q3, c.a]];
+    cuts.forEach(function (k) { el("line", { x1: X(k[1]), y1: 40, x2: X(k[1]), y2: 120, stroke: k[2], "stroke-width": 3 }, ef); txt(ef, X(k[1]), 32, k[0], k[2], 700, 18); });
+    var inside = JUMP.filter(function (v) { return v > q.q1 && v < q.q3; }).length;
+    document.getElementById("entry-note").textContent = entryK === 0 ? "12 个数已从小到大排好，点在数轴上。" : entryK === 1 ? "12 是偶数：中间一刀切在第 6、7 个之间，Q₂ = (126 + 131) ÷ 2 = " + f(q.q2) + "，左右各 6 个。" : "左半 6 个的中位数 Q₁ = (112 + 118) ÷ 2 = " + f(q.q1) + "，右半 6 个的中位数 Q₃ = (140 + 146) ÷ 2 = " + f(q.q3) + "。每份 3 个，阴影里有 " + inside + " 个。";
+  }
+  bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
+
+  /* 微图解 ①：百分位 */
+  var m1p = 25;
+  function drawM1() {
+    var p = document.getElementById("m1-fig"), c = C(), n = 20, w = 16, x0 = 30; p.innerHTML = "";
+    var cut = n * m1p / 100;
+    for (var i = 0; i < n; i++) el("rect", { x: x0 + i * w, y: 40, width: w - 2, height: 40, rx: 3, fill: i < cut ? c.a : c.card, stroke: c.muted, "stroke-width": 1.2 }, p);
+    var xc = x0 + cut * w - 1;
+    el("line", { x1: xc, y1: 28, x2: xc, y2: 94, stroke: c.no, "stroke-width": 3 }, p);
+    txt(p, xc, 22, m1p + "%", c.no, 700, 17);
+    txt(p, x0, 124, "小", c.muted, 700, 16, "start"); txt(p, x0 + n * w - 2, 124, "大", c.muted, 700, 16, "end");
+    document.getElementById("m1-note").textContent = "20 个数据从小到大排成一排。" + m1p + "% 分位数切在第 " + cut + " 个和第 " + (cut + 1) + " 个之间：左边 " + cut + " 个，约占 " + m1p + "%。" + (m1p === 50 ? "这就是中位数 Q₂。" : m1p === 25 ? "这是 Q₁，也叫下四分位数。" : "这是 Q₃，也叫上四分位数。");
+  }
+  bar("m1-bar", function (t) { m1p = +t.getAttribute("data-p"); drawM1(); });
+
+  /* 微图解 ②：奇偶两种分法 */
+  var BASE = [3, 5, 6, 8, 9, 11, 12, 14, 15, 17, 20], m2n = 8;
+  function cards(p, s, x0, w, gap, y, hl) {
+    var c = C();
+    s.forEach(function (v, i) {
+      var col = hl(i);
+      el("rect", { x: x0 + i * (w + gap), y: y, width: w, height: 34, rx: 5, fill: c.card, stroke: col, "stroke-width": 2.5 }, p);
+      txt(p, x0 + i * (w + gap) + w / 2, y + 23, String(v), col, 700, 15);
+    });
+  }
+  function bracket(p, xa, xb, y, col, label) { el("path", { d: "M" + xa + " " + (y - 6) + " v6 H" + xb + " v-6", fill: "none", stroke: col, "stroke-width": 2.5 }, p); txt(p, (xa + xb) / 2, y + 26, label, col, 700, 16); }
+  function drawM2() {
+    var p = document.getElementById("m2-fig"), c = C(), s = BASE.slice(0, m2n), q = quart(s), n = s.length, h = n >> 1, w = 29, gap = 4, x0 = (380 - n * w - (n - 1) * gap) / 2; p.innerHTML = "";
+    cards(p, s, x0, w, gap, 30, function (i) { return i < h ? c.a : i >= n - h ? c.c : c.b; });
+    function L(i) { return x0 + i * (w + gap); }
+    bracket(p, L(0), L(h - 1) + w, 80, c.a, "Q₁ = " + f(q.q1));
+    bracket(p, L(n - h), L(n - 1) + w, 80, c.c, "Q₃ = " + f(q.q3));
+    txt(p, 190, 150, "Q₂ = " + f(q.q2), c.b, 700, 17);
+    document.getElementById("m2-note").textContent = n + " 个数据：" + (n % 2 ? "奇数个，中位数是第 " + (h + 1) + " 个（金色），它不进两半；左右各 " + h + " 个。" : "偶数个，Q₂ 是第 " + h + "、" + (h + 1) + " 个的平均数，左右正好各 " + h + " 个。") + "Q₁ = 左半的中位数 " + f(q.q1) + "，Q₃ = 右半的中位数 " + f(q.q3) + "。";
+  }
+  bar("m2-bar", function (t) { m2n = +t.getAttribute("data-n"); drawM2(); });
+
+  /* 微图解 ③：画箱线图 */
+  var CHORE = [20, 35, 15, 40, 60, 25, 30, 45, 30, 50, 90], m3k = 0;
+  function drawM3() {
+    var p = document.getElementById("m3-fig"), c = C(), q = quart(CHORE); p.innerHTML = "";
+    var X = axis(p, 10, 100, 24, 340, 130, 5, 20, 16, 28);
+    box(p, q, X, 70, 40, c.b, m3k);
+    document.getElementById("m3-note").textContent = m3k === 0 ? "五个数：最小值 " + q.min + "，Q₁ = " + q.q1 + "，Q₂ = " + q.q2 + "，Q₃ = " + q.q3 + "，最大值 " + q.max + "，各画一条短竖线。" : m3k === 1 ? "Q₁ 到 Q₃ 连成箱体，长 " + q.q3 + " − " + q.q1 + " = " + (q.q3 - q.q1) + "（四分位距），中间的线是中位数。" : "从箱体两端画须线到最小值和最大值。右须线 " + (q.max - q.q3) + "，左须线 " + (q.q1 - q.min) + "：右边拖得长。";
+  }
+  bar("m3-bar", function (t) { m3k = +t.getAttribute("data-k"); drawM3(); });
+
+  /* 微图解 ④：两个班比较 */
+  var CA = [50, 58, 62, 66, 68, 70, 72, 75, 78, 85, 92], CB = [45, 60, 70, 74, 78, 80, 81, 83, 84, 86, 88], m4k = 0;
+  function drawM4() {
+    var p = document.getElementById("m4-fig"), c = C(), qa = quart(CA), qb = quart(CB); p.innerHTML = "";
+    var X = axis(p, 40, 100, 50, 346, 146, 5, 10, 16, 28);
+    txt(p, 10, 56, "一班", c.a, 700, 16, "start"); txt(p, 10, 106, "二班", c.c, 700, 16, "start");
+    box(p, qa, X, 50, 28, c.a); box(p, qb, X, 100, 28, c.c);
+    if (m4k === 0) [qa.q2, qb.q2].forEach(function (v, i) { el("line", { x1: X(v), y1: 30, x2: X(v), y2: 146, stroke: i ? c.c : c.a, "stroke-width": 1.5, "stroke-dasharray": "4 4" }, p); });
+    if (m4k === 1) { [[qa, 50, c.a], [qb, 100, c.c]].forEach(function (g) { el("rect", { x: X(g[0].q1) - 3, y: g[1] - 19, width: X(g[0].q3) - X(g[0].q1) + 6, height: 38, fill: "none", stroke: c.no, "stroke-width": 2.5, rx: 4 }, p); }); }
+    if (m4k === 2) { [[qb, 100]].forEach(function (g) { el("line", { x1: X(g[0].min), y1: g[1] + 20, x2: X(g[0].q1), y2: g[1] + 20, stroke: c.no, "stroke-width": 4 }, p); }); }
+    document.getElementById("m4-note").textContent = m4k === 0 ? "中位数：一班 " + qa.q2 + "，二班 " + qb.q2 + "。二班的中间水平更高。" : m4k === 1 ? "箱体：一班 " + qa.q1 + "～" + qa.q3 + "（长 " + (qa.q3 - qa.q1) + "），二班 " + qb.q1 + "～" + qb.q3 + "（长 " + (qb.q3 - qb.q1) + "）。二班中间一半更集中。" : "二班左须线从 " + qb.min + " 到 " + qb.q1 + "，长 " + (qb.q1 - qb.min) + "，右须线只长 " + (qb.max - qb.q3) + "；中位线也偏右：大部分人分数高，少数人拖了低分，不对称。一班两边差不多，比较对称。";
+  }
+  bar("m4-bar", function (t) { m4k = +t.getAttribute("data-k"); drawM4(); });
+
+  /* 翻车现场 ① */
+  function drawTrap() {
+    var p = document.getElementById("m-trap"), c = C(), s = srt(CHORE), w = 24, gap = 2, x0 = (300 - 11 * w - 10 * gap) / 2; p.innerHTML = "";
+    s.forEach(function (v, i) {
+      var col = i < 5 ? c.a : i === 5 ? c.b : c.c;
+      el("rect", { x: x0 + i * (w + gap), y: 20, width: w, height: 30, rx: 4, fill: c.card, stroke: col, "stroke-width": 2 }, p);
+      txt(p, x0 + i * (w + gap) + w / 2, 41, String(v), col, 700, 15);
+    });
+    function L(i) { return x0 + i * (w + gap); }
+    bracket(p, L(0), L(4) + w, 70, c.a, "Q₁ = 25");
+    el("path", { d: "M" + (L(5) + w / 2) + " 54 v64", stroke: c.b, "stroke-width": 2.5, "stroke-dasharray": "4 3" }, p);
+    txt(p, L(5) + w / 2 + 8, 138, "不进两半", c.b, 700, 15, "start");
+  }
+
+  /* 动手 ①：拖动数据看箱线图 */
+  var P0 = [2, 4, 5, 7, 8, 10, 11, 14, 18], P = P0.slice(), ten = 15, useTen = false, focusP = -1, fb = document.getElementById("fig-box"), nBtn = document.getElementById("n-box");
+  function drawBox() {
+    var c = C(), d = useTen ? P.concat([ten]) : P, q = quart(d), hs = []; fb.innerHTML = "";
+    var X = axis(fb, 0, 20, 40, 516, 176, 1, 2, 19, 36);
+    box(fb, q, X, 54, 36, c.b);
+    d.forEach(function (v, i) {
+      hs.push(handle(fb, X(v), stackY(d, i, 176, 24), i === 9 ? c.no : c.c, "第 " + (i + 1) + " 个数据", v, 0, 20, 1, function (x) { return (x - 40) / 23.8; },
+        function (nv, key) { if (i === 9) ten = nv; else P[i] = nv; focusP = key ? i : -1; drawBox(); }));
+    });
+    var n = d.length, h = n >> 1;
+    document.getElementById("out-box").innerHTML = "排好序：" + q.s.join("，") + "（" + n + " 个，" + (n % 2 ? "奇数，中位数 " + q.q2 + " 不进两半" : "偶数，正好分成两半") + "）。左半 " + q.left.join("，") + " → Q₁ = <span class=\"ok\">" + f(q.q1) + "</span>；Q₂ = <span class=\"sum\">" + f(q.q2) + "</span>；右半 " + q.right.join("，") + " → Q₃ = <span class=\"ok\">" + f(q.q3) + "</span>。四分位距 " + f(q.q3 - q.q1) + (q.q3 === q.q1 ? "：中间一半数据挤在同一个值上。" : "：中间约一半的数据在 " + f(q.q1) + " 到 " + f(q.q3) + " 之间。");
+    if (focusP >= 0) hs[focusP].focus();
+  }
+  nBtn.onclick = function () { useTen = !useTen; nBtn.setAttribute("aria-pressed", useTen ? "true" : "false"); nBtn.textContent = useTen ? "去掉第 10 个数据" : "加入第 10 个数据"; focusP = -1; drawBox(); };
+  document.getElementById("reset-box").onclick = function () { P = P0.slice(); ten = 15; useTen = true; nBtn.onclick(); };
+
+  /* 动手 ②：拖动五个数 */
+  var F0 = [20, 35, 50, 60, 90], F = F0.slice(), NAMES = ["最小值", "Q₁", "Q₂", "Q₃", "最大值"], focusF = -1, ff = document.getElementById("fig-five");
+  function drawFive() {
+    var c = C(), hs = [], q = { min: F[0], q1: F[1], q2: F[2], q3: F[3], max: F[4] }; ff.innerHTML = "";
+    var X = axis(ff, 0, 100, 40, 516, 140, 5, 10, 19, 36);
+    box(ff, q, X, 74, 44, c.b);
+    F.forEach(function (v, i) {
+      hs.push(handle(ff, X(v), 140, i === 2 ? c.no : c.b, NAMES[i], v, 0, 100, 1, function (x) { return (x - 40) / 4.76; },
+        function (nv, key) {
+          // 拖过相邻的数时把它一起推走，保持 最小值 ≤ Q₁ ≤ Q₂ ≤ Q₃ ≤ 最大值
+          F[i] = nv; for (var j = i + 1; j < 5; j++) F[j] = Math.max(F[j], F[j - 1]); for (j = i - 1; j >= 0; j--) F[j] = Math.min(F[j], F[j + 1]);
+          focusF = key ? i : -1; drawFive();
+        }));
+    });
+    var lw = F[1] - F[0], rw = F[4] - F[3], lb = F[2] - F[1], rb = F[3] - F[2];
+    function cmpS(r, l, name) { return Math.abs(r - l) <= 3 ? name + "左右差不多长" : name + (r > l ? "右边更长" : "左边更长"); }
+    var dw = rw - lw, db = rb - lb, sw = Math.abs(dw) <= 3 ? 0 : dw > 0 ? 1 : -1, sb = Math.abs(db) <= 3 ? 0 : db > 0 ? 1 : -1;
+    var sym = cmpS(rw, lw, "须线") + "（左 " + lw + "，右 " + rw + "），" + cmpS(rb, lb, "半箱") + "（左 " + lb + "，右 " + rb + "）：" +
+      (!sw && !sb ? "分布大致对称。" : sw * sb < 0 ? "须线和半箱偏向不同的两边，形状不对称，不能简单说哪一侧拖得长。" : (sw + sb > 0 ? "大的那一侧数据拖得远，分布不对称。" : "小的那一侧数据拖得远，分布不对称。"));
+    var same = F[0] === F[1] || F[1] === F[2] || F[2] === F[3] || F[3] === F[4];
+    document.getElementById("out-five").innerHTML = "全部数据在 " + F[0] + " 到 " + F[4] + " 之间；约一半不超过 " + F[2] + "；约 25% 不超过 " + F[1] + "，约 25% 不小于 " + F[3] + "；中间约一半在 " + F[1] + " 到 " + F[3] + " 之间，四分位距 <span class=\"sum\">" + (F[3] - F[1]) + "</span>。" + (same ? "有几个数重合了：说明很多数据取同一个值，这时「小于」「大于」某个数的比例可能是 0，只能说「不超过」「不小于」。" : "") + (F[0] === F[4] ? "五个数全相等：所有数据都一样，没有波动，也谈不上对称不对称。" : sym);
+    if (focusF >= 0) hs[focusF].focus();
+  }
+  document.getElementById("reset-five").onclick = function () { F = F0.slice(); focusF = -1; drawFive(); };
+
+  /* 动手 ③：两个班 */
+  var ONE = [132, 140, 146, 150, 155, 158, 162, 165, 170, 176, 184, 196], SH = 0, SC = 10, focusT = "", ft = document.getElementById("fig-two");
+  function two() { return ONE.map(function (v) { return Math.round(160 + SC / 10 * (v - 160) + SH); }); }
+  function drawTwo() {
+    var c = C(), B = two(), qa = quart(ONE), qb = quart(B), hs = {}; ft.innerHTML = "";
+    var X = axis(ft, 90, 240, 70, 516, 150, 10, 30, 19, 36);
+    txt(ft, 12, 56, "一班", c.a, 700, 19, "start"); txt(ft, 12, 116, "二班", c.c, 700, 19, "start");
+    box(ft, qa, X, 50, 30, c.a); box(ft, qb, X, 110, 30, c.c);
+    [["SH", "平移", 230, -20, 20, 1, SH, function (v) { return f(v); }], ["SC", "伸缩", 275, 5, 15, 1, SC, function (v) { return "×" + f(v / 10, 1); }]].forEach(function (g) {
+      txt(ft, 12, g[2] + 7, g[1], c.b, 700, 19, "start");
+      el("line", { x1: 150, y1: g[2], x2: 470, y2: g[2], stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, ft);
+      txt(ft, 548, g[2] + 7, g[7](g[6]), c.b, 700, 19, "end");
+      var u = 320 / (g[4] - g[3]);
+      hs[g[0]] = handle(ft, 150 + (g[6] - g[3]) * u, g[2], c.b, g[1], g[6], g[3], g[4], 1, function (x) { return g[3] + (x - 150) / u; }, function (v, k) { if (g[0] === "SH") SH = v; else SC = v; focusT = k ? g[0] : ""; drawTwo(); });
+    });
+    var la = qa.q3 - qa.q1, lb = qb.q3 - qb.q1, va = vari(ONE), vb = vari(B);
+    var cmp = lb > la ? "二班箱体更长（" + f(lb) + " > " + f(la) + "），更分散" : lb < la ? "二班箱体更短（" + f(lb) + " < " + f(la) + "），更集中" : "两班箱体一样长（" + f(la) + "）";
+    document.getElementById("out-two").innerHTML = "二班成绩：" + B.join("，") + "。中位数：一班 " + f(qa.q2) + "，二班 <span class=\"sum\">" + f(qb.q2) + "</span>" + (qb.q2 > qa.q2 ? "，二班中间水平高" : qb.q2 < qa.q2 ? "，二班中间水平低" : "，一样") + "。" + cmp + "；方差：一班 " + f(va, 1) + "，二班 " + f(vb, 1) + "。这里二班是把一班的成绩整体伸缩、平移得到的，箱体和方差跟着一起变大或变小；一般情况下，箱体只看中间约一半，方差用到全部数据，两者不一定同向。平移只挪位置，不改变箱体长短。";
+    if (focusT) hs[focusT].focus();
+  }
+  document.getElementById("reset-two").onclick = function () { SH = 0; SC = 10; focusT = ""; drawTwo(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawM4(); drawTrap(); drawBox(); drawFive(); drawTwo(); }
+  drawAll();
+  new MutationObserver(function () { focusP = focusF = -1; focusT = ""; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

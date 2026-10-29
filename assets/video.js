@@ -6,8 +6,9 @@
 (function () {
   "use strict";
 
-  var LOG_KEY = "peiyu.hs.log";
   var sec = document.body.getAttribute("data-sec") || "";
+  var stage = document.body.getAttribute("data-stage") || (/^j\d+-/.test(sec) ? "junior" : /^p[1-6][ab]-/.test(sec) ? "primary" : "high");
+  var LOG_KEY = stage === "primary" ? "peiyu.ps.log" : stage === "junior" ? "peiyu.jh.log" : "peiyu.hs.log";
   function log(id, choice) {
     try {
       var all = JSON.parse(localStorage.getItem(LOG_KEY) || "[]");
@@ -34,6 +35,9 @@
     ".vid-box video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }",
     ".vid-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; font-size: 15px; color: var(--muted); }",
     ".vid-bar button { font: inherit; font-size: 15px; color: var(--c); background: none; border: none; cursor: pointer; padding: 4px 0; min-height: 36px; }",
+    ".primary .vid-bar button { min-height: 44px; }",
+    ".primary .vid-txt b, .primary .vid-txt span, .primary .vid-bar { font-size: 17px; }",
+    ".primary.low .vid-txt b, .primary.low .vid-txt span, .primary.low .vid-bar, .primary.low .vid-bar button { font-size: 19px; }",
     ".vid-err { color: var(--no); font-size: 15px; margin: 6px 0 0; }"
   ].join("\n");
   document.head.appendChild(css);

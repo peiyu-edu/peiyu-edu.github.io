@@ -4,14 +4,14 @@
 <title>8.2 一元线性回归模型及其应用 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=b155721e85c0">
+<link rel="stylesheet" href="../assets/site.css?v=0346bdf6f187">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
-<link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-62308ba8592150cf">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-8b9f09c986b5a3f5"></script>
-<script defer src="../assets/lesson.js?v=sha256-44e493d1f33aec00"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
+<script defer src="../assets/gaokao-solutions.js?v=sha256-e68606ab30c2ca25"></script>
+<script defer src="../assets/lesson.js?v=sha256-f5854593a033282a"></script>
 <script defer src="../assets/student-textbook.js"></script>
-  <script defer src="../assets/video.js?v=vs-157bbe6abfc8"></script>
+  <script defer src="../assets/video.js?v=vs-bc840972e87d"></script>
 <style>
   .fig text { font-size: 20px; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
@@ -23,8 +23,10 @@
   .tbl td, .tbl th { white-space: nowrap; }
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .micro-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .micro-tabs button { font-size: 14px; max-width: 100%; white-space: normal; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=e4a83d05f4b6"><link rel="stylesheet" href="../assets/learning-course.css?v=b8a36277ecb1"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=ab1fd38fe53b"></script><script defer src="../assets/learning-data.js?v=4e255d69b3cd"></script><script defer src="../assets/learning-shell.js?v=2eb3130a1b07"></script><script defer src="../assets/learning-course.js?v=c5e965152295"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="e3-8-2" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -111,20 +113,20 @@
     </div>
   </div>
 
-  <div class="concept-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:16px 0;">
+  <div class="concept-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); gap:12px; margin:16px 0;">
     <div class="card" style="border-top:3px solid #1976d2; margin:0;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <b style="color:#1976d2;">总体回归模型（建模假设）</b>
-        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:11px; padding:2px 8px; border-radius:10px;">不可直接测</span>
+        <span class="badge-pill" style="background:#e3f2fd; color:#1976d2; font-size:14px; padding:2px 8px; border-radius:10px;">不可直接测</span>
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>形式</b>：\(Y = bx + a + e\)。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：选定情境与范围内的近似模型，参数 \(a, b\) 恒定但未知，含随机误差项 \(e\)。</p>
       <p class="small" style="margin:0;"><b>特质</b>：不同人抽样，估计出来的 \(\hat{b}\) 围绕真值 \(b\) 波动。</p>
     </div>
     <div class="card" style="border-top:3px solid #2e7d32; margin:0;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+      <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:space-between; align-items:center; margin-bottom:6px;">
         <b style="color:#2e7d32;">经验回归方程（样本估计）</b>
-        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:11px; padding:2px 8px; border-radius:10px;">实践预报</span>
+        <span class="badge-pill" style="background:#e8f5e9; color:#2e7d32; font-size:14px; padding:2px 8px; border-radius:10px;">实践预报</span>
       </div>
       <p class="small" style="margin:0 0 4px 0;"><b>形式</b>：\(\hat{y} = \hat{b}x + \hat{a}\)。</p>
       <p class="small" style="margin:0 0 4px 0;"><b>内涵</b>：带帽子表示估计值，由最小二乘法计算得出。</p>
@@ -231,7 +233,7 @@
   </div>
 
   <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; margin:12px 0;">
-    <div style="font-weight:700; font-size:12.5px; color:var(--fg); margin-bottom:6px;">反例微图解：最小二乘准则（竖直残差方块面积之和最小）直觉示意</div>
+    <div style="font-weight:700; font-size:14px; color:var(--fg); margin-bottom:6px;">反例微图解：最小二乘准则（竖直残差方块面积之和最小）直觉示意</div>
     <svg class="micro-fig" id="m-reg-trap-fig" viewBox="0 0 540 140" style="width:100%; max-width:540px; height:auto; display:block; margin:0 auto;"></svg>
     <div style="font-size:15px; color:var(--muted); margin-top:4px;">
       左图量测同一x下的竖直残差e；右图由正交投影精确求垂足，虚线确实垂直于基线。普通含截距线性回归最小化竖直残差平方和；它与垂距平方和是不同的优化准则。
@@ -334,6 +336,7 @@
   <div id="practice" data-fold-later></div>
 </section>
 
+<section class="card stage-bridge" data-bridge="high-from-junior" aria-labelledby="stage-bridge-prev-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-prev-title">先修回顾 · 初中数学</h2><p class="small">学这一节之前，需要用到下面的初中数学基础；如果觉得生疏可以先点开回顾：</p><ul class="bridge-list"><li><a class="bridge-link" href="../junior/lessons/j23-4.html">初中 · 23.4 实际问题与一次函数</a><span class="bridge-why">初中在散点图上取两点或顺势画一条直线用一次函数 $y=kx+b$ 作近似预测，在高中升级为使残差平方和最小的最小二乘线性回归方程。</span></li></ul><p class="bridge-all"><a href="../junior/courses.html">打开初中数学课程目录</a></p></section>
 <nav class="back"><a class="home" href="../index.html">← 返回主页，看全部章节</a></nav>
 <footer>培玉智能 · 自编讲解。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>

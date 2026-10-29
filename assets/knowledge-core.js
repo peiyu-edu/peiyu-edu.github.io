@@ -1,16 +1,21 @@
 /* 独立知识点详情与自测；不读写旧卡片、旧日志的存储。 */
 (function () {
   "use strict";
+  var body = document.body, junior = !!body && (body.getAttribute("data-stage") === "junior" || /^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(body.getAttribute("data-sec") || ""));
+  if (junior) body.classList.add("knowledge-junior");
   var script = document.currentScript;
   var root = new URL("../", script && script.src ? script.src : new URL("assets/knowledge-core.js", document.baseURI));
-  var STORAGE_KEY = "peiyu.hs.knowledge.v1", HISTORY_LIMIT = 120;
+  // A junior page may load the shared script through /assets/ or /junior/assets/.
+  // Resolve its data and deep links from the page's site root in either case.
+  if (junior) root = new URL(/^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(body.getAttribute("data-sec") || "") ? "../" : "./", document.baseURI);
+  var STORAGE_KEY = junior ? "peiyu.jh.knowledge.v1" : "peiyu.hs.knowledge.v1", HISTORY_LIMIT = 120;
   var data = null, loading = null, memoryOnly = false;
   var renderedHosts = new Map();
   var scopeLabels = { required: "本节核心", selective_required: "选必内容", optional: "选学", enrichment: "拓展 · 可以跳过", teacher_reference: "教师参考" };
   var statusLabels = { untouched: "还未查看", viewed: "已查看 · 尚未自测", passed: "本次自测通过", review: "建议再练" };
 
   function blank() { return { version: 1, points: {}, history: [] }; }
-  function validId(id) { return /^pyhs\.[a-z]+\.\d{3}$/.test(id || ""); }
+  function validId(id) { return (junior ? /^pyjh\.[a-z]+\.\d{3}$/ : /^pyhs\.[a-z]+\.\d{3}$/).test(id || ""); }
   function sectionId(id) { return data && data.sections.some(function (s) { return s.id === id; }) ? id : null; }
   function parseState(raw) {
     var out = blank();
@@ -62,16 +67,23 @@
     if (data) return Promise.resolve(data);
     if (loading) return loading;
     loading = fetch(new URL("data/knowledge/catalog.json", root).href).then(function (r) {
+      if (junior && (r.status === 404 || r.status === 410)) return null;
       // 老的集合样板仍可独立运行；服务器故障不静默回退为较小题库。
       if (r.status === 404 || r.status === 410) return fetch(new URL("data/knowledge/sets.json", root).href);
       return r;
     }).then(function (r) {
+      if (!r) return null;
       if (!r.ok) throw new Error("知识点暂时没有加载成功。");
       return r.json();
     }).then(function (v) {
-      if (!v || (v.domain !== "sets" && v.domain !== "senior-math") || !Array.isArray(v.points) || !Array.isArray(v.sections)) throw new Error("知识点数据格式不完整。");
+      if (junior && v === null) {
+        data = { version: 1, domain: "junior-math", title: "初中知识库", domains: [], sections: [], points: [], unavailable: true };
+        return data;
+      }
+      if (!v || (junior ? v.domain !== "junior-math" : (v.domain !== "sets" && v.domain !== "senior-math")) || !Array.isArray(v.points) || !Array.isArray(v.sections)) throw new Error("知识点数据格式不完整。");
+      if (junior && v.sections.some(function (s) { return !/^j\d+-\d+$/.test(s.id); })) throw new Error("知识点数据格式不完整。");
       var domains = Array.isArray(v.domains) ? v.domains : [{ id: "sets", title: v.title || "集合与逻辑" }];
-      var allowedScopes = ["required", "selective_required", "optional", "enrichment"];
+      var allowedScopes = junior ? ["required", "optional", "enrichment"] : ["required", "selective_required", "optional", "enrichment"];
       var points = v.points.filter(function (p) { return p && validId(p.id) && allowedScopes.indexOf(p.course_scope) >= 0; }).map(function (p) {
         return Object.assign({}, p, { domain: p.domain || (v.domain === "sets" ? "sets" : "") });
       });
@@ -81,6 +93,12 @@
       return data;
     }).catch(function (e) { loading = null; throw e; });
     return loading;
+  }
+  function availableInSection(id, context) {
+    if (!junior || !context) return !!pointById(id);
+    var p = pointById(id), ids = data ? data.sections.map(function (s) { return s.id; }) : [];
+    var current = ids.indexOf(context), first = p ? ids.indexOf(p.first_section) : -1;
+    return current >= 0 && first >= 0 && first <= current;
   }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function list(items, tag) { return "<" + (tag || "ul") + ">" + (items || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</" + (tag || "ul") + ">"; }
@@ -105,7 +123,7 @@
     return found ? found.title : (id || "本节");
   }
   function pointLinks(ids, context) {
-    return ids.map(function (id) { var p = pointById(id); return p ? '<a href="' + esc(pointHref(id, context)) + '" data-knavigate="' + esc(id) + '">' + esc(p.title) + "</a>" : ""; }).join("");
+    return ids.map(function (id) { var p = availableInSection(id, context) && pointById(id); return p ? '<a href="' + esc(pointHref(id, context)) + '" data-knavigate="' + esc(id) + '">' + esc(p.title) + "</a>" : ""; }).join("");
   }
   function complementHTML() {
     return '<div class="k-complement"><h3>在 U 里，才谈补集</h3><p class="k-note">$U=\\{1,2,3,4\\}$，$A=\\{1,4\\}$。点一个数，看它是否属于 $\\complement_U A$。</p>' +
@@ -115,6 +133,8 @@
   function renderPoint(host, id, options) {
     options = options || {};
     var p = pointById(id);
+    // Even a direct render on a lesson must respect its current teaching boundary.
+    if (junior && /^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(body.getAttribute("data-sec") || "") && !availableInSection(id, body.getAttribute("data-sec"))) p = null;
     renderedHosts.delete(host);
     host.replaceChildren();
     if (!p) { host.innerHTML = '<p class="k-empty">没有找到这个知识点。请从目录选择。</p>'; return; }
@@ -125,7 +145,7 @@
     var quiz = p.diagnostic;
     var domain = data.domains.find(function (d) { return d.id === p.domain; });
     var html = '<article class="k-point" data-knowledge-id="' + esc(id) + '"><div class="k-point-head"><span>' + esc((domain ? domain.title + " / " : "") + sectionTitle(p.first_section)) + '</span><span class="k-scope' + (extra ? " enrichment" : "") + '">' + esc(scopeLabels[p.course_scope] || "拓展") + '</span><span class="k-point-status" data-kpoint-status></span></div>' +
-      '<h2 class="k-point-title">' + esc(p.title) + '</h2>' + (extra ? '<p class="k-optional">这是拓展内容，可以先跳过。读过或通过这道题，都不会改变核心课的学习要求。</p>' : "") +
+      '<h2 class="k-point-title">' + esc(p.title) + '</h2>' + (extra ? '<p class="k-optional">' + (junior && p.course_scope === "optional" ? "这是选学内容，可以先跳过。" : "这是拓展内容，可以先跳过。") + '读过或通过这道题，都不会改变核心课的学习要求。</p>' : "") +
       '<p class="k-definition">' + esc(p.definition) + '</p>' + (id === "pyhs.set.012" ? complementHTML() : "") +
       '<section class="k-conditions"><h3>用之前，先确认</h3>' + list(p.conditions) + '</section><section><h3>容易混在哪里</h3>' +
       p.misconceptions.map(function (m) { return '<div class="k-misconception"><p class="k-error"><b>常见误解：</b>' + esc(m.error) + '</p><p class="k-correction"><b>这样分清：</b>' + esc(m.correction) + '</p></div>'; }).join("") + '</section>';
@@ -138,7 +158,7 @@
       '<details class="k-more"><summary>学习范围与可用方法</summary><h3>可以这样做</h3>' + list(p.boundary.allowed) + '<h3>这里不默认要求</h3>' + list(p.boundary.not_assumed) + '</details>';
     if (p.prerequisite_notes.length) html += '<details class="k-more"><summary>开始前还会用到</summary>' + list(p.prerequisite_notes) + '</details>';
     html += '<section><h3>把知识接起来</h3><p class="k-relation-label">先把这些分清</p><div class="k-links">' + (pointLinks(p.prerequisites, context) || '<span class="k-note">本模块没有额外的知识点先修。</span>') + '</div><p class="k-relation-label">接着可以看</p><div class="k-links">' + (pointLinks(later, context) || '<span class="k-note">可以回课时练习，把这个点用起来。</span>') + '</div></section>';
-    if (p.legacy_cards.length) html += '<section><h3>相关方法与红线卡</h3><div class="k-links">' + p.legacy_cards.map(function (card) { return '<a href="' + esc(new URL("wiki.html#card-" + encodeURIComponent(card.id), root).href) + '">' + esc(card.title) + '</a>'; }).join("") + '</div></section>';
+    if (!junior && p.legacy_cards.length) html += '<section><h3>相关方法与红线卡</h3><div class="k-links">' + p.legacy_cards.map(function (card) { return '<a href="' + esc(new URL("wiki.html#card-" + encodeURIComponent(card.id), root).href) + '">' + esc(card.title) + '</a>'; }).join("") + '</div></section>';
     html += '<footer class="k-lesson-links"><a class="btn ghost" href="' + esc(lessonHref(returnSection, "step2")) + '">回到' + esc(sectionTitle(returnSection)) + '讲解</a><a class="btn" href="' + esc(lessonHref(returnSection, "step4")) + '">去课时练习</a></footer></article>';
     host.innerHTML = html;
     var entry = state.points[id] || (state.points[id] = { viewedAt: 0 });
@@ -223,5 +243,5 @@
     });
     notify(null);
   });
-  window.PeiyuKnowledge = { load: load, renderPoint: renderPoint, getStatus: getStatus, pointHref: pointHref, renderMath: renderMath };
+  window.PeiyuKnowledge = { stage: junior ? "junior" : "high", availableInSection: availableInSection, load: load, renderPoint: renderPoint, getStatus: getStatus, pointHref: pointHref, renderMath: renderMath };
 })();

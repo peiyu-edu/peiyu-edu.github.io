@@ -7,6 +7,9 @@
   var me = document.currentScript && document.currentScript.src;
   var ROOT = me ? me.replace(/assets\/hci\.js.*$/, "") : "";
   var PATH = location.pathname;
+  // 学段：初中页（data-sec 为 j<章>-<节>）还没有 Wiki、实验台、记录页，导航只留「全部课程」，记录读 peiyu.jh.log
+  var STAGE = document.body.getAttribute("data-stage") || (/^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(document.body.getAttribute("data-sec") || "") ? "junior" : "high");
+  var LOG_KEY = STAGE === "junior" ? "peiyu.jh.log" : "peiyu.hs.log";
   var PAGE = /\/lessons\//.test(PATH) ? "lesson"
     : /wiki\.html/.test(PATH) ? "wiki"
     : /record\.html/.test(PATH) ? "record"
@@ -41,6 +44,7 @@
     if (!top || top.querySelector(".hci-nav")) return;
     var nav = el("nav", "hci-nav"); nav.setAttribute("aria-label", "站内导航");
     NAV.forEach(function (n) {
+      if (STAGE === "junior" && n.id !== "home") return;
       var a = el("a", "wk-topbtn hci-link"); // 带 wk-topbtn：wiki.js 看到就不再插自己的按钮
       a.href = ROOT + n.href;
       a.innerHTML = '<span class="hci-full"></span><span class="hci-short"></span>';
@@ -85,7 +89,7 @@
 
   /* ---------- H-2 课内步骤：网址、回访、键盘、单行标签 ---------- */
   var SEC = document.body.getAttribute("data-sec") || "";
-  var SHORT = { "从例子进入": "例子", "讲清楚": "讲解", "概念课": "讲解", "动手": "动手", "练一练": "练习", "高考真题": "真题" };
+  var SHORT = { "从例子进入": "例子", "讲清楚": "讲解", "概念课": "讲解", "动手": "动手", "练一练": "练习", "高考真题": "真题", "中考真题": "真题" };
   var lesson = null; // { bar, tabs, steps }
 
   function stepIndex() { return lesson ? lesson.tabs.findIndex(function (t) { return t.getAttribute("aria-selected") === "true"; }) : -1; }
@@ -302,14 +306,17 @@
         if (n.matches(".wk-chain")) body.insertBefore(n, body.firstChild); else body.appendChild(n);
         // 摘要里写上先修，收起时也看得到
         if (n.matches(".wk-chain")) {
+          var summary = n.getAttribute("data-guide-summary");
           var span = [].filter.call(n.querySelectorAll("span"), function (s) { return /硬先修|前置/.test(s.textContent); })[0];
           var a = span && span.querySelector("a");
-          if (a) box.querySelector(".hci-guide-s").textContent = "先修：" + a.textContent + (span.querySelectorAll("a").length > 1 ? " 等" : "") + " · 本节路线";
+          if (summary) box.querySelector(".hci-guide-s").textContent = summary;
+          else if (a) box.querySelector(".hci-guide-s").textContent = "先修：" + a.textContent + (span.querySelectorAll("a").length > 1 ? " 等" : "") + " · 本节路线";
         }
       });
       box.hidden = !body.children.length;
     }
     collect();
+    document.addEventListener("peiyu:wiki-chain-ready", collect);
     var mo = new MutationObserver(collect);
     mo.observe(host, { childList: true });
     setTimeout(function () { mo.disconnect(); }, 10000);
@@ -319,7 +326,7 @@
   function sectionProgress() {
     // 新数据（hci 记的看过哪些步）+ 旧记录 peiyu.hs.log 里的 step 事件，老用户也能看到进度
     var by = {}, log = [];
-    try { log = JSON.parse(localStorage.getItem("peiyu.hs.log") || "[]"); } catch (e) { /* ignore */ }
+    try { log = JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); } catch (e) { /* ignore */ }
     log.forEach(function (e) {
       if (!e || !e.sec) return;
       var p = by[e.sec] || (by[e.sec] = { max: 0, seen: {} });
@@ -403,6 +410,7 @@
         if (!window.confirm("确定清空？做题记录和学习进度都会删掉，找不回来。\n要交给老师的话，先点「复制记录」。")) return;
         try {
           localStorage.removeItem("peiyu.hs.log");
+          localStorage.removeItem("peiyu.jh.log");
           localStorage.removeItem("peiyu.hs.cards");
           Object.keys(localStorage).forEach(function (k) { if (k.indexOf("peiyu.hs.hci.") === 0) localStorage.removeItem(k); });
         } catch (e) { /* ignore */ }
@@ -453,7 +461,7 @@
     document.documentElement.classList.add("hci");
   }
 
-  window.PeiyuHCI = { page: PAGE, root: ROOT, store: store, json: json };
+  window.PeiyuHCI = { page: PAGE, stage: STAGE, root: ROOT, store: store, json: json };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();

@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>27.2 反比例函数的图象和性质 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
+  .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j27-2" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">九年级上册 · 第二十七章 反比例函数</p>
+<h1>27.2 反比例函数的图象和性质</h1>
+<p class="lead">画出 \(y=\frac6x\) 的图象，你会看到两支分开的曲线。这一节弄清 \(k\) 的正负怎样决定图象的位置和增减，为什么「增减」必须加上「在每一个象限内」，以及 \(k\) 和矩形面积的关系。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：22.2 函数图象 · 23.2 一次函数图象 · 27.1 反比例函数概念 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：列表描点连线作图法（<a href="j22-2.html">回看 22.2</a>）、一次函数单调性与正负系数判定（<a href="j23-2.html">回看 23.2</a>）、反比例函数的解析式与乘积守恒（<a href="j27-1.html">回看 27.1</a>）。</p>
+  <ol class="small">
+    <li>从描点画图切入：为什么反比例函数的图象会分裂成两条互不相连的双曲线？</li>
+    <li>系数 \(k\) 决定象限：\(k > 0\) 占一三象限，\(k \lt 0\) 占二四象限。</li>
+    <li>核心铁律：增减性必须加上「在每一个象限内」，跨象限绝不单调！</li>
+    <li>对称之美：关于原点 \((0, 0)\) 成中心对称，关于直线 \(y = x\) 与 \(y = -x\) 轴对称。</li>
+    <li>几何意义绝招：双曲线上任意一点向两轴作垂线，围成矩形面积恒等于 \(|k|\)。</li>
+    <li>动手实验：在双曲线参数控制台与动点矩形面积投影台亲手探究。</li>
+    <li>自检与中考真题演练，稳拿象限判定、单调比大小与面积割补全部分数。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>为了探究反比例函数 \(y = \frac{6}{x}\) 的图象特征，我们通过「列表、描点、连线」画出它的图象。自变量 \(x\) 能取哪些值？对应函数值 \(y\) 怎么变化？</p>
+  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTYwIDI0MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Y+N5q+U5L6L5Ye95pWw5YiX6KGo5o+P54K55Zu+XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuiHquWPmOmHj+eCueS9jeWIh+aNolwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtcHQ9XCJwMVwiPuato+aVsOe7hO+8mnggPSAxLCAyLCAzLCA2PC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLXB0PVwicDJcIj7otJ/mlbDnu4TvvJp4ID0gLTEsIC0yLCAtMywgLTY8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtcHQ9XCJwM1wiPuWFqOiniO+8muS4pOaUr+W5s+a7keWPjOabsue6vzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxwIGNsYXNzPVwiZW50cnktbm90ZVwiIGlkPVwiZW50cnktbm90ZVwiIGFyaWEtbGl2ZT1cInBvbGl0ZVwiPjwvcD5cbiAgICA8cD7op4Llr5/nlLvlh7rnmoTlm77osaHvvIzlj43mr5Tkvovlh73mlbAgXFwoeSA9IFxcZnJhY3s2fXt4fVxcKSDnmoTlm77osaHmmK/ku4DkuYjlvaLnirbvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuS4gOadoei/nue7reS4jeaWreepv+i/h+WdkOagh+WOn+eCueeahOebtOe6vzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS4pOaUr+WIhuWIq+S9jeS6juesrOS4gOOAgeS4ieixoemZkOS4lOaXoOmZkOaOpei/keWdkOagh+i9tOeahOWFiea7keabsue6v++8iOWPjOabsue6v++8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuW8gOWPo+WQkeS4iueahOaKm+eJqee6vzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPui/nuaOpeWQhOeCueeahOS4gOadoeWwgemXreaKmOe6vzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkI8L2I+44CC5Y+N5q+U5L6L5Ye95pWw55qE5Zu+6LGh5piv55Sx5Lik5pSv5YWJ5ruR5puy57q/57uE5oiQ55qE77yM5Y+r5L2cPGI+5Y+M5puy57q/PC9iPu+8iGh5cGVyYm9sYe+8ieOAgjwvcD5cbiAgICAgIDxwPuWboOS4uiBcXCh4IFxcbmUgMFxcKe+8jOWbvuixoeWcqCBcXCh5XFwpIOi9tOWkhOiiq+malOaWreaIkOW3puWPs+S4pOaUr++8m+WboOS4uiBcXCh5IFxcbmUgMFxcKe+8jOWPjOabsue6v+aXoOmZkOaOpei/keWdkOagh+i9tOWNtOawuOi/nOS4jeiDveS4juWdkOagh+i9tOebuOS6pO+8gTwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 560 240" role="img" aria-label="反比例函数列表描点图"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="自变量点位切换">
+      <button type="button" class="on" data-pt="p1">正数组：x = 1, 2, 3, 6</button>
+      <button type="button" data-pt="p2">负数组：x = -1, -2, -3, -6</button>
+      <button type="button" data-pt="p3">全览：两支平滑双曲线</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>观察画出的图象，反比例函数 \(y = \frac{6}{x}\) 的图象是什么形状？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一条连续不断穿过坐标原点的直线</button>
+      <button class="opt" data-v="B"><b>B</b>两支分别位于第一、三象限且无限接近坐标轴的光滑曲线（双曲线）</button>
+      <button class="opt" data-v="C"><b>C</b>开口向上的抛物线</button>
+      <button class="opt" data-v="D"><b>D</b>连接各点的一条封闭折线</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。反比例函数的图象是由两支光滑曲线组成的，叫作<b>双曲线</b>（hyperbola）。</p>
+      <p>因为 \(x \ne 0\)，图象在 \(y\) 轴处被隔断成左右两支；因为 \(y \ne 0\)，双曲线无限接近坐标轴却永远不能与坐标轴相交！</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+
+  <h3>1. 先认识几个词：双曲线与反比例函数的几何性质</h3>
+  <p class="small">前置知识：反比例函数的定义（<a href="j27-1.html">回看 27.1</a>）。反比例函数 \(y = \frac{k}{x}\)（\(k \ne 0\)）的图象与性质完全由<b>比例系数 \(k\) 的正负</b>唯一掌控：</p>
+  <ul>
+    <li><b>图象名称</b>：双曲线（由两支无限延伸的光滑曲线组成）。</li>
+    <li><b>象限分布</b>：当 \(k > 0\) 时，两支分别位于<b>第一、三象限</b>；当 \(k \lt 0\) 时，两支分别位于<b>第二、四象限</b>。</li>
+    <li><b>增减性铁律</b>：当 \(k > 0\) 时，<b>在每一个象限内</b>，\(y\) 随 \(x\) 的增大而减小；当 \(k \lt 0\) 时，<b>在每一个象限内</b>，\(y\) 随 \(x\) 的增大而增大。</li>
+    <li><b>对称特征</b>：关于原点 \((0, 0)\) 成中心对称；关于直线 \(y = x\) 和 \(y = -x\) 成轴对称。</li>
+  </ul>
+
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>比例系数 k 正负与图象象限分布对比</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="k 正负对比">
+        <button type="button" class="on" data-k="pos">k = 6 &gt; 0（第一、三象限，每支递减）</button>
+        <button type="button" data-k="neg">k = -6 &lt; 0（第二、四象限，每支递增）</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 400 170" role="img" aria-label="象限分布对比图"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-no">生死关卡 1</span><b>为什么坚决不能漏掉「在每一个象限内」？</b></p>
+      <p class="small" style="margin:0">以 \(y = \frac{2}{x}\)（\(k=2>0\)）为例：取第三象限点 \(A(-1, -2)\)，第一象限点 \(B(1, 2)\)。横坐标从 \(-1\) 增大到 \(1\)，但纵坐标从 \(-2\) 增大到 \(2\)！若跨象限，函数值不仅没减小反而增大了！因此说增减性时，<b>必须且只能在同一象限（或同一支）内比较</b>！</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-b">解题秘籍 2</span><b>跨象限比大小金法则：先看正负，再比同支</b></p>
+      <p class="small" style="margin:0">当给出的点分布在不同象限时，绝不能直接盲目比大小！正确战术是：先看横坐标正负定象限，确定纵坐标的正负区间（如第二象限 \(y > 0\)，第四象限 \(y \lt 0\)，则第二象限必然大于第四象限）；位于同一象限的点，再根据增减性精准排定高低。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心利器：系数 k 的几何意义（面积不变量）</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>k 的几何意义：动点拉出的矩形面积恒等于 |k|</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="几何面积展示">
+        <button type="button" class="on" data-k="area_rec">矩形面积 S = |xy| = |k|</button>
+        <button type="button" data-k="area_tri">直角三角形面积 S = 1/2|k|</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 400 170" role="img" aria-label="面积不变量图"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <h3>3. 对称之美：中心对称与双轴对称</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>双曲线的三重几何对称性全景</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="对称性切换">
+        <button type="button" class="on" data-k="origin">中心对称：关于原点 (0, 0)</button>
+        <button type="button" data-k="diag1">轴对称：关于直线 y = x</button>
+        <button type="button" data-k="diag2">轴对称：关于直线 y = -x</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 400 170" role="img" aria-label="双曲线对称性图"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <details class="more">
+    <summary>深入剖析：为什么双曲线上任意一点拉出的矩形面积都是常数？</summary>
+    <p class="small">设点 \(P(x, y)\) 是反比例函数 \(y = \frac{k}{x}\) 图象上的任意一点。过点 \(P\) 向 \(x\) 轴作垂线，垂足为 \(A(x, 0)\)；向 \(y\) 轴作垂线，垂足为 \(B(0, y)\)。</p>
+    <p class="small">所得矩形 \(PAOB\) 的两边长分别为 \(|x|\) 和 \(|y|\)，因此矩形面积为：</p>
+    <p class="small">\[ S_{\text{矩形}} = |x| \cdot |y| = |xy| = |k| \]</p>
+    <p class="small">同理，连接 \(OP\)，直角三角形 \(POA\) 的面积为矩形的一半：\(S_{\triangle} = \frac{1}{2}|x| \cdot |y| = \frac{1}{2}|k|\)。只要点在曲线上，无论点怎么滑动，面积永远不变！</p>
+  </details>
+
+  <details class="more">
+    <summary>注意绝对值：反求 k 时千万别漏负号！</summary>
+    <p class="small">中考经常出现这样的题目：「如图，点 \(P\) 在反比例函数图象上，过 \(P\) 作坐标轴垂线围成矩形面积为 6，求函数解析式」。</p>
+    <p class="small">此时由面积可知 \(|k| = 6 \implies k = \pm 6\)。如果图象在第一、三象限，则 \(k = 6\)；如果图象在第二、四象限，则必须取负数 \(k = -6\)！漏看象限漏加负号是极其惨痛的扣分点。</p>
+  </details>
+
+  <details class="more">
+    <summary>几何对称性：反比例函数与正比例函数的交点必然关于原点对称</summary>
+    <p class="small">正比例函数 \(y = mx\) 与反比例函数 \(y = \frac{k}{x}\) 的图象都关于原点 \((0, 0)\) 成中心对称。</p>
+    <p class="small">联立方程组 \(\begin{cases} y = mx \\ y = \frac{k}{x} \end{cases} \implies mx^2 = k \implies x^2 = \frac{k}{m}\)。</p>
+    <p class="small">当 \(km > 0\) 时，方程有两个互为相反数的解 \(x_1 = \sqrt{\frac{k}{m}}\)，\(x_2 = -\sqrt{\frac{k}{m}}\)。对应的函数值也互为相反数 \(y_1 = -y_2\)。所以若两函数图象相交于 \(A, B\) 两点，则线段 \(AB\) 必过原点且被原点平分，即点 \(A\) 与点 \(B\) 必然关于原点对称！</p>
+  </details>
+
+  <details class="more">
+    <summary>如何快速解决反比例函数与一次函数的面积综合大题？</summary>
+    <p class="small">反比例函数综合压轴题中，经常涉及三角形面积与交点坐标。关键技巧是「铅垂高与水平宽割补法」：</p>
+    <p class="small">若三角形三个顶点都不在坐标轴上，过顶点作平行于 \(y\) 轴的垂线，将任意三角形分割为左右两个以铅垂线段为公共底边的直角/钝角三角形，面积等于 \(\frac{1}{2} \times \text{铅垂高} \times \text{水平宽}\)，免去复杂距离计算！</p>
+  </details>
+
+  <div class="example">
+    <p><span class="badge-pill badge-b">示范例题</span><b>图象象限、常数范围与单调性比较</b></p>
+    <p><b>题目</b>：已知反比例函数 \(y = \frac{2m+1}{x}\) 的图象的一支位于第二象限。<br>
+    (1) 图象的另一支位于哪个象限？常数 \(m\) 的取值范围是什么？<br>
+    (2) 在这个函数图象的某一支上任取点 \(A(x_1, y_1)\) 和点 \(B(x_2, y_2)\)。如果 \(x_1 > x_2\)，那么 \(y_1\) 和 \(y_2\) 有怎样的大小关系？</p>
+
+    <p><b>【Polya 审题与理解】</b></p>
+    <p class="small">已知一支在第二象限，根据中心对称性可知另一支必在第四象限；比例系数为整体 \(2m+1\)，由第二象限可知系数小于 0；第二问明确了「在某一支上」，可直接运用单调性。</p>
+
+    <details class="more"><summary>先自己想一想，再展开：想办法、完整解答、回头看</summary>
+    <p><b>【拟定计划】</b></p>
+    <p class="small">第一问：由第二象限得出第四象限，列出不等式 \(2m + 1 \lt 0\) 求出 \(m\)；第二问：因为 \(k \lt 0\)，在每一支上 \(y\) 随 \(x\) 增大而增大，由 \(x_1 > x_2\) 得出 \(y_1 > y_2\)。</p>
+
+    <p><b>【执行解答】</b></p>
+    <p class="small"><b>解</b>：(1) 因为反比例函数的图象是由两支关于原点对称的双曲线组成的，已知一支位于第二象限，所以另一支必定位于<b>第四象限</b>。<br>
+    因为双曲线位于第二、四象限，所以反比例系数小于 0，即：<br>
+    \[ 2m + 1 \lt 0 \implies m \lt -\frac{1}{2} \]<br>
+    (2) 因为 \(2m + 1 \lt 0\)，所以在这个函数图象的任意一支上，函数值 \(y\) 随自变量 \(x\) 的增大而增大。<br>
+    因为点 \(A(x_1, y_1)\) 与点 \(B(x_2, y_2)\) 在图象的某一支上，且 \(x_1 > x_2\)，<br>
+    所以 \(y_1 > y_2\)。</p>
+
+    <p><b>【回顾与反思】</b></p>
+    <p class="small">注意第二问的前提是「在某一支上」，如果未说明在同一支上，则必须分在同一象限和分处不同象限进行分类讨论，绝不能直接下结论。</p>
+    </details>
+  </div>
+
+  <div class="card predict" data-id="chk1" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjxiPuOAkOiHqua1iyAxIMK3IOixoemZkOWIpOWumuOAkTwvYj7lj43mr5Tkvovlh73mlbAgXFwoeSA9IC1cXGZyYWN7M317eH1cXCkg55qE5Zu+6LGh5L2N5LqO77yIIO+8iTwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+56ys5LiA44CB5LiJ6LGh6ZmQPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+56ys5LiA44CB5LqM6LGh6ZmQPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+56ys5LqM44CB5LiJ6LGh6ZmQPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+56ys5LqM44CB5Zub6LGh6ZmQPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+RDwvYj7jgILmr5Tkvovns7vmlbAgXFwoayA9IC0zIFxcbHQgMFxcKe+8jOagueaNruWPjeavlOS+i+WHveaVsOaAp+i0qO+8jOWbvuixoeW/heWumuS9jeS6juesrOS6jOOAgeWbm+ixoemZkOOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <p><b>【自测 1 · 象限判定】</b>反比例函数 \(y = -\frac{3}{x}\) 的图象位于（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>第一、三象限</button>
+      <button class="opt" data-v="B"><b>B</b>第一、二象限</button>
+      <button class="opt" data-v="C"><b>C</b>第二、三象限</button>
+      <button class="opt" data-v="D"><b>D</b>第二、四象限</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。比例系数 \(k = -3 \lt 0\)，根据反比例函数性质，图象必定位于第二、四象限。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="chk2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuOAkOiHqua1iyAyIMK3IOWNleiwg+aAp+mBv+WdkeOAkTwvYj7ngrkgXFwoQSgtMywgeV8xKVxcKeOAgVxcKEIoLTEsIHlfMilcXCnjgIFcXChDKDIsIHlfMylcXCkg5Zyo5Y+N5q+U5L6L5Ye95pWwIFxcKHkgPSBcXGZyYWN7Nn17eH1cXCkg55qE5Zu+6LGh5LiK77yM5YiZIFxcKHlfMSwgeV8yLCB5XzNcXCkg55qE5aSn5bCP5YWz57O75Li677yIIO+8iTwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoeV8zICZndDsgeV8xICZndDsgeV8yXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoeV8xICZndDsgeV8yICZndDsgeV8zXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoeV8zICZndDsgeV8yICZndDsgeV8xXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoeV8yICZndDsgeV8xICZndDsgeV8zXFwpPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QTwvYj7jgILmr5Tkvovns7vmlbAgXFwoayA9IDYgJmd0OyAwXFwp44CC54K5IFxcKEMoMiwgeV8zKVxcKSDlnKjnrKzkuIDosaHpmZDvvIxcXCh5XzMgPSBcXGZyYWN7Nn17Mn0gPSAzICZndDsgMFxcKe+8m+eCuSBcXChBLCBCXFwpIOWcqOesrOS4ieixoemZkO+8jFxcKHlfMSwgeV8yIFxcbHQgMFxcKeOAguWcqOesrOS4ieixoemZkOWGhSBcXCh5XFwpIOmajyBcXCh4XFwpIOWinuWkp+iAjOWHj+Wwj++8jOWboOS4uiBcXCgtMyBcXGx0IC0xXFwp77yM5omA5LulIFxcKHlfMSAmZ3Q7IHlfMlxcKeOAgue7vOWQiOW+lyBcXCh5XzMgJmd0OyB5XzEgJmd0OyB5XzJcXCnjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <p><b>【自测 2 · 单调性避坑】</b>点 \(A(-3, y_1)\)、\(B(-1, y_2)\)、\(C(2, y_3)\) 在反比例函数 \(y = \frac{6}{x}\) 的图象上，则 \(y_1, y_2, y_3\) 的大小关系为（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(y_3 > y_1 > y_2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y_1 > y_2 > y_3\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y_3 > y_2 > y_1\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(y_2 > y_1 > y_3\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。比例系数 \(k = 6 > 0\)。点 \(C(2, y_3)\) 在第一象限，\(y_3 = \frac{6}{2} = 3 > 0\)；点 \(A, B\) 在第三象限，\(y_1, y_2 \lt 0\)。在第三象限内 \(y\) 随 \(x\) 增大而减小，因为 \(-3 \lt -1\)，所以 \(y_1 > y_2\)。综合得 \(y_3 > y_1 > y_2\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="chk3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjxiPuOAkOiHqua1iyAzIMK3IOWHoOS9lemdouenr+WPjeaxguOAkTwvYj7ngrkgXFwoUFxcKSDmmK/lj43mr5Tkvovlh73mlbAgXFwoeSA9IFxcZnJhY3trfXt4fVxcKe+8iFxcKGsgXFxsdCAwXFwp77yJ5Zu+6LGh5LiK5LiA54K577yM6L+H54K5IFxcKFBcXCkg5ZCR5Lik5Z2Q5qCH6L205L2c5Z6C57q/5Zu05oiQ55qE55+p5b2i6Z2i56ev5Li6IFxcKDhcXCnvvIzliJkgXFwoa1xcKSDnmoTlgLzkuLrvvIgg77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg4XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoLThcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg0XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoLTRcXCk8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5CPC9iPuOAgueUsSBcXChrXFwpIOeahOWHoOS9leaEj+S5ie+8jOefqeW9oumdouenryBcXChTID0gfGt8ID0gOFxcKeOAguWboOS4uuW3suefpSBcXChrIFxcbHQgMFxcKe+8iOWbvuixoeWcqOesrOS6jOaIluWbm+ixoemZkO+8ie+8jOaJgOS7pSBcXChrID0gLThcXCnjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <p><b>【自测 3 · 几何面积反求】</b>点 \(P\) 是反比例函数 \(y = \frac{k}{x}\)（\(k \lt 0\)）图象上一点，过点 \(P\) 向两坐标轴作垂线围成的矩形面积为 \(8\)，则 \(k\) 的值为（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(8\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(-8\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(4\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(-4\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。由 \(k\) 的几何意义，矩形面积 \(S = |k| = 8\)。因为已知 \(k \lt 0\)（图象在第二或四象限），所以 \(k = -8\)。</p>
+    </div>
+  </div>
+
+  <h3>4. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>跨象限比大小，直接套「\(k>0\) 时 \(y\) 随 \(x\) 增大而减小」</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：\(y=\frac2x\)，\(k>0\)，\(y\) 随 \(x\) 增大而减小，所以 \(x_1=-1\lt x_2=1\) 时 \(y_1>y_2\)。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：\(y_1=-2\)，\(y_2=2\)，\(y_1\lt y_2\)。两个点在不同的两支上，中间隔着 \(y\) 轴。先看正负，再在同一支上比。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 280 180" role="img" aria-label="跨象限的两点：x 增大但 y 也增大"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>\(k\lt 0\) 时面积写成负数</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：点在 \(y=-\frac6x\) 上，矩形面积 \(S=k=-6\)。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：面积不会是负数，\(S=\lvert k\rvert=6\)。反过来，已知面积是 \(6\)，只能得到 \(\lvert k\rvert=6\)，要看图象在哪几个象限才能定 \(k=6\) 还是 \(-6\)。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>把两支曲线连起来，或者画到碰到坐标轴</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：描点后用一条线把左右两支连通，或把曲线画得穿过 \(y\) 轴、碰到 \(x\) 轴。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：\(x=0\) 没有函数值，所以图象在 \(y\) 轴处断开，成为两支；\(y\) 不会等于 \(0\)，曲线也碰不到 \(x\) 轴。曲线只会越来越靠近坐标轴。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="动手">
+  <p>先拉 \(k\)，看两支曲线怎样翻到另一对象限；再沿着曲线移动点 \(P\)，看矩形的面积是否真的不变。</p>
+
+  <div class="card fig">
+    <p><span class="badge-pill badge-a">基础实验 ①</span><b>\(k\) 的正负决定一切：象限与增减</b></p>
+    <div class="range-box">
+      <label for="sl-k1">比例系数 k：<b id="val-k1">6</b></label>
+      <input type="range" id="sl-k1" min="-18" max="18" step="3" value="6">
+      <button type="button" class="btn-sub" id="btn-reset1">重置 (k = 6)</button>
+    </div>
+    <svg class="fig" id="fig-lab1" viewBox="0 0 560 260" role="img" aria-label="双曲线形态翻转实验台"></svg>
+    <p class="result" id="res-lab1" aria-live="polite"></p>
+  </div>
+
+  <div class="card fig">
+    <p><span class="badge-pill badge-b">进阶实验 ②</span><b>移动点 \(P\)：矩形面积恒等于 \(\lvert k\rvert\)（进阶）</b></p>
+    <div class="entry-bar" id="k2-bar" role="group" aria-label="选择 k 的符号">
+      <button type="button" class="on" data-k="12">k = 12（点在第一象限）</button>
+      <button type="button" data-k="-12">k = −12（点在第四象限）</button>
+    </div>
+    <div class="range-box">
+      <label for="sl-x2">动点 P 的横坐标 x：<b id="val-x2">2</b></label>
+      <input type="range" id="sl-x2" min="0" max="6" step="1" value="2" aria-valuetext="x 等于 2">
+      <button type="button" class="btn-sub" id="btn-reset2">重置 (x = 2)</button>
+    </div>
+    <svg class="fig" id="fig-lab2" viewBox="0 0 560 260" role="img" aria-label="反比例函数面积不变量实验台"></svg>
+    <p class="result" id="res-lab2" aria-live="polite"></p>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjEuIOiLpeWPjeavlOS+i+WHveaVsCBcXCh5PVxcZnJhY3syLW19e3h9XFwpIOeahOWbvuixoeWcqOesrOS4gOOAgeS4ieixoemZkO+8jOWImSBcXChtXFwpIOeahOWPluWAvOiMg+WbtOaYr++8iCDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKG0mZ3Q7MlxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKG1cXGx0IDJcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXChtXFxnZTJcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXChtXFxsZTJcXCk8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5CPC9iPuOAguS4gOOAgeS4ieixoemZkCBcXChcXGlmZlxcKSDns7vmlbDlpKfkuo4gXFwoMFxcKe+8mlxcKDItbSZndDswXFwp77yMXFwobVxcbHQgMlxcKeOAgkEg5piv5oqK57O75pWw5YaZ5oiQ5LqGIFxcKG0tMlxcKe+8m0PjgIFEIOWkmuS6huOAjOetieS6juOAje+8muezu+aVsOetieS6jiBcXCgwXFwpIOaXtuWwseS4jeaYr+WPjeavlOS+i+WHveaVsOS6huOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <p>1. 若反比例函数 \(y=\frac{2-m}{x}\) 的图象在第一、三象限，则 \(m\) 的取值范围是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(m>2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(m\lt 2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(m\ge2\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(m\le2\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。一、三象限 \(\iff\) 系数大于 \(0\)：\(2-m>0\)，\(m\lt 2\)。A 是把系数写成了 \(m-2\)；C、D 多了「等于」：系数等于 \(0\) 时就不是反比例函数了。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjIuIOW3suefpeWPjeavlOS+i+WHveaVsCBcXCh5PS1cXGZyYWM0eFxcKe+8jOW9kyBcXCh4XzFcXGx0IHhfMlxcbHQgMFxcKSDml7bvvIxcXCh5XzFcXCkg5LiOIFxcKHlfMlxcKSDnmoTlpKflsI/lhbPns7vmmK/vvIgg77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCh5XzEmZ3Q7eV8yXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoeV8xPXlfMlxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKHlfMVxcbHQgeV8yXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiN6IO956Gu5a6aPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QzwvYj7jgIJcXChrPS00XFxsdCAwXFwp77yM5Zyo5q+P5LiA5Liq6LGh6ZmQ5YaFIFxcKHlcXCkg6ZqPIFxcKHhcXCkg5aKe5aSn6ICM5aKe5aSn77ybXFwoeF8xXFxsdCB4XzJcXGx0IDBcXCkg5ZCM5Zyo56ys5LqM6LGh6ZmQ77yM5omA5LulIFxcKHlfMVxcbHQgeV8yXFwp44CC5L6L5aaCIFxcKHhfMT0tNCx4XzI9LTJcXCnvvJpcXCh5XzE9MSx5XzI9MlxcKeOAgkEg5piv5aWX5LqG44CMXFwoayZndDswXFwpIOaXtuWHj+Wwj+OAje+8m0Qg5piv5rKh5Y+R546w5Lik54K55Zyo5ZCM5LiA6LGh6ZmQ44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <p>2. 已知反比例函数 \(y=-\frac4x\)，当 \(x_1\lt x_2\lt 0\) 时，\(y_1\) 与 \(y_2\) 的大小关系是（ ）</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(y_1>y_2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y_1=y_2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y_1\lt y_2\)</button>
+      <button class="opt" data-v="D"><b>D</b>不能确定</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(k=-4\lt 0\)，在每一个象限内 \(y\) 随 \(x\) 增大而增大；\(x_1\lt x_2\lt 0\) 同在第二象限，所以 \(y_1\lt y_2\)。例如 \(x_1=-4,x_2=-2\)：\(y_1=1,y_2=2\)。A 是套了「\(k>0\) 时减小」；D 是没发现两点在同一象限。</p>
+    </div>
+  </div>
+
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjMuIOeCuSBcXChBXFwpIOaYr+WPjeavlOS+i+WHveaVsCBcXCh5PVxcZnJhY3sxMH17eH1cXCkg5Zu+6LGh5LiK5LiA54K577yM6L+HIFxcKEFcXCkg5L2cIFxcKHhcXCkg6L2055qE5Z6C57q/77yM5Z6C6Laz5Li6IFxcKEJcXCnvvIzov57mjqUgXFwoT0FcXCnvvIzliJkgXFwoXFx0cmlhbmdsZSBBT0JcXCkg55qE6Z2i56ev5Li677yIIO+8iTwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+55+p5b2i6Z2i56ev5pivIFxcKFxcbHZlcnQga1xccnZlcnRcXCnvvJvkuInop5LlvaLlj6rljaDlroPnmoTkuIDpg6jliIbjgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg1XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMTBcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgyMFxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDIuNVxcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkE8L2I+44CC6K6+IFxcKEEoYSxiKVxcKe+8jFxcKGFiPTEwXFwp77yMXFwoU197XFx0cmlhbmdsZSBBT0J9PVxcZnJhYzEyXFxsdmVydCBhXFxydmVydFxcbHZlcnQgYlxccnZlcnQ9XFxmcmFjMTJcXHRpbWVzMTA9NVxcKeOAgkIg5piv5oqK5LiJ6KeS5b2i5b2T5oiQ5LqG55+p5b2i77yI5ryP5LmYIFxcKFxcZnJhYzEyXFwp77yJ77ybQyDlpJrkuZjkuoYgXFwoMlxcKe+8m0Qg5pivIFxcKFxcZnJhY3sxfXs0fVxcbHZlcnQga1xccnZlcnRcXCnjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <p>3. 点 \(A\) 是反比例函数 \(y=\frac{10}{x}\) 图象上一点，过 \(A\) 作 \(x\) 轴的垂线，垂足为 \(B\)，连接 \(OA\)，则 \(\triangle AOB\) 的面积为（ ）</p>
+    <details class="more"><summary>提示</summary><p>矩形面积是 \(\lvert k\rvert\)；三角形只占它的一部分。</p></details>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(5\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(10\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(20\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(2.5\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。设 \(A(a,b)\)，\(ab=10\)，\(S_{\triangle AOB}=\frac12\lvert a\rvert\lvert b\rvert=\frac12\times10=5\)。B 是把三角形当成了矩形（漏乘 \(\frac12\)）；C 多乘了 \(2\)；D 是 \(\frac{1}{4}\lvert k\rvert\)。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p4" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjQuIOWPjeavlOS+i+WHveaVsCBcXCh5PVxcZnJhYyBreFxcKSDnmoTlm77osaHkuIrmnInkuKTngrkgXFwoQSh4XzEseV8xKVxcKe+8jFxcKEIoeF8yLHlfMilcXCnvvIzoi6UgXFwoeF8xeF8yXFxsdCAwXFwp77yM5YiZ5LiL5YiX57uT6K665LiA5a6a5oiQ56uL55qE5piv77yIIO+8iTwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+XFwoeF8xeF8yXFxsdCAwXFwpIOivtOaYjuS4pOeCueeahOaoquWdkOagh+S4gOato+S4gOi0n+OAgue6teWdkOagh+eahOato+i0n+eUsSBcXChrXFwpIOWSjOaoquWdkOagh+WFseWQjOWGs+Wumu+8jOWFiOivlSBcXChrJmd0OzBcXCnvvIzlho3or5UgXFwoa1xcbHQgMFxcKeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKHlfMXlfMiZndDswXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoeV8xK3lfMj0wXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5Lik54K55Zyo5ZCM5LiA6LGh6ZmQPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoeV8xeV8yXFxsdCAwXFwpPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+RDwvYj7jgIJcXCh5XzF5XzI9XFxmcmFje2t9e3hfMX1cXGNkb3RcXGZyYWN7a317eF8yfT1cXGZyYWN7a14yfXt4XzF4XzJ9XFwp77yM5YiG5a2QIFxcKGteMiZndDswXFwp77yM5YiG5q+NIFxcKFxcbHQgMFxcKe+8jOaJgOS7pSBcXCh5XzF5XzJcXGx0IDBcXCnjgIJB44CBQyDkuI7mqKrlnZDmoIflvILlj7fnn5vnm77vvJtCIOWPquaciSBcXCh4XzE9LXhfMlxcKSDml7bmiY3miJDnq4vjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <p>4. 反比例函数 \(y=\frac kx\) 的图象上有两点 \(A(x_1,y_1)\)，\(B(x_2,y_2)\)，若 \(x_1x_2\lt 0\)，则下列结论一定成立的是（ ）</p>
+    <details class="more"><summary>提示</summary><p>\(x_1x_2\lt 0\) 说明两点的横坐标一正一负。纵坐标的正负由 \(k\) 和横坐标共同决定，先试 \(k>0\)，再试 \(k\lt 0\)。</p></details>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(y_1y_2>0\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y_1+y_2=0\)</button>
+      <button class="opt" data-v="C"><b>C</b>两点在同一象限</button>
+      <button class="opt" data-v="D"><b>D</b>\(y_1y_2\lt 0\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>D</b>。\(y_1y_2=\frac{k}{x_1}\cdot\frac{k}{x_2}=\frac{k^2}{x_1x_2}\)，分子 \(k^2>0\)，分母 \(\lt 0\)，所以 \(y_1y_2\lt 0\)。A、C 与横坐标异号矛盾；B 只有 \(x_1=-x_2\) 时才成立。</p>
+    </div>
+  </div>
+
+  <div class="card predict" data-id="p5" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjUuIOeCuSBcXChBKC0yLHlfMSlcXCnjgIFcXChCKDMseV8yKVxcKSDpg73lnKjlj43mr5Tkvovlh73mlbAgXFwoeT0tXFxmcmFjNnhcXCkg55qE5Zu+6LGh5LiK77yM5YiZIFxcKHlfMVxcKSDkuI4gXFwoeV8yXFwpIOeahOWkp+Wwj+WFs+ezu+aYr++8iCDvvIk8L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuS4pOS4queCueWcqOWQjOS4gOS4quixoemZkOWQl++8n+WFiOeul+WHuuWug+S7rOWQhOiHqueahCBcXCh5XFwpIOWAvOaYr+ato+i/mOaYr+i0n+OAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKHlfMVxcbHQgeV8yXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoeV8xPXlfMlxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKHlfMSZndDt5XzJcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7ml6Dms5Xmr5TovoM8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5DPC9iPuOAglxcKHlfMT1cXGZyYWN7LTZ9ey0yfT0zJmd0OzBcXCnvvIxcXCh5XzI9XFxmcmFjey02fXszfT0tMlxcbHQgMFxcKe+8jOaJgOS7pSBcXCh5XzEmZ3Q7eV8yXFwp44CCQSDmmK/nlKjjgIxcXChrXFxsdCAwXFwpIOaXtiBcXCh5XFwpIOmajyBcXCh4XFwpIOWinuWkp+iAjOWinuWkp+OAjeWll+WIsOS6huS4jeWQjOixoemZkOeahOS4pOeCueS4iu+8iFxcKC0yXFxsdCAzXFwpIOWwseS7peS4uiBcXCh5XzFcXGx0IHlfMlxcKe+8ie+8m0Qg5piv5Lul5Li66Leo6LGh6ZmQ5bCx5LiN6IO95q+U77yM5YW25a6e5YWI55yL5q2j6LSf5bCx6IO95q+U44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <p>5. 点 \(A(-2,y_1)\)、\(B(3,y_2)\) 都在反比例函数 \(y=-\frac6x\) 的图象上，则 \(y_1\) 与 \(y_2\) 的大小关系是（ ）</p>
+    <details class="more"><summary>提示</summary><p>两个点在同一个象限吗？先算出它们各自的 \(y\) 值是正还是负。</p></details>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(y_1\lt y_2\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y_1=y_2\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y_1>y_2\)</button>
+      <button class="opt" data-v="D"><b>D</b>无法比较</button>
+    </div>
+    <div class="reveal">
+      <p><b>C</b>。\(y_1=\frac{-6}{-2}=3>0\)，\(y_2=\frac{-6}{3}=-2\lt 0\)，所以 \(y_1>y_2\)。A 是用「\(k\lt 0\) 时 \(y\) 随 \(x\) 增大而增大」套到了不同象限的两点上（\(-2\lt 3\) 就以为 \(y_1\lt y_2\)）；D 是以为跨象限就不能比，其实先看正负就能比。</p>
+    </div>
+  </div>
+
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjYuIOWPjeavlOS+i+WHveaVsCBcXCh5PVxcZnJhYyBreFxcKSDnmoTlm77osaHlnKjnrKzkuozjgIHlm5vosaHpmZDvvIzngrkgXFwoUFxcKSDlnKjlm77osaHkuIrvvIxcXChQQVxccGVycCB5XFwpIOi9tOS6jueCuSBcXChBXFwp77yMXFwoXFx0cmlhbmdsZSBQQU9cXCkg55qE6Z2i56ev5Li6IFxcKDRcXCnvvIzliJnov5nkuKrlh73mlbDnmoTop6PmnpDlvI/mmK/vvIgg77yJPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAx77ya6Z2i56ev5oCO5LmI55SoPC9zdW1tYXJ5PjxwPlxcKFNfe1xcdHJpYW5nbGUgUEFPfT1cXGZyYWMxMlxcbHZlcnQga1xccnZlcnRcXCnjgILlhYjmsYIgXFwoXFxsdmVydCBrXFxydmVydFxcKeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDLvvJrnrKblj7fmgI7kuYjlrpo8L3N1bW1hcnk+PHA+44CM56ys5LqM44CB5Zub6LGh6ZmQ44CN5ZGK6K+J5L2gIFxcKGtcXCkg5piv5q2j6L+Y5piv6LSf44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoeT1cXGZyYWM4eFxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKHk9LVxcZnJhYzh4XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoeT0tXFxmcmFjNHhcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCh5PVxcZnJhYzR4XFwpPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QjwvYj7jgIJcXChcXGZyYWMxMlxcbHZlcnQga1xccnZlcnQ9NFxcKe+8jFxcKFxcbHZlcnQga1xccnZlcnQ9OFxcKe+8m+esrOS6jOOAgeWbm+ixoemZkCBcXChrXFxsdCAwXFwp77yMXFwoaz0tOFxcKeOAgkEg5b+Y5LqGIFxcKGtcXCkg55qE56ym5Y+377ybQyDmiorkuInop5LlvaLpnaLnp6/lvZPmiJDkuoYgXFwoXFxsdmVydCBrXFxydmVydFxcKe+8m0Qg5Lik5Liq6ZSZ6K+v6YO954qv5LqG44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <p>6. 反比例函数 \(y=\frac kx\) 的图象在第二、四象限，点 \(P\) 在图象上，\(PA\perp y\) 轴于点 \(A\)，\(\triangle PAO\) 的面积为 \(4\)，则这个函数的解析式是（ ）</p>
+    <details class="more"><summary>提示 1：面积怎么用</summary><p>\(S_{\triangle PAO}=\frac12\lvert k\rvert\)。先求 \(\lvert k\rvert\)。</p></details>
+    <details class="more"><summary>提示 2：符号怎么定</summary><p>「第二、四象限」告诉你 \(k\) 是正还是负。</p></details>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(y=\frac8x\)</button>
+      <button class="opt" data-v="B"><b>B</b>\(y=-\frac8x\)</button>
+      <button class="opt" data-v="C"><b>C</b>\(y=-\frac4x\)</button>
+      <button class="opt" data-v="D"><b>D</b>\(y=\frac4x\)</button>
+    </div>
+    <div class="reveal">
+      <p><b>B</b>。\(\frac12\lvert k\rvert=4\)，\(\lvert k\rvert=8\)；第二、四象限 \(k\lt 0\)，\(k=-8\)。A 忘了 \(k\) 的符号；C 把三角形面积当成了 \(\lvert k\rvert\)；D 两个错误都犯了。</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p>近三年各地中考原卷真题，检验象限判断、同一象限内的增减性，以及「先分正负再比大小」的跨象限比较。</p>
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-to-high" aria-labelledby="stage-bridge-next-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-next-title">往后学 · 高中数学</h2><p class="small">把这一节学透，到了高中就能直接迁移到下面的课程：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../lessons/b1-3-3.html">高中 · 幂函数</a><span class="bridge-why">初中的一次函数 $y=x$、二次函数 $y=x^2$ 与反比例函数 $y=x^{-1}$，在高中统一归入幂函数族 $y=x^\alpha$，反比例函数的中心对称性也成为奇函数的典型例子。</span></li><li><a class="bridge-link" href="../../lessons/e1-3-2.html">高中 · 双曲线</a><span class="bridge-why">初中反比例函数 $y=k/x$ 的图象实际上是绕原点旋转 $45^\circ$ 的等轴双曲线，其渐近线与对称性为高中学习标准双曲线提供了直观对照。</span></li></ul><p class="bridge-all"><a href="../../courses.html">打开高中数学课程目录</a></p></section>
+<footer class="foot">
+  <p class="small">培玉初中数学 · 2024/2026 人教新版九年级上册同步互动课课练</p>
+</footer>
+</div>
+
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+  if (typeof renderMathInElement === "function") {
+    renderMathInElement(document.body, {
+      delimiters: [
+        {left: "$$", right: "$$", display: true},
+        {left: "\\[", right: "\\]", display: true},
+        {left: "\\(", right: "\\)", display: false}
+      ],
+      throwOnError: false
+    });
+  }
+  function $(id) { return document.getElementById(id); }
+  function T(x, y, s, o) { o = o || {}; return '<text x="' + x + '" y="' + y + '" text-anchor="' + (o.a || "middle") + '" font-size="' + (o.s || 16) + '" fill="' + (o.f || "var(--fg)") + '"' + (o.w ? ' font-weight="' + o.w + '"' : "") + ">" + s + "</text>"; }
+  function L(x1, y1, x2, y2, st, w, d) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + st + '" stroke-width="' + (w || 1.5) + '"' + (d ? ' stroke-dasharray="' + d + '"' : "") + "/>"; }
+  function D(x, y, r, f) { return '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" fill="' + f + '"/>'; }
+  function P(d, st, w, dash) { return d ? '<path d="' + d + '" fill="none" stroke="' + st + '" stroke-width="' + (w || 2.5) + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : "") + ' stroke-linecap="round"/>' : ""; }
+  function fm(n) { var r = Math.round(n * 100) / 100; if (r === 0) r = 0; return String(r).replace("-", "−"); }
+  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
+  function frac(n, d) { var g = gcd(n, d); n /= g; d /= g; if (d < 0) { n = -n; d = -d; } return d === 1 ? fm(n) : fm(n) + "/" + d; }
+  function bar(id, cb) {
+    var b = $(id); if (!b) return;
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  /* y = k/x 的两支，只画落在竖直方向 up/dn 像素以内的部分 */
+  function hyp(k, ox, oy, sx, sy, xmax, up, dn) {
+    var out = [];
+    [1, -1].forEach(function (sg) {
+      var lim = (k * sg > 0) ? up : dn, x0 = Math.abs(k) * sy / lim, d = "";
+      if (x0 >= xmax) { out.push(""); return; }
+      for (var i = 0; i <= 80; i++) {
+        var x = x0 + (xmax - x0) * i / 80, X = sg * x, y = k / X;
+        d += (i ? " L " : "M ") + (ox + X * sx).toFixed(1) + " " + (oy - y * sy).toFixed(1);
+      }
+      out.push(d);
+    });
+    return out;
+  }
+  function axes(ox, oy, x1, x2, y1, y2, fs) {
+    fs = fs || 16;
+    return L(x1, oy, x2, oy, "var(--muted)", 1.5) + L(ox, y1, ox, y2, "var(--muted)", 1.5) +
+      T(x2, oy + fs + 4, "x", { a: "end", s: fs, f: "var(--muted)" }) + T(ox + 8, y1 + fs, "y", { a: "start", s: fs, f: "var(--muted)" });
+  }
+  function sld(el, fn) { el.addEventListener("input", fn); }
+
+  /* 从例子进入：y = 6/x 描点 */
+  var eMode = "p1";
+  function drawEntry() {
+    var ox = 280, oy = 122, sx = 34, sy = 17, c = hyp(6, ox, oy, sx, sy, 6.8, 108, 108);
+    var h = axes(ox, oy, 40, 530, 8, 232, 18);
+    var pos = [[1, 6], [2, 3], [3, 2], [6, 1]], neg = [[-1, -6], [-2, -3], [-3, -2], [-6, -1]];
+    if (eMode === "p3") h += P(c[0], "var(--c)", 3) + P(c[1], "var(--b)", 3);
+    if (eMode !== "p2") pos.forEach(function (p) { var cx = ox + p[0] * sx, cy = oy - p[1] * sy; h += D(cx, cy, 6, "var(--c)") + T(cx + 9, cy - 9, "(" + p[0] + ", " + p[1] + ")", { a: "start", s: 18, f: "var(--c)" }); });
+    if (eMode !== "p1") neg.forEach(function (p) { var cx = ox + p[0] * sx, cy = oy - p[1] * sy; h += D(cx, cy, 6, "var(--b)") + (cy > 200 ? T(cx - 9, cy - 9, "(" + fm(p[0]) + ", " + fm(p[1]) + ")", { a: "end", s: 18, f: "var(--b)" }) : T(cx + 9, cy + 24, "(" + fm(p[0]) + ", " + fm(p[1]) + ")", { a: "start", s: 18, f: "var(--b)" })); });
+    $("entry-fig").innerHTML = h;
+    $("entry-note").textContent = eMode === "p1" ? "x 取正数时，点都在第一象限。x 从 1 增大到 6，y 从 6 减小到 1。" : eMode === "p2" ? "x 取负数时，点都在第三象限。x 从 −6 增大到 −1，y 从 −1 减小到 −6。" : "两组点连成两支光滑曲线：x ≠ 0，曲线在 y 轴处断开；y ≠ 0，曲线碰不到 x 轴。";
+  }
+  bar("entry-bar", function (b) { eMode = b.dataset.pt; drawEntry(); });
+  drawEntry();
+
+  /* 微图解 1：k 的正负 */
+  var m1k = 6;
+  function drawM1() {
+    var k = m1k, ox = 200, oy = 88, sx = 24, sy = 11, c = hyp(k, ox, oy, sx, sy, 6, 72, 72), col = k > 0 ? "var(--c)" : "var(--b)";
+    var y1 = k, y2 = k / 3, h = axes(ox, oy, 10, 392, 6, 164, 15) + P(c[0], col, 3) + P(c[1], col, 3);
+    [[1, y1], [3, y2]].forEach(function (p, i) { var cx = ox + p[0] * sx, cy = oy - p[1] * sy; h += D(cx, cy, 6, "var(--no)") + T(cx + 9, k > 0 ? cy + (i ? -8 : 6) : cy + (i ? 22 : 6), "(" + p[0] + ", " + fm(p[1]) + ")", { a: "start", s: 16, f: "var(--no)" }); });
+    h += T(396, 22, "k = " + fm(k), { a: "end", s: 19, f: col, w: 700 }) + T(396, 44, "x：1 → 3", { a: "end", s: 16 }) + T(396, 64, "y：" + fm(y1) + " → " + fm(y2), { a: "end", s: 16, f: "var(--no)" });
+    $("m1-fig").innerHTML = h;
+    $("m1-note").textContent = k > 0 ? "k = 6 > 0：两支在第一、三象限。在每一个象限内，x 增大，y 减小（右边那一支：x 从 1 到 3，y 从 6 到 2）。" : "k = −6 < 0：两支在第二、四象限。在每一个象限内，x 增大，y 增大（右边那一支：x 从 1 到 3，y 从 −6 到 −2）。";
+  }
+  bar("m1-bar", function (b) { m1k = b.dataset.k === "pos" ? 6 : -6; drawM1(); });
+  drawM1();
+
+  /* 微图解 2：面积 */
+  var m2k = "area_rec";
+  function drawM2() {
+    var ox = 60, oy = 150, sx = 36, sy = 22, c = hyp(6, ox, oy, sx, sy, 5.5, 130, 10), px = ox + 3 * sx, py = oy - 2 * sy, h = axes(ox, oy, 10, 280, 8, 162, 15) + P(c[0], "var(--c)", 2.5);
+    if (m2k === "area_rec") {
+      h += '<rect x="' + ox + '" y="' + py + '" width="' + (px - ox) + '" height="' + (oy - py) + '" fill="var(--c)" fill-opacity="0.22" stroke="var(--c)" stroke-width="2" stroke-dasharray="5 4"/>' +
+        T(206, 42, "P(3, 2)", { a: "start", s: 18, f: "var(--b)", w: 700 }) + T(206, 68, "矩形：3 × 2 = 6", { a: "start", s: 18 }) + T(206, 94, "= |k|", { a: "start", s: 20, f: "var(--c)", w: 700 });
+      $("m2-note").textContent = "过 P 向两条坐标轴作垂线，围成的矩形长 |x|、宽 |y|，面积 |x|·|y| = |xy| = |k| = 6。";
+    } else {
+      h += '<polygon points="' + ox + "," + oy + " " + px + "," + oy + " " + px + "," + py + '" fill="var(--a)" fill-opacity="0.25" stroke="var(--a)" stroke-width="2"/>' +
+        T(206, 42, "P(3, 2)", { a: "start", s: 18, f: "var(--b)", w: 700 }) + T(206, 68, "三角形：½ × 3 × 2", { a: "start", s: 18 }) + T(206, 94, "= 3 = ½|k|", { a: "start", s: 20, f: "var(--a)", w: 700 });
+      $("m2-note").textContent = "连接 OP，过 P 作 x 轴的垂线，围成的直角三角形面积是矩形的一半：½|k| = 3。";
+    }
+    h += D(px, py, 6, "var(--b)"); $("m2-fig").innerHTML = h;
+  }
+  bar("m2-bar", function (b) { m2k = b.dataset.k; drawM2(); });
+  drawM2();
+
+  /* 微图解 3：对称 */
+  var m3k = "origin";
+  function drawM3() {
+    var ox = 110, oy = 85, s = 12, c = hyp(6, ox, oy, s, s, 8, 74, 74);
+    function X(a) { return ox + a * s; } function Y(a) { return oy - a * s; }
+    var h = axes(ox, oy, 10, 214, 6, 168, 15) + P(c[0], "var(--c)", 2.5) + P(c[1], "var(--c)", 2.5), a = [2, 3], t1, t2, t3, b;
+    if (m3k === "origin") { b = [-2, -3]; h += L(X(2), Y(3), X(-2), Y(-3), "var(--no)", 1.5, "5 4") + D(ox, oy, 5, "var(--no)"); t1 = "(2, 3)"; t2 = "(−2, −3)"; t3 = "关于原点对称：(x, y) → (−x, −y)"; }
+    else if (m3k === "diag1") { b = [3, 2]; h += L(X(-6), Y(-6), X(6), Y(6), "var(--a)", 2, "6 4") + L(X(2), Y(3), X(3), Y(2), "var(--no)", 1.5, "4 3") + T(X(6) - 2, Y(6) + 18, "y = x", { a: "end", s: 15, f: "var(--a)" }); t1 = "(2, 3)"; t2 = "(3, 2)"; t3 = "关于 y = x 对称：(x, y) → (y, x)"; }
+    else { b = [-3, -2]; h += L(X(-6), Y(6), X(6), Y(-6), "var(--c)", 2, "6 4") + L(X(2), Y(3), X(-3), Y(-2), "var(--no)", 1.5, "4 3") + T(X(-6) + 2, Y(6) + 16, "y = −x", { a: "start", s: 15, f: "var(--c)" }); t1 = "(2, 3)"; t2 = "(−3, −2)"; t3 = "关于 y = −x 对称：(x, y) → (−y, −x)"; }
+    h += D(X(a[0]), Y(a[1]), 6, "var(--b)") + D(X(b[0]), Y(b[1]), 6, "var(--no)") + T(224, 40, "点 " + t1, { a: "start", s: 18, f: "var(--b)", w: 700 }) + T(224, 68, "对称点 " + t2, { a: "start", s: 18, f: "var(--no)", w: 700 });
+    $("m3-fig").innerHTML = h;
+    $("m3-note").textContent = t3 + "，对称点的两个坐标的积仍是 6，所以还在这条双曲线上。";
+  }
+  bar("m3-bar", function (b) { m3k = b.dataset.k; drawM3(); });
+  drawM3();
+
+  /* 翻车现场 ①：跨象限 */
+  (function () {
+    var ox = 140, oy = 90, s = 28, c = hyp(2, ox, oy, s, s, 4.5, 80, 80);
+    $("m-trap").innerHTML = axes(ox, oy, 8, 272, 6, 176, 15) + P(c[0], "var(--c)", 3) + P(c[1], "var(--c)", 3) +
+      D(ox + s, oy - 2 * s, 6, "var(--no)") + D(ox - s, oy + 2 * s, 6, "var(--no)") +
+      T(ox + s + 8, oy - 2 * s - 6, "B(1, 2)", { a: "start", s: 16, f: "var(--no)" }) + T(ox - s + 10, oy + 2 * s + 24, "A(−1, −2)", { a: "start", s: 16, f: "var(--no)" }) +
+      T(10, 24, "x：−1 → 1", { a: "start", s: 16 }) + T(10, 46, "y：−2 → 2", { a: "start", s: 16, f: "var(--no)", w: 700 });
+  })();
+
+  /* 动手 1：k 翻转台 */
+  var slK = $("sl-k1");
+  function drawLab1() {
+    var k = +slK.value; $("val-k1").textContent = fm(k);
+    var ox = 280, oy = 130, sx = 24, sy = 8, h = axes(ox, oy, 60, 540, 14, 246, 18);
+    if (k === 0) {
+      h += T(300, 80, "k = 0：y = 0/x", { a: "start", s: 22, w: 700 }) + T(300, 110, "函数值恒为 0，没有双曲线", { a: "start", s: 18, f: "var(--no)" });
+      $("fig-lab1").innerHTML = h;
+      $("res-lab1").innerHTML = "<span class=\"sum\">k = 0</span> 时 y 恒等于 0，不是反比例函数，图象不是双曲线。把滑块拉离 0 看看。";
+      return;
+    }
+    var c = hyp(k, ox, oy, sx, sy, 8.3, 105, 105), col = k > 0 ? "var(--c)" : "var(--b)";
+    h += P(c[0], col, 3) + P(c[1], col, 3);
+    [3, 6, -3, -6].forEach(function (x) { var y = k / x, cx = ox + x * sx, cy = oy - y * sy; h += D(cx, cy, 6, "var(--no)") + (x > 0 ? T(cx + 9, cy + (y > 0 ? -9 : 24), "(" + x + ", " + fm(y) + ")", { a: "start", s: 17, f: "var(--no)" }) : T(cx - 9, cy + (y > 0 ? -9 : 24), "(" + fm(x) + ", " + fm(y) + ")", { a: "end", s: 17, f: "var(--no)" })); });
+    h += T(20, 30, "y = " + fm(k) + "/x", { a: "start", s: 22, f: col, w: 700 }) + T(20, 56, "第" + (k > 0 ? "一、三" : "二、四") + "象限", { a: "start", s: 18 });
+    $("fig-lab1").innerHTML = h;
+    $("res-lab1").innerHTML = "k = <span class=\"sum\">" + fm(k) + "</span>：图象在<span class=\"sum\">第" + (k > 0 ? "一、三" : "二、四") + "象限</span>。右边一支，x 从 3 增大到 6，y 从 " + fm(k / 3) + " 变到 " + fm(k / 6) + "（" + (k > 0 ? "减小" : "增大") + "）；左边一支，x 从 −6 增大到 −3，y 从 " + fm(-k / 6) + " 变到 " + fm(-k / 3) + "（同样" + (k > 0 ? "减小" : "增大") + "）。所以说「在每一个象限内，y 随 x 增大而" + (k > 0 ? "减小" : "增大") + "」。";
+  }
+  sld(slK, drawLab1);
+  $("btn-reset1").addEventListener("click", function () { slK.value = "6"; drawLab1(); });
+  drawLab1();
+
+  /* 动手 2：面积不变 */
+  var XS = [1, 1.5, 2, 3, 4, 6, 8], slX = $("sl-x2"), k2 = 12;
+  function drawLab2() {
+    var xi = +slX.value, x = XS[xi], k = k2, y = k / x, ox = 60, oy = 130, sx = 40, sy = 8, c = hyp(k, ox, oy, sx, sy, 8.6, 108, 108), px = ox + x * sx, py = oy - y * sy;
+    $("val-x2").textContent = fm(x); slX.setAttribute("aria-valuetext", "x 等于 " + fm(x));
+    var h = axes(ox, oy, 20, 410, 12, 248, 18) + P(c[0], "var(--c)", 3) +
+      '<rect x="' + ox + '" y="' + Math.min(oy, py) + '" width="' + (px - ox) + '" height="' + Math.abs(py - oy) + '" fill="var(--b)" fill-opacity="0.2" stroke="var(--b)" stroke-width="2" stroke-dasharray="5 4"/>' +
+      '<polygon points="' + ox + "," + oy + " " + px + "," + oy + " " + px + "," + py + '" fill="var(--a)" fill-opacity="0.3" stroke="var(--a)" stroke-width="2"/>' + D(px, py, 7, "var(--no)") +
+      T(424, 52, "P(" + fm(x) + ", " + fm(y) + ")", { a: "start", s: 19, f: "var(--no)", w: 700 }) + T(424, 90, "矩形 S = " + fm(Math.abs(x * y)), { a: "start", s: 19, f: "var(--b)" }) + T(424, 124, "三角形 S = " + fm(Math.abs(x * y) / 2), { a: "start", s: 19, f: "var(--a)" }) + T(424, 170, "|k| = " + fm(Math.abs(k)), { a: "start", s: 19, w: 700 });
+    $("fig-lab2").innerHTML = h;
+    $("res-lab2").innerHTML = "P(<span class=\"sum\">" + fm(x) + "</span>, <span class=\"sum\">" + fm(y) + "</span>)：矩形面积 = " + fm(x) + " × " + fm(Math.abs(y)) + " = <span class=\"sum\">" + fm(Math.abs(x * y)) + "</span> = |k|；三角形面积 = <span class=\"sum\">" + fm(Math.abs(x * y) / 2) + "</span> = ½|k|。长变了宽跟着变，乘积不变。k = " + fm(k) + (k < 0 ? " 为负，点在第四象限，面积仍然是正数 " + fm(Math.abs(k)) + "，不是 " + fm(k) + "。" : "，点在第一象限。") + "（这里只画了 x > 0 的一支。）";
+  }
+  bar("k2-bar", function (b) { k2 = +b.dataset.k; drawLab2(); });
+  sld(slX, drawLab2);
+  $("btn-reset2").addEventListener("click", function () { slX.value = "2"; drawLab2(); });
+  drawLab2();
+
+  if (typeof initGaoKaoSolutions === "function") {
+    initGaoKaoSolutions("practice", "../data/sections/j27-2.json");
+  }
+});
+</script>
+</body>
+</html>

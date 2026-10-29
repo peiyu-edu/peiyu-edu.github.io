@@ -1,0 +1,150 @@
+/* 培玉 · 小学数学 — 小学页样式。配色、深浅色变量全部来自 ../assets/site.css，这里只加小学专用的部件。 */
+
+:root { --on-accent: #ffffff; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --on-accent: #141b18; }
+}
+:root[data-theme="dark"] { --on-accent: #141b18; }
+
+/* 字号看齐高中站（site.css：正文 16px/1.75、h1 26px）；一、二年级（.low）保持大字号 */
+body.primary { font-size: 16px; }
+body.primary.low { font-size: 20px; }
+body.primary.low h1 { font-size: 32px; }
+/* 教具图里不写字号的文字按原来的 17px（低年级 20px）设计，正文变小时图里的字不跟着变 */
+body.primary svg { font-size: 17px; }
+body.primary.low svg { font-size: 20px; }
+
+/* 步骤导航：按钮更大，便于手指点 */
+body.primary .steps button { min-height: 44px; font-size: 15px; padding: 8px 16px; }
+body.primary.low .steps button { font-size: 16px; }
+/* 选中步骤在强调色底上用 --on-accent；:where() 把优先级压到和页内 `body.primary .steps button` 同级，自定步骤底色的页面（如 PY-160 复习页）以页内为准 */
+body.primary .steps button:where([aria-selected="true"]) { color: var(--on-accent); }
+body.primary .next { display: flex; justify-content: flex-end; }
+body.primary .next .btn { min-height: 48px; font-size: 15px; padding: 10px 20px; color: var(--on-accent); }
+body.primary.low .next .btn { font-size: 17px; }
+
+/* 竖排分数 */
+.fr { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; line-height: 1.05; margin: 0 .15em; font-variant-numeric: tabular-nums; }
+.fr > span { display: block; min-width: .9em; text-align: center; }
+.fr > .bar { height: 0; border-top: 2px solid currentColor; width: 100%; min-width: 1.1em; margin: 2px 0; }
+.fr.big { font-size: 1.6em; font-weight: 700; }
+.fr.huge { font-size: 3em; font-weight: 700; }
+
+/* 朗读按钮 */
+.say { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin-left: 6px; vertical-align: middle; border: 1.5px solid var(--a); border-radius: 50%; background: var(--card); color: var(--a); cursor: pointer; vertical-align: middle; flex: 0 0 auto; padding: 0; }
+.say svg { width: 20px; height: 20px; }
+.say:hover, .say:focus-visible, .say.on { background: var(--a); color: var(--card); }
+.say:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+.line { display: block; }
+.line > .say, .read > .say { margin-left: 6px; }
+body.primary:not(.low) :not(.key-say):not(.say-demo) > button.say,
+body.primary.high button.say { display: none; }
+
+/* 一句话结论 */
+.key-say { background: var(--hl-soft); border-left: 5px solid var(--hl); border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; font-size: 1.1em; font-weight: 600; }
+
+/* 家长导读 */
+details.parent { background: var(--card); border: 1.5px dashed var(--c); border-radius: var(--radius); padding: 10px 16px; margin: 12px 0 18px; font-size: 17px; }
+details.parent summary { cursor: pointer; font-weight: 700; color: var(--c); min-height: 32px; }
+details.parent li { margin: 4px 0; }
+
+/* 拼音 */
+body.low ruby { ruby-position: over; }
+body.low rt { font-size: max(.6em, 11px); color: var(--muted); letter-spacing: 0; }
+.kid { font-size: 1.15em; font-weight: 600; line-height: 2.1; }
+
+/* 教具外框 */
+.manip { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; margin: 14px 0; }
+.manip svg.stage { display: block; width: 100%; height: auto; max-width: 560px; margin: 0 auto; touch-action: manipulation; }
+.manip .ctrls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 10px 0 4px; }
+.manip .ctrls button,
+body.primary .manip :is(.ctrls button, button.btn):not(.say) { min-height: 44px; min-width: 44px; padding: 6px 14px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg); font: inherit; font-size: 16px; cursor: pointer; }
+.manip .ctrls button:is([aria-pressed="true"], .on, .is-on, .active),
+body.primary .manip :is(.ctrls button, button.btn):not(.say):is([aria-pressed="true"], .on, .is-on, .active) { border-color: var(--a); background: var(--ok-soft); color: var(--fg); font-weight: 700; }
+.manip .ctrls button:disabled { opacity: .45; cursor: default; }
+.manip .ctrls button:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+.manip .ctrls .count { display: inline-flex; align-items: center; gap: 6px; }
+.manip .ctrls .count b { min-width: 2.2em; text-align: center; font-size: 18px; }
+.manip .read { text-align: center; margin: 8px 0 0; font-size: 18px; min-height: 2.2em; display: block; line-height: 1.9; }
+.manip .read.ok { color: var(--a); font-weight: 700; }
+.manip .read.no { color: var(--no); font-weight: 700; }
+.manip .part { cursor: pointer; }
+.manip .part:focus { outline: none; }
+.manip .part:focus-visible { stroke: var(--hl); stroke-width: 5; }
+.manip .hint { text-align: center; color: var(--muted); font-size: 15px; margin: 4px 0 0; }
+
+/* 题目 */
+.q .ans { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 10px 0; }
+.q .box { min-width: 56px; height: 52px; border: 2px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--fg); font: inherit; font-size: 26px; font-weight: 700; text-align: center; cursor: pointer; padding: 0 8px; }
+.q .box.on { border-color: var(--c); box-shadow: 0 0 0 3px var(--hl-soft); }
+.q .box:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+.q .fbox { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
+.q .fbox .fbar { width: 72px; border-top: 3px solid var(--fg); }
+.q .fbox .box { height: 48px; min-width: 64px; }
+.q .pad { display: grid; grid-template-columns: repeat(5, 52px); gap: 6px; }
+.q .pad button { height: 48px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--fg); font: inherit; font-size: 22px; font-weight: 600; cursor: pointer; }
+.q .pad button.go { grid-column: span 2; background: var(--a); border-color: var(--a); color: var(--on-accent); font-size: 18px; }
+.q .pad button:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
+.q .fb { margin: 6px 0 0; font-size: 17px; min-height: 1.5em; }
+.q .fb.ok { color: var(--a); font-weight: 700; }
+.q .fb.no { color: var(--no); }
+.q .fb.tip { color: var(--c); }
+.q.done .pad, .q.done .go-inline, .q.done .pad-toggle { display: none; }
+body.primary.high .q:not(.pad-open) .pad { display: none; }
+body.primary.high .q .go-inline, body.primary.high .q .pad-toggle { min-height: 44px; font-size: 16px; padding: 6px 14px; }
+body.primary.high .q.pad-open .ans { align-items: flex-start; }
+.q.done .box { cursor: default; border-color: var(--a); background: var(--ok-soft); }
+.q .reveal, .predict .reveal { display: none; }
+.q.done .reveal, .predict.done .reveal { display: block; }
+.predict .opt { min-height: 48px; }
+.predict .fb { margin: 6px 0 0; font-size: 17px; min-height: 1.2em; color: var(--no); }
+.predict .fb.ok { color: var(--a); font-weight: 700; }
+.predict.done .opt { cursor: default; }
+.q-tag { display: inline-block; font-size: 14px; font-weight: 700; color: var(--c); border: 1px solid var(--c); border-radius: 999px; padding: 0 10px; margin-bottom: 4px; }
+
+/* 章节静态配图、题目里的小图、选项图 */
+figure.fig > svg, svg.fig { display: block; width: 100%; max-width: 560px; height: auto; margin: 0 auto; }
+svg.qfig { display: block; width: 100%; max-width: 300px; height: auto; margin: 6px auto; }
+.opts.pics { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.opts.pics .opt { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.opts.pics .opt svg { width: 100%; max-width: 130px; height: auto; }
+
+/* 容易错的地方（红绿对比） */
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+.pair > div { border-radius: var(--radius); padding: 12px; border: 1.5px solid; }
+.pair .no { border-color: var(--no); background: var(--no-soft); }
+.pair .ok { border-color: var(--a); background: var(--ok-soft); }
+.pair b.t { display: block; margin-bottom: 4px; }
+.pair svg { display: block; width: 100%; max-width: 160px; height: auto; margin: 6px auto; }
+@media (max-width: 480px) { .pair { grid-template-columns: 1fr; } }
+
+/* 打印卡 */
+.print-card { border: 2px dashed var(--b); border-radius: var(--radius); padding: 14px 16px; background: var(--card); }
+.print-card h3 { margin-top: 0; color: var(--b); }
+@media print {
+  .top, .steps, .next, .say, details.parent, .no-print { display: none !important; }
+  .step { display: block !important; }
+}
+
+@media (max-width: 480px) {
+  body.primary { font-size: 15.5px; }
+  .q .ans { flex-direction: column; align-items: flex-start; }
+  .q .pad { width: 100%; max-width: 340px; }
+  body.primary .steps { gap: 4px; flex-wrap: nowrap; }
+  body.primary .steps button, body.primary.low .steps button { padding: 6px 10px; font-size: 15px; }
+}
+@media (max-width: 420px) {
+  .q .pad { grid-template-columns: repeat(5, 1fr); }
+  body.primary.low { font-size: 19px; }
+  body.primary.low svg { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .manip * { transition: none !important; animation: none !important; }
+}
+
+/* 演示页、说明里的长代码（如 data-cfg 示例）在窄屏上折行 */
+code { overflow-wrap: anywhere; }
+
+/* 看答案（PY-192）：错满两次后出现，点了揭晓正确答案 */
+.q .peek, .predict .peek { margin: 8px 0 0; min-height: 44px; }
+.predict.peeked .fb { color: var(--c); font-weight: 700; }

@@ -444,7 +444,7 @@
       ticks.push('M'+tenth(cx+r0*Math.cos(a))+' '+tenth(cy+r0*Math.sin(a))+'L'+tenth(cx+r1*Math.cos(a))+' '+tenth(cy+r1*Math.sin(a)));
     }
     const nx=cx+(r-7)*Math.cos(needleAng), ny=cy+(r-7)*Math.sin(needleAng);
-    const rangeText=(expanded?'自动量程':'量程')+'['+dialNumberText(lower,significantDigits)+unit+', '+dialNumberText(upper,significantDigits)+unit+']';
+    const rangeText=options.rangeText || ((expanded?'自动量程':'量程')+'['+dialNumberText(lower,significantDigits)+unit+', '+dialNumberText(upper,significantDigits)+unit+']');
     const color=measured<0?'var(--iso-warn)':'var(--iso-accent)';
     return '<g class="iso-dial" data-dial-raw-value="'+value+'" data-dial-value="'+measured+'" data-dial-min="'+lower+'" data-dial-max="'+upper+'" data-dial-signed="'+signed+'" data-dial-expanded="'+expanded+'" data-dial-zero-tolerance="'+zeroTolerance+'">'+
       '<circle cx="'+tenth(cx)+'" cy="'+tenth(cy)+'" r="'+tenth(r+2.5)+'" fill="var(--iso-s1)" stroke="var(--iso-mid)" stroke-width="1.2"/>'+
@@ -1659,9 +1659,9 @@
     parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">瞬时投影值 ${fnName}(${Math.round(deg)}°) = ${val.toFixed(3)}</text>`);
 
     // 5. 右侧双千分表：瞬时函数值 f(θ) 与 相位弧度 θ
-    parts.push(dialGaugeSvg(490, 80, 33, val, 1.0, `瞬时值 ${fnName}(θ)`, "", {signed:true,zeroTolerance:1e-12}));
-    parts.push(dialGaugeSvg(490, 226, 33, rad, 2*Math.PI, "相位角 θ (rad)", " rad"));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">最值 ±1 处为对称轴</text>`);
+    parts.push(dialGaugeSvg(472, 80, 33, val, 1.0, `瞬时值 ${fnName}(θ)`, "", {signed:true,zeroTolerance:1e-12}));
+    parts.push(dialGaugeSvg(472, 226, 33, rad, 2*Math.PI, "相位角 θ", " rad", {rangeText: "量程[0, 2π]"}));
+    parts.push(`<text x="472" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">最值 ±1 处为对称轴</text>`);
 
     svg.innerHTML = parts.join("\n");
 
@@ -1688,6 +1688,14 @@
     const areaOrig = a * a;
     const ratio = 0.5 * sinA;
     const areaObl = areaOrig * ratio;
+    const hObl = 0.5 * a * sinA;
+    const hExact = Math.abs(hObl - Number(hObl.toFixed(2))) < 1e-9;
+    const sExact = Math.abs(areaObl - Number(areaObl.toFixed(2))) < 1e-9;
+    const rExact = Math.abs(ratio - Number(ratio.toFixed(3))) < 1e-9;
+    const sOpSvg = sExact ? "=" : "≈";
+    const rOpSvg = rExact ? "=" : "≈";
+    const hOpTex = hExact ? "=" : "\\approx ";
+    const sOpTex = sExact ? "=" : "\\approx ";
 
     const P = { scale: 1.42, origin: [198, 188], azimuth: 28, elevation: 25 };
     const k = 14;
@@ -1722,7 +1730,7 @@
     // 4. 固定安全区文字标注
     parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">斜二测画法投影夹具台 · x'=x, y'=y/2, ∠x'O'y'=${Math.round(deg)}°</text>`);
     parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">原图边长 a=${a.toFixed(1)}, S原=${areaOrig.toFixed(2)}</text>`);
-    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">直观图 S'=${areaObl.toFixed(2)} (比值 ${ratio.toFixed(3)})</text>`);
+    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">直观图 S'${sOpSvg}${areaObl.toFixed(2)} (比值${rOpSvg}${ratio.toFixed(3)})</text>`);
 
     // 5. 右侧双千分表：直观图面积 S' 与 面积换算比 S'/S
     parts.push(dialGaugeSvg(490, 80, 33, areaObl, 12.5, "直观图面积 S'", ""));
@@ -1733,8 +1741,8 @@
 
     if (desc) {
       desc.innerHTML =
-        `<b>斜二测画法三规则夹具台</b>：横轴平行且长度不变（\\(x'=a=${a.toFixed(1)}\\)），纵轴夹角 \\(\\angle x'O'y'=${Math.round(deg)}^\\circ\\) 且<b>长度折半</b>（\\(y'=\\dfrac{a}{2}=${(a / 2).toFixed(2)}\\)），直观图高 \\(h'=y'\\sin ${Math.round(deg)}^\\circ=${(0.5 * a * sinA).toFixed(2)}\\)。<br>` +
-        `<b>面积换算公式</b>：原图面积 \\(S_{\\text{原}}=${areaOrig.toFixed(2)}\\)，直观图面积 \\(S_{\\text{直观}}=${areaObl.toFixed(2)}\\)。标准 \\(45^\\circ\\)（或 \\(135^\\circ\\)）下恒有 \\(S_{\\text{直观}}=\\dfrac{\\sqrt{2}}{4}S_{\\text{原}}\\approx 0.354 S_{\\text{原}}\\)，逆求原图面积必乘 \\(2\\sqrt{2}\\approx 2.828\\)！`;
+        `<b>斜二测画法三规则夹具台</b>：横轴平行且长度不变（\\(x'=a=${a.toFixed(1)}\\)），纵轴夹角 \\(\\angle x'O'y'=${Math.round(deg)}^\\circ\\) 且<b>长度折半</b>（\\(y'=\\dfrac{a}{2}=${(a / 2).toFixed(2)}\\)），直观图高 \\(h'=y'\\sin ${Math.round(deg)}^\\circ${hOpTex}${hObl.toFixed(2)}\\)。<br>` +
+        `<b>面积换算公式</b>：原图面积 \\(S_{\\text{原}}=${areaOrig.toFixed(2)}\\)，直观图面积 \\(S_{\\text{直观}}${sOpTex}${areaObl.toFixed(2)}\\)。标准 \\(45^\\circ\\)（或 \\(135^\\circ\\)）下恒有 \\(S_{\\text{直观}}=\\dfrac{\\sqrt{2}}{4}S_{\\text{原}}\\approx 0.354 S_{\\text{原}}\\)，逆求原图面积必乘 \\(2\\sqrt{2}\\approx 2.828\\)！`;
       if (renderMath) renderMath();
     }
   }
@@ -2403,14 +2411,14 @@
     parts.push(segmentSvg([wxQ2, 28, 16], [wxMean, 28, 16], P, { warn: true, width: 2.6 }));
 
     // 4. 固定安全区文字标注
-    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">百分位数与五数箱线图分拣台 · 可调样本 x₉=${String(xMax)}，真实最大值 ${dialNumberText(actualMax)}</text>`);
+    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-hi)">五数箱线图分拣台 · 样本 x₉=${String(xMax)}，最大值 ${dialNumberText(actualMax)}</text>`);
     parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">中位数 Q₂=${q2.toFixed(2)} (稳健不动!)</text>`);
     parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">均值 x̄=${mean.toFixed(2)}, 标准差 s=${sd.toFixed(2)}</text>`);
 
     // 5. 右侧双千分表：样本均值 x̄ 与 样本标准差 s
-    parts.push(dialGaugeSvg(490, 80, 33, mean, 1.5, "样本均值 x̄", "", {signed:true,zeroTolerance:1e-12}));
-    parts.push(dialGaugeSvg(490, 226, 33, sd, 3.0, "样本标准差 s", ""));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">中位数抗极端值</text>`);
+    parts.push(dialGaugeSvg(472, 80, 33, mean, 1.5, "均值 x̄", "", {signed:true,zeroTolerance:1e-12}));
+    parts.push(dialGaugeSvg(472, 226, 33, sd, 3.0, "标准差 s", ""));
+    parts.push(`<text x="472" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">中位数抗极端值</text>`);
 
     svg.innerHTML = parts.join("\n");
 
@@ -2479,9 +2487,9 @@
     parts.push('<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">双圆位置与公切线 · d=' + d.toFixed(1) + ', R+r=' + sumR.toFixed(1) + ', R-r=' + diffR.toFixed(1) + '</text>');
     parts.push('<text x="102" y="318" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">当前位置：' + stateName + '</text>');
     parts.push('<text x="318" y="318" text-anchor="middle" font-size="11.5" fill="var(--iso-warn)">图中公切线：' + tanCount + ' 条</text>');
-    parts.push(dialGaugeSvg(490,80,33,d,6.5,'圆心距 |O₁O₂|',''));
-    parts.push(dialGaugeSvg(490,226,33,tanCount,4,'公切线条数','条'));
-    parts.push('<text x="490" y="154" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">比对 R-r 与 R+r</text>');
+    parts.push(dialGaugeSvg(472,80,33,d,6.5,'圆心距 d',''));
+    parts.push(dialGaugeSvg(472,226,33,tanCount,4,'公切线数','条',{rangeText:'量程[0, 4]条'}));
+    parts.push('<text x="472" y="154" text-anchor="middle" font-size="11.5" fill="var(--iso-accent)">比对 R-r 与 R+r</text>');
     svg.innerHTML = parts.join('\n');
     if (desc) {
       desc.innerHTML = '<b>双圆位置与公切线</b>：\\(R=' + R.toFixed(1) + ',r=' + r.toFixed(1) + ',d=' + d.toFixed(1) + '\\)，当前为<b>' + stateName + '</b>，图中画出全部 <b>' + tanCount + ' 条</b>公切线。圆、切线和公共弦位于同一数学平面，点标覆盖真实圆心。<br>' +

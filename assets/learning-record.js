@@ -11,7 +11,7 @@
   function esc(value) { return dataAPI.escape(value); }
   function url(path) { return new URL(path, dataAPI.root || document.baseURI); }
   function point(id) { return index.points.find(function (item) { return item.id === id; }); }
-  function lesson(id) { return index.lessons.find(function (item) { return item.id === id; }); }
+  function lesson(id) { return index.lessons.find(function (item) { return item.id === id; }) || (Array.isArray(index.units) && index.units.find(function (item) { return item.id === id; })); }
   function contextual(path) {
     var target = url(path);
     if (context.from) {
@@ -104,8 +104,12 @@
   function reviews(items, due) {
     if (!items.length) return '<p class="lp-note">' + (due ? '目前没有到期的复习安排。可以从课程或练习开始，记录会逐步积累。' : '有作答记录后，这里会列出之后的复习安排。') + '</p>';
     return '<ul class="lr-review-list">' + items.map(function (item) {
-      var p = point(item.pointId); if (!p) return "";
-      return '<li><h3><a href="' + esc(knowledgeHref(p.id, item)) + '">' + esc(p.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(practiceHref(p.id, item, true)) + '">回看并练习</a></div></li>';
+      var p = point(item.pointId);
+      if (p) {
+        return '<li><h3><a href="' + esc(knowledgeHref(p.id, item)) + '">' + esc(p.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(practiceHref(p.id, item, true)) + '">回看并练习</a></div></li>';
+      }
+      var s = lesson(item.sectionId); if (!s) return "";
+      return '<li><h3><a href="' + esc(lessonHref(item)) + '">' + esc(s.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(lessonHref(item)) + '">回到这一课复习</a></div></li>';
     }).join("") + '</ul>';
   }
   function group(title, count, hint, content, open) {
@@ -121,7 +125,8 @@
     var views = events.filter(function (event) { return event.kind === "view"; });
     var ratings = events.filter(function (event) { return event.kind === "self-rating"; });
     var visits = events.filter(function (event) { return event.kind === "review"; });
-    var review = (snapshot.review || []).filter(function (item) { return point(item.pointId); }).sort(function (a, b) { return number(a.dueAt || a.reviewDueAt) - number(b.dueAt || b.reviewDueAt); });
+    var noKnowledge = index && index.knowledge === false;
+    var review = (snapshot.review || []).filter(function (item) { return point(item.pointId) || (noKnowledge && lesson(item.sectionId)); }).sort(function (a, b) { return number(a.dueAt || a.reviewDueAt) - number(b.dueAt || b.reviewDueAt); });
     var due = review.filter(function (item) { return item.due === true || number(item.dueAt || item.reviewDueAt) <= Date.now(); });
     var future = review.filter(function (item) { return due.indexOf(item) < 0; });
     var resume = snapshot.resume && lesson(snapshot.resume.sectionId) ? snapshot.resume : null;
@@ -160,7 +165,7 @@
       if (/^[A-Za-z0-9_.:-]{1,100}$/.test(query.get("question") || "")) context.question = query.get("question");
     }
     render();
-    window.addEventListener("storage", function (event) { if (event.key === "peiyu.hs.learning.v1") render(); });
+    window.addEventListener("storage", function (event) { if (event.key === (state.key || "peiyu.hs.learning.v1")) render(); });
   }).catch(function () {
     host.innerHTML = '<div class="lp-page"><h1>学习记录暂时没有加载成功</h1><p>请刷新页面重试。已有的本地记录不会受到影响。</p><button class="lp-button" type="button" data-lr-reload>重新加载</button></div>';
     host.querySelector("[data-lr-reload]").addEventListener("click", function () { location.reload(); });

@@ -82,15 +82,15 @@
       ".sc-panel .sc-num{font-size:15px}",
       ".sc-panel .sc-num b{font-size:20px;color:var(--a)}",
       ".sc-panel .sc-num b.due{color:var(--no)}",
-      ".sc-panel .sc-sub{font-size:13.5px;color:var(--muted)}",
+      ".sc-panel .sc-sub{font-size:14px;color:var(--muted)}",
       ".sc-panel .sc-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-left:auto}",
       ".sc-panel .btn{min-height:38px}",
       ".sc-mode{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--bg);padding:3px;gap:2px}",
-      ".sc-mode button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13.5px;font-weight:600;padding:5px 12px;min-height:32px;border-radius:999px;cursor:pointer}",
+      ".sc-mode button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:600;padding:5px 12px;min-height:32px;border-radius:999px;cursor:pointer}",
       ".sc-mode button.on{background:var(--a);color:#fff}",
       ".sc-mode button:focus-visible{outline:3px solid var(--hl)}",
       ".sc-done{width:100%;font-size:15px;color:var(--a);font-weight:600}",
-      ".sc-chip{display:inline-block;font-size:12px;font-weight:600;border-radius:6px;padding:2px 7px;border:1px solid var(--line);color:var(--muted);background:var(--bg)}",
+      ".sc-chip{display:inline-block;font-size:14px;font-weight:600;border-radius:6px;padding:2px 7px;border:1px solid var(--line);color:var(--muted);background:var(--bg)}",
       ".sc-chip.due{border-color:var(--no);color:var(--no);background:var(--no-soft)}",
       ".sc-chip.ok{border-color:var(--a);color:var(--a);background:var(--ok-soft)}",
       ".sc-cover{border:1.5px dashed var(--line);border-radius:10px;padding:14px 16px;margin:10px 0;background:var(--bg);display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}",
@@ -105,7 +105,7 @@
       ".sc-grade .btn.no{background:transparent;border:1.5px solid var(--no);color:var(--no)}",
       ".sc-grade .sc-note{font-size:14px;color:var(--muted)}",
       ".sc-grade .sc-note b{color:var(--fg)}",
-      ".sc-tabbadge{display:inline-block;margin-left:6px;font-size:12px;font-weight:700;color:#fff;background:var(--no);border-radius:999px;padding:1px 7px;vertical-align:middle}"
+      ".sc-tabbadge{display:inline-block;margin-left:6px;font-size:14px;font-weight:700;color:#fff;background:var(--no);border-radius:999px;padding:1px 7px;vertical-align:middle}"
     ].join("\n");
     document.head.appendChild(st);
   })();

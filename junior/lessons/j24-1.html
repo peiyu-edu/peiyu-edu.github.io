@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>24.1 数据的集中趋势 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  .result .ok { color: var(--a); font-weight: 700; }
+  .tb { border-collapse: collapse; margin: 6px 0; font-size: 15px; }
+  .tb th, .tb td { border: 1px solid var(--line); padding: 3px 10px; text-align: center; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j24-1" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">八年级下册 · 第二十四章 数据的分析</p>
+<h1>24.1 数据的集中趋势</h1>
+<p class="lead">一组数据「一般在什么水平」，可以用一个数来说。平均数、中位数、众数都能说，但说法不一样：有一个特别大的数混进来时，它们的反应完全不同。</p>
+
+<details class="more route">
+  <summary>本节导读　先修：小学平均数、12.1 统计调查 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：小学的平均数（总数 ÷ 个数）和百分数；总体、样本、简单随机抽样（<a href="j12-1.html">回看 12.1</a>）；频数分布表、组距（<a href="j12-2.html">回看 12.2</a>）。</p>
+  <ol class="small">
+    <li>从「一个人读得特别多」进入：平均数会被拉走。</li>
+    <li>加权平均数：各项重要程度不同，用「权」；分母是权的和。</li>
+    <li>分组数据的平均数：以各组人数（频数）为权，不能把各组平均数直接再平均。</li>
+    <li>中位数：先排序，奇数个取正中间，偶数个取中间两个的平均数。</li>
+    <li>众数：出现次数最多的数据，可能不止一个，也可能没有。</li>
+    <li>三个统计量怎么选；用样本估计总体。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>阅读小组 9 位同学记下了上周的课外阅读时间。前 8 位是 \(2,3,3,4,4,5,5,6\)（单位：小时），第 9 位小林读得多一些。点按钮换小林的时间，看红色虚线（平均数）往哪走：</p>
+  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDI0MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Lmd5L2N5ZCM5a2m6ZiF6K+75pe26Ze055qE54K55Zu+77yM5qCH5Ye65bmz5Z2H5pWw5ZKM5Lit5L2N5pWwXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuWwj+ael+eahOmYheivu+aXtumXtFwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjZcIj7lsI/mnpcgNiDlsI/ml7Y8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjEyXCI+5bCP5p6XIDEyIOWwj+aXtjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1rPVwiMjBcIj7lsI/mnpcgMjAg5bCP5pe2PC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPHAgY2xhc3M9XCJlbnRyeS1ub3RlXCIgaWQ9XCJlbnRyeS1ub3RlXCIgYXJpYS1saXZlPVwicG9saXRlXCI+PC9wPlxuICAgIDxwPuWmguaenOWwj+ael+ivu+S6hiBcXCgzMFxcKSDlsI/ml7bvvIw5IOS6uueahOW5s+Wdh+aVsOe6puaYryBcXCg2Ljg5XFwpIOWwj+aXtuOAgjkg5Lq66YeM5pyJ5Yeg5Lq655qE6ZiF6K+75pe26Ze06LaF6L+H6L+Z5Liq5bmz5Z2H5pWw77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgxXFwpIOS6ujwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDRcXCkg5Lq6PC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNVxcKSDkuro8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgwXFwpIOS6ujwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkE8L2I+44CC5Y+q5pyJ5bCP5p6X6Ieq5bex6LaF6L+HIFxcKDYuODlcXCnvvJvlhbbkvZkgOCDkurrpg73kuI3otoXov4cgXFwoNlxcKSDlsI/ml7bjgILmgLvml7bpl7QgXFwoMzIrMzA9NjJcXCnvvIxcXCg2MlxcZGl2OVxcYXBwcm94Ni44OVxcKe+8muWwj+ael+S4gOS4quS6uuaKiuW5s+Wdh+aVsOaLiemrmOS6huOAgumAiSBDIOaYr+S7peS4uuOAjOW5s+Wdh+aVsOS4iuS4i+WQhOWNoOS4gOWNiuOAjeOAgjwvcD5cbiAgICAgIDxwPui/meaXtuivtOOAjOWkp+WutuW5s+Wdh+ivu+S6hiBcXCg2Ljg5XFwpIOWwj+aXtuOAjeW5tuS4jeiDveS7o+ihqOWkp+WkmuaVsOS6uuOAguaOkuWcqOato+S4remXtOeahOaVsO+8iOesrCA1IOS4qu+8ieaYryBcXCg0XFwp77yM5a6D5LiN566h5bCP5p6X6K+75aSa5bCR6YO95LiN5Y+Y44CC6L+Z5LiA6IqC6KaB5Zue562U77yaPGI+5o+P6L+w44CM5LiA6Iis5rC05bmz44CN5pyJ5ZOq5Yeg56eN5pWw77yf5ZCE6Ieq5LuA5LmI5pe25YCZ5aW955So77yfPC9iPjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 240" role="img" aria-label="九位同学阅读时间的点图，标出平均数和中位数"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="小林的阅读时间">
+      <button type="button" class="on" data-k="6">小林 6 小时</button>
+      <button type="button" data-k="12">小林 12 小时</button>
+      <button type="button" data-k="20">小林 20 小时</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>如果小林读了 \(30\) 小时，9 人的平均数约是 \(6.89\) 小时。9 人里有几人的阅读时间超过这个平均数？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(1\) 人</button>
+      <button class="opt" data-v="B"><b>B</b>\(4\) 人</button>
+      <button class="opt" data-v="C"><b>C</b>\(5\) 人</button>
+      <button class="opt" data-v="D"><b>D</b>\(0\) 人</button>
+    </div>
+    <div class="reveal">
+      <p><b>A</b>。只有小林自己超过 \(6.89\)；其余 8 人都不超过 \(6\) 小时。总时间 \(32+30=62\)，\(62\div9\approx6.89\)：小林一个人把平均数拉高了。选 C 是以为「平均数上下各占一半」。</p>
+      <p>这时说「大家平均读了 \(6.89\) 小时」并不能代表大多数人。排在正中间的数（第 5 个）是 \(4\)，它不管小林读多少都不变。这一节要回答：<b>描述「一般水平」有哪几种数？各自什么时候好用？</b></p>
+    </div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：平均数、权、加权平均数</h3>
+  <p class="small">前置知识：小学的平均数。\(n\) 个数据 \(x_1,x_2,\dots,x_n\) 的<b>平均数</b>记作 \(\bar x\)（读作「x 拔」）：\(\bar x=\dfrac{x_1+x_2+\cdots+x_n}{n}\)，它反映数据的<b>平均水平</b>。</p>
+  <p>有时几项数据的<b>重要程度</b>不同。比如一次招新，笔试、面试、实操的成绩是 \(70,80,95\)，社团觉得实操更重要。给每一项配一个数表示它有多重要，这个数叫<b>权</b>（「权」原来指秤锤）。把平均数看成天平的平衡点，点下面几组权，看平衡点怎么移：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>权像砝码：哪一项的权大，平衡点就偏向哪一项</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="三项的权">
+        <button type="button" class="on" data-w="1,1,1">权 1 : 1 : 1</button>
+        <button type="button" data-w="2,3,5">权 2 : 3 : 5</button>
+        <button type="button" data-w="5,3,2">权 5 : 3 : 2</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 200" role="img" aria-label="三项成绩上叠放砝码，平衡点是加权平均数"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(\bar x=\dfrac{\color{#2F7A56}{\underbrace{x_1w_1+x_2w_2+\cdots+x_nw_n}_{\text{每个数乘它的权，再相加}}}}{\color{#B5452F}{\underbrace{w_1+w_2+\cdots+w_n}_{\text{除以权的和}}}}\)
+    <p class="small" style="margin:6px 0 0;color:var(--fg)">这叫 \(x_1,\dots,x_n\) 的<b>加权平均数</b>，\(w_1,\dots,w_n\) 是它们的权。权可以写成比、百分数、人数（频数）等；权都相等时，就是普通平均数。</p>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>分母是「权的和」</b></p>
+      <p class="small" style="margin:0">权是 \(2:3:5\) 时分母是 \(10\)。权是百分数 \(30\%,30\%,40\%\) 时，权的和是 \(100\%=1\)，分母是 \(1\)，所以只要乘完相加——但心里要知道「除以了 1」。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>同样的成绩，权不同，名次可能变</b></p>
+      <p class="small" style="margin:0">权反映「看重什么」。换一套权，加权平均数就变；两个人的高下也可能反过来（见例 1）。</p>
+    </div>
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">学校评「读书达人」，看三项：阅读量、读书笔记、分享展示。甲三项得分 \(90,75,84\)，乙三项得分 \(80,88,86\)。按 \(5:3:2\) 的权计算，谁的得分高？如果三项一样重要呢？</p>
+    <p><b>① 读懂题意：</b>同一组数据，要算两种平均数：一种带权 \(5:3:2\)，一种不带权。</p>
+    <details class="more"><summary>提示 1：分母是多少</summary><p>权的和是 \(5+3+2=10\)；不带权时就是除以 \(3\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>每项分乘对应的权，加起来，再除以权的和。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>甲：\(\dfrac{90\times5+75\times3+84\times2}{10}=\dfrac{843}{10}=84.3\)；乙：\(\dfrac{80\times5+88\times3+86\times2}{10}=\dfrac{836}{10}=83.6\)。按 \(5:3:2\)，甲高。三项一样重要时：甲 \(\dfrac{249}{3}=83\)，乙 \(\dfrac{254}{3}\approx84.67\)，乙高。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>甲的阅读量 \(90\) 最突出，阅读量的权最大，所以加权后甲占便宜，方向对 ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>结论跟着权变。题目给了权，就必须按权算；说「谁更好」之前先问「看重什么」。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muWtpuacn+aAu+ivhOS4re+8jOW5s+aXtuOAgeacn+S4reOAgeacn+acq+aIkOe7qeWIhuWIq+WNoCBcXCgyMFxcJVxcKeOAgVxcKDMwXFwlXFwp44CBXFwoNTBcXCVcXCnjgILlsI/pm6jkuInpobnmmK8gXFwoOTUsODAsODZcXCkg5YiG77yM5aW555qE5oC76K+E5piv5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoODdcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoODZcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMjYxXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDQzXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCXFwoOTVcXHRpbWVzMjBcXCUrODBcXHRpbWVzMzBcXCUrODZcXHRpbWVzNTBcXCU9MTkrMjQrNDM9ODZcXCnvvIjmnYPnmoTlkozmmK8gXFwoMTAwXFwlXFwp77yM5YiG5q+N5Li6IFxcKDFcXCnvvInjgIJBIOaYr+S4jeeci+adg+eahOaZrumAmuW5s+Wdh+aVsCBcXCgyNjFcXGRpdjNcXCnvvJtDIOaYr+S4iemhueebtOaOpeebuOWKoO+8m0Qg5Y+q566X5LqG5pyf5pyr6YKj5LiA6YOo5YiG44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：学期总评中，平时、期中、期末成绩分别占 \(20\%\)、\(30\%\)、\(50\%\)。小雨三项是 \(95,80,86\) 分，她的总评是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(87\)</button><button class="opt" data-v="B"><b>B</b>\(86\)</button><button class="opt" data-v="C"><b>C</b>\(261\)</button><button class="opt" data-v="D"><b>D</b>\(43\)</button></div>
+    <div class="reveal"><p><b>B</b>。\(95\times20\%+80\times30\%+86\times50\%=19+24+43=86\)（权的和是 \(100\%\)，分母为 \(1\)）。A 是不看权的普通平均数 \(261\div3\)；C 是三项直接相加；D 只算了期末那一部分。</p></div>
+  </div>
+
+  <h3>2. 核心点：分组数据的平均数，以人数为权</h3>
+  <p>一班 \(40\) 人数学平均 \(80\) 分，二班 \(10\) 人平均 \(90\) 分，两个班合起来平均多少？「\((80+90)\div2=85\)」是错的：一班人多，它在总分里占的分量大。合起来的平均数 \(=\dfrac{\text{总分}}{\text{总人数}}=\dfrac{80\times40+90\times10}{50}=82\)，正是<b>以人数为权</b>的加权平均数。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>人多的那组更「重」，合起来的平均数靠近它</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="两班人数">
+        <button type="button" class="on" data-n="40,10">40 人 : 10 人</button>
+        <button type="button" data-n="25,25">25 人 : 25 人</button>
+        <button type="button" data-n="10,40">10 人 : 40 人</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 200" role="img" aria-label="两组人数不同时合并平均数的位置"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p>先分组算、再按人数合成，这种算法叫<b>分布式计算</b>的简单形式。各组人数也可以换成各组人数所占的比值（叫<b>频率</b>），作用一样。</p>
+  <p>只有频数分布表、不知道每个原始数据时，用每组的<b>组中值</b>（这一组两个端点的平均数）代表这一组，以频数为权求平均数。这样算出的是<b>近似值</b>。</p>
+  <div class="card predict" data-id="try-2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muiwg+afpSAyNSDlkI3lkIzlrabmr4/lpKnnmoTnnaHnnKDml7bpl7TvvIxcXCg2XFxsZSB4Jmx0OzdcXCkg55qEIDUg5Lq677yMXFwoN1xcbGUgeCZsdDs4XFwpIOeahCAxMiDkurrvvIxcXCg4XFxsZSB4Jmx0OzlcXCkg55qEIDgg5Lq677yI5Y2V5L2N77ya5bCP5pe277yJ44CC5Lyw6K6h6L+ZIDI1IOS6uueahOW5s+Wdh+edoeecoOaXtumXtOOAgjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5LiJ57uE55qE57uE5Lit5YC85pivIFxcKDYuNSw3LjUsOC41XFwp77yM5p2D5pivIFxcKDUsMTIsOFxcKe+8jOWIhuavjeaYryBcXCgyNVxcKeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+57qmIFxcKDcuNjJcXCkg5bCP5pe277yI5Lyw6K6h5YC877yJPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDcuNVxcKSDlsI/ml7Y8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5q2j5aW9IFxcKDcuNjJcXCkg5bCP5pe277yM5ZKM5Y6f5aeL5pWw5o2u566X55qE5LiA5qC3PC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoXFxkZnJhY3s2LjVcXHRpbWVzNSs3LjVcXHRpbWVzMTIrOC41XFx0aW1lczh9ezI1fT1cXGRmcmFjezE5MC41fXsyNX09Ny42MlxcKeOAguavj+e7hOeUqOe7hOS4reWAvOS7o+abv++8jOaJgOS7peWPquaYr+S8sOiuoeWAvO+8jEMg6ZSZ44CCQiDmmK/miorkuInkuKrnu4TkuK3lgLznm7TmjqXlubPlnYfvvIzmsqHmnInmjInkurrmlbDliqDmnYPjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：调查 25 名同学每天的睡眠时间，\(6\le x&lt;7\) 的 5 人，\(7\le x&lt;8\) 的 12 人，\(8\le x&lt;9\) 的 8 人（单位：小时）。估计这 25 人的平均睡眠时间。</p>
+    <details class="more"><summary>提示</summary><p>三组的组中值是 \(6.5,7.5,8.5\)，权是 \(5,12,8\)，分母是 \(25\)。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>约 \(7.62\) 小时（估计值）</button><button class="opt" data-v="B"><b>B</b>\(7.5\) 小时</button><button class="opt" data-v="C"><b>C</b>正好 \(7.62\) 小时，和原始数据算的一样</button></div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{6.5\times5+7.5\times12+8.5\times8}{25}=\dfrac{190.5}{25}=7.62\)。每组用组中值代替，所以只是估计值，C 错。B 是把三个组中值直接平均，没有按人数加权。</p></div>
+  </div>
+
+  <h3>3. 核心点：中位数，先排序再找中间</h3>
+  <p>把一组数据<b>按从小到大（或从大到小）排列</b>，处在中间位置的数叫<b>中位数</b>。数据个数是<b>奇数</b>时，就是正中间那个数；是<b>偶数</b>时，取中间两个数的<b>平均数</b>。排好序后，中位数所在的中间位置左右两侧的数据个数相同，它反映数据的<b>中间水平</b>。（注意：有重复的数时，严格大于中位数和严格小于中位数的数据不一定一样多，如 \(1,1,1,2,3\) 的中位数是 \(1\)，没有比它小的。）</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>不排序找到的「中间」不算数</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="排序步骤">
+        <button type="button" class="on" data-s="0">原来的顺序</button>
+        <button type="button" data-s="1">排好序（7 个）</button>
+        <button type="button" data-s="2">再加一个 10（8 个）</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 150" role="img" aria-label="数据卡片排序后找中位数"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">8 位同学某天睡前用手机的时间（单位：分钟）：\(35,20,60,15,40,25,90,30\)。求平均数和中位数，并说说哪个更能代表「多数人」。</p>
+    <details class="more"><summary>提示：第一步写什么</summary><p>先把 8 个数从小到大写一遍；8 是偶数，中位数要用第 4、第 5 个。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">排序：</span>\(15,20,25,30,35,40,60,90\)，共 8 个。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">计算：</span>中位数 \(=\dfrac{30+35}{2}=32.5\)；平均数 \(=\dfrac{315}{8}=39.375\)。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">检查：</span>中位数左边 4 个、右边 4 个 ✓。平均数比 5 个人的时间都长，是被 \(90\) 和 \(60\) 拉上去的。</div>
+      </div>
+      <p><b>回头看：</b>偶数个数据的中位数 \(32.5\) 不在原数据里，这很正常。有特别大的数时，中位数更能代表多数人。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS4gOe7hOaVsOaNriBcXCg5LDQsNywxMiw0LDEwLDZcXCkg55qE5Lit5L2N5pWw5piv5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoMTJcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoN1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg2LjVcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoNFxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAguaOkuW6j+W+lyBcXCg0LDQsNiw3LDksMTAsMTJcXCnvvIw3IOS4quaVsO+8jOesrCA0IOS4quaYryBcXCg3XFwp44CCQSDmmK/msqHmjpLluo/vvIznm7TmjqXlj5bljp/mnaXnmoTnrKwgNCDkuKrvvJtDIOaYr+aKiuWlh+aVsOS4quW9k+aIkOWBtuaVsOS4qu+8jOWPluS6hiBcXCg2XFwpIOWSjCBcXCg3XFwpIOeahOW5s+Wdh++8m0Qg5piv5Ye6546w5pyA5aSa55qE5pWw77yI5LyX5pWw77yJ77yM5LiN5piv5Lit5L2N5pWw44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：一组数据 \(9,4,7,12,4,10,6\) 的中位数是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(12\)</button><button class="opt" data-v="B"><b>B</b>\(7\)</button><button class="opt" data-v="C"><b>C</b>\(6.5\)</button><button class="opt" data-v="D"><b>D</b>\(4\)</button></div>
+    <div class="reveal"><p><b>B</b>。排序得 \(4,4,6,7,9,10,12\)，7 个数，第 4 个是 \(7\)。A 是没排序，直接取原来的第 4 个；C 是把奇数个当成偶数个，取了 \(6\) 和 \(7\) 的平均；D 是出现最多的数（众数），不是中位数。</p></div>
+  </div>
+
+  <h3>4. 核心点：众数，出现次数最多的数据</h3>
+  <p>一组数据中<b>出现次数最多</b>的数据叫<b>众数</b>。几个数据出现次数并列最多时，它们<b>都是众数</b>；每个数据都只出现一次时，这组数据<b>没有众数</b>。众数答的是<b>数据本身</b>，不是它出现了几次。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ④</span><b>点图里最高的那一摞</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m4-bar" role="group" aria-label="三组鞋码数据">
+        <button type="button" class="on" data-d="35,36,36,36,37,37,38">一个众数</button>
+        <button type="button" data-d="35,36,36,37,37,38">两个众数</button>
+        <button type="button" data-d="34,35,36,37,38,39">没有众数</button>
+      </div>
+      <svg class="micro-fig" id="m4-fig" viewBox="0 0 380 170" role="img" aria-label="鞋码点图，最高的一摞是众数"></svg>
+      <p class="entry-note" id="m4-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <p>众数还能用于不是数的数据：全班投票选春游地点，得票最多的「植物园」就是众数，这时平均数、中位数都没法求。</p>
+  <div class="card predict" data-id="try-4" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mumei+W6l+S4gOWRqOWNluWHuuafkOasvui/kOWKqOmei++8mlxcKDM3XFwpIOeggSA4IOWPjO+8jFxcKDM4XFwpIOeggSAxNSDlj4zvvIxcXCgzOVxcKSDnoIEgMTUg5Y+M77yMXFwoNDBcXCkg56CBIDYg5Y+M44CC6ZSA5ZSu5bC656CB55qE5LyX5pWw5piv5LuA5LmI77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoMTVcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMzhcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMzhcXCkg5ZKMIFxcKDM5XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuayoeacieS8l+aVsDwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAglxcKDM4XFwpIOeggeWSjCBcXCgzOVxcKSDnoIHpg73ljZbkuoYgMTUg5Y+M77yM5bm25YiX5pyA5aSa77yM5Lik5Liq6YO95piv5LyX5pWw44CCQSDlhpnmiJDkuobmrKHmlbDvvJtCIOa8j+S6hiBcXCgzOVxcKe+8m0Qg5piv5Lul5Li644CM5bm25YiX5bCx5rKh5pyJ5LyX5pWw44CN44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>自己试试：鞋店一周卖出某款运动鞋：\(37\) 码 8 双，\(38\) 码 15 双，\(39\) 码 15 双，\(40\) 码 6 双。销售尺码的众数是什么？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(15\)</button><button class="opt" data-v="B"><b>B</b>\(38\)</button><button class="opt" data-v="C"><b>C</b>\(38\) 和 \(39\)</button><button class="opt" data-v="D"><b>D</b>没有众数</button></div>
+    <div class="reveal"><p><b>C</b>。\(38\) 码和 \(39\) 码都卖了 15 双，并列最多，两个都是众数。A 写成了次数；B 漏了 \(39\)；D 是以为「并列就没有众数」。</p></div>
+  </div>
+
+  <h3>5. 核心点：三个数怎么选</h3>
+  <div class="concept-grid">
+    <div class="card"><p><b>平均数</b></p><p class="small" style="margin:0">用到每一个数据，信息最全；但容易被<b>极端值</b>（和其余数据差得很远的数）拉走。</p></div>
+    <div class="card"><p><b>中位数</b></p><p class="small" style="margin:0">只看排在中间的，不怕极端值；但没有用上每个数据的大小。</p></div>
+    <div class="card"><p><b>众数</b></p><p class="small" style="margin:0">关心「最多的是哪个」时用（进货、投票）；各数据次数差不多时，它代表性差。</p></div>
+  </div>
+  <div class="card" id="ex3">
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范：选统计量）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">某楼 9 户一个月的用电量（单位：千瓦时）：\(80,85,90,90,95,100,105,110,600\)，最后一户在家开了小作坊。要说「这栋楼一户一般用多少电」，用哪个数？</p>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">算一算：</span>平均数 \(=1355\div9\approx150.6\)，中位数是第 5 个 \(95\)，众数 \(90\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">看数据：</span>\(600\) 是极端值；9 户里有 8 户不超过 \(110\)，平均数 \(150.6\) 比它们都大。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">结论：</span>有极端值，问的是「一般水平」，用中位数 \(95\) 更合适。</div>
+      </div>
+      <p><b>回头看：</b>说理三句话：数据有没有极端值；问题关心平均水平、中间水平还是「最多的」；所以选哪个。</p>
+    </details>
+  </div>
+  <p><b>用样本估计总体：</b>从全校随机抽取 50 名同学，算出平均每周运动 \(5.2\) 小时，就可以说「估计全校同学平均每周运动<b>大约</b> \(5.2\) 小时」。前提是样本随机抽取（<a href="j12-1.html">回看 12.1</a>）；换一个样本结果可能不同，样本大一些估计更可靠。</p>
+
+  <h3>6. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>把两组平均数直接再平均</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：40 人平均 80 分、10 人平均 90 分，合起来「\((80+90)\div2=85\)」。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：80 分那组有 40 人，分量是另一组的 4 倍，平衡点在 \(\dfrac{80\times40+90\times10}{50}=82\)。只有两组人数相同时，直接平均才对。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 200" role="img" aria-label="合并平均数在八十二而不是八十五"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>求中位数忘了排序，偶数个只取一个</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：\(6,9,2,8\) 的中位数是「\(9\)」或「\(2\)」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：先排序 \(2,6,8,9\)，偶数个，取中间两个的平均：\((6+8)\div2=7\)。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>众数写成次数，以为众数只有一个</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：\(5,5,5,7,8\) 的众数是「\(3\)」；\(1,1,2,2,3\) 「没有众数」。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：第一组众数是 \(5\)（出现 3 次）；第二组 \(1\) 和 \(2\) 都出现 2 次，都是众数。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：为什么比赛要「去掉一个最高分和一个最低分」</summary>
+    <p>评委里可能有人打分特别高或特别低。去掉两端各一个再求平均，就是为了减少极端值对平均数的影响。去掉之后，中位数并不会变：两头各少一个，中间那个还在中间。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 拖动数据点：平均数和中位数谁先动？</h3>
+  <p class="small">7 个数据。拖动圆点（或点一下圆点再用方向键）改变数据。红色虚线是平均数，绿色实线是中位数。试着把最右边的点拖到最远。</p>
+  <div class="card">
+    <svg class="fig" id="fig-drag" viewBox="0 0 560 230" role="img" aria-label="可拖动的七个数据点及其平均数和中位数"></svg>
+    <div class="result" id="out-drag" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-drag" type="button">重置</button></div>
+  </div>
+  <h3>② 改权：同样三项成绩，总评跟着变</h3>
+  <p class="small">笔试 \(70\)、面试 \(92\)、实操 \(80\)。拖动下面三条滑轨上的圆点改各项的权（\(0\) 到 \(5\)），上面每摞方块的个数就是权，红三角是加权平均数。</p>
+  <div class="card">
+    <svg class="fig" id="fig-w" viewBox="0 0 560 330" role="img" aria-label="三项成绩的权和加权平均数"></svg>
+    <div class="result" id="out-w" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-w" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：两组合并，平均数落在哪</h3>
+  <p class="small">在数轴上拖动两组的平均数 \(a_1\)、\(a_2\)，在滑轨上拖动两组人数 \(n_1\)、\(n_2\)。实心红三角是合并后的平均数，空心三角是两个平均数直接平均。</p>
+  <div class="card">
+    <svg class="fig" id="fig-m" viewBox="0 0 560 310" role="img" aria-label="两组合并的平均数"></svg>
+    <div class="result" id="out-m" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-m" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIOaVsOaNriBcXCgxNSwxOCwxMiwxOCwyMCwxNlxcKSDnmoTkuK3kvY3mlbDlkozkvJfmlbDliIbliKvmmK/lpJrlsJHvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5Lit5L2N5pWwIFxcKDE3XFwp77yM5LyX5pWwIFxcKDE4XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS4reS9jeaVsCBcXCgxOFxcKe+8jOS8l+aVsCBcXCgxOFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7kuK3kvY3mlbAgXFwoMTVcXCnvvIzkvJfmlbAgXFwoMThcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5Lit5L2N5pWwIFxcKDE2XFwp77yM5LyX5pWwIFxcKDJcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QTwvYj7jgILmjpLluo/vvJpcXCgxMiwxNSwxNiwxOCwxOCwyMFxcKe+8jOS4reS9jeaVsCBcXCgoMTYrMTgpXFxkaXYyPTE3XFwp77ybXFwoMThcXCkg5Ye6546w5Lik5qyh77yM5LyX5pWwIFxcKDE4XFwp44CCQiDmmK/lgbbmlbDkuKrlj6rlj5bkuobovoPlpKfnmoTpgqPkuKrvvJtDIOaYr+ayoeaOkuW6j++8jOWPluWOn+adpeesrCAz44CBNCDkuKogXFwoMTJcXCkg5ZKMIFxcKDE4XFwpIOeahOW5s+Wdh++8m0Qg5piv5LyX5pWw5YaZ5oiQ5LqG5qyh5pWw44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>1. 数据 \(15,18,12,18,20,16\) 的中位数和众数分别是多少？</p>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>中位数 \(17\)，众数 \(18\)</button><button class="opt" data-v="B"><b>B</b>中位数 \(18\)，众数 \(18\)</button><button class="opt" data-v="C"><b>C</b>中位数 \(15\)，众数 \(18\)</button><button class="opt" data-v="D"><b>D</b>中位数 \(16\)，众数 \(2\)</button></div>
+    <div class="reveal"><p><b>A</b>。排序：\(12,15,16,18,18,20\)，中位数 \((16+18)\div2=17\)；\(18\) 出现两次，众数 \(18\)。B 是偶数个只取了较大的那个；C 是没排序，取原来第 3、4 个 \(12\) 和 \(18\) 的平均；D 是众数写成了次数。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjIuIOatjOWUseavlOi1m+aMieWUseWKn+OAgeWPsOmjjuOAgeWIm+aEjyBcXCg1OjI6M1xcKSDorqHmgLvliIbjgILlsI/nvo7kuInpobnlvpfliIYgXFwoOTAsODAsNzBcXCnvvIzlpbnnmoTmgLvliIbmmK/lpJrlsJHvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg4MFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCg4MlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCg4MjBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoOTBcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgIJcXChcXGRmcmFjezkwXFx0aW1lczUrODBcXHRpbWVzMis3MFxcdGltZXMzfXs1KzIrM309XFxkZnJhY3s4MjB9ezEwfT04MlxcKeOAgkEg5piv5rKh5Yqg5p2D77ybQyDmmK/lv5jkuobpmaTku6XmnYPnmoTlkowgXFwoMTBcXCnvvJtEIOWPqueci+S6huacgOmHjeimgeeahOS4gOmhueOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>2. 歌唱比赛按唱功、台风、创意 \(5:2:3\) 计总分。小美三项得分 \(90,80,70\)，她的总分是多少？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(80\)</button><button class="opt" data-v="B"><b>B</b>\(82\)</button><button class="opt" data-v="C"><b>C</b>\(820\)</button><button class="opt" data-v="D"><b>D</b>\(90\)</button></div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac{90\times5+80\times2+70\times3}{5+2+3}=\dfrac{820}{10}=82\)。A 是没加权；C 是忘了除以权的和 \(10\)；D 只看了最重要的一项。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjMuIOeUsuePrSBcXCgzMFxcKSDkurrlubPlnYfouqvpq5ggXFwoMTU4XFwpIGNt77yM5LmZ54+tIFxcKDIwXFwpIOS6uuW5s+Wdh+i6q+mrmCBcXCgxNjhcXCkgY23jgILkuKTnj63lkIjotbfmnaXlubPlnYfouqvpq5jmmK/lpJrlsJHvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuWFiOeul+S4pOePrei6q+mrmOeahOaAu+WSjO+8jOWGjemZpOS7peaAu+S6uuaVsCBcXCg1MFxcKeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgxNjNcXCkgY208L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMTYyXFwpIGNtPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDE2NFxcKSBjbTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj5cXCgxNjBcXCkgY208L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgIJcXChcXGRmcmFjezE1OFxcdGltZXMzMCsxNjhcXHRpbWVzMjB9ezUwfT1cXGRmcmFjezQ3NDArMzM2MH17NTB9PTE2MlxcKeOAgkEg5piv5Lik5Liq5bmz5Z2H5pWw55u05o6l5bmz5Z2H77yI57+76L2m546w5Zy6IOKRoO+8ie+8m0Mg5piv5oqK5Lik54+t5Lq65pWw6YWN5Y+N5LqG77yaXFwoXFxkZnJhY3sxNThcXHRpbWVzMjArMTY4XFx0aW1lczMwfXs1MH09MTY0XFwp44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>3. 甲班 \(30\) 人平均身高 \(158\) cm，乙班 \(20\) 人平均身高 \(168\) cm。两班合起来平均身高是多少？</p>
+    <details class="more"><summary>提示</summary><p>先算两班身高的总和，再除以总人数 \(50\)。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(163\) cm</button><button class="opt" data-v="B"><b>B</b>\(162\) cm</button><button class="opt" data-v="C"><b>C</b>\(164\) cm</button><button class="opt" data-v="D"><b>D</b>\(160\) cm</button></div>
+    <div class="reveal"><p><b>B</b>。\(\dfrac{158\times30+168\times20}{50}=\dfrac{4740+3360}{50}=162\)。A 是两个平均数直接平均（翻车现场 ①）；C 是把两班人数配反了：\(\dfrac{158\times20+168\times30}{50}=164\)。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjQuIOS4i+mdouivtOazleato+ehrueahOaYr+WTquS4gOS4qu+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5q+P5Liq6K+05rOV6YO96K+V552A5om+5LiA5Liq5Y+N5L6L77ya5YG25pWw5Liq5pWw5o2u44CB5q+P5Liq5pWw5Y+q5Ye6546w5LiA5qyh44CB5pyJ5LiA5Liq54m55Yir5aSn55qE5pWw44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kuK3kvY3mlbDkuIDlrprmmK/ov5nnu4TmlbDmja7kuK3nmoTmn5DkuKrmlbA8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5Lu75L2V5LiA57uE5pWw5o2u6YO95pyJ5LyX5pWwPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4gOe7hOaVsOaNrueahOS8l+aVsOWPr+iDveS4jeatouS4gOS4qjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7lpKfkuo7lubPlnYfmlbDlkozlsI/kuo7lubPlnYfmlbDnmoTmlbDmja7kuIDlrprkuIDmoLflpJo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgIJcXCgxLDEsMiwyXFwpIOacieS4pOS4quS8l+aVsOOAgkHvvJpcXCgxLDIsMyw0XFwpIOeahOS4reS9jeaVsCBcXCgyLjVcXCkg5LiN5Zyo5pWw5o2u6YeM77ybQu+8mlxcKDEsMiwzXFwpIOayoeacieS8l+aVsO+8m0TvvJpcXCgxLDIsMywzMFxcKSDnmoTlubPlnYfmlbAgXFwoOVxcKe+8jOWPquaciSBcXCgzMFxcKSDmr5TlroPlpKfjgILlubPlnYfmlbDkuI3kv53or4HkuIrkuIvkuIDmoLflpJrvvJvmjpLluo/lkI7kuK3pl7TkvY3nva7kuKTkvqfnmoTmlbDmja7kuKrmlbDnm7jlkIzvvIzor7TnmoTmmK/kuK3kvY3mlbDmiYDlnKjnmoTkvY3nva7jgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>4. 下面说法正确的是哪一个？</p>
+    <details class="more"><summary>提示</summary><p>每个说法都试着找一个反例：偶数个数据、每个数只出现一次、有一个特别大的数。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>中位数一定是这组数据中的某个数</button><button class="opt" data-v="B"><b>B</b>任何一组数据都有众数</button><button class="opt" data-v="C"><b>C</b>一组数据的众数可能不止一个</button><button class="opt" data-v="D"><b>D</b>大于平均数和小于平均数的数据一定一样多</button></div>
+    <div class="reveal"><p><b>C</b>。\(1,1,2,2\) 有两个众数。A：\(1,2,3,4\) 的中位数 \(2.5\) 不在数据里；B：\(1,2,3\) 没有众数；D：\(1,2,3,30\) 的平均数 \(9\)，只有 \(30\) 比它大。平均数不保证上下一样多；排序后中间位置两侧的数据个数相同，说的是中位数所在的位置。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjUuIOa1i+W+l+afkOi3r+WPoyAzMCDovobovabnmoTovabpgJ/vvJpcXCg0MFxcbGUgdiZsdDs1MFxcKSDnmoQgNiDovobvvIxcXCg1MFxcbGUgdiZsdDs2MFxcKSDnmoQgMTUg6L6G77yMXFwoNjBcXGxlIHYmbHQ7NzBcXCkg55qEIDkg6L6G77yI5Y2V5L2N77yaa20vaO+8ieOAguS4i+mdouivtOazleWvueeahOaYr++8mjwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5q+P57uE55So57uE5Lit5YC8IFxcKDQ1LDU1LDY1XFwpIOS7o+ihqO+8m+Wug+S7rOiDveS7o+ihqOavj+i+hui9pueahOecn+Wunui9pumAn+WQl++8nzwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5Lyw6K6h5bmz5Z2H6L2m6YCf57qmIFxcKDU2XFwpIGttL2g8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5bmz5Z2H6L2m6YCf5q2j5aW95pivIFxcKDU2XFwpIGttL2g8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5bmz5Z2H6L2m6YCf57qmIFxcKDU1XFwpIGttL2jvvIzlm6DkuLogXFwoKDQ1KzU1KzY1KVxcZGl2Mz01NVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAglxcKFxcZGZyYWN7NDVcXHRpbWVzNis1NVxcdGltZXMxNSs2NVxcdGltZXM5fXszMH09XFxkZnJhY3sxNjgwfXszMH09NTZcXCnvvIzkvYbnu4TkuK3lgLzlj6rmmK/ku6PooajvvIznu5PmnpzmmK/kvLDorqHlgLzvvIzmiYDku6UgQiDplJnjgIJDIOayoeacieaMieavj+e7hOi9pui+huaVsOWKoOadg+OAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>5. 测得某路口 30 辆车的车速：\(40\le v&lt;50\) 的 6 辆，\(50\le v&lt;60\) 的 15 辆，\(60\le v&lt;70\) 的 9 辆（单位：km/h）。下面说法对的是：</p>
+    <details class="more"><summary>提示</summary><p>每组用组中值 \(45,55,65\) 代表；它们能代表每辆车的真实车速吗？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>估计平均车速约 \(56\) km/h</button><button class="opt" data-v="B"><b>B</b>平均车速正好是 \(56\) km/h</button><button class="opt" data-v="C"><b>C</b>平均车速约 \(55\) km/h，因为 \((45+55+65)\div3=55\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(\dfrac{45\times6+55\times15+65\times9}{30}=\dfrac{1680}{30}=56\)，但组中值只是代表，结果是估计值，所以 B 错。C 没有按每组车辆数加权。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjYuIOafkOi9pumYnyAxMCDkvY3lj7jmnLrkuIDlpKnnmoTmjqXljZXmlbDvvJpcXCgxMiwxNCwxNSwxNSwxNSwxNiwxNywxOCwyMCw0OFxcKeOAgui9pumYn+aDs+WumuS4gOS4quWlluWKseagh+WHhu+8jOiuqTxiPuWkp+e6puS4gOWNijwvYj7lj7jmnLrog73ovr7liLDvvIzlupTor6Xlj4LogIPlk6rkuKrmlbDvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDHvvJrlhYjmiorkuInkuKrmlbDnrpflh7rmnaU8L3N1bW1hcnk+PHA+5bmz5Z2H5pWwIFxcKD0xOTBcXGRpdjEwXFwp77yb5Lit5L2N5pWw5piv56ysIDXjgIE2IOS4queahOW5s+Wdh++8m+S8l+aVsOeci+WHuueOsOacgOWkmueahOOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDLvvJrpgJDkuKrmo4Dpqow8L3N1bW1hcnk+PHA+5Lul5q+P5Liq5pWw5Li65qCH5YeG77yM5pWw5LiA5pWw5pyJ5Yeg5Lq66L6+5Yiw77yI5o6l5Y2V5pWw5LiN5bCR5LqO5a6D77yJ44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuW5s+Wdh+aVsCBcXCgxOVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuK3kvY3mlbAgXFwoMTUuNVxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7kvJfmlbAgXFwoMTVcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5pyA5aSa55qEIFxcKDQ4XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC5LulIFxcKDE1LjVcXCkg5Li65qCH5YeG77yMXFwoMTYsMTcsMTgsMjAsNDhcXCkg5YWxIDUg5Lq66L6+5Yiw77yM5q2j5aW95LiA5Y2K44CC5Lul5bmz5Z2H5pWwIFxcKDE5XFwpIOS4uuagh+WHhuWPquaciSAyIOS6uu+8iFxcKDQ4XFwpIOaKiuW5s+Wdh+aVsOaLiemrmOS6hu+8ie+8m+S7peS8l+aVsCBcXCgxNVxcKSDkuLrmoIflh4bmnIkgOCDkurrvvJvku6UgXFwoNDhcXCkg5Li65qCH5YeG5Y+q5pyJIDEg5Lq644CCPC9wPjwvZGl2PlxuICAifQ==">
+    <p>6. 某车队 10 位司机一天的接单数：\(12,14,15,15,15,16,17,18,20,48\)。车队想定一个奖励标准，让<b>大约一半</b>司机能达到，应该参考哪个数？</p>
+    <details class="more"><summary>提示 1：先把三个数算出来</summary><p>平均数 \(=190\div10\)；中位数是第 5、6 个的平均；众数看出现最多的。</p></details>
+    <details class="more"><summary>提示 2：逐个检验</summary><p>以每个数为标准，数一数有几人达到（接单数不少于它）。</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>平均数 \(19\)</button><button class="opt" data-v="B"><b>B</b>中位数 \(15.5\)</button><button class="opt" data-v="C"><b>C</b>众数 \(15\)</button><button class="opt" data-v="D"><b>D</b>最多的 \(48\)</button></div>
+    <div class="reveal"><p><b>B</b>。以 \(15.5\) 为标准，\(16,17,18,20,48\) 共 5 人达到，正好一半。以平均数 \(19\) 为标准只有 2 人（\(48\) 把平均数拉高了）；以众数 \(15\) 为标准有 8 人；以 \(48\) 为标准只有 1 人。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">中考常考：求中位数、众数，按权算成绩，再用统计量做判断。填空题直接填，做完看解析。</p>
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-from-primary" aria-labelledby="stage-bridge-prev-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-prev-title">先修回顾 · 小学数学</h2><p class="small">学这一节之前，如果下面的小学基础还有点生疏，可以先回去温习：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../primary/lessons/p4b-u8.html">小学 · 四下第8单元 · 平均数与条形统计图</a><span class="bridge-why">小学“移多补少”求算术平均数的方法，在初中扩展为加权平均数，并与中位数、众数共同构成刻画集中趋势的三类指标。</span></li></ul><p class="bridge-all"><a href="../../primary/courses.html">打开小学数学课程目录</a></p></section>
+<section class="card stage-bridge" data-bridge="junior-to-high" aria-labelledby="stage-bridge-next-title"><h2 id="stage-bridge-next-title">往后学 · 高中数学</h2><p class="small">把这一节学透，到了高中就能直接迁移到下面的课程：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../lessons/b2-9-2.html">高中 · 用样本估计总体</a><span class="bridge-why">初中离散数据的平均数、中位数、众数，在高中扩展到频率分布直方图上的样本数字特征估计。</span></li></ul><p class="bridge-all"><a href="../../courses.html">打开高中数学课程目录</a></p></section>
+<footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function f(v, d) { var k = Math.pow(10, d == null ? 2 : d), r = Math.round(v * k) / k; if (r === 0) return "0"; var s = String(Math.abs(r)); return r < 0 ? "−" + s : s; }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(t);
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  function nums(s) { return s.split(",").map(Number); }
+  function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+  function srt(a) { return a.slice().sort(function (x, y) { return x - y; }); }
+  function median(a) { var s = srt(a), n = s.length, m = n >> 1; return n % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+  // 数轴：lo..hi（整数）画在 x0..x1；every 每几格标数
+  function axis(p, lo, hi, x0, x1, y, every, sz, off) {
+    var c = C(), u = (x1 - x0) / (hi - lo);
+    function X(v) { return x0 + (v - lo) * u; }
+    el("line", { x1: x0 - 8, y1: y, x2: x1 + 12, y2: y, stroke: c.fg, "stroke-width": 2 }, p);
+    el("path", { d: "M" + (x1 + 20) + " " + y + " l-12 -6 v12 z", fill: c.fg }, p);
+    for (var v = lo; v <= hi; v++) {
+      el("line", { x1: X(v), y1: y - 5, x2: X(v), y2: y + 5, stroke: c.fg, "stroke-width": 1.5 }, p);
+      if ((v - lo) % every === 0) txt(p, X(v), y + (off || 28), String(v), c.fg, 400, sz || 16);
+    }
+    return X;
+  }
+  // 三角标记：尖在 (x, y)；down 为真时朝下（底在上方）
+  function tri(p, x, y, col, down, hollow) { var d = down ? -1 : 1; el("path", { d: "M" + x + " " + y + " l-9 " + (d * 15) + " h18 z", fill: hollow ? "none" : col, stroke: col, "stroke-width": 2.5 }, p); }
+  function dot(p, x, y, col, r) { el("circle", { cx: x, cy: y, r: r || 7, fill: col }, p); }
+  function handle(svg, x, y, col, label, val, lo, hi, step, toVal, cb) {
+    var c = C();
+    var h = el("circle", { cx: x, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": f(val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + step, ArrowUp: val + step, ArrowLeft: val - step, ArrowDown: val - step, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(clamp(Math.round(nv / step) * step, lo, hi), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) {
+        var m = svg.getScreenCTM(); if (!m) return;
+        var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY;
+        cb(clamp(Math.round(toVal(pt.matrixTransform(m.inverse()).x) / step) * step, lo, hi), false);
+      }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+  // 点图：同一个值叠起来
+  function stackY(arr, i, y0, gap) { var k = 0; for (var j = 0; j < i; j++) if (arr[j] === arr[i]) k++; return y0 - k * gap; }
+
+  /* 从例子进入 */
+  var BASE = [2, 3, 3, 4, 4, 5, 5, 6], ef = document.getElementById("entry-fig"), entryK = 6;
+  function drawEntry() {
+    var c = C(), d = BASE.concat([entryK]), m = sum(d) / d.length, md = median(d); ef.innerHTML = "";
+    var X = axis(ef, 0, 32, 30, 486, 150, 4, 18, 30);
+    d.forEach(function (v, i) { dot(ef, X(v), stackY(d, i, 136, 16), i === 8 ? c.b : c.a, 7); });
+    el("line", { x1: X(m), y1: 40, x2: X(m), y2: 150, stroke: c.no, "stroke-width": 2.5, "stroke-dasharray": "6 4" }, ef);
+    txt(ef, X(m), 30, "平均数", c.no, 700, 18);
+    tri(ef, X(md), 158, c.a, false);
+    txt(ef, X(md), 224, "中位数", c.a, 700, 18);
+    var above = d.filter(function (v) { return v > m; }).length;
+    document.getElementById("entry-note").textContent = "小林 " + entryK + " 小时：总时间 " + sum(d) + "，平均数 " + sum(d) + " ÷ 9 ≈ " + f(m) + "；超过平均数的有 " + above + " 人。中位数（排序后第 5 个）是 " + md + "，没有变。";
+  }
+  bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
+
+  /* 微图解 ①：权像砝码 */
+  var m1w = [1, 1, 1], M1V = [70, 80, 95];
+  function drawM1() {
+    var p = document.getElementById("m1-fig"), c = C(), W = sum(m1w), m = (M1V[0] * m1w[0] + M1V[1] * m1w[1] + M1V[2] * m1w[2]) / W; p.innerHTML = "";
+    var X = axis(p, 60, 100, 30, 346, 150, 10, 16, 28);
+    var cols = [c.a, c.b, c.c];
+    M1V.forEach(function (v, i) { for (var k = 0; k < m1w[i]; k++) el("rect", { x: X(v) - 11, y: 150 - 8 - (k + 1) * 16, width: 22, height: 14, rx: 3, fill: cols[i] }, p); });
+    el("line", { x1: X(m), y1: 56, x2: X(m), y2: 150, stroke: c.no, "stroke-width": 2, "stroke-dasharray": "5 4" }, p);
+    tri(p, X(m), 56, c.no, true);
+    txt(p, X(m), 34, f(m), c.no, 700, 18);
+    document.getElementById("m1-note").textContent = "权 " + m1w.join(" : ") + "：(70×" + m1w[0] + " + 80×" + m1w[1] + " + 95×" + m1w[2] + ") ÷ " + W + " ≈ " + f(m) + "。" + (m1w[0] === m1w[1] && m1w[1] === m1w[2] ? "权都相等，就是普通平均数。" : m1w[2] > m1w[0] ? "实操（95）的权大，平衡点往右偏。" : "笔试（70）的权大，平衡点往左偏。");
+  }
+  bar("m1-bar", function (t) { m1w = nums(t.getAttribute("data-w")); drawM1(); });
+
+  /* 微图解 ②、翻车现场 ①：两组合并 */
+  function drawMerge(p, n1, n2, x0, x1, showWrong) {
+    var c = C(), m = (80 * n1 + 90 * n2) / (n1 + n2); p.innerHTML = "";
+    var X = axis(p, 75, 95, x0, x1, 160, 5, 16, 28);
+    [[80, n1, c.a], [90, n2, c.b]].forEach(function (g) {
+      var h = g[1] * 2;
+      el("rect", { x: X(g[0]) - 13, y: 160 - 6 - h, width: 26, height: h, rx: 3, fill: g[2] }, p);
+      txt(p, X(g[0]), 160 - 14 - h, g[1] + "人", g[2], 700, 16);
+    });
+    if (showWrong) tri(p, X(85), 158, c.muted, true, true);
+    el("line", { x1: X(m), y1: 48, x2: X(m), y2: 160, stroke: c.no, "stroke-width": 2, "stroke-dasharray": "5 4" }, p);
+    tri(p, X(m), 48, c.no, true);
+    txt(p, X(m), 26, f(m), c.no, 700, 17);
+    return m;
+  }
+  var m2n = [40, 10];
+  function drawM2() {
+    var m = drawMerge(document.getElementById("m2-fig"), m2n[0], m2n[1], 30, 346, false);
+    document.getElementById("m2-note").textContent = "80 分组 " + m2n[0] + " 人，90 分组 " + m2n[1] + " 人：(80×" + m2n[0] + " + 90×" + m2n[1] + ") ÷ " + (m2n[0] + m2n[1]) + " = " + f(m) + "。" + (m2n[0] === m2n[1] ? "两组人数相同，才正好等于 (80 + 90) ÷ 2 = 85。" : "人数不同，不等于 85，偏向人多的那组。");
+  }
+  bar("m2-bar", function (t) { m2n = nums(t.getAttribute("data-n")); drawM2(); });
+
+  /* 微图解 ③：排序找中位数 */
+  var m3s = 0, RAW = [12, 5, 9, 15, 7, 9, 20];
+  function drawM3() {
+    var p = document.getElementById("m3-fig"), c = C(); p.innerHTML = "";
+    var d = m3s === 0 ? RAW : m3s === 1 ? srt(RAW) : srt(RAW.concat([10])), n = d.length, w = 40, gap = 5, x0 = (380 - n * w - (n - 1) * gap) / 2;
+    var mid = n % 2 ? [n >> 1] : [n / 2 - 1, n / 2];
+    d.forEach(function (v, i) {
+      var on = mid.indexOf(i) >= 0, col = !on ? c.muted : m3s === 0 ? c.no : c.a;
+      el("rect", { x: x0 + i * (w + gap), y: 30, width: w, height: 40, rx: 6, fill: on ? col : c.card, stroke: col, "stroke-width": 2 }, p);
+      txt(p, x0 + i * (w + gap) + w / 2, 57, String(v), on ? c.card : c.fg, 700, 18);
+    });
+    var cx = x0 + (mid[0] + mid[mid.length - 1]) / 2 * (w + gap) + w / 2;
+    txt(p, cx, 108, m3s === 0 ? "不是中位数" : "中位数", m3s === 0 ? c.no : c.a, 700, 18);
+    var med = median(d);
+    document.getElementById("m3-note").textContent = m3s === 0 ? "没排序：正中间是 15，可它是第二大的数，不能代表中间水平。" : m3s === 1 ? "排好序：7 个是奇数，第 4 个就是中位数 " + med + "，左右各 3 个。" : "8 个是偶数：取第 4、第 5 个的平均数 (9 + 10) ÷ 2 = " + med + "，它不在原数据里。";
+  }
+  bar("m3-bar", function (t) { m3s = +t.getAttribute("data-s"); drawM3(); });
+
+  /* 微图解 ④：众数 */
+  var m4d = [35, 36, 36, 36, 37, 37, 38];
+  function drawM4() {
+    var p = document.getElementById("m4-fig"), c = C(); p.innerHTML = "";
+    var X = axis(p, 33, 40, 30, 346, 130, 1, 16, 28), cnt = {}, top = 0;
+    m4d.forEach(function (v) { cnt[v] = (cnt[v] || 0) + 1; top = Math.max(top, cnt[v]); });
+    var modes = top > 1 ? Object.keys(cnt).filter(function (k) { return cnt[k] === top; }).map(Number) : [];
+    m4d.forEach(function (v, i) { dot(p, X(v), stackY(m4d, i, 116, 18), modes.indexOf(v) >= 0 ? c.no : c.a, 8); });
+    if (modes.length) modes.forEach(function (v) { txt(p, X(v), 116 - top * 18 - 6, "众数", c.no, 700, 16); });
+    else txt(p, 190, 40, "没有众数", c.no, 700, 18);
+    document.getElementById("m4-note").textContent = m4d.join("，") + "：" + (modes.length === 1 ? modes[0] + " 出现 " + top + " 次，最多，众数是 " + modes[0] + "。" : modes.length ? modes.join(" 和 ") + " 都出现 " + top + " 次，并列最多，两个都是众数。" : "每个数都只出现 1 次，这组数据没有众数。");
+  }
+  bar("m4-bar", function (t) { m4d = nums(t.getAttribute("data-d")); drawM4(); });
+
+  /* 动手 ①：拖动数据点 */
+  var D0 = [3, 5, 6, 6, 8, 9, 12], D = D0.slice(), focusD = -1, fd = document.getElementById("fig-drag");
+  function drawDrag() {
+    var c = C(), m = sum(D) / D.length, md = median(D), hs = []; fd.innerHTML = "";
+    var X = axis(fd, 0, 20, 40, 516, 170, 2, 19, 36);
+    el("line", { x1: X(m), y1: 30, x2: X(m), y2: 170, stroke: c.no, "stroke-width": 3, "stroke-dasharray": "7 5" }, fd);
+    el("line", { x1: X(md), y1: 60, x2: X(md), y2: 170, stroke: c.a, "stroke-width": 3 }, fd);
+    D.forEach(function (v, i) {
+      hs.push(handle(fd, X(v), stackY(D, i, 170, 26), c.c, "第 " + (i + 1) + " 个数据", v, 0, 20, 1, function (x) { return (x - 40) / 23.8; },
+        function (nv, key) { D[i] = nv; focusD = key ? i : -1; drawDrag(); }));
+    });
+    var s = srt(D), above = D.filter(function (v) { return v > m; }).length, below = D.filter(function (v) { return v < m; }).length;
+    var why = Math.abs(m - md) < 0.5 ? "平均数和中位数很接近；但这说明不了数据左右分布一样，还要看全部数据。" : (m > md ? "平均数比中位数大：右边有离得远的数据，把平均数往右拉。" : "平均数比中位数小：左边有离得远的数据，把平均数往左拉。") + "中位数只由排在中间的数决定：拖动两端的点，只要排序后的第 4 个数没变，中位数就不变，平均数却跟着变；点越过中间位置时，中位数也会变。";
+    document.getElementById("out-drag").innerHTML = "排好序：" + s.join("，") + "（7 个，奇数）。中位数是第 4 个：<span class=\"ok\">" + md + "</span>；平均数 = " + sum(D) + " ÷ 7 ≈ <span class=\"sum\">" + f(m) + "</span>。比平均数大的有 " + above + " 个，小的有 " + below + " 个。" + why;
+    if (focusD >= 0) hs[focusD].focus();
+  }
+  document.getElementById("reset-drag").onclick = function () { D = D0.slice(); focusD = -1; drawDrag(); };
+
+  /* 动手 ②：改权 */
+  var WV = [70, 92, 80], WN = ["笔试 70", "面试 92", "实操 80"], W0 = [3, 2, 5], Wt = W0.slice(), focusW = -1, fw = document.getElementById("fig-w");
+  function drawW() {
+    var c = C(), cols = [c.a, c.b, c.c], T = sum(Wt), hs = []; fw.innerHTML = "";
+    var X = axis(fw, 60, 100, 40, 516, 140, 10, 19, 40);
+    WV.forEach(function (v, i) { for (var k = 0; k < Wt[i]; k++) el("rect", { x: X(v) - 13, y: 140 - 8 - (k + 1) * 18, width: 26, height: 16, rx: 3, fill: cols[i] }, fw); });
+    var m = T ? (WV[0] * Wt[0] + WV[1] * Wt[1] + WV[2] * Wt[2]) / T : null;
+    if (T) tri(fw, X(m), 146, c.no, false);
+    for (var i = 0; i < 3; i++) (function (i) {
+      var y = 225 + i * 40;
+      txt(fw, 20, y + 7, WN[i], cols[i], 700, 19, "start");
+      el("line", { x1: 150, y1: y, x2: 470, y2: y, stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, fw);
+      txt(fw, 548, y + 7, "权 " + Wt[i], cols[i], 700, 19, "end");
+      hs.push(handle(fw, 150 + Wt[i] * 64, y, cols[i], WN[i] + " 的权", Wt[i], 0, 5, 1, function (x) { return (x - 150) / 64; },
+        function (nv, key) { Wt[i] = nv; focusW = key ? i : -1; drawW(); }));
+    })(i);
+    var o = document.getElementById("out-w");
+    if (!T) o.innerHTML = "三个权都是 0，权的和为 0，不能求加权平均数（除数不能是 0）。至少给一项一个正的权。";
+    else {
+      var big = Wt.indexOf(Math.max.apply(null, Wt));
+      o.innerHTML = "(70×" + Wt[0] + " + 92×" + Wt[1] + " + 80×" + Wt[2] + ") ÷ (" + Wt.join(" + ") + ") = " + (WV[0] * Wt[0] + WV[1] * Wt[1] + WV[2] * Wt[2]) + " ÷ " + T + " ≈ <span class=\"sum\">" + f(m) + "</span>。" + (Wt[0] === Wt[1] && Wt[1] === Wt[2] ? "三项权相等，就是普通平均数 " + f(242 / 3) + "。" : "权最大的是" + WN[big].slice(0, 2) + "，加权平均数被拉向 " + WV[big] + "。") + (Wt.filter(function (w) { return w > 0; }).length === 1 ? "只有一项有权，结果就是那一项的分数。" : "");
+    }
+    if (focusW >= 0) hs[focusW].focus();
+  }
+  document.getElementById("reset-w").onclick = function () { Wt = W0.slice(); focusW = -1; drawW(); };
+
+  /* 动手 ③：两组合并 */
+  var G0 = { a1: 76, a2: 92, n1: 30, n2: 10 }, G = Object.assign({}, G0), focusG = "", fm = document.getElementById("fig-m");
+  function drawM() {
+    var c = C(), m = (G.a1 * G.n1 + G.a2 * G.n2) / (G.n1 + G.n2), nv = (G.a1 + G.a2) / 2, hs = {}; fm.innerHTML = "";
+    var X = axis(fm, 60, 100, 40, 516, 140, 10, 19, 40);
+    [["a1", "n1", c.a], ["a2", "n2", c.b]].forEach(function (g) { var h = G[g[1]] * 2; el("rect", { x: X(G[g[0]]) - 14, y: 140 - 16 - h, width: 28, height: h, rx: 3, fill: g[2], opacity: 0.75 }, fm); });
+    tri(fm, X(nv), 146, c.muted, false, true);
+    tri(fm, X(m), 45, c.no, true);
+    el("line", { x1: X(m), y1: 45, x2: X(m), y2: 140, stroke: c.no, "stroke-width": 2, "stroke-dasharray": "5 4" }, fm);
+    hs.a1 = handle(fm, X(G.a1), 140, c.a, "第一组平均数", G.a1, 60, 100, 1, function (x) { return 60 + (x - 40) / 11.9; }, function (v, k) { G.a1 = v; focusG = k ? "a1" : ""; drawM(); });
+    hs.a2 = handle(fm, X(G.a2), 140, c.b, "第二组平均数", G.a2, 60, 100, 1, function (x) { return 60 + (x - 40) / 11.9; }, function (v, k) { G.a2 = v; focusG = k ? "a2" : ""; drawM(); });
+    [["n1", "一组人数", c.a, 235], ["n2", "二组人数", c.b, 280]].forEach(function (g) {
+      txt(fm, 20, g[3] + 7, g[1], g[2], 700, 19, "start");
+      el("line", { x1: 150, y1: g[3], x2: 470, y2: g[3], stroke: c.line, "stroke-width": 6, "stroke-linecap": "round" }, fm);
+      txt(fm, 548, g[3] + 7, G[g[0]] + " 人", g[2], 700, 19, "end");
+      hs[g[0]] = handle(fm, 150 + (G[g[0]] - 1) * 320 / 39, g[3], g[2], g[1], G[g[0]], 1, 40, 1, function (x) { return 1 + (x - 150) * 39 / 320; }, function (v, k) { G[g[0]] = v; focusG = k ? g[0] : ""; drawM(); });
+    });
+    var why = G.a1 === G.a2 ? "两组平均数相同，合起来也是它。" : G.n1 === G.n2 ? "两组人数相同，合并平均数正好等于两个平均数直接平均。" : "人数不同：合并平均数偏向人多的" + (G.n1 > G.n2 ? "第一组" : "第二组") + "，和直接平均差了 " + f(Math.abs(m - nv)) + "。";
+    document.getElementById("out-m").innerHTML = "合起来 = (" + G.a1 + "×" + G.n1 + " + " + G.a2 + "×" + G.n2 + ") ÷ " + (G.n1 + G.n2) + " ≈ <span class=\"sum\">" + f(m) + "</span>；直接平均 (" + G.a1 + " + " + G.a2 + ") ÷ 2 = " + f(nv) + "。" + why;
+    if (focusG) hs[focusG].focus();
+  }
+  document.getElementById("reset-m").onclick = function () { G = Object.assign({}, G0); focusG = ""; drawM(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawM4(); drawMerge(document.getElementById("m-trap"), 40, 10, 24, 266, true); drawDrag(); drawW(); drawM(); }
+  drawAll();
+  new MutationObserver(function () { focusD = focusW = -1; focusG = ""; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

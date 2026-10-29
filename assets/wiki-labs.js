@@ -68,7 +68,7 @@
       ".lab-inline .lab{margin:0;background:var(--bg)}",
       ".lab-hd{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:6px}",
       ".lab-hd h3{margin:0;font-size:17px;flex:1 1 auto}",
-      ".lab-tpl{display:inline-block;font-size:12.5px;font-weight:600;border-radius:6px;padding:2px 8px;background:var(--no-soft);color:var(--no)}",
+      ".lab-tpl{display:inline-block;font-size:14px;font-weight:600;border-radius:6px;padding:2px 8px;background:var(--no-soft);color:var(--no)}",
       ".lab-intro{font-size:14.5px;color:var(--muted);margin:4px 0 10px;line-height:1.7}",
       ".lab-ask{border:1.5px dashed var(--b);border-radius:10px;padding:12px 14px;margin:8px 0;background:var(--hl-soft)}",
       ".lab-ask-q{font-size:15.5px;font-weight:600;margin:0 0 8px;line-height:1.7}",
@@ -80,7 +80,7 @@
       ".lab-opts button:disabled{cursor:default;opacity:.85}",
       ".lab-ask-fb{font-size:14.5px;margin:8px 0 0;line-height:1.7}",
       ".lab-ask-fb b{color:var(--fg)}",
-      ".lab-skip{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:4px 0;margin-top:4px}",
+      ".lab-skip{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;text-decoration:underline;cursor:pointer;padding:4px 0;margin-top:4px}",
       ".lab-body{position:relative;margin-top:10px}",
       ".lab-body.locked>*{opacity:.35;pointer-events:none;user-select:none}",
       ".lab-body.locked::after{content:'先在上面选一个预测，再来拨开关';position:absolute;left:0;right:0;top:46%;text-align:center;font-size:15px;font-weight:600;color:var(--fg);opacity:1}",
@@ -95,7 +95,7 @@
       ".lab-out{font-size:15px;margin:8px 0 0;line-height:1.75;min-height:2.6em}",
       ".lab-out .ok{color:var(--a);font-weight:600}",
       ".lab-out .bad{color:var(--no);font-weight:600}",
-      ".lab-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;font-size:13.5px;color:var(--muted)}",
+      ".lab-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;font-size:14px;color:var(--muted)}",
       ".lab-group{margin:18px 0 6px}",
       ".lab-group h3{margin:0 0 4px;font-size:16px;color:var(--muted)}"
     ].join("\n");

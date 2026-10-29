@@ -2,6 +2,7 @@
 :root { --surface:var(--card); --ink:var(--fg); --accent:var(--a); }
 .lf-shell {max-width:1240px;margin:0 auto;padding:0 28px 64px}
 .lf-top {display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:20px 0 15px;border-bottom:1px solid var(--line);margin-bottom:24px}
+header.top {flex-wrap:wrap}
 .lf-brand {display:flex;align-items:center;gap:9px;color:var(--ink);font-weight:750;text-decoration:none;white-space:nowrap}
 .lf-brand img {width:28px;height:28px}
 .lf-nav,.top .hci-nav.lf-nav {display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-left:auto}
@@ -28,7 +29,7 @@
 .lf-search-results {border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:12px;margin-top:6px;max-height:420px;overflow:auto}
 .lf-search-results a {display:block;padding:10px 8px;text-decoration:none;border-bottom:1px solid var(--line)}
 .lf-search-results a:last-child {border:0}
-.lf-search-results span {display:block;color:var(--muted);font-size:13px}
+.lf-search-results span {display:block;color:var(--muted);font-size:14px}
 .lf-search-results h3 {font-size:14px;color:var(--muted);margin:12px 8px 4px}
 .lf-eyebrow {color:var(--muted);font-size:14px;margin:0 0 10px}
 .lf-heading {font-size:clamp(27px,3vw,38px);font-weight:750;letter-spacing:-.03em;line-height:1.4;margin:0 0 14px}
@@ -105,7 +106,7 @@
 .lf-lesson-row p {margin:4px 0 0;font-size:14px;color:var(--muted)}
 .lf-lesson-row>a {font-weight:650;text-decoration:none}
 .lf-lesson-actions {display:flex;gap:14px;font-size:14px;white-space:nowrap}
-.lf-footer {font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:24px;margin-top:44px}
+.lf-footer {font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:24px;margin-top:44px}
 .lf-note {color:var(--muted);font-size:14px}
 .lf-skip {position:absolute;left:-9999px}.lf-skip:focus {position:fixed;left:10px;top:10px;z-index:500;background:var(--surface);padding:10px}
 [data-learning-page] :focus-visible {outline:3px solid var(--hl);outline-offset:3px}
@@ -145,7 +146,58 @@
 .lf-next>a {font-size:14px;white-space:nowrap}
 @media(prefers-reduced-motion:reduce) {.lf-ink path {animation:none}}
 @media(max-width:760px) {
- .lf-hero {grid-template-columns:1fr;gap:28px;padding-top:8px}
+ .lf-hero {grid-template-columns:minmax(0,1fr);gap:28px;padding-top:8px}
+ .lf-current .lf-button {white-space:normal;text-align:center}
  .lf-hero .lf-heading {font-size:30px}
  .lf-next {grid-template-columns:1fr;gap:14px;padding:18px 0}.lf-next ol {flex-direction:column;gap:10px}
 }
+
+/* 初中学段（junior/）：首页配图是内联 SVG，课程树里未上线的节变灰 */
+.lf-hero-svg {aspect-ratio:4/3;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line),0 22px 44px -28px color-mix(in srgb,var(--fg) 40%,transparent);display:grid;place-items:center;overflow:hidden}
+.lf-hero-svg svg {width:100%;height:100%}
+/* SVG units shrink on mobile and in the two-column A4 hero. */
+.lf-hero-svg text {font-size:24px;text-anchor:middle;fill:var(--muted)}
+.lf-jh-axis line,.lf-jh-axis path {stroke:var(--fg);stroke-width:2.5;fill:none}
+.lf-jh-axis path {fill:var(--fg)}
+.lf-jh-arc {fill:none;stroke-width:3;stroke-dasharray:8 7}
+.lf-jh-pos {stroke:var(--a)} .lf-jh-neg {stroke:var(--no)}
+.lf-hero-svg text.lf-jh-tag {font-size:24px;font-weight:700}
+.lf-hero-svg text.lf-jh-pos {fill:var(--a);stroke:none} .lf-hero-svg text.lf-jh-neg {fill:var(--no);stroke:none}
+.lf-jh-dot.lf-jh-pos {fill:var(--a)} .lf-jh-dot.lf-jh-neg {fill:var(--no)}
+.lf-jh-zero {fill:var(--surface);stroke:var(--fg);stroke-width:2.5}
+.lf-hero-svg text.lf-jh-note {font-size:30px;font-weight:700;fill:var(--fg);font-family:var(--lf-serif)}
+.lf-hero-svg text.lf-jh-sub {font-size:24px}
+.lf-jh-tree {margin-top:40px}
+.lf-jh-todo span {color:var(--muted)}
+.lf-jh-seen {display:inline-block;margin-left:6px;padding:0 7px;border-radius:999px;background:var(--ok-soft);color:var(--a);font-size:14px;font-weight:600;vertical-align:2px}
+
+/* 小学学段（primary/）：年级选择、低年级家长说明、单元首页入口 */
+.lf-grade-nav {display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.lf-grade-btn {min-height:42px;padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:15px;font-weight:650;cursor:pointer;transition:border-color .15s ease,background-color .15s ease,color .15s ease}
+.lf-grade-btn[aria-pressed="true"] {border-color:var(--accent);background:var(--accent);color:var(--card)}
+.lf-grade-btn:hover:not([aria-pressed="true"]) {border-color:var(--accent);color:var(--accent)}
+.lf-parent-note {display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;padding:12px 16px;margin:0 0 20px;border:1px solid var(--line);border-left:4px solid var(--b);border-radius:10px;background:var(--surface);font-size:14px;line-height:1.55;color:var(--muted)}
+.lf-parent-note.is-low {background:color-mix(in srgb,var(--b) 8%,var(--surface))}
+.lf-parent-note strong {color:var(--ink);font-weight:700}
+.lf-unit-head {display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 16px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:4px}
+.lf-unit-head h2 {margin:0;border:0;padding:0}
+.lf-unit-badge {font-size:14px;font-weight:650;text-decoration:none;color:var(--accent);white-space:nowrap}
+.lf-unit-badge.is-todo {color:var(--muted);font-weight:500}
+.lf-unit-row {background:color-mix(in srgb,var(--accent) 5%,transparent);padding-left:12px;padding-right:12px;border-radius:8px}
+@media(max-width:760px) {
+  .lf-grade-nav {gap:6px}
+  .lf-grade-btn {padding:7px 12px;font-size:14px;min-height:38px}
+  .lf-parent-note {padding:10px 12px;font-size:14px}
+}
+
+/* PY-191 初中、小学字体看齐高中：课程树的长说明用常规字重（高中页没有 data-stage，不变） */
+[data-stage] .lf-lesson-row>a p {font-weight:400}
+/* 小学概念与易错卡页套学习外壳：用外壳的导航和主题开关，标题与高中知识库同款 */
+.concept-page[data-learning-page] :is(.cc-nav,#cc-theme) {display:none}
+.concept-page .lf-global-search>summary {padding:10px 0}
+.concept-page button.lf-theme {min-height:0;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--muted)}
+.concept-page[data-learning-page] .cc-grades {gap:8px}
+.concept-page[data-learning-page] .cc-grades a {padding:8px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font-size:15px;font-weight:650;text-decoration:none}
+.concept-page[data-learning-page] .cc-grades a[aria-current] {border-color:var(--accent);background:var(--accent);color:var(--card)}
+.concept-page #learning-app>h1 {font-family:var(--lf-serif);font-size:clamp(27px,3vw,38px);font-weight:700;line-height:1.4;margin:0 0 14px}
+.concept-page #learning-app>.cc-intro {color:var(--muted)}

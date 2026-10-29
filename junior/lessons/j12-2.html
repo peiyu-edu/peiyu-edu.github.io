@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12.2 用统计图描述数据 · 培玉初中数学</title>
+<link rel="icon" href="../assets/logo.svg">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/site.css">
+<script defer src="../assets/katex/katex.min.js"></script>
+<script defer src="../assets/katex/auto-render.min.js"></script>
+<link rel="stylesheet" href="../assets/gaokao-solutions.css">
+<script defer src="../assets/gaokao-solutions.js"></script>
+<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/video.js"></script>
+<style>
+  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  .result .sum { color: var(--no); font-weight: 700; }
+  table.ft { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+  table.ft th, table.ft td { border: 1px solid var(--line); padding: 4px 10px; text-align: center; }
+  .raw { font-size: 15px; line-height: 1.7; color: var(--muted); overflow-wrap: anywhere; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=bd584168dfc4"></script><script defer src="../assets/learning-review-badges.js?v=f48be5357f33"></script>
+</head>
+<body data-stage="junior" data-sec="j12-2" data-standard="v2">
+<div class="wrap">
+<header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
+<p class="crumb">七年级下册 · 第十二章 数据的收集、整理与描述</p>
+<h1>12.2 用统计图描述数据</h1>
+<p class="lead">收集来的数据，用什么图画出来最能说明问题？扇形图怎么画，直方图怎么分组，趋势图怎么帮我们预测？</p>
+
+<details class="more route">
+  <summary>本节导读　先修：12.1 统计调查、9.1 坐标 · 本节路线</summary>
+  <p class="small" style="margin:6px 0 0">要用到：怎样收集数据（<a href="j12-1.html">回看 12.1</a>）；在坐标系里描点（<a href="j9-1.html">回看 9.1</a>）；小学的条形图、折线图会画，扇形图会读，会算百分数。</p>
+  <ol class="small">
+    <li>从一次班级投票进入：同一组数据，画成不同的图，看出的东西不同。</li>
+    <li>扇形图：百分比换成圆心角，自己动手画。</li>
+    <li>选图：想表达占比、多少、变化，各用什么图。</li>
+    <li>频数分布直方图：四步走，难在分组（左闭右开、组数取整）。</li>
+    <li>趋势图：描点，画一条「尽可能靠近」各点的线，再预测。</li>
+    <li>动手改数据、改组距、拖趋势线；练习与中考真题。</li>
+  </ol>
+</details>
+
+<section class="step" data-title="从例子进入">
+  <p>七（3）班 \(40\) 人投票选最喜欢的课间活动：跳绳 \(14\) 人，阅读 \(12\) 人，下棋 \(8\) 人，踢毽子 \(6\) 人。同一组数据，点按钮看看画成三种图各是什么样：</p>
+  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDI0MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5ZCM5LiA57uE5oqV56Wo5pWw5o2u55qE5LiJ56eN57uf6K6h5Zu+XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuWbvueahOenjeexu1wiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtaz1cIjBcIj7mnaHlvaLlm748L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjFcIj7miYflvaLlm748L2J1dHRvbj5cbiAgICAgIDxidXR0b24gdHlwZT1cImJ1dHRvblwiIGRhdGEtaz1cIjJcIj7mipjnur/lm748L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+54+t6ZW/5oOz6LS05LiA5byg5Zu+77yM6K6p5aSn5a62PGI+5LiA55y855yL5Ye65q+P56eN5rS75Yqo5Y2g5YWo54+t55qE5aSa5aSn5q+U5L6LPC9iPuOAgueUqOWTquenjeWbvuacgOWQiOmAgu+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuadoeW9ouWbvjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuaJh+W9ouWbvjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuaKmOe6v+WbvjwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAguaJh+W9ouWbvueUqOaVtOS4quWchuihqOekuuWFqOePre+8jOavj+Wdl+aJh+W9ouaYr+S4gOmDqOWIhu+8jOOAjOWNoOWkmuWwkeOAjeS4gOecvOWPr+ingeOAguadoeW9ouWbvuabtOmAguWQiOavlOi+g+WQhOmhuTxiPuacieWkmuWwkTwvYj7vvJvmipjnur/lm77pgILlkIjnnIs8Yj7pmo/ml7bpl7TmgI7moLflj5jljJY8L2I+77yM6L+Z5Zub56eN5rS75Yqo5rKh5pyJ5YWI5ZCO77yM6L+e5oiQ57q/5rKh5pyJ5oSP5LmJ44CC6L+Z5LiA6IqC5a2m5oCO5qC3PGI+55S7PC9iPuaJh+W9ouWbvu+8jOaAjuagtzxiPumAiTwvYj7lm77vvIzlho3orqTor4bkuKTnp43mlrDlm77vvJrnm7Tmlrnlm77lkozotovlir/lm77jgII8L3A+PC9kaXY+XG4gICJ9">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 240" role="img" aria-label="同一组投票数据的三种统计图"></svg>
+    <div class="entry-bar" id="entry-bar" role="group" aria-label="图的种类">
+      <button type="button" class="on" data-k="0">条形图</button>
+      <button type="button" data-k="1">扇形图</button>
+      <button type="button" data-k="2">折线图</button>
+    </div>
+    <p class="entry-note" id="entry-note" aria-live="polite"></p>
+    <p>班长想贴一张图，让大家<b>一眼看出每种活动占全班的多大比例</b>。用哪种图最合适？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>条形图</button>
+      <button class="opt" data-v="B"><b>B</b>扇形图</button>
+      <button class="opt" data-v="C"><b>C</b>折线图</button>
+    </div>
+    <div class="reveal"><p><b>B</b>。扇形图用整个圆表示全班，每块扇形是一部分，「占多少」一眼可见。条形图更适合比较各项<b>有多少</b>；折线图适合看<b>随时间怎样变化</b>，这四种活动没有先后，连成线没有意义。这一节学怎样<b>画</b>扇形图，怎样<b>选</b>图，再认识两种新图：直方图和趋势图。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="讲清楚">
+  <div class="vid" data-video="concept"></div>
+  <h3>1. 先认识几个词：扇形图、频数、组距、频数分布直方图、趋势图</h3>
+  <p class="small">前置知识：小学会画条形图、折线图，会读扇形图；怎样收集数据见 <a href="j12-1.html">12.1</a>；描点见 <a href="j9-1.html">9.1</a>。</p>
+  <p><b>扇形图</b>用整个圆表示总体，每个扇形表示其中一部分，扇形的大小由它的<b>圆心角</b>决定。把数据分成若干组，<b>落在各组内的数据的个数</b>叫这一组的<b>频数</b>；每组两个端点之间的距离叫<b>组距</b>。列出各组和频数的表叫<b>频数分布表</b>；在横轴上按组画出<b>紧挨着</b>的小长方形、用高表示频数，就是<b>频数分布直方图</b>（本节只用每组一样宽的等距分组）。把成对的数据描成点，画一条尽可能靠近这些点的线来描述两个量的关系，叫<b>趋势图</b>。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>扇形的大小 = 这部分占全体的比例</b></p>
+    <p class="small" style="margin:0">调查 \(50\) 名同学的上学方式：步行 \(18\) 人，骑车 \(12\) 人，公交 \(15\) 人，家长接送 \(5\) 人。点一类，看它的扇形是怎么算出来的：</p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m1-bar" role="group" aria-label="上学方式">
+        <button type="button" class="on" data-k="0">步行</button>
+        <button type="button" data-k="1">骑车</button>
+        <button type="button" data-k="2">公交</button>
+        <button type="button" data-k="3">家长接送</button>
+      </div>
+      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 200" role="img" aria-label="上学方式扇形图"></svg>
+      <p class="entry-note" id="m1-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="concept-grid">
+    <div class="card">
+      <p><span class="badge-pill badge-b">核心概念 ②</span><b>条形图 vs 直方图</b></p>
+      <p class="small" style="margin:0">条形图的横轴是<b>类别</b>（步行、骑车……），条和条分开；直方图的横轴是<b>一段段连续的数</b>（\(145\)～\(150\) cm、\(150\)～\(155\) cm……），长方形一个挨一个，不留空隙。</p>
+    </div>
+    <div class="card">
+      <p><span class="badge-pill badge-no">核心概念 ③</span><b>扇形只说占比，不说多少</b></p>
+      <p class="small" style="margin:0">「步行占 \(36\%\)」只告诉你比例。\(50\) 人里是 \(18\) 人，\(1\,000\) 人里就是 \(360\) 人。总数不同的两张扇形图，不能比扇形大小来比人数。</p>
+    </div>
+  </div>
+
+  <h3>2. 核心点：扇形图——百分比换成圆心角</h3>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(\color{#2F7A56}{\underbrace{\text{圆心角}}_{\text{扇形多大}}} \;=\; 360^\circ\times\color{#966524}{\underbrace{\text{百分比}}_{\text{这部分占总体的多少}}}\)
+  </div>
+  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+  <div class="card" id="ex1">
+    <p class="small" style="margin:0 0 4px"><b>例 1（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">社区随机调查了 \(200\) 户居民对垃圾分类的掌握情况：完全掌握 \(92\) 户，基本掌握 \(64\) 户，了解一点 \(30\) 户，不了解 \(14\) 户。画扇形图前，先算出各部分的圆心角。</p>
+    <p><b>① 读懂题意：</b>扇形图要的是「占比」，题目给的是「户数」。中间差了哪一步？</p>
+    <details class="more"><summary>提示 1：先求百分比</summary><p>每部分户数 ÷ 总户数 \(200\)。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>户数 → 百分比 → 圆心角，列成一张表。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>完全掌握 \(92\div200=46\%\)，\(360^\circ\times46\%=165.6^\circ\)；基本掌握 \(32\%\)，\(115.2^\circ\)；了解一点 \(15\%\)，\(54^\circ\)；不了解 \(7\%\)，\(25.2^\circ\)。再用量角器依次画出，每块标上名称和百分比。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>\(46\%+32\%+15\%+7\%=100\%\)，\(165.6^\circ+115.2^\circ+54^\circ+25.2^\circ=360^\circ\) ✓。</div>
+      </div>
+      <p><b>④ 回头看：</b>百分比加起来不是 \(100\%\)，多半是漏了一类（常常是「其他」）。扇形的先后位置可以换，不影响图的意思。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS4gOW8oOaJh+W9ouWbvumHjO+8jOOAjOWdkOWcsOmTgeOAjei/meS4gOWdl+eahOWchuW/g+inkuaYryBcXCg1NF5cXGNpcmNcXCnjgILlnZDlnLDpk4HnmoTkurrljaDmgLvkurrmlbDnmoTnmb7liIbkuYvlh6DvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj4xNSU8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+NTQlPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPjI3JTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguWAkui/h+adpeeul++8mlxcKDU0XlxcY2lyY1xcZGl2MzYwXlxcY2lyYz0wLjE1PTE1XFwlXFwp44CC5ZyG5b+D6KeS55qE5bqm5pWw5LiN5piv55m+5YiG5pWw77yM6KaB6Zmk5LulIFxcKDM2MF5cXGNpcmNcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：一张扇形图里，「坐地铁」这一块的圆心角是 \(54^\circ\)。坐地铁的人占总人数的百分之几？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>15%</button><button class="opt" data-v="B"><b>B</b>54%</button><button class="opt" data-v="C"><b>C</b>27%</button></div>
+    <div class="reveal"><p><b>A</b>。倒过来算：\(54^\circ\div360^\circ=0.15=15\%\)。圆心角的度数不是百分数，要除以 \(360^\circ\)。</p></div>
+  </div>
+
+  <h3>3. 核心点：想表达什么，就选什么图</h3>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>四种需要，四种图</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m2-bar" role="group" aria-label="想表达什么">
+        <button type="button" class="on" data-k="0">看占比</button>
+        <button type="button" data-k="1">比多少</button>
+        <button type="button" data-k="2">看变化</button>
+        <button type="button" data-k="3">两组比较</button>
+      </div>
+      <svg class="micro-fig" id="m2-fig" viewBox="0 0 380 190" role="img" aria-label="不同需要选择不同统计图"></svg>
+      <p class="entry-note" id="m2-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card predict" data-id="try-2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muWwj+ael+iusOW9leS6huS4gOagquixhuiLl+i/nue7rSBcXCgxMFxcKSDlpKnmr4/lpKnnmoTpq5jluqbvvIzmg7PnnIvlh7rlroPplb/pq5jnmoTlv6vmhaLlj5jljJbvvIzmnIDpgILlkIjnlKjlk6rnp43lm77vvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7miYflvaLlm748L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5p2h5b2i5Zu+PC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuaKmOe6v+WbvjwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAguaVsOaNrumaj+aXtumXtOWPmOWMlu+8jOaKmOe6v+eahOmZoeWSjOe8k+ebtOaOpeaYvuekuumVv+W+l+W/q+WSjOaFouOAguaJh+W9ouWbvueci+S4jeWHuuWFiOWQju+8m+adoeW9ouWbvuiDveavlOavj+WkqeeahOmrmOS9ju+8jOS9hueci+WPmOWMlui2i+WKv+S4jeWmguaKmOe6v+ebtOinguOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：小林记录了一株豆苗连续 \(10\) 天每天的高度，想看出它长高的快慢变化，最适合用哪种图？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>扇形图</button><button class="opt" data-v="B"><b>B</b>条形图</button><button class="opt" data-v="C"><b>C</b>折线图</button></div>
+    <div class="reveal"><p><b>C</b>。数据随时间变化，折线的陡和缓直接显示长得快和慢。扇形图看不出先后；条形图能比每天的高低，但看变化趋势不如折线直观。</p></div>
+  </div>
+
+  <h3>4. 核心点：频数分布直方图——四步，难在分组</h3>
+  <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
+    \(\color{#2F7A56}{\underbrace{\text{组数}}_{\text{分几组}}} \;\leftarrow\; \dfrac{\color{#966524}{\text{最大值}-\text{最小值}}}{\color{#B5452F}{\text{组距}}}\;\color{#B5452F}{\underbrace{\text{不是整数，取比它大的最小整数}}_{\text{保证装得下所有数据}}}\)
+  </div>
+  <p>四步是：① 求最大值与最小值的差；② 定组距和组数；③ 列频数分布表；④ 画直方图。分组写成 \(a\le x\lt b\)：<b>左端点算在本组，右端点不算</b>，下一组从 \(b\) 开始，每个数据只落进一组。如果差<b>恰好</b>是组距的整数倍，最大值会落在最后一组的右端点上、不在组内，还要再多分一组。</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>一个数据落进哪一组？左闭右开</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m3-bar" role="group" aria-label="数据">
+        <button type="button" class="on" data-k="147">147</button>
+        <button type="button" data-k="150">150</button>
+        <button type="button" data-k="160">160</button>
+        <button type="button" data-k="141">141</button>
+      </div>
+      <svg class="micro-fig" id="m3-fig" viewBox="0 0 380 150" role="img" aria-label="左闭右开分组示意"></svg>
+      <p class="entry-note" id="m3-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex2">
+    <p class="small" style="margin:0 0 4px"><b>例 2（示范：跟老师走一遍思考过程）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">七（2）班 \(30\) 名同学 \(1\) 分钟仰卧起坐的个数如下。取组距为 \(5\)，列频数分布表，画频数分布直方图。</p>
+    <p class="raw" id="raw-ex2"></p>
+    <p><b>① 读懂题意：</b>组距已经给了，还缺什么才能分组？</p>
+    <details class="more"><summary>提示 1：先找最大值、最小值</summary><p>最小值 \(22\)，最大值 \(49\)。差是多少？要分几组？</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>差 \(49-22=27\)，\(27\div5=5.4\)，不是整数，分 <b>6 组</b>。第一组从略小于最小值的 \(20\) 开始：\(20\le x\lt25\)，\(25\le x\lt30\)，……，\(45\le x\lt50\)。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>逐个数据划「正」字，得频数分布表（下表），再按表画直方图（下图）：横轴是数轴，长方形紧挨着，高等于频数。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>频数合计 \(2+5+7+10+4+2=30\)，正好是数据个数 ✓；最后一组右端点 \(50\) 大于最大值 \(49\)，装得下 ✓。</div>
+      </div>
+      <table class="ft"><tr><th>个数分组</th><th>频数</th></tr><tr><td>20 ≤ x &lt; 25</td><td>2</td></tr><tr><td>25 ≤ x &lt; 30</td><td>5</td></tr><tr><td>30 ≤ x &lt; 35</td><td>7</td></tr><tr><td>35 ≤ x &lt; 40</td><td>10</td></tr><tr><td>40 ≤ x &lt; 45</td><td>4</td></tr><tr><td>45 ≤ x &lt; 50</td><td>2</td></tr><tr><td>合计</td><td>30</td></tr></table>
+      <svg class="micro-fig" id="m-ex2" viewBox="0 0 380 200" role="img" aria-label="例 2 的频数分布直方图"></svg>
+      <p><b>④ 回头看：</b>读图：做 \(35\) 到 \(40\) 个（不含 \(40\)）的人最多，两头的人少。如果取组距 \(1\)，要分 \(28\) 组，太碎；取 \(20\)，只有两组，看不出分布。组距要选得让「形状」露出来。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS4gOe7hOaVsOaNruacgOWkp+WAvOaYryBcXCg5MlxcKe+8jOacgOWwj+WAvOaYryBcXCg1OFxcKe+8jOWPlue7hOi3neS4uiBcXCg1XFwp77yM5bqU5YiG5Yeg57uE77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+NiDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+NyDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+MzQg57uEPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCXFwoOTItNTg9MzRcXCnvvIxcXCgzNFxcZGl2NT02LjhcXCnvvIzlj5bmr5TlroPlpKfnmoTmnIDlsI/mlbTmlbAgXFwoN1xcKeOAguWPquWIhiBcXCg2XFwpIOe7hO+8jOS7jiBcXCg1OFxcKSDotbflj6rliLAgXFwoODhcXCnvvIxcXCg5MlxcKSDlsLHmsqHlnLDmlrnmlL7kuobjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>自己试试：一组数据最大值是 \(92\)，最小值是 \(58\)，取组距为 \(5\)，应分几组？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>6 组</button><button class="opt" data-v="B"><b>B</b>7 组</button><button class="opt" data-v="C"><b>C</b>34 组</button></div>
+    <div class="reveal"><p><b>B</b>。\(92-58=34\)，\(34\div5=6.8\)，取比它大的最小整数 \(7\)。只分 \(6\) 组，从 \(58\) 起只到 \(88\)，\(92\) 就没地方放了。</p></div>
+  </div>
+  <div class="card predict" data-id="try-4" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuWGjeivleS4gOS4qu+8muWIhue7hOaYryBcXCgxNDVcXGxlIHhcXGx0MTUwXFwp77yMXFwoMTUwXFxsZSB4XFxsdDE1NVxcKeOAguS4gOWQjeWQjOWtpui6q+mrmCBcXCgxNTBcXCkgY23vvIzlupTorqHlhaXlk6rkuIDnu4TvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCgxNDVcXGxlIHhcXGx0MTUwXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDE1MFxcbGUgeFxcbHQxNTVcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5Lik57uE5ZCE566X5LiA5qyhPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCXFwoMTUwXFwpIOaYr+WJjeS4gOe7hOeahOWPs+err+eCue+8jOS4jeWcqOmCo+e7hOmHjO+8m+aYr+WQjuS4gOe7hOeahOW3puerr+eCue+8jOeul+WcqOWQjuS4gOe7hOOAguWQjOS4gOS4quaVsOaNruWPquiDveeul+S4gOasoe+8jOWQpuWImemikeaVsOWQiOiuoeS8muavlOaVsOaNruS4quaVsOWkmuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>再试一个：分组是 \(145\le x\lt150\)，\(150\le x\lt155\)。一名同学身高 \(150\) cm，应计入哪一组？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(145\le x\lt150\)</button><button class="opt" data-v="B"><b>B</b>\(150\le x\lt155\)</button><button class="opt" data-v="C"><b>C</b>两组各算一次</button></div>
+    <div class="reveal"><p><b>B</b>。\(150\) 是前一组的右端点，不在那组里；是后一组的左端点，算在后一组。同一个数据只能算一次，否则频数合计会比数据个数多。</p></div>
+  </div>
+
+  <h3>5. 核心点：趋势图——描点，画一条「靠近」的线，再预测</h3>
+  <p>西红柿苗栽下后第 \(5,10,15,20,25,30\) 天量株高，依次是 \(6.5,\,9.5,\,14,\,17,\,22,\,24.5\)（单位：cm）。把每一对（天数，株高）描成点，这些点大致排在一条直线附近，就可以画一条<b>尽可能靠近所有点</b>的直线来描述它，并用来预测。「尽可能靠近」的标准不止一种：</p>
+  <div class="card">
+    <p><span class="badge-pill badge-a">直觉微图解 ④</span><b>标准不同，线不同，预测也不同</b></p>
+    <div class="micro-box">
+      <div class="entry-bar" id="m4-bar" role="group" aria-label="画线的标准">
+        <button type="button" class="on" data-k="0">过尽量多的点</button>
+        <button type="button" data-k="1">两侧点数相等</button>
+        <button type="button" data-k="2">预测第 35 天</button>
+      </div>
+      <svg class="micro-fig" id="m4-fig" viewBox="0 0 380 230" role="img" aria-label="株高趋势图与两条趋势线"></svg>
+      <p class="entry-note" id="m4-note" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="card" id="ex3">
+    <p class="small" style="margin:0 0 4px"><b>例 3（示范）</b></p>
+    <p style="font-size:16.5px;margin:0 0 8px">用上面的数据，估计第 \(35\) 天西红柿苗的株高。</p>
+    <details class="more"><summary>提示：还没学函数，怎么从图上读预测值？</summary><p>从横轴上 \(35\) 处向上作竖线，交趋势线于一点，再从这点向左作横线，读纵轴。</p></details>
+    <details class="more"><summary>看完整示范</summary>
+      <div class="think-steps">
+        <div class="think-step"><span class="ts-tag ca">想办法：</span>描点 → 选一个「靠近」的标准画线 → 作图读数。</div>
+        <div class="think-step step-op"><span class="ts-tag cb">执行：</span>第 \(10,20,30\) 天的三个点 \((10,9.5)\)、\((20,17)\)、\((30,24.5)\) 正好在一条直线上（每 \(10\) 天长 \(7.5\) cm），按「过尽量多的点」就画这条线，读出第 \(35\) 天约 \(28.25\) cm；按「两侧点数相等」画的线读出约 \(27.5\) cm。</div>
+        <div class="think-step step-chk"><span class="ts-tag cc">检查：</span>每 \(5\) 天大约长 \(3.5\)～\(4\) cm，第 \(30\) 天 \(24.5\) cm，再过 \(5\) 天到 \(27\)～\(29\) cm，说得通 ✓。</div>
+      </div>
+      <p><b>回头看：</b>答「约 \(27.5\)～\(28\) cm」都合理，关键是说清自己的标准。预测是估计，离已有数据越远越不可靠：不能用这条线去「预测」第 \(300\) 天。</p>
+    </details>
+  </div>
+  <div class="card predict" data-id="try-5" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muWvueS+iyAzIOeahOeCue+8jOWwj+mZiOeUu+eahOi2i+WKv+e6v+mihOa1i+esrCBcXCgzNVxcKSDlpKnnuqYgXFwoMjguMjVcXCkgY23vvIzlsI/orrjnlLvnmoTpooTmtYvnuqYgXFwoMjcuNVxcKSBjbeOAguiwgeWvue+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPui2i+WKv+e6v+WPquacieS4gOadoeato+ehruetlOahiO+8jOS4pOS6uuiHs+WwkeS4gOS4qumUmeS6hjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPui2i+WKv+e6v+W/hemhu+epv+i/h+aJgOacieeahOeCue+8jOS4pOS6uumDvemUmeS6hjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4pOadoee6v+mDvemdoOi/keWQhOeCueOAgeagh+WHhuivtOW+l+WHuueQhueUse+8jOS4pOS4quS8sOiuoemDveWQiOeQhjwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAguOAjOWwveWPr+iDvemdoOi/keOAjeeahOagh+WHhuS4jeWUr+S4gO+8m+e6v+S4jeWQjO+8jOmihOa1i+S5n+S8mueVpeacieS4jeWQjO+8jOWug+S7rOmDveWPquaYr+S8sOiuoeOAgui2i+WKv+e6v+S5n+S4jeW/heepv+i/h+avj+S4queCueOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>自己试试：对例 3 的点，小陈画的趋势线预测第 \(35\) 天约 \(28.25\) cm，小许画的预测约 \(27.5\) cm。谁对？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>趋势线只有一条正确答案，两人至少一个错了</button>
+      <button class="opt" data-v="B"><b>B</b>趋势线必须穿过所有的点，两人都错了</button>
+      <button class="opt" data-v="C"><b>C</b>两条线都靠近各点、标准说得出理由，两个估计都合理</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。「尽可能靠近」的标准不唯一；线不同，预测也会略有不同，它们都只是估计。趋势线也不必穿过每个点。</p></div>
+  </div>
+
+  <h3>6. 用之前必查：三大翻车现场</h3>
+  <div class="trap-grid">
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>扇形更大，就以为数量更多</span></div>
+      <div class="trap-body">
+        <div class="trap-vs">
+          <div class="trap-wrong"><b>❌ 典型错解</b>：「甲校喜欢足球的扇形比乙校大，所以甲校喜欢足球的人多。」</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：甲校 \(600\) 人，\(20\%\) 是 \(120\) 人；乙校 \(1\,500\) 人，\(12\%\) 是 \(180\) 人。扇形小的乙校，人反而多。</div>
+        </div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 280 200" role="img" aria-label="两校扇形图对比"></svg></div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>组数算出带分数，就舍掉零头</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：差 \(23\)，组距 \(3\)，\(23\div3=7\tfrac23\)，「去掉零头」分 \(7\) 组。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：\(7\) 组从最小值起只覆盖 \(7\times3=21\) 的跨度，装不下所有数据。要取比商大的最小整数，分 \(8\) 组，写成「\(23\div3=7\tfrac23\)，所以分 \(8\) 组」。</div>
+      </div>
+    </div>
+    <div class="trap-card">
+      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>把直方图画成条形图</span></div>
+      <div class="trap-body">
+        <div class="trap-wrong"><b>❌ 典型错解</b>：长方形之间留空隙；或者分组宽窄不一，还直接用高表示频数。</div>
+        <div class="trap-right"><b>✅ 一眼看清</b>：横轴是连续的数，长方形必须<b>紧挨着</b>。只有<b>等距分组</b>时才能用高表示频数；组宽不一样时，宽的那组会显得数据特别多。</div>
+      </div>
+    </div>
+  </div>
+  <details class="more"><summary>再深一点（可以先跳过）：直方图的「本义」是面积；统计图也会骗人</summary>
+    <p>直方图里，真正表示频数的是小长方形的<b>面积</b>：一般把纵轴取成「频数 ÷ 组距」，面积 = 组距 × 高 = 频数。等距分组时每个长方形一样宽，面积和高成比例，才可以直接用高表示频数。高中还会继续用面积来读图。</p>
+    <p>看别人的图要留心：条形图纵轴不从 \(0\) 开始，差一点也会被画得像差好几倍；折线图横轴时间间隔不一样，变化快慢也会被看错。</p>
+  </details>
+</section>
+
+<section class="step" data-title="动手">
+  <h3>① 改数据，扇形图跟着变</h3>
+  <p class="small">还是 \(50\) 名同学的上学方式。先点选一类，再拖动下方圆点（或用方向键）改这一类的人数。看百分比和圆心角怎样一起变。</p>
+  <div class="card">
+    <div class="entry-bar" id="pie-bar" role="group" aria-label="改哪一类">
+      <button type="button" class="on" data-k="0">步行</button>
+      <button type="button" data-k="1">骑车</button>
+      <button type="button" data-k="2">公交</button>
+      <button type="button" data-k="3">家长接送</button>
+    </div>
+    <svg class="fig" id="fig-pie" viewBox="0 0 560 350" role="img" aria-label="可以改人数的扇形图"></svg>
+    <div class="result" id="out-pie" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-pie" type="button">重置</button></div>
+  </div>
+  <h3>② 拖动组距，直方图和频数一起变</h3>
+  <p class="small">某班 \(40\) 名同学的身高（单位：cm）如下，第一组从最小值开始。拖动「组距」圆点（或用方向键），看分几组、每组多少人。</p>
+  <p class="raw" id="raw-h"></p>
+  <div class="card">
+    <svg class="fig" id="fig-hist" viewBox="0 0 560 400" role="img" aria-label="可调组距的频数分布直方图"></svg>
+    <div class="result" id="out-hist" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-hist" type="button">重置</button></div>
+  </div>
+  <h3>③ 进阶：自己画趋势线</h3>
+  <p class="small">西红柿苗的 6 个点。上下拖动直线上的两个圆点（或用方向键），让线「尽可能靠近」各点，看两侧点数、竖直距离之和和第 35 天的预测怎样变。</p>
+  <div class="card">
+    <svg class="fig" id="fig-trend" viewBox="0 0 560 380" role="img" aria-label="可拖动的趋势线"></svg>
+    <div class="result" id="out-trend" aria-live="polite"></div>
+    <div class="ctrl"><button class="btn ghost" id="reset-trend" type="button">重置</button></div>
+  </div>
+</section>
+
+<section class="step" data-title="练一练">
+  <p class="small">从易到难排好了。卡住时先展开提示。</p>
+  <h3>直接用</h3>
+  <div class="card predict" data-id="p1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjEuIOiwg+afpSBcXCg0MFxcKSDlkI3lkIzlrabmnIDllpzmrKLnmoTnpL7lm6LvvIzpgInjgIznp5HmioDnpL7jgI3nmoTmnIkgXFwoOVxcKSDkurrjgILnlLvmiYflvaLlm77ml7bvvIzjgIznp5HmioDnpL7jgI3ov5nkuIDlnZfnmoTlnIblv4Pop5LmmK/lpJrlsJHluqbvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg4MV5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMjIuNV5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoOV5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoNDBeXFxjaXJjXFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkE8L2I+44CCXFwoOVxcZGl2NDA9MjIuNVxcJVxcKe+8jFxcKDM2MF5cXGNpcmNcXHRpbWVzMjIuNVxcJT04MV5cXGNpcmNcXCnjgIJCIOaKiueZvuWIhuaVsOebtOaOpeW9k+aIkOS6huW6puaVsOOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>1. 调查 \(40\) 名同学最喜欢的社团，选「科技社」的有 \(9\) 人。画扇形图时，「科技社」这一块的圆心角是多少度？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(81^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(22.5^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(9^\circ\)</button><button class="opt" data-v="D"><b>D</b>\(40^\circ\)</button></div>
+    <div class="reveal"><p><b>A</b>。\(9\div40=22.5\%\)，\(360^\circ\times22.5\%=81^\circ\)。B 把百分数直接当成了度数。</p></div>
+  </div>
+  <div class="card predict" data-id="p2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjIuIOS4gOe7hOaVsOaNruS4reacgOWkp+WAvOaYryBcXCg3MVxcKe+8jOacgOWwj+WAvOaYryBcXCg0NFxcKeOAguWPlue7hOi3neS4uiBcXCg0XFwp77yM5bqU5YiG5oiQ5Yeg57uE77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+NiDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+NyDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+Mjcg57uEPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPjYuNzUg57uEPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CCXFwoNzEtNDQ9MjdcXCnvvIxcXCgyN1xcZGl2ND02Ljc1XFwp77yM5Y+W5q+U5a6D5aSn55qE5pyA5bCP5pW05pWwIFxcKDdcXCnjgILnu4TmlbDmmK/mlbTmlbDvvIzkuI3og73lhpkgXFwoNi43NVxcKSDnu4TvvIzkuZ/kuI3og73oiI3miJAgXFwoNlxcKSDnu4TjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>2. 一组数据中最大值是 \(71\)，最小值是 \(44\)。取组距为 \(4\)，应分成几组？</p>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>6 组</button><button class="opt" data-v="B"><b>B</b>7 组</button><button class="opt" data-v="C"><b>C</b>27 组</button><button class="opt" data-v="D"><b>D</b>6.75 组</button></div>
+    <div class="reveal"><p><b>B</b>。\(71-44=27\)，\(27\div4=6.75\)，取比它大的最小整数 \(7\)。组数是整数，不能写 \(6.75\) 组，也不能舍成 \(6\) 组。</p></div>
+  </div>
+  <h3>易错</h3>
+  <div class="card predict" data-id="p3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjMuIOS4g+W5tOe6p+aciSBcXCgzMDBcXCkg5Lq677yM5omH5b2i5Zu+5Lit44CM5Zac5qyi5Lmm5rOV44CN5Y2gIFxcKDMwXFwlXFwp77yb5YWr5bm057qn5pyJIFxcKDQwMFxcKSDkurrvvIzmiYflvaLlm77kuK3jgIzllpzmrKLkuabms5XjgI3ljaAgXFwoMjVcXCVcXCnjgILlk6rkuKrlubTnuqfllpzmrKLkuabms5XnmoTkurrlpJrvvJ88L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwPuaJh+W9ouWPquihqOekuuWNoOavlOOAguWFiOaKiuS4pOS4quW5tOe6p+eahOS6uuaVsOWQhOeul+WHuuadpeOAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5LiD5bm057qn77yM5Zug5Li65a6D55qE5omH5b2i5pu05aSnPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuWFq+W5tOe6pzwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7kuIDmoLflpJo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5Lik5byg5omH5b2i5Zu+77yM5rKh5rOV5q+UPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC5LiD5bm057qnIFxcKDMwMFxcdGltZXMzMFxcJT05MFxcKSDkurrvvIzlhavlubTnuqcgXFwoNDAwXFx0aW1lczI1XFwlPTEwMFxcKSDkurrjgILnn6XpgZPmgLvmlbDlsLHog73mjaLnrpfmiJDkurrmlbDlho3mr5TvvIzmiYDku6UgRCDkuZ/kuI3lr7njgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>3. 七年级有 \(300\) 人，扇形图中「喜欢书法」占 \(30\%\)；八年级有 \(400\) 人，扇形图中「喜欢书法」占 \(25\%\)。哪个年级喜欢书法的人多？</p>
+    <details class="more"><summary>提示</summary><p>扇形只表示占比。先把两个年级的人数各算出来。</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>七年级，因为它的扇形更大</button><button class="opt" data-v="B"><b>B</b>八年级</button><button class="opt" data-v="C"><b>C</b>一样多</button><button class="opt" data-v="D"><b>D</b>两张扇形图，没法比</button></div>
+    <div class="reveal"><p><b>B</b>。七年级 \(300\times30\%=90\) 人，八年级 \(400\times25\%=100\) 人。知道总数就能换算成人数再比，所以 D 也不对。</p></div>
+  </div>
+  <div class="card predict" data-id="p4" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjQuIOaIkOe7qeWIhuaIkCBcXCg2MFxcbGUgeFxcbHQ3MFxcKe+8jFxcKDcwXFxsZSB4XFxsdDgwXFwp77yMXFwoODBcXGxlIHhcXGx0OTBcXCkg562J57uE44CC5oiQ57upIFxcKDgwXFwpIOWIhuW6lOiuoeWFpeWTquS4gOe7hO+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5bem56uv54K5566X5Zyo5pys57uE77yM5Y+z56uv54K55LiN566X44CCXFwoODBcXCkg5piv5ZOq5LiA57uE55qE5bem56uv54K577yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg3MFxcbGUgeFxcbHQ4MFxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuKTnu4Tpg73orqHlhaU8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoODBcXGxlIHhcXGx0OTBcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5ZOq57uE6YO95LiN6K6h5YWlPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkM8L2I+44CCXFwoODBcXCkg5pivIFxcKDgwXFxsZSB4XFxsdDkwXFwpIOeahOW3puerr+eCueOAguiuoeWFpeS4pOe7hOS8muiuqemikeaVsOWQiOiuoeavlOaVsOaNruS4quaVsOWkmu+8m+WTque7hOmDveS4jeiuoeWwsea8j+S6huOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>4. 成绩分成 \(60\le x\lt70\)，\(70\le x\lt80\)，\(80\le x\lt90\) 等组。成绩 \(80\) 分应计入哪一组？</p>
+    <details class="more"><summary>提示</summary><p>左端点算在本组，右端点不算。\(80\) 是哪一组的左端点？</p></details>
+    <div class="opts"><button class="opt" data-v="A"><b>A</b>\(70\le x\lt80\)</button><button class="opt" data-v="B"><b>B</b>两组都计入</button><button class="opt" data-v="C"><b>C</b>\(80\le x\lt90\)</button><button class="opt" data-v="D"><b>D</b>哪组都不计入</button></div>
+    <div class="reveal"><p><b>C</b>。\(80\) 是 \(80\le x\lt90\) 的左端点。计入两组会让频数合计比数据个数多；哪组都不计就漏了。</p></div>
+  </div>
+  <div class="card predict" data-id="p5" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjUuIOWFs+S6jumikeaVsOWIhuW4g+ebtOaWueWbvu+8jOS4i+mdouivtOazleato+ehrueahOaYr+WTquS4gOS4qu+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5oOz5oOz55u05pa55Zu+5ZKM5p2h5b2i5Zu+5qiq6L205LiK5YaZ55qE5YiG5Yir5piv5LuA5LmI44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuWSjOadoeW9ouWbvuS4gOagt++8jOmVv+aWueW9ouS5i+mXtOimgeeVmeWHuuepuumamTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuaoqui9tOS4iuWGmeeahOaYr+exu+WIq++8jOWmguOAjOevrueQg+OAjeOAjOi2s+eQg+OAjTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuetiei3neWIhue7hOaXtu+8jOWPr+S7peeUqOmVv+aWueW9oueahOmrmOihqOekuumikeaVsDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPue7hOWuveS4jeS4gOagt+S5n+WPr+S7peebtOaOpeeUqOmrmOihqOekuumikeaVsDwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAguebtOaWueWbvuaoqui9tOaYr+i/nue7reeahOaVsO+8jOmVv+aWueW9oue0p+aMqOedgO+8iEHjgIFCIOivtOeahOaYr+adoeW9ouWbvu+8ieOAguWPquacieavj+e7hOS4gOagt+Wuve+8jOmrmOaJjeiDveS7o+ihqOmikeaVsO+8m+e7hOWuveS4jeS4gOagt+aXtu+8jOimgeeci+mdouenr+OAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <p>5. 关于频数分布直方图，下面说法正确的是哪一个？</p>
+    <details class="more"><summary>提示</summary><p>想想直方图和条形图横轴上写的分别是什么。</p></details>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>和条形图一样，长方形之间要留出空隙</button>
+      <button class="opt" data-v="B"><b>B</b>横轴上写的是类别，如「篮球」「足球」</button>
+      <button class="opt" data-v="C"><b>C</b>等距分组时，可以用长方形的高表示频数</button>
+      <button class="opt" data-v="D"><b>D</b>组宽不一样也可以直接用高表示频数</button>
+    </div>
+    <div class="reveal"><p><b>C</b>。直方图横轴是连续的数，长方形紧挨着（A、B 说的是条形图）。只有每组一样宽，高才能代表频数；组宽不一样时，要看面积。</p></div>
+  </div>
+  <h3>挑战</h3>
+  <div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjYuIOS4gOe7hOaVsOaNruacgOWwj+WAvOaYryBcXCg0MFxcKe+8jOacgOWkp+WAvOaYryBcXCg3MFxcKe+8jOWPlue7hOi3neS4uiBcXCg1XFwp77yM56ys5LiA57uE5LuOIFxcKDQwXFwpIOW8gOWni++8iFxcKDQwXFxsZSB4XFxsdDQ1XFwp77yJ44CC6KaB6KOF5LiL5omA5pyJ5pWw5o2u77yM5bqU5YiG5Yeg57uE77yfPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAxPC9zdW1tYXJ5PjxwPuWFiOeulyBcXCgoNzAtNDApXFxkaXY1XFwp77yM5piv5pW05pWw5ZCX77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMjwvc3VtbWFyeT48cD7mjInov5nkuKrmlbDliIbnu4TvvIzmnIDlkI7kuIDnu4TmmK/ku4DkuYjvvJ9cXCg3MFxcKSDlnKjkuI3lnKjph4zpnaLvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+NiDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+NyDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+NSDnu4Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+OCDnu4Q8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgIJcXCgzMFxcZGl2NT02XFwpIOaBsOWlveaYr+aVtOaVsOOAguWPr+aYryBcXCg2XFwpIOe7hOWIsCBcXCg2NVxcbGUgeFxcbHQ3MFxcKSDkuLrmraLvvIxcXCg3MFxcKSDmmK/lj7Pnq6/ngrnjgIHkuI3lnKjov5nnu4Tph4zvvIzopoHlho3liqDkuIDnu4QgXFwoNzBcXGxlIHhcXGx0NzVcXCnvvIzlhbEgXFwoN1xcKSDnu4TjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p>6. 一组数据最小值是 \(40\)，最大值是 \(70\)，取组距为 \(5\)，第一组从 \(40\) 开始（\(40\le x\lt45\)）。要装下所有数据，应分几组？</p>
+    <details class="more"><summary>提示 1</summary><p>先算 \((70-40)\div5\)，是整数吗？</p></details>
+    <details class="more"><summary>提示 2</summary><p>按这个数分组，最后一组是什么？\(70\) 在不在里面？</p></details>
+    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>6 组</button><button class="opt" data-v="B"><b>B</b>7 组</button><button class="opt" data-v="C"><b>C</b>5 组</button><button class="opt" data-v="D"><b>D</b>8 组</button></div>
+    <div class="reveal"><p><b>B</b>。\(30\div5=6\) 恰好是整数。可是 \(6\) 组到 \(65\le x\lt70\) 为止，\(70\) 是右端点、不在这组里，要再加一组 \(70\le x\lt75\)，共 \(7\) 组。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="中考真题">
+  <p class="small">中考常考读统计图表求数、选合适的统计图、从直方图读信息。原题的图表已改写成文字。选择题点选项自动判对错，做完看解析。</p>
+  <div id="practice"></div>
+</section>
+
+<section class="card stage-bridge" data-bridge="junior-from-primary" aria-labelledby="stage-bridge-prev-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-prev-title">先修回顾 · 小学数学</h2><p class="small">学这一节之前，如果下面的小学基础还有点生疏，可以先回去温习：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../primary/lessons/p4a-u6.html">小学 · 四上第6单元 · 条形统计图</a><span class="bridge-why">小学学习的条形统计图、五下折线统计图与六上扇形统计图，在初中与频数分布直方图结合，用于全面描述样本数据的分布特征。</span></li></ul><p class="bridge-all"><a href="../../primary/courses.html">打开小学数学课程目录</a></p></section>
+<footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
+</div>
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
+  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
+  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
+  function cols(c) { return [c.a, c.b, c.no, c.c]; }
+  function bar(id, cb) {
+    var b = document.getElementById(id);
+    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
+    b.addEventListener("click", function (ev) {
+      var t = ev.target.closest("button"); if (!t) return;
+      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
+      cb(+t.getAttribute("data-k"));
+      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
+    });
+  }
+  // 画扇形：从正上方开始顺时针
+  function pie(p, cx, cy, r, vals, colors, hi) {
+    var tot = 0; vals.forEach(function (v) { tot += v; }); if (!tot) return;
+    var a0 = -Math.PI / 2;
+    vals.forEach(function (v, i) {
+      if (!v) return;
+      var a1 = a0 + v / tot * 2 * Math.PI, big = a1 - a0 > Math.PI ? 1 : 0;
+      var d = v === tot ? "M" + (cx - r) + " " + cy + " a" + r + " " + r + " 0 1 0 " + 2 * r + " 0 a" + r + " " + r + " 0 1 0 " + (-2 * r) + " 0z"
+        : "M" + cx + " " + cy + " L" + (cx + r * Math.cos(a0)) + " " + (cy + r * Math.sin(a0)) + " A" + r + " " + r + " 0 " + big + " 1 " + (cx + r * Math.cos(a1)) + " " + (cy + r * Math.sin(a1)) + "z";
+      el("path", { d: d, fill: colors[i], stroke: css("--card"), "stroke-width": 2, opacity: hi == null || hi === i ? 1 : 0.35 }, p);
+      a0 = a1;
+    });
+  }
+  function handle(svg, x, y, col, label, val, lo, hi, step, toVal, cb, vert) {
+    var c = C();
+    var h = el("circle", { cx: x, cy: y, r: 12, fill: c.card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label,
+      "aria-valuemin": lo, "aria-valuemax": hi, "aria-valuenow": val, "aria-valuetext": String(val), style: "cursor:grab;touch-action:none" }, svg);
+    h.addEventListener("keydown", function (e) {
+      var nv = { ArrowRight: val + step, ArrowUp: val + step, ArrowLeft: val - step, ArrowDown: val - step, Home: lo, End: hi }[e.key];
+      if (nv === undefined) return; e.preventDefault(); cb(clamp(Math.round(nv / step) * step, lo, hi), true);
+    });
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      function mv(ev) { var m = svg.getScreenCTM(); if (!m) return; var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; var q = pt.matrixTransform(m.inverse()); cb(toVal(vert ? q.y : q.x), false); }
+      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
+      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
+    });
+    return h;
+  }
+
+  /* ---------- 数据（全页只此一份） ---------- */
+  var VOTE = { n: ["跳绳", "阅读", "下棋", "踢毽子"], v: [14, 12, 8, 6] };
+  var WAY = { n: ["步行", "骑车", "公交", "家长接送"], v: [18, 12, 15, 5] };
+  var SIT = [34, 28, 41, 37, 22, 45, 31, 38, 36, 29, 33, 40, 27, 35, 42, 30, 37, 24, 39, 32, 36, 44, 26, 38, 31, 35, 49, 33, 37, 29];
+  var H = [152, 148, 157, 160, 145, 155, 163, 150, 158, 154, 149, 161, 156, 141, 153, 159, 147, 166, 151, 157, 155, 162, 146, 158, 153, 150, 156, 160, 144, 154, 152, 159, 157, 149, 155, 164, 151, 153, 158, 156];
+  var TD = [5, 10, 15, 20, 25, 30], TH = [6.5, 9.5, 14, 17, 22, 24.5];
+  function freq(data, start, w, k) { var f = []; for (var i = 0; i < k; i++) f.push(data.filter(function (x) { return x >= start + i * w && x < start + (i + 1) * w; }).length); return f; }
+  document.getElementById("raw-ex2").textContent = SIT.join("，");
+  document.getElementById("raw-h").textContent = H.join("，");
+
+  /* 从例子进入 */
+  var entryK = 0;
+  function drawEntry() {
+    var c = C(), p = document.getElementById("entry-fig"), col = cols(c); p.innerHTML = "";
+    if (entryK === 1) {
+      pie(p, 130, 118, 100, VOTE.v, col);
+      VOTE.n.forEach(function (n, i) { el("rect", { x: 280, y: 36 + i * 48, width: 18, height: 18, fill: col[i], rx: 3 }, p); txt(p, 308, 52 + i * 48, n + " " + VOTE.v[i] / 40 * 100 + "%", c.fg, 700, 19, "start"); });
+    } else {
+      var X0 = 70, Y0 = 196, u = 9;
+      el("line", { x1: X0, y1: Y0, x2: 500, y2: Y0, stroke: c.fg, "stroke-width": 2 }, p);
+      el("line", { x1: X0, y1: Y0, x2: X0, y2: 30, stroke: c.fg, "stroke-width": 2 }, p);
+      [0, 5, 10, 15].forEach(function (v) { txt(p, X0 - 10, Y0 - v * u + 6, String(v), c.muted, 400, 17, "end"); });
+      VOTE.v.forEach(function (v, i) {
+        var x = X0 + 60 + i * 105;
+        if (entryK === 0) { el("rect", { x: x - 26, y: Y0 - v * u, width: 52, height: v * u, fill: col[i], rx: 3 }, p); }
+        else { el("circle", { cx: x, cy: Y0 - v * u, r: 6, fill: c.no }, p); if (i) el("line", { x1: x - 105, y1: Y0 - VOTE.v[i - 1] * u, x2: x, y2: Y0 - v * u, stroke: c.no, "stroke-width": 3 }, p); }
+        txt(p, x, 226, VOTE.n[i] + " " + v, c.fg, 400, 17);
+      });
+    }
+    document.getElementById("entry-note").textContent = [
+      "条形图：谁多谁少一眼看出，跳绳最多（14 人）、踢毽子最少（6 人）；但「占全班多少」要自己再算。",
+      "扇形图：整个圆是全班 40 人。跳绳占 35%、阅读占 30%……占比一眼可见，但看不出具体人数。",
+      "折线图：把四种活动连成一条线，线的升降好像在说「变化」，可这四类没有先后顺序，这条线没有意义。"][entryK];
+  }
+  bar("entry-bar", function (k) { entryK = k; drawEntry(); });
+
+  /* 微图解 ①：上学方式扇形图 */
+  var m1k = 0;
+  function drawM1() {
+    var c = C(), p = document.getElementById("m1-fig"), col = cols(c), v = WAY.v[m1k], tot = 50; p.innerHTML = "";
+    pie(p, 100, 100, 88, WAY.v, col, m1k);
+    WAY.n.forEach(function (n, i) { txt(p, 214, 42 + i * 44, n + " " + WAY.v[i] / tot * 100 + "%", i === m1k ? col[i] : c.muted, i === m1k ? 700 : 400, 17, "start"); });
+    var pc = v / tot * 100, ang = r1(360 * v / tot);
+    document.getElementById("m1-note").textContent = WAY.n[m1k] + " " + v + " 人：" + v + " ÷ 50 = " + pc + "%，圆心角 360° × " + pc + "% = " + ang + "°。四类的圆心角合起来正好 360°。";
+  }
+  bar("m1-bar", function (k) { m1k = k; drawM1(); });
+
+  /* 微图解 ②：选图 */
+  var m2k = 0;
+  function drawM2() {
+    var c = C(), p = document.getElementById("m2-fig"), col = cols(c), i; p.innerHTML = "";
+    var Y0 = 150;
+    if (m2k === 0) { pie(p, 190, 90, 72, WAY.v, col); }
+    else {
+      el("line", { x1: 40, y1: Y0, x2: 350, y2: Y0, stroke: c.fg, "stroke-width": 2 }, p); el("line", { x1: 40, y1: Y0, x2: 40, y2: 20, stroke: c.fg, "stroke-width": 2 }, p);
+      if (m2k === 1) for (i = 0; i < 4; i++) el("rect", { x: 70 + i * 72, y: Y0 - WAY.v[i] * 6, width: 40, height: WAY.v[i] * 6, fill: col[i], rx: 3 }, p);
+      if (m2k === 2) { var T = [12, 15, 19, 24, 27, 26]; for (i = 0; i < 6; i++) { el("circle", { cx: 70 + i * 54, cy: Y0 - T[i] * 4.4, r: 5, fill: c.no }, p); if (i) el("line", { x1: 16 + i * 54, y1: Y0 - T[i - 1] * 4.4, x2: 70 + i * 54, y2: Y0 - T[i] * 4.4, stroke: c.no, "stroke-width": 3 }, p); } }
+      if (m2k === 3) { var B1 = [9, 6, 7, 2], B2 = [9, 6, 8, 3]; for (i = 0; i < 4; i++) { el("rect", { x: 66 + i * 72, y: Y0 - B1[i] * 12, width: 24, height: B1[i] * 12, fill: c.a, rx: 2 }, p); el("rect", { x: 90 + i * 72, y: Y0 - B2[i] * 12, width: 24, height: B2[i] * 12, fill: c.b, rx: 2 }, p); } }
+    }
+    txt(p, 190, 182, ["扇形图", "条形图", "折线图", "复式条形图"][m2k], c.fg, 700, 18);
+    document.getElementById("m2-note").textContent = [
+      "看各部分占总体的比例：扇形图（上学方式，步行占 36%）。",
+      "比较各类别有多少：条形图，条与条分开，高矮一比就知道（步行 18 人最多）。",
+      "看随时间（或另一个量）的变化：折线图，线往上是升、往下是降（某地 1～6 月的平均气温示意）。",
+      "两组数据一起比：复式条形图（男生、女生两种颜色并排）或复式折线图。"][m2k];
+  }
+  bar("m2-bar", function (k) { m2k = k; drawM2(); });
+
+  /* 微图解 ③：左闭右开 */
+  var m3v = 147;
+  function drawM3() {
+    var c = C(), p = document.getElementById("m3-fig"), lo = 140, hi = 170, x0 = 20, x1 = 360; p.innerHTML = "";
+    function X(v) { return x0 + (v - lo) / (hi - lo) * (x1 - x0); }
+    var g = Math.floor((m3v - lo) / 5);
+    for (var i = 0; i < 6; i++) {
+      el("rect", { x: X(lo + i * 5), y: 50, width: X(lo + 5) - X(lo), height: 30, fill: i === g ? c.b : (i % 2 ? c.line : "none"), opacity: i === g ? 0.85 : 0.6 }, p);
+      el("circle", { cx: X(lo + i * 5), cy: 65, r: 5, fill: c.fg }, p);
+      el("circle", { cx: X(lo + i * 5 + 5) - 1, cy: 65, r: 4.5, fill: c.card, stroke: c.fg, "stroke-width": 1.5, opacity: 0.9 }, p);
+    }
+    el("line", { x1: x0, y1: 100, x2: x1, y2: 100, stroke: c.fg, "stroke-width": 2 }, p);
+    for (var v = lo; v <= hi; v += 5) { el("line", { x1: X(v), y1: 94, x2: X(v), y2: 106, stroke: c.fg }, p); txt(p, X(v), 128, String(v), c.fg, 400, 15); }
+    el("path", { d: "M" + X(m3v) + " 44 l-7 -12 h14 z", fill: c.no }, p);
+    txt(p, X(m3v), 24, String(m3v), c.no, 700, 17);
+    var a = lo + g * 5, b = a + 5;
+    document.getElementById("m3-note").textContent = m3v + " 落在 " + a + " ≤ x < " + b + "。" + (m3v === a ? (m3v === lo ? "它是最小值，第一组的左端点（实心点），算在第一组。" : "它是前一组 " + (a - 5) + " ≤ x < " + a + " 的右端点（空心点，不算），又是这一组的左端点（实心点，算），所以只进这一组。") : "它在两个端点之间，没有争议。");
+  }
+  bar("m3-bar", function (k) { m3v = k; drawM3(); });
+
+  /* 例 2 的直方图 */
+  function drawEx2() {
+    var c = C(), p = document.getElementById("m-ex2"), f = freq(SIT, 20, 5, 6), X0 = 46, Y0 = 160, w = 50, u = 13; p.innerHTML = "";
+    el("line", { x1: X0, y1: Y0, x2: X0 + 6 * w + 16, y2: Y0, stroke: c.fg, "stroke-width": 2 }, p);
+    el("line", { x1: X0, y1: Y0, x2: X0, y2: 16, stroke: c.fg, "stroke-width": 2 }, p);
+    [5, 10].forEach(function (v) { txt(p, X0 - 8, Y0 - v * u + 5, String(v), c.muted, 400, 15, "end"); });
+    f.forEach(function (v, i) { el("rect", { x: X0 + i * w, y: Y0 - v * u, width: w, height: v * u, fill: c.b, stroke: c.card, "stroke-width": 1.5 }, p); txt(p, X0 + i * w + w / 2, Y0 - v * u - 6, String(v), c.fg, 700, 15); });
+    for (var i = 0; i <= 6; i++) txt(p, X0 + i * w, Y0 + 28, String(20 + 5 * i), c.fg, 400, 15);
+  }
+
+  /* 微图解 ④：趋势线 */
+  var m4k = 0, LA = [0.75, 2], LB = [0.68, 3.7];
+  function r2(v) { return Math.round(v * 100) / 100; }
+  // 6 个点里最多有几个在同一条直线上（「过尽量多的点」的上限）
+  var MAXON = 2; (function () { for (var i = 0; i < 6; i++) for (var j = i + 1; j < 6; j++) { var k = (TH[j] - TH[i]) / (TD[j] - TD[i]), n = 0; for (var m = 0; m < 6; m++) if (Math.abs(TH[m] - (TH[i] + k * (TD[m] - TD[i]))) < 0.05) n++; MAXON = Math.max(MAXON, n); } })();
+  function trendAxes(p, c, X0, Y0, ux, uy, xmax, ymax, sz, off) {
+    el("line", { x1: X0, y1: Y0, x2: X0 + xmax * ux + 10, y2: Y0, stroke: c.fg, "stroke-width": 2 }, p);
+    el("line", { x1: X0, y1: Y0, x2: X0, y2: Y0 - ymax * uy - 6, stroke: c.fg, "stroke-width": 2 }, p);
+    for (var d = 0; d <= xmax; d += 10) { el("line", { x1: X0 + d * ux, y1: Y0 - 5, x2: X0 + d * ux, y2: Y0 + 5, stroke: c.fg }, p); txt(p, X0 + d * ux, Y0 + off, String(d), c.fg, 400, sz); }
+    for (var h = 10; h <= ymax; h += 10) { el("line", { x1: X0 - 5, y1: Y0 - h * uy, x2: X0 + 5, y2: Y0 - h * uy, stroke: c.fg }, p); txt(p, X0 - 10, Y0 - h * uy + 6, String(h), c.fg, 400, sz, "end"); }
+    TD.forEach(function (d, i) { el("circle", { cx: X0 + d * ux, cy: Y0 - TH[i] * uy, r: 5, fill: c.fg }, p); });
+  }
+  function side(L) { var u = 0, v = 0, w = 0, s = 0; TD.forEach(function (d, i) { var e = TH[i] - (L[0] * d + L[1]); s += Math.abs(e); if (Math.abs(e) < 0.05) w++; else if (e > 0) u++; else v++; }); return { up: u, down: v, on: w, dist: r1(s) }; }
+  function drawM4() {
+    var c = C(), p = document.getElementById("m4-fig"), X0 = 44, Y0 = 190, ux = 8, uy = 5; p.innerHTML = "";
+    trendAxes(p, c, X0, Y0, ux, uy, 40, 30, 15, 26);
+    function line(L, col) { el("line", { x1: X0, y1: Y0 - L[1] * uy, x2: X0 + 40 * ux, y2: Y0 - (L[0] * 40 + L[1]) * uy, stroke: col, "stroke-width": 3 }, p); }
+    if (m4k !== 1) line(LA, c.b);
+    if (m4k !== 0) line(LB, c.a);
+    if (m4k === 2) {
+      [LA, LB].forEach(function (L, j) { var y = Y0 - (L[0] * 35 + L[1]) * uy; el("line", { x1: X0, y1: y, x2: X0 + 35 * ux, y2: y, stroke: j ? c.a : c.b, "stroke-dasharray": "4 4" }, p); });
+      el("line", { x1: X0 + 35 * ux, y1: Y0, x2: X0 + 35 * ux, y2: Y0 - (LA[0] * 35 + LA[1]) * uy, stroke: c.no, "stroke-dasharray": "4 4", "stroke-width": 2 }, p);
+      txt(p, X0 + 35 * ux, Y0 + 26, "35", c.no, 700, 15);
+    }
+    var a = side(LA), b = side(LB);
+    document.getElementById("m4-note").textContent = [
+      "第 10、20、30 天的三个点正好共线，金色线就过这 " + a.on + " 个点（6 个点里最多只能有 " + MAXON + " 个在同一直线上）；另外 3 个点 " + a.up + " 个在上、" + a.down + " 个在下。",
+      "绿色线不过任何点，但上方 " + b.up + " 个、下方 " + b.down + " 个，两侧一样多。",
+      "从横轴 35 向上作竖线交线，再向左读纵轴：金色线约 " + r2(LA[0] * 35 + LA[1]) + " cm，绿色线约 " + r2(LB[0] * 35 + LB[1]) + " cm。两个估计都有道理。"][m4k];
+  }
+  bar("m4-bar", function (k) { m4k = k; drawM4(); });
+
+  /* 翻车现场 ①：两校扇形 */
+  function drawTrap() {
+    var c = C(), p = document.getElementById("m-trap"); p.innerHTML = "";
+    pie(p, 70, 80, 55, [20, 80], [c.no, c.line]); pie(p, 210, 80, 55, [12, 88], [c.no, c.line]);
+    txt(p, 70, 166, "甲校 120 人", c.fg, 700, 16); txt(p, 210, 166, "乙校 180 人", c.no, 700, 16);
+  }
+
+  /* 动手 ①：扇形图 */
+  var PV = WAY.v.slice(), pieK = 0, focusPie = false, PX0 = 60, PX1 = 500;
+  function drawPie() {
+    var c = C(), p = document.getElementById("fig-pie"), col = cols(c), tot = 0; p.innerHTML = "";
+    PV.forEach(function (v) { tot += v; });
+    if (tot) pie(p, 140, 132, 112, PV, col, pieK); else txt(p, 140, 140, "没有数据", c.muted, 700, 20);
+    var pcs = PV.map(function (v) { return tot ? r1(v / tot * 100) : 0; }), angs = PV.map(function (v) { return tot ? r1(v / tot * 360) : 0; });
+    WAY.n.forEach(function (n, i) { el("rect", { x: 290, y: 38 + i * 50, width: 18, height: 18, rx: 3, fill: col[i] }, p); txt(p, 318, 54 + i * 50, n + " " + PV[i] + " 人", i === pieK ? c.fg : c.muted, i === pieK ? 700 : 400, 20, "start"); });
+    el("line", { x1: PX0, y1: 300, x2: PX1, y2: 300, stroke: c.muted, "stroke-width": 4, "stroke-linecap": "round" }, p);
+    txt(p, PX0, 336, "0", c.muted, 400, 19); txt(p, PX1, 336, "30", c.muted, 400, 19);
+    var hd = handle(p, PX0 + PV[pieK] / 30 * (PX1 - PX0), 300, col[pieK], WAY.n[pieK] + "人数", PV[pieK], 0, 30, 1,
+      function (x) { return clamp(Math.round((x - PX0) / (PX1 - PX0) * 30), 0, 30); }, function (v, key) { PV[pieK] = v; focusPie = key; drawPie(); });
+    var out = document.getElementById("out-pie");
+    if (!tot) { out.innerHTML = "四类都是 0 人：总数为 0，算不出百分比，也画不出扇形。至少要有一类不为 0。"; }
+    else {
+      var sp = r1(pcs.reduce(function (s, v) { return s + v; }, 0)), sa = r1(angs.reduce(function (s, v) { return s + v; }, 0));
+      out.innerHTML = "共 " + tot + " 人。" + WAY.n[pieK] + " " + PV[pieK] + " 人：" + PV[pieK] + " ÷ " + tot + " ≈ " + pcs[pieK] + "%，圆心角 ≈ <span class=\"sum\">" + angs[pieK] + "°</span>。四类百分比合计 " + sp + "%，圆心角合计 " + sa + "°" + (sp === 100 && sa === 360 ? "。" : "（四舍五入造成的小差额，所以要写「约」）。") +
+        " 改了一类的人数，总数也变了，<b>其他三类的扇形也跟着变</b>，虽然它们的人数没动：扇形只反映占比。";
+    }
+    if (focusPie) hd.focus();
+  }
+  bar("pie-bar", function (k) { pieK = k; focusPie = false; drawPie(); });
+  document.getElementById("reset-pie").onclick = function () { PV = WAY.v.slice(); focusPie = false; drawPie(); };
+
+  /* 动手 ②：直方图 */
+  var HW = 5, focusH = false, HMIN = Math.min.apply(null, H), HMAX = Math.max.apply(null, H), WX0 = 120, WX1 = 440;
+  function drawHist() {
+    var c = C(), p = document.getElementById("fig-hist"), d = HMAX - HMIN, k = Math.floor(d / HW) + 1, f = freq(H, HMIN, HW, k), fm = Math.max.apply(null, f); p.innerHTML = "";
+    var X0 = 70, X1 = 530, Y0 = 250, top = 40, u = (Y0 - top) / Math.max(fm, 1), bw = (X1 - X0 - 10) / k;
+    el("line", { x1: X0, y1: Y0, x2: X1, y2: Y0, stroke: c.fg, "stroke-width": 2 }, p);
+    el("line", { x1: X0, y1: Y0, x2: X0, y2: top - 14, stroke: c.fg, "stroke-width": 2 }, p);
+    var step = fm > 20 ? 10 : 5;
+    for (var t = step; t <= fm; t += step) { el("line", { x1: X0 - 5, y1: Y0 - t * u, x2: X0, y2: Y0 - t * u, stroke: c.fg }, p); txt(p, X0 - 10, Y0 - t * u + 7, String(t), c.fg, 400, 19, "end"); }
+    var every = k > 7 ? 2 : 1;
+    f.forEach(function (v, i) {
+      if (v) el("rect", { x: X0 + i * bw, y: Y0 - v * u, width: bw, height: v * u, fill: c.b, stroke: c.card, "stroke-width": 1.5 }, p);
+      if (v && bw >= 24) txt(p, X0 + i * bw + bw / 2, Y0 - v * u - 8, String(v), c.fg, 700, 19);
+    });
+    for (var i = 0; i <= k; i += every) txt(p, X0 + i * bw, Y0 + 36, String(HMIN + i * HW), c.fg, 400, 19);
+    el("line", { x1: WX0, y1: 330, x2: WX1, y2: 330, stroke: c.muted, "stroke-width": 4, "stroke-linecap": "round" }, p);
+    txt(p, WX0 - 24, 337, "2", c.muted, 400, 19, "end"); txt(p, WX1 + 24, 337, "10", c.muted, 400, 19, "start");
+    txt(p, 280, 380, "组距 " + HW, c.fg, 700, 20);
+    var hd = handle(p, WX0 + (HW - 2) / 8 * (WX1 - WX0), 330, c.b, "组距", HW, 2, 10, 1, function (x) { return clamp(Math.round((x - WX0) / (WX1 - WX0) * 8 + 2), 2, 10); }, function (v, key) { HW = v; focusH = key; drawHist(); });
+    var q = d / HW, exact = d % HW === 0, sum = f.reduce(function (s, v) { return s + v; }, 0);
+    var q2 = Math.round(q * 100) / 100;
+    var s = "差 " + HMAX + " − " + HMIN + " = " + d + "，" + d + " ÷ " + HW + (Math.abs(q2 - q) < 1e-9 ? " = " + q2 : " ≈ " + q2) + "，";
+    s += exact ? "恰好是整数。可最大值 " + HMAX + " 正好是第 " + q + " 组的右端点，不在组内，所以要再多一组，共 <span class=\"sum\">" + k + "</span> 组。" : "不是整数，取比它大的最小整数，分 <span class=\"sum\">" + k + "</span> 组。";
+    s += "第一组 " + HMIN + " ≤ x < " + (HMIN + HW) + "，最后一组 " + (HMIN + (k - 1) * HW) + " ≤ x < " + (HMIN + k * HW) + "。频数依次 " + f.join("、") + "，合计 " + sum + "，等于数据个数。";
+    s += k >= 10 ? "组太多，长方形又矮又碎，看不出整体形状。" : k <= 3 ? "组太少，数据挤在一起，细节都看不到了。" : "组数适中，能看出中间多、两头少。";
+    document.getElementById("out-hist").innerHTML = s;
+    if (focusH) hd.focus();
+  }
+  document.getElementById("reset-hist").onclick = function () { HW = 5; focusH = false; drawHist(); };
+
+  /* 动手 ③：拖趋势线（线过第 5 天、第 30 天上的两个圆点） */
+  var TA = 6, TB = 26, focusT = null;
+  function drawTrend() {
+    var c = C(), p = document.getElementById("fig-trend"), X0 = 70, Y0 = 300, ux = 11.4, uy = 5.8; p.innerHTML = "";
+    trendAxes(p, c, X0, Y0, ux, uy, 40, 45, 19, 36);
+    txt(p, X0 + 10, 30, "株高/cm", c.muted, 400, 19, "start"); txt(p, 530, Y0 - 14, "天", c.muted, 400, 19, "end");
+    var k = (TB - TA) / 25, b = TA - 5 * k, L = [k, b], pr = Math.round((35 * k + b) * 100) / 100;
+    function Y(v) { return Y0 - v * uy; }
+    // 只画 0 ≤ 株高 ≤ 45 的那一段（k ≥ 0：TA ≤ 15 ≤ TB）
+    var d0 = b < 0 ? -b / k : 0, d1 = 40 * k + b > 45 ? (45 - b) / k : 40;
+    el("line", { x1: X0 + d0 * ux, y1: Y(k * d0 + b), x2: X0 + d1 * ux, y2: Y(k * d1 + b), stroke: c.a, "stroke-width": 3 }, p);
+    el("line", { x1: X0 + 35 * ux, y1: Y0, x2: X0 + 35 * ux, y2: Y(pr), stroke: c.no, "stroke-dasharray": "5 4", "stroke-width": 2 }, p);
+    el("line", { x1: X0, y1: Y(pr), x2: X0 + 35 * ux, y2: Y(pr), stroke: c.no, "stroke-dasharray": "5 4", "stroke-width": 2 }, p);
+    el("circle", { cx: X0 + 35 * ux, cy: Y(pr), r: 6, fill: c.no }, p);
+    TD.forEach(function (d, i) { el("line", { x1: X0 + d * ux, y1: Y(TH[i]), x2: X0 + d * ux, y2: Y(k * d + b), stroke: c.muted, "stroke-width": 1.5 }, p); });
+    var ha = handle(p, X0 + 5 * ux, Y(TA), c.a, "第 5 天处的高度", TA, 0, 15, 0.25, function (y) { return clamp(Math.round((Y0 - y) / uy * 4) / 4, 0, 15); }, function (v, key) { TA = v; focusT = key ? "a" : null; drawTrend(); }, true);
+    var hb = handle(p, X0 + 30 * ux, Y(TB), c.a, "第 30 天处的高度", TB, 15, 35, 0.25, function (y) { return clamp(Math.round((Y0 - y) / uy * 4) / 4, 15, 35); }, function (v, key) { TB = v; focusT = key ? "b" : null; drawTrend(); }, true);
+    var s = side(L), msg;
+    if (s.on === MAXON) msg = "线经过 " + s.on + " 个点，6 个点里最多只能有 " + MAXON + " 个共线，这已经是「过尽量多的点」。";
+    else if (s.up === s.down) msg = "两侧点数一样多，符合「两侧点数相等」的标准。";
+    else if (s.on >= 2) msg = "线经过 " + s.on + " 个点，但还不是最多：有 " + MAXON + " 个点正好共线，找找看。";
+    else if (Math.abs(s.up - s.down) >= 4) msg = "点几乎都在线的一侧，这条线没有「靠近」所有点，预测会偏" + (s.up > s.down ? "低" : "高") + "。";
+    else msg = "试着让两侧点数相等，或让竖直距离之和更小。";
+    document.getElementById("out-trend").innerHTML = "这条线在第 5 天处高 " + TA + " cm，第 30 天处高 " + TB + " cm。点在线上方 " + s.up + " 个、下方 " + s.down + " 个、线上 " + s.on + " 个；灰色竖线（各点到线的竖直距离）之和 " + s.dist + " cm。按这条线，第 35 天株高约 <span class=\"sum\">" + pr + " cm</span>。" + msg + " 标准不同，画出的线和预测都可以不同。";
+    if (focusT) (focusT === "a" ? ha : hb).focus();
+  }
+  document.getElementById("reset-trend").onclick = function () { TA = 6; TB = 26; focusT = null; drawTrend(); };
+
+  function drawAll() { drawEntry(); drawM1(); drawM2(); drawM3(); drawEx2(); drawM4(); drawTrap(); drawPie(); drawHist(); drawTrend(); }
+  drawAll();
+  new MutationObserver(function () { focusPie = focusH = false; focusT = null; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+</body></html>

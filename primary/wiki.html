@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>方法卡 · 培玉小学数学</title>
+<link rel="icon" href="assets/logo.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script defer src="assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<style>
+  /* 小学方法卡与课时脉络（PY-246，沿用 PY-229 的初中版式）：卡片、搜索、按单元筛选与课时脉络表；只用 site.css 变量，跟随深浅色 */
+  .w-search { margin: 14px 0 10px; }
+  .w-search input[type=search] {
+    width: 100%; box-sizing: border-box; font: inherit; font-size: 15px; padding: 9px 14px;
+    border: 1.5px solid var(--line); border-radius: 999px; background: var(--card); color: var(--fg);
+  }
+  .w-search input[type=search]:focus { outline: 3px solid var(--hl); border-color: var(--a); }
+  .w-bar { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin: 8px 0; }
+  .w-pill {
+    flex: 0 0 auto; border: 1px solid var(--line); background: var(--card); color: var(--fg);
+    border-radius: 999px; padding: 5px 12px; font: inherit; font-size: 14px; cursor: pointer;
+  }
+  .w-pill.on { background: var(--a); border-color: var(--a); color: #fff; font-weight: 600; }
+  .w-stat { font-size: 14px; color: var(--muted); margin: 8px 0 12px; }
+  .ws-book { font-size: 20px; margin: 26px 0 4px; }
+  .ws-chap > h3 { font-size: 17px; margin: 18px 0 6px; color: var(--muted); }
+  .w-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px; margin: 12px 0; scroll-margin-top: 64px; transition: box-shadow .2s; overflow-wrap: anywhere;
+  }
+  .w-card.flash, #ws-map tr.flash { box-shadow: 0 0 0 3px var(--hl); }
+  .w-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .w-title { font-size: 18px; font-weight: 700; margin: 0; flex: 1 1 auto; }
+  .w-badge { display: inline-block; font-size: 14px; font-weight: 600; border-radius: 6px; padding: 2px 8px; }
+  .w-badge.concept { background: var(--ok-soft); color: var(--a); }
+  .w-badge.formula { background: var(--hl-soft); color: var(--b); }
+  .w-badge.method  { background: rgba(62,92,118,.15); color: var(--c); }
+  .w-badge.pitfall { background: var(--no-soft); color: var(--no); }
+  .w-trig { font-size: 15px; color: var(--muted); margin: 6px 0 10px; }
+  .w-trig b, .w-key b { color: var(--fg); }
+  .w-key { font-size: 15.5px; line-height: 1.8; margin: 6px 0; }
+  .w-card .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+  .w-warn { font-size: 15px; line-height: 1.75; margin: 10px 0 4px; padding: 8px 12px; border-radius: 8px; background: var(--no-soft); }
+  details.more { margin: 10px 0 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; background: var(--bg); }
+  details.more summary { cursor: pointer; font-weight: 600; font-size: 14.5px; padding: 2px 0; }
+  .w-links {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    border-top: 1px dashed var(--line); margin-top: 12px; padding-top: 10px; font-size: 14px;
+  }
+  .w-links a.act {
+    display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+    border-radius: 6px; border: 1px solid var(--a); color: var(--a); text-decoration: none; font-weight: 600; font-size: 14px;
+  }
+  .w-links a.act:hover { background: var(--a); color: #fff; }
+  .w-links a.sec-link { color: var(--c); text-decoration: none; }
+  .w-links a.sec-link:hover { text-decoration: underline; }
+  .ws-pending { color: var(--muted); }
+  #ws-map { margin-top: 32px; }
+  #ws-map h2 { font-size: 20px; }
+  .ws-table { overflow-x: auto; }
+  #ws-map table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.6; }
+  #ws-map th, #ws-map td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+  #ws-map thead th { color: var(--muted); font-weight: 600; }
+  #ws-map tbody th { width: 34%; font-weight: 600; }
+  #ws-map tr { scroll-margin-top: 64px; }
+  #ws-map a { color: var(--a); text-decoration: none; }
+  #ws-map a:hover { text-decoration: underline; }
+  @media (max-width: 560px) {
+    #ws-map table, #ws-map tbody, #ws-map tr, #ws-map th, #ws-map td { display: block; width: auto; }
+    #ws-map thead { display: none; }
+    #ws-map tr { border-bottom: 1px solid var(--line); padding: 6px 0; }
+    #ws-map th, #ws-map td { border: 0; padding: 2px 0; }
+    #ws-map td:nth-of-type(1)::before { content: "前置："; color: var(--muted); }
+    #ws-map td:nth-of-type(2)::before { content: "后续："; color: var(--muted); }
+  }
+  footer { font-size: 14px; } /* 字号门槛 ≥14px（PY-118）；共享 site.css 的 13px 由 PY-333 统一 */
+</style>
+<link rel="stylesheet" href="assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="assets/knowledge-core.js"></script><script defer src="assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="assets/learning-contrast-state.js?v=c65a32056158"></script>
+</head>
+<body data-stage="primary" data-wiki-stage="primary">
+<div class="wrap">
+<header class="top"><a href="index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="assets/logo.svg" alt=""></a><a class="brand" href="index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="index.html">← 返回主页</a></header>
+<h1>小学数学 · 方法卡</h1>
+<p class="lead">每个单元挑出最常用的方法和最容易错的地方，写成一张张小卡片：什么时候用、怎么做、哪里容易错，再配一个小例子。孩子可以自己看，家长也可以陪着一起读。下面还有全部课时的「先学什么、学完能学什么」脉络表。</p>
+<div id="ws-root"><p class="small">正在加载方法卡……</p></div>
+<footer>培玉智能 · 自编讲解。</footer>
+</div>
+</body></html>

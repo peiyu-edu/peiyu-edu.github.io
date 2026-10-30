@@ -184,6 +184,7 @@
         correct: detail.correct, feedbackSeen: seenBefore || existing.feedbackSeen, time: time }));
       if (revealedNow) write(Object.assign({}, ids, { kind: 'feedback', time: time }));
       updateToolbar();
+      meta.box.dispatchEvent(new CustomEvent('course:answer', { bubbles: true, detail: Object.assign({}, ids, { correct: detail.correct, time: time }) }));
     });
     meta.feedbackSeen = true;
     meta.beforePick = true;
@@ -219,6 +220,7 @@
         correct: detail.correct, feedbackSeen: seenBefore || existing.feedbackSeen, time: time }));
       if (revealedNow) write(Object.assign({}, ids, { kind: 'feedback', time: time }));
       updateToolbar();
+      meta.box.dispatchEvent(new CustomEvent('course:answer', { bubbles: true, detail: Object.assign({}, ids, { correct: detail.correct, time: time }) }));
     });
     meta.feedbackSeen = true;
     meta.beforePick = true;

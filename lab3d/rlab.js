@@ -272,6 +272,8 @@ export function makeLab({ page, aria, modes, quizItems }) {
   renderMath($('#pane-quiz'));
 
   select(curKey);
-  expose({ page, modes: Object.keys(modes), select: (k) => select(k), key: () => curKey, params: () => cur().params, stage: S });
+  // set：质检扫边界用（PY-377），直接写参数、同步控件、重算，不走动画
+  const set = (vals) => { S.cancelTweens(); busy = false; Object.assign(cur().params, vals); for (const k of Object.keys(vals)) ctl[k]?.set(vals[k]); update(); };
+  expose({ page, modes: Object.keys(modes), select: (k) => select(k), key: () => curKey, params: () => cur().params, set, stage: S });
   return { S, select };
 }

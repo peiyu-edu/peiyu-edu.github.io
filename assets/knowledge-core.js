@@ -98,7 +98,12 @@
     if (!junior || !context) return !!pointById(id);
     var p = pointById(id), ids = data ? data.sections.map(function (s) { return s.id; }) : [];
     var current = ids.indexOf(context), first = p ? ids.indexOf(p.first_section) : -1;
-    return current >= 0 && first >= 0 && first <= current;
+    if (current >= 0) return first >= 0 && first <= current;
+    // 已上线课时可能尚未收录知识点。只用同学段已加载的课程索引补足顺序；未知课时仍不可见。
+    var source = window.PeiyuLearningData;
+    if (!p || !source || typeof source.stage !== "function" || typeof source.lesson !== "function" || source.stage() !== "junior") return false;
+    var original = source.lesson(context), initial = source.lesson(p.first_section);
+    return !!(original && initial && Number.isFinite(original.order) && Number.isFinite(initial.order) && initial.order <= original.order);
   }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function list(items, tag) { return "<" + (tag || "ul") + ">" + (items || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</" + (tag || "ul") + ">"; }

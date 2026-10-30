@@ -98,3 +98,11 @@ export function cuboid(a, b, c) {
   const F = [['A', 'B', 'C', 'D'], ['A1', 'B1', 'C1', 'D1'], ['A', 'B', 'B1', 'A1'], ['B', 'C', 'C1', 'B1'], ['C', 'D', 'D1', 'C1'], ['D', 'A', 'A1', 'D1']];
   return { V, F };
 }
+
+/** 课本建系的正方体（选必一 1.4 例题）：棱长 s，D 为原点，DA、DC、DD₁ 为 x、y、z 轴 */
+export function cubeD(s) {
+  return {
+    D: [0, 0, 0], A: [s, 0, 0], B: [s, s, 0], C: [0, s, 0],
+    D1: [0, 0, s], A1: [s, 0, s], B1: [s, s, s], C1: [0, s, s],
+  };
+}

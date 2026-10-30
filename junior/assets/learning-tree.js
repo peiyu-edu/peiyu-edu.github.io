@@ -172,7 +172,8 @@
   }
   function renderOverview() {
     if (junior) {
-      detail.innerHTML = '<section class="lt-overview"><h2>按册、章、节查知识点</h2><p>必学内容默认显示，选学与拓展按需打开。</p>' + (juniorBranches(visiblePoints()) || '<p>这里暂时没有匹配的知识点。</p>') + '</section>';
+      var juniorVisible = visiblePoints();
+      detail.innerHTML = '<section class="lt-overview"><h2>' + (query ? '查找知识点' : '按册、章、节查知识点') + '</h2><p>' + (query ? '找到 ' + juniorVisible.length + ' 个匹配的知识点。' : '必学内容默认显示，选学与拓展按需打开。') + '</p>' + (juniorBranches(juniorVisible) || '<p>已收录的知识点中没有匹配结果。可以换个关键词，或清除筛选后查找。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>') + '</section>';
       document.title = "知识库 · 培玉初中数学";
       return;
     }
@@ -253,6 +254,7 @@
     var variant = practiceVariant(selected);
     node.hidden = !original && !variant;
     node.innerHTML = original ? '<span>来自「' + esc(original.title) + '」第 ' + esc(context.step) + ' 步</span><a href="' + esc(returnURL(original.id, 2).href) + '">' + (context.question ? "回到原题" : "回到原课时") + '</a>' : "";
+    if (junior && original && !points.some(function (p) { return lessonIds(p).includes(original.id); })) node.innerHTML += '<p>本课知识点正在整理，可以查找已收录的前置知识点。</p>';
     if (variant) node.innerHTML += '<a href="' + esc(practiceURL(selected).href) + '">回到刚才的练习</a>';
   }
   function updateURL(push) {

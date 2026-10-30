@@ -70,7 +70,7 @@
     if (storage === undefined) { try { storage = win.localStorage; } catch (_) { storage = null; } }
     var filter = "all", unit = "", source = "", sort = "recent", activeTab = chapters ? "wrongbook" : "today";
     // PY-336: a chapter-test result page links here with ?chapter=j<N>; junior pre-selects that chapter (unknown ids fall back to all).
-    if (chapters) { try { unit = new win.URLSearchParams(options.search !== undefined ? options.search : win.location.search).get("chapter") || ""; } catch (_) { unit = ""; } }
+    try { unit = new win.URLSearchParams(options.search !== undefined ? options.search : win.location.search).get(chapters ? "chapter" : "unit") || ""; } catch (_) { unit = ""; }
     var recordsHost = options.recordsHost, model, destroyed = false, timer, signature;
     var fragmentId = null, fragmentTimer;
     var fragmentInputs = ["wheel", "touchmove", "keydown", "pointerdown"];
@@ -169,7 +169,7 @@
       return hidden[q.identity] ? "hidden" : q.group === "corrected" ? "corrected" : q.streakWrong >= 2 ? "review" : q.fixedByRetry ? "feedback" : "wrong";
     }
     var statusLabels = { wrong: "待巩固", feedback: "反馈后已改对", review: "需要回看", corrected: "已改正", hidden: "已收起" };
-    function sourceText(q) { return { predict: "课内", card: "课内", diagnostic: stage === "high" ? "练习" : "诊断", exam: "章末测验" }[q.questionType] || "课内"; }
+    function sourceText(q) { return { predict: "课内", card: "课内", diagnostic: stage === "high" ? "练习" : "诊断", exam: stage === "primary" ? "单元测评" : "章末测验" }[q.questionType] || "课内"; }
     function item(q) {
       var li = el("li", undefined, "lw-item"); li.dataset.identity = q.identity;
       append(li, el("h3", q.title), el("p", chapters ? statusLabels[wrongStatus(q)] : stateText(q), "lw-state"));
@@ -184,7 +184,8 @@
         }).filter(Boolean);
         if (pointNames.length) li.appendChild(el("p", "知识点：" + pointNames.join("、"), "lw-note"));
       }
-      if (typeof q.lastChoice === "string" && q.lastChoice) li.appendChild(el("p", "你上次选了 " + q.lastChoice));
+      // Option ids a/b/c are shown to students as A/B/C (option order matches id order); other answers stay as typed.
+      if (typeof q.lastChoice === "string" && q.lastChoice) li.appendChild(el("p", "你上次选了 " + (/^[a-z]$/.test(q.lastChoice) ? q.lastChoice.toUpperCase() : q.lastChoice)));
       if (q.wrongCount) li.appendChild(el("p", "改正 " + q.fixes + "/2"));
       if (q.incomplete) li.appendChild(el("p", "这道题的早期记录不完整。", "lw-note"));
       if (q.nextStrongAt && now() < q.nextStrongAt) li.appendChild(el("p", "满 20 小时后再试。", "lw-note"));

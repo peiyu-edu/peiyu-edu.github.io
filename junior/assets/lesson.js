@@ -1,3 +1,70 @@
+/* BEGIN SHARED MATH CONFIG */
+/* PY-401 shared math configuration. Generated copies: tools/sync_math_config.py. */
+var PY_MATH = (function () {
+  var macros = {
+  "\\i": "\\mathrm{i}", "\\e": "\\mathrm{e}",
+  "\\R": "\\mathbf{R}", "\\N": "\\mathbf{N}", "\\Z": "\\mathbf{Z}", "\\Q": "\\mathbf{Q}", "\\C": "\\mathbf{C}",
+  "\\bs": "\\boldsymbol{#1}", "\\symbfup": "\\mathbf{#1}", "\\symbfit": "\\boldsymbol{#1}",
+  "\\overarc": "\\overgroup{#1}", "\\arc": "\\overgroup{#1}", "\\parallelogram": "\\square",
+  "\\upi": "\\pi", "\\uppi": "\\pi", "\\mathbbm": "\\mathbb{#1}",
+  "\\Box": "\\square", "\\normalfont": "", "\\upshape": "", "\\degree": "^\\circ", "\\celsius": "^\\circ\\mathrm{C}",
+  "\\parallel": "\\mathrel{\\htmlClass{py-par}{\\char\"2225}}",
+  "\\nparallel": "\\mathrel{\\htmlClass{py-par}{\\char\"2226}}",
+};
+  macros["∥"] = macros["\\parallel"];
+  macros["∦"] = macros["\\nparallel"];
+  function trust(context) {
+    return context.command === "\\htmlClass" && context.class === "py-par";
+  }
+  return { macros: macros, trust: trust };
+})();
+if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
+/* Display-only glyph styling, including labels inserted after initial math render.
+ * Never touches attributes, input values, stored answers or KaTeX's MathML. */
+(function () {
+  if (typeof document === "undefined" || !document.createTreeWalker || !document.addEventListener || window.pyParallelDisplayReady) return;
+  window.pyParallelDisplayReady = true;
+  var doc = document;
+  function styleParallel(root) {
+    if (!root) return;
+    var walker = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    var nodes = [], node;
+    while ((node = walker.nextNode())) {
+      if (/[∥∦]/.test(node.data) && node.parentElement &&
+          !node.parentElement.closest('script,style,textarea,input,pre,code,math,.katex,.py-par,[contenteditable]')) nodes.push(node);
+    }
+    nodes.forEach(function (text) {
+      var fragment = doc.createDocumentFragment(), styled = false;
+      text.data.split(/(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\)|\$[^$]*?\$)/g).forEach(function (segment, index) {
+        if (index % 2) { fragment.appendChild(doc.createTextNode(segment)); return; }
+        segment.split(/([∥∦])/).forEach(function (part) {
+        if (!/[∥∦]/.test(part)) { fragment.appendChild(doc.createTextNode(part)); return; }
+        var svg = text.parentElement.namespaceURI === 'http://www.w3.org/2000/svg';
+        var span = svg ? doc.createElementNS('http://www.w3.org/2000/svg', 'tspan') : doc.createElement('span');
+        styled = true; span.setAttribute('class', 'py-par'); span.textContent = part; fragment.appendChild(span);
+      });
+      });
+      if (styled) text.replaceWith(fragment);
+    });
+  }
+  function start() {
+    styleParallel(doc.body);
+    var pending = false;
+    var observer = new MutationObserver(function () {
+      if (pending) return;
+      pending = true;
+      queueMicrotask(function () { pending = false; styleParallel(doc.body); });
+    });
+    observer.observe(doc.body, { childList: true, subtree: true, characterData: true });
+    window.addEventListener("pagehide", function () { observer.disconnect(); });
+    window.addEventListener("pageshow", function () {
+      observer.observe(doc.body, { childList: true, subtree: true, characterData: true });
+    });
+  }
+  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+/* END SHARED MATH CONFIG */
 /* 培玉 · 高中数学互动站 — 页面公共脚本：步骤切换、先猜、真题练习、做题记录、KaTeX。
    每节页面只需：<body data-sec="b1-1-3">，步骤写成 <section class="step" data-title="…">，
    先猜写成 <div class="predict" data-answer="B" data-id="p1">…</div>（见 lessons/_template.html），
@@ -26,10 +93,7 @@
   }
 
   /* ---------- KaTeX ---------- */
-  var MACROS = {
-    "\\i": "\\mathrm{i}", "\\e": "\\mathrm{e}", "\\R": "\\mathbf{R}", "\\N": "\\mathbf{N}", "\\Z": "\\mathbf{Z}",
-    "\\Q": "\\mathbf{Q}", "\\C": "\\mathbf{C}", "\\bs": "\\boldsymbol{#1}", "\\symbfup": "\\mathbf{#1}", "\\symbfit": "\\boldsymbol{#1}"
-  };
+  var MACROS = PY_MATH.macros;
   function math(el) {
     if (window.renderMathInElement) {
       window.renderMathInElement(el, {
@@ -37,7 +101,7 @@
           { left: "$$", right: "$$", display: true }, { left: "\\[", right: "\\]", display: true },
           { left: "\\(", right: "\\)", display: false }, { left: "$", right: "$", display: false }
         ],
-        macros: MACROS, throwOnError: false, strict: "ignore"
+        macros: MACROS, trust: PY_MATH.trust, throwOnError: false, strict: "ignore"
       });
     }
   }
@@ -542,7 +606,7 @@
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");
-      ws.src = "../assets/wiki.js?v=vs-d563426d743f";
+      ws.src = "../assets/wiki.js?v=vs-6b55a0fe0acb";
       document.head.appendChild(ws);
     }
     var hs = document.createElement("script"); // 交互层（PY-53）

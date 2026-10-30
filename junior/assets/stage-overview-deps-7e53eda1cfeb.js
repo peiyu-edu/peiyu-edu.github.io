@@ -19,7 +19,7 @@ var local={exports:{}};
 })(typeof globalThis !== "undefined" ? globalThis : this, function () {
   "use strict";
   var KEY = "peiyu.hs.learning.v1", DAY = 86400000;
-  var KINDS = ["view", "answer", "feedback", "resume", "self-rating", "review"];
+  var KINDS = ["view", "answer", "feedback", "resume", "self-rating", "review", "quiz-submit"];
   var TYPES = ["diagnostic", "predict", "exam", "card", "lab", "cue"];
   function obj(v) { return v && typeof v === "object" && !Array.isArray(v); }
   function dict() { return Object.create(null); }
@@ -51,6 +51,20 @@ var local={exports:{}};
     var parts; try { parts = JSON.parse(identity); } catch (err) { return null; }
     return Array.isArray(parts) && parts.length === 4 && parts.every(function (p) { return typeof p === "string"; }) && TYPES.indexOf(parts[0]) >= 0 && parts[2] ? parts : null;
   }
+  // Optional evidence is preserved through reload, compaction and export. Self-checks never claim independence.
+  function assessmentEvidence(input) {
+    var out = {};
+    if (input.selfCheck === true) out.selfCheck = true;
+    if (Array.isArray(input.pointIds)) out.pointIds = input.pointIds.filter(function (p) { return !!str(p); }).slice(0, 100);
+    return out;
+  }
+  function quizScore(value) {
+    if (!obj(value)) return null;
+    var keys = ["correct", "total", "selfCorrect", "selfTotal"];
+    if (!keys.every(function (k) { return Number.isInteger(value[k]) && value[k] >= 0 && value[k] <= 12; }) ||
+        value.correct > value.total || value.selfCorrect > value.selfTotal || value.total + value.selfTotal > 12 || (!value.total && !value.selfTotal)) return null;
+    return { correct: value.correct, total: value.total, selfCorrect: value.selfCorrect, selfTotal: value.selfTotal };
+  }
   function normalize(input, now, legacy) {
     if (!obj(input) || KINDS.indexOf(input.kind) < 0) return null;
     var ids = identifiers(input), t = time(input.time === undefined ? now : input.time);
@@ -62,11 +76,17 @@ var local={exports:{}};
       feedbackSeen: input.feedbackSeen === true, step: Number.isInteger(input.step) && input.step >= 1 && input.step <= 5 ? input.step : null,
       rating: ["know", "fuzzy", "no"].indexOf(rating) >= 0 ? rating : null,
       legacy: !!legacy, independent: legacy ? null : false, attemptKind: null });
+    Object.assign(e, assessmentEvidence(input));
+    if (e.selfCheck) e.feedbackSeen = true;
+    if (input.kind === "quiz-submit") {
+      e.score = quizScore(input.score);
+      if (!e.score || !e.identity || !e.contentVersion) return null;
+    }
     if (input.kind === "self-rating" && !e.rating) return null;
     if (input.kind !== "answer") e.correct = null;
     // Explicit ids are scoped to an identity. The default also deduplicates duplicate listeners.
     e.id = (legacy ? "legacy:" : "native:") + hash(input.dedupeKey ? [ids.identity, input.kind, String(input.dedupeKey)] :
-      [e.kind, e.identity, e.sectionId, e.pointId, e.choice, e.correct, e.feedbackSeen, e.step, e.rating, e.time]);
+      [e.kind, e.identity, e.sectionId, e.pointId, e.choice, e.correct, e.feedbackSeen, e.step, e.rating, e.time].concat(e.score ? [e.score] : []));
     return e;
   }
   function blank() { return { version: 1, events: [], questions: dict(), marks: dict(), guards: dict(), resume: null, historyIncomplete: false, compacted: false }; }
@@ -84,6 +104,7 @@ var local={exports:{}};
       Object.keys(s.questions).forEach(function (k) {
         var q = s.questions[k], dest = out.questions[k] || (out.questions[k] = newQuestion(q));
         dest.firstAnswer = earlier(dest.firstAnswer, q.firstAnswer); dest.lastAnswer = later(dest.lastAnswer, q.lastAnswer);
+        if (q.firstSubmission) dest.firstSubmission = earlier(dest.firstSubmission, q.firstSubmission);
         dest.feedbackSeen = dest.feedbackSeen || q.feedbackSeen; dest.legacyExposure = dest.legacyExposure || q.legacyExposure;
         dest.lastReview = later(dest.lastReview, q.lastReview);
         if (q.reviewDueAt !== null && (dest.reviewDueAt === null || q.reviewScheduledAt > dest.reviewScheduledAt ||
@@ -146,6 +167,7 @@ var local={exports:{}};
       var q = s.questions[k]; if (!obj(q)) return;
       var n = newQuestion(q); if (n.identity !== k) return;
       n.firstAnswer = event(q.firstAnswer); n.lastAnswer = event(q.lastAnswer);
+      if (q.firstSubmission) n.firstSubmission = event(q.firstSubmission);
       n.feedbackSeen = q.feedbackSeen === true; n.legacyExposure = q.legacyExposure === true;
       n.reviewDueAt = typeof q.reviewDueAt === "number" && q.reviewDueAt >= 0 ? q.reviewDueAt : null;
       n.reviewReason = str(q.reviewReason, 80); n.lastReview = event(q.lastReview); n.reviewConsumedId = str(q.reviewConsumedId, 100);
@@ -155,6 +177,7 @@ var local={exports:{}};
       var m = s.marks[k]; if (!obj(m) || k.length > 100 || KINDS.indexOf(m.kind) < 0) return;
       out.marks[k] = { kind: m.kind, identity: identityParts(str(m.identity, 1000)) ? m.identity : null, base: str(m.base, 700), time: time(m.time), choice: str(m.choice, 300), sectionId: str(m.sectionId), pointId: str(m.pointId),
         correct: typeof m.correct === "boolean" ? m.correct : null, attemptKind: str(m.attemptKind, 20), legacy: m.legacy === true };
+      Object.assign(out.marks[k], assessmentEvidence(m));
       if (m.kind === "answer" && (!out.questions[m.identity] || !out.questions[m.identity].firstAnswer)) out.historyIncomplete = true;
     });
     out.resume = event(s.resume);
@@ -173,33 +196,78 @@ var local={exports:{}};
     var state = blank(), loaded = false, blockedWrite = false, memoryOnly = !storage, problems = [], listeners = [], updating = false;
     // PY-382: answers() runs once per content item (thousands per page). Skip re-parsing an unchanged
     // stored ledger, and group marks by identity once per ledger change instead of rescanning per call.
-    var syncedRaw = null, dirty = true, marksByIdentity = null;
+    var syncedRaw = null, writtenRaw = null, syncedState = blank(), dirty = true, marksByIdentity = null;
+    // Receipts survive KEY-only removal, so retained legacy sources cannot recreate deleted
+    // evidence on reload. Full storage.clear() removes both receipts and those sources.
+    var LEGACY_SEEN = KEY + ".legacy-seen", legacySeen = dict();
     function problem(msg) { if (problems.indexOf(msg) < 0) problems.push(msg); }
     function read(key) {
-      try { return storage ? storage.getItem(key) : null; } catch (_) { memoryOnly = true; state.historyIncomplete = true; problem("storage-unavailable"); return null; }
+      try { return storage ? storage.getItem(key) : undefined; } catch (_) { memoryOnly = true; state.historyIncomplete = true; problem("storage-unavailable"); return undefined; }
     }
     function json(key) { var raw = read(key); if (!raw) return null; try { return JSON.parse(raw); } catch (_) { problem("legacy-corrupt:" + key); state.historyIncomplete = true; return null; } }
-    function sync() {
+    function sync(cleared) {
       var raw = read(KEY);
-      if (!dirty && raw !== null && raw === syncedRaw) return;
+      // A failed read is not deletion: keep all unsaved evidence and the last good baseline.
+      if (raw === undefined) return false;
+      if (!cleared && !dirty && raw === syncedRaw) return true;
       var parsed = parse(raw);
-      if (parsed.corrupt) { blockedWrite = true; memoryOnly = true; state.historyIncomplete = true; problem("learning-storage-corrupt"); syncedRaw = null; return; }
-      state = merge(state, parsed.state); marksByIdentity = null;
-      syncedRaw = raw; dirty = false;
+      if (parsed.corrupt) { blockedWrite = true; memoryOnly = true; state.historyIncomplete = true; problem("learning-storage-corrupt"); return false; }
+      var next = parsed.state, baseline = syncedState;
+      // A deletion can occur immediately after our write, before a read acknowledges it.
+      // A strict subset of that successful write is deletion too. A competing write with
+      // new marks still follows the observed baseline, preserving concurrent additions.
+      if (writtenRaw !== null && writtenRaw !== raw) {
+        var written = parse(writtenRaw).state;
+        if (Object.keys(next.marks).every(function (id) { return !!written.marks[id]; })) baseline = merge(baseline, written);
+      }
+      var priorIds = Object.keys(baseline.marks);
+      var reset = cleared || (raw === null && (syncedRaw !== null || writtenRaw !== null)) ||
+        ((raw !== syncedRaw || (writtenRaw !== null && raw !== writtenRaw)) && !Object.keys(next.marks).length && !next.events.length && !Object.keys(next.questions).length && !next.resume) ||
+        (priorIds.length && !priorIds.some(function (id) { return !!next.marks[id]; }));
+      if (reset) { state = blank(); blockedWrite = false; }
+      else if (raw !== syncedRaw || (writtenRaw !== null && raw !== writtenRaw)) {
+        // Three-way synchronization: absence of previously observed evidence means deletion.
+        // Only local additions not in the last read remain eligible for a concurrent union.
+        // Removing detailed events alone is ordinary timeline compaction, not mark deletion.
+        var removed = dict(), detailed = dict(), removedQuestions = dict();
+        Object.keys(baseline.questions).forEach(function (id) { if (!next.questions[id]) { removedQuestions[id] = true; delete state.questions[id]; } });
+        Object.keys(state.marks).forEach(function (id) { if (removedQuestions[state.marks[id].identity]) { removed[id] = true; delete state.marks[id]; } });
+        priorIds.forEach(function (id) { if (!next.marks[id]) { removed[id] = true; delete state.marks[id]; } });
+        next.events.forEach(function (e) { detailed[e.id] = true; });
+        var oldDetailed = dict(); baseline.events.forEach(function (e) { oldDetailed[e.id] = true; });
+        state.events = state.events.filter(function (e) { return !removed[e.id] && (!oldDetailed[e.id] || detailed[e.id]); });
+        Object.keys(baseline.guards).forEach(function (id) { if (!next.guards[id]) delete state.guards[id]; });
+        if (state.resume && baseline.resume && state.resume.id === baseline.resume.id && !next.resume) state.resume = null;
+      }
+      state = merge(state, next); marksByIdentity = null;
+      syncedState = next; syncedRaw = raw; writtenRaw = null; dirty = false;
+      return true;
+    }
+    function saveLegacySeen() {
+      var ids = Object.keys(legacySeen).sort();
+      if (!ids.length) return;
+      try {
+        // Another tab may have consumed additional legacy entries since our import.
+        var saved = json(LEGACY_SEEN);
+        if (Array.isArray(saved)) saved.forEach(function (id) { if (str(id, 100)) legacySeen[id] = true; });
+        var raw = JSON.stringify(Object.keys(legacySeen).sort());
+        if (read(LEGACY_SEEN) !== raw) storage.setItem(LEGACY_SEEN, raw);
+      } catch (_) { problem("legacy-receipts-unavailable"); }
     }
     function write() {
       var serialized = canonical(state);
       if (storage.getItem(KEY) !== serialized) storage.setItem(KEY, serialized);
+      writtenRaw = serialized;
     }
     function persist() {
       state.events.sort(function (a, b) { return a.time - b.time || a.id.localeCompare(b.id); });
       if (state.events.length > maxEvents) { state.events = state.events.slice(-maxEvents); state.compacted = true; }
       if (!storage || blockedWrite) { memoryOnly = true; return; }
-      try { write(); memoryOnly = false; return; } catch (_) { /* Keep every exposure guard, shorten only the recent detailed timeline. */ }
+      try { write(); memoryOnly = false; saveLegacySeen(); return; } catch (_) { /* Keep every exposure guard, shorten only the recent detailed timeline. */ }
       var detailed = state.events;
       for (var count = Math.floor(detailed.length / 2); ; count = Math.floor(count / 2)) {
         state.events = count ? detailed.slice(-count) : []; state.compacted = true;
-        try { write(); memoryOnly = false; problem("timeline-compacted"); return; } catch (_) { if (!count) break; }
+        try { write(); memoryOnly = false; saveLegacySeen(); problem("timeline-compacted"); return; } catch (_) { if (!count) break; }
       }
       state.events = detailed; memoryOnly = true; problem("storage-full");
       // A quota-sized store normally still accepts a shorter replacement. Preserve old evidence while
@@ -234,11 +302,13 @@ var local={exports:{}};
           q.reviewReason = e.legacy ? "legacy-evidence" : e.correct === false ? "incorrect-answer" : reviewing ? "reviewed-familiar-question" : e.independent ? "independent-answer" : "familiar-question";
         }
       }
+      if (e.kind === "quiz-submit" && q) q.firstSubmission = earlier(q.firstSubmission, e);
       if (e.kind === "feedback" && q) { q.feedbackSeen = true; if (e.legacy) state.guards[e.base] = true; }
       if (e.kind === "review" && q) q.lastReview = later(q.lastReview, e);
       if (e.kind === "resume" && e.sectionId) state.resume = later(state.resume, e);
       state.events.push(e); dirty = true; marksByIdentity = null;
       state.marks[e.id] = { kind: e.kind, identity: e.identity, base: e.base, time: e.time, choice: e.choice, sectionId: e.sectionId, pointId: e.pointId, correct: e.correct, attemptKind: e.attemptKind, legacy: e.legacy };
+      Object.assign(state.marks[e.id], assessmentEvidence(e));
       return e;
     }
     // Marks keep the persisted schema (no questionId field); type and id come from identity [type, owner, questionId, version].
@@ -265,12 +335,18 @@ var local={exports:{}};
         return h.kind === "reset" ? n.time <= time(h.t) : n.correct === h.correct && Math.abs(n.time - time(h.t)) <= 2000;
       });
     }
+    function consumedLegacy(id) {
+      if (legacySeen[id]) return true;
+      legacySeen[id] = true; return false;
+    }
     function legacy(input, key) {
-      if (legacyNativeMatch(input)) return;
       var e = normalize(Object.assign({}, input, { contentVersion: null, dedupeKey: key }), 0, true);
-      if (e) insert(e);
+      if (!e || consumedLegacy(e.id) || legacyNativeMatch(input)) return;
+      insert(e);
     }
     function importLegacy() {
+      var saved = json(LEGACY_SEEN);
+      if (Array.isArray(saved)) saved.forEach(function (id) { if (str(id, 100)) legacySeen[id] = true; });
       var high = stage === "high";
       var log = json(LOG), knowledge = high ? json("peiyu.hs.knowledge.v1") : null, cards = high ? json("peiyu.hs.cards") : null;
       if (Array.isArray(log)) log.forEach(function (e) {
@@ -300,7 +376,7 @@ var local={exports:{}};
         if (Array.isArray(knowledge.history)) knowledge.history.forEach(function (h) {
           if (!obj(h) || !str(h.pointId) || ["attempt", "reset"].indexOf(h.kind) < 0) return;
           // Native evidence already accounts for matching legacy-writer entries, even after timeline compaction.
-          if (nativeKnowledgeHistory(h)) return;
+          if (consumedLegacy("history:" + hash([h.pointId, h.kind, h.t, h.correct])) || nativeKnowledgeHistory(h)) return;
           // History carries no diagnostic ID/version and is truncated by the old UI. It cannot establish independence.
           state.guards[JSON.stringify(["diagnostic", h.pointId, "*"])] = true;
           var p = knowledge.points[h.pointId], a = p && p.attempt;
@@ -320,6 +396,7 @@ var local={exports:{}};
         var saved = json(key); if (!obj(saved)) return;
         Object.keys(saved).forEach(function (id) {
           var qid = id.replace(/#\d+$/, ""), base = identifiers({ questionType: "predict", sectionId: match[1], questionId: qid }).base;
+          if (consumedLegacy("hci:" + hash([key, id, saved[id]]))) return;
           // HCI is a restoration cache, often duplicating an already retained legacy/native answer.
           if (Object.keys(state.questions).some(function (k) { return state.questions[k].base === base && state.questions[k].firstAnswer; })) return;
           state.guards[base] = true;
@@ -342,7 +419,7 @@ var local={exports:{}};
       finally { updating = false; }
     }
     function question(input, counts) {
-      ensure(); var ids = identifiers(input), stored = state.questions[ids.identity], q = stored ? copy(stored) : newQuestion(ids);
+      ensure(); if (!counts) sync(); var ids = identifiers(input), stored = state.questions[ids.identity], q = stored ? copy(stored) : newQuestion(ids);
       q.hasAnswered = !!q.firstAnswer; q.legacyExposure = q.legacyExposure || guard(ids);
       q.feedbackSeen = q.feedbackSeen || q.legacyExposure;
       q.canAnswerIndependently = !state.historyIncomplete && !!q.contentVersion && !q.hasAnswered && !q.feedbackSeen && !q.legacyExposure;
@@ -395,7 +472,7 @@ var local={exports:{}};
             else if (answerCount === 1 && q && q.reviewScheduleId === entry.id && consumed &&
               consumed.kind === "review" && consumed.identity === identity && consumed.time < m.time) afterReview = true;
           }
-          result.push({ time: m.time, correct: m.correct, attemptKind: m.attemptKind, afterReview: afterReview });
+          result.push(Object.assign({ time: m.time, correct: m.correct, attemptKind: m.attemptKind, afterReview: afterReview }, assessmentEvidence(m)));
         }
         priorReview = priorReview || reviewAtTime; start = end;
       }
@@ -441,7 +518,13 @@ var local={exports:{}};
     }
     if (options.eventTarget && options.eventTarget.addEventListener) options.eventTarget.addEventListener("storage", function (e) {
       if (e.key !== KEY && e.key !== null && !(typeof e.key === "string" && (e.key === LOG || /^peiyu\.hs\.(knowledge\.v1|cards|hci\.)/.test(e.key)))) return;
-      ensure(); sync(); if (e.key !== KEY) importLegacy(); persist(); notify();
+      if (!loaded && (e.key === KEY || e.key === null)) loaded = true;
+      else ensure();
+      if (!sync(e.key === null || (e.key === KEY && e.newValue === null))) { notify(); return; }
+      if (e.key !== KEY && e.key !== null) importLegacy();
+      // A clear notification is not a request to recreate the namespace (or re-migrate legacy).
+      if (syncedRaw !== null || (e.key !== KEY && e.key !== null)) persist();
+      notify();
     });
     return { key: KEY, stage: stage, load: function () { ensure(); return snapshot(); }, record: record, snapshot: snapshot, question: question, answers: answers, answersReader: answersReader,
       exportJSON: exportJSON, subscribe: function (fn) { if (typeof fn !== "function") return function () {}; listeners.push(fn);

@@ -80,7 +80,6 @@
         fixedByRetry: false, recentWeakWrong: false, weakCorrect: false, incomplete: false, hasLegacy: false,
         clockAnomaly: false, clockAnomalyCount: 0, answered: false, againWrong: false,
         // Unlock inputs mirror primary/site/p-assets/concept-practice.js: the stored first answer (positive time only) and "touched".
-        firstFromRow: !!stored && Object.prototype.hasOwnProperty.call(stored, "firstAnswer"),
         firstAnswerAt: stored && stored.firstAnswer && stored.firstAnswer.time > 0 ? stored.firstAnswer.time : null,
         touched: !!(stored && (stored.feedbackSeen || stored.firstAnswer)),
         evidence: { s0: 0, s1Own: 0, s1Family: 0, weak: 0, startWeak: 0, ignored: 0 }, strongEvidence: [] });
@@ -115,7 +114,7 @@
         // E1 currently omits id/legacy. Its legacy attemptKind is explicit; the
         // content signature is a deterministic fallback, never insertion order.
         var a = { id: typeof answer.id === "string" && answer.id ? answer.id : "signature:" + canonical([q.identity, answer.time, answer.correct, answer.attemptKind]),
-          time: answer.time, correct: answer.correct, attemptKind: answer.attemptKind,
+          time: answer.time, correct: answer.correct, attemptKind: answer.attemptKind, selfCheck: answer.selfCheck === true,
           legacy: answer.legacy === true || answer.attemptKind === "legacy", afterReview: answer.afterReview,
           clockAnomaly: answer.clockAnomaly === true,
           version: answer.contentVersion === undefined ? q.contentVersion : answer.contentVersion, model: model };
@@ -126,8 +125,6 @@
       });
       deduped.forEach(function (entry) {
         events.push(entry.answer);
-        // A snapshot row that carries firstAnswer is authoritative (same as the card page); bare rows fall back to the event stream.
-        var at = entry.answer.time; if (!q.firstFromRow && Number.isFinite(at) && at > 0 && (q.firstAnswerAt === null || at < q.firstAnswerAt)) q.firstAnswerAt = at;
       });
     });
     events.sort(function (a, b) {
@@ -170,7 +167,7 @@
       }
       model.ownEligible = true; q.answered = true;
       if (q.state === "unseen") q.state = "practicing";
-      var strength = q.anchorAt === null ? (a.attemptKind === "independent" ? "S0" : "start-W") : a.time - q.anchorAt >= GAP ? "S1" : "W";
+      var strength = a.selfCheck ? "W" : q.anchorAt === null ? (a.attemptKind === "independent" ? "S0" : "start-W") : a.time - q.anchorAt >= GAP ? "S1" : "W";
       // Test both sides using pre-event anchors; an own W never feeds family.
       var targets = strength === "S0" || strength === "S1" ? (families.get(q.family) || []).filter(function (target) {
         return target !== model && target.q.anchorAt !== null && a.time - target.q.anchorAt >= GAP;

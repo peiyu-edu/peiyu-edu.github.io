@@ -8,18 +8,25 @@
 
   function recent(data) {
     var position = data.studyPosition, home = document.querySelector("[data-home-study-revision]");
-    if (!object(position) || position.fr !== "FR008" || !Object.hasOwn(steps, position.step) ||
-        !home || position.revision !== home.dataset.homeStudyRevision || !time(position.at)) return [];
-    var ids = home.dataset.studyPractice.split(" ");
+    if (!object(position) || !/^FR\d{3}$/.test(position.fr) || !Object.hasOwn(steps, position.step) || !time(position.at)) return [];
+    var catalog = document.getElementById('study-catalog'), entry;
+    try { entry = catalog && JSON.parse(catalog.textContent)[position.fr]; } catch (e) { return []; }
+    if (!entry && position.fr === 'FR008' && home) {
+      entry = { revision: home.dataset.homeStudyRevision, practice: home.dataset.studyPractice.split(' '), title: '不等式的证明', steps: steps };
+    }
+    if (!entry || position.revision !== entry.revision) return [];
+    var ids = entry.practice;
     if (position.step === "practice" && ids.every(function (id) { return data.problems[id] && ["ok", "no", "part"].includes(data.problems[id].status); })) return [];
-    return [{ at: position.at, fr: position.fr, href: "s/FR008.html#study-" + position.step,
-      text: "不等式的证明 · " + steps[position.step] }];
+    return [{ at: position.at, fr: position.fr, href: "s/" + position.fr + ".html#study-" + position.step,
+      text: entry.title + " · " + entry.steps[position.step] }];
   }
   window.PeiyuStudy = { recent: recent };
 
   function initRoute(api) {
     var route = document.querySelector("[data-study-route]");
     if (!route) return;
+    var routeSteps = Object.assign({}, steps);
+    route.querySelectorAll('.study-route-nav a').forEach(function (a) { routeSteps[a.hash.replace('#study-', '')] = a.textContent; });
     function remember(step) {
       if (!Object.hasOwn(steps, step)) return;
       var data = api.load();
@@ -27,7 +34,7 @@
       var message = document.getElementById("study-save-message");
       try {
         localStorage.setItem(STORE, JSON.stringify(data));
-        message.textContent = "已记住位置：" + steps[step] + "，下次可从首页接着看。";
+        message.textContent = "已记住位置：" + routeSteps[step] + "，下次可从首页接着看。";
       } catch (e) {
         message.textContent = "当前浏览器无法保存位置。可以继续练习，下次请从学习路线重新进入。";
       }
@@ -64,8 +71,10 @@
       line.dataset.excluded = String(m > 4);
       line.setAttribute("aria-label", "数轴上，允许范围从" + m + "开始，原等号位置4" + (m > 4 ? "不在" : "位于") + "允许范围内");
     }
-    slider.addEventListener("input", function () { explore(); remember("example"); });
-    explore();
+    if (slider) {
+      slider.addEventListener("input", function () { explore(); remember("example"); });
+      explore();
+    }
     saveHash();
   }
 

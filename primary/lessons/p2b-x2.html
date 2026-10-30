@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=960b69da9959"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <style>
@@ -108,7 +108,7 @@
       <li><b>第 ③ 格提问题</b>：「可以吃几天？还剩几个？」</li>
       <li><b>第 ④ 格写算式</b>：写出算式 <code>14 ÷ 3 = 4（天）……2（个）</code>，讲给爸爸妈妈听！</li>
     </ol>
-    <p class="small">夸孩子「你画的个数和文字里的数字一模一样，条件和问题也对得上」，不说「真聪明」。</p>
+    <p class="small">可以这样夸：「你画的个数和文字里的数字一模一样，条件和问题也对得上」。</p>
   </div>
   <p class="no-print" style="margin-top:12px"><button class="btn" type="button" onclick="window.print()">打印这张卡</button></p>
 </section>
@@ -169,8 +169,11 @@ document.addEventListener("DOMContentLoaded", function () {
       var g = el("g", { class: "part", tabindex: "0", role: "button", "aria-label": txt }, svg);
       el("rect", { x: x, y: y, width: 168, height: 92, rx: 10, style: "fill:var(--hl-soft);stroke:" + colors[i] + ";stroke-width:2.5" }, g);
       el("text", { x: x + 84, y: y + 40, "text-anchor": "middle", style: "fill:" + colors[i] + ";font-size:16px;font-weight:700" }, g).textContent = i < 2 ? "数学信息" : (i === 2 ? "提出问题" : "列式解答");
-      // Long panel lines wrap at the comma so they stay inside the 168-wide panel (and the viewBox).
-      var lines = txt.length > 10 && txt.indexOf("，") > 0 ? [txt.slice(0, txt.indexOf("，") + 1), txt.slice(txt.indexOf("，") + 1)] : [txt];
+      // Wrap long conditions/questions after punctuation, and put the remainder on its own line.
+      var splitAt = txt.indexOf("，") + 1;
+      if (!splitAt) splitAt = txt.indexOf("？") + 1;
+      if (!splitAt || splitAt === txt.length) splitAt = txt.indexOf("……");
+      var lines = txt.length > 10 && splitAt > 0 ? [txt.slice(0, splitAt), txt.slice(splitAt)] : [txt];
       lines.forEach(function (line, j) {
         el("text", { x: x + 84, y: y + (lines.length > 1 ? 62 + j * 20 : 70), "text-anchor": "middle", style: "fill:var(--fg);font-size:17px;font-weight:700" }, g).textContent = line;
       });

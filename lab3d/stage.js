@@ -741,14 +741,26 @@ export const CHAPTER8 = [
   { id: 'b2-8-3', no: '8.3', name: '表面积与体积', lab: 'b2-8-3.html', icon: 'cone' },
   { id: 'b2-8-4', no: '8.4', name: '点、直线、平面的位置关系', lab: 'b2-8-4.html', icon: 'plane' },
   { id: 'b2-8-5', no: '8.5', name: '直线、平面的平行', lab: 'b2-8-5.html', icon: 'parallel' },
-  { id: 'b2-8-6', no: '8.6', name: '直线、平面的垂直', lab: 'b2-8-6.html', icon: 'perp' },
+  { id: 'b2-8-6', no: '8.6', name: '直线、平面的垂直', lab: 'b2-8-6.html', icon: 'perp',
+    // 例题舞台（PY-377）：课时页里的例题搬上舞台，分步作图，几何法和法向量法两套读数对照
+    ex: [
+      { id: 'b2-8-6-x1', no: '例 1', name: '鳖臑与二面角', icon: 'perp' },
+      { id: 'b2-8-6-x2', no: '例 2', name: '正方体的线面角', icon: 'prism' },
+      { id: 'b2-8-6-x3', no: '例 3', name: '正四面体的二面角', icon: 'plane' },
+    ] },
 ];
 // 选必一第 1 章（PY-355）：做了 3D 舞台的节填 lab，其余链到原版课时页
 export const CHAPTER_E1_1 = [
   { id: 'e1-1-1', no: '1.1', name: '空间向量及其运算', lab: 'e1-1-1.html', icon: 'vec' },
   { id: 'e1-1-2', no: '1.2', name: '空间向量基本定理', lab: 'e1-1-2.html', icon: 'basis' },
   { id: 'e1-1-3', no: '1.3', name: '空间向量运算的坐标表示', lab: 'e1-1-3.html', icon: 'axes' },
-  { id: 'e1-1-4', no: '1.4', name: '空间向量的应用', lab: 'e1-1-4.html', icon: 'perp' },
+  { id: 'e1-1-4', no: '1.4', name: '空间向量的应用', lab: 'e1-1-4.html', icon: 'perp',
+    // 例题舞台（PY-384）：棱长 2 的正方体，D 为原点，和课时页例题同一套坐标
+    ex: [
+      { id: 'e1-1-4-x1', no: '例 1–2', name: '法向量与平行垂直', icon: 'perp' },
+      { id: 'e1-1-4-x2', no: '例 3', name: '点到平面的距离', icon: 'prism' },
+      { id: 'e1-1-4-x3', no: '例 4', name: '三种角', icon: 'plane' },
+    ] },
 ];
 export const CHAPTER_E1_3 = [
   { id: 'e1-3-1', no: '3.1', name: '椭圆', lab: 'e1-3-1.html', icon: 'ellipse' },
@@ -774,16 +786,49 @@ const LESSON_ICON = {
   parallel: '<path d="M6 30l10-8h26l-10 8z" fill="var(--ok-soft)"/><path d="M12 14h22M14 20h22"/>',
   perp: '<path d="M6 30l10-8h26l-10 8z" fill="var(--ok-soft)"/><path d="M24 6v20"/><path d="M24 22h3v4"/>',
 };
+// 「下载 A4 讲义」入口（PY-372）。讲义由 tools/lab3d_sheet.mjs 导出到 highSchool/out/sheets/lab3d/，
+// 4360 上在 /out/sheets/lab3d/（和 219 份课时讲义同一路子）。先探一下文件在不在，不在就不出按钮，免得学生点进 404。
+export function sheetLink(id) {
+  const top = document.querySelector('.l3-top');
+  if (!top || top.querySelector('.l3-sheet')) return Promise.resolve(null);
+  const href = `../out/sheets/lab3d/${id}-3d-sheet.pdf`;
+  return fetch(href, { method: 'HEAD', cache: 'no-store' }).then((r) => {
+    if (!r.ok || !/pdf/i.test(r.headers.get('content-type') || '')) return null;
+    const a = document.createElement('a');
+    a.className = 'pill l3-sheet';
+    a.href = href;
+    a.download = `${id}-3d-sheet.pdf`;
+    a.title = '下载本页的 A4 讲义（PDF）：每个实验一张图，附练一练答案与解析';
+    a.innerHTML = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v8M4.5 6.8 8 10.3l3.5-3.5M3 13.5h10"/></svg><span>下载 A4 讲义</span>';
+    top.insertBefore(a, top.querySelector('a.pill'));
+    return a;
+  }, () => null);
+}
 export function courseStrip(host, current) {
+  sheetLink(current);
   const ch = CHAPTERS.find((c) => current.startsWith(c.prefix)) || CHAPTERS[0];
   host.innerHTML = `<h2>${ch.title}</h2><div class="l3-strip"></div>`;
   const strip = host.querySelector('.l3-strip');
   for (const l of ch.list) {
     const a = document.createElement('a');
-    a.className = 'l3-lesson' + (l.id === current ? ' on' : '');
+    a.className = 'l3-lesson' + (l.id === current || current.startsWith(l.id + '-') ? ' on' : '');
     a.href = l.lab ? `./${l.lab}` : `../lessons/${l.id}.html`;
     a.innerHTML = `<svg viewBox="0 0 48 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${LESSON_ICON[l.icon]}</svg>
       <span>${l.no} ${l.name}<small>${l.lab ? '3D 舞台' : '原版课时页'}</small></span>`;
     strip.appendChild(a);
+  }
+  // 这一节有例题舞台：节页和例题页底下都列出来
+  const sec = ch.list.find((l) => current === l.id || current.startsWith(l.id + '-'));
+  if (sec?.ex) {
+    host.insertAdjacentHTML('beforeend', `<h2>${sec.no} 例题舞台</h2><div class="l3-strip l3-ex"></div>`);
+    const row = host.querySelector('.l3-ex');
+    for (const e of sec.ex) {
+      const a = document.createElement('a');
+      a.className = 'l3-lesson' + (e.id === current ? ' on' : '');
+      a.href = `./${e.id}.html`;
+      a.innerHTML = `<svg viewBox="0 0 48 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${LESSON_ICON[e.icon]}</svg>
+      <span>${e.no} ${e.name}<small>例题舞台</small></span>`;
+      row.appendChild(a);
+    }
   }
 }

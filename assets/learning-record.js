@@ -33,6 +33,7 @@
     if (item && variants.some(function (variant) { return variant.id === item.questionId && variant.point_id === id; })) target.searchParams.set("variant", item.questionId);
     return target.href;
   }
+  function isUnitTest(item) { return /^p[1-6][ab]-u\d+-test$/.test(item.sectionId || ""); }
   function questionLabel(item) {
     if (!item.questionId) return "";
     if (item.questionType === "diagnostic") {
@@ -45,6 +46,7 @@
       if (full && full.diagnostic && full.diagnostic.id === item.questionId) return "原诊断题";
       return item.questionId === "unknown-diagnostic" ? "诊断题（题目不详）" : "历史诊断题（内容已更新）";
     }
+    if (isUnitTest(item)) return "单元测评";
     return { predict: "课内预测题", exam: "课内练习题", card: "方法卡", lab: "实验", cue: "课内问题" }[item.questionType] || "课内题目";
   }
   function lessonHref(item) {
@@ -60,20 +62,25 @@
   }
   function math(node) { if (window.PeiyuKnowledge) window.PeiyuKnowledge.renderMath(node); }
   function eventTitle(event) {
-    var p = point(event.pointId), s = lesson(event.sectionId);
+    var p = point(event.pointId), s = lesson(isUnitTest(event) ? event.sectionId.replace(/-test$/, "") : event.sectionId);
     return p ? p.title : s ? s.title : "学习记录";
   }
   function eventHref(event) {
+    if (isUnitTest(event)) {
+      var test = url("tests/" + event.sectionId + ".html"), match = /-t(\d+)$/.exec(event.questionId || "");
+      if (match) test.hash = "q-" + Number(match[1]); return test.href;
+    }
     if (point(event.pointId)) return knowledgeHref(event.pointId, event);
     if (lesson(event.sectionId)) return lessonHref(event);
     return url("courses.html").href;
   }
   function eventMeta(event) {
-    var source = sourceNames[event.source] || "本地记录";
+    var source = isUnitTest(event) ? "单元测评" : sourceNames[event.source] || "本地记录";
     return date(event.time, true) + " · " + source;
   }
   function isLegacy(event) { return event.attemptKind === "legacy" || event.source === "legacy" || event.legacy === true || event.independent === null && event.kind === "answer"; }
   function answerText(event) {
+    if (event.selfCheck) return "看答案后自评：" + (event.correct ? "对" : "不对") + "。不计入自动判分成绩。";
     var result = event.correct === true ? "这次答对" : event.correct === false ? "这次答错" : "作答结果未知";
     if (isLegacy(event)) return result + "；是否独立作答未知。";
     if (event.attemptKind === "retry") return result + "；已看过反馈，作为订正记录。";
@@ -88,7 +95,7 @@
       return items.map(function (event) {
         var detail = type === "rating" ? "当时的自评：" + (ratingNames[event.rating] || "已记录自评") + "。自评不替代作答证据。" : type === "view" ? "查看过这项内容；没有据此标记完成。" : type === "review" ? "回到这个知识点复习；是否理解仍要结合具体作答。" : answerText(event);
         var question = questionLabel(event);
-        return '<li><div class="lr-event-head"><a href="' + esc(eventHref(event)) + '">' + esc(eventTitle(event)) + '</a><span class="lr-pill">' + esc(type === "rating" ? "自评" : type === "view" ? "查看" : type === "review" ? "复习访问" : isLegacy(event) ? "独立情况未知" : event.attemptKind === "independent" ? "首次独立" : event.attemptKind === "retry" ? "反馈后重做" : "再次作答") + '</span></div>' + (question ? '<p class="lr-question">' + esc(question) + '</p>' : '') + '<p>' + esc(detail) + '</p><p class="lr-meta">' + esc(eventMeta(event)) + '</p></li>';
+        return '<li><div class="lr-event-head"><a href="' + esc(eventHref(event)) + '">' + esc(eventTitle(event)) + '</a><span class="lr-pill">' + esc(type === "rating" ? "自评" : type === "view" ? "查看" : type === "review" ? "复习访问" : event.selfCheck ? "看答案后自评" : isLegacy(event) ? "独立情况未知" : event.attemptKind === "independent" ? "首次独立" : event.attemptKind === "retry" ? "反馈后重做" : "再次作答") + '</span></div>' + (question ? '<p class="lr-question">' + esc(question) + '</p>' : '') + '<p>' + esc(detail) + '</p><p class="lr-meta">' + esc(eventMeta(event)) + '</p></li>';
       }).join("");
     }
     return '<ul class="lr-events">' + rows(sorted.slice(0, 8)) + '</ul>' + (sorted.length > 8 ? '<details class="lr-show-more"><summary>展开另外 ' + (sorted.length - 8) + ' 条近期记录</summary><ul class="lr-events">' + rows(sorted.slice(8)) + '</ul></details>' : '');

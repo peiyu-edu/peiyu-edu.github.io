@@ -164,7 +164,12 @@ const SHAPES = {
         <li><span class="l3-term" data-co="side">球面</span> 是曲面，球是实心的立体，两个词不要混。</li>
       </ol>`,
     controls: roundControls({ R: [0.6, 1.6, 1.2] }),
-    readout: (p) => `<dt>半径 \\(R\\)</dt><dd data-k="R" data-v="${p.R}"><b>${p.R.toFixed(1)}</b></dd><dt>直径</dt><dd data-k="d" data-v="${2 * p.R}"><b>${(2 * p.R).toFixed(1)}</b></dd>`,
+    readout: (p) => {
+      // 球没有母线：清掉从圆台带过来的说明
+      $('#ro-title').textContent = '量一量';
+      $('#ro-note').innerHTML = '球的大小只由半径决定：直径 = 2 × 半径。';
+      return `<dt>半径 \\(R\\)</dt><dd data-k="R" data-v="${p.R}"><b>${p.R.toFixed(1)}</b></dd><dt>直径</dt><dd data-k="d" data-v="${2 * p.R}"><b>${(2 * p.R).toFixed(1)}</b></dd>`;
+    },
   },
 };
 

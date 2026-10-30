@@ -152,12 +152,23 @@
   function draw() {
     const params = new URLSearchParams(location.search);
     const section = params.get("section");
-    const source = data.units.find(u=>u.lessonIds.includes(section));
-    let unit = source || data.units.find(u=>u.id===params.get("unit"));
-    const grade = unit ? unit.grade : (Number(params.get("grade")) || 1);
+    let source = data.units.find(u=>u.lessonIds.includes(section));
+    const hasCards = u => data.cards.some(c=>c.unitId===u.id);
+    let snap = snapshot();
+    const requested = source || data.units.find(u=>u.id===params.get("unit")) ||
+      data.units.find(u=>data.cards.some(c=>c.unitId===u.id && c.id===new URLSearchParams(location.hash.slice(1)).get("card")));
+    const requestedGrade = requested ? requested.grade : Number(params.get("grade"));
+    const candidates = data.units.filter(hasCards);
+    // Use the existing local evidence, including a compacted resume/last answer. Never create a new preference store.
+    const evidence = snap ? [snap.resume, ...(snap.events || []), ...(snap.questions || []).map(q=>q.lastAnswer)].filter(Boolean).sort((a,b)=>b.time-a.time) : [];
+    const recent = evidence.map(e=>candidates.find(u=>e.sectionId===u.id || e.sectionId===u.id+'-test' || u.lessonIds.includes(e.sectionId) || data.cards.some(c=>c.unitId===u.id && c.id===e.pointId))).find(Boolean);
+    const inGrade = candidates.find(u=>u.grade===requestedGrade);
+    const unit = requested && hasCards(requested) ? requested : requestedGrade ? inGrade || candidates[0] : recent || candidates[0];
+    if (!unit) { app.innerHTML='<h1>概念与易错卡</h1><p>概念卡建设中，可以先回课程动手学。</p><a href="courses.html">打开课程目录</a>'; return; }
+    const fallback = (requested && requested.id!==unit.id) || (requestedGrade && requestedGrade!==unit.grade);
+    const grade = unit.grade;
     const visibleUnits = data.units.filter(u=>u.grade===grade);
-    unit = unit || visibleUnits[0];
-    if (!unit) { navigate("?grade=1",false); return; }
+    if (source && (source.id!==unit.id || !data.cards.some(c=>c.unitId===unit.id && c.lessonIds.includes(section)))) source = null;
     const low = grade <= 2;
     const cards = data.cards.filter(c=>c.unitId===unit.id && (!source || c.lessonIds.includes(section)));
     const from = params.get("from");
@@ -166,12 +177,13 @@
     // A review visit is recorded once per question and page load, under the question's current version.
     const entry = targetCard && hash.get("review") === "1" && store() && P.find(targetCard, hash.get("q"));
     if (entry && !reviewed.has(entry.question.id)) { reviewed.add(entry.question.id); P.review(store(), targetCard, entry.question); }
-    const snap = snapshot();
+    snap = snapshot();
     const validFrom = data.units.some(u=>u.lessonIds.includes(from));
     app.innerHTML = '<h1>概念与易错卡</h1><p class="cc-intro">先看图，把容易混的地方说清，再试一题。低年级可由家长陪读，也可点“听一听”。</p>'
       + '<p class="cc-status">' + (store() ? '每张卡有自测题、变式题和复习题。作答记在这台设备的“我的学习”里，按每道题安排复习，不上传；第一次自己作答和看过答案后再做分开记。' : '自测只在本页练习，离开后不保存，也不计入“我的学习”。') + '</p>'
-      + '<div class="cc-filter"><nav class="cc-grades" aria-label="选择年级">'+[1,2,3,4,5,6].map(g=>'<a href="?grade='+g+'"'+(g===grade?' aria-current="page"':'')+'>'+cn[g]+'年级</a>').join("")+'</nav>'
-      + '<label for="cc-unit">选择单元</label><select id="cc-unit">'+visibleUnits.map(u=>'<option value="'+esc(u.id)+'"'+(u.id===unit.id?' selected':'')+'>'+esc(u.book+' · '+u.title)+'</option>').join("")+'</select></div>'
+      + (fallback?'<p class="cc-status">所选单元或年级的概念卡建设中，先打开已有内容的单元。</p>':'')
+      + '<div class="cc-filter"><nav class="cc-grades" aria-label="选择年级">'+[1,2,3,4,5,6].map(g=>candidates.some(u=>u.grade===g)?'<a href="?grade='+g+'"'+(g===grade?' aria-current="page"':'')+'>'+cn[g]+'年级</a>':'<span aria-disabled="true">'+cn[g]+'年级 · 建设中</span>').join("")+'</nav>'
+      + '<label for="cc-unit">选择单元</label><select id="cc-unit">'+visibleUnits.map(u=>'<option value="'+esc(u.id)+'"'+(u.id===unit.id?' selected':'')+(hasCards(u)?'':' disabled')+'>'+esc(u.book+' · '+u.title)+(hasCards(u)?'':' · 建设中')+'</option>').join("")+'</select></div>'
       + (validFrom?'<a class="cc-jump" href="lessons/'+esc(from)+'.html">回到刚才的课时</a>':'')
       + '<h2>'+esc(unit.book+' · '+unit.title)+'</h2><p role="status">'+(source?'与第'+esc(section.split("-").pop())+'课相关，':'')+cards.length+'张卡。</p>'
       + (source?'<a class="cc-jump" href="?grade='+grade+'&unit='+unit.id+'">看本单元全部卡</a>':'')

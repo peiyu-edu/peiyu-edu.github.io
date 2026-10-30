@@ -156,7 +156,7 @@
      结论是「一定够 / 一定不够 / 说不准」三种之一；说不准时提示换个方向估。 */
   function kancheng(root, cfg) {
     var cases = cfg.cases && cfg.cases.length ? cfg.cases : [{ x: 788, m: 6, T: 5000, q: "788 名同学，每人 6 元，5000 元够不够？" }], ci = 0, st = {}, firstTry = true, reported = false;
-    var qp = h("p", "line"), svg = el("svg", { class: "stage", viewBox: "0 0 360 120", role: "group", "aria-label": "看成" });
+    var qp = h("p", "line"), svg = el("svg", { class: "stage", viewBox: "0 0 360 126", role: "group", "aria-label": "看成" });
     var read = h("div", "read"), ctr = h("div", "ctrls");
     read.setAttribute("aria-live", "polite"); read.style.flexDirection = "column";
     root.appendChild(qp); root.appendChild(svg); root.appendChild(read); root.appendChild(ctr);
@@ -268,7 +268,7 @@
       while (svg.firstChild) svg.removeChild(svg.firstChild);
       var a = st.a, b = st.b, n = b - 10, sp = Math.min(13, Math.floor(270 / a)), x0 = 14, y0 = 14, gap = 14;
       var ry = function (r) { return y0 + r * sp + (r >= 10 ? gap : 0); };
-      var H = ry(b - 1) + sp + 24; // 页内版本是 ry(b - 1) + 26：每行超过 20 个时点变小，底下那行字会被「圈下面几行」的框压住
+      var H = ry(b - 1) + sp + 28; // 页内版本是 ry(b - 1) + 26：每行超过 20 个时点变小，底下那行字会被「圈下面几行」的框压住
       svg.setAttribute("viewBox", "0 0 360 " + H);
       for (var r = 0; r < b; r++) for (var c = 0; c < a; c++)
         el("circle", { cx: x0 + c * sp + sp / 2, cy: ry(r) + sp / 2, r: Math.max(3, sp / 2 - 2), style: "fill:" + (r < 10 ? (st.up ? "var(--c)" : "var(--fg)") : (st.lo ? "var(--b)" : "var(--fg)")) }, svg);
@@ -283,7 +283,7 @@
         el("rect", { x: x0 - 5, y: ry(10) - 4, width: a * sp + 10, height: n * sp + 8, rx: 8, style: "fill:none;stroke:var(--b);stroke-width:2.5" }, svg);
         el("text", { x: xr, y: ry(10) + n * sp / 2 + 6, style: "font-size:17px;font-weight:700;fill:var(--b)" }, svg, n + " 行");
       }
-      el("text", { x: x0, y: H - 4, style: "font-size:16px;fill:var(--muted)" }, svg, "每行 " + a + " 个，一共 " + b + " 行");
+      el("text", { x: x0, y: H - 8, style: "font-size:16px;fill:var(--muted)" }, svg, "每行 " + a + " 个，一共 " + b + " 行");
       var lines = [];
       if (st.lo) lines.push('<span style="color:var(--b)">下面 ' + n + " 行：" + a + " × " + n + " = " + a * n + "</span>");
       if (st.up) lines.push('<span style="color:var(--c)">上面 10 行：' + a + " × 10 = " + a * 10 + "</span>");

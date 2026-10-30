@@ -2,14 +2,14 @@
 // 斜二测画法 = 把进深方向「斜 45°、压一半」的平行投影。这里真的对模型做这个剪切变换，
 // 同时把镜头转到正前方：实物（或俯视的平面图形）一步步变成课本上的直观图。
 // 所有长度、面积都由当前顶点坐标实时算出（投影后的坐标 + 鞋带公式），不写死。
-import { createStage, tabs, slider, quiz, renderMath, courseStrip, readout, expose, THREE, noteShow } from './stage.js';
+import { createStage, tabs, slider, quiz, renderMath, courseStrip, readout, expose, THREE, noteShow, DUR } from './stage.js';
 import { buildRound, faces, polyEdges, inkSegs, polyline, colors } from './solids.js';
 
 const $ = (s) => document.querySelector(s);
 const f2 = (x) => x.toFixed(2);
 const deg = THREE.MathUtils.degToRad;
 
-const S = createStage($('#stage'), { onHot: () => applyHot(), ariaLabel: '可拖动旋转的平面图形与立体图形，可以变成斜二测直观图' });
+const S = createStage($('#stage'), { onHot: () => applyHot(), onReset: () => setView(cur().params.t), ariaLabel: '可拖动旋转的平面图形与立体图形，可以变成斜二测直观图' });
 tabs($('#info'));
 courseStrip($('#course'), 'b2-8-2');
 renderMath($('#pane-how'));
@@ -294,7 +294,7 @@ async function play(btn) {
   busy = true;
   const p = cur().params, from = p.t, to = p.t > 0.5 ? 0 : 1;
   // 被打断（切形体、「在模型上看」）时：同步把原形体记到终点，之后不碰任何控件（busy 已在 select 里放开）
-  const done = await S.tween(2200, (u) => { p.t = from + (to - from) * u; tSlider.set(p.t); rebuild(); setView(p.t); primeTags(); }, undefined, () => { p.t = to; });
+  const done = await S.tween(DUR.build, (u) => { p.t = from + (to - from) * u; tSlider.set(p.t); rebuild(); setView(p.t); primeTags(); }, undefined, () => { p.t = to; });
   if (!done) return;
   p.t = to;
   tSlider.set(to);

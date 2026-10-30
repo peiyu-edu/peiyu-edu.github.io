@@ -131,7 +131,7 @@
     }
     function refresh() {
       if (destroyed) return;
-      model = options.mastery.derive(store.snapshot(), function (id) { return store.answers(id); }, content, now(), config);
+      model = options.mastery.derive(store.snapshot(), store.answersReader ? store.answersReader() : function (id) { return store.answers(id); }, content, now(), config);
       paint();
     }
     // Renderers replace their DOM on book/point changes. Ignore our own updates

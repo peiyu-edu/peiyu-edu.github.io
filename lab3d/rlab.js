@@ -1,7 +1,7 @@
 // 位置关系实验台的公共骨架（PY-337，8.4 / 8.5 / 8.6 共用）。
 // 每页只写「模式」：参数、滑块、下拉框、按钮，以及 scene(p) 给出的点、线、面、角，
 // 和 read(p, sc) 给出的读数行。所有读数都在 read 里由 geom3.js 按当前坐标现算。
-import { createStage, tabs, slider, quiz, renderMath, courseStrip, readout, expose, THREE, noteShow } from './stage.js';
+import { createStage, tabs, slider, quiz, renderMath, courseStrip, readout, expose, THREE, noteShow, DUR } from './stage.js';
 import { faces, polyEdges, inkSegs, polyline, tint } from './solids.js';
 import * as G from './geom3.js';
 
@@ -64,6 +64,27 @@ export function makeLab({ page, aria, modes, quizItems }) {
       S.root.add(mesh, edge);
       inks.push({ id: pl.id, color: base, set: (c) => { edge.userData.setColor(c); mesh.material.color.set(tint(S, c, 0.35)); } });
     }
+    // 曲面（圆锥面等）：只上半透明色、不描每个小面的边，轮廓另用 curves 画（PY-362）
+    for (const sf of sc.surfaces || []) {
+      const mesh = faces(S, sf.polys.map((f) => f.map((q) => W(R(q)))), '#000', sf.id);
+      mesh.material = new THREE.MeshBasicMaterial({ color: tint(S, col(sf.color), S.pal.dark ? 0.5 : 0.7), transparent: true, opacity: sf.opacity ?? 0.28, depthWrite: false, side: THREE.DoubleSide });
+      mesh.renderOrder = 1;
+      S.root.add(mesh);
+    }
+    for (const sp of sc.spheres || []) {
+      const c0 = col(sp.color);
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(sp.r, 40, 24), new THREE.MeshBasicMaterial({ color: tint(S, c0, S.pal.dark ? 0.45 : 0.6), transparent: true, opacity: 0.42, depthWrite: false }));
+      mesh.position.copy(W(R(sp.c)));
+      mesh.renderOrder = 2;
+      S.root.add(mesh);
+      inks.push({ id: sp.id, color: c0, set: (c) => mesh.material.color.set(tint(S, c, S.pal.dark ? 0.45 : 0.6)) });
+    }
+    for (const cv of sc.curves || []) {
+      const c0 = col(cv.color);
+      const g = inkSegs(S, polyline(cv.pts.map((q) => W(R(q))), !!cv.closed), c0, { width: cv.width ?? 3, dashed: !!cv.dashed });
+      S.root.add(g);
+      inks.push({ id: cv.id, color: c0, set: (c) => g.userData.setColor(c) });
+    }
     for (const ln of sc.lines || []) {
       const a = W(R(ln.from)), b = W(R(ln.to)), c0 = col(ln.color);
       let end = b, head = null;
@@ -120,9 +141,20 @@ export function makeLab({ page, aria, modes, quizItems }) {
   }
 
   function boxOf() {
+    // 球心取包围盒中心，半径取到最远一点的距离（不用包围盒的外接球：三条坐标轴那种「十字」会被放大到 √3 倍）
+    // 平面的四个角也算进去，不然像 1.1「共面向量」那块平面会伸出舞台；曲线上的点、线段两端、球（球心 ± 半径）也算（PY-366）。
+    // 曲面（圆锥面）不算：它由母线和截口曲线围出来，轮廓已经在 P 和 curves 里
+    const pts = [...Object.values(sc.P), ...(sc.planes || []).flatMap((pl) => pl.pts.map(R)),
+      ...(sc.curves || []).flatMap((cv) => cv.pts.map(R)), ...(sc.lines || []).flatMap((ln) => [R(ln.from), R(ln.to)])].map(W);
+    const balls = (sc.spheres || []).map((sp) => ({ c: W(R(sp.c)), r: sp.r }));
     const box = new THREE.Box3();
-    for (const q of Object.values(sc.P)) box.expandByPoint(W(q));
-    return box.getBoundingSphere(new THREE.Sphere());
+    for (const q of pts) box.expandByPoint(q);
+    for (const b of balls) box.union(new THREE.Box3().setFromCenterAndSize(b.c, new THREE.Vector3(2 * b.r, 2 * b.r, 2 * b.r)));
+    const c = box.getCenter(new THREE.Vector3());
+    let r = 0;
+    for (const q of pts) r = Math.max(r, q.distanceTo(c));
+    for (const b of balls) r = Math.max(r, b.c.distanceTo(c) + b.r);
+    return new THREE.Sphere(c, r);
   }
   function frame(keep) {
     const s = boxOf();
@@ -159,7 +191,7 @@ export function makeLab({ page, aria, modes, quizItems }) {
 
   // ---------- 控件 ----------
   let busy = false;
-  async function animate(target, ms = 1600) {
+  async function animate(target, ms = DUR.move) {
     if (busy) return;
     busy = true;
     const p = cur().params, from = { ...p };

@@ -5,9 +5,10 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=960b69da9959"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=2def94435483"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
+<script defer src="../p-assets/kits/cubeview.js"></script>
 </head>
 <body class="primary" data-stage="primary" data-sec="p5b-u1-1">
 <div class="wrap">
@@ -31,11 +32,9 @@
 
 <section class="step" data-title="摆一摆">
   <h2>1. 前面定每列的高，左面定每排的高</h2>
-  <div class="card manip" id="m1">
-    <p class="line">棋盘有<b>后排</b>和<b>前排</b>，每排 3 个位置。点按钮，给那个位置加 1 层（加到 3 层再点就清空）。要求：<b>前面</b>看，左列 2 层、中列 1 层、右列 2 层；<b>左面</b>看，后排 2 层、前排 1 层。摆的时候，<b>每块小正方体至少有一个面和别的小正方体整面贴合</b>，不能孤零零地放着。</p>
-    <svg class="stage" id="m1-svg" viewBox="0 0 360 220" role="img" aria-label="摆小正方体并对照前面、左面看到的图形"></svg>
-    <div class="ctrls" id="m1-ctrls"></div>
-    <output class="read" id="m1-out" aria-live="polite"></output>
+  <div class="card" id="m1">
+    <p class="line">棋盘有<b>后排</b>和<b>前排</b>，每排 3 个位置。点下面的位置按钮，给那个位置加 1 层（加到 3 层再点就清空）；拖一拖可以转着看，点「转到前面」「转到左面」正对着核对。要求：<b>前面</b>看，左列 2 层、中列 1 层、右列 2 层；<b>左面</b>看，后排 2 层、前排 1 层。摆的时候，<b>每块小正方体至少有一个面和别的小正方体整面贴合</b>，不能孤零零地放着。</p>
+    <div class="manip" data-manip="cubeview" data-cfg='{"id":"build","edit":true,"rows":2,"cols":3,"maxH":3,"connect":true,"dirs":["front","left","top"],"target":{"front":[2,1,2],"left":[2,1]},"presets":[{"n":"最少的摆法","g":[[0,1,0],[2,1,2]]},{"n":"最多的摆法","g":[[1,1,1],[2,1,2]]}]}'></div>
   </div>
 
   <div class="card predict" data-id="try1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5UgMTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj7lhYjorqnjgIzlkI7mjpLlt6bjgI3lkozjgIzlkI7mjpLlj7PjgI3pg73mmK8gMiDlsYLvvIzov5jlt648Yj7liY3pnaLnnIvkuK3liJfmnIkgMSDlsYI8L2I+44CBPGI+5bem6Z2i55yL5YmN5o6S5pyJIDEg5bGCPC9iPuOAguavj+Wdl+mDveimgeWSjOWIq+eahOWdl+aVtOmdoui0tOWQiO+8jOacgOWwkeWGjeaUvuWHoOWdl++8jOS4pOS4quimgeaxguaJjemDvea7oei2s++8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCLlj6rmlL4gMSDlnZfvvIzopoHkuYjkuK3liJfmnInkuobjgIHliY3mjpLov5jnqbrnnYDvvIzopoHkuYjliY3mjpLmnInkuobjgIHkuK3liJfov5jnqbrnnYDvvJvmlL7lnKjliY3mjpLkuK3nmoTpgqPkuIDlnZfov5jlraTpm7bpm7bnmoTvvIzmsqHmnInpnaLlkozliKvnmoTlnZfotLTlkIjjgIJcIj48Yj5BPC9iPjEg5Z2XPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+MiDlnZfvvIjlkI7mjpLkuK0gMSDlsYLjgIHliY3mjpLkuK0gMSDlsYLvvIk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi6aKY55uu6Zeu55qE5piv5pyA5bCR44CC5oOz5oOz77ya55yf55qE6ZyA6KaB5pS+6L+Z5LmI5aSa5Z2X5ZCX77yfXCI+PGI+QzwvYj4zIOWdlzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD5C44CC5ZCO5o6S5Lit5pS+IDEg5Z2X77yM6K6p5Lit5YiX5pyJ5LqG77yb5YmN5o6S5Lit5YaN5pS+IDEg5Z2X77yM6K6p5YmN5o6S5pyJ5LqG77yM6ICM5LiU5a6D6LS0552A5ZCO5o6S5Lit6YKj5Z2X44CC5Y+q5pS+5YmN5o6S5LitIDEg5Z2X5Lya5a2k6Zu26Zu244CCPC9wPjwvZGl2PlxuICAifQ==">
@@ -137,72 +136,4 @@
 
 <nav class="back"><a href="p5b-u1.html">返回本单元</a></nav>
 </div>
-<script>
-function el(t,a,x){var e=document.createElementNS("http://www.w3.org/2000/svg",t);if(a)for(var k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;return e;}
-function clr(n){while(n.firstChild)n.removeChild(n.firstChild);}
-function onKey(n,f){n.addEventListener("click",f);n.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();f();}});}
-document.addEventListener("DOMContentLoaded", function () {
-  /* 摆小正方体：2 排 × 3 列，每个位置 0~3 层；对照「前面」「左面」目标 */
-  var svg = document.getElementById("m1-svg"), out = document.getElementById("m1-out"), ct = document.getElementById("m1-ctrls");
-  if (!svg) return;
-  var NAMES = ["后左", "后中", "后右", "前左", "前中", "前右"];
-  var TF = [2, 1, 2], TL = [2, 1];            /* 目标：前面每列最高；左面 后排、前排 最高 */
-  var h = [0, 0, 0, 0, 0, 0];
-  var btns = NAMES.map(function (n, i) {
-    var b = document.createElement("button"); b.type = "button";
-    b.addEventListener("click", function () { h[i] = (h[i] + 1) % 4; draw(); });
-    ct.appendChild(b); return b;
-  });
-  [["重来", function () { h = [0,0,0,0,0,0]; }], ["最少的摆法", function () { h = [2,1,2,0,1,0]; }], ["最多的摆法", function () { h = [2,1,2,1,1,1]; }]].forEach(function (p) {
-    var b = document.createElement("button"); b.type = "button"; b.textContent = p[0];
-    b.addEventListener("click", function () { p[1](); draw(); }); ct.appendChild(b);
-  });
-  function cube(cx, cy, s, c) {
-    var dx = s * 0.86, dy = s * 0.48, dz = s * 0.92, g = el("g");
-    function P(a) { return a.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" "); }
-    var st = "stroke:var(--fg);stroke-width:1.2;stroke-linejoin:round;";
-    g.appendChild(el("polygon", { points: P([[cx, cy - dz - dy], [cx + dx, cy - dz], [cx, cy - dz + dy], [cx - dx, cy - dz]]), style: st + "fill:var(--hl-soft)" }));
-    g.appendChild(el("polygon", { points: P([[cx - dx, cy - dz], [cx, cy - dz + dy], [cx, cy + dy], [cx - dx, cy]]), style: st + "fill:var(--hl)" }));
-    g.appendChild(el("polygon", { points: P([[cx, cy - dz + dy], [cx + dx, cy - dz], [cx + dx, cy], [cx, cy + dy]]), style: st + "fill:var(--a);opacity:.75" }));
-    return g;
-  }
-  function grid(x0, y0, cols, rows, on, t) {
-    var cs = 17;
-    svg.appendChild(el("text", { x: x0 + cols * cs / 2, y: y0 - 6, "text-anchor": "middle", style: "font-size:16px;fill:var(--fg);font-weight:800" }, t));
-    for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
-      var f = on(c, rows - 1 - r);
-      svg.appendChild(el("rect", { x: x0 + c * cs, y: y0 + r * cs, width: cs, height: cs, style: "stroke:" + (f ? "var(--fg)" : "var(--line)") + ";stroke-width:" + (f ? 1.5 : 1) + ";fill:" + (f ? "var(--hl)" : "var(--card)") }));
-    }
-  }
-  function draw() {
-    clr(svg);
-    svg.appendChild(el("rect", { x: 4, y: 4, width: 352, height: 212, rx: 10, style: "fill:var(--bg);stroke:var(--line)" }));
-    var total = h.reduce(function (a, b) { return a + b; }, 0);
-    var blocks = [];
-    h.forEach(function (n, i) { var x = i % 3, y = i < 3 ? 0 : 1; for (var z = 0; z < n; z++) blocks.push([x, y, z]); });
-    blocks.sort(function (a, b) { return (a[0] + a[1] + a[2]) - (b[0] + b[1] + b[2]); });
-    blocks.forEach(function (b) { svg.appendChild(cube(72 + (b[0] - b[1]) * 15, 128 + (b[0] + b[1]) * 8.4 - b[2] * 15.4, 17.5)); });
-    svg.appendChild(el("text", { x: 72, y: 26, "text-anchor": "middle", style: "font-size:16px;fill:var(--fg);font-weight:800" }, "现在共 " + total + " 块"));
-    var cf = [0, 0, 0], cl = [0, 0];
-    h.forEach(function (n, i) { var c = i % 3, r = i < 3 ? 0 : 1; cf[c] = Math.max(cf[c], n); cl[r] = Math.max(cl[r], n); });
-    var okF = cf.join() === TF.join(), okL = cl.join() === TL.join(), iso = 0;
-    h.forEach(function (n, i) {
-      if (n !== 1) return;
-      var c = i % 3, r = i < 3 ? 0 : 1, nb = (c > 0 && h[i - 1] > 0) || (c < 2 && h[i + 1] > 0) || h[(1 - r) * 3 + c] > 0;
-      if (!nb) iso++;
-    });
-    grid(168, 52, 3, 3, function (c, k) { return TF[c] > k; }, "目标·前面");
-    grid(262, 52, 2, 3, function (c, k) { return TL[c] > k; }, "目标·左面");
-    grid(168, 142, 3, 3, function (c, k) { return cf[c] > k; }, "你摆·前面");
-    grid(262, 142, 2, 3, function (c, k) { return cl[c] > k; }, "你摆·左面");
-    btns.forEach(function (b, i) { b.textContent = NAMES[i] + "：" + h[i] + " 层"; });
-    var msg = "前面看" + (okF ? "对了" : "还不对") + "，左面看" + (okL ? "对了" : "还不对") + "，共 " + total + " 块。";
-    if (iso) msg += "有 " + iso + " 块孤零零的，没有面和别的块贴合，不合要求。";
-    else if (okF && okL) msg += total === 6 ? "这是最少的摆法。" : total === 8 ? "这是最多的摆法。" : "符合，用 " + total + " 块也行。";
-    out.className = "read" + (okF && okL && !iso ? " ok" : "");
-    out.textContent = msg;
-  }
-  draw();
-});
-</script>
 </body></html>

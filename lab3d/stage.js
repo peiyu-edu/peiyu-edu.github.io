@@ -9,7 +9,17 @@ import { LineMaterial } from './vendor/LineMaterial.js';
 
 export { THREE };
 
-const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+const reduceMotion = () => motionQuery.matches;
+
+/** 动画时长统一分 5 档（毫秒）。开着「减少动态」时 tween 一律直接跳到终点。 */
+export const DUR = {
+  quick: 400,   // 工具条转 45°
+  view: 800,    // 抬高/放低视线、转到某个方位
+  move: 1600,   // 点、线、截面移动到新位置
+  build: 2400,  // 旋转生成、展开、直观图画法
+  tour: 4000,   // 动点沿曲线走一圈
+};
 
 function cssVar(name, fallback) {
   const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -69,8 +79,22 @@ export function createStage(el, opts = {}) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setClearColor(0x000000, 0);
   el.appendChild(renderer.domElement);
-  renderer.domElement.setAttribute('aria-label', opts.ariaLabel || '可拖动旋转的立体图形');
-  renderer.domElement.tabIndex = 0;
+  // 读屏：舞台是一个能用键盘操作的「应用」区，说明文字写键盘操作，再接上标注图例
+  const cv = renderer.domElement;
+  const uid = `l3-${Math.random().toString(36).slice(2, 8)}`;
+  cv.tabIndex = 0;
+  cv.setAttribute('role', 'application');
+  cv.setAttribute('aria-roledescription', '3D 舞台');
+  cv.setAttribute('aria-label', opts.ariaLabel || '可拖动旋转的立体图形');
+  const desc = document.createElement('p');
+  desc.className = 'l3-sr';
+  desc.id = `${uid}-desc`;
+  desc.textContent = '键盘操作：左右方向键转动视角，上下方向键抬高或放低视线，加号、减号放大缩小，Home 键复位。';
+  el.appendChild(desc);
+  const live = document.createElement('p');
+  live.className = 'l3-sr';
+  live.setAttribute('aria-live', 'polite');
+  el.appendChild(live);
 
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.classList.add('l3-leaders');
@@ -85,12 +109,16 @@ export function createStage(el, opts = {}) {
   const legend = document.createElement('ol');
   legend.className = 'l3-legend';
   legend.setAttribute('aria-label', '标注');
+  legend.id = `${uid}-legend`;
   el.after(legend);
+  cv.setAttribute('aria-describedby', `${desc.id} ${legend.id}`);
 
   const scene = new THREE.Scene();
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -100, 100);
   const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
+  // 拖动后的惯性滑行也算动态：开着「减少动态」就关掉，运行中改设置也跟着变
+  controls.enableDamping = !reduceMotion();
+  motionQuery.addEventListener?.('change', () => { controls.enableDamping = !reduceMotion(); });
   controls.dampingFactor = 0.09;
   controls.minZoom = 0.45;
   controls.maxZoom = 3.2;
@@ -224,22 +252,29 @@ export function createStage(el, opts = {}) {
     const w = el.clientWidth || 1, h = el.clientHeight || 1;
     renderer.setSize(w, h, false);
     const aspect = w / h;
-    const r = fit.radius * 1.45;
-    // 竖屏时按宽度放，横屏按高度放；右侧留一点给标注卡
+    // 竖屏时按宽度放，横屏按高度放；宽屏右侧留一点给标注卡，手机上标注是小圆点，边距可以小一些
+    const r = fit.radius * (w < 640 ? 1.3 : 1.45);
     const halfH = aspect >= 1 ? r : r / aspect;
     camera.left = -halfH * aspect; camera.right = halfH * aspect;
     camera.top = halfH; camera.bottom = -halfH;
     camera.updateProjectionMatrix();
     for (const m of lineMats) m.resolution.set(w, h);
     el.classList.toggle('compact', w < 640);
+    for (const c of callouts) c.card.tabIndex = w < 640 ? -1 : 0;
     legend.classList.toggle('on', w < 640);
   }
   new ResizeObserver(resize).observe(el);
 
   // ---------- 标注卡 ----------
   let callouts = [];
-  let hotId = null;
+  const compactNow = () => (el.clientWidth || 1) < 640;
+  // 两种高亮分开记：hotId 是「按下」的那张（点击、Enter、空格切换，aria-pressed 只跟它走）；
+  // peekId 是鼠标悬停的临时预览。显示时预览优先，移开就回到按下的那张。获得焦点只给焦点框，不改按下状态。
+  let hotId = null, peekId = null, painted = null;
   function setCallouts(list) {
+    // 换模式时标注卡整组重建：上一组的按下 / 悬停状态一并清掉，并通知页面熄掉模型上的高亮（PY-366 复审 P2）
+    hotId = null;
+    peekId = null;
     coLayer.innerHTML = '';
     svg.innerHTML = '';
     legend.innerHTML = '';
@@ -247,12 +282,21 @@ export function createStage(el, opts = {}) {
       const card = document.createElement('div');
       card.className = 'l3-co';
       card.innerHTML = `<i class="n">${i + 1}</i><b>${c.title}</b>${c.text ? `<span>${c.text}</span>` : ''}`;
-      card.addEventListener('mouseenter', () => setHot(c.id));
-      card.addEventListener('mouseleave', () => setHot(null));
+      // 键盘：标注卡是开关按钮，Tab 到只给焦点框，Enter / 空格切换高亮，离开焦点高亮保留；
+      // 手机上标注卡收成圆点，改由下方图例的按钮接键盘
+      card.setAttribute('role', 'button');
+      card.tabIndex = compactNow() ? -1 : 0;
+      card.setAttribute('aria-pressed', 'false');
+      card.addEventListener('mouseenter', () => peekHot(c.id));
+      card.addEventListener('mouseleave', () => peekHot(null));
       card.addEventListener('click', () => setHot(hotId === c.id ? null : c.id));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setHot(hotId === c.id ? null : c.id); }
+      });
       coLayer.appendChild(card);
       const li = document.createElement('li');
       li.innerHTML = `<button type="button"><i class="n">${i + 1}</i><b>${c.title}</b>${c.text ? `<span>${c.text}</span>` : ''}</button>`;
+      li.firstChild.setAttribute('aria-pressed', 'false');
       li.firstChild.addEventListener('click', () => setHot(hotId === c.id ? null : c.id));
       legend.appendChild(li);
       card.li = li;
@@ -262,16 +306,24 @@ export function createStage(el, opts = {}) {
       svg.append(path, dot);
       return { ...c, card, path, dot };
     });
+    paintHot();
   }
-  function setHot(id) {
-    hotId = id;
+  function paintHot() {
+    const id = peekId ?? hotId;
     for (const c of callouts) {
       c.card.classList.toggle('hot', c.id === id);
       c.card.li.classList.toggle('hot', c.id === id);
+      c.card.setAttribute('aria-pressed', String(c.id === hotId));
+      c.card.li.firstChild.setAttribute('aria-pressed', String(c.id === hotId));
       c.dot.classList.toggle('hot', c.id === id);
     }
+    painted = id;
     opts.onHot?.(id);
   }
+  /** 按下 / 松开某个标注（null = 全部松开） */
+  function setHot(id) { hotId = id; paintHot(); }
+  /** 悬停预览（null = 结束预览，回到按下的那张） */
+  function peekHot(id) { peekId = id; paintHot(); }
   const v = new THREE.Vector3();
   function placeCallouts() {
     const w = el.clientWidth, h = el.clientHeight;
@@ -286,6 +338,7 @@ export function createStage(el, opts = {}) {
       const show = labelsOn && (c.when ? c.when() : true);
       c.card.classList.toggle('hidden', !show);
       c.card.li.classList.toggle('hidden', !show);
+      c.card.tabIndex = show && !compact ? 0 : -1;
       if (!show) { c.path.setAttribute('d', ''); c.dot.setAttribute('r', '0'); continue; }
       const p = typeof c.at === 'function' ? c.at() : c.at;
       v.copy(p).project(camera);
@@ -366,12 +419,13 @@ export function createStage(el, opts = {}) {
   function tween(ms, fn, e = ease.inOut, onCancel = null) {
     return new Promise((res) => {
       if (reduceMotion() || ms <= 0) { fn(1); res(true); return; }
+      // 播到一半打开「减少动态」：直接跳到终点
       const t0 = performance.now(), gen = tweenGen;
       if (onCancel) cancelHooks.add(onCancel);
       const finish = (ok) => { if (onCancel) cancelHooks.delete(onCancel); res(ok); };
       const step = (now) => {
         if (gen !== tweenGen) { finish(false); return; }
-        const t = Math.min(1, (now - t0) / ms);
+        const t = reduceMotion() ? 1 : Math.min(1, (now - t0) / ms);
         fn(e(t));
         if (t < 1) requestAnimationFrame(step); else finish(true);
       };
@@ -394,30 +448,91 @@ export function createStage(el, opts = {}) {
   const spin = (deg) => {
     const off = camera.position.clone().sub(controls.target);
     const start = off.clone();
-    tween(380, (t) => {
+    return tween(DUR.quick, (t) => {
       off.copy(start).applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(deg) * t);
       camera.position.copy(controls.target).add(off);
     });
   };
-  mk('left', '向左转 45°', () => spin(-45));
-  mk('right', '向右转 45°', () => spin(45));
+  const zoomBy = (k) => {
+    camera.zoom = Math.min(controls.maxZoom, Math.max(controls.minZoom, camera.zoom * k));
+    camera.updateProjectionMatrix();
+  };
+  // 工具条的转动、缩放、复位也在 live 区域报一句视角（say 在下面键盘一节定义，点击时早已就绪）
+  mk('left', '向左转 45°', () => spin(-45).then(() => say()));
+  mk('right', '向右转 45°', () => spin(45).then(() => say()));
   sep();
-  mk('minus', '缩小', () => { camera.zoom = Math.max(controls.minZoom, camera.zoom / 1.2); camera.updateProjectionMatrix(); });
-  mk('plus', '放大', () => { camera.zoom = Math.min(controls.maxZoom, camera.zoom * 1.2); camera.updateProjectionMatrix(); });
-  mk('reset', '复位视角', () => frame(fit.center, fit.radius));
+  mk('minus', '缩小', () => { zoomBy(1 / 1.2); say(); });
+  mk('plus', '放大', () => { zoomBy(1.2); say(); });
+  // 复位：回到取景时的默认视角；页面若有自己的视角规则（如 8.2 随画法进度从俯视转到斜视），由 onReset 接着摆
+  const reset = () => { frame(fit.center, fit.radius); opts.onReset?.(); controls.update(); };
+  mk('reset', '复位视角', () => { reset(); say(); });
   sep();
-  const bLabel = mk('label', '显示/隐藏标注', () => { labelsOn = !labelsOn; bLabel.classList.toggle('on', labelsOn); });
+  const bLabel = mk('label', '显示标注', () => { labelsOn = !labelsOn; bLabel.classList.toggle('on', labelsOn); bLabel.setAttribute('aria-pressed', String(labelsOn)); });
   bLabel.classList.add('on');
+  bLabel.setAttribute('aria-pressed', 'true');
   const bDash = mk('dash', '被挡住的棱画虚线', () => {
-    hiddenOn = !hiddenOn; bDash.classList.toggle('on', hiddenOn);
+    hiddenOn = !hiddenOn; bDash.classList.toggle('on', hiddenOn); bDash.setAttribute('aria-pressed', String(hiddenOn));
     root.traverse((o) => { if (o.userData.isHidden) o.visible = hiddenOn; });
   });
   bDash.classList.add('on');
+  bDash.setAttribute('aria-pressed', 'true');
+  tools.setAttribute('role', 'toolbar');
+  tools.setAttribute('aria-label', '视角工具');
   el.appendChild(tools);
   const hint = document.createElement('div');
   hint.className = 'l3-hint';
-  hint.textContent = '拖动旋转 · 右键平移 · 滚轮缩放';
+  const HINT = '拖动旋转 · 右键平移 · 滚轮缩放';
+  hint.textContent = HINT;
+  hint.setAttribute('aria-hidden', 'true');
   el.appendChild(hint);
+
+  // ---------- 键盘 ----------
+  // 方向键一次转 15° / 抬 10°，直接到位（按住会连续转），转完用 live 区域报一句现在的视角
+  const view = () => {
+    const sph = new THREE.Spherical().setFromVector3(camera.position.clone().sub(controls.target));
+    const az = (Math.round(THREE.MathUtils.radToDeg(sph.theta)) % 360 + 360) % 360;
+    return { az, elev: Math.round(90 - THREE.MathUtils.radToDeg(sph.phi)), zoom: camera.zoom };
+  };
+  const say = () => { const q = view(); live.textContent = `方位 ${q.az} 度，仰角 ${q.elev} 度，放大 ${q.zoom.toFixed(1)} 倍`; };
+  const step = (dAz, dElev) => {
+    const off = camera.position.clone().sub(controls.target);
+    const sph = new THREE.Spherical().setFromVector3(off);
+    sph.theta += THREE.MathUtils.degToRad(dAz);
+    // 上限 85°（再高就成了正俯视、方位转不动）；但当前已经更高（如 8.2 的俯视 89.5°）时按左右键不能把视线压下来
+    const cur = Math.PI / 2 - sph.phi;
+    const lo = Math.PI / 2 - controls.maxPolarAngle + 1e-3, hi = Math.max(THREE.MathUtils.degToRad(85), cur);
+    const elev = dElev ? Math.min(hi, Math.max(lo, cur + THREE.MathUtils.degToRad(dElev))) : cur;
+    sph.phi = Math.PI / 2 - elev;
+    off.setFromSpherical(sph);
+    camera.position.copy(controls.target).add(off);
+    controls.update();
+  };
+  cv.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const act = {
+      ArrowLeft: () => step(-15, 0), ArrowRight: () => step(15, 0),
+      ArrowUp: () => step(0, 10), ArrowDown: () => step(0, -10),
+      '+': () => zoomBy(1.2), '=': () => zoomBy(1.2), '-': () => zoomBy(1 / 1.2), _: () => zoomBy(1 / 1.2),
+      Home: reset, 0: reset,
+    }[e.key];
+    if (!act) return;
+    e.preventDefault();
+    act();
+    say();
+  });
+  cv.addEventListener('focus', () => { if (cv.matches(':focus-visible')) hint.textContent = '方向键旋转 · +/− 缩放 · Home 复位'; });
+  cv.addEventListener('blur', () => { hint.textContent = HINT; });
+
+  // 芯片（选形体/模式）各页自己用 .on 标当前项，这里统一同步成 aria-pressed 给读屏
+  const syncChips = () => {
+    for (const b of el.querySelectorAll('.l3-chips button')) {
+      const on = String(b.classList.contains('on'));
+      if (b.getAttribute('aria-pressed') !== on) b.setAttribute('aria-pressed', on);
+    }
+  };
+  new MutationObserver(syncChips).observe(el, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+  const chipBar = el.querySelector('.l3-chips');
+  if (chipBar) { chipBar.setAttribute('role', 'group'); chipBar.setAttribute('aria-label', '选择图形'); }
 
   // ---------- 主循环 ----------
   function loop() {
@@ -433,7 +548,7 @@ export function createStage(el, opts = {}) {
   requestAnimationFrame(loop);
 
   // 平滑地把视线抬高/放低到指定仰角（度）
-  function orbitTo(elevDeg, ms = 700, azDeg = null) {
+  function orbitTo(elevDeg, ms = DUR.view, azDeg = null) {
     const off = camera.position.clone().sub(controls.target);
     const sph = new THREE.Spherical().setFromVector3(off);
     const p0 = sph.phi, p1 = THREE.MathUtils.degToRad(90 - elevDeg);
@@ -445,8 +560,12 @@ export function createStage(el, opts = {}) {
 
   return {
     THREE, scene, camera, controls, root, renderer, el, pal, shadow,
-    toon, ink, outline, tween, cancelTweens, frame, frameObject, setCallouts, setHot, setTags, orbitTo, legend,
-    get hot() { return hotId; },
+    toon, ink, outline, tween, cancelTweens, frame, frameObject, setCallouts, setHot, peekHot, setTags, orbitTo, legend, view,
+    /** 正在显示的高亮（悬停预览优先）；pinned 是按下的那张，切换开关时用它判断 */
+    get hot() { return peekId ?? hotId; },
+    get pinned() { return hotId; },
+    /** 最近一次交给页面 onHot 的部件（质检用：模型上实际亮着的是谁） */
+    get painted() { return painted; },
     onFrame(f) { frameHooks.push(f); return () => { frameHooks = frameHooks.filter((x) => x !== f); }; },
     clear() {
       for (const c of [...root.children]) { root.remove(c); this.dispose(c); }
@@ -466,14 +585,45 @@ export function createStage(el, opts = {}) {
 }
 
 // ---------- 页面公共件 ----------
+// 选项卡：按 WAI-ARIA tabs 模式，焦点只停在当前选项卡，左右方向键 / Home / End 切换
 export function tabs(card) {
   const btns = [...card.querySelectorAll('.l3-tabs button')];
   const panes = [...card.querySelectorAll('.l3-pane')];
+  const bar = card.querySelector('.l3-tabs');
+  bar?.setAttribute('role', 'tablist');
+  btns.forEach((b, i) => {
+    const p = panes.find((x) => x.dataset.tab === b.dataset.tab);
+    b.id ||= `${card.id || 'l3'}-tab-${i}`;
+    b.setAttribute('role', 'tab');
+    if (p) {
+      p.id ||= `${card.id || 'l3'}-pane-${i}`;
+      p.setAttribute('role', 'tabpanel');
+      p.setAttribute('aria-labelledby', b.id);
+      p.tabIndex = 0;
+      b.setAttribute('aria-controls', p.id);
+    }
+  });
   const show = (k) => {
-    btns.forEach((b) => b.classList.toggle('on', b.dataset.tab === k));
+    btns.forEach((b) => {
+      const on = b.dataset.tab === k;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', String(on));
+      b.tabIndex = on ? 0 : -1;
+    });
     panes.forEach((p) => p.classList.toggle('on', p.dataset.tab === k));
   };
-  btns.forEach((b) => b.addEventListener('click', () => show(b.dataset.tab)));
+  btns.forEach((b, i) => {
+    b.addEventListener('click', () => show(b.dataset.tab));
+    b.addEventListener('keydown', (e) => {
+      const j = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: btns.length - 1 }[e.key];
+      if (j === undefined) return;
+      e.preventDefault();
+      const t = btns[(j + btns.length) % btns.length];
+      show(t.dataset.tab);
+      t.focus();
+    });
+  });
+  show((btns.find((b) => b.classList.contains('on')) || btns[0])?.dataset.tab);
   return show;
 }
 
@@ -483,23 +633,68 @@ export function slider(host, { key, label, min, max, step, value, fmt = (x) => x
   row.innerHTML = `<span>${label}</span><input type="range" name="${key}" min="${min}" max="${max}" step="${step}" value="${value}"><output></output>`;
   const input = row.querySelector('input');
   const out = row.querySelector('output');
-  const upd = () => { out.textContent = fmt(+input.value); onChange(key, +input.value); };
+  // 读屏念 aria-valuetext：跟旁边显示的读数一致（比如「45%」而不是 0.45）
+  const show = (v) => { out.textContent = fmt(v); input.setAttribute('aria-valuetext', out.textContent); };
+  const upd = () => { show(+input.value); onChange(key, +input.value); };
   input.addEventListener('input', upd);
   host.appendChild(row);
-  out.textContent = fmt(+value);
-  return { row, input, set(v) { input.value = v; out.textContent = fmt(+v); } };
+  show(+value);
+  return { row, input, set(v) { input.value = v; show(+v); } };
+}
+
+/** 32 位字符串哈希（FNV-1a），给选项打乱当种子 */
+function hash32(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  return h >>> 0;
+}
+/** 选项的显示顺序（原始下标的排列）：干扰项按种子打乱，正确项放在第 (种子 + 题号) % n 位，
+ *  同一页刷新顺序不变，各题正确项的位置轮换，不会总在第一个。 */
+function seeded(seed) {
+  // FNV 对只差一个字的页面 id 区分不开，先过一遍 murmur3 的收尾混合
+  let h = hash32(seed);
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16; h >>>= 0;
+  return () => { h = (Math.imul(h ^ (h >>> 15), 0x2c1b3c6d) + 0x6d2b79f5) >>> 0; return h / 4294967296; };
+}
+function shuffle(a, rnd) {
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+/* 一页各题正确项放在第几个：每题各自随机（前面几题推不出后面一题），
+   只排除「全页都在同一个位置」这一种情况，抽到了就接着往下抽。种子是页面 id，刷新后不变。 */
+export function answerSlots(page, ns) {
+  const rnd = seeded(`${page}#slots`);
+  // 只有一道题有得选（或都只有一个选项）时「全在同一位置」躲不开，直接抽一次返回，免得死循环
+  if (ns.filter((n) => n >= 2).length < 2) return ns.map((n) => Math.floor(rnd() * n));
+  for (;;) {
+    const s = ns.map((n) => Math.floor(rnd() * n));
+    if (s.length < 2 || s.some((x) => x !== s[0])) return s;
+  }
+}
+
+/* 第 k 题的选项顺序：干扰项按「页面 id + 题号」洗，正确项插到 slot 位。判对错仍用原始下标。 */
+export function optionOrder(page, k, n, answer, slot) {
+  const rest = shuffle([...Array(n).keys()].filter((i) => i !== answer), seeded(`${page}#${k}`));
+  rest.splice(slot, 0, answer);
+  return rest;
 }
 
 export function quiz(host, items) {
   host.classList.add('l3-quiz');
-  items.forEach((it) => {
+  const page = document.body.dataset.sec || location.pathname;
+  const slots = answerSlots(page, items.map((it) => it.opts.length));
+  items.forEach((it, k) => {
     const box = document.createElement('div');
-    box.innerHTML = `<p class="q">${it.q}</p><div class="opts"></div><div class="why"></div>`;
+    const qid = `${String(page).replace(/[^\w-]/g, '_')}-q${k}`;
+    box.innerHTML = `<p class="q" id="${qid}">${it.q}</p><div class="opts" role="group" aria-labelledby="${qid}"></div><div class="why" aria-live="polite"></div>`;
     const opts = box.querySelector('.opts');
     const why = box.querySelector('.why');
-    it.opts.forEach((o, i) => {
+    optionOrder(page, k, it.opts.length, it.answer, slots[k]).forEach((i) => {
+      const o = it.opts[i];
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'opt'; b.innerHTML = o;
+      if (i === it.answer) b.dataset.ok = '1';
       b.addEventListener('click', () => {
         opts.querySelectorAll('.opt').forEach((x) => x.classList.remove('ok', 'no'));
         b.classList.add(i === it.answer ? 'ok' : 'no');
@@ -552,14 +747,23 @@ export const CHAPTER8 = [
 export const CHAPTER_E1_1 = [
   { id: 'e1-1-1', no: '1.1', name: '空间向量及其运算', lab: 'e1-1-1.html', icon: 'vec' },
   { id: 'e1-1-2', no: '1.2', name: '空间向量基本定理', lab: 'e1-1-2.html', icon: 'basis' },
-  { id: 'e1-1-3', no: '1.3', name: '空间向量运算的坐标表示', icon: 'axes' },
-  { id: 'e1-1-4', no: '1.4', name: '空间向量的应用', icon: 'perp' },
+  { id: 'e1-1-3', no: '1.3', name: '空间向量运算的坐标表示', lab: 'e1-1-3.html', icon: 'axes' },
+  { id: 'e1-1-4', no: '1.4', name: '空间向量的应用', lab: 'e1-1-4.html', icon: 'perp' },
+];
+export const CHAPTER_E1_3 = [
+  { id: 'e1-3-1', no: '3.1', name: '椭圆', lab: 'e1-3-1.html', icon: 'ellipse' },
+  { id: 'e1-3-2', no: '3.2', name: '双曲线', lab: 'e1-3-2.html', icon: 'hyper' },
+  { id: 'e1-3-3', no: '3.3', name: '抛物线', lab: 'e1-3-3.html', icon: 'parab' },
 ];
 const CHAPTERS = [
   { prefix: 'b2-8-', title: '第 8 章 立体几何初步', list: CHAPTER8 },
   { prefix: 'e1-1-', title: '选必一 第 1 章 空间向量与立体几何', list: CHAPTER_E1_1 },
+  { prefix: 'e1-3-', title: '选必一 第 3 章 圆锥曲线的方程', list: CHAPTER_E1_3 },
 ];
 const LESSON_ICON = {
+  ellipse: '<path d="M14 6L4 36h20z" fill="var(--ok-soft)"/><ellipse cx="17" cy="24" rx="8" ry="4" transform="rotate(-20 17 24)"/>',
+  hyper: '<path d="M10 8c8 8 8 24 0 32M38 8c-8 8-8 24 0 32"/><path d="M8 8l32 32M40 8L8 40" stroke-dasharray="2 2"/>',
+  parab: '<path d="M8 8c4 30 28 30 32 0"/><circle cx="24" cy="16" r="1.8" fill="currentColor"/>',
   vec: '<path d="M8 32l14-20M8 32h24M8 32l26-10" /><path d="M22 12l-5 1 3 3zM32 32l-4-2v4zM34 22l-5-1 2 4z" fill="currentColor"/>',
   basis: '<path d="M10 32h22l8-10H18z" fill="var(--ok-soft)"/><path d="M14 30V8"/><path d="M14 8l-2 5h4z" fill="currentColor"/>',
   axes: '<path d="M14 32V8M14 32h26M14 32l-8 6"/><circle cx="30" cy="16" r="2" fill="currentColor"/><path d="M30 16v16M30 16H14" stroke-dasharray="2 2"/>',

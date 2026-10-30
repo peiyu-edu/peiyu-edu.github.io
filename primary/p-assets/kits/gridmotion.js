@@ -97,10 +97,17 @@
     function poly(pts, style, par) { return el(OPEN ? "polyline" : "polygon", { points: ps(pts), style: style }, par || layer); }
     function dot(p, r, style, par) { return el("circle", { cx: X(p), cy: Y(p), r: r, style: style }, par || layer); }
     function txt(x, y, s, style, par) {
-      var t = el("text", { x: Math.max(12, Math.min(348, x)), y: Math.max(18, Math.min(VH - 6, y)), "text-anchor": "middle", style: "font-size:18px;font-weight:700;" + (style || "fill:var(--fg)") }, par || layer);
+      var t = el("text", { x: Math.max(12, Math.min(348, x)), y: Math.max(18, Math.min(VH + 1, y)), "text-anchor": "middle", style: "font-size:18px;font-weight:700;" + (style || "fill:var(--fg)") }, par || layer);
       t.textContent = s; return t;
     }
-    function lab(p, s, c, style) { var dx = p[0] - c[0], dy = p[1] - c[1], L = Math.sqrt(dx * dx + dy * dy) || 1; return txt(X(p) + dx / L * 16, Y(p) + dy / L * 16 + 6, s, style); }
+    function lab(p, s, c, style, direction) {
+      var dx = p[0] - c[0], dy = p[1] - c[1];
+      // Put labels in a grid cell instead of straddling the grid lines at a vertex.
+      var sx = direction || (dx < 0 ? -1 : 1), sy = dy > 0 ? 1 : -1;
+      if (X(p) + sx * 16 < 22 || X(p) + sx * 16 > 338) { sx = -sx; if (direction) sy = 1; }
+      var x = X(p) + sx * 16, y = Y(p) + (sy < 0 ? -12 : 24);
+      return txt(x, y, s, style);
+    }
     function nm(i, pr) { return (LB[i] || String(i + 1)) + (pr ? "′" : ""); }
     function anim(ms, step, done) {
       busy = true;
@@ -138,7 +145,7 @@
 
     if (mode === "clock") return clock();
 
-    var svg = el("svg", { viewBox: "0 0 360 " + VH, class: "stage", role: "group", "aria-label": cfg.aria || "方格纸" });
+    var svg = el("svg", { viewBox: "-8 -8 376 " + (VH + 16), class: "stage", role: "group", "aria-label": cfg.aria || "方格纸" });
     svg.style.touchAction = "none";
     root.appendChild(svg);
     var i, gl = el("g", { style: "stroke:var(--line);stroke-width:1" }, svg);
@@ -219,7 +226,7 @@
     function drawGiven(pts, t) {
       poly(pts, fillS(t || cfg.tone));
       var c = center(pts);
-      pts.forEach(function (p, j) { if (LB[j]) { dot(p, 4, "fill:var(--fg)"); lab(p, nm(j), c); } });
+      pts.forEach(function (p, j) { if (LB[j]) { dot(p, 4, "fill:var(--fg)"); if (!(mode === "rot" && D && clockOn && j === PV)) lab(p, nm(j), c); } });
     }
 
     /* ---------- 轴对称 ---------- */
@@ -231,7 +238,14 @@
     var rulerOn = false;
     function drawAxis() {
       el("line", { x1: X(A1), y1: Y(A1), x2: X(A2), y2: Y(A2), style: "stroke:var(--c);stroke-width:3;stroke-dasharray:10 6" }, layer);
-      if (cfg.axisName !== false) txt(X(A2) + (IDX === 1 ? -26 : 0), Y(A2) + (IDX === 0 ? 16 : -8), cfg.axisName || "对称轴", "fill:var(--c);font-size:16px");
+      if (cfg.axisName !== false) {
+        var name = cfg.axisName || "对称轴", width = Math.min(350, String(name).length * 17 + 8);
+        var x = Math.max(width / 2, Math.min(360 - width / 2, X(A2) + (IDX === 1 ? -26 : 0)));
+        var y = Math.max(18, Math.min(VH + 1, Y(A2) + (IDX === 1 ? 48 : 22)));
+        // A narrow halo protects horizontal-axis text without masking the completed shape.
+        if (IDX !== 1) el("rect", { x: x - width / 2, y: y - 19, width: width, height: 23, style: "fill:var(--card)" }, layer);
+        txt(x, y, name, "fill:var(--c);font-size:17px" + (IDX === 1 ? ";paint-order:stroke;stroke:var(--card);stroke-width:3;stroke-linejoin:round" : ""));
+      }
     }
     function drawRuler(p, col) {
       if (IDX < 0 || onAxis(p)) return;
@@ -240,7 +254,7 @@
         var a = p.slice(), b = p.slice(); a[IDX] = p[IDX] + s * (k - 1); b[IDX] = p[IDX] + s * k;
         el("line", { x1: X(a), y1: Y(a), x2: X(b), y2: Y(b), style: "stroke:" + (k % 2 ? "var(--hl)" : col) + ";stroke-width:6;stroke-linecap:butt" }, layer);
         var mdl = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-        txt(X(mdl) + (o === 0 ? -14 : 0), Y(mdl) + (o === 1 ? -9 : 6), String(k), "font-size:17px;fill:" + col);
+        txt(X(mdl) + (o === 0 ? -14 : 0), Y(mdl) + (o === 1 ? 24 : 6), String(k), "font-size:17px;fill:" + col);
       }
       var f = foot(p), sq = 8, ux = IDX === 0 ? -s : 0, uy = IDX === 1 ? -s : 0, vx = IDX === 1 ? 1 : 0, vy = IDX === 0 ? 1 : 0;
       el("polyline", { points: [X(f) + ux * sq, Y(f) + uy * sq, X(f) + ux * sq + vx * sq, Y(f) + uy * sq + vy * sq, X(f) + vx * sq, Y(f) + vy * sq].join(" "), style: "fill:none;stroke:var(--fg);stroke-width:1.5" }, layer);
@@ -324,18 +338,26 @@
       if (cfg.target && cfg.showTarget !== false) pieceDraw(pc, cfg.target, "fill:none;stroke:var(--b);stroke-width:2.5;stroke-dasharray:8 5");
       if (off[0] || off[1]) pieceDraw(pc, [0, 0], GHOST);
       if (cfg.track != null && pc.pts) {
-        var tp = pc.pts[cfg.track], path = pathOf(live ? steps.concat([live]) : steps).map(function (d) { return add(tp, d); });
+        var tp = pc.pts[cfg.track], path = pathOf(live ? steps.concat([live]) : steps).map(function (d) { return add(tp, d); }), counts = {};
         if (path.length > 1) el("polyline", { points: ps(path), style: "fill:none;stroke:var(--c);stroke-width:3" }, layer);
         for (var j = 1; j < path.length; j++) {
           var a = path[j - 1], b = path[j], n = Math.abs(b[0] - a[0] + b[1] - a[1]), dx = sgn(b[0] - a[0]), dy = sgn(b[1] - a[1]);
-          for (var k = 1; k <= n; k++) { var q = [a[0] + dx * k, a[1] + dy * k]; dot(q, 4, "fill:var(--c)"); txt(X(q) - dx * U / 2 + (dy ? 15 : 0), Y(q) - dy * U / 2 + (dx ? -9 : 6), String(k), "font-size:17px;fill:var(--c)"); }
+          for (var k = 1; k <= n; k++) {
+            var q = [a[0] + dx * k, a[1] + dy * k], tx = X(q) - dx * U / 2 + (dy ? 15 : 0), ty = Y(q) - dy * U / 2 + (dx ? -9 : 6), key = tx + "," + ty + "," + k;
+            dot(q, 4, "fill:var(--c)");
+            if (!counts[key]) { txt(tx, ty, String(k), "font-size:17px;fill:var(--c)"); counts[key] = true; }
+          }
         }
-        dot(tp, 5, "fill:var(--fg)"); lab(tp, nm(cfg.track), center(pc.pts));
+        var firstStep = path.length > 1 ? sgn(path[1][0] - path[0][0]) : 0;
+        dot(tp, 5, "fill:var(--fg)"); lab(tp, nm(cfg.track), center(pc.pts), null, path.length > 1 ? (firstStep ? -firstStep : -1) : 0);
       }
       var g = pieceDraw(pc, off, fillS(pc.tone || cfg.tone || "a", 0.55));
       g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", "可以移动的图形，用方向键移动");
       g.style.cursor = "grab"; g.setAttribute("data-mv", "1");
-      if (cfg.track != null && pc.pts && (off[0] || off[1])) { var cp = add(pc.pts[cfg.track], off); dot(cp, 5, "fill:var(--fg)"); lab(cp, nm(cfg.track, 1), center(pc.pts.map(function (p) { return add(p, off); }))); }
+      if (cfg.track != null && pc.pts && (off[0] || off[1])) {
+        var cp = add(pc.pts[cfg.track], off), lastStep = path.length > 1 ? sgn(path[path.length - 1][0] - path[path.length - 2][0]) : 0;
+        dot(cp, 5, "fill:var(--fg)"); lab(cp, nm(cfg.track, 1), center(pc.pts.map(function (p) { return add(p, off); })), null, lastStep || -1);
+      }
       return g;
     }
     function nudge(d) {
@@ -507,7 +529,7 @@
       }
       if (mode === "rot") {
         var o = (D ? D.given : cur)[PV];
-        if (D) { if (D.ghost) poly(D.ghost, "fill:var(--c);fill-opacity:.25;stroke:var(--c);stroke-width:2.5;stroke-dasharray:6 4"); drawGiven(D.given); drawKid(); if (clockOn) drawClockFace(o); drawPin(o); return; }
+        if (D) { if (D.ghost) poly(D.ghost, "fill:var(--c);fill-opacity:.25;stroke:var(--c);stroke-width:2.5;stroke-dasharray:6 4"); drawGiven(D.given); drawKid(); if (clockOn) drawClockFace(o); drawPin(o); if (clockOn && LB[PV]) lab(o, nm(PV), center(D.given), null, -1); return; }
         if (qn % 4 || busy) { poly(cfg.shape, GHOST); }
         arcs.forEach(function (a) {
           if (!a.e || a.r < 0.01) return;
@@ -521,7 +543,7 @@
           if (cfg.pick && !busy) { hit.setAttribute("tabindex", "0"); hit.setAttribute("role", "button"); hit.setAttribute("aria-label", "绕点 " + nm(j) + " 转"); hit.setAttribute("data-v", j); }
           if (j !== PV && LB[j]) lab(p, nm(j, (qn % 4) !== 0), cc);
         });
-        drawPin(o); lab(o, nm(PV), cc);
+        drawPin(o); lab(o, nm(PV), cc, null, clockOn ? -1 : 0);
       }
       if (mode === "puzzle") drawPuzzle(live);
       if (mode === "design") {

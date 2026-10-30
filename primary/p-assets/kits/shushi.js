@@ -71,8 +71,10 @@
     node.className = "read" + (cls ? " " + cls : "");
     node.innerHTML = html;
     var s = spoken(node.textContent), p = P();
-    if (p && s.trim()) { var b = p.sayButton(s); b.addEventListener("click", function () { p.say(s, b); }); node.appendChild(b); }
+    if (document.body.classList.contains("low") && p && s.trim()) { var b = p.sayButton(s); b.addEventListener("click", function () { p.say(s, b); }); node.appendChild(b); }
   }
+  /* PY-216：每次提交都要用文字说对 / 不对（旧页内副本用 VP 拼的），前缀由 PeiyuP 统一拼 */
+  function verdict(ok, t) { var p = P(); return p ? (ok ? p.okText(t) : p.noText(t)) : t; }
   function digs(n) { return String(n).split("").reverse().map(Number); }
   function pow(j) { return Math.pow(10, j); }
   function stepper(label, get, set, unit) {
@@ -261,7 +263,7 @@
       if (ok) {
         st.fill[sl.key] = sl.v;
         if (sl.kind === "z0" && v === "skip") st.faint[sl.key] = 1;
-        st.wrong = null; st.hint = sl.kind === "z0" ? (v === "skip" ? "个位的 0 省略了，第二次乘得的数从十位写起。" : "写上 0 也对，平时一般省略不写。") : "";
+        st.wrong = null; st.hint = sl.kind === "z0" ? verdict(true, v === "skip" ? "对了，个位的 0 省略了，第二次乘得的数从十位写起。" : "写上 0 也对，平时一般省略不写。") : "";
         var nx = -1;
         for (var i = 0; i < st.slots.length; i++) if (!isDone(st.slots[i])) { nx = i; if (!anyOrder || i > st.active) break; }
         if (nx < 0) finish(); else st.active = nx;
@@ -439,7 +441,8 @@
       function arrow() {
         if (!cur || !(cur.t === "mul" || cur.t === "row") || curPart === "c") return;
         var bc = S + cur.k, x1 = X(bc), y1 = Y.b - 30, x2 = X(cur.ac) + 6, y2 = Y.a + 8;
-        if (cur.ac === bc) { x1 -= 20; y1 = Y.b - 16; x2 -= 12; y2 = Y.a + 2; }
+        // Same-column arrows approach from the left, clear of the digit's ink.
+        if (cur.ac === bc) { x1 -= 20; y1 = Y.b - 16; x2 -= 22; y2 = Y.a + 2; }
         var ang = Math.atan2(y2 - y1, x2 - x1), ah = 9, col = two && !cur.k ? "var(--b)" : "var(--c)";
         el("line", { x1: x1, y1: y1, x2: x2, y2: y2, style: "stroke:" + col + ";stroke-width:2.5" }, svg);
         el("path", { d: "M" + x2 + " " + y2 + " L" + (x2 - ah * Math.cos(ang - 0.5)).toFixed(1) + " " + (y2 - ah * Math.sin(ang - 0.5)).toFixed(1) + " L" + (x2 - ah * Math.cos(ang + 0.5)).toFixed(1) + " " + (y2 - ah * Math.sin(ang + 0.5)).toFixed(1) + " Z", style: "fill:" + col }, svg);
@@ -510,9 +513,9 @@
         noCarry.hidden = !asl || asl.kind !== "c";
         skip0.hidden = !asl || asl.kind !== "z0";
         padWrap.hidden = st.done;
-        if (st.done) readout(read, "对了！" + st.a + " × " + st.b + " = " + pl.P + "。" + (v4 ? (two ? "两次乘得的数都对齐了，再加起来。" : "每一位都乘到了。")
-          : "你一位一位地乘，" + (pl.steps.some(function (s) { return s.co || (s.last && s.v > 9); }) ? "还看了进位。" : "每一位都乘到了。")) + estText(), "ok");
-        else if (st.hint) readout(read, st.hint, "no");
+        if (st.done) readout(read, verdict(true, "对了！" + st.a + " × " + st.b + " = " + pl.P + "。" + (v4 ? (two ? "两次乘得的数都对齐了，再加起来。" : "每一位都乘到了。")
+          : "你一位一位地乘，" + (pl.steps.some(function (s) { return s.co || (s.last && s.v > 9); }) ? "还看了进位。" : "每一位都乘到了。")) + estText()), "ok");
+        else if (st.hint) readout(read, verdict(false, st.hint), "no");
         else readout(read, head + prompt(asl));
       } else if (st.msg) { readout(read, st.msg); st.msg = ""; }
       else if (st.pos === 0) readout(read, head + (v4 ? (S ? "0 前面的数对齐，0 伸到右边。" : "") : (st.tz && S ? "一位数写在 " + st.a + " 的第一个不是 0 的数下面。" : "")) + "点「下一步」，一位一位地乘。");

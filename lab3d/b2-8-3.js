@@ -1,6 +1,6 @@
 // 8.3 简单几何体的表面积与体积 · 3D 舞台页（PY-331 试点）
 // 面积、体积、展开图的尺寸全部由当前参数按公式算出。
-import { createStage, tabs, slider, quiz, renderMath, courseStrip, readout as fillReadout, expose, THREE, noteShow } from './stage.js';
+import { createStage, tabs, slider, quiz, renderMath, courseStrip, readout as fillReadout, expose, THREE, noteShow, DUR } from './stage.js';
 import { buildPrismUnfold, buildPyramidUnfold, buildCylinderUnfold, buildConeUnfold, buildSphere, colors, geo } from './solids.js';
 
 const $ = (s) => document.querySelector(s);
@@ -174,14 +174,14 @@ async function toggleUnfold(btn) {
   g.add(cur().build({ ...p, e: 0 }).group, cur().build({ ...p, e: 1 }).group);
   S.frameObject(g, true, 0.85);
   S.dispose(g);   // 临时模型只用来取景（PY-347）
-  if (!to) S.orbitTo(28, 900);
-  if (!(await S.tween(2400, (t) => { p.e = from + (to - from) * t; rebuild(); }, undefined, () => { p.e = to; }))) return;   // 中途被打断
+  if (!to) S.orbitTo(28, DUR.view);
+  if (!(await S.tween(DUR.build, (t) => { p.e = from + (to - from) * t; rebuild(); }, undefined, () => { p.e = to; }))) return;   // 中途被打断
   p.e = to;
   rebuild();
   if (to) {
     const upright = curKey === 'cyl' || curKey === 'prism'; // 展开图竖着立 → 正面看；平铺 → 俯视
     S.frameObject(S.root, true, 0.9);
-    if (!(await (upright ? S.orbitTo(14, 900, 0) : S.orbitTo(64, 900)))) return;
+    if (!(await (upright ? S.orbitTo(14, DUR.view, 0) : S.orbitTo(64, DUR.view)))) return;
   }
   else S.frameObject(S.root, true, 1.0);
   btn.textContent = to ? '↺ 合上' : '✂ 剪开、展开';

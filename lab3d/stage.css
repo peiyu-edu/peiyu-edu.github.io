@@ -149,5 +149,17 @@ body.l3 { margin: 0; background: var(--bg); color: var(--fg); overflow-x: hidden
   .l3-hint { display: none; }
   .l3-tools { bottom: 8px; }
   .l3-tools button { width: 30px; }
+  /* 手机竖屏：模型按宽度放，舞台不用比宽度高太多，少滑一屏才看到讲解 */
+  .l3-stage { height: min(64vh, calc(100vw + 110px)); }
 }
-@media (prefers-reduced-motion: reduce) { .l3-co { transition: none; } }
+/* 键盘焦点框（PY-366）：舞台、工具条、芯片、选项卡、标注卡、选项都要看得见 */
+.l3-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.l3-stage canvas:focus { outline: none; }
+.l3-stage canvas:focus-visible { outline: 3px solid var(--a); outline-offset: -3px; border-radius: inherit; }
+.l3-tools button:focus-visible, .l3-chips button:focus-visible, .l3-tabs button:focus-visible, .l3-quiz .opt:focus-visible,
+.l3-legend button:focus-visible, .l3-btn:focus-visible, .l3-lesson:focus-visible, .l3-pane:focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
+.l3-co:focus-visible { outline: 2px solid var(--a); outline-offset: 2px; border-color: var(--hl); }
+.l3-ctl input[type=range]:focus-visible { outline: 2px solid var(--a); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  .l3 *, .l3 *::before, .l3 *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}

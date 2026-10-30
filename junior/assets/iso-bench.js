@@ -559,7 +559,7 @@
         `<b>祖暅原理等距实验台（「幂势既同，则积不容异」）</b>：半径 \\(R = ${R.toFixed(1)}\\)，当前截面高度 \\(h = ${h.toFixed(2)}\\)。<br>` +
         `① <b>左工位（半球截面）</b>：由勾股定理，截面圆半径 \\(r_1 = \\sqrt{R^2 - h^2} = ${rSphereSec.toFixed(2)}\\)，面积 \\(S_1 = \\pi(R^2 - h^2) = ${areaSec.toFixed(2)}\\)；<br>` +
         `② <b>右工位（圆柱挖圆锥截面）</b>：外圆半径 \\(R\\)，内圆锥在高度 \\(h\\) 处半径恰为 \\(h\\)，圆环面积 \\(S_2 = \\pi R^2 - \\pi h^2 = \\pi(R^2 - h^2) = ${areaSec.toFixed(2)}\\)；<br>` +
-        `③ <b>体积定论</b>：任一高度 \\(h \\in [0, R]\\) 处两截面面积严格相等（右侧双表盘读数同步），故 \\(V_{\\text{半球}} = V_{\\text{柱}} - V_{\\text{锥}} = \\pi R^3 - \\dfrac{1}{3}\\pi R^3 = \\dfrac{2}{3}\\pi R^3 = ${vHemi.toFixed(2)}\\)。`;
+        `③ <b>体积定论</b>：任一高度 \\(h \\in [0, R]\\) 处两截面面积严格相等（右侧双表盘读数同步）。<span style="font-size:max(14px,1em)">半球体积 = 圆柱体积 − 圆锥体积</span>，故半球体积 \\(V = \\pi R^3 - \\dfrac{1}{3}\\pi R^3 = \\dfrac{2}{3}\\pi R^3 = ${vHemi.toFixed(2)}\\)\u2060。`;
       if (renderMath) renderMath();
     }
   }
@@ -1058,21 +1058,21 @@
     parts.push(solidSvg(cylinder(wQ[0], wQ[1], 4.8, wQ[2] - 4, 8, P, 12), { tone: "hi" }));
 
     // 5. 固定安全区文字标注
-    parts.push(`<text x="212" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">割线逼近切线千分表台 · Δx=${dx.toFixed(2)}, k割=${kSec.toFixed(3)}</text>`);
-    parts.push(`<text x="112" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-accent)">切点 P(1, 0.5), 极限导数 f'(1)=1.000</text>`);
-    parts.push(`<text x="312" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-warn)">Δy=${dy.toFixed(2)}, 斜率差 k割-f'(1)=+${err.toFixed(3)}</text>`);
+    parts.push(`<text x="212" y="22" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">割线逼近切线千分表台 · Δx=${dx.toFixed(2)}, Δy/Δx=${kSec.toFixed(3)}</text>`);
+    parts.push(`<text x="112" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-accent)">切点 P(1, 0.5), 极限导数 f′(1)=1.000</text>`);
+    parts.push(`<text x="312" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="var(--iso-warn)">Δy=${dy.toFixed(2)}, 斜率差 Δy/Δx−f′(1)=+${err.toFixed(3)}</text>`);
 
-    // 6. 右侧双千分表：割线斜率 k割 与 斜率逼近误差
-    parts.push(dialGaugeSvg(490, 74, 32, kSec, 2.5, "割线斜率 k割=Δy/Δx", ""));
-    parts.push(dialGaugeSvg(490, 210, 32, err, 1.5, "逼近误差 k割-f'(1)", ""));
-    parts.push(`<text x="490" y="144" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">Δx→0 ⇒ k割→1.00</text>`);
+    // 6. 右侧双千分表：割线斜率 Δy/Δx 与 斜率逼近误差
+    parts.push(dialGaugeSvg(490, 74, 32, kSec, 2.5, "割线斜率 Δy/Δx", ""));
+    parts.push(dialGaugeSvg(490, 210, 32, err, 1.5, "逼近误差 Δy/Δx−f′(1)", ""));
+    parts.push(`<text x="490" y="144" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">Δx→0 ⇒ Δy/Δx→1.00</text>`);
 
     svg.innerHTML = parts.join("\n");
 
     if (desc) {
       desc.innerHTML =
         `<b>等距凸轮导轨与瞬时变化率千分表</b>：当自变量增量 \\(\\Delta x = ${dx.toFixed(2)}\\) 时，函数增量 \\(\\Delta y = f(1+\\Delta x)-f(1) = ${dy.toFixed(3)}\\)。<br>` +
-        `<b>极限逼近读数</b>：割线连杆斜率 \\(k_{\\text{割}} = \\dfrac{\\Delta y}{\\Delta x} = 1 + 0.5\\Delta x = ${kSec.toFixed(3)}\\)，与切线斜率 \\(f'(1)=1.000\\) 仅差 <b>+${err.toFixed(3)}</b>！`;
+        `<b>极限逼近读数</b>：<span style="font-size:max(14px,1em)">割线连杆斜率</span> \\(\\dfrac{\\Delta y}{\\Delta x} = 1 + 0.5\\Delta x = ${kSec.toFixed(3)}\\)，与切线斜率 \\(f'(1)=1.000\\) 仅差 <b>+${err.toFixed(3)}</b>！`;
       if (renderMath) renderMath();
     }
   }
@@ -1728,21 +1728,21 @@
     parts.push(solidSvg(cylinder(bx + dx, by + dy, 4, 15.6, 2.8, P, 10), { tone: "hi", accent: true }));
 
     // 4. 固定安全区文字标注
-    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">斜二测画法投影夹具台 · x'=x, y'=y/2, ∠x'O'y'=${Math.round(deg)}°</text>`);
-    parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">原图边长 a=${a.toFixed(1)}, S原=${areaOrig.toFixed(2)}</text>`);
-    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">直观图 S'${sOpSvg}${areaObl.toFixed(2)} (比值${rOpSvg}${ratio.toFixed(3)})</text>`);
+    parts.push(`<text x="212" y="24" text-anchor="middle" font-size="13.5" font-weight="700" fill="var(--iso-hi)">斜二测画法投影夹具台 · x′=x, y′=y/2, ∠x′O′y′=${Math.round(deg)}°</text>`);
+    parts.push(`<text x="102" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-accent)">原图边长 a=${a.toFixed(1)}, S=${areaOrig.toFixed(2)}</text>`);
+    parts.push(`<text x="318" y="318" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--iso-warn)">直观图 S′${sOpSvg}${areaObl.toFixed(2)} (比值${rOpSvg}${ratio.toFixed(3)})</text>`);
 
     // 5. 右侧双千分表：直观图面积 S' 与 面积换算比 S'/S
-    parts.push(dialGaugeSvg(490, 80, 33, areaObl, 12.5, "直观图面积 S'", ""));
-    parts.push(dialGaugeSvg(490, 226, 33, ratio, 0.5, "面积比 S'/S", ""));
-    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">S' = (sin α)/2·S</text>`);
+    parts.push(dialGaugeSvg(490, 80, 33, areaObl, 12.5, "直观图面积 S′", ""));
+    parts.push(dialGaugeSvg(490, 226, 33, ratio, 0.5, "面积比 S′/S", ""));
+    parts.push(`<text x="490" y="154" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--iso-accent)">S′ = (sin α)/2·S</text>`);
 
     svg.innerHTML = parts.join("\n");
 
     if (desc) {
       desc.innerHTML =
         `<b>斜二测画法三规则夹具台</b>：横轴平行且长度不变（\\(x'=a=${a.toFixed(1)}\\)），纵轴夹角 \\(\\angle x'O'y'=${Math.round(deg)}^\\circ\\) 且<b>长度折半</b>（\\(y'=\\dfrac{a}{2}=${(a / 2).toFixed(2)}\\)），直观图高 \\(h'=y'\\sin ${Math.round(deg)}^\\circ${hOpTex}${hObl.toFixed(2)}\\)。<br>` +
-        `<b>面积换算公式</b>：原图面积 \\(S_{\\text{原}}=${areaOrig.toFixed(2)}\\)，直观图面积 \\(S_{\\text{直观}}${sOpTex}${areaObl.toFixed(2)}\\)。标准 \\(45^\\circ\\)（或 \\(135^\\circ\\)）下恒有 \\(S_{\\text{直观}}=\\dfrac{\\sqrt{2}}{4}S_{\\text{原}}\\approx 0.354 S_{\\text{原}}\\)，逆求原图面积必乘 \\(2\\sqrt{2}\\approx 2.828\\)！`;
+        `<b>面积换算公式</b>：原图面积 \\(S=${areaOrig.toFixed(2)}\\)，直观图面积 \\(S'${sOpTex}${areaObl.toFixed(2)}\\)。标准 \\(45^\\circ\\)（或 \\(135^\\circ\\)）下恒有 \\(S'=\\dfrac{\\sqrt{2}}{4}S\\approx 0.354 S\\)，逆求原图面积必乘 \\(2\\sqrt{2}\\approx 2.828\\)！`;
       if (renderMath) renderMath();
     }
   }
@@ -2088,7 +2088,8 @@
       const exact = value => Number.isInteger(value) ? String(value) : String(value);
       desc.innerHTML = `<b>平面拼图怎样读：</b>四块有编号的三角形全等。①的橙色直角边为a、绿色直角边为b；两条直角边分别是 \\(a=${exact(a)}\\)、\\(b=${exact(b)}\\)。外正方形的四条边是它们的斜边，所以外方面积为 \\(a^2+b^2=${exact(a*a+b*b)}\\)。<br>` +
         `<b>逐块数面积：</b>①、②、③、④每块都是 \\(\\dfrac{ab}{2}=${exact(triArea)}\\)，四块合计 \\(2ab=${exact(2*a*b)}\\)。绿色中心正方形的边长为 \\(|a-b|=${exact(Math.abs(a-b))}\\)，面积为 \\((a-b)^2=${exact(gap)}\\)。这些区域在同一平面内，恰好铺满外方：<br>` +
-        `\\[\\underbrace{${exact(a*a+b*b)}}_{\\text{外方}}=\\underbrace{4\\times${exact(triArea)}}_{\\text{四个三角形}}+\\underbrace{${exact(gap)}}_{\\text{中心小方}}.\\]` +
+        `<div style="font-size:max(14px,1em)">面积相加：外方 = 四个三角形 + 中心小方。</div>` +
+        `\\[${exact(a*a+b*b)}=4\\times${exact(triArea)}+${exact(gap)}.\\]` +
         `<b>由面积看不等式：</b>中心面积非负，故 \\(a^2+b^2\\ge2ab\\)，也就是 \\((a+b)^2\\ge4ab\\)。因 \\(a,b&gt;0\\)，得到 \\(\\dfrac{a+b}{2}\\ge\\sqrt{ab}\\)。当 \\(a=b\\) 时中心退化为一个点，四个三角形仍铺满外方。<br>` +
         `<b>右图均值：</b>同底同尺度的条长表示 \\(H=\\dfrac{2ab}{a+b}\\approx${H.toFixed(3)}\\)、\\(G=\\sqrt{ab}\\approx${G.toFixed(3)}\\)、\\(A=\\dfrac{a+b}{2}=${exact(A)}\\)、\\(Q=\\sqrt{\\dfrac{a^2+b^2}{2}}\\approx${Q.toFixed(3)}\\)，满足 \\(H\\le G\\le A\\le Q\\)。等号同时成立当且仅当 \\(a=b\\)。`;
       if (renderMath) renderMath();

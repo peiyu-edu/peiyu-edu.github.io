@@ -5,17 +5,13 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=960b69da9959"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=2def94435483"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
+<script defer src="../p-assets/kits/cubeview.js"></script>
 <style>
 .manip { max-width:100%; }
 .note-old { color:var(--muted); font-size:16px; margin:-4px 0 12px; }
-.ob-pick { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0; }
-.ob-pick button { min-height:44px; min-width:44px; padding:6px 14px; font-size:19px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); color:var(--fg); cursor:pointer; }
-.ob-pick button[aria-pressed="true"] { border-color:var(--a); background:var(--hl-soft); font-weight:700; }
-.ob-pick button:focus-visible { outline:3px solid var(--a); outline-offset:2px; }
-.ob-lab { font-size:16px; color:var(--muted); margin:8px 0 0; }
 </style>
 </head>
 <body class="primary" data-stage="primary" data-sec="p4b-u2-2">
@@ -49,159 +45,23 @@
   </div>
 
   <h2>2. 六个物体，转着看</h2>
-  <p class="line">选一个物体，再选一个看的方向。右边画出你看到的形状，下面告诉你：<b>还有哪些物体看到的形状和它一样</b>。</p>
-  <div class="card manip" id="m-ob">
-    <div class="ob-pick" id="ob-solid" role="group" aria-label="选一个物体"></div>
-    <div class="ob-pick" id="ob-view" role="group" aria-label="选一个看的方向"></div>
-    <svg class="stage" id="ob-svg" viewBox="0 0 360 200" role="img" aria-label="左边是摆好的物体，右边是从选定方向看到的形状"></svg>
-    <div class="ctrls"><button type="button" id="ob-reset">重来</button></div>
-    <p class="read" id="ob-read" aria-live="polite"></p>
-  </div>
-  <script>
-  /* 同一位置看不同物体：6 个物体，都摆在 2 行 3 列的格子里（前排、后排），每格叠 0～2 个小正方体。
-     看到的形状由代码算：前面看每一列取最高，左面看每一排取最高（前排在右边），上面看有小正方体的格子。
-     形状平移后相同就算「一样」。 */
-  document.addEventListener("DOMContentLoaded", function () {
-    var root = document.getElementById("m-ob");
-    if (!root) return;
-    var NS = "http://www.w3.org/2000/svg";
-    var SOL = [
-      { n: "甲", F: [1, 1, 1], B: [0, 0, 0] },
-      { n: "乙", F: [1, 1, 1], B: [0, 1, 0] },
-      { n: "丙", F: [1, 1, 1], B: [1, 0, 0] },
-      { n: "丁", F: [1, 1, 0], B: [0, 1, 1] },
-      { n: "戊", F: [2, 1, 0], B: [0, 0, 0] },
-      { n: "己", F: [2, 1, 0], B: [1, 0, 0] }
-    ];
-    var VIEWS = ["前面", "左面", "上面"];
-    var si = 0, vi = 0;
-    var svg = document.getElementById("ob-svg");
-    var readBox = document.getElementById("ob-read");
-    function shape(s, v) {
-      var cs = [], c, r, l, m;
-      if (v === 0) {
-        for (c = 0; c < 3; c++) { m = Math.max(s.F[c], s.B[c]); for (l = 0; l < m; l++) cs.push([c, l]); }
-      } else if (v === 1) {
-        for (r = 0; r < 2; r++) {
-          var row = r === 0 ? s.F : s.B;
-          m = Math.max(row[0], row[1], row[2]);
-          for (l = 0; l < m; l++) cs.push([1 - r, l]);
-        }
-      } else {
-        for (c = 0; c < 3; c++) {
-          if (s.F[c] > 0) cs.push([c, 0]);
-          if (s.B[c] > 0) cs.push([c, 1]);
-        }
-      }
-      return cs;
-    }
-    function sig(cs) {
-      if (!cs.length) return "";
-      var mx = Math.min.apply(null, cs.map(function (p) { return p[0]; }));
-      var my = Math.min.apply(null, cs.map(function (p) { return p[1]; }));
-      return cs.map(function (p) { return (p[0] - mx) + "," + (p[1] - my); }).sort().join(";");
-    }
-    function el(name, attrs, parent) {
-      var e = document.createElementNS(NS, name);
-      Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); });
-      parent.appendChild(e);
-      return e;
-    }
-    function label(x, y, t, size, anchor, weight) {
-      var e = el("text", { x: x, y: y, "text-anchor": anchor || "middle" }, svg);
-      e.setAttribute("style", "fill:var(--fg);font-size:" + size + "px;font-weight:" + (weight || 700));
-      e.textContent = t;
-    }
-    function drawSolid(s) {
-      var S = 34, DX = 13, DY = 11, OX = 40, OY = 150, r, c, l, x, y, p;
-      var h = [s.F, s.B], st = "stroke:var(--fg);stroke-width:1.6;stroke-linejoin:round;fill:var(--a);";
-      for (r = 1; r >= 0; r--) {
-        for (c = 0; c < 3; c++) {
-          for (l = 0; l < h[r][c]; l++) {
-            x = OX + c * S + r * DX; y = OY - (l + 1) * S - r * DY;
-            p = el("rect", { x: x, y: y, width: S, height: S }, svg);
-            p.setAttribute("style", st + "fill-opacity:.5");
-            p = el("polygon", { points: [x, y, x + DX, y - DY, x + S + DX, y - DY, x + S, y].join(" ") }, svg);
-            p.setAttribute("style", st + "fill-opacity:.22");
-            p = el("polygon", { points: [x + S, y, x + S + DX, y - DY, x + S + DX, y - DY + S, x + S, y + S].join(" ") }, svg);
-            p.setAttribute("style", st + "fill-opacity:.8");
-          }
-        }
-      }
-      label(OX + 51, 178, "前面", 17);
-      label(18, 118, "左", 17);
-    }
-    function render() {
-      var s = SOL[si], cs = shape(s, vi), g = sig(cs), k, p, i;
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
-      for (k = 0; k < SOL.length; k++) {
-        document.getElementById("ob-solid").children[k].setAttribute("aria-pressed", k === si ? "true" : "false");
-      }
-      for (k = 0; k < 3; k++) {
-        document.getElementById("ob-view").children[k].setAttribute("aria-pressed", k === vi ? "true" : "false");
-      }
-      drawSolid(s);
-      label(192, 112, "→", 26);
-      label(276, 38, s.n + "，从" + VIEWS[vi] + "看", 18);
-      var CELL = 36, X0 = 222, Y0 = 170;
-      var mx = Math.min.apply(null, cs.map(function (q) { return q[0]; }));
-      var my = Math.min.apply(null, cs.map(function (q) { return q[1]; }));
-      cs.forEach(function (q) {
-        p = el("rect", { x: X0 + (q[0] - mx) * CELL, y: Y0 - (q[1] - my + 1) * CELL, width: CELL, height: CELL }, svg);
-        p.setAttribute("style", "fill:var(--b);fill-opacity:.55;stroke:var(--fg);stroke-width:2");
-      });
-      var same = [], other = [[], [], []];
-      SOL.forEach(function (t) {
-        if (sig(shape(t, vi)) === g) same.push(t);
-      });
-      var msg = "从" + VIEWS[vi] + "看，";
-      if (same.length === 1) {
-        msg += "只有" + s.n + "是这个形状，别的物体看到的都不一样。";
-      } else {
-        msg += same.map(function (t) { return t.n; }).join("、") + "看到的形状一样，一共 " + same.length + " 个物体。";
-        var parts = [];
-        for (i = 0; i < 3; i++) {
-          if (i === vi) continue;
-          var seen = {};
-          same.forEach(function (t) { seen[sig(shape(t, i))] = 1; });
-          var cnt = Object.keys(seen).length;
-          parts.push("从" + VIEWS[i] + "看，它们分成 " + cnt + " 种");
-        }
-        msg += "可是它们不是同一个物体：" + parts.join("；") + "。";
-      }
-      readBox.className = "read";
-      readBox.textContent = msg;
-    }
-    SOL.forEach(function (t, k) {
-      var b = document.createElement("button"); b.type = "button"; b.textContent = t.n;
-      b.setAttribute("aria-label", "物体 " + t.n);
-      b.addEventListener("click", function () { si = k; render(); });
-      document.getElementById("ob-solid").appendChild(b);
-    });
-    VIEWS.forEach(function (t, k) {
-      var b = document.createElement("button"); b.type = "button"; b.textContent = "从" + t + "看";
-      b.addEventListener("click", function () { vi = k; render(); });
-      document.getElementById("ob-view").appendChild(b);
-    });
-    document.getElementById("ob-reset").addEventListener("click", function () { si = 0; vi = 0; render(); });
-    render();
-  });
-  </script>
+  <p class="line">选一个物体，拖一拖转着看；再点「转到前面」「转到左面」「转到上面」，正对着看。下面的小图画出各个方向看到的形状，读数告诉你：<b>还有哪些物体从这个方向看到的形状和它一样</b>。</p>
+  <div class="manip" data-manip="cubeview" data-cfg='{"id":"six","same":true,"objs":[{"n":"甲","g":[[1,1,1],[0,0,0]]},{"n":"乙","g":[[1,1,1],[0,1,0]]},{"n":"丙","g":[[1,1,1],[1,0,0]]},{"n":"丁","g":[[1,1,0],[0,1,1]]},{"n":"戊","g":[[2,1,0],[0,0,0]]},{"n":"己","g":[[2,1,0],[1,0,0]]}]}'></div>
 
   <div class="card q" data-id="try1" data-kind="num" data-answer="4"
-       data-miss='{"3":"3 可能漏掉了。把「从前面看」选好，六个物体再点一遍，数一数哪些是一排 3 个并排的。","2":"2 太少了。把六个物体都点一遍，数一数哪些从前面看是一排 3 个并排的。"}'
-       data-hint="选「从前面看」，把甲到己六个物体都点一遍，数一数哪些是一排 3 个并排的正方形。" data-lc-source="eyJhbnN3ZXIiOiI0IiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YWt5Liq54mp5L2T6YeM77yM5LuO5YmN6Z2i55yL5piv44CM5LiA5o6SIDMg5Liq5bm25o6S55qE5q2j5pa55b2i44CN55qE77yM5LiA5YWx5pyJ5Yeg5Liq77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj7nlLLjgIHkuZnjgIHkuJnjgIHkuIHvvIzkuIDlhbEgNCDkuKrjgILmiIrlkozlt7Hku47liY3pnaLnnIvmmK/lt6bovrnpq5jjgIHlj7PovrnkvY7nmoTlj7DpmLbvvIzkuI3mmK/kuIDmjpLjgII8L3A+PC9kaXY+XG4gICJ9">
+       data-miss='{"3":"3 可能漏掉了。先点「转到前面」，再把六个物体一个一个点一遍，数一数哪些是一排 3 个并排的。","2":"2 太少了。把六个物体都点一遍，数一数哪些从前面看是一排 3 个并排的。"}'
+       data-hint="先点「转到前面」，再把甲到己六个物体都点一遍，数一数哪些是一排 3 个并排的正方形。" data-lc-source="eyJhbnN3ZXIiOiI0IiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YWt5Liq54mp5L2T6YeM77yM5LuO5YmN6Z2i55yL5piv44CM5LiA5o6SIDMg5Liq5bm25o6S55qE5q2j5pa55b2i44CN55qE77yM5LiA5YWx5pyJ5Yeg5Liq77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj7nlLLjgIHkuZnjgIHkuJnjgIHkuIHvvIzkuIDlhbEgNCDkuKrjgILmiIrlkozlt7Hku47liY3pnaLnnIvmmK/lt6bovrnpq5jjgIHlj7PovrnkvY7nmoTlj7DpmLbvvIzkuI3mmK/kuIDmjpLjgII8L3A+PC9kaXY+XG4gICJ9">
     <span class="q-tag">自己试试</span>
     <p class="line">六个物体里，从前面看是「一排 3 个并排的正方形」的，一共有几个？</p>
     <div class="reveal"><p class="line">甲、乙、丙、丁，一共 4 个。戊和己从前面看是左边高、右边低的台阶，不是一排。</p></div>
   </div>
 
-  <div class="card predict" data-id="try2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5LmZ5ZKM5LiZ5LuO5YmN6Z2i55yL5LiA5qC344CC6KaB5oqK5a6D5Lus5YiG5byA77yM5bqU6K+l5o2i5Yiw5ZOq5Liq5pa55ZCR55yL77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIui/mOaYr+S7juWJjemdoueci++8jOS4pOS4queci+WIsOeahOWwseaYr+S4gOagt+eahO+8jOWIhuS4jeW8gOOAglwiPjxiPkE8L2I+6L+Y5piv5LuO5YmN6Z2i55yLPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIumAieOAjOS7juW3pumdoueci+OAjeivleivle+8muS5meWSjOS4meeci+WIsOeahOmDveaYryAyIOS4quW5tuaOkueahOato+aWueW9ou+8jOi/mOaYr+WIhuS4jeW8gOOAglwiPjxiPkI8L2I+5LuO5bem6Z2i55yLPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5LuO5LiK6Z2i55yLPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPkPjgILku47kuIrpnaLnnIvvvIzkuZnnmoTlkI7mjpLpgqPkuIDkuKrlnKjkuK3pl7TvvIzkuJnnmoTlkI7mjpLpgqPkuIDkuKrlnKjlt6bovrnvvIzkuKTkuKrlvaLnirbkuI3kuIDmoLfjgII8L3A+PC9kaXY+XG4gICJ9">
+  <div class="card predict" data-id="try2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5LmZ5ZKM5LiZ5LuO5YmN6Z2i55yL5LiA5qC344CC6KaB5oqK5a6D5Lus5YiG5byA77yM5bqU6K+l5o2i5Yiw5ZOq5Liq5pa55ZCR55yL77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIui/mOaYr+S7juWJjemdoueci++8jOS4pOS4queci+WIsOeahOWwseaYr+S4gOagt+eahO+8jOWIhuS4jeW8gOOAglwiPjxiPkE8L2I+6L+Y5piv5LuO5YmN6Z2i55yLPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIueCueOAjOi9rOWIsOW3pumdouOAjeivleivle+8muS5meWSjOS4meeci+WIsOeahOmDveaYryAyIOS4quW5tuaOkueahOato+aWueW9ou+8jOi/mOaYr+WIhuS4jeW8gOOAglwiPjxiPkI8L2I+5LuO5bem6Z2i55yLPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5LuO5LiK6Z2i55yLPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPkPjgILku47kuIrpnaLnnIvvvIzkuZnnmoTlkI7mjpLpgqPkuIDkuKrlnKjkuK3pl7TvvIzkuJnnmoTlkI7mjpLpgqPkuIDkuKrlnKjlt6bovrnvvIzkuKTkuKrlvaLnirbkuI3kuIDmoLfjgII8L3A+PC9kaXY+XG4gICJ9">
     <span class="q-tag">自己试试</span>
     <p class="line">乙和丙从前面看一样。要把它们分开，应该换到哪个方向看？</p>
     <div class="opts">
       <button class="opt" data-v="A" data-hint="还是从前面看，两个看到的就是一样的，分不开。"><b>A</b>还是从前面看</button>
-      <button class="opt" data-v="B" data-hint="选「从左面看」试试：乙和丙看到的都是 2 个并排的正方形，还是分不开。"><b>B</b>从左面看</button>
+      <button class="opt" data-v="B" data-hint="点「转到左面」试试：乙和丙看到的都是 2 个并排的正方形，还是分不开。"><b>B</b>从左面看</button>
       <button class="opt" data-v="C"><b>C</b>从上面看</button>
     </div>
     <div class="reveal"><p>C。从上面看，乙的后排那一个在中间，丙的后排那一个在左边，两个形状不一样。</p></div>

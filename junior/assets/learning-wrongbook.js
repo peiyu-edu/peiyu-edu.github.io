@@ -339,7 +339,7 @@
       if (destroyed) return;
       var focusedTab = doc.activeElement && doc.activeElement.getAttribute("data-lw-tab");
       var snapshot = store.snapshot();
-      model = mastery.derive(snapshot, function (id) { return store.answers(id); }, content, now(), { stage: stage, dailyLimit: Math.min(config.dailyLimit || (stage === "primary" ? 5 : 10), stage === "primary" ? 5 : 10), staleDays: config.staleDays });
+      model = mastery.derive(snapshot, store.answersReader ? store.answersReader() : function (id) { return store.answers(id); }, content, now(), { stage: stage, dailyLimit: Math.min(config.dailyLimit || (stage === "primary" ? 5 : 10), stage === "primary" ? 5 : 10), staleDays: config.staleDays });
       var page = el("div", undefined, "lw-page"); page.appendChild(el("h1", "我的学习"));
       page.appendChild(el("p", "记录只保存在这台设备的浏览器里，不会上传。", "lw-note"));
       if (snapshot.storage && snapshot.storage.memoryOnly) page.appendChild(el("p", "这次的记录可能保存不下来。", "lw-alert"));

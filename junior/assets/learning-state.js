@@ -167,15 +167,21 @@
     function ownSection(sec) { return typeof sec !== "string" || !sec || sectionStage(sec) === stage; }
     var storage = options.storage || null, now = options.now || Date.now, maxEvents = Number.isInteger(options.maxEvents) ? Math.max(1, options.maxEvents) : 1500;
     var state = blank(), loaded = false, blockedWrite = false, memoryOnly = !storage, problems = [], listeners = [], updating = false;
+    // PY-382: answers() runs once per content item (thousands per page). Skip re-parsing an unchanged
+    // stored ledger, and group marks by identity once per ledger change instead of rescanning per call.
+    var syncedRaw = null, dirty = true, marksByIdentity = null;
     function problem(msg) { if (problems.indexOf(msg) < 0) problems.push(msg); }
     function read(key) {
       try { return storage ? storage.getItem(key) : null; } catch (_) { memoryOnly = true; state.historyIncomplete = true; problem("storage-unavailable"); return null; }
     }
     function json(key) { var raw = read(key); if (!raw) return null; try { return JSON.parse(raw); } catch (_) { problem("legacy-corrupt:" + key); state.historyIncomplete = true; return null; } }
     function sync() {
-      var parsed = parse(read(KEY));
-      if (parsed.corrupt) { blockedWrite = true; memoryOnly = true; state.historyIncomplete = true; problem("learning-storage-corrupt"); return; }
-      state = merge(state, parsed.state);
+      var raw = read(KEY);
+      if (!dirty && raw !== null && raw === syncedRaw) return;
+      var parsed = parse(raw);
+      if (parsed.corrupt) { blockedWrite = true; memoryOnly = true; state.historyIncomplete = true; problem("learning-storage-corrupt"); syncedRaw = null; return; }
+      state = merge(state, parsed.state); marksByIdentity = null;
+      syncedRaw = raw; dirty = false;
     }
     function write() {
       var serialized = canonical(state);
@@ -227,7 +233,7 @@
       if (e.kind === "feedback" && q) { q.feedbackSeen = true; if (e.legacy) state.guards[e.base] = true; }
       if (e.kind === "review" && q) q.lastReview = later(q.lastReview, e);
       if (e.kind === "resume" && e.sectionId) state.resume = later(state.resume, e);
-      state.events.push(e);
+      state.events.push(e); dirty = true; marksByIdentity = null;
       state.marks[e.id] = { kind: e.kind, identity: e.identity, base: e.base, time: e.time, choice: e.choice, sectionId: e.sectionId, pointId: e.pointId, correct: e.correct, attemptKind: e.attemptKind, legacy: e.legacy };
       return e;
     }
@@ -348,12 +354,26 @@
       return q;
     }
     function emptyCounts() { return { views: 0, independentAnswers: 0, independentCorrect: 0, retries: 0, otherAnswers: 0, legacyAnswers: 0, selfRatings: 0, reviewVisits: 0 }; }
-    function answers(identity) {
-      ensure(); sync();
+    function answerMarks(identity) {
+      if (!marksByIdentity) {
+        marksByIdentity = new Map();
+        Object.keys(state.marks).forEach(function (id, order) {
+          var mark = state.marks[id];
+          if (typeof mark.identity !== "string" || (mark.kind !== "answer" && mark.kind !== "review")) return;
+          var list = marksByIdentity.get(mark.identity);
+          if (!list) marksByIdentity.set(mark.identity, list = []);
+          list.push({ id: id, mark: mark, order: order });
+        });
+        marksByIdentity.forEach(function (list) { list.sort(function (a, b) { return a.mark.time - b.mark.time || a.order - b.order; }); });
+      }
+      return marksByIdentity.get(identity) || [];
+    }
+    function answers(identity) { ensure(); sync(); return answersNow(identity); }
+    // One sync for a batch of lookups (mastery derive calls this once per content item).
+    function answersReader() { ensure(); sync(); return answersNow; }
+    function answersNow(identity) {
       if (typeof identity !== "string" || !identity) return [];
-      var marks = Object.keys(state.marks).map(function (id, order) { return { id: id, mark: state.marks[id], order: order }; })
-        .filter(function (entry) { return entry.mark.identity === identity && (entry.mark.kind === "answer" || entry.mark.kind === "review"); })
-        .sort(function (a, b) { return a.mark.time - b.mark.time || a.order - b.order; });
+      var marks = answerMarks(identity);
       var q = state.questions[identity], consumed = q && state.marks[q.reviewConsumedId], priorReview = false, result = [];
       for (var start = 0; start < marks.length;) {
         var end = start, reviewAtTime = false, answerCount = 0;
@@ -419,7 +439,7 @@
       if (e.key !== KEY && e.key !== null && !(typeof e.key === "string" && (e.key === LOG || /^peiyu\.hs\.(knowledge\.v1|cards|hci\.)/.test(e.key)))) return;
       ensure(); sync(); if (e.key !== KEY) importLegacy(); persist(); notify();
     });
-    return { key: KEY, stage: stage, load: function () { ensure(); return snapshot(); }, record: record, snapshot: snapshot, question: question, answers: answers,
+    return { key: KEY, stage: stage, load: function () { ensure(); return snapshot(); }, record: record, snapshot: snapshot, question: question, answers: answers, answersReader: answersReader,
       exportJSON: exportJSON, subscribe: function (fn) { if (typeof fn !== "function") return function () {}; listeners.push(fn);
         return function () { listeners = listeners.filter(function (f) { return f !== fn; }); }; } };
   }

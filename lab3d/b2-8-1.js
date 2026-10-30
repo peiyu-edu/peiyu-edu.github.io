@@ -1,5 +1,5 @@
 // 8.1 基本立体图形 · 3D 舞台页（PY-331 试点）
-import { createStage, tabs, slider, quiz, renderMath, courseStrip, expose, noteShow } from './stage.js';
+import { createStage, tabs, slider, quiz, renderMath, courseStrip, expose, noteShow, DUR } from './stage.js';
 import { buildPrism, buildPyramid, buildFrustumPoly, buildRound, buildSphere, colors } from './solids.js';
 
 const $ = (s) => document.querySelector(s);
@@ -202,7 +202,7 @@ async function spinPlay() {
   const full = withFull();
   S.frameObject(full, true, 1.0);
   S.dispose(full);   // 临时模型只用来取景（PY-347）
-  if (!(await S.tween(2600, (t) => { p.spin = Math.max(0.001, t); rebuild(); }, undefined, () => { p.spin = 1; }))) return;   // 中途被打断
+  if (!(await S.tween(DUR.build, (t) => { p.spin = Math.max(0.001, t); rebuild(); }, undefined, () => { p.spin = 1; }))) return;   // 中途被打断
   p.spin = 1;
   rebuild();
 }
@@ -276,9 +276,9 @@ function select(key) {
   $('#pane-def').innerHTML = sh.def;
   renderMath($('#pane-def'));
   for (const t of document.querySelectorAll('#pane-def .l3-term')) {
-    t.addEventListener('mouseenter', () => S.setHot(t.dataset.co));
-    t.addEventListener('mouseleave', () => S.setHot(null));
-    t.addEventListener('click', () => S.setHot(S.hot === t.dataset.co ? null : t.dataset.co));
+    t.addEventListener('mouseenter', () => S.peekHot(t.dataset.co));
+    t.addEventListener('mouseleave', () => S.peekHot(null));
+    t.addEventListener('click', () => S.setHot(S.pinned === t.dataset.co ? null : t.dataset.co));
   }
   mountControls();
   S.setCallouts(sh.callouts);

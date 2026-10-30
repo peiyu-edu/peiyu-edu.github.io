@@ -41,6 +41,7 @@ body {
   margin: 0; background: var(--bg); color: var(--fg);
   font: 16px/1.75 -apple-system, "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
 }
+button, input, select, textarea { font: inherit; }
 a { color: var(--a); }
 .wrap { max-width: clamp(860px, 85vw, 1440px); margin: 0 auto; padding: 0 16px 64px; }
 
@@ -244,7 +245,9 @@ svg text { text-rendering: geometricPrecision; -webkit-text-size-adjust: none; }
 .trap-grid { display: grid; gap: 12px; margin: 12px 0; }
 .trap-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); overflow: hidden; }
 .trap-head { padding: 8px 14px; font-weight: 700; font-size: 15.5px; border-bottom: 1px solid var(--line); background: var(--bg); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.trap-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; padding: 12px 14px; align-items: center; }
+/* Full-row generated notes must not activate a third auto-fit column. */
+.trap-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, max(230px, calc((100% - 12px) / 2))), 1fr)); gap: 12px; padding: 12px 14px; align-items: center; }
+.trap-body > .figure-notes { grid-column: 1 / -1; order: 1; }
 .trap-vs { display: grid; gap: 8px; }
 .trap-wrong { background: var(--no-soft); border-left: 3.5px solid var(--no); border-radius: 6px; padding: 8px 11px; font-size: 14.5px; overflow-x: auto; }
 .trap-right { background: var(--ok-soft); border-left: 3.5px solid var(--a); border-radius: 6px; padding: 8px 11px; font-size: 14.5px; overflow-x: auto; }

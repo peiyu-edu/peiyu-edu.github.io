@@ -5,16 +5,13 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=98f4d1951708"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=bc8e3f382635"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=5386fbb9fecf"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=e3d4083f037a"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=960b69da9959"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=2def94435483"></script><script defer src="../assets/learning-course.js?v=b71c551648be"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
+<script defer src="../p-assets/kits/cubeview.js"></script>
 <style>
 .note-old { color:var(--muted, var(--fg)); opacity:.75; font-size:15px; margin-top:-6px; }
 .manip { max-width:100%; }
-.vw-row { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:6px 0; }
-.vw-row button { min-height:44px; min-width:44px; padding:6px 14px; font:inherit; font-size:17px; border:1.5px solid var(--line); border-radius:10px; background:var(--bg); color:var(--fg); cursor:pointer; }
-.vw-row button[aria-pressed="true"] { border-color:var(--a); background:var(--ok-soft); font-weight:700; }
-.vw-row button:focus-visible { outline:3px solid var(--hl); outline-offset:2px; }
 .opt svg { display:block; margin:6px 0 0; max-width:100%; height:auto; }
 </style>
 </head>
@@ -43,148 +40,33 @@
 
 <section class="step" data-title="摆一摆">
   <h2>1. 选一个物体，选一个方向</h2>
-  <p class="line">先选一个物体，再点「前面」「左面」「上面」。右边会出现你看到的样子。颜色变淡的小正方体，是这个方向<b>被挡住、看不到</b>的。</p>
-  <div class="card manip" id="m-view">
-    <div class="vw-row" id="vw-ex" role="group" aria-label="选一个物体"></div>
-    <svg class="stage" id="vw-svg" viewBox="0 0 360 190" role="img" aria-label="小正方体物体和从选定方向看到的方格图"></svg>
-    <div class="vw-row" id="vw-dir" role="group" aria-label="选一个观察方向"></div>
-    <div class="ctrls"><button type="button" id="vw-reset">重来</button></div>
-    <p class="read" id="vw-read" aria-live="polite"></p>
-  </div>
-  <script>
-  /* 观察小正方体物体教具：物体由高度表 g[排][列] 给出（排 0 在最前，列 0 在最左）。
-     前面看：每一列取最高；左面看：每一排取最高（前面那排画在右边）；上面看：有小正方体的位置就是一格。
-     被挡住的判断：前面看，同一列同一层前面还有；左面看，同一排同一层左边还有；上面看，上面还有一层。数都由代码算。 */
-  document.addEventListener("DOMContentLoaded", function () {
-    var svg = document.getElementById("vw-svg");
-    if (!svg) return;
-    var NS = "http://www.w3.org/2000/svg";
-    var EX = [
-      { n: "物体 ①", g: [[1, 1, 0], [0, 1, 0]] },
-      { n: "物体 ②", g: [[2, 1, 0], [0, 1, 0]] },
-      { n: "物体 ③", g: [[1, 1, 1], [0, 1, 0]] },
-      { n: "物体 ④", g: [[1, 2, 0], [1, 0, 0]] }
-    ];
-    var DIRS = [["front", "前面"], ["left", "左面"], ["top", "上面"]];
-    var S = 34, D = 13, Z = 36, HM = 2, NC = 3, NR = 2;
-    var cur = 0, dir = null;
-    var exBox = document.getElementById("vw-ex"), dirBox = document.getElementById("vw-dir"), readBox = document.getElementById("vw-read");
-    function el(tag, attrs, parent) {
-      var e = document.createElementNS(NS, tag);
-      for (var k in attrs) e.setAttribute(k, attrs[k]);
-      if (parent) parent.appendChild(e);
-      return e;
-    }
-    function h(g, r, c) { return (g[r] && g[r][c]) || 0; }
-    function visible(g, r, c, l, d) {
-      var i;
-      if (d === "front") { for (i = 0; i < r; i++) if (h(g, i, c) > l) return false; return true; }
-      if (d === "left") { for (i = 0; i < c; i++) if (h(g, r, i) > l) return false; return true; }
-      if (d === "top") return h(g, r, c) === l + 1;
-      return true;
-    }
-    function cells(g, d) {
-      var set = {}, out = [], r, c, l;
-      for (r = 0; r < NR; r++) for (c = 0; c < NC; c++) for (l = 0; l < h(g, r, c); l++) {
-        var px, py;
-        if (d === "front") { px = c; py = l; }
-        else if (d === "left") { px = NR - 1 - r; py = l; }
-        else { px = c; py = r; }
-        set[px + "," + py] = [px, py];
-      }
-      for (var k in set) out.push(set[k]);
-      return out;
-    }
-    function dims(d) { return d === "left" ? [NR, HM] : [NC, d === "top" ? NR : HM]; }
-    function cubeCount(g) { var t = 0; g.forEach(function (row) { row.forEach(function (v) { t += v; }); }); return t; }
-    function draw() {
-      var g = EX[cur].g, r, c, l, x, y, hid = 0;
-      while (svg.firstChild) svg.removeChild(svg.firstChild);
-      var X0 = 14, Y0 = 130;
-      for (r = NR - 1; r >= 0; r--) for (l = 0; l < HM; l++) for (c = 0; c < NC; c++) {
-        if (h(g, r, c) <= l) continue;
-        var vis = dir ? visible(g, r, c, l, dir) : true;
-        if (!vis) hid++;
-        x = X0 + c * S + r * D; y = Y0 - (l + 1) * S - r * D;
-        var gp = el("g", { opacity: vis ? "1" : "0.3" }, svg);
-        var sd = vis ? "" : "4 3";
-        el("path", { d: "M" + x + "," + y + " l" + D + ",-" + D + " h" + S + " l-" + D + "," + D + "z", style: "fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5", "stroke-dasharray": sd }, gp);
-        el("path", { d: "M" + (x + S) + "," + y + " l" + D + ",-" + D + " v" + S + " l-" + D + "," + D + "z", style: "fill:var(--line);stroke:var(--fg);stroke-width:1.5", "stroke-dasharray": sd }, gp);
-        el("rect", { x: x, y: y, width: S, height: S, style: "fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5", "stroke-dasharray": sd }, gp);
-      }
-      var t = el("text", { x: X0 + 60, y: Y0 + 30, "text-anchor": "middle", style: "fill:var(--muted);font-size:17px" }, svg);
-      t.textContent = "前面（正对你）";
-      var n = 0;
-      if (dir) {
-        var px0 = 212, py0 = 130;
-        var dm = dims(dir), list = cells(g, dir), a, b;
-        var tt = el("text", { x: px0 + 54, y: 44, "text-anchor": "middle", style: "fill:var(--fg);font-size:17px;font-weight:700" }, svg);
-        tt.textContent = "从" + DIRS.filter(function (q) { return q[0] === dir; })[0][1] + "看";
-        for (a = 0; a < dm[0]; a++) for (b = 0; b < dm[1]; b++) {
-          el("rect", { x: px0 + a * Z, y: py0 - (b + 1) * Z, width: Z, height: Z, style: "fill:none;stroke:var(--dim);stroke-width:1;stroke-dasharray:3 3" }, svg);
-        }
-        list.forEach(function (q) {
-          el("rect", { x: px0 + q[0] * Z, y: py0 - (q[1] + 1) * Z, width: Z, height: Z, style: "fill:var(--hl-soft);stroke:var(--fg);stroke-width:2" }, svg);
-        });
-        if (dir === "left") {
-          var lt = el("text", { x: px0 + 54, y: py0 + 30, "text-anchor": "middle", style: "fill:var(--muted);font-size:17px" }, svg);
-          lt.textContent = "前面在右边";
-        } else if (dir === "top") {
-          var tp = el("text", { x: px0 + 54, y: py0 + 30, "text-anchor": "middle", style: "fill:var(--muted);font-size:17px" }, svg);
-          tp.textContent = "前面在下边";
-        }
-        n = list.length;
-      }
-      var name = dir ? DIRS.filter(function (q) { return q[0] === dir; })[0][1] : "";
-      readBox.className = dir ? "read ok" : "read";
-      if (!dir) {
-        readBox.textContent = "这个物体用了 " + cubeCount(g) + " 个小正方体。点一个方向，看看你会看到什么。";
-      } else {
-        readBox.textContent = "从" + name + "看，看到 " + n + " 个方格；" + (hid ? "有 " + hid + " 个小正方体被挡住，看不到。" : "每个小正方体都看得到。");
-      }
-    }
-    function sync() {
-      var i;
-      for (i = 0; i < exBox.children.length; i++) exBox.children[i].setAttribute("aria-pressed", i === cur ? "true" : "false");
-      for (i = 0; i < dirBox.children.length; i++) dirBox.children[i].setAttribute("aria-pressed", dir === DIRS[i][0] ? "true" : "false");
-      draw();
-    }
-    EX.forEach(function (ex, i) {
-      var b = document.createElement("button"); b.type = "button"; b.textContent = ex.n;
-      b.addEventListener("click", function () { cur = i; sync(); });
-      exBox.appendChild(b);
-    });
-    DIRS.forEach(function (q) {
-      var b = document.createElement("button"); b.type = "button"; b.textContent = q[1];
-      b.setAttribute("aria-label", "从" + q[1] + "看");
-      b.addEventListener("click", function () { dir = q[0]; sync(); });
-      dirBox.appendChild(b);
-    });
-    document.getElementById("vw-reset").addEventListener("click", function () { cur = 0; dir = null; sync(); });
-    sync();
-  });
-  </script>
+  <p class="line">先选一个物体，拖一拖，把它转着看。再点「转到前面」「转到左面」「转到上面」：小正方体会转到正对你的位置，这时看到的，就是从这个方向看到的样子。下面的小图先盖着「？」，<b>先想一想会看到什么，再转过去看</b>。</p>
+  <div class="manip" data-manip="cubeview" data-cfg='{"id":"view","objs":[{"n":"物体 ①","g":[[1,1,0],[0,1,0]]},{"n":"物体 ②","g":[[2,1,0],[0,1,0]]},{"n":"物体 ③","g":[[1,1,1],[0,1,0]]},{"n":"物体 ④","g":[[1,2,0],[1,0,0]]}]}'></div>
 
   <h2>2. 只数看得到的</h2>
   <p class="line">从一个方向看，前面的会挡住后面的。只数<b>看得到</b>的方格，被挡住的不数。</p>
   <div class="card q" data-id="try1" data-kind="num" data-answer="3"
        data-miss='{"4": "4 是把藏在后面的那一个也数进去了。后排中间的那个被前排中间的挡住，从前面看不到。"}'
-       data-hint="从前面看，每一列只数最高的那一摞，被挡住的不数。" data-lc-source="eyJhbnN3ZXIiOiIzIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+55SoIDQg5Liq5bCP5q2j5pa55L2T5pGG5oiQ5LiL6Z2i55qE54mp5L2T44CC5YmN5o6S77ya5bem6L655Y+gIDIg5Liq44CB5Lit6Ze0IDEg5Liq77yb5ZCO5o6S77ya5Lit6Ze0IDEg5Liq44CC5LuO5YmN6Z2i55yL77yM6IO955yL5Yiw5Yeg5Liq5pa55qC877yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMTUyXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCI0IOS4quWwj+ato+aWueS9k+aRhuaIkOeahOeJqeS9k++8jOWJjeaOkuW3pui+ueWPoOS4pOS4qu+8jOS4remXtOS4gOS4qu+8jOWQjuaOkuS4remXtOS4gOS4qlwiPjxwYXRoIGQ9XCJNMTYzLjAsNzcgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMTk3LjAsNzcgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxNjMuMFwiIHk9XCI3N1wiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHBhdGggZD1cIk0xMTYuMCw5MCBsMTMsLTEzIGgzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1vay1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHBhdGggZD1cIk0xNTAuMCw5MCBsMTMsLTEzIHYzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1saW5lKTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHJlY3QgeD1cIjExNi4wXCIgeT1cIjkwXCIgd2lkdGg9XCIzNFwiIGhlaWdodD1cIjM0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcmVjdD48cGF0aCBkPVwiTTE1MC4wLDkwIGwxMywtMTMgaDM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLW9rLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cGF0aCBkPVwiTTE4NC4wLDkwIGwxMywtMTMgdjM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLWxpbmUpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cmVjdCB4PVwiMTUwLjBcIiB5PVwiOTBcIiB3aWR0aD1cIjM0XCIgaGVpZ2h0PVwiMzRcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9yZWN0PjxwYXRoIGQ9XCJNMTE2LjAsNTYgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMTUwLjAsNTYgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxMTYuMFwiIHk9XCI1NlwiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHRleHQgeD1cIjE4MFwiIHk9XCIxNDZcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjE4cHhcIj7liY3pnaLvvIjmraPlr7nnnYDkvaDvvIk8L3RleHQ+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwIGNsYXNzPVwibGluZVwiPuWJjemdoueci++8muW3pui+ueS4gOWIlyAyIOagvOmrmO+8jOS4remXtOS4gOWIlyAxIOagvOmrmO+8jOWFsSAzIOS4quaWueagvOOAguWQjuaOkuS4remXtOmCo+S4quiiq+aMoeS9j+S6huOAgjwvcD48L2Rpdj5cbiAgIn0=">
+       data-hint="从前面看，每一列只数最高的那一摞，被挡住的不数。" data-lc-source="eyJhbnN3ZXIiOiIzIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+55SoIDQg5Liq5bCP5q2j5pa55L2T5pGG5oiQ5LiL6Z2i55qE54mp5L2T44CC5YmN5o6S77ya5bem6L655Y+gIDIg5Liq44CB5Lit6Ze0IDEg5Liq77yb5ZCO5o6S77ya5Lit6Ze0IDEg5Liq44CC5LuO5YmN6Z2i55yL77yM6IO955yL5Yiw5Yeg5Liq5pa55qC877yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMTUyXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCI0IOS4quWwj+ato+aWueS9k+aRhuaIkOeahOeJqeS9k++8jOWJjeaOkuW3pui+ueWPoOS4pOS4qu+8jOS4remXtOS4gOS4qu+8jOWQjuaOkuS4remXtOS4gOS4qlwiPjxwYXRoIGQ9XCJNMTYzLjAsNzcgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMTk3LjAsNzcgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxNjMuMFwiIHk9XCI3N1wiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHBhdGggZD1cIk0xMTYuMCw5MCBsMTMsLTEzIGgzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1vay1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHBhdGggZD1cIk0xNTAuMCw5MCBsMTMsLTEzIHYzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1saW5lKTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHJlY3QgeD1cIjExNi4wXCIgeT1cIjkwXCIgd2lkdGg9XCIzNFwiIGhlaWdodD1cIjM0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcmVjdD48cGF0aCBkPVwiTTE1MC4wLDkwIGwxMywtMTMgaDM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLW9rLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cGF0aCBkPVwiTTE4NC4wLDkwIGwxMywtMTMgdjM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLWxpbmUpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cmVjdCB4PVwiMTUwLjBcIiB5PVwiOTBcIiB3aWR0aD1cIjM0XCIgaGVpZ2h0PVwiMzRcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9yZWN0PjxwYXRoIGQ9XCJNMTE2LjAsNTYgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMTUwLjAsNTYgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxMTYuMFwiIHk9XCI1NlwiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHRleHQgeD1cIjE4MFwiIHk9XCIxNDZcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjE4cHhcIj7liY3pnaLvvIjmraPlr7nnnYDkvaDvvIk8L3RleHQ+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwIGNsYXNzPVwibGluZVwiPuWJjemdoueci++8muW3pui+ueS4gOWIlyAyIOagvOmrmO+8jOS4remXtOS4gOWIlyAxIOagvOmrmO+8jOWFsSAzIOS4quaWueagvOOAguWQjuaOkuS4remXtOmCo+S4quiiq+aMoeS9j+S6huOAgjwvcD5cbiAgICAgIDxwIGNsYXNzPVwibGluZVwiPui9rOS4gOi9rO+8jOaguOWvueS4gOS4i++8mjwvcD5cbiAgICAgIDxkaXYgY2xhc3M9XCJtYW5pcFwiIGRhdGEtbWFuaXA9XCJjdWJldmlld1wiIGRhdGEtY2ZnPVwieyZxdW90O2lkJnF1b3Q7OiZxdW90O3RyeTEtM2QmcXVvdDssJnF1b3Q7ZyZxdW90OzpbWzIsMSwwXSxbMCwxLDBdXSwmcXVvdDtzaG93JnF1b3Q7OiZxdW90O2FsbCZxdW90O31cIj48L2Rpdj48L2Rpdj5cbiAgIn0=">
     <span class="q-tag">自己试试</span>
     <p class="line">用 4 个小正方体摆成下面的物体。前排：左边叠 2 个、中间 1 个；后排：中间 1 个。从前面看，能看到几个方格？</p>
     <svg class="qfig" viewBox="0 0 360 152" role="img" aria-label="4 个小正方体摆成的物体，前排左边叠两个，中间一个，后排中间一个"><path d="M163.0,77 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M197.0,77 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="163.0" y="77" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M116.0,90 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M150.0,90 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="116.0" y="90" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M150.0,90 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M184.0,90 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="150.0" y="90" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M116.0,56 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M150.0,56 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="116.0" y="56" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><text x="180" y="146" text-anchor="middle" style="fill:var(--muted);font-size:18px">前面（正对着你）</text></svg>
-    <div class="reveal"><p class="line">前面看：左边一列 2 格高，中间一列 1 格高，共 3 个方格。后排中间那个被挡住了。</p></div>
+    <div class="reveal"><p class="line">前面看：左边一列 2 格高，中间一列 1 格高，共 3 个方格。后排中间那个被挡住了。</p>
+      <p class="line">转一转，核对一下：</p>
+      <div class="manip" data-manip="cubeview" data-cfg='{"id":"try1-3d","g":[[2,1,0],[0,1,0]],"show":"all"}'></div></div>
   </div>
 
   <h2>3. 换个方向，结果可能变</h2>
   <p class="line">从左面看，数的是前后有几排；从前面看，数的是左右有几列。</p>
   <div class="card q" data-id="try2" data-kind="num" data-answer="2"
        data-miss='{"4": "4 是把所有小正方体都数了。从左面看，前排的 3 个排成一线，只看得到最外面的 1 个。", "3": "3 是前面看到的方格数。从左面看，要数的是「前后有几排」。", "1": "1 只看到了前排。后排的那一块虽然靠后，但没有被挡住，从左面也看得到。"}'
-       data-hint="从左面看，前后方向有几排，就并排几个方格；同一排里的小正方体会挡在一条线上。" data-lc-source="eyJhbnN3ZXIiOiIyIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+54mp5L2T77ya5YmN5o6S77ya5bem6L65IDEg5Liq44CB5Lit6Ze0IDEg5Liq44CB5Y+z6L65IDEg5Liq77yb5ZCO5o6S77ya5Lit6Ze0IDEg5Liq44CC56uZ5Zyo54mp5L2T55qE5bem6Z2i55yL77yM6IO955yL5Yiw5Yeg5Liq5pa55qC877yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMTE4XCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCI0IOS4quWwj+ato+aWueS9k++8muWJjeaOkuS4gOaOkuS4ieS4qu+8jOWQjuaOkuS4remXtOS4gOS4qlwiPjxwYXRoIGQ9XCJNMTYzLjAsNDMgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMTk3LjAsNDMgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxNjMuMFwiIHk9XCI0M1wiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHBhdGggZD1cIk0xMTYuMCw1NiBsMTMsLTEzIGgzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1vay1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHBhdGggZD1cIk0xNTAuMCw1NiBsMTMsLTEzIHYzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1saW5lKTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHJlY3QgeD1cIjExNi4wXCIgeT1cIjU2XCIgd2lkdGg9XCIzNFwiIGhlaWdodD1cIjM0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcmVjdD48cGF0aCBkPVwiTTE1MC4wLDU2IGwxMywtMTMgaDM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLW9rLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cGF0aCBkPVwiTTE4NC4wLDU2IGwxMywtMTMgdjM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLWxpbmUpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cmVjdCB4PVwiMTUwLjBcIiB5PVwiNTZcIiB3aWR0aD1cIjM0XCIgaGVpZ2h0PVwiMzRcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9yZWN0PjxwYXRoIGQ9XCJNMTg0LjAsNTYgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMjE4LjAsNTYgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxODQuMFwiIHk9XCI1NlwiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHRleHQgeD1cIjE4MFwiIHk9XCIxMTJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjE4cHhcIj7liY3pnaLvvIjmraPlr7nnnYDkvaDvvIk8L3RleHQ+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwIGNsYXNzPVwibGluZVwiPuW3pumdoueci++8muWJjeaOkiAzIOS4quWwj+ato+aWueS9k+aOkuaIkOS4gOe6v++8jOWPqueci+WIsCAxIOagvO+8m+WQjuaOkiAxIOS4queci+WIsCAxIOagvOOAguWFsSAyIOS4quaWueagvOOAgjwvcD48L2Rpdj5cbiAgIn0=">
+       data-hint="从左面看，前后方向有几排，就并排几个方格；同一排里的小正方体会挡在一条线上。" data-lc-source="eyJhbnN3ZXIiOiIyIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+54mp5L2T77ya5YmN5o6S77ya5bem6L65IDEg5Liq44CB5Lit6Ze0IDEg5Liq44CB5Y+z6L65IDEg5Liq77yb5ZCO5o6S77ya5Lit6Ze0IDEg5Liq44CC56uZ5Zyo54mp5L2T55qE5bem6Z2i55yL77yM6IO955yL5Yiw5Yeg5Liq5pa55qC877yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMTE4XCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCI0IOS4quWwj+ato+aWueS9k++8muWJjeaOkuS4gOaOkuS4ieS4qu+8jOWQjuaOkuS4remXtOS4gOS4qlwiPjxwYXRoIGQ9XCJNMTYzLjAsNDMgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMTk3LjAsNDMgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxNjMuMFwiIHk9XCI0M1wiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHBhdGggZD1cIk0xMTYuMCw1NiBsMTMsLTEzIGgzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1vay1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHBhdGggZD1cIk0xNTAuMCw1NiBsMTMsLTEzIHYzNCBsLTEzLDEzelwiIHN0eWxlPVwiZmlsbDp2YXIoLS1saW5lKTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3BhdGg+PHJlY3QgeD1cIjExNi4wXCIgeT1cIjU2XCIgd2lkdGg9XCIzNFwiIGhlaWdodD1cIjM0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcmVjdD48cGF0aCBkPVwiTTE1MC4wLDU2IGwxMywtMTMgaDM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLW9rLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cGF0aCBkPVwiTTE4NC4wLDU2IGwxMywtMTMgdjM0IGwtMTMsMTN6XCIgc3R5bGU9XCJmaWxsOnZhcigtLWxpbmUpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvcGF0aD48cmVjdCB4PVwiMTUwLjBcIiB5PVwiNTZcIiB3aWR0aD1cIjM0XCIgaGVpZ2h0PVwiMzRcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9yZWN0PjxwYXRoIGQ9XCJNMTg0LjAsNTYgbDEzLC0xMyBoMzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tb2stc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxwYXRoIGQ9XCJNMjE4LjAsNTYgbDEzLC0xMyB2MzQgbC0xMywxM3pcIiBzdHlsZT1cImZpbGw6dmFyKC0tbGluZSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9wYXRoPjxyZWN0IHg9XCIxODQuMFwiIHk9XCI1NlwiIHdpZHRoPVwiMzRcIiBoZWlnaHQ9XCIzNFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L3JlY3Q+PHRleHQgeD1cIjE4MFwiIHk9XCIxMTJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjE4cHhcIj7liY3pnaLvvIjmraPlr7nnnYDkvaDvvIk8L3RleHQ+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwIGNsYXNzPVwibGluZVwiPuW3pumdoueci++8muWJjeaOkiAzIOS4quWwj+ato+aWueS9k+aOkuaIkOS4gOe6v++8jOWPqueci+WIsCAxIOagvO+8m+WQjuaOkiAxIOS4queci+WIsCAxIOagvOOAguWFsSAyIOS4quaWueagvOOAgjwvcD5cbiAgICAgIDxwIGNsYXNzPVwibGluZVwiPui9rOS4gOi9rO+8jOaguOWvueS4gOS4i++8mjwvcD5cbiAgICAgIDxkaXYgY2xhc3M9XCJtYW5pcFwiIGRhdGEtbWFuaXA9XCJjdWJldmlld1wiIGRhdGEtY2ZnPVwieyZxdW90O2lkJnF1b3Q7OiZxdW90O3RyeTItM2QmcXVvdDssJnF1b3Q7ZyZxdW90OzpbWzEsMSwxXSxbMCwxLDBdXSwmcXVvdDtzaG93JnF1b3Q7OiZxdW90O2FsbCZxdW90O31cIj48L2Rpdj48L2Rpdj5cbiAgIn0=">
     <span class="q-tag">自己试试</span>
     <p class="line">物体：前排：左边 1 个、中间 1 个、右边 1 个；后排：中间 1 个。站在物体的左面看，能看到几个方格？</p>
     <svg class="qfig" viewBox="0 0 360 118" role="img" aria-label="4 个小正方体：前排一排三个，后排中间一个"><path d="M163.0,43 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M197.0,43 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="163.0" y="43" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M116.0,56 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M150.0,56 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="116.0" y="56" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M150.0,56 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M184.0,56 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="150.0" y="56" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M184.0,56 l13,-13 h34 l-13,13z" style="fill:var(--ok-soft);stroke:var(--fg);stroke-width:1.5"/><path d="M218.0,56 l13,-13 v34 l-13,13z" style="fill:var(--line);stroke:var(--fg);stroke-width:1.5"/><rect x="184.0" y="56" width="34" height="34" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:1.5"/><text x="180" y="112" text-anchor="middle" style="fill:var(--muted);font-size:18px">前面（正对着你）</text></svg>
-    <div class="reveal"><p class="line">左面看：前排 3 个小正方体排成一线，只看到 1 格；后排 1 个看到 1 格。共 2 个方格。</p></div>
+    <div class="reveal"><p class="line">左面看：前排 3 个小正方体排成一线，只看到 1 格；后排 1 个看到 1 格。共 2 个方格。</p>
+      <p class="line">转一转，核对一下：</p>
+      <div class="manip" data-manip="cubeview" data-cfg='{"id":"try2-3d","g":[[1,1,1],[0,1,0]],"show":"all"}'></div></div>
   </div>
 
 </section>

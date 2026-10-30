@@ -1609,7 +1609,7 @@
   function ensureIsoBenchLoaded(cb) {
     if (window.IsoBench) { cb(); return; }
     var s = document.createElement("script");
-    s.src = ROOT + "assets/iso-bench.js?v=vs-0c6393f7be55";
+    s.src = ROOT + "assets/iso-bench.js?v=vs-dd2c2924fb99";
     s.onload = cb;
     document.head.appendChild(s);
   }

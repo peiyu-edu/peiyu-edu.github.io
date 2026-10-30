@@ -389,7 +389,7 @@
   /* ---------- 图上文字不随 SVG 缩得太小 + 移动端拖动点自动扩大触控靶区 ----------
      SVG 在手机上整体缩小，文字也跟着缩。这里按缩放比把 <text> 放大到屏幕上至少 MIN_PX，
      同时给半径偏小的可拖动圆点/滑块自动挂上透明大触控圆（屏幕半径 ≥ 22px），页面不用改代码。 */
-  var MIN_PX = 12, MIN_HIT_PX = 22, SVG_NS = "http://www.w3.org/2000/svg", fitQueued = false;
+  var MIN_PX = 14, MIN_HIT_PX = 22, SVG_NS = "http://www.w3.org/2000/svg", fitQueued = false;
   if (typeof SVGElement !== "undefined" && SVGElement.prototype && SVGElement.prototype.addEventListener) {
     var origSvgAdd = SVGElement.prototype.addEventListener;
     SVGElement.prototype.addEventListener = function (type, fn, opts) {
@@ -484,9 +484,13 @@
         if (!fs0) {
           fs0 = parseFloat(getComputedStyle(t).fontSize) || 15;
           t.setAttribute("data-fs0", fs0);
+          t._peiyuOriginalFontSize = t.style.fontSize;
         }
-        var want = Math.max(fs0, MIN_PX / k);
-        t.style.fontSize = want > fs0 + 0.01 ? want.toFixed(1) + "px" : "";
+        // Nested camera/group transforms also scale text; round upward to keep the floor.
+        var matrix = t.getScreenCTM();
+        var textScale = matrix ? Math.min(Math.hypot(matrix.a, matrix.b), Math.hypot(matrix.c, matrix.d)) : k;
+        var want = Math.max(fs0, MIN_PX / Math.max(0.01, textScale));
+        t.style.fontSize = want > fs0 ? Math.ceil(want * 1000) / 1000 + "px" : (t._peiyuOriginalFontSize || "");
       });
       fitTouchTargets(svg, k);
       if (window.PeiyuFigureLayout) PeiyuFigureLayout.fit(svg);
@@ -538,7 +542,7 @@
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");
-      ws.src = "../assets/wiki.js?v=vs-cad72bae0c22";
+      ws.src = "../assets/wiki.js?v=vs-d563426d743f";
       document.head.appendChild(ws);
     }
     var hs = document.createElement("script"); // 交互层（PY-53）

@@ -1,0 +1,154 @@
+/* 一试首页（PY-186）：主视觉、练法四步、起点卡图标、专题地图的模块编号与难度分布条。
+   只在 index.html 加载，覆盖 site.css 里的首页旧样式；配色全部取 site.css 变量，深浅色自动跟随。 */
+
+/* —— 首屏：左文右图，与高中站首页同一结构 —— */
+.home-hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 48px; align-items: center;
+  padding: 18px 0 34px; }
+.home-eyebrow { margin: 0 0 14px; font-size: 14px; color: var(--muted); letter-spacing: .04em; }
+.home-eyebrow::before { content: ""; display: inline-block; width: 22px; height: 2px; margin-right: 10px; vertical-align: middle;
+  background: var(--hl); }
+.home-hero .home-heading { font-size: clamp(36px, 4.4vw, 56px); line-height: 1.22; margin-bottom: 18px; }
+.home-hero .lead { max-width: 34em; font-size: 16.5px; }
+.home-stats { display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 0; margin: 26px 0 22px; }
+.home-stats > div { padding: 0 26px; border-left: 1px solid var(--line); }
+.home-stats > div:first-child { padding-left: 0; border-left: 0; }
+.home-stats dt { font-size: 14px; color: var(--muted); }
+.home-stats dd { margin: 2px 0 0; font-family: "Songti SC", "STSong", "Source Han Serif SC", "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-size: 28px; line-height: 1.2; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.home-hero-links { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0; font-size: 15px; }
+.home-hero-links a { font-weight: 600; }
+
+/* 主视觉卡片：浅网格 + 半圆，像一页草稿纸 */
+.home-figure { margin: 0; }
+.home-figure-card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px;
+  padding: 18px 18px 8px; box-shadow: 0 18px 40px -28px #1a282259, var(--card-shadow); }
+.home-figure-formula { margin: 0; text-align: center; font: italic 26px/1.3 "Times New Roman", "Songti SC", serif; color: var(--fg); }
+.home-figure-formula .sq { white-space: nowrap; }
+.home-figure-formula .ov { border-top: 1.5px solid currentColor; padding: 0 2px; }
+.home-figure-formula .frac { display: inline-flex; flex-direction: column; vertical-align: middle; font-size: .8em; line-height: 1.15; text-align: center; }
+.home-figure-formula .frac > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px; }
+.home-figure svg { display: block; width: 100%; height: auto; touch-action: none; cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.hf-grid path { stroke: var(--line); stroke-width: 1; fill: none; opacity: .7; }
+.hf-base { stroke: var(--muted); stroke-width: 1.5; }
+.hf-arc { fill: none; stroke: var(--fg); stroke-width: 2; opacity: .8; }
+.hf-chord { fill: none; stroke: var(--dim); stroke-width: 1.2; stroke-dasharray: 4 4; }
+.hf-radius { stroke: var(--b); stroke-width: 2.5; stroke-dasharray: 7 5; }
+.hf-cd { stroke: var(--a); stroke-width: 4.5; stroke-linecap: round; }
+.hf-tick { fill: none; stroke: var(--a); stroke-width: 1.2; }
+.hf-seg path { stroke: var(--muted); stroke-width: 1.2; marker: none; }
+.hf-pt { fill: var(--card); stroke: var(--fg); stroke-width: 1.8; }
+.hf-o { fill: var(--b); stroke: var(--b); }
+.hf-dpt { fill: var(--a); stroke: var(--card); stroke-width: 2; }
+.hf-name { font: italic 17px "Times New Roman", serif; fill: var(--muted); }
+.hf-var { font: italic 19px "Times New Roman", serif; fill: var(--fg); text-anchor: middle; }
+.hf-lab { font: 17px "Times New Roman", "Songti SC", serif; }
+.hf-lab .ov { text-decoration: overline; font-style: italic; }
+.hf-lab .it { font-style: italic; }
+.hf-lab-g { fill: var(--a); font-weight: 700; }
+.hf-lab-r { fill: var(--b); }
+.hf-la, .hf-lb, #hf-la, #hf-lb, #hf-lg { transition: opacity .2s ease; }
+.hf-handle { cursor: grab; outline: none; }
+.hf-halo { fill: var(--hl); opacity: .22; transition: opacity .2s ease; }
+.hf-c { fill: var(--hl); stroke: var(--fg); stroke-width: 1.8; }
+.hf-cname { fill: var(--fg); font-style: italic; font-weight: 700; }
+.hf-handle:hover .hf-halo, .hf-handle:focus-visible .hf-halo { opacity: .45; }
+.hf-handle:focus-visible .hf-c { stroke: var(--a); stroke-width: 3; }
+.home-figure.is-equal .hf-cd { stroke: var(--b); }
+.home-figure.is-equal .hf-lab-g { fill: var(--b); }
+.home-figure figcaption { padding: 12px 4px 0; }
+.home-figure-readout { margin: 0; font: 15px/1.6 "Times New Roman", "Songti SC", serif; color: var(--fg); font-variant-numeric: tabular-nums; min-height: 1.6em; }
+.home-figure.is-equal .home-figure-readout { color: var(--b); font-weight: 700; }
+.home-figure-note { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 2px 0 0; font-size: 14px; }
+
+/* —— 练法四步 —— */
+.home-steps { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0 0 28px; padding: 16px 0;
+  border-block: 1px solid var(--line); counter-reset: step; }
+.home-steps li { display: flex; align-items: center; gap: 12px; padding: 0 16px; min-width: 0; position: relative; }
+.home-steps li + li::before { content: "→"; position: absolute; left: -8px; color: var(--dim); font-size: 14px; }
+.home-steps b { flex: 0 0 auto; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ok-soft); color: var(--a); font-family: "Songti SC", "STSong", "Noto Serif SC", serif; font-size: 17px; }
+.home-steps li:nth-child(2) b { background: var(--hl-soft); color: var(--b); }
+.home-steps li:nth-child(4) b { background: var(--fig-blue-soft); color: var(--c); }
+.home-steps span { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+/* —— 开始/继续卡：起点四格带图标与色条 —— */
+#home-state { padding: 22px 24px; border-radius: 16px; }
+.home-starters { gap: 14px; }
+.home-starters article { position: relative; border: 1px solid var(--line); border-top: 3px solid var(--a); border-radius: 12px;
+  padding: 16px 16px 18px; background: var(--bg); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.home-starters article[data-kind="几何"] { border-top-color: var(--c); }
+.home-starters article[data-kind="组合"] { border-top-color: var(--b); }
+.home-starters article[data-kind="数论"] { border-top-color: var(--hl); }
+.home-starters article:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -18px #1a282280; }
+.starter-icon { display: block; width: 34px; height: 34px; margin-bottom: 10px; fill: none; color: var(--a); stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; }
+.starter-icon .fill { fill: currentColor; stroke: none; }
+.home-starters article { color: var(--fg); }
+.home-starters article[data-kind="几何"] .starter-icon { color: var(--c); }
+.home-starters article[data-kind="组合"] .starter-icon { color: var(--b); }
+.home-starters article[data-kind="数论"] .starter-icon { color: var(--b); }
+.home-starters h3 { font-size: 17px; }
+
+/* —— 专题地图 —— */
+.home-map-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 4px 24px; margin-top: 44px; }
+.home-map-head h2 { grid-column: 1 / -1; margin: 0; font-family: "Songti SC", "STSong", "Source Han Serif SC", "Noto Serif SC", serif; font-size: 28px; }
+.home-map-head .lead { margin: 0; }
+.lvkey { display: flex; gap: 12px; margin: 0; font-size: 14px; color: var(--muted); }
+.lvkey span { display: inline-flex; align-items: center; gap: 4px; }
+.lvkey i { display: inline-block; width: 14px; height: 6px; border-radius: 3px; }
+.home-map { gap: 8px; margin-top: 18px; }
+.home-module { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 20px; padding: 22px 0; border-top: 1px solid var(--line); }
+.home-module > header { position: relative; align-self: start; }
+.home-module .mod-no { display: block; font: 700 40px/1 "Times New Roman", "Songti SC", serif; color: var(--dim); opacity: .55; letter-spacing: -.02em; }
+.home-module h2 { margin: 6px 0 2px; font-size: 19px; }
+.home-module .mod-meta { font-size: 14px; color: var(--muted); }
+.home-map .topics { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+.home-map .topic { display: flex; flex-direction: column; gap: 2px; min-height: 92px; padding: 12px 14px 12px; border-radius: 12px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease; }
+.home-map a.topic:hover, .home-map a.topic:focus-visible { transform: translateY(-2px); box-shadow: 0 10px 22px -16px #1a282280; }
+.home-map .topic .n { margin-top: auto; }
+.home-map .topic-guided { align-self: flex-start; margin: 4px 0 2px; }
+.lvbar { display: flex; gap: 2px; height: 5px; margin-top: 8px; border-radius: 3px; overflow: hidden; }
+.lvbar i, .lvkey i { display: block; min-width: 3px; }
+.lvbar i.lv1, .lvkey i.lv1 { background: var(--a); }
+.lvbar i.lv2, .lvkey i.lv2 { background: var(--c); }
+.lvbar i.lv3, .lvkey i.lv3 { background: var(--hl); }
+.lvbar i.lv4, .lvkey i.lv4 { background: var(--b); }
+.lvbar i.lv5, .lvkey i.lv5 { background: var(--no); }
+
+@media (max-width: 960px) {
+  .home-hero { grid-template-columns: 1fr; gap: 28px; }
+  .home-figure { max-width: 560px; }
+  .home-steps { grid-template-columns: 1fr 1fr; gap: 14px 0; }
+  .home-steps li:nth-child(3)::before { display: none; }
+  .home-module { grid-template-columns: 1fr; gap: 12px; }
+  .home-module > header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .home-module .mod-no { font-size: 28px; }
+  .home-module h2 { margin: 0; }
+}
+@media (max-width: 600px) {
+  .home-hero { padding-top: 6px; }
+  .home-hero .home-heading { font-size: 34px; }
+  .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 0; }
+  .home-stats > div { padding: 0 14px; }
+  .home-stats > div:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .home-stats dd { font-size: 24px; }
+  .home-figure-card { padding: 12px 8px 4px; border-radius: 14px; }
+  .home-figure-formula { font-size: 22px; }
+  .hf-name { font-size: 22px; } .hf-var { font-size: 25px; } .hf-lab { font-size: 23px; }
+  .home-steps { grid-template-columns: 1fr; }
+  .home-steps li { padding: 0; }
+  .home-steps li::before { display: none; }
+  #home-state { padding: 18px 14px; }
+  .home-starters article { padding: 12px 12px 14px; }
+  .home-map-head { grid-template-columns: 1fr; }
+  .home-map-head h2 { font-size: 24px; }
+  .lvkey { flex-wrap: wrap; }
+  .home-map .topics { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .home-map .topic { min-height: 84px; padding: 10px 12px; }
+  .home-map .topic .t { font-size: 15px; line-height: 1.45; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-starters article, .home-map .topic, .hf-halo, #hf-la, #hf-lb, #hf-lg { transition: none; }
+  .home-starters article:hover, .home-map a.topic:hover, .home-map a.topic:focus-visible { transform: none; }
+}

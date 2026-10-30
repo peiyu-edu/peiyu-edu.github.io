@@ -161,9 +161,9 @@
     if(upper)return upper;
     return data.index.lessons.find(function(l){return l.gradeId===gradeId&&l.ready;})||data.index.lessons.find(function(l){return l.gradeId===gradeId;});
   }
-  var P_HOME_CLIPS={g1:['1～5 的认识','点一个，数一个','p1a-u1-1'],g2:['认识乘法','相同的加数，可以写成乘法','p2a-u2-1'],g3:['几分之一','平均分，才有几分之一','p3a-u6-1'],g4:['量角','中心对顶点，零线对一边','p4a-u2-2'],g5:['小数乘整数','换个单位，看清小数乘法','p5a-u2-1'],g6:['认识圆','固定一个中心，画出一个圆','p6a-u4-1']};
-  function pHeroFig(gradeId){var item=P_HOME_CLIPS[gradeId]||P_HOME_CLIPS.g1;return stageHero('primary-'+gradeId,'讲解视频 · '+gradeId[1]+'年级 · '+item[0],item[1],item[2]);}
-  function pHomeTopics(){return '<section><h2>跟着动画，看一看数学</h2><div class="lf-topic-list">'+[['数与运算','primary-g1','p1a-u1-1','一年级起：从点数开始，认识数和运算。'],['分数的初步认识','primary-g3','p3a-u6-1','三年级起：把一个整体平均分，再认识几分之一。'],['图形与几何','primary-g6','p6a-u4-1','六年级：看圆怎样画出来，认识圆心与半径。']].map(function(p){return '<article class="lf-topic">'+clip(p[1])+'<h3>'+p[0]+'</h3><p>'+p[3]+'</p><div><a href="'+jLessonHref(p[2],2)+'">看这一课 →</a></div></article>';}).join('')+'</div></section>';}
+  var P_HOME_CLIPS={g1:['加法','把两盘苹果合在一起','p1a-u1-5'],g2:['认识乘法','每盘同样多，几盘一共多少','p2a-u2-1'],g3:['几分之一','分一张饼，认识几分之一','p3a-u6-1'],g4:['角的再认识','扇子打开，角也变大','p4a-u2-1'],g5:['平行四边形的面积','剪一剪，拼成长方形','p5a-u6-1'],g6:['认识圆','固定一个中心，慢慢画一圈','p6a-u4-1']};
+  function pHeroFig(gradeId){var item=P_HOME_CLIPS[gradeId]||P_HOME_CLIPS.g1;return stageHero('primary-'+gradeId+'-slow','动画看一看 · '+gradeId[1]+'年级 · '+item[0],item[1],item[2]);}
+  function pHomeTopics(){return '<section><h2>跟着动画，看一看数学</h2><div class="lf-topic-list">'+[['数与运算','primary-g1-slow','p1a-u1-5','一年级起：把两盘苹果合起来，数一数一共有几个。'],['分数的初步认识','primary-g3-slow','p3a-u6-1','三年级起：把一张饼平均分，拿出其中的一份。'],['图形与几何','primary-g6-slow','p6a-u4-1','六年级：固定一端、拉紧绳子，慢慢画出一个圆。']].map(function(p){return '<article class="lf-topic">'+clip(p[1])+'<h3>'+p[0]+'</h3><p>'+p[3]+'</p><div><a href="'+jLessonHref(p[2],2)+'">看这一课 →</a></div></article>';}).join('')+'</div></section>';}
   function pUnitTree(lessons,unitMap,done,mode,bookId){
     var units=Object.values(unitMap).filter(function(u){return u.bookId===bookId;}).map(function(u){return u.id;});
     return units.map(function(uid){

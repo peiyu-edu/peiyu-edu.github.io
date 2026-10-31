@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <style>
@@ -211,14 +211,28 @@ document.addEventListener("DOMContentLoaded", function () {
     ctr.appendChild(mkBtn("60（个位写0）", function () { st.tens = 6; st.ones = 0; draw(); }));
     ctr.appendChild(mkBtn("36（彩珠）", function () { st.tens = 3; st.ones = 6; draw(); }));
     ctr.appendChild(mkBtn("44（玻璃珠）", function () { st.tens = 4; st.ones = 4; draw(); }));
-    ctr.appendChild(mkBtn("十位 +1", function () { st.tens = st.tens < 9 ? st.tens + 1 : 1; draw(); }));
-    ctr.appendChild(mkBtn("个位 +1", function () { st.ones = (st.ones + 1) % 10; draw(); }));
+    var addTen = mkBtn("十位 +1", function () { add(10); });
+    addTen.title = "本教具只表示两位数，加十后不能超过99";
+    ctr.appendChild(addTen);
+    var addOne = mkBtn("个位 +1", function () { add(1); });
+    addOne.title = "本教具只表示两位数，加一后不能超过99";
+    ctr.appendChild(addOne);
     ctr.appendChild(mkBtn("重来", function () { st.tens = 6; st.ones = 0; draw(); }));
     root.appendChild(ctr); root.appendChild(out);
+
+    function add(step) {
+      var next = st.tens * 10 + st.ones + step;
+      if (next > 99) return;
+      st.tens = Math.floor(next / 10);
+      st.ones = next % 10;
+      draw();
+    }
 
     function draw() {
       clear(g);
       var num = st.tens * 10 + st.ones;
+      addTen.disabled = num > 89;
+      addOne.disabled = num === 99;
       var readStr = toChinese(num);
 
       /* 计数器底座与两根杆 */
@@ -234,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
       for (var i = 0; i < st.tens; i++) {
         el("ellipse", { cx: 68, cy: 92 - i * 9, rx: 16, ry: 4.2, style: "fill:var(--a);stroke:var(--fg);stroke-width:1.3" }, rodT);
       }
-      rodT.addEventListener("click", function () { st.tens = st.tens < 9 ? st.tens + 1 : 1; draw(); });
+      rodT.addEventListener("click", function () { add(10); });
 
       /* 个位珠子（可点） */
       var rodO = el("g", { class: "part", style: "cursor:pointer" }, g);
@@ -242,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
       for (var j = 0; j < st.ones; j++) {
         el("ellipse", { cx: 132, cy: 92 - j * 9, rx: 16, ry: 4.2, style: "fill:var(--b);stroke:var(--fg);stroke-width:1.3" }, rodO);
       }
-      rodO.addEventListener("click", function () { st.ones = (st.ones + 1) % 10; draw(); });
+      rodO.addEventListener("click", function () { add(1); });
 
       /* 右侧读写展板 */
       el("rect", { x: 192, y: 16, width: 154, height: 112, rx: 10, style: "fill:var(--card);stroke:var(--a);stroke-width:2" }, g);

@@ -4,7 +4,7 @@
 <title>3.3 幂函数 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -42,7 +42,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-3-3" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -56,10 +56,10 @@
   <div class="card predict" data-id="entry" data-answer="B">
     <svg class="entry-fig" id="entry-pow" viewBox="0 0 520 400" role="img" aria-label="当x等于4时四个幂函数几何意义的四格视觉对比卡"></svg>
     <div class="entry-bar" id="entry-pow-bar">
-      <button type="button" data-m="A">A 正方形面积 4²=16</button>
-      <button type="button" data-m="B" class="on">B 正方体体积 4³=64</button>
-      <button type="button" data-m="C">C 面积4的边长 √4=2</button>
-      <button type="button" data-m="D">D 平分蛋糕 1/4=0.25</button>
+      <button type="button" data-m="A">A 正方形面积 4²</button>
+      <button type="button" data-m="B">B 正方体体积 4³</button>
+      <button type="button" data-m="C">C 面积4的边长 √4</button>
+      <button type="button" data-m="D">D 平分蛋糕 1/4</button>
     </div>
     <div class="entry-note" id="entry-pow-note"></div>
     <p>哪个算式的数值最大？</p>
@@ -701,12 +701,13 @@
     (parent || epSvg).appendChild(e); return e;
   }
   function epDraw(sel) {
+    var answered = epSvg.closest(".predict").classList.contains("done");
     epSvg.innerHTML = "";
     var cards = [
-      { id: "A", title: "A 面积 x²", val: "4² = 16", col: "var(--b)" },
-      { id: "B", title: "B 体积 x³", val: "4³ = 64 ★", col: "var(--c)" },
-      { id: "C", title: "C 边长 √x", val: "√4 = 2", col: "var(--a)" },
-      { id: "D", title: "D 平分 1/x", val: "1/4 = 0.25", col: "var(--hl)" }
+      { id: "A", title: "A 面积 x²", val: answered ? "4² = 16" : "4² = ?", col: "var(--b)" },
+      { id: "B", title: "B 体积 x³", val: answered ? "4³ = 64 ★" : "4³ = ?", col: "var(--c)" },
+      { id: "C", title: "C 边长 √x", val: answered ? "√4 = 2" : "√4 = ?", col: "var(--a)" },
+      { id: "D", title: "D 平分 1/x", val: answered ? "1/4 = 0.25" : "1/4 = ?", col: "var(--hl)" }
     ];
     cards.forEach(function (c, idx) {
       var x = 8 + (idx % 2) * 256, y = 8 + Math.floor(idx / 2) * 192, w = 248, h = 180, act = c.id === sel;
@@ -758,7 +759,7 @@
       C: "<b>C 面积 4 的正方形边长 √x</b>：什么数的平方等于 4？<b>√4 = 2</b>。",
       D: "<b>D 平分蛋糕 1/x</b>：1 个蛋糕分给 4 个人，每人分到 <b>1/4 = 0.25</b> 个（最小）。"
     };
-    epNote.innerHTML = notes[sel] + "　大小顺序：<b>1/4 &lt; 2 &lt; 16 &lt; 64</b>";
+    epNote.innerHTML = answered ? notes[sel] + "　大小顺序：<b>1/4 &lt; 2 &lt; 16 &lt; 64</b>" : "分别算出四个算式的数值，再比较大小。";
   }
   [].forEach.call(epBar.querySelectorAll("button"), function (b) {
     b.onclick = function () { epDraw(b.getAttribute("data-m")); };
@@ -767,11 +768,11 @@
     if (ev.detail && ev.detail.id === "entry" && ev.detail.choice) epDraw(ev.detail.choice);
   });
   document.addEventListener("predict:reset", function (ev) {
-    if (ev.detail && ev.detail.id === "entry") epDraw("B");
+    if (ev.detail && ev.detail.id === "entry") epDraw(null);
   });
 
-  document.addEventListener("DOMContentLoaded", function () { epDraw("B"); reset(); initStep2(); });
-  if (document.readyState !== "loading") { epDraw("B"); reset(); initStep2(); }
+  document.addEventListener("DOMContentLoaded", function () { epDraw(null); reset(); initStep2(); });
+  if (document.readyState !== "loading") { epDraw(null); reset(); initStep2(); }
 
   // Step 2 Vivid Visualizations
   function initStep2() {

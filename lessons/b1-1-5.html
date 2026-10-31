@@ -4,7 +4,7 @@
 <title>1.5 全称量词与存在量词 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -41,7 +41,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-1-5" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -53,11 +53,11 @@
 <section class="step" data-title="从例子进入">
   <p>全班 \(40\) 人。班长对老师说：“我们班<b>所有</b>同学都交了作业。”老师不太信。点下面按钮或作业本帮老师抽查：</p>
   <div class="card predict" data-id="entry" data-answer="A">
-    <svg class="entry-fig" id="entry-hw" viewBox="0 0 520 190" role="img" aria-label="抽查一排作业本，发现第3本未交即可推翻全称命题"></svg>
+    <svg class="entry-fig" id="entry-hw" viewBox="0 0 520 190" role="img" aria-label="作业提交情况抽查示意图"></svg>
     <div class="entry-bar" id="entry-hw-bar">
       <button type="button" data-m="claim">班长声称：全都交了</button>
-      <button type="button" data-m="one" class="on">抽查到 3 号（发现 1 本未交！）</button>
-      <button type="button" data-m="all">为什么不用查满 40 人？</button>
+      <button type="button" data-m="one" class="on">查看 3 号的提交情况</button>
+      <button type="button" data-m="all">查看其余同学的提交情况</button>
     </div>
     <div class="entry-note" id="entry-hw-note"></div>
     <p>老师要说明班长这句话不对，最少需要查到什么？</p>
@@ -592,12 +592,13 @@ document.addEventListener("DOMContentLoaded", function () {
   /* ---------- 0 从例子进入：抽查作业本 ---------- */
   var ehSvg = $("entry-hw"), ehBar = $("entry-hw-bar"), ehNote = $("entry-hw-note");
   function ehDraw(mode) {
+    var answered = ehSvg.closest(".predict").classList.contains("done");
     ehSvg.innerHTML = "";
     var isClaim = mode === "claim";
     // 顶部横幅：班长的全称命题
     ehSvg.appendChild(svgEl("rect", { x: 16, y: 10, width: 488, height: 42, rx: 10, fill: isClaim ? "var(--ok-soft)" : "var(--no-soft)", stroke: isClaim ? "var(--a)" : "var(--no)", "stroke-width": 1.8 }));
     ehSvg.appendChild(svgEl("text", { x: 260, y: 36, "text-anchor": "middle", "font-weight": 700, fill: isClaim ? "var(--a)" : "var(--no)", "font-size": 14.5 },
-      isClaim ? "班长声称（∀全称）：「全班 40 人全都交了作业！」" : "班长声称：「全都交了」 → 已被 3 号这 1 个反例推翻 ✗"));
+      !answered || isClaim ? "班长声称：「全班 40 人全都交了作业！」" : "班长声称：「全都交了」 → 已被 3 号这 1 个反例推翻 ✗"));
 
     // 一排作业本卡片
     var books = ["1号", "2号", "3号", "4号", "5号", "6号", "…", "40号"];
@@ -613,10 +614,10 @@ document.addEventListener("DOMContentLoaded", function () {
       var fillCol = isBad ? "var(--no-soft)" : (isClaim || i < 2 || mode === "all" ? "var(--ok-soft)" : "var(--card)");
       g.appendChild(svgEl("rect", { x: x, y: y, width: 54, height: 76, rx: 7, fill: fillCol, stroke: strokeCol, "stroke-width": isBad ? 2.6 : 1.5 }));
       g.appendChild(svgEl("text", { x: x + 27, y: y + 26, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 13.5 }, lb));
-      var stTxt = isBad ? "✗ 未交" : (isClaim || i < 2 || mode === "all" ? "✓ 已交" : "不用查");
+      var stTxt = isBad ? "✗ 未交" : (isClaim || i < 2 || mode === "all" ? "✓ 已交" : "未查看");
       var stCol = isBad ? "var(--no)" : (isClaim || i < 2 || mode === "all" ? "var(--a)" : "var(--muted)");
       g.appendChild(svgEl("text", { x: x + 27, y: y + 54, "text-anchor": "middle", "font-weight": 700, fill: stCol, "font-size": 13 }, stTxt));
-      if (isBad) {
+      if (isBad && answered) {
         g.appendChild(svgEl("text", { x: x + 27, y: y + 98, "text-anchor": "middle", "font-weight": 700, fill: "var(--no)", "font-size": 13 }, "▲ 只需 1 个反例！"));
       }
       g.onclick = function () { ehDraw(i === 2 ? "one" : (isClaim ? "one" : "all")); };
@@ -625,7 +626,9 @@ document.addEventListener("DOMContentLoaded", function () {
     [].forEach.call(ehBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", b.getAttribute("data-m") === mode);
     });
-    if (isClaim) {
+    if (!answered) {
+      ehNote.textContent = "对照班长的说法与抽查结果，想一想怎样的情况能说明这句话不对。";
+    } else if (isClaim) {
       ehNote.innerHTML = "要让「<b>所有人</b>都交了」成立，必须 1 号到 40 号<b>一个不漏全打 ✓</b>。点「抽查到 3 号」看看怎么推翻它！";
     } else if (mode === "one") {
       ehNote.innerHTML = "查到 <b>3 号未交 ✗</b>！哪怕其余 39 人全交了，「所有人都交了」也立刻变成<b>假话</b>——推翻「所有」只需 <b>1 个反例</b>。";

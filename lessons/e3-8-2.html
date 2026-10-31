@@ -4,7 +4,7 @@
 <title>8.2 一元线性回归模型及其应用 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -26,7 +26,7 @@
   .micro-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
   .micro-tabs button { font-size: 14px; max-width: 100%; white-space: normal; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="e3-8-2" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -36,18 +36,13 @@
 <p class="lead">散点大致排成一条斜线时，画一条“最贴近”它们的直线，就能用 \(x\) 估计 \(y\)。这一节讲：哪条线算最贴近、怎么算出来、用它预测时要小心什么。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>小卖部记下了 \(5\) 天的最高气温和卖出的冰棍数。先点下面的按钮，看顺着这 5 天的散点画出趋势线，延伸到 \(30\) ℃ 会指向哪里：</p>
+  <p>小卖部记下了 \(5\) 天的最高气温和卖出的冰棍数。先根据题目数据作答，再操作图示核对。</p>
   <div class="tbl"><table class="rec">
     <tr><th>气温 / ℃</th><td>\(20\)</td><td>\(22\)</td><td>\(24\)</td><td>\(26\)</td><td>\(28\)</td></tr>
     <tr><th>冰棍 / 根</th><td>\(40\)</td><td>\(46\)</td><td>\(50\)</td><td>\(55\)</td><td>\(59\)</td></tr>
   </table></div>
   <div class="card predict" data-id="entry" data-answer="C">
-    <svg class="entry-fig" id="entry-reg" viewBox="0 0 520 205" role="img" aria-label="5天最高气温与冰棍销量散点图，以及延伸到30摄氏度的回归预测直线"></svg>
-    <div class="entry-bar" id="entry-reg-bar">
-      <button type="button" data-m="pts">只看前 5 天散点</button>
-      <button type="button" data-m="pred" class="on">画出回归趋势线并延伸预测 30℃（约 64 根！）</button>
-    </div>
-    <div class="entry-note" id="entry-reg-note"></div>
+
     <p>按这个势头，明天预报 \(30\) ℃，大约能卖多少根？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>\(30\) 根左右</button>
@@ -55,7 +50,13 @@
       <button class="opt" data-v="C"><b>C</b>\(64\) 根左右</button>
       <button class="opt" data-v="D"><b>D</b>\(120\) 根左右</button>
     </div>
-    <div class="reveal">
+    <div class="reveal" hidden>
+    <svg class="entry-fig" id="entry-reg" viewBox="0 0 520 205" role="img" aria-label="5天最高气温与冰棍销量散点图，以及延伸到30摄氏度的回归预测直线"></svg>
+    <div class="entry-bar" id="entry-reg-bar">
+      <button type="button" data-m="pts">只看前 5 天散点</button>
+      <button type="button" data-m="pred" class="on">画出回归趋势线并延伸预测 30℃（约 64 根！）</button>
+    </div>
+    <div class="entry-note" id="entry-reg-note"></div>
       <p><b>C</b>。气温每高 \(2\) ℃，大约多卖 \(5\) 根，从 \(28\) ℃ 的 \(59\) 根再往上走一步，约 \(64\) 根。</p>
       <p>你其实在心里画了一条直线：五个点并不正好在一条线上（每一步多卖 \(6,4,5,4\) 根），但大致沿着一条斜线往上走。</p>
       <p>这一节把这件事做准：在所有直线里，按一个明确的标准挑出<b>最贴近</b>这些点的那一条（最小二乘法），再用它估计。也要讲清楚：这样的估计是「平均来说大约多少」，不是「一定是多少」。</p>

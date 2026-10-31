@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <style>
@@ -29,7 +29,7 @@
   <summary>家长先看（30 秒）</summary>
   <ul>
     <li>今天把 1～100 按每行 10 个排成整齐的<b>百数表</b>（课本例 4），让孩子自己找出表里的排列规律。</li>
-    <li>三条核心规律：①<b>横着看（同一行）</b>：左右相邻的两个数相差 <b>1</b>（往右走一格 <b>+1</b>，往左走一格 <b>−1</b>）；②<b>竖着看（同一列）</b>：个位上的数字都相同，上下相邻的两个数相差 <b>10</b>（往下走一格 <b>+10</b>，往上走一格 <b>−10</b>）；③<b>斜着看</b>：从左上到右下（11、22、33……），十位和个位上的数字相同。</li>
+    <li>三条核心规律：①<b>横着看（同一行）</b>：左右相邻的两个数相差 <b>1</b>（往右走一格 <b>+1</b>，往左走一格 <b>−1</b>）；②<b>竖着看（同一列）</b>：个位上的数字都相同，上下相邻的两个数相差 <b>10</b>（往下走一格 <b>+10</b>，往上走一格 <b>−10</b>）；③<b>斜着看</b>：11、22、33……99 这些数排在一条从左上到右下的斜线上，十位和个位上的数字相同，相邻两个数相差 11。</li>
     <li>考试最常考的是“十字框 / 田字框挖空填数”：给出中间一个数（如 45），让孩子不看全表填出它的上（35）、下（55）、左（44）、右（46）。</li>
     <li>留心常见错：往下走一格时，孩子顺手按数数习惯写成“+1”（把 34 下面的数写成 35，其实应是 44）。</li>
   </ul>
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
           var x = 16 + c * 66, y = 8 + r * 29;
           var hl = (st.mode === "row" && r === 2) ||
                    (st.mode === "col" && c === 2) ||
-                   (st.mode === "diag" && r === c);
+                   (st.mode === "diag" && val < 100 && Math.floor(val / 10) === val % 10);
           var cell = el("g", { class: "part", style: "cursor:pointer" }, g);
           el("rect", {
             x: x, y: y, width: 62, height: 26, rx: 5,
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }, cell).textContent = String(val);
           (function (rr, cc) {
             cell.addEventListener("click", function () {
-              if (rr === cc) st.mode = "diag";
+              if (st.startRow + rr === st.startCol + cc + 1) st.mode = "diag";
               else if (rr === 2) st.mode = "row";
               else st.mode = "col";
               draw();
@@ -268,9 +268,9 @@ document.addEventListener("DOMContentLoaded", function () {
         var cOnes = (cMid + 1) % 10;
         msg = "竖着看这一列：个位上全都是 " + cOnes + "，往下走一格就加 10，上下相邻两个数相差 10！";
       } else {
-        msg = "斜着看（左上到右下）：每次往右下走一格，十位加 1、个位也加 1，每次多 11！";
+        msg = "斜着看高亮的数：十位和个位上的数字相同，相邻两个高亮数相差 11！";
       }
-      setOut(out, msg, msg, true);
+      setOut(out, msg, st.mode === "diag" ? "一到一百排成整齐的队伍，横看、竖看、斜看有什么秘密？" : msg, true);
     }
     draw();
   }

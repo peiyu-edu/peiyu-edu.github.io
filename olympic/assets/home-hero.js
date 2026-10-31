@@ -8,7 +8,7 @@
     var svg = fig.querySelector("svg"), handle = fig.querySelector("#hf-handle");
     var U = +fig.dataset.unit, OX = +fig.dataset.ox, OY = +fig.dataset.oy, R = 2 * U, L = OX - R, RT = OX + R;
     var $ = function (id) { return fig.querySelector("#" + id); };
-    var readout = $("hf-readout"), touched = false, a = 1;
+    var values = $("hf-values"), result = $("hf-result"), touched = false, a = 1;
     function fmt(x, d) { return String(parseFloat(x.toFixed(d || 2))); }
     function draw(v) {
       a = Math.min(3.9, Math.max(0.1, v));
@@ -30,8 +30,10 @@
       fig.classList.toggle("is-equal", eq);
       handle.setAttribute("aria-valuenow", fmt(a));
       handle.setAttribute("aria-valuetext", "a = " + fmt(a) + "，b = " + fmt(b));
-      readout.textContent = eq ? "a = b = 2：√ab = 2 = (a+b)/2，C 在圆心时取等" :
-        "a = " + fmt(a) + "，b = " + fmt(b) + "：√ab ≈ " + fmt(g, 3) + " < 2 = (a+b)/2";
+      // 只更新数值，保留读数中覆盖整个 ab 的 MathML 根式。
+      values.textContent = eq ? "a = b = 2：" : "a = " + fmt(a) + "，b = " + fmt(b) + "：";
+      result.textContent = eq ? " = 2 = (a+b)/2，C 在圆心时取等" :
+        " ≈ " + fmt(g, 3) + " < 2 = (a+b)/2";
     }
     // 拖动与开场动画在圆心附近吸附，避免把 1.999 显示成取等。
     function snap(v) { return Math.abs(v - 2) < 0.06 ? 2 : v; }

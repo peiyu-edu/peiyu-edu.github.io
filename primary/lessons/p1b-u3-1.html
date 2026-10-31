@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <style>
@@ -297,25 +297,39 @@ document.addEventListener("DOMContentLoaded", function () {
       var num = pair[0] * 10 + pair[1];
       ctr.appendChild(mkBtn("看 " + num, function () { st.tens = pair[0]; st.ones = pair[1]; draw(); }));
     });
-    ctr.appendChild(mkBtn("加 1 个十", function () { st.tens = st.tens < 9 ? st.tens + 1 : 1; draw(); }));
-    ctr.appendChild(mkBtn("加 1 个一", function () { st.ones = (st.ones + 1) % 10; draw(); }));
+    var addTen = mkBtn("加 1 个十", function () { add(10); });
+    addTen.title = "本教具只表示两位数，加十后不能超过99";
+    ctr.appendChild(addTen);
+    var addOne = mkBtn("加 1 个一", function () { add(1); });
+    addOne.title = "本教具只表示两位数，加一后不能超过99";
+    ctr.appendChild(addOne);
     ctr.appendChild(mkBtn("重来", function () { st.tens = 5; st.ones = 4; draw(); }));
     root.appendChild(ctr); root.appendChild(out);
+
+    function add(step) {
+      var next = st.tens * 10 + st.ones + step;
+      if (next > 99) return;
+      st.tens = Math.floor(next / 10);
+      st.ones = next % 10;
+      draw();
+    }
 
     function draw() {
       clear(g);
       var num = st.tens * 10 + st.ones;
+      addTen.disabled = num > 89;
+      addOne.disabled = num === 99;
       var gT = el("g", { class: "part", style: "cursor:pointer" }, g);
       el("rect", { x: 14, y: 12, width: 156, height: 74, rx: 10, style: "fill:var(--ok-soft);stroke:var(--a);stroke-width:2" }, gT);
       el("text", { x: 92, y: 42, "text-anchor": "middle", style: "fill:var(--a);font-size:18px;font-weight:700" }, gT).textContent = st.tens + " 个十";
       el("text", { x: 92, y: 68, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px" }, gT).textContent = "（" + (st.tens * 10) + " 根小棒）";
-      gT.addEventListener("click", function () { st.tens = st.tens < 9 ? st.tens + 1 : 1; draw(); });
+      gT.addEventListener("click", function () { add(10); });
 
       var gO = el("g", { class: "part", style: "cursor:pointer" }, g);
       el("rect", { x: 190, y: 12, width: 156, height: 74, rx: 10, style: "fill:var(--hl-soft);stroke:var(--b);stroke-width:2" }, gO);
       el("text", { x: 268, y: 42, "text-anchor": "middle", style: "fill:var(--b);font-size:18px;font-weight:700" }, gO).textContent = st.ones + " 个一";
       el("text", { x: 268, y: 68, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px" }, gO).textContent = "（" + st.ones + " 根单根）";
-      gO.addEventListener("click", function () { st.ones = (st.ones + 1) % 10; draw(); });
+      gO.addEventListener("click", function () { add(1); });
 
       var desc = st.ones === 0
         ? st.tens + " 个十是 " + num

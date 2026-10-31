@@ -4,7 +4,7 @@
 <title>3.2 函数的基本性质 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -22,7 +22,7 @@
   .info .good { color: var(--a); font-weight: 600; }
   .ctrl label { display: inline-flex; align-items: center; gap: 4px; font-size: 15px; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-3-2" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -34,12 +34,12 @@
 <section class="step" data-title="从例子进入">
   <p>记录某天 6、10、14、18 点的四次气温。这里额外假设相邻读数之间按直线变化，建立一个简化折线模型。横轴是时刻（小时），纵轴是气温（℃）。只有读数本身，不能断定两次记录之间一直升降。</p>
   <div class="card predict" data-id="entry" data-answer="C">
-    <svg class="entry-fig" id="entry-temp" viewBox="0 0 520 200" role="img" aria-label="6点到18点气温变化折线图，标出上升段、14点最高温23度与下降段"></svg>
+    <svg class="entry-fig" id="entry-temp" viewBox="0 0 520 200" role="img" aria-label="6点到18点气温读数及其简化折线模型"></svg>
     <div class="entry-bar" id="entry-temp-bar">
       <button type="button" data-m="all" class="on">看本时段趋势</button>
-      <button type="button" data-m="up">6~14点：上升段(递增)</button>
-      <button type="button" data-m="peak">14点：最高温 23℃(最大值)</button>
-      <button type="button" data-m="down">14~18点：下降段(递减)</button>
+      <button type="button" data-m="up">查看 6~14 点</button>
+      <button type="button" data-m="peak">查看 14 点读数</button>
+      <button type="button" data-m="down">查看 14~18 点</button>
     </div>
     <div class="entry-note" id="entry-temp-note"></div>
     <p>在这个简化模型中，从 6 点到 18 点，气温怎么变？</p>
@@ -734,6 +734,7 @@
   var etSvg = document.getElementById("entry-temp"), etBar = document.getElementById("entry-temp-bar"), etNote = document.getElementById("entry-temp-note");
   var etMode = "all";
   function etDraw(mode) {
+    var answered = etSvg.closest(".predict").classList.contains("done");
     etMode = mode;
     var c = C(), okS = css("--ok-soft");
     etSvg.innerHTML = "";
@@ -779,7 +780,9 @@
     [].forEach.call(etBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", b.getAttribute("data-m") === mode);
     });
-    if (mode === "up") {
+    if (!answered) {
+      etNote.textContent = "沿时间轴依次比较读数，并在折线模型中判断气温怎样变化。";
+    } else if (mode === "up") {
       etNote.innerHTML = "<b>6 点 → 14 点（上升段）</b>：15° → 21° → 23°，时间越往后气温越高（<b>单调递增</b>）。";
     } else if (mode === "peak") {
       etNote.innerHTML = "<b>14 点达到最高峰</b>：所给时段最高气温 <b>23°C</b>（这就是函数在这段时间上的<b>最大值</b>）。";

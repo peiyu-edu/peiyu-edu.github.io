@@ -36,7 +36,7 @@
 :root[data-theme="dark"] .key .katex [style*="color: rgb(47, 122, 86)"] { color: #5FB58A !important; }
 :root[data-theme="dark"] .key .katex [style*="color: rgb(150, 101, 36)"] { color: #D3A15C !important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j29-3" data-standard="v2">
 <div class="wrap">
@@ -418,6 +418,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function renderEntry(ang) {
     if (!entryFig) return;
+    var answered = entryFig.closest(".predict").classList.contains("done");
     var ox = 250, oy = 110, r = 68;
     var startRad = Math.PI / 2;
     var endRad = startRad - ang * Math.PI / 180;
@@ -445,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (entryNote) {
       var frac = ang === 90 ? "1/4" : (ang === 120 ? "1/3" : "1/2");
       var exactStr = ang === 90 ? "10π" : (ang === 120 ? "40π/3" : "20π");
-      entryNote.textContent = '当前从最低点 A 逆时针转到点 B，圆心角 ' + ang + '°（占整圆的 ' + frac + '），划过弧长 l = ' + frac + ' × 40π = ' + exactStr + ' m。';
+      entryNote.textContent = answered ? '当前从最低点 A 逆时针转到点 B，圆心角 ' + ang + '°（占整圆的 ' + frac + '），划过弧长 l = ' + frac + ' × 40π = ' + exactStr + ' m。' : '当前圆心角 ' + ang + '°。先想它占整圆的几分之几，再计算所问的弧长。';
     }
   }
 
@@ -459,6 +460,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
   renderEntry(120);
+
+  // Keep calculated readouts behind the prediction, including after retry.
+  if (entryFig) {
+    var entryBox = entryFig.closest(".predict");
+    function refreshEntry() {
+      var selected = document.querySelector("#entry-bar button.on");
+      renderEntry(selected ? Number(selected.getAttribute("data-ang")) : 120);
+    }
+    entryBox.addEventListener("predict:pick", refreshEntry);
+    entryBox.addEventListener("predict:reset", refreshEntry);
+  }
 
   // 微图解 1
   var m1Svg = document.getElementById("m1-fig");

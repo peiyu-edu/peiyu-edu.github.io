@@ -4,7 +4,7 @@
 <title>8.3 列联表与独立性检验 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -32,7 +32,7 @@
   .micro-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
   .micro-tabs button { font-size: 14px; max-width: 100%; white-space: normal; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="e3-8-3" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -42,21 +42,22 @@
 <p class="lead">两件“是 / 否”类的事有没有关系？把人数填进一张四格的表，算一个数 \(\chi^2\)，再和事先定好的标准比。先从一次篮球调查开始。</p>
 
 <section class="step" data-title="从例子进入">
-<p>年级里调查了 \(80\) 名男生、\(50\) 名女生，问“每周打不打篮球”。男生有 \(48\) 人打，女生有 \(10\) 人打。由于男女生总人数不同，我们把两组都画成等长的“百人比例条”来比一比：</p>
+<p>年级里调查了 \(80\) 名男生、\(50\) 名女生，问“每周打不打篮球”。男生有 \(48\) 人打，女生有 \(10\) 人打。由于男女生总人数不同，需要按比例比较。先作答，再看等长的“百人比例条”核对。</p>
 <div class="card predict" data-id="entry" data-answer="A">
-    <svg class="entry-fig" id="entry-chi" viewBox="0 0 520 205" role="img" aria-label="男女生打篮球比例100%堆叠条形图对比：男生60%对女生20%"></svg>
-<div class="entry-bar" id="entry-chi-bar">
-<button type="button" data-m="real" class="on">看实际调查比例（男 60% vs 女 20%，差距悬殊！）</button>
-<button type="button" data-m="close">对比假想情况：若男 52% vs 女 48%（仅差一点，可能是抽样巧合）</button>
-</div>
-<div class="entry-note" id="entry-chi-note"></div>
+
 <p>按<b>比例</b>看，男生和女生谁更常打篮球？</p>
 <div class="opts cols">
 <button class="opt" data-v="A"><b>A</b>男生</button>
 <button class="opt" data-v="B"><b>B</b>女生</button>
 <button class="opt" data-v="C"><b>C</b>差不多</button>
 </div>
-<div class="reveal">
+<div class="reveal" hidden>
+    <svg class="entry-fig" id="entry-chi" viewBox="0 0 520 205" role="img" aria-label="男女生打篮球比例100%堆叠条形图对比：男生60%对女生20%"></svg>
+<div class="entry-bar" id="entry-chi-bar">
+<button type="button" data-m="real" class="on">看实际调查比例（男 60% vs 女 20%，差距悬殊！）</button>
+<button type="button" data-m="close">对比假想情况：若男 52% vs 女 48%（仅差一点，可能是抽样巧合）</button>
+</div>
+<div class="entry-note" id="entry-chi-note"></div>
 <p><b>A</b>。男生 \(\dfrac{48}{80}=60\%\)，女生 \(\dfrac{10}{50}=20\%\)，差得很多。看起来「性别」和「打不打篮球」有关联。</p>
 <p>可要是比例是 \(52\%\) 对 \(48\%\) 呢？差一点点，可能只是这次碰巧问到的人不一样。</p>
 <p>这一节就讲：把数据整理成一张四格的表，用一个数 \(\chi^2\) 量「差得够不够多」，再和事先定好的标准比，决定能不能说「有关联」，以及这句话该怎么说才不过头。</p>
@@ -654,7 +655,7 @@
 
     // 右侧 χ² 结论卡片
     svg("rect", { x: 418, y: 54, width: 92, height: 96, rx: 8, fill: mode === "real" ? noS : okS, stroke: mode === "real" ? no : ca, "stroke-width": 1.6 }, ecSvg);
-    txt(ecSvg, 464, 82, mode === "real" ? "χ² ≈ 19.76" : "χ² ≈ 0.20", { "text-anchor": "middle", fill: mode === "real" ? no : ca, "font-weight": 700, "font-size": 13 });
+    txt(ecSvg, 464, 82, mode === "real" ? "χ² ≈ 19.92" : "χ² ≈ 0.20", { "text-anchor": "middle", fill: mode === "real" ? no : ca, "font-weight": 700, "font-size": 13 });
     txt(ecSvg, 464, 106, mode === "real" ? "远超临界值" : "小于临界值", { "text-anchor": "middle", fill: fg, "font-size": 11.5 });
     txt(ecSvg, 464, 128, mode === "real" ? "有显著关联" : "多半是巧合", { "text-anchor": "middle", fill: mode === "real" ? no : ca, "font-weight": 700, "font-size": 12 });
 
@@ -662,7 +663,7 @@
       b.classList.toggle("on", b.getAttribute("data-m") === mode);
     });
     if (mode === "real") {
-      ecNote.innerHTML = "实际调查：男生 <b>48/80 = 60%</b> 打篮球，女生 <b>10/50 = 20%</b> 打篮球，比例整整差了 <b>40%</b>（χ² ≈ 19.76），说明性别与打篮球有关联。";
+      ecNote.innerHTML = "实际调查：男生 <b>48/80 = 60%</b> 打篮球，女生 <b>10/50 = 20%</b> 打篮球，比例整整差了 <b>40%</b>（χ² ≈ 19.92），说明性别与打篮球有关联。";
     } else {
       ecNote.innerHTML = "假想对比：若男生 <b>52%</b>、女生 <b>48%</b>，两条绿柱几乎齐平（仅差 4%，χ² ≈ 0.20），这点微小差距很可能是随机抽样的巧合！";
     }

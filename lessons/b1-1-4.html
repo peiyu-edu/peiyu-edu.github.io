@@ -4,7 +4,7 @@
 <title>1.4 充分条件与必要条件 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -39,7 +39,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-1-4" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -53,9 +53,9 @@
   <div class="card predict" data-id="entry" data-answer="A">
     <svg class="entry-fig" id="entry-zj" viewBox="0 0 520 195" role="img" aria-label="浙江省大圈包含杭州、宁波、温州三个城市小圈的推出关系图"></svg>
     <div class="entry-bar" id="entry-zj-bar">
-      <button type="button" data-m="hz" class="on">人在杭州 → 必在浙江 ✓</button>
-      <button type="button" data-m="nb">人在浙江（如宁波）→ 未必在杭州 ✗</button>
-      <button type="button" data-m="wz">人在浙江（如温州）→ 反例 ✗</button>
+      <button type="button" data-m="hz" class="on">把人放在杭州</button>
+      <button type="button" data-m="nb">把人放在宁波</button>
+      <button type="button" data-m="wz">把人放在温州</button>
     </div>
     <div class="entry-note" id="entry-zj-note"></div>
     <p>下面哪句话<b>一定</b>对？</p>
@@ -553,6 +553,7 @@
   var ezSvg = document.getElementById("entry-zj"), ezBar = document.getElementById("entry-zj-bar"), ezNote = document.getElementById("entry-zj-note");
   var ezCity = "hz";
   function ezDraw(city) {
+    var answered = ezSvg.closest(".predict").classList.contains("done");
     ezCity = city;
     ezSvg.innerHTML = "";
     // 左侧：浙江省大圈
@@ -578,18 +579,20 @@
 
     // 右侧：双向推出判断卡
     var isHz = city === "hz";
-    mk("rect", { x: 296, y: 18, width: 208, height: 74, rx: 10, fill: isHz ? "var(--ok-soft)" : "var(--card)", stroke: "var(--a)", "stroke-width": isHz ? 2.2 : 1.3 }, ezSvg);
-    mk("text", { x: 400, y: 44, "text-anchor": "middle", "font-weight": 700, fill: "var(--a)", "font-size": 14.5 }, ezSvg).textContent = "在杭州 ⇒ 在浙江";
-    mk("text", { x: 400, y: 72, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, ezSvg).textContent = "✓ 一定对（小范围推大范围）";
+    mk("rect", { x: 296, y: 18, width: 208, height: 74, rx: 10, fill: answered && isHz ? "var(--ok-soft)" : "var(--card)", stroke: "var(--a)", "stroke-width": isHz ? 2.2 : 1.3 }, ezSvg);
+    mk("text", { x: 400, y: 44, "text-anchor": "middle", "font-weight": 700, fill: "var(--a)", "font-size": 14.5 }, ezSvg).textContent = "在杭州 ⇒ 在浙江？";
+    mk("text", { x: 400, y: 72, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, ezSvg).textContent = answered ? "✓ 一定对（小范围推大范围）" : "观察位置，判断能否推出";
 
-    mk("rect", { x: 296, y: 104, width: 208, height: 74, rx: 10, fill: !isHz ? "var(--no-soft)" : "var(--card)", stroke: "var(--no)", "stroke-width": !isHz ? 2.2 : 1.3 }, ezSvg);
-    mk("text", { x: 400, y: 130, "text-anchor": "middle", "font-weight": 700, fill: "var(--no)", "font-size": 14.5 }, ezSvg).textContent = "在浙江 ⇒ 在杭州？";
-    mk("text", { x: 400, y: 158, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, ezSvg).textContent = "✗ 不一定（反例：宁波/温州）";
+    mk("rect", { x: 296, y: 104, width: 208, height: 74, rx: 10, fill: answered && !isHz ? "var(--no-soft)" : "var(--card)", stroke: "var(--line)", "stroke-width": !isHz ? 2.2 : 1.3 }, ezSvg);
+    mk("text", { x: 400, y: 130, "text-anchor": "middle", "font-weight": 700, fill: "var(--fg)", "font-size": 14.5 }, ezSvg).textContent = "在浙江 ⇒ 在杭州？";
+    mk("text", { x: 400, y: 158, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13.5 }, ezSvg).textContent = answered ? "✗ 不一定（反例：宁波/温州）" : "换个城市，再判断一次";
 
     [].forEach.call(ezBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", b.getAttribute("data-m") === city);
     });
-    if (isHz) {
+    if (!answered) {
+      ezNote.textContent = "观察小人所在的城市与浙江范围，分别判断两个方向的推理。";
+    } else if (isHz) {
       ezNote.innerHTML = "当前位置：<b>杭州</b>。因为杭州整个在浙江圈内，所以<b>人在杭州 ⇒ 必在浙江</b>（充分条件 ✓）。";
     } else {
       var cname = city === "nb" ? "宁波" : "温州";

@@ -4,7 +4,7 @@
 <title>6.1 分类加法计数原理与分步乘法计数原理 · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -21,7 +21,7 @@
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
   .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="e3-6-1" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -31,8 +31,15 @@
 <p class="lead">从生活中的出行方案、穿搭组合到计算机算法的穷举设计，解决“一共有多少种可能”的底层基石只有两条：能独立做成的用分类相加，缺一不可的用分步相乘。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>小明从学校出发前往位于海岛的研学基地。第一阶段：从学校到码头中转站，可以乘大巴（有 3 趟班车），也可以乘轻轨（有 2 趟列车）；第二阶段：从中转码头到海岛，必须换乘渡轮（有 4 艘渡轮）。先点下面的按钮看一看两段路线怎么接起来：</p>
+  <p>小明从学校出发前往位于海岛的研学基地。第一阶段：从学校到码头中转站，可以乘大巴（有 3 趟班车），也可以乘轻轨（有 2 趟列车）；第二阶段：从中转码头到海岛，必须换乘渡轮（有 4 艘渡轮）。先根据题目数据作答，再操作图示核对。</p>
   <div class="card predict" data-id="entry" data-answer="B">
+
+    <p>小明从学校出发顺利抵达海岛研学基地，共有多少种不同的路线走法？</p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>\(3 + 2 + 4 = 9\) 种</button>
+      <button class="opt" data-v="B"><b>B</b>\((3 + 2) \times 4 = 20\) 种</button>
+    </div>
+    <div class="reveal" hidden>
     <svg class="entry-fig" id="entry-route" viewBox="0 0 520 205" role="img" aria-label="学校经码头中转站到海岛基地的两阶段交通路线图：第一阶段3趟大巴加2趟轻轨共5种，第二阶段4艘渡轮"></svg>
     <div class="entry-bar" id="entry-route-bar">
       <button type="button" data-m="s1">只看第一阶段：3大巴 + 2轻轨 = 5种</button>
@@ -40,12 +47,6 @@
       <button type="button" data-m="one">随机点亮 1 条完整路线</button>
     </div>
     <div class="entry-note" id="entry-route-note"></div>
-    <p>小明从学校出发顺利抵达海岛研学基地，共有多少种不同的路线走法？</p>
-    <div class="opts cols">
-      <button class="opt" data-v="A"><b>A</b>\(3 + 2 + 4 = 9\) 种</button>
-      <button class="opt" data-v="B"><b>B</b>\((3 + 2) \times 4 = 20\) 种</button>
-    </div>
-    <div class="reveal">
       <p><b>B</b>。第一阶段到码头，乘大巴或乘轻轨都能到达码头，属于二选一的<b>分类</b>，共有 \(3 + 2 = 5\) 种方法；</p>
       <p>但是到了码头任务并没有结束！小明还必须搭乘渡轮，缺少第二阶段就到不了海岛。两阶段是连续必须完成的<b>分步</b>关系，所以用乘法：\(5 \times 4 = 20\) 种。</p>
       <p>区分「分类」还是「分步」，关键在于：<b>单独这一类能不能独立完成整件事</b>！这一节我们就来系统建立两大基本计数原理。</p>

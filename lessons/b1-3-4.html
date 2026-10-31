@@ -4,7 +4,7 @@
 <title>3.4 函数的应用（一） · 培玉高中数学</title>
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/katex/katex.min.css">
-<link rel="stylesheet" href="../assets/site.css?v=5faad6921482">
+<link rel="stylesheet" href="../assets/site.css?v=2e8a27d69144">
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
@@ -22,7 +22,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-3-4" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -567,6 +567,7 @@
   var etxSvg = document.getElementById("entry-taxi"), etxBar = document.getElementById("entry-taxi-bar"), etxNote = document.getElementById("entry-taxi-note");
   var etxKm = 8;
   function etxDraw(km) {
+    var answered = etxSvg.closest(".predict").classList.contains("done");
     etxKm = km;
     var c = C(), okS = css("--ok-soft");
     var extraKm = Math.max(0, km - 3), extraFee = extraKm * 2, total = 10 + extraFee;
@@ -577,8 +578,8 @@
     txt("假设计价模型",{x:260,y:39,"text-anchor":"middle",fill:c.a,"font-weight":700},etxSvg);
     txt("路程："+km+" 千米",{x:30,y:73,fill:c.fg},etxSvg);
     txt("前 3 千米起步价：10 元",{x:30,y:107,fill:c.muted},etxSvg);
-    txt(extraKm>0?"超出 "+extraKm+" 千米 × 2 元 = "+extraFee+" 元":"未超 3 千米：不加价",{x:30,y:141,fill:c.b},etxSvg);
-    txt("合计："+total+" 元",{x:260,y:177,"text-anchor":"middle",fill:c.hl,"font-weight":700},etxSvg);
+    txt(km === 8 && !answered ? "超出部分：按每千米 2 元计算" : extraKm>0?"超出 "+extraKm+" 千米 × 2 元 = "+extraFee+" 元":"未超 3 千米：不加价",{x:30,y:141,fill:c.b},etxSvg);
+    txt(km === 8 && !answered ? "合计：算算看" : "合计："+total+" 元",{x:260,y:177,"text-anchor":"middle",fill:c.hl,"font-weight":700},etxSvg);
     var gx0=70,gx1=470,gy0=374,gy1=215;
     function X(k){return gx0+k/10*(gx1-gx0);} function Y(f){return gy0-f/25*(gy0-gy1);}
     [10,20].forEach(function(f){svg("line",{x1:gx0,y1:Y(f),x2:gx1,y2:Y(f),stroke:c.line},etxSvg);txt(String(f),{x:gx0-12,y:Y(f)+7,"text-anchor":"end",fill:c.muted},etxSvg);});
@@ -598,7 +599,9 @@
     [].forEach.call(etxBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", parseInt(b.getAttribute("data-km"), 10) === km);
     });
-    if (km <= 3) {
+    if (km === 8 && !answered) {
+      etxNote.textContent = "先找超出起步里程的部分，按规则计算车费，再加上起步价。";
+    } else if (km <= 3) {
       etxNote.innerHTML = "坐了 <b>" + km + " 千米</b>（不超过 3 千米）：落在<b>第一段水平线</b>，统一收起步价 <b>10 元</b>。";
     } else {
       etxNote.innerHTML = "坐了 <b>" + km + " 千米</b>：前 3 千米 <b>10 元</b> + 超出 <b>(" + km + " − 3) = " + extraKm + " 千米 × 2 元 = " + extraFee + " 元</b> → 合计 <b>" + total + " 元</b>！";

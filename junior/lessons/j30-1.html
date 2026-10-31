@@ -33,7 +33,7 @@
 :root[data-theme="dark"] .key .katex [style*="color: rgb(47, 122, 86)"] { color: #5FB58A !important; }
 :root[data-theme="dark"] .key .katex [style*="color: rgb(150, 101, 36)"] { color: #D3A15C !important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j30-1" data-standard="v2">
 <div class="wrap">
@@ -423,6 +423,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function renderEntry(dist) {
     if (!entryFig) return;
+    var answered = entryFig.closest(".predict").classList.contains("done");
     var ox = 250, r = 60;
     var seaY = 152;
     var sunY = seaY - dist * 60 / 70;
@@ -443,7 +444,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (entryNote) {
       var state = dist < 70 ? "相交（有两个公共点，部分浸入海中）" : (dist === 70 ? "相切（有唯一公共点，刚浮出海面）" : "相离（无公共点，完全升起）");
-      entryNote.textContent = '当前距离 d = ' + dist + '，半径 r = 70。位置关系：' + state + '。';
+      entryNote.textContent = answered ? '当前距离 d = ' + dist + '，半径 r = 70。位置关系：' + state + '。' : '观察太阳与海平面的公共点，再比较圆心到海平面的距离 d 与半径 r。';
     }
   }
 
@@ -458,6 +459,17 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
   renderEntry(70);
+
+  // Keep calculated readouts behind the prediction, including after retry.
+  if (entryFig) {
+    var entryBox = entryFig.closest(".predict");
+    function refreshEntry() {
+      var selected = document.querySelector("#entry-bar button.on");
+      renderEntry(selected ? Number(selected.getAttribute("data-d")) : 70);
+    }
+    entryBox.addEventListener("predict:pick", refreshEntry);
+    entryBox.addEventListener("predict:reset", refreshEntry);
+  }
 
   // 微图解 1：三种位置关系
   var m1Svg = document.getElementById("m1-fig");

@@ -14,7 +14,7 @@
   }
   function find(card, id) { return questions(card).find(function (entry) { return entry.question.id === id; }) || null; }
   function ref(card, question) {
-    return { questionType: "diagnostic", pointId: card.id, questionId: question.id, contentVersion: question.contentVersion, source: "knowledge" };
+    return { questionType: "diagnostic", pointId: card.id, questionId: question.id, contentVersion: question.contentVersion, contentVersions: question.contentVersions, source: "knowledge" };
   }
   function tagged(card, question, extra) { return Object.assign(ref(card, question), extra); }
   // An answer is recorded before its feedback is shown; a later answer to the same question is a retry.
@@ -30,7 +30,7 @@
     return (snapshot && snapshot.questions || []).filter(function (q) { return q.questionType === "diagnostic" && q.pointId === card.id; });
   }
   // Only records of the question's current version count; older versions stay in the ledger untouched.
-  function isCurrent(card, q) { var entry = find(card, q.questionId); return !!entry && entry.question.contentVersion === q.contentVersion; }
+  function isCurrent(card, q) { var entry = find(card, q.questionId); return !!entry && (entry.question.contentVersion === q.contentVersion || (entry.question.contentVersions || []).indexOf(q.contentVersion) >= 0); }
   function touched(q) { return !!(q.firstAnswer || q.feedbackSeen); }
   function available(snapshot, card, now, session) {
     var mine = own(snapshot, card).filter(function (q) { return isCurrent(card, q); }), seen = function (id) {
@@ -57,7 +57,7 @@
       if (item.questionType !== "diagnostic") return;
       var card = cards.find(function (c) { return c.id === item.pointId; });
       if (!card) return;
-      var entry = find(card, item.questionId), current = !!entry && entry.question.contentVersion === item.contentVersion;
+      var entry = find(card, item.questionId), current = !!entry && (entry.question.contentVersion === item.contentVersion || (entry.question.contentVersions || []).indexOf(item.contentVersion) >= 0);
       var due = item.dueAt <= now, unit = units[card.unitId];
       (byCard[card.id] = byCard[card.id] || []).push({ questionId: item.questionId, dueAt: item.dueAt, due: due, current: current,
         label: current ? LABELS[entry.role] : "题目已更新", lastCorrect: item.lastAnswer ? item.lastAnswer.correct : null,

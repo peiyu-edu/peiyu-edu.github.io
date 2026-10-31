@@ -95,7 +95,9 @@
     var count = 0;
     var snapQuestions = initialSnapshot && Array.isArray(initialSnapshot.questions) ? initialSnapshot.questions : [];
     questions.forEach(function (meta) {
-      if (sessionAnswered.has(meta.id) || (meta.box.classList && meta.box.classList.contains('done'))) { count++; return; }
+      var done = meta.box.classList && meta.box.classList.contains('done');
+      var peekOnly = isPrimary && meta.box.classList && meta.box.classList.contains('peeked');
+      if (sessionAnswered.has(meta.id) || done && !peekOnly) { count++; return; }
       if (meta.version && stateAPI && stateAPI.question(identifiers(meta)).hasAnswered) { count++; return; }
       if (snapQuestions.some(function (q) { return q.sectionId === sectionId && q.questionId === meta.id && q.firstAnswer; })) count++;
     });
@@ -124,7 +126,7 @@
   }
   function identifiers(meta) {
     return { source: 'course', sectionId: sectionId, questionType: meta.questionType || 'predict',
-      questionId: meta.id, contentVersion: meta.version, step: meta.step };
+      questionId: meta.id, contentVersion: meta.version, contentVersions: meta.versions, step: meta.step };
   }
   function queue(meta, callback) {
     meta.pending = meta.pending.then(function () {
@@ -153,6 +155,13 @@
       var authored = (isPrimary || isJunior) && box.getAttribute('data-lc-source');
       bytes = authored ? Uint8Array.from(window.atob(authored), function (c) { return c.charCodeAt(0); }) : new TextEncoder().encode(source);
     } catch (error) { showUnavailable(); return; }
+    if (window.PeiyuCNQuotes) {
+      meta.pending = window.PeiyuCNQuotes.digests(new TextDecoder().decode(bytes), window.crypto, 'sha256:').then(function (versions) {
+        meta.versions = versions;
+        meta.version = versions[versions.length - 1];
+      }).catch(showUnavailable);
+      return;
+    }
     meta.pending = window.crypto.subtle.digest('SHA-256', bytes).then(function (hash) {
       meta.version = 'sha256:' + Array.from(new Uint8Array(hash), function (n) { return n.toString(16).padStart(2, '0'); }).join('');
     }).catch(showUnavailable);
@@ -600,7 +609,7 @@
     return lessons.filter(function (l) { return l.ready !== false; }).sort(byOrder);
   }
   function lessonName(l) {
-    if (l.isUnit) return '单元小结与闯关：' + (l.unitTitle || l.title);
+    if (l.isUnit) return (l.isActivity ? '综合与实践：' : '单元小结与闯关：') + (l.unitTitle || l.title);
     var m = !isPrimary && !isJunior && /^[a-z]\d+-(\d+)-(\d+)$/.exec(l.id);
     return m && !/^\d/.test(l.title) ? m[1] + '.' + m[2] + ' ' + l.title : l.title;
   }
@@ -701,6 +710,9 @@
     if (lessonData && isJunior) lessonData = Object.assign({}, lessonData, { pointIds: lessonData.pointIds.filter(allowedPoint) });
     if (!lessonData && isPrimary) lessonData = { id: sectionId, pointIds: [] };
     hasPoints = !!(lessonData && lessonData.pointIds && lessonData.pointIds.length);
+    // Primary reviewed points have a separate read-only page; keep the existing
+    // concept-card toolbar until a compatible renderer is loaded.
+    if (isPrimary && !window.PeiyuKnowledge) hasPoints = false;
     if (lessonData && knowledgeData) enhance();
   }).catch(function () {
     if (isPrimary) {

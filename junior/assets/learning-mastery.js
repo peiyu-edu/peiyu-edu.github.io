@@ -1,10 +1,11 @@
 /* Read-only mastery derived from local answer evidence; shared by primary/junior. */
 (function (root, factory) {
   "use strict";
-  var api = factory();
+  var quotes = typeof module === "object" && module.exports && typeof require === "function" ? require('./cn-quotes.js') : root.PeiyuCNQuotes;
+  var api = factory(quotes);
   if (typeof module === "object" && module.exports) module.exports = api;
   else if (root) root.PeiyuMastery = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (quotes) {
   "use strict";
   var GAP = 20 * 3600000, DAY = 86400000, FUTURE = 5 * 60000;
   var LABELS = { unseen: "未作答", practicing: "练习中", learned: "初步掌握", secure: "已巩固", wrong: "待巩固" };
@@ -64,7 +65,7 @@
       current.set(ids.base, { ids: ids, row: row });
     });
     function create(ids, row, stored) {
-      var admitted = current.get(ids.base), isCurrent = !!admitted && ids.contentVersion === admitted.ids.contentVersion && ids.contentVersion !== "?";
+      var admitted = current.get(ids.base), isCurrent = !!admitted && (ids.contentVersion === admitted.ids.contentVersion || (quotes && quotes.accepts(ids.contentVersion, admitted.row))) && ids.contentVersion !== "?";
       var sectionId = row.sectionId || (ids.questionType !== "diagnostic" && ids.questionType !== "card" ? ids.owner : null) || (stored && stored.sectionId) || null;
       var pointIds = ids.questionType === "lab" ? [] : sorted(array(row.pointIds).concat(ids.questionType === "diagnostic" ? [ids.owner] : []));
       pointIds.forEach(function (pid) { addGroup(pid, row); });
@@ -77,7 +78,7 @@
         versionStale: !!admitted && !isCurrent, unavailable: !admitted, current: isCurrent,
         state: "unseen", anchorAt: null, lastStrongAt: null, nextStrongAt: null, fixes: 0, streakWrong: 0,
         firstWrongAt: null, lastWrongAt: null, wrongCount: 0, lastChoice: stored && stored.lastAnswer ? stored.lastAnswer.choice : null,
-        fixedByRetry: false, recentWeakWrong: false, weakCorrect: false, incomplete: false, hasLegacy: false,
+        fixedByRetry: false, selfCheck: false, selfCorrected: false, recentWeakWrong: false, weakCorrect: false, incomplete: false, hasLegacy: false,
         clockAnomaly: false, clockAnomalyCount: 0, answered: false, againWrong: false,
         // Unlock inputs mirror primary/site/p-assets/concept-practice.js: the stored first answer (positive time only) and "touched".
         firstAnswerAt: stored && stored.firstAnswer && stored.firstAnswer.time > 0 ? stored.firstAnswer.time : null,
@@ -93,9 +94,18 @@
     }
     var stored = new Map();
     array(snapshot.questions).slice().sort(function (a, b) { return compare(canonical(a), canonical(b)); }).forEach(function (row) {
+      if (row.questionId === "$submission") return; // Older v1 snapshots may still include paper-level rows.
       var ids = identity(row); if (ids && !stored.has(ids.identity)) stored.set(ids.identity, row);
     });
-    current.forEach(function (entry) { create(entry.ids, entry.row, stored.get(entry.ids.identity)); });
+    current.forEach(function (entry) {
+      var ids = entry.ids;
+      if (quotes) quotes.versions(entry.row).some(function (version) {
+        var candidate = identity(Object.assign({}, entry.row, { contentVersion: version }));
+        if (!stored.has(candidate.identity)) return false;
+        ids = candidate; return true;
+      });
+      create(ids, entry.row, stored.get(ids.identity));
+    });
     stored.forEach(function (row, key) {
       if (!models.has(key)) {
         var ids = identity(row), entry = current.get(ids.base);
@@ -157,7 +167,7 @@
       if (q.questionType === "lab") { q.answered = true; q.state = "practicing"; q.evidence.ignored++; return; }
       if (!normalTime) { q.clockAnomaly = true; q.clockAnomalyCount++; q.evidence.weak++; return; }
       var eligible = q.current && a.version === q.contentVersion && TYPES.indexOf(q.questionType) >= 0 &&
-        typeof a.correct === "boolean" && ["independent", "repeat", "retry"].indexOf(a.attemptKind) >= 0;
+        typeof a.correct === "boolean" && ["independent", "repeat", "retry", "self-check"].indexOf(a.attemptKind) >= 0;
       if (!eligible) {
         if (q.current && a.version === q.contentVersion && a.attemptKind === "unknown" && typeof a.correct === "boolean") {
           model.hasUnknown = true; q.answered = true;
@@ -166,6 +176,16 @@
         q.evidence.ignored++; return;
       }
       model.ownEligible = true; q.answered = true;
+      if (a.selfCheck) {
+        // A self-correction closes the wrongbook task, not the mastery-evidence requirement.
+        q.selfCheck = true; q.evidence.weak++;
+        q.selfCorrected = a.correct && q.wrongCount > 0;
+        q.state = a.correct ? "practicing" : "wrong";
+        q.streakWrong = a.correct ? 0 : q.streakWrong + 1;
+        q.fixedByRetry = false; q.weakCorrect = a.correct; q.recentWeakWrong = !a.correct;
+        return;
+      }
+      q.selfCheck = false; q.selfCorrected = false;
       if (q.state === "unseen") q.state = "practicing";
       var strength = a.selfCheck ? "W" : q.anchorAt === null ? (a.attemptKind === "independent" ? "S0" : "start-W") : a.time - q.anchorAt >= GAP ? "S1" : "W";
       // Test both sides using pre-event anchors; an own W never feeds family.
@@ -212,7 +232,7 @@
       var last = qs.reduce(function (t, q) { return q.lastStrongAt === null ? t : Math.max(t || 0, q.lastStrongAt); }, null);
       var state = !answered ? "unseen" : wrong ? "wrong" : secure && learned >= 2 ? "secure" : learned ? "learned" : "practicing";
       return { pointId: pid, state: state, stateLabel: LABELS[state], questions: qs.length, answered: answered,
-        wrongOpen: qs.filter(function (q) { return q.wrongCount && q.state !== "secure"; }).length,
+        wrongOpen: qs.filter(function (q) { return q.wrongCount && q.state !== "secure" && !q.selfCorrected; }).length,
         lastStrongAt: last, stale: last !== null && now - last >= staleGap, groupIds: sorted(Array.from(pointGroups.get(pid) || [])) };
     });
     var groups = Array.from(groupMeta.keys()).sort(compare).map(function (gid) {
@@ -240,7 +260,7 @@
     }
     var wrongbook = questions.filter(function (q) { return TYPES.indexOf(q.questionType) >= 0 && q.wrongCount > 0; }).map(function (q) {
       var retry = retryTarget(q);
-      return Object.assign({}, q, { group: q.versionStale || q.unavailable ? "updated" : q.state === "secure" ? "corrected" : "open",
+      return Object.assign({}, q, { group: q.versionStale || q.unavailable ? "updated" : q.state === "secure" || q.selfCorrected ? "corrected" : "open",
         currentHref: current.has(q.base) ? current.get(q.base).row.href || null : null,
         retryIdentity: retry.identity, retryHref: retry.href });
     });

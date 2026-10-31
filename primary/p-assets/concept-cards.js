@@ -11,6 +11,7 @@
   const esc = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
   function spoken(text) {
     return text.replace(/\d+/g, n => {
+      if (n.length > 1 && n[0] === "0") return Array.from(n, digit => cn[Number(digit)]).join("");
       const x = Number(n);
       if (x < 10) return cn[x];
       if (x < 100) return (x >= 20 ? cn[Math.floor(x / 10)] : "") + "十" + (x % 10 ? cn[x % 10] : "");
@@ -116,7 +117,7 @@
   }
   function recordNote(card, entry, snap) {
     if (!snap) return '';
-    const q = snap.questions.find(x => x.questionType === "diagnostic" && x.pointId === card.id && x.questionId === entry.question.id && x.contentVersion === entry.question.contentVersion);
+    const q = snap.questions.find(x => x.questionType === "diagnostic" && x.pointId === card.id && x.questionId === entry.question.id && (x.contentVersion === entry.question.contentVersion || (entry.question.contentVersions || []).includes(x.contentVersion)));
     if (!q || !q.firstAnswer) return '<p class="cc-record">' + (q && q.feedbackSeen ? '已看过答案，之后再做记为订正。' : '第一次自己作答会记入“我的学习”，并安排复习。') + '</p>';
     // A wrong answer goes to 再练一练; the ledger keeps an earlier schedule (e.g. +7 days after a first correct answer), so say what is actually scheduled.
     if (q.lastAnswer && q.lastAnswer.correct === false) return '<p class="cc-record">已放进『再练一练』，' + remindText(q.reviewDueAt) + '。</p>';

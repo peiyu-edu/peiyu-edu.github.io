@@ -174,6 +174,7 @@
       var li = el("li", undefined, "lw-item"); li.dataset.identity = q.identity;
       append(li, el("h3", q.title), el("p", chapters ? statusLabels[wrongStatus(q)] : stateText(q), "lw-state"));
       var r = rowMeta(q), title = stage === "primary" ? r.unitTitle : r.chapterTitle;
+      if (stage === "primary" && r.prompt) li.appendChild(el("p", r.prompt, "lw-prompt"));
       if (title) li.appendChild(el("p", title, "lw-note"));
       if (chapters) {
         li.appendChild(el("p", "来源：" + sourceText(q) + " · 错 " + q.wrongCount + " 次", "lw-note"));
@@ -185,8 +186,11 @@
         if (pointNames.length) li.appendChild(el("p", "知识点：" + pointNames.join("、"), "lw-note"));
       }
       // Option ids a/b/c are shown to students as A/B/C (option order matches id order); other answers stay as typed.
-      if (typeof q.lastChoice === "string" && q.lastChoice) li.appendChild(el("p", "你上次选了 " + (/^[a-z]$/.test(q.lastChoice) ? q.lastChoice.toUpperCase() : q.lastChoice)));
-      if (q.wrongCount) li.appendChild(el("p", "改正 " + q.fixes + "/2"));
+      if (typeof q.lastChoice === "string" && q.lastChoice) {
+        var filled = r.inputType && r.inputType !== "choice";
+        li.appendChild(el("p", (filled ? "你上次填了 " : "你上次选了 ") + (!filled && /^[a-z]$/.test(q.lastChoice) ? q.lastChoice.toUpperCase() : q.lastChoice)));
+      }
+      if (q.wrongCount) li.appendChild(el("p", q.selfCheck ? (q.selfCorrected ? "自评已改对（不计掌握证据）" : "自评不对，请重做后再核对") : "改正 " + q.fixes + "/2"));
       if (q.incomplete) li.appendChild(el("p", "这道题的早期记录不完整。", "lw-note"));
       if (q.nextStrongAt && now() < q.nextStrongAt) li.appendChild(el("p", "满 20 小时后再试。", "lw-note"));
       var actions = el("div", undefined, "lw-actions"), action;
@@ -213,7 +217,7 @@
         toggle.setAttribute("aria-expanded", "false"); actions.appendChild(toggle); li.appendChild(hint);
       }
       actions.appendChild(button(hidden[q.identity] ? "恢复" : "先收起", function () { setHidden(q.identity, !hidden[q.identity]); }));
-      var speech = say(q.title); if (speech) actions.appendChild(speech);
+      var speech = say(q.title + (stage === "primary" && r.prompt ? "。" + r.prompt : "")); if (speech) actions.appendChild(speech);
       li.appendChild(actions); return li;
     }
     function today() {
@@ -226,7 +230,8 @@
         var q = model.questions.find(function (p) { return p.identity === entry.questionIdentity; });
         var original = model.questions.find(function (p) { return p.identity === entry.identity; });
         var row = el("li"), action = reviewLink(entry.needsReview ? config.reviewLabel || "回课时看一看" : "去做这道题", entry.href, entry.needsReview ? original : q, entry.needsReview);
-        append(row, el("span", original ? original.title : "复习题")); if (action) row.appendChild(action); items.appendChild(row);
+        var prompt = original && stage === "primary" && rowMeta(original).prompt;
+        append(row, el("span", original ? original.title + (prompt ? " · " + prompt : "") : "复习题")); if (action) row.appendChild(action); items.appendChild(row);
       });
       section.appendChild(items); return section;
     }
@@ -236,7 +241,8 @@
       groupSelect.setAttribute("aria-label", stage === "primary" ? "按单元筛选" : "按章筛选");
       groupSelect.appendChild(new win.Option(stage === "primary" ? "全部单元" : "全部章节", ""));
       var groups = new Map(); model.wrongbook.forEach(function (q) { var r = rowMeta(q); groups.set(groupId(q), (stage === "primary" ? r.unitTitle : r.chapterTitle) || "其他记录"); });
-      groups.forEach(function (title, id) { groupSelect.appendChild(new win.Option(title, id)); });
+      Array.from(groups).sort(function (a, b) { return a[0].localeCompare(b[0], undefined, { numeric: true }); })
+        .forEach(function (entry) { groupSelect.appendChild(new win.Option(entry[1], entry[0])); });
       if (unit && !groups.has(unit)) unit = "";
       groupSelect.value = unit;
       groupSelect.addEventListener("change", function () { unit = groupSelect.value; render(); host.querySelector("[aria-label='" + groupSelect.getAttribute("aria-label") + "']").focus(); });

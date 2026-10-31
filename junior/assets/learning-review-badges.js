@@ -77,6 +77,11 @@
       doc.querySelectorAll(".lf-chapter[id]").forEach(function (chapter) {
         var id = chapter.id, key = stage === "primary" ? "unitId" : "chapterId";
         var heading = chapter.querySelector(".lf-unit-head") || chapter.querySelector("h2");
+        if (stage === "primary") {
+          var unit = list(data.units).find(function (u) { return u.id === id; });
+          var available = unit && unit.ready || list(data.lessons).some(function (l) { return l.unitId === id && l.ready !== false; });
+          if (!available) { setBadge(heading, "group", "", true); return; }
+        }
         var n = openCount(key, id);
         setBadge(heading, "group", stage === "primary" ? config.labels[stateFor(key, id)] : n ? "↻ 待巩固 " + n : "", true);
       });

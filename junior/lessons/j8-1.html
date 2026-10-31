@@ -20,9 +20,17 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .tbl { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
+  .root-work label { display:block; margin:10px 0; }
+  .root-work input, .root-work select, .root-work textarea { font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:6px; padding:8px; max-width:100%; box-sizing:border-box; }
+  .root-work input { width:11em; }
+  .root-work textarea { width:100%; }
+  .root-work .ctrl { display:flex; flex-wrap:wrap; gap:8px; }
+  .root-work output { display:block; padding:10px; border:1px solid var(--line); overflow-wrap:anywhere; }
+  .root-row { border-top:1px solid var(--line); padding-top:8px; }
+  .root-work :focus-visible { outline:3px solid var(--a); outline-offset:2px; }
   .tbl td, .tbl th { border: 1px solid var(--line); padding: 4px 10px; text-align: center; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j8-1" data-standard="v2">
 <div class="wrap">
@@ -185,7 +193,7 @@
     <p style="font-size:16.5px;margin:0 0 8px">(1) \(\sqrt{47}\) 在哪两个相邻整数之间？(2) 在哪两个相邻的一位小数之间？(3) 把 \(\sqrt{47}\) 精确到十分位。</p>
     <details class="more"><summary>提示 1：找最近的两个平方数</summary><p>\(47\) 前后最近的平方数是哪两个？</p></details>
     <details class="more"><summary>提示 2：精确到十分位，要四舍五入</summary><p>知道 \(\sqrt{47}\) 在 \(6.8\) 和 \(6.9\) 之间还不够：要看它比中点 \(6.85\) 大还是小。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <div class="think-steps">
         <div class="think-step"><span class="ts-tag ca">② 想办法：</span>比的永远是平方和 \(47\)，不是拿 \(6.8\) 和 \(47\) 比。</div>
         <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>(1) \(6^2=36&lt;47&lt;49=7^2\)，所以 \(6&lt;\sqrt{47}&lt;7\)。(2) \(6.8^2=46.24&lt;47&lt;47.61=6.9^2\)，所以 \(6.8&lt;\sqrt{47}&lt;6.9\)。(3) \(6.85^2=46.9225&lt;47\)，所以 \(\sqrt{47}&gt;6.85\)，四舍五入到十分位得 \(\sqrt{47}\approx 6.9\)。</div>
@@ -237,6 +245,40 @@
 </section>
 
 <section class="step" data-title="动手">
+  <h3>先做记录：计算器的 √ 键算出了什么？</h3>
+  <form class="card root-work" id="root-calc" novalidate>
+    <p>试求 √47，也可以自己选被开方数。先输入，再按本页的 √ 键；也可用自己的计算器。把屏幕值记录下来，再按指定精度四舍五入，最后核对。√ 键给出的是<b>算术平方根</b>。</p>
+    <label>被开方数 a（小数或分数；0 或绝对值在 0.0001～1000000 之间）<br><input id="root-a" autocomplete="off" inputmode="decimal"></label>
+    <button class="btn" type="button" id="root-sqrt">√ 计算</button>
+    <output id="root-screen" aria-live="polite">计算器屏幕：等待输入</output>
+    <label>我记录的屏幕值（开不尽时至少记录四位小数，多记几位更稳妥）<br><input id="root-display" autocomplete="off" inputmode="decimal"></label>
+    <label>指定精度 <select id="root-digits"><option value="1">精确到十分位</option><option value="2">精确到百分位</option><option value="3">精确到千分位</option></select></label>
+    <label>我按精度取的近似值<br><input id="root-rounded" autocomplete="off" inputmode="decimal"></label>
+    <div class="ctrl"><button class="btn" type="submit">核对记录与取值</button><button class="btn ghost" type="reset">重置计算任务</button></div>
+    <p class="result" id="root-calc-feedback" aria-live="polite"></p>
+    <p class="small">本页屏幕保留八位小数，位数有限；开不尽时不能把显示值当作精确值。外置计算器也只核对你输入的记录，网页不能确认你是否在线下按过键。求正数的“平方根”时，还须考虑另一根。</p>
+  </form>
+  <h3>先填空表，再归纳：哪些数有平方根？</h3>
+  <form class="card root-work" id="root-table" novalidate>
+    <p>分别找出使 x² 等于下列数的所有 x。先填根的个数和所有平方根；没有时写“无”。两个数可用逗号隔开，也可用 ±。</p>
+    <div class="root-row"><b>被开方数：9</b><label>平方根个数 <select id="root-count-0" aria-label="9 的平方根个数"><option value="">请选择</option><option value="0">0 个</option><option value="1">1 个</option><option value="2">2 个</option></select></label><label>所有平方根 <input id="root-values-0" aria-label="9 的所有平方根" autocomplete="off"></label></div>
+<div class="root-row"><b>被开方数：0</b><label>平方根个数 <select id="root-count-1" aria-label="0 的平方根个数"><option value="">请选择</option><option value="0">0 个</option><option value="1">1 个</option><option value="2">2 个</option></select></label><label>所有平方根 <input id="root-values-1" aria-label="0 的所有平方根" autocomplete="off"></label></div>
+<div class="root-row"><b>被开方数：-9</b><label>平方根个数 <select id="root-count-2" aria-label="-9 的平方根个数"><option value="">请选择</option><option value="0">0 个</option><option value="1">1 个</option><option value="2">2 个</option></select></label><label>所有平方根 <input id="root-values-2" aria-label="-9 的所有平方根" autocomplete="off"></label></div>
+    <label>类比加减、乘除：把“已知 x 求 x²”倒过来，已知 x² 求 x 的运算叫 <select id="root-inverse"><option value="">请选择</option><option>加法</option><option>减法</option><option>乘法</option><option>除法</option><option>乘方</option><option>开平方</option></select></label>
+    <label>用自己的一句话归纳正数、零、负数的平方根情况：<textarea id="root-rule" rows="3"></textarea></label>
+    <div class="ctrl"><button class="btn" type="submit">核对空表与归纳依据</button><button class="btn ghost" type="reset">重置空表</button></div>
+    <p class="result" id="root-table-feedback" aria-live="polite"></p>
+    <p class="small">填表后再用下方原有图解验证。几个例子能帮助猜想；要解释一般情形，还须用“相反数平方相等、任意实数的平方非负”等道理。</p>
+  </form>
+  <h3>写两行：因为平方得到原数，所以找到了哪些根？</h3>
+  <form class="card root-work" id="root-reason" novalidate>
+    <label>选择任务：求 <select id="root-target"><option value="0.81">0.81</option><option value="16">16</option><option value="121">121</option></select> 的平方根</label>
+    <p>第一行写平方验证，第二行写完整结论。括号内可填 ± 或用逗号列出分别验证的数；支持小数、分数。核对会检查是否漏根。</p>
+    <label>第一行：因为（<input id="root-bases" aria-label="用于平方验证的数" autocomplete="off">）² = <input id="root-square" aria-label="平方所得的数" autocomplete="off" inputmode="decimal"></label>
+    <label>第二行：所以所选数的平方根为 <input id="root-conclusion" autocomplete="off" aria-label="平方根结论"></label>
+    <div class="ctrl"><button class="btn" type="submit">核对两行过程</button><button class="btn ghost" type="reset">重置两行过程</button></div>
+    <p class="result" id="root-reason-feedback" aria-live="polite"></p>
+  </form>
   <h3>① 拖面积，看边长</h3>
   <p class="small">拖动正方形右上角的圆点（或点一下圆点再用方向键，每次面积 ±1）。看面积 \(a\) 变了，边长 \(\sqrt{a}\) 怎么变、夹在哪两个整数之间。</p>
   <div class="card">
@@ -515,6 +557,134 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focA = focQ = focZ = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script>
+// 本页独占活动；只在当前 DOM 反馈，不写学习记录或掌握状态。
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const clean = s => s.normalize('NFKC').replace(/[−–﹣]/g, '-').trim();
+  const decimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i;
+  function number(s) {
+    const unwrap = x => { x = x.trim(); while (/^\([^()]*\)$/.test(x)) x = x.slice(1,-1).trim(); return x; };
+    const parts = unwrap(clean(s)).split('/').map(unwrap);
+    if (parts.length > 2 || !parts.every(p => decimal.test(p.trim()))) return NaN;
+    const n = parts.length === 1 ? Number(parts[0]) : Number(parts[0]) / Number(parts[1]);
+    return Number.isFinite(n) ? n : NaN;
+  }
+  function roots(s) {
+    s = clean(s).replace(/^(?:x\s*=|平方根(?:为|是)\s*)/i, '').replace(/。$/, '').trim();
+    if (/^(无|没有|不存在|无平方根|没有平方根)$/.test(s)) return [];
+    if (/^(±|\+\s*\/\s*-)/.test(s)) {
+      const v = number(s.replace(/^(±|\+\s*\/\s*-)/, ''));
+      return Number.isFinite(v) && v >= 0 ? (v === 0 ? [0] : [-v, v]) : null;
+    }
+    const ns = s.split(/[,，、;；]|和|或/).map(number);
+    return ns.length && ns.every(Number.isFinite) ? [...new Set(ns)].sort((a,b) => a-b) : null;
+  }
+  const close = (a,b) => Math.abs(a-b) <= 1e-10 * Math.max(1,Math.abs(b));
+  function complete(list, a) {
+    if (!list) return false;
+    // 由被开方数实时计算，并把每一个候选数平方检验；没有预置答案 key。
+    const expected = a < 0 ? [] : a === 0 ? [0] : [-Math.sqrt(a),Math.sqrt(a)];
+    return list.length === expected.length && list.every((v,i) => close(v, expected[i]) && close(v*v,a));
+  }
+  function feedback(id, text, ok) {
+    $(id).textContent = text;
+    $(id).dataset.state = ok ? 'ok' : 'retry';
+  }
+  function radicand() {
+    const a = ratio($('root-a').value), n = a && (a.n < 0n ? -a.n : a.n);
+    return a && n <= 1000000n*a.d && (n === 0n || n*10000n >= a.d) ? a : null;
+  }
+  // 原始十进制/分数保留为有理数；以平方比较取位，不用浮点半位或 epsilon。
+  function ratio(s) {
+    const unwrap = x => { x = x.trim(); while (/^\([^()]*\)$/.test(x)) x = x.slice(1,-1).trim(); return x; };
+    const parts = unwrap(clean(s)).split('/').map(unwrap);
+    if (parts.length > 2) return null;
+    function term(t) {
+      if (t.length > 2048 || !decimal.test(t)) return null;
+      const [v,e='0'] = t.toLowerCase().split('e'), dot = v.indexOf('.');
+      const shift = Number(e) - (dot < 0 ? 0 : v.length-dot-1);
+      if (!Number.isInteger(shift) || Math.abs(shift) > 2048) return null;
+      const n = BigInt(v.replace('.',''));
+      return {n:n*10n**BigInt(Math.max(shift,0)),d:10n**BigInt(Math.max(-shift,0))};
+    }
+    const p = term(parts[0]), q = parts.length === 2 ? term(parts[1]) : {n:1n,d:1n};
+    if (!p || !q || q.n === 0n) return null;
+    const sign = q.n < 0n ? -1n : 1n;
+    return {n:p.n*q.d*sign,d:p.d*q.n*sign};
+  }
+  function rootUnits(a,d) {
+    const scale = 10n**BigInt(d), n = a.n*scale*scale;
+    let lo = 0n, hi = 1000n*scale+1n;
+    while (hi-lo > 1n) { const m = (hi+lo)/2n; if (m*m*a.d <= n) lo = m; else hi = m; }
+    return {scale,lo,rounded:(2n*lo+1n)**2n*a.d <= 4n*n ? lo+1n : lo};
+  }
+  function fixedRoot(a,d) {
+    const s = rootUnits(a,d).rounded.toString().padStart(d+1,'0');
+    return s.slice(0,-d)+'.'+s.slice(-d);
+  }
+  function clearResult() {
+    $('root-calc-feedback').textContent = '';
+    delete $('root-calc-feedback').dataset.state;
+  }
+  function clearCalc() {
+    $('root-screen').textContent = '计算器屏幕：等待输入';
+    clearResult();
+  }
+  $('root-a').addEventListener('input', () => {
+    clearCalc(); $('root-display').value = ''; $('root-rounded').value = '';
+  });
+  $('root-digits').addEventListener('change', clearResult);
+  $('root-sqrt').addEventListener('click', () => {
+    const a = radicand();
+    $('root-screen').textContent = !a ? '请先输入范围内的小数或分数，分母不能为零。' :
+      a.n < 0n ? '本学段的实数范围内，负数没有平方根。请另选非负数计算。' : '计算器屏幕：' + fixedRoot(a,8);
+  });
+  $('root-calc').addEventListener('submit', e => {
+    e.preventDefault(); const a = radicand(), d = Number($('root-digits').value);
+    if (!a || a.n < 0n || ![1,2,3].includes(d)) return feedback('root-calc-feedback', '先选范围内的非负被开方数；负数在实数范围内没有平方根。', false);
+    const raw = clean($('root-display').value), v = ratio(raw), rounded = ratio($('root-rounded').value);
+    const m = raw.match(/^[+]?\d*(?:\.(\d*))?$/), places = m && m[1] ? m[1].length : 0;
+    const exact = v && v.n >= 0n && v.n*v.n*a.d === a.n*v.d*v.d;
+    const units = m && v && v.n >= 0n && places >= 4 ? rootUnits(a,places) : null;
+    const screen = rootUnits(a,8);
+    const recorded = units && (v.n*units.scale === units.lo*v.d || v.n*units.scale === units.rounded*v.d || v.n*screen.scale === screen.rounded*v.d);
+    if (!m || (!exact && !recorded)) {
+      return feedback('root-calc-feedback', '屏幕记录还需检查：请记录非负的小数值；开不尽时至少抄四位小数，可用 √ 键重新计算。', false);
+    }
+    const answer = rootUnits(a,d);
+    if (!rounded || rounded.n*answer.scale !== answer.rounded*rounded.d) return feedback('root-calc-feedback', '屏幕记录与平方检验相符；取值还要四舍五入，看保留位的后一位，不能直接截去。', false);
+    feedback('root-calc-feedback', '记录与取值相符：√(' + clean($('root-a').value) + ') 按指定精度写为 ' + fixedRoot(a,d) + '。屏幕位数有限，开不尽时这是近似显示，用 ≈ 连接近似值；根号式可保留精确值。√ 键给出非负的算术平方根。' + (a.n > 0n ? '求这个正数的所有平方根，还要写上与它互为相反数的另一根。' : '零的平方根只有零这一个。'), true);
+  });
+  $('root-calc').addEventListener('reset', clearCalc);
+  $('root-table').addEventListener('submit', e => {
+    e.preventDefault(); const problems = [];
+    [9,0,-9].forEach((a,i) => {
+      const list = roots($('root-values-'+i).value), count = $('root-count-'+i).value;
+      const expectedCount = a < 0 ? 0 : a === 0 ? 1 : 2;
+      if (count === '' || Number(count) !== expectedCount || !complete(list,a)) problems.push(String(a));
+    });
+    if (problems.length) return feedback('root-table-feedback', '请再检查被开方数为 ' + problems.join('、') + ' 的行：把候选根分别平方，检验是否等于原数，并注意有没有漏掉相反数。', false);
+    if ($('root-inverse').value !== '开平方') return feedback('root-table-feedback', '表格计算相符。再想想乘方中的平方与哪一种运算方向相反；它不同于除以二。', false);
+    if (!$('root-rule').value.trim()) return feedback('root-table-feedback', '表格计算相符。请再写一句自己的归纳，然后核对依据。', false);
+    feedback('root-table-feedback', '三行计算相符。请自己对照归纳（文字未作自动判分）：正数有两个互为相反数的平方根；零只有一个平方根零；负数没有平方根。平方与开平方方向相反，类似加与减、乘与除；这里倒过来的是平方运算。一般理由：若 x²=a，则 (-x)²=a；当 a>0 时 x 不为零；任意实数的平方都非负。有限几个例子本身不能代替一般理由。', true);
+  });
+  $('root-reason').addEventListener('submit', e => {
+    e.preventDefault(); const a = Number($('root-target').value), list = roots($('root-bases').value), value = number($('root-square').value), conclusion = roots($('root-conclusion').value);
+    if (!list || !list.length || !Number.isFinite(value)) return feedback('root-reason-feedback', '先填第一行：哪些数需要平方验证？平方得到的数是什么？可用 ± 或逗号列出。', false);
+    if (!list.every(x => close(x*x,a)) || !close(value,a)) return feedback('root-reason-feedback', '第一行的平方不相符。将括号内的数分别平方，结果应等于所选的被开方数。', false);
+    if (!complete(list,a)) return feedback('root-reason-feedback', '你写的数平方后确实得到原数，但验证还漏了另一根。把相反数也平方试试。', false);
+    if (!complete(conclusion,a)) return feedback('root-reason-feedback', '第一行平方验证完整；第二行还需写出全部平方根，检查是否漏掉负根，或把根号的值与平方根混淆。', false);
+    feedback('root-reason-feedback', '两行相符：因为 ('+list[0]+')² = '+a+'，('+list[1]+')² = '+a+'，所以 '+a+' 的平方根为 '+list.join(' 和 ')+'。两个根互为相反数。', true);
+  });
+  [['root-table','root-table-feedback'],['root-reason','root-reason-feedback']].forEach(([form,out]) => {
+    $(form).addEventListener('reset', () => { $(out).textContent = ''; delete $(out).dataset.state; });
+    $(form).addEventListener('input', () => { $(out).textContent = ''; delete $(out).dataset.state; });
+  });
+  ['root-display','root-rounded'].forEach(id => $(id).addEventListener('input', clearResult));
 })();
 </script>
 </body></html>

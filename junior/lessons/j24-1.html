@@ -23,7 +23,7 @@
   .tb { border-collapse: collapse; margin: 6px 0; font-size: 15px; }
   .tb th, .tb td { border: 1px solid var(--line); padding: 3px 10px; text-align: center; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j24-1" data-standard="v2">
 <div class="wrap">
@@ -38,7 +38,7 @@
   <ol class="small">
     <li>从“一个人读得特别多”进入：平均数会被拉走。</li>
     <li>加权平均数：各项重要程度不同，用“权”；分母是权的和。</li>
-    <li>分组数据的平均数：以各组人数（频数）为权，不能把各组平均数直接再平均。</li>
+    <li>分组数据的平均数：以各组人数（频数）为权，一般不能把各组平均数直接再平均。</li>
     <li>中位数：先排序，奇数个取正中间，偶数个取中间两个的平均数。</li>
     <li>众数：出现次数最多的数据，可能不止一个，也可能没有。</li>
     <li>三个统计量怎么选；用样本估计总体。</li>
@@ -225,9 +225,9 @@
       <div class="trap-body">
         <div class="trap-vs">
           <div class="trap-wrong"><b>❌ 典型错解</b>：40 人平均 80 分、10 人平均 90 分，合起来“\((80+90)\div2=85\)”。</div>
-          <div class="trap-right"><b>✅ 看图秒懂</b>：80 分那组有 40 人，分量是另一组的 4 倍，平衡点在 \(\dfrac{80\times40+90\times10}{50}=82\)。只有两组人数相同时，直接平均才对。</div>
+          <div class="trap-right"><b>✅ 看图秒懂</b>：80 分那组有 40 人，分量是另一组的 4 倍，平衡点在 \(\dfrac{80\times40+90\times10}{50}=82\)。合并时应按人数加权；人数相同能保证直接平均正确。人数不同但两组平均数相同时，直接平均也正确。</div>
         </div>
-        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 200" role="img" aria-label="合并平均数在八十二而不是八十五"></svg></div>
+        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 300 200" role="img" aria-label="以人数为权求两组合并平均数的示意图"></svg></div>
       </div>
     </div>
     <div class="trap-card">
@@ -434,7 +434,7 @@
   var m2n = [40, 10];
   function drawM2() {
     var m = drawMerge(document.getElementById("m2-fig"), m2n[0], m2n[1], 30, 346, false);
-    document.getElementById("m2-note").textContent = "80 分组 " + m2n[0] + " 人，90 分组 " + m2n[1] + " 人：(80×" + m2n[0] + " + 90×" + m2n[1] + ") ÷ " + (m2n[0] + m2n[1]) + " = " + f(m) + "。" + (m2n[0] === m2n[1] ? "两组人数相同，才正好等于 (80 + 90) ÷ 2 = 85。" : "人数不同，不等于 85，偏向人多的那组。");
+    document.getElementById("m2-note").textContent = "80 分组 " + m2n[0] + " 人，90 分组 " + m2n[1] + " 人：(80×" + m2n[0] + " + 90×" + m2n[1] + ") ÷ " + (m2n[0] + m2n[1]) + " = " + f(m) + "。" + (m2n[0] === m2n[1] ? "本图两组均值为 80 和 90，人数相同时合并均值等于 (80 + 90) ÷ 2 = 85。" : "人数不同，不等于 85，偏向人多的那组。");
   }
   bar("m2-bar", function (t) { m2n = nums(t.getAttribute("data-n")); drawM2(); });
 
@@ -531,7 +531,7 @@
       txt(fm, 548, g[3] + 7, G[g[0]] + " 人", g[2], 700, 19, "end");
       hs[g[0]] = handle(fm, 150 + (G[g[0]] - 1) * 320 / 39, g[3], g[2], g[1], G[g[0]], 1, 40, 1, function (x) { return 1 + (x - 150) * 39 / 320; }, function (v, k) { G[g[0]] = v; focusG = k ? g[0] : ""; drawM(); });
     });
-    var why = G.a1 === G.a2 ? "两组平均数相同，合起来也是它。" : G.n1 === G.n2 ? "两组人数相同，合并平均数正好等于两个平均数直接平均。" : "人数不同：合并平均数偏向人多的" + (G.n1 > G.n2 ? "第一组" : "第二组") + "，和直接平均差了 " + f(Math.abs(m - nv)) + "。";
+    var why = G.a1 === G.a2 ? "两组平均数相同，合并平均数与直接平均都等于它；即使人数不同也成立。" : G.n1 === G.n2 ? "两组人数相同，合并平均数正好等于两个平均数直接平均。" : "人数不同：合并平均数偏向人多的" + (G.n1 > G.n2 ? "第一组" : "第二组") + "，和直接平均差了 " + f(Math.abs(m - nv)) + "。";
     document.getElementById("out-m").innerHTML = "合起来 = (" + G.a1 + "×" + G.n1 + " + " + G.a2 + "×" + G.n2 + ") ÷ " + (G.n1 + G.n2) + " ≈ <span class=\"sum\">" + f(m) + "</span>；直接平均 (" + G.a1 + " + " + G.a2 + ") ÷ 2 = " + f(nv) + "。" + why;
     if (focusG) hs[focusG].focus();
   }

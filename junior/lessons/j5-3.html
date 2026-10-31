@@ -21,8 +21,14 @@
   .result .sum { color: var(--no); font-weight: 700; }
   table.mini { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
   table.mini th, table.mini td { border: 1px solid var(--line); padding: 4px 10px; text-align: center; }
+  #model-workbench input, #model-workbench select, #model-workbench button { font: inherit; color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 8px; max-width: 100%; }
+  #model-workbench label { display: block; margin: 12px 0; }
+  #model-workbench input { display: block; width: 100%; box-sizing: border-box; }
+  #model-workbench fieldset { min-width: 0; border: 1px solid var(--line); border-radius: 8px; margin: 16px 0; }
+  #model-workbench .model-status { overflow-wrap: anywhere; min-height: 2em; }
+  #model-workbench [hidden] { display: none !important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j5-3" data-standard="v2">
 <div class="wrap">
@@ -121,7 +127,7 @@
     <p><b>① 读懂题意：</b>工作总量没给具体数。甲一天能修全部的几分之几？</p>
     <details class="more"><summary>提示 1：效率怎么表示</summary><p>把全部工作看作 \(1\)。甲 \(12\) 天修完，每天修 \(\tfrac{1}{12}\)；乙每天修多少？注意不是 \(12\)、\(18\)。</p></details>
     <details class="more"><summary>提示 2：列表</summary><p>表头写「每天修 | 修几天 | 修了多少」，甲一行、乙一行。相等关系：甲修的 \(+\) 乙修的 \(=1\)。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <table class="mini"><tr><th></th><th>每天修</th><th>修几天</th><th>修了多少</th></tr>
         <tr><td>甲</td><td>\(\tfrac{1}{12}\)</td><td>\(2+x\)</td><td>\(\tfrac{2+x}{12}\)</td></tr>
         <tr><td>乙</td><td>\(\tfrac{1}{18}\)</td><td>\(x\)</td><td>\(\tfrac{x}{18}\)</td></tr></table>
@@ -240,6 +246,29 @@
     <div class="result" id="out-tier" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-tier" type="button">重置</button></div>
   </div>
+<div class="card" id="model-workbench">
+  <h2>自己完成：设、找关系、列、解、双检、答</h2>
+  <p>沿用本页的水价、计分和印刷情境，换一组数据独立做。每步先写再核对；换设法或数据会清空这次过程。草稿只留在当前页面，刷新后可重做。</p>
+  <p class="small">算式可用小数、分数、括号、加减乘除，乘号可写 *、× 或省略。未知量统一写 x。暂时无法识别的写法会提示“暂未核对”，请保留纸笔推导，不把它当成数学错误。</p>
+  <label>选择情境 <select id="model-case"><option value="water">阶梯水价：账单 71 元</option><option value="quiz-ok">计分：得 51 分</option><option value="quiz-no">计分：得 52 分</option></select></label>
+  <p id="model-story"></p>
+  <form id="model-form" novalidate>
+    <div id="model-fields"></div>
+    <details class="more"><summary>回看我已完成的过程</summary><ol id="model-notebook"></ol></details>
+    <p id="model-status" class="model-status" role="status" aria-live="polite"></p>
+    <button type="submit" id="model-check">核对本步</button>
+    <button type="button" id="model-reset">清空重做</button>
+  </form>
+  <h2>方案比较：理由也由你写</h2>
+  <p>另一批印刷报价：甲店每页 0.5 元；乙店前 40 页每页 0.7 元，超过 40 页的部分每页 0.3 元。页数 n 是非负整数，不印不收费。先建费用式和分界方程，再比较三段。只求出“一样贵”还没有回答选哪家。</p>
+  <form id="plan-form" novalidate>
+    <div id="plan-fields"></div>
+    <p id="plan-status" class="model-status" role="status" aria-live="polite"></p>
+    <button type="submit" id="plan-check">核对方案依据</button>
+    <button type="button" id="plan-reset">清空方案比较</button>
+  </form>
+</div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -482,6 +511,198 @@
   drawAll();
   new MutationObserver(function () { focusT = focusN = focusW = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script>
+/* j5-3 only. No storage or changes to the shared learning contract. */
+(function () {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const near = (a, b) => Math.abs(a - b) < 1e-8 * Math.max(1, Math.abs(a), Math.abs(b));
+  function normalizeMath(source) {
+    // Fold typography only. Superscripts/subscripts keep their mathematical meaning.
+    return source.replace(/[！-～]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0xFEE0))
+      .replace(/[\u{1D400}-\u{1D7FF}]/gu, ch => ch.normalize('NFKC'));
+  }
+  // Parse affine expressions algebraically, never by eval or sample points.
+  function expression(source, variable = 'x') {
+    const text = normalizeMath(source).replace(/[−–]/g, '-').replace(/[×·]/g, '*').replace(/÷/g, '/');
+    const s = text.replace(/\s/g, '');
+    const tokens = text.match(/(?:\d+(?:\.\d*)?|\.\d+)|[a-z]|[()+*/-]/g) || [];
+    const isNumber = token => /^(?:\d+(?:\.\d*)?|\.\d+)$/.test(token);
+    if (tokens.some((token, position) => position > 0 && isNumber(token) && isNumber(tokens[position - 1]))) {
+      throw Error('暂未核对：请检查数字之间的运算符，不要用空格拆开数字。');
+    }
+    if (!s || tokens.join('') !== s || tokens.length > 120) throw Error('暂未核对：请用本页支持的算式写法。');
+    let i = 0;
+    function atom() {
+      const t = tokens[i++];
+      if (t === '+' || t === '-') { const v = atom(); return t === '-' ? [-v[0], -v[1]] : v; }
+      if (t === '(') { const v = sum(); if (tokens[i++] !== ')') throw Error('暂未核对：请检查括号是否配对。'); return v; }
+      if (t === variable) return [1, 0];
+      if (t && /^\d|^\./.test(t)) return [0, Number(t)];
+      throw Error('暂未核对：请使用题设字母和数字。');
+    }
+    function product() {
+      let a = atom();
+      while (i < tokens.length) {
+        const t = tokens[i];
+        const implicit = t === '(' || t === variable || /^\d|^\./.test(t);
+        if (t !== '*' && t !== '/' && !implicit) break;
+        if (!implicit) i++;
+        const b = atom();
+        if (t === '/') {
+          if (b[0] !== 0 || b[1] === 0) throw Error('暂未核对：本页只核对除以非零常数的式子。');
+          a = [a[0] / b[1], a[1] / b[1]];
+        } else {
+          if (a[0] !== 0 && b[0] !== 0) throw Error('暂未核对：请先在纸上化成一次式。');
+          a = [a[0] * b[1] + b[0] * a[1], a[1] * b[1]];
+        }
+      }
+      return a;
+    }
+    function sum() {
+      let a = product();
+      while (tokens[i] === '+' || tokens[i] === '-') {
+        const sign = tokens[i++] === '+' ? 1 : -1, b = product();
+        a = [a[0] + sign * b[0], a[1] + sign * b[1]];
+      }
+      return a;
+    }
+    const value = sum();
+    if (i !== tokens.length || !value.every(Number.isFinite)) throw Error('暂未核对：请检查算式。');
+    return value;
+  }
+  function equation(s, variable = 'x') {
+    const parts = normalizeMath(s).split('=');
+    if (parts.length !== 2) throw Error('暂未核对：方程要有一个等号。');
+    const a = expression(parts[0], variable), b = expression(parts[1], variable);
+    return [a[0] - b[0], a[1] - b[1]];
+  }
+  function expr(s, expected, variable) {
+    const a = expression(s, variable);
+    return near(a[0], expected[0]) && near(a[1], expected[1]);
+  }
+  function eq(s, expected, variable) {
+    const a = equation(s, variable);
+    return a[0] !== 0 && near(-a[1] / a[0], -expected[1] / expected[0]);
+  }
+  function number(s) {
+    const a = expression(s);
+    if (a[0] !== 0) throw Error('暂未核对：这里请填数值，可以用分数。');
+    return a[1];
+  }
+  const input = (id, label) => `<label>${label}<input id="${id}" autocomplete="off" spellcheck="false"></label>`;
+  const select = (id, label, options) => `<label>${label}<select id="${id}"><option value="">请选择</option>${options.map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select></label>`;
+  const val = id => $(id).value.trim();
+  function need(ids) { if (ids.some(id => !val(id))) throw Error('请先完成本步的每一项，再核对。'); }
+  function requireOK(ok, message) { if (!ok) throw Error(message); }
+  let step, cfg, state;
+  function reset() {
+    step = 0; state = {}; $('model-notebook').replaceChildren();
+    const water = val('model-case') === 'water', score = val('model-case') === 'quiz-ok' ? 51 : 52;
+    cfg = { water, score };
+    $('model-story').textContent = water ? '某户每月前 12 吨水每吨 3 元，超过部分每吨 5 元。本月水费 71 元。用了多少吨？先用整档费用判断该在哪一档建模。' : `20 道题全部作答，答对一道得 5 分，答错一道扣 2 分。总分 ${score} 分，可能吗？若可能，答对几题？不能只看方程有没有解。`;
+    $('model-status').textContent = ''; render();
+  }
+  function render() {
+    let html = '';
+    if (step === 0) html = select('unknown', '① 设 x 表示什么？', cfg.water ? [['total', '总用水量'], ['part', '超过第一档的用水量']] : [['total', '答对题数'], ['part', '答错题数']]) + select('unit', 'x 的单位', [['ton', '吨'], ['question', '题'], ['yuan', '元']]);
+    if (step === 1) html = cfg.water ? select('tier', '② 先判断账单所属档位', [['first', '只用第一档'], ['second', '用到了第二档']]) + input('relation-a', '前 12 吨的费用（元）：写数值算式') + input('relation-b', '超过 12 吨的用量（吨）：用 x 表示') : input('relation-a', '② 另一类题数：用 x 表示') + input('relation-b', '总得分：用 x 表示');
+    if (step === 2) html = '<p>③ 把上一步的关系写成方程。等号两侧应表示同一个量。</p>' + input('equation', '你的方程');
+    if (step === 3) html = '<p>④ 自己变形并求解。另写一行等价方程（与原方程写法不同），再求 x。可先去括号、合并、移项或同除非零数。</p>' + input('transform', '变形后的一行方程') + input('root', 'x 的值') + select('reason', '本次采用的等价变形依据（可多步合并）', [['equivalent', '等式性质及运算律，且未除以零'], ['one-side', '只改变等号一侧的值也保持相等'], ['round', '先把分数四舍五入成整数']]);
+    if (step === 4) html = '<p>⑤ 双重检验。将你的 x 代入你所列的原方程，分别算两边。再回到实际情境。</p>' + input('left', '原方程左边的数值') + input('right', '原方程右边的数值') + input('actual', cfg.water ? '从 x 换算出的总用水量（吨）' : '从 x 换算出的答对题数') + select('domain', '实际条件的判断依据', cfg.water ? [['valid', '总用水量大于 12，且水费按两档累计'], ['first', '总用水量应在 0 到 12 之间'], ['integer', '只要是整数即可']] : [['valid', '答对、答错都是 0 到 20 的整数'], ['fraction', '方程解出题数不是整数，所以此总分不可能'], ['equation', '方程有解就一定可行']]);
+    if (step === 5) html = '<p>⑥ 回答原问题：不能只留下 x 的值。</p>' + select('possible', '本情境是否可行？', [['yes', '可行'], ['no', '不存在这样的实际情况']]) + input('answer', cfg.water ? '若可行，总用水量是多少？' : '若可行，答对几题？不可行可留空') + select('answer-unit', '回答的数量单位（不可行也应明确所讨论的量）', [['ton', '吨'], ['question', '题'], ['yuan', '元']]);
+    if (step === 6) html = `<p>本轮已完成：${cfg.water ? '用水量 19 吨；12×3 + 7×5 = 71 元，19 大于 12，档位与单位相符。' : cfg.score === 51 ? '答对 13 题、答错 7 题；13×5 − 7×2 = 51 分，均为范围内的整数。' : '答对题数是 92/7，不是整数；尽管方程有解，也不存在恰得 52 分的情况。'}可清空重做，换另一种未知量设法比较。</p>`;
+    $('model-fields').innerHTML = `<fieldset><legend>${step < 6 ? '建模过程 ' + (step + 1) + '/6' : '完成与反思'}</legend>${html}</fieldset>`;
+    $('model-check').hidden = step === 6;
+  }
+  $('model-case').addEventListener('change', reset);
+  $('model-reset').addEventListener('click', reset);
+  $('model-form').addEventListener('submit', event => {
+    event.preventDefault();
+    try {
+      const w = cfg.water, total = state.unknown === 'total', q = cfg.score;
+      const root = w ? (total ? 19 : 7) : (total ? (q + 40) / 7 : (100 - q) / 7);
+      const expected = w ? [5, total ? -95 : -35] : (total ? [7, -40 - q] : [-7, 100 - q]);
+      if (step === 0) { need(['unknown', 'unit']); requireOK(val('unit') === (w ? 'ton' : 'question'), '单位应属于你所设的数量，不是费用或得分。'); state.unknown = val('unknown'); }
+      if (step === 1) {
+        need(w ? ['tier', 'relation-a', 'relation-b'] : ['relation-a', 'relation-b']);
+        if (w) {
+          requireOK(val('tier') === 'second', '先算用满第一档的费用，再与账单比较。');
+          requireOK(expr(val('relation-a'), [0, 36]), '前一档是数量乘单价，注意结果单位是元。');
+          requireOK(expr(val('relation-b'), total ? [1, -12] : [1, 0]), '检查 x 的定义：总量与超过第一档的量相差多少？');
+        } else {
+          requireOK(expr(val('relation-a'), [-1, 20]), '答对和答错的题数合计为 20；结合你对 x 的设法。');
+          requireOK(expr(val('relation-b'), total ? [7, -40] : [-7, 100]), '总得分是答对得分减去答错扣分，检查每项的题数与符号。');
+        }
+      }
+      if (step === 2) { need(['equation']); requireOK(eq(val('equation'), expected), '这个方程的解与已建立的数量关系不一致，请核对总量、单价和符号。'); state.equation = val('equation'); }
+      if (step === 3) {
+        need(['transform', 'root', 'reason']);
+        requireOK(val('transform').replace(/\s/g, '') !== state.equation.replace(/\s/g, ''), '请自己再写一行变形，不要原样抄回原方程。');
+        requireOK(eq(val('transform'), expected), '变形改变了解，请检查是否对等号两边作了相应运算。');
+        requireOK(near(number(val('root')), root), '再核对方程的解；可保留精确分数。');
+        requireOK(val('reason') === 'equivalent', '等价变形必须保持解不变，不能随意取整或只改一边。');
+      }
+      if (step === 4) {
+        need(['left', 'right', 'actual', 'domain']);
+        const parts = normalizeMath(state.equation).split('=');
+        const side = s => { const a = expression(s); return a[0] * root + a[1]; };
+        requireOK(near(number(val('left')), side(parts[0])) && near(number(val('right')), side(parts[1])), '请分别代入你自己的原方程计算；不能只写“两边相等”。');
+        requireOK(near(number(val('actual')), w ? 19 : (q + 40) / 7), '要把 x 换回题目所问的总量，注意你设的是哪一个量。');
+        requireOK(val('domain') === (!w && q === 52 ? 'fraction' : 'valid'), w ? '方程检验之外，还要检验用量落在哪一档。' : '题数必须是范围内的整数。分数不能靠四舍五入变成题数。');
+      }
+      if (step === 5) {
+        need(['possible', 'answer-unit']);
+        const feasible = w || q === 51;
+        requireOK(val('possible') === (feasible ? 'yes' : 'no'), '回答必须与刚才的实际条件检验一致。');
+        requireOK(val('answer-unit') === (w ? 'ton' : 'question'), '请给题目所问数量的单位。');
+        if (feasible) { need(['answer']); requireOK(near(number(val('answer')), w ? 19 : 13), '答案要回答原问题所问的量，而不一定是 x。'); }
+      }
+      const line = document.createElement('li');
+      line.textContent = Array.from($('model-fields').querySelectorAll('label')).map(label => {
+        const field = label.querySelector('input, select');
+        return label.firstChild.textContent + '：' + (field.tagName === 'SELECT' ? field.selectedOptions[0].textContent : field.value);
+      }).join('；');
+      $('model-notebook').appendChild(line);
+      step++; render(); $('model-status').textContent = step === 6 ? '本轮完成。换个设法再试试，方程不同也能描述同一个情境。' : '本步核对通过。继续独立完成下一步。';
+      const first = $('model-fields').querySelector('input, select'); if (first) first.focus();
+    } catch (error) { $('model-status').textContent = error.message; }
+  });
+  let planStep;
+  function resetPlan() {
+    planStep = 0; $('plan-check').hidden = false; $('plan-status').textContent = '';
+    $('plan-fields').innerHTML = '<fieldset><legend>费用模型与分界</legend>' + input('cost-a', '甲店费用（用 n 表示，单位元）') + input('cost-b1', '不超过 40 页时乙店费用（用 n 表示）') + input('cost-b2', '超过 40 页时乙店费用（用 n 表示）') + input('plan-equation', '超过 40 页时两店费用相等的方程') + input('boundary', '该方程解出的分界页数') + '</fieldset>';
+  }
+  $('plan-reset').addEventListener('click', resetPlan);
+  $('plan-form').addEventListener('submit', event => {
+    event.preventDefault();
+    try {
+      if (planStep === 0) {
+        need(['cost-a', 'cost-b1', 'cost-b2', 'plan-equation', 'boundary']);
+        requireOK(expr(val('cost-a'), [0.5, 0], 'n') && expr(val('cost-b1'), [0.7, 0], 'n') && expr(val('cost-b2'), [0.3, 16], 'n'), '费用式要把乙店前 40 页与超过部分分别累计，不能把全部页数都乘优惠单价。');
+        requireOK(eq(val('plan-equation'), [0.2, -16], 'n') && near(number(val('boundary')), 80), '用两店费用相等列方程，并检查分界是否在超过 40 页的范围。');
+        planStep = 1;
+        let html = '<p>用代入检查分界两边，再填写三段结论。下列三次印刷分别求费用（元）。</p>';
+        [20, 60, 120].forEach(n => { html += input('a' + n, n + ' 页，甲店费用') + input('b' + n, n + ' 页，乙店费用'); });
+        [['low', '1 到 79 页'], ['equal', '80 页'], ['high', '81 页及更多']].forEach(([id, label]) => { html += select(id, label + '应选', [['a', '甲店'], ['b', '乙店'], ['same', '两店一样']]); });
+        html += input('difference', '超过 40 页时，乙费用减甲费用的差式（用 n 表示）') + select('plan-reason', '为什么三段结论能推广？', [['rate', '前 40 页直接比单价；超过后结合分界两边差式的正负'], ['samples', '只代三个数就证明所有页数'], ['unit', '只看哪家优惠单价低']]) + input('zero', '0 页时，两店费用都是多少元？');
+        $('plan-fields').innerHTML = '<fieldset><legend>比较、说明与回答</legend>' + html + '</fieldset>';
+        $('plan-status').textContent = '模型已核对。现在用费用和差式支持你的选择。'; $('a20').focus();
+      } else {
+        need(['a20', 'b20', 'a60', 'b60', 'a120', 'b120', 'low', 'equal', 'high', 'difference', 'plan-reason', 'zero']);
+        [20, 60, 120].forEach(n => { requireOK(near(number(val('a' + n)), 0.5 * n) && near(number(val('b' + n)), n <= 40 ? 0.7 * n : 28 + 0.3 * (n - 40)), '代入费用核对未通过：请区分乙店的两档。'); });
+        requireOK(expr(val('difference'), [-0.2, 16], 'n'), '差式应是乙减甲；用你的费用式相减。');
+        requireOK(val('low') === 'a' && val('equal') === 'same' && val('high') === 'b', '检查三段选择是否与费用差的方向一致。');
+        requireOK(val('plan-reason') === 'rate', '代入能帮助检验；推广到所有页数还要说明单价或差式的依据。');
+        requireOK(near(number(val('zero')), 0), '题设不印不收费，别漏掉这个边界。');
+        $('plan-status').textContent = '完成：0 页均为 0 元；1 到 79 页甲省；80 页一样；81 页及以上乙省。前 40 页乙每页贵 0.2 元；超过后差为 0.2(80−n)，分界两侧分别为正、负，支持三段结论。';
+        $('plan-check').hidden = true;
+      }
+    } catch (error) { $('plan-status').textContent = error.message; }
+  });
+  reset(); resetPlan();
 })();
 </script>
 </body></html>

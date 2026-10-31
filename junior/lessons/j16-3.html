@@ -19,8 +19,22 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+
+  .pattern-lab input, .pattern-lab select, .pattern-lab textarea { max-width:100%; box-sizing:border-box; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:6px; padding:6px; }
+  .pattern-lab textarea { display:block; width:100%; min-height:90px; margin:6px 0; }
+  .pattern-controls { display:flex; flex-wrap:wrap; gap:10px; align-items:end; margin:12px 0; }
+  .pattern-controls label { display:grid; gap:4px; }
+  .pattern-controls input { width:110px; }
+  .pattern-calendar { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:3px; max-width:430px; margin:10px 0; }
+  .pattern-calendar > * { text-align:center; padding:7px 0; min-width:0; font:inherit; }
+  .pattern-calendar button { color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:5px; cursor:pointer; }
+  .pattern-calendar button:disabled { opacity:.45; cursor:default; }
+  .pattern-calendar button.picked { outline:2px solid var(--a); outline-offset:-2px; font-weight:700; }
+  .pattern-lab table { width:100%; border-collapse:collapse; font-size:15px; margin:10px 0; }
+  .pattern-lab th, .pattern-lab td { border:1px solid var(--line); padding:6px 3px; text-align:center; overflow-wrap:anywhere; }
+  .pattern-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j16-3" data-standard="v2">
 <div class="wrap">
@@ -261,6 +275,70 @@
     <div class="result" id="out-dsq" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-dsq" type="button">重置</button></div>
   </div>
+
+  <h3>④ 章末探究：月历中的数字关系</h3>
+  <div class="card pattern-lab" id="calendar-lab">
+    <p>自选月份和一个完整局部块，先计算、记录，再寻找不随位置改变的关系。本活动只研究下列两种形状；可以换形状另做一轮。</p>
+    <p class="small" id="pattern-number-help">数值输入支持整数、小数或整数分数（分母为正整数）。首尾、分数线两侧可留空格，数字内部不能加空格；整数部分、分子和分母最多 8 位，小数最多 8 位；不输入算式、指数或单位。也支持全角数字和负号“−”。</p>
+    <div class="pattern-controls">
+      <label>年份（1900—2100）<input id="cal-year" value="2028" inputmode="numeric" aria-describedby="pattern-number-help"></label>
+      <label>月份（1—12）<input id="cal-month" value="2" inputmode="numeric" aria-describedby="pattern-number-help"></label>
+      <button class="btn ghost" id="cal-load" type="button">生成月历</button>
+      <label>形状<select id="cal-shape"><option value="block">相邻两行两列</option><option value="row">同一周横排三个</option></select></label>
+    </div>
+    <p class="small">周一为一周的第一列。方块点左上日期；横排点中间日期。淡色日期不能作锚点：所选形状必须同属本月，横排不能跨周，方块不能从周日绕到下一行。</p>
+    <p id="cal-caption" aria-live="polite"></p>
+    <div id="cal-grid" class="pattern-calendar" role="group" aria-label="选择局部块的锚点日期"></div>
+    <p id="cal-selected" aria-live="polite">请点选一个可用的日期。</p>
+    <form id="cal-sample" novalidate>
+      <label for="cal-value">填入所选关系的计算结果</label>
+      <div class="pattern-controls"><input id="cal-value" aria-describedby="pattern-number-help cal-selected" inputmode="text" autocomplete="off"><button class="btn" type="submit">核对并记入表</button></div>
+    </form>
+    <p id="cal-feedback" role="status"></p>
+    <table><caption>本轮已核对的样本</caption><thead><tr><th scope="col">锚点</th><th scope="col">局部日期</th><th scope="col">结果</th></tr></thead><tbody id="cal-rows"></tbody></table>
+    <form id="cal-conjecture" novalidate>
+      <label for="cal-guess">至少记录两个不同位置后，写你的猜想</label><textarea id="cal-guess" maxlength="1200"></textarea>
+      <label for="cal-reason">用一个字母表示锚点，写出其余日期并展开说明；同时写明块的边界条件</label><textarea id="cal-reason" maxlength="1800"></textarea>
+      <button class="btn" type="submit">保存本轮文字并打开自查</button>
+    </form>
+    <p id="cal-proof-feedback" role="status"></p>
+    <details class="more" id="cal-proof" hidden><summary>对照一般式，自查自己的说明</summary>
+      <p id="cal-proof-block">把方块左上日期记为 \(n\)，四个数依次为 \(n,n+1,n+7,n+8\)。本轮算的是左上乘右下减右上乘左下：\(n(n+8)-(n+1)(n+7)=n^2+8n-(n^2+8n+7)=-7\)。</p>
+      <p id="cal-proof-row" hidden>横排把中间日期记为 \(n\)，另外两个为 \(n-1,n+1\)。两端的积减中间数的平方：\((n-1)(n+1)-n^2=n^2-1-n^2=-1\)，用到了平方差公式。</p>
+      <p>逐项自查：① 字母代表哪个日期？② 相邻列差 1、相邻行差 7 的式子写对了吗？③ 展开、减括号和结论一致吗？④ 三个日期在同一周，或方块两列没有跨周，且所有日期都在本月吗？一般式说明所有满足条件的块；两次计算只提供猜想线索。若自行换成别的形状，需重新列式，不能直接套这里的结论。</p>
+    </details>
+    <button class="btn ghost" type="button" id="cal-reset">重置月历探究</button>
+  </div>
+  <h3>⑤ 章末探究：和固定，积怎样变？</h3>
+  <div class="card pattern-lab" id="sum-lab">
+    <p>自选一个固定的和 \(S\)，再多次分配成两数 \(a,b\)。记录两数与乘积，提出猜想，再用本节公式说明。可以试负数、零和两数相等的情形。</p>
+    <p class="small" id="sum-range">本表为方便核对，只收 −20 到 20 之间的整数或半整数（如 2.5、−1/2）；和与两数都在此范围。一般说明不受这些取样步长限制。改变和会开始新表；输入格式同上。</p>
+    <form id="sum-sample" novalidate>
+      <div class="pattern-controls">
+        <label>固定和 S<input id="sum-total" value="12" aria-describedby="sum-range pattern-number-help" inputmode="text"></label>
+        <label>自选第一个数 a<input id="sum-a" value="2" aria-describedby="sum-range pattern-number-help" inputmode="text"></label>
+        <label>填写第二个数 b<input id="sum-b" aria-describedby="sum-range pattern-number-help" inputmode="text" autocomplete="off"></label>
+        <label>填写两数的积<input id="sum-product" aria-describedby="pattern-number-help" inputmode="text" autocomplete="off"></label>
+        <button class="btn" type="submit">核对并记入表</button>
+      </div>
+    </form>
+    <p id="sum-feedback" role="status"></p>
+    <table><caption id="sum-caption">固定和的分配表（尚无样本）</caption><thead><tr><th scope="col">第一个数</th><th scope="col">第二个数</th><th scope="col">积</th></tr></thead><tbody id="sum-rows"></tbody></table>
+    <form id="sum-conjecture" novalidate>
+      <label for="sum-guess">同一和至少记录三种分配后，写你的猜想：哪种分配的积较大？相等与不相等时怎样？</label><textarea id="sum-guess" maxlength="1200"></textarea>
+      <label for="sum-reason">用字母写出一般说明：比较任意分配和你猜想的那种分配，理由是什么？</label><textarea id="sum-reason" maxlength="1800"></textarea>
+      <button class="btn" type="submit">保存本轮文字并打开自查</button>
+    </form>
+    <p id="sum-proof-feedback" role="status"></p>
+    <details class="more" id="sum-proof" hidden><summary>用平方差与平方非负，自查一般说明</summary>
+      <p>设两数的和为 \(S\)，令 \(m=S/2\)。任何这样的两数都能写成 \(m+t,m-t\)（例如令 \(t=a-m\)，则 \(b=S-a=m-t\)）。按平方差公式：\((m+t)(m-t)=m^2-t^2\)。</p>
+      <p>任意数的平方 \(t^2\ge0\)，所以积不大于 \(m^2\)；当且仅当 \(t=0\)，也就是两数相等时，积等于 \(m^2\)；两数不相等时，\(t^2&gt;0\)，积严格小于 \(m^2\)。这对正、负、零的和都成立，无需除以 \(S\)，也无需把 \(S\) 限成正数。</p>
+      <p>逐项自查：① 两个数的和确为 \(S\) 吗？② 说明了任何分配都能如此表示吗？③ 公式的减号对吗？④ 用了平方非负，且写了等号条件吗？表中有限样本只能启发猜想，不能代替一般说明。若另加“两数必须是整数”等限制，相等分配未必可选，例如和为奇整数时，应另行研究。</p>
+    </details>
+    <button class="btn ghost" type="button" id="sum-reset">重置定和探究</button>
+    <p class="small">两项活动的样本和文字只保留在本页内存，刷新即清除。保存文字仅供你对照准则修改，系统不把自由文字自动判为正确。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -522,6 +600,107 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  function on(id, type, fn) { $(id).addEventListener(type, fn); }
+  // Map only supported numeric glyphs. Never normalize superscripts or Roman numerals.
+  function number(raw) {
+    var s = raw.replace(/[０-９]/g, function (c) { return String(c.charCodeAt(0) - 65296); }).replace(/[−－]/g, "-").replace(/＋/g, "+").replace(/／/g, "/").replace(/．/g, ".").trim();
+    if (s.length > 48) return null;
+    var token = /^[+-]?(?:\d{1,8}(?:\.\d{1,8})?|\.\d{1,8})$/;
+    var parts = s.split("/"), value;
+    if (parts.length === 1 && token.test(s)) value = Number(s);
+    else if (parts.length === 2 && /^[+-]?\d{1,8}$/.test(parts[0].trim()) && /^\+?\d{1,8}$/.test(parts[1].trim())) {
+      var den = Number(parts[1].trim());
+      if (!den) return null;
+      value = Number(parts[0].trim()) / den;
+    } else return null;
+    return Number.isFinite(value) && Math.abs(value) <= 1000000 ? value : null;
+  }
+  function feedback(id, message, state) { $(id).textContent = message; if (state) $(id).dataset.state = state; else delete $(id).dataset.state; }
+  function closeProof(prefix) { $(prefix + "-proof").hidden = true; $(prefix + "-proof").open = false; feedback(prefix + "-proof-feedback", ""); }
+  function textChanged(prefix) { closeProof(prefix); }
+  function addRow(id, values) { var tr = document.createElement("tr"); values.forEach(function (v) { var td = document.createElement("td"); td.textContent = v; tr.appendChild(td); }); $(id).appendChild(tr); }
+  var calendar = { year: 2028, month: 2, days: 29, first: 1, anchor: null, rows: new Set() };
+  function block(n) {
+    var col = (calendar.first + n - 1) % 7;
+    if ($("cal-shape").value === "block") return col < 6 && n + 8 <= calendar.days ? [n, n + 1, n + 7, n + 8] : null;
+    return col > 0 && col < 6 && n > 1 && n < calendar.days ? [n - 1, n, n + 1] : null;
+  }
+  function clearCalendar() { calendar.rows.clear(); $("cal-rows").textContent = ""; $("cal-guess").value = ""; $("cal-reason").value = ""; closeProof("cal"); }
+  function choose(n) {
+    calendar.anchor = n; $("cal-value").value = ""; feedback("cal-feedback", "");
+    var a = block(n);
+    $("cal-selected").textContent = a.length === 4 ? "所选四个日期：" + a.join("、") + "。计算：左上 × 右下 − 右上 × 左下。" : "所选横排日期：" + a.join("、") + "。计算：两端日期的积 − 中间日期的平方。";
+    Array.from($("cal-grid").querySelectorAll("button")).forEach(function (b) { b.classList.toggle("picked", a.indexOf(Number(b.textContent)) !== -1); b.setAttribute("aria-pressed", Number(b.textContent) === n ? "true" : "false"); });
+  }
+  function drawCalendar() {
+    calendar.anchor = null; $("cal-grid").textContent = ""; $("cal-value").value = ""; feedback("cal-feedback", "");
+    $("cal-proof-block").hidden = $("cal-shape").value !== "block"; $("cal-proof-row").hidden = $("cal-shape").value !== "row";
+    $("cal-caption").textContent = calendar.year + " 年 " + calendar.month + " 月，共 " + calendar.days + " 天。";
+    $("cal-selected").textContent = "请点选一个可用的日期。";
+    ["一", "二", "三", "四", "五", "六", "日"].forEach(function (d) { var h = document.createElement("span"); h.textContent = d; $("cal-grid").appendChild(h); });
+    for (var i = 0; i < calendar.first; i++) $("cal-grid").appendChild(document.createElement("span"));
+    for (var n = 1; n <= calendar.days; n++) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = n; b.disabled = !block(n); b.setAttribute("aria-pressed", "false");
+      b.setAttribute("aria-label", n + " 日" + (b.disabled ? "，不能作此形状锚点" : "，选作锚点"));
+      b.addEventListener("click", function (e) { choose(Number(e.currentTarget.textContent)); }); $("cal-grid").appendChild(b);
+    }
+  }
+  function loadCalendar() {
+    var y = number($("cal-year").value), m = number($("cal-month").value);
+    clearCalendar();
+    if (!Number.isInteger(y) || y < 1900 || y > 2100 || !Number.isInteger(m) || m < 1 || m > 12) {
+      calendar.anchor = null; $("cal-grid").textContent = ""; $("cal-caption").textContent = "月份参数无效，尚未生成月历。"; $("cal-selected").textContent = "请先输入有效年月。";
+      feedback("cal-feedback", "年份须为 1900—2100 的整数，月份须为 1—12 的整数。", "retry"); return;
+    }
+    calendar.year = y; calendar.month = m; calendar.days = new Date(Date.UTC(y, m, 0)).getUTCDate(); calendar.first = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7;
+    drawCalendar();
+  }
+  on("cal-load", "click", loadCalendar);
+  ["cal-year", "cal-month"].forEach(function (id) { on(id, "input", function () { calendar.anchor = null; clearCalendar(); $("cal-grid").textContent = ""; $("cal-caption").textContent = "参数已改变，请重新生成月历。"; $("cal-selected").textContent = "请先生成月历。"; feedback("cal-feedback", ""); }); });
+  on("cal-shape", "change", function () { clearCalendar(); loadCalendar(); });
+  on("cal-sample", "submit", function (e) {
+    e.preventDefault(); var n = calendar.anchor, value = number($("cal-value").value);
+    if (n === null) { feedback("cal-feedback", "先生成月历并点选有效锚点。", "retry"); return; }
+    var a = block(n), expected = a.length === 4 ? a[0] * a[3] - a[1] * a[2] : a[0] * a[2] - a[1] * a[1];
+    if (value === null || value !== expected) { feedback("cal-feedback", "再核对两个乘积与减法顺序；输入一个结果数值，不能输入算式。", "retry"); return; }
+    if (calendar.rows.has(n)) { feedback("cal-feedback", "这个位置已经记录，换一个位置试试。", "retry"); return; }
+    calendar.rows.add(n); addRow("cal-rows", [n, a.join("、"), value]); closeProof("cal");
+    feedback("cal-feedback", "本次计算核对一致，已记录 " + calendar.rows.size + " 个位置。样本还不是一般证明。", "ok");
+  });
+  var sums = { total: null, rows: new Set() };
+  function clearSums() { sums.total = null; sums.rows.clear(); $("sum-rows").textContent = ""; $("sum-caption").textContent = "固定和的分配表（尚无样本）"; $("sum-guess").value = ""; $("sum-reason").value = ""; closeProof("sum"); }
+  function half(v) { return v !== null && Math.abs(v) <= 20 && Number.isInteger(v * 2); }
+  on("sum-sample", "submit", function (e) {
+    e.preventDefault(); var s = number($("sum-total").value), a = number($("sum-a").value), b = number($("sum-b").value), p = number($("sum-product").value);
+    if (!half(s) || !half(a) || !half(b)) { feedback("sum-feedback", "和与两个数都须为 −20 到 20 的整数或半整数；分母不能为 0。", "retry"); return; }
+    if (a + b !== s || p === null || a * b !== p) { feedback("sum-feedback", "再检查：两数相加是否等于固定和？相乘是否等于填写的积？", "retry"); return; }
+    if (sums.total !== null && sums.total !== s) clearSums();
+    if (sums.rows.has(a)) { feedback("sum-feedback", "这种分配已记录，请改变第一个数。", "retry"); return; }
+    sums.total = s; sums.rows.add(a); $("sum-caption").textContent = "固定和 S = " + s + " 的分配表"; addRow("sum-rows", [a, b, p]); closeProof("sum");
+    feedback("sum-feedback", "和与积均核对一致，已记录 " + sums.rows.size + " 种分配。尝试接近、远离以及相等的两数。", "ok");
+  });
+  on("sum-total", "input", function () { clearSums(); $("sum-b").value = ""; $("sum-product").value = ""; feedback("sum-feedback", "和已改变，开始一张新表。"); });
+  on("sum-a", "input", function () { $("sum-b").value = ""; $("sum-product").value = ""; feedback("sum-feedback", ""); });
+  ["sum-b", "sum-product"].forEach(function (id) { on(id, "input", function () { feedback("sum-feedback", ""); }); });
+  on("cal-value", "input", function () { feedback("cal-feedback", ""); });
+  ["cal", "sum"].forEach(function (prefix) {
+    ["guess", "reason"].forEach(function (part) { on(prefix + "-" + part, "input", function () { textChanged(prefix); }); });
+    on(prefix + "-conjecture", "submit", function (e) {
+      e.preventDefault(); var count = prefix === "cal" ? calendar.rows.size : sums.rows.size, need = prefix === "cal" ? 2 : 3;
+      if (count < need || !$(prefix + "-guess").value.trim() || !$(prefix + "-reason").value.trim()) { feedback(prefix + "-proof-feedback", "先完成至少 " + need + " 个不同样本，再写下猜想和自己的字母说明。", "retry"); return; }
+      feedback(prefix + "-proof-feedback", "本轮文字已保存在本页，尚未判定正确；请展开准则逐项对照，发现不一致就修改。", "recorded"); $(prefix + "-proof").hidden = false;
+    });
+  });
+  on("cal-reset", "click", function () { $("cal-year").value = "2028"; $("cal-month").value = "2"; $("cal-shape").value = "block"; loadCalendar(); });
+  on("sum-reset", "click", function () { $("sum-sample").reset(); clearSums(); feedback("sum-feedback", ""); });
+  loadCalendar();
 })();
 </script>
 </body></html>

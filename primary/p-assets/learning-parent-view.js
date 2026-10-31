@@ -45,8 +45,8 @@
       if (number && number[1] === "p") kind = "先想一想";
       var peers = content.items.filter(function (item) { return item.owner === q.owner && item.questionType === q.questionType; });
       var position = peers.findIndex(function (item) { return item.base === q.base; }) + 1;
-      var question = number ? kind + "第 " + Number(number[2]) + " 题" : "其他" + kind + "第 " + (position || 1) + " 题";
-      return title + (step ? " · 第 " + Number(step[1]) + " 步" : "") + " · " + question;
+      var question = kind + "第 " + (number ? Number(number[2]) : position || 1) + " 题";
+      return title + (step ? " · 第 " + Number(step[1]) + " 步" : "") + " · " + question + (row.prompt ? " · " + row.prompt : "");
     }
     var key = stage === "primary" ? "peiyu.ps.learning.v1" : "peiyu.jh.learning.v1";
     var pref = stage === "primary" ? "peiyu.ps.wrongbook.v1" : "peiyu.jh.wrongbook.v1";
@@ -104,17 +104,18 @@
       if (!open.length) add("p", "暂时没有还没改对的题。");
       open.forEach(function (q) {
         var due = q.dueAt ? new Date(q.dueAt).toLocaleDateString("zh-CN") : "暂无";
-        add("p", questionLabel(q) + " · 错 " + q.wrongCount + " 次 · 改正 " + q.fixes + "/2 · 复习日期 " + due + (q.needsReview ? " · 需要回看讲解" : "") + (hidden[q.identity] ? " · 孩子已收起" : ""));
+        add("p", questionLabel(q) + " · 错 " + q.wrongCount + " 次 · " + (q.selfCheck ? "自评不对，待核对" : "改正 " + q.fixes + "/2") + " · 复习日期 " + due + (q.needsReview ? " · 需要回看讲解" : "") + (hidden[q.identity] ? " · 孩子已收起" : ""));
       });
       add("h2", "反复出错与证据来源");
       var repeated = model.questions.filter(function (q) { return q.wrongCount >= 2; });
       if (!repeated.length) add("p", "暂时没有反复出错的记录。");
       function provenance(q) {
         var answers = read.answers(q.identity), unclassified = answers.filter(function (a) {
-          return a.correct === true && ["independent", "retry", "repeat"].indexOf(a.attemptKind) < 0;
+          return !a.selfCheck && a.correct === true && ["independent", "retry", "repeat"].indexOf(a.attemptKind) < 0;
         }).length;
-        return "独立做对 " + answers.filter(function (a) { return a.correct === true && a.attemptKind === "independent"; }).length +
-          " · 看提示或已见过题后做对 " + answers.filter(function (a) { return a.correct === true && (a.attemptKind === "retry" || a.attemptKind === "repeat"); }).length +
+        return "独立做对 " + answers.filter(function (a) { return !a.selfCheck && a.correct === true && a.attemptKind === "independent"; }).length +
+          " · 看提示或已见过题后做对 " + answers.filter(function (a) { return !a.selfCheck && a.correct === true && (a.attemptKind === "retry" || a.attemptKind === "repeat"); }).length +
+          (answers.some(function (a) { return a.selfCheck; }) ? " · 看答案后自评对 " + answers.filter(function (a) { return a.selfCheck && a.correct === true; }).length + "（不计掌握证据）" : "") +
           " · 变式做对 " + q.strongEvidence.filter(function (e) { return e.correct && e.strength === "family-S1"; }).length +
           (unclassified ? " · 来源不明或旧记录做对 " + unclassified + "（不计入上述三项）" : "");
       }

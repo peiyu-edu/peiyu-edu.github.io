@@ -46,7 +46,10 @@
       if (full && full.diagnostic && full.diagnostic.id === item.questionId) return "原诊断题";
       return item.questionId === "unknown-diagnostic" ? "诊断题（题目不详）" : "历史诊断题（内容已更新）";
     }
-    if (isUnitTest(item)) return "单元测评";
+    if (isUnitTest(item)) {
+      var match = /-t(\d+)$/.exec(item.questionId);
+      return "单元测评" + (match ? " 第 " + Number(match[1]) + " 题" : "");
+    }
     return { predict: "课内预测题", exam: "课内练习题", card: "方法卡", lab: "实验", cue: "课内问题" }[item.questionType] || "课内题目";
   }
   function lessonHref(item) {
@@ -63,7 +66,7 @@
   function math(node) { if (window.PeiyuKnowledge) window.PeiyuKnowledge.renderMath(node); }
   function eventTitle(event) {
     var p = point(event.pointId), s = lesson(isUnitTest(event) ? event.sectionId.replace(/-test$/, "") : event.sectionId);
-    return p ? p.title : s ? s.title : "学习记录";
+    return isUnitTest(event) && s ? (s.unitTitle || s.title.replace(/\s*·\s*单元首页$/, "")) : p ? p.title : s ? s.title : "学习记录";
   }
   function eventHref(event) {
     if (isUnitTest(event)) {
@@ -111,6 +114,9 @@
   function reviews(items, due) {
     if (!items.length) return '<p class="lp-note">' + (due ? '目前没有到期的复习安排。可以从课程或练习开始，记录会逐步积累。' : '有作答记录后，这里会列出之后的复习安排。') + '</p>';
     return '<ul class="lr-review-list">' + items.map(function (item) {
+      if (isUnitTest(item)) {
+        return '<li><h3><a href="' + esc(eventHref(item)) + '">' + esc(eventTitle(item)) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><a class="lp-button secondary" href="' + esc(eventHref(item)) + '">回到这道测评题</a></li>';
+      }
       var p = point(item.pointId);
       if (p) {
         return '<li><h3><a href="' + esc(knowledgeHref(p.id, item)) + '">' + esc(p.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(practiceHref(p.id, item, true)) + '">回看并练习</a></div></li>';
@@ -125,15 +131,16 @@
   function render() {
     var snapshot = state.snapshot(), totals = snapshot.totals || {}, events = snapshot.events || [];
     var answerEvents = events.filter(function (event) { return event.kind === "answer"; });
-    var independent = answerEvents.filter(function (event) { return event.attemptKind === "independent" && !isLegacy(event); });
-    var retries = answerEvents.filter(function (event) { return event.attemptKind === "retry" && !isLegacy(event); });
-    var other = answerEvents.filter(function (event) { return !isLegacy(event) && event.attemptKind !== "independent" && event.attemptKind !== "retry"; });
+    var selfChecks = answerEvents.filter(function (event) { return event.selfCheck && !isLegacy(event); });
+    var independent = answerEvents.filter(function (event) { return !event.selfCheck && event.attemptKind === "independent" && !isLegacy(event); });
+    var retries = answerEvents.filter(function (event) { return !event.selfCheck && event.attemptKind === "retry" && !isLegacy(event); });
+    var other = answerEvents.filter(function (event) { return !event.selfCheck && !isLegacy(event) && event.attemptKind !== "independent" && event.attemptKind !== "retry"; });
     var legacy = answerEvents.filter(isLegacy);
     var views = events.filter(function (event) { return event.kind === "view"; });
     var ratings = events.filter(function (event) { return event.kind === "self-rating"; });
     var visits = events.filter(function (event) { return event.kind === "review"; });
     var noKnowledge = index && index.knowledge === false;
-    var review = (snapshot.review || []).filter(function (item) { return point(item.pointId) || (noKnowledge && lesson(item.sectionId)); }).sort(function (a, b) { return number(a.dueAt || a.reviewDueAt) - number(b.dueAt || b.reviewDueAt); });
+    var review = (snapshot.review || []).filter(function (item) { return isUnitTest(item) ? !!lesson(item.sectionId.replace(/-test$/, "")) : point(item.pointId) || (noKnowledge && lesson(item.sectionId)); }).sort(function (a, b) { return number(a.dueAt || a.reviewDueAt) - number(b.dueAt || b.reviewDueAt); });
     var due = review.filter(function (item) { return item.due === true || number(item.dueAt || item.reviewDueAt) <= Date.now(); });
     var future = review.filter(function (item) { return due.indexOf(item) < 0; });
     var resume = snapshot.resume && lesson(snapshot.resume.sectionId) ? snapshot.resume : null;
@@ -146,6 +153,7 @@
       '<dl class="lr-summary"><div><dt>查看次数</dt><dd>' + number(totals.views) + '</dd></div><div><dt>首次独立作答</dt><dd>' + number(totals.independentAnswers) + '</dd></div><div><dt>反馈后重做</dt><dd>' + number(totals.retries) + '</dd></div><div><dt>到期复习</dt><dd>' + due.length + '</dd></div></dl><div class="lr-layout"><div><section class="lr-section"><h2>现在可以复习</h2><p class="lp-note">安排依据具体题目的记录，不把做对一次当作掌握。</p>' + reviews(due, true) + '</section><section class="lr-section"><h2>之后再回看</h2>' + reviews(future, false) + '</section><section class="lr-section"><h2>每一种记录分别看</h2><p class="lp-note">总次数来自保留的证据汇总；下方列出浏览器中保存的近期明细。</p>' +
       group("首次独立作答", totals.independentAnswers, '首次提交前未记录到该题的答案反馈。累计答对 ' + number(totals.independentCorrect) + ' 次；这不是知识点掌握率。', renderEvents(independent, "answer"), true) +
       group("反馈后重做", totals.retries, "已经看过同一道题的反馈。订正成功会保留，但不增加首次独立作答次数。", renderEvents(retries, "answer")) +
+      group("看答案后自评", totals.selfChecks, "对照答案后的自评单独记录，不作为首次独立作答或强掌握证据。", renderEvents(selfChecks, "answer")) +
       group("其他作答", totals.otherAnswers, "同题再次作答、独立情况暂不能确认的作答单独保存。", renderEvents(other, "answer")) +
       group("查看", totals.views, "进入过内容页面，不表示已经完成学习。", renderEvents(views, "view")) +
       group("自评", totals.selfRatings, "记录当时的感受，与题目表现并列，不替代作答证据。", renderEvents(ratings, "rating")) +

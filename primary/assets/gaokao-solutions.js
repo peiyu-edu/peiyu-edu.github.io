@@ -548,7 +548,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     solution.hidden = true;
     solution.appendChild(render(problem));
     var controls = element("div", "gs-controls");
-    var reveal = element("button", "btn", choices.length ? "提交答案" : "做完了，看解析");
+    var reveal = element("button", "btn", choices.length ? "提交并查看解析" : "查看答案与解析");
     reveal.type = "button";
     var retry = element("button", "btn ghost", "重新作答");
     retry.type = "button";

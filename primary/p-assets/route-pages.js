@@ -13,7 +13,7 @@
       node('p', '这些公共教具用于课程中的观察和操作。打开已上线课程即可体验。');
       const tools = await (await fetch('data/manip-index.json')).json();
       for (const item of tools) {
-        const section = node('section', ''); node('h2', item.name, section);
+        const section = node('section', ''); node('h2', item.title || '数学教具', section);
         if (item.lessons.length) item.lessons.forEach(lesson => { const p = node('p', '', section); link(p, lesson.title, `lessons/${lesson.id}.html`); });
         else node('p', '暂无已上线课程使用。', section);
       }

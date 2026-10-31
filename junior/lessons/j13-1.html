@@ -20,7 +20,7 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j13-1" data-standard="v2">
 <div class="wrap">
@@ -185,7 +185,7 @@
     <svg class="micro-fig" id="ex3-fig" viewBox="0 0 380 190" role="img" aria-label="三角形中连了 AD 和 BE"></svg>
     <p><b>① 读懂题意：</b>数的是所有三角形，大的、小的都算；三点在一条直线上的不算。</p>
     <details class="more"><summary>提示：按「含不含 \(BE\)」分两类</summary><p>不含 \(BE\) 的三角形就是例题前面那种「从 \(A\) 往 \(BC\) 连线」的图；含 \(BE\) 的，看 \(BE\) 和哪些线段围成三角形。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>基础示范（可收起）</summary>
       <div class="think-steps">
         <div class="think-step"><span class="ts-tag ca">② 想办法：</span>先分类再列举，每类按字母顺序写。</div>
         <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>不含 \(BE\)：\(\triangle ABD\)、\(\triangle ADC\)、\(\triangle ABC\)，3 个。含 \(BE\)：\(\triangle ABE\)、\(\triangle BED\)，2 个。共 \(5\) 个。</div>
@@ -249,6 +249,28 @@
     <div class="result" id="out-goal" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="next-goal" type="button">换一个目标</button><button class="btn ghost" id="reset-goal" type="button">重置</button></div>
   </div>
+  <div class="card" id="stick-lab">
+    <h3>③ 小棒工坊：自己搭，再有序地数</h3>
+    <p>取一样长的单位棒，分别试用 <b>3、5、7 根</b>，也可试 9、12 根。每轮用完所选根数，自己设计方案，再数出所有等边三角形。可在纸上照着点名复现，或用实物摆好后录入。</p>
+    <p class="small">本工坊限定为下方 4 行、每行 4 点的三角网格，只能沿相邻两点放一根棒：棒不折、不重叠，共边只用一根。只数三边沿网格直线、每边由 1～3 根棒接成的等边三角形；三边必须闭合、顶点不共线，大的也算，同一组三个顶点只算一次。这里只核对你的方案，不求所有摆法的最大值。</p>
+    <div class="ctrl"><label>本轮棒数 <select id="stick-stock"><option>3</option><option>5</option><option>7</option><option>9</option><option>12</option></select></label><button class="btn ghost" id="stick-reset" type="button">清空本轮</button></div>
+    <p class="small">点两点间的短线放棒，再点撤棒；键盘 Tab 选短线，空格或回车操作。换棒数会清空本轮。图中淡线只是可放位置。</p>
+    <svg class="fig" id="stick-grid" viewBox="0 0 400 260" role="group" aria-label="空白三角网格，逐条放撤单位小棒"></svg>
+    <p id="stick-used" aria-live="polite"></p>
+    <details class="more"><summary>纸上方案录入 / 查看当前棒清单</summary>
+      <label for="stick-plan-entry">每根写两端点名，用逗号或换行分开，例如 A1-A2。只接受相邻点，不接受重复棒。</label>
+      <textarea id="stick-plan-entry" rows="3" style="width:100%;box-sizing:border-box" aria-label="待录入的小棒清单"></textarea>
+      <button class="btn ghost" id="stick-import" type="button">用清单搭建</button>
+      <p class="small" id="stick-plan" style="overflow-wrap:anywhere"></p>
+    </details>
+    <label for="stick-count">我数到的等边三角形总数（0～99 的整数）</label>
+    <input id="stick-count" type="text" inputmode="numeric" autocomplete="off" style="max-width:100%;box-sizing:border-box" aria-describedby="stick-feedback">
+    <p><label for="stick-explain">我的计数说明：按什么顺序列？哪些共用一根棒？怎样避免漏掉大的、重复算同一个？</label></p>
+    <textarea id="stick-explain" rows="3" maxlength="800" style="width:100%;box-sizing:border-box"></textarea>
+    <div class="ctrl"><button class="btn" id="stick-check" type="button">核对我的方案与数量</button></div>
+    <div class="result" id="stick-feedback" aria-live="polite">先放棒并写下自己的计数。说明只留在本页，系统不会判定你已做过实物操作。</div>
+    <details class="more"><summary>本轮搭建痕迹（刷新后清空）</summary><p id="stick-trace" class="small" style="overflow-wrap:anywhere">还没有放棒。</p></details>
+  </div>
 </section>
 
 <section class="step" data-title="练一练">
@@ -284,8 +306,35 @@
     <div class="reveal"><p><b>C</b>。不含 \(BE\)：\(\triangle ADE\)、\(\triangle ABC\)；含 \(BE\)：\(\triangle ABE\)、\(\triangle BDE\)、\(\triangle BEC\)。共 5 个。答 3 个是只数了三块小的 \(\triangle ADE\)、\(\triangle BDE\)、\(\triangle BEC\)；答 4 个多半漏了大的 \(\triangle ABC\) 或 \(\triangle ABE\)。\(D\)、\(E\)、\(C\) 之间没有连 \(DC\)，不算。</p></div>
   </div>
   <h3>挑战</h3>
-  <div class="card predict" data-id="p6" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjYuIOWcqCBcXChcXHRyaWFuZ2xlIEFCQ1xcKSDnmoTovrkgXFwoQkNcXCkg5LiK77yM6ZmkIFxcKEJcXCnjgIFcXChDXFwpIOWkluWPpuWPliBcXCg2XFwpIOS4queCue+8jOaKiuWug+S7rOmDveWSjCBcXChBXFwpIOi/nui1t+adpeOAguWbvuS4reS4gOWFseacieWHoOS4quS4ieinkuW9ou+8nzwvcD5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMe+8muavj+S4quS4ieinkuW9oumDveS7pSBcXChBXFwpIOS4uumhtueCuTwvc3VtbWFyeT48cD7lj6bkuKTkuKrpobbngrnlnKggXFwoQkNcXCkg5LiK44CCXFwoQkNcXCkg5LiK5LiA5p2h57q/5q615a+55bqU5LiA5Liq5LiJ6KeS5b2i44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMu+8muaMieW3puerr+eCueaVsOe6v+autTwvc3VtbWFyeT48cD5cXChCQ1xcKSDkuIrkuIDlhbEgXFwoOFxcKSDkuKrngrnjgILlt6bnq6/ngrnmmK/mnIDlt6bovrnnmoTngrnml7bvvIzlj7Pnq6/ngrnmnInlh6DkuKrpgInmi6nvvJ/kuIvkuIDkuKrngrnlkaLvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+NyDkuKo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+MjEg5LiqPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPjI4IOS4qjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj4zNiDkuKo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgIJcXChCQ1xcKSDkuIrlhbEgXFwoOFxcKSDkuKrngrnvvIzmjInlt6bnq6/ngrnmlbDnur/mrrXvvJpcXCg3KzYrNSs0KzMrMisxPTI4XFwpIOadoe+8jOavj+adoeWvueW6lOS4gOS4quS4ieinkuW9ouOAgkEg5Y+q5pWw5LqG55u46YK75Lik54K557uE5oiQ55qEIDcg5Liq5bCP5LiJ6KeS5b2i77ybQiDmmK8gXFwoNis1K1xcZG90cysxXFwp77yM5oqK54K55pWw5b2T5oiQ5LqGIFxcKDdcXCnvvJtEIOaYryBcXCg4KzcrXFxkb3RzKzFcXCnvvIzlpJrnrpfkuobkuIDkuKrngrnjgII8L3A+PC9kaXY+XG4gICJ9">
+  <div class="card predict" data-id="p6" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjYuIOWcqCBcXChcXHRyaWFuZ2xlIEFCQ1xcKSDnmoTovrkgXFwoQkNcXCkg5LiK77yM6ZmkIFxcKEJcXCnjgIFcXChDXFwpIOWkluWPpuWPliBcXCg2XFwpIOS4queCue+8jOaKiuWug+S7rOmDveWSjCBcXChBXFwpIOi/nui1t+adpeOAguWbvuS4reS4gOWFseacieWHoOS4quS4ieinkuW9ou+8nzwvcD5cbiAgICA8c3ZnIGNsYXNzPVwibWljcm8tZmlnXCIgaWQ9XCJwNi1maWdcIiB2aWV3Qm94PVwiMCAwIDM4MCAyMzBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuS4ieinkuW9oiBBQkPvvIxCQyDkuIrlj6bmnInlha3kuKrngrnvvIxBIOS4jui/meS6m+eCueWIhuWIq+ebuOi/nlwiPlxuICAgICAgPGcgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJ2YXIoLS1mZylcIiBzdHJva2Utd2lkdGg9XCIyLjVcIiBzdHJva2UtbGluZWNhcD1cInJvdW5kXCI+XG4gICAgICAgIDxsaW5lIHgxPVwiNDBcIiB5MT1cIjE3OFwiIHgyPVwiMzM0XCIgeTI9XCIxNzhcIj48L2xpbmU+XG4gICAgICAgIDxsaW5lIHgxPVwiMTc4XCIgeTE9XCI0MlwiIHgyPVwiNDBcIiB5Mj1cIjE3OFwiPjwvbGluZT5cbiAgICAgICAgPGxpbmUgeDE9XCIxNzhcIiB5MT1cIjQyXCIgeDI9XCI4MlwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgICA8bGluZSB4MT1cIjE3OFwiIHkxPVwiNDJcIiB4Mj1cIjEyNFwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgICA8bGluZSB4MT1cIjE3OFwiIHkxPVwiNDJcIiB4Mj1cIjE2NlwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgICA8bGluZSB4MT1cIjE3OFwiIHkxPVwiNDJcIiB4Mj1cIjIwOFwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgICA8bGluZSB4MT1cIjE3OFwiIHkxPVwiNDJcIiB4Mj1cIjI1MFwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgICA8bGluZSB4MT1cIjE3OFwiIHkxPVwiNDJcIiB4Mj1cIjI5MlwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgICA8bGluZSB4MT1cIjE3OFwiIHkxPVwiNDJcIiB4Mj1cIjMzNFwiIHkyPVwiMTc4XCI+PC9saW5lPlxuICAgICAgPC9nPlxuICAgICAgPGcgZmlsbD1cInZhcigtLWZnKVwiPlxuICAgICAgICA8Y2lyY2xlIGN4PVwiMTc4XCIgY3k9XCI0MlwiIHI9XCIzLjVcIj48L2NpcmNsZT5cbiAgICAgICAgPGNpcmNsZSBjeD1cIjQwXCIgY3k9XCIxNzhcIiByPVwiMy41XCI+PC9jaXJjbGU+PGNpcmNsZSBjeD1cIjgyXCIgY3k9XCIxNzhcIiByPVwiMy41XCI+PC9jaXJjbGU+XG4gICAgICAgIDxjaXJjbGUgY3g9XCIxMjRcIiBjeT1cIjE3OFwiIHI9XCIzLjVcIj48L2NpcmNsZT48Y2lyY2xlIGN4PVwiMTY2XCIgY3k9XCIxNzhcIiByPVwiMy41XCI+PC9jaXJjbGU+XG4gICAgICAgIDxjaXJjbGUgY3g9XCIyMDhcIiBjeT1cIjE3OFwiIHI9XCIzLjVcIj48L2NpcmNsZT48Y2lyY2xlIGN4PVwiMjUwXCIgY3k9XCIxNzhcIiByPVwiMy41XCI+PC9jaXJjbGU+XG4gICAgICAgIDxjaXJjbGUgY3g9XCIyOTJcIiBjeT1cIjE3OFwiIHI9XCIzLjVcIj48L2NpcmNsZT48Y2lyY2xlIGN4PVwiMzM0XCIgY3k9XCIxNzhcIiByPVwiMy41XCI+PC9jaXJjbGU+XG4gICAgICA8L2c+XG4gICAgICA8ZyBmaWxsPVwidmFyKC0tZmcpXCIgZm9udC1zaXplPVwiMjBcIiBmb250LXdlaWdodD1cIjYwMFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+XG4gICAgICAgIDx0ZXh0IHg9XCIxNzhcIiB5PVwiMjJcIj5BPC90ZXh0PlxuICAgICAgICA8dGV4dCB4PVwiNDBcIiB5PVwiMjE0XCI+QjwvdGV4dD48dGV4dCB4PVwiODJcIiB5PVwiMjE0XCI+RDwvdGV4dD5cbiAgICAgICAgPHRleHQgeD1cIjEyNFwiIHk9XCIyMTRcIj5FPC90ZXh0Pjx0ZXh0IHg9XCIxNjZcIiB5PVwiMjE0XCI+RjwvdGV4dD5cbiAgICAgICAgPHRleHQgeD1cIjIwOFwiIHk9XCIyMTRcIj5HPC90ZXh0Pjx0ZXh0IHg9XCIyNTBcIiB5PVwiMjE0XCI+SDwvdGV4dD5cbiAgICAgICAgPHRleHQgeD1cIjI5MlwiIHk9XCIyMTRcIj5JPC90ZXh0Pjx0ZXh0IHg9XCIzMzRcIiB5PVwiMjE0XCI+QzwvdGV4dD5cbiAgICAgIDwvZz5cbiAgICA8L3N2Zz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMe+8muavj+S4quS4ieinkuW9oumDveS7pSBcXChBXFwpIOS4uumhtueCuTwvc3VtbWFyeT48cD7lj6bkuKTkuKrpobbngrnlnKggXFwoQkNcXCkg5LiK44CCXFwoQkNcXCkg5LiK5LiA5p2h57q/5q615a+55bqU5LiA5Liq5LiJ6KeS5b2i44CCPC9wPjwvZGV0YWlscz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLogMu+8muaMieW3puerr+eCueaVsOe6v+autTwvc3VtbWFyeT48cD5cXChCQ1xcKSDkuIrkuIDlhbEgXFwoOFxcKSDkuKrngrnjgILlt6bnq6/ngrnmmK/mnIDlt6bovrnnmoTngrnml7bvvIzlj7Pnq6/ngrnmnInlh6DkuKrpgInmi6nvvJ/kuIvkuIDkuKrngrnlkaLvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+NyDkuKo8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+MjEg5LiqPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPjI4IOS4qjwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj4zNiDkuKo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QzwvYj7jgIJcXChCQ1xcKSDkuIrlhbEgXFwoOFxcKSDkuKrngrnvvIzmjInlt6bnq6/ngrnmlbDnur/mrrXvvJpcXCg3KzYrNSs0KzMrMisxPTI4XFwpIOadoe+8jOavj+adoeWvueW6lOS4gOS4quS4ieinkuW9ouOAgkEg5Y+q5pWw5LqG55u46YK75Lik54K557uE5oiQ55qEIDcg5Liq5bCP5LiJ6KeS5b2i77ybQiDmmK8gXFwoNis1K1xcZG90cysxXFwp77yM5oqK54K55pWw5b2T5oiQ5LqGIFxcKDdcXCnvvJtEIOaYryBcXCg4KzcrXFxkb3RzKzFcXCnvvIzlpJrnrpfkuobkuIDkuKrngrnjgII8L3A+PC9kaXY+XG4gICJ9">
     <p>6. 在 \(\triangle ABC\) 的边 \(BC\) 上，除 \(B\)、\(C\) 外另取 \(6\) 个点，把它们都和 \(A\) 连起来。图中一共有几个三角形？</p>
+    <svg class="micro-fig" id="p6-fig" viewBox="0 0 380 230" role="img" aria-label="三角形 ABC，BC 上另有六个点，A 与这些点分别相连">
+      <g fill="none" stroke="var(--fg)" stroke-width="2.5" stroke-linecap="round">
+        <line x1="40" y1="178" x2="334" y2="178"/>
+        <line x1="178" y1="42" x2="40" y2="178"/>
+        <line x1="178" y1="42" x2="82" y2="178"/>
+        <line x1="178" y1="42" x2="124" y2="178"/>
+        <line x1="178" y1="42" x2="166" y2="178"/>
+        <line x1="178" y1="42" x2="208" y2="178"/>
+        <line x1="178" y1="42" x2="250" y2="178"/>
+        <line x1="178" y1="42" x2="292" y2="178"/>
+        <line x1="178" y1="42" x2="334" y2="178"/>
+      </g>
+      <g fill="var(--fg)">
+        <circle cx="178" cy="42" r="3.5"/>
+        <circle cx="40" cy="178" r="3.5"/><circle cx="82" cy="178" r="3.5"/>
+        <circle cx="124" cy="178" r="3.5"/><circle cx="166" cy="178" r="3.5"/>
+        <circle cx="208" cy="178" r="3.5"/><circle cx="250" cy="178" r="3.5"/>
+        <circle cx="292" cy="178" r="3.5"/><circle cx="334" cy="178" r="3.5"/>
+      </g>
+      <g fill="var(--fg)" font-size="20" font-weight="600" text-anchor="middle">
+        <text x="178" y="22">A</text>
+        <text x="40" y="214">B</text><text x="82" y="214">D</text>
+        <text x="124" y="214">E</text><text x="166" y="214">F</text>
+        <text x="208" y="214">G</text><text x="250" y="214">H</text>
+        <text x="292" y="214">I</text><text x="334" y="214">C</text>
+      </g>
+    </svg>
     <details class="more"><summary>提示 1：每个三角形都以 \(A\) 为顶点</summary><p>另两个顶点在 \(BC\) 上。\(BC\) 上一条线段对应一个三角形。</p></details>
     <details class="more"><summary>提示 2：按左端点数线段</summary><p>\(BC\) 上一共 \(8\) 个点。左端点是最左边的点时，右端点有几个选择？下一个点呢？</p></details>
     <div class="opts cols"><button class="opt" data-v="A"><b>A</b>7 个</button><button class="opt" data-v="B"><b>B</b>21 个</button><button class="opt" data-v="C"><b>C</b>28 个</button><button class="opt" data-v="D"><b>D</b>36 个</button></div>
@@ -553,6 +602,93 @@
   resetFree(); resetGoal(); drawAll();
   new MutationObserver(function () { drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script id="stick-builder-script">
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); }, svg = $("stick-grid"), ns = "http://www.w3.org/2000/svg";
+  var points = [], edges = [], placed = new Set(), trace = [], result = null;
+  for (var r = 0; r < 4; r++) for (var c = 0; c < 4; c++) points.push({ name: "ABCD"[r] + (c + 1), c: c, r: r });
+  function key(a, b) { return [a.name, b.name].sort().join("-"); }
+  function distance(a, b) { var x = a.c - b.c, y = a.r - b.r; return x * x + x * y + y * y; }
+  points.forEach(function (a, i) { points.slice(i + 1).forEach(function (b) { if (distance(a, b) === 1) edges.push({ a: a, b: b, key: key(a, b) }); }); });
+  function path(a, b) {
+    var dc = b.c - a.c, dr = b.r - a.r, n = Math.max(Math.abs(dc), Math.abs(dr)), out = [];
+    if (!n || !(dc === 0 || dr === 0 || dc === -dr)) return null;
+    for (var i = 0; i < n; i++) {
+      var p = { c: a.c + i * dc / n, r: a.r + i * dr / n }, q = { c: a.c + (i + 1) * dc / n, r: a.r + (i + 1) * dr / n };
+      p.name = "ABCD"[p.r] + (p.c + 1); q.name = "ABCD"[q.r] + (q.c + 1); out.push(key(p, q));
+    }
+    return out;
+  }
+  function triangles() {
+    var out = [];
+    points.forEach(function (a, i) { points.slice(i + 1).forEach(function (b, j) { points.slice(i + j + 2).forEach(function (c) {
+      var d = distance(a, b);
+      if (!d || d !== distance(a, c) || d !== distance(b, c) || (b.c - a.c) * (c.r - a.r) === (c.c - a.c) * (b.r - a.r)) return;
+      var ab = path(a, b), ac = path(a, c), bc = path(b, c);
+      if (ab && ac && bc && ab.concat(ac, bc).every(function (e) { return placed.has(e); })) out.push({ name: "△" + [a.name, b.name, c.name].join("·"), size: ab.length });
+    }); }); });
+    return out;
+  }
+  function node(tag, attrs, parent) { var e = document.createElementNS(ns, tag); Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); }); (parent || svg).appendChild(e); return e; }
+  function xy(p) { return [32 + (p.c + p.r / 2) * 68, 38 + p.r * 34 * Math.sqrt(3)]; }
+  function stock() { return Number($("stick-stock").value); }
+  function feedback(text) { $("stick-feedback").textContent = text; }
+  function invalidate() { result = null; feedback("方案已变化，请重新数一遍，再核对。"); }
+  function draw(focusKey) {
+    var style = getComputedStyle(document.documentElement), color = function (v) { return style.getPropertyValue(v).trim(); };
+    svg.replaceChildren();
+    edges.forEach(function (e) {
+      var on = placed.has(e.key), a = xy(e.a), b = xy(e.b);
+      var g = node("g", { role: "button", tabindex: "0", "aria-label": e.key + "，放撤一根棒", "aria-pressed": String(on), "data-edge": e.key, style: "cursor:pointer;touch-action:manipulation" });
+      node("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "transparent", "stroke-width": 38 }, g);
+      node("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: color(on ? "--a" : "--muted"), "stroke-width": on ? 7 : 2, "stroke-dasharray": on ? "none" : "3 5", opacity: on ? 1 : 0.45, "pointer-events": "none" }, g);
+      function toggle() {
+        if (on) { placed.delete(e.key); trace.push("撤 " + e.key); }
+        else if (placed.size < stock()) { placed.add(e.key); trace.push("放 " + e.key); }
+        else { feedback("本轮小棒已用完。先撤一根，或换棒数重新搭建。"); return; }
+        invalidate(); draw(e.key);
+      }
+      g.addEventListener("click", toggle);
+      g.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); toggle(); } });
+    });
+    points.forEach(function (p) { var a = xy(p); node("rect", { x: a[0] - 2, y: a[1] - 2, width: 4, height: 4, fill: color("--fg"), "pointer-events": "none" }); var t = node("text", { x: a[0], y: a[1] - 12, "text-anchor": "middle", fill: color("--fg"), "font-size": 17, "pointer-events": "none" }); t.textContent = p.name; });
+    $("stick-used").textContent = "实际用棒：" + placed.size + " / " + stock() + " 根。每个高亮短线是一根棒，共边只列一次。";
+    $("stick-plan").textContent = "当前方案：" + (Array.from(placed).sort().join("，") || "空白") + "。";
+    $("stick-trace").textContent = trace.join("；") || "还没有放棒。";
+    if (focusKey) { var focus = Array.from(svg.querySelectorAll("[data-edge]")).find(function (e) { return e.dataset.edge === focusKey; }); if (focus) focus.focus({ preventScroll: true }); }
+  }
+  function reset() { placed.clear(); trace = []; result = null; $("stick-count").value = ""; $("stick-explain").value = ""; $("stick-plan-entry").value = ""; feedback("本轮已清空。先搭建，写下自己的计数与说明。"); draw(); }
+  $("stick-reset").onclick = reset;
+  $("stick-stock").onchange = reset;
+  $("stick-import").onclick = function () {
+    var raw = $("stick-plan-entry").value.trim(), next = new Set(), valid = true;
+    if (!raw) { feedback("清单为空。请写出每根棒的两个端点，或直接在图上操作。"); return; }
+    raw.split(/[,，;；\n]+/).forEach(function (token) {
+      var m = /^\s*([A-D][1-4])\s*-\s*([A-D][1-4])\s*$/i.exec(token);
+      if (!m) { valid = false; return; }
+      var k = [m[1].toUpperCase(), m[2].toUpperCase()].sort().join("-");
+      if (next.has(k) || !edges.some(function (e) { return e.key === k; })) valid = false;
+      next.add(k);
+    });
+    if (!valid) { feedback("未录入：检查端点名与连接号；每棒只连相邻两点，不能重叠、重复或两端相同。原方案保留。"); return; }
+    if (next.size > stock()) { feedback("未录入：清单超过本轮棒数。原方案保留。"); return; }
+    placed = next; trace.push("录入 " + Array.from(placed).join("，")); invalidate(); draw();
+  };
+  $("stick-check").onclick = function () {
+    if (placed.size !== stock()) { feedback("本轮要用完 " + stock() + " 根；当前用了 " + placed.size + " 根。先补棒再核对。"); return; }
+    var raw = $("stick-count").value.trim();
+    if (!/^(0|[1-9][0-9]?)$/.test(raw)) { feedback("计数请写 0～99 的整数，不带单位、小数或算式；空格不能把两个数拼成一个数。"); return; }
+    if (!$("stick-explain").value.trim()) { feedback("请先写下你的计数顺序或三角形顶点清单，再核对。"); return; }
+    result = triangles();
+    feedback((Number(raw) === result.length ? "数量核对一致。" : "数量还不一致，你填了 " + raw + " 个；当前方案可核到 " + result.length + " 个。") + "实际用了 " + placed.size + " 根棒。" + (result.length ? "逐个对照：" + result.map(function (t) { return t.name + "（每边 " + t.size + " 根）"; }).join("；") + "。" : "三边尚未围成符合规则的等边三角形；有棒相接不等于闭合。") + "你的说明已留在本页，请自行检查是否不重不漏；系统只核对当前图的数量，不判定说明充分或已做过实物操作。");
+  };
+  ["stick-count", "stick-explain"].forEach(function (id) { $(id).addEventListener("input", function () { if (result) invalidate(); }); });
+  new MutationObserver(function () { draw(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", function () { draw(); }); }
+  draw();
 })();
 </script>
 </body></html>

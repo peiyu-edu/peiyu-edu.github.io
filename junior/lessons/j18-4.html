@@ -19,8 +19,15 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+
+  #reciprocal-lab input, #reciprocal-lab textarea { box-sizing:border-box; width:100%; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); padding:7px; }
+  .rec-controls { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+  .rec-controls label { flex:1; min-width:130px; }
+  #reciprocal-lab table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:15px; }
+  #reciprocal-lab th, #reciprocal-lab td { border:1px solid var(--line); padding:6px 3px; text-align:center; overflow-wrap:anywhere; }
+  #reciprocal-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j18-4" data-standard="v2">
 <div class="wrap">
@@ -280,6 +287,38 @@
     <div class="result" id="out-pow" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-pow" type="button">重置</button></div>
   </div>
+
+  <h3>④ 数学活动：一个数与它倒数的平方和</h3>
+  <div class="card" id="reciprocal-lab">
+    <p>自选非零有理数 \(x\)，计算 \(x^2+(1/x)^2\)。换成 \(-x\)、\(1/x\) 再填表，观察哪些数值改变、哪些不变。表里的分数是精确值；有限样本提供猜想线索，一般结论还要用字母说明。</p>
+    <p class="small" id="rec-format">输入整数、小数或整数分数，不输入算式、指数或单位。首尾、分数线两侧可空格，数字内部不能空格；支持全角数字和负号“−”。每个整数块最多120位，小数最多100位；x约分后的分子、分母最多24位，且 \(1/10^6\le |x|\le10^6\)。分母不能为0，结果填写精确值。</p>
+    <form id="rec-sample" novalidate>
+      <div class="rec-controls">
+        <label>自选参数 x<input id="rec-x" aria-describedby="rec-format" autocomplete="off"></label>
+        <label>填写 x 的倒数<input id="rec-inverse" aria-describedby="rec-format" autocomplete="off"></label>
+        <label>填写两平方之和<input id="rec-sum" aria-describedby="rec-format" autocomplete="off"></label>
+      </div>
+      <div class="ctrl"><button class="btn" type="submit">核对并记入表</button><button class="btn ghost" id="rec-negative" type="button">用相反数作新参数</button><button class="btn ghost" id="rec-reciprocal" type="button">用倒数作新参数</button></div>
+    </form>
+    <p class="result" id="rec-feedback" role="status"></p>
+    <table><caption>本轮已核对的精确值</caption><thead><tr><th scope="col">x</th><th scope="col">1/x</th><th scope="col">x²</th><th scope="col">(1/x)²</th><th scope="col">和</th></tr></thead><tbody id="rec-rows"></tbody></table>
+    <p class="small">为比较正、负和分数，请记录一组不是±1的 \(x,-x,1/x\)，再试1与−1，共至少五个不同参数。当前参数记入表后，可用上面按钮切换新参数，倒数与和仍由你填写。</p>
+    <form id="rec-conjecture" novalidate>
+      <p><label for="rec-guess">从表猜想：和的取值有什么范围？什么时候到达边界？换相反数、倒数有什么规律？</label><textarea id="rec-guess" rows="3" maxlength="1600"></textarea></p>
+      <p><label for="rec-reason">用字母写一般说明，并写清 x 的限制与等号条件（可从完全平方公式考虑）</label><textarea id="rec-reason" rows="4" maxlength="2000"></textarea></p>
+      <button class="btn" type="submit">保存文字并打开自查准则</button>
+    </form>
+    <p id="rec-proof-feedback" role="status"></p>
+    <details class="more" id="rec-proof" hidden><summary>展开一般说明，逐项自查</summary>
+      <p>当 \(x\ne0\) 时，\(x\cdot(1/x)=1\)。展开完全平方公式：\((x-1/x)^2=x^2-2+(1/x)^2\)，因此 \(x^2+(1/x)^2=(x-1/x)^2+2\ge2\)，理由是任意数的平方不小于0。</p>
+      <p>等号成立恰在 \(x-1/x=0\)，也就是 \(x=1/x\)。因 \(x\ne0\)，两边乘x得 \(x^2=1\)，已学的平方根告诉我们恰为 \(x=1\) 或 \(x=-1\)。其余非零x的平方项严格大于0，所以和严格大于2。这段理由适用于所有非零x，不受表格取样范围限制。</p>
+      <p>换相反数：\((-x)^2+(1/(-x))^2=x^2+(1/x)^2\)；换倒数只是交换两个平方，所以和也不变。</p>
+      <p>逐项自查：① 说明x不能为0了吗？② 中间项确为−2吗？③ 用平方非负说明了所有非零x，而非只列样本吗？④ 等号的必要与充分条件都写了吗？⑤ 解释了相反数、倒数两种对照吗？文字只是保存在本页，系统未判你的论证正确；对照后请自行修改或与同伴讨论。</p>
+    </details>
+    <div class="ctrl"><button class="btn ghost" id="rec-reset" type="button">重做本轮探究</button></div>
+    <p class="small">本活动的样本与文字只在本页内存保留，刷新后清空。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -606,6 +645,53 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focusMul = focusPow = null; focusSci = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+
+<script id="reciprocal-activity-script">
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  function abs(n) { return n < 0n ? -n : n; }
+  function rational(n, d) { if (!d) throw Error("分母不能为0。"); if (d < 0n) { n = -n; d = -d; } var a = abs(n), b = d; while (b) { var r = a % b; a = b; b = r; } return { n: n / a, d: d / a }; }
+  function parse(raw) {
+    var s = raw.replace(/[０-９]/g, function (c) { return String(c.charCodeAt(0) - 65296); }).replace(/[−－]/g, "-").replace(/＋/g, "+").replace(/／/g, "/").replace(/．/g, ".").trim();
+    if (!s || s.length > 300) throw Error("请按说明输入不超过300字符的精确数值。");
+    var p = s.split("/"), n, d;
+    if (p.length === 2 && p.every(function (v) { return /^[+-]?\d{1,120}$/.test(v.trim()); })) { n = BigInt(p[0].trim()); d = BigInt(p[1].trim()); }
+    else if (p.length === 1) { var m = /^([+-]?)(\d{0,120})(?:\.(\d{1,100}))?$/.exec(s); if (!m || !(m[2] || m[3])) throw Error("数值格式不符：保留运算空格，但不要拆开数字，也不输入算式。"); var tail = m[3] || ""; n = BigInt((m[1] === "-" ? "-" : "") + (m[2] || "0") + tail); d = 10n ** BigInt(tail.length); }
+    else throw Error("请填写整数、小数或整数分数，分数线两侧可以留空格。");
+    return rational(n, d);
+  }
+  function text(a) { return a.d === 1n ? String(a.n) : a.n + "/" + a.d; }
+  function key(a) { return a.n + "/" + a.d; }
+  function square(a) { return rational(a.n * a.n, a.d * a.d); }
+  function inv(a) { return rational(a.d, a.n); }
+  function neg(a) { return { n: -a.n, d: a.d }; }
+  function sum(a, b) { return rational(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function same(a, b) { return a.n === b.n && a.d === b.d; }
+  function getX() { var a = parse($("rec-x").value), n = abs(a.n); if (!n) throw Error("x不能为0：0没有倒数，不能记入本表。"); if (String(n).length > 24 || String(a.d).length > 24 || n * 1000000n < a.d || n > a.d * 1000000n) throw Error("x超出本表取样范围；请看输入说明。一般说明并不限于此范围。"); return a; }
+  var rows = new Map();
+  function feedback(id, message, state) { $(id).textContent = message; if (state) $(id).dataset.state = state; else delete $(id).dataset.state; }
+  function closeProof() { $("rec-proof").hidden = true; $("rec-proof").open = false; feedback("rec-proof-feedback", ""); }
+  $("rec-sample").onsubmit = function (e) {
+    e.preventDefault();
+    try { var x = getX(), r = inv(x), a = square(x), b = square(r), total = sum(a, b);
+      if (!same(parse($("rec-inverse").value), r) || !same(parse($("rec-sum").value), total)) { feedback("rec-feedback", "再核对倒数和两个平方之和。这里核对精确值，近似小数不能代替不相等的精确结果。", "retry"); return; }
+      if (rows.has(key(x))) { feedback("rec-feedback", "这个参数已记录，换一个不同的数。", "retry"); return; }
+      rows.set(key(x), x); var tr = document.createElement("tr"); [x, r, a, b, total].forEach(function (v) { var td = document.createElement("td"); td.textContent = text(v); tr.appendChild(td); }); $("rec-rows").appendChild(tr); closeProof();
+      feedback("rec-feedback", "倒数与和均核对一致，已记录 " + rows.size + " 个不同参数。试作对照，再提出猜想；这些样本还不是一般证明。", "ok");
+    } catch (err) { feedback("rec-feedback", err.message, "retry"); }
+  };
+  ["negative", "reciprocal"].forEach(function (kind) { $("rec-" + kind).onclick = function () { try { var x = getX(); if (!rows.has(key(x))) throw Error("先核对并记录当前参数，再用它作对照。"); $("rec-x").value = text(kind === "negative" ? neg(x) : inv(x)); $("rec-inverse").value = $("rec-sum").value = ""; feedback("rec-feedback", "新参数已选好，请自己填写倒数与和。"); closeProof(); } catch (e) { feedback("rec-feedback", e.message, "retry"); } }; });
+  ["x", "inverse", "sum"].forEach(function (part) { $("rec-" + part).addEventListener("input", function () { feedback("rec-feedback", ""); if (part === "x") { $("rec-inverse").value = $("rec-sum").value = ""; closeProof(); } }); });
+  ["guess", "reason"].forEach(function (part) { $("rec-" + part).addEventListener("input", closeProof); });
+  $("rec-conjecture").onsubmit = function (e) {
+    e.preventDefault(); var group = Array.from(rows.values()).some(function (x) { return abs(x.n) !== x.d && rows.has(key(neg(x))) && rows.has(key(inv(x))); });
+    if (!rows.has("1/1") || !rows.has("-1/1") || !group || !$("rec-guess").value.trim() || !$("rec-reason").value.trim()) { feedback("rec-proof-feedback", "先记录一组非±1的x、−x、1/x，再试1与−1，并写下自己的猜想和一般说明。", "retry"); return; }
+    feedback("rec-proof-feedback", "文字已保存在本页，尚未判定正确；请展开准则逐项自查。", "recorded"); $("rec-proof").hidden = false;
+  };
+  $("rec-reset").onclick = function () { rows.clear(); $("rec-rows").textContent = ""; ["x", "inverse", "sum", "guess", "reason"].forEach(function (part) { $("rec-" + part).value = ""; }); feedback("rec-feedback", ""); closeProof(); };
 })();
 </script>
 </body></html>

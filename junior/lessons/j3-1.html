@@ -19,8 +19,13 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+
+  .expression-work label { display:block; margin:12px 0; }
+  .expression-work input:not([type=checkbox]), .expression-work textarea { display:block; box-sizing:border-box; width:100%; padding:10px; font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--muted); border-radius:6px; }
+  .expression-work textarea { min-height:72px; }
+  .expression-work { overflow-wrap:anywhere; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j3-1" data-standard="v2">
 <div class="wrap">
@@ -176,7 +181,7 @@
     <p style="font-size:16.5px;margin:0 0 8px">打印店黑白打印每页 \(0.2\) 元，彩色打印每页 \(a\) 元。小敏打印了 \(30\) 页黑白、\(8\) 页彩色，付了 \(20\) 元。应找回多少元？</p>
     <p><b>① 读懂题意：</b>题里有哪几笔钱？哪个量是会变的，用字母表示？</p>
     <details class="more"><summary>提示 1：先用文字写关系</summary><p>找回的钱 ＝ 付的钱 － 黑白打印的钱 － 彩色打印的钱。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <div class="think-steps">
         <div class="think-step"><span class="ts-tag ca">② 想办法：</span>每一笔钱都是「单价 × 页数」。黑白的单价、页数都已知，能直接算出；彩色的单价是 \(a\)，只能写成式子。</div>
         <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>黑白：\(0.2\times30=6\)（元）；彩色：\(8\times a=8a\)（元）。找回 \(20-6-8a\)，即 \((14-8a)\) 元。</div>
@@ -288,6 +293,38 @@
     <div class="result" id="out-rect" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-rect" type="button">重置</button></div>
   </div>
+
+  <h3>自主工作台：先自己写，再核对</h3>
+  <p class="small">这些草稿只留在本页，刷新即清空，不写入学习账本。式子可用 + − * × / ÷ ^、小数和括号，乘号可省略；平方可写 ²。不输入等号或单位。系统精确合并同次幂核对，不用试几个数来证明等价。超出可识别范围时提供核对建议，不判错。文字说明请按提交后的准则自检。</p>
+  <form class="card expression-work" id="compose">
+  <h3>③ 从数量到文字关系，再列式</h3>
+  <p>小禾带60元买票，每张7元，买x张（x是0到8的整数）。求剩余钱数。</p>
+  <label>列出已知量、未知量及各自单位<textarea name="quantities" maxlength="600" required></textarea></label>
+  <label>先用文字写数量关系<textarea name="relation" maxlength="600" required></textarea></label>
+  <label>独立输入代数式（用x）<input name="expression" maxlength="600" required></label>
+  <button class="btn" type="submit">核对我的记录</button>
+  <button class="btn ghost" type="reset">清空重试</button>
+  <p class="result" role="status" aria-live="polite"></p>
+  </form>
+  <form class="card expression-work" id="inverse">
+  <h3>④ 积一定的关系</h3>
+  <p>一台泵匀速排完36升水，用时t分钟，t&gt;0。用式子表示每分钟排水量，再说明哪个乘积一定及其单位。</p>
+  <label>文字关系与乘积说明<textarea name="relation" maxlength="600" required></textarea></label>
+  <label>每分钟排水量的代数式（用t）<input name="expression" maxlength="600" required></label>
+  <button class="btn" type="submit">核对我的记录</button>
+  <button class="btn ghost" type="reset">清空重试</button>
+  <p class="result" role="status" aria-live="polite"></p>
+  </form>
+  <form class="card expression-work" id="stories">
+  <h3>⑤ 同一个式子，自己编两个故事</h3>
+  <p>为4n+6自拟两个不同情境。每个故事都写明n表示什么、取值范围、4和6各表示什么、所求量和单位。再选同一个合法n逐项解释两种情境。</p>
+  <label>情境一<textarea name="story1" maxlength="600" required></textarea></label>
+  <label>情境二<textarea name="story2" maxlength="600" required></textarea></label>
+  <label>选择n并检验两个故事<textarea name="check" maxlength="600" required></textarea></label>
+  <button class="btn" type="submit">核对我的记录</button>
+  <button class="btn ghost" type="reset">清空重试</button>
+  <p class="result" role="status" aria-live="polite"></p>
+  </form>
 </section>
 
 <section class="step" data-title="练一练">
@@ -559,6 +596,52 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focusPat = focusR = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script>
+
+/* 仅本页使用的精确有理系数运算；不接触学习记录。 */
+function expressionParse(source, variable, inverse) {
+  let s=source.replace(/[−–]/g,'-').replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3');
+  const compact=s.replace(/\s/g,'');
+  if (!compact || compact.length>160) throw Error('range');
+  // Tokenize before discarding spacing: separate number fragments are not one number.
+  const tokens=s.match(/\d+(?:\.\d+)?|[a-z]|[()+*/^\-]/g)||[];
+  if(tokens.join('')!==compact || tokens.some((t,j)=>j>0 && /^\d/.test(t) && /^\d/.test(tokens[j-1]))) throw Error('syntax');
+  let i=0,depth=0;
+  const gcd=(a,b)=>b?gcd(b,a%b):a;
+  function q(a,b=1n){if(!b)throw Error('zero');if(b<0n){a=-a;b=-b;}let g=gcd(a<0n?-a:a,b);return [a/g,b/g];}
+  const add=(a,b)=>q(a[0]*b[1]+b[0]*a[1],a[1]*b[1]);
+  const mul=(a,b)=>q(a[0]*b[0],a[1]*b[1]);
+  const clean=p=>{for(const k of Object.keys(p))if(!p[k][0])delete p[k];return p;};
+  function plus(a,b,sign=1n){let r={...a};for(const k in b)r[k]=add(r[k]||q(0n),mul(b[k],q(sign)));return clean(r);}
+  function times(a,b){let r={};for(const k in a)for(const l in b){let n=+k+(+l);if(Math.abs(n)>24)throw Error('range');r[n]=add(r[n]||q(0n),mul(a[k],b[l]));}return clean(r);}
+  function divide(a,b){let keys=Object.keys(b);if(keys.length!==1)throw Error('manual');let k=+keys[0];if(k && !inverse)throw Error('domain');let r={};for(const l in a){let n=+l-k;if(Math.abs(n)>24)throw Error('range');r[n]=mul(a[l],q(b[k][1],b[k][0]));}return clean(r);}
+  function atom(){if(++depth>30)throw Error('range');let t=tokens[i++],r;
+    if(t==='('){r=sum();if(tokens[i++]!==')')throw Error('syntax');}
+    else if(t===variable && variable)r={1:q(1n)};
+    else if(t && /^\d/.test(t)){let parts=t.split('.'),d=parts[1]||'';r=clean({0:q(BigInt(parts[0]+d),10n**BigInt(d.length))});}
+    else throw Error('manual');
+    depth--;return r;
+  }
+  function power(){let a=atom();if(tokens[i]==='^'){i++;let t=tokens[i++];if(!/^[0-6]$/.test(t||''))throw Error('manual');if(t==='0'&&(Object.keys(a).length!==1 || !a[0]))throw Error('manual');let r={0:q(1n)};for(let n=0;n<+t;n++)r=times(r,a);a=r;}return a;}
+  function unary(){if(tokens[i]==='+' || tokens[i]==='-'){let t=tokens[i++];return times({0:q(t==='-'?-1n:1n)},unary());}return power();}
+  function product(){let a=unary();while(i<tokens.length){let t=tokens[i];if(t==='*'||t==='/'){i++;let b=unary();a=t==='*'?times(a,b):divide(a,b);}else if(t==='(' || /^[a-z\d]/.test(t)){a=times(a,unary());}else break;}return a;}
+  function sum(){let a=product();while(tokens[i]==='+'||tokens[i]==='-'){let t=tokens[i++];a=plus(a,product(),t==='+'?1n:-1n);}return a;}
+  let result=sum();if(i!==tokens.length)throw Error('syntax');return result;
+}
+function expressionCompare(value,expected,variable='',inverse=false){
+  try {let a=expressionParse(value,variable,inverse),b=expressionParse(expected,variable,inverse);let keys=new Set([...Object.keys(a),...Object.keys(b)]);return [...keys].every(k=>(a[k]?.[0]||0n)*(b[k]?.[1]||1n)===(b[k]?.[0]||0n)*(a[k]?.[1]||1n))?'equal':'different';}
+  catch {return 'manual';}
+}
+
+(function(){
+function attach(id,review){const f=document.getElementById(id);if(!f)return;const out=f.querySelector('[role=status]');f.addEventListener('submit',e=>{e.preventDefault();const v=Object.fromEntries(new FormData(f));out.textContent=review(v);});f.addEventListener('reset',()=>{out.textContent='已清空，可重新独立作答。';});f.addEventListener('input',()=>{out.textContent='草稿已修改，请重新核对。';});}
+function verdict(s){return s==='equal'?'式子经精确运算核对相符。':s==='different'?'这个式子与题意所需式子不等价，请检查运算顺序和数量关系。':'暂不能自动判定，不记错。请按数量关系逐项核对；可改用本章的四则运算、括号和0至6次整数幂输入。含字母的除数只支持本题已保证非零的单项式；其他分母需另查定义域。';}
+
+attach('compose',v=>verdict(expressionCompare(v.expression,'60-7*x','x'))+' 文字自检：x为票数，7元/张乘票数是花费；剩余=带的钱−花费，结果用元。检查0张与8张时的含义；这些代入只用于回查情境，不是等价证明。');
+attach('inverse',v=>verdict(expressionCompare(v.expression,'36/t','t',true))+' 文字自检：每分钟排水量×用时=36升；t>0，排水量用升/分。排水量=总水量÷用时，乘积固定且非零才是这里的反比例关系。');
+attach('stories',()=> '已记录，文字情境没有自动判分。逐项自检：两个故事背景不同；n的意义、范围和单位明确；4n与固定量6应表示同一种量并使用一致单位；4的单位要结合n和所求量确定，不必与6的单位相同。例如n用米、4是元/米、6是元时，4n与6都用元。都先求4与n的乘积，再加固定量6。若故事是先增加6再乘4，就不符合。用一个共同合法n检查，但一组值相同不能证明故事关系正确；请与同伴互读并逐项解释。');
 })();
 </script>
 </body></html>

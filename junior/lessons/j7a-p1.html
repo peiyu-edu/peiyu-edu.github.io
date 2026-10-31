@@ -25,8 +25,15 @@
   .ladder { border-collapse: collapse; margin: 6px auto; font-size: 15px; }
   .ladder td { padding: 2px 10px; border-bottom: 1px solid var(--line); text-align: right; }
   .ladder td.r { color: var(--no); font-weight: 700; }
+  #binary-project input { color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:6px; padding:8px; max-width:100%; box-sizing:border-box; font:inherit; }
+  #binary-project label { display:block; margin:8px 0; }
+  #binary-project .bit-input { width:5em; }
+  #binary-project table { width:100%; border-collapse:collapse; font-size:15px; }
+  #binary-project th, #binary-project td { padding:6px 3px; border-bottom:1px solid var(--line); text-align:center; overflow-wrap:anywhere; }
+  #binary-project fieldset { min-width:0; border:1px solid var(--line); margin:12px 0; }
+  #binary-project button { white-space:normal; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-sec="j7a-p1" data-stage="junior" data-standard="v2">
 <div class="wrap">
@@ -155,7 +162,7 @@
     <p class="small" style="margin:0 0 4px"><b>例 2（示范）</b></p>
     <p>把 \(100\) 化成三进制数，并检验。</p>
     <details class="more"><summary>提示：什么时候停</summary><p>一直除以 \(3\)，直到<b>商为 \(0\)</b> 才停；每一步记下余数，余数只能是 \(0\)、\(1\)、\(2\)。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <div class="think-steps">
         <div class="think-step step-op"><span class="ts-tag cb">执行：</span>\(100\div3=33\cdots\cdots1\)；\(33\div3=11\cdots\cdots0\)；\(11\div3=3\cdots\cdots2\)；\(3\div3=1\cdots\cdots0\)；\(1\div3=0\cdots\cdots1\)。余数从下往上读：\(100=(10201)_3\)。</div>
         <div class="think-step step-chk"><span class="ts-tag cc">检验：</span>\((10201)_3=1\times81+0\times27+2\times9+0\times3+1=81+18+1=100\) ✓。</div>
@@ -240,6 +247,53 @@
     <div class="result" id="out-conv" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-conv" type="button">重置</button></div>
   </div>
+  <div class="card" id="binary-project">
+    <h3>③ 项目：二进制怎样做加法？</h3>
+    <p>先自己提出一个可检验的问题，例如“两数相加时，进位会不会连续传到左边？”小组用下面的工作台检验，再用位值转换的方法复核。输入和操作只在本页暂存，刷新即清除；需要保存时请在纸上记录。</p>
+    <details class="more"><summary>项目任务页：分工、查资料与交流（约三课时）</summary>
+      <ol>
+        <li><b>提出问题（5 分钟）</b>：每人写一个关于进位的问题，小组选一个；先写预测及理由，不先看计算结果。</li>
+        <li><b>分工查证（15 分钟）</b>：计算员做逐位加法；复核员独立按位值转换后相加；资料员查找教材、图书或可信网站中“两种电路状态”和二进制的联系，记录书名页码或网址、作者、查阅日期；汇报员记录分歧。每换一题轮换角色，独学时依次担任四种角色。</li>
+        <li><b>数学实验（20 分钟）</b>：完成默认题，再自选不进位、连续进位、含零或位数不同的例子。逐列记下“两个数码＋传入进位＝本位数码＋2×传出进位”，用两种算法算同一题。若结果不一致，定位第一列差异并重试。</li>
+        <li><b>文化推理（15 分钟）</b>：自画三个位置的图案，每个位置可用实线或断线。约定实线记 1、断线记 0，并约定左边为高位，列出全部图案，按二进制转成十进制排序。交换两种线的记号后，同一图案的数会怎样改变？用一例检验。查找八卦图案资料，区分“现代的二进制编码类比”与“历史上就采用该算法”的主张；后者须有独立史料支持，不能仅凭图形相似下结论。</li>
+        <li><b>结论交流（每组 3 分钟）</b>：纸上报告按“问题—预测—资料出处—两种算法的完整过程—反例或修正—结论”组织。另一组追问一次“为什么要进位”和一次“结论适用哪些数”；据此修改报告。</li>
+      </ol>
+      <p><b>自检准则</b>：能否指出每次传入的进位来自哪列？最高位溢出是否保留？两种算法是否一致？至少三类例子支持结论了吗？每人是否完成一次计算及解释？资料中的事实与自己的推断是否分开？报告不能替代下方的实际运算。</p>
+    </details>
+    <p><b>规则卡</b>：从右往左，短的数在左边补 0。每列把两个数码和右列传来的进位相加，得到十进制小计 <i>t</i>：本位写 <i>t</i> 除以 2 的余数，向左进 <i>t</i> 除以 2 的整数商。小计可能是 0、1、2、3；因此本位与传出进位都只能是 0 或 1。最后若还有进位，要添在最左端。</p>
+    <form id="binary-start">
+      <label>第一个二进制非负整数 <input id="binary-a" value="1011" autocomplete="off" spellcheck="false"></label>
+      <label>第二个二进制非负整数 <input id="binary-b" value="111" autocomplete="off" spellcheck="false"></label>
+      <p class="small">本工作台每个数限 1～8 位，允许前导 0；不含括号和下标。更长的数、负数与小数不在本工作台的处理范围内。</p>
+      <button class="btn" type="submit">开始 / 清空重做</button>
+    </form>
+    <p id="binary-status" role="status"></p>
+    <div id="binary-work" hidden>
+      <p id="binary-operands"></p>
+      <table><caption>算法一：已核对的逐列记录（从最低位开始）</caption><thead><tr><th scope="col">位值</th><th scope="col">数码甲</th><th scope="col">数码乙</th><th scope="col">传入</th><th scope="col">本位</th><th scope="col">传出</th></tr></thead><tbody id="binary-rows"></tbody></table>
+      <form id="binary-column">
+        <fieldset><legend id="binary-column-label"></legend>
+          <label>十进制小计 <input class="bit-input" id="binary-total" inputmode="numeric" autocomplete="off"></label>
+          <label>本位数码 <input class="bit-input" id="binary-digit" inputmode="numeric" autocomplete="off"></label>
+          <label>传向左边的进位 <input class="bit-input" id="binary-carry" inputmode="numeric" autocomplete="off"></label>
+          <button class="btn" type="submit">核对本列 / 继续向左</button>
+        </fieldset>
+      </form>
+      <p id="binary-feedback" role="status"></p>
+      <form id="binary-compare">
+        <fieldset><legend>算法二：按位值化成十进制，相加，再除二取余转回</legend>
+          <p class="small">先在纸上写出各数码乘位值的展开式和除二取余过程，再填结果。两种算法应表示同一个数。比较：哪种算法换算少？哪种更便于你检验？为什么？</p>
+          <label>甲的十进制值 <input class="bit-input" id="binary-dec-a" inputmode="numeric" autocomplete="off"></label>
+          <label>乙的十进制值 <input class="bit-input" id="binary-dec-b" inputmode="numeric" autocomplete="off"></label>
+          <label>十进制和 <input class="bit-input" id="binary-dec-sum" inputmode="numeric" autocomplete="off"></label>
+          <label>转回的二进制和 <input id="binary-final" autocomplete="off" spellcheck="false"></label>
+          <button class="btn" type="submit">比较两种算法</button>
+        </fieldset>
+      </form>
+      <p id="binary-comparison" role="status"></p>
+    </div>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -479,6 +533,94 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script>
+/* j7a-p1 only: ephemeral project workspace; no storage or learning-ledger writes. */
+(function () {
+  'use strict';
+  const get = id => document.getElementById('binary-' + id);
+  let state = null;
+  function binary(value) { return /^[01]+$/.test(value.trim()); }
+  function integer(value) { return /^\d+$/.test(value.trim()) ? Number(value.trim()) : NaN; }
+  function column() {
+    const {a, b, index, carry} = state;
+    const x = Number(a[a.length - 1 - index] || 0);
+    const y = Number(b[b.length - 1 - index] || 0);
+    return {x, y, total: x + y + carry};
+  }
+  function prompt() {
+    const {x, y} = column();
+    get('column-label').textContent = '位值 ' + 2 ** state.index + '：' + x + ' + ' + y + ' + 传入进位 ' + state.carry;
+    ['total', 'digit', 'carry'].forEach(id => { get(id).value = ''; });
+  }
+  get('start').addEventListener('submit', event => {
+    event.preventDefault();
+    const a = get('a').value.trim(), b = get('b').value.trim();
+    if (![a, b].every(binary)) {
+      get('status').textContent = '请输入只含 0、1 的非负整数数码串；负数、小数与带下标记法暂不处理。';
+      return;
+    }
+    if (a.length > 8 || b.length > 8) {
+      get('status').textContent = '该写法可表示二进制整数，但超过本工作台的 8 位处理范围，请缩短后再开始。';
+      return;
+    }
+    state = {a, b, index: 0, carry: 0, digits: [], length: Math.max(a.length, b.length)};
+    get('rows').replaceChildren();
+    get('work').hidden = false;
+    get('column').hidden = false;
+    get('operands').textContent = '本轮：(甲 ' + a + ')₂ + (乙 ' + b + ')₂。改动输入后需点“开始 / 清空重做”才生效。';
+    ['feedback', 'comparison', 'status'].forEach(id => { get(id).textContent = ''; });
+    ['dec-a', 'dec-b', 'dec-sum', 'final'].forEach(id => { get(id).value = ''; });
+    prompt();
+    get('total').focus();
+  });
+  get('column').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!state || state.index >= state.length) return;
+    const {x, y, total} = column();
+    const t = integer(get('total').value), d = integer(get('digit').value), c = integer(get('carry').value);
+    if (![t, d, c].every(Number.isSafeInteger) || d > 1 || c > 1) {
+      get('feedback').textContent = '请填非负整数小计，本位数码和进位均限 0 或 1。空白不当作 0。';
+      return;
+    }
+    if (t !== total || d !== total % 2 || c !== Math.floor(total / 2)) {
+      get('feedback').textContent = '本列还不一致。先把两个数码与传入进位相加，再检查“小计 = 本位数码 + 2×传出进位”。修改后可重试，本列尚未推进。';
+      return;
+    }
+    const row = document.createElement('tr');
+    [2 ** state.index, x, y, state.carry, d, c].forEach(value => {
+      const td = document.createElement('td'); td.textContent = value; row.appendChild(td);
+    });
+    get('rows').appendChild(row);
+    state.digits.unshift(d); state.carry = c; state.index++;
+    get('comparison').textContent = '';
+    if (state.index === state.length) {
+      if (c) state.digits.unshift(c);
+      get('column').hidden = true;
+      get('feedback').textContent = '逐位完成！' + (c ? '最高位仍有进位，添在最左端。' : '最高位无剩余进位。') + '二进制和为 (' + state.digits.join('').replace(/^0+(?=.)/, '') + ')₂。请用算法二独立复核。';
+      get('dec-a').focus();
+    } else {
+      get('feedback').textContent = '本列核对通过，已把进位传到左边一列。';
+      prompt(); get('total').focus();
+    }
+  });
+  get('compare').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!state) return;
+    const a = parseInt(state.a, 2), b = parseInt(state.b, 2), final = get('final').value.trim();
+    const values = ['dec-a', 'dec-b', 'dec-sum'].map(id => integer(get(id).value));
+    if (!values.every(Number.isSafeInteger) || !binary(final)) {
+      get('comparison').textContent = '请填三个十进制非负整数和只含 0、1 的二进制和；支持前导 0。'; return;
+    }
+    // BigInt avoids rounding an arbitrarily long learner-entered binary string.
+    if (values[0] !== a || values[1] !== b || values[2] !== a + b || BigInt('0b' + final) !== BigInt(a + b)) {
+      get('comparison').textContent = '请重新核对位值展开、十进制相加和余数倒序三个环节；本轮输入保留，可修改重试。'; return;
+    }
+    get('comparison').textContent = state.index < state.length
+      ? '算法二的输入核对通过。还需完成算法一的每一列，才能比较两种过程。'
+      : '两种算法一致：' + a + ' + ' + b + ' = ' + (a + b) + ' = (' + (a + b).toString(2) + ')₂。逐位加法直接用满二进一；转换法先展开位值、相加、再转回。请向同伴解释一列进位并记录你更喜欢的方法和理由。';
+  });
 })();
 </script>
 </body></html>

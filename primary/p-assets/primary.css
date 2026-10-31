@@ -1,6 +1,10 @@
 /* 培玉 · 小学数学 — 小学页样式。配色、深浅色变量全部来自 ../assets/site.css，这里只加小学专用的部件。 */
 
-:root { --on-accent: #ffffff; }
+:root {
+  --on-accent: #ffffff;
+  /* Older lesson diagrams use --ok for the same positive color as --a. */
+  --ok: var(--a);
+}
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) { --on-accent: #141b18; }
 }
@@ -14,6 +18,8 @@ body.primary.low h1 { font-size: 32px; }
 body.primary svg { font-size: 17px; }
 body.primary.low svg { font-size: 20px; }
 body.primary .top a.home { font-size: 14px; }
+/* Unavailable lesson titles are still reading text in the route and unit lists. */
+body.primary :is(.les-list, .unit) li.todo { color: var(--muted); }
 
 /* 步骤导航：按钮更大，便于手指点 */
 body.primary .steps button { min-height: 44px; font-size: 15px; padding: 8px 16px; }
@@ -122,6 +128,41 @@ svg.qfig { display: block; width: 100%; max-width: 300px; height: auto; margin: 
 .pair svg { display: block; width: 100%; max-width: 160px; height: auto; margin: 6px auto; }
 @media (max-width: 480px) { .pair { grid-template-columns: 1fr; } }
 
+/* 高段（4–6 年级）v2 标杆部件：路线导读 .route、算理主模块 .why-box、波利亚三步例题 .example-steps、洞察视频卡 .insight-card */
+details.route { border: 1.5px solid var(--c); border-radius: var(--radius); padding: 10px 16px; margin: 12px 0 18px; background: var(--card); }
+details.route summary { cursor: pointer; font-weight: 700; color: var(--c); min-height: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+details.route .route-summary { margin: 8px 0 6px; font-size: 16px; line-height: 1.7; color: var(--fg); }
+details.route .route-bridges { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; font-size: 14.5px; }
+details.route .route-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--fg); text-decoration: none; }
+details.route a.route-pill:hover, details.route a.route-pill:focus-visible { border-color: var(--a); color: var(--a); }
+details.route ol { margin: 6px 0 2px; padding-left: 22px; font-size: 15px; color: var(--muted); line-height: 1.75; }
+
+.why-box { background: var(--card); border: 1.5px solid var(--a); border-left: 5px solid var(--a); border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; }
+.why-box h3 { margin: 0 0 8px; font-size: 18px; color: var(--a); }
+.why-box ol, .why-box ul { margin: 6px 0; padding-left: 22px; line-height: 1.8; }
+.why-box li { margin: 4px 0; }
+
+.example-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin: 14px 0; }
+.example-card .ex-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 15px; color: var(--muted); font-weight: 700; }
+.example-card .ex-stem { font-size: 17.5px; font-weight: 600; margin: 0 0 10px; line-height: 1.65; }
+.example-steps { display: grid; gap: 8px; margin: 10px 0 4px; }
+.ex-step { background: var(--bg); border-left: 4px solid var(--a); border-radius: 0 8px 8px 0; padding: 9px 12px; font-size: 16px; line-height: 1.75; overflow-x: auto; }
+.ex-step.s2 { border-left-color: var(--b); }
+.ex-step.s3 { border-left-color: var(--c); }
+.ex-step .ex-tag { font-weight: 700; margin-right: 6px; }
+
+.insight-card { background: var(--card); border: 1.5px solid var(--c); border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; }
+.insight-card .insight-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.insight-card video { display: block; width: 100%; max-width: 640px; height: auto; margin: 8px auto; border-radius: 10px; background: #141B18; border: 1px solid var(--line); }
+
+.manip .ctrl-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 10px 0 6px; padding: 10px 12px; background: var(--bg); border-radius: 10px; border: 1px solid var(--line); }
+.manip .ctrl-item { display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+.manip .ctrl-item label { display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+.manip .ctrl-item input[type=range] { width: 100%; }
+.manip .stat-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 8px 0 4px; }
+.manip .stat-pill { padding: 4px 12px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); font-size: 15px; }
+.manip .stat-pill b { font-variant-numeric: tabular-nums; }
+
 /* 打印卡 */
 .print-card { border: 2px dashed var(--b); border-radius: var(--radius); padding: 14px 16px; background: var(--card); }
 .print-card h3 { margin-top: 0; color: var(--b); }
@@ -130,12 +171,16 @@ svg.qfig { display: block; width: 100%; max-width: 300px; height: auto; margin: 
   .step { display: block !important; }
 }
 
+@media (max-width: 520px) {
+  body.primary[data-standard="v2"] .steps { flex-wrap: wrap; gap: 6px; }
+  body.primary[data-standard="v2"] .steps button { padding: 6px 11px; font-size: 14.5px; min-height: 40px; }
+}
 @media (max-width: 480px) {
   body.primary { font-size: 15.5px; }
   .q .ans { flex-direction: column; align-items: flex-start; }
   .q .pad { width: 100%; max-width: 340px; }
-  body.primary .steps { gap: 4px; flex-wrap: nowrap; }
-  body.primary .steps button, body.primary.low .steps button { padding: 6px 10px; font-size: 15px; }
+  body.primary:not([data-standard="v2"]) .steps { gap: 4px; flex-wrap: nowrap; }
+  body.primary:not([data-standard="v2"]) .steps button, body.primary.low .steps button { padding: 6px 10px; font-size: 15px; }
 }
 @media (max-width: 420px) {
   .q .pad { grid-template-columns: repeat(5, 1fr); }
@@ -152,3 +197,16 @@ code { overflow-wrap: anywhere; }
 /* 看答案（PY-192）：错满两次后出现，点了揭晓正确答案 */
 .q .peek, .predict .peek { margin: 8px 0 0; min-height: 44px; }
 .predict.peeked .fb { color: var(--c); font-weight: 700; }
+
+/* 高段 v2 样板页：图和实验台收小。内容区不再撑满宽屏，插图/实验台限宽限高并居中（PY-140 反馈） */
+body.primary[data-standard="v2"] .wrap { max-width: 820px; }
+body.primary[data-standard="v2"] .micro-box svg.micro-fig { display: block; width: 100%; max-width: 380px; max-height: 190px; height: auto; margin: 6px auto; }
+body.primary[data-standard="v2"] .manip svg.stage { max-width: 420px; max-height: 240px; }
+body.primary[data-standard="v2"] .manip .ctrl-grid { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 6px 10px; padding: 8px 10px; }
+body.primary[data-standard="v2"] .why-box svg, body.primary[data-standard="v2"] .example-card svg { max-width: 300px; height: auto; }
+/* 高段 v2：图在窄屏不再跟着缩小（缩小后字会小于 14px），保持上面的限宽，外层可左右滑动（PY-140） */
+body.primary[data-standard="v2"] .fig-scroll { max-width: 100%; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+body.primary[data-standard="v2"] .fig-scroll:focus-visible { outline: 2px solid var(--a); outline-offset: 2px; }
+body.primary[data-standard="v2"] .micro-box .fig-scroll > svg.micro-fig { min-width: 380px; }
+body.primary[data-standard="v2"] .manip .fig-scroll > svg.stage { display: block; width: 100%; min-width: 420px; margin: 0 auto; }
+body.primary[data-standard="v2"] .example-card .fig-scroll > svg { display: block; width: 100%; min-width: 300px; margin: 6px auto; }

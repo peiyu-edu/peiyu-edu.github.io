@@ -12,16 +12,23 @@
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
-  /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
-  .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
-  details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
-  details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
-  .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
-  .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
-  .result .sum { color: var(--no); font-weight: 700; }
-  .practice-fig { max-width: 360px; height: auto; }
+/* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
+.hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
+details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
+details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
+.result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+.result .sum { color: var(--no); font-weight: 700; }
+.practice-fig { max-width: 360px; height: auto; }
+#parallel-construction .construction-controls { display: grid; gap: 12px; }
+#parallel-construction label { display: block; }
+#parallel-construction [hidden] { display: none !important; }
+#parallel-construction input { max-width: 100%; }
+#parallel-construction input[type="range"] { width: 100%; }
+#parallel-construction svg { width: 100%; max-width: 560px; touch-action: none; }
+#parallel-construction button:focus-visible, #parallel-construction input:focus-visible { outline: 3px solid var(--a); outline-offset: 3px; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j7-2" data-standard="v2">
 <div class="wrap">
@@ -31,586 +38,386 @@
 <p class="lead">两条直线永远不相交，没法一直画下去检验，怎么才能确定？反过来，知道两条直线平行，它们和第三条直线形成的角又有什么规律？答案都藏在 7.1 的“三线八角”里。</p>
 
 <details class="more route">
-  <summary>本节导读　先修：7.1 相交线 · 本节路线</summary>
-  <p class="small" style="margin:6px 0 0">要用到：对顶角相等、邻补角互补、垂直的定义、同位角/内错角/同旁内角的识别（<a href="j7-1.html">回看 7.1</a>）；补角（<a href="j6-3.html">回看 6.3</a>）；等式的性质。</p>
-  <ol class="small">
-    <li>从画车位线进入：每条线和路边成同样的角，它们会相交吗？</li>
-    <li>平行线的定义（同一平面内）和关于平行线的基本事实。</li>
-    <li>判定：由“角”推出“线平行”——同位角、内错角、同旁内角。</li>
-    <li>性质：由“线平行”推出“角”的关系。</li>
-    <li>分清判定和性质，先判定、再用性质。</li>
-    <li>练习与中考真题：每一步括号里写依据。</li>
-  </ol>
+<summary>本节导读　先修：7.1 相交线 · 本节路线</summary>
+<p class="small" style="margin:6px 0 0">要用到：对顶角相等、邻补角互补、垂直的定义、同位角/内错角/同旁内角的识别（<a href="j7-1.html">回看 7.1</a>）；补角（<a href="j6-3.html">回看 6.3</a>）；等式的性质。</p>
+<ol class="small">
+<li>从画车位线进入：每条线和路边成同样的角，它们会相交吗？</li>
+<li>平行线的定义（同一平面内）和关于平行线的基本事实。</li>
+<li>判定：由“角”推出“线平行”——同位角、内错角、同旁内角。</li>
+<li>性质：由“线平行”推出“角”的关系。</li>
+<li>分清判定和性质，先判定、再用性质。</li>
+<li>练习与中考真题：每一步括号里写依据。</li>
+</ol>
 </details>
 
 <section class="step" data-title="从例子进入">
-  <p>停车场画斜车位：路边先拉一条直线，每画一条车位线，都用量角器让它和路边在同一侧成同样大的角。点下面的按钮，换几种角度，看两条车位线往上（或往下）延长会不会碰到：</p>
-  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDI0MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Lik5p2h6L2m5L2N57q/5LiO6Lev6L655omA5oiQ55qE6KeSXCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuS4pOadoee6v+S4jui3r+i+ueeahOinklwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtYWI9XCI1NSw1NVwiPumDveaIkCA1NcKwPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLWFiPVwiNTUsNjVcIj41NcKwIOWSjCA2NcKwPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLWFiPVwiNTUsNDVcIj41NcKwIOWSjCA0NcKwPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPHAgY2xhc3M9XCJlbnRyeS1ub3RlXCIgaWQ9XCJlbnRyeS1ub3RlXCIgYXJpYS1saXZlPVwicG9saXRlXCI+PC9wPlxuICAgIDxwPuW3peS6uueUu+eahOavj+S4gOadoei9puS9jee6v++8jOmDveWSjOi3r+i+ueWcqOWQjOS4gOS+p+aIkCBcXCg1NV5cXGNpcmNcXCnjgILov5nkupvovabkvY3nur/lvbzmraTmmK/ku4DkuYjkvY3nva7lhbPns7vvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kupLnm7jlubPooYzvvIzkuI3kvJrnm7jkuqQ8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7otornlLvotormlpzvvIzlu7bplb/lkI7mgLvkvJrnorDliLDkuIDotbc8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7or7TkuI3lh4bvvIzopoHkuIDnm7Tlu7bplb/kuIvljrvmiY3nn6XpgZM8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5BPC9iPuOAgui3r+i+uei/meadoeebtOe6v+aKiuavj+S4pOadoei9puS9jee6v+mDveOAjOaIquOAjeS6huS4gOS4i++8jOaIquWHuueahOWQjOS9jeinkuS4gOagt+Wkp++8jOi/meagt+eahOS4pOadoeebtOe6v+W5s+ihjOOAguinkuW6puW3ruS4gOeCue+8iFxcKDU1XlxcY2lyY1xcKSDlkowgXFwoNjVeXFxjaXJjXFwp77yJ77yM5bu26ZW/5ZCO5bCx5Lya55u45Lqk44CCPC9wPlxuICAgICAgPHA+5LiN55So5bu26ZW/5Yiw5peg56m36L+c77yM5Y+q55yLPGI+6KeSPC9iPuWwseiDveWIpOaWreW5s+ihjOKAlOKAlOi/meS4gOiKguimgeiusu+8mjxiPueUseinkuaAjuagt+WIpOWumuW5s+ihjO+8n+WPjei/h+adpe+8jOW5s+ihjOaXtuinkuWPiOacieS7gOS5iOWFs+ezu++8nzwvYj48L3A+XG4gICAgPC9kaXY+XG4gICJ9">
-    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 240" role="img" aria-label="两条车位线与路边所成的角"></svg>
-    <div class="entry-bar" id="entry-bar" role="group" aria-label="两条线与路边的角">
-      <button type="button" class="on" data-ab="55,55">都成 55°</button>
-      <button type="button" data-ab="55,65">55° 和 65°</button>
-      <button type="button" data-ab="55,45">55° 和 45°</button>
-    </div>
-    <p class="entry-note" id="entry-note" aria-live="polite"></p>
-    <p>工人画的每一条车位线，都和路边在同一侧成 \(55^\circ\)。这些车位线彼此是什么位置关系？</p>
-    <div class="opts">
-      <button class="opt" data-v="A"><b>A</b>互相平行，不会相交</button>
-      <button class="opt" data-v="B"><b>B</b>越画越斜，延长后总会碰到一起</button>
-      <button class="opt" data-v="C"><b>C</b>说不准，要一直延长下去才知道</button>
-    </div>
-    <div class="reveal">
-      <p><b>A</b>。路边这条直线把每两条车位线都「截」了一下，截出的同位角一样大，这样的两条直线平行。角度差一点（\(55^\circ\) 和 \(65^\circ\)），延长后就会相交。</p>
-      <p>不用延长到无穷远，只看<b>角</b>就能判断平行——这一节要讲：<b>由角怎样判定平行？反过来，平行时角又有什么关系？</b></p>
-    </div>
-  </div>
+<p>停车场画斜车位：路边先拉一条直线，每画一条车位线，都用量角器让它和路边在同一侧成同样大的角。点下面的按钮，换几种角度，看两条车位线往上（或往下）延长会不会碰到：</p>
+<div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuPHN2ZyBjbGFzcz1cImVudHJ5LWZpZ1wiIGlkPVwiZW50cnktZmlnXCIgdmlld0JveD1cIjAgMCA1MjAgMjQwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLkuKTmnaHovabkvY3nur/kuI7ot6/ovrnmiYDmiJDnmoTop5JcIj48L3N2Zz5cbjxkaXYgY2xhc3M9XCJlbnRyeS1iYXJcIiBpZD1cImVudHJ5LWJhclwiIHJvbGU9XCJncm91cFwiIGFyaWEtbGFiZWw9XCLkuKTmnaHnur/kuI7ot6/ovrnnmoTop5JcIj5cbjxidXR0b24gdHlwZT1cImJ1dHRvblwiIGNsYXNzPVwib25cIiBkYXRhLWFiPVwiNTUsNTVcIj7pg73miJAgNTXCsDwvYnV0dG9uPlxuPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1hYj1cIjU1LDY1XCI+NTXCsCDlkowgNjXCsDwvYnV0dG9uPlxuPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1hYj1cIjU1LDQ1XCI+NTXCsCDlkowgNDXCsDwvYnV0dG9uPlxuPC9kaXY+XG48cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG48cD7lt6XkurrnlLvnmoTmr4/kuIDmnaHovabkvY3nur/vvIzpg73lkozot6/ovrnlnKjlkIzkuIDkvqfmiJAgXFwoNTVeXFxjaXJjXFwp44CC6L+Z5Lqb6L2m5L2N57q/5b285q2k5piv5LuA5LmI5L2N572u5YWz57O777yfPC9wPlxuPGRpdiBjbGFzcz1cIm9wdHNcIj5cbjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kupLnm7jlubPooYzvvIzkuI3kvJrnm7jkuqQ8L2J1dHRvbj5cbjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7otornlLvotormlpzvvIzlu7bplb/lkI7mgLvkvJrnorDliLDkuIDotbc8L2J1dHRvbj5cbjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7or7TkuI3lh4bvvIzopoHkuIDnm7Tlu7bplb/kuIvljrvmiY3nn6XpgZM8L2J1dHRvbj5cbjwvZGl2PlxuPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuPHA+PGI+QTwvYj7jgILot6/ovrnov5nmnaHnm7Tnur/miormr4/kuKTmnaHovabkvY3nur/pg73jgIzmiKrjgI3kuobkuIDkuIvvvIzmiKrlh7rnmoTlkIzkvY3op5LkuIDmoLflpKfvvIzov5nmoLfnmoTkuKTmnaHnm7Tnur/lubPooYzjgILop5Lluqblt67kuIDngrnvvIhcXCg1NV5cXGNpcmNcXCkg5ZKMIFxcKDY1XlxcY2lyY1xcKe+8ie+8jOW7tumVv+WQjuWwseS8muebuOS6pOOAgjwvcD5cbjxwPuS4jeeUqOW7tumVv+WIsOaXoOept+i/nO+8jOWPquecizxiPuinkjwvYj7lsLHog73liKTmlq3lubPooYzigJTigJTov5nkuIDoioLopoHorrLvvJo8Yj7nlLHop5LmgI7moLfliKTlrprlubPooYzvvJ/lj43ov4fmnaXvvIzlubPooYzml7bop5Llj4jmnInku4DkuYjlhbPns7vvvJ88L2I+PC9wPlxuPC9kaXY+XG4ifQ==">
+<svg class="entry-fig" id="entry-fig" viewBox="0 0 520 240" role="img" aria-label="两条车位线与路边所成的角"></svg>
+<div class="entry-bar" id="entry-bar" role="group" aria-label="两条线与路边的角">
+<button type="button" class="on" data-ab="55,55">都成 55°</button>
+<button type="button" data-ab="55,65">55° 和 65°</button>
+<button type="button" data-ab="55,45">55° 和 45°</button>
+</div>
+<p class="entry-note" id="entry-note" aria-live="polite"></p>
+<p>工人画的每一条车位线，都和路边在同一侧成 \(55^\circ\)。这些车位线彼此是什么位置关系？</p>
+<div class="opts">
+<button class="opt" data-v="A"><b>A</b>互相平行，不会相交</button>
+<button class="opt" data-v="B"><b>B</b>越画越斜，延长后总会碰到一起</button>
+<button class="opt" data-v="C"><b>C</b>说不准，要一直延长下去才知道</button>
+</div>
+<div class="reveal">
+<p><b>A</b>。路边这条直线把每两条车位线都「截」了一下，截出的同位角一样大，这样的两条直线平行。角度差一点（\(55^\circ\) 和 \(65^\circ\)），延长后就会相交。</p>
+<p>不用延长到无穷远，只看<b>角</b>就能判断平行——这一节要讲：<b>由角怎样判定平行？反过来，平行时角又有什么关系？</b></p>
+</div>
+</div>
 </section>
 
 <section class="step" data-title="讲清楚">
-  <div class="vid" data-video="concept"></div>
-  <h3>1. 先认识几个词：平行线与平行的基本事实</h3>
-  <p class="small">前置知识：两直线相交、同位角、内错角、同旁内角（<a href="j7-1.html">回看 7.1</a>）。点一点，看同一张纸上两条直线的位置：</p>
-  <div class="card">
-    <p><span class="badge-pill badge-a">直觉微图解 ①</span><b>同一平面内的两条直线：不相交，就平行</b></p>
-    <div class="micro-box">
-      <div class="entry-bar" id="m1-bar" role="group" aria-label="两条直线的位置">
-        <button type="button" class="on" data-m="x">相交</button>
-        <button type="button" data-m="p">平行</button>
-        <button type="button" data-m="P">过直线外一点</button>
-        <button type="button" data-m="on">点在直线上</button>
-      </div>
-      <svg class="micro-fig" id="m1-fig" viewBox="0 0 380 190" role="img" aria-label="同一平面内两条直线的位置关系"></svg>
-      <p class="entry-note" id="m1-note" aria-live="polite"></p>
-    </div>
-  </div>
-  <ul>
-    <li><b>平行线</b>：<b>在同一平面内</b>，不相交的两条直线叫作平行线。直线 \(a\) 与 \(b\) 平行，记作 \(a\parallel b\)。</li>
-    <li>在同一平面内，不重合的两条直线只有两种位置关系：<b>相交</b>或<b>平行</b>。两条线段（射线）平行，是说它们所在的直线平行。</li>
-    <li><b>基本事实</b>：<b>过直线外一点</b>，有且只有一条直线与这条直线平行。</li>
-    <li><b>推论</b>：如果两条直线都与第三条直线平行，那么这两条直线也互相平行（画一画就能确认）。</li>
-  </ul>
-  <div class="concept-grid">
-    <div class="card">
-      <p><span class="badge-pill badge-b">核心概念 ②</span><b>“同一平面内”不能省</b></p>
-      <p class="small" style="margin:0">一个长方体纸盒，上底面前面那条棱和下底面右边那条棱，永远碰不到，可它们并不平行，因为不在同一个平面里。我们在一张纸上画图，说的平行都是同一平面内的。</p>
-    </div>
-    <div class="card">
-      <p><span class="badge-pill badge-no">核心概念 ③</span><b>“直线外”不能省</b></p>
-      <p class="small" style="margin:0">点在直线上时，过这个点的直线要么就是原直线，要么和它相交，谈不上画平行线。所以基本事实说的是“过直线<b>外</b>一点”。</p>
-    </div>
-  </div>
+<div class="vid" data-video="concept"></div>
+<h3>1. 先认识几个词：平行线与平行的基本事实</h3>
+<p class="small">前置知识：两直线相交、同位角、内错角、同旁内角（<a href="j7-1.html">回看 7.1</a>）。点一点，看同一张纸上两条直线的位置：</p>
+<div class="card">
+<p><span class="badge-pill badge-a">直觉微图解 ①</span><b>同一平面内的两条直线：不相交，就平行</b></p>
+<div class="micro-box">
+<div class="entry-bar" id="m1-bar" role="group" aria-label="两条直线的位置">
+<button type="button" class="on" data-m="x">相交</button>
+<button type="button" data-m="p">平行</button>
+<button type="button" data-m="P">过直线外一点</button>
+<button type="button" data-m="on">点在直线上</button>
+</div>
+<svg class="micro-fig" id="m1-fig" viewBox="0 0 380 190" role="img" aria-label="同一平面内两条直线的位置关系"></svg>
+<p class="entry-note" id="m1-note" aria-live="polite"></p>
+</div>
+</div>
+<ul>
+<li><b>平行线</b>：<b>在同一平面内</b>，不相交的两条直线叫作平行线。直线 \(a\) 与 \(b\) 平行，记作 \(a\parallel b\)。</li>
+<li>在同一平面内，不重合的两条直线只有两种位置关系：<b>相交</b>或<b>平行</b>。两条线段（射线）平行，是说它们所在的直线平行。</li>
+<li><b>基本事实</b>：<b>过直线外一点</b>，有且只有一条直线与这条直线平行。</li>
+<li><b>推论</b>：如果两条直线都与第三条直线平行，那么这两条直线也互相平行（画一画就能确认）。</li>
+</ul>
+<div class="concept-grid">
+<div class="card">
+<p><span class="badge-pill badge-b">核心概念 ②</span><b>“同一平面内”不能省</b></p>
+<p class="small" style="margin:0">一个长方体纸盒，上底面前面那条棱和下底面右边那条棱，永远碰不到，可它们并不平行，因为不在同一个平面里。我们在一张纸上画图，说的平行都是同一平面内的。</p>
+</div>
+<div class="card">
+<p><span class="badge-pill badge-no">核心概念 ③</span><b>“直线外”不能省</b></p>
+<p class="small" style="margin:0">点在直线上时，过这个点的直线要么就是原直线，要么和它相交，谈不上画平行线。所以基本事实说的是“过直线<b>外</b>一点”。</p>
+</div>
+</div>
 
-  <h3>2. 先认角的位置，再学怎样判定平行</h3>
-  <div class="card" id="angle-guide">
-    <p><b>先把三条线和两个交点找出来</b>：\(a\)、\(b\) 是我们要研究的两条直线；\(c\) 穿过它们，叫作<b>截线</b>。每个交点都有四个角。图中的 1–8 是角的名字，不是度数。</p>
-    <p>先看上面的交点：从右上起，逆时针依次是角 1、2、3、4；下面同样编号为角 5、6、7、8。点按钮，每次只看着色的两个角：</p>
-    <div class="entry-bar" id="angle-guide-bar" role="group" aria-label="逐对认识三类角">
-      <button type="button" class="on" data-pair="1,5">同位角：1 和 5</button>
-      <button type="button" data-pair="3,5">内错角：3 和 5</button>
-      <button type="button" data-pair="4,5">同旁内角：4 和 5</button>
-    </div>
-    <svg class="fig practice-fig" id="angle-guide-fig" viewBox="0 0 360 260" role="img" aria-label="三线八角位置图，切换按钮突出一对角"></svg>
-    <p class="entry-note" id="angle-guide-note" aria-live="polite"></p>
-    <p><b>先分位置，再谈大小。</b>叫作同位角、内错角或同旁内角，只是在说明位置，<b>还不能据此说它们相等或互补</b>。要谈大小关系，得再看题目给了什么条件。</p>
-    <p class="small">还要分清两种老关系：\(\angle1\) 与 \(\angle3\) 在<b>同一个交点</b>，是对顶角，总相等；\(\angle1\) 与 \(\angle4\) 的外侧两条边拼成一条直线，是邻补角，总和为 \(180^\circ\)。这两条都不需要 \(a\parallel b\)。</p>
-  </div>
-  <p>直线 \(a\)、\(b\) 被直线 \(c\) 所截，八个角的编号和 7.1 一样：\(a\) 上的交点处，右上、左上、左下、右下依次是 \(\angle1\)–\(\angle4\)；\(b\) 上依次是 \(\angle5\)–\(\angle8\)。</p>
-  <div class="key">
-    <p><b>判定解决的问题：还不知道平不平行，怎样确认？</b></p>
-    <p>① 同位角相等：\(\angle1=\angle5\Rightarrow a\parallel b\)（基本事实）。</p>
-    <p>② 内错角相等：\(\angle3=\angle5\Rightarrow a\parallel b\)。</p>
-    <p>③ 同旁内角互补：\(\angle4+\angle5=180^\circ\Rightarrow a\parallel b\)。</p>
-    <p>三条都从<b>角的关系</b>出发，得到<b>两直线平行</b>。依据写成“同位角相等，两直线平行”，就是把已知和结论按顺序说出来。</p>
-  </div>
-  <div class="card">
-    <p><span class="badge-pill badge-a">直觉微图解 ②</span><b>\(\angle1\) 固定为 \(62^\circ\)，转一转 \(b\)：只有 \(\angle5=\angle1\) 时，\(a\)、\(b\) 才不相交</b></p>
-    <div class="micro-box">
-      <div class="entry-bar" id="m2-bar" role="group" aria-label="∠5 的大小">
-        <button type="button" class="on" data-be="10">∠5 = 52°</button>
-        <button type="button" data-be="0">∠5 = 62°</button>
-        <button type="button" data-be="-10">∠5 = 72°</button>
-      </div>
-      <svg class="micro-fig" id="m2-fig" viewBox="0 0 400 230" role="img" aria-label="同位角是否相等决定两直线是否相交"></svg>
-      <p class="entry-note" id="m2-note" aria-live="polite"></p>
-    </div>
-  </div>
-  <p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
-  <div class="card" id="ex1">
-    <p class="small" style="margin:0 0 4px"><b>例 1（示范：自己推出「内错角相等，两直线平行」）</b></p>
-    <p style="font-size:16.5px;margin:0 0 8px">直线 \(a\)、\(b\) 被直线 \(c\) 所截（编号同上），已知 \(\angle3=\angle5\)。说明 \(a\parallel b\)。</p>
-    <svg class="fig practice-fig" id="ex1-angle-fig" viewBox="0 0 360 260" role="img" aria-label="例1的内错角3、5及过渡角1"></svg>
-    <p><b>① 读懂题意：</b>已知的是一对内错角相等，要推出平行。手里现成能判定平行的依据只有哪一条？</p>
-    <details class="more"><summary>提示 1：转化</summary><p>手里只有「同位角相等，两直线平行」。能不能把 \(\angle3\) 换成 \(\angle5\) 的一个同位角？\(\angle5\) 的同位角是 \(\angle1\)，而 \(\angle1\) 和 \(\angle3\) 是什么关系？</p></details>
-    <details class="more" open><summary>跟着推一遍（可收起）</summary>
-      <div class="think-steps">
-        <div class="think-step"><span class="ts-tag ca">② 想办法：</span>\(\angle1\) 与 \(\angle3\) 是对顶角，相等；于是 \(\angle1=\angle5\)，变成同位角相等。</div>
-        <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>∵ \(\angle1=\angle3\)（对顶角相等），\(\angle3=\angle5\)（已知），<br>∴ \(\angle1=\angle5\)（等量代换）。<br>∴ \(a\parallel b\)（同位角相等，两直线平行）。</div>
-        <div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>每一行括号里都有依据；最后一步用的是判定，「角在前、线在后」✓。「∵」读作「因为」，「∴」读作「所以」。</div>
-      </div>
-      <p><b>④ 回头看：</b>这样推一遍，就得到判定方法 2：<b>内错角相等，两直线平行</b>。同样把 \(\angle4+\angle5=180^\circ\) 里的 \(\angle4\) 换成 \(180^\circ-\angle1\)，可以推出判定方法 3。</p>
-    </details>
-  </div>
-  <div class="card">
-    <p><b>为什么同旁内角互补，也能判平行？</b>仍看上图：已知 \(\angle4+\angle5=180^\circ\)。</p>
-    <p>① \(\angle1+\angle4=180^\circ\)，因为它们是邻补角。<br>② 两个和都是 \(180^\circ\)，都减去 \(\angle4\)，就有 \(\angle1=\angle5\)。<br>③ 这就变成<b>同位角相等</b>，所以 \(a\parallel b\)。</p>
-    <p class="small">内错角和同旁内角的两种判定，都是先转成同位角相等，再用基本事实；不必把三条当作互不相关的口诀。</p>
-  </div>
-  <div class="card predict" data-id="try-1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8mumHj+W+lyBcXChcXGFuZ2xlND0xMDheXFxjaXJjXFwp77yMXFwoXFxhbmdsZTU9NzJeXFxjaXJjXFwp44CC6IO95Yik5a6aIFxcKGFcXHBhcmFsbGVsIGJcXCkg5ZCX77yf55So5ZOq5LiA5p2h77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuiDve+8jOWQjOS9jeinkuebuOetie+8jOS4pOebtOe6v+W5s+ihjDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7og73vvIzlhoXplJnop5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+6IO977yM5ZCM5peB5YaF6KeS5LqS6KGl77yM5Lik55u057q/5bmz6KGMPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuS4jeiDve+8jOWboOS4uiBcXChcXGFuZ2xlNFxcbmVcXGFuZ2xlNVxcKTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAglxcKFxcYW5nbGU0XFwpIOWSjCBcXChcXGFuZ2xlNVxcKSDpg73lpLnlnKggXFwoYVxcKeOAgVxcKGJcXCkg5LmL6Ze077yM6YO95ZyoIFxcKGNcXCkg55qE5Y+z6L6577yM5piv5ZCM5peB5YaF6KeS77ybXFwoMTA4XlxcY2lyYys3Ml5cXGNpcmM9MTgwXlxcY2lyY1xcKe+8jOS6kuihpeOAguWQjOaXgeWGheinkueci+eahOaYr+OAjOWSjOaYr+S4jeaYryBcXCgxODBeXFxjaXJjXFwp44CN77yM5LiN5piv55yL55u4562J77yM5omA5LulIEQg6ZSZ44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <p>自己试试：量得 \(\angle4=108^\circ\)，\(\angle5=72^\circ\)。能判定 \(a\parallel b\) 吗？用哪一条？</p>
-    <div class="opts"><button class="opt" data-v="A"><b>A</b>能，同位角相等，两直线平行</button><button class="opt" data-v="B"><b>B</b>能，内错角相等，两直线平行</button><button class="opt" data-v="C"><b>C</b>能，同旁内角互补，两直线平行</button><button class="opt" data-v="D"><b>D</b>不能，因为 \(\angle4\ne\angle5\)</button></div>
-    <div class="reveal"><p><b>C</b>。\(\angle4\) 和 \(\angle5\) 都夹在 \(a\)、\(b\) 之间，都在 \(c\) 的右边，是同旁内角；\(108^\circ+72^\circ=180^\circ\)，互补。同旁内角看的是「和是不是 \(180^\circ\)」，不是看相等，所以 D 错。</p></div>
-  </div>
+<h3>2. 先认角的位置，再学怎样判定平行</h3>
+<div class="card" id="angle-guide">
+<p><b>先把三条线和两个交点找出来</b>：\(a\)、\(b\) 是我们要研究的两条直线；\(c\) 穿过它们，叫作<b>截线</b>。每个交点都有四个角。图中的 1–8 是角的名字，不是度数。</p>
+<p>先看上面的交点：从右上起，逆时针依次是角 1、2、3、4；下面同样编号为角 5、6、7、8。点按钮，每次只看着色的两个角：</p>
+<div class="entry-bar" id="angle-guide-bar" role="group" aria-label="逐对认识三类角">
+<button type="button" class="on" data-pair="1,5">同位角：1 和 5</button>
+<button type="button" data-pair="3,5">内错角：3 和 5</button>
+<button type="button" data-pair="4,5">同旁内角：4 和 5</button>
+</div>
+<svg class="fig practice-fig" id="angle-guide-fig" viewBox="0 0 360 260" role="img" aria-label="三线八角位置图，切换按钮突出一对角"></svg>
+<p class="entry-note" id="angle-guide-note" aria-live="polite"></p>
+<p><b>先分位置，再谈大小。</b>叫作同位角、内错角或同旁内角，只是在说明位置，<b>还不能据此说它们相等或互补</b>。要谈大小关系，得再看题目给了什么条件。</p>
+<p class="small">还要分清两种老关系：\(\angle1\) 与 \(\angle3\) 在<b>同一个交点</b>，是对顶角，总相等；\(\angle1\) 与 \(\angle4\) 的外侧两条边拼成一条直线，是邻补角，总和为 \(180^\circ\)。这两条都不需要 \(a\parallel b\)。</p>
+</div>
+<p>直线 \(a\)、\(b\) 被直线 \(c\) 所截，八个角的编号和 7.1 一样：\(a\) 上的交点处，右上、左上、左下、右下依次是 \(\angle1\)–\(\angle4\)；\(b\) 上依次是 \(\angle5\)–\(\angle8\)。</p>
+<div class="key">
+<p><b>判定解决的问题：还不知道平不平行，怎样确认？</b></p>
+<p>① 同位角相等：\(\angle1=\angle5\Rightarrow a\parallel b\)（基本事实）。</p>
+<p>② 内错角相等：\(\angle3=\angle5\Rightarrow a\parallel b\)。</p>
+<p>③ 同旁内角互补：\(\angle4+\angle5=180^\circ\Rightarrow a\parallel b\)。</p>
+<p>三条都从<b>角的关系</b>出发，得到<b>两直线平行</b>。依据写成“同位角相等，两直线平行”，就是把已知和结论按顺序说出来。</p>
+</div>
+<div class="card">
+<p><span class="badge-pill badge-a">直觉微图解 ②</span><b>\(\angle1\) 固定为 \(62^\circ\)，转一转 \(b\)：只有 \(\angle5=\angle1\) 时，\(a\)、\(b\) 才不相交</b></p>
+<div class="micro-box">
+<div class="entry-bar" id="m2-bar" role="group" aria-label="∠5 的大小">
+<button type="button" class="on" data-be="10">∠5 = 52°</button>
+<button type="button" data-be="0">∠5 = 62°</button>
+<button type="button" data-be="-10">∠5 = 72°</button>
+</div>
+<svg class="micro-fig" id="m2-fig" viewBox="0 0 400 230" role="img" aria-label="同位角是否相等决定两直线是否相交"></svg>
+<p class="entry-note" id="m2-note" aria-live="polite"></p>
+</div>
+</div>
+<p class="small">试着用四步想问题：读懂题意 → 想办法 → 执行并检查 → 回头看。卡住时按需展开提示。</p>
+<div class="card" id="ex1">
+<p class="small" style="margin:0 0 4px"><b>例 1（示范：自己推出「内错角相等，两直线平行」）</b></p>
+<p style="font-size:16.5px;margin:0 0 8px">直线 \(a\)、\(b\) 被直线 \(c\) 所截（编号同上），已知 \(\angle3=\angle5\)。说明 \(a\parallel b\)。</p>
+<svg class="fig practice-fig" id="ex1-angle-fig" viewBox="0 0 360 260" role="img" aria-label="例1的内错角3、5及过渡角1"></svg>
+<p><b>① 读懂题意：</b>已知的是一对内错角相等，要推出平行。手里现成能判定平行的依据只有哪一条？</p>
+<details class="more"><summary>提示 1：转化</summary><p>手里只有「同位角相等，两直线平行」。能不能把 \(\angle3\) 换成 \(\angle5\) 的一个同位角？\(\angle5\) 的同位角是 \(\angle1\)，而 \(\angle1\) 和 \(\angle3\) 是什么关系？</p></details>
+<details class="more" open><summary>跟着推一遍（可收起）</summary>
+<div class="think-steps">
+<div class="think-step"><span class="ts-tag ca">② 想办法：</span>\(\angle1\) 与 \(\angle3\) 是对顶角，相等；于是 \(\angle1=\angle5\)，变成同位角相等。</div>
+<div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>∵ \(\angle1=\angle3\)（对顶角相等），\(\angle3=\angle5\)（已知），<br>∴ \(\angle1=\angle5\)（等量代换）。<br>∴ \(a\parallel b\)（同位角相等，两直线平行）。</div>
+<div class="think-step step-chk"><span class="ts-tag cc">执行中检查：</span>每一行括号里都有依据；最后一步用的是判定，「角在前、线在后」✓。「∵」读作「因为」，「∴」读作「所以」。</div>
+</div>
+<p><b>④ 回头看：</b>这样推一遍，就得到判定方法 2：<b>内错角相等，两直线平行</b>。同样把 \(\angle4+\angle5=180^\circ\) 里的 \(\angle4\) 换成 \(180^\circ-\angle1\)，可以推出判定方法 3。</p>
+</details>
+</div>
+<div class="card">
+<p><b>为什么同旁内角互补，也能判平行？</b>仍看上图：已知 \(\angle4+\angle5=180^\circ\)。</p>
+<p>① \(\angle1+\angle4=180^\circ\)，因为它们是邻补角。<br>② 两个和都是 \(180^\circ\)，都减去 \(\angle4\)，就有 \(\angle1=\angle5\)。<br>③ 这就变成<b>同位角相等</b>，所以 \(a\parallel b\)。</p>
+<p class="small">内错角和同旁内角的两种判定，都是先转成同位角相等，再用基本事实；不必把三条当作互不相关的口诀。</p>
+</div>
+<div class="card predict" data-id="try-1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuPHA+6Ieq5bex6K+V6K+V77ya6YeP5b6XIFxcKFxcYW5nbGU0PTEwOF5cXGNpcmNcXCnvvIxcXChcXGFuZ2xlNT03Ml5cXGNpcmNcXCnjgILog73liKTlrpogXFwoYVxccGFyYWxsZWwgYlxcKSDlkJfvvJ/nlKjlk6rkuIDmnaHvvJ88L3A+XG48ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7og73vvIzlkIzkvY3op5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+6IO977yM5YaF6ZSZ6KeS55u4562J77yM5Lik55u057q/5bmz6KGMPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuiDve+8jOWQjOaXgeWGheinkuS6kuihpe+8jOS4pOebtOe6v+W5s+ihjDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuI3og73vvIzlm6DkuLogXFwoXFxhbmdsZTRcXG5lXFxhbmdsZTVcXCk8L2J1dHRvbj48L2Rpdj5cbjxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAglxcKFxcYW5nbGU0XFwpIOWSjCBcXChcXGFuZ2xlNVxcKSDpg73lpLnlnKggXFwoYVxcKeOAgVxcKGJcXCkg5LmL6Ze077yM6YO95ZyoIFxcKGNcXCkg55qE5Y+z6L6577yM5piv5ZCM5peB5YaF6KeS77ybXFwoMTA4XlxcY2lyYys3Ml5cXGNpcmM9MTgwXlxcY2lyY1xcKe+8jOS6kuihpeOAguWQjOaXgeWGheinkueci+eahOaYr+OAjOWSjOaYr+S4jeaYryBcXCgxODBeXFxjaXJjXFwp44CN77yM5LiN5piv55yL55u4562J77yM5omA5LulIEQg6ZSZ44CCPC9wPjwvZGl2PlxuIn0=">
+<p>自己试试：量得 \(\angle4=108^\circ\)，\(\angle5=72^\circ\)。能判定 \(a\parallel b\) 吗？用哪一条？</p>
+<div class="opts"><button class="opt" data-v="A"><b>A</b>能，同位角相等，两直线平行</button><button class="opt" data-v="B"><b>B</b>能，内错角相等，两直线平行</button><button class="opt" data-v="C"><b>C</b>能，同旁内角互补，两直线平行</button><button class="opt" data-v="D"><b>D</b>不能，因为 \(\angle4\ne\angle5\)</button></div>
+<div class="reveal"><p><b>C</b>。\(\angle4\) 和 \(\angle5\) 都夹在 \(a\)、\(b\) 之间，都在 \(c\) 的右边，是同旁内角；\(108^\circ+72^\circ=180^\circ\)，互补。同旁内角看的是「和是不是 \(180^\circ\)」，不是看相等，所以 D 错。</p></div>
+</div>
 
-  <h3>3. 核心点：平行线有什么性质（由线推出角）</h3>
-  <div class="key">
-    <p><b>性质解决另一个问题：已经知道平行，能得到哪些角的关系？</b></p>
-    <p>先有 \(a\parallel b\)，才有同位角相等：\(\color{#2F7A56}{\underbrace{\angle1=\angle5}_{\text{同位角相等}}}\)。这是测量、观察后本节先承认的性质，不是基本事实，也不能只因把判定反过来读就当作证明。</p>
-    <p>再用对顶角：\(\angle3=\angle1=\angle5\)，得到<b>两直线平行，内错角相等</b>。</p>
-    <p>再用邻补角：\(\angle4+\angle1=180^\circ\)，把 \(\angle1\) 换成 \(\angle5\)，得到<b>两直线平行，同旁内角互补</b>。</p>
-  </div>
-  <div class="card">
-    <p><span class="badge-pill badge-a">直觉微图解 ③</span><b>\(a\parallel b\) 不动，换一条截线：八个角至多两种大小；截线垂直时全是直角</b></p>
-    <div class="micro-box">
-      <div class="entry-bar" id="m3-bar" role="group" aria-label="截线的方向">
-        <button type="button" class="on" data-g="50">截线斜一点</button>
-        <button type="button" data-g="75">陡一点</button>
-        <button type="button" data-g="90">垂直</button>
-        <button type="button" data-g="118">向左斜</button>
-      </div>
-      <svg class="micro-fig" id="m3-fig" viewBox="0 0 400 230" role="img" aria-label="两条平行线被截线所截的八个角的度数"></svg>
-      <p class="entry-note" id="m3-note" aria-live="polite"></p>
-    </div>
-  </div>
-  <div class="card" id="ex-basic">
-    <p><b>先跟着算一题：</b>已知 \(a\parallel b\)，\(\angle1=68^\circ\)，求 \(\angle5\)、\(\angle6\)。</p>
-    <svg class="fig practice-fig" id="basic-angle-fig" viewBox="0 0 360 260" role="img" aria-label="基础算角例题：角1为68度，先找同位角5，再找邻补角6"></svg>
-    <ol>
-      <li><b>先跨到下面的交点。</b>题目已经给了平行，可以用性质。\(\angle1\)、\(\angle5\) 都在各自交点的右上，是同位角，所以 \(\angle5=\angle1=68^\circ\)。依据是“两直线平行，同位角相等”。</li>
-      <li><b>再在同一个交点里求角。</b>\(\angle5\)、\(\angle6\) 并排拼成平角，是邻补角，所以 \(\angle6=180^\circ-68^\circ=112^\circ\)。这一步用邻补角互补。</li>
-    </ol>
-    <p><b>为什么先找角 5？</b>已知角 1 在上面，要求的角 6 在下面，角 5 能把两步接起来。不是看到数字就马上相减，要先说出是哪一对角、有什么关系。</p>
-    <p class="small">回头检验：\(68^\circ+112^\circ=180^\circ\)，邻补角的和正确。下面换一个已知角，按同样思路走。</p>
-  </div>
-  <div class="card" id="ex2">
-    <p class="small" style="margin:0 0 4px"><b>例 2（示范：已知平行，求角）</b></p>
-    <p style="font-size:16.5px;margin:0 0 8px">直线 \(a\parallel b\)，被直线 \(c\) 所截（编号同上），\(\angle7=124^\circ\)。求 \(\angle1\) 和 \(\angle4\)。</p>
-    <svg class="fig practice-fig" id="ex2-angle-fig" viewBox="0 0 360 260" role="img" aria-label="例2中平行线被截，角7为124度，角1与角4待求"></svg>
-    <details class="more"><summary>提示：从已知角出发找路</summary><p>已知平行，要求角，用性质。\(\angle7\) 的同位角是谁？再从它走到 \(\angle1\)、\(\angle4\)。</p></details>
-    <details class="more" open><summary>跟着推一遍（可收起）</summary>
-      <div class="think-steps">
-        <div class="think-step"><span class="ts-tag ca">想办法：</span>\(\angle7\) 在 \(b\) 的左下，它的同位角是 \(a\) 的左下 \(\angle3\)；\(\angle1\) 是 \(\angle3\) 的对顶角，\(\angle4\) 是 \(\angle3\) 的邻补角。</div>
-        <div class="think-step step-op"><span class="ts-tag cb">执行：</span>∵ \(a\parallel b\)，∴ \(\angle3=\angle7=124^\circ\)（两直线平行，同位角相等）。<br>\(\angle1=\angle3=124^\circ\)（对顶角相等）；\(\angle4=180^\circ-\angle3=56^\circ\)（邻补角互补）。</div>
-        <div class="think-step step-chk"><span class="ts-tag cc">检查：</span>换条路验证：\(\angle5=\angle7=124^\circ\)（对顶角相等）；\(\angle4\) 与 \(\angle5\) 是同旁内角，平行时应互补：\(56^\circ+124^\circ=180^\circ\) ✓。</div>
-      </div>
-      <p><b>回头看：</b>性质的依据语序是「线在前、角在后」。平行线被截，八个角至多两种大小，这里是\(124^\circ\) 和 \(56^\circ\)。</p>
-    </details>
-  </div>
-  <div class="card predict" data-id="try-2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muihpeWFqOS+neaNruOAguOAjOKItSBcXChhXFxwYXJhbGxlbCBiXFwp77yM4oi0IFxcKFxcYW5nbGU0PVxcYW5nbGU2XFwp77yI44CA44CA77yJ44CNPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuWGhemUmeinkuebuOetie+8jOS4pOebtOe6v+W5s+ihjDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuKTnm7Tnur/lubPooYzvvIzlhoXplJnop5Lnm7jnrYk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5a+56aG26KeS55u4562JPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuS4pOebtOe6v+W5s+ihjO+8jOWQjOS9jeinkuebuOetiTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAglxcKFxcYW5nbGU0XFwp77yIXFwoYVxcKSDkuIvmlrnjgIFcXChjXFwpIOWPs+i+ue+8ieWSjCBcXChcXGFuZ2xlNlxcKe+8iFxcKGJcXCkg5LiK5pa544CBXFwoY1xcKSDlt6bovrnvvInmmK/lhoXplJnop5LjgILlt7Lnn6XnmoTmmK/nur/vvIzmjqjlh7rnmoTmmK/op5LvvIznlKjmgKfotKjvvIzjgIznur/lnKjliY3jgIHop5LlnKjlkI7jgI3jgIJBIOaYr+WIpOWumu+8jOaWueWQkeWPjeS6hu+8m+Wug+S7rOS4jeaYr+Wvuemhtuinku+8jOS5n+S4jeaYr+WQjOS9jeinkuOAgjwvcD48L2Rpdj5cbiAgIn0=">
-    <p>自己试试：补全依据。「∵ \(a\parallel b\)，∴ \(\angle4=\angle6\)（　　）」</p>
-    <div class="opts"><button class="opt" data-v="A"><b>A</b>内错角相等，两直线平行</button><button class="opt" data-v="B"><b>B</b>两直线平行，内错角相等</button><button class="opt" data-v="C"><b>C</b>对顶角相等</button><button class="opt" data-v="D"><b>D</b>两直线平行，同位角相等</button></div>
-    <div class="reveal"><p><b>B</b>。\(\angle4\)（\(a\) 下方、\(c\) 右边）和 \(\angle6\)（\(b\) 上方、\(c\) 左边）是内错角。已知的是线，推出的是角，用性质，「线在前、角在后」。A 是判定，方向反了；它们不是对顶角，也不是同位角。</p></div>
-  </div>
+<h3>3. 核心点：平行线有什么性质（由线推出角）</h3>
+<div class="key">
+<p><b>性质解决另一个问题：已经知道平行，能得到哪些角的关系？</b></p>
+<p>先有 \(a\parallel b\)，才有同位角相等：\(\color{#2F7A56}{\underbrace{\angle1=\angle5}_{\text{同位角相等}}}\)。这是测量、观察后本节先承认的性质，不是基本事实，也不能只因把判定反过来读就当作证明。</p>
+<p>再用对顶角：\(\angle3=\angle1=\angle5\)，得到<b>两直线平行，内错角相等</b>。</p>
+<p>再用邻补角：\(\angle4+\angle1=180^\circ\)，把 \(\angle1\) 换成 \(\angle5\)，得到<b>两直线平行，同旁内角互补</b>。</p>
+</div>
+<div class="card">
+<p><span class="badge-pill badge-a">直觉微图解 ③</span><b>\(a\parallel b\) 不动，换一条截线：八个角至多两种大小；截线垂直时全是直角</b></p>
+<div class="micro-box">
+<div class="entry-bar" id="m3-bar" role="group" aria-label="截线的方向">
+<button type="button" class="on" data-g="50">截线斜一点</button>
+<button type="button" data-g="75">陡一点</button>
+<button type="button" data-g="90">垂直</button>
+<button type="button" data-g="118">向左斜</button>
+</div>
+<svg class="micro-fig" id="m3-fig" viewBox="0 0 400 230" role="img" aria-label="两条平行线被截线所截的八个角的度数"></svg>
+<p class="entry-note" id="m3-note" aria-live="polite"></p>
+</div>
+</div>
+<div class="card" id="ex-basic">
+<p><b>先跟着算一题：</b>已知 \(a\parallel b\)，\(\angle1=68^\circ\)，求 \(\angle5\)、\(\angle6\)。</p>
+<svg class="fig practice-fig" id="basic-angle-fig" viewBox="0 0 360 260" role="img" aria-label="基础算角例题：角1为68度，先找同位角5，再找邻补角6"></svg>
+<ol>
+<li><b>先跨到下面的交点。</b>题目已经给了平行，可以用性质。\(\angle1\)、\(\angle5\) 都在各自交点的右上，是同位角，所以 \(\angle5=\angle1=68^\circ\)。依据是“两直线平行，同位角相等”。</li>
+<li><b>再在同一个交点里求角。</b>\(\angle5\)、\(\angle6\) 并排拼成平角，是邻补角，所以 \(\angle6=180^\circ-68^\circ=112^\circ\)。这一步用邻补角互补。</li>
+</ol>
+<p><b>为什么先找角 5？</b>已知角 1 在上面，要求的角 6 在下面，角 5 能把两步接起来。不是看到数字就马上相减，要先说出是哪一对角、有什么关系。</p>
+<p class="small">回头检验：\(68^\circ+112^\circ=180^\circ\)，邻补角的和正确。下面换一个已知角，按同样思路走。</p>
+</div>
+<div class="card" id="ex2">
+<p class="small" style="margin:0 0 4px"><b>例 2（示范：已知平行，求角）</b></p>
+<p style="font-size:16.5px;margin:0 0 8px">直线 \(a\parallel b\)，被直线 \(c\) 所截（编号同上），\(\angle7=124^\circ\)。求 \(\angle1\) 和 \(\angle4\)。</p>
+<svg class="fig practice-fig" id="ex2-angle-fig" viewBox="0 0 360 260" role="img" aria-label="例2中平行线被截，角7为124度，角1与角4待求"></svg>
+<details class="more"><summary>提示：从已知角出发找路</summary><p>已知平行，要求角，用性质。\(\angle7\) 的同位角是谁？再从它走到 \(\angle1\)、\(\angle4\)。</p></details>
+<details class="more" open><summary>跟着推一遍（可收起）</summary>
+<div class="think-steps">
+<div class="think-step"><span class="ts-tag ca">想办法：</span>\(\angle7\) 在 \(b\) 的左下，它的同位角是 \(a\) 的左下 \(\angle3\)；\(\angle1\) 是 \(\angle3\) 的对顶角，\(\angle4\) 是 \(\angle3\) 的邻补角。</div>
+<div class="think-step step-op"><span class="ts-tag cb">执行：</span>∵ \(a\parallel b\)，∴ \(\angle3=\angle7=124^\circ\)（两直线平行，同位角相等）。<br>\(\angle1=\angle3=124^\circ\)（对顶角相等）；\(\angle4=180^\circ-\angle3=56^\circ\)（邻补角互补）。</div>
+<div class="think-step step-chk"><span class="ts-tag cc">检查：</span>换条路验证：\(\angle5=\angle7=124^\circ\)（对顶角相等）；\(\angle4\) 与 \(\angle5\) 是同旁内角，平行时应互补：\(56^\circ+124^\circ=180^\circ\) ✓。</div>
+</div>
+<p><b>回头看：</b>性质的依据语序是「线在前、角在后」。平行线被截，八个角至多两种大小，这里是\(124^\circ\) 和 \(56^\circ\)。</p>
+</details>
+</div>
+<div class="card predict" data-id="try-2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuPHA+6Ieq5bex6K+V6K+V77ya6KGl5YWo5L6d5o2u44CC44CM4oi1IFxcKGFcXHBhcmFsbGVsIGJcXCnvvIziiLQgXFwoXFxhbmdsZTQ9XFxhbmdsZTZcXCnvvIjjgIDjgIDvvInjgI08L3A+XG48ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7lhoXplJnop5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5Lik55u057q/5bmz6KGM77yM5YaF6ZSZ6KeS55u4562JPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuWvuemhtuinkuebuOetiTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuKTnm7Tnur/lubPooYzvvIzlkIzkvY3op5Lnm7jnrYk8L2J1dHRvbj48L2Rpdj5cbjxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAglxcKFxcYW5nbGU0XFwp77yIXFwoYVxcKSDkuIvmlrnjgIFcXChjXFwpIOWPs+i+ue+8ieWSjCBcXChcXGFuZ2xlNlxcKe+8iFxcKGJcXCkg5LiK5pa544CBXFwoY1xcKSDlt6bovrnvvInmmK/lhoXplJnop5LjgILlt7Lnn6XnmoTmmK/nur/vvIzmjqjlh7rnmoTmmK/op5LvvIznlKjmgKfotKjvvIzjgIznur/lnKjliY3jgIHop5LlnKjlkI7jgI3jgIJBIOaYr+WIpOWumu+8jOaWueWQkeWPjeS6hu+8m+Wug+S7rOS4jeaYr+Wvuemhtuinku+8jOS5n+S4jeaYr+WQjOS9jeinkuOAgjwvcD48L2Rpdj5cbiJ9">
+<p>自己试试：补全依据。「∵ \(a\parallel b\)，∴ \(\angle4=\angle6\)（　　）」</p>
+<div class="opts"><button class="opt" data-v="A"><b>A</b>内错角相等，两直线平行</button><button class="opt" data-v="B"><b>B</b>两直线平行，内错角相等</button><button class="opt" data-v="C"><b>C</b>对顶角相等</button><button class="opt" data-v="D"><b>D</b>两直线平行，同位角相等</button></div>
+<div class="reveal"><p><b>B</b>。\(\angle4\)（\(a\) 下方、\(c\) 右边）和 \(\angle6\)（\(b\) 上方、\(c\) 左边）是内错角。已知的是线，推出的是角，用性质，「线在前、角在后」。A 是判定，方向反了；它们不是对顶角，也不是同位角。</p></div>
+</div>
 
-  <h3>4. 核心点：先判定，再用性质</h3>
-  <div class="concept-grid">
-    <div class="card"><p><span class="badge-pill badge-b">判定</span><b>角 ⇒ 线</b></p><p class="small" style="margin:0">已知同位角相等（或内错角相等、同旁内角互补），推出两直线平行。</p></div>
-    <div class="card"><p><span class="badge-pill badge-a">性质</span><b>线 ⇒ 角</b></p><p class="small" style="margin:0">已知两直线平行，推出同位角相等、内错角相等、同旁内角互补。</p></div>
-  </div>
-  <p>做题前先圈出已知，再看要得出什么：<b>要说明两条线平行</b>，找一对角的关系，用判定；<b>已知平行、要求角</b>，先用性质。若只给一个角、既没说平行也不能判定平行，就不能跨交点直接套性质。有时要两步接力：先判定平行，再用性质求角。</p>
-  <div class="card" id="ex3">
-    <p class="small" style="margin:0 0 4px"><b>例 3（示范：两条截线接力）</b></p>
-    <p style="font-size:16.5px;margin:0 0 8px">如图，直线 \(a\)、\(b\) 被直线 \(c\)、\(d\) 所截，\(\angle1=\angle2=75^\circ\)，\(\angle3=112^\circ\)。求 \(\angle4\)。</p>
-    <svg class="micro-fig" id="ex3-fig" viewBox="0 0 400 210" role="img" aria-label="两条直线被两条截线所截"></svg>
-    <details class="more"><summary>提示：题目没说 a <span class="py-par">∥</span> b</summary><p>先看 \(\angle1\)、\(\angle2\) 是哪条截线截出的什么角，能不能先得到 \(a\parallel b\)？再看 \(\angle3\)、\(\angle4\) 是截线 \(d\) 截出的什么角。</p></details>
-    <details class="more"><summary>看完整示范</summary>
-      <div class="think-steps">
-        <div class="think-step"><span class="ts-tag ca">想办法：</span>\(\angle1\)、\(\angle2\) 是 \(a\)、\(b\) 被 \(c\) 所截的同位角，先判定 \(a\parallel b\)；\(\angle3\)、\(\angle4\) 是 \(a\)、\(b\) 被 \(d\) 所截的同旁内角，再用性质。</div>
-        <div class="think-step step-op"><span class="ts-tag cb">执行：</span>∵ \(\angle1=\angle2\)，∴ \(a\parallel b\)（同位角相等，两直线平行）。<br>∴ \(\angle3+\angle4=180^\circ\)（两直线平行，同旁内角互补）。<br>∴ \(\angle4=180^\circ-112^\circ=68^\circ\)。</div>
-        <div class="think-step step-chk"><span class="ts-tag cc">检查：</span>两步依据一个是判定（角在前）、一个是性质（线在前），没有用反 ✓。</div>
-      </div>
-      <p><b>回头看：</b>图上 \(a\)、\(b\) 看起来平行不算数，平行必须由已知条件推出来。</p>
-    </details>
-  </div>
-  <div class="card predict" data-id="try-3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPuiHquW3seivleivle+8muS+iyAzIOmHjOWmguaenDxiPuWOu+aOiTwvYj7mnaHku7bjgIxcXChcXGFuZ2xlMT1cXGFuZ2xlMj03NV5cXGNpcmNcXCnjgI3vvIzlj6rnn6XpgZMgXFwoXFxhbmdsZTM9MTEyXlxcY2lyY1xcKe+8jOi/mOiDveaxguWHuiBcXChcXGFuZ2xlNFxcKSDlkJfvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+6IO977yMXFwoXFxhbmdsZTQ9NjheXFxjaXJjXFwp77yM5Zug5Li65ZCM5peB5YaF6KeS5LqS6KGlPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS4jeiDve+8jOS4jeefpemBkyBcXChhXFwp44CBXFwoYlxcKSDmmK/lkKblubPooYzvvIzlkIzml4HlhoXop5LkuI3kuIDlrprkupLooaU8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+6IO977yMXFwoXFxhbmdsZTQ9MTEyXlxcY2lyY1xcKe+8jOWboOS4uuWbvuS4iueci+i1t+adpeebuOetiTwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAguOAjOWQjOaXgeWGheinkuS6kuihpeOAjeaYr+W5s+ihjOe6v+eahOaAp+i0qO+8jOWJjeaPkOaYr+S4pOebtOe6v+W5s+ihjOOAguayoeaciSBcXChcXGFuZ2xlMT1cXGFuZ2xlMlxcKe+8jOWwseaOqOS4jeWHuiBcXChhXFxwYXJhbGxlbCBiXFwp77yMXFwoXFxhbmdsZTRcXCkg5Y+v5Lul5piv5Yir55qE5bqm5pWw44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <p>自己试试：例 3 里如果<b>去掉</b>条件「\(\angle1=\angle2=75^\circ\)」，只知道 \(\angle3=112^\circ\)，还能求出 \(\angle4\) 吗？</p>
-    <div class="opts"><button class="opt" data-v="A"><b>A</b>能，\(\angle4=68^\circ\)，因为同旁内角互补</button><button class="opt" data-v="B"><b>B</b>不能，不知道 \(a\)、\(b\) 是否平行，同旁内角不一定互补</button><button class="opt" data-v="C"><b>C</b>能，\(\angle4=112^\circ\)，因为图上看起来相等</button></div>
-    <div class="reveal"><p><b>B</b>。「同旁内角互补」是平行线的性质，前提是两直线平行。没有 \(\angle1=\angle2\)，就推不出 \(a\parallel b\)，\(\angle4\) 可以是别的度数。</p></div>
-  </div>
+<h3>4. 核心点：先判定，再用性质</h3>
+<div class="concept-grid">
+<div class="card"><p><span class="badge-pill badge-b">判定</span><b>角 ⇒ 线</b></p><p class="small" style="margin:0">已知同位角相等（或内错角相等、同旁内角互补），推出两直线平行。</p></div>
+<div class="card"><p><span class="badge-pill badge-a">性质</span><b>线 ⇒ 角</b></p><p class="small" style="margin:0">已知两直线平行，推出同位角相等、内错角相等、同旁内角互补。</p></div>
+</div>
+<p>做题前先圈出已知，再看要得出什么：<b>要说明两条线平行</b>，找一对角的关系，用判定；<b>已知平行、要求角</b>，先用性质。若只给一个角、既没说平行也不能判定平行，就不能跨交点直接套性质。有时要两步接力：先判定平行，再用性质求角。</p>
+<div class="card" id="ex3">
+<p class="small" style="margin:0 0 4px"><b>例 3（示范：两条截线接力）</b></p>
+<p style="font-size:16.5px;margin:0 0 8px">如图，直线 \(a\)、\(b\) 被直线 \(c\)、\(d\) 所截，\(\angle1=\angle2=75^\circ\)，\(\angle3=112^\circ\)。求 \(\angle4\)。</p>
+<svg class="micro-fig" id="ex3-fig" viewBox="0 0 400 210" role="img" aria-label="两条直线被两条截线所截"></svg>
+<details class="more"><summary>提示：题目没说 a <span class="py-par">∥</span> b</summary><p>先看 \(\angle1\)、\(\angle2\) 是哪条截线截出的什么角，能不能先得到 \(a\parallel b\)？再看 \(\angle3\)、\(\angle4\) 是截线 \(d\) 截出的什么角。</p></details>
+<details class="more"><summary>看完整示范</summary>
+<div class="think-steps">
+<div class="think-step"><span class="ts-tag ca">想办法：</span>\(\angle1\)、\(\angle2\) 是 \(a\)、\(b\) 被 \(c\) 所截的同位角，先判定 \(a\parallel b\)；\(\angle3\)、\(\angle4\) 是 \(a\)、\(b\) 被 \(d\) 所截的同旁内角，再用性质。</div>
+<div class="think-step step-op"><span class="ts-tag cb">执行：</span>∵ \(\angle1=\angle2\)，∴ \(a\parallel b\)（同位角相等，两直线平行）。<br>∴ \(\angle3+\angle4=180^\circ\)（两直线平行，同旁内角互补）。<br>∴ \(\angle4=180^\circ-112^\circ=68^\circ\)。</div>
+<div class="think-step step-chk"><span class="ts-tag cc">检查：</span>两步依据一个是判定（角在前）、一个是性质（线在前），没有用反 ✓。</div>
+</div>
+<p><b>回头看：</b>图上 \(a\)、\(b\) 看起来平行不算数，平行必须由已知条件推出来。</p>
+</details>
+</div>
+<div class="card predict" data-id="try-3" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuPHA+6Ieq5bex6K+V6K+V77ya5L6LIDMg6YeM5aaC5p6cPGI+5Y675o6JPC9iPuadoeS7tuOAjFxcKFxcYW5nbGUxPVxcYW5nbGUyPTc1XlxcY2lyY1xcKeOAje+8jOWPquefpemBkyBcXChcXGFuZ2xlMz0xMTJeXFxjaXJjXFwp77yM6L+Y6IO95rGC5Ye6IFxcKFxcYW5nbGU0XFwpIOWQl++8nzwvcD5cbjxkaXYgY2xhc3M9XCJvcHRzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuiDve+8jFxcKFxcYW5nbGU0PTY4XlxcY2lyY1xcKe+8jOWboOS4uuWQjOaXgeWGheinkuS6kuihpTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuI3og73vvIzkuI3nn6XpgZMgXFwoYVxcKeOAgVxcKGJcXCkg5piv5ZCm5bmz6KGM77yM5ZCM5peB5YaF6KeS5LiN5LiA5a6a5LqS6KGlPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuiDve+8jFxcKFxcYW5nbGU0PTExMl5cXGNpcmNcXCnvvIzlm6DkuLrlm77kuIrnnIvotbfmnaXnm7jnrYk8L2J1dHRvbj48L2Rpdj5cbjxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAguOAjOWQjOaXgeWGheinkuS6kuihpeOAjeaYr+W5s+ihjOe6v+eahOaAp+i0qO+8jOWJjeaPkOaYr+S4pOebtOe6v+W5s+ihjOOAguayoeaciSBcXChcXGFuZ2xlMT1cXGFuZ2xlMlxcKe+8jOWwseaOqOS4jeWHuiBcXChhXFxwYXJhbGxlbCBiXFwp77yMXFwoXFxhbmdsZTRcXCkg5Y+v5Lul5piv5Yir55qE5bqm5pWw44CCPC9wPjwvZGl2PlxuIn0=">
+<p>自己试试：例 3 里如果<b>去掉</b>条件「\(\angle1=\angle2=75^\circ\)」，只知道 \(\angle3=112^\circ\)，还能求出 \(\angle4\) 吗？</p>
+<div class="opts"><button class="opt" data-v="A"><b>A</b>能，\(\angle4=68^\circ\)，因为同旁内角互补</button><button class="opt" data-v="B"><b>B</b>不能，不知道 \(a\)、\(b\) 是否平行，同旁内角不一定互补</button><button class="opt" data-v="C"><b>C</b>能，\(\angle4=112^\circ\)，因为图上看起来相等</button></div>
+<div class="reveal"><p><b>B</b>。「同旁内角互补」是平行线的性质，前提是两直线平行。没有 \(\angle1=\angle2\)，就推不出 \(a\parallel b\)，\(\angle4\) 可以是别的度数。</p></div>
+</div>
 
-  <h3>5. 用之前必查：三大翻车现场</h3>
-  <div class="trap-grid">
-    <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>以为同位角、内错角总相等</span></div>
-      <div class="trap-body">
-        <div class="trap-vs">
-          <div class="trap-wrong"><b>❌ 典型错解</b>：“\(\angle1\) 和 \(\angle5\) 是同位角，\(\angle1=65^\circ\)，所以 \(\angle5=65^\circ\)。”题目根本没说 \(a\parallel b\)。</div>
-          <div class="trap-right"><b>✅ 看图秒懂</b>：右图 \(a\)、\(b\) 不平行，同位角一个 \(65^\circ\)、一个 \(50^\circ\)。只有先有 \(a\parallel b\)，才能说同位角相等、内错角相等。</div>
-        </div>
-        <div><svg class="micro-fig" id="m-trap" viewBox="0 0 280 190" role="img" aria-label="不平行时同位角不相等"></svg></div>
-      </div>
-    </div>
-    <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>判定和性质用反</span></div>
-      <div class="trap-body">
-        <div class="trap-wrong"><b>❌ 典型错解</b>：“∵ \(a\parallel b\)，∴ \(\angle1=\angle5\)（同位角相等，两直线平行）。”</div>
-        <div class="trap-right"><b>✅ 一眼看清</b>：已知线平行、推角，用性质“两直线平行，同位角相等”；已知角、推平行，才用判定。</div>
-      </div>
-    </div>
-    <div class="trap-card">
-      <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>漏掉“同一平面内”“直线外”</span></div>
-      <div class="trap-body">
-        <div class="trap-wrong"><b>❌ 典型错解</b>：“\(a\perp b\)，\(b\perp c\)，所以 \(a\perp c\)。”“过一点有且只有一条直线与已知直线平行。”</div>
-        <div class="trap-right"><b>✅ 一眼看清</b>：在同一平面内，\(a\)、\(c\) 都垂直于 \(b\)，以 \(b\) 为截线，同位角都是 \(90^\circ\)，所以 \(a\parallel c\)。平行的基本事实里，点必须在直线外。</div>
-      </div>
-    </div>
-  </div>
-  <details class="more"><summary>再深一点（可以先跳过）：为什么“两直线平行，同位角相等”要先承认？</summary>
-    <p>这一条现在没法用已经学过的东西推出来，所以先通过度量确认、接受它。它不算基本事实，是一条暂时不证明的结论，到九年级可以回头证明它。</p>
-    <p>判定和性质是“反过来”的两句话。判定：同位角相等 ⇒ 平行；性质：平行 ⇒ 同位角相等。两句都对，但不能互相代替。</p>
-  </details>
+<h3>5. 用之前必查：三大翻车现场</h3>
+<div class="trap-grid">
+<div class="trap-card">
+<div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频！）</span><span>以为同位角、内错角总相等</span></div>
+<div class="trap-body">
+<div class="trap-vs">
+<div class="trap-wrong"><b>❌ 典型错解</b>：“\(\angle1\) 和 \(\angle5\) 是同位角，\(\angle1=65^\circ\)，所以 \(\angle5=65^\circ\)。”题目根本没说 \(a\parallel b\)。</div>
+<div class="trap-right"><b>✅ 看图秒懂</b>：右图 \(a\)、\(b\) 不平行，同位角一个 \(65^\circ\)、一个 \(50^\circ\)。只有先有 \(a\parallel b\)，才能说同位角相等、内错角相等。</div>
+</div>
+<div><svg class="micro-fig" id="m-trap" viewBox="0 0 280 190" role="img" aria-label="不平行时同位角不相等"></svg></div>
+</div>
+</div>
+<div class="trap-card">
+<div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>判定和性质用反</span></div>
+<div class="trap-body">
+<div class="trap-wrong"><b>❌ 典型错解</b>：“∵ \(a\parallel b\)，∴ \(\angle1=\angle5\)（同位角相等，两直线平行）。”</div>
+<div class="trap-right"><b>✅ 一眼看清</b>：已知线平行、推角，用性质“两直线平行，同位角相等”；已知角、推平行，才用判定。</div>
+</div>
+</div>
+<div class="trap-card">
+<div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>漏掉“同一平面内”“直线外”</span></div>
+<div class="trap-body">
+<div class="trap-wrong"><b>❌ 典型错解</b>：“\(a\perp b\)，\(b\perp c\)，所以 \(a\perp c\)。”“过一点有且只有一条直线与已知直线平行。”</div>
+<div class="trap-right"><b>✅ 一眼看清</b>：在同一平面内，\(a\)、\(c\) 都垂直于 \(b\)，以 \(b\) 为截线，同位角都是 \(90^\circ\)，所以 \(a\parallel c\)。平行的基本事实里，点必须在直线外。</div>
+</div>
+</div>
+</div>
+<details class="more"><summary>再深一点（可以先跳过）：为什么“两直线平行，同位角相等”要先承认？</summary>
+<p>这一条现在没法用已经学过的东西推出来，所以先通过度量确认、接受它。它不算基本事实，是一条暂时不证明的结论，到九年级可以回头证明它。</p>
+<p>判定和性质是“反过来”的两句话。判定：同位角相等 ⇒ 平行；性质：平行 ⇒ 同位角相等。两句都对，但不能互相代替。</p>
+</details>
 </section>
 
 <section class="step" data-title="动手">
-  <h3>① 判定：转动 b，找到不相交的位置</h3>
-  <p class="small">直线 \(a\) 和截线 \(c\) 不动，\(\angle1=60^\circ\)。拖动 \(b\) 上的圆点（或按方向键 ↑ ↓）转动 \(b\)，看 \(\angle5\) 等于 \(\angle1\) 时会怎样。</p>
-  <div class="card">
-    <svg class="fig" id="fig-judge" viewBox="0 0 560 320" role="img" aria-label="转动直线 b 判定平行"></svg>
-    <div class="result" id="out-judge" aria-live="polite"></div>
-    <div class="ctrl"><button class="btn ghost" id="reset-judge" type="button">重置</button></div>
-  </div>
-  <h3>② 性质：a <span class="py-par">∥</span> b 不动，转动截线 c</h3>
-  <p class="small">拖动截线 \(c\) 上的圆点（或按方向键 ↑ ↓），选一类角，看两个角的关系是不是始终成立。</p>
-  <div class="card">
-    <div class="entry-bar" id="prop-bar" role="group" aria-label="选一类角">
-      <button type="button" class="on" data-p="1,5">同位角 ∠1、∠5</button>
-      <button type="button" data-p="3,5">内错角 ∠3、∠5</button>
-      <button type="button" data-p="4,5">同旁内角 ∠4、∠5</button>
-    </div>
-    <svg class="fig" id="fig-prop" viewBox="0 0 560 320" role="img" aria-label="平行线被转动的截线所截"></svg>
-    <div class="result" id="out-prop" aria-live="polite"></div>
-    <div class="ctrl"><button class="btn ghost" id="reset-prop" type="button">重置</button></div>
-  </div>
-  <h3>③ 进阶：拐角处的角，过拐点作平行线</h3>
-  <p class="small">\(AB\parallel CD\)，拐点 \(E\) 在两条平行线之间。拖动 \(E\)（或点它后按方向键），看 \(\angle BED\) 和 \(\angle ABE\)、\(\angle CDE\) 的关系。虚线是过 \(E\) 作的 \(EF\parallel AB\)。</p>
-  <div class="card">
-    <svg class="fig" id="fig-turn" viewBox="0 0 560 320" role="img" aria-label="两条平行线之间的拐角"></svg>
-    <div class="result" id="out-turn" aria-live="polite"></div>
-    <div class="ctrl"><button class="btn ghost" id="reset-turn" type="button">重置</button></div>
-  </div>
+<div class="card" id="parallel-construction">
+<h3>先作一条线：过外点 P 作 a 的平行线</h3>
+<p>黑线 a 和外点 P 固定在同一平面内。先操作，再点“画线并核对”。图框只显示直线的一部分，不能凭框内没交点就说平行。</p>
+<div class="construction-controls">
+<label>操作方式 <select id="pc-mode"><option value="slide">沿直尺平推三角尺</option><option value="rotate">过 P 转动候选直线</option></select></label>
+<p id="pc-instruction">三角尺的一条边已贴合 a。把直尺靠紧另一条直角边，再固定方向。</p>
+<button class="btn ghost" id="pc-lock" type="button">靠紧直尺，固定方向</button>
+<label id="pc-slide-label">三角尺画线边的位置（图中高度） <output id="pc-height-value">240</output>
+<input id="pc-height" type="range" min="90" max="240" step="1" value="240" disabled>
+</label>
+<label id="pc-angle-label" hidden>候选直线方向（度，0° 和 180° 表示同一方向）
+<input id="pc-angle" type="number" min="0" max="360" step="0.1" value="18" inputmode="decimal">
+<input id="pc-angle-range" type="range" min="0" max="360" step="0.1" value="18" aria-label="转动候选直线">
+</label>
+</div>
+<svg id="pc-figure" viewBox="0 0 560 320" role="img" aria-label="固定直线 a、外点 P 与正在操作的作图工具"></svg>
+<div class="ctrl"><button class="btn" id="pc-draw" type="button" disabled>画线并核对</button> <button class="btn ghost" id="pc-reset" type="button">重置作图</button></div>
+<p id="pc-result" class="result" aria-live="polite">请先操作工具，再画线核对。</p>
+<p id="pc-history" class="small" aria-live="polite"></p>
+<details class="more"><summary>把网页操作搬到纸上</summary>
+<ol><li>在纸上画直线 a，在直线外标点 P。将三角尺的一条直角边与 a 重合。</li><li>用直尺紧贴三角尺的另一条直角边，按住直尺不动。</li><li>让三角尺沿直尺平移，不转动，直到原先贴着 a 的边经过 P；沿这条边画直线。</li><li>核对画线是否过 P、三角尺是否转动、画线边与直尺所成的角是否保持。两条画线边与直尺都成直角，同位角相等，可判定平行。</li></ol>
+<p>网页只能核对这里的作图。纸上的线需要你按上述准则亲自核对。</p>
+</details>
+<p class="small">多试几种方向、把同一条线反向再画，比较核对结果。有限次操作帮助我们体验基本事实，不是对所有直线的证明：过直线外一点，有且只有一条直线与这条直线平行；本节把它作为基本事实。</p>
+</div>
+
+<h3>① 判定：转动 b，找到不相交的位置</h3>
+<p class="small">直线 \(a\) 和截线 \(c\) 不动，\(\angle1=60^\circ\)。拖动 \(b\) 上的圆点（或按方向键 ↑ ↓）转动 \(b\)，看 \(\angle5\) 等于 \(\angle1\) 时会怎样。</p>
+<div class="card">
+<svg class="fig" id="fig-judge" viewBox="0 0 560 320" role="img" aria-label="转动直线 b 判定平行"></svg>
+<div class="result" id="out-judge" aria-live="polite"></div>
+<div class="ctrl"><button class="btn ghost" id="reset-judge" type="button">重置</button></div>
+</div>
+<h3>② 性质：a <span class="py-par">∥</span> b 不动，转动截线 c</h3>
+<p class="small">拖动截线 \(c\) 上的圆点（或按方向键 ↑ ↓），选一类角，看两个角的关系是不是始终成立。</p>
+<div class="card">
+<div class="entry-bar" id="prop-bar" role="group" aria-label="选一类角">
+<button type="button" class="on" data-p="1,5">同位角 ∠1、∠5</button>
+<button type="button" data-p="3,5">内错角 ∠3、∠5</button>
+<button type="button" data-p="4,5">同旁内角 ∠4、∠5</button>
+</div>
+<svg class="fig" id="fig-prop" viewBox="0 0 560 320" role="img" aria-label="平行线被转动的截线所截"></svg>
+<div class="result" id="out-prop" aria-live="polite"></div>
+<div class="ctrl"><button class="btn ghost" id="reset-prop" type="button">重置</button></div>
+</div>
+<h3>③ 进阶：拐角处的角，过拐点作平行线</h3>
+<p class="small">\(AB\parallel CD\)，拐点 \(E\) 在两条平行线之间。拖动 \(E\)（或点它后按方向键），看 \(\angle BED\) 和 \(\angle ABE\)、\(\angle CDE\) 的关系。虚线是过 \(E\) 作的 \(EF\parallel AB\)。</p>
+<div class="card">
+<svg class="fig" id="fig-turn" viewBox="0 0 560 320" role="img" aria-label="两条平行线之间的拐角"></svg>
+<div class="result" id="out-turn" aria-live="polite"></div>
+<div class="ctrl"><button class="btn ghost" id="reset-turn" type="button">重置</button></div>
+</div>
 </section>
 
 <section class="step" data-title="练一练">
-  <p class="small">从易到难排好了。第 1–4、6 题的配图沿用“讲清楚”的编号（\(a\)、\(b\) 被 \(c\) 所截，\(\angle1\)–\(\angle4\) 在 \(a\) 上，\(\angle5\)–\(\angle8\) 在 \(b\) 上，都从右上起逆时针编号）。图只表示角的位置，是否平行、角度大小以题目条件为准。</p>
-  <h3>直接用</h3>
-  <div class="card predict" data-id="p1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjEuIOW3suefpSBcXChhXFxwYXJhbGxlbCBiXFwp77yMXFwoXFxhbmdsZTE9NzZeXFxjaXJjXFwp44CCXFwoXFxhbmdsZTZcXCkg5piv5aSa5bCR5bqm77yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJmaWcgcHJhY3RpY2UtZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMjMwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLnm7Tnur8gYeOAgWIg6KKr5oiq57q/IGMg5omA5oiq44CC5LiK5pa55Lqk54K55LuO5Y+z5LiK6LW36YCG5pe26ZKI5Li66KeSMeOAgTLjgIEz44CBNO+8jOS4i+aWueS6pOeCueWQjOagt+S4uuinkjXjgIE244CBN+OAgTjvvJvmmK/lkKblubPooYzku6Xpopjnm67mnaHku7bkuLrlh4ZcIj5cbiAgICAgIDxnIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwidmFyKC0tZmcpXCIgc3Ryb2tlLXdpZHRoPVwiMi41XCI+PHBhdGggZD1cIk0yMiA3MEgzMjggTTIyIDE3MEgzMjggTTExMiAyMTBMMjM4IDMwXCI+PC9wYXRoPjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1mZylcIiBmb250LXNpemU9XCIyMlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjM0MlwiIHk9XCI3N1wiPmE8L3RleHQ+PHRleHQgeD1cIjM0MlwiIHk9XCIxNzdcIj5iPC90ZXh0Pjx0ZXh0IHg9XCIyNzRcIiB5PVwiMjhcIj5jPC90ZXh0PjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1hKVwiIGZvbnQtc2l6ZT1cIjIyXCIgZm9udC13ZWlnaHQ9XCI3MDBcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIyNDhcIiB5PVwiNTZcIj4xPC90ZXh0Pjx0ZXh0IHg9XCIxODRcIiB5PVwiNDRcIj4yPC90ZXh0Pjx0ZXh0IHg9XCIxNzRcIiB5PVwiMTAwXCI+MzwvdGV4dD48dGV4dCB4PVwiMjM2XCIgeT1cIjEwMFwiPjQ8L3RleHQ+PHRleHQgeD1cIjE3OFwiIHk9XCIxNTZcIj41PC90ZXh0Pjx0ZXh0IHg9XCIxMTRcIiB5PVwiMTQ0XCI+NjwvdGV4dD48dGV4dCB4PVwiMTAwXCIgeT1cIjIwMFwiPjc8L3RleHQ+PHRleHQgeD1cIjE2NlwiIHk9XCIyMDBcIj44PC90ZXh0PjwvZz5cbiAgICA8L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDc2XlxcY2lyY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgxMDReXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDE0XlxcY2lyY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuI3og73noa7lrpo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgILiiLUgXFwoYVxccGFyYWxsZWwgYlxcKe+8jOKItCBcXChcXGFuZ2xlNT1cXGFuZ2xlMT03Nl5cXGNpcmNcXCnvvIjkuKTnm7Tnur/lubPooYzvvIzlkIzkvY3op5Lnm7jnrYnvvInvvJtcXChcXGFuZ2xlNj0xODBeXFxjaXJjLTc2XlxcY2lyYz0xMDReXFxjaXJjXFwp77yI6YK76KGl6KeS5LqS6KGl77yJ44CCQyDmmK/miorkupLooaXplJnmiJDkuobkupLkvZnjgII8L3A+PC9kaXY+XG4gICJ9">
-    <p>1. 已知 \(a\parallel b\)，\(\angle1=76^\circ\)。\(\angle6\) 是多少度？</p>
-    <svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
-      <g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
-      <g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
-      <g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
-    </svg>
-    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(76^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(104^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(14^\circ\)</button><button class="opt" data-v="D"><b>D</b>不能确定</button></div>
-    <div class="reveal"><p><b>B</b>。∵ \(a\parallel b\)，∴ \(\angle5=\angle1=76^\circ\)（两直线平行，同位角相等）；\(\angle6=180^\circ-76^\circ=104^\circ\)（邻补角互补）。C 是把互补错成了互余。</p></div>
-  </div>
-  <div class="card predict" data-id="p2" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjIuIOS4i+mdouWTquS4quadoeS7tjxiPuS4jeiDvTwvYj7liKTlrpogXFwoYVxccGFyYWxsZWwgYlxcKe+8nzwvcD5cbiAgICA8c3ZnIGNsYXNzPVwiZmlnIHByYWN0aWNlLWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzYwIDIzMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55u057q/IGHjgIFiIOiiq+aIque6vyBjIOaJgOaIquOAguS4iuaWueS6pOeCueS7juWPs+S4iui1t+mAhuaXtumSiOS4uuinkjHjgIEy44CBM+OAgTTvvIzkuIvmlrnkuqTngrnlkIzmoLfkuLrop5I144CBNuOAgTfjgIE477yb5piv5ZCm5bmz6KGM5Lul6aKY55uu5p2h5Lu25Li65YeGXCI+XG4gICAgICA8ZyBmaWxsPVwibm9uZVwiIHN0cm9rZT1cInZhcigtLWZnKVwiIHN0cm9rZS13aWR0aD1cIjIuNVwiPjxwYXRoIGQ9XCJNMjIgNzBIMzI4IE0yMiAxNzBIMzI4IE0xMTIgMjEwTDIzOCAzMFwiPjwvcGF0aD48L2c+XG4gICAgICA8ZyBmaWxsPVwidmFyKC0tZmcpXCIgZm9udC1zaXplPVwiMjJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIzNDJcIiB5PVwiNzdcIj5hPC90ZXh0Pjx0ZXh0IHg9XCIzNDJcIiB5PVwiMTc3XCI+YjwvdGV4dD48dGV4dCB4PVwiMjc0XCIgeT1cIjI4XCI+YzwvdGV4dD48L2c+XG4gICAgICA8ZyBmaWxsPVwidmFyKC0tYSlcIiBmb250LXNpemU9XCIyMlwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIj48dGV4dCB4PVwiMjQ4XCIgeT1cIjU2XCI+MTwvdGV4dD48dGV4dCB4PVwiMTg0XCIgeT1cIjQ0XCI+MjwvdGV4dD48dGV4dCB4PVwiMTc0XCIgeT1cIjEwMFwiPjM8L3RleHQ+PHRleHQgeD1cIjIzNlwiIHk9XCIxMDBcIj40PC90ZXh0Pjx0ZXh0IHg9XCIxNzhcIiB5PVwiMTU2XCI+NTwvdGV4dD48dGV4dCB4PVwiMTE0XCIgeT1cIjE0NFwiPjY8L3RleHQ+PHRleHQgeD1cIjEwMFwiIHk9XCIyMDBcIj43PC90ZXh0Pjx0ZXh0IHg9XCIxNjZcIiB5PVwiMjAwXCI+ODwvdGV4dD48L2c+XG4gICAgPC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChcXGFuZ2xlMj1cXGFuZ2xlNlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChcXGFuZ2xlND1cXGFuZ2xlNlxcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXChcXGFuZ2xlMytcXGFuZ2xlNj0xODBeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKFxcYW5nbGUyPVxcYW5nbGU0XFwpPC9idXR0b24+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkQ8L2I+44CCXFwoXFxhbmdsZTJcXCkg5ZKMIFxcKFxcYW5nbGU0XFwpIOaYr+Wvuemhtuinku+8jOS4jeeuoSBcXChhXFwp44CBXFwoYlxcKSDlubPkuI3lubPooYzpg73nm7jnrYnvvIzor7TmmI7kuI3kuobku4DkuYjjgIJB44CBQuOAgUMg5YiG5Yir5piv5ZCM5L2N6KeS55u4562J44CB5YaF6ZSZ6KeS55u4562J44CB5ZCM5peB5YaF6KeS5LqS6KGl44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <p>2. 下面哪个条件<b>不能</b>判定 \(a\parallel b\)？</p>
-    <svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
-      <g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
-      <g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
-      <g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
-    </svg>
-    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\angle2=\angle6\)</button><button class="opt" data-v="B"><b>B</b>\(\angle4=\angle6\)</button><button class="opt" data-v="C"><b>C</b>\(\angle3+\angle6=180^\circ\)</button><button class="opt" data-v="D"><b>D</b>\(\angle2=\angle4\)</button></div>
-    <div class="reveal"><p><b>D</b>。\(\angle2\) 和 \(\angle4\) 是对顶角，不管 \(a\)、\(b\) 平不平行都相等，说明不了什么。A、B、C 分别是同位角相等、内错角相等、同旁内角互补。</p></div>
-  </div>
-  <h3>易错</h3>
-  <div class="card predict" data-id="p3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjMuIOOAjOKItSBcXChcXGFuZ2xlMz1cXGFuZ2xlNVxcKe+8jOKItCBcXChhXFxwYXJhbGxlbCBiXFwp77yI44CA44CA77yJ44CN5ous5Y+36YeM5bqU5aGr5LuA5LmI77yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJmaWcgcHJhY3RpY2UtZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMjMwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLnm7Tnur8gYeOAgWIg6KKr5oiq57q/IGMg5omA5oiq44CC5LiK5pa55Lqk54K55LuO5Y+z5LiK6LW36YCG5pe26ZKI5Li66KeSMeOAgTLjgIEz44CBNO+8jOS4i+aWueS6pOeCueWQjOagt+S4uuinkjXjgIE244CBN+OAgTjvvJvmmK/lkKblubPooYzku6Xpopjnm67mnaHku7bkuLrlh4ZcIj5cbiAgICAgIDxnIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwidmFyKC0tZmcpXCIgc3Ryb2tlLXdpZHRoPVwiMi41XCI+PHBhdGggZD1cIk0yMiA3MEgzMjggTTIyIDE3MEgzMjggTTExMiAyMTBMMjM4IDMwXCI+PC9wYXRoPjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1mZylcIiBmb250LXNpemU9XCIyMlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjM0MlwiIHk9XCI3N1wiPmE8L3RleHQ+PHRleHQgeD1cIjM0MlwiIHk9XCIxNzdcIj5iPC90ZXh0Pjx0ZXh0IHg9XCIyNzRcIiB5PVwiMjhcIj5jPC90ZXh0PjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1hKVwiIGZvbnQtc2l6ZT1cIjIyXCIgZm9udC13ZWlnaHQ9XCI3MDBcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIyNDhcIiB5PVwiNTZcIj4xPC90ZXh0Pjx0ZXh0IHg9XCIxODRcIiB5PVwiNDRcIj4yPC90ZXh0Pjx0ZXh0IHg9XCIxNzRcIiB5PVwiMTAwXCI+MzwvdGV4dD48dGV4dCB4PVwiMjM2XCIgeT1cIjEwMFwiPjQ8L3RleHQ+PHRleHQgeD1cIjE3OFwiIHk9XCIxNTZcIj41PC90ZXh0Pjx0ZXh0IHg9XCIxMTRcIiB5PVwiMTQ0XCI+NjwvdGV4dD48dGV4dCB4PVwiMTAwXCIgeT1cIjIwMFwiPjc8L3RleHQ+PHRleHQgeD1cIjE2NlwiIHk9XCIyMDBcIj44PC90ZXh0PjwvZz5cbiAgICA8L3N2Zz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5ZyI5Ye65bey55+l77ya5bey55+l55qE5piv6KeS6L+Y5piv57q/77yf5o6o5Ye655qE5piv5LuA5LmI77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7lhoXplJnop5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5Lik55u057q/5bmz6KGM77yM5YaF6ZSZ6KeS55u4562JPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuWQjOS9jeinkuebuOetie+8jOS4pOebtOe6v+W5s+ihjDwvYnV0dG9uPjwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguW3suefpeeahOaYr+inku+8jOaOqOWHuueahOaYr+e6v++8jOeUqOWIpOWumu+8jOOAjOinkuWcqOWJjeOAgee6v+WcqOWQjuOAjeOAglxcKFxcYW5nbGUzXFwp44CBXFwoXFxhbmdsZTVcXCkg5piv5YaF6ZSZ6KeS77yM5LiN5piv5ZCM5L2N6KeS44CCQiDmmK/mgKfotKjvvIzmlrnlkJHlj43kuobjgII8L3A+PC9kaXY+XG4gICJ9">
-    <p>3. 「∵ \(\angle3=\angle5\)，∴ \(a\parallel b\)（　　）」括号里应填什么？</p>
-    <svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
-      <g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
-      <g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
-      <g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
-    </svg>
-    <details class="more"><summary>提示</summary><p>圈出已知：已知的是角还是线？推出的是什么？</p></details>
-    <div class="opts"><button class="opt" data-v="A"><b>A</b>内错角相等，两直线平行</button><button class="opt" data-v="B"><b>B</b>两直线平行，内错角相等</button><button class="opt" data-v="C"><b>C</b>同位角相等，两直线平行</button></div>
-    <div class="reveal"><p><b>A</b>。已知的是角，推出的是线，用判定，「角在前、线在后」。\(\angle3\)、\(\angle5\) 是内错角，不是同位角。B 是性质，方向反了。</p></div>
-  </div>
-  <div class="card predict" data-id="p4" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuICAgIDxwPjQuIOebtOe6vyBcXChhXFwp44CBXFwoYlxcKSDooqvnm7Tnur8gXFwoY1xcKSDmiYDmiKrvvIjpopjnm67msqHmnInor7QgXFwoYVxcKeOAgVxcKGJcXCkg55qE5L2N572u5YWz57O777yJ77yMXFwoXFxhbmdsZTE9NzBeXFxjaXJjXFwp44CCXFwoXFxhbmdsZTVcXCkg5piv5aSa5bCR5bqm77yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJmaWcgcHJhY3RpY2UtZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMjMwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLnm7Tnur8gYeOAgWIg6KKr5oiq57q/IGMg5omA5oiq44CC5LiK5pa55Lqk54K55LuO5Y+z5LiK6LW36YCG5pe26ZKI5Li66KeSMeOAgTLjgIEz44CBNO+8jOS4i+aWueS6pOeCueWQjOagt+S4uuinkjXjgIE244CBN+OAgTjvvJvmmK/lkKblubPooYzku6Xpopjnm67mnaHku7bkuLrlh4ZcIj5cbiAgICAgIDxnIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwidmFyKC0tZmcpXCIgc3Ryb2tlLXdpZHRoPVwiMi41XCI+PHBhdGggZD1cIk0yMiA3MEgzMjggTTIyIDE3MEgzMjggTTExMiAyMTBMMjM4IDMwXCI+PC9wYXRoPjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1mZylcIiBmb250LXNpemU9XCIyMlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjM0MlwiIHk9XCI3N1wiPmE8L3RleHQ+PHRleHQgeD1cIjM0MlwiIHk9XCIxNzdcIj5iPC90ZXh0Pjx0ZXh0IHg9XCIyNzRcIiB5PVwiMjhcIj5jPC90ZXh0PjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1hKVwiIGZvbnQtc2l6ZT1cIjIyXCIgZm9udC13ZWlnaHQ9XCI3MDBcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIyNDhcIiB5PVwiNTZcIj4xPC90ZXh0Pjx0ZXh0IHg9XCIxODRcIiB5PVwiNDRcIj4yPC90ZXh0Pjx0ZXh0IHg9XCIxNzRcIiB5PVwiMTAwXCI+MzwvdGV4dD48dGV4dCB4PVwiMjM2XCIgeT1cIjEwMFwiPjQ8L3RleHQ+PHRleHQgeD1cIjE3OFwiIHk9XCIxNTZcIj41PC90ZXh0Pjx0ZXh0IHg9XCIxMTRcIiB5PVwiMTQ0XCI+NjwvdGV4dD48dGV4dCB4PVwiMTAwXCIgeT1cIjIwMFwiPjc8L3RleHQ+PHRleHQgeD1cIjE2NlwiIHk9XCIyMDBcIj44PC90ZXh0PjwvZz5cbiAgICA8L3N2Zz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+44CM5ZCM5L2N6KeS55u4562J44CN5oiQ56uL55qE5YmN5o+Q5piv5LuA5LmI77yf6aKY55uu57uZ5LqG5ZCX77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKDcwXlxcY2lyY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXCgxMTBeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKDIwXlxcY2lyY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuI3og73noa7lrpo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+RDwvYj7jgIJcXChcXGFuZ2xlMVxcKSDlkowgXFwoXFxhbmdsZTVcXCkg5piv5ZCM5L2N6KeS77yM5L2G5rKh5pyJIFxcKGFcXHBhcmFsbGVsIGJcXCkg6L+Z5Liq5p2h5Lu277yM5ZCM5L2N6KeS5LiN5LiA5a6a55u4562J44CC5Zu+5LiK44CM55yL6LW35p2l5bmz6KGM44CN5LiN6IO95b2T5bey55+l44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <p>4. 直线 \(a\)、\(b\) 被直线 \(c\) 所截（题目没有说 \(a\)、\(b\) 的位置关系），\(\angle1=70^\circ\)。\(\angle5\) 是多少度？</p>
-    <svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
-      <g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
-      <g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
-      <g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
-    </svg>
-    <details class="more"><summary>提示</summary><p>「同位角相等」成立的前提是什么？题目给了吗？</p></details>
-    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(70^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(110^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(20^\circ\)</button><button class="opt" data-v="D"><b>D</b>不能确定</button></div>
-    <div class="reveal"><p><b>D</b>。\(\angle1\) 和 \(\angle5\) 是同位角，但没有 \(a\parallel b\) 这个条件，同位角不一定相等。图上「看起来平行」不能当已知。</p></div>
-  </div>
-  <div class="card predict" data-id="p5" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjUuIOWcqOWQjOS4gOW5s+mdouWGhe+8jOebtOe6vyBcXChhXFxwZXJwIGJcXCnvvIxcXChiXFxwZXJwIGNcXCnjgILnm7Tnur8gXFwoYVxcKSDlkowgXFwoY1xcKSDmmK/ku4DkuYjlhbPns7vvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cImZpZyBwcmFjdGljZS1maWdcIiB2aWV3Qm94PVwiMCAwIDM2MCAyMzBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuWQjOS4gOW5s+mdouWGhe+8jOebtOe6vyBh44CBYyDpg73kuI7nm7Tnur8gYiDlnoLnm7TvvIzkuKTkuKrkuqTngrnlpITmoIfmnInnm7Top5JcIj5cbiAgICAgIDxnIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwidmFyKC0tZmcpXCIgc3Ryb2tlLXdpZHRoPVwiMi41XCI+PHBhdGggZD1cIk0yMiA2NUgzMjggTTIyIDE3MEgzMjggTTE2NSAyMFYyMTBcIj48L3BhdGg+PC9nPlxuICAgICAgPGcgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJ2YXIoLS1hKVwiIHN0cm9rZS13aWR0aD1cIjIuNVwiPjxwYXRoIGQ9XCJNMTY1IDQ3SDE4M1Y2NSBNMTY1IDE1MkgxODNWMTcwXCI+PC9wYXRoPjwvZz5cbiAgICAgIDxnIGZpbGw9XCJ2YXIoLS1mZylcIiBmb250LXNpemU9XCIyMlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjM0MlwiIHk9XCI3MlwiPmE8L3RleHQ+PHRleHQgeD1cIjM0MlwiIHk9XCIxNzdcIj5jPC90ZXh0Pjx0ZXh0IHg9XCIxNDZcIiB5PVwiMjdcIj5iPC90ZXh0PjwvZz5cbiAgICA8L3N2Zz5cbiAgICA8ZGV0YWlscyBjbGFzcz1cIm1vcmVcIj48c3VtbWFyeT7mj5DnpLo8L3N1bW1hcnk+PHA+5oqKIFxcKGJcXCkg55yL5oiQ5oiq57q/77yMXFwoYVxcKeOAgVxcKGNcXCkg5ZKMIFxcKGJcXCkg55u45Lqk5oiQ55qE5ZCM5L2N6KeS5ZCE5piv5aSa5bCR5bqm77yfPC9wPjwvZGV0YWlscz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKGFcXHBlcnAgY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5cXChhXFxwYXJhbGxlbCBjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuebuOS6pOS9huS4jeWeguebtDwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+PGI+RDwvYj7kuI3og73noa7lrpo8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgILku6UgXFwoYlxcKSDkuLrmiKrnur/vvIxcXChhXFwp44CBXFwoY1xcKSDkuI4gXFwoYlxcKSDmiYDmiJDnmoTlkIzkvY3op5Lpg73mmK8gXFwoOTBeXFxjaXJjXFwp77yI5Z6C55u055qE5a6a5LmJ77yJ77yM55u4562J77yM5omA5LulIFxcKGFcXHBhcmFsbGVsIGNcXCnvvIjlkIzkvY3op5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYzvvInjgILjgIzlnoLnm7Tlho3lnoLnm7Tov5jmmK/lnoLnm7TjgI3mmK/lh63mhJ/op4nnsbvmjqjvvIzplJnkuobjgII8L3A+PC9kaXY+XG4gICJ9">
-    <p>5. 在同一平面内，直线 \(a\perp b\)，\(b\perp c\)。直线 \(a\) 和 \(c\) 是什么关系？</p>
-    <svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="同一平面内，直线 a、c 都与直线 b 垂直，两个交点处标有直角">
-      <g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 65H328 M22 170H328 M165 20V210"/></g>
-      <g fill="none" stroke="var(--a)" stroke-width="2.5"><path d="M165 47H183V65 M165 152H183V170"/></g>
-      <g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="72">a</text><text x="342" y="177">c</text><text x="146" y="27">b</text></g>
-    </svg>
-    <details class="more"><summary>提示</summary><p>把 \(b\) 看成截线，\(a\)、\(c\) 和 \(b\) 相交成的同位角各是多少度？</p></details>
-    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(a\perp c\)</button><button class="opt" data-v="B"><b>B</b>\(a\parallel c\)</button><button class="opt" data-v="C"><b>C</b>相交但不垂直</button><button class="opt" data-v="D"><b>D</b>不能确定</button></div>
-    <div class="reveal"><p><b>B</b>。以 \(b\) 为截线，\(a\)、\(c\) 与 \(b\) 所成的同位角都是 \(90^\circ\)（垂直的定义），相等，所以 \(a\parallel c\)（同位角相等，两直线平行）。「垂直再垂直还是垂直」是凭感觉类推，错了。</p></div>
-  </div>
-  <h3>挑战</h3>
-  <div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjYuIOW3suefpSBcXChhXFxwYXJhbGxlbCBiXFwp77yMXFwoXFxhbmdsZTRcXCkg5q+UIFxcKFxcYW5nbGUxXFwpIOWkpyBcXCg0MF5cXGNpcmNcXCnjgIJcXChcXGFuZ2xlNlxcKSDmmK/lpJrlsJHluqbvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cImZpZyBwcmFjdGljZS1maWdcIiB2aWV3Qm94PVwiMCAwIDM2MCAyMzBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuebtOe6vyBh44CBYiDooqvmiKrnur8gYyDmiYDmiKrjgILkuIrmlrnkuqTngrnku47lj7PkuIrotbfpgIbml7bpkojkuLrop5Ix44CBMuOAgTPjgIE077yM5LiL5pa55Lqk54K55ZCM5qC35Li66KeSNeOAgTbjgIE344CBOO+8m+aYr+WQpuW5s+ihjOS7pemimOebruadoeS7tuS4uuWHhlwiPlxuICAgICAgPGcgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJ2YXIoLS1mZylcIiBzdHJva2Utd2lkdGg9XCIyLjVcIj48cGF0aCBkPVwiTTIyIDcwSDMyOCBNMjIgMTcwSDMyOCBNMTEyIDIxMEwyMzggMzBcIj48L3BhdGg+PC9nPlxuICAgICAgPGcgZmlsbD1cInZhcigtLWZnKVwiIGZvbnQtc2l6ZT1cIjIyXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIj48dGV4dCB4PVwiMzQyXCIgeT1cIjc3XCI+YTwvdGV4dD48dGV4dCB4PVwiMzQyXCIgeT1cIjE3N1wiPmI8L3RleHQ+PHRleHQgeD1cIjI3NFwiIHk9XCIyOFwiPmM8L3RleHQ+PC9nPlxuICAgICAgPGcgZmlsbD1cInZhcigtLWEpXCIgZm9udC1zaXplPVwiMjJcIiBmb250LXdlaWdodD1cIjcwMFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjI0OFwiIHk9XCI1NlwiPjE8L3RleHQ+PHRleHQgeD1cIjE4NFwiIHk9XCI0NFwiPjI8L3RleHQ+PHRleHQgeD1cIjE3NFwiIHk9XCIxMDBcIj4zPC90ZXh0Pjx0ZXh0IHg9XCIyMzZcIiB5PVwiMTAwXCI+NDwvdGV4dD48dGV4dCB4PVwiMTc4XCIgeT1cIjE1NlwiPjU8L3RleHQ+PHRleHQgeD1cIjExNFwiIHk9XCIxNDRcIj42PC90ZXh0Pjx0ZXh0IHg9XCIxMDBcIiB5PVwiMjAwXCI+NzwvdGV4dD48dGV4dCB4PVwiMTY2XCIgeT1cIjIwMFwiPjg8L3RleHQ+PC9nPlxuICAgIDwvc3ZnPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAx77ya5YWI5rGCIOKIoDHjgIHiiKA0PC9zdW1tYXJ5PjxwPlxcKFxcYW5nbGUxXFwpIOWSjCBcXChcXGFuZ2xlNFxcKSDmnInlhazlhbHovrnvvIhcXChhXFwpIOWQkeWPs+eahOmDqOWIhu+8ie+8jOWPpuS4gOi+ueS6kuS4uuWPjeWQkeW7tumVv+e6v++8muWug+S7rOaYr+S7gOS5iOWFs+ezu++8n+WSjOaYr+WkmuWwke+8nzwvcD48L2RldGFpbHM+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDLvvJriiKA2IOWSjOiwgeacieWFs+ezuzwvc3VtbWFyeT48cD5cXChcXGFuZ2xlNlxcKSDlnKggXFwoYlxcKSDkuIrmlrnjgIFcXChjXFwpIOW3pui+ue+8jOWSjCBcXChcXGFuZ2xlNFxcKSDmmK/lk6rkuIDnsbvop5LvvJ88L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNzBeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDExMF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNDBeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDE0MF5cXGNpcmNcXCk8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgIJcXChcXGFuZ2xlMStcXGFuZ2xlND0xODBeXFxjaXJjXFwp77yI6YK76KGl6KeS5LqS6KGl77yJ77yM5Y+IIFxcKFxcYW5nbGU0LVxcYW5nbGUxPTQwXlxcY2lyY1xcKe+8jOaJgOS7pSBcXChcXGFuZ2xlMT03MF5cXGNpcmNcXCnvvIxcXChcXGFuZ2xlND0xMTBeXFxjaXJjXFwp44CC4oi1IFxcKGFcXHBhcmFsbGVsIGJcXCnvvIziiLQgXFwoXFxhbmdsZTY9XFxhbmdsZTQ9MTEwXlxcY2lyY1xcKe+8iOS4pOebtOe6v+W5s+ihjO+8jOWGhemUmeinkuebuOetie+8ieOAguajgOafpe+8mlxcKFxcYW5nbGU1PVxcYW5nbGUxPTcwXlxcY2lyY1xcKe+8iOWQjOS9jeinku+8ie+8jFxcKFxcYW5nbGU1K1xcYW5nbGU2PTE4MF5cXGNpcmNcXCkg4pyT44CCQSDmmK8gXFwoXFxhbmdsZTFcXCnjgII8L3A+PC9kaXY+XG4gICJ9">
-    <p>6. 已知 \(a\parallel b\)，\(\angle4\) 比 \(\angle1\) 大 \(40^\circ\)。\(\angle6\) 是多少度？</p>
-    <svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
-      <g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
-      <g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
-      <g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
-    </svg>
-    <details class="more"><summary>提示 1：先求 ∠1、∠4</summary><p>\(\angle1\) 和 \(\angle4\) 有公共边（\(a\) 向右的部分），另一边互为反向延长线：它们是什么关系？和是多少？</p></details>
-    <details class="more"><summary>提示 2：∠6 和谁有关系</summary><p>\(\angle6\) 在 \(b\) 上方、\(c\) 左边，和 \(\angle4\) 是哪一类角？</p></details>
-    <div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(70^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(110^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(40^\circ\)</button><button class="opt" data-v="D"><b>D</b>\(140^\circ\)</button></div>
-    <div class="reveal"><p><b>B</b>。\(\angle1+\angle4=180^\circ\)（邻补角互补），又 \(\angle4-\angle1=40^\circ\)，所以 \(\angle1=70^\circ\)，\(\angle4=110^\circ\)。∵ \(a\parallel b\)，∴ \(\angle6=\angle4=110^\circ\)（两直线平行，内错角相等）。检查：\(\angle5=\angle1=70^\circ\)（同位角），\(\angle5+\angle6=180^\circ\) ✓。A 是 \(\angle1\)。</p></div>
-  </div>
+<p class="small">从易到难排好了。第 1–4、6 题的配图沿用“讲清楚”的编号（\(a\)、\(b\) 被 \(c\) 所截，\(\angle1\)–\(\angle4\) 在 \(a\) 上，\(\angle5\)–\(\angle8\) 在 \(b\) 上，都从右上起逆时针编号）。图只表示角的位置，是否平行、角度大小以题目条件为准。</p>
+<h3>直接用</h3>
+<div class="card predict" data-id="p1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuPHA+MS4g5bey55+lIFxcKGFcXHBhcmFsbGVsIGJcXCnvvIxcXChcXGFuZ2xlMT03Nl5cXGNpcmNcXCnjgIJcXChcXGFuZ2xlNlxcKSDmmK/lpJrlsJHluqbvvJ88L3A+XG48c3ZnIGNsYXNzPVwiZmlnIHByYWN0aWNlLWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzYwIDIzMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55u057q/IGHjgIFiIOiiq+aIque6vyBjIOaJgOaIquOAguS4iuaWueS6pOeCueS7juWPs+S4iui1t+mAhuaXtumSiOS4uuinkjHjgIEy44CBM+OAgTTvvIzkuIvmlrnkuqTngrnlkIzmoLfkuLrop5I144CBNuOAgTfjgIE477yb5piv5ZCm5bmz6KGM5Lul6aKY55uu5p2h5Lu25Li65YeGXCI+XG48ZyBmaWxsPVwibm9uZVwiIHN0cm9rZT1cInZhcigtLWZnKVwiIHN0cm9rZS13aWR0aD1cIjIuNVwiPjxwYXRoIGQ9XCJNMjIgNzBIMzI4IE0yMiAxNzBIMzI4IE0xMTIgMjEwTDIzOCAzMFwiPjwvcGF0aD48L2c+XG48ZyBmaWxsPVwidmFyKC0tZmcpXCIgZm9udC1zaXplPVwiMjJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIzNDJcIiB5PVwiNzdcIj5hPC90ZXh0Pjx0ZXh0IHg9XCIzNDJcIiB5PVwiMTc3XCI+YjwvdGV4dD48dGV4dCB4PVwiMjc0XCIgeT1cIjI4XCI+YzwvdGV4dD48L2c+XG48ZyBmaWxsPVwidmFyKC0tYSlcIiBmb250LXNpemU9XCIyMlwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIj48dGV4dCB4PVwiMjQ4XCIgeT1cIjU2XCI+MTwvdGV4dD48dGV4dCB4PVwiMTg0XCIgeT1cIjQ0XCI+MjwvdGV4dD48dGV4dCB4PVwiMTc0XCIgeT1cIjEwMFwiPjM8L3RleHQ+PHRleHQgeD1cIjIzNlwiIHk9XCIxMDBcIj40PC90ZXh0Pjx0ZXh0IHg9XCIxNzhcIiB5PVwiMTU2XCI+NTwvdGV4dD48dGV4dCB4PVwiMTE0XCIgeT1cIjE0NFwiPjY8L3RleHQ+PHRleHQgeD1cIjEwMFwiIHk9XCIyMDBcIj43PC90ZXh0Pjx0ZXh0IHg9XCIxNjZcIiB5PVwiMjAwXCI+ODwvdGV4dD48L2c+XG48L3N2Zz5cbjxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNzZeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDEwNF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoMTReXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuS4jeiDveehruWumjwvYnV0dG9uPjwvZGl2PlxuPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPkI8L2I+44CC4oi1IFxcKGFcXHBhcmFsbGVsIGJcXCnvvIziiLQgXFwoXFxhbmdsZTU9XFxhbmdsZTE9NzZeXFxjaXJjXFwp77yI5Lik55u057q/5bmz6KGM77yM5ZCM5L2N6KeS55u4562J77yJ77ybXFwoXFxhbmdsZTY9MTgwXlxcY2lyYy03Nl5cXGNpcmM9MTA0XlxcY2lyY1xcKe+8iOmCu+ihpeinkuS6kuihpe+8ieOAgkMg5piv5oqK5LqS6KGl6ZSZ5oiQ5LqG5LqS5L2Z44CCPC9wPjwvZGl2PlxuIn0=">
+<p>1. 已知 \(a\parallel b\)，\(\angle1=76^\circ\)。\(\angle6\) 是多少度？</p>
+<svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
+<g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
+<g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
+<g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
+</svg>
+<div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(76^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(104^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(14^\circ\)</button><button class="opt" data-v="D"><b>D</b>不能确定</button></div>
+<div class="reveal"><p><b>B</b>。∵ \(a\parallel b\)，∴ \(\angle5=\angle1=76^\circ\)（两直线平行，同位角相等）；\(\angle6=180^\circ-76^\circ=104^\circ\)（邻补角互补）。C 是把互补错成了互余。</p></div>
+</div>
+<div class="card predict" data-id="p2" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuPHA+Mi4g5LiL6Z2i5ZOq5Liq5p2h5Lu2PGI+5LiN6IO9PC9iPuWIpOWumiBcXChhXFxwYXJhbGxlbCBiXFwp77yfPC9wPlxuPHN2ZyBjbGFzcz1cImZpZyBwcmFjdGljZS1maWdcIiB2aWV3Qm94PVwiMCAwIDM2MCAyMzBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuebtOe6vyBh44CBYiDooqvmiKrnur8gYyDmiYDmiKrjgILkuIrmlrnkuqTngrnku47lj7PkuIrotbfpgIbml7bpkojkuLrop5Ix44CBMuOAgTPjgIE077yM5LiL5pa55Lqk54K55ZCM5qC35Li66KeSNeOAgTbjgIE344CBOO+8m+aYr+WQpuW5s+ihjOS7pemimOebruadoeS7tuS4uuWHhlwiPlxuPGcgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJ2YXIoLS1mZylcIiBzdHJva2Utd2lkdGg9XCIyLjVcIj48cGF0aCBkPVwiTTIyIDcwSDMyOCBNMjIgMTcwSDMyOCBNMTEyIDIxMEwyMzggMzBcIj48L3BhdGg+PC9nPlxuPGcgZmlsbD1cInZhcigtLWZnKVwiIGZvbnQtc2l6ZT1cIjIyXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIj48dGV4dCB4PVwiMzQyXCIgeT1cIjc3XCI+YTwvdGV4dD48dGV4dCB4PVwiMzQyXCIgeT1cIjE3N1wiPmI8L3RleHQ+PHRleHQgeD1cIjI3NFwiIHk9XCIyOFwiPmM8L3RleHQ+PC9nPlxuPGcgZmlsbD1cInZhcigtLWEpXCIgZm9udC1zaXplPVwiMjJcIiBmb250LXdlaWdodD1cIjcwMFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjI0OFwiIHk9XCI1NlwiPjE8L3RleHQ+PHRleHQgeD1cIjE4NFwiIHk9XCI0NFwiPjI8L3RleHQ+PHRleHQgeD1cIjE3NFwiIHk9XCIxMDBcIj4zPC90ZXh0Pjx0ZXh0IHg9XCIyMzZcIiB5PVwiMTAwXCI+NDwvdGV4dD48dGV4dCB4PVwiMTc4XCIgeT1cIjE1NlwiPjU8L3RleHQ+PHRleHQgeD1cIjExNFwiIHk9XCIxNDRcIj42PC90ZXh0Pjx0ZXh0IHg9XCIxMDBcIiB5PVwiMjAwXCI+NzwvdGV4dD48dGV4dCB4PVwiMTY2XCIgeT1cIjIwMFwiPjg8L3RleHQ+PC9nPlxuPC9zdmc+XG48ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPlxcKFxcYW5nbGUyPVxcYW5nbGU2XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKFxcYW5nbGU0PVxcYW5nbGU2XFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKFxcYW5nbGUzK1xcYW5nbGU2PTE4MF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoXFxhbmdsZTI9XFxhbmdsZTRcXCk8L2J1dHRvbj48L2Rpdj5cbjxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5EPC9iPuOAglxcKFxcYW5nbGUyXFwpIOWSjCBcXChcXGFuZ2xlNFxcKSDmmK/lr7npobbop5LvvIzkuI3nrqEgXFwoYVxcKeOAgVxcKGJcXCkg5bmz5LiN5bmz6KGM6YO955u4562J77yM6K+05piO5LiN5LqG5LuA5LmI44CCQeOAgULjgIFDIOWIhuWIq+aYr+WQjOS9jeinkuebuOetieOAgeWGhemUmeinkuebuOetieOAgeWQjOaXgeWGheinkuS6kuihpeOAgjwvcD48L2Rpdj5cbiJ9">
+<p>2. 下面哪个条件<b>不能</b>判定 \(a\parallel b\)？</p>
+<svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
+<g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
+<g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
+<g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
+</svg>
+<div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(\angle2=\angle6\)</button><button class="opt" data-v="B"><b>B</b>\(\angle4=\angle6\)</button><button class="opt" data-v="C"><b>C</b>\(\angle3+\angle6=180^\circ\)</button><button class="opt" data-v="D"><b>D</b>\(\angle2=\angle4\)</button></div>
+<div class="reveal"><p><b>D</b>。\(\angle2\) 和 \(\angle4\) 是对顶角，不管 \(a\)、\(b\) 平不平行都相等，说明不了什么。A、B、C 分别是同位角相等、内错角相等、同旁内角互补。</p></div>
+</div>
+<h3>易错</h3>
+<div class="card predict" data-id="p3" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuPHA+My4g44CM4oi1IFxcKFxcYW5nbGUzPVxcYW5nbGU1XFwp77yM4oi0IFxcKGFcXHBhcmFsbGVsIGJcXCnvvIjjgIDjgIDvvInjgI3mi6zlj7fph4zlupTloavku4DkuYjvvJ88L3A+XG48c3ZnIGNsYXNzPVwiZmlnIHByYWN0aWNlLWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzYwIDIzMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55u057q/IGHjgIFiIOiiq+aIque6vyBjIOaJgOaIquOAguS4iuaWueS6pOeCueS7juWPs+S4iui1t+mAhuaXtumSiOS4uuinkjHjgIEy44CBM+OAgTTvvIzkuIvmlrnkuqTngrnlkIzmoLfkuLrop5I144CBNuOAgTfjgIE477yb5piv5ZCm5bmz6KGM5Lul6aKY55uu5p2h5Lu25Li65YeGXCI+XG48ZyBmaWxsPVwibm9uZVwiIHN0cm9rZT1cInZhcigtLWZnKVwiIHN0cm9rZS13aWR0aD1cIjIuNVwiPjxwYXRoIGQ9XCJNMjIgNzBIMzI4IE0yMiAxNzBIMzI4IE0xMTIgMjEwTDIzOCAzMFwiPjwvcGF0aD48L2c+XG48ZyBmaWxsPVwidmFyKC0tZmcpXCIgZm9udC1zaXplPVwiMjJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIzNDJcIiB5PVwiNzdcIj5hPC90ZXh0Pjx0ZXh0IHg9XCIzNDJcIiB5PVwiMTc3XCI+YjwvdGV4dD48dGV4dCB4PVwiMjc0XCIgeT1cIjI4XCI+YzwvdGV4dD48L2c+XG48ZyBmaWxsPVwidmFyKC0tYSlcIiBmb250LXNpemU9XCIyMlwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIj48dGV4dCB4PVwiMjQ4XCIgeT1cIjU2XCI+MTwvdGV4dD48dGV4dCB4PVwiMTg0XCIgeT1cIjQ0XCI+MjwvdGV4dD48dGV4dCB4PVwiMTc0XCIgeT1cIjEwMFwiPjM8L3RleHQ+PHRleHQgeD1cIjIzNlwiIHk9XCIxMDBcIj40PC90ZXh0Pjx0ZXh0IHg9XCIxNzhcIiB5PVwiMTU2XCI+NTwvdGV4dD48dGV4dCB4PVwiMTE0XCIgeT1cIjE0NFwiPjY8L3RleHQ+PHRleHQgeD1cIjEwMFwiIHk9XCIyMDBcIj43PC90ZXh0Pjx0ZXh0IHg9XCIxNjZcIiB5PVwiMjAwXCI+ODwvdGV4dD48L2c+XG48L3N2Zz5cbjxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekujwvc3VtbWFyeT48cD7lnIjlh7rlt7Lnn6XvvJrlt7Lnn6XnmoTmmK/op5Lov5jmmK/nur/vvJ/mjqjlh7rnmoTmmK/ku4DkuYjvvJ88L3A+PC9kZXRhaWxzPlxuPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5YaF6ZSZ6KeS55u4562J77yM5Lik55u057q/5bmz6KGMPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS4pOebtOe6v+W5s+ihjO+8jOWGhemUmeinkuebuOetiTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7lkIzkvY3op5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYw8L2J1dHRvbj48L2Rpdj5cbjxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5BPC9iPuOAguW3suefpeeahOaYr+inku+8jOaOqOWHuueahOaYr+e6v++8jOeUqOWIpOWumu+8jOOAjOinkuWcqOWJjeOAgee6v+WcqOWQjuOAjeOAglxcKFxcYW5nbGUzXFwp44CBXFwoXFxhbmdsZTVcXCkg5piv5YaF6ZSZ6KeS77yM5LiN5piv5ZCM5L2N6KeS44CCQiDmmK/mgKfotKjvvIzmlrnlkJHlj43kuobjgII8L3A+PC9kaXY+XG4ifQ==">
+<p>3. 「∵ \(\angle3=\angle5\)，∴ \(a\parallel b\)（　　）」括号里应填什么？</p>
+<svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
+<g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
+<g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
+<g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
+</svg>
+<details class="more"><summary>提示</summary><p>圈出已知：已知的是角还是线？推出的是什么？</p></details>
+<div class="opts"><button class="opt" data-v="A"><b>A</b>内错角相等，两直线平行</button><button class="opt" data-v="B"><b>B</b>两直线平行，内错角相等</button><button class="opt" data-v="C"><b>C</b>同位角相等，两直线平行</button></div>
+<div class="reveal"><p><b>A</b>。已知的是角，推出的是线，用判定，「角在前、线在后」。\(\angle3\)、\(\angle5\) 是内错角，不是同位角。B 是性质，方向反了。</p></div>
+</div>
+<div class="card predict" data-id="p4" data-answer="D" data-lc-source="eyJhbnN3ZXIiOiJEIiwiaHRtbCI6IlxuPHA+NC4g55u057q/IFxcKGFcXCnjgIFcXChiXFwpIOiiq+ebtOe6vyBcXChjXFwpIOaJgOaIqu+8iOmimOebruayoeacieivtCBcXChhXFwp44CBXFwoYlxcKSDnmoTkvY3nva7lhbPns7vvvInvvIxcXChcXGFuZ2xlMT03MF5cXGNpcmNcXCnjgIJcXChcXGFuZ2xlNVxcKSDmmK/lpJrlsJHluqbvvJ88L3A+XG48c3ZnIGNsYXNzPVwiZmlnIHByYWN0aWNlLWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzYwIDIzMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55u057q/IGHjgIFiIOiiq+aIque6vyBjIOaJgOaIquOAguS4iuaWueS6pOeCueS7juWPs+S4iui1t+mAhuaXtumSiOS4uuinkjHjgIEy44CBM+OAgTTvvIzkuIvmlrnkuqTngrnlkIzmoLfkuLrop5I144CBNuOAgTfjgIE477yb5piv5ZCm5bmz6KGM5Lul6aKY55uu5p2h5Lu25Li65YeGXCI+XG48ZyBmaWxsPVwibm9uZVwiIHN0cm9rZT1cInZhcigtLWZnKVwiIHN0cm9rZS13aWR0aD1cIjIuNVwiPjxwYXRoIGQ9XCJNMjIgNzBIMzI4IE0yMiAxNzBIMzI4IE0xMTIgMjEwTDIzOCAzMFwiPjwvcGF0aD48L2c+XG48ZyBmaWxsPVwidmFyKC0tZmcpXCIgZm9udC1zaXplPVwiMjJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIzNDJcIiB5PVwiNzdcIj5hPC90ZXh0Pjx0ZXh0IHg9XCIzNDJcIiB5PVwiMTc3XCI+YjwvdGV4dD48dGV4dCB4PVwiMjc0XCIgeT1cIjI4XCI+YzwvdGV4dD48L2c+XG48ZyBmaWxsPVwidmFyKC0tYSlcIiBmb250LXNpemU9XCIyMlwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIj48dGV4dCB4PVwiMjQ4XCIgeT1cIjU2XCI+MTwvdGV4dD48dGV4dCB4PVwiMTg0XCIgeT1cIjQ0XCI+MjwvdGV4dD48dGV4dCB4PVwiMTc0XCIgeT1cIjEwMFwiPjM8L3RleHQ+PHRleHQgeD1cIjIzNlwiIHk9XCIxMDBcIj40PC90ZXh0Pjx0ZXh0IHg9XCIxNzhcIiB5PVwiMTU2XCI+NTwvdGV4dD48dGV4dCB4PVwiMTE0XCIgeT1cIjE0NFwiPjY8L3RleHQ+PHRleHQgeD1cIjEwMFwiIHk9XCIyMDBcIj43PC90ZXh0Pjx0ZXh0IHg9XCIxNjZcIiB5PVwiMjAwXCI+ODwvdGV4dD48L2c+XG48L3N2Zz5cbjxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekujwvc3VtbWFyeT48cD7jgIzlkIzkvY3op5Lnm7jnrYnjgI3miJDnq4vnmoTliY3mj5DmmK/ku4DkuYjvvJ/popjnm67nu5nkuoblkJfvvJ88L3A+PC9kZXRhaWxzPlxuPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCg3MF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoMTEwXlxcY2lyY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj5cXCgyMF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiN6IO956Gu5a6aPC9idXR0b24+PC9kaXY+XG48ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+RDwvYj7jgIJcXChcXGFuZ2xlMVxcKSDlkowgXFwoXFxhbmdsZTVcXCkg5piv5ZCM5L2N6KeS77yM5L2G5rKh5pyJIFxcKGFcXHBhcmFsbGVsIGJcXCkg6L+Z5Liq5p2h5Lu277yM5ZCM5L2N6KeS5LiN5LiA5a6a55u4562J44CC5Zu+5LiK44CM55yL6LW35p2l5bmz6KGM44CN5LiN6IO95b2T5bey55+l44CCPC9wPjwvZGl2PlxuIn0=">
+<p>4. 直线 \(a\)、\(b\) 被直线 \(c\) 所截（题目没有说 \(a\)、\(b\) 的位置关系），\(\angle1=70^\circ\)。\(\angle5\) 是多少度？</p>
+<svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
+<g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
+<g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
+<g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
+</svg>
+<details class="more"><summary>提示</summary><p>「同位角相等」成立的前提是什么？题目给了吗？</p></details>
+<div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(70^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(110^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(20^\circ\)</button><button class="opt" data-v="D"><b>D</b>不能确定</button></div>
+<div class="reveal"><p><b>D</b>。\(\angle1\) 和 \(\angle5\) 是同位角，但没有 \(a\parallel b\) 这个条件，同位角不一定相等。图上「看起来平行」不能当已知。</p></div>
+</div>
+<div class="card predict" data-id="p5" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuPHA+NS4g5Zyo5ZCM5LiA5bmz6Z2i5YaF77yM55u057q/IFxcKGFcXHBlcnAgYlxcKe+8jFxcKGJcXHBlcnAgY1xcKeOAguebtOe6vyBcXChhXFwpIOWSjCBcXChjXFwpIOaYr+S7gOS5iOWFs+ezu++8nzwvcD5cbjxzdmcgY2xhc3M9XCJmaWcgcHJhY3RpY2UtZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMjMwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLlkIzkuIDlubPpnaLlhoXvvIznm7Tnur8gYeOAgWMg6YO95LiO55u057q/IGIg5Z6C55u077yM5Lik5Liq5Lqk54K55aSE5qCH5pyJ55u06KeSXCI+XG48ZyBmaWxsPVwibm9uZVwiIHN0cm9rZT1cInZhcigtLWZnKVwiIHN0cm9rZS13aWR0aD1cIjIuNVwiPjxwYXRoIGQ9XCJNMjIgNjVIMzI4IE0yMiAxNzBIMzI4IE0xNjUgMjBWMjEwXCI+PC9wYXRoPjwvZz5cbjxnIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwidmFyKC0tYSlcIiBzdHJva2Utd2lkdGg9XCIyLjVcIj48cGF0aCBkPVwiTTE2NSA0N0gxODNWNjUgTTE2NSAxNTJIMTgzVjE3MFwiPjwvcGF0aD48L2c+XG48ZyBmaWxsPVwidmFyKC0tZmcpXCIgZm9udC1zaXplPVwiMjJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIzNDJcIiB5PVwiNzJcIj5hPC90ZXh0Pjx0ZXh0IHg9XCIzNDJcIiB5PVwiMTc3XCI+YzwvdGV4dD48dGV4dCB4PVwiMTQ2XCIgeT1cIjI3XCI+YjwvdGV4dD48L2c+XG48L3N2Zz5cbjxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekujwvc3VtbWFyeT48cD7mioogXFwoYlxcKSDnnIvmiJDmiKrnur/vvIxcXChhXFwp44CBXFwoY1xcKSDlkowgXFwoYlxcKSDnm7jkuqTmiJDnmoTlkIzkvY3op5LlkITmmK/lpJrlsJHluqbvvJ88L3A+PC9kZXRhaWxzPlxuPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXChhXFxwZXJwIGNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoYVxccGFyYWxsZWwgY1xcKTwvYnV0dG9uPjxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7nm7jkuqTkvYbkuI3lnoLnm7Q8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiN6IO956Gu5a6aPC9idXR0b24+PC9kaXY+XG48ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+QjwvYj7jgILku6UgXFwoYlxcKSDkuLrmiKrnur/vvIxcXChhXFwp44CBXFwoY1xcKSDkuI4gXFwoYlxcKSDmiYDmiJDnmoTlkIzkvY3op5Lpg73mmK8gXFwoOTBeXFxjaXJjXFwp77yI5Z6C55u055qE5a6a5LmJ77yJ77yM55u4562J77yM5omA5LulIFxcKGFcXHBhcmFsbGVsIGNcXCnvvIjlkIzkvY3op5Lnm7jnrYnvvIzkuKTnm7Tnur/lubPooYzvvInjgILjgIzlnoLnm7Tlho3lnoLnm7Tov5jmmK/lnoLnm7TjgI3mmK/lh63mhJ/op4nnsbvmjqjvvIzplJnkuobjgII8L3A+PC9kaXY+XG4ifQ==">
+<p>5. 在同一平面内，直线 \(a\perp b\)，\(b\perp c\)。直线 \(a\) 和 \(c\) 是什么关系？</p>
+<svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="同一平面内，直线 a、c 都与直线 b 垂直，两个交点处标有直角">
+<g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 65H328 M22 170H328 M165 20V210"/></g>
+<g fill="none" stroke="var(--a)" stroke-width="2.5"><path d="M165 47H183V65 M165 152H183V170"/></g>
+<g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="72">a</text><text x="342" y="177">c</text><text x="146" y="27">b</text></g>
+</svg>
+<details class="more"><summary>提示</summary><p>把 \(b\) 看成截线，\(a\)、\(c\) 和 \(b\) 相交成的同位角各是多少度？</p></details>
+<div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(a\perp c\)</button><button class="opt" data-v="B"><b>B</b>\(a\parallel c\)</button><button class="opt" data-v="C"><b>C</b>相交但不垂直</button><button class="opt" data-v="D"><b>D</b>不能确定</button></div>
+<div class="reveal"><p><b>B</b>。以 \(b\) 为截线，\(a\)、\(c\) 与 \(b\) 所成的同位角都是 \(90^\circ\)（垂直的定义），相等，所以 \(a\parallel c\)（同位角相等，两直线平行）。「垂直再垂直还是垂直」是凭感觉类推，错了。</p></div>
+</div>
+<h3>挑战</h3>
+<div class="card predict" data-id="p6" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuPHA+Ni4g5bey55+lIFxcKGFcXHBhcmFsbGVsIGJcXCnvvIxcXChcXGFuZ2xlNFxcKSDmr5QgXFwoXFxhbmdsZTFcXCkg5aSnIFxcKDQwXlxcY2lyY1xcKeOAglxcKFxcYW5nbGU2XFwpIOaYr+WkmuWwkeW6pu+8nzwvcD5cbjxzdmcgY2xhc3M9XCJmaWcgcHJhY3RpY2UtZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgMjMwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLnm7Tnur8gYeOAgWIg6KKr5oiq57q/IGMg5omA5oiq44CC5LiK5pa55Lqk54K55LuO5Y+z5LiK6LW36YCG5pe26ZKI5Li66KeSMeOAgTLjgIEz44CBNO+8jOS4i+aWueS6pOeCueWQjOagt+S4uuinkjXjgIE244CBN+OAgTjvvJvmmK/lkKblubPooYzku6Xpopjnm67mnaHku7bkuLrlh4ZcIj5cbjxnIGZpbGw9XCJub25lXCIgc3Ryb2tlPVwidmFyKC0tZmcpXCIgc3Ryb2tlLXdpZHRoPVwiMi41XCI+PHBhdGggZD1cIk0yMiA3MEgzMjggTTIyIDE3MEgzMjggTTExMiAyMTBMMjM4IDMwXCI+PC9wYXRoPjwvZz5cbjxnIGZpbGw9XCJ2YXIoLS1mZylcIiBmb250LXNpemU9XCIyMlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCI+PHRleHQgeD1cIjM0MlwiIHk9XCI3N1wiPmE8L3RleHQ+PHRleHQgeD1cIjM0MlwiIHk9XCIxNzdcIj5iPC90ZXh0Pjx0ZXh0IHg9XCIyNzRcIiB5PVwiMjhcIj5jPC90ZXh0PjwvZz5cbjxnIGZpbGw9XCJ2YXIoLS1hKVwiIGZvbnQtc2l6ZT1cIjIyXCIgZm9udC13ZWlnaHQ9XCI3MDBcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiPjx0ZXh0IHg9XCIyNDhcIiB5PVwiNTZcIj4xPC90ZXh0Pjx0ZXh0IHg9XCIxODRcIiB5PVwiNDRcIj4yPC90ZXh0Pjx0ZXh0IHg9XCIxNzRcIiB5PVwiMTAwXCI+MzwvdGV4dD48dGV4dCB4PVwiMjM2XCIgeT1cIjEwMFwiPjQ8L3RleHQ+PHRleHQgeD1cIjE3OFwiIHk9XCIxNTZcIj41PC90ZXh0Pjx0ZXh0IHg9XCIxMTRcIiB5PVwiMTQ0XCI+NjwvdGV4dD48dGV4dCB4PVwiMTAwXCIgeT1cIjIwMFwiPjc8L3RleHQ+PHRleHQgeD1cIjE2NlwiIHk9XCIyMDBcIj44PC90ZXh0PjwvZz5cbjwvc3ZnPlxuPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6IDHvvJrlhYjmsYIg4oigMeOAgeKIoDQ8L3N1bW1hcnk+PHA+XFwoXFxhbmdsZTFcXCkg5ZKMIFxcKFxcYW5nbGU0XFwpIOacieWFrOWFsei+ue+8iFxcKGFcXCkg5ZCR5Y+z55qE6YOo5YiG77yJ77yM5Y+m5LiA6L655LqS5Li65Y+N5ZCR5bu26ZW/57q/77ya5a6D5Lus5piv5LuA5LmI5YWz57O777yf5ZKM5piv5aSa5bCR77yfPC9wPjwvZGV0YWlscz5cbjxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekuiAy77ya4oigNiDlkozosIHmnInlhbPns7s8L3N1bW1hcnk+PHA+XFwoXFxhbmdsZTZcXCkg5ZyoIFxcKGJcXCkg5LiK5pa544CBXFwoY1xcKSDlt6bovrnvvIzlkowgXFwoXFxhbmdsZTRcXCkg5piv5ZOq5LiA57G76KeS77yfPC9wPjwvZGV0YWlscz5cbjxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+XFwoNzBeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPlxcKDExMF5cXGNpcmNcXCk8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+XFwoNDBeXFxjaXJjXFwpPC9idXR0b24+PGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPlxcKDE0MF5cXGNpcmNcXCk8L2J1dHRvbj48L2Rpdj5cbjxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5CPC9iPuOAglxcKFxcYW5nbGUxK1xcYW5nbGU0PTE4MF5cXGNpcmNcXCnvvIjpgrvooaXop5LkupLooaXvvInvvIzlj4ggXFwoXFxhbmdsZTQtXFxhbmdsZTE9NDBeXFxjaXJjXFwp77yM5omA5LulIFxcKFxcYW5nbGUxPTcwXlxcY2lyY1xcKe+8jFxcKFxcYW5nbGU0PTExMF5cXGNpcmNcXCnjgILiiLUgXFwoYVxccGFyYWxsZWwgYlxcKe+8jOKItCBcXChcXGFuZ2xlNj1cXGFuZ2xlND0xMTBeXFxjaXJjXFwp77yI5Lik55u057q/5bmz6KGM77yM5YaF6ZSZ6KeS55u4562J77yJ44CC5qOA5p+l77yaXFwoXFxhbmdsZTU9XFxhbmdsZTE9NzBeXFxjaXJjXFwp77yI5ZCM5L2N6KeS77yJ77yMXFwoXFxhbmdsZTUrXFxhbmdsZTY9MTgwXlxcY2lyY1xcKSDinJPjgIJBIOaYryBcXChcXGFuZ2xlMVxcKeOAgjwvcD48L2Rpdj5cbiJ9">
+<p>6. 已知 \(a\parallel b\)，\(\angle4\) 比 \(\angle1\) 大 \(40^\circ\)。\(\angle6\) 是多少度？</p>
+<svg class="fig practice-fig" viewBox="0 0 360 230" role="img" aria-label="直线 a、b 被截线 c 所截。上方交点从右上起逆时针为角1、2、3、4，下方交点同样为角5、6、7、8；是否平行以题目条件为准">
+<g fill="none" stroke="var(--fg)" stroke-width="2.5"><path d="M22 70H328 M22 170H328 M112 210L238 30"/></g>
+<g fill="var(--fg)" font-size="22" text-anchor="middle"><text x="342" y="77">a</text><text x="342" y="177">b</text><text x="274" y="28">c</text></g>
+<g fill="var(--a)" font-size="22" font-weight="700" text-anchor="middle"><text x="248" y="56">1</text><text x="184" y="44">2</text><text x="174" y="100">3</text><text x="236" y="100">4</text><text x="178" y="156">5</text><text x="114" y="144">6</text><text x="100" y="200">7</text><text x="166" y="200">8</text></g>
+</svg>
+<details class="more"><summary>提示 1：先求 ∠1、∠4</summary><p>\(\angle1\) 和 \(\angle4\) 有公共边（\(a\) 向右的部分），另一边互为反向延长线：它们是什么关系？和是多少？</p></details>
+<details class="more"><summary>提示 2：∠6 和谁有关系</summary><p>\(\angle6\) 在 \(b\) 上方、\(c\) 左边，和 \(\angle4\) 是哪一类角？</p></details>
+<div class="opts cols"><button class="opt" data-v="A"><b>A</b>\(70^\circ\)</button><button class="opt" data-v="B"><b>B</b>\(110^\circ\)</button><button class="opt" data-v="C"><b>C</b>\(40^\circ\)</button><button class="opt" data-v="D"><b>D</b>\(140^\circ\)</button></div>
+<div class="reveal"><p><b>B</b>。\(\angle1+\angle4=180^\circ\)（邻补角互补），又 \(\angle4-\angle1=40^\circ\)，所以 \(\angle1=70^\circ\)，\(\angle4=110^\circ\)。∵ \(a\parallel b\)，∴ \(\angle6=\angle4=110^\circ\)（两直线平行，内错角相等）。检查：\(\angle5=\angle1=70^\circ\)（同位角），\(\angle5+\angle6=180^\circ\) ✓。A 是 \(\angle1\)。</p></div>
+</div>
 </section>
 
 <section class="step" data-title="中考真题">
-  <p class="small">“已知平行求角”几乎是各地中考选择题的固定题型。点选项自动判对错，做完看解析。</p>
-  <div id="practice"></div>
+<p class="small">“已知平行求角”几乎是各地中考选择题的固定题型。点选项自动判对错，做完看解析。</p>
+<div id="practice"></div>
 </section>
 
 <section class="card stage-bridge" data-bridge="junior-from-primary" aria-labelledby="stage-bridge-prev-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-prev-title">先修回顾 · 小学数学</h2><p class="small">学这一节之前，如果下面的小学基础还有点生疏，可以先回去温习：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../primary/lessons/p4a-u5.html">小学 · 四上第5单元 · 平行四边形和梯形</a><span class="bridge-why">小学通过三角尺与直尺画垂线和平行线、认识点到直线的距离，初中在此基础上用同位角、内错角、同旁内角建立平行线的判定与性质定理。</span></li></ul><p class="bridge-all"><a href="../../primary/courses.html">打开小学数学课程目录</a></p></section>
 <footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
 </div>
 <script>
-(function () {
-  "use strict";
-  var NS = "http://www.w3.org/2000/svg", RAD = Math.PI / 180;
-  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
-  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle" }, p); t.textContent = s; return t; }
-  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
-  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), no: css("--no"), muted: css("--muted"), card: css("--card") }; }
-  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-  function bar(id, cb) {
-    var b = document.getElementById(id);
-    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
-    b.addEventListener("click", function (ev) {
-      var t = ev.target.closest("button"); if (!t) return;
-      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
-      cb(t);
-      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
-    });
-  }
-  function P(x, y, r, d) { return [x + r * Math.cos(d * RAD), y - r * Math.sin(d * RAD)]; }
-  function arc(p, x, y, r, a0, a1, col, fill) {
-    var s = P(x, y, r, a0), e = P(x, y, r, a1), lg = a1 - a0 > 180 ? 1 : 0;
-    var d = "M" + s[0] + " " + s[1] + " A" + r + " " + r + " 0 " + lg + " 0 " + e[0] + " " + e[1];
-    if (fill) return el("path", { d: "M" + x + " " + y + " L" + d.slice(1) + " Z", fill: col, "fill-opacity": 0.25, stroke: col, "stroke-width": 2.5 }, p);
-    return el("path", { d: d, fill: "none", stroke: col, "stroke-width": 2 }, p);
-  }
-  function line(p, x, y, d, box, col, w, dash) {
-    var dx = Math.cos(d * RAD), dy = -Math.sin(d * RAD), lo = -1e4, hi = 1e4;
-    [[dx, x, box[0], box[2]], [dy, y, box[1], box[3]]].forEach(function (q) {
-      if (Math.abs(q[0]) < 1e-9) return;
-      var t1 = (q[2] - q[1]) / q[0], t2 = (q[3] - q[1]) / q[0];
-      lo = Math.max(lo, Math.min(t1, t2)); hi = Math.min(hi, Math.max(t1, t2));
-    });
-    var a = { x1: x + lo * dx, y1: y + lo * dy, x2: x + hi * dx, y2: y + hi * dy, stroke: col, "stroke-width": w || 2.5 };
-    if (dash) a["stroke-dasharray"] = dash;
-    el("line", a, p); return a;
-  }
-  function dot(p, x, y, col, r) { el("circle", { cx: x, cy: y, r: r || 5, fill: col }, p); }
-  function handle(svg, x, y, col, label, vt, onPt, onKey) {
-    var h = el("circle", { cx: x, cy: y, r: 12, fill: C().card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label, "aria-valuetext": vt, style: "cursor:grab;touch-action:none" }, svg);
-    h.addEventListener("keydown", function (e) { if (onKey(e.key)) e.preventDefault(); });
-    h.addEventListener("pointerdown", function (e) {
-      e.preventDefault();
-      function mv(ev) { var m = svg.getScreenCTM(); if (!m) return; var pt = svg.createSVGPoint(); pt.x = ev.clientX; pt.y = ev.clientY; pt = pt.matrixTransform(m.inverse()); onPt(pt.x, pt.y); }
-      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
-      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
-    });
-    return h;
-  }
-  function step(k, big) { return { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1, PageUp: big, PageDown: -big }[k]; }
-  function four(d1, d2) { return { 1: [d1, d2], 2: [d2, d1 + 180], 3: [d1 + 180, d2 + 180], 4: [d2 + 180, d1 + 360] }; }
-  // 三线八角：a 水平过 (qx,ya)，截线方向 g，b 过截线上 y=yb 的点、方向 be
-  function eight(p, ya, yb, qx, g, be, box, c, sel, sz, rr, vals) {
-    var q2x = qx - (yb - ya) / Math.tan(g * RAD), A1 = four(0, g), A2 = four(be, g);
-    function rng(k) { return k <= 4 ? A1[k] : A2[k - 4]; }
-    function ctr(k) { return k <= 4 ? [qx, ya] : [q2x, yb]; }
-    function val(k) { var r = rng(k); return Math.round(r[1] - r[0]); }
-    sel.forEach(function (k, i) { var o = ctr(k), r = rng(k); arc(p, o[0], o[1], rr + 6, r[0], r[1], i ? c.a : c.no, true); });
-    line(p, qx, ya, 0, box, c.fg); line(p, q2x, yb, be, box, c.fg); line(p, qx, ya, g, box, c.fg);
-    for (var k = 1; k <= 8; k++) {
-      var o = ctr(k), r = rng(k), small = r[1] - r[0] < 45, m = P(o[0], o[1], rr + (vals && small ? 16 : 0), (r[0] + r[1]) / 2);
-      var tk = txt(p, m[0], m[1] + sz / 3, vals ? val(k) + "°" : String(k), sel.indexOf(k) >= 0 ? c.fg : c.muted, 700, sz);
-      tk.setAttribute("paint-order", "stroke fill"); tk.setAttribute("stroke", "var(--card)"); tk.setAttribute("stroke-width", "4px");
-    }
-    return { q2x: q2x, val: val };
-  }
-
-  /* 讲解：认角与基础例题共用一致的编号，大小由几何生成。 */
-  var guidePair = [1, 5];
-  var guideNotes = {
-    1: "同位角看两个交点的相同位置：∠1 在 a 上方、c 右侧；∠5 在 b 上方、c 右侧，都是各自交点的右上角。另有 2和6、3和7、4和8。",
-    3: "内错角先看“内”：∠3、∠5 都夹在 a、b 之间；再看“错”：一个在 c 左侧，一个在 c 右侧。另一对是 ∠4、∠6。",
-    4: "同旁内角先看“内”：∠4、∠5 都夹在 a、b 之间；再看“同旁”：都在 c 右侧。另一对是 ∠3、∠6。"
-  };
-  function angleDiagram(id, pair, g) {
-    var svg = document.getElementById(id), c = C(); svg.innerHTML = "";
-    eight(svg, 80, 180, 200, g, 0, [18, 18, 322, 238], c, pair, 22, 44);
-    txt(svg, 342, 87, "a", c.fg, 700, 22); txt(svg, 342, 187, "b", c.fg, 700, 22);
-    var cx = 200 + 62 / Math.tan(g * RAD);
-    txt(svg, cx + (g < 90 ? 42 : -25), 27, "c", c.fg, 700, 22);
-  }
-  function drawExplanation() {
-    angleDiagram("angle-guide-fig", guidePair, 62);
-    document.getElementById("angle-guide-note").textContent = guideNotes[guidePair[0]];
-    angleDiagram("ex1-angle-fig", [3, 5], 62);
-    angleDiagram("basic-angle-fig", [1, 5], 68);
-    angleDiagram("ex2-angle-fig", [7], 124);
-  }
-  bar("angle-guide-bar", function (t) { guidePair = t.getAttribute("data-pair").split(",").map(Number); drawExplanation(); });
-
-  /* 从例子进入：车位线 */
-  var ef = document.getElementById("entry-fig"), EA = [55, 55];
-  function drawEntry() {
-    var c = C(), y = 196, x1 = 170, x2 = 330, t1 = EA[0], t2 = EA[1]; ef.innerHTML = "";
-    el("line", { x1: 20, y1: y, x2: 500, y2: y, stroke: c.fg, "stroke-width": 3 }, ef); txt(ef, 30, y + 30, "路边", c.muted, 400, 17, "start");
-    line(ef, x1, y, t1, [20, 12, 500, 232], c.b, 3); line(ef, x2, y, t2, [20, 12, 500, 232], c.a, 3);
-    arc(ef, x1, y, 34, 0, t1, c.b, true); arc(ef, x2, y, 34, 0, t2, c.a, true);
-    var m1 = P(x1, y, 56, t1 / 2), m2 = P(x2, y, 56, t2 / 2);
-    txt(ef, m1[0] + 6, m1[1] + 6, t1 + "°", c.b, 700, 18, "start"); txt(ef, m2[0] + 6, m2[1] + 6, t2 + "°", c.a, 700, 18, "start");
-    var k1 = 1 / Math.tan(t1 * RAD), k2 = 1 / Math.tan(t2 * RAD), note;
-    if (t1 === t2) note = "两条线和路边成的角一样大（都是 " + t1 + "°）：怎么延长，两线之间的横向距离都不变，永远碰不到。";
-    else { var h = (x2 - x1) / (k1 - k2); note = t1 + "° 和 " + t2 + "°：只差 " + Math.abs(t1 - t2) + "°，" + (h > 0 ? "往上" : "往下") + "延长约 " + Math.round(Math.abs(h)) + " 个单位就会相交（图外）。"; }
-    document.getElementById("entry-note").textContent = note;
-  }
-  bar("entry-bar", function (t) { EA = t.getAttribute("data-ab").split(",").map(Number); drawEntry(); });
-
-  /* 微图解 ①：相交、平行、过直线外一点 */
-  var m1 = document.getElementById("m1-fig"), m1m = "x";
-  var M1 = { x: "两条直线有一个公共点：相交。", p: "两条直线在同一平面内怎么延长都没有公共点：平行，记作 a ∥ b。", P: "过直线 a 外一点 P：转来转去，只有一条直线（实线）和 a 不相交；别的（虚线）迟早和 a 相交。", on: "点 P 在直线 a 上：过 P 的直线要么就是 a，要么和 a 相交，画不出平行线。所以必须说“直线外”一点。" };
-  function drawM1() {
-    var c = C(), box = [16, 12, 360, 180]; m1.innerHTML = "";
-    line(m1, 190, 140, 0, box, c.fg); txt(m1, 370, 146, "a", c.fg, 700, 17);
-    if (m1m === "x") { line(m1, 150, 140, 18, box, c.a); txt(m1, 352, 60, "b", c.a, 700, 17); dot(m1, 150, 140, c.no); }
-    if (m1m === "p") { line(m1, 190, 60, 0, box, c.a); txt(m1, 370, 66, "b", c.a, 700, 17); }
-    if (m1m === "P") { [14, -18, 34].forEach(function (d) { line(m1, 190, 60, d, box, c.muted, 2, "5 5"); }); line(m1, 190, 60, 0, box, c.a, 3); dot(m1, 190, 60, c.no); txt(m1, 190, 44, "P", c.no, 700, 16); }
-    if (m1m === "on") { [30, 140].forEach(function (d) { line(m1, 190, 140, d, box, c.muted, 2, "5 5"); }); dot(m1, 190, 140, c.no); txt(m1, 190, 168, "P", c.no, 700, 16); }
-    document.getElementById("m1-note").textContent = M1[m1m];
-  }
-  bar("m1-bar", function (t) { m1m = t.getAttribute("data-m"); drawM1(); });
-
-  /* 微图解 ②：转动 b */
-  var m2 = document.getElementById("m2-fig"), m2b = 10;
-  function drawM2() {
-    var c = C(), be = m2b; m2.innerHTML = "";
-    var r = eight(m2, 70, 160, 210, 62, be, [14, 12, 372, 222], c, [1, 5], 15, 30);
-    txt(m2, 384, 76, "a", c.fg, 700, 17);
-    var by = 160 - (372 - r.q2x) * Math.tan(be * RAD); txt(m2, 384, by + 6, "b", c.fg, 700, 17);
-    var v5 = r.val(5);
-    document.getElementById("m2-note").textContent = "∠1 = 62°，∠5 = " + v5 + "°。" + (be === 0 ? "同位角相等：a ∥ b，怎么延长都不相交。" : "同位角不相等：a、b 向" + (be > 0 ? "右" : "左") + "延长会相交。");
-  }
-  bar("m2-bar", function (t) { m2b = +t.getAttribute("data-be"); drawM2(); });
-
-  /* 微图解 ③：平行线被不同截线所截 */
-  var m3 = document.getElementById("m3-fig"), m3g = 50;
-  function drawM3() {
-    var c = C(), g = m3g; m3.innerHTML = "";
-    eight(m3, 70, 170, g > 90 ? 230 : 200, g, 0, [14, 12, 372, 222], c, [1, 5], 14, 32, true);
-    txt(m3, 384, 76, "a", c.fg, 700, 17); txt(m3, 384, 176, "b", c.fg, 700, 17);
-    document.getElementById("m3-note").textContent = g === 90 ? "截线和 a、b 都垂直：八个角全是 90°。" : "八个角里，锐角都是 " + Math.min(g, 180 - g) + "°，钝角都是 " + Math.max(g, 180 - g) + "°：同位角相等，内错角相等，同旁内角一锐一钝、加起来 180°。";
-  }
-  bar("m3-bar", function (t) { m3g = +t.getAttribute("data-g"); drawM3(); });
-
-  /* 例 3 的图：a ∥ b，两条截线 c、d */
-  function drawEx3() {
-    var p = document.getElementById("ex3-fig"), c = C(), box = [14, 12, 372, 200]; p.innerHTML = "";
-    line(p, 200, 60, 0, box, c.fg); line(p, 200, 160, 0, box, c.fg);
-    var qc = 120, qc2 = qc - 100 / Math.tan(75 * RAD), qd = 270, qd2 = qd - 100 / Math.tan(68 * RAD);
-    line(p, qc, 60, 75, box, c.fg); line(p, qd, 60, 68, box, c.fg);
-    arc(p, qc, 60, 24, 0, 75, c.b, true); arc(p, qc2, 160, 24, 0, 75, c.b, true);
-    arc(p, qd, 60, 24, 248, 360, c.no, true); arc(p, qd2, 160, 24, 0, 68, c.a, true);
-    var l = [[P(qc, 60, 40, 37), "1"], [P(qc2, 160, 40, 37), "2"], [P(qd, 60, 40, 304), "3"], [P(qd2, 160, 40, 34), "4"]];
-    l.forEach(function (q) { txt(p, q[0][0], q[0][1] + 6, q[1], c.fg, 700, 16); });
-    txt(p, 384, 66, "a", c.fg, 700, 17); txt(p, 384, 166, "b", c.fg, 700, 17);
-    var tc = P(qc, 60, 46, 75), td = P(qd, 60, 46, 68);
-    txt(p, tc[0] - 10, tc[1] + 6, "c", c.fg, 700, 17, "end"); txt(p, td[0] + 10, td[1] + 6, "d", c.fg, 700, 17, "start");
-  }
-
-  /* 翻车现场 ①：不平行时同位角不等 */
-  function drawTrap() {
-    var p = document.getElementById("m-trap"), c = C(); p.innerHTML = "";
-    var r = eight(p, 60, 140, 150, 65, 15, [10, 10, 262, 180], c, [1, 5], 14, 26, false);
-    var m1 = P(150, 60, 50, 32), m5 = P(r.q2x, 140, 54, 40);
-    var t1 = txt(p, m1[0] + 4, m1[1] + 4, "65°", c.no, 700, 15, "start"); t1.setAttribute("paint-order", "stroke fill"); t1.setAttribute("stroke", "var(--card)"); t1.setAttribute("stroke-width", "4px");
-    var t5 = txt(p, m5[0] + 4, m5[1] + 4, "50°", c.a, 700, 15, "start"); t5.setAttribute("paint-order", "stroke fill"); t5.setAttribute("stroke", "var(--card)"); t5.setAttribute("stroke-width", "4px");
-  }
-
-  /* 动手 ①：判定 */
-  var fj = document.getElementById("fig-judge"), oj = document.getElementById("out-judge"), JB = 12, focJ = false;
-  function drawJudge() {
-    var c = C(), g = 60, ya = 90, yb = 220, qx = 320, box = [20, 16, 530, 304]; fj.innerHTML = "";
-    var r = eight(fj, ya, yb, qx, g, JB, box, c, [1, 5], 18, 28);
-    txt(fj, 544, ya + 7, "a", c.fg, 700, 20);
-    var tc = P(qx, ya, 64, g); txt(fj, tc[0] + 14, tc[1] + 7, "c", c.fg, 700, 20, "start");
-    var hb = P(r.q2x, yb, 180, JB); var tb = txt(fj, Math.min(hb[0] + 34, 544), hb[1] + 7, "b", c.fg, 700, 20); tb.setAttribute("paint-order", "stroke fill"); tb.setAttribute("stroke", "var(--card)"); tb.setAttribute("stroke-width", "4px");
-    var mx = null;
-    if (JB !== 0) { mx = r.q2x + (yb - ya) / Math.tan(JB * RAD); if (mx > 30 && mx < 520) { dot(fj, mx, ya, c.no, 7); } }
-    var hd = handle(fj, hb[0], hb[1], c.b, "直线 b 的方向", "∠5 = " + r.val(5) + "°",
-      function (px, py) { var d = Math.atan2(yb - py, px - r.q2x) / RAD; JB = clamp(Math.round(d), -25, 25); focJ = false; drawJudge(); },
-      function (k) { var s = step(k, 5); if (s === undefined) return false; JB = clamp(JB + s, -25, 25); focJ = true; drawJudge(); return true; });
-    var v5 = r.val(5);
-    oj.innerHTML = "∠1 = 60°，∠5 = " + v5 + "°。" + (JB === 0 ? "<span class=\"sum\">同位角相等，所以 a ∥ b</span>（基本事实）。这时内错角 ∠3 = ∠5 = 60°，同旁内角 ∠4 + ∠5 = 120° + 60° = 180°，三种判定说的是同一件事。" : "同位角不相等，a、b 不平行：" + (mx !== null && mx > 30 && mx < 520 ? "图上已经看到交点（红点）。" : "向" + (JB > 0 ? "右" : "左") + "延长（图外）就会相交。") + "再转 " + Math.abs(JB) + "° 就平行了。");
-    if (focJ) hd.focus();
-  }
-  document.getElementById("reset-judge").onclick = function () { JB = 12; focJ = false; drawJudge(); };
-
-  /* 动手 ②：性质 */
-  var fp = document.getElementById("fig-prop"), op = document.getElementById("out-prop"), PG = 55, PP = [1, 5], focP = false;
-  function drawProp() {
-    var c = C(), ya = 90, yb = 220, qx = 300, box = [20, 16, 530, 304]; fp.innerHTML = "";
-    var r = eight(fp, ya, yb, qx, PG, 0, box, c, PP, 18, 28);
-    txt(fp, 544, ya + 7, "a", c.fg, 700, 20); txt(fp, 544, yb + 7, "b", c.fg, 700, 20);
-    var hc = P(qx, ya, 64, PG);
-    var hd = handle(fp, hc[0], hc[1], c.b, "截线 c 的方向", "∠1 = " + PG + "°",
-      function (px, py) { var d = Math.atan2(ya - py, px - qx) / RAD; if (d < 0) d += 180; PG = clamp(Math.round(d), 30, 150); focP = false; drawProp(); },
-      function (k) { var s = step(k, 10); if (s === undefined) return false; PG = clamp(PG + s, 30, 150); focP = true; drawProp(); return true; });
-    txt(fp, hc[0] + (PG < 90 ? 20 : -20), hc[1] - 4, "c", c.fg, 700, 20, PG < 90 ? "start" : "end");
-    var v = r.val(PP[0]), v5 = r.val(5);
-    op.innerHTML = { 1: "同位角：∠1 = " + v + "°，∠5 = " + v5 + "°，<span class=\"sum\">相等</span>（两直线平行，同位角相等）。", 3: "内错角：∠3 = " + v + "°，∠5 = " + v5 + "°，<span class=\"sum\">相等</span>（两直线平行，内错角相等）。", 4: "同旁内角：∠4 + ∠5 = " + v + "° + " + v5 + "° = <span class=\"sum\">180°</span>（两直线平行，同旁内角互补）。" }[PP[0]] + "截线怎么转，角的大小在变，这个关系不变——前提是 a ∥ b。";
-    if (focP) hd.focus();
-  }
-  bar("prop-bar", function (t) { PP = t.getAttribute("data-p").split(",").map(Number); drawProp(); });
-  document.getElementById("reset-prop").onclick = function () { PG = 55; focP = false; drawProp(); };
-
-  /* 动手 ③：拐角 */
-  var ft = document.getElementById("fig-turn"), ot = document.getElementById("out-turn"), E = [330, 150], focT = false;
-  function drawTurn() {
-    var c = C(), bx = 110, ya = 60, yb = 260, ex = E[0], ey = E[1]; ft.innerHTML = "";
-    el("line", { x1: 40, y1: ya, x2: 530, y2: ya, stroke: c.fg, "stroke-width": 2.5 }, ft); el("line", { x1: 40, y1: yb, x2: 530, y2: yb, stroke: c.fg, "stroke-width": 2.5 }, ft);
-    el("line", { x1: 40, y1: ey, x2: 530, y2: ey, stroke: c.muted, "stroke-width": 2, "stroke-dasharray": "7 6" }, ft);
-    var t1 = Math.atan2(ey - ya, ex - bx) / RAD, t2 = Math.atan2(yb - ey, ex - bx) / RAD, a1 = Math.round(t1), a2 = Math.round(t2), at = Math.round(t1 + t2);
-    arc(ft, bx, ya, 46, -t1, 0, c.no, true); arc(ft, ex, ey, 40, 180 - t1, 180, c.no, true);
-    arc(ft, bx, yb, 46, 0, t2, c.a, true); arc(ft, ex, ey, 52, 180, 180 + t2, c.a, true);
-    el("polyline", { points: bx + "," + ya + " " + ex + "," + ey + " " + bx + "," + yb, fill: "none", stroke: c.b, "stroke-width": 3.5 }, ft);
-    var l1 = P(bx, ya, 76, -t1 / 2), l2 = P(bx, yb, 76, t2 / 2);
-    txt(ft, l1[0], l1[1] + 7, a1 + "°", c.no, 700, 19); txt(ft, l2[0], l2[1] + 7, a2 + "°", c.a, 700, 19);
-    txt(ft, bx - 8, ya - 14, "B", c.fg, 700, 20, "end"); txt(ft, 544, ya + 7, "A", c.fg, 700, 20);
-    txt(ft, bx - 8, yb + 32, "D", c.fg, 700, 20, "end"); txt(ft, 544, yb + 7, "C", c.fg, 700, 20);
-    txt(ft, 34, ey + 7, "F", c.muted, 700, 20, "end");
-    dot(ft, bx, ya, c.fg); dot(ft, bx, yb, c.fg);
-    var hd = handle(ft, ex, ey, c.b, "拐点 E", "∠BED 约 " + at + "°",
-      function (px, py) { E = [clamp(Math.round(px), 200, 500), clamp(Math.round(py), 100, 220)]; focT = false; drawTurn(); },
-      function (k) { var d = { ArrowLeft: [-5, 0], ArrowRight: [5, 0], ArrowUp: [0, -5], ArrowDown: [0, 5] }[k]; if (!d) return false; E = [clamp(E[0] + d[0], 200, 500), clamp(E[1] + d[1], 100, 220)]; focT = true; drawTurn(); return true; });
-    txt(ft, ex + 18, ey - 14, "E", c.b, 700, 20, "start");
-    ot.innerHTML = "量得 ∠ABE ≈ " + a1 + "°，∠CDE ≈ " + a2 + "°，∠BED ≈ <span class=\"sum\">" + at + "°</span>（都是四舍五入到 1° 的测量值，所以两个小角的读数相加可能和总角差 1°）。准确的关系是 ∠BED = ∠ABE + ∠CDE。为什么：过 E 作 EF ∥ AB，则 EF ∥ CD（平行于同一条直线的两条直线平行）；∠BEF = ∠ABE（两直线平行，内错角相等），∠FED = ∠CDE（同理），两块合起来就是 ∠BED。";
-    if (focT) hd.focus();
-  }
-  document.getElementById("reset-turn").onclick = function () { E = [330, 150]; focT = false; drawTurn(); };
-
-  function drawAll() { drawExplanation(); drawEntry(); drawM1(); drawM2(); drawM3(); drawEx3(); drawTrap(); drawJudge(); drawProp(); drawTurn(); }
-  drawAll();
-  new MutationObserver(function () { focJ = focP = focT = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
-  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
-})();
+/* Existing diagrams: whitespace/local names minified for the 60 KiB lesson budget. */
+(function(){"use strict";var t="http://www.w3.org/2000/svg",e=Math.PI/180;function n(e,n,r){var a=document.createElementNS(t,e);for(var i in n)a.setAttribute(i,n[i]);if(r)r.appendChild(a);return a}function r(t,e,r,a,i,o,u,f){var c=n("text",{x:e,y:r,fill:i,"font-size":u||20,"font-weight":o||400,"text-anchor":f||"middle"},t);c.textContent=a;return c}function a(t){return getComputedStyle(document.documentElement).getPropertyValue(t).trim()}function i(){return{fg:a("--fg"),a:a("--a"),b:a("--b"),no:a("--no"),muted:a("--muted"),card:a("--card")}}function o(t,e,n){return Math.max(e,Math.min(n,t))}function u(t,e){var n=document.getElementById(t);[].forEach.call(n.children,function(t){t.setAttribute("aria-pressed",t.classList.contains("on")?"true":"false")});n.addEventListener("click",function(r){var a=r.target.closest("button");if(!a)return;[].forEach.call(n.children,function(t){t.classList.toggle("on",t===a);t.setAttribute("aria-pressed",t===a?"true":"false")});e(a);if(window.Peiyu&&Peiyu.log)Peiyu.log("interact",{id:t,choice:a.textContent.trim()})})}function f(t,n,r,a){return[t+r*Math.cos(a*e),n-r*Math.sin(a*e)]}function c(t,e,r,a,i,o,u,c){var d=f(e,r,a,i),s=f(e,r,a,o),l=o-i>180?1:0;var g="M"+d[0]+" "+d[1]+" A"+a+" "+a+" 0 "+l+" 0 "+s[0]+" "+s[1];if(c)return n("path",{d:"M"+e+" "+r+" L"+g.slice(1)+" Z",fill:u,"fill-opacity":.25,stroke:u,"stroke-width":2.5},t);return n("path",{d:g,fill:"none",stroke:u,"stroke-width":2},t)}function d(t,r,a,i,o,u,f,c){var d=Math.cos(i*e),s=-Math.sin(i*e),l=-1e4,g=1e4;[[d,r,o[0],o[2]],[s,a,o[1],o[3]]].forEach(function(t){if(Math.abs(t[0])<1e-9)return;var e=(t[2]-t[1])/t[0],n=(t[3]-t[1])/t[0];l=Math.max(l,Math.min(e,n));g=Math.min(g,Math.max(e,n))});var m={x1:r+l*d,y1:a+l*s,x2:r+g*d,y2:a+g*s,stroke:u,"stroke-width":f||2.5};if(c)m["stroke-dasharray"]=c;n("line",m,t);return m}function s(t,e,r,a,i){n("circle",{cx:e,cy:r,r:i||5,fill:a},t)}function l(t,e,r,a,o,u,f,c){var d=n("circle",{cx:e,cy:r,r:12,fill:i().card,stroke:a,"stroke-width":4,tabindex:0,role:"slider","aria-label":o,"aria-valuetext":u,style:"cursor:grab;touch-action:none"},t);d.addEventListener("keydown",function(t){if(c(t.key))t.preventDefault()});d.addEventListener("pointerdown",function(e){e.preventDefault();function n(e){var n=t.getScreenCTM();if(!n)return;var r=t.createSVGPoint();r.x=e.clientX;r.y=e.clientY;r=r.matrixTransform(n.inverse());f(r.x,r.y)}function r(){window.removeEventListener("pointermove",n);window.removeEventListener("pointerup",r);if(window.Peiyu&&Peiyu.log)Peiyu.log("interact",{id:t.id,choice:o})}window.addEventListener("pointermove",n);window.addEventListener("pointerup",r)});return d}function g(t,e){return{ArrowUp:1,ArrowRight:1,ArrowDown:-1,ArrowLeft:-1,PageUp:e,PageDown:-e}[t]}function m(t,e){return{1:[t,e],2:[e,t+180],3:[t+180,e+180],4:[e+180,t+360]}}function v(t,n,a,i,o,u,s,l,g,v,h,b){var p=i-(a-n)/Math.tan(o*e),E=m(0,o),M=m(u,o);function y(t){return t<=4?E[t]:M[t-4]}function x(t){return t<=4?[i,n]:[p,a]}function w(t){var e=y(t);return Math.round(e[1]-e[0])}g.forEach(function(e,n){var r=x(e),a=y(e);c(t,r[0],r[1],h+6,a[0],a[1],n?l.a:l.no,true)});d(t,i,n,0,s,l.fg);d(t,p,a,u,s,l.fg);d(t,i,n,o,s,l.fg);for(var k=1;k<=8;k++){var A=x(k),B=y(k),L=B[1]-B[0]<45,I=f(A[0],A[1],h+(b&&L?16:0),(B[0]+B[1])/2);var P=r(t,I[0],I[1]+v/3,b?w(k)+"°":String(k),g.indexOf(k)>=0?l.fg:l.muted,700,v);P.setAttribute("paint-order","stroke fill");P.setAttribute("stroke","var(--card)");P.setAttribute("stroke-width","4px")}return{q2x:p,val:w}}var h=[1,5];var b={1:"同位角看两个交点的相同位置：∠1 在 a 上方、c 右侧；∠5 在 b 上方、c 右侧，都是各自交点的右上角。另有 2和6、3和7、4和8。",3:"内错角先看“内”：∠3、∠5 都夹在 a、b 之间；再看“错”：一个在 c 左侧，一个在 c 右侧。另一对是 ∠4、∠6。",4:"同旁内角先看“内”：∠4、∠5 都夹在 a、b 之间；再看“同旁”：都在 c 右侧。另一对是 ∠3、∠6。"};function p(t,n,a){var o=document.getElementById(t),u=i();o.innerHTML="";v(o,80,180,200,a,0,[18,18,322,238],u,n,22,44);r(o,342,87,"a",u.fg,700,22);r(o,342,187,"b",u.fg,700,22);var f=200+62/Math.tan(a*e);r(o,f+(a<90?42:-25),27,"c",u.fg,700,22)}function E(){p("angle-guide-fig",h,62);document.getElementById("angle-guide-note").textContent=b[h[0]];p("ex1-angle-fig",[3,5],62);p("basic-angle-fig",[1,5],68);p("ex2-angle-fig",[7],124)}u("angle-guide-bar",function(t){h=t.getAttribute("data-pair").split(",").map(Number);E()});var M=document.getElementById("entry-fig"),y=[55,55];function x(){var t=i(),a=196,o=170,u=330,s=y[0],l=y[1];M.innerHTML="";n("line",{x1:20,y1:a,x2:500,y2:a,stroke:t.fg,"stroke-width":3},M);r(M,30,a+30,"路边",t.muted,400,17,"start");d(M,o,a,s,[20,12,500,232],t.b,3);d(M,u,a,l,[20,12,500,232],t.a,3);c(M,o,a,34,0,s,t.b,true);c(M,u,a,34,0,l,t.a,true);var g=f(o,a,56,s/2),m=f(u,a,56,l/2);r(M,g[0]+6,g[1]+6,s+"°",t.b,700,18,"start");r(M,m[0]+6,m[1]+6,l+"°",t.a,700,18,"start");var v=1/Math.tan(s*e),h=1/Math.tan(l*e),b;if(s===l)b="两条线和路边成的角一样大（都是 "+s+"°）：怎么延长，两线之间的横向距离都不变，永远碰不到。";else{var p=(u-o)/(v-h);b=s+"° 和 "+l+"°：只差 "+Math.abs(s-l)+"°，"+(p>0?"往上":"往下")+"延长约 "+Math.round(Math.abs(p))+" 个单位就会相交（图外）。"}document.getElementById("entry-note").textContent=b}u("entry-bar",function(t){y=t.getAttribute("data-ab").split(",").map(Number);x()});var w=document.getElementById("m1-fig"),k="x";var A={x:"两条直线有一个公共点：相交。",p:"两条直线在同一平面内怎么延长都没有公共点：平行，记作 a ∥ b。",P:"过直线 a 外一点 P：转来转去，只有一条直线（实线）和 a 不相交；别的（虚线）迟早和 a 相交。",on:"点 P 在直线 a 上：过 P 的直线要么就是 a，要么和 a 相交，画不出平行线。所以必须说“直线外”一点。"};function B(){var t=i(),e=[16,12,360,180];w.innerHTML="";d(w,190,140,0,e,t.fg);r(w,370,146,"a",t.fg,700,17);if(k==="x"){d(w,150,140,18,e,t.a);r(w,352,60,"b",t.a,700,17);s(w,150,140,t.no)}if(k==="p"){d(w,190,60,0,e,t.a);r(w,370,66,"b",t.a,700,17)}if(k==="P"){[14,-18,34].forEach(function(n){d(w,190,60,n,e,t.muted,2,"5 5")});d(w,190,60,0,e,t.a,3);s(w,190,60,t.no);r(w,190,44,"P",t.no,700,16)}if(k==="on"){[30,140].forEach(function(n){d(w,190,140,n,e,t.muted,2,"5 5")});s(w,190,140,t.no);r(w,190,168,"P",t.no,700,16)}document.getElementById("m1-note").textContent=A[k]}u("m1-bar",function(t){k=t.getAttribute("data-m");B()});var L=document.getElementById("m2-fig"),I=10;function P(){var t=i(),n=I;L.innerHTML="";var a=v(L,70,160,210,62,n,[14,12,372,222],t,[1,5],15,30);r(L,384,76,"a",t.fg,700,17);var o=160-(372-a.q2x)*Math.tan(n*e);r(L,384,o+6,"b",t.fg,700,17);var u=a.val(5);document.getElementById("m2-note").textContent="∠1 = 62°，∠5 = "+u+"°。"+(n===0?"同位角相等：a ∥ b，怎么延长都不相交。":"同位角不相等：a、b 向"+(n>0?"右":"左")+"延长会相交。")}u("m2-bar",function(t){I=+t.getAttribute("data-be");P()});var C=document.getElementById("m3-fig"),D=50;function T(){var t=i(),e=D;C.innerHTML="";v(C,70,170,e>90?230:200,e,0,[14,12,372,222],t,[1,5],14,32,true);r(C,384,76,"a",t.fg,700,17);r(C,384,176,"b",t.fg,700,17);document.getElementById("m3-note").textContent=e===90?"截线和 a、b 都垂直：八个角全是 90°。":"八个角里，锐角都是 "+Math.min(e,180-e)+"°，钝角都是 "+Math.max(e,180-e)+"°：同位角相等，内错角相等，同旁内角一锐一钝、加起来 180°。"}u("m3-bar",function(t){D=+t.getAttribute("data-g");T()});function H(){var t=document.getElementById("ex3-fig"),n=i(),a=[14,12,372,200];t.innerHTML="";d(t,200,60,0,a,n.fg);d(t,200,160,0,a,n.fg);var o=120,u=o-100/Math.tan(75*e),s=270,l=s-100/Math.tan(68*e);d(t,o,60,75,a,n.fg);d(t,s,60,68,a,n.fg);c(t,o,60,24,0,75,n.b,true);c(t,u,160,24,0,75,n.b,true);c(t,s,60,24,248,360,n.no,true);c(t,l,160,24,0,68,n.a,true);var g=[[f(o,60,40,37),"1"],[f(u,160,40,37),"2"],[f(s,60,40,304),"3"],[f(l,160,40,34),"4"]];g.forEach(function(e){r(t,e[0][0],e[0][1]+6,e[1],n.fg,700,16)});r(t,384,66,"a",n.fg,700,17);r(t,384,166,"b",n.fg,700,17);var m=f(o,60,46,75),v=f(s,60,46,68);r(t,m[0]-10,m[1]+6,"c",n.fg,700,17,"end");r(t,v[0]+10,v[1]+6,"d",n.fg,700,17,"start")}function q(){var t=document.getElementById("m-trap"),e=i();t.innerHTML="";var n=v(t,60,140,150,65,15,[10,10,262,180],e,[1,5],14,26,false);var a=f(150,60,50,32),o=f(n.q2x,140,54,40);var u=r(t,a[0]+4,a[1]+4,"65°",e.no,700,15,"start");u.setAttribute("paint-order","stroke fill");u.setAttribute("stroke","var(--card)");u.setAttribute("stroke-width","4px");var c=r(t,o[0]+4,o[1]+4,"50°",e.a,700,15,"start");c.setAttribute("paint-order","stroke fill");c.setAttribute("stroke","var(--card)");c.setAttribute("stroke-width","4px")}var F=document.getElementById("fig-judge"),S=document.getElementById("out-judge"),N=12,j=false;function U(){var t=i(),n=60,a=90,u=220,c=320,d=[20,16,530,304];F.innerHTML="";var m=v(F,a,u,c,n,N,d,t,[1,5],18,28);r(F,544,a+7,"a",t.fg,700,20);var h=f(c,a,64,n);r(F,h[0]+14,h[1]+7,"c",t.fg,700,20,"start");var b=f(m.q2x,u,180,N);var p=r(F,Math.min(b[0]+34,544),b[1]+7,"b",t.fg,700,20);p.setAttribute("paint-order","stroke fill");p.setAttribute("stroke","var(--card)");p.setAttribute("stroke-width","4px");var E=null;if(N!==0){E=m.q2x+(u-a)/Math.tan(N*e);if(E>30&&E<520){s(F,E,a,t.no,7)}}var M=l(F,b[0],b[1],t.b,"直线 b 的方向","∠5 = "+m.val(5)+"°",function(t,n){var r=Math.atan2(u-n,t-m.q2x)/e;N=o(Math.round(r),-25,25);j=false;U()},function(t){var e=g(t,5);if(e===undefined)return false;N=o(N+e,-25,25);j=true;U();return true});var y=m.val(5);S.innerHTML="∠1 = 60°，∠5 = "+y+"°。"+(N===0?'<span class="sum">同位角相等，所以 a ∥ b</span>（基本事实）。这时内错角 ∠3 = ∠5 = 60°，同旁内角 ∠4 + ∠5 = 120° + 60° = 180°，三种判定说的是同一件事。':"同位角不相等，a、b 不平行："+(E!==null&&E>30&&E<520?"图上已经看到交点（红点）。":"向"+(N>0?"右":"左")+"延长（图外）就会相交。")+"再转 "+Math.abs(N)+"° 就平行了。");if(j)M.focus()}document.getElementById("reset-judge").onclick=function(){N=12;j=false;U()};var O=document.getElementById("fig-prop"),R=document.getElementById("out-prop"),V=55,z=[1,5],G=false;function X(){var t=i(),n=90,a=220,u=300,c=[20,16,530,304];O.innerHTML="";var d=v(O,n,a,u,V,0,c,t,z,18,28);r(O,544,n+7,"a",t.fg,700,20);r(O,544,a+7,"b",t.fg,700,20);var s=f(u,n,64,V);var m=l(O,s[0],s[1],t.b,"截线 c 的方向","∠1 = "+V+"°",function(t,r){var a=Math.atan2(n-r,t-u)/e;if(a<0)a+=180;V=o(Math.round(a),30,150);G=false;X()},function(t){var e=g(t,10);if(e===undefined)return false;V=o(V+e,30,150);G=true;X();return true});r(O,s[0]+(V<90?20:-20),s[1]-4,"c",t.fg,700,20,V<90?"start":"end");var h=d.val(z[0]),b=d.val(5);R.innerHTML={1:"同位角：∠1 = "+h+"°，∠5 = "+b+'°，<span class="sum">相等</span>（两直线平行，同位角相等）。',3:"内错角：∠3 = "+h+"°，∠5 = "+b+'°，<span class="sum">相等</span>（两直线平行，内错角相等）。',4:"同旁内角：∠4 + ∠5 = "+h+"° + "+b+'° = <span class="sum">180°</span>（两直线平行，同旁内角互补）。'}[z[0]]+"截线怎么转，角的大小在变，这个关系不变——前提是 a ∥ b。";if(G)m.focus()}u("prop-bar",function(t){z=t.getAttribute("data-p").split(",").map(Number);X()});document.getElementById("reset-prop").onclick=function(){V=55;G=false;X()};var Y=document.getElementById("fig-turn"),Z=document.getElementById("out-turn"),J=[330,150],K=false;function Q(){var t=i(),a=110,u=60,d=260,g=J[0],m=J[1];Y.innerHTML="";n("line",{x1:40,y1:u,x2:530,y2:u,stroke:t.fg,"stroke-width":2.5},Y);n("line",{x1:40,y1:d,x2:530,y2:d,stroke:t.fg,"stroke-width":2.5},Y);n("line",{x1:40,y1:m,x2:530,y2:m,stroke:t.muted,"stroke-width":2,"stroke-dasharray":"7 6"},Y);var v=Math.atan2(m-u,g-a)/e,h=Math.atan2(d-m,g-a)/e,b=Math.round(v),p=Math.round(h),E=Math.round(v+h);c(Y,a,u,46,-v,0,t.no,true);c(Y,g,m,40,180-v,180,t.no,true);c(Y,a,d,46,0,h,t.a,true);c(Y,g,m,52,180,180+h,t.a,true);n("polyline",{points:a+","+u+" "+g+","+m+" "+a+","+d,fill:"none",stroke:t.b,"stroke-width":3.5},Y);var M=f(a,u,76,-v/2),y=f(a,d,76,h/2);r(Y,M[0],M[1]+7,b+"°",t.no,700,19);r(Y,y[0],y[1]+7,p+"°",t.a,700,19);r(Y,a-8,u-14,"B",t.fg,700,20,"end");r(Y,544,u+7,"A",t.fg,700,20);r(Y,a-8,d+32,"D",t.fg,700,20,"end");r(Y,544,d+7,"C",t.fg,700,20);r(Y,34,m+7,"F",t.muted,700,20,"end");s(Y,a,u,t.fg);s(Y,a,d,t.fg);var x=l(Y,g,m,t.b,"拐点 E","∠BED 约 "+E+"°",function(t,e){J=[o(Math.round(t),200,500),o(Math.round(e),100,220)];K=false;Q()},function(t){var e={ArrowLeft:[-5,0],ArrowRight:[5,0],ArrowUp:[0,-5],ArrowDown:[0,5]}[t];if(!e)return false;J=[o(J[0]+e[0],200,500),o(J[1]+e[1],100,220)];K=true;Q();return true});r(Y,g+18,m-14,"E",t.b,700,20,"start");Z.innerHTML="量得 ∠ABE ≈ "+b+"°，∠CDE ≈ "+p+'°，∠BED ≈ <span class="sum">'+E+"°</span>（都是四舍五入到 1° 的测量值，所以两个小角的读数相加可能和总角差 1°）。准确的关系是 ∠BED = ∠ABE + ∠CDE。为什么：过 E 作 EF ∥ AB，则 EF ∥ CD（平行于同一条直线的两条直线平行）；∠BEF = ∠ABE（两直线平行，内错角相等），∠FED = ∠CDE（同理），两块合起来就是 ∠BED。";if(K)x.focus()}document.getElementById("reset-turn").onclick=function(){J=[330,150];K=false;Q()};function W(){E();x();B();P();T();H();q();U();X();Q()}W();new MutationObserver(function(){j=G=K=false;W()}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme","class"]});if(window.matchMedia){var $=matchMedia("(prefers-color-scheme: dark)");if($.addEventListener)$.addEventListener("change",W)}})();
+</script>
+<!-- Runtime inlined because build_junior copies lesson HTML only. Readable source: j7-2-construction.js. -->
+<script id="j7-2-construction-runtime">
+(function(e){"use strict";const t=Math.PI/180;const n=1e-9;function i(e){return(e%180+180)%180}function r(e,n,r){if(![e,n,r].every(Number.isFinite))return null;const a=i(r)*t;return{x:e,y:n,dx:Math.cos(a),dy:-Math.sin(a)}}function a(e){return e&&[e.x,e.y,e.dx,e.dy].every(Number.isFinite)&&Math.hypot(e.dx,e.dy)>n}function o(e,t){return Math.abs((t.x-e.x)*e.dy-(t.y-e.y)*e.dx)/Math.hypot(e.dx,e.dy)}function l(e,t){if(!a(e)||!a(t))return false;return Math.abs(e.dx*t.dy-e.dy*t.dx)/Math.hypot(e.dx,e.dy)/Math.hypot(t.dx,t.dy)<n&&o(e,t)<n}function c(e,i,r){if(!a(e)||!i||![i.x,i.y,r].every(Number.isFinite))return{kind:"invalid"};if(Math.abs(i.y-r)<n)return{kind:"point-on-base"};const l=o(e,i),c=Math.abs(e.dy)/Math.hypot(e.dx,e.dy);const s=c<n,d=s&&Math.abs(e.y-r)<n;const u=Math.asin(Math.min(1,c))/t;return{kind:d?"coincident":s?"parallel":"intersect",miss:l,angleError:u,through:l<n,close:l<=3+n&&u<=.5+n&&!d,intersection:s?null:{x:e.x+(r-e.y)*e.dx/e.dy,y:r}}}const s={direction:i,lineAt:r,check:c,sameLine:l};if(typeof module!=="undefined"&&module.exports)module.exports=s;if(!e.document)return;const d=t=>e.document.getElementById(t);if(!d("parallel-construction"))return;const u=d("pc-figure"),p={x:300,y:90},h=240;let f=false,x=[],y=false,g=false;function v(){return d("pc-mode").value}function m(){const e=d("pc-angle");return e.value.trim()&&e.validity.valid?Number(e.value):NaN}function k(){return v()==="slide"?r(140,Number(d("pc-height").value),0):r(p.x,p.y,m())}function b(t,n,i){const r=e.document.createElementNS("http://www.w3.org/2000/svg",t);Object.entries(n).forEach(([e,t])=>r.setAttribute(e,t));if(i)r.textContent=i;u.appendChild(r);return r}function M(e,t,n){if(!a(e))return;b("line",{x1:e.x-1e3*e.dx,y1:e.y-1e3*e.dy,x2:e.x+1e3*e.dx,y2:e.y+1e3*e.dy,stroke:t,"stroke-width":3,"stroke-dasharray":n||""})}function w(){u.replaceChildren();M(r(0,h,0),"var(--fg)");x.forEach(e=>M(e,"var(--muted)","5 6"));const e=k();if(v()==="slide"){const e=Number(d("pc-height").value);b("rect",{x:116,y:12,width:24,height:286,fill:"var(--card)",stroke:"var(--muted)","stroke-width":2});b("polygon",{points:`140,${e} 390,${e} 140,${e-80}`,fill:"var(--a)","fill-opacity":".14",stroke:"var(--a)","stroke-width":3});b("path",{d:`M140 ${e-14}h14v14`,fill:"none",stroke:"var(--a)","stroke-width":2});b("text",{x:86,y:290,fill:"var(--fg)","font-size":20,"text-anchor":"middle"},"直尺");b("circle",{id:"pc-grip",cx:230,cy:e-18,r:12,fill:"var(--a)",style:f?"cursor:ns-resize":"cursor:default"})}else M(e,"var(--a)");b("circle",{cx:p.x,cy:p.y,r:5,fill:"var(--no)"});b("text",{x:320,y:78,fill:"var(--fg)","font-size":22},"P");b("text",{x:524,y:h-12,fill:"var(--fg)","font-size":22},"a");d("pc-height-value").value=d("pc-height").value;d("pc-slide-label").hidden=v()!=="slide";d("pc-angle-label").hidden=v()!=="rotate";d("pc-lock").hidden=v()!=="slide";d("pc-lock").disabled=f;d("pc-height").disabled=!f;d("pc-draw").disabled=!y||!e||v()==="slide"&&!f}function C(){y=true;d("pc-result").textContent="已调整。请画线，再核对是否过点、是否平行。";w()}d("pc-lock").onclick=()=>{f=true;d("pc-instruction").textContent="直尺已固定。拖动三角尺内的实心圆或用位置滑块（方向键）平推；到合适位置后画线。画线边与直尺所成的角始终保持为直角。";w()};d("pc-height").oninput=C;d("pc-angle").oninput=()=>{if(Number.isFinite(m()))d("pc-angle-range").value=m();C();if(!Number.isFinite(m()))d("pc-result").textContent="请输入 0 到 360 之间、最多一位小数的方向角。空白或非法值不能画线。"};d("pc-angle-range").oninput=()=>{d("pc-angle").value=d("pc-angle-range").value;C()};d("pc-mode").onchange=()=>{y=false;d("pc-instruction").textContent=v()==="slide"?f?"沿固定直尺平推三角尺，保持方向，再画线。":"三角尺的一条边已贴合 a。把直尺靠紧另一条直角边，再固定方向。":"候选直线始终过 P。用方向角输入框或滑块转动，再画线核对。";d("pc-result").textContent="请先调整工具，再画线核对。";w()};d("pc-draw").onclick=()=>{if(d("pc-draw").disabled)return;const e=k(),t=c(e,p,h);if(t.kind==="invalid")return;const n=x.some(t=>l(t,e));if(!n)x.push(e);let i=t.through?"过点检查：经过 P。":`过点检查：没有经过 P，与 P 相差约 ${t.miss.toFixed(1)} 个图中单位。`;if(t.kind==="coincident")i+="这条线与 a 重合，不能算作 a 的平行线。";else if(t.kind==="parallel")i+=v()==="slide"?"方向检查：与 a 平行。两条画线边与同一直尺都成直角，同位角相等。":"方向检查：与 a 平行。候选直线与 a 方向一致，可用同一直尺作截线，核对同位角相等。";else{const e=t.intersection.x;i+=`方向检查：与 a 不平行，延长后在${e<0||e>560?"图框外":"图框内"}相交（横向位置约 ${e.toFixed(1)}）。`}if(t.kind==="parallel"&&t.through)i+="完成：这条线过 P 且与 a 平行。";else if(t.close)i+="操作已在误差范围内（离点不超过 3、方向差不超过 0.5°），可视为近似作图；读数仍有误差，不能把近似说成严格平行。";if(n)i+="这与已画的一条直线重合；反向画同一直线也不增加条数。";d("pc-result").textContent=i;d("pc-history").textContent=`本次已保留 ${x.length} 条不同的候选直线（虚线）。其中过 P 且严格平行的有 ${x.filter(e=>{const t=c(e,p,h);return t.through&&t.kind==="parallel"}).length} 条。`;w()};u.addEventListener("pointerdown",e=>{if(e.target.id!=="pc-grip"||!f||v()!=="slide")return;e.preventDefault();g=true;u.setPointerCapture(e.pointerId)});u.addEventListener("pointermove",e=>{if(!g)return;const t=u.getScreenCTM();if(!t)return;const n=u.createSVGPoint();n.x=e.clientX;n.y=e.clientY;d("pc-height").value=Math.max(90,Math.min(240,Math.round(n.matrixTransform(t.inverse()).y+18)));C()});["pointerup","pointercancel","lostpointercapture"].forEach(e=>u.addEventListener(e,()=>{g=false}));d("pc-reset").onclick=()=>{f=y=g=false;x=[];d("pc-mode").value="slide";d("pc-height").value=240;d("pc-angle").value=d("pc-angle-range").value=18;d("pc-instruction").textContent="三角尺的一条边已贴合 a。把直尺靠紧另一条直角边，再固定方向。";d("pc-result").textContent="请先操作工具，再画线核对。";d("pc-history").textContent="";w()};w()})(typeof window==="undefined"?globalThis:window);
 </script>
 </body></html>

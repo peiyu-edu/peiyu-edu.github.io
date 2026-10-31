@@ -251,6 +251,7 @@ export function createStage(el, opts = {}) {
   function resize() {
     const w = el.clientWidth || 1, h = el.clientHeight || 1;
     renderer.setSize(w, h, false);
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     const aspect = w / h;
     // 竖屏时按宽度放，横屏按高度放；宽屏右侧留一点给标注卡，手机上标注是小圆点，边距可以小一些
     const r = fit.radius * (w < 640 ? 1.3 : 1.45);

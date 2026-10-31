@@ -19,8 +19,16 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+  #calculator-lab input,#calculator-lab textarea,#calculator-lab select{box-sizing:border-box;max-width:100%;width:100%;background:var(--card);color:var(--fg);border:1px solid var(--muted);border-radius:6px;padding:9px;font:inherit;}
+  #calculator-lab label{display:block;margin:10px 0;}
+  #calculator-lab [data-keypad]{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px 0;}
+  #calculator-lab [data-keypad] button{min-height:44px;padding:6px 2px;}
+  #calculator-lab button{background:var(--card);color:var(--fg)}
+  #calculator-lab :focus-visible{outline:3px solid var(--a);outline-offset:2px;}
+  #calculator-lab .calc-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+  #calculator-lab .result{overflow-wrap:anywhere;}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j2-2" data-standard="v2">
 <div class="wrap">
@@ -181,7 +189,7 @@
     <p style="font-size:16.5px;margin:0 0 8px">计算：\((-3.5)\div\tfrac78\times\left(-\tfrac34\right)\)。</p>
     <p><b>① 读懂题意：</b>只有乘和除，是同一级运算。能不能先算后面的 \(\tfrac78\times\left(-\tfrac34\right)\)？</p>
     <details class="more"><summary>提示：先把「÷」改掉</summary><p>除以 \(\tfrac78\) 就是乘 \(\tfrac87\)；\(-3.5\) 先化成 \(-\tfrac72\)。改完全是乘法，才可以随意交换、结合。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <div class="think-steps">
         <div class="think-step"><span class="ts-tag ca">② 想办法：</span>原式 \(=\left(-\tfrac72\right)\times\tfrac87\times\left(-\tfrac34\right)\)。负因数 \(2\) 个，积为正。</div>
         <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>绝对值 \(\tfrac72\times\tfrac87\times\tfrac34=4\times\tfrac34=3\)，所以原式 \(=3\)。</div>
@@ -267,6 +275,27 @@
     <svg class="fig" id="fig-chain" viewBox="0 0 560 330" role="img" aria-label="五个因数连乘时积的符号"></svg>
     <div class="result" id="out-chain" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-chain" type="button">重置</button></div>
+  </div>
+
+  <div class="card" id="calculator-lab" data-powers="no">
+    <h3>④ 计算器键盘：先笔算，再输入验算</h3>
+    <p>先在纸上算 12÷(-3)×2，再算 (-2)×(3-5)，分别输入核对。也可自选三步以内的式子。</p>
+    <p class="small" id="calc-help">实体键盘或下方按键均可输入。负数键输入“(−”，需补右括号；减号表示相减。先括号，乘除同级从左到右，后加减；乘方到 2.3 再练。分数用 /，乘号不能省。每式限 80 字符，整数部分≤7位、小数部分≤6位。</p>
+    <label>我输入的原式<input name="expression" type="text" maxlength="80" autocomplete="off" spellcheck="false" aria-describedby="calc-help"></label>
+    <div data-keypad role="group" aria-label="算式输入键盘"><button class="btn ghost" type="button" data-calc-key="7">7</button><button class="btn ghost" type="button" data-calc-key="8">8</button><button class="btn ghost" type="button" data-calc-key="9">9</button><button class="btn ghost" type="button" data-calc-key="/">÷</button><button class="btn ghost" type="button" data-calc-key="4">4</button><button class="btn ghost" type="button" data-calc-key="5">5</button><button class="btn ghost" type="button" data-calc-key="6">6</button><button class="btn ghost" type="button" data-calc-key="*">×</button><button class="btn ghost" type="button" data-calc-key="1">1</button><button class="btn ghost" type="button" data-calc-key="2">2</button><button class="btn ghost" type="button" data-calc-key="3">3</button><button class="btn ghost" type="button" data-calc-key="-">减号 −</button><button class="btn ghost" type="button" data-calc-key="0">0</button><button class="btn ghost" type="button" data-calc-key=".">.</button><button class="btn ghost" type="button" data-calc-key="(-">负数 (−</button><button class="btn ghost" type="button" data-calc-key="+">+</button><button class="btn ghost" type="button" data-calc-key="(">(</button><button class="btn ghost" type="button" data-calc-key=")">)</button><button class="btn ghost" type="button" data-calc-key="back">退格</button></div>
+    <label>我的笔算过程（每行一式，至多三行，末行写结果）<textarea name="steps" rows="3" maxlength="250" spellcheck="false"></textarea></label>
+    <p class="small">先点要编辑的框，选中文字可替换。Enter 核对原式，Ctrl+Enter 核对过程，Esc 清空。只比较各行的值，请说明每步依据。</p>
+    <div class="calc-actions"><button class="btn" type="button" data-check>核对我的笔算</button><button class="btn ghost" type="button" data-reset>清空重试</button></div>
+    <p class="result" data-calc-output aria-live="polite">输入和笔算都准备好后再核对。</p>
+    <h3>⑤ 自选数字，比较两种算法</h3>
+    <p>自选几组数，含负数、0、分数。三条乘法运算律都试，再对照除法换序。同一字母取同一数。</p>
+    <label>比较方式<select name="law"><option value="commute">乘法交换：a×b 与 b×a</option><option value="associate">乘法结合：(a×b)×c 与 a×(b×c)</option><option value="distribute">分配：a×(b+c) 与 a×b+a×c</option><option value="divide">对照除法：a÷b 与 b÷a（a、b 均不为 0）</option></select></label>
+    <label>a<input name="a" type="text" maxlength="30" autocomplete="off"></label>
+    <label>b<input name="b" type="text" maxlength="30" autocomplete="off"></label>
+    <label>c（仅结合、分配律用，不用时可留空）<input name="c" type="text" maxlength="30" autocomplete="off"></label>
+    <label>我预测这一组两式<select name="relation"><option value="">先作预测</option><option value="equal">相等</option><option value="different">不等</option></select></label>
+    <div class="calc-actions"><button class="btn" type="button" data-law-check>计算两式并比较</button><button class="btn ghost" type="button" data-law-reset>换一组重试</button></div>
+    <p class="result" data-law-output aria-live="polite">先自选数字并预测，再比较两式。</p>
   </div>
 </section>
 
@@ -580,6 +609,161 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focusM = focusS = null; focusC = -1; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script id="calculator-activity">
+/* 限界有理数计算，不存记录。 */
+(function () {
+'use strict';
+var root = document.getElementById('calculator-lab');
+if (!root) return;
+var powers = root.dataset.powers === 'yes';
+function fail(message) { throw new Error(message); }
+function gcd(a, b) { a = a < 0n ? -a : a; while (b) { var t = a % b; a = b; b = t; } return a; }
+function rat(n, d) {
+if (!d) fail('除数为 0：这个式子没有意义。请检查除号后的整个式子。');
+if (d < 0n) { n = -n; d = -d; }
+var g = gcd(n, d); n /= g; d /= g;
+if (String(n).length > 80 || String(d).length > 80) fail('数值超出练习范围，请改用简单数，不判笔算对错。');
+return { n: n, d: d };
+}
+function same(a, b) { return a.n === b.n && a.d === b.d; }
+function calc(a, op, b) {
+if (op === '+') return rat(a.n * b.d + b.n * a.d, a.d * b.d);
+if (op === '-') return rat(a.n * b.d - b.n * a.d, a.d * b.d);
+if (op === '*') return rat(a.n * b.n, a.d * b.d);
+return rat(a.n * b.d, a.d * b.n);
+}
+function parse(source) {
+var s = source.replace(/\s/g, '').replace(/[−–]/g, '-').replace(/[×·]/g, '*').replace(/÷/g, '/');
+if (!s) fail('请先输入算式。');
+if (s.length > 80) fail('每式限 80 字符，请缩短。');
+if (/[^\d.+*/()\[\]^\-]/.test(s)) fail('只支持数字、四则与括号' + (powers ? '及 ^ 乘方' : '') + '；其他写法请改写后核对。');
+if (!powers && s.includes('^')) fail('本节先练四则运算，乘方请到 2.3 练习。');
+var pos = 0, depth = 0;
+function primary() {
+if (++depth > 16) fail('括号或符号嵌套过多，请用简单算式。');
+var a, open = s[pos];
+if (open === '(' || open === '[') {
+pos++; a = sum();
+if (s[pos] !== (open === '(' ? ')' : ']')) fail('括号没有配对，请检查左右括号。');
+pos++;
+} else {
+var m = /^(?:\d+(?:\.\d*)?|\.\d+)/.exec(s.slice(pos));
+if (!m) fail('这里缺少数或括号，请检查运算符的位置。');
+var parts = m[0].split('.'), fraction = parts[1] || '';
+if (parts[0].length > 7 || fraction.length > 6) fail('数的整数部分至多 7 位，小数部分至多 6 位，也可写分数。');
+a = rat(BigInt((parts[0] || '0') + fraction), 10n ** BigInt(fraction.length)); pos += m[0].length;
+}
+depth--; return a;
+}
+function power() {
+var a = primary();
+if (s[pos] === '^') {
+pos++; var b = unary();
+if (b.d !== 1n || b.n < 1n || b.n > 6n) fail('只练 1 至 6 的正整数次幂，其他指数不作判断。');
+a = rat(a.n ** b.n, a.d ** b.n);
+}
+return a;
+}
+function unary() {
+if (s[pos] === '+' || s[pos] === '-') {
+if (++depth > 16) fail('连续符号过多，请简化算式。');
+var op = s[pos++], a = unary(); depth--;
+return op === '-' ? rat(-a.n, a.d) : a;
+}
+return power();
+}
+function product() {
+var a = unary();
+while (s[pos] === '*' || s[pos] === '/') { var op = s[pos++]; a = calc(a, op, unary()); }
+return a;
+}
+function sum() {
+var a = product();
+while (s[pos] === '+' || s[pos] === '-') { var op = s[pos++]; a = calc(a, op, product()); }
+return a;
+}
+var value = sum();
+if (pos !== s.length) fail('未读完：检查括号和小数点，相邻数或括号间请写乘号。');
+return value;
+}
+function display(a) {
+if (a.d === 1n) return String(a.n);
+var negative = a.n < 0n, n = negative ? -a.n : a.n;
+var rounded = (n * 10000n * 2n + a.d) / (2n * a.d);
+return a.n + '/' + a.d + '（≈ ' + (negative && rounded ? '-' : '') + rounded / 10000n + '.' + String(rounded % 10000n).padStart(4, '0') + '，四舍五入到 0.0001）';
+}
+var expression = root.querySelector('[name=expression]');
+var steps = root.querySelector('[name=steps]');
+var output = root.querySelector('[data-calc-output]');
+var active = expression;
+[expression, steps].forEach(function (input) {
+input.addEventListener('focus', function () { active = input; });
+input.addEventListener('input', function () { output.textContent = '已修改，请重新核对。'; });
+input.addEventListener('keydown', function (e) {
+if (e.key === 'Enter' && (input === expression || e.ctrlKey)) { e.preventDefault(); check(); }
+if (e.key === 'Escape') { e.preventDefault(); reset(); }
+});
+});
+root.querySelector('[data-keypad]').addEventListener('click', function (e) {
+var button = e.target.closest('[data-calc-key]'); if (!button) return;
+var key = button.dataset.calcKey, start = active.selectionStart, end = active.selectionEnd;
+if (key === 'back') { if (start === end && start > 0) start--; key = ''; }
+active.setRangeText(key, start, end, 'end'); active.focus();
+active.dispatchEvent(new Event('input', { bubbles: true }));
+});
+function check() {
+try {
+var rows = steps.value.trim().split(/\n|=/).map(function (x) { return x.trim(); }).filter(Boolean);
+if (!rows.length) { output.textContent = '先笔算：至少填一行过程或结果。'; return; }
+if (rows.length > 3) { output.textContent = '请保留至多三行过程。'; return; }
+var value = parse(expression.value), messages = [];
+rows.forEach(function (row, i) {
+try { messages.push('第 ' + (i + 1) + ' 行' + (same(value, parse(row)) ? '与原式同值。' : '与原式不同值，请查符号、括号及顺序。')); }
+catch (e) { messages.push('第 ' + (i + 1) + ' 行暂未核对：' + e.message); }
+});
+output.textContent = '输入式的值：' + display(value) + '。' + messages.join(' ') + ' 请自己说明每步依据。';
+if (powers && /[-−]\s*\d+(?:\.\d+)?\s*(?:\)|\])?\s*\^\s*2/.test(expression.value)) {
+output.textContent += ' 括号检查：(-a)^2 的底数含负号；-a^2 先平方再取相反数。';
+}
+} catch (e) { output.textContent = '暂未核对：' + e.message; }
+}
+function reset() {
+expression.value = ''; steps.value = ''; output.textContent = '输入和笔算都准备好后再核对。'; active = expression; expression.focus();
+}
+root.querySelector('[data-check]').addEventListener('click', check);
+root.querySelector('[data-reset]').addEventListener('click', reset);
+var law = root.querySelector('[name=law]'), relation = root.querySelector('[name=relation]');
+var lawOutput = root.querySelector('[data-law-output]');
+var fields = ['a', 'b', 'c'].map(function (name) { return root.querySelector('[name=' + name + ']'); });
+function formulas(a, b, c) {
+var A = '(' + a + ')', B = '(' + b + ')', C = '(' + c + ')';
+if (law.value === 'commute') return [A + '*' + B, B + '*' + A];
+if (law.value === 'associate') return ['(' + A + '*' + B + ')*' + C, A + '*(' + B + '*' + C + ')'];
+if (law.value === 'distribute') return [A + '*(' + B + '+' + C + ')', A + '*' + B + '+' + A + '*' + C];
+return [A + '/' + B, B + '/' + A];
+}
+function clearLaw() { lawOutput.textContent = '已修改，请先预测再比较。'; relation.value = ''; }
+fields.concat([law]).forEach(function (input) { input.addEventListener('input', clearLaw); });
+root.querySelector('[data-law-check]').addEventListener('click', function () {
+if (!relation.value) { lawOutput.textContent = '先预测两式相等还是不等，再比较。'; return; }
+try {
+var values = fields.map(function (input, i) {
+var s = input.value.trim().replace(/−/g, '-');
+if (i === 2 && !s && (law.value === 'commute' || law.value === 'divide')) return '0';
+if (!/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:\/[+-]?(?:\d+(?:\.\d*)?|\.\d+))?$/.test(s)) fail('请为 ' + 'abc'[i] + ' 输入整数、小数或分数（如 -2/3），不填字母。');
+parse(s); return s;
+});
+var pair = formulas(values[0], values[1], values[2]), left = parse(pair[0]), right = parse(pair[1]), equal = same(left, right);
+lawOutput.textContent = pair[0].replace(/\*/g, '×') + ' = ' + display(left) + '；' + pair[1].replace(/\*/g, '×') + ' = ' + display(right) + '。本组两式' + (equal ? '相等' : '不等') + '，与你的预测' + ((relation.value === 'equal') === equal ? '一致' : '不同') + '。换含负数、0、分数的几组数再试；例子不能代替运算律的证明。';
+if (law.value === 'divide') lawOutput.textContent += ' 除法没有交换律，不能把一组推广到所有非零数。';
+} catch (e) { lawOutput.textContent = '暂未比较：' + e.message; }
+});
+root.querySelector('[data-law-reset]').addEventListener('click', function () {
+fields.forEach(function (input) { input.value = ''; }); law.value = 'commute'; relation.value = '';
+lawOutput.textContent = '先自选数字并预测，再比较两式。'; fields[0].focus();
+});
 })();
 </script>
 </body></html>

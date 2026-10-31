@@ -21,11 +21,15 @@
   var SOURCE = "chapter-quiz";
 
   // Exact rational arithmetic, never eval. Unsupported language/geometry answers stay self-checks.
-  function numericValue(raw) {
-    if (typeof raw !== "string" || raw.length > 300) return null;
+  function numericText(raw) {
+    if (typeof raw !== "string" || raw.length > 300) return "";
     var text = raw.normalize("NFKC").replace(/\s+/g, "").replace(/[−–]/g, "-").replace(/×/g, "*").replace(/[÷⁄]/g, "/");
     var units = "平方千米|平方分米|平方厘米|平方毫米|立方分米|立方厘米|立方毫米|平方米|立方米|千米|分米|厘米|毫米|千克|毫升|分钟|小时|秒钟|公顷|厘米²|厘米³|cm2|cm3|m2|m3|km|cm|dm|mm|kg|mL|°|个|只|张|本|辆|支|元|角|分|米|克|吨|升|时|秒|天|人|袋|盒|根|块|棵|朵|条|把|套|杯|瓶|圈|度|m|g|L";
     text = text.replace(new RegExp("(?:\\((?:" + units + ")\\)|(?:" + units + "))$"), "");
+    return text;
+  }
+  function numericValue(raw) {
+    var text = numericText(raw);
     if (!text || text.length > 160 || /[^0-9.+*/()=%-]/.test(text)) return null;
     function gcd(a, b) { a = a < 0n ? -a : a; while (b) { var c = a % b; a = b; b = c; } return a; }
     function fraction(n, d) { if (!d) throw Error("zero denominator"); if (d < 0n) { n = -n; d = -d; } var g = gcd(n, d); return [n / g, d / g]; }
@@ -72,23 +76,52 @@
       return result[0].toString() + "/" + result[1].toString();
     } catch (_) { return null; }
   }
-  function automatic(item) { return item.type !== "fill" || numericValue(item.answer) !== null; }
+  // A value is insufficient when the task asks for a construction or a particular representation.
+  function gradingMode(item) {
+    var prompt = item.prompt || "";
+    if (/(?:添.*括号|(?:列|写|检验|验算).*算式)/.test(prompt)) return "self";
+    if (numericValue(item.answer) === null) return "self";
+    if (/(?:原来.*分数|原分数)/.test(prompt)) return "original-fraction";
+    if (/最简/.test(prompt)) return "simplest-fraction";
+    if (/保留.*位小数/.test(prompt)) return /^[+-]?\d+\.\d+$/.test(numericText(item.answer)) ? "decimal-places" : "self";
+    if (/(?:用|化成|写成).*小数/.test(prompt)) return "decimal";
+    if (/(?:用|化成|写成).*分数/.test(prompt)) return "fraction";
+    return "value";
+  }
+  function automatic(item) { return item.type !== "fill" || gradingMode(item) !== "self"; }
   function grade(item, response) {
     if (item.type !== "fill") return response === item.correct;
-    var expected = numericValue(item.answer); return expected !== null && numericValue(response) === expected;
+    var mode = gradingMode(item), text = numericText(response), expectedText = numericText(item.answer);
+    if (mode === "self") return false;
+    // Equations supplied in a value-only blank cannot be unrelated tautologies such as 5=5.
+    if (text.indexOf("=") >= 0 && text !== expectedText) return false;
+    if (mode === "original-fraction" || mode === "simplest-fraction" || mode === "fraction") {
+      var parts = /^([+-]?\d+)\/([1-9]\d*)$/.exec(text);
+      if (!parts) return false;
+      if (mode !== "fraction") {
+        var expectedParts = /^([+-]?\d+)\/([1-9]\d*)$/.exec(expectedText);
+        if (!expectedParts || BigInt(parts[1]) !== BigInt(expectedParts[1]) || BigInt(parts[2]) !== BigInt(expectedParts[2])) return false;
+      }
+    }
+    if (mode === "decimal" || mode === "decimal-places") {
+      if (!/^[+-]?\d+\.\d+$/.test(text)) return false;
+      if (mode === "decimal-places" && text.split(".")[1].length !== expectedText.split(".")[1].length) return false;
+    }
+    return numericValue(response) === numericValue(item.answer);
   }
 
-  function identity(quiz, item) {
-    return JSON.stringify(["exam", quiz.sectionId, item.id, item.contentVersion]);
+  function identity(quiz, item, store) {
+    var version = store && store.resolveVersion ? store.resolveVersion(event(quiz, item, {})) : item.contentVersion;
+    return JSON.stringify(["exam", quiz.sectionId, item.id, version]);
   }
   function event(quiz, item, extra) {
     return Object.assign({ source: SOURCE, questionType: "exam", sectionId: quiz.sectionId,
-      questionId: item.id, contentVersion: item.contentVersion }, item.pointIds ? { pointIds: item.pointIds } : {}, extra);
+      questionId: item.id, contentVersion: item.contentVersion, contentVersions: item.contentVersions }, item.pointIds ? { pointIds: item.pointIds } : {}, extra);
   }
 
   // choices: { itemId: optionId }。所有作答写完后才写反馈，所以每题本次作答不会因为本次反馈变成 retry。
   function submissionSpec(quiz) {
-    return { questionType: "exam", sectionId: quiz.sectionId, questionId: "$submission", contentVersion: quiz.contentVersion };
+    return { questionType: "exam", sectionId: quiz.sectionId, questionId: "$submission", contentVersion: quiz.contentVersion, contentVersions: quiz.contentVersions };
   }
   function isCorrect(item, choices, selfChecks) {
     return automatic(item) ? grade(item, choices[item.id]) : !!(selfChecks && selfChecks[item.id]);
@@ -139,7 +172,7 @@
     }
     var firsts = [], session = { correct: 0, wrong: [] }, retryCorrect = 0, attempted = 0;
     quiz.items.forEach(function (item) {
-      var answers = store ? store.answers(identity(quiz, item)) || [] : [];
+      var answers = store ? store.answers(identity(quiz, item, store)) || [] : [];
       if (answers.length) attempted++;
       firsts.push(answers[0] || null);
       if (answers.length > 1 && answers[answers.length - 1].correct === true && answers[0].correct === false) retryCorrect++;
@@ -189,25 +222,66 @@
 
   function mount(doc, host, store, quiz, root) {
     var choices = {}, selfChecks = {}, revealed = {}, submitted = false;
+    var target = null, single = null, wholeDraft = null, lastResult = null, lastSaved = false;
     var status = el(doc, "p", "cq-status"); status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite");
+
+    function focusTarget() {
+      var box = target && host.querySelector("#q-" + target.number);
+      if (box) { box.focus(); if (box.scrollIntoView) box.scrollIntoView({ block: "center" }); }
+    }
+    function restoreWhole() {
+      if (!wholeDraft) return;
+      choices = wholeDraft.choices; selfChecks = wholeDraft.selfChecks; revealed = wholeDraft.revealed;
+      submitted = wholeDraft.submitted; lastResult = wholeDraft.result; lastSaved = wholeDraft.saved;
+      single = null; wholeDraft = null;
+    }
+    function readTarget() {
+      var match = root && root.location && /^#q-([1-9][0-9]*)$/.exec(root.location.hash);
+      target = quiz.stage === "primary" || !match ? null : quiz.items.find(function (item) { return String(item.number) === match[1]; }) || null;
+    }
+    function enterSingle() {
+      wholeDraft = { choices: choices, selfChecks: selfChecks, revealed: revealed, submitted: submitted, result: lastResult, saved: lastSaved };
+      single = target; choices = {}; selfChecks = {}; revealed = {}; submitted = false; lastResult = null;
+      status.textContent = ""; render(); focusTarget();
+    }
 
     function render() {
       host.textContent = "";
+      var items = single ? [single] : quiz.items;
       var before = summary(store, quiz, null);
       if (!store) host.appendChild(el(doc, "p", "cq-warn", "这台设备不能保存学习记录，本次作答不会计入错题本。"));
-      if (before.redo && !submitted) {
-        host.appendChild(el(doc, "p", "cq-note", before.first === null ? "你做过这套测验。这次是重做，成绩单独显示。" :
+      if (single) {
+        host.appendChild(el(doc, "p", "cq-note", "只练第 " + single.number + " 题。本题结果单独显示，不是整套成绩。"));
+        var back = el(doc, "button", "cq-target-back", "返回整套作答"); back.type = "button";
+        back.addEventListener("click", function () { restoreWhole(); status.textContent = ""; render(); focusTarget(); });
+        host.appendChild(back);
+      }
+      if (!single && before.redo && !submitted) {
+        host.appendChild(el(doc, "p", "cq-note", quiz.stage !== "primary" && before.attempted < before.total ?
+          "已有 " + before.attempted + " 题的作答记录。继续整套作答，已有记录的题按账本规则记作重练。" : before.first === null ? "你做过这套测验。这次是重做，成绩单独显示。" :
           "你做过这套测验，首次成绩 " + before.first + "/" + before.total + "。这次是重做，不改首次成绩。"));
       }
       var form = el(doc, "form", "cq-form"); form.noValidate = true;
-      quiz.items.forEach(function (item) {
+      items.forEach(function (item) {
         var box = el(doc, "fieldset", "cq-item"); box.id = "q-" + item.number;
+        if (item === target) { box.classList.add("cq-target"); box.setAttribute("tabindex", "-1"); }
         var legend = el(doc, "legend", "cq-prompt");
         legend.appendChild(el(doc, "span", "cq-no", item.number + "."));
         legend.appendChild(el(doc, "span", "cq-tier", item.tierLabel));
         legend.appendChild(el(doc, "span", "cq-text", item.prompt));
         if (item.type === "fill") legend.appendChild(el(doc, "span", "cq-mode", automatic(item) ? "（自动判分）" : "（看答案后自评）"));
         box.appendChild(legend);
+        if (item === target && !single) {
+          box.appendChild(el(doc, "p", "cq-target-note", "已定位第 " + item.number + " 题。可以只练这题，也可以继续整套作答。"));
+          var practice = el(doc, "button", "cq-target-start", "只练这题"); practice.type = "button";
+          practice.addEventListener("click", enterSingle); box.appendChild(practice);
+        }
+        if (quiz.stage === "primary" && item.figure) {
+          // Authored SVGs are validated by primary_unit_tests.load_figures at build time.
+          var picture = doc.createElement("template");
+          picture.innerHTML = item.figure;
+          box.appendChild(picture.content.cloneNode(true));
+        }
         if (item.type === "fill") {
           var input = el(doc, "textarea", "cq-fill");
           input.setAttribute("aria-label", "第 " + item.number + " 题的答案");
@@ -215,7 +289,7 @@
           input.addEventListener("input", function () { choices[item.id] = input.value; updateCount(); });
           box.appendChild(input);
           if (!automatic(item) && !revealed[item.id] && !submitted) {
-            var reveal = el(doc, "button", "cq-reveal", "看答案"); reveal.type = "button";
+            var reveal = el(doc, "button", "cq-reveal", "查看答案与解析"); reveal.type = "button";
             reveal.addEventListener("click", function () {
               if (!(choices[item.id] || "").trim()) { status.textContent = "先写下第 " + item.number + " 题的答案，再看答案。"; input.focus(); return; }
               if (store) { try { store.record(event(quiz, item, { kind: "feedback", selfCheck: true })); } catch (_) { /* Final report checks persistence. */ } }
@@ -271,35 +345,56 @@
       });
       var actions = el(doc, "div", "cq-actions"), count = el(doc, "p", "cq-count");
       function updateCount() {
-        var n = quiz.items.filter(function (item) { return !automatic(item) ? typeof selfChecks[item.id] === "boolean" : (choices[item.id] || "").trim(); }).length;
-        count.textContent = submitted ? "" : "已作答 " + n + "/" + quiz.items.length + " 题";
+        var n = items.filter(function (item) { return !automatic(item) ? typeof selfChecks[item.id] === "boolean" : (choices[item.id] || "").trim(); }).length;
+        count.textContent = submitted ? "" : "已作答 " + n + "/" + items.length + " 题";
       }
       if (!submitted) {
-        var button = el(doc, "button", "cq-submit", "提交整套");
+        var button = el(doc, "button", "cq-submit", single ? "提交本题" : "提交整套");
         button.type = "submit";
         actions.appendChild(count); actions.appendChild(button);
       } else {
         var again = el(doc, "button", "cq-again", "重做一遍");
         again.type = "button";
-        again.addEventListener("click", function () { choices = {}; selfChecks = {}; revealed = {}; submitted = false; render(); host.scrollIntoView(); });
+        again.addEventListener("click", function () { choices = {}; selfChecks = {}; revealed = {}; submitted = false; lastResult = null; status.textContent = ""; render(); host.scrollIntoView(); });
         actions.appendChild(again);
       }
       form.appendChild(actions);
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        var missing = quiz.items.filter(function (item) { return !automatic(item) ? typeof selfChecks[item.id] !== "boolean" : !(choices[item.id] || "").trim(); });
-        if (missing.length) { status.textContent = "还有 " + missing.length + " 题没有作答（第 " + missing.map(function (i) { return i.number; }).join("、") + " 题）。需要自评的题看答案并自评后，整套提交。"; return; }
+        var missing = items.filter(function (item) { return !automatic(item) ? typeof selfChecks[item.id] !== "boolean" : !(choices[item.id] || "").trim(); });
+        if (missing.length) { status.textContent = single ? "请先作答第 " + single.number + " 题，再提交本题。" : "还有 " + missing.length + " 题没有作答（第 " + missing.map(function (i) { return i.number; }).join("、") + " 题）。需要自评的题看答案并自评后，整套提交。"; return; }
         var after, saved = false;
-        try { after = store ? submit(store, quiz, choices, Date.now(), selfChecks) : summary(null, quiz, choices, selfChecks); saved = isSaved(store); } catch (_) { after = summary(null, quiz, choices, selfChecks); }
+        if (single) {
+          after = { correct: isCorrect(single, choices, selfChecks) };
+          // Keep the ledger's exposure rules: prior feedback is retry; an answer alone is repeat.
+          try {
+            if (store) {
+              var time = Date.now();
+              store.record(event(quiz, single, { kind: "answer", time: time, choice: choices[single.id], correct: after.correct, selfCheck: !automatic(single) }));
+              store.record(event(quiz, single, { kind: "feedback", time: time + 1 }));
+              saved = isSaved(store);
+            }
+          } catch (_) { saved = false; }
+        } else {
+          try { after = store ? submit(store, quiz, choices, Date.now(), selfChecks) : summary(null, quiz, choices, selfChecks); saved = isSaved(store); } catch (_) { after = summary(null, quiz, choices, selfChecks); }
+        }
+        lastResult = after; lastSaved = saved;
         submitted = true;
         render();
-        report(after, saved);
       });
       host.appendChild(form);
       host.appendChild(status);
       updateCount();
       if (quiz.stage === "primary") primaryFractions(doc, host);
       else math(root, host);
+      if (submitted && lastResult) {
+        if (single) {
+          var result = el(doc, "p", "cq-target-result", "第 " + single.number + " 题" + (lastResult.correct ? "答对了。" : "答错了。") +
+            (lastSaved ? "本题记录已保存。" : "本题记录没能保存，刷新后可能丢失。") + "这不是整套成绩。");
+          result.setAttribute("role", "status"); result.setAttribute("tabindex", "-1"); host.insertBefore(result, host.firstChild); result.focus();
+          status.textContent = "已提交本题，可在题目下查看解析。";
+        } else report(lastResult, lastSaved);
+      }
     }
 
     function report(result, saved) {
@@ -324,12 +419,15 @@
         box.appendChild(p);
       }
       host.insertBefore(box, host.firstChild);
-      status.textContent = "已提交。答错的题下面有提示和解析。";
+      status.textContent = "已提交。每道题下面都有答案和解析。";
       box.setAttribute("tabindex", "-1");
       if (box.focus) box.focus();
     }
 
-    render();
+    readTarget(); render(); focusTarget();
+    if (quiz.stage !== "primary" && root && root.addEventListener) root.addEventListener("hashchange", function () {
+      restoreWhole(); readTarget(); status.textContent = ""; render(); focusTarget();
+    });
   }
 
   return { numericValue: numericValue, automatic: automatic, grade: grade, identity: identity, wrongbookHref: wrongbookHref, isSaved: isSaved, submit: submit, summary: summary, mount: mount };

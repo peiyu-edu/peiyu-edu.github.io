@@ -63,6 +63,14 @@
   }
   function fit(svg) {
     if(svg.closest('.katex')||!svg.getScreenCTM())return;
+    // Some lessons freeze the root separator color into stroke attributes.
+    // Rebind those diagram lines so they also follow later theme switches.
+    if(!document.body.matches('[data-stage="primary"]')&&svg.matches('.fig,.micro-fig,.entry-fig,.micro-box svg,svg[id^="m-"]')){
+      var separator=getComputedStyle(document.documentElement).getPropertyValue('--line').trim();
+      [].forEach.call(svg.querySelectorAll('[stroke]'),function(el){
+        if(separator&&el.getAttribute('stroke').trim()===separator)el.setAttribute('stroke','var(--control-line, var(--muted))');
+      });
+    }
     var vb=svg.viewBox.baseVal, sr=svg.getBoundingClientRect();if(!vb.width||!sr.width)return;
     var s=state(svg), m=svg.getScreenCTM(), inv=m.inverse(), scale=Math.hypot(m.a,m.b), pad=3/scale;
     var labels=[], points=[], placed=[], notes=[];
@@ -75,7 +83,10 @@
     [].forEach.call(svg.querySelectorAll('text'),function(t){
       if(t.closest('[data-figure-layout]'))return;
       var style=getComputedStyle(t), content=t.textContent.trim();
-      if(!content||t.children.length||style.display==='none'||style.visibility==='hidden'||Number(style.opacity)<0.1||!t.getBoundingClientRect().width)return;
+      var rich=[].some.call(t.children,function(child){
+        return child.tagName.toLowerCase()!=='tspan'||!child.classList.contains('py-par')||['x','y','dx','dy'].some(function(k){return child.hasAttribute(k);});
+      });
+      if(!content||rich||style.display==='none'||style.visibility==='hidden'||Number(style.opacity)<0.1||!t.getBoundingClientRect().width)return;
       for(var parent=t.parentElement;parent&&parent!==svg;parent=parent.parentElement){var ps=getComputedStyle(parent);if(ps.display==='none'||ps.visibility==='hidden'||Number(ps.opacity)<0.1)return;}
       if(t.closest('defs,.tri-cell,.hd[data-k="c"],[role="button"],[data-figure-label-fixed="1"]')){if(!t.closest('defs'))placed.push(rect(t,inv));return;}
       var previous=s.labels.get(t), order=previous?previous.order:++s.nextOrder;s.labels.set(t,{order:order});

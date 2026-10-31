@@ -20,8 +20,14 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
+
+  .workshop input,.workshop select {max-width:100%;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--muted);border-radius:5px;padding:6px;box-sizing:border-box}
+  .workshop input[type=number] {width:6em} .workshop input[type=range] {width:100%;padding:10px 0}
+  .workshop label {display:inline-block;margin:6px 10px 6px 0} .workshop button {margin:4px}
+  .workshop svg {width:100%;max-width:560px;margin:auto;display:block} .workshop fieldset {min-width:0;border:1px solid var(--line);margin:12px 0}
+  .workshop table {width:100%;border-collapse:collapse} .workshop th,.workshop td {padding:5px;text-align:center;border:1px solid var(--line)}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j6-2" data-standard="v2">
 <div class="wrap">
@@ -120,7 +126,7 @@
     <p style="font-size:16.5px;margin:0 0 8px">平面上有 \(A\)、\(B\)、\(C\) 三个点（题目没说它们在不在同一条直线上）。经过其中每两个点画直线，一共能画几条？</p>
     <p><b>① 读懂题意：</b>「每两个点画一条」，有几对点？题目没说三点的位置，要不要分情况？</p>
     <details class="more"><summary>提示 1：先数有几对点</summary><p>从 \(A\) 出发：\(AB\)、\(AC\)；从 \(B\) 出发：\(BC\)（\(BA\) 已经数过）。共 3 对。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <div class="think-steps">
         <div class="think-step"><span class="ts-tag ca">② 想办法：</span>两点确定一条直线：每对点画出一条，而且只有一条。但不同的两对点，画出的可能是同一条直线。</div>
         <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>三点不在同一条直线上：3 对点画出 3 条不同的直线。三点在同一条直线上：3 对点画出的都是这一条，只有 1 条。答：1 条或 3 条。</div>
@@ -225,6 +231,29 @@
 </section>
 
 <section class="step" data-title="动手">
+
+  <div class="card workshop" id="measure-work">
+  <h3>实测：把尺放对，再读数</h3>
+  <p>移动尺，让零刻度与 A 对齐（尺边已沿 AB）。读出 B 的刻度，填写两点间距离。屏幕缩放会改变图的厘米大小，这里的 cm 是虚拟尺单位。</p>
+  <svg id="measure-fig" viewBox="0 0 560 220" role="img" aria-label="待测线段与可移动刻度尺"></svg>
+  <label>移动尺的零刻度 <input id="ruler-x" type="range" min="60" max="210" value="100" step="1"></label>
+  <form id="measure-form"><label>AB 长 <input id="measure-value" type="number" step="any" required></label><label>单位 <select id="measure-unit"><option>cm</option><option>mm</option></select></label><button class="btn" type="submit">核对度量</button><button class="btn ghost" type="reset">重试</button></form>
+  <p class="result" id="measure-out" role="status">先对齐零刻度，不能把尺子的左边缘当作零。</p>
+  <details class="more"><summary>纸笔核对</summary><p>在纸上任取 A、B，连接 AB。尺零刻度对 A，尺边贴 AB，视线正对 B 读数；记录“AB≈__ cm”，与同伴交换尺重复测量。若从非零刻度量，须用终点读数减起点读数。误差超过尺的一个最小格，先查对齐和读数，不把近似值说成精确相等。</p></details>
+  </div>
+  <div class="card workshop" id="construct-work">
+  <h3>无刻度尺规：自己截取等长、和与差</h3>
+  <p>上方给出线段 a、b。先画射线 OX；选择圆心和圆规开口画弧，再亲自选弧与射线的交点。作图不用读取长度，不要求写作法。保留的圆弧是检查依据。</p>
+  <label>目标 <select id="construct-mode"><option value="copy">作 OP = a</option><option value="sum">作 OQ = a + b</option><option value="diff">作 OQ = a − b（a &gt; b）</option></select></label>
+  <svg id="construct-fig" viewBox="0 0 560 350" role="img" aria-label="给定线段、射线和作图圆弧"></svg>
+  <p id="construct-task">第一步：在射线 OX 上截取 OP = a。</p>
+  <label>圆心 <select id="construct-center"><option>O</option><option>P</option></select></label>
+  <label>圆规开口 <select id="construct-radius"><option>a</option><option>b</option><option value="zero">闭合圆规</option></select></label>
+  <div><button id="construct-arc" class="btn" type="button">按我的选择画弧</button><button id="construct-left" class="btn ghost" type="button" disabled>取左交点</button><button id="construct-right" class="btn ghost" type="button" disabled>取右交点</button><button id="construct-reset" class="btn ghost" type="button">重新作图</button></div>
+  <p id="construct-out" class="result" role="status">尚未画弧。两条已知线段的开口都可试，观察条件是否满足。</p>
+  <details class="more"><summary>把三张图画到纸上，怎样验收？</summary><p>① 等长：画射线 OX，圆规两脚对 a 的两端，保持开口，以 O 为圆心画弧，取射线上的 P。② 和：从 P 再用 b 的开口向前截到 Q。③ 差（a&gt;b）：从 P 用 b 的开口往回截，取 O、P 之间的 Q。每张都保留弧痕，用圆规回量 OP 与 a、PQ 与 b；和图顺序 O—P—Q，差图顺序 O—Q—P。若 a=b，差长为0，两端重合，不是一条非退化线段；a&lt;b 不能在 OP 内截去 b。纸上成品由自己或同伴检查，网页不会替你完成纸笔作图。</p></details>
+  </div>
+  <details class="more workshop"><summary>读句画图，再看图说话</summary><p>纸上标 A、B：分别连接 AB、画直线 AB、画射线 AB，并用箭头表示延伸。再把射线 AB 反向延长，并在图上标出反向延长的方向。</p><form id="language-form"><label>连接 AB 后有几个端点？ <input id="language-n" type="number" required></label><label>射线 AB 反向延长越过 <select id="language-end"><option value="">请选择</option><option>A</option><option>B</option></select></label><button class="btn">核对</button></form><p id="language-out" role="status"></p><p>把自己的图交给同伴，遮住题句，让对方按图写“线段 AB / 直线 AB / 射线 AB”；比较双方的描述与画法，记录需要修改的地方。</p></details>
   <h3>① 线段的和、差与中点</h3>
   <p class="small">拖动 \(A\)、\(B\)、\(C\)（或点一下再用方向键，每次 0.5 cm；直尺单位是 cm）。\(M\) 是线段 \(AB\) 的中点，由代码算出。看 \(C\) 在线段上和线段外时，\(AC\)、\(CB\) 和 \(AB\) 的关系。</p>
   <div class="card">
@@ -508,6 +537,34 @@
  // 切换深浅色时重画，图里的颜色跟着变
  new MutationObserver(function () { fSeg = null; fP = fN = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+
+<script>
+(function(){
+ const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
+ function add(s,t,a,text){const e=document.createElementNS(NS,t);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));if(text)e.textContent=text;s.appendChild(e);return e;}
+ function ln(s,x,y,X,Y,c='var(--fg)'){add(s,'line',{x1:x,y1:y,x2:X,y2:Y,stroke:c,'stroke-width':2});}
+ function tx(s,x,y,t){add(s,'text',{x,y,fill:'var(--fg)','font-size':20,'text-anchor':'middle'},t);}
+ function number(id){const v=$(id).value.trim();return v===''?NaN:Number(v);}
+ function measure(){const s=$('measure-fig'),x=+$('ruler-x').value;s.replaceChildren();ln(s,150,65,390,65);tx(s,150,35,'A');tx(s,390,35,'B');ln(s,x-15,110,x+310,110);for(let i=0;i<=120;i++){ln(s,x+i*2.5,110,x+i*2.5,i%10===0?130:i%5===0?125:119);if(i%20===0)tx(s,x+i*2.5,175,String(i/10));}}
+ $('ruler-x').oninput=()=>{measure();$('measure-out').textContent='尺已移动，请重新读数核对。';};
+ $('measure-form').onsubmit=e=>{e.preventDefault();const n=number('measure-value'),v=$('measure-unit').value==='mm'?n/10:n;let t;if(+$('ruler-x').value!==150)t='先让零刻度对准 A，再读 B，当前尚未对齐。';else if(!Number.isFinite(v)||v<0)t='请输入非负的有限长度。';else if(Math.abs(v-9.6)<=0.050000001)t='度量符合：零刻度对 A，B 读数约9.6 cm（96 mm）。允许半毫米读数误差；这是测量核对，不是精确相等的证明。';else t='再读 B 的刻度；每大格1 cm，小数位估读，注意 cm 与 mm 相差10倍。';$('measure-out').textContent=t;};
+ $('measure-form').onreset=()=>{$('ruler-x').value=100;measure();$('measure-out').textContent='重新对齐零刻度并测量。';};measure();
+ let stage=0,arc=null,marks=[],arcs=[];
+ function mode(){return $('construct-mode').value;}
+ function draw(){const s=$('construct-fig');s.replaceChildren();ln(s,80,70,170,70,'var(--a)');tx(s,125,40,'a');ln(s,330,70,385,70,'var(--b)');tx(s,358,40,'b');ln(s,150,220,490,220);ln(s,480,214,490,220);ln(s,480,226,490,220);tx(s,150,250,'O');tx(s,490,250,'X');arcs.concat(arc?[arc]:[]).forEach(a=>add(s,'circle',{cx:a.x,cy:220,r:a.r,fill:'none',stroke:'var(--b)','stroke-width':2}));marks.forEach(m=>{add(s,'circle',{cx:m.x,cy:220,r:4,fill:'var(--a)'});tx(s,m.x,285,m.name);});}
+ function reset(){stage=0;arc=null;marks=[];arcs=[];$('construct-left').disabled=$('construct-right').disabled=true;$('construct-center').value='O';$('construct-radius').value='a';$('construct-task').textContent='第一步：在射线 OX 上截取 OP = a。';$('construct-out').textContent='尚未作图。请选择圆心和开口。';draw();}
+ $('construct-arc').onclick=()=>{if(stage===2){$('construct-out').textContent='本图已核对；换目标或重新作图可再练。';return;}const center=$('construct-center').value,r=$('construct-radius').value;if(center==='P'&&!marks.length){$('construct-out').textContent='P 尚未构造，请先截取第一条线段。';return;}if(r==='zero'){$('construct-out').textContent='圆规开口为0，弧退化成点，不能截取给定的正长度。';return;}arc={x:center==='O'?150:240,r:r==='a'?90:55,center,radius:r};$('construct-left').disabled=$('construct-right').disabled=false;$('construct-out').textContent='弧已按你的选择画出。请选择交点；圆与直线可能有两个交点，但还须在指定射线或线段内。';draw();};
+ function take(sign){if(!arc)return;const x=arc.x+sign*arc.r;let t='';if(stage===0){if(arc.center!=='O'||arc.radius!=='a')t='要让 OP 等于 a，检查圆心是否为 O、开口是否取自 a。';else if(x<150)t='左交点不在射线 OX 上；射线只从 O 向 X 延伸。';else{marks.push({x,name:'P'});arcs.push(arc);stage=mode()==='copy'?2:1;}}
+ else if(stage===1){if(arc.center!=='P'||arc.radius!=='b')t='第二次要从 P 截取长度 b，检查圆心与开口。';else if((mode()==='sum'&&sign!==1)||(mode()==='diff'&&sign!==-1))t=mode()==='sum'?'这是往回截取；和应首尾相接向前截。':'这是向前延长；差应截在 O、P 之间。';else{marks.push({x,name:'Q'});arcs.push(arc);stage=2;}}
+ if(t){$('construct-out').textContent=t;return;}arc=null;$('construct-left').disabled=$('construct-right').disabled=true;$('construct-task').textContent=stage===1?'第二步：从 P 用 b 的开口截取，选择符合目标的交点。':'已完成本次数字作图。';$('construct-out').textContent=stage===1?'OP 已截得，与 a 共用圆规开口。现在决定从 P 向前还是向回截取。':mode()==='copy'?'核对通过：P 在射线 OX 上，OP 与 a 使用同一开口。':mode()==='sum'?'核对通过：O—P—Q，OP=a、PQ=b，所以 OQ=a+b。':'核对通过：O—Q—P，OP=a、PQ=b，所以 OQ=a−b。';draw();}
+ $('construct-left').onclick=()=>take(-1);$('construct-right').onclick=()=>take(1);$('construct-reset').onclick=reset;$('construct-mode').onchange=reset;reset();
+ $('language-form').onsubmit=e=>{e.preventDefault();$('language-out').textContent=number('language-n')===2&&$('language-end').value==='A'?'符合：连接得到线段，有两个端点。作图对照：线段、直线、射线的端点依次为2 / 0 / 1，射线首字母表示端点；射线 AB 从 A 向 B 延伸，反向延长越过的是 A，不是 B。反向延长后成直线，不能说射线 BA 就是射线 AB。':'请按端点与延伸方向检查纸上的图，再试。';};
+ function clearLanguage(){ $('language-out').textContent=''; }
+ $('language-form').addEventListener('input',clearLanguage);
+ $('language-form').addEventListener('change',clearLanguage);
+ $('language-form').addEventListener('reset',clearLanguage);
 })();
 </script>
 </body></html>

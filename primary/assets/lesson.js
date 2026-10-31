@@ -148,9 +148,21 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       var ans = box.getAttribute("data-answer"), id = box.getAttribute("data-id") || "";
       var reveal = box.querySelector(".reveal"); if (reveal) reveal.hidden = true;
       var opts = [].slice.call(box.querySelectorAll(".opt"));
+      var verdict = document.createElement("p");
+      verdict.className = "predict-verdict";
+      verdict.setAttribute("role", "status");
+      verdict.setAttribute("aria-live", "polite");
+      box.appendChild(verdict);
+      if (reveal && opts.length) {
+        var note = document.createElement("p");
+        note.className = "small";
+        note.textContent = "选择后显示答案与解析。";
+        box.insertBefore(note, reveal);
+      }
 
       function reset() {
         box.classList.remove("done");
+        verdict.textContent = "";
         opts.forEach(function (p) {
           p.classList.remove("right", "wrong", "sel");
           p.removeAttribute("aria-disabled");
@@ -187,6 +199,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
           if (box.classList.contains("done")) return;
           box.classList.add("done");
           var v = o.getAttribute("data-v");
+          verdict.textContent = v === ans ? "答对了。" : "这题答错了，请看看解析再试一次。";
           opts.forEach(function (p) {
             var pv = p.getAttribute("data-v");
             if (pv === ans) p.classList.add("right");
@@ -329,7 +342,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       });
       card.appendChild(box);
       if (multi) {
-        var sub = el("button", "btn", "提交"); sub.type = "button";
+        var sub = el("button", "btn", "提交并查看解析"); sub.type = "button";
         sub.onclick = function () {
           if (done) return;
           var mine = Object.keys(picked).filter(function (k) { return picked[k]; }).sort().join("");
@@ -343,7 +356,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     } else if (/填空/.test(p.type) && p.answer) {
       var row = el("div", "ctrl");
       var inp = el("input"); inp.type = "text"; inp.placeholder = "填答案，如 3 或 1/2"; inp.setAttribute("aria-label", "答案");
-      var chk = el("button", "btn", "对答案"); chk.type = "button";
+      var chk = el("button", "btn", "查看答案与解析"); chk.type = "button";
       row.appendChild(inp); row.appendChild(chk); card.appendChild(row);
       chk.onclick = function () {
         if (done) return;
@@ -355,7 +368,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
         chk.disabled = true;
       };
     } else {
-      var see = el("button", "btn ghost", "做完了，看解析"); see.type = "button";
+      var see = el("button", "btn ghost", "查看答案与解析"); see.type = "button";
       card.appendChild(see);
       see.onclick = function () {
         if (done) return;
@@ -602,7 +615,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     math(document.body);
     log("open", {});
     var fl = document.createElement("script");
-    fl.src = "../assets/figure-layout.js?v=vs-a4abfb4cced8";
+    fl.src = "../assets/figure-layout.js?v=vs-ce77f522581e";
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");

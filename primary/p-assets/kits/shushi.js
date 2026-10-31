@@ -64,7 +64,7 @@
   function el(tag, attrs, parent, text) { var e = U8.el(tag, attrs, parent); if (text != null) e.textContent = text; return e; }
   function spoken(s) {
     return String(s).replace(/<[^>]+>/g, "").replace(/×/g, "乘").replace(/÷/g, "除以").replace(/=/g, "等于").replace(/\+/g, "加")
-      .replace(/</g, "小于").replace(/>/g, "大于").replace(/……/g, "，");
+      .replace(/</g, "小于").replace(/>/g, "大于").replace(/……/g, "，").replace(/[✓✗]/g, "").trim();
   }
   /* 读数：朗读的话从读数文字自动转（× 读「乘」、= 读「等于」……） */
   function readout(node, html, cls) {
@@ -263,7 +263,7 @@
       if (ok) {
         st.fill[sl.key] = sl.v;
         if (sl.kind === "z0" && v === "skip") st.faint[sl.key] = 1;
-        st.wrong = null; st.hint = sl.kind === "z0" ? verdict(true, v === "skip" ? "对了，个位的 0 省略了，第二次乘得的数从十位写起。" : "写上 0 也对，平时一般省略不写。") : "";
+        st.wrong = null; st.hint = sl.kind === "z0" ? (v === "skip" ? "对了，个位的 0 省略了，第二次乘得的数从十位写起。" : "写上 0 也对，平时一般省略不写。") : "对了！";
         var nx = -1;
         for (var i = 0; i < st.slots.length; i++) if (!isDone(st.slots[i])) { nx = i; if (!anyOrder || i > st.active) break; }
         if (nx < 0) finish(); else st.active = nx;
@@ -275,7 +275,6 @@
         try { root.dispatchEvent(new CustomEvent("manip:answer", { detail: { id: qidErr, value: String(v), slot: sl.key, correct: false }, bubbles: true })); } catch (e) { /* ignore */ }
       }
       draw();
-      if (ok && st.hint && !st.done) { readout(read, st.hint + "<br>" + prompt(st.slots[st.active])); st.hint = ""; }
     }
     function isDone(sl) { return sl.key in st.fill; }
     function finish() {
@@ -515,7 +514,7 @@
         padWrap.hidden = st.done;
         if (st.done) readout(read, verdict(true, "对了！" + st.a + " × " + st.b + " = " + pl.P + "。" + (v4 ? (two ? "两次乘得的数都对齐了，再加起来。" : "每一位都乘到了。")
           : "你一位一位地乘，" + (pl.steps.some(function (s) { return s.co || (s.last && s.v > 9); }) ? "还看了进位。" : "每一位都乘到了。")) + estText()), "ok");
-        else if (st.hint) readout(read, verdict(false, st.hint), "no");
+        else if (st.hint) readout(read, verdict(!st.wrong, st.hint) + (st.wrong ? "" : "<br>" + prompt(asl)), st.wrong ? "no" : "ok");
         else readout(read, head + prompt(asl));
       } else if (st.msg) { readout(read, st.msg); st.msg = ""; }
       else if (st.pos === 0) readout(read, head + (v4 ? (S ? "0 前面的数对齐，0 伸到右边。" : "") : (st.tz && S ? "一位数写在 " + st.a + " 的第一个不是 0 的数下面。" : "")) + "点「下一步」，一位一位地乘。");

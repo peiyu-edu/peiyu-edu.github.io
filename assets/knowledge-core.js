@@ -157,7 +157,7 @@
     if (quiz) {
       html += '<form class="k-quiz" data-kquiz="' + esc(quiz.id) + '"><fieldset><legend>用一道题检验</legend><p class="k-quiz-prompt">' + esc(quiz.prompt) + '</p><div class="k-options">' +
         quiz.options.map(function (o, i) { return '<label class="k-option" data-koption="' + esc(o.id) + '"><input type="radio" name="kquiz-' + esc(quiz.id) + '" value="' + esc(o.id) + '"><span><b>' + String.fromCharCode(65 + i) + '.</b> ' + esc(o.text) + '</span></label>'; }).join("") +
-        '</div></fieldset><div class="k-quiz-actions"><button type="submit" class="btn" data-kquiz-submit>核对答案</button><button type="button" class="btn ghost" data-kquiz-reset hidden>重新做这题</button></div><div class="k-quiz-feedback" data-kquiz-feedback aria-live="polite" hidden></div><p class="k-note">只记录这道题的表现；查看知识点不等于已经掌握。</p></form>';
+        '</div></fieldset><div class="k-quiz-actions"><button type="submit" class="btn" data-kquiz-submit>提交并查看解析</button><button type="button" class="btn ghost" data-kquiz-reset hidden>重新做这题</button></div><div class="k-quiz-feedback" data-kquiz-feedback aria-live="polite" hidden></div><p class="k-note">只记录这道题的表现；查看知识点不等于已经掌握。</p></form>';
     } else html += '<p class="k-note">这个知识点的自测题还在整理，可以先回课时练习。</p>';
     html += '<p class="k-storage" data-k-storage hidden>浏览器未能保存记录，本次页面内仍可继续自测。</p><details class="k-more"><summary>学完可以做什么</summary>' + list(p.outcomes) + '</details>' +
       '<details class="k-more"><summary>学习范围与可用方法</summary><h3>可以这样做</h3>' + list(p.boundary.allowed) + '<h3>这里不默认要求</h3>' + list(p.boundary.not_assumed) + '</details>';

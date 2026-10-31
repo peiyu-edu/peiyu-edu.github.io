@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var svg = document.createElementNS(NS, "svg");
   svg.setAttribute("class", "stage");
   svg.setAttribute("role", "img");
-  svg.setAttribute("viewBox", "0 0 360 168");
+  svg.setAttribute("viewBox", "0 0 360 280");
   box.appendChild(svg);
 
   var ctr = document.createElement("div");
@@ -215,34 +215,55 @@ document.addEventListener("DOMContentLoaded", function () {
     b2.setAttribute("aria-pressed", tab === 2 ? "true" : "false");
     b3.setAttribute("aria-pressed", tab === 3 ? "true" : "false");
 
-    el("rect", { x: 8, y: 6, width: 344, height: 156, rx: 10, style: "fill:var(--bg);stroke:var(--line);stroke-width:1.5" });
+    el("rect", { x: 8, y: 6, width: 344, height: 266, rx: 10, style: "fill:var(--bg);stroke:var(--line);stroke-width:1.5" });
+
+    var noteY = 66;
+    function note(text, color) {
+      var t = el("text", { x: 18, y: noteY, style: "fill:var(--" + color + ");font-size:16px;font-weight:700" });
+      var measure = document.createElement("canvas").getContext("2d");
+      measure.font = "16px " + getComputedStyle(t).fontFamily;
+      var lines = [""];
+      text.match(/\d+(?:\.\d+)?|[^\d]/g).forEach(function (token) {
+        var last = lines.length - 1;
+        if (lines[last] && measure.measureText(lines[last] + token).width > 260) lines.push(token);
+        else lines[last] += token;
+      });
+      lines.forEach(function (line, i) {
+        var span = document.createElementNS(NS, "tspan");
+        span.setAttribute("x", "18");
+        if (i) span.setAttribute("dy", "22");
+        span.textContent = line;
+        t.appendChild(span);
+      });
+      noteY += lines.length * 22 + 12;
+    }
 
     if (tab === 0) {
       el("text", { x: 180, y: 32, "text-anchor": "middle", style: "fill:var(--a);font-size:16px;font-weight:700" }, "板块 ①：口算拆分与乘法口诀估算");
-      el("text", { x: 180, y: 66, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 300 ÷ 5 = 60（看作 30 个十 ÷ 5 = 6 个十）");
-      el("text", { x: 180, y: 98, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 84 ÷ 4 = 21（80÷4=20，4÷4=1，20+1=21）");
-      el("text", { x: 180, y: 130, "text-anchor": "middle", style: "fill:var(--b);font-size:15px;font-weight:700" }, "• 236 ÷ 4 ≈ 60（看作能整除的 240，准确商 < 60）");
+      note("• 300 ÷ 5 = 60（看作 30 个十 ÷ 5 = 6 个十）", "fg");
+      note("• 84 ÷ 4 = 21（80÷4=20，4÷4=1，20+1=21）", "fg");
+      note("• 236 ÷ 4 ≈ 60（看作能整除的 240，准确商 < 60）", "b");
       read.className = "read ok";
       read.innerHTML = "<b>口算与估算</b>：整十整百看计数单位；两位数拆成整十和一位数分别除再合起来；估算想乘法口诀找能整除的近似数。";
     } else if (tab === 1) {
       el("text", { x: 180, y: 32, "text-anchor": "middle", style: "fill:var(--b);font-size:16px;font-weight:700" }, "板块 ②：商的位数判断与乘法验算");
-      el("text", { x: 180, y: 66, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 百位 ≥ 除数 → 商是三位数（如 432 ÷ 3 = 144）");
-      el("text", { x: 180, y: 98, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 百位 < 除数 → 商是两位数（如 314 ÷ 5 = 62……4）");
-      el("text", { x: 180, y: 130, "text-anchor": "middle", style: "fill:var(--a);font-size:15px;font-weight:700" }, "• 有余数验算：商 × 除数 + 余数 = 被除数（余数 < 除数）");
+      note("• 百位 ≥ 除数 → 商是三位数（如 432 ÷ 3 = 144）", "fg");
+      note("• 百位 < 除数 → 商是两位数（如 314 ÷ 5 = 62……4）", "fg");
+      note("• 有余数验算：商 × 除数 + 余数 = 被除数（余数 < 除数）", "a");
       read.className = "read ok";
       read.innerHTML = "<b>笔算与验算</b>：从最高位除起，除到哪一位商就写在哪一位上面，每次余数必须比除数小！";
     } else if (tab === 2) {
       el("text", { x: 180, y: 32, "text-anchor": "middle", style: "fill:var(--no);font-size:16px;font-weight:700" }, "板块 ③：商中间有 0 与商末尾有 0");
-      el("text", { x: 180, y: 66, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 0 除以任何不是 0 的数都得 0（0 不能作除数）");
-      el("text", { x: 180, y: 98, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 商中间有 0：百位除尽，十位是 0 或十位 < 除数写 0 占位");
-      el("text", { x: 180, y: 130, "text-anchor": "middle", style: "fill:var(--no);font-size:15px;font-weight:700" }, "• 商末尾有 0：十位除尽，个位是 0 或个位 < 除数写 0 占位");
+      note("• 0 除以任何不是 0 的数都得 0（0 不能作除数）", "fg");
+      note("• 商中间有 0：百位除尽，十位是 0 或十位 < 除数写 0 占位", "fg");
+      note("• 商末尾有 0：十位除尽，个位是 0 或个位 < 除数写 0 占位", "no");
       read.className = "read ok";
       read.innerHTML = "<b>写 0 占位秘诀</b>：求出商的最高位后，哪一位上不够商 1，就一定要在哪一位上写 <b>0 占位</b>！";
     } else {
       el("text", { x: 180, y: 32, "text-anchor": "middle", style: "fill:var(--a);font-size:16px;font-weight:700" }, "板块 ④：连乘、连除与归一、归总");
-      el("text", { x: 180, y: 66, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, "• 连除等价：180 ÷ 2 ÷ 3 = 180 ÷ (2 × 3)");
-      el("text", { x: 180, y: 98, "text-anchor": "middle", style: "fill:var(--a);font-size:15px;font-weight:700" }, "• 归一问题（每 1 份不变）：先用除法求 1 份是多少");
-      el("text", { x: 180, y: 130, "text-anchor": "middle", style: "fill:var(--b);font-size:15px;font-weight:700" }, "• 归总问题（总数不变）：先用乘法求总数是多少");
+      note("• 连除等价：180 ÷ 2 ÷ 3 = 180 ÷ (2 × 3)", "fg");
+      note("• 归一问题（每 1 份不变）：先用除法求 1 份是多少", "a");
+      note("• 归总问题（总数不变）：先用乘法求总数是多少", "b");
       read.className = "read ok";
       read.innerHTML = "<b>两步解决问题</b>：先想清楚第一步求的“中间问题”是什么；区分“每 1 份不变（先除）”与“总数不变（先乘）”。";
     }

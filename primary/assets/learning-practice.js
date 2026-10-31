@@ -48,7 +48,7 @@
   function identity(point, quiz) {
     quiz = quiz || point.diagnostic;
     var metadata = pointIndex(point.id);
-    return { pointId: point.id, questionId: quiz.id, questionType: "diagnostic", contentVersion: quiz.id === point.diagnostic.id ? metadata.diagnosticVersion : quiz.contentVersion, source: "practice", sectionId: context.from || section || point.first_section, step: context.step };
+    return { pointId: point.id, questionId: quiz.id, questionType: "diagnostic", contentVersion: quiz.id === point.diagnostic.id ? metadata.diagnosticVersion : quiz.contentVersion, contentVersions: quiz.id === point.diagnostic.id ? metadata.diagnosticVersions : quiz.contentVersions, source: "practice", sectionId: context.from || section || point.first_section, step: context.step };
   }
   function question(point, quiz) { return state.question(identity(point, quiz)); }
   function date(time) { return new Date(time).toLocaleDateString("zh-CN", { month: "long", day: "numeric" }); }
@@ -125,7 +125,7 @@
       (!summary.lastAnswer && !summary.canAnswerIndependently && unexposedVariant ? '<p class="lp-note">这个知识点还有一题尚未作答的平行变式。</p><p><button type="button" class="lp-button secondary" data-lp-fresh-variant>换一道尚未作答的变式</button></p>' : '') +
       '<form data-lp-quiz><fieldset><legend>选择一个答案，再核对理由</legend><p class="lp-prompt lp-katex">' + esc(quiz.prompt) + '</p><div class="lp-options">' + quiz.options.map(function (option, i) {
         return '<label class="lp-option" data-lp-option="' + esc(option.id) + '"><input type="radio" name="practice-answer" value="' + esc(option.id) + '"><span><b>' + String.fromCharCode(65 + i) + '.</b> ' + esc(option.text) + '<small class="lp-option-result" data-lp-result hidden></small></span></label>';
-      }).join("") + '</div></fieldset><p class="lp-alert" role="status" data-lp-warning hidden></p><div class="lp-actions"><button class="lp-button" type="submit" data-lp-submit>核对答案</button></div><p class="lp-note">只记录这道题的表现。答对一道题还不足以判断是否掌握。</p></form>' +
+      }).join("") + '</div></fieldset><p class="lp-alert" role="status" data-lp-warning hidden></p><div class="lp-actions"><button class="lp-button" type="submit" data-lp-submit>提交并查看解析</button></div><p class="lp-note">只记录这道题的表现。答对一道题还不足以判断是否掌握。</p></form>' +
       '<section class="lp-feedback" data-lp-feedback aria-live="polite" hidden></section><p class="lp-alert" data-lp-storage hidden>浏览器暂时无法保存记录；本页仍可练习，但刷新或离开后，本次新记录可能丢失。</p>' +
       (context.from ? '<p class="lp-return-line"><a href="' + esc(returnHref()) + '">回到' + esc(lesson(context.from).title) + ' · 第 ' + context.step + ' 步' + (context.question ? '原题' : '') + '</a></p>' : '') + '</article>';
     state.record(Object.assign({}, identity(point, quiz), { kind: "view" }));

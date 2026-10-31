@@ -22,8 +22,14 @@
   .result .sum { color: var(--no); font-weight: 700; }
   .range-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; font-size: 15px; }
   .range-row input[type="range"] { flex: 1; min-width: 160px; accent-color: var(--a); }
+  .project-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:12px 0; }
+  #field-project fieldset { min-width:0; border:1px solid var(--line); border-radius:8px; margin:16px 0; padding:12px; }
+  #field-project label { display:block; font-size:16px; overflow-wrap:anywhere; }
+  #field-project input, #field-project select, #field-project textarea { display:block; box-sizing:border-box; width:100%; min-width:0; margin-top:5px; padding:8px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:4px; }
+  #field-project :focus-visible { outline:3px solid var(--a); outline-offset:2px; }
+  #field-project .ctrl { flex-wrap:wrap; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=515d933de1ca"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/learning-state.js?v=683b48c89f09"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=f819c1328a46"></script><script defer src="../assets/learning-course.js?v=13fbb4c8d9e4"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=8674b0fbf4ec"></script><script defer src="../assets/learning-review-badges.js?v=33d8ada58a4c"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-sec="j7a-p2" data-stage="junior" data-standard="v2">
 <div class="wrap">
@@ -103,7 +109,7 @@
     <p>设计一圈 \(400\) m 的跑道，第 1 道跑动线的弯道半径取 \(36\) m。每条直道应该多长？</p>
     <p class="small">① 读懂题意：已知一圈 \(400\)、半径 \(36\)，求直道长 \(L\)。</p>
     <details class="more"><summary>提示 1：等量关系是什么</summary><p>两条直道 + 两个半圆弯道 = \(400\)。两个半圆合起来是一个半径 \(36\) 的整圆。</p></details>
-    <details class="more"><summary>看完整示范</summary>
+    <details class="more" open><summary>看完整示范</summary>
       <div class="think-steps">
         <div class="think-step"><span class="ts-tag ca">② 想办法：</span>设每条直道长 \(L\) m，列方程 \(2L+2\times3.14\times36=400\)。</div>
         <div class="think-step step-op"><span class="ts-tag cb">③ 执行：</span>\(2\times3.14\times36=226.08\)，\(2L=400-226.08=173.92\)，\(L=86.96\)。</div>
@@ -220,6 +226,76 @@
     <svg class="fig" id="fig-lane" viewBox="0 0 560 320" role="img" aria-label="各道起跑点"></svg>
     <div class="result" id="out-lane" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-lane" type="button">重置</button></div>
+  </div>
+  <h3>③ 项目工作台：从测量到比例图，再修改方案</h3>
+  <div class="card" id="field-project">
+    <p><b>先定任务，再测量。</b>可用学校允许测量的空地，也可用下面的虚拟数据练习。网页只核对简化模型的计算与矩形预留区，不代表你已经实测、施划或获得场地安全认证。原活动的“各跑动线取内沿”及 7.66 m 结论继续适用。</p>
+    <details class="more"><summary>实测和查规格任务单（先在纸上记，再输入）</summary>
+      <ol>
+        <li>建议 5～8 人分工：测量、复测、记录、计算、绘图和汇报；独立练习时依次承担各角色。先与体育教师确认可测区域和禁入区域。</li>
+        <li>查赛事采用的现行官方规则/场地资料，记录机构、文件名、日期或版本、页码/链接、测量线位置、道宽、跳远和投掷区要求。分清“内沿半径”和“测量线半径”：正式场地第 1 道与其他道的测量线偏移不同，不能直接用本页内沿模型核定真实 400 m 或第 1、2 道前伸数。未查证的数值只作假设，标明待核。</li>
+        <li>用卷尺沿两条互相垂直的方向量可用空地的长、宽，绕开固定障碍；各复测一次。记录两次数据、单位、差值和采用值，差异明显就重新量，不把网页默认数当实测结果。不规则场地先取完全位于可用区域内的长方形。</li>
+      </ol>
+    </details>
+    <form id="field-form">
+      <fieldset><legend>① 测量和跑道假设</legend>
+        <div class="project-grid">
+          <label>可用空地长 <input name="siteLength" type="number" step="any" min="0" value="180" required></label>
+          <label>可用空地宽 <input name="siteWidth" type="number" step="any" min="0" value="110" required></label>
+          <label>以上两个测量值的单位 <select name="unit"><option value="m">米 m</option><option value="cm">厘米 cm</option></select></label>
+          <label>目标一圈长（m） <input name="lap" type="number" step="any" min="0" value="400" required></label>
+          <label>第 1 道内沿半径（m） <input name="radius" type="number" step="any" min="0" value="36" required></label>
+          <label>跑道条数（1～8） <input name="lanes" type="number" step="1" min="1" max="8" value="6" required></label>
+          <label>道宽（m，模型假设） <input name="laneWidth" type="number" step="any" min="0" value="1.22" required></label>
+          <label>外沿至空地边界至少留（m） <input name="margin" type="number" step="any" min="0" value="2" required></label>
+        </div>
+        <label>测量/资料记录（不填姓名）<textarea name="measurement" rows="3" placeholder="实测或虚拟？两次测量、差值、采用理由；规格来源和仍待核对的数据。"></textarea></label>
+      </fieldset>
+      <fieldset><legend>② 先算比例尺，再画图</legend>
+        <p class="small">用横向纸面中 26 cm × 18 cm 的可画区域，长对应横向。比例尺 1∶N 的两边必须同单位：图上厘米数 = 实际米数 × 100 ÷ N。先选 N 并手算空地在纸上的长、宽，再输入核对；可换任意正数 N。本屏示意图会缩放到屏幕，不能拿屏幕上的厘米直接测量。</p>
+        <div class="project-grid">
+          <label>比例尺 1∶N，N = <input name="scale" type="number" step="any" min="0" value="1000" required></label>
+          <label>我算的图上空地长（cm） <input name="paperLength" type="number" step="any" min="0" required></label>
+          <label>我算的图上空地宽（cm） <input name="paperWidth" type="number" step="any" min="0" required></label>
+        </div>
+        <p class="small">结果四舍五入到 0.1 cm；核对容差 0.05 cm。先在纸上画空地边框，再画两圆心间距 L、半径 r、两直道及各道外沿；标比例尺、单位、尺寸、方向和图例。这里不要求尺规作图。</p>
+      </fieldset>
+      <fieldset><legend>③ 田赛与统筹布局</legend>
+        <p>在两条直道之间的中央长方形（长 L、宽 2r）内安排两个<b>矩形预留区</b>。以其左上角为原点，x 向右、y 向下，长度都用 m；x、y 表示预留区左上角。预留区须包含该项目需要的全部设施、助跑、落地区和经教师确认的安全空间，尺寸由你查资料后选定。投掷区只是占地包络框，不是正式扇形场地图，也不能以“框内放得下”代替安全判断。</p>
+        <div class="project-grid">
+          <label>跳远区 x <input name="jumpX" type="number" step="any" value="2" required></label>
+          <label>跳远区 y <input name="jumpY" type="number" step="any" value="2" required></label>
+          <label>跳远区长 <input name="jumpLength" type="number" step="any" min="0" value="50" required></label>
+          <label>跳远区宽 <input name="jumpWidth" type="number" step="any" min="0" value="8" required></label>
+          <label>投掷区 x <input name="throwX" type="number" step="any" value="8" required></label>
+          <label>投掷区 y <input name="throwY" type="number" step="any" value="25" required></label>
+          <label>投掷区长 <input name="throwLength" type="number" step="any" min="0" value="30" required></label>
+          <label>投掷区宽 <input name="throwWidth" type="number" step="any" min="0" value="30" required></label>
+          <label>使用方式 <select name="schedule"><option value="together">两项目同时进行</option><option value="separate">分时进行，重新布置并隔离</option></select></label>
+        </div>
+        <label>方案理由与人员组织 <textarea name="reason" rows="3" placeholder="为什么选这个半径/比例尺/布局？出入口、观众、运动员如何避开比赛区？分时方案如何清场和隔离？"></textarea></label>
+      </fieldset>
+      <div class="ctrl"><button class="btn" type="submit">核对并绘制方案</button><button class="btn ghost" type="reset">重置工作台</button></div>
+    </form>
+    <div id="project-feedback" class="result" role="status" aria-live="polite">请先填图上尺寸，再核对。文字理由由你和同伴按下方标准讨论，网页不把自由表达判成对错。</div>
+    <div id="project-drawing" hidden>
+      <svg class="fig" id="project-fig" viewBox="0 0 560 360" role="img" aria-label="按输入数据生成的简化场地方案"></svg>
+      <p class="small">图例：跑道外沿、各道内沿；虚线为中央可布局矩形；带文字的框为田赛预留区。越界时图形仅作示警，不能当合格比例图使用。</p>
+    </div>
+    <details class="more"><summary>从比例图到纸笔施划：起跑线与田赛场地</summary>
+      <ol>
+        <li>先在纸上按选定比例尺画出自己的方案，核对 r、L、总占地、每个预留区的长宽位置；用直尺量图上尺寸，乘 N 后换算回 m，与输入值互查。</li>
+        <li>用上面活动②计算选定道次在 200 m、400 m 时的前伸数，写明比较的是哪些内沿线、经过几个半圆。纸上先定终点及第 1 道起点，再沿相应跑动线从基准起点向跑进方向量前伸距离，画各道起跑线；不要把弧长当直线弦长。</li>
+        <li>在允许的空地可先做缩小模型：用绳作半径画两半圆、卷尺定两圆心和直道，核对连接处；弧上可用柔软卷尺或不伸长的绳沿线量距。实际学校场地须由体育教师核对正式测量线和安全要求后指导施划，网页的简化图不作为真实比赛划线依据。</li>
+        <li>田赛纸图先标助跑方向、起跳/投掷位置、落地区和安全边界，再用矩形包络框核对占地；扇形只按查到的角度用量角器画，不要求扇形面积公式。把器材、进出通道及观众区域补到纸图，若冲突就移位、缩减项目或分时使用。</li>
+      </ol>
+    </details>
+    <h4>④ 点评 → 修改 → 重新核对</h4>
+    <p class="small">与同伴交换纸图（独立练习时隔一会儿再自查）：①原始数据与单位能追溯吗？②图上尺寸乘比例尺能还原吗？③跑道和田赛区是否越界/重叠，真实安全要求是否另行核对？④起跑线是沿弧量前伸吗？提出一条具体修改意见，改上方数据后再次核对。</p>
+    <label>我的修订记录<textarea id="project-revision" rows="3" placeholder="原方案 → 具体意见与理由 → 修改的数据/图形 → 重新核对结果；还没实测的要写待实测。"></textarea></label>
+    <button class="btn ghost" type="button" id="project-compare">比较最近两次核对</button>
+    <p id="project-comparison" class="result" aria-live="polite">完成两次核对后，可查看尺寸、比例尺和布局的变化。</p>
+    <p class="small">研究报告写：问题与分工、资料来源与待核项、两次测量及采用值、计算与比例图、布局理由、点评与修改前后结果，再提出一个新问题（如增加两条跑道后是否仍放得下）并检验。输入和最近两次核对只在本页内存中，刷新即清除；请把需要的报告记在自己的纸上，不填写个人信息。</p>
   </div>
 </section>
 
@@ -433,5 +509,112 @@
   new MutationObserver(drawAll).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
+</script>
+<script>
+/* Exclusive to j7a-p2. Geometry feedback is not a real facility certification. */
+(function (root) {
+  "use strict";
+  var numeric = ["siteLength", "siteWidth", "lap", "radius", "lanes", "laneWidth", "margin", "scale", "paperLength", "paperWidth", "jumpX", "jumpY", "jumpLength", "jumpWidth", "throwX", "throwY", "throwLength", "throwWidth"];
+  function nearLE(a, b) { return a <= b + 1e-9 * Math.max(1, Math.abs(a), Math.abs(b)); }
+  function evaluate(raw) {
+    var v = {}, errors = [];
+    numeric.forEach(function (k) {
+      v[k] = String(raw[k] === undefined ? "" : raw[k]).trim() === "" ? NaN : Number(raw[k]);
+      if (!Number.isFinite(v[k])) errors.push("请把所有数值栏填为有限数字；空白不当作 0。");
+    });
+    if (errors.length) return { errors: [errors[0]] };
+    var positive = ["siteLength", "siteWidth", "lap", "radius", "laneWidth", "scale", "jumpLength", "jumpWidth", "throwLength", "throwWidth"];
+    if (positive.some(function (k) { return v[k] <= 0; }) || v.margin < 0 || v.paperLength < 0 || v.paperWidth < 0) errors.push("实际长度、半径和比例尺分母须为正数，边界预留和舍入后的图上尺寸不能为负。");
+    if (!Number.isInteger(v.lanes) || v.lanes < 1 || v.lanes > 8) errors.push("本工作台支持 1～8 条跑道，条数须为整数。");
+    if (raw.unit !== "m" && raw.unit !== "cm") errors.push("请选择米或厘米作为测量单位。");
+    if (raw.schedule !== "together" && raw.schedule !== "separate") errors.push("请选择同时或分时使用。");
+    if (errors.length) return { errors: errors };
+    var sw = v.siteWidth / (raw.unit === "cm" ? 100 : 1), sl = v.siteLength / (raw.unit === "cm" ? 100 : 1);
+    var L = (v.lap - 2 * 3.14 * v.radius) / 2, R = v.radius + v.lanes * v.laneWidth;
+    if (L <= 0) return { errors: ["当前半径使两段弯道合长不小于目标一圈长，直道长须大于 0；请改半径或目标长度。"] };
+    var needLength = L + 2 * R + 2 * v.margin, needWidth = 2 * R + 2 * v.margin;
+    var pL = sl * 100 / v.scale, pW = sw * 100 / v.scale;
+    if (![sl, sw, L, R, needLength, needWidth, pL, pW].every(function (n) { return Number.isFinite(n) && n > 0; })) return { errors: ["这些数据超出本工具可计算范围，请换用可表示的测量精度；这不代表数学方案本身错误。"] };
+    function zone(prefix) { return { x: v[prefix + "X"], y: v[prefix + "Y"], length: v[prefix + "Length"], width: v[prefix + "Width"] }; }
+    var jump = zone("jump"), thr = zone("throw");
+    function inside(z) { return z.x >= 0 && z.y >= 0 && nearLE(z.x + z.length, L) && nearLE(z.y + z.width, 2 * v.radius); }
+    var overlap = Math.min(jump.x + jump.length, thr.x + thr.length) > Math.max(jump.x, thr.x) + 1e-9 && Math.min(jump.y + jump.width, thr.y + thr.width) > Math.max(jump.y, thr.y) + 1e-9;
+    var trackFits = nearLE(needLength, sl) && nearLE(needWidth, sw), zonesFit = inside(jump) && inside(thr);
+    var scaleCorrect = Math.abs(v.paperLength - pL) <= 0.050000001 && Math.abs(v.paperWidth - pW) <= 0.050000001;
+    var paperFits = nearLE(pL, 26) && nearLE(pW, 18);
+    return { errors: [], v: v, L: L, R: R, siteLength: sl, siteWidth: sw, needLength: needLength, needWidth: needWidth,
+      paperLength: pL, paperWidth: pW, trackFits: trackFits, zonesFit: zonesFit, jump: jump, thr: thr,
+      overlap: overlap, unit: raw.unit, schedule: raw.schedule, scaleCorrect: scaleCorrect, paperFits: paperFits,
+      geometryOK: trackFits && zonesFit && (!overlap || raw.schedule === "separate") };
+  }
+  if (typeof module === "object" && module.exports) module.exports = { evaluate: evaluate };
+  if (!root.document) return;
+  var doc = root.document, form = doc.getElementById("field-form");
+  if (!form) return;
+  var feedback = doc.getElementById("project-feedback"), drawing = doc.getElementById("project-drawing"), fig = doc.getElementById("project-fig"), history = [], current = null;
+  function fmt(n) { return Number(n.toFixed(3)).toString(); }
+  function line(text) { var p = doc.createElement("p"); p.textContent = text; feedback.appendChild(p); }
+  function color(name) { return getComputedStyle(doc.documentElement).getPropertyValue(name).trim(); }
+  function draw(r) {
+    fig.replaceChildren();
+    if (!r || r.errors.length) return;
+    var NS = "http://www.w3.org/2000/svg", s = Math.min(480 / r.siteLength, 260 / r.siteWidth), x0 = (560 - r.siteLength * s) / 2, y0 = 40 + (260 - r.siteWidth * s) / 2;
+    function el(tag, attrs, parent) { var e = doc.createElementNS(NS, tag); Object.keys(attrs).forEach(function (k) { e.setAttribute(k, attrs[k]); }); (parent || fig).appendChild(e); return e; }
+    function label(x, y, text, fill) { var t = el("text", { x: x, y: y, fill: fill || color("--fg"), "text-anchor": "middle", "font-size": 19 }); t.textContent = text; }
+    el("rect", { x: x0, y: y0, width: r.siteLength * s, height: r.siteWidth * s, fill: "none", stroke: color("--fg"), "stroke-width": 2 });
+    var defs = el("defs", {}), clip = el("clipPath", { id: "project-site-clip" }, defs);
+    el("rect", { x: x0, y: y0, width: r.siteLength * s, height: r.siteWidth * s }, clip);
+    var g = el("g", { "clip-path": "url(#project-site-clip)" });
+    var cx = 280, cy = 170, l = r.L * s;
+    for (var k = 0; k <= r.v.lanes; k++) {
+      var rad = (r.v.radius + k * r.v.laneWidth) * s;
+      el("path", { d: "M " + (cx - l / 2) + " " + (cy + rad) + " H " + (cx + l / 2) + " A " + rad + " " + rad + " 0 0 0 " + (cx + l / 2) + " " + (cy - rad) + " H " + (cx - l / 2) + " A " + rad + " " + rad + " 0 0 0 " + (cx - l / 2) + " " + (cy + rad) + " Z", fill: "none", stroke: color(k === r.v.lanes ? "--a" : "--muted"), "stroke-width": k === r.v.lanes ? 2.5 : 1 }, g);
+    }
+    var left = cx - l / 2, top = cy - r.v.radius * s;
+    el("rect", { x: left, y: top, width: l, height: 2 * r.v.radius * s, fill: "none", stroke: color("--fg"), "stroke-dasharray": "4 4" }, g);
+    [r.jump, r.thr].forEach(function (z, i) {
+      el("rect", { x: left + z.x * s, y: top + z.y * s, width: z.length * s, height: z.width * s, fill: "none", stroke: color(i ? "--no" : "--b"), "stroke-width": 3, "stroke-dasharray": i ? "8 3" : "none" }, g);
+    });
+    // Labels stay in fixed positions outside the diagram, even for very small zones.
+    label(280, 24, "空地 " + fmt(r.siteLength) + " × " + fmt(r.siteWidth) + " m");
+    label(160, 325, "实线框：跳远区", color("--b"));
+    label(400, 325, "长虚线框：投掷区", color("--no"));
+    label(280, 352, "屏幕示意 · 纸图比例尺 1∶" + r.v.scale);
+  }
+  function read() { var raw = {}; new FormData(form).forEach(function (v, k) { raw[k] = v; }); return raw; }
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var r = evaluate(read()); feedback.replaceChildren(); current = null; drawing.hidden = true;
+    if (r.errors.length) { r.errors.forEach(line); return; }
+    current = r; history.push(r); if (history.length > 2) history.shift();
+    line("计算：每条直道 L = (" + r.v.lap + " − 2 × 3.14 × " + r.v.radius + ") ÷ 2 = " + fmt(r.L) + " m；" + r.v.lanes + " 条道的最外沿半径 = r + 条数 × 道宽 = " + fmt(r.R) + " m（不是最后一条内沿的半径）。");
+    line("比例尺核对：空地应画 " + fmt(r.paperLength) + " cm × " + fmt(r.paperWidth) + " cm。" + (r.scaleCorrect ? "你的两个图上尺寸在约定舍入容差内。" : "你填写的图上尺寸需修改：先把米乘 100 化为厘米，再除以 N。") + (r.paperFits ? "按此方向可放进 26 cm × 18 cm 纸面。" : "超出 26 cm × 18 cm 纸面，请增大 N 或另选纸张；本题纸面固定，可重新选比例尺。"));
+    line("跑道占地核对：含四边预留，至少需要 " + fmt(r.needLength) + " m × " + fmt(r.needWidth) + " m。" + (r.trackFits ? "在所填长方形空地内。" : "超出所填空地，请改半径、道数、道宽、总长或另选空地，不能只把图缩小就当实际放得下。"));
+    line("中央矩形 " + fmt(r.L) + " m × " + fmt(2 * r.v.radius) + " m；" + (r.zonesFit ? "两个田赛预留区都在该矩形内（含边界）。" : "田赛预留区越出中央矩形：逐个查 x、y 不小于 0，x + 长 ≤ L，y + 宽 ≤ 2r。") + (r.overlap ? (r.schedule === "together" ? "两区有面积重叠，不能按当前同时使用方案通过几何核对。" : "两区有面积重叠；分时方案须另外写明清场、器材搬移和隔离，仍需教师确认。") : "两区无面积重叠；边界相接也须自行核对安全空间是否已计入。"));
+    line((r.geometryOK && r.scaleCorrect && r.paperFits ? "本次简化几何与比例核对通过。" : "本次仍有上述项目需修改后再核对。") + "这不评价你的文字理由，也不认证实测数据、正式体育规格、通道或投掷安全。请完成纸图和修订记录。");
+    drawing.hidden = false; draw(r);
+  });
+  form.addEventListener("input", function () { current = null; drawing.hidden = true; feedback.textContent = "输入已修改，请重新核对；上一幅图已隐藏，避免与新数据混用。"; });
+  form.addEventListener("change", function () { current = null; drawing.hidden = true; });
+  form.addEventListener("reset", function () {
+    current = null; history = []; drawing.hidden = true; fig.replaceChildren(); feedback.textContent = "已重置，请先填图上尺寸，再核对。";
+    doc.getElementById("project-revision").value = "";
+    doc.getElementById("project-comparison").textContent = "完成两次核对后，可查看尺寸、比例尺和布局的变化。";
+  });
+  doc.getElementById("project-compare").addEventListener("click", function () {
+    var target = doc.getElementById("project-comparison");
+    if (history.length < 2) { target.textContent = "还没有两次有效计算。修改数据后再次核对，再比较；请在修订记录中说明理由。"; return; }
+    var before = history[0], after = history[1], changes = [];
+    numeric.forEach(function (k) { if (before.v[k] !== after.v[k]) changes.push(k); });
+    // Student-facing labels come from the associated form label, not internal field names.
+    var names = changes.map(function (k) { return form.elements[k].parentNode.firstChild.textContent.trim() + "：" + before.v[k] + " → " + after.v[k]; });
+    if (before.unit !== after.unit) names.push("测量单位：" + before.unit + " → " + after.unit);
+    if (before.schedule !== after.schedule) names.push("使用方式已改变");
+    target.textContent = "最近两次：" + (names.length ? names.join("；") : "输入数值和使用方式相同") + "。占地 " + fmt(before.needLength) + " × " + fmt(before.needWidth) + " → " + fmt(after.needLength) + " × " + fmt(after.needWidth) + " m；图上空地 " + fmt(before.paperLength) + " × " + fmt(before.paperWidth) + " → " + fmt(after.paperLength) + " × " + fmt(after.paperWidth) + " cm。最新几何核对" + (after.geometryOK ? "通过" : "仍需修改") + "；比例换算" + (after.scaleCorrect ? "通过" : "仍需修改") + "；纸面" + (after.paperFits ? "放得下" : "放不下") + "。这只比较两次核对的输入，不代表已实施修改或完成实测。";
+  });
+  new MutationObserver(function () { draw(current); }).observe(doc.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
+  var mq = root.matchMedia && root.matchMedia("(prefers-color-scheme: dark)");
+  if (mq && mq.addEventListener) mq.addEventListener("change", function () { draw(current); });
+})(typeof window === "undefined" ? globalThis : window);
 </script>
 </body></html>

@@ -12,6 +12,9 @@
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/junior-consolidation.js"></script>
 <script defer src="../assets/video.js"></script>
+<!-- J30 WORKSHOP LOADER BEGIN -->
+<script defer src="../assets/b9a-j30-2-teaching-workshop-dev.js"></script>
+<!-- J30 WORKSHOP LOADER END -->
 <style>
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
   details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
@@ -34,7 +37,23 @@
 :root[data-theme="dark"] .key .katex [style*="color: rgb(47, 122, 86)"] { color: #5FB58A !important; }
 :root[data-theme="dark"] .key .katex [style*="color: rgb(150, 101, 36)"] { color: #D3A15C !important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<!-- J30 WORKSHOP STYLE BEGIN -->
+<style>
+#j30-workshop { overflow-wrap:anywhere; }
+#j30-workshop .jw-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+#j30-workshop label { display:block; margin:8px 0; }
+#j30-workshop input:not([type="checkbox"]), #j30-workshop select, #j30-workshop textarea { display:block; box-sizing:border-box; width:100%; min-width:0; padding:9px; margin-top:5px; font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--muted); border-radius:6px; }
+#j30-workshop button { min-height:44px; max-width:100%; white-space:normal; padding:8px 12px; color:var(--fg); background:var(--bg); border:1px solid var(--muted); border-radius:6px; font:inherit; cursor:pointer; }
+#j30-workshop .jw-actions { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+#j30-workshop .jw-status { min-height:3em; }
+#j30-workshop :focus-visible { outline:3px solid var(--fg); outline-offset:3px; }
+#j30-workshop svg { display:block; width:100%; height:auto; background:var(--bg); border:1px solid var(--muted); touch-action:pan-y; }
+#j30-workshop .jw-ref[hidden] { display:none; }
+#j30-workshop fieldset { min-width:0; margin:14px 0; border:1px solid var(--muted); border-radius:6px; }
+@media(max-width:600px) { #j30-workshop .jw-grid { grid-template-columns:1fr; } }
+</style>
+<!-- J30 WORKSHOP STYLE END -->
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j30-2" data-standard="v2">
 <div class="wrap">
@@ -271,6 +290,76 @@
     <svg class="fig" id="fig2" viewBox="0 0 500 280" role="img" aria-label="内切圆动态联动图"></svg>
     <div class="result" id="res2" aria-live="polite"></div>
   </div>
+<!-- J30 WORKSHOP ROOT BEGIN -->
+<div id="j30-workshop">
+<h3>亲手完成：证明与尺规作图工作坊</h3>
+<p>先完成自己的记录，再打开对照。这里的文字和自核只留在本次页面，不写入学习记录；刷新即清空。图形的近似检查不能替代一般证明。</p>
+<form id="jw-proof" class="card" autocomplete="off">
+<h4>一、从猜想到 HL 证明</h4>
+<label>先用上方切线滑块探索：记录两组不同的圆心距、两段切线长及你的猜想<textarea name="explore" rows="3"></textarea></label>
+<p>一般情形：半径为正的圆 O，P 在圆外，PA、PB 是切线，A、B 为两个不同切点。连接 OA、OB、OP。不要把待证的切线长相等当作依据。按“前提 → 全等 → 对应结论”自己补全。</p>
+<p class="small">封闭记号：线段写两个大写字母，角或三角形写三个大写字母；关系用 =（全等栏也可用 ≌）。只允许完整词元间的 ASCII 空白，不合并字母。此处核对的是指定证明链，不接收任意证明文字的自动判定。</p>
+<div class="jw-grid">
+<label>切点 A 处的直角：填角名<input name="ra" maxlength="16"></label>
+<label>切点 B 处的直角：填角名<input name="rb" maxlength="16"></label>
+<label>这两个直角的依据<select name="rightReason"><option value="">请选择</option><option value="radius">同圆半径相等</option><option value="tangent">切线性质</option><option value="conclusion">切线长定理</option><option value="look">图形看起来对称</option></select></label>
+<label>一对相等的直角边：写等式<input name="leg" maxlength="30"></label>
+<label>这对直角边相等的依据<select name="legReason"><option value="">请选择</option><option value="common">公共边</option><option value="radius">同圆半径相等</option><option value="conclusion">切线长定理</option><option value="look">看起来一样长</option></select></label>
+<label>一对相等的斜边：写等式<input name="hyp" maxlength="30"></label>
+<label>这对斜边相等的依据<select name="hypReason"><option value="">请选择</option><option value="radius">同圆半径相等</option><option value="common">公共边</option><option value="conclusion">切线长定理</option></select></label>
+<label>据此使用的全等判定<select name="rule"><option value="">请选择</option><option>ASA</option><option>HL</option><option>SAS</option><option>SSA</option></select></label>
+<label>按对应顺序写两三角形全等<input name="tri" maxlength="30"></label>
+<label>由对应边相等得到的切线长等式<input name="length" maxlength="30"></label>
+<label>两切线夹角被平分：写对应角等式<input name="angleP" maxlength="30"></label>
+<label>再找圆心处被平分的角：写对应角等式<input name="angleO" maxlength="30"></label>
+</div>
+<label>把证明连成段落：指出对应顶点和依据，并解释 OP 在所讨论的两角内部；若要证 OP 垂直平分 AB，还需什么理由？<textarea name="proofText" rows="4"></textarea></label>
+<div class="jw-actions"><button type="submit">核对指定证明链</button><button type="button" id="jw-proof-reference">写后打开证明对照</button><button type="reset">重做证明</button></div>
+<p class="jw-status" id="jw-proof-status" role="status"></p>
+<div class="jw-ref" id="jw-proof-ref" hidden>
+<p>切线性质给 OA ⟂ PA、OB ⟂ PB，所以 ∠OAP、∠OBP 都是直角。OA=OB（同圆半径），OP=OP（公共斜边），故 Rt△OAP≌Rt△OBP（HL），对应 O↔O、A↔B、P↔P。由对应边相等得 PA=PB；由对应角相等得 ∠APO=∠BPO、∠AOP=∠BOP。</p>
+<p>P 在圆外且两切点不同，射线 PO 在 ∠APB 内部，射线 OP 在较小的 ∠AOB 内部，故它们分别平分相应夹角。O、P 是两个不同点，且各自到 A、B 等距，故直线 OP 是 AB 的垂直平分线。不能倒用待证的切线长定理来建立 HL 前提。</p>
+<label><input type="checkbox" name="proofSelf">我按对照逐条自核了自由文字中的前提、对应与角的内部条件（本次自报）</label>
+</div>
+</form>
+<form id="jw-draw" class="card" autocomplete="off">
+<h4>二、自己作三角形的内切圆</h4>
+<p>先取三个不共线点画三角形；重合或共线时没有本活动所说的正半径内切圆。任选下列构型，纸上另作一幅，保留尺规痕迹。</p>
+<label>作图构型<select id="jw-shape"><option value="acute">不等边锐角三角形</option><option value="right">不等边直角三角形</option><option value="obtuse">不等边钝角三角形</option></select></label>
+<ol>
+<li>作 A 内角的平分线：以 A 为心画弧，交 AB、AC 于 U、V；以 U、V 为心、相同且大于 UV 一半的半径画弧，在角内交于非 A 的 W，画射线 AW。对 B 内角重复。</li>
+<li>标两射线交点 I。说明 I 在三角形内部，利用角平分线性质，说明它到三边的垂直距离相等，再说明 CI 也平分 C 内角。</li>
+<li>过 I 作 BC 的垂线：以 I 为心用足够大半径画弧，交 BC 所在直线于 M、N；以 M、N 为心、相同且大于 MN 一半的半径画弧，取非 I 的交点 Q，连 IQ，交 BC 于 D。要取垂线段 ID 的长，不能取斜线段 IA。</li>
+<li>以 I 为圆心、ID 为半径画圆。再作 I 到 CA、AB 的垂足 E、F；检验 D、E、F 在边段上，ID=IE=IF，且半径分别垂直对应边。垂足在圆上和垂直两条件一起给相切。</li>
+</ol>
+<p>屏幕练习：先画两条内角平分线，再标交点、垂足并取半径画圆。可输入圆规开口看辅助弧，亲自选择弧的内部交点来画线。辅助弧采用同一开口作等距弧，不会替你连线。输入坐标只为屏幕精细落点，不作为学生的证明方法。</p>
+<div class="jw-grid">
+<label>圆规开口（0.5 到 2 格）<input id="jw-opening" inputmode="decimal" maxlength="12"></label>
+<div class="jw-actions"><button type="button" data-compass="a">画 A 角等距辅助弧</button><button type="button" data-compass="b">画 B 角等距辅助弧</button></div>
+</div>
+<label>下一次落点的作用<select id="jw-tool"><option value="a">选 A 角平分线经过点，画射线</option><option value="b">选 B 角平分线经过点，画射线</option><option value="i">标两射线交点 I</option><option value="d">标 I 到 BC 的垂足 D</option></select></label>
+<svg id="jw-board" viewBox="0 0 600 500" tabindex="0" role="group" aria-label="内切圆作图板，方向键移动十字光标，Enter按所选作用落点" aria-describedby="jw-board-help"></svg>
+<p id="jw-board-help" class="small">点击或轻触网格即落点（到 0.1 格）；也可聚焦图板，用方向键移动 0.1 格，Shift 加方向键移动 1 格，Enter 落点。精细位置可在下方输入。改前一步会清除依赖它的交点、垂足和圆。</p>
+<div class="jw-grid">
+<label>落点横坐标 x（0 到 16）<input id="jw-x" inputmode="decimal" maxlength="12"></label>
+<label>落点纵坐标 y（0 到 12）<input id="jw-y" inputmode="decimal" maxlength="12"></label>
+</div>
+<p class="small">数值只接受 ASCII 普通十进制，至多两位小数；允许前后 ASCII 空白，不接受内部空白、全角、分数、指数或表达式。网格检查容差为 0.18 格；即使接近也不是严格尺规证明。</p>
+<div class="jw-actions"><button type="submit">按坐标落点</button><button type="button" id="jw-circle">以 I 为圆心、ID 为半径画圆</button><button type="button" id="jw-check-draw">检查本次近似图</button><button type="reset">清空重画</button></div>
+<p id="jw-draw-status" class="jw-status" role="status"></p>
+<label>写出作图理由：两条内角平分线为何足够？为何第三边也相切？内心与外心的作法、等距对象有何不同？<textarea name="drawText" rows="4"></textarea></label>
+<div class="jw-actions"><button type="button" id="jw-draw-reference">写后打开作图自核准则</button></div>
+<div class="jw-ref" id="jw-draw-ref" hidden>
+<p>两条内角平分线交于内部的 I。因 I 在 A 的内角平分线上，到 AB、AC 等距；又在 B 的内角平分线上，到 BA、BC 等距，故三边垂距都相等。由角平分线性质的逆定理，I 也在 C 的内角平分线上。</p>
+<p>作垂足 D、E、F，三条垂线段都等于正数 ID；以 I 为心、ID 为半径的圆经过三个垂足，且在这些点的半径各垂直对应边，故三边均为切线。非退化三角形的这三个垂足均在边段上。内心用内角平分线求，到三边等距；外心用边的垂直平分线求，到三个顶点等距。内心一定在内部，外心的位置随三角形类型变化。</p>
+<label><input type="checkbox" name="self1">纸上确实作了两条内角平分线，留下等距弧和交点 I（自报）</label>
+<label><input type="checkbox" name="self2">纸上作垂足取半径画圆，检验三边切点与垂直/等距条件（自报）</label>
+<label><input type="checkbox" name="self3">已用性质说明作法，未把内心当外心，未将近似测量当证明（自报）</label>
+<p>勾选仅表示本次自核；机器没有看过或认证你的纸笔作品，也不认证任意文字。</p>
+</div>
+</form>
+</div>
+<!-- J30 WORKSHOP ROOT END -->
 </section>
 
 <section class="step" data-title="练一练">
@@ -386,357 +475,6 @@
 
 </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  if (typeof renderMathInElement === "function") {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: "$$", right: "$$", display: true},
-        {left: "\\[", right: "\\]", display: true},
-        {left: "$", right: "$", display: false},
-        {left: "\\(", right: "\\)", display: false}
-      ],
-      throwOnError: false
-    });
-  }
-
-  if (typeof initGaoKaoSolutions === "function") {
-    initGaoKaoSolutions("practice", "../data/sections/j30-2.json");
-  }
-
-  // Step 1: V型卡尺示意
-  var entryFig = document.getElementById("entry-fig");
-  var entryBar = document.getElementById("entry-bar");
-  var entryNote = document.getElementById("entry-note");
-
-  function renderEntry(halfDeg) {
-    if (!entryFig) return;
-    var ox = 275, oy = 110, r = 50;
-    var rad = halfDeg * Math.PI / 180;
-    var d = r / Math.sin(rad);
-    var px = ox - d, py = oy;
-
-    var tanLen = Math.sqrt(d * d - r * r);
-    var ax = px + tanLen * Math.cos(rad);
-    var ay = py - tanLen * Math.sin(rad);
-    var bx = px + tanLen * Math.cos(rad);
-    var by = py + tanLen * Math.sin(rad);
-
-    var h = '';
-    h += '<circle cx="' + ox + '" cy="' + oy + '" r="' + r + '" fill="var(--bg)" stroke="var(--muted)" stroke-width="2"/>';
-    h += '<circle cx="' + ox + '" cy="' + oy + '" r="4" fill="var(--fg)"/>';
-    h += '<text x="' + (ox + 12) + '" y="' + (oy + 4) + '" font-size="12" fill="var(--fg)" font-weight="700">O</text>';
-
-    h += '<line x1="' + px.toFixed(1) + '" y1="' + py + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--c)" stroke-width="3"/>';
-    h += '<line x1="' + px.toFixed(1) + '" y1="' + py + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--c)" stroke-width="3"/>';
-    h += '<line x1="' + px.toFixed(1) + '" y1="' + py + '" x2="' + ox + '" y2="' + oy + '" stroke="var(--c)" stroke-width="1.5" stroke-dasharray="4,4"/>';
-
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--no)" stroke-width="1.5"/>';
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--no)" stroke-width="1.5"/>';
-
-    h += '<circle cx="' + px.toFixed(1) + '" cy="' + py + '" r="5" fill="var(--c)"/>';
-    h += '<text x="' + (px - 22).toFixed(1) + '" y="' + (py + 4) + '" font-size="12" fill="var(--c)" font-weight="700">P</text>';
-    h += '<circle cx="' + ax.toFixed(1) + '" cy="' + ay.toFixed(1) + '" r="5" fill="var(--no)"/>';
-    h += '<text x="' + (ax + 8).toFixed(1) + '" y="' + (ay - 8).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">A</text>';
-    h += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="5" fill="var(--no)"/>';
-    h += '<text x="' + (bx + 8).toFixed(1) + '" y="' + (by + 16).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">B</text>';
-
-    entryFig.innerHTML = h;
-
-    if (entryNote) {
-      entryNote.textContent = '卡尺两边夹角为 ' + (halfDeg * 2) + '°。对称性保证 PA = PB 严格相等，且 OP 平分两边夹角！';
-    }
-  }
-
-  if (entryBar) {
-    var btns = entryBar.querySelectorAll("button");
-    btns.forEach(function(b) {
-      b.addEventListener("click", function() {
-        btns.forEach(function(x) { x.classList.remove("on"); });
-        b.classList.add("on");
-        renderEntry((parseInt(b.getAttribute("data-ang"), 10) || 90) / 2);
-      });
-    });
-  }
-  renderEntry(45);
-
-  // 微图解 1：切线长定理
-  var m1Svg = document.getElementById("m1-fig");
-  var m1Bar = document.getElementById("m1-bar");
-  var m1Note = document.getElementById("m1-note");
-  function drawM1(m) {
-    if (!m1Svg) return;
-    var ox = 155, oy = 90, r = 50, px = 325;
-    var d = px - ox;
-    var cosA = r / d, sinA = Math.sqrt(1 - cosA * cosA);
-    var ax = ox + r * cosA, ay = oy - r * sinA;
-    var bx = ox + r * cosA, by = oy + r * sinA;
-    var h = '<rect x="0" y="0" width="460" height="180" fill="var(--card)"/>';
-    h += '<circle cx="' + ox + '" cy="' + oy + '" r="' + r + '" fill="var(--line)" stroke="var(--c)" stroke-width="2"/>';
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--c)" stroke-width="1.6"/>';
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--c)" stroke-width="1.6"/>';
-    h += '<line x1="' + px + '" y1="' + oy + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--b)" stroke-width="2.4"/>';
-    h += '<line x1="' + px + '" y1="' + oy + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--b)" stroke-width="2.4"/>';
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + px + '" y2="' + oy + '" stroke="var(--a)" stroke-width="2" stroke-dasharray="4,3"/>';
-    if (m === "chord") {
-      h += '<line x1="' + ax.toFixed(1) + '" y1="' + ay.toFixed(1) + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--no)" stroke-width="2.2"/>';
-      h += '<circle cx="' + ax.toFixed(1) + '" cy="' + oy + '" r="3.2" fill="var(--no)"/>';
-      h += '<text x="' + (ax + 8).toFixed(1) + '" y="106" font-size="12" fill="var(--no)" font-weight="700">H</text>';
-    }
-    h += '<circle cx="' + ox + '" cy="' + oy + '" r="3.5" fill="var(--c)"/>';
-    h += '<text x="128" y="94" font-size="12" fill="var(--c)" font-weight="700">O</text>';
-    h += '<circle cx="' + ax.toFixed(1) + '" cy="' + ay.toFixed(1) + '" r="4" fill="var(--b)"/>';
-    h += '<text x="' + (ax + 8).toFixed(1) + '" y="' + (ay - 8).toFixed(1) + '" font-size="12" fill="var(--b)" font-weight="700">A</text>';
-    h += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="4" fill="var(--b)"/>';
-    h += '<text x="' + (bx + 8).toFixed(1) + '" y="' + (by + 16).toFixed(1) + '" font-size="12" fill="var(--b)" font-weight="700">B</text>';
-    h += '<circle cx="' + px + '" cy="' + oy + '" r="4" fill="var(--a)"/>';
-    h += '<text x="335" y="94" font-size="12" fill="var(--a)" font-weight="700">P</text>';
-    m1Svg.innerHTML = h;
-    if (m1Note) {
-      m1Note.textContent = m === "len" ? "切线长相等：由 Rt△OAP ≌ Rt△OBP (HL) 得 PA = PB。" : (m === "bis" ? "平分夹角：连心线 OP 平分两切线夹角 ∠APB，也平分圆心角 ∠AOB。" : "三线合一：在等腰 △PAB 中，角平分线 OP 垂直平分切点弦 AB。");
-    }
-  }
-  if (m1Bar) {
-    m1Bar.addEventListener("click", function(e) {
-      var btn = e.target.closest("button");
-      if (!btn) return;
-      m1Bar.querySelectorAll("button").forEach(function(b) { b.classList.remove("on"); });
-      btn.classList.add("on");
-      drawM1(btn.dataset.m || "len");
-    });
-    drawM1("len");
-  }
-
-  // 微图解 2：内心与拆边
-  var m2Svg = document.getElementById("m2-fig");
-  var m2Bar = document.getElementById("m2-bar");
-  var m2Note = document.getElementById("m2-note");
-  function drawM2(m) {
-    if (!m2Svg) return;
-    var Ax = 220, Ay = 22, Bx = 115, By = 152, Cx = 345, Cy = 152;
-    var a = Math.hypot(Cx - Bx, Cy - By), b = Math.hypot(Ax - Cx, Ay - Cy), c = Math.hypot(Bx - Ax, By - Ay);
-    var p = a + b + c;
-    var ix = (a * Ax + b * Bx + c * Cx) / p, iy = (a * Ay + b * By + c * Cy) / p;
-    var r = Math.abs((Bx - Ax) * (Cy - Ay) - (Cx - Ax) * (By - Ay)) / p;
-    function foot(Px, Py, Qx, Qy) {
-      var dx = Qx - Px, dy = Qy - Py;
-      var t = ((ix - Px) * dx + (iy - Py) * dy) / (dx * dx + dy * dy);
-      return {x: Px + t * dx, y: Py + t * dy};
-    }
-    var D = foot(Bx, By, Cx, Cy), E = foot(Ax, Ay, Cx, Cy), F = foot(Ax, Ay, Bx, By);
-    var h = '<rect x="0" y="0" width="460" height="180" fill="var(--card)"/>';
-    h += '<polygon points="' + Ax + ',' + Ay + ' ' + Bx + ',' + By + ' ' + Cx + ',' + Cy + '" fill="none" stroke="var(--c)" stroke-width="2.2"/>';
-    h += '<circle cx="' + ix.toFixed(1) + '" cy="' + iy.toFixed(1) + '" r="' + r.toFixed(1) + '" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2"/>';
-    if (m === "dist") {
-      [D, E, F].forEach(function(pt) {
-        h += '<line x1="' + ix.toFixed(1) + '" y1="' + iy.toFixed(1) + '" x2="' + pt.x.toFixed(1) + '" y2="' + pt.y.toFixed(1) + '" stroke="var(--no)" stroke-width="2"/>';
-        h += '<circle cx="' + pt.x.toFixed(1) + '" cy="' + pt.y.toFixed(1) + '" r="3.2" fill="var(--no)"/>';
-      });
-      h += '<text x="' + (D.x + 10).toFixed(1) + '" y="168" font-size="12" fill="var(--no)" font-weight="700">D</text>';
-      h += '<text x="' + (E.x + 10).toFixed(1) + '" y="' + (E.y - 4).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">E</text>';
-      h += '<text x="' + (F.x - 22).toFixed(1) + '" y="' + (F.y - 6).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">F</text>';
-    } else if (m === "split") {
-      h += '<text x="' + ((Ax + F.x) / 2 - 16).toFixed(1) + '" y="' + ((Ay + F.y) / 2).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">x</text>';
-      h += '<text x="' + ((Bx + D.x) / 2 - 4).toFixed(1) + '" y="168" font-size="12" fill="var(--b)" font-weight="700">y</text>';
-      h += '<text x="' + ((Cx + D.x) / 2 - 4).toFixed(1) + '" y="168" font-size="12" fill="var(--c)" font-weight="700">z</text>';
-    } else {
-      h += '<line x1="' + ix.toFixed(1) + '" y1="' + iy.toFixed(1) + '" x2="' + Bx + '" y2="' + By + '" stroke="var(--b)" stroke-width="2"/>';
-      h += '<line x1="' + ix.toFixed(1) + '" y1="' + iy.toFixed(1) + '" x2="' + Cx + '" y2="' + Cy + '" stroke="var(--b)" stroke-width="2"/>';
-    }
-    h += '<circle cx="' + ix.toFixed(1) + '" cy="' + iy.toFixed(1) + '" r="3.5" fill="var(--a)"/>';
-    h += '<text x="' + (ix + 8).toFixed(1) + '" y="' + (iy - 4).toFixed(1) + '" font-size="12" fill="var(--a)" font-weight="700">I</text>';
-    h += '<text x="228" y="26" font-size="12" fill="var(--c)" font-weight="700">A</text>';
-    h += '<text x="98" y="156" font-size="12" fill="var(--c)" font-weight="700">B</text>';
-    h += '<text x="354" y="156" font-size="12" fill="var(--c)" font-weight="700">C</text>';
-    m2Svg.innerHTML = h;
-    if (m2Note) {
-      m2Note.textContent = m === "dist" ? "内心等距：内心 I 到三边垂线段 ID = IE = IF = r。" : (m === "split" ? "切线长拆边：AF=AE=x，BF=BD=y，CD=CE=z，满足 x+y+z = (a+b+c)/2。" : "内心张角：IB, IC 平分 ∠ABC, ∠ACB，故 ∠BIC = 90° + (1/2)∠A。");
-    }
-  }
-  if (m2Bar) {
-    m2Bar.addEventListener("click", function(e) {
-      var btn = e.target.closest("button");
-      if (!btn) return;
-      m2Bar.querySelectorAll("button").forEach(function(b) { b.classList.remove("on"); });
-      btn.classList.add("on");
-      drawM2(btn.dataset.m || "dist");
-    });
-    drawM2("dist");
-  }
-
-  // 微图解 3：内切圆半径公式
-  var m3Svg = document.getElementById("m3-fig");
-  var m3Bar = document.getElementById("m3-bar");
-  var m3Note = document.getElementById("m3-note");
-  function drawM3(m) {
-    if (!m3Svg) return;
-    var h = '<rect x="0" y="0" width="460" height="180" fill="var(--card)"/>';
-    if (m === "area") {
-      var Ax = 220, Ay = 22, Bx = 115, By = 152, Cx = 345, Cy = 152;
-      var a = Math.hypot(Cx - Bx, Cy - By), b = Math.hypot(Ax - Cx, Ay - Cy), c = Math.hypot(Bx - Ax, By - Ay);
-      var ix = (a * Ax + b * Bx + c * Cx) / (a + b + c), iy = (a * Ay + b * By + c * Cy) / (a + b + c), r = By - iy;
-      h += '<polygon points="' + ix + ',' + iy + ' ' + Bx + ',' + By + ' ' + Cx + ',' + Cy + '" fill="var(--line)" opacity="0.7" stroke="var(--c)" stroke-width="1.6"/>';
-      h += '<polygon points="' + ix + ',' + iy + ' ' + Cx + ',' + Cy + ' ' + Ax + ',' + Ay + '" fill="var(--hl-soft)" opacity="0.7" stroke="var(--b)" stroke-width="1.6"/>';
-      h += '<polygon points="' + ix + ',' + iy + ' ' + Ax + ',' + Ay + ' ' + Bx + ',' + By + '" fill="var(--ok-soft)" opacity="0.7" stroke="var(--a)" stroke-width="1.6"/>';
-      h += '<circle cx="' + ix + '" cy="' + iy + '" r="' + r + '" fill="none" stroke="var(--no)" stroke-width="1.6" stroke-dasharray="4,3"/>';
-      h += '<circle cx="' + ix + '" cy="' + iy + '" r="3.5" fill="var(--no)"/>';
-      h += '<text x="' + (ix + 8) + '" y="' + (iy + 4) + '" font-size="12" fill="var(--no)" font-weight="700">I</text>';
-      h += '<text x="228" y="26" font-size="12" fill="var(--c)" font-weight="700">A</text>';
-      h += '<text x="98" y="156" font-size="12" fill="var(--c)" font-weight="700">B</text>';
-      h += '<text x="354" y="156" font-size="12" fill="var(--c)" font-weight="700">C</text>';
-    } else if (m === "rt") {
-      h += '<rect x="135" y="112" width="40" height="40" fill="var(--no-soft)" stroke="var(--no)" stroke-width="1.8"/>';
-      h += '<polygon points="135,32 135,152 295,152" fill="none" stroke="var(--c)" stroke-width="2.2"/>';
-      h += '<circle cx="175" cy="112" r="40" fill="var(--ok-soft)" opacity="0.7" stroke="var(--a)" stroke-width="2"/>';
-      h += '<circle cx="175" cy="112" r="3.5" fill="var(--a)"/>';
-      h += '<text x="183" y="108" font-size="12" fill="var(--a)" font-weight="700">I</text>';
-      h += '<text x="118" y="158" font-size="12" fill="var(--no)" font-weight="700">C</text>';
-      h += '<text x="118" y="36" font-size="12" fill="var(--c)" font-weight="700">A</text>';
-      h += '<text x="304" y="156" font-size="12" fill="var(--c)" font-weight="700">B</text>';
-    } else {
-      var ox = 150, oy = 90, r = 50, px = 330;
-      var d = px - ox, cosA = r / d, sinA = Math.sqrt(1 - cosA * cosA);
-      var ax = ox + r * cosA, ay = oy - r * sinA, bx = ox + r * cosA, by = oy + r * sinA;
-      var tx = ox + r, t = (tx - px) / (ax - px);
-      var dy = oy + t * (ay - oy), ey = oy + t * (by - oy);
-      h += '<circle cx="' + ox + '" cy="' + oy + '" r="' + r + '" fill="var(--line)" stroke="var(--c)" stroke-width="2"/>';
-      h += '<line x1="' + px + '" y1="' + oy + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--b)" stroke-width="2.2"/>';
-      h += '<line x1="' + px + '" y1="' + oy + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--b)" stroke-width="2.2"/>';
-      h += '<line x1="' + tx + '" y1="' + dy.toFixed(1) + '" x2="' + tx + '" y2="' + ey.toFixed(1) + '" stroke="var(--no)" stroke-width="2.4"/>';
-      h += '<text x="' + (tx - 4) + '" y="' + (dy - 8).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">D</text>';
-      h += '<text x="' + (tx - 4) + '" y="' + (ey + 16).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">E</text>';
-      h += '<text x="338" y="94" font-size="12" fill="var(--b)" font-weight="700">P</text>';
-    }
-    m3Svg.innerHTML = h;
-    if (m3Note) {
-      m3Note.textContent = m === "area" ? "三块面积相加：它们的高都是 r，S△ABC = S△IBC + S△ICA + S△IAB = (1/2)(a+b+c)r。" : (m === "rt" ? "直角三角形内切圆：直角顶点 C 处围成边长为 r 的正方形，故 r = (a+b-c)/2。" : "切线割三角形：因为 DC=DA, EC=EB，所以 △PDE 周长恒等于 PA + PB = 2PA。");
-    }
-  }
-  if (m3Bar) {
-    m3Bar.addEventListener("click", function(e) {
-      var btn = e.target.closest("button");
-      if (!btn) return;
-      m3Bar.querySelectorAll("button").forEach(function(b) { b.classList.remove("on"); });
-      btn.classList.add("on");
-      drawM3(btn.dataset.m || "area");
-    });
-    drawM3("area");
-  }
-
-  // Step 3: 动手实验 1 - 切线长定理测算
-  var tanD = document.getElementById("tan-d");
-  var tanDVal = document.getElementById("tan-d-val");
-  var fig1 = document.getElementById("fig1");
-  var res1 = document.getElementById("res1");
-  var r1 = 50;
-
-  function renderFig1() {
-    if (!fig1 || !tanD) return;
-    var d = parseInt(tanD.value, 10) || 100;
-    if (tanDVal) tanDVal.textContent = d;
-
-    var ox = 300, oy = 130;
-    var px = ox - d, py = oy;
-    var lTan = Math.sqrt(d * d - r1 * r1);
-    var sinA = r1 / d;
-    var cosA = lTan / d;
-
-    var ax = px + lTan * cosA, ay = py - lTan * sinA;
-    var bx = px + lTan * cosA, by = py + lTan * sinA;
-
-    var h = '';
-    h += '<circle cx="' + ox + '" cy="' + oy + '" r="' + r1 + '" fill="var(--line)" stroke="var(--c)" stroke-width="2"/>';
-    h += '<circle cx="' + ox + '" cy="' + oy + '" r="4" fill="var(--c)"/>';
-    h += '<text x="' + (ox + 12) + '" y="' + (oy + 4) + '" font-size="12" fill="var(--c)" font-weight="700">O</text>';
-
-    h += '<line x1="' + px + '" y1="' + py + '" x2="' + ox + '" y2="' + oy + '" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4,4"/>';
-    h += '<line x1="' + px + '" y1="' + py + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--a)" stroke-width="2.5"/>';
-    h += '<line x1="' + px + '" y1="' + py + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--a)" stroke-width="2.5"/>';
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + ax.toFixed(1) + '" y2="' + ay.toFixed(1) + '" stroke="var(--no)" stroke-width="1.5"/>';
-    h += '<line x1="' + ox + '" y1="' + oy + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--no)" stroke-width="1.5"/>';
-    h += '<line x1="' + ax.toFixed(1) + '" y1="' + ay.toFixed(1) + '" x2="' + bx.toFixed(1) + '" y2="' + by.toFixed(1) + '" stroke="var(--b)" stroke-width="1.5"/>';
-
-    h += '<circle cx="' + px + '" cy="' + py + '" r="5" fill="var(--a)"/>';
-    h += '<text x="' + (px - 22) + '" y="' + (py + 4) + '" font-size="12" fill="var(--a)" font-weight="700">P</text>';
-    h += '<circle cx="' + ax.toFixed(1) + '" cy="' + ay.toFixed(1) + '" r="4" fill="var(--no)"/>';
-    h += '<text x="' + (ax + 8).toFixed(1) + '" y="' + (ay - 8).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">A</text>';
-    h += '<circle cx="' + bx.toFixed(1) + '" cy="' + by.toFixed(1) + '" r="4" fill="var(--no)"/>';
-    h += '<text x="' + (bx + 8).toFixed(1) + '" y="' + (by + 16).toFixed(1) + '" font-size="12" fill="var(--no)" font-weight="700">B</text>';
-
-    fig1.innerHTML = h;
-
-    var halfAng = (Math.asin(sinA) * 180 / Math.PI).toFixed(1);
-    if (res1) {
-      res1.innerHTML = '圆心距 <span class="sum">PO = ' + d + '</span>，半径 <span class="sum">r = 50</span>：<br>' +
-        '• 切线长勾股计算：PA = PB = √(d² - r²) = √(' + (d*d) + ' - 2500) ≈ <span class="sum">' + lTan.toFixed(1) + '</span><br>' +
-        '• 对称平分结论：∠APO = ∠BPO ≈ <span class="sum">' + halfAng + '°</span>，两切线夹角 ∠APB = ' + (halfAng * 2).toFixed(1) + '°';
-    }
-  }
-
-  if (tanD) tanD.addEventListener("input", renderFig1);
-
-  // Step 3: 动手实验 2 - 直角三角形内切圆联动
-  var triA = document.getElementById("tri-a");
-  var triB = document.getElementById("tri-b");
-  var triAVal = document.getElementById("tri-a-val");
-  var triBVal = document.getElementById("tri-b-val");
-  var resetBtn = document.getElementById("reset-btn");
-  var fig2 = document.getElementById("fig2");
-  var res2 = document.getElementById("res2");
-
-  function renderFig2() {
-    if (!fig2 || !triA || !triB) return;
-    var a = parseInt(triA.value, 10) || 80;
-    var b = parseInt(triB.value, 10) || 120;
-    if (triAVal) triAVal.textContent = a;
-    if (triBVal) triBVal.textContent = b;
-
-    var c = Math.sqrt(a * a + b * b);
-    var rIn = (a + b - c) / 2;
-
-    var originX = 140, originY = 220;
-    var cx = originX, cy = originY;
-    var ax = cx, ay = cy - a;
-    var bx = cx + b, by = cy;
-    var ix = cx + rIn, iy = cy - rIn;
-
-    var h = '';
-    h += '<polygon points="' + ax + ',' + ay + ' ' + bx + ',' + by + ' ' + cx + ',' + cy + '" fill="var(--bg)" stroke="var(--fg)" stroke-width="2.5"/>';
-    h += '<circle cx="' + ix.toFixed(1) + '" cy="' + iy.toFixed(1) + '" r="' + rIn.toFixed(1) + '" fill="var(--hl-soft)" opacity="0.6" stroke="var(--b)" stroke-width="2"/>';
-    h += '<circle cx="' + ix.toFixed(1) + '" cy="' + iy.toFixed(1) + '" r="4" fill="var(--b)"/>';
-    h += '<text x="' + (ix + 8).toFixed(1) + '" y="' + (iy + 4).toFixed(1) + '" font-size="12" fill="var(--b)" font-weight="700">I</text>';
-
-    h += '<rect x="' + cx + '" y="' + (cy - rIn).toFixed(1) + '" width="' + rIn.toFixed(1) + '" height="' + rIn.toFixed(1) + '" fill="var(--hl-soft)" opacity="0.4" stroke="var(--hl)" stroke-width="1.5" stroke-dasharray="2,2"/>';
-
-    h += '<text x="' + (cx - 18) + '" y="' + (cy + 16) + '" font-size="12" fill="var(--fg)" font-weight="700">C</text>';
-    h += '<text x="' + (ax - 18) + '" y="' + (ay + 4) + '" font-size="12" fill="var(--fg)" font-weight="700">A</text>';
-    h += '<text x="' + (bx + 10) + '" y="' + (by + 4) + '" font-size="12" fill="var(--fg)" font-weight="700">B</text>';
-
-    fig2.innerHTML = h;
-
-    var area = (0.5 * a * b).toFixed(0);
-    var peri = (a + b + c).toFixed(1);
-
-    if (res2) {
-      res2.innerHTML = '直角边 <span class="sum">a = ' + a + '</span>，<span class="sum">b = ' + b + '</span>，斜边 <span class="sum">c = ' + c.toFixed(1) + '</span>：<br>' +
-        '• 内切圆半径公式：r = (a + b - c)/2 = (' + a + ' + ' + b + ' - ' + c.toFixed(1) + ')/2 = <span class="sum">' + rIn.toFixed(2) + '</span><br>' +
-        '• 面积法验证：S = 1/2 × a × b = ' + area + '；周长 p = ' + peri + '；r = 2S / p ≈ <span class="sum">' + (2 * area / peri).toFixed(2) + '</span>（完全吻合！）';
-    }
-  }
-
-  if (triA) triA.addEventListener("input", renderFig2);
-  if (triB) triB.addEventListener("input", renderFig2);
-  if (resetBtn) {
-    resetBtn.addEventListener("click", function() {
-      triA.value = "80";
-      triB.value = "120";
-      renderFig2();
-    });
-  }
-
-  renderFig1();
-  renderFig2();
-});
-</script>
+<script>document.addEventListener("DOMContentLoaded",function(){if(typeof renderMathInElement==="function"){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"\\[",right:"\\]",display:true},{left:"$",right:"$",display:false},{left:"\\(",right:"\\)",display:false}],throwOnError:false});}if(typeof initGaoKaoSolutions==="function"){initGaoKaoSolutions("practice","../data/sections/j30-2.json");}var entryFig=document.getElementById("entry-fig");var entryBar=document.getElementById("entry-bar");var entryNote=document.getElementById("entry-note");function renderEntry(halfDeg){if(!entryFig)return;var ox=275,oy=110,r=50;var rad=halfDeg*Math.PI/180;var d=r/Math.sin(rad);var px=ox-d,py=oy;var tanLen=Math.sqrt(d*d-r*r);var ax=px+tanLen*Math.cos(rad);var ay=py-tanLen*Math.sin(rad);var bx=px+tanLen*Math.cos(rad);var by=py+tanLen*Math.sin(rad);var h='';h+='<circle cx="'+ox+'" cy="'+oy+'" r="'+r+'" fill="var(--bg)" stroke="var(--muted)" stroke-width="2"/>';h+='<circle cx="'+ox+'" cy="'+oy+'" r="4" fill="var(--fg)"/>';h+='<text x="'+(ox+12)+'" y="'+(oy+4)+'" font-size="12" fill="var(--fg)" font-weight="700">O</text>';h+='<line x1="'+px.toFixed(1)+'" y1="'+py+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--c)" stroke-width="3"/>';h+='<line x1="'+px.toFixed(1)+'" y1="'+py+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--c)" stroke-width="3"/>';h+='<line x1="'+px.toFixed(1)+'" y1="'+py+'" x2="'+ox+'" y2="'+oy+'" stroke="var(--c)" stroke-width="1.5" stroke-dasharray="4,4"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--no)" stroke-width="1.5"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--no)" stroke-width="1.5"/>';h+='<circle cx="'+px.toFixed(1)+'" cy="'+py+'" r="5" fill="var(--c)"/>';h+='<text x="'+(px-22).toFixed(1)+'" y="'+(py+4)+'" font-size="12" fill="var(--c)" font-weight="700">P</text>';h+='<circle cx="'+ax.toFixed(1)+'" cy="'+ay.toFixed(1)+'" r="5" fill="var(--no)"/>';h+='<text x="'+(ax+8).toFixed(1)+'" y="'+(ay-8).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">A</text>';h+='<circle cx="'+bx.toFixed(1)+'" cy="'+by.toFixed(1)+'" r="5" fill="var(--no)"/>';h+='<text x="'+(bx+8).toFixed(1)+'" y="'+(by+16).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">B</text>';entryFig.innerHTML=h;if(entryNote){entryNote.textContent='卡尺两边夹角为 '+(halfDeg*2)+'°。对称性保证 PA = PB 严格相等，且 OP 平分两边夹角！';}}if(entryBar){var btns=entryBar.querySelectorAll("button");btns.forEach(function(b){b.addEventListener("click",function(){btns.forEach(function(x){x.classList.remove("on");});b.classList.add("on");renderEntry((parseInt(b.getAttribute("data-ang"),10)||90)/2);});});}renderEntry(45);var m1Svg=document.getElementById("m1-fig");var m1Bar=document.getElementById("m1-bar");var m1Note=document.getElementById("m1-note");function drawM1(m){if(!m1Svg)return;var ox=155,oy=90,r=50,px=325;var d=px-ox;var cosA=r/d,sinA=Math.sqrt(1-cosA*cosA);var ax=ox+r*cosA,ay=oy-r*sinA;var bx=ox+r*cosA,by=oy+r*sinA;var h='<rect x="0" y="0" width="460" height="180" fill="var(--card)"/>';h+='<circle cx="'+ox+'" cy="'+oy+'" r="'+r+'" fill="var(--line)" stroke="var(--c)" stroke-width="2"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--c)" stroke-width="1.6"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--c)" stroke-width="1.6"/>';h+='<line x1="'+px+'" y1="'+oy+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--b)" stroke-width="2.4"/>';h+='<line x1="'+px+'" y1="'+oy+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--b)" stroke-width="2.4"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+px+'" y2="'+oy+'" stroke="var(--a)" stroke-width="2" stroke-dasharray="4,3"/>';if(m==="chord"){h+='<line x1="'+ax.toFixed(1)+'" y1="'+ay.toFixed(1)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--no)" stroke-width="2.2"/>';h+='<circle cx="'+ax.toFixed(1)+'" cy="'+oy+'" r="3.2" fill="var(--no)"/>';h+='<text x="'+(ax+8).toFixed(1)+'" y="106" font-size="12" fill="var(--no)" font-weight="700">H</text>';}h+='<circle cx="'+ox+'" cy="'+oy+'" r="3.5" fill="var(--c)"/>';h+='<text x="128" y="94" font-size="12" fill="var(--c)" font-weight="700">O</text>';h+='<circle cx="'+ax.toFixed(1)+'" cy="'+ay.toFixed(1)+'" r="4" fill="var(--b)"/>';h+='<text x="'+(ax+8).toFixed(1)+'" y="'+(ay-8).toFixed(1)+'" font-size="12" fill="var(--b)" font-weight="700">A</text>';h+='<circle cx="'+bx.toFixed(1)+'" cy="'+by.toFixed(1)+'" r="4" fill="var(--b)"/>';h+='<text x="'+(bx+8).toFixed(1)+'" y="'+(by+16).toFixed(1)+'" font-size="12" fill="var(--b)" font-weight="700">B</text>';h+='<circle cx="'+px+'" cy="'+oy+'" r="4" fill="var(--a)"/>';h+='<text x="335" y="94" font-size="12" fill="var(--a)" font-weight="700">P</text>';m1Svg.innerHTML=h;if(m1Note){m1Note.textContent=m==="len"?"切线长相等：由 Rt△OAP ≌ Rt△OBP (HL) 得 PA = PB。":(m==="bis"?"平分夹角：连心线 OP 平分两切线夹角 ∠APB，也平分圆心角 ∠AOB。":"三线合一：在等腰 △PAB 中，角平分线 OP 垂直平分切点弦 AB。");}}if(m1Bar){m1Bar.addEventListener("click",function(e){var btn=e.target.closest("button");if(!btn)return;m1Bar.querySelectorAll("button").forEach(function(b){b.classList.remove("on");});btn.classList.add("on");drawM1(btn.dataset.m||"len");});drawM1("len");}var m2Svg=document.getElementById("m2-fig");var m2Bar=document.getElementById("m2-bar");var m2Note=document.getElementById("m2-note");function drawM2(m){if(!m2Svg)return;var Ax=220,Ay=22,Bx=115,By=152,Cx=345,Cy=152;var a=Math.hypot(Cx-Bx,Cy-By),b=Math.hypot(Ax-Cx,Ay-Cy),c=Math.hypot(Bx-Ax,By-Ay);var p=a+b+c;var ix=(a*Ax+b*Bx+c*Cx)/p,iy=(a*Ay+b*By+c*Cy)/p;var r=Math.abs((Bx-Ax)*(Cy-Ay)-(Cx-Ax)*(By-Ay))/p;function foot(Px,Py,Qx,Qy){var dx=Qx-Px,dy=Qy-Py;var t=((ix-Px)*dx+(iy-Py)*dy)/(dx*dx+dy*dy);return{x:Px+t*dx,y:Py+t*dy};}var D=foot(Bx,By,Cx,Cy),E=foot(Ax,Ay,Cx,Cy),F=foot(Ax,Ay,Bx,By);var h='<rect x="0" y="0" width="460" height="180" fill="var(--card)"/>';h+='<polygon points="'+Ax+','+Ay+' '+Bx+','+By+' '+Cx+','+Cy+'" fill="none" stroke="var(--c)" stroke-width="2.2"/>';h+='<circle cx="'+ix.toFixed(1)+'" cy="'+iy.toFixed(1)+'" r="'+r.toFixed(1)+'" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2"/>';if(m==="dist"){[D,E,F].forEach(function(pt){h+='<line x1="'+ix.toFixed(1)+'" y1="'+iy.toFixed(1)+'" x2="'+pt.x.toFixed(1)+'" y2="'+pt.y.toFixed(1)+'" stroke="var(--no)" stroke-width="2"/>';h+='<circle cx="'+pt.x.toFixed(1)+'" cy="'+pt.y.toFixed(1)+'" r="3.2" fill="var(--no)"/>';});h+='<text x="'+(D.x+10).toFixed(1)+'" y="168" font-size="12" fill="var(--no)" font-weight="700">D</text>';h+='<text x="'+(E.x+10).toFixed(1)+'" y="'+(E.y-4).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">E</text>';h+='<text x="'+(F.x-22).toFixed(1)+'" y="'+(F.y-6).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">F</text>';}else if(m==="split"){h+='<text x="'+((Ax+F.x)/2-16).toFixed(1)+'" y="'+((Ay+F.y)/2).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">x</text>';h+='<text x="'+((Bx+D.x)/2-4).toFixed(1)+'" y="168" font-size="12" fill="var(--b)" font-weight="700">y</text>';h+='<text x="'+((Cx+D.x)/2-4).toFixed(1)+'" y="168" font-size="12" fill="var(--c)" font-weight="700">z</text>';}else{h+='<line x1="'+ix.toFixed(1)+'" y1="'+iy.toFixed(1)+'" x2="'+Bx+'" y2="'+By+'" stroke="var(--b)" stroke-width="2"/>';h+='<line x1="'+ix.toFixed(1)+'" y1="'+iy.toFixed(1)+'" x2="'+Cx+'" y2="'+Cy+'" stroke="var(--b)" stroke-width="2"/>';}h+='<circle cx="'+ix.toFixed(1)+'" cy="'+iy.toFixed(1)+'" r="3.5" fill="var(--a)"/>';h+='<text x="'+(ix+8).toFixed(1)+'" y="'+(iy-4).toFixed(1)+'" font-size="12" fill="var(--a)" font-weight="700">I</text>';h+='<text x="228" y="26" font-size="12" fill="var(--c)" font-weight="700">A</text>';h+='<text x="98" y="156" font-size="12" fill="var(--c)" font-weight="700">B</text>';h+='<text x="354" y="156" font-size="12" fill="var(--c)" font-weight="700">C</text>';m2Svg.innerHTML=h;if(m2Note){m2Note.textContent=m==="dist"?"内心等距：内心 I 到三边垂线段 ID = IE = IF = r。":(m==="split"?"切线长拆边：AF=AE=x，BF=BD=y，CD=CE=z，满足 x+y+z = (a+b+c)/2。":"内心张角：IB, IC 平分 ∠ABC, ∠ACB，故 ∠BIC = 90° + (1/2)∠A。");}}if(m2Bar){m2Bar.addEventListener("click",function(e){var btn=e.target.closest("button");if(!btn)return;m2Bar.querySelectorAll("button").forEach(function(b){b.classList.remove("on");});btn.classList.add("on");drawM2(btn.dataset.m||"dist");});drawM2("dist");}var m3Svg=document.getElementById("m3-fig");var m3Bar=document.getElementById("m3-bar");var m3Note=document.getElementById("m3-note");function drawM3(m){if(!m3Svg)return;var h='<rect x="0" y="0" width="460" height="180" fill="var(--card)"/>';if(m==="area"){var Ax=220,Ay=22,Bx=115,By=152,Cx=345,Cy=152;var a=Math.hypot(Cx-Bx,Cy-By),b=Math.hypot(Ax-Cx,Ay-Cy),c=Math.hypot(Bx-Ax,By-Ay);var ix=(a*Ax+b*Bx+c*Cx)/(a+b+c),iy=(a*Ay+b*By+c*Cy)/(a+b+c),r=By-iy;h+='<polygon points="'+ix+','+iy+' '+Bx+','+By+' '+Cx+','+Cy+'" fill="var(--line)" opacity="0.7" stroke="var(--c)" stroke-width="1.6"/>';h+='<polygon points="'+ix+','+iy+' '+Cx+','+Cy+' '+Ax+','+Ay+'" fill="var(--hl-soft)" opacity="0.7" stroke="var(--b)" stroke-width="1.6"/>';h+='<polygon points="'+ix+','+iy+' '+Ax+','+Ay+' '+Bx+','+By+'" fill="var(--ok-soft)" opacity="0.7" stroke="var(--a)" stroke-width="1.6"/>';h+='<circle cx="'+ix+'" cy="'+iy+'" r="'+r+'" fill="none" stroke="var(--no)" stroke-width="1.6" stroke-dasharray="4,3"/>';h+='<circle cx="'+ix+'" cy="'+iy+'" r="3.5" fill="var(--no)"/>';h+='<text x="'+(ix+8)+'" y="'+(iy+4)+'" font-size="12" fill="var(--no)" font-weight="700">I</text>';h+='<text x="228" y="26" font-size="12" fill="var(--c)" font-weight="700">A</text>';h+='<text x="98" y="156" font-size="12" fill="var(--c)" font-weight="700">B</text>';h+='<text x="354" y="156" font-size="12" fill="var(--c)" font-weight="700">C</text>';}else if(m==="rt"){h+='<rect x="135" y="112" width="40" height="40" fill="var(--no-soft)" stroke="var(--no)" stroke-width="1.8"/>';h+='<polygon points="135,32 135,152 295,152" fill="none" stroke="var(--c)" stroke-width="2.2"/>';h+='<circle cx="175" cy="112" r="40" fill="var(--ok-soft)" opacity="0.7" stroke="var(--a)" stroke-width="2"/>';h+='<circle cx="175" cy="112" r="3.5" fill="var(--a)"/>';h+='<text x="183" y="108" font-size="12" fill="var(--a)" font-weight="700">I</text>';h+='<text x="118" y="158" font-size="12" fill="var(--no)" font-weight="700">C</text>';h+='<text x="118" y="36" font-size="12" fill="var(--c)" font-weight="700">A</text>';h+='<text x="304" y="156" font-size="12" fill="var(--c)" font-weight="700">B</text>';}else{var ox=150,oy=90,r=50,px=330;var d=px-ox,cosA=r/d,sinA=Math.sqrt(1-cosA*cosA);var ax=ox+r*cosA,ay=oy-r*sinA,bx=ox+r*cosA,by=oy+r*sinA;var tx=ox+r,t=(tx-px)/(ax-px);var dy=oy+t*(ay-oy),ey=oy+t*(by-oy);h+='<circle cx="'+ox+'" cy="'+oy+'" r="'+r+'" fill="var(--line)" stroke="var(--c)" stroke-width="2"/>';h+='<line x1="'+px+'" y1="'+oy+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--b)" stroke-width="2.2"/>';h+='<line x1="'+px+'" y1="'+oy+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--b)" stroke-width="2.2"/>';h+='<line x1="'+tx+'" y1="'+dy.toFixed(1)+'" x2="'+tx+'" y2="'+ey.toFixed(1)+'" stroke="var(--no)" stroke-width="2.4"/>';h+='<text x="'+(tx-4)+'" y="'+(dy-8).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">D</text>';h+='<text x="'+(tx-4)+'" y="'+(ey+16).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">E</text>';h+='<text x="338" y="94" font-size="12" fill="var(--b)" font-weight="700">P</text>';}m3Svg.innerHTML=h;if(m3Note){m3Note.textContent=m==="area"?"三块面积相加：它们的高都是 r，S△ABC = S△IBC + S△ICA + S△IAB = (1/2)(a+b+c)r。":(m==="rt"?"直角三角形内切圆：直角顶点 C 处围成边长为 r 的正方形，故 r = (a+b-c)/2。":"切线割三角形：因为 DC=DA, EC=EB，所以 △PDE 周长恒等于 PA + PB = 2PA。");}}if(m3Bar){m3Bar.addEventListener("click",function(e){var btn=e.target.closest("button");if(!btn)return;m3Bar.querySelectorAll("button").forEach(function(b){b.classList.remove("on");});btn.classList.add("on");drawM3(btn.dataset.m||"area");});drawM3("area");}var tanD=document.getElementById("tan-d");var tanDVal=document.getElementById("tan-d-val");var fig1=document.getElementById("fig1");var res1=document.getElementById("res1");var r1=50;function renderFig1(){if(!fig1||!tanD)return;var d=parseInt(tanD.value,10)||100;if(tanDVal)tanDVal.textContent=d;var ox=300,oy=130;var px=ox-d,py=oy;var lTan=Math.sqrt(d*d-r1*r1);var sinA=r1/d;var cosA=lTan/d;var ax=px+lTan*cosA,ay=py-lTan*sinA;var bx=px+lTan*cosA,by=py+lTan*sinA;var h='';h+='<circle cx="'+ox+'" cy="'+oy+'" r="'+r1+'" fill="var(--line)" stroke="var(--c)" stroke-width="2"/>';h+='<circle cx="'+ox+'" cy="'+oy+'" r="4" fill="var(--c)"/>';h+='<text x="'+(ox+12)+'" y="'+(oy+4)+'" font-size="12" fill="var(--c)" font-weight="700">O</text>';h+='<line x1="'+px+'" y1="'+py+'" x2="'+ox+'" y2="'+oy+'" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4,4"/>';h+='<line x1="'+px+'" y1="'+py+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--a)" stroke-width="2.5"/>';h+='<line x1="'+px+'" y1="'+py+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--a)" stroke-width="2.5"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+ax.toFixed(1)+'" y2="'+ay.toFixed(1)+'" stroke="var(--no)" stroke-width="1.5"/>';h+='<line x1="'+ox+'" y1="'+oy+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--no)" stroke-width="1.5"/>';h+='<line x1="'+ax.toFixed(1)+'" y1="'+ay.toFixed(1)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'" stroke="var(--b)" stroke-width="1.5"/>';h+='<circle cx="'+px+'" cy="'+py+'" r="5" fill="var(--a)"/>';h+='<text x="'+(px-22)+'" y="'+(py+4)+'" font-size="12" fill="var(--a)" font-weight="700">P</text>';h+='<circle cx="'+ax.toFixed(1)+'" cy="'+ay.toFixed(1)+'" r="4" fill="var(--no)"/>';h+='<text x="'+(ax+8).toFixed(1)+'" y="'+(ay-8).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">A</text>';h+='<circle cx="'+bx.toFixed(1)+'" cy="'+by.toFixed(1)+'" r="4" fill="var(--no)"/>';h+='<text x="'+(bx+8).toFixed(1)+'" y="'+(by+16).toFixed(1)+'" font-size="12" fill="var(--no)" font-weight="700">B</text>';fig1.innerHTML=h;var halfAng=(Math.asin(sinA)*180/Math.PI).toFixed(1);if(res1){res1.innerHTML='圆心距 <span class="sum">PO = '+d+'</span>，半径 <span class="sum">r = 50</span>：<br>'+'• 切线长勾股计算：PA = PB = √(d² - r²) = √('+(d*d)+' - 2500) ≈ <span class="sum">'+lTan.toFixed(1)+'</span><br>'+'• 对称平分结论：∠APO = ∠BPO ≈ <span class="sum">'+halfAng+'°</span>，两切线夹角 ∠APB = '+(halfAng*2).toFixed(1)+'°';}}if(tanD)tanD.addEventListener("input",renderFig1);var triA=document.getElementById("tri-a");var triB=document.getElementById("tri-b");var triAVal=document.getElementById("tri-a-val");var triBVal=document.getElementById("tri-b-val");var resetBtn=document.getElementById("reset-btn");var fig2=document.getElementById("fig2");var res2=document.getElementById("res2");function renderFig2(){if(!fig2||!triA||!triB)return;var a=parseInt(triA.value,10)||80;var b=parseInt(triB.value,10)||120;if(triAVal)triAVal.textContent=a;if(triBVal)triBVal.textContent=b;var c=Math.sqrt(a*a+b*b);var rIn=(a+b-c)/2;var originX=140,originY=220;var cx=originX,cy=originY;var ax=cx,ay=cy-a;var bx=cx+b,by=cy;var ix=cx+rIn,iy=cy-rIn;var h='';h+='<polygon points="'+ax+','+ay+' '+bx+','+by+' '+cx+','+cy+'" fill="var(--bg)" stroke="var(--fg)" stroke-width="2.5"/>';h+='<circle cx="'+ix.toFixed(1)+'" cy="'+iy.toFixed(1)+'" r="'+rIn.toFixed(1)+'" fill="var(--hl-soft)" opacity="0.6" stroke="var(--b)" stroke-width="2"/>';h+='<circle cx="'+ix.toFixed(1)+'" cy="'+iy.toFixed(1)+'" r="4" fill="var(--b)"/>';h+='<text x="'+(ix+8).toFixed(1)+'" y="'+(iy+4).toFixed(1)+'" font-size="12" fill="var(--b)" font-weight="700">I</text>';h+='<rect x="'+cx+'" y="'+(cy-rIn).toFixed(1)+'" width="'+rIn.toFixed(1)+'" height="'+rIn.toFixed(1)+'" fill="var(--hl-soft)" opacity="0.4" stroke="var(--hl)" stroke-width="1.5" stroke-dasharray="2,2"/>';h+='<text x="'+(cx-18)+'" y="'+(cy+16)+'" font-size="12" fill="var(--fg)" font-weight="700">C</text>';h+='<text x="'+(ax-18)+'" y="'+(ay+4)+'" font-size="12" fill="var(--fg)" font-weight="700">A</text>';h+='<text x="'+(bx+10)+'" y="'+(by+4)+'" font-size="12" fill="var(--fg)" font-weight="700">B</text>';fig2.innerHTML=h;var area=(0.5*a*b).toFixed(0);var peri=(a+b+c).toFixed(1);if(res2){res2.innerHTML='直角边 <span class="sum">a = '+a+'</span>，<span class="sum">b = '+b+'</span>，斜边 <span class="sum">c = '+c.toFixed(1)+'</span>：<br>'+'• 内切圆半径公式：r = (a + b - c)/2 = ('+a+' + '+b+' - '+c.toFixed(1)+')/2 = <span class="sum">'+rIn.toFixed(2)+'</span><br>'+'• 面积法验证：S = 1/2 × a × b = '+area+'；周长 p = '+peri+'；r = 2S / p ≈ <span class="sum">'+(2*area/peri).toFixed(2)+'</span>（完全吻合！）';}}if(triA)triA.addEventListener("input",renderFig2);if(triB)triB.addEventListener("input",renderFig2);if(resetBtn){resetBtn.addEventListener("click",function(){triA.value="80";triB.value="120";renderFig2();});}renderFig1();renderFig2();});</script>
 </body>
 </html>

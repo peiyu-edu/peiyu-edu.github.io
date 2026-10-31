@@ -20,7 +20,8 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<script defer src="../assets/b7a-j1-2-own-numberline-dev.js"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j1-2" data-standard="v2">
 <div class="wrap">
@@ -308,6 +309,43 @@
     <svg class="fig" id="fig-dist" viewBox="0 0 560 260" role="img" aria-label="数轴上到一点距离相等的两个点"></svg>
     <div class="result" id="out-dist" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-dist" type="button">重置</button></div>
+  </div>
+  <div class="card" id="own-numberline-work">
+    <h3>④ 选学深化：我自己定三要素、标点</h3>
+    <p>上面已认识三要素并用数轴表示数。这里进一步自己定原点、正方向和均匀单位长度。浅灰小格只是作图尺，不是数轴的数；从尺左端数，第0到第16小格。</p>
+    <label>要标的数（1～6个，逗号或换行分开）<textarea id="on-targets" rows="2" maxlength="160" style="width:100%;box-sizing:border-box"></textarea></label>
+    <button class="btn ghost" id="on-given" type="button">采用一组给定数</button>
+    <p class="small">数与位置只收半角整数、至多两位小数或简单分数（如用斜线写分数，分母为1～99的正整数）；整数或分子最多四位。负号用 -，不用正号、多余前导0、单位、算式、指数或内部空格。不作无限循环小数化分数练习。重复的同一个数必须标在同一位置。</p>
+    <div class="ctrl"><label>原点在第几小格 <input id="on-origin" size="5" maxlength="2" inputmode="numeric"></label><label>正方向 <select id="on-direction"><option value="">先选择</option><option value="1">向右为正</option><option value="-1">向左为正</option></select></label><label>每单位占几小格 <input id="on-unit" size="4" maxlength="1" inputmode="numeric"></label></div>
+    <p class="small">本工坊原点位置用0～16的整数，每单位用1～8个等宽小格。正数沿声明的正方向数，负数朝反方向数，0在原点。本选学也可向左规定正方向；换方向不改变数本身。画布放不下时重选布局，不是说该数不能用数轴表示。</p>
+    <button class="btn" id="on-build" type="button">按我定的三要素画轴 / 重画</button>
+    <ol id="on-list"></ol>
+    <div class="ctrl"><label>我要标 <select id="on-active"><option value="">先选点</option></select></label><label>从尺左端数，在第几小格 <input id="on-position" size="7" maxlength="12" autocomplete="off"></label><button class="btn ghost" id="on-place" type="button">描到该位置</button><button class="btn ghost" id="on-remove" type="button">撤当前点</button></div>
+    <p class="small">也可选点后点数轴，按0.01小格记录；需精确分数位置时输入分数。图上Home/End到尺端，方向键每次0.01小格，Shift每次一小格。相同位置的点分行显示，沿虚线读轴；核对按精确数值，不把接近当相等。</p>
+    <svg class="fig" id="on-fig" viewBox="0 0 560 500" role="group" tabindex="0" aria-label="按自己规定的三要素标点"></svg>
+    <p id="on-plan" class="small" style="overflow-wrap:anywhere" aria-live="polite">先自己定三要素，尚未自动标点。</p>
+    <div class="ctrl"><button class="btn" id="on-check" type="button">核对我标的点</button><button class="btn ghost" id="on-reset" type="button">清空我的轴</button></div>
+    <p id="on-feedback" class="result" aria-live="polite">先画轴、自己标点，再核对。</p>
+    <details class="more"><summary>选学：这幅轴画得一致吗？</summary>
+      <label>待检查图 <select id="on-audit"><option value="">先选择</option><option value="0">甲</option><option value="1">乙</option><option value="2">丙</option><option value="3">丁</option></select></label>
+      <svg class="fig" id="on-audit-fig" viewBox="0 0 560 160" role="img" aria-label="待检查的原点、方向、刻度和标数"></svg>
+      <label>我的判断 <select id="on-audit-guess"><option value="">先判断</option><option value="yes">三要素与标数一致</option><option value="no">有不一致之处</option></select></label>
+      <label>我的依据<textarea id="on-audit-why" rows="2" maxlength="600" style="width:100%;box-sizing:border-box"></textarea></label><button class="btn ghost" id="on-audit-check" type="button">核图，文字另自检</button><p id="on-audit-feedback" aria-live="polite"></p>
+    </details>
+  </div>
+  <div class="card" id="numberline-induction-work">
+    <h3>⑤ 选学深化：先观察记录，再写我自己的归纳</h3>
+    <p>逐组看正数、负数和0的位置，先留下观察记录。图中分行标数，沿虚线读同一数轴位置；数值沿用上面的半角语法。再用自己的话写相反数、绝对值、负数比较的归纳；不是选一条已给规律，也不把有限例子当一般证明。</p>
+    <label>观察组 <select id="oi-case"><option value="">先选择</option><option value="0">甲</option><option value="1">乙</option><option value="2">丙</option><option value="3">丁</option></select></label>
+    <p id="oi-prompt"></p><svg class="fig" id="oi-fig" viewBox="0 0 560 330" role="img" aria-label="供自己观察记录的数轴"></svg>
+    <div class="ctrl"><label>所问数的相反数 <input id="oi-opposite" size="7" maxlength="12"></label><label>到原点距离（单位） <input id="oi-distance" size="7" maxlength="12"></label><label>两数之间填 <select id="oi-compare"><option value="">先比较</option><option value="&lt;">&lt;</option><option value="=">=</option><option value="&gt;">&gt;</option></select></label></div>
+    <label>我观察到的位置、距离与比较依据<textarea id="oi-note" rows="2" maxlength="700" style="width:100%;box-sizing:border-box"></textarea></label><button class="btn" id="oi-record" type="button">保存本组观察</button><p id="oi-progress" aria-live="polite">四组都还没留下自己的观察。</p>
+    <label>我的归纳：相反数（要包含0）<textarea id="oi-rule-0" disabled rows="2" maxlength="700" style="width:100%;box-sizing:border-box"></textarea></label>
+    <label>我的归纳：绝对值与距离<textarea id="oi-rule-1" disabled rows="2" maxlength="700" style="width:100%;box-sizing:border-box"></textarea></label>
+    <label>我的归纳：两个负数怎样比较<textarea id="oi-rule-2" disabled rows="2" maxlength="700" style="width:100%;box-sizing:border-box"></textarea></label>
+    <div class="ctrl"><button class="btn" id="oi-check" type="button">写完后打开归纳自检</button><button class="btn ghost" id="oi-reset" type="button">清空观察与归纳</button></div>
+    <p id="oi-feedback" class="result" aria-live="polite">先观察、自己记录，再写自己的话。</p><div id="oi-criteria" hidden></div>
+    <p class="small">只核有限图中的数值记录；自由文字、归纳及纸笔/同伴经历不自动认证。草稿只在本页内存，刷新或相应清空即清除。</p>
   </div>
 </section>
 

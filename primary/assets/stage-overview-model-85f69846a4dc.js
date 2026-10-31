@@ -2,9 +2,9 @@
 (function (root, factory) {
   "use strict";
   if (typeof module === "object" && module.exports) {
-    module.exports = factory(require("../assets/learning-state.js"), require("../../../olympic/site/assets/learning.js"));
-  } else root.PeiyuStageOverview = factory(root.PeiyuOverviewEvidence, root.PeiyuOverviewOlympic);
-})(typeof globalThis !== "undefined" ? globalThis : this, function (evidence, olympic) {
+    module.exports = factory(require("../assets/learning-state.js"), require("../../../olympic/site/assets/learning.js"), require("../assets/learning-mastery.js"));
+  } else root.PeiyuStageOverview = factory(root.PeiyuOverviewEvidence, root.PeiyuOverviewOlympic, root.PeiyuOverviewMastery);
+})(typeof globalThis !== "undefined" ? globalThis : this, function (evidence, olympic, mastery) {
   "use strict";
   function object(x) { return !!x && typeof x === "object" && !Array.isArray(x); }
   function own(map, key) { return object(map) && Object.prototype.hasOwnProperty.call(map, key) ? map[key] : null; }
@@ -30,7 +30,8 @@
   }
   function course(stage, storage, now) {
     var errors = new Set(), projection = memoryProjection(storage, errors);
-    var snapshot = evidence.createStore({storage: projection, stage: stage.id, now: function () { return now; }}).load();
+    var store = evidence.createStore({storage: projection, stage: stage.id, now: function () { return now; }});
+    var snapshot = store.load();
     var lessons = stage.lessons || {}, points = stage.points || {};
     function location(item) {
       if (!object(item) || !numericTime(item.time)) return null;
@@ -42,13 +43,16 @@
       if (point) return {title: point.title, href: stage.prefix + "knowledge.html#point=" + encodeURIComponent(item.pointId), time: item.time};
       return null;
     }
-    var review = snapshot.review.filter(function (item) {
-      return own(points, item.pointId) || (stage.id !== "high" && own(lessons, item.sectionId));
-    });
-    var candidates = snapshot.events.map(location).concat([location(snapshot.resume)]);
+    // Use the reviewed content and the same daily queue as 我的学习 (including its cap).
+    var review = mastery.derive(snapshot, store.answersReader(), stage.reviewIndex, now, {stage: stage.id});
+    var candidates = snapshot.events.map(location);
     snapshot.questions.forEach(function (q) { candidates.push(location(q.lastAnswer)); });
+    var resume = location(snapshot.resume);
+    if (resume && own(lessons, snapshot.resume.sectionId) && /^[A-Za-z0-9_.:-]{1,100}$/.test(snapshot.resume.questionId || "")) {
+      resume.href = resume.href.replace(".html#", ".html?focus=" + encodeURIComponent(snapshot.resume.questionId) + "#");
+    }
     var partial = snapshot.storage.historyIncomplete || errors.size > 0;
-    return {recent: recent(candidates), due: review.filter(function (q) { return q.due; }).length,
+    return {recent: resume || recent(candidates), due: review.today.items.length,
       status: errors.size ? "unreadable" : partial ? "partial" : "ready"};
   }
   function contest(stage, storage, now) {

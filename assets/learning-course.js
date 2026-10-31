@@ -488,7 +488,7 @@
         toolbar.append(stage, progress, resumeBtn, nextStep);
         if (lessonData && lessonData.conceptCards) {
           var cards = el('a', '本课概念卡', 'lc-button'); cards.setAttribute('data-lc-concepts', '');
-          var cardsHref = new URL(dataAPI.url('knowledge.html'));
+          var cardsHref = new URL(dataAPI.url('concept-cards.html'));
           cardsHref.searchParams.set('section', sectionId); cardsHref.searchParams.set('from', sectionId);
           cards.href = cardsHref.href;
           nextStep.before(cards);

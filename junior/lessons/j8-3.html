@@ -19,8 +19,9 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+#r8-work label{display:block;margin:10px 0}#r8-work input:not([type=checkbox]),#r8-work textarea,#r8-work select{box-sizing:border-box;width:100%;padding:8px;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--muted);border-radius:5px}#r8-work textarea{min-height:76px}#r8-work p{overflow-wrap:anywhere}#r8-division{white-space:pre-wrap}#r8-photo-preview{max-width:100%;max-height:350px}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j8-3" data-standard="v2">
 <div class="wrap">
@@ -253,6 +254,28 @@
     <div class="result" id="out-apx" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-apx" type="button">重置</button></div>
   </div>
+<div id="r8-work" class="card">
+<h3>④ 输入原式，最后取近似</h3>
+<p>输入原式与精度，可试sqrt(2)+sqrt(3)，不要先舍入根式。支持四则、括号、√/sqrt、∛/cbrt、π/pi及^2、^3；未支持的合法写法转人工，不判错。</p>
+<form id="r8-calc" autocomplete="off">
+<label>题目原式<input id="r8-expression" maxlength="180" required></label>
+<label>本题要求保留几位小数<select id="r8-places" required><option value="">请选择</option><option value="0">0位</option><option value="1">1位</option><option value="2">2位</option><option value="3">3位</option><option value="4">4位</option></select></label>
+<button class="btn" type="submit">计算并保留</button><button class="btn ghost" type="reset">清空重算</button><p id="r8-calc-out" role="status"></p></form>
+<div id="r8-calculation" hidden><p id="r8-display" role="status"></p>
+<form id="r8-result-form" autocomplete="off"><label>抄完整显示，暂不取位<input id="r8-carry" maxlength="70" required></label><label>最后按要求写近似值<input id="r8-final" maxlength="70" required></label><button class="btn" type="submit">核对这次取位</button><button class="btn ghost" type="reset">清空取位</button><p id="r8-calc-result" role="status"></p></form></div>
+<h3>⑤ 先做除法，再分类</h3>
+<form id="r8-div-start" autocomplete="off"><label>选择分数<select id="r8-fraction" required><option value="">请选择</option><option>1/2</option><option>1/3</option><option>3/8</option><option>2/7</option></select></label><button class="btn" type="submit">做这次除法</button><button class="btn ghost" type="reset">换题清空</button></form>
+<div id="r8-div-record" hidden><p id="r8-division"></p><form id="r8-div-check" autocomplete="off">
+<label>我的商（循环节用括号，近似须注明）<input id="r8-quotient" maxlength="65" required></label><label><input id="r8-quotient-approx" type="checkbox">这里只记录计算器有限位近似显示</label>
+<label>这个分数本身的小数类型<select id="r8-decimal-type" required><option value="">请选择</option><option value="finite">有限小数</option><option value="repeat">无限循环小数</option><option value="nonrepeat">无限不循环小数</option></select></label>
+<label>这个分数属于<select id="r8-number-type" required><option value="">请选择</option><option value="rational">有理数</option><option value="irrational">无理数</option></select></label>
+<label>选一个已命名的无理数作对照<select id="r8-contrast" required><option value="">请选择</option><option value="sqrt2">√2</option><option value="pi">π</option><option value="sqrt9">√9</option><option value="finite">3.14</option></select></label>
+<button class="btn" type="submit">提交观察与分类</button><button class="btn ghost" type="reset">清空再判断</button><p id="r8-div-out" role="status"></p></form></div>
+<h3>⑥ 纸上作±√2，交出长度依据</h3>
+<p>请用纸、无刻度直尺和圆规实际操作。</p><ol><li>画数轴，标原点和单位长，再用同一单位画四格组成的2×2单位方格。</li><li>连外框四边中点，圈中间正方形。剪去四角三角片，用外框减四角的面积求内方形面积，再以算术平方根解释边长，不用勾股定理。</li><li>取内方形一边为开口，以数轴原点画弧，标左右交点和数；保持开口回量两点到原点的距离。</li></ol>
+<form id="r8-paper" autocomplete="off"><label>纸上步骤与两点位置<textarea id="r8-paper-steps" maxlength="1200" required></textarea></label><label>长度为什么合适：写面积依据及回量结果<textarea id="r8-paper-basis" maxlength="1200" required></textarea></label><label>可选：本机成品图（不上传、不写入账本）<input id="r8-photo" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label><img id="r8-photo-preview" alt="纸上成品本机预览，未经判定" hidden><button class="btn" type="submit">记录并自检</button><button class="btn ghost" type="reset">清空记录</button><p id="r8-paper-out" role="status"></p></form>
+<p class="small">记录仅存本页，刷新清空，不写账本。自行或同伴核对图文，不认证实物经历或交流。</p>
+</div>
 </section>
 
 <section class="step" data-title="练一练">
@@ -527,6 +550,61 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focA = focR = focP = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script id="r8-local">
+(function(){
+'use strict';
+/* r8-math-start */
+const R8=(()=>{
+const fail=()=>{throw Error('manual');},abs=n=>n<0n?-n:n,gcd=(a,b)=>b?gcd(b,a%b):a;
+function q(p,d=1n){if(!d)fail();if(d<0n){p=-p;d=-d;}const g=gcd(abs(p),d);p/=g;d/=g;if(abs(p).toString().length>90||d.toString().length>90)fail();return {p,d};}
+const eps=v=>8*Number.EPSILON*Math.abs(v)+8*Number.MIN_VALUE;
+function exact(r){const v=Number(r.p)/Number(r.d);if(!Number.isFinite(v))fail();return {v,e:eps(v),q:r};}
+function plain(s){s=characters(s).trim();if(!/^[+-]?\d+(?:\.\d+)?$/.test(s)||s.length>65)return null;const neg=s[0]==='-',a=s.replace(/^[+-]/,'').split('.'),f=a[1]||'';return q(BigInt(a[0]+f)*(neg?-1n:1n),10n**BigInt(f.length));}
+function characters(s){return String(s).replace(/[０-９]/g,c=>String(c.charCodeAt(0)-0xff10)).replace(/[．]/g,'.').replace(/[−–－]/g,'-').replace(/＋/g,'+');}
+function op(a,b,t){if(a.q&&b.q){const x=a.q,y=b.q;return exact(t==='+'?q(x.p*y.d+y.p*x.d,x.d*y.d):t==='-'?q(x.p*y.d-y.p*x.d,x.d*y.d):t==='*'?q(x.p*y.p,x.d*y.d):q(x.p*y.d,x.d*y.p));}
+let v,e;if(t==='+'){v=a.v+b.v;e=a.e+b.e;}else if(t==='-'){v=a.v-b.v;e=a.e+b.e;}else if(t==='*'){v=a.v*b.v;e=Math.abs(a.v)*b.e+Math.abs(b.v)*a.e+a.e*b.e;}else{const low=Math.abs(b.v)-b.e;if(low<=0)fail();v=a.v/b.v;e=(a.e+Math.abs(v)*b.e)/low;}if(!Number.isFinite(v))fail();return {v,e:e+eps(v),q:null};}
+function iroot(n,k){let lo=0n,hi=n+1n;while(hi-lo>1n){const m=(lo+hi)/2n;if(m**BigInt(k)<=n)lo=m;else hi=m;}return lo;}
+function root(a,k){if(k===2&&a.v<0)fail();if(a.q){const p=iroot(abs(a.q.p),k),d=iroot(a.q.d,k);if(p**BigInt(k)===abs(a.q.p)&&d**BigInt(k)===a.q.d)return exact(q(a.q.p<0n?-p:p,d));}
+const f=k===2?Math.sqrt:Math.cbrt,v=f(a.v),lo=k===2?Math.max(0,a.v-a.e):a.v-a.e,hi=a.v+a.e;if(k===2&&hi<0)fail();return {v,e:Math.max(Math.abs(v-f(lo)),Math.abs(f(hi)-v))+eps(v),q:null};}
+function parse(source){const s=characters(source).toLowerCase().replace(/[×·]/g,'*').replace(/÷/g,'/').replace(/（/g,'(').replace(/）/g,')').replace(/√/g,'sqrt ').replace(/∛/g,'cbrt ').replace(/π/g,'pi');const compact=s.replace(/\s/g,'');if(!compact||compact.length>180)fail();const ts=s.match(/\d+(?:\.\d+)?|sqrt|cbrt|pi|[()+*/^\-]/g)||[];
+if(ts.join('')!==compact||ts.some((t,i)=>i&&/^\d/.test(t)&&/^\d/.test(ts[i-1])))fail();let i=0,depth=0;
+function atom(){if(++depth>20)fail();const t=ts[i++];let a;if(t==='('){a=sum();if(ts[i++]!==')')fail();}else if(t==='sqrt'||t==='cbrt')a=root(atom(),t==='sqrt'?2:3);else if(t==='pi')a={v:Math.PI,e:eps(Math.PI),q:null};else if(t&&/^\d/.test(t))a=exact(plain(t));else fail();depth--;return a;}
+function power(){let a=atom();if(ts[i]==='^'){i++;const n=ts[i++];if(!/^[1-6]$/.test(n||''))fail();let r=exact(q(1n));for(let k=0;k<+n;k++)r=op(r,a,'*');a=r;}return a;}
+function unary(){if(ts[i]==='+'||ts[i]==='-'){const t=ts[i++],a=unary();return t==='-'?op(exact(q(-1n)),a,'*'):a;}return power();}
+function product(){let a=unary();while(i<ts.length){const t=ts[i];if(t==='*'||t==='/'){i++;a=op(a,unary(),t);}else if(t==='('||t==='sqrt'||t==='cbrt'||t==='pi'||/^\d/.test(t))a=op(a,unary(),'*');else break;}return a;}
+function sum(){let a=product();while(ts[i]==='+'||ts[i]==='-'){const t=ts[i++];a=op(a,product(),t);}return a;}
+const a=sum();if(i!==ts.length||!Number.isFinite(a.v)||Math.abs(a.v)>1e8||(a.v!==0&&Math.abs(a.v)<1e-6))fail();return a;}
+function fixed(n,d){const neg=n<0n;n=abs(n);let s=n.toString().padStart(d+1,'0');if(d)s=s.slice(0,-d)+'.'+s.slice(-d);return (neg&&n?'-':'')+s;}
+function rounded(a,d){if(!Number.isInteger(d)||d<0||d>4)fail();const scale=10n**BigInt(d);if(a.q){let n=abs(a.q.p)*scale/a.q.d;if(2n*(abs(a.q.p)*scale%a.q.d)>=a.q.d)n++;return fixed(a.q.p<0n?-n:n,d);}
+const r=x=>Math.sign(x)*Math.floor(Math.abs(x)*Number(scale)+0.5),lo=r(a.v-a.e),hi=r(a.v+a.e);return lo===hi?fixed(BigInt(lo),d):null;}
+function display(a){let s=a.v.toPrecision(15);if(s.includes('.'))s=s.replace(/0+$/,'').replace(/\.$/,'');return s==='-0'?'0':s;}
+function same(a,b){return a.p*b.d===b.p*a.d;}
+function reading(s,v){const r=plain(s);return r?Math.abs(Number(r.p)/Number(r.d)-v)<=3e-14*Math.max(1,Math.abs(v)):null;}
+function decimalRecord(s){s=characters(s).trim();const m=/^([+-]?)(\d+)\.(\d*)\((\d+)\)$/.exec(s);if(!m)return plain(s);if(s.length>65)return null;const scale=10n**BigInt(m[3].length),cycle=10n**BigInt(m[4].length)-1n;return q((BigInt(m[2])*scale*cycle+BigInt(m[3]||'0')*cycle+BigInt(m[4]))*(m[1]==='-'?-1n:1n),scale*cycle);}
+function division(p,d){const n=BigInt(p),den=BigInt(d);let rem=n%den,digits='',steps=[],seen=new Map(),repeat=-1;while(rem&&steps.length<30){if(seen.has(rem)){repeat=seen.get(rem);break;}seen.set(rem,steps.length);const start=rem;rem*=10n;const digit=rem/den;rem%=den;digits+=digit;steps.push({start:String(start),digit:String(digit),rem:String(rem)});}return {p:n,d:den,steps,repeat,finite:rem===0n,notation:String(n/den)+(digits?'.'+(repeat<0?digits:digits.slice(0,repeat)+'('+digits.slice(repeat)+')'):''),value:Number(n)/Number(den)};}
+return {parse,plain,rounded,display,same,reading,decimalRecord,division};
+})();
+/* r8-math-end */
+const $=id=>document.getElementById(id),manual='暂不能可靠核对，不记错。请改写或请同伴核对，上标不是普通数字。';let calc=null,div=null,photoURL=null,paperRecord=null;
+function clear(id){$(id).textContent='';}
+function invalidateCalc(){calc=null;$('r8-calculation').hidden=true;$('r8-result-form').reset();clear('r8-display');clear('r8-calc-out');}
+$('r8-calc').addEventListener('input',invalidateCalc);$('r8-calc').addEventListener('change',invalidateCalc);$('r8-calc').addEventListener('reset',invalidateCalc);
+$('r8-calc').addEventListener('submit',e=>{e.preventDefault();try{const a=R8.parse($('r8-expression').value),d=$('r8-places').value;if(d==='')throw Error();calc={a,d:+d,expression:$('r8-expression').value};$('r8-result-form').reset();$('r8-calculation').hidden=false;$('r8-display').textContent='原式：'+calc.expression+'；本次按你选择保留'+d+'位小数。计算器保留的显示：'+R8.display(a)+'。未按题目精度取位；无理数的有限显示仅为近似。';clear('r8-calc-out');}catch{invalidateCalc();$('r8-calc-out').textContent=manual;}});
+$('r8-result-form').addEventListener('input',()=>{if(calc)delete calc.submission;clear('r8-calc-result');});$('r8-result-form').addEventListener('reset',()=>{if(calc)delete calc.submission;clear('r8-calc-result');});
+$('r8-result-form').addEventListener('submit',e=>{e.preventDefault();if(!calc)return;const read=R8.reading($('r8-carry').value,calc.a.v),answer=R8.plain($('r8-final').value),target=R8.rounded(calc.a,calc.d);let s;if(read===null||!answer)s=manual;else if(!read)s='记录不符，请抄完整显示，暂不取位。';else if(target===null)s='接近舍入分界，请用更高精度或精确方法核对，不记错。';else if(!R8.same(answer,R8.plain(target)))s='取位不符，请按保留显示检查四舍五入与精度。';else s='数值与精度相符，最后约为'+target+'。请核对原题，不自动认证整题或按键能力。';calc.submission={carry:$('r8-carry').value,final:$('r8-final').value};$('r8-calc-result').textContent=s;});
+function invalidateDiv(){div=null;$('r8-div-record').hidden=true;$('r8-div-check').reset();clear('r8-division');}
+$('r8-div-start').addEventListener('change',invalidateDiv);$('r8-div-start').addEventListener('reset',invalidateDiv);
+$('r8-div-start').addEventListener('submit',e=>{e.preventDefault();const pair=$('r8-fraction').value;if(!pair)return;const [p,d]=pair.split('/');div=R8.division(p,d);$('r8-div-check').reset();$('r8-div-record').hidden=false;$('r8-division').textContent=p+' ÷ '+d+' 的计算器显示约为 '+R8.display({v:div.value})+'\n逐位做除法：\n'+div.steps.map((s,i)=>'第'+(i+1)+'位：余数'+s.start+'乘10，商写'+s.digit+'，新余数'+s.rem).join('\n')+'\n请按余数变化写商再分类，不能只凭有限显示判定小数类型。';});
+$('r8-div-check').addEventListener('input',()=>clear('r8-div-out'));$('r8-div-check').addEventListener('change',()=>clear('r8-div-out'));$('r8-div-check').addEventListener('reset',()=>clear('r8-div-out'));
+$('r8-div-check').addEventListener('submit',e=>{e.preventDefault();if(!div)return;const exact=R8.decimalRecord($('r8-quotient').value),isExact=exact&&R8.same(exact,div),read=R8.reading($('r8-quotient').value,div.value),approx=$('r8-quotient-approx').checked;let s;
+if(!exact)s=manual;else if(!isExact&&!(approx&&read))s='请核对商：循环节用括号，有限位近似要注明；等值写法不判错。';else if($('r8-decimal-type').value!==(div.finite?'finite':'repeat')||$('r8-number-type').value!=='rational')s='再看除法余数，区别数本身与有限位显示，再试。';else if(!['sqrt2','pi'].includes($('r8-contrast').value))s='对照数先求值：根号不一定无理，有限小数不是π。';else s='核对符合：'+div.notation+' 是'+(div.finite?'有限小数':'无限循环小数')+'，本次分数属于有理数。'+(!isExact?'你记录的有限位小数只是近似显示。':'')+'与已知无限不循环的√2、π对照，不凭有限显示判无理。';$('r8-div-out').textContent=s;});
+function removePhoto(){if(photoURL)URL.revokeObjectURL(photoURL);photoURL=null;$('r8-photo-preview').hidden=true;$('r8-photo-preview').removeAttribute('src');}
+$('r8-paper').addEventListener('input',()=>{paperRecord=null;clear('r8-paper-out');});$('r8-paper').addEventListener('reset',()=>{paperRecord=null;removePhoto();clear('r8-paper-out');});
+$('r8-photo').addEventListener('change',()=>{removePhoto();clear('r8-paper-out');const f=$('r8-photo').files[0];if(!f)return;if(!/^image\/(png|jpeg|webp|gif)$/.test(f.type)||f.size>8*1024*1024){$('r8-paper-out').textContent='图片无法预览，请选8MB以内位图或只记文字，不判错。';return;}photoURL=URL.createObjectURL(f);$('r8-photo-preview').src=photoURL;$('r8-photo-preview').hidden=false;});
+$('r8-paper').addEventListener('submit',e=>{e.preventDefault();paperRecord={steps:$('r8-paper-steps').value,basis:$('r8-paper-basis').value,photo:photoURL};$('r8-paper-out').textContent='记录暂存，图和文字未自动判定。对照：外框面积4，四角总面积2，内方形面积2、正边长√2。保持开口，以原点画弧，左交点−√2、右交点√2；请自己或同伴核单位、面积依据，并回量实物。不用勾股定理。';});
+window.addEventListener('pageshow',()=>{for(const id of ['r8-calc','r8-result-form','r8-div-start','r8-div-check','r8-paper'])$(id).reset();});
 })();
 </script>
 </body></html>

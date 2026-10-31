@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/j1-1-self-example.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -19,8 +20,18 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+  #self-example { overflow-wrap: anywhere; }
+  #self-example .self-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  #self-example label { display: block; margin: 10px 0; }
+  #self-example input:not([type="checkbox"]), #self-example textarea, #self-example select { display: block; box-sizing: border-box; width: 100%; min-width: 0; margin-top: 5px; padding: 10px; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--muted); border-radius: 6px; }
+  #self-example input[type="checkbox"] { width: 20px; height: 20px; vertical-align: middle; margin-right: 8px; }
+  #self-example :focus-visible { outline: 3px solid var(--a); outline-offset: 3px; }
+  #self-example fieldset { min-width: 0; border: 1px solid var(--line); border-radius: 6px; padding: 12px; }
+  #self-example .self-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  #self-example-output { white-space: pre-line; }
+  @media (max-width: 600px) { #self-example .self-grid { grid-template-columns: 1fr; } }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j1-1" data-standard="v2">
 <div class="wrap">
@@ -246,6 +257,35 @@
     <div class="result" id="out-level" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-level" type="button">重置</button></div>
   </div>
+  <h3>④ 自己举例：把身边的两种方向写成数</h3>
+  <form class="card" id="self-example" autocomplete="off" novalidate>
+    <p>观察附近街道的行走、社区水池的水位变化或商店的进出货，也可以自选生活情境。请自己写一对相反意义的量，不填写姓名、成绩或其他个人信息。这里仅在本页临时填写。</p>
+    <label for="self-scene">我的本地生活情境<textarea id="self-scene" rows="2" maxlength="400"></textarea></label>
+    <label for="self-base">两者共同的基准（写清相对哪个地点、时刻或标准）<input id="self-base" maxlength="120"></label>
+    <label for="self-unit">两者共用的单位<input id="self-unit" maxlength="24"></label>
+    <div class="self-grid">
+      <fieldset><legend>量 A</legend>
+        <label for="self-dir-a">方向 A 的文字<input id="self-dir-a" maxlength="80"></label>
+        <label for="self-size-a">离基准有多少（只填大小）<input id="self-size-a" inputmode="text" maxlength="80" aria-describedby="self-grammar"></label>
+        <label for="self-signed-a">我写的带符号数（单位用上方共用单位）<input id="self-signed-a" inputmode="text" maxlength="80" aria-describedby="self-grammar"></label>
+      </fieldset>
+      <fieldset><legend>量 B</legend>
+        <label for="self-dir-b">方向 B 的文字<input id="self-dir-b" maxlength="80"></label>
+        <label for="self-size-b">离基准有多少（只填大小）<input id="self-size-b" inputmode="text" maxlength="80" aria-describedby="self-grammar"></label>
+        <label for="self-signed-b">我写的带符号数（单位用上方共用单位）<input id="self-signed-b" inputmode="text" maxlength="80" aria-describedby="self-grammar"></label>
+      </fieldset>
+    </div>
+    <p id="self-grammar" class="small">大小可以不同。数值只支持半角整数、有限小数、整数/正整数形式的分数；每个整数部分最多 24 位。带符号数前可写 +、- 或 −。数中不夹空格、单位或算式，不支持指数、上标、全角数码。首尾空白忽略。</p>
+    <label for="self-positive">我规定哪个方向为正？<select id="self-positive"><option value="">请选择</option><option value="a">方向 A 为正</option><option value="b">方向 B 为正</option></select></label>
+    <fieldset><legend>先按准则自核，再请同伴复核文字</legend>
+      <label><input id="self-same-base" type="checkbox">我核过：两个量相对同一个基准，基准处表示 0。</label>
+      <label><input id="self-same-unit" type="checkbox">我核过：比较的是同一种量，单位一致，而不是把长度和质量等混在一起。</label>
+      <label><input id="self-opposite" type="checkbox">我能向同伴解释：两个方向在同一比较中意义相反，而不只是名称不同。</label>
+    </fieldset>
+    <p class="small">程序只核对数值和符号是否符合你的规定，不能判断自由文字是否真有相反关系。勾选表示你的自核声明。0 在基准处，既非正数也非负数；若某个量是 0，它不能充当一正一负中的一方。</p>
+    <div class="self-actions"><button class="btn" type="submit">核对我的表示</button><button class="btn ghost" type="reset">清空重来</button></div>
+    <div class="result" id="self-example-output" role="status" aria-live="polite" aria-atomic="true"></div>
+  </form>
 </section>
 
 <section class="step" data-title="练一练">

@@ -12,6 +12,7 @@
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/junior-consolidation.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b9a-j29-1-teaching-workshop-dev.js"></script>
 <style>
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
   details.more { margin: 12px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
@@ -33,7 +34,7 @@
 :root[data-theme="dark"] .key .katex [style*="color: rgb(47, 122, 86)"] { color: #5FB58A !important; }
 :root[data-theme="dark"] .key .katex [style*="color: rgb(150, 101, 36)"] { color: #D3A15C !important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j29-1" data-standard="v2">
 <div class="wrap">
@@ -189,7 +190,7 @@
   <h3>3. 确定圆的条件与三角形的外接圆</h3>
   <p class="small">几个点可以确定一个圆？这是尺规作图与几何解析的基石：</p>
   <ul>
-    <li><b>过一个点</b>：可以作无数个圆（圆心在平面任意位置，半径任意）；</li>
+    <li><b>过一个点</b>：可以作无数个圆（圆心可取该点以外的任意位置，半径须等于圆心到该点的距离）；</li>
     <li><b>过两个点</b>：可以作无数个圆（圆心在线段 \(AB\) 的垂直平分线上）；</li>
     <li><b>过三个点</b>：<b>不在同一直线上的三点确定一个圆</b>（圆心是任意两边垂直平分线的交点，有且只有一个）；</li>
     <li><b>三角形外接圆与外心</b>：经过三角形三个顶点的圆叫作<b>外接圆</b>，外接圆的圆心叫作三角形的<b>外心</b>。外心到三角形三个顶点距离相等（\(OA = OB = OC = R\)）。</li>
@@ -268,6 +269,60 @@
     </div>
     <svg class="fig" id="fig2" viewBox="0 -24 500 344" role="img" aria-label="外接圆三态交互图"></svg>
     <div class="result" id="res2" aria-live="polite"></div>
+  </div>
+  <div class="card" id="circle-workshop">
+    <h3>实验 3：从一点到三点，亲手找圆心、作圆</h3>
+    <p>先选条件，自己选圆心、定半径。两点起可用下方尺规工具：选线段，用同一开口画两弧，连两交点作中垂线；三点时再作另一边的中垂线，取交点并标外心 O。图上的操作只模拟尺规，纸上还要实际完成。</p>
+    <div class="range-box">
+      <label>经过的点数 <select id="cw-count"><option value="1">一点 A</option><option value="2">两点 A、B</option><option value="3" selected>三点 A、B、C</option></select></label>
+      <label>点的配置 <select id="cw-shape"><option value="acute">配置一</option><option value="right">配置二</option><option value="obtuse">配置三</option><option value="collinear">配置四</option><option value="repeat">配置五</option><option value="same">配置六</option><option value="near">配置七</option></select></label>
+      <button type="button" class="btn" id="cw-reset">重做本配置</button>
+    </div>
+    <p class="small" id="cw-givens"></p>
+    <svg class="fig" id="cw-fig" viewBox="0 0 400 320" tabindex="0" role="group" aria-label="作圆实验画板，点击或触摸选候选圆心，方向键每次移动四分之一单位" style="touch-action:none"></svg>
+    <p class="small">坐标仅供核对，正方向为右、上。点画板或拖动可选候选圆心；聚焦画板后方向键移动。图外的交点可由作线后的取交点按钮取得，画板大小不决定圆是否存在。</p>
+    <div class="range-box">
+      <label>圆心横坐标 <input id="cw-x" type="text" inputmode="decimal" autocomplete="off" size="7"></label>
+      <label>圆心纵坐标 <input id="cw-y" type="text" inputmode="decimal" autocomplete="off" size="7"></label>
+      <label>半径 <input id="cw-r" type="text" inputmode="decimal" autocomplete="off" size="7"></label>
+      <button type="button" class="btn" id="cw-radius">量取 OA 为半径</button>
+      <button type="button" class="btn" id="cw-circle">按所填圆心、半径作圆并核对</button>
+    </div>
+    <p class="small">输入采用封闭语法：半角十进制数，可有负号，至多三位小数，绝对值不超过 1000；半径须大于 0。不接受空格、分数、算式、科学记数法或全角数字。长度显示为近似值，核对容差为 0.002 单位，接近相等不等于证明相等。</p>
+    <fieldset id="cw-tools">
+      <legend>尺规工具：先作弧，再连线</legend>
+      <div class="range-box">
+        <label>线段 <select id="cw-pair"><option value="">请选择</option><option value="AB">AB</option><option value="AC">AC</option><option value="BC">BC</option></select></label>
+        <label>圆规开口 <input id="cw-opening" type="text" inputmode="decimal" autocomplete="off" size="7"></label>
+        <button type="button" class="btn" id="cw-arcs">以两端点画等半径弧</button>
+      </div>
+      <p class="small">开口须大于线段长的一半，才能有两个不同的弧交点。选过点后连成直线；U、V 是本次两弧交点，换线段或改开口须重新作弧。</p>
+      <div class="range-box">
+        <label>过点一 <select id="cw-from"><option value="">请选择</option><option>A</option><option>B</option><option>C</option><option>U</option><option>V</option></select></label>
+        <label>过点二 <select id="cw-to"><option value="">请选择</option><option>A</option><option>B</option><option>C</option><option>U</option><option>V</option></select></label>
+        <button type="button" class="btn" id="cw-line">连成直线</button>
+        <button type="button" class="btn" id="cw-intersection">取已作两条中垂线的交点为 O</button>
+      </div>
+    </fieldset>
+    <div class="result" id="cw-feedback" role="status" aria-live="polite">还没有作图。先自己选圆心，或从尺规作弧开始。</div>
+    <p class="small" id="cw-lines"></p>
+    <details class="more">
+      <summary>探究记录与纸笔任务：先做，再用准则自核</summary>
+      <ol>
+        <li>一点：作两个圆心不同的圆都经过 A。每次圆心定了以后，半径还能任意选吗？试把圆心放在 A，检查半径为零是否是圆。</li>
+        <li>两点：作 AB 的中垂线，在线上选两个不同的圆心，各量取到 A 的距离作半径。核对是否也过 B；再移到线外观察。说明所有合适圆心为何恰在线上。</li>
+        <li>三点：纸上任取不共线的 A、B、C，保留两组等半径弧和所连中垂线，标交点 O，以 OA 为半径画圆。用圆规同一开口检验 OB、OC。换锐角、直角、钝角构型再做，外心不一定在三角形内。</li>
+        <li>失败也要保留：三个不同共线点、一个点重复、三点全重合分别试作。重复作同一边的中垂线，能否增加一个新条件？配置七看似共线，要读坐标并区分图的分辨率与几何事实。</li>
+      </ol>
+      <label>写下作图过程及“为什么存在、为什么唯一”的理由（本页不自动判文字证明）<textarea id="cw-proof" rows="4" style="display:block;width:100%;max-width:100%;box-sizing:border-box"></textarea></label>
+      <p>自核准则：保留原点、两组辅助弧、中垂线及外心标签；说明 OA=OB、OB=OC 的依据；任一另一个候选圆心为何也必须在两条线上；共线与重复点须分别说明。文字、纸图及同伴核对均由你按准则自核，本页不登记为掌握。</p>
+      <details class="more"><summary>完成尝试后，展开一般理由与退化核对</summary>
+        <p>圆的半径为正。过 A 的圆，圆心 P 只须不等于 A，半径就只能取 PA；这样的圆心无数。过两个不同点 A、B，必须且只须 PA=PB，所以圆心恰在线段 AB 的中垂线上，线上每点均可作圆，故有无数个。</p>
+        <p>三个不同且不共线的点：AB 与 BC 不平行，它们的中垂线也不平行，有唯一交点 O。由中垂线性质，OA=OB，OB=OC，故以 O 为圆心、OA 为半径的圆过三点，且 OA&gt;0。反过来，任何过三点的圆心都在这两条线上，只能是 O，半径也只能是 OA。这才同时说明存在性和唯一性，几次数值相近不能替代它。</p>
+        <p>三个不同共线点的两条中垂线平行且不同，故无圆。若三个标签只有两个不同位置，就只剩两点条件，中垂线会重合，可作无数个圆；只有一个位置也有无数个圆。重复同一条线不能证明唯一。近共线但确实不共线的三点仍有唯一圆，外心和半径可能很远、很大，屏幕画不全不等于几何不存在。</p>
+        <p>点与圆位置的双向关系来自定义：距离等于正半径的全部点组成圆周；距离小于它在圆内，大于它在圆外。这里的近似长度仅帮助检查本次操作，不替代这些一般关系。</p>
+      </details>
+    </details>
   </div>
 </section>
 

@@ -19,8 +19,15 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+  .cd-work label { display:inline-flex; flex-direction:column; gap:4px; margin:6px 10px 6px 0; max-width:100%; }
+  .cd-work input, .cd-work select, .cd-work textarea { font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:6px; padding:6px; max-width:100%; box-sizing:border-box; }
+  .cd-work textarea { width:100%; } .cd-work .cd-wide { display:flex; }
+  .cd-work input[type=range] { width:10em; } .cd-work svg { width:100%; display:block; touch-action:none; }
+  .cd-work :focus-visible { outline:3px solid var(--a); outline-offset:2px; }
+  #cd-source { max-width:300px; margin:auto; } #cd-board, #cd-gallery svg { border:1px solid var(--line); }
+  #cd-list button { margin:4px; } #cd-gallery { overflow-wrap:anywhere; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j14-1" data-standard="v2">
 <div class="wrap">
@@ -237,6 +244,38 @@
     <div class="result" id="out-fit" aria-live="polite"></div>
     <div class="ctrl"><button class="btn" id="flip-fit" type="button">翻折</button> <button class="btn ghost" id="reset-fit" type="button">重置</button></div>
   </div>
+  <h3>③ 自己设计：用全等形组成图案</h3>
+  <div class="card cd-work" id="cd-work">
+    <p>选基本图形，再安排副本的位置、转向和正反面，留下至少两幅。三角形可改顶点，副本同步改变，不单独拉伸或缩放。</p>
+    <label>基本图形<select id="cd-shape"><option value="tri">可改顶点的三角形</option><option value="square">正方形</option></select></label>
+    <svg id="cd-source" viewBox="0 0 260 220" role="img" aria-label="我选择的基本图形"></svg>
+    <label>调整顶点<select id="cd-point"></select></label><label>左右位置<input id="cd-vx" type="range" min="-60" max="60" step="5"></label><label>上下位置<input id="cd-vy" type="range" min="-60" max="60" step="5"></label>
+    <p class="small">拖顶点或用方向键改三角形；扁小摆法本台暂不采用，可在纸上设计。正方形固定。拖下图圆点或用方向键移动，Home/End到边界。</p>
+    <label>副本左右<input id="cd-x" type="range" min="100" max="460" step="10" value="160"></label><label>副本上下<input id="cd-y" type="range" min="100" max="300" step="10" value="200"></label>
+    <label>转动<select id="cd-turn"><option value="0">不转</option><option value="1">顺时针90°</option><option value="2">180°</option><option value="3">顺时针270°</option></select></label><label>正反面<select id="cd-flip"><option value="0">原来的一面</option><option value="1">左右翻面</option></select></label>
+    <svg id="cd-board" viewBox="0 0 560 400" role="img" aria-label="我的全等形组合画布"></svg>
+    <p id="cd-info" class="small"></p>
+    <div class="ctrl"><button type="button" class="btn" id="cd-add">留下这个副本</button><button type="button" class="btn ghost" id="cd-new">准备新副本</button><button type="button" class="btn ghost" id="cd-reset">重置设计台</button></div>
+    <ol id="cd-list"></ol>
+    <label class="cd-wide">图案名称<input id="cd-title" maxlength="60" autocomplete="off"></label>
+    <label class="cd-wide">我的摆放方法、对应顶点与图案想法<textarea id="cd-reason" rows="3" maxlength="500"></textarea></label>
+    <p class="small">自检：各幅能否不拉伸地移回原形并完全重合？翻面后也可全等。请指出一组对应顶点，并说明组合想法；说明文字不自动判分。</p>
+    <button class="btn" type="button" id="cd-show">展示我的图案与说明</button> <button class="btn ghost" type="button" id="cd-save" disabled>保存图案</button>
+    <p id="cd-status" class="result" aria-live="polite"></p><div id="cd-gallery" hidden></div>
+    <p class="small">作品只留本页；刷新前保存图案或抄下说明。图案含你的名称与说明，不上传。</p>
+  </div>
+  <h3>到生活里找一找</h3>
+  <form class="card cd-work" id="cd-life-form">
+    <p>观察、描画或口述两个具体物体的轮廓，写明哪两件、边缘细节及怎样试着重合；不能确认的如实记录。</p>
+    <label class="cd-wide">我的生活实例<textarea id="cd-life" rows="2" maxlength="500"></textarea></label>
+    <label class="cd-wide">我的重合依据或尚待核对之处<textarea id="cd-basis" rows="3" maxlength="500"></textarea></label>
+    <label><span><input type="checkbox" id="cd-outline"> 我比较完整轮廓和边缘细节</span></label>
+    <label><span><input type="checkbox" id="cd-size"> 我核对形状、大小，不用拉伸或缩放代替重合</span></label>
+    <label><span><input type="checkbox" id="cd-motion"> 我说明怎样移动、转动或翻面试重合，或注明尚不能确认</span></label>
+    <div class="ctrl"><button class="btn" type="submit">整理我的观察</button><button class="btn ghost" type="reset">清空观察</button></div>
+    <p id="cd-life-status" class="result" aria-live="polite"></p><div id="cd-life-output"></div>
+    <details class="more"><summary>面积相等就够了吗？看一对固定反例</summary><p>方格纸上边长2格的正方形与长4格、宽1格的长方形，面积都是4平方格，但边长分别为2、2、2、2和4、1、4、1，不能完全重合。只核对面积还不够。</p></details>
+  </form>
 </section>
 
 <section class="step" data-title="练一练">
@@ -507,6 +546,83 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focP = -1; focF = null; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script>
+// 本页设计台：全部顶点作同一平移、整直角旋转及翻面，不写学习记录。
+(function () {
+  'use strict';
+  const $=id=>document.getElementById('cd-'+id), NS='http://www.w3.org/2000/svg';
+  const seed={tri:[[-40,35],[45,35],[-15,-40]],square:[[-30,-30],[30,-30],[30,30],[-30,30]]};
+  let points,copies,conf,active,vertex=0,drag=null;
+  const colors=['--a','--b','--c','--no'], col=i=>'var('+colors[i%4]+')', clone=o=>({...o});
+  function node(tag,attrs,parent,text) { const e=document.createElementNS(NS,tag); for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;parent.appendChild(e);return e; }
+  function mapped(p,c) { return p.map(([x,y])=>{if(c.flip)x=-x;for(let i=0;i<c.turn;i++)[x,y]=[-y,x];return[x+c.x,y+c.y];}); }
+  const signature=p=>p.map(v=>v.join(',')).sort().join('|');
+  const clamp=(v,lo,hi,step)=>Math.max(lo,Math.min(hi,Math.round(v/step)*step));
+  function invalidate() { $('status').textContent='';delete $('status').dataset.state;$('gallery').hidden=true;$('gallery').replaceChildren();$('save').disabled=true; }
+  function polygon(svg,p,color,preview,index) { return node('polygon',{points:p.map(q=>q.join(',')).join(' '),fill:color,'fill-opacity':preview?0.08:0.23,stroke:color,'stroke-width':3,'stroke-linejoin':'round',...(preview?{'stroke-dasharray':'7 5','data-preview':'1'}:{'data-copy':index})},svg); }
+  function handle(svg,x,y,id,label,kind,index) {
+    const h=node('circle',{id:'cd-'+id,cx:x,cy:y,r:10,fill:'var(--card)',stroke:kind==='point'?col(index):'var(--b)','stroke-width':4,tabindex:0,role:'slider','aria-label':label,'aria-valuemin':kind==='point'?-60:100,'aria-valuemax':kind==='point'?60:460,'aria-valuenow':kind==='point'?points[index][0]:conf.x,'aria-valuetext':kind==='point'?points[index].join('，'):conf.x+'，'+conf.y},svg);
+    h.addEventListener('keydown',e=>{const d={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];
+      if(kind==='point'&&d){e.preventDefault();changePoint(index,points[index][0]+d[0]*5,points[index][1]+d[1]*5,true);}
+      if(kind==='place'&&(d||e.key==='Home'||e.key==='End')){e.preventDefault();place(d?conf.x+d[0]*10:e.key==='Home'?100:460,d?conf.y+d[1]*10:e.key==='Home'?100:300);$('handle').focus();}
+    });
+    h.addEventListener('pointerdown',e=>{e.preventDefault();drag={kind,index,svg,id:e.pointerId};svg.setPointerCapture(e.pointerId);});
+  }
+  function render() {
+    const source=$('source'),board=$('board');source.replaceChildren();board.replaceChildren();
+    polygon(source,points.map(([x,y])=>[x+130,y+110]),col(0),false,'original');
+    const editable=$('shape').value==='tri';
+    points.forEach(([x,y],i)=>{node('text',{x:x+130,y:y+110-18,fill:col(i),'font-size':20,'text-anchor':'middle'},source,'ABCD'[i]);if(!editable)node('circle',{cx:x+130,cy:y+110,r:5,fill:col(i)},source);if(editable)handle(source,x+130,y+110,'v'+i,'原形顶点'+'ABC'[i],'point',i);});
+    $('vx').disabled=$('vy').disabled=$('point').disabled=!editable;$('point').value=String(vertex);
+    $('vx').value=points[vertex][0];$('vy').value=points[vertex][1];
+    for(const id of['x','y','turn'])$(id).value=conf[id];$('flip').value=conf.flip?'1':'0';
+    copies.forEach((c,i)=>{polygon(board,mapped(points,c),col(i),false,i);mapped(points,c).forEach(([x,y],j)=>node('circle',{cx:x,cy:y,r:5,fill:col(j)},board));});
+    if(active<0)polygon(board,mapped(points,conf),'var(--muted)',true,-1);
+    handle(board,conf.x,conf.y,'handle',active<0?'新副本位置':'第'+(active+1)+'幅位置','place',-1);
+    $('info').textContent='已留下'+copies.length+'幅。'+(active<0?'虚线是待留下的新副本。':'正在调整第'+(active+1)+'幅。')+'位置：左右'+conf.x+'、上下'+conf.y+'；转'+conf.turn*90+'°'+(conf.flip?'，已翻面。':'，未翻面。');
+    $('list').replaceChildren();copies.forEach((c,i)=>{const li=document.createElement('li');li.textContent='第'+(i+1)+'幅：同色顶点对应，顺序与原形一致。';for(const[k,t]of[['edit','调整'],['drop','删除']]){const b=document.createElement('button');b.type='button';b.dataset[k]=String(i);b.textContent=t+'第'+(i+1)+'幅';li.appendChild(b);}$('list').appendChild(li);});
+  }
+  function shape() { points=(seed[$('shape').value]||seed.tri).map(p=>p.slice());vertex=0;$('point').replaceChildren();points.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent='ABCD'[i];$('point').appendChild(o);}); }
+  function reset() { $('shape').value='tri';shape();copies=[];conf={x:160,y:200,turn:0,flip:false};active=-1;$('title').value='';$('reason').value='';invalidate();render(); }
+  function changePoint(i,x,y,key) {
+    invalidate();const next=points.map(p=>p.slice());next[i]=[clamp(x,-60,60,5),clamp(y,-60,60,5)];
+    const cross=(next[1][0]-next[0][0])*(next[2][1]-next[0][1])-(next[1][1]-next[0][1])*(next[2][0]-next[0][0]);
+    if(!cross){$('status').textContent='三点在同一直线上，不构成三角形；原形保留。';render();if(key)$('v'+i).focus();return;}
+    if(Math.abs(cross)<600||next.some((p,j)=>{const q=next[(j+1)%3];return(p[0]-q[0])**2+(p[1]-q[1])**2<900;})){$('status').textContent='这次位置过于扁小，本台暂不采用；可换位置或在纸上设计。原形保留。';render();if(key)$('v'+i).focus();return;}
+    points=next;vertex=i;render();if(key)$('v'+i).focus();
+  }
+  function update() { invalidate();if(active>=0)copies[active]=clone(conf);render(); }
+  function place(x,y) { conf.x=clamp(x,100,460,10);conf.y=clamp(y,100,300,10);update(); }
+  window.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;const m=drag.svg.getScreenCTM();if(!m)return;const p=drag.svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(m.inverse());if(drag.kind==='point')changePoint(drag.index,q.x-130,q.y-110,false);else place(q.x,q.y);});
+  const stop=()=>{drag=null;};window.addEventListener('pointerup',stop);window.addEventListener('pointercancel',stop);
+  $('shape').addEventListener('change',()=>{invalidate();shape();render();});
+  $('point').addEventListener('change',()=>{vertex=Number($('point').value);render();});
+  ['vx','vy'].forEach(id=>$(id).addEventListener('input',()=>changePoint(vertex,Number($('vx').value),Number($('vy').value),false)));
+  ['x','y'].forEach(id=>$(id).addEventListener('input',()=>place(Number($('x').value),Number($('y').value))));
+  $('turn').addEventListener('change',()=>{conf.turn=Number($('turn').value);update();});$('flip').addEventListener('change',()=>{conf.flip=$('flip').value==='1';update();});
+  $('new').addEventListener('click',()=>{active=-1;invalidate();render();});
+  $('add').addEventListener('click',()=>{invalidate();if(copies.length>=6){$('status').textContent='本台最多留6幅，可先删除一幅再设计。';return;}
+    const s=signature(mapped(points,conf));if(copies.some(c=>signature(mapped(points,c))===s)){$('status').textContent='这幅完全盖住已有的一幅，请先挪开一点再留下，便于展示组合。';return;}
+    copies.push(clone(conf));active=-1;render();
+  });
+  $('list').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;invalidate();if(b.dataset.edit!==undefined){active=Number(b.dataset.edit);conf=clone(copies[active]);}else{copies.splice(Number(b.dataset.drop),1);active=-1;}render();(active<0?$('new'):$('handle')).focus();});
+  ['title','reason'].forEach(id=>$(id).addEventListener('input',invalidate));$('reset').addEventListener('click',reset);
+  function artwork() { const svg=document.createElementNS(NS,'svg');svg.setAttribute('viewBox','0 0 560 400');node('title',{},svg,$('title').value.trim());node('desc',{},svg,$('reason').value.trim());node('rect',{x:0,y:0,width:560,height:400,fill:'var(--card)'},svg);copies.forEach((c,i)=>polygon(svg,mapped(points,c),col(i),false,i));return svg; }
+  $('show').addEventListener('click',()=>{invalidate();const count=new Set(copies.map(c=>signature(mapped(points,c)))).size;
+    if(count<2){$('status').textContent='请留下至少两幅能区分开的副本，再展示组合。';return;}
+    if(!$('title').value.trim()||!$('reason').value.trim()){$('status').textContent='请先写图案名称和自己的摆放说明；文字不自动判分。';return;}
+    const h=document.createElement('h4');h.textContent=$('title').value.trim();const p=document.createElement('p');p.textContent=$('reason').value.trim();$('gallery').append(h,artwork(),p);$('gallery').hidden=false;$('save').disabled=false;
+    $('status').textContent='图案已展示。副本只经平移、转动或翻面，形状和大小没有改变；说明文字未自动判分，请按准则自检。';$('status').dataset.state='display';
+  });
+  $('save').addEventListener('click',()=>{const svg=$('gallery').querySelector('svg').cloneNode(true),css=getComputedStyle(document.documentElement);svg.querySelectorAll('[fill],[stroke]').forEach(e=>{for(const key of['fill','stroke']){const s=e.getAttribute(key)||'',m=s.match(/^var\((--[\w-]+)\)$/);if(m)e.setAttribute(key,css.getPropertyValue(m[1]).trim()||'#333');}});const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'})),a=document.createElement('a');a.href=url;a.download='congruent-pattern.svg';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+  function clearLife() { $('life-status').textContent='';delete $('life-status').dataset.state;$('life-output').replaceChildren(); }
+  $('life-form').addEventListener('input',clearLife);$('life-form').addEventListener('reset',clearLife);
+  $('life-form').addEventListener('submit',e=>{e.preventDefault();clearLife();if(!$('life').value.trim()||!$('basis').value.trim()||!['outline','size','motion'].every(id=>$(id).checked)){$('life-status').textContent='请写出具体实例和依据，逐项自检；尚不能确认的也可如实记录。文字不自动判分。';return;}
+    for(const id of['life','basis']){const p=document.createElement('p');p.textContent=$(id).value.trim();$('life-output').appendChild(p);}$('life-status').textContent='观察已整理，未自动判定实例是否全等。请据完整轮廓、形状大小和能否不拉伸重合再核对，可交同伴或老师讨论。';$('life-status').dataset.state='self-check';
+  });
+  reset();
 })();
 </script>
 </body></html>

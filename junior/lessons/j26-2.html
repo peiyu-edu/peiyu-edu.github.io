@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b9a-j26-2-teaching-workshop-dev.js"></script>
 <style>
   @media (max-width: 600px) {
     .predict[data-id="e2"] .opts.cols { grid-template-columns: 1fr; }
@@ -24,8 +25,18 @@
   .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
   .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--a); }
   .btn-sub { font-size: 14px; }
+  #j26-workshop input[type="text"] { width: 100%; min-width: 0; box-sizing: border-box; }
+  #j26-workshop select, #j26-workshop input, #j26-workshop textarea { font: inherit; color: var(--fg); background: var(--card); border: 1px solid var(--muted); border-radius: 4px; padding: 8px; max-width: 100%; }
+  #j26-workshop label { display: block; margin: 8px 0; }
+  #j26-workshop table { width: 100%; table-layout: fixed; border-collapse: collapse; }
+  #j26-workshop th, #j26-workshop td { border: 1px solid var(--line); padding: 5px; text-align: center; }
+  #j26-workshop svg { display: block; width: 100%; max-width: 480px; margin: 12px auto; background: var(--card); }
+  #jw-grid { touch-action: none; border: 1px solid var(--muted); }
+  #j26-workshop :focus-visible { outline: 3px solid var(--a); outline-offset: 2px; }
+  #j26-workshop textarea { width: 100%; box-sizing: border-box; }
+  #js-questions label { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j26-2" data-standard="v2">
 <div class="wrap">
@@ -276,6 +287,53 @@
 </section>
 
 <section class="step" data-title="动手">
+  <div id="j26-workshop">
+    <div class="card">
+      <h3>亲自画一条抛物线：填值 → 落点 → 平滑连接</h3>
+      <p>先把五个函数值算在表中，选中一行，在网格上为这一行落点。顶点及其左右各两点要互不相同；坐标轴交点重合时，另取对称点补足五点。这里自变量可取全体实数，网格只显示其中一段。</p>
+      <label>作图任务 <select id="jw-case">
+        <option value="0">y = (x−1)²−1</option>
+        <option value="1">y = −(1/2)(x+1)²+2</option>
+        <option value="2">y = (1/2)x²−2</option>
+        <option value="3">退化辨析：y = 0·x²+2</option>
+      </select></label>
+      <p id="jw-domain" aria-live="polite"></p>
+      <p class="small">数值输入只接受整数、至多六位小数或整数分数 p/q（q≠0），可用正负号（负号可写 −）；只忽略首尾空白。内部空白、算式、科学计数法及全角数字均不接受，总长至多 24 字符。不会把“1 2”拼成“12”。</p>
+      <div id="jw-table"></div>
+      <p>网格横纵每小格均为 0.5，每大格为 1。点击/轻触网格落点；也可聚焦网格，用方向键每次移动 0.5，回车落点。选另一行后可重放，编辑表值会清除此行落点和旧曲线。</p>
+      <label>操作 <select id="jw-mode"><option value="point">落点</option><option value="curve">画平滑曲线</option></select></label>
+      <svg id="jw-grid" viewBox="0 0 400 400" tabindex="0" role="application" aria-label="五点作图网格" aria-describedby="jw-cursor"></svg>
+      <p id="jw-cursor" aria-live="polite"></p>
+      <p class="small">画线模式：按住鼠标或手指描画；键盘移动游标后按空格逐次取样连线。线条是你的草图，不会自动变成标准抛物线。重新起笔或点“清除曲线”可重画。也可在纸上完成平滑连接，再按下方准则自核。</p>
+      <div class="entry-bar">
+        <button type="button" id="jw-check">核对表值与落点</button>
+        <button type="button" id="jw-clear">清除曲线</button>
+        <button type="button" id="jw-reset">本题重来</button>
+      </div>
+      <p id="jw-feedback" class="result" aria-live="polite"></p>
+      <details class="more"><summary>连接之后：逐项自检（曲线质量由你核对）</summary>
+        <p>① 表中居中的点是否为顶点？② 两组到轴距离相等的点，纵坐标是否相同？③ 图上点是否同时满足横、纵刻度？④ 曲线是否按横坐标顺序经过五点，顶点附近平滑转弯，而非折线尖角？⑤ 两侧是否关于对称轴对称，延伸方向与 a 的符号相符？</p>
+        <p>先标顶点、与坐标轴的交点及其对称点；有重合时补点。不必每一条抛物线都与 x 轴相交。纸笔或屏幕画线只供自核，本活动不会据此判定“已掌握作图”。</p>
+      </details>
+    </div>
+    <div class="card">
+      <h3>进阶：从同一幅图解释六个符号</h3>
+      <p>图象是某个 y=ax²+bx+c（a≠0）的实际截取，虚线为对称轴 x=h，所有自变量取全体实数。分别判断下列式子的符号，并为每个判断选依据。x=−1、x=1 处用短线标出图上高度；遇到交点应严格判断为零。</p>
+      <label>换图 <select id="js-case"><option value="0">图 1</option><option value="1">图 2</option><option value="2">图 3</option><option value="3">图 4</option><option value="4">图 5</option><option value="5">图 6</option></select></label>
+      <p id="js-condition"></p>
+      <svg id="js-grid" viewBox="0 0 400 400" role="img" aria-label="待判断的抛物线与对称轴"></svg>
+      <div id="js-questions"></div>
+      <label>写下你的推理（自行核对，不自动判真）<textarea id="js-reason" rows="3"></textarea></label>
+      <div class="entry-bar"><button type="button" id="js-check">核对符号与所选依据</button><button type="button" id="js-reset">清空本图作答</button></div>
+      <div id="js-feedback" class="result" aria-live="polite"></div>
+      <details class="more"><summary>作答后再看：一般关系与 −1 / 1 的区别</summary>
+        <p>记 f(x)=ax²+bx+c，h=−b/(2a)，其中 a≠0。由 b=−2ah 得 <b>2a+b=2a(1−h)</b>。因此 h=1 时等于零；h&lt;1 时与 a 同号；h&gt;1 时与 a 异号。这是代数恒等变形，对所有允许的 a、b 成立，不是靠几幅图猜出的规律。</p>
+        <p>特别地，轴为 x=−1 时 b=2a，<b>2a+b=4a</b>，不能判为零；以 −1 为零值分界的是 2a−b=2a(1+h)。只知道轴在 −1 的右边，还不足以判断 2a+b：还要区分 h&lt;1、h=1、h&gt;1，并看 a 的符号。</p>
+        <p>a+b+c=f(1)，a−b+c=f(−1)：找对应横坐标处的图象在 x 轴上方、下方还是轴上。a 看开口；b 用 b=−2ah；c 看与 y 轴交点。一般理由请逐项写全条件；软件只核对封闭选项，不判定你写的证明是否成立。</p>
+      </details>
+    </div>
+  </div>
+
   <div class="card fig" id="param-lab">
     <p><span class="badge-pill badge-b">实验台 1</span><b>最简式 \(y = ax^2\) 调参台：体验开口与胖瘦的几何变形</b></p>
     <p class="small">拖动滑块调节二次项系数 \(a\)，实时观察抛物线如何翻转、陡峭收拢与平缓张开：</p>

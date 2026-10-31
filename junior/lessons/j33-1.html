@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b9b-j33-1-trig-calculator-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -20,12 +21,12 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j33-1" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
-<p class="crumb">九年级下册（旧版目录占位）· 第三十三章 锐角三角函数</p>
+<p class="crumb">九年级下册· 第三十三章 锐角三角函数</p>
 <h1>33.1 锐角三角函数</h1>
 <p class="lead">两条坡道哪条更陡？不用比谁长、谁高，只要比一个「比值」。在直角三角形里，锐角一旦确定，边与边的比就跟着确定。这一节给这些比值起名字：正弦、余弦、正切。</p>
 <p class="small">说明：新版九下 2027 春才出版，本节先按旧版教材（原九下第二十八章 28.1）编排，出版后再对表。</p>
@@ -265,6 +266,32 @@
     <div class="result" id="out-inv" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-inv" type="button">重置</button></div>
   </div>
+  <div class="card" id="j33-calculator">
+    <h3>④ 自主计算：先估一估，再核验</h3>
+    <p>自己选一个锐角求比值，或给一个比值找锐角。先用三角板、边的比或原互动图估计，再看计算读数。</p>
+    <p class="small" id="j33-calc-scope">数学范围：0° &lt; θ &lt; 90°；sin、cos 的值在 0 与 1 之间，tan 的值大于 0，也可以大于 1。为便于读数，本工作区只接收：角 0.000001°～89.999999°，sin/cos 值 0.000001～0.999999，tan 值 0.000001～1000000（均含两端）。这是工作区限制，不是数学定义域的边界。用十进制数（可用 e 记数），不带单位或算式。</p>
+    <form id="j33-calc-form" novalidate>
+      <p>1. <label for="j33-calc-function">选择比值</label>
+        <select id="j33-calc-function"><option value="sin">sin 正弦</option><option value="cos">cos 余弦</option><option value="tan">tan 正切</option></select>
+        <label for="j33-calc-direction">选择方向</label>
+        <select id="j33-calc-direction"><option value="forward">由角求值</option><option value="inverse">由值求角</option></select>
+      </p>
+      <p><label for="j33-calc-known" id="j33-calc-known-label">2. 输入锐角 θ（度）</label><br>
+        <input id="j33-calc-known" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-describedby="j33-calc-scope j33-calc-range" style="width:100%;max-width:22em;box-sizing:border-box">
+        <span class="small" id="j33-calc-range">本工作区：0.000001 ≤ θ ≤ 89.999999（度）。</span>
+      </p>
+      <p><label for="j33-calc-estimate" id="j33-calc-estimate-label">3. 先填你的比值估计（无单位）</label><br>
+        <input id="j33-calc-estimate" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" aria-describedby="j33-calc-estimate-help" style="width:100%;max-width:22em;box-sizing:border-box">
+        <span class="small" id="j33-calc-estimate-help">估计可填 0 或 1 等粗略读数；由值求角时估计填 0°～90°内的数。这里只作数值对照，不判定你的估算过程。</span>
+      </p>
+      <div class="ctrl"><button class="btn" type="submit">核验读数</button><button class="btn ghost" type="reset">清空重试</button></div>
+    </form>
+    <p class="result" id="j33-calc-result" role="status" aria-live="polite"></p>
+    <details class="more" id="j33-calc-explain" hidden><summary>估算后再看：怎样检查读数</summary>
+      <p>比值没有单位，角的单位是度。锐角增大，sin、tan 增大，cos 减小。可换一个互余角核对 sin 与 cos；tan 大于 1 时，对边比邻边长。用原①的滑轨对照时，注意它只到 5°～85°且按整数度变化；原③只在整数度中找角。</p>
+      <p>本区所有结果都是近似读数，通常保留 8 位有效数字；靠近 1 时写成「1 − 一个小数」避免丢掉差值，差值也取近似。e−8 表示乘以 10 的负八次方。不要把近似相等当成准确关系；30°、45°、60°的精确值仍看原②。</p>
+    </details>
+  </div>
 </section>
 
 <section class="step" data-title="练一练">
@@ -310,7 +337,7 @@
 </section>
 
 <section class="step" data-title="中考真题">
-  <p class="small">这一节按旧版目录占位；核不到原卷的题不放，真题待在有原卷库的机器上补。</p>
+  <p class="small">本节真题待补。</p>
   <div id="practice"></div>
 </section>
 

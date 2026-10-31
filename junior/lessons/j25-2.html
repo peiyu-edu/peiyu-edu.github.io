@@ -20,8 +20,15 @@
   .result .sum { color: var(--no); font-weight: 700; }
   .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
   .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+  #vieta-workshop input,#vieta-workshop select,#vieta-workshop textarea { max-width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:6px; }
+  #vieta-workshop .vw-fields { display:flex;flex-wrap:wrap;gap:10px;margin:10px 0; }
+  #vieta-workshop label { display:grid;gap:4px;min-width:0; }
+  #vieta-workshop input { width:150px; }
+  #vieta-workshop textarea { width:100%;min-height:80px; }
+  #vieta-workshop p { overflow-wrap:anywhere; }
+  #vieta-workshop [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j25-2" data-standard="v2">
 <div class="wrap">
@@ -280,6 +287,48 @@
     </div>
     <svg class="fig" id="roots-svg" viewBox="0 0 560 240" role="img" aria-label="判别式与两根数轴位置全景图"></svg>
     <p class="result" id="roots-readout" aria-live="polite"></p>
+  </div>
+  <div class="card" id="vieta-workshop">
+    <h3>③ 我来构造方程，再从一根迁移</h3>
+    <p>先自己选已知数或原方程，再填写计算与代回结果。两条任务都要查首项非0、实根条件与和积符号；允许0根、负根、分数和两个相等的实根。本工坊只处理有理数输入，不覆盖根式输入。</p>
+    <p class="small" id="vw-syntax">数值用整数、有限小数（最多12位）或整数分数（正分母），每个整数词元最多12位。支持全角数字及＋、－、．、／和负号“−”；首尾、分数线两侧可留空格，数字中不能夹空格，不输入算式、指数、单位或根式。自选参数绝对值≤20，约分后分母≤20；填写结果不受此参数范围限制，须用精确值。</p>
+    <h4>A. 以自己选的两个实数为根</h4>
+    <form id="vw-construct-setup" novalidate>
+      <div class="vw-fields"><label>已知数 u<input id="vw-u" aria-describedby="vw-syntax" autocomplete="off"></label><label>已知数 v<input id="vw-v" aria-describedby="vw-syntax" autocomplete="off"></label><label>我选的首项系数 A<input id="vw-scale" aria-describedby="vw-syntax" autocomplete="off"></label></div>
+      <button class="btn" type="submit">采用两数与首项系数</button>
+    </form>
+    <p id="vw-construct-prompt"></p>
+    <form id="vw-construct-work" hidden novalidate>
+      <p>构造一般式 Ax²+Bx+C=0。先填自己算的系数、和积、判别式，并把 u、v 各代回一次。</p>
+      <div class="vw-fields"><label>一次项系数 B<input id="vw-build-b" aria-describedby="vw-syntax" autocomplete="off"></label><label>常数项 C<input id="vw-build-c" aria-describedby="vw-syntax" autocomplete="off"></label><label>两根之和<input id="vw-build-sum" aria-describedby="vw-syntax" autocomplete="off"></label><label>两根之积<input id="vw-build-product" aria-describedby="vw-syntax" autocomplete="off"></label><label>判别式 Δ<input id="vw-build-delta" aria-describedby="vw-syntax" autocomplete="off"></label><label>u 代入左边的值<input id="vw-build-u-value" aria-describedby="vw-syntax" autocomplete="off"></label><label>v 代入左边的值<input id="vw-build-v-value" aria-describedby="vw-syntax" autocomplete="off"></label></div>
+      <label>实根情况<select id="vw-build-kind"><option value="">先判断</option><option value="distinct">两个不相等实根</option><option value="repeated">两个相等实根（一个不同实数值）</option><option value="none">无实数根</option></select></label>
+      <label>写出你如何构造，并解释代回检验的作用；自由文字另自检，不填个人资料。<textarea id="vw-build-reason" maxlength="1000"></textarea></label>
+      <button class="btn" type="submit">核对我构造的方程</button>
+    </form>
+    <p id="vw-construct-feedback" role="status"></p>
+    <h4>B. “已知一根”也先核原方程</h4>
+    <form id="vw-root-setup" novalidate>
+      <div class="vw-fields"><label>原方程系数 a<input id="vw-a" aria-describedby="vw-syntax" autocomplete="off"></label><label>原方程系数 b<input id="vw-b" aria-describedby="vw-syntax" autocomplete="off"></label><label>原方程系数 c<input id="vw-c" aria-describedby="vw-syntax" autocomplete="off"></label><label>声称已知的实根 r<input id="vw-r" aria-describedby="vw-syntax" autocomplete="off"></label></div>
+      <button class="btn" type="submit">采用原方程与待核的根</button>
+    </form>
+    <p id="vw-root-prompt"></p>
+    <form id="vw-root-work" hidden novalidate>
+      <p>先算判别式，并核 r 是否真是原方程的根，再利用和积求另一根 s。两个根都要代回同一个原方程，不能只凑一个形式上的和。</p>
+      <div class="vw-fields"><label>原方程判别式 Δ<input id="vw-find-delta" aria-describedby="vw-syntax" autocomplete="off"></label><label>r 代入原方程左边<input id="vw-find-r-value" aria-describedby="vw-syntax" autocomplete="off"></label><label>由系数求两根之和<input id="vw-find-sum" aria-describedby="vw-syntax" autocomplete="off"></label><label>由系数求两根之积<input id="vw-find-product" aria-describedby="vw-syntax" autocomplete="off"></label><label>我求的另一根 s<input id="vw-find-other" aria-describedby="vw-syntax" autocomplete="off"></label><label>s 代入原方程左边<input id="vw-find-s-value" aria-describedby="vw-syntax" autocomplete="off"></label></div>
+      <label>实根情况<select id="vw-find-kind"><option value="">先判断</option><option value="distinct">两个不相等实根</option><option value="repeated">两个相等实根（一个不同实数值）</option><option value="none">无实数根</option></select></label>
+      <label>记录求另一根的方法及检查前提的理由；文字不自动判正确。<textarea id="vw-find-reason" maxlength="1000"></textarea></label>
+      <button class="btn" type="submit">核原方程并记录另一根</button>
+    </form>
+    <p id="vw-root-feedback" role="status"></p>
+    <h4>我的构造与迁移记录（最多12条）</h4><div id="vw-records"></div>
+    <button class="btn" id="vw-open-guide" type="button">完成两类任务后对照一般依据</button><p id="vw-guide-feedback" role="status"></p>
+    <details class="more" id="vw-guide" hidden><summary>构造、实根与原方程的逐项自检</summary>
+      <p>对任意实数 u、v 和非零 A，\(A(x-u)(x-v)=Ax^2-A(u+v)x+Auv\)。展开对比系数就得到一个以 u、v 为根的方程；判别式是 \(A^2(u-v)^2\)，必非负，且 u=v 时为0。任意非零倍数都可构造方程，不必限首项系数为1；本次须沿用自己选的 A。</p>
+      <p>对原方程 \(ax^2+bx+c=0\)，先有 a≠0、r 是实数且代回得0，才能称它为已知实根。令 \(s=-b/a-r\)，由 \(ar^2+br+c=0\) 可得 \(rs=c/a\)，所以原多项式就是 \(a(x-r)(x-s)\)，s 也是原方程的实根；和为 −b/a、积为 c/a。r=0 时 c=0，仍可用和求 s，不能除以 r。Δ&lt;0 时无实数根，不能套用“两个实根”；Δ=0 是两个相等实根，按不同数值只算一个。</p>
+      <p>上面是按恒等展开与原方程给出的一般依据，不是用有限记录证明全部情况。逐条自查自己的符号、系数、首项条件、判别式、两次代回及理由。系统只核本次精确数值和实根判断，任意自由文字、纸笔或同伴经历未自动判真。</p>
+    </details>
+    <button class="btn ghost" id="vw-reset" type="button">清空构造与迁移</button>
+    <p class="small">草稿与记录仅留本页内存，刷新或清空即清除，不写学习账本。</p>
   </div>
 </section>
 
@@ -735,4 +784,5 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+<script defer src="../assets/b9a-j25-2-teaching-workshop-dev.js"></script>
 </body></html>

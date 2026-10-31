@@ -54,6 +54,12 @@ body.primary.high button.say { display: none; }
 details.parent { background: var(--card); border: 1.5px dashed var(--c); border-radius: var(--radius); padding: 10px 16px; margin: 12px 0 18px; font-size: 17px; }
 details.parent summary { cursor: pointer; font-weight: 700; color: var(--c); min-height: 32px; }
 details.parent li { margin: 4px 0; }
+/* 脚本把 open 改成收起之前，先藏起正文，避免 HTML 上的 open 先闪出得数。
+   无脚本（scripting: none）时这条不生效，页面保持 HTML 原样。 */
+@media (scripting: enabled) {
+  details.parent:not(.parent-ready) > :not(summary) { display: none; }
+  details.parent:not(.parent-ready) > summary { list-style-type: disclosure-closed; }
+}
 
 /* 拼音 */
 body.low ruby { ruby-position: over; }

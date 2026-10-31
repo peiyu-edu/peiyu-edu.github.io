@@ -20,8 +20,26 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
+
+  .j103-activity { margin-top: 24px; }
+  .j103-activity fieldset { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin: 12px 0; min-width: 0; }
+  .j103-activity legend { font-weight: 700; }
+  .j103-activity label { display: block; margin: 10px 0; }
+  .j103-activity input:not([type="range"]), .j103-activity select, .j103-activity textarea { display: block; width: 100%; max-width: 100%; box-sizing: border-box; font: inherit; color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 9px; margin-top: 4px; }
+  .j103-activity input[type="range"] { width: 100%; }
+  .j103-activity button { white-space: normal; margin: 4px 6px 4px 0; }
+  .j103-activity :focus-visible { outline: 3px solid var(--a); outline-offset: 3px; }
+  .j103-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 16px; }
+  .j103-feedback { white-space: pre-line; overflow-wrap: anywhere; line-height: 1.8; }
+  .j103-activity [hidden] { display: none !important; }
+  .j103-land-fig { display: block; width: 100%; max-width: 440px; margin: 12px auto; }
+  .j103-land-fig .land-a { fill: var(--a); fill-opacity: .35; }
+  .j103-land-fig .land-b { fill: var(--b); fill-opacity: .35; }
+  .j103-land-fig rect, .j103-land-fig line { stroke: var(--fg); stroke-width: 2; }
+  .j103-land-fig text { fill: var(--fg); font-size: 20px; text-anchor: middle; }
+  @media(max-width: 600px) { .j103-grid { grid-template-columns: 1fr; } }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j10-3" data-standard="v2">
 <div class="wrap">
@@ -251,6 +269,61 @@
     <div class="result" id="out-track" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-track" type="button">重置</button></div>
   </div>
+
+  <div class="card j103-activity" id="j103-model">
+    <h3>④ 自己建模：先估计，再把饮品单价算清楚</h3>
+    <p>沿用例 1 的情境：两种果茶单价固定。第一天卖大杯 30 杯、小杯 20 杯，收入 520 元；第二天卖大杯 25 杯、小杯 40 杯，收入 620 元。先合上示范，独立走一遍。这里的记录只留在本页，刷新即清空。</p>
+    <form id="j103-model-form" novalidate>
+      <fieldset id="j103-estimates"><legend>1 · 先留下经验估计</legend>
+        <div class="j103-grid"><label>估计大杯单价（元/杯）<input name="estimateBig" inputmode="decimal" autocomplete="off"></label><label>估计小杯单价（元/杯）<input name="estimateSmall" inputmode="decimal" autocomplete="off"></label></div>
+        <label>你依据什么估计？<textarea name="estimateReason" rows="2" maxlength="300"></textarea></label>
+        <button class="btn" id="j103-record-estimate" type="button">记下估计，开始建模</button>
+      </fieldset>
+      <p id="j103-estimate-out" class="j103-feedback" role="status">先填写估计；估计不要求正确。</p>
+      <fieldset id="j103-work" disabled><legend>2 · 分析、设元、列组、求解</legend>
+        <label>这两天哪两个量保持不变？各天提供了什么相等关系？<textarea name="analysis" rows="3" maxlength="600"></textarea></label>
+        <div class="j103-grid"><label>设 x 表示<select name="variable"><option value="">请选择</option><option value="big">大杯单价，y 是小杯单价</option><option value="small">小杯单价，y 是大杯单价</option></select></label><label>x、y 的单位<select name="unit"><option value="">请选择</option><option value="price">元/杯</option><option value="count">杯</option><option value="total">元（总收入）</option></select></label></div>
+        <p class="small">输入两条方程，可交换顺序、移项、约分。支持 x、y、整数、小数、分数、括号与 + − * /；乘号可省略，如 2x。其它写法暂不自动核对，请先改写为这种形式。不能输入上标作普通数字。</p>
+        <label>方程一<input name="equation1" autocomplete="off" spellcheck="false"></label>
+        <label>方程二<input name="equation2" autocomplete="off" spellcheck="false"></label>
+        <label>用代入法或加减法，说明怎样消去一个未知数<textarea name="method" rows="2" maxlength="400"></textarea></label>
+        <label>写出消元后的一条一元一次方程（仍用 x 或 y）<input name="eliminated" autocomplete="off" spellcheck="false"></label>
+        <div class="j103-grid"><label>解得 x =<input name="solutionX" inputmode="decimal" autocomplete="off"></label><label>解得 y =<input name="solutionY" inputmode="decimal" autocomplete="off"></label></div>
+      </fieldset>
+      <fieldset id="j103-check-work" disabled><legend>3 · 代回两天原条件，再作答</legend>
+        <p class="small">自己先算四笔金额。网页会独立计算乘积与总收入，不能只核验约分后的方程。</p>
+        <div class="j103-grid"><label>第一天大杯收入（元）<input name="day1Big" inputmode="decimal" autocomplete="off"></label><label>第一天小杯收入（元）<input name="day1Small" inputmode="decimal" autocomplete="off"></label><label>第二天大杯收入（元）<input name="day2Big" inputmode="decimal" autocomplete="off"></label><label>第二天小杯收入（元）<input name="day2Small" inputmode="decimal" autocomplete="off"></label></div>
+        <label>结合单位和情境判断<select name="feasibility"><option value="">请选择</option><option value="positive">两种单价都须为正；单价可以是小数，不必是整数</option><option value="integer">两种单价必须是整数，因为杯数是整数</option><option value="any">只要方程成立，负单价也可以</option></select></label>
+        <div class="j103-grid"><label>答：大杯每杯（元）<input name="answerBig" inputmode="decimal" autocomplete="off"></label><label>小杯每杯（元）<input name="answerSmall" inputmode="decimal" autocomplete="off"></label></div>
+        <button class="btn" type="submit">核对我的过程，并比较估计</button>
+      </fieldset>
+      <button class="btn ghost" type="reset">清空过程，重新估计</button>
+      <p id="j103-model-out" class="j103-feedback" role="status">估计记录后再填写过程。文字分析和消元说明供你对照，不作自动语义评分。</p>
+    </form>
+  </div>
+  <div class="card j103-activity" id="j103-land">
+    <h3>⑤ 开放探究：同一个产量比，能怎样分地？</h3>
+    <p>一块长 30 m、宽 20 m 的长方形地全部分给甲、乙两种作物，不重叠、不留空。甲每平方米产 2 kg，乙每平方米产 3 kg（本活动假设每处单位面积产量相同）。要求甲、乙总产量比为 2∶1。面积允许是小数，不要求整平方米。</p>
+    <p>设甲占 x m²、乙占 y m²。先列两条关系，再试着画分界线。这里能试沿长边分、沿宽边分两类直线方案；其它划法可画在纸上，用面积与产量关系核对。网页不会据此认定你已完成纸笔活动。</p>
+    <form id="j103-land-form" novalidate>
+      <label>面积关系方程<input name="areaEquation" autocomplete="off" spellcheck="false"></label>
+      <label>产量关系方程<input name="yieldEquation" autocomplete="off" spellcheck="false"></label>
+      <label>分界方式<select name="direction"><option value="vertical">沿长边量，从左侧分给甲</option><option value="horizontal">沿宽边量，从上侧分给甲</option></select></label>
+      <label>分界距左边／上边多少米？<input name="cut" inputmode="decimal" value="15" autocomplete="off"></label>
+      <label>也可拖动或用方向键试分界（占相应边长的百分比）<input name="cutSlider" type="range" min="0" max="100" step="0.5" value="50"></label>
+      <svg class="j103-land-fig" id="j103-land-fig" viewBox="0 0 360 270" role="img" aria-label="当前尝试的分地示意图，甲在左侧或上侧，乙为余下部分">
+        <rect class="land-a" id="j103-land-a" x="30" y="40" width="150" height="200"></rect><rect class="land-b" id="j103-land-b" x="180" y="40" width="150" height="200"></rect>
+      </svg>
+      <p id="j103-land-preview" class="j103-feedback" role="status"></p>
+      <button class="btn" type="submit">核对并保留这个方案</button><button class="btn ghost" type="reset">重置分地探究</button>
+      <p id="j103-land-out" class="j103-feedback" role="status">先写方程并操作分界，再核对；初始图只是一种尝试。</p>
+      <ol id="j103-land-schemes"></ol>
+      <p id="j103-land-compare" class="j103-feedback" hidden></p>
+    </form>
+  </div>
+
+
+<div id="model-transfer"><noscript>本活动需JavaScript。可先在纸上按题意分析、列表和列式。</noscript></div>
 </section>
 
 <section class="step" data-title="练一练">
@@ -520,4 +593,6 @@
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+<script defer src="../assets/j10-3-activity.js"></script>
+<script src="../assets/b7b-j10-3-model-transfer.js"></script>
 </body></html>

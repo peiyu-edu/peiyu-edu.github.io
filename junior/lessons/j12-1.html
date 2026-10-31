@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b7b-j12-1-own-survey-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -19,8 +20,15 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+  #own-survey label { display:block; margin:12px 0; }
+  #own-survey textarea, #own-survey input, #own-survey select { display:block; width:100%; max-width:100%; box-sizing:border-box; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:6px; padding:8px; }
+  #own-survey button { margin:6px 4px 6px 0; white-space:normal; }
+  #own-survey { overflow-wrap:anywhere; }
+  #own-survey table { width:100%; table-layout:fixed; border-collapse:collapse; }
+  #own-survey th, #own-survey td { padding:6px; border:1px solid var(--line); overflow-wrap:anywhere; }
+  #os-chart .os-bar { height:20px; background:var(--a); margin:4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j12-1" data-standard="v2">
 <div class="wrap">
@@ -269,6 +277,59 @@
 </section>
 
 <section class="step" data-title="动手">
+  <article class="card" id="own-survey">
+    <h3>自主项目：把一份调查从头做到尾</h3>
+    <p>研究书签的主要图案：先逐个调查教室小箱的8个书签，再把范围扩大到全校库房80个书签。你来拟问题、定分类、选方案并做记录。也可换成同数量的无身份物品。不要输入姓名、成绩、健康情况等个人信息。</p>
+    <p class="small">默认是虚构答案代码的录入模型，不是真实调查。真实收集请与同伴清点物品、统一编号和判定口径后另做；页面无法核实观察发生或问卷质量。所有新输入仅在本页内存，刷新即失；可导出本地文本，不传服务器，不写学习账本。</p>
+    <form id="os-form">
+      <h4>① 自己编问卷</h4>
+      <p>问题须中立；定义“主要图案”如何判断（如混合图案如何归类），每个物品只能选一项。选项每行一项，2—6项，依次编号A—F；按定义查不重、不漏，并考虑无图案或其他情况。</p>
+      <label>调查问题<textarea id="os-question" rows="2"></textarea></label>
+      <label>概念、观察规则与统计范围<textarea id="os-definition" rows="2"></textarea></label>
+      <label>自己设计的选项（每行写名称及判定规则）<textarea id="os-options" rows="4"></textarea></label>
+      <button type="button" id="os-draft">预览并按准则自核</button>
+      <div id="os-preview" class="result" role="status"></div>
+      <div id="os-rubric" hidden>
+        <p>问卷准则：①有没有褒贬或诱导？②概念能让两人作同一判断吗？③每一选项回答的是本问题吗？④找一个边界物品，会不会同时落两项？⑤能否找到无处可选的物品？两人试填后再改。这里只提供自核，不自动判“问卷合格”。</p>
+        <label>试填发现、修改后的问卷理由<textarea id="os-draft-note" rows="2"></textarea></label>
+      </div>
+      <h4>② 小范围先逐个做</h4>
+      <label>数据来源<select id="os-source"><option value="model">模型模拟（虚构代码）</option><option value="objects">学生自行观察无身份物品</option></select></label>
+      <p>小箱编号1—8。真实观察时逐个查看，按你的问卷规则记录；暂不能判定就保留现场记录，与同伴复核后写明处理，不悄悄删除或换物品。模型只给虚构代码，不证明这些选项符合实际书签。</p>
+      <button type="button" id="os-small">开始小箱全面调查</button>
+      <h4>③ 扩大范围前，自己算代价、定方案</h4>
+      <label>逐个查看一个书签需多少分钟（1—120的整数模型）<input id="os-time" inputmode="numeric"></label>
+      <button type="button" id="os-cost">比较两个范围的耗时</button>
+      <div id="os-cost-out" class="result" role="status"></div>
+      <label>扩大后选择<select id="os-method"><option value="">请自己选择</option><option value="all">80个全部查看</option><option value="sample">从80个编号中随机抽取一部分</option></select></label>
+      <label>若只查一部分，打算查看多少个（1—79）<input id="os-size" inputmode="numeric"></label>
+      <label>你的选择和时间成本理由<textarea id="os-decision" rows="2"></textarea></label>
+      <label>范围评价：谁有机会、谁可能遗漏？怎样保证机会相等？<textarea id="os-range" rows="2"></textarea></label>
+      <label>容量评价：怎样兼顾稳定性和时间成本？<textarea id="os-capacity" rows="2"></textarea></label>
+      <p class="small">先做完小箱记录再扩大。大范围需先清点全部80个并编1—80号；真实抽签用同形纸签、充分混匀、逐张取出且不重复，保留抽中名单。也可使用下方程序编号抽签。不能仅问方便接触的一部分，再用“大样本”补救。</p>
+      <button type="button" id="os-expand">按我的方案准备大范围调查</button>
+      <h4>④ 原始记录 → 划记 → 表与图</h4>
+      <div id="os-task" class="result" role="status"></div>
+      <details class="more" id="os-model"><summary>查看本轮虚构代码卡（仅模型）</summary><p id="os-cards"></p></details>
+      <label>原始记录：每行“编号,选项代码”，代码用大写A—F；逗号也可用中文逗号<textarea id="os-raw" rows="6" spellcheck="false"></textarea></label>
+      <label>你逐项划记并整理的频数：每个选项一行“代码,频数”，包括0；先在纸上划记<textarea id="os-counts" rows="4" spellcheck="false"></textarea></label>
+      <label>本轮来源与现场/划记说明（模拟写“模拟”，真实写观察时间、地点、缺失与核查方法，不写身份）<textarea id="os-origin" rows="2"></textarea></label>
+      <label>修订或新一轮理由：保留旧稿，说明改了什么、为什么；纠错请留原值和订正依据<textarea id="os-reason" rows="2"></textarea></label>
+      <button type="button" id="os-organize">核对记录和频数，生成对照图</button>
+      <div id="os-data-out" class="result" role="status"></div>
+      <div id="os-chart"></div>
+      <h4>⑤ 写成果与评价</h4>
+      <label>用表与图描述结果；抽样结论写“估计/约”，并说明局限<textarea id="os-conclusion" rows="3"></textarea></label>
+      <label>新方案及修改理由（不为迎合结论改原始数据）<textarea id="os-revision" rows="2"></textarea></label>
+      <label>同伴核对记录（仅写核对内容、分歧和处理，不写姓名；尚未核对请如实说明）<textarea id="os-peer" rows="2"></textarea></label>
+      <button type="submit">打开成果评价准则</button>
+      <div id="os-review" class="result" role="status"></div>
+      <p id="os-history" class="small" aria-live="polite"></p>
+      <button type="button" id="os-export">导出本机项目草稿（文本）</button>
+      <button type="reset">清空本项目和内存旧稿</button>
+    </form>
+  </article>
+
   <h3>① 随机抽样：样本容量越大，估计越稳</h3>
   <p class="small">上面 \(1\,000\) 个点就是“从例子进入”里的全校同学，从上到下是七、八、九年级。拖动“样本容量”圆点（或点一下再用方向键），点“再抽一次”。下方数轴上是<b>连抽 20 次</b>得到的 20 个样本比例，金色的是这一次，红线是全校真实比例。</p>
   <div class="card">

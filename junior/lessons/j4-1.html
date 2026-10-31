@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b7a-j4-1-self-polynomial-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -18,9 +19,12 @@
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
+  #self-polynomial-work input, #self-polynomial-work textarea, #self-polynomial-work select { color:var(--fg); background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:6px; max-width:100%; box-sizing:border-box; }
+  #self-polynomial-work input { display:block; width:min(16em,100%); }
+  #self-polynomial-work button { min-height:44px; margin:3px; }
   .result .sum { color: var(--no); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j4-1" data-standard="v2">
 <div class="wrap">
@@ -219,6 +223,42 @@
 </section>
 
 <section class="step" data-title="动手">
+  <div id="self-polynomial-work" class="card">
+    <h3>先自己列式，再给式子命名</h3>
+    <p>下面四题先输入数量式，写单位，再读系数或常数项、次数。不要只代入某个数：式子要适用于题目允许的所有取值。这里只核对你写的式子与指定结构，不靠抽几个数判断相等。</p>
+    <p class="small" id="sp-syntax">本工作台输入语法：小写单字母；乘号用 * 或省略；指数用 ^ 后接 1～9 的整数；系数可用整数、有限小数或数字分数，末尾也可除以非零正数。加减号连接各项，允许运算符两侧空格。数字中间不可插空格。暂不核对括号、上标字符、重复字母因子、需要合并同类项或其它写法，请改写后再核对；暂未核对不表示数学想法错误。单位另填，不写在式中。</p>
+    <form id="sp-model-form">
+      <label for="sp-case">选一题自己列式</label>
+      <select id="sp-case"><option value="0">水位变化</option><option value="1">三角形面积</option><option value="2">购买材料</option><option value="3">水箱余量</option></select>
+      <p id="sp-question"></p>
+      <p><label for="sp-expression">数量式</label> <input id="sp-expression" type="text" aria-describedby="sp-syntax" autocomplete="off" spellcheck="false"></p>
+      <p><label for="sp-unit">结果的单位</label> <input id="sp-unit" type="text" autocomplete="off"></p>
+      <p><label id="sp-number-label" for="sp-number">系数</label> <input id="sp-number" type="text" autocomplete="off"></p>
+      <p><label for="sp-degree">式子的次数</label> <input id="sp-degree" type="text" inputmode="numeric" autocomplete="off"></p>
+      <button type="submit" class="btn">核对本题</button> <button type="reset" class="btn ghost">清空本题重试</button>
+      <p id="sp-model-feedback" class="result" aria-live="polite"></p>
+      <p id="sp-progress" class="small" aria-live="polite"></p>
+      <p class="small">你的本轮列式（核对后展示，供归纳比较；刷新即清空）：</p><ul id="sp-records"></ul>
+    </form>
+    <form id="sp-reason-form">
+      <p><label for="sp-reason">用自己的话归纳：比较四个式子的字母、指数和运算。哪些是单项式，哪些是多项式？两类各有什么共同特征，为什么都属于整式？说清项的符号、系数与次数怎样读。</label></p>
+      <textarea id="sp-reason" rows="5" style="width:100%;box-sizing:border-box" autocomplete="off"></textarea>
+      <p><button type="submit" class="btn">展开准则，自核文字</button> <button type="reset" class="btn ghost">重写归纳</button></p>
+      <div id="sp-criteria" hidden>
+        <p>文字未自动判真。逐条对照自己的文字，缺哪条就补哪条；不表示已完成纸笔或同伴讨论。</p>
+        <ul><li>先说每个式子表示什么量、单位与允许取值，再观察式的结构；具体量取到 0 不等于整个式子没有字母。</li><li>前两题是数与字母的积（数字分母并入数字因数），后两题是单项式的和；减号连同后面的项一起读。两类合称整式。</li><li>系数含符号；单项式次数把所有字母指数相加，多项式次数取最高项的次数，不把各项次数相加。多项式本身不说系数。</li><li>字母可以有一个或多个；不含字母的非零数也是单项式，次数为 0。这里不规定 0 的次数，也不讨论字母分母的分类。</li></ul>
+      </div>
+      <p id="sp-reason-feedback" class="result" aria-live="polite"></p>
+    </form>
+    <details class="more"><summary>选学：亲手换项，符号跟着走</summary>
+      <p>把每个带符号的项当成一张完整卡片，用“前移/后移”换位置，再核对。按钮支持点击、触摸和键盘 Enter/空格；也可用行内方向键前移/后移。这里只交换项，不合并、不去括号。</p>
+      <label for="sp-sort-case">排序任务</label> <select id="sp-sort-case"><option value="0">按 x 降幂</option><option value="1">按 x 升幂</option><option value="2">含 y 的式子按 x 降幂</option></select>
+      <p id="sp-sort-question"></p><ol id="sp-sort-list"></ol>
+      <button type="button" id="sp-sort-check" class="btn">核对排列</button> <button type="button" id="sp-sort-reset" class="btn ghost">恢复原顺序</button>
+      <p id="sp-sort-feedback" class="result" aria-live="polite"></p>
+    </details>
+  </div>
+
   <h3>① 单项式拼装台</h3>
   <p class="small">拖动三个圆点（或点一下圆点再用方向键）：第一行选系数，第二、三行选 \(x\)、\(y\) 的指数。指数拖到“不含”，单项式里就没有这个字母。右上角的小方块一块代表一次。</p>
   <div class="card">

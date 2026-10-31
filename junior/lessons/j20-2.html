@@ -19,8 +19,10 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+
+#j202-workshop .j202-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}#j202-workshop label{display:block;margin:9px 0}#j202-workshop input:not([type=range]),#j202-workshop select,#j202-workshop textarea{display:block;width:100%;box-sizing:border-box;max-width:100%;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--muted);border-radius:6px;padding:8px;margin-top:4px}#j202-workshop input[type=range]{width:100%}#j202-workshop fieldset{min-width:0;border:1px solid var(--line);border-radius:8px;margin:12px 0;padding:12px}#j202-workshop legend{font-weight:700}#j202-workshop [hidden]{display:none!important}#j202-workshop .j202-out{white-space:pre-line;overflow-wrap:anywhere;line-height:1.8}#j202-workshop button{margin:4px 5px 4px 0;white-space:normal}#j202-workshop :focus-visible{outline:3px solid var(--a);outline-offset:3px}@media(max-width:600px){#j202-workshop .j202-grid{grid-template-columns:1fr}}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j20-2" data-standard="v2">
 <div class="wrap">
@@ -254,6 +256,61 @@
     <div class="result" id="out-grid" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-grid" type="button">重置</button></div>
   </div>
+
+<div id="j202-workshop">
+<div class="card">
+<h3>④ 结绳工坊：先搭边、读角，再写猜想</h3>
+<details class="more"><summary>纸绳怎么做、记录什么？</summary><p>用尺量出3、4、5个同长单位的三段不易伸长的细绳，接成闭环，固定三个结点，把每段拉直成三角形。用量角器量最长段所对的角，记下单位长度、三段实测长度、角读数与误差；未做就写计划。下面先在网页上搭接，网页记录不认证实物或同伴操作已发生。</p></details>
+<form id="j202-rope" novalidate>
+<p>先统一单位，再输入三段长度（可试3、4、5及其它数），再自己移动C，让CA、CB都接上给定长度。AB作底边；a=BC，b=CA，c=AB。</p>
+<p class="small">数值仅支持ASCII整数、小数或分数：整数部至多9位、小数至多6位；数字词元须完整，仅斜线两侧可有空白。不猜读上标、全角、单位或其它算式。</p>
+<div class="j202-grid"><label>a，BC长<input name="a" inputmode="decimal" autocomplete="off"></label><label>b，CA长<input name="b" inputmode="decimal" autocomplete="off"></label><label>c，AB长<input name="c" inputmode="decimal" autocomplete="off"></label></div>
+<button class="btn" type="button" id="j202-prepare">取三段绳，开始搭接</button><button class="btn ghost" type="reset">清空本次工坊</button>
+<p class="j202-out" id="j202-side-out" role="status">尚未取绳。</p>
+<fieldset id="j202-build" disabled><legend>移动结点C，再核搭接</legend>
+<p class="small">横、纵标尺以最长绳长为1格；方向键每次移0.001格，也可拖C或拖标尺。搭接误差按最长绳长的0.2%核对，只作近似测量。</p>
+<svg class="fig" id="j202-rope-fig" viewBox="0 0 560 340" role="group" aria-label="自己移动结点C搭接三段绳"></svg>
+<div class="j202-grid"><label>C横标尺<input name="cx" type="range" min="-1000" max="2000" step="1" value="0"></label><label>C纵标尺<input name="cy" type="range" min="0" max="1200" step="1" value="250"></label></div>
+<p class="j202-out" id="j202-ruler" role="status"></p><button class="btn" type="button" id="j202-fit">核对搭接，拿出量角器</button>
+<p class="j202-out" id="j202-fit-out" role="status"></p>
+</fieldset>
+<fieldset id="j202-measure" disabled><legend>先留下本图量角记录</legend>
+<p id="j202-protractor" class="j202-out"></p>
+<label>最大边是哪条（并列时任选一条）？<select name="maximum"><option value="">请选择</option><option value="0">BC（a）</option><option value="1">CA（b）</option><option value="2">AB（c）</option></select></label>
+<label>本图中最大边所对角的读数（度）<input name="angle" inputmode="decimal" autocomplete="off"></label>
+<button class="btn" type="button" id="j202-record">记下本图读数</button><p class="j202-out" id="j202-measure-out" role="status"></p>
+</fieldset>
+<fieldset id="j202-guess" disabled><legend>再写猜想，核算精确边长</legend>
+<label>从搭接和量角中，你猜想边的平方关系与直角有什么联系？<textarea name="guess" rows="3" maxlength="1000"></textarea></label>
+<label>实物计划或自己的实测记录、误差与疑问（未实做请说明）<textarea name="physical" rows="2" maxlength="1000"></textarea></label>
+<button class="btn" type="submit">核算并对照猜想准则</button><p class="j202-out" id="j202-guess-out" role="status"></p>
+</fieldset>
+</form>
+</div>
+<div class="card">
+<h3>⑤ 证明工坊：只用两条边与直角来构造</h3>
+<p>一般题设：非退化△ABC中，BC=a&gt;0、CA=b&gt;0、AB=c&gt;0，且a²+b²=c²。求证∠C为直角。下面用a=3、b=4演练作图；一般证明仍要写任意正a、b、c的理由，不能只用这一组数或测量结论。上方任意三段若不满足这里的题设，不能套用本证明的结论。</p>
+<form id="j202-proof" novalidate>
+<fieldset><legend>作新三角形A′B′C′</legend>
+<p>先作∠A′C′B′为直角，再在两射线上分别截C′B′=a、C′A′=b。不要预设新三角形的第三边，也不要先把原∠C当直角。</p>
+<svg class="fig" id="j202-proof-fig" viewBox="0 0 400 400" role="img" aria-label="用两条射线的夹角和两条边构造新三角形"></svg>
+<label>∠A′C′B′（度）<input name="turn" type="range" min="30" max="150" step="1" value="60"></label>
+<div class="j202-grid"><label>C′B′（演练目标a=3）<input name="legA" type="range" min="1" max="6" step="0.5" value="2"></label><label>C′A′（演练目标b=4）<input name="legB" type="range" min="1" max="6" step="0.5" value="2"></label></div>
+<p class="j202-out" id="j202-construction-read"></p><button class="btn" type="button" id="j202-save-construction">保存我的构造</button><p class="j202-out" id="j202-construction-out" role="status"></p>
+</fieldset>
+<fieldset id="j202-reasons" disabled><legend>从构造写到原三角形</legend>
+<label>新三角形中，A′B′²=a²+b²的依据<select name="pythagoras"><option value="">请选择</option><option value="forward">已经证明的勾股定理</option><option value="converse">正在证明的逆定理</option><option value="measure">本图量角近似相等</option></select></label>
+<label>从A′B′²=c²到A′B′=c还需什么？<select name="positive"><option value="">请选择</option><option value="lengths">A′B′与c都是正长度</option><option value="largest">只要c是最大边即可</option><option value="sign">A′B′也可以是负c</option></select></label>
+<label>已有三组对应边相等，用哪条判定？<select name="congruence"><option value="">请选择</option><option value="SSS">SSS</option><option value="HL">HL（先把原三角形当直角）</option><option value="AAA">三个角分别相等</option></select></label>
+<label>原三角形与∠C′对应的角<select name="vertex"><option value="">请选择</option><option value="A">∠A</option><option value="B">∠B</option><option value="C">∠C</option></select></label>
+<label>自己写一般证明：构造、勾股等式、正长度、三组对应边、全等与对应角<textarea name="argument" rows="4" maxlength="2200"></textarea></label>
+<button class="btn" type="submit">核对结构，再逐句自检证明</button><p class="j202-out" id="j202-proof-out" role="status"></p>
+</fieldset>
+<button class="btn ghost" type="reset">重置证明工坊</button>
+</form>
+</div>
+</div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -564,4 +621,5 @@
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+<script defer src="../assets/b8b-j20-2-converse-workshop-dev.js"></script>
 </body></html>

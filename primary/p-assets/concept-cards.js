@@ -2,6 +2,7 @@
 (function () {
   "use strict";
   const app = document.getElementById("learning-app");
+  const integrated = document.body.dataset.learningPage === "knowledge" && !document.body.classList.contains("concept-page");
   const cn = "零一二三四五六七八九";
   let data;
   const P = window.PeiyuConceptPractice;
@@ -215,6 +216,7 @@
     const target = e.target.closest("[data-choice],[data-cc-question],.cc-answer summary");
     if(!target)return;
     const article = target.closest("[data-card]");
+    if (!article) return;
     const card = data.cards.find(c=>c.id===article.dataset.card);
     const snap = snapshot(), entry = current(card, P.available(snap, card, Date.now(), session)), q = entry.question;
     if (target.matches("summary")) {
@@ -244,6 +246,27 @@
     const focus = article.querySelector(target.hasAttribute("data-cc-question") ? '[data-cc-question="' + target.dataset.ccQuestion + '"]' : '[data-choice="' + target.dataset.choice + '"]');
     if (focus) focus.focus();
   });
+  if (integrated) {
+    // The shared library owns navigation; retain this component's figures, speech and quiz handlers.
+    window.PeiyuPrimaryConcepts = {
+      ready: fetch("data/knowledge/primary-concepts.json").then(r => {
+        if (!r.ok) throw new Error("概念卡暂时没有打开");
+        return r.json();
+      }).then(value => { data = value; return data; }),
+      renderUnit(target, unitId, section) {
+        const cards = data.cards.filter(c => c.unitId === unitId && (!section || c.lessonIds.includes(section)));
+        const hash = new URLSearchParams(location.hash.slice(1));
+        const card = cards.find(c => c.id === hash.get("card"));
+        const entry = card && P.find(card, hash.get("q"));
+        if (entry) selected[card.id] = entry.question.id;
+        if (entry && hash.get("review") === "1" && store() && !reviewed.has(entry.question.id)) {
+          reviewed.add(entry.question.id); P.review(store(), card, entry.question);
+        }
+        target.innerHTML = cards.map(c => cardHTML(c, /^p[12]/.test(c.unitId), snapshot())).join("");
+      }
+    };
+    return;
+  }
   function setTheme(theme) {
     document.documentElement.dataset.theme=theme;
     try{localStorage.setItem("peiyu.hs.theme",theme);}catch(e){ /* Theme remains usable in memory. */ }

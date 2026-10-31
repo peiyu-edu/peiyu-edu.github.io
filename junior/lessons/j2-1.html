@@ -19,8 +19,16 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+  #addition-law-lab input,#addition-law-lab select,#addition-law-lab textarea { max-width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:6px; }
+  .al-fields { display:flex;flex-wrap:wrap;gap:10px;margin:10px 0; }
+  .al-fields label { display:grid;gap:4px;min-width:0; }
+  .al-fields input { width:140px; }
+  #addition-law-lab fieldset { min-width:0;border:1px solid var(--line);margin:12px 0; }
+  #addition-law-lab textarea { display:block;width:100%;min-height:90px; }
+  #addition-law-lab p { overflow-wrap:anywhere; }
+  #addition-law-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j2-1" data-standard="v2">
 <div class="wrap">
@@ -281,6 +289,39 @@
     <div class="result" id="out-dist" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-dist" type="button">重置</button></div>
   </div>
+  <h3>④ 自己改计划：含负数的加法运算律</h3>
+  <div class="card" id="addition-law-lab">
+    <p>自己选三个有理数，给它们甲、乙、丙三个加数卡片。亲自改变先后或先合并哪一对，先预测，再填写中间值与总和。至少一条比较要含负数，也可试0、相反数和分数。</p>
+    <p class="small" id="al-syntax">输入精确数值：整数、有限小数（最多12位）或整数分数（正分母）；每个整数词元最多12位。首尾、分数线两侧可留空格，不能拆开数字，不输入算式、指数或单位。支持全角数字与负号“−”。三个参数绝对值不超过100，约分后分母不超过100；结果也用精确值。</p>
+    <form id="al-parameters" novalidate>
+      <div class="al-fields"><label>加数甲<input id="al-a" aria-describedby="al-syntax" autocomplete="off"></label><label>加数乙<input id="al-b" aria-describedby="al-syntax" autocomplete="off"></label><label>加数丙<input id="al-c" aria-describedby="al-syntax" autocomplete="off"></label></div>
+      <button class="btn" type="submit">采用我的三个数</button>
+    </form>
+    <p id="al-feedback" role="status"></p>
+    <div id="al-work" hidden>
+      <form id="al-check" novalidate>
+        <p><label for="al-mode">本次重点：</label><select id="al-mode"><option value="commute">交换第一对的先后</option><option value="associate">只移动括号</option><option value="free">自由选择简算计划</option></select></p>
+        <p id="al-help" class="small"></p>
+        <div id="al-plans"></div>
+        <p><label for="al-prediction">先预测两种总和：</label><select id="al-prediction"><option value="">先预测</option><option value="same">相同</option><option value="different">不同</option></select></p>
+        <p><label for="al-easier">哪一种计划对你更方便？</label><select id="al-easier"><option value="">先选择</option><option value="one">计划一</option><option value="two">计划二</option><option value="either">都方便，或没有明显差别</option></select></p>
+        <p><label for="al-reason">写出本组的简算理由：具体先合并哪两个数，为什么这样更好算？不填个人资料。</label><textarea id="al-reason" maxlength="1200"></textarea></p>
+        <button class="btn" type="submit">核对数值、预测并记录理由</button>
+      </form>
+    </div>
+    <h4>我的多组比较（最多12条）</h4><div id="al-records"></div>
+    <p class="small">先完成一次交换第一对、一次只移括号，且至少一条含负数，再打开自检。重复比较只更新理由，不增加条数。自由简算可同时用两条加法运算律。</p>
+    <button class="btn" id="al-open-guide" type="button">对照加法运算律与简算准则</button>
+    <p id="al-guide-feedback" role="status"></p>
+    <details class="more" id="al-guide" hidden><summary>教材运算律与我的应用</summary>
+      <p>教材把加法交换律 \(a+b=b+a\)、结合律 \((a+b)+c=a+(b+c)\) 用于有理数。交换第一对时，比较的是同一对加数换先后；只移括号时，加数顺序不变，先合并的一对改变。本表的有限算例是应用练习，不是对所有有理数的一般证明。</p>
+      <p>重排时每张加数卡片恰用一次，并带着原符号走。可以先合并相反数凑0，或合并能凑整数、整十的数。理由要指出本组三个数中的具体一对；不是任意换法都更快，也不一定有唯一方便的计划。</p>
+      <p>逐项自检：加数和符号有没有变？括号位置和第一步计算一致吗？两总和与预测一致吗？简算理由是否符合本组数值？系统只核数值与预测，方便程度和自由文字尚未判定正确，请自行修改。没有实际进行的纸笔或同伴活动不作认证。</p>
+    </details>
+    <button class="btn ghost" id="al-reset" type="button">清空并重做加法比较</button>
+    <p class="small">本活动练习加法交换与结合。全部参数、比较和理由只留本页内存，刷新清除，不进入学习账本。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -561,4 +602,5 @@
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+<script defer src="../assets/b7a-j2-1-addition-law-dev.js"></script>
 </body></html>

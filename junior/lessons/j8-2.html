@@ -21,8 +21,16 @@
   .result .sum { color: var(--no); font-weight: 700; }
   .tbl { border-collapse: collapse; margin: 8px 0; font-size: 15px; }
   .tbl td, .tbl th { border: 1px solid var(--line); padding: 4px 10px; text-align: center; }
+  .j82-activity form label { display:block; margin:12px 0; }
+  .j82-activity input, .j82-activity textarea, .j82-activity select { display:block; box-sizing:border-box; width:100%; min-width:0; margin-top:6px; padding:10px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:6px; }
+  .j82-activity .ctrl { display:flex; flex-wrap:wrap; gap:8px; }
+  .j82-activity [data-j82-feedback], #j82-screen, #j82-calc-record { overflow-wrap:anywhere; line-height:1.8; }
+  .j82-activity [data-j82-feedback] { border-left:3px solid var(--a); padding-left:10px; }
+  .j82-activity [data-state="wrong"] { border-color:var(--no); }
+  .j82-activity :focus-visible { outline:3px solid var(--b); outline-offset:3px; }
+  @media (min-width:700px) { .j82-fields { display:grid; grid-template-columns:1fr 1fr; gap:0 16px; } }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j8-2" data-standard="v2">
 <div class="wrap">
@@ -258,6 +266,67 @@
     <div class="result" id="out-cmp" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-cmp" type="button">重置</button></div>
   </div>
+  <div class="j82-activity" id="j82-activity">
+    <h3>④ 自己输入：立方根计算器</h3>
+    <div class="card">
+      <p>使用<b>本页立方根计算器</b>：输入被开方数，选精度，再按“∛ 计算”。依次试 \(20\)、\(-20\)、\(0\)、\(-\tfrac18\)，每次读屏幕后，自己写四舍五入的结果。它使用浏览器的立方根近似计算，不是上面的拖动图。</p>
+      <p class="small" id="j82-format">数值框支持小数、分数、括号及四则运算，乘号用 * 或 ×，幂用 ^；不会把上标当作普通数字。复杂写法可保留交教师核对。计算器范围：绝对值不超过一万亿；非零数不小于万亿分之一。</p>
+      <form id="j82-calc">
+        <label>被开方数 <input name="radicand" type="text" autocomplete="off" aria-describedby="j82-format" required></label>
+        <label>四舍五入保留小数位数 <select name="digits"><option value="2">2 位</option><option value="3">3 位</option><option value="1">1 位</option><option value="0">0 位</option></select></label>
+        <div class="ctrl"><button class="btn" type="submit">∛ 计算</button><button class="btn ghost" type="reset">重置本次输入</button></div>
+        <p data-j82-feedback hidden role="status"></p>
+      </form>
+      <form id="j82-round" hidden>
+        <p id="j82-screen" role="status"></p>
+        <label>按所选精度写近似值 <input name="approx" type="text" autocomplete="off" required></label>
+        <div class="ctrl"><button class="btn" type="submit">核对近似值并留下一行</button></div>
+        <p data-j82-feedback hidden role="status"></p>
+      </form>
+      <details class="more"><summary>本次计算记录（刷新后清空）</summary><ol id="j82-calc-record"></ol><button class="btn ghost" type="button" id="j82-clear-record">清空本次计算记录</button></details>
+    </div>
+    <h3>⑤ 先算，再写自己的发现</h3>
+    <form class="card" id="j82-explore">
+      <p>先独立填表，留一点时间比较，再写一句自己的发现。全部提交后才显示对照；不把“看过图”当作已经亲自计算。</p>
+      <div class="j82-fields">
+        <label>27 的立方根 <input name="positive" type="text" autocomplete="off" required></label>
+        <label>−64 的立方根 <input name="negative" type="text" autocomplete="off" required></label>
+        <label>0 的立方根 <input name="zero" type="text" autocomplete="off" required></label>
+      </div>
+      <label>我的发现：根的个数、符号有什么特点？<textarea name="finding" rows="3" required></textarea></label>
+      <div class="ctrl"><button class="btn" type="submit">提交计算与发现，显示对照</button><button class="btn ghost" type="reset">重新探索</button></div>
+      <p data-j82-feedback hidden role="status"></p>
+    </form>
+    <h3>⑥ 先写立方检验，再写根式结论</h3>
+    <div class="card">
+      <p>求 \(-\tfrac8{27}\) 的立方根。先写“哪个数的立方等于它”的等式（带负号的底数请加括号），再写结论。可以用 ^3 或 ³ 表示立方。</p>
+      <form id="j82-verify">
+        <label>① 因为：立方检验等式 <textarea name="equation" rows="2" required></textarea></label>
+        <div class="ctrl"><button class="btn" type="submit">先核对立方检验</button><button class="btn ghost" type="reset">重写两步</button></div>
+        <p data-j82-feedback hidden role="status"></p>
+      </form>
+      <form id="j82-conclude" hidden>
+        <label>② 所以：∛(−8/27) = <input name="root" type="text" autocomplete="off" required></label>
+        <div class="ctrl"><button class="btn" type="submit">核对根式结论</button></div>
+        <p data-j82-feedback hidden role="status"></p>
+      </form>
+    </div>
+    <h3>⑦ 报数：已知完全立方数才这样猜</h3>
+    <form class="card" id="j82-report">
+      <p>这里给出的数<b>已知是一个两位正整数的立方</b>。去掉后三位，用两个相邻整数的立方夹住剩余部分，确定根的十位；再由原数的个位判断根的个位，最后必须立方验算。这个方法不用于任意数的精确开立方。</p>
+      <p id="j82-reported"></p>
+      <div class="j82-fields">
+        <label>夹住剩余部分的下界立方，其底数 <input name="lower" type="text" autocomplete="off" required></label>
+        <label>相邻上界立方，其底数 <input name="upper" type="text" autocomplete="off" required></label>
+        <label>由个位判断：根的个位 <input name="ones" type="text" autocomplete="off" required></label>
+        <label>我报出的两位整数 <input name="root" type="text" autocomplete="off" required></label>
+      </div>
+      <label>立方验算等式 <textarea name="equation" rows="2" required></textarea></label>
+      <div class="ctrl"><button class="btn" type="submit">核对判断与验算</button><button class="btn ghost" type="reset">重试这题</button><button class="btn ghost" id="j82-next" type="button">换一个已知完全立方数</button></div>
+      <p data-j82-feedback hidden role="status"></p>
+    </form>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -513,4 +582,151 @@
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+<script id="j82-activity-script">
+(function () {
+  "use strict";
+  // Exact rational arithmetic keeps equivalent finite answers equal. Never NFKC-fold exponents.
+  function rational(n, d) {
+    if (!d) throw Error("zero denominator");
+    if (d < 0n) { n = -n; d = -d; }
+    var a = n < 0n ? -n : n, b = d;
+    while (b) { var t = a % b; a = b; b = t; }
+    n /= a; d /= a;
+    if (String(n).length > 80 || String(d).length > 80) throw Error("range");
+    return { n: n, d: d };
+  }
+  function eq(a, b) { return a.n === b.n && a.d === b.d; }
+  function value(source) {
+    var s = source.trim().replace(/[０-９]/g, function (c) { return String(c.charCodeAt(0) - 65296); })
+      .replace(/[−﹣－]/g, "-").replace(/[（]/g, "(").replace(/[）]/g, ")")
+      .replace(/[×·]/g, "*").replace(/[÷⁄／]/g, "/").replace(/³/g, "^3").replace(/\s/g, "");
+    if (!s || s.length > 180 || /[^0-9.+*/^()-]/.test(s)) throw Error("notation");
+    var at = 0;
+    function node(v, cubeBase) { return { v: v, cubeBase: cubeBase }; }
+    function atom() {
+      if (s[at] === "(") { at++; var x = sum(); if (s[at++] !== ")") throw Error("parenthesis"); return x; }
+      var m = /^(?:\d+(?:\.\d*)?|\.\d+)/.exec(s.slice(at));
+      if (!m || m[0].replace(".", "").length > 18) throw Error("number");
+      at += m[0].length;
+      var decimal = m[0].split("."), digits = decimal[1] || "";
+      return node(rational(BigInt((decimal[0] || "0") + digits), 10n ** BigInt(digits.length)));
+    }
+    function power() {
+      var a = atom();
+      if (s[at] === "^") {
+        at++; var m = /^[+-]?\d+/.exec(s.slice(at));
+        if (!m || Math.abs(Number(m[0])) > 6) throw Error("exponent");
+        at += m[0].length; var e = Number(m[0]);
+        if (e === 0 && a.v.n === 0n) throw Error("undefined power");
+        var n = a.v.n ** BigInt(Math.abs(e)), d = a.v.d ** BigInt(Math.abs(e));
+        return node(e < 0 ? rational(d, n) : rational(n, d), e === 3 ? a.v : undefined);
+      }
+      return a;
+    }
+    function unary() {
+      if (s[at] === "+") { at++; return unary(); }
+      if (s[at] === "-") { at++; var a = unary(); return node(rational(-a.v.n, a.v.d)); }
+      return power();
+    }
+    function product() {
+      var a = unary();
+      while (s[at] === "*" || s[at] === "/") {
+        var op = s[at++], b = unary();
+        a = node(op === "*" ? rational(a.v.n * b.v.n, a.v.d * b.v.d) : rational(a.v.n * b.v.d, a.v.d * b.v.n));
+      }
+      return a;
+    }
+    function sum() {
+      var a = product();
+      while (s[at] === "+" || s[at] === "-") {
+        var op = s[at++], b = product();
+        a = node(rational(a.v.n * b.v.d + (op === "+" ? 1n : -1n) * b.v.n * a.v.d, a.v.d * b.v.d));
+      }
+      return a;
+    }
+    var result = sum(); if (at !== s.length) throw Error("trailing notation"); return result;
+  }
+  function number(s) { return value(s).v; }
+  function target(n, d) { return rational(BigInt(n), BigInt(d || 1)); }
+  function field(form, name) { return form.elements.namedItem(name).value; }
+  function feedback(form, message, status) {
+    var p = form.querySelector("[data-j82-feedback]"); p.textContent = message; p.hidden = false; p.dataset.state = status;
+  }
+  function clear(form) { var p = form.querySelector("[data-j82-feedback]"); p.textContent = ""; p.hidden = true; delete p.dataset.state; }
+  var manual = "这种写法或数值范围本工具不能可靠自动核对；请保留原式，与教师核对。这不表示你的数学答案错误。";
+  function bind(form, submit, invalidate) {
+    form.addEventListener("submit", function (e) { e.preventDefault(); clear(form); try { submit(); } catch (error) { feedback(form, manual, "manual"); } });
+    function changed() { clear(form); if (invalidate) invalidate(); }
+    form.addEventListener("input", changed); form.addEventListener("change", function (e) { if (e.target.tagName === "SELECT") changed(); }); form.addEventListener("reset", changed);
+    form.addEventListener("keydown", function (e) { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); form.requestSubmit(); } });
+  }
+  function get(id) { return document.getElementById(id); }
+  var calc = get("j82-calc"), round = get("j82-round"), current = null;
+  function invalidateCalc() { current = null; round.hidden = true; round.reset(); get("j82-screen").textContent = ""; }
+  bind(calc, function () {
+    invalidateCalc(); var a = number(field(calc, "radicand")), v = Number(a.n) / Number(a.d);
+    if (Math.abs(v) > 1e12 || (v !== 0 && Math.abs(v) < 1e-12)) throw Error("calculator range");
+    var r = Math.cbrt(v), digits = Number(field(calc, "digits"));
+    current = { expression: field(calc, "radicand"), radicand: a, root: r, digits: digits };
+    get("j82-screen").textContent = "本页计算器屏幕：∛(" + current.expression + ") ≈ " + Number(r.toPrecision(12)) + "（有限显示）。请四舍五入保留 " + digits + " 位小数。";
+    round.hidden = false;
+  }, invalidateCalc);
+  bind(round, function () {
+    if (!current) return;
+    // Compare exact cubes at rounding boundaries; binary float display is not a tie oracle.
+    var scale = Math.pow(10, current.digits), mag = Math.floor(Math.abs(current.root) * scale);
+    var a = current.radicand, abs = a.n < 0n ? -a.n : a.n, den = a.d;
+    function compare(k, divisor) { return abs * BigInt(divisor) ** 3n - BigInt(k) ** 3n * den; }
+    while (mag > 0 && compare(mag, scale) < 0n) mag--;
+    while (compare(mag + 1, scale) >= 0n) mag++;
+    if (compare(2 * mag + 1, 2 * scale) >= 0n) mag++;
+    var n = BigInt(current.root < 0 ? -mag : mag);
+    var expected = rational(n, BigInt(scale)), actual = number(field(round, "approx"));
+    if (!eq(actual, expected)) { feedback(round, "还需调整：看保留位的下一位，按四舍五入取值，负数先处理绝对值再还原负号。请重试。", "wrong"); return; }
+    var formatted = (Number(n) / scale).toFixed(current.digits), li = document.createElement("li");
+    li.textContent = "∛(" + current.expression + ")，屏幕约 " + Number(current.root.toPrecision(12)) + "；我取 " + field(round, "approx") + "（保留 " + current.digits + " 位）。";
+    get("j82-calc-record").appendChild(li); feedback(round, "数值核对正确，约为 " + formatted + "；有限显示和四舍五入值都不应写成开不尽立方根的精确等式。", "correct");
+  });
+  get("j82-clear-record").onclick = function () { get("j82-calc-record").replaceChildren(); };
+  var explore = get("j82-explore");
+  bind(explore, function () {
+    var ok = eq(number(field(explore, "positive")), target(3)) && eq(number(field(explore, "negative")), target(-4)) && eq(number(field(explore, "zero")), target(0));
+    if (!ok) { feedback(explore, "表内还有数值不符。把写出的根分别立方，检查能否回到27、−64、0，再试一次。", "wrong"); return; }
+    feedback(explore, "表内数值正确：3³=27，(−4)³=−64，0³=0。你的文字归纳已保留，请对照：正数、负数、零各有一个立方根；正数的根为正，负数的根为负，零的根是零。文字理由请自己或与教师核对，本页不凭关键词判定说理已掌握。", "compare");
+  });
+  // An exact equality alone is not evidence of having written a cube check.
+  function cubeCheck(source, root, cube) {
+    var parts = source.replace(/＝/g, "=").split("="); if (parts.length !== 2) throw Error("equation");
+    var left = value(parts[0]), right = value(parts[1]);
+    if (!eq(left.v, cube) || !eq(right.v, cube)) return "wrong";
+    return (left.cubeBase && eq(left.cubeBase, root)) || (right.cubeBase && eq(right.cubeBase, root)) ? "correct" : "manual";
+  }
+  var verify = get("j82-verify"), conclude = get("j82-conclude"), processStatus = null;
+  function invalidateVerify() { processStatus = null; conclude.hidden = true; conclude.reset(); }
+  bind(verify, function () {
+    var result = cubeCheck(field(verify, "equation"), target(-2, 3), target(-8, 27));
+    if (result === "wrong") { feedback(verify, "等式的数值不符：检查负号，以及分子、分母是否分别立方。先修正检验过程。", "wrong"); return; }
+    processStatus = result; conclude.hidden = false;
+    feedback(verify, result === "correct" ? "立方检验正确。现在根据这条等式写根式结论。" : "等式数值相符；连乘、分步或其他检验写法请与教师核对是否表达了立方过程，再写结论。", result);
+  }, invalidateVerify);
+  bind(conclude, function () {
+    if (!processStatus) return;
+    if (!eq(number(field(conclude, "root")), target(-2, 3))) { feedback(conclude, "结论的数值不符。回看已写的立方检验，根只有一个，符号也要保留。", "wrong"); return; }
+    feedback(conclude, "根值正确：因为(−2/3)³=−8/27，所以∛(−8/27)=−2/3。" + (processStatus === "manual" ? "你的检验表达仍需人工核对。" : "两步数值与立方过程已核对。"), processStatus === "manual" ? "manual" : "correct");
+  });
+  var report = get("j82-report"), reports = [54872, 357911, 110592], index = 0;
+  function showReported() { get("j82-reported").textContent = "报数：" + reports[index] + "（已知完全立方数）。"; }
+  bind(report, function () {
+    var cube = reports[index], root = Math.round(Math.cbrt(cube)), tens = Math.floor(root / 10), ones = root % 10;
+    if (!eq(number(field(report, "lower")), target(tens)) || !eq(number(field(report, "upper")), target(tens + 1))) { feedback(report, "十位判断需重试：去掉后三位，找下界≤剩余部分<上界的两个相邻整数立方，再取下界的底数作十位。", "wrong"); return; }
+    if (!eq(number(field(report, "ones")), target(ones)) || !eq(number(field(report, "root")), target(root))) { feedback(report, "个位或合成的两位数还不符；比较0到9的立方个位，再把十位和个位合起来。", "wrong"); return; }
+    var result = cubeCheck(field(report, "equation"), target(root), target(cube));
+    if (result === "wrong") { feedback(report, "报数判断相符，但立方验算等式的数值不符，请重新计算后再确认。", "wrong"); return; }
+    feedback(report, tens + "³ ≤ " + Math.floor(cube / 1000) + " < " + (tens + 1) + "³，十位为" + tens + "；" + ones + "³的个位为" + cube % 10 + "，个位为" + ones + "。" + root + "³=" + cube + "。" + (result === "manual" ? "数值相符，你的检验写法需人工核对。" : "判断和立方验算正确。"), result);
+  });
+  get("j82-next").onclick = function () { index = (index + 1) % reports.length; report.reset(); showReported(); };
+  showReported();
+})();
+</script>
+
 </body></html>

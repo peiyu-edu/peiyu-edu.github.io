@@ -24,7 +24,7 @@
     function renderBooks(selected, target) {
       for (const book of selected) {
         const group = node('section', '', target); node('h2', book, group);
-        if (data.lessons.some(item => item.bookTitle === book && item.placeholder)) node('p', '本册目录暂按旧版占位，待新版核对。', group);
+        if (data.lessons.some(item => item.bookTitle === book && item.placeholder)) node('p', '本册按旧版教材编排。', group);
         const units = data.units.filter(unit => unit.bookTitle === book);
         for (const unit of units) {
           const details = node('details', '', group); node('summary', unit.unitTitle, details);

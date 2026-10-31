@@ -20,8 +20,19 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
+
+  #water-lab input, #water-lab textarea, #water-lab select { box-sizing:border-box; max-width:100%; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); padding:6px; }
+  #water-lab textarea { display:block; width:100%; min-height:90px; }
+  .water-fields { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+  .water-fields label { display:grid; gap:4px; }
+  .water-fields input { width:130px; }
+  #water-lab table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:15px; }
+  #water-lab th, #water-lab td { border:1px solid var(--line); padding:6px 3px; text-align:center; overflow-wrap:anywhere; }
+  #water-lab td input { width:100%; min-width:0; }
+  #water-groups p { overflow-wrap:anywhere; }
+  #water-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j24-2" data-standard="v2">
 <div class="wrap">
@@ -243,6 +254,41 @@
     <div class="result" id="out-sh" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="add-sh" type="button" aria-pressed="false">加入一个等于平均数的数</button> <button class="btn ghost" id="reset-sh" type="button">重置</button></div>
   </div>
+
+  <h3>④ 用水数据探究：自己列表、计算，再比较</h3>
+  <div class="card" id="water-lab">
+    <p>为同一种用途自拟多组“一天用水量”，每个数代表一次相同时长的观察，不需要姓名或个人资料。先用2—5个数的小组按定义手算，再录入6—20个数，用本页计算工具对照。重复值和0都可保留，不把工具填表说成独立手算完成。</p>
+    <p class="small" id="water-format">每项用逗号或换行分隔，不留空项或尾逗号；空格不能分隔两个数。数值支持整数、小数、整数分数，首尾与分数线两侧可空格，数字内部不能空格；支持全角数字/负号“−”，不支持指数、算式或单位词。每组1—20项，水量在0—10000之间、约分后分母不超过100。数值每个整数块最多120位、小数最多100位；核对精确值，不以近似值代替。</p>
+    <form id="water-load" novalidate>
+      <p><label for="water-data">本组水量（全部用下面同一个单位）</label><textarea id="water-data" aria-describedby="water-format"></textarea></p>
+      <div class="ctrl"><label>单位<select id="water-unit"><option value="L">升（L）</option><option value="m3">立方米（m³）</option></select></label><button class="btn" type="submit">建立本组计算表</button></div>
+    </form>
+    <p id="water-feedback" role="status"></p>
+    <div id="water-calc" hidden>
+      <form id="water-check" novalidate>
+        <p id="water-caption"></p>
+        <p class="small">均值和离差的单位同水量；离差平方、平方和及方差的单位是水量单位的平方。可先用自己的计算器，逐行核对。</p>
+        <div class="water-fields"><label>你算的均值<input id="water-mean" aria-describedby="water-format"></label></div>
+        <table><thead><tr><th scope="col">序号</th><th scope="col">水量</th><th scope="col">离差</th><th scope="col">离差平方</th></tr></thead><tbody id="water-rows"></tbody></table>
+        <div class="water-fields"><label>离差平方和<input id="water-total" aria-describedby="water-format"></label><label>按教材定义选的除数<input id="water-divisor" aria-describedby="water-format"></label><label>你算的方差<input id="water-variance" aria-describedby="water-format"></label></div>
+        <div class="ctrl"><button class="btn" type="submit">核对并记录本组</button><button class="btn ghost" id="water-tool" type="button" disabled>计算较多数据的逐项参考</button></div>
+        <p class="small">工具按钮在一组2—5项的逐项填写核对后开放给6—20项组。先选好教材定义中的除数，再按按钮。工具填入的参考只供对照，记录会注明“工具计算”。</p>
+      </form>
+    </div>
+    <h4>本轮计算记录</h4><div id="water-groups"></div>
+    <form id="water-compare" novalidate>
+      <div class="water-fields"><label>左边选一组<select id="water-left"><option value="">先记录数据组</option></select></label><label>右边另选一组<select id="water-right"><option value="">先记录数据组</option></select></label><label>方差数值较小的是<select id="water-choice"><option value="">先判断</option><option value="left">左边所选组</option><option value="right">右边所选组</option><option value="equal">两组相等</option></select></label></div>
+      <p><label for="water-explain">写出两组均值、方差及实际意义：单位与统计时长可比吗？平均水平和波动分别说明什么？还有哪些限制？</label><textarea id="water-explain" maxlength="1800"></textarea></p>
+      <button class="btn" type="submit">核对数值比较并记录解释</button>
+    </form>
+    <p id="water-compare-feedback" role="status"></p>
+    <details class="more" id="water-guide" hidden><summary>解释准则：请自行对照修改</summary>
+      <p>① 数据同用途、同统计时长且单位一致吗？不同单位须先换算，再重新录入，不能直接比较方差数值。② 均值描述平均用水水平，方差描述相对各自均值的离散程度；本课按数据个数n相除。③ 两组均值相同或接近时，才宜直接结合方差谈“更稳定”；均值相差很大时，不只凭方差下结论。④ 方差小不等于更节水，更不能由这一次自拟或观察的数据推断某措施造成了变化。⑤ 解释只保存在本页，系统尚未判定文字正确；没有随机抽样依据就不推广到总体。</p>
+    </details>
+    <div class="ctrl"><button class="btn ghost" id="water-reset" type="button">清空并重做用水探究</button></div>
+    <p class="small">数据、计算和解释只留本页内存，刷新清除；不输入任何人员身份资料。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -517,6 +563,83 @@
   drawAll();
   new MutationObserver(function () { focusV = focusQ = -1; focusK = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+
+<script id="water-activity-script">
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById("water-" + id); }
+  function abs(n) { return n < 0n ? -n : n; }
+  function rat(n, d) { if (!d) throw Error("分母不能为0。"); if (d < 0n) { n = -n; d = -d; } var a = abs(n), b = d; while (b) { var r = a % b; a = b; b = r; } return { n: n / a, d: d / a }; }
+  function num(raw) {
+    var s = raw.replace(/[０-９]/g, function (c) { return String(c.charCodeAt(0) - 65296); }).replace(/[−－]/g, "-").replace(/＋/g, "+").replace(/／/g, "/").replace(/．/g, ".").trim();
+    if (!s || s.length > 300) throw Error("请按说明填写长度不超过300的精确数值。");
+    var p = s.split("/"), m;
+    if (p.length === 2 && p.every(function (v) { return /^[+-]?\d{1,120}$/.test(v.trim()); })) return rat(BigInt(p[0].trim()), BigInt(p[1].trim()));
+    if (p.length !== 1 || !(m = /^([+-]?)(\d{0,120})(?:\.(\d{1,100}))?$/.exec(s)) || !(m[2] || m[3])) throw Error("数值格式不符；不能拆开数字、输入算式或指数。");
+    var tail = m[3] || ""; return rat(BigInt((m[1] === "-" ? "-" : "") + (m[2] || "0") + tail), 10n ** BigInt(tail.length));
+  }
+  function add(a, b) { return rat(a.n * b.d + b.n * a.d, a.d * b.d); }
+  function subtract(a, b) { return add(a, { n: -b.n, d: b.d }); }
+  function square(a) { return rat(a.n * a.n, a.d * a.d); }
+  function over(a, n) { return rat(a.n, a.d * BigInt(n)); }
+  function eq(a, b) { return a.n === b.n && a.d === b.d; }
+  function show(a) { return a.d === 1n ? String(a.n) : a.n + "/" + a.d; }
+  var current = null, groups = [], smallDone = false;
+  function message(id, text, state) { $(id).textContent = text; if (state) $(id).dataset.state = state; else delete $(id).dataset.state; }
+  function clearCompare() { message("compare-feedback", ""); $("guide").hidden = true; $("guide").open = false; }
+  function clearCalc() { current = null; $("calc").hidden = true; $("rows").textContent = ""; ["mean", "total", "divisor", "variance"].forEach(function (id) { $(id).value = ""; }); message("feedback", ""); clearCompare(); }
+  function stats(data) { var total = data.reduce(add, rat(0n, 1n)), mean = over(total, data.length), deviations = data.map(function (v) { return subtract(v, mean); }), squares = deviations.map(square), ss = squares.reduce(add, rat(0n, 1n)); return { data: data, mean: mean, deviations: deviations, squares: squares, ss: ss, variance: over(ss, data.length) }; }
+  function cell(tr, text) { var td = document.createElement("td"); td.textContent = text; tr.appendChild(td); return td; }
+  function unitName(value) { return value === "L" ? "L" : "m³"; }
+  $("load").onsubmit = function (e) {
+    e.preventDefault(); clearCalc();
+    try { var parts = $("data").value.trim().replace(/\r\n?/g, "\n").split(/[,，\n]/);
+      if (parts.length < 1 || parts.length > 20 || parts.some(function (v) { return !v.trim(); })) throw Error("每组须有1—20项，逗号或换行间不能有空项。");
+      var data = parts.map(num); if (data.some(function (v) { return v.n < 0n || v.n > 10000n * v.d || v.d > 100n; })) throw Error("水量须在0—10000之间，约分后分母不超过100；负水量不能入表。");
+      current = stats(data); current.unit = $("unit").value; current.tool = false;
+      $("caption").textContent = "本组共 " + data.length + " 项；水量单位 " + unitName(current.unit) + "。以下只用精确数或分数。";
+      data.forEach(function (v, i) { var tr = document.createElement("tr"); cell(tr, i + 1); cell(tr, show(v)); ["d", "q"].forEach(function (kind) { var input = document.createElement("input"); input.id = "water-" + kind + "-" + i; input.setAttribute("aria-label", "第" + (i + 1) + "项" + (kind === "d" ? "离差" : "离差平方")); input.setAttribute("aria-describedby", "water-format"); input.addEventListener("input", function () { message("feedback", ""); }); cell(tr, "").appendChild(input); }); $("rows").appendChild(tr); });
+      $("calc").hidden = false; $("tool").disabled = !(smallDone && data.length > 5);
+      message("feedback", "计算表已建立，请先填写均值、各项离差与平方和，再选除数、算方差。");
+    } catch (err) { message("feedback", err.message, "retry"); }
+  };
+  function divisorOK() { if (!current) throw Error("先建立当前数据组的计算表。"); if (!eq(num($("divisor").value), rat(BigInt(current.data.length), 1n))) throw Error("除数与本课方差定义不符，请回看“离差平方的平均数”，不能改用n−1。"); }
+  $("tool").onclick = function () {
+    try { if (!smallDone || !current || current.data.length <= 5) throw Error("先完成一组2—5项的逐项填写核对，再对6—20项组使用计算参考。"); divisorOK();
+      $("mean").value = show(current.mean); $("total").value = show(current.ss); $("variance").value = show(current.variance);
+      current.deviations.forEach(function (v, i) { $("d-" + i).value = show(v); $("q-" + i).value = show(current.squares[i]); }); current.tool = true;
+      message("feedback", "工具参考已列出：请对照每项及教材除数后记录。这不表示已经独立手算。", "reference");
+    } catch (err) { message("feedback", err.message, "retry"); }
+  };
+  $("check").onsubmit = function (e) {
+    e.preventDefault();
+    try { divisorOK(); if (current.recorded) throw Error("本组已经记录；请修改数据并建立下一组。");
+      if (!eq(num($("mean").value), current.mean)) throw Error("均值还需核对：先求总量，再除以数据个数。");
+      current.deviations.forEach(function (v, i) { if (!eq(num($("d-" + i).value), v) || !eq(num($("q-" + i).value), current.squares[i])) throw Error("第" + (i + 1) + "项的离差或平方不符；离差用本项减均值，平方不能带负号。"); });
+      if (!eq(num($("total").value), current.ss) || !eq(num($("variance").value), current.variance)) throw Error("平方和或方差不符：先加各离差平方，再按教材定义相除。请填精确结果。");
+      if (!current.tool && current.data.length >= 2 && current.data.length <= 5) smallDone = true;
+      var group = { n: current.data.length, unit: current.unit, mean: current.mean, variance: current.variance }, index = groups.length; groups.push(group); current.recorded = true;
+      var p = document.createElement("p"); p.textContent = "组" + (index + 1) + "：" + group.n + "项，单位" + unitName(group.unit) + "，均值 " + show(group.mean) + "，离差平方和 " + show(current.ss) + "，方差 " + show(group.variance) + "（" + unitName(group.unit) + "）²；" + (current.tool ? "工具计算" : "逐项填写核对") + "。"; $("groups").appendChild(p);
+      ["left", "right"].forEach(function (id) { var option = document.createElement("option"); option.value = index; option.textContent = "组" + (index + 1); $(id).appendChild(option); });
+      message("feedback", "本组数值已核对并记录；离差和为0可作验算。可以修改数据建立下一组。", "ok"); clearCompare();
+    } catch (err) { message("feedback", err.message, "retry"); }
+  };
+  $("compare").onsubmit = function (e) {
+    e.preventDefault(); clearCompare();
+    try { var a = groups[$("left").value], b = groups[$("right").value]; if (!a || !b || $("left").value === $("right").value) throw Error("先记录并选择两个不同的数据组。");
+      if (a.unit !== b.unit) throw Error("两组单位不同，不能直接比较方差数值。先换成同单位，再重新录入计算。");
+      var difference = a.variance.n * b.variance.d - b.variance.n * a.variance.d, expected = difference < 0n ? "left" : difference > 0n ? "right" : "equal";
+      if ($("choice").value !== expected) throw Error("方差数值的比较还需核对；数据个数不同时也要比较除以n后的结果。");
+      if (!$("explain").value.trim()) throw Error("先写下两组均值、方差和实际意义，再对照解释准则。");
+      message("compare-feedback", "方差数值排序核对一致，解释仅保存、尚未判定正确。" + (eq(a.mean, b.mean) ? "两组均值相同，可结合方差描述本组数据的波动。" : "两组均值不同；这里只确认方差数值排序，不单凭它判断谁更稳定或更节水。") + "请展开准则自查口径和结论边界。", "recorded"); $("guide").hidden = false;
+    } catch (err) { message("compare-feedback", err.message, "retry"); }
+  };
+  $("data").addEventListener("input", clearCalc); $("unit").addEventListener("change", clearCalc);
+  ["mean", "total", "divisor", "variance"].forEach(function (id) { $(id).addEventListener("input", function () { message("feedback", ""); }); });
+  ["left", "right", "choice"].forEach(function (id) { $(id).addEventListener("change", clearCompare); }); $("explain").addEventListener("input", clearCompare);
+  $("reset").onclick = function () { $("load").reset(); $("compare").reset(); groups = []; smallDone = false; $("groups").textContent = ""; ["left", "right"].forEach(function (id) { $(id).innerHTML = '<option value="">先记录数据组</option>'; }); clearCalc(); };
 })();
 </script>
 </body></html>

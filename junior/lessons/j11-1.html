@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b7b-j11-1-self-inequality-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -20,7 +21,20 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+
+<style id="j11-self-style">
+  #j11-self { overflow-wrap:anywhere; }
+  #j11-self .self-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr)); gap:12px; margin:12px 0; }
+  #j11-self label { display:block; }
+  #j11-self input, #j11-self select, #j11-self textarea { box-sizing:border-box; width:100%; max-width:100%; min-height:44px; margin-top:5px; padding:8px; border:1px solid var(--muted); border-radius:6px; color:var(--fg); background:var(--card); font:inherit; }
+  #j11-self textarea { min-height:90px; }
+  #j11-self button { min-height:44px; margin:4px 6px 4px 0; white-space:normal; }
+  #j11-self svg { display:block; width:100%; height:auto; background:var(--card); }
+  #j11-self svg [role="button"] { cursor:pointer; }
+  #j11-self :focus-visible { outline:3px solid var(--a); outline-offset:3px; }
+  #j11-self .self-feedback { min-height:1.8em; margin:8px 0; font-weight:600; }
+</style>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j11-1" data-standard="v2">
 <div class="wrap">
@@ -269,6 +283,65 @@
     <div class="result" id="out-rng" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-rng" type="button">重置</button></div>
   </div>
+
+<!-- j11-self-start -->
+<div id="j11-self">
+  <h3>④ 自己造一幅解集图</h3>
+  <div class="card" id="j11-draw-card">
+    <p>这次由你决定数轴的原点、单位长度和解集画法。正方向已约定向右，刻度等距。先选落笔对象，再点图上的刻度；也可选刻度编号后按“落笔”。单位点表示数 1，须在你选的原点右侧。</p>
+    <label>作图任务<select id="j11-draw-task"><option value="0">x ≤ −1.5</option><option value="1">x &gt; 2</option><option value="2">x ≥ 0</option><option value="3">x &lt; −2</option></select></label>
+    <div class="self-fields">
+      <label>落笔对象<select id="j11-tool"><option value="">请选择</option><option value="origin">原点</option><option value="unit">单位点（数 1）</option><option value="end">解集端点</option></select></label>
+      <label>刻度编号（从左到右）<select id="j11-tick"><option value="">请选择</option><option value="0">1</option><option value="1">2</option><option value="2">3</option><option value="3">4</option><option value="4">5</option><option value="5">6</option><option value="6">7</option><option value="7">8</option><option value="8">9</option><option value="9">10</option><option value="10">11</option><option value="11">12</option><option value="12">13</option></select></label>
+    </div>
+    <button type="button" class="btn ghost" id="j11-place">落笔</button>
+    <svg id="j11-drawing" viewBox="0 0 560 210" role="group" aria-label="自己构造的数轴作品"></svg>
+    <p class="small" id="j11-drawing-note" aria-live="polite"></p>
+    <div class="self-fields">
+      <label>端点画法<select id="j11-end-style"><option value="">请选择</option><option value="open">空心圈</option><option value="closed">实心点</option></select></label>
+      <label>射线方向<select id="j11-ray"><option value="">请选择</option><option value="left">向左</option><option value="right">向右</option></select></label>
+    </div>
+    <button type="button" class="btn" id="j11-check-draw">核对作品</button><button type="button" class="btn ghost" id="j11-reset-draw">清空作品</button>
+    <p class="self-feedback" id="j11-draw-feedback" aria-live="polite"></p>
+    <p class="small">射线表示沿这个方向延伸的所有数，也包括刻度之间的数，不只是几个圆点。代入一个点只能检验它是不是一个解；即使试过几个点，也不能据此证明已经找全解集。</p>
+  </div>
+
+  <h3>⑤ 同一段路，自己从两种量列式</h3>
+  <div class="card" id="j11-trip-card">
+    <p>一辆车要匀速行驶 96 km，要求所用时间不超过 3 h（没有中途停车）。设速度为 v km/h。速度必须为正，规定的 3 h 也为正。请先写速度的取值前提，再分别比较“3 h 能行驶的路程与 96 km”和“走完 96 km 所需时间与 3 h”。<b>只列不等式，不求速度范围。</b></p>
+    <p class="small" id="j11-trip-syntax">输入约定：用 v；数用普通整数或有限小数。路程式的一边用“数字*v”“数字v”或“v*数字”，另一边用数字；时间式的一边用“数字/v”，另一边用数字。可交换两边。不等号可用 &lt;、&gt;、&lt;=、&gt;=、≤、≥。空白可放在词元之间，不能把一个数字拆开。每个数最多 48 字符，每式最多 180 字符。不输入单位、上标、算式求值或已解出的速度范围；其他写法请按下方准则自行核对。</p>
+    <div class="self-fields">
+      <label>速度的取值前提<input id="j11-speed-domain" type="text" autocomplete="off" spellcheck="false" aria-describedby="j11-trip-syntax"></label>
+      <label>从路程列式（两边都是 km）<input id="j11-distance" type="text" autocomplete="off" spellcheck="false" aria-describedby="j11-trip-syntax"></label>
+      <label>从时间列式（两边都是 h）<input id="j11-time" type="text" autocomplete="off" spellcheck="false" aria-describedby="j11-trip-syntax"></label>
+    </div>
+    <button type="button" class="btn" id="j11-check-trip">核对列式</button><button type="button" class="btn ghost" id="j11-reset-trip">清空列式</button>
+    <p class="self-feedback" id="j11-trip-feedback" aria-live="polite"></p>
+    <p class="small">比较准则：路程＝速度×时间，时间＝路程÷速度；两边单位必须相同；“不超过”是否含恰好用完 3 h？正速度保证除数不为 0。两式描述同一要求，但从不同的量出发；含字母分母的式子本节只列，不继续解。</p>
+  </div>
+
+  <h3>⑥ 注水：代数范围还要回到实际意义</h3>
+  <div class="card" id="j11-water-card">
+    <p>一个容量为 18 L 的空容器，以恒定 2.5 L/min 的速度注水，不排水，到装满即停止。设从开始到停止的已注水时间为 t min，已注入水的体积为 V L，因此 V＝2.5t。这里时间和水量都可连续变化，不要求整数。</p>
+    <p>先写“不溢出”这一条条件经性质变形得到的 t 的代数范围，再写 V 和 t 的完整实际范围。后两项要把非负和上界同时连写，不能只写上界。</p>
+    <p class="small" id="j11-water-syntax">输入约定：字母区分大小写，使用 t、V。用一个或两个同向不等号连写，端点用普通整数、有限小数或整数/正整数分数（分数内部不留空格）。只忽略两端空白及不等号旁空白，不把拆开的数字拼在一起。每个数最多 48 字符，每式最多 180 字符。按题意写精确值，不四舍五入。</p>
+    <div class="self-fields">
+      <label>只由“不溢出”得到的 t 的代数范围（min）<input id="j11-water-algebra" type="text" autocomplete="off" spellcheck="false" aria-describedby="j11-water-syntax"></label>
+      <label>V 的完整实际范围（L，连写）<input id="j11-water-volume" type="text" autocomplete="off" spellcheck="false" aria-describedby="j11-water-syntax"></label>
+      <label>t 的完整实际范围（min，连写）<input id="j11-water-time" type="text" autocomplete="off" spellcheck="false" aria-describedby="j11-water-syntax"></label>
+    </div>
+    <button type="button" class="btn" id="j11-check-water">核对范围</button><button type="button" class="btn ghost" id="j11-reset-water">清空范围</button>
+    <p class="self-feedback" id="j11-water-feedback" aria-live="polite"></p>
+  </div>
+
+  <div class="card">
+    <label>我的解释：射线为什么不只表示整数？两个行程式的单位如何对齐？注水为什么还要补实际限制？<textarea id="j11-reflection"></textarea></label>
+    <button type="button" class="btn ghost" id="j11-self-review">显示解释自核准则</button><button type="button" class="btn ghost" id="j11-reset-reflection">清空解释</button>
+    <p id="j11-review-feedback" aria-live="polite"></p>
+    <p class="small">这段解释由你按准则复核，也可向同伴说明。程序不判断任意文字是否正确，不记录掌握情况，也不认证实物注水或同伴讨论已经发生。</p>
+  </div>
+</div>
+<!-- j11-self-end -->
 </section>
 
 <section class="step" data-title="练一练">

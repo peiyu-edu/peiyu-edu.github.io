@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b7b-j11-3-self-system-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -19,8 +20,17 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+
+  #self-system-dev label { display:block; margin:10px 0; line-height:1.7; }
+  #self-system-dev input:not([type=checkbox]), #self-system-dev select, #self-system-dev textarea { display:block; box-sizing:border-box; width:100%; max-width:100%; padding:9px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:5px; }
+  #self-system-dev input[type=checkbox] { width:20px; height:20px; vertical-align:middle; margin-right:8px; }
+  #self-system-dev fieldset { min-width:0; border:1px solid var(--line); margin:12px 0; padding:12px; }
+  #self-system-dev button { margin:5px; min-height:44px; white-space:normal; }
+  #self-system-dev svg { width:100%; height:auto; touch-action:pan-y; }
+  #self-system-dev :focus-visible { outline:3px solid var(--fg); outline-offset:3px; }
+  #self-system-dev [role=status] { min-height:2em; overflow-wrap:anywhere; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j11-3" data-standard="v2">
 <div class="wrap">
@@ -264,6 +274,32 @@
     <svg class="fig" id="fig-chain" viewBox="0 0 560 270" role="img" aria-label="连写不等式拆成两个后的公共部分"></svg>
     <div class="result" id="out-chain" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-chain" type="button">重置</button></div>
+  </div>
+
+  <div class="card" id="self-system-dev" aria-labelledby="ss-title">
+    <h3 id="ss-title">自主完成：分别解，再亲画，再归纳</h3>
+    <p>先在纸上或下框写两式各自的变形依据，再输入合并行及解集。程序核对这两行的数学结果；文字过程请自己或老师逐步核看。</p>
+    <p class="small">输入约定：字母用 x。合并行只写“数字系数x &gt; 数”等关系；最终写“x ≥ 数”等关系。支持 &gt;、&lt;、≥、≤、&gt;=、&lt;=。数值支持整数、至多三位小数、整数/正整数；不支持括号、指数或内部拼接空格。不要用有限几个代入值代替一般推导。</p>
+    <div id="ss-work"></div>
+    <h4>在同一数轴上亲画三个范围</h4>
+    <p>依次设置①、②、公共部分的端点、空实心与方向。可以选中要设置的端点后点数轴（半单位刻度），也可用输入框键入精确分数或小数；全部控件支持键盘。三行初始空白，按“画出我的输入”查看自己的作品，程序不会替你填答案。没有公共点选对应形状，单点自动实心。</p>
+    <div id="ss-drawing"></div>
+    <details class="more"><summary>解题过程自核准则（不代替自主推导）</summary>
+      <p>①②是否分别写出等价变形？两边同加减后方向是否保留？除数是否非零、正负是否已判断，负数乘除是否反向？是否画在同一数轴？端点是否满足两个原式？公共部分之外的数为何至少不满足一式？最后是否回到题目所问的实数或整数？代入端点能帮助排错，但几个代入值不能证明全体解集。</p>
+    </details>
+    <div id="ss-reflect">
+      <h4>回头自己归纳</h4>
+      <label for="ss-reflection">用自己的话写解组的基本过程，以及数轴在其中帮你解决了什么问题。</label>
+      <textarea id="ss-reflection" rows="4"></textarea>
+      <p id="ss-reflect-status" role="status"></p>
+    </div>
+    <h3>分同一批书：比较两种设元方法（原创）</h3>
+    <p>把一批书分给若干名同学。每人分 3 本，还剩 5 本；若每人分 4 本，所缺的书至少 1 本、至多 3 本。求所有可能的人数和书本数。人数、书本数都是正整数。</p>
+    <p>分别设人数、设书本数各做一次：写出未知数的单位、同一批书的关系、剩余和不足条件、定义域、推导与全部答案；再比较两法。设书本数时，用剩余关系表示人数，先检查人数表达式为正再去分母，并保留人数必须是整数的约束。这里不要求解未知数在分母里的不等式。</p>
+    <div id="ss-model"><p id="ss-model-status" role="status"></p></div>
+    <details class="more"><summary>两法比较的自核准则</summary>
+      <p>设人数时，是否用“每人本数×人数+剩余”表示同一批书？不足是否用“需要的总本数−已有本数”表示并保留上下界？设书本数时，是否由剩余关系还原人数，说明除法域为正、人数为整数？是否逐组还原两个问量并代回原题？两法的范围为何必须连同整数约束一起比较？本区只核对填入的范围及组合，不自动认证开放文字或线下活动已经发生。</p>
+    </details>
   </div>
 </section>
 

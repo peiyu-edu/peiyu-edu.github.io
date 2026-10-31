@@ -20,8 +20,17 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
+  #own-elimination input,#own-elimination select,#own-elimination textarea { max-width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:6px; }
+  #own-elimination .oe-fields { display:flex;flex-wrap:wrap;gap:10px;margin:10px 0; }
+  #own-elimination label { display:grid;gap:4px;min-width:0; }
+  #own-elimination input { width:120px; }
+  #own-elimination textarea { width:100%;min-height:70px; }
+  #own-elimination fieldset { min-width:0;margin:12px 0;border:1px solid var(--line); }
+  #own-elimination p,#own-elimination li { overflow-wrap:anywhere; }
+  #own-elimination .oe-url { overflow-wrap:anywhere;word-break:break-all; }
+  #own-elimination [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j10-4" data-standard="v2">
 <div class="wrap">
@@ -230,6 +239,46 @@
     <svg class="fig" id="fig-plan" viewBox="0 0 560 250" role="img" aria-label="两次消元的乘数"></svg>
     <div class="result" id="out-plan" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-plan" type="button">重置</button></div>
+  </div>
+  <div class="card" id="own-elimination">
+    <h3>④ 选学：我自己完整求解，再换顺序</h3>
+    <p>上面已练过消元计划。这里选一道简单且有唯一解的题，从空白写完两次同元消去、继续化成一元、求三个值，并逐式回代。选学可跳过，不作考试要求或后续先修。</p>
+    <p class="small" id="oe-syntax">数字只用半角有符号整数、有限小数（至多6位）或整数分数（正分母）；整数部分或分子、分母至多6位。小数须写整数部分，首尾与分数线两侧可留空格，数字中不能夹空格，也不用多余前导0。不输入算式、指数、单位、上标或全角数符。关系倍数用−4到4的整数，继续消元倍数用−12到12的整数。</p>
+    <label>自己选题<select id="oe-case"><option value="">先选一道</option><option value="a">甲：三个方程都含三元</option><option value="b">乙：同构型，含分数常数</option><option value="c">丙：一个方程已缺元</option><option value="d">丁：缺元构型，含分数常数</option></select></label>
+    <div id="oe-equations" aria-live="polite"></div>
+    <form id="oe-work" hidden novalidate>
+      <label>我先消哪个未知数？<select id="oe-eliminate"><option value="">先选</option><option value="x">x</option><option value="y">y</option><option value="z">z</option></select></label>
+      <p>填写两个关系④、⑤，最终都不能含先消的元。选择一对不同原式，写 m×前式+n×后式；负倍数表示相减。每对中m、n都非0，不重复同一对，三个原式都要用上。若原式已缺该元，可选“保留原式”，此时m非0、n写0，与另两式消元所得关系配对。</p>
+      <div id="oe-relations"></div>
+      <p>把④、⑤继续合成一元式：u×④+v×⑤。若已有一元式，可把另一倍数写0；两倍数不能同时0。先选最后要解哪个元，再填写 H×该未知数=J 的H和J。</p>
+      <div class="oe-fields"><label>继续消元倍数 u<input id="oe-u" aria-describedby="oe-syntax" autocomplete="off"></label><label>继续消元倍数 v<input id="oe-v" aria-describedby="oe-syntax" autocomplete="off"></label><label>最后的一元未知数<select id="oe-target"><option value="">先选</option><option value="x">x</option><option value="y">y</option><option value="z">z</option></select></label><label>一元式系数 H<input id="oe-h" aria-describedby="oe-syntax" autocomplete="off"></label><label>一元式右边 J<input id="oe-j" aria-describedby="oe-syntax" autocomplete="off"></label></div>
+      <p>先从一元式求值，再回代求另外两个。解要三个值一起填写；每个原式的左边也要亲自代数计算。</p>
+      <div class="oe-fields"><label>x 的值<input id="oe-x" aria-describedby="oe-syntax" autocomplete="off"></label><label>y 的值<input id="oe-y" aria-describedby="oe-syntax" autocomplete="off"></label><label>z 的值<input id="oe-z" aria-describedby="oe-syntax" autocomplete="off"></label><label>代入①左边的值<input id="oe-back0" aria-describedby="oe-syntax" autocomplete="off"></label><label>代入②左边的值<input id="oe-back1" aria-describedby="oe-syntax" autocomplete="off"></label><label>代入③左边的值<input id="oe-back2" aria-describedby="oe-syntax" autocomplete="off"></label></div>
+      <label>写计划理由：为何先消这个元，三式怎样都用上，缺元时是否可优先保留？说明回代顺序。文字另自检，不填个人资料。<textarea id="oe-reason" maxlength="1500"></textarea></label>
+      <button class="btn" type="submit">逐步核对并保存本题草稿</button>
+    </form>
+    <p id="oe-feedback" role="status"></p>
+    <h4>本题已核数学步骤的草稿</h4><div id="oe-records"></div>
+    <p class="small">同题换一个先消的元可保存另一份，每题至多三份。再次核对同一个先消元会更新对应草稿；未核对的编辑不会改旧稿。草稿只在本页内存。</p>
+    <form id="oe-compare" novalidate>
+      <div class="oe-fields"><label>选草稿一<select id="oe-first"><option value="">先保存草稿</option></select></label><label>选草稿二<select id="oe-second"><option value="">先保存草稿</option></select></label></div>
+      <label>比较哪种顺序更简便：说具体系数、倍数或缺元条件，不只说“更快”。<textarea id="oe-comparison" maxlength="1200"></textarea></label>
+      <label>给同伴一个追问，或如实写还未交流时准备问什么。<textarea id="oe-peer" maxlength="1000"></textarea></label>
+      <label>我总结的“从三元到一元，再回代”注意点。<textarea id="oe-summary" maxlength="1200"></textarea></label>
+      <button class="btn" type="submit">记录比较，打开文字自检</button>
+    </form>
+    <p id="oe-compare-feedback" role="status"></p><p class="small" id="oe-comparison-record"></p>
+    <p class="small">比较说明以点击记录时的文字保存，切回本题可回看；未保存的编辑不改旧比较，刷新或清空会清除。</p>
+    <div id="oe-guide" hidden><p>比较文字尚未判定正确，也未认证同伴交流或纸笔已发生。请对照：两关系是否消同一个元、三原式都用上且不重复同一对？缺元原式能否直接保留？倍乘时等式两边是否同乘，非零倍数/相加系数是否写全？继续消元是否只剩一个未知数，三个值是否代回全部原式？比较的是具体计算便利性，没有唯一的方便顺序。</p><p>等式两边同乘非零数仍保持相等；把两个等式相加可得到新等式。但不能仅凭随意两次组合就认证解：本工作单核每个组合，还要求三个值满足三个原式。有限试数不代替一般等式依据，自由解释仍由你自行核对。</p></div>
+    <button class="btn ghost" id="oe-reset" type="button">清空本活动和全部草稿</button>
+    <p class="small">不写学习账本，无在线提交；刷新即清除。文化阅读与本工作单相互独立，均可跳过。</p>
+    <details class="more" id="oe-culture"><summary>⑤ 可跳过的文化阅读：方程术、共井与百鸡类型</summary>
+      <p>《九章算术》“方程”章用算筹按列记数，以整列倍减逐步消去，再逐个求数，可与本节加减消元联系阅读。刘徽在3世纪为《九章》作注，重视解释计算依据；唐代李淳风等又整理、说明这些注释。这里阅读“直除”的消元思想，不把古代记法或更多未知数列为训练要求。</p>
+      <p>“五家共井”把各家绳长与同一井深联系起来，井深也是需要考虑的量；“百鸡”类型把总只数与总费用联系起来，《张丘建算经》保存了著名例子。条件的作用与物品的整数、正负等限制要一起看，不能只数方程就断言有无穷多整数答案。</p>
+      <p><b>自编仿古共绳模型（非古籍原题、非原题数据）</b>：以同一单位记两种绳长a、b及井深d，设a+b=d、2a+b=d+2，长度为正。由两式之差知a=2，但(2,1,3)与(2,3,5)都合条件，尚不能唯一确定；若另外量得d=5，就能得b=3。这只是说明还缺信息，不是本工作单的唯一解正式题。</p>
+      <p><b>自编仿古购禽模型（非“百鸡”原题或原价）</b>：三类禽每只分别3、2、1枚钱，共买6只花10枚，数量a、b、c为非负整数。关系是a+b+c=6、3a+2b+c=10，整理得2a+b=4。逐个试a，可列(0,4,2)、(1,2,3)、(2,0,4)三组；再大的a会使b为负。若另要求三类都买，便只剩(1,2,3)。可见现实限制会缩小候选，不能把阅读里的“不定”混成对所有方程组的解数判定。</p>
+      <p class="small">离线来源线索（标题与可复制纯文本URL；核对2026-10-31，无需点击）：圣安德鲁斯大学MacTutor，Nine Chapters on the Mathematical Art 与 Liu Hui：<span class="oe-url">https://mathshistory.st-andrews.ac.uk/HistTopics/Nine_chapters/</span>；<span class="oe-url">https://mathshistory.st-andrews.ac.uk/Biographies/Liu_Hui/</span>。同档Zhang Qiujian（页面标2003年更新）：<span class="oe-url">https://mathshistory.st-andrews.ac.uk/Biographies/Zhang_Qiujian/</span>。五家共井题型参照香港理工大学AMA1007课程资料，2018/2019第1学期第3题释述：<span class="oe-url">https://www.polyu.edu.hk/ama/profile/hwlee/AMA1007/AMA1007Finals-2018-2019-Sem1.pdf</span>。上面两个小模型均为本页自编，不是这些资料的引文。</p>
+    </details>
   </div>
 </section>
 
@@ -495,4 +544,5 @@
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+<script defer src="../assets/b7b-j10-4-own-elimination-dev.js"></script>
 </body></html>

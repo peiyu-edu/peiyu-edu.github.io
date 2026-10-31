@@ -21,7 +21,7 @@
   .tag-ok { display: inline-block; padding: 2px 8px; border-radius: 4px; background: rgba(34, 197, 94, 0.15); color: #16a34a; font-weight: 700; margin-right: 6px; }
   .tag-no { display: inline-block; padding: 2px 8px; border-radius: 4px; background: rgba(239, 68, 68, 0.15); color: #dc2626; font-weight: 700; margin-right: 6px; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b2-8-5" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -68,7 +68,7 @@
         <button data-m="section">面面性质（第三面截交线）</button>
       </div>
     </div>
-    <svg id="m-para-fig" viewBox="0 0 520 180" class="micro-fig"></svg>
+    <svg id="m-para-fig" viewBox="0 0 320 590" class="micro-fig" style="max-width:320px"></svg>
     <div class="micro-status" id="m-para-status">空间平行三位一体：线线平行 ⇄ 线面平行 ⇄ 面面平行，向右用判定，向左用性质。</div>
   </div>
 
@@ -890,87 +890,95 @@
 
   function drawPara(mode) {
     fig.innerHTML = "";
+    fig.setAttribute("viewBox", "0 0 320 590");
+    // Stack the diagram and callouts so mobile labels have separate reading rows.
+    var diagram = sEl(fig, "g", { transform: "translate(8 48) scale(1.2)" });
+    function row(y, text, col, weight) {
+      return sTxt(fig, 16, y, text, col, 16, weight || 400);
+    }
     if (mode === "lineplane") {
-      // 线面平行判定与性质
-      sTxt(fig, 30, 24, "【线面平行判定与性质】线线平行 ⇄ 线面平行", ca, 12, 700);
-
+      row(22, "【线面平行判定与性质】", ca, 700);
+      row(46, "线线平行 ⇄ 线面平行", ca, 700);
       // 平面 α
-      sEl(fig, "polygon", { points: "40,140 180,140 210,70 70,70", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
-      sTxt(fig, 55, 90, "平面 α", ca, 11, 700);
+      sEl(diagram, "polygon", { points: "40,140 180,140 210,70 70,70", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
+      sTxt(diagram, 55, 90, "平面 α", ca, 14, 700);
 
       // 面内线 b
-      sEl(fig, "line", { x1: 90, y1: 110, x2: 170, y2: 110, stroke: ca, "stroke-width": 2 });
-      sTxt(fig, 175, 114, "b ⊂ α", ca, 11, 700);
+      sEl(diagram, "line", { x1: 90, y1: 110, x2: 170, y2: 110, stroke: ca, "stroke-width": 2 });
+      sTxt(diagram, 175, 114, "b ⊂ α", ca, 14, 700);
 
-      sTxt(fig, 130, 42, "a ∥ b ⟹ a ∥ α", cd, 11.5, 700, "middle");
+      sTxt(diagram, 130, 28, "a ∥ b ⟹ a ∥ α", cd, 14, 700, "middle");
       // 面外线 a
-      sEl(fig, "line", { x1: 90, y1: 52, x2: 170, y2: 52, stroke: cb, "stroke-width": 2 });
-      sTxt(fig, 175, 55, "a ⊄ α", cb, 11, 700);
+      sEl(diagram, "line", { x1: 90, y1: 52, x2: 170, y2: 52, stroke: cb, "stroke-width": 2 });
+      sTxt(diagram, 175, 55, "a ⊄ α", cb, 14, 700);
 
-      // 右侧截面辅助性质
-      sTxt(fig, 245, 50, "【性质逆推】辅助截面交线：", cc, 11.5, 700);
-      sTxt(fig, 245, 75, "若 a ∥ α，且截面 β 包含 a", mut, 11);
-      sTxt(fig, 245, 96, "截割 α 得到交线 b = α ∩ β", mut, 11);
-      sTxt(fig, 245, 120, "⟹ 必有 a ∥ b （线线平行！）", cc, 12, 700);
-
-      // 最右侧三要件卡片
-      sEl(fig, "rect", { x: 400, y: 25, width: 110, height: 125, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 410, 48, "判定三要件：", cb, 11.5, 700);
-      sTxt(fig, 410, 72, "1. a ⊄ α （面外）", ca, 10.5, 600);
-      sTxt(fig, 410, 94, "2. b ⊂ α （面内）", ca, 10.5, 600);
-      sTxt(fig, 410, 116, "3. a ∥ b （平行）", cb, 10.5, 700);
-      sTxt(fig, 410, 136, "★ 缺一不可！", cd, 10, 700);
+      row(254, "【性质逆推】辅助截面交线：", cc, 700);
+      row(282, "若 a ∥ α，且截面 β 包含 a", mut);
+      row(310, "截割 α 得到交线 b = α ∩ β", mut);
+      row(338, "⟹ 必有 a ∥ b （线线平行！）", cc, 700);
+      sEl(fig, "rect", { x: 8, y: 364, width: 304, height: 210, rx: 6, fill: bgCard, stroke: border });
+      row(394, "判定三要件：", cb, 700);
+      row(432, "1. a ⊄ α （面外）", ca, 600);
+      row(470, "2. b ⊂ α （面内）", ca, 600);
+      row(508, "3. a ∥ b （平行）", cb, 700);
+      row(550, "★ 缺一不可！", cd, 700);
     } else if (mode === "planeplane") {
-      // 面面判定（两条相交直线锁死）
-      sTxt(fig, 30, 24, "【面面平行判定】两条相交直线锁死方向", cb, 12, 700);
-
+      row(22, "【面面平行判定】", cb, 700);
+      row(46, "两条相交直线锁死方向", cb, 700);
       // 上平面 β
-      sEl(fig, "polygon", { points: "40,80 180,80 210,35 70,35", fill: "rgba(217,119,6,0.06)", stroke: cb, "stroke-width": 1.5 });
-      sTxt(fig, 50, 55, "平面 β", cb, 11, 700);
+      sEl(diagram, "polygon", { points: "40,80 180,80 210,35 70,35", fill: "rgba(217,119,6,0.06)", stroke: cb, "stroke-width": 1.5 });
+      sTxt(diagram, 185, 95, "平面 β", cb, 14, 700);
       // β 内两相交线 a, b
-      sEl(fig, "line", { x1: 85, y1: 70, x2: 165, y2: 45, stroke: cd, "stroke-width": 1.8 });
-      sEl(fig, "line", { x1: 95, y1: 45, x2: 155, y2: 70, stroke: cd, "stroke-width": 1.8 });
-      sEl(fig, "circle", { cx: 125, cy: 57.5, r: 3, fill: cd });
-      sTxt(fig, 132, 55, "P", cd, 11, 700);
+      sEl(diagram, "line", { x1: 85, y1: 70, x2: 165, y2: 45, stroke: cd, "stroke-width": 1.8 });
+      sEl(diagram, "line", { x1: 95, y1: 45, x2: 155, y2: 70, stroke: cd, "stroke-width": 1.8 });
+      sEl(diagram, "circle", { cx: 125, cy: 57.5, r: 3, fill: cd });
+      sTxt(diagram, 132, 55, "P", cd, 14, 700);
 
       // 下平面 α
-      sEl(fig, "polygon", { points: "40,150 180,150 210,105 70,105", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
-      sTxt(fig, 50, 125, "平面 α", ca, 11, 700);
+      sEl(diagram, "polygon", { points: "40,150 180,150 210,105 70,105", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
+      sTxt(diagram, 185, 165, "平面 α", ca, 14, 700);
 
-      // 右侧锁定说明
-      sEl(fig, "rect", { x: 235, y: 25, width: 275, height: 125, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 250, 48, "双相交线锁死自由度：", cb, 12, 700);
-      sTxt(fig, 250, 72, "• 单条线平行： 平面可绕轴任意倾斜旋转", mut, 11);
-      sTxt(fig, 250, 94, "• 两平行线： 旋转轴单一，仍可切入相交", mut, 11);
-      sTxt(fig, 250, 118, "• 两相交线 a ∩ b = P: 双向锁死无法倾斜！", cc, 11.5, 700);
-      sTxt(fig, 250, 136, "⟹ 必有 β ∥ α （面面平行严格成立）", ca, 12, 700);
+
+      sEl(fig, "rect", { x: 8, y: 264, width: 304, height: 310, rx: 6, fill: bgCard, stroke: border });
+      row(294, "双相交线锁死自由度：", cb, 700);
+      row(332, "• 单条线平行：", mut);
+      row(360, "平面可绕轴任意倾斜旋转", mut);
+      row(398, "• 两平行线：旋转轴单一，", mut);
+      row(426, "仍可切入相交", mut);
+      row(464, "• 两相交线 a ∩ b = P:", cc, 700);
+      row(492, "双向锁死无法倾斜！", cc, 700);
+      row(540, "⟹ 必有 β ∥ α", ca, 700);
+      row(568, "（面面平行严格成立）", ca, 700);
     } else if (mode === "section") {
-      // 面面性质：第三面截交线
-      sTxt(fig, 30, 24, "【面面平行性质】第三平面截出平行交线", cc, 12, 700);
-
+      row(22, "【面面平行性质】", cc, 700);
+      row(46, "第三平面截出平行交线", cc, 700);
       // 平行平面 α 与 β
-      sEl(fig, "polygon", { points: "30,80 160,80 185,40 55,40", fill: "rgba(16,185,129,0.06)", stroke: cc, "stroke-width": 1.5 });
-      sTxt(fig, 40, 58, "平面 β", cc, 11, 700);
-      sEl(fig, "polygon", { points: "30,150 160,150 185,110 55,110", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
-      sTxt(fig, 40, 128, "平面 α", ca, 11, 700);
+      sEl(diagram, "polygon", { points: "30,80 160,80 185,40 55,40", fill: "rgba(16,185,129,0.06)", stroke: cc, "stroke-width": 1.5 });
+      sTxt(diagram, 40, 58, "平面 β", cc, 14, 700);
+      sEl(diagram, "polygon", { points: "30,150 160,150 185,110 55,110", fill: "rgba(2,132,199,0.06)", stroke: ca, "stroke-width": 1.5 });
+      sTxt(diagram, 40, 128, "平面 α", ca, 14, 700);
 
       // 截面 γ 竖直切下
-      sEl(fig, "polygon", { points: "100,25 150,25 120,165 70,165", fill: "rgba(236,72,153,0.08)", stroke: cd, "stroke-width": 1.5 });
-      sTxt(fig, 155, 35, "截面 γ", cd, 11, 700);
+      sEl(diagram, "polygon", { points: "100,25 150,25 120,165 70,165", fill: "rgba(236,72,153,0.08)", stroke: cd, "stroke-width": 1.5 });
+      sTxt(diagram, 155, 35, "截面 γ", cd, 14, 700);
 
       // 交线 a 和 b
-      sEl(fig, "line", { x1: 88, y1: 60, x2: 138, y2: 60, stroke: "#ef4444", "stroke-width": 2.2 });
-      sTxt(fig, 142, 64, "交线 b", "#ef4444", 10.5, 700);
-      sEl(fig, "line", { x1: 78, y1: 130, x2: 128, y2: 130, stroke: "#ef4444", "stroke-width": 2.2 });
-      sTxt(fig, 132, 134, "交线 a", "#ef4444", 10.5, 700);
+      sEl(diagram, "line", { x1: 88, y1: 60, x2: 138, y2: 60, stroke: "#ef4444", "stroke-width": 2.2 });
+      sTxt(diagram, 142, 64, "交线 b", "#ef4444", 14, 700);
+      sEl(diagram, "line", { x1: 78, y1: 130, x2: 128, y2: 130, stroke: "#ef4444", "stroke-width": 2.2 });
+      sTxt(diagram, 132, 134, "交线 a", "#ef4444", 14, 700);
 
-      // 右侧换算
-      sEl(fig, "rect", { x: 235, y: 25, width: 275, height: 125, rx: 6, fill: bgCard, stroke: border });
-      sTxt(fig, 250, 48, "性质定理几何精髓：", cd, 12, 700);
-      sTxt(fig, 250, 72, "两平行平面没有公共点，面内直线亦无交点", mut, 11);
-      sTxt(fig, 250, 94, "第三截面把两交线约束在同一平面 γ 内！", ca, 11, 600);
-      sTxt(fig, 250, 118, "同面且无交点 ⟹ 必为平行线：a ∥ b", cc, 12, 700);
-      sTxt(fig, 250, 136, "★ 构造第三截面是高考立体几何高频技巧！", cd, 10.5, 700);
+
+      sEl(fig, "rect", { x: 8, y: 264, width: 304, height: 310, rx: 6, fill: bgCard, stroke: border });
+      row(294, "性质定理几何精髓：", cd, 700);
+      row(332, "两平行平面没有公共点，", mut);
+      row(360, "面内直线亦无交点", mut);
+      row(398, "第三截面把两交线约束在", ca, 600);
+      row(426, "同一平面 γ 内！", ca, 600);
+      row(464, "同面且无交点 ⟹ 必为平行线：", cc, 700);
+      row(492, "a ∥ b", cc, 700);
+      row(530, "★ 构造第三截面是高考立体", cd, 700);
+      row(558, "几何高频技巧！", cd, 700);
     }
   }
 

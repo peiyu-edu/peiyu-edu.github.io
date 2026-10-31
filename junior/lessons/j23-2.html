@@ -19,8 +19,9 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+#fp-work input{width:5em;font:inherit;max-width:100%}#fp-work label{display:block;margin:6px 0}#fp-work select,#fp-work button,#fp-work textarea{font:inherit;max-width:100%}#fp-work button{min-height:40px}#fp-work textarea{display:block;box-sizing:border-box;width:100%}.fp-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:end}#fp-feedback{min-height:3em;overflow-wrap:anywhere}#fp-work{overflow-wrap:anywhere}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j23-2" data-standard="v2">
 <div class="wrap">
@@ -263,7 +264,24 @@
     <svg class="fig" id="fig-rg" viewBox="0 0 560 430" role="img" aria-label="自变量范围对应的函数值范围"></svg>
     <div class="result" id="out-rg" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-rg" type="button">重置</button></div>
-  </div>
+  </div><div class="card" id="fp-work">
+<h3>④ 由你列表、描点，再画直线</h3>
+<p>原滑块用于观察；这里要自己算、自己落点。图只显示你的点和你选点画出的直线，不用曲线插值，也不把有限个点都正确当作一般证明。</p>
+<label>待画函数<select id="fp-task"><option value="">自行选择</option><option value="a">y = (3/2)x</option><option value="b">y = (-2/3)x</option><option value="c">y = (-1/2)x - 1</option><option value="d">y = 2x - 3</option><option value="e">y = (1/2)x + 4</option><option value="z">y = 0x + 2（边界）</option><option value="o">y = 0x（边界）</option></select></label>
+<label>作图方法<select id="fp-method"><option value="table">列表多点（5点）</option><option value="two">两点法（2点）</option></select></label>
+<p id="fp-prompt"></p><p class="small">换函数/方法会重置本任务。x取−6至6内的整数或半单位，y及落点限−6至6；纵横每大格均为1单位，窗口外仍有图象。数值只用0–9及+ - . /，可写有符号整数、至多3位小数、p/q（整数分子绝对值≤10000，分母1至1000）；不收表达式、内部空白或科学记数。</p>
+<div id="fp-table"></div><button type="button" id="fp-table-check">核对列表</button>
+<svg id="fp-fig" viewBox="0 0 560 560" tabindex="0" role="application" aria-label="作图坐标格，方向键移动游标，回车将游标坐标放入落点输入" style="width:100%;display:block;touch-action:none"></svg>
+<p class="small">先核表，再选表中第几行，自行输入图上坐标并落点。也可点格子或用方向键移动游标（每步1/4单位），回车取游标坐标；三分之一等点请用分数输入精确定位。游标不是已描点。</p>
+<div class="fp-controls"><label>对应表行<select id="fp-row"></select></label><label>图上x<input id="fp-px" inputmode="decimal"></label><label>图上y<input id="fp-py" inputmode="decimal"></label><button type="button" id="fp-plot">落点/改点</button><button type="button" id="fp-points-check">核对描点</button></div>
+<div class="fp-controls"><label>选一点<select id="fp-from"></select></label><label>另一点<select id="fp-to"></select></label><button type="button" id="fp-line">过两点画直线</button></div>
+<p class="small">图象已知为直线，故可用两点定线（两点横坐标必须不同）；多点列表用于核算、观察和复查，不能证明所有实数位置都满足。</p>
+<div class="fp-controls"><label>与y轴交点的纵坐标<input id="fp-yaxis" inputmode="decimal"></label><label>与x轴交点的横坐标<input id="fp-xaxis" inputmode="decimal"></label><label>是否经过原点<select id="fp-origin"><option value="">自行判断</option><option value="yes">是</option><option value="no">否</option></select></label><button type="button" id="fp-axes-check">核对交点与原点</button></div>
+<p id="fp-feedback" role="status" aria-live="polite"></p><ol id="fp-trace"></ol>
+<label>我的选点理由与复查记录<textarea id="fp-note" rows="3"></textarea></label><button type="button" id="fp-self">对照自检准则</button><p id="fp-rubric" hidden>核表中代入运算、图上横纵位置和刻度；确认两点横坐标不同，过点画整条直线并向窗口外延伸。与y轴交点令x=0，与x轴交点令y=0。一般结论依据本节已知图象为直线，不把有限点当作证明。开放文字未自动判对。</p>
+<button type="button" id="fp-save">保存本机作图记录（TXT）</button><button type="button" id="fp-reset">重置本任务</button><p class="small">仅本页内存和主动保存的本机文件，不写入原答题账本，不认证纸笔或同伴经历。</p>
+</div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -316,262 +334,8 @@
 <section class="card stage-bridge" data-bridge="junior-to-high" aria-labelledby="stage-bridge-next-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-next-title">往后学 · 高中数学</h2><p class="small">把这一节学透，到了高中就能直接迁移到下面的课程：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../lessons/b1-3-2.html">高中 · 函数的基本性质</a><span class="bridge-why">初中对一次函数“$y$ 随 $x$ 增大而增大（或减小）”的观察，在高中用任意 $x_1&lt;x_2$ 时 $f(x_1)&lt;f(x_2)$ 的符号语言严格定义为函数单调性。</span></li><li><a class="bridge-link" href="../../lessons/e1-2-1.html">高中 · 直线的倾斜角与斜率</a><span class="bridge-why">初中一次函数 $y=kx+b$ 中决定直线陡峭程度与升降方向的系数 $k$，正是高中解析几何中的直线斜率 $k=\tan\alpha$。</span></li></ul><p class="bridge-all"><a href="../../courses.html">打开高中数学课程目录</a></p></section>
 <footer>培玉智能 · 自编讲解；中考真题注明出处。</footer>
 </div>
-<script>
-(function () {
-  "use strict";
-  var NS = "http://www.w3.org/2000/svg";
-  function el(tag, a, p) { var e = document.createElementNS(NS, tag); for (var k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; }
-  function txt(p, x, y, s, col, fw, sz, anc) { var t = el("text", { x: x, y: y, fill: col, "font-size": sz || 20, "font-weight": fw || 400, "text-anchor": anc || "middle", "paint-order": "stroke fill", stroke: "var(--card)", "stroke-width": "4px" }, p); t.textContent = s; return t; }
-  function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
-  function C() { return { fg: css("--fg"), a: css("--a"), b: css("--b"), c: css("--c"), no: css("--no"), muted: css("--muted"), card: css("--card"), line: css("--line") }; }
-  function f(v) { var r = Math.round(v * 100) / 100; if (r === 0) return "0"; var s = String(Math.abs(r)); return r < 0 ? "−" + s : s; }
-  function fp(v) { return v < 0 ? "(" + f(v) + ")" : f(v); }
-  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
-  function snap(v, st) { return Math.round(v / st) * st; }
-  function pt(a, b) { return "(" + f(a) + ", " + f(b) + ")"; }
-  /* y = kx + b 写成文字；k、b 可以是数或「分数字符串」 */
-  function lin(k, b, yv, xv) {
-    yv = yv || "y"; xv = xv || "x";
-    if (Math.abs(k) < 1e-9) return yv + " = " + f(b);
-    var s = k === 1 ? xv : k === -1 ? "−" + xv : f(k) + xv;
-    if (b > 1e-9) s += " + " + f(b); else if (b < -1e-9) s += " − " + f(-b);
-    return yv + " = " + s;
-  }
-  function bar(id, cb) {
-    var b = document.getElementById(id);
-    [].forEach.call(b.children, function (x) { x.setAttribute("aria-pressed", x.classList.contains("on") ? "true" : "false"); });
-    b.addEventListener("click", function (ev) {
-      var t = ev.target.closest("button"); if (!t) return;
-      [].forEach.call(b.children, function (x) { x.classList.toggle("on", x === t); x.setAttribute("aria-pressed", x === t ? "true" : "false"); });
-      cb(t);
-      if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: id, choice: t.textContent.trim() });
-    });
-  }
-  function dk(t) { return t.getAttribute("data-k"); }
-  /* 坐标网格：原点在 (cx,cy)，单位 u，网格 x0..x1、y0..y1。
-     刻度数字只每 st 格标一个，标在网格下边外 off 处和左边外，离网格里的拖动点足够远。 */
-  function plane(p, g) {
-    var c = C(), sz = g.sz || 19, st = g.st || 2, off = g.off || 40, i;
-    function X(w) { return g.cx + g.u * w; } function Y(w) { return g.cy - g.u * w; }
-    for (i = g.x0; i <= g.x1; i++) el("line", { x1: X(i), y1: Y(g.y0), x2: X(i), y2: Y(g.y1), stroke: c.line, "stroke-width": 1 }, p);
-    for (i = g.y0; i <= g.y1; i++) el("line", { x1: X(g.x0), y1: Y(i), x2: X(g.x1), y2: Y(i), stroke: c.line, "stroke-width": 1 }, p);
-    var ax = Y(Math.max(g.y0, 0)), ay = X(Math.max(g.x0, 0)), xe = X(g.x1) + 12, ye = Y(g.y1) - 12;
-    el("line", { x1: X(g.x0), y1: ax, x2: xe, y2: ax, stroke: c.fg, "stroke-width": 2 }, p);
-    el("path", { d: "M" + (xe + 12) + " " + ax + " l-13 -6 v12 z", fill: c.fg }, p);
-    el("line", { x1: ay, y1: Y(g.y0), x2: ay, y2: ye, stroke: c.fg, "stroke-width": 2 }, p);
-    el("path", { d: "M" + ay + " " + (ye - 12) + " l-6 13 h12 z", fill: c.fg }, p);
-    txt(p, xe + 10, ax - 12, g.xn || "x", c.fg, 700, sz, "middle");
-    txt(p, ay + 12, ye + 12, g.yn || "y", c.fg, 700, sz, "start");
-    for (i = g.x0; i <= g.x1; i++) if (i % st === 0 && !(g.skipX && g.skipX(i))) txt(p, X(i), Y(g.y0) + off, f(i * (g.xs || 1)), i ? c.muted : c.b, i ? 400 : 700, sz);
-    for (i = g.y0 + 1; i <= g.y1; i++) if (i % st === 0) txt(p, X(g.x0) - 10, Y(i) + sz * 0.35, f(i * (g.ys || 1)), i ? c.muted : c.b, i ? 400 : 700, sz, "end");
-    return { X: X, Y: Y, P: function (a, b) { return [X(a), Y(b)]; }, g: g };
-  }
-  /* 在网格里画 y = kx + b（截到网格内，xl..xr 可再限制 x 范围） */
-  function seg(p, G, k, b, col, w, dash, xl, xr) {
-    var g = G.g, lo = Math.max(g.x0, xl === undefined ? -1e9 : xl), hi = Math.min(g.x1, xr === undefined ? 1e9 : xr);
-    if (Math.abs(k) > 1e-9) {
-      var xa = (g.y0 - b) / k, xb = (g.y1 - b) / k;
-      lo = Math.max(lo, Math.min(xa, xb)); hi = Math.min(hi, Math.max(xa, xb));
-    } else if (b < g.y0 || b > g.y1) return null;
-    if (hi - lo < 1e-6) return null;
-    var a = G.P(lo, k * lo + b), z = G.P(hi, k * hi + b), at = { x1: a[0], y1: a[1], x2: z[0], y2: z[1], stroke: col, "stroke-width": w || 4, "stroke-linecap": "round" };
-    if (dash) at["stroke-dasharray"] = dash;
-    return el("line", at, p);
-  }
-  function dot(p, xy, col, r, hollow) { if (r && r <= 4 && !hollow) return el("rect", { x: xy[0] - r, y: xy[1] - r, width: 2 * r, height: 2 * r, rx: 1, fill: col }, p); return el("circle", hollow ? { cx: xy[0], cy: xy[1], r: r || 6, fill: C().card, stroke: col, "stroke-width": 3 } : { cx: xy[0], cy: xy[1], r: r || 6, fill: col }, p); }
-  function dash(p, a, b, col, w) { el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: col, "stroke-width": w || 2, "stroke-dasharray": "6 5" }, p); }
-  /* 拖动点：onStep([dx,dy]) 方向键，onAt(x,y) 指针（viewBox 坐标） */
-  function handle(svg, xy, col, label, vt, onStep, onAt) {
-    var h = el("circle", { cx: xy[0], cy: xy[1], r: 12, fill: C().card, stroke: col, "stroke-width": 4, tabindex: 0, role: "slider", "aria-label": label + "，方向键移动", "aria-valuetext": vt, style: "cursor:grab;touch-action:none" }, svg);
-    h.addEventListener("keydown", function (e) {
-      var d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[e.key];
-      if (!d) return; e.preventDefault(); onStep(d);
-    });
-    h.addEventListener("pointerdown", function (e) {
-      e.preventDefault();
-      function mv(ev) { var m = svg.getScreenCTM(); if (!m) return; var q = svg.createSVGPoint(); q.x = ev.clientX; q.y = ev.clientY; q = q.matrixTransform(m.inverse()); onAt(q.x, q.y); }
-      function up() { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); if (window.Peiyu && Peiyu.log) Peiyu.log("interact", { id: svg.id, choice: label }); }
-      window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
-    });
-    return h;
-  }
-  /* 分数：化简后写成 "−3/2" */
-  function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { var t = a % b; a = b; b = t; } return a || 1; }
-  function fr(n, d) { if (d < 0) { n = -n; d = -d; } var g = gcd(n, d); n /= g; d /= g; if (n === 0) return "0"; return (n < 0 ? "−" : "") + Math.abs(n) + (d === 1 ? "" : "/" + d); }
-  var draws = [], resetFocus = [];
-  function reg(fn) { draws.push(fn); return fn; }
-  function drawAll() { draws.forEach(function (fn) { fn(); }); }
-  var MG = { cx: 190, cy: 126, u: 24, x0: -6, x1: 6, y0: -4, y1: 4, sz: 15, off: 28 };
-  var BG = { cx: 280, cy: 200, u: 34, x0: -6, x1: 6, y0: -5, y1: 5, sz: 19, off: 40 };
-  function shadeQ(p, G, q, col) {
-    var g = G.g, xa = q === 1 || q === 4 ? 0 : g.x0, xb = q === 1 || q === 4 ? g.x1 : 0, ya = q <= 2 ? g.y1 : 0, yb = q <= 2 ? 0 : g.y0;
-    el("rect", { x: G.X(xa), y: G.Y(ya), width: G.X(xb) - G.X(xa), height: G.Y(yb) - G.Y(ya), fill: col, "fill-opacity": 0.13 }, p);
-  }
-  function quads(k, b) {
-    if (!k) return b > 0 ? [1, 2] : b < 0 ? [3, 4] : [];
-    if (!b) return k > 0 ? [1, 3] : [2, 4];
-    return k > 0 ? (b > 0 ? [1, 2, 3] : [1, 3, 4]) : (b > 0 ? [1, 2, 4] : [2, 3, 4]);
-  }
-  var QN = ["", "一", "二", "三", "四"];
-  function qtext(k, b) { return "第" + quads(k, b).map(function (q) { return QN[q]; }).join("、") + "象限"; }
-  /* 一个 plane 先画阴影再画网格：先建一个空的 G 求坐标 */
-  function geo(g) { return { X: function (w) { return g.cx + g.u * w; }, Y: function (w) { return g.cy - g.u * w; }, g: g }; }
-
-  /* 从例子进入：描点 */
-  var ef = document.getElementById("entry-fig"), entryK = 1;
-  var EG = { cx: 150, cy: 140, u: 22, x0: -3, x1: 3, y0: -5, y1: 5, sz: 16, off: 28 };
-  var drawEntry = reg(function () {
-    var c = C(), k = entryK, st = [0, 1, 0.5, 0.1][k], n = 0, x; ef.innerHTML = "";
-    var G = plane(ef, EG);
-    if (k === 3) seg(ef, G, 2, 0, c.a, 2, "6 5");
-    for (x = -2; x <= 2.0001; x += st) { dot(ef, G.P(x, 2 * x), c.no, k === 3 ? 3 : 6); n++; }
-    txt(ef, 390, 110, "描了 " + n + " 个点", c.fg, 700, 20);
-    txt(ef, 390, 150, k === 1 ? "像排成一线" : "在一条直线上", k === 1 ? c.muted : c.a, 700, 20);
-    document.getElementById("entry-note").textContent = k === 1 ? "x = −2, −1, 0, 1, 2 时，y = −4, −2, 0, 2, 4：5 个点好像排成了一条线。" : k === 2 ? "每隔 0.5 取一个 x，新描的点也落在同一条线上，没有一个跑偏。" : "x 每隔 0.1 取一个值，点密得连成了线——这条线就是 y = 2x 的图象，它经过原点。";
-  });
-  bar("entry-bar", function (t) { entryK = +dk(t); drawEntry(); });
-
-  /* 微图解 ①：y = kx */
-  var m1 = document.getElementById("m1-fig"), m1k = 3;
-  var drawM1 = reg(function () {
-    var c = C(), k = m1k; m1.innerHTML = "";
-    var G0 = geo(MG); quads(k, 0).forEach(function (q) { shadeQ(m1, G0, q, c.a); });
-    var G = plane(m1, MG);
-    seg(m1, G, k, 0, c.b, 4);
-    var P = G.P(1, k); dot(m1, P, c.no, 6);
-    txt(m1, P[0] + 12, P[1] + (k > 0 ? 18 : -10), "(1, " + f(k) + ")", c.no, 700, 15, "start");
-    document.getElementById("m1-note").textContent = "y = " + (k === 1 ? "" : k === -1 ? "−" : f(k)) + "x：过原点和 (1, " + f(k) + ")。" + (k > 0 ? "k > 0，直线从左向右上升，经过第三、第一象限（浅色）；y 随 x 的增大而增大。" : "k < 0，直线从左向右下降，经过第二、第四象限（浅色）；y 随 x 的增大而减小。") + (Math.abs(k) >= 2 ? "|k| 大，直线陡。" : Math.abs(k) < 1 ? "|k| 小，直线平缓。" : "");
-  });
-  bar("m1-bar", function (t) { m1k = +dk(t); drawM1(); });
-
-  /* 微图解 ②：上下平移 */
-  var m2 = document.getElementById("m2-fig"), m2b = 3;
-  function varrow(p, G, x, ya, yb, col) {
-    var a = G.P(x, ya), z = G.P(x, yb), d = yb > ya ? -1 : 1;
-    if (Math.abs(a[1] - z[1]) < 4) return;
-    el("line", { x1: a[0], y1: a[1], x2: z[0], y2: z[1] - d * 8, stroke: col, "stroke-width": 3 }, p);
-    el("path", { d: "M" + z[0] + " " + z[1] + " l-6 " + (-d * 11) + " h12 z", fill: col }, p);
-  }
-  var drawM2 = reg(function () {
-    var c = C(), b = m2b; m2.innerHTML = "";
-    var G = plane(m2, MG);
-    seg(m2, G, 0.5, 0, c.muted, 3, "6 5");
-    seg(m2, G, 0.5, b, c.a, 4);
-    [-4, -2, 2].forEach(function (x) { varrow(m2, G, x, 0.5 * x, 0.5 * x + b, c.b); });
-    dot(m2, G.P(0, b), c.no, 6);
-    document.getElementById("m2-note").textContent = "灰色虚线是 y = 0.5x，绿色是 " + lin(0.5, b) + "。同一个 x，绿色直线上的点总比灰线上的点" + (b > 0 ? "高 " + b : "低 " + (-b)) + "（金色箭头一样长），所以整条直线向" + (b > 0 ? "上" : "下") + "平移了 " + Math.abs(b) + " 个单位，与 y 轴交于 (0, " + f(b) + ")（红点）。两条直线一样斜。";
-  });
-  bar("m2-bar", function (t) { m2b = +dk(t); drawM2(); });
-
-  /* 微图解 ③：象限 */
-  var m3 = document.getElementById("m3-fig"), m3v = [2, 3];
-  var drawM3 = reg(function () {
-    var c = C(), k = m3v[0], b = m3v[1]; m3.innerHTML = "";
-    var G0 = geo(MG); quads(k, b).forEach(function (q) { shadeQ(m3, G0, q, c.a); });
-    var G = plane(m3, MG);
-    seg(m3, G, k, b, c.b, 4);
-    dot(m3, G.P(0, b), c.no, 6); dot(m3, G.P(-b / k, 0), c.a, 6);
-    document.getElementById("m3-note").textContent = lin(k, b) + "：k " + (k > 0 ? "> 0，从左向右上升" : "< 0，从左向右下降") + "；与 y 轴交于 (0, " + f(b) + ")（红点），在 y 轴" + (b > 0 ? "正" : "负") + "半轴；与 x 轴交于 (" + f(-b / k) + ", 0)。所以经过" + qtext(k, b) + "（浅色），不经过第" + QN[[1, 2, 3, 4].filter(function (q) { return quads(k, b).indexOf(q) < 0; })[0]] + "象限。";
-  });
-  bar("m3-bar", function (t) { var p = t.getAttribute("data-kb").split(","); m3v = [+p[0], +p[1]]; drawM3(); });
-
-  /* 翻车现场 ① */
-  var drawTrap = reg(function () {
-    var p = document.getElementById("m-trap"), c = C(); p.innerHTML = "";
-    var G = plane(p, { cx: 140, cy: 110, u: 20, x0: -5, x1: 5, y0: -4, y1: 4, sz: 14, off: 26 });
-    seg(p, G, 2, -3, c.a, 4);
-    dot(p, G.P(0, -3), c.no, 6);
-    txt(p, G.X(-3), G.Y(2.5), "仍上升", c.a, 700, 15);
-  });
-
-  /* 动手 ①：拖 k、b */
-  var fk = document.getElementById("fig-kb"), ok = document.getElementById("out-kb"), K2 = 3, B2 = -2, focusKb = null;
-  function fixK() { K2 = clamp(K2, -6, 6); K2 = clamp(K2, -9 - B2, 9 - B2); }
-  var drawKb = reg(function () {
-    var c = C(), k = K2 / 2, b = B2 / 2; fk.innerHTML = "";
-    var G = plane(fk, BG);
-    if (k) seg(fk, G, k, 0, c.muted, 2, "7 6");
-    seg(fk, G, k, b, c.no, 4);
-    el("line", { x1: G.X(1), y1: G.Y(-5), x2: G.X(1), y2: G.Y(5), stroke: c.a, "stroke-width": 1.5, "stroke-dasharray": "3 5" }, fk);
-    var hb = handle(fk, G.P(0, b), c.b, "b", "b = " + f(b), function (d) { B2 = clamp(B2 + (d[1] || d[0]), -8, 8); fixK(); focusKb = "b"; drawKb(); },
-      function (x, y) { B2 = clamp(Math.round(2 * (200 - y) / 34), -8, 8); fixK(); focusKb = null; drawKb(); });
-    var hk = handle(fk, G.P(1, k + b), c.a, "k", "k = " + f(k), function (d) { K2 += (d[1] || d[0]); fixK(); focusKb = "k"; drawKb(); },
-      function (x, y) { K2 = Math.round(2 * (200 - y) / 34) - B2; fixK(); focusKb = null; drawKb(); });
-    var s;
-    if (!K2) s = "<span class=\"sum\">k = 0：" + (B2 ? lin(0, b) + " 是一条水平直线" : "y = 0 就是 x 轴") + "，y 不随 x 变化。这时它不是一次函数（是常数函数）。</span>";
-    else {
-      s = lin(k, b) + "：k = " + f(k) + (k > 0 ? " > 0，直线从左向右上升，y 随 x 的增大而增大" : " < 0，直线从左向右下降，y 随 x 的增大而减小") + "；与 y 轴交于 (0, " + f(b) + ")，与 x 轴交于 (" + fr(-B2, K2) + ", 0)；经过" + qtext(k, b) + "。";
-      s += B2 ? "它由灰色虚线 " + lin(k, 0) + " 向" + (b > 0 ? "上" : "下") + "平移 " + f(Math.abs(b)) + " 个单位得到。" : "b = 0：这是正比例函数，直线过原点。";
-    }
-    ok.innerHTML = s;
-    if (focusKb) (focusKb === "b" ? hb : hk).focus();
-  });
-  document.getElementById("reset-kb").onclick = function () { K2 = 3; B2 = -2; focusKb = null; drawKb(); };
-  resetFocus.push(function () { focusKb = null; });
-
-  /* 动手 ②：两点定直线 */
-  var f2 = document.getElementById("fig-2p"), o2 = document.getElementById("out-2p"), PP = [-3, -1], QQ = [3, 3], focus2 = null;
-  function kx(n, d, v) { var s = fr(n, d); if (s === "1") return v; if (s === "−1") return "−" + v; if (s.indexOf("/") >= 0) return (s[0] === "−" ? "−(" + s.slice(1) : "(" + s) + ")" + v; return s + v; }
-  function linFr(kn, kd, bn, bd) {
-    var s = "y = " + kx(kn, kd, "x"), bs = fr(bn, bd);
-    if (bs !== "0") s += bs[0] === "−" ? " − " + bs.slice(1) : " + " + bs;
-    return s;
-  }
-  function eq(x, y) { return (x === 0 ? "b" : (x === 1 ? "k" : x === -1 ? "−k" : f(x) + "k") + " + b") + " = " + f(y); }
-  function mv2(P, d) { P[0] = clamp(P[0] + d[0], -5, 5); P[1] = clamp(P[1] + d[1], -4, 4); }
-  function at2(P, x, y) { P[0] = clamp(Math.round((x - 280) / 34), -5, 5); P[1] = clamp(Math.round((200 - y) / 34), -4, 4); }
-  var draw2p = reg(function () {
-    var c = C(), x1 = PP[0], y1 = PP[1], x2 = QQ[0], y2 = QQ[1], dx = x2 - x1, dy = y2 - y1; f2.innerHTML = "";
-    var G = plane(f2, BG);
-    if (dx) seg(f2, G, dy / dx, y1 - dy / dx * x1, c.no, 4);
-    else if (dy) el("line", { x1: G.X(x1), y1: G.Y(-5), x2: G.X(x1), y2: G.Y(5), stroke: c.muted, "stroke-width": 4, "stroke-dasharray": "8 6" }, f2);
-    var hp = handle(f2, G.P(x1, y1), c.b, "点 P", "P" + pt(x1, y1), function (d) { mv2(PP, d); focus2 = "p"; draw2p(); }, function (x, y) { at2(PP, x, y); focus2 = null; draw2p(); });
-    var hq = handle(f2, G.P(x2, y2), c.a, "点 Q", "Q" + pt(x2, y2), function (d) { mv2(QQ, d); focus2 = "q"; draw2p(); }, function (x, y) { at2(QQ, x, y); focus2 = null; draw2p(); });
-    txt(f2, G.X(x1) - 16, G.Y(y1) - 14, "P", c.b, 700, 19, "end");
-    txt(f2, G.X(x2) + 18, G.Y(y2) + 18, "Q", c.a, 700, 19, "start");
-    var s = "P" + pt(x1, y1) + "，Q" + pt(x2, y2) + "。";
-    if (!dx && !dy) s += "<span class=\"sum\">P、Q 重合：只有一个点，定不出一条直线。</span>";
-    else if (!dx) s += "<span class=\"sum\">P、Q 的横坐标相同：过它们的是一条竖直的直线（灰色虚线）。同一个 x 对应了不止一个 y，它不是函数的图象，求不出 k、b。</span>";
-    else {
-      s += "设 y = kx + b，代入两点：" + eq(x1, y1) + "，" + eq(x2, y2) + "。两式相减：" + f(dx) + "k = " + f(dy) + "，k = " + fr(dy, dx) + "；代回得 b = " + fr(y1 * dx - dy * x1, dx) + "。";
-      s += dy ? "所以 <span class=\"sum\">" + linFr(dy, dx, y1 * dx - dy * x1, dx) + "</span>。" + (dy % dx ? "k 不是整数也没关系，照样用方程组解。" : "") : "<span class=\"sum\">k = 0：这是水平直线 y = " + f(y1) + "，不是一次函数。</span>";
-    }
-    o2.innerHTML = s;
-    if (focus2) (focus2 === "p" ? hp : hq).focus();
-  });
-  document.getElementById("reset-2p").onclick = function () { PP = [-3, -1]; QQ = [3, 3]; focus2 = null; draw2p(); };
-  resetFocus.push(function () { focus2 = null; });
-
-  /* 动手 ③：x 的范围 → y 的范围 */
-  var fg = document.getElementById("fig-rg"), og = document.getElementById("out-rg"), RL = [0.5, 1], RA = -2, RC = 4, focusRg = null;
-  function rgLo() { return RL[0] > 0 ? -5 : -4; }
-  bar("rg-bar", function (t) { var p = t.getAttribute("data-kb").split(","); RL = [+p[0], +p[1]]; RA = Math.max(RA, rgLo()); RC = Math.max(RC, RA); drawRg(); });
-  var drawRg = reg(function () {
-    var c = C(), k = RL[0], b = RL[1], ya = k * RA + b, yc = k * RC + b, lo = Math.min(ya, yc), hi = Math.max(ya, yc); fg.innerHTML = "";
-    var G = plane(fg, BG);
-    seg(fg, G, k, b, c.muted, 2);
-    if (RC > RA) seg(fg, G, k, b, c.no, 6, null, RA, RC);
-    dash(fg, G.P(RA, 0), G.P(RA, ya), c.muted); dash(fg, G.P(RC, 0), G.P(RC, yc), c.muted);
-    dash(fg, G.P(RA, ya), G.P(0, ya), c.a); dash(fg, G.P(RC, yc), G.P(0, yc), c.a);
-    if (hi > lo) el("line", { x1: G.X(0), y1: G.Y(lo), x2: G.X(0), y2: G.Y(hi), stroke: c.a, "stroke-width": 7, "stroke-linecap": "round" }, fg);
-    dot(fg, G.P(RA, ya), c.no, 6); dot(fg, G.P(RC, yc), c.no, 6);
-    var ha = handle(fg, G.P(RA, 0), c.b, "x 的最小值", "x = " + f(RA), function (d) { RA = clamp(RA + (d[0] || d[1]), rgLo(), RC); focusRg = "a"; drawRg(); },
-      function (x) { RA = clamp(Math.round((x - 280) / 34), rgLo(), RC); focusRg = null; drawRg(); });
-    var hc = handle(fg, G.P(RC, 0), c.b, "x 的最大值", "x = " + f(RC), function (d) { RC = clamp(RC + (d[0] || d[1]), RA, 5); focusRg = "c"; drawRg(); },
-      function (x) { RC = clamp(Math.round((x - 280) / 34), RA, 5); focusRg = null; drawRg(); });
-    var s = lin(k, b) + "，" + f(RA) + " ≤ x ≤ " + f(RC) + "。";
-    if (RA === RC) s += "两端重合，只有 x = " + f(RA) + " 一个值，y = " + f(ya) + "。";
-    else s += "k = " + f(k) + (k > 0 ? " > 0，y 随 x 的增大而增大：x 取最小的 " + f(RA) + " 时 y 最小，取最大的 " + f(RC) + " 时 y 最大。" : " < 0，y 随 x 的增大而减小：x 取最小的 " + f(RA) + " 时 y 反而最大，取最大的 " + f(RC) + " 时 y 最小。") + "所以 <span class=\"sum\">" + f(lo) + " ≤ y ≤ " + f(hi) + "</span>。最大、最小都在两个端点处取到。";
-    og.innerHTML = s;
-    if (focusRg) (focusRg === "a" ? ha : hc).focus();
-  });
-  document.getElementById("reset-rg").onclick = function () { RA = -2; RC = 4; focusRg = null; drawRg(); };
-  resetFocus.push(function () { focusRg = null; });
-
-  drawAll();
-  // 切换深浅色时重画，图里的颜色跟着变
-  new MutationObserver(function () { resetFocus.forEach(function (fn) { fn(); }); drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
-  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
-})();
-</script>
+<script>(function(){"use strict";var NS="http://www.w3.org/2000/svg";function el(tag,a,p){var e=document.createElementNS(NS,tag);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}function txt(p,x,y,s,col,fw,sz,anc){var t=el("text",{x:x,y:y,fill:col,"font-size":sz||20,"font-weight":fw||400,"text-anchor":anc||"middle","paint-order":"stroke fill",stroke:"var(--card)","stroke-width":"4px"},p);t.textContent=s;return t;}function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}function C(){return{fg:css("--fg"),a:css("--a"),b:css("--b"),c:css("--c"),no:css("--no"),muted:css("--muted"),card:css("--card"),line:css("--line")};}function f(v){var r=Math.round(v*100)/100;if(r===0)return"0";var s=String(Math.abs(r));return r<0?"−"+s:s;}function fp(v){return v<0?"("+f(v)+")":f(v);}function clamp(v,lo,hi){return Math.max(lo,Math.min(hi,v));}function snap(v,st){return Math.round(v/st)*st;}function pt(a,b){return"("+f(a)+", "+f(b)+")";}/* y = kx + b 写成文字；k、b 可以是数或「分数字符串」 */function lin(k,b,yv,xv){yv=yv||"y";xv=xv||"x";if(Math.abs(k)<1e-9)return yv+" = "+f(b);var s=k===1?xv:k===-1?"−"+xv:f(k)+xv;if(b>1e-9)s+=" + "+f(b);else if(b<-1e-9)s+=" − "+f(-b);return yv+" = "+s;}function bar(id,cb){var b=document.getElementById(id);[].forEach.call(b.children,function(x){x.setAttribute("aria-pressed",x.classList.contains("on")?"true":"false");});b.addEventListener("click",function(ev){var t=ev.target.closest("button");if(!t)return;[].forEach.call(b.children,function(x){x.classList.toggle("on",x===t);x.setAttribute("aria-pressed",x===t?"true":"false");});cb(t);if(window.Peiyu&&Peiyu.log)Peiyu.log("interact",{id:id,choice:t.textContent.trim()});});}function dk(t){return t.getAttribute("data-k");}/* 坐标网格：原点在 (cx,cy)，单位 u，网格 x0..x1、y0..y1。
+     刻度数字只每 st 格标一个，标在网格下边外 off 处和左边外，离网格里的拖动点足够远。 */function plane(p,g){var c=C(),sz=g.sz||19,st=g.st||2,off=g.off||40,i;function X(w){return g.cx+g.u*w;}function Y(w){return g.cy-g.u*w;}for(i=g.x0;i<=g.x1;i++)el("line",{x1:X(i),y1:Y(g.y0),x2:X(i),y2:Y(g.y1),stroke:c.line,"stroke-width":1},p);for(i=g.y0;i<=g.y1;i++)el("line",{x1:X(g.x0),y1:Y(i),x2:X(g.x1),y2:Y(i),stroke:c.line,"stroke-width":1},p);var ax=Y(Math.max(g.y0,0)),ay=X(Math.max(g.x0,0)),xe=X(g.x1)+12,ye=Y(g.y1)-12;el("line",{x1:X(g.x0),y1:ax,x2:xe,y2:ax,stroke:c.fg,"stroke-width":2},p);el("path",{d:"M"+(xe+12)+" "+ax+" l-13 -6 v12 z",fill:c.fg},p);el("line",{x1:ay,y1:Y(g.y0),x2:ay,y2:ye,stroke:c.fg,"stroke-width":2},p);el("path",{d:"M"+ay+" "+(ye-12)+" l-6 13 h12 z",fill:c.fg},p);txt(p,xe+10,ax-12,g.xn||"x",c.fg,700,sz,"middle");txt(p,ay+12,ye+12,g.yn||"y",c.fg,700,sz,"start");for(i=g.x0;i<=g.x1;i++)if(i%st===0&&!(g.skipX&&g.skipX(i)))txt(p,X(i),Y(g.y0)+off,f(i*(g.xs||1)),i?c.muted:c.b,i?400:700,sz);for(i=g.y0+1;i<=g.y1;i++)if(i%st===0)txt(p,X(g.x0)-10,Y(i)+sz*0.35,f(i*(g.ys||1)),i?c.muted:c.b,i?400:700,sz,"end");return{X:X,Y:Y,P:function(a,b){return[X(a),Y(b)];},g:g};}/* 在网格里画 y = kx + b（截到网格内，xl..xr 可再限制 x 范围） */function seg(p,G,k,b,col,w,dash,xl,xr){var g=G.g,lo=Math.max(g.x0,xl===undefined?-1e9:xl),hi=Math.min(g.x1,xr===undefined?1e9:xr);if(Math.abs(k)>1e-9){var xa=(g.y0-b)/k,xb=(g.y1-b)/k;lo=Math.max(lo,Math.min(xa,xb));hi=Math.min(hi,Math.max(xa,xb));}else if(b<g.y0||b>g.y1)return null;if(hi-lo<1e-6)return null;var a=G.P(lo,k*lo+b),z=G.P(hi,k*hi+b),at={x1:a[0],y1:a[1],x2:z[0],y2:z[1],stroke:col,"stroke-width":w||4,"stroke-linecap":"round"};if(dash)at["stroke-dasharray"]=dash;return el("line",at,p);}function dot(p,xy,col,r,hollow){if(r&&r<=4&&!hollow)return el("rect",{x:xy[0]-r,y:xy[1]-r,width:2*r,height:2*r,rx:1,fill:col},p);return el("circle",hollow?{cx:xy[0],cy:xy[1],r:r||6,fill:C().card,stroke:col,"stroke-width":3}:{cx:xy[0],cy:xy[1],r:r||6,fill:col},p);}function dash(p,a,b,col,w){el("line",{x1:a[0],y1:a[1],x2:b[0],y2:b[1],stroke:col,"stroke-width":w||2,"stroke-dasharray":"6 5"},p);}/* 拖动点：onStep([dx,dy]) 方向键，onAt(x,y) 指针（viewBox 坐标） */function handle(svg,xy,col,label,vt,onStep,onAt){var h=el("circle",{cx:xy[0],cy:xy[1],r:12,fill:C().card,stroke:col,"stroke-width":4,tabindex:0,role:"slider","aria-label":label+"，方向键移动","aria-valuetext":vt,style:"cursor:grab;touch-action:none"},svg);h.addEventListener("keydown",function(e){var d={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,1],ArrowDown:[0,-1]}[e.key];if(!d)return;e.preventDefault();onStep(d);});h.addEventListener("pointerdown",function(e){e.preventDefault();function mv(ev){var m=svg.getScreenCTM();if(!m)return;var q=svg.createSVGPoint();q.x=ev.clientX;q.y=ev.clientY;q=q.matrixTransform(m.inverse());onAt(q.x,q.y);}function up(){window.removeEventListener("pointermove",mv);window.removeEventListener("pointerup",up);if(window.Peiyu&&Peiyu.log)Peiyu.log("interact",{id:svg.id,choice:label});}window.addEventListener("pointermove",mv);window.addEventListener("pointerup",up);});return h;}/* 分数：化简后写成 "−3/2" */function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=a%b;a=b;b=t;}return a||1;}function fr(n,d){if(d<0){n=-n;d=-d;}var g=gcd(n,d);n/=g;d/=g;if(n===0)return"0";return(n<0?"−":"")+Math.abs(n)+(d===1?"":"/"+d);}var draws=[],resetFocus=[];function reg(fn){draws.push(fn);return fn;}function drawAll(){draws.forEach(function(fn){fn();});}var MG={cx:190,cy:126,u:24,x0:-6,x1:6,y0:-4,y1:4,sz:15,off:28};var BG={cx:280,cy:200,u:34,x0:-6,x1:6,y0:-5,y1:5,sz:19,off:40};function shadeQ(p,G,q,col){var g=G.g,xa=q===1||q===4?0:g.x0,xb=q===1||q===4?g.x1:0,ya=q<=2?g.y1:0,yb=q<=2?0:g.y0;el("rect",{x:G.X(xa),y:G.Y(ya),width:G.X(xb)-G.X(xa),height:G.Y(yb)-G.Y(ya),fill:col,"fill-opacity":0.13},p);}function quads(k,b){if(!k)return b>0?[1,2]:b<0?[3,4]:[];if(!b)return k>0?[1,3]:[2,4];return k>0?(b>0?[1,2,3]:[1,3,4]):(b>0?[1,2,4]:[2,3,4]);}var QN=["","一","二","三","四"];function qtext(k,b){return"第"+quads(k,b).map(function(q){return QN[q];}).join("、")+"象限";}/* 一个 plane 先画阴影再画网格：先建一个空的 G 求坐标 */function geo(g){return{X:function(w){return g.cx+g.u*w;},Y:function(w){return g.cy-g.u*w;},g:g};}/* 从例子进入：描点 */var ef=document.getElementById("entry-fig"),entryK=1;var EG={cx:150,cy:140,u:22,x0:-3,x1:3,y0:-5,y1:5,sz:16,off:28};var drawEntry=reg(function(){var c=C(),k=entryK,st=[0,1,0.5,0.1][k],n=0,x;ef.innerHTML="";var G=plane(ef,EG);if(k===3)seg(ef,G,2,0,c.a,2,"6 5");for(x=-2;x<=2.0001;x+=st){dot(ef,G.P(x,2*x),c.no,k===3?3:6);n++;}txt(ef,390,110,"描了 "+n+" 个点",c.fg,700,20);txt(ef,390,150,k===1?"像排成一线":"在一条直线上",k===1?c.muted:c.a,700,20);document.getElementById("entry-note").textContent=k===1?"x = −2, −1, 0, 1, 2 时，y = −4, −2, 0, 2, 4：5 个点好像排成了一条线。":k===2?"每隔 0.5 取一个 x，新描的点也落在同一条线上，没有一个跑偏。":"x 每隔 0.1 取一个值，点密得连成了线——这条线就是 y = 2x 的图象，它经过原点。";});bar("entry-bar",function(t){entryK=+dk(t);drawEntry();});/* 微图解 ①：y = kx */var m1=document.getElementById("m1-fig"),m1k=3;var drawM1=reg(function(){var c=C(),k=m1k;m1.innerHTML="";var G0=geo(MG);quads(k,0).forEach(function(q){shadeQ(m1,G0,q,c.a);});var G=plane(m1,MG);seg(m1,G,k,0,c.b,4);var P=G.P(1,k);dot(m1,P,c.no,6);txt(m1,P[0]+12,P[1]+(k>0?18:-10),"(1, "+f(k)+")",c.no,700,15,"start");document.getElementById("m1-note").textContent="y = "+(k===1?"":k===-1?"−":f(k))+"x：过原点和 (1, "+f(k)+")。"+(k>0?"k > 0，直线从左向右上升，经过第三、第一象限（浅色）；y 随 x 的增大而增大。":"k < 0，直线从左向右下降，经过第二、第四象限（浅色）；y 随 x 的增大而减小。")+(Math.abs(k)>=2?"|k| 大，直线陡。":Math.abs(k)<1?"|k| 小，直线平缓。":"");});bar("m1-bar",function(t){m1k=+dk(t);drawM1();});/* 微图解 ②：上下平移 */var m2=document.getElementById("m2-fig"),m2b=3;function varrow(p,G,x,ya,yb,col){var a=G.P(x,ya),z=G.P(x,yb),d=yb>ya?-1:1;if(Math.abs(a[1]-z[1])<4)return;el("line",{x1:a[0],y1:a[1],x2:z[0],y2:z[1]-d*8,stroke:col,"stroke-width":3},p);el("path",{d:"M"+z[0]+" "+z[1]+" l-6 "+(-d*11)+" h12 z",fill:col},p);}var drawM2=reg(function(){var c=C(),b=m2b;m2.innerHTML="";var G=plane(m2,MG);seg(m2,G,0.5,0,c.muted,3,"6 5");seg(m2,G,0.5,b,c.a,4);[-4,-2,2].forEach(function(x){varrow(m2,G,x,0.5*x,0.5*x+b,c.b);});dot(m2,G.P(0,b),c.no,6);document.getElementById("m2-note").textContent="灰色虚线是 y = 0.5x，绿色是 "+lin(0.5,b)+"。同一个 x，绿色直线上的点总比灰线上的点"+(b>0?"高 "+b:"低 "+(-b))+"（金色箭头一样长），所以整条直线向"+(b>0?"上":"下")+"平移了 "+Math.abs(b)+" 个单位，与 y 轴交于 (0, "+f(b)+")（红点）。两条直线一样斜。";});bar("m2-bar",function(t){m2b=+dk(t);drawM2();});/* 微图解 ③：象限 */var m3=document.getElementById("m3-fig"),m3v=[2,3];var drawM3=reg(function(){var c=C(),k=m3v[0],b=m3v[1];m3.innerHTML="";var G0=geo(MG);quads(k,b).forEach(function(q){shadeQ(m3,G0,q,c.a);});var G=plane(m3,MG);seg(m3,G,k,b,c.b,4);dot(m3,G.P(0,b),c.no,6);dot(m3,G.P(-b/k,0),c.a,6);document.getElementById("m3-note").textContent=lin(k,b)+"：k "+(k>0?"> 0，从左向右上升":"< 0，从左向右下降")+"；与 y 轴交于 (0, "+f(b)+")（红点），在 y 轴"+(b>0?"正":"负")+"半轴；与 x 轴交于 ("+f(-b/k)+", 0)。所以经过"+qtext(k,b)+"（浅色），不经过第"+QN[[1,2,3,4].filter(function(q){return quads(k,b).indexOf(q)<0;})[0]]+"象限。";});bar("m3-bar",function(t){var p=t.getAttribute("data-kb").split(",");m3v=[+p[0],+p[1]];drawM3();});/* 翻车现场 ① */var drawTrap=reg(function(){var p=document.getElementById("m-trap"),c=C();p.innerHTML="";var G=plane(p,{cx:140,cy:110,u:20,x0:-5,x1:5,y0:-4,y1:4,sz:14,off:26});seg(p,G,2,-3,c.a,4);dot(p,G.P(0,-3),c.no,6);txt(p,G.X(-3),G.Y(2.5),"仍上升",c.a,700,15);});/* 动手 ①：拖 k、b */var fk=document.getElementById("fig-kb"),ok=document.getElementById("out-kb"),K2=3,B2=-2,focusKb=null;function fixK(){K2=clamp(K2,-6,6);K2=clamp(K2,-9-B2,9-B2);}var drawKb=reg(function(){var c=C(),k=K2/2,b=B2/2;fk.innerHTML="";var G=plane(fk,BG);if(k)seg(fk,G,k,0,c.muted,2,"7 6");seg(fk,G,k,b,c.no,4);el("line",{x1:G.X(1),y1:G.Y(-5),x2:G.X(1),y2:G.Y(5),stroke:c.a,"stroke-width":1.5,"stroke-dasharray":"3 5"},fk);var hb=handle(fk,G.P(0,b),c.b,"b","b = "+f(b),function(d){B2=clamp(B2+(d[1]||d[0]),-8,8);fixK();focusKb="b";drawKb();},function(x,y){B2=clamp(Math.round(2*(200-y)/34),-8,8);fixK();focusKb=null;drawKb();});var hk=handle(fk,G.P(1,k+b),c.a,"k","k = "+f(k),function(d){K2+=(d[1]||d[0]);fixK();focusKb="k";drawKb();},function(x,y){K2=Math.round(2*(200-y)/34)-B2;fixK();focusKb=null;drawKb();});var s;if(!K2)s="<span class=\"sum\">k = 0："+(B2?lin(0,b)+" 是一条水平直线":"y = 0 就是 x 轴")+"，y 不随 x 变化。这时它不是一次函数（是常数函数）。</span>";else{s=lin(k,b)+"：k = "+f(k)+(k>0?" > 0，直线从左向右上升，y 随 x 的增大而增大":" < 0，直线从左向右下降，y 随 x 的增大而减小")+"；与 y 轴交于 (0, "+f(b)+")，与 x 轴交于 ("+fr(-B2,K2)+", 0)；经过"+qtext(k,b)+"。";s+=B2?"它由灰色虚线 "+lin(k,0)+" 向"+(b>0?"上":"下")+"平移 "+f(Math.abs(b))+" 个单位得到。":"b = 0：这是正比例函数，直线过原点。";}ok.innerHTML=s;if(focusKb)(focusKb==="b"?hb:hk).focus();});document.getElementById("reset-kb").onclick=function(){K2=3;B2=-2;focusKb=null;drawKb();};resetFocus.push(function(){focusKb=null;});/* 动手 ②：两点定直线 */var f2=document.getElementById("fig-2p"),o2=document.getElementById("out-2p"),PP=[-3,-1],QQ=[3,3],focus2=null;function kx(n,d,v){var s=fr(n,d);if(s==="1")return v;if(s==="−1")return"−"+v;if(s.indexOf("/")>=0)return(s[0]==="−"?"−("+s.slice(1):"("+s)+")"+v;return s+v;}function linFr(kn,kd,bn,bd){var s="y = "+kx(kn,kd,"x"),bs=fr(bn,bd);if(bs!=="0")s+=bs[0]==="−"?" − "+bs.slice(1):" + "+bs;return s;}function eq(x,y){return(x===0?"b":(x===1?"k":x===-1?"−k":f(x)+"k")+" + b")+" = "+f(y);}function mv2(P,d){P[0]=clamp(P[0]+d[0],-5,5);P[1]=clamp(P[1]+d[1],-4,4);}function at2(P,x,y){P[0]=clamp(Math.round((x-280)/34),-5,5);P[1]=clamp(Math.round((200-y)/34),-4,4);}var draw2p=reg(function(){var c=C(),x1=PP[0],y1=PP[1],x2=QQ[0],y2=QQ[1],dx=x2-x1,dy=y2-y1;f2.innerHTML="";var G=plane(f2,BG);if(dx)seg(f2,G,dy/dx,y1-dy/dx*x1,c.no,4);else if(dy)el("line",{x1:G.X(x1),y1:G.Y(-5),x2:G.X(x1),y2:G.Y(5),stroke:c.muted,"stroke-width":4,"stroke-dasharray":"8 6"},f2);var hp=handle(f2,G.P(x1,y1),c.b,"点 P","P"+pt(x1,y1),function(d){mv2(PP,d);focus2="p";draw2p();},function(x,y){at2(PP,x,y);focus2=null;draw2p();});var hq=handle(f2,G.P(x2,y2),c.a,"点 Q","Q"+pt(x2,y2),function(d){mv2(QQ,d);focus2="q";draw2p();},function(x,y){at2(QQ,x,y);focus2=null;draw2p();});txt(f2,G.X(x1)-16,G.Y(y1)-14,"P",c.b,700,19,"end");txt(f2,G.X(x2)+18,G.Y(y2)+18,"Q",c.a,700,19,"start");var s="P"+pt(x1,y1)+"，Q"+pt(x2,y2)+"。";if(!dx&&!dy)s+="<span class=\"sum\">P、Q 重合：只有一个点，定不出一条直线。</span>";else if(!dx)s+="<span class=\"sum\">P、Q 的横坐标相同：过它们的是一条竖直的直线（灰色虚线）。同一个 x 对应了不止一个 y，它不是函数的图象，求不出 k、b。</span>";else{s+="设 y = kx + b，代入两点："+eq(x1,y1)+"，"+eq(x2,y2)+"。两式相减："+f(dx)+"k = "+f(dy)+"，k = "+fr(dy,dx)+"；代回得 b = "+fr(y1*dx-dy*x1,dx)+"。";s+=dy?"所以 <span class=\"sum\">"+linFr(dy,dx,y1*dx-dy*x1,dx)+"</span>。"+(dy%dx?"k 不是整数也没关系，照样用方程组解。":""):"<span class=\"sum\">k = 0：这是水平直线 y = "+f(y1)+"，不是一次函数。</span>";}o2.innerHTML=s;if(focus2)(focus2==="p"?hp:hq).focus();});document.getElementById("reset-2p").onclick=function(){PP=[-3,-1];QQ=[3,3];focus2=null;draw2p();};resetFocus.push(function(){focus2=null;});/* 动手 ③：x 的范围 → y 的范围 */var fg=document.getElementById("fig-rg"),og=document.getElementById("out-rg"),RL=[0.5,1],RA=-2,RC=4,focusRg=null;function rgLo(){return RL[0]>0?-5:-4;}bar("rg-bar",function(t){var p=t.getAttribute("data-kb").split(",");RL=[+p[0],+p[1]];RA=Math.max(RA,rgLo());RC=Math.max(RC,RA);drawRg();});var drawRg=reg(function(){var c=C(),k=RL[0],b=RL[1],ya=k*RA+b,yc=k*RC+b,lo=Math.min(ya,yc),hi=Math.max(ya,yc);fg.innerHTML="";var G=plane(fg,BG);seg(fg,G,k,b,c.muted,2);if(RC>RA)seg(fg,G,k,b,c.no,6,null,RA,RC);dash(fg,G.P(RA,0),G.P(RA,ya),c.muted);dash(fg,G.P(RC,0),G.P(RC,yc),c.muted);dash(fg,G.P(RA,ya),G.P(0,ya),c.a);dash(fg,G.P(RC,yc),G.P(0,yc),c.a);if(hi>lo)el("line",{x1:G.X(0),y1:G.Y(lo),x2:G.X(0),y2:G.Y(hi),stroke:c.a,"stroke-width":7,"stroke-linecap":"round"},fg);dot(fg,G.P(RA,ya),c.no,6);dot(fg,G.P(RC,yc),c.no,6);var ha=handle(fg,G.P(RA,0),c.b,"x 的最小值","x = "+f(RA),function(d){RA=clamp(RA+(d[0]||d[1]),rgLo(),RC);focusRg="a";drawRg();},function(x){RA=clamp(Math.round((x-280)/34),rgLo(),RC);focusRg=null;drawRg();});var hc=handle(fg,G.P(RC,0),c.b,"x 的最大值","x = "+f(RC),function(d){RC=clamp(RC+(d[0]||d[1]),RA,5);focusRg="c";drawRg();},function(x){RC=clamp(Math.round((x-280)/34),RA,5);focusRg=null;drawRg();});var s=lin(k,b)+"，"+f(RA)+" ≤ x ≤ "+f(RC)+"。";if(RA===RC)s+="两端重合，只有 x = "+f(RA)+" 一个值，y = "+f(ya)+"。";else s+="k = "+f(k)+(k>0?" > 0，y 随 x 的增大而增大：x 取最小的 "+f(RA)+" 时 y 最小，取最大的 "+f(RC)+" 时 y 最大。":" < 0，y 随 x 的增大而减小：x 取最小的 "+f(RA)+" 时 y 反而最大，取最大的 "+f(RC)+" 时 y 最小。")+"所以 <span class=\"sum\">"+f(lo)+" ≤ y ≤ "+f(hi)+"</span>。最大、最小都在两个端点处取到。";og.innerHTML=s;if(focusRg)(focusRg==="a"?ha:hc).focus();});document.getElementById("reset-rg").onclick=function(){RA=-2;RC=4;focusRg=null;drawRg();};resetFocus.push(function(){focusRg=null;});drawAll();// 切换深浅色时重画，图里的颜色跟着变
+new MutationObserver(function(){resetFocus.forEach(function(fn){fn();});drawAll();}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme","class"]});if(window.matchMedia){var mq=matchMedia("(prefers-color-scheme: dark)");if(mq.addEventListener)mq.addEventListener("change",drawAll);}})();</script>
+<script id="fp-script">!function(){"use strict";const e=e=>document.getElementById("fp-"+e),t="http://www.w3.org/2000/svg",n={a:["3/2","0"],b:["-2/3","0"],c:["-1/2","-1"],d:["2","-3"],e:["1/2","4"],z:["0","2"],o:["0","0"]};function r(e,t=1n){t<0n&&(e=-e,t=-t);const n=function(e,t){for(e=e<0n?-e:e;t;){const n=e%t;e=t,t=n}return e||1n}(e,t);return{n:e/n,d:t/n}}function o(e){if(e=e.trim(),!/^[+-]?(?:\d+(?:\.\d{1,3})?|\d+\/\d+)$/.test(e))return null;let t,n=1n;if(e.includes("/")){const r=e.split("/");if(t=BigInt(r[0]),n=BigInt(r[1]),n<1n||n>1000n)return null}else{const r=e.split(".");n=10n**BigInt((r[1]||"").length),t=BigInt(r[0]+(r[1]||""))}return t>10000n||t<-10000n?null:r(t,n)}const l=(e,t)=>e&&t&&e.n*t.d==t.n*e.d,i=(e,t)=>r(e.n*t.d+t.n*e.d,e.d*t.d),a=(e,t)=>r(e.n*t.n,e.d*t.d),c=(e,t)=>i(e,r(-t.n,t.d)),u=(e,t)=>r(e.n*t.d,e.d*t.n),d=e=>Number(e.n)/Number(e.d),s=e=>String(e.n)+(1n===e.d?"":"/"+e.d),f=(r(0n),e=>e&&Math.abs(d(e))<=6);let x=null,p=null,h=[],v=!1,y=null,m=null,b=[];function k(t,n="notice"){e("feedback").textContent=t,e("feedback").dataset.state=n}function g(){k(""),e("rubric").hidden=!0}function w(t){b.push(t);const n=document.createElement("li");n.textContent=t,e("trace").append(n)}function E(){g(),x=null,p=null,h=[],y=null,m=null,v=!1,b=[],e("trace").replaceChildren(),["px","py","xaxis","yaxis","note"].forEach((t=>e(t).value="")),e("origin").value="",function(){const t="two"===e("method").value?2:5;["row","from","to"].forEach((n=>{e(n).replaceChildren(new Option("自行选择",""),...Array.from({length:t},((e,t)=>new Option("第"+(t+1)+"点",String(t)))))}))}();const t="two"===e("method").value?2:5;e("table").replaceChildren();for(let n=0;n<t;n++){const t=document.createElement("div");t.className="fp-controls",t.innerHTML="<b>第"+(n+1)+'行</b><label>x<input data-fp-x="'+n+'" inputmode="decimal"></label><label>我算的y<input data-fp-y="'+n+'" inputmode="decimal"></label>',e("table").append(t)}const r=n[e("task").value];if(e("prompt").textContent=r?"请为所选函数自行取不同x、算y，再描点连线。":"先选择待画函数。",r){const t=o(r[0]),n=o(r[1]);0n===t.n?(e("prompt").textContent="k=0，这是常数函数；按本册定义既不是正比例函数，也不是一次函数。请换一个非零k任务。",k("边界：k=0不进入本活动的一次/正比例作图验收。","boundary")):x={k:t,b:n}}S()}function M(n,r){const o=document.createElementNS(t,n);return Object.entries(r).forEach((([e,t])=>o.setAttribute(e,t))),e("fig").append(o),o}e("table-check").onclick=()=>{g(),p=function(){if(!x)return k("请先选k不为0的待画函数。","error"),null;const t=[...e("table").querySelectorAll("[data-fp-x]")],n=[...e("table").querySelectorAll("[data-fp-y]")],r=[];for(let e=0;e<t.length;e++){const c=o(t[e].value),u=o(n[e].value);if(!f(c)||!f(u)||!c||c.d>2n)return k("第"+(e+1)+"行：检查语法、范围；x须为整数或半单位。","error"),null;if(r.some((e=>l(e.x,c))))return k("横坐标重复：两点法需两个不同x，多点表也请取不同x。","error"),null;if(!l(u,i(a(x.k,c),x.b)))return k("第"+(e+1)+"行代入不相等，请检查符号和运算。","error"),null;r.push({x:c,y:u})}return r}(),v=!1,y=null,p&&(k("列表代入均相等；现在由你在图中独立落点。","table"),w("核对"+p.length+"行列表")),S()},e("table").addEventListener("input",(()=>{g(),p=null,h=[],v=!1,y=null,S()}));const L=e=>280+36*e,C=e=>280-36*e;function S(){e("fig").replaceChildren();for(let e=-6;e<=6;e++)M("line",{x1:L(e),y1:C(-6),x2:L(e),y2:C(6),stroke:"var(--line)"}),M("line",{x1:L(-6),y1:C(e),x2:L(6),y2:C(e),stroke:"var(--line)"}),e%2==0&&(A(L(e),525,String(e)),A(30,C(e)+6,String(e)));if(M("line",{x1:64,y1:280,x2:508,y2:280,stroke:"var(--fg)","stroke-width":2}),M("line",{x1:280,y1:496,x2:280,y2:52,stroke:"var(--fg)","stroke-width":2}),A(520,270,"x"),A(298,44,"y"),y){const e=d(y.k),t=d(y.b);let n=-6,r=6;const o=(-6-t)/e,l=(6-t)/e;n=Math.max(n,Math.min(o,l)),r=Math.min(r,Math.max(o,l)),n<r&&M("line",{id:"fp-student-line",x1:L(n),y1:C(e*n+t),x2:L(r),y2:C(e*r+t),stroke:"var(--a)","stroke-width":3})}h.forEach(((e,t)=>{e&&(M("circle",{cx:L(d(e.x)),cy:C(d(e.y)),r:6,fill:"var(--no)","data-plot":t,"data-x":s(e.x),"data-y":s(e.y)}),A(L(d(e.x))+12,C(d(e.y))-12,"P"+(t+1)))})),m&&M("path",{d:"M"+(L(m[0])-7)+" "+C(m[1])+"h14m-7 -7v14",stroke:"var(--b)","stroke-width":2})}function A(e,t,n){M("text",{x:e,y:t,fill:"var(--fg)","font-size":20,"text-anchor":"middle","data-figure-label-fixed":"1"}).textContent=n}function B(){m||(m=[0,0]),e("px").value=String(m[0]),e("py").value=String(m[1]),g(),y=null,v=!1,S()}e("plot").onclick=()=>{g(),y=null,v=!1;const t=e("row").value,n=o(e("px").value),r=o(e("py").value);if(!p||""===t||!f(n)||!f(r))return k("先核列表、选表行，再输入窗口内的图上坐标。","error"),void S();h[+t]={x:n,y:r},w("落P"+(+t+1)+"=("+s(n)+","+s(r)+")"),k("已按你输入的坐标落点，尚未核对是否对应表中该行。"),S()},e("points-check").onclick=()=>{if(g(),v=!1,y=null,!p)return k("先完成列表核验。","error"),void S();for(let e=0;e<p.length;e++){const t=h[e];if(!t||!l(t.x,p[e].x)||!l(t.y,p[e].y))return k("第"+(e+1)+"点未对应表中坐标，请检查横纵位置及刻度。","error"),void S()}v=!0,k("描点与表逐项对应；请选择两点画直线。","points"),S()},e("line").onclick=()=>{g(),y=null;const t=e("from").value,n=e("to").value,r=h[+t],o=h[+n];if(!v||""===t||""===n||!r||!o||l(r.x,o.x))return k("先核完描点，再选横坐标不同的两点。","error"),void S();const i=u(c(o.y,r.y),c(o.x,r.x)),d=c(r.y,a(i,r.x));if(!l(i,x.k)||!l(d,x.b))return k("所选点没有确定题给直线，请复查。","error"),void S();y={k:i,b:d},w("过P"+(+t+1)+"、P"+(+n+1)+"画直线"),k("已画过所选两点的直线；窗口只截取其中一部分。有限点核算不是对所有点的证明。","line"),S()},e("axes-check").onclick=()=>{if(g(),!y)return void k("先完成自主描点连线。","error");const t=o(e("yaxis").value),n=o(e("xaxis").value),i=u(r(-x.b.n,x.b.d),x.k),a=e("origin").value,c=l(t,x.b)&&l(n,i)&&a===(0n===x.b.n?"yes":"no");k(c?"交点与原点判断一致；"+(Math.abs(d(i))>6?"x轴交点在窗口外，不是不存在。":0n===x.b.n?"过原点，这是正比例函数，也是一次函数。":"不过原点，这是一次函数而非正比例函数。"):"交点或原点判断需复查：分别令x=0和y=0。",c?"pass":"error"),c&&w("交点与原点复核完成")},e("fig").addEventListener("pointerdown",(t=>{if(!x)return;const n=e("fig").getBoundingClientRect(),r=560*(t.clientX-n.left)/n.width,o=560*(t.clientY-n.top)/n.height;r<64||r>496||o<64||o>496||(m=[Math.round((r-280)/36*4)/4,Math.round((280-o)/36*4)/4],B())})),e("fig").addEventListener("keydown",(e=>{const t={ArrowLeft:[-.25,0],ArrowRight:[.25,0],ArrowUp:[0,.25],ArrowDown:[0,-.25]}[e.key];t?(e.preventDefault(),m=m||[0,0],m=[Math.max(-6,Math.min(6,m[0]+t[0])),Math.max(-6,Math.min(6,m[1]+t[1]))],g(),S()):"Enter"===e.key&&(e.preventDefault(),B())})),["px","py","from","to"].forEach((t=>{const n=()=>{g(),y=null,"px"!==t&&"py"!==t||(v=!1),S()};e(t).addEventListener("input",n),e(t).addEventListener("change",n)})),e("row").onchange=()=>{g(),e("px").value="",e("py").value=""},["xaxis","yaxis","origin"].forEach((t=>e(t).addEventListener("input",g))),e("note").addEventListener("input",(()=>{e("rubric").hidden=!0})),e("self").onclick=()=>{e("note").value.trim()?e("rubric").hidden=!1:k("先写下你的选点和复查记录。")},e("task").onchange=E,e("method").onchange=E,e("reset").onclick=E,e("save").onclick=()=>{const t=["23.2 我的作图记录（开放文字未自动判对）",e("task").selectedOptions[0].textContent,e("method").selectedOptions[0].textContent,...[...e("table").children].map((e=>[...e.querySelectorAll("input")].map((e=>e.value)).join(","))),...b,e("note").value].join("\n"),n=document.createElement("a"),r=URL.createObjectURL(new Blob([t],{type:"text/plain;charset=utf-8"}));n.href=r,n.download="j23-2-我的作图.txt",n.click(),setTimeout((()=>URL.revokeObjectURL(r)),1e3)},E()}();</script>
 </body></html>

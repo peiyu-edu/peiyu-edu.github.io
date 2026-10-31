@@ -21,7 +21,8 @@
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<script defer src="../assets/b8b-j24-3-self-boxplot-dev.js"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j24-3" data-standard="v2">
 <div class="wrap">
@@ -240,6 +241,30 @@
     <svg class="fig" id="fig-two" viewBox="0 0 560 300" role="img" aria-label="两个班成绩的箱线图与调节滑轨"></svg>
     <div class="result" id="out-two" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-two" type="button">重置</button></div>
+  </div>
+  <div class="card" id="self-boxplot-work">
+    <h3>④ 自己画：定刻度、描五点、连箱须</h3>
+    <p>采用一份<b>已提供的五数概括</b>，不是把这五个数当成五条原始数据。自行录入，或选一份给定练习；这里不另定四分位数求法、不替原数据复核五数。</p>
+    <div class="ctrl"><button class="btn ghost" id="sb-given" type="button">给定练习</button><button class="btn ghost" id="sb-flat" type="button">给定零宽箱体</button><button class="btn ghost" id="sb-equal" type="button">给定全等五数</button></div>
+    <div id="sb-five" class="ctrl"></div>
+    <p class="small">按最小值 ≤ Q₁ ≤ Q₂ ≤ Q₃ ≤ 最大值录入，允许相等。所有数只收半角整数或至多两位小数，整数部分最多三位；负号用 -，不用正号、多余前导0、单位、算式、指数或内部空格。</p>
+    <h4>1. 我定均匀刻度</h4>
+    <div class="ctrl"><label>数轴起点 <input id="sb-lo" size="7" maxlength="8" inputmode="decimal"></label><label>终点 <input id="sb-hi" size="7" maxlength="8" inputmode="decimal"></label><label>每小格间隔 <input id="sb-step" size="7" maxlength="8" inputmode="decimal"></label></div>
+    <p class="small">起点小于终点，覆盖五数；间隔为正，正好分成1～20小格。数轴只标部分刻度的数，其余按相同间隔数。五数全等时也要选一条有长度的数轴。修改五数或刻度会撤下旧图，须重新建立刻度。</p>
+    <button class="btn" id="sb-axis" type="button">按我定的刻度开始 / 重画</button>
+    <h4>2. 我逐个描点</h4>
+    <div class="ctrl"><label>当前标记 <select id="sb-marker"><option value="">先选择</option><option value="0">最小值</option><option value="1">Q₁</option><option value="2">Q₂（中位数）</option><option value="3">Q₃</option><option value="4">最大值</option></select></label><label>我描的位置 <input id="sb-position" size="7" maxlength="8" inputmode="decimal"></label><button class="btn ghost" id="sb-place" type="button">描在这个位置</button><button class="btn ghost" id="sb-unplace" type="button">撤当前标记</button></div>
+    <p class="small">选标记后点数轴描点，或输入自己按刻度算的位置。键盘聚焦图：Home/End放到轴端，方向键每次0.01，按Shift每次一小格。五点分行显示，沿竖向虚线看同一数轴位置；相等数可重合，不会强行错开数值。</p>
+    <h4>3. 我画箱体、中位线和须线</h4>
+    <label>要画 / 重画 <select id="sb-part"><option value="">先选择构件</option><option value="box">箱体</option><option value="median">中位线</option><option value="left">左须线</option><option value="right">右须线</option></select></label>
+    <p class="small">先选构件，再点两个已描的标记作端点；中位线只选一个。允许重复选同一标记以画零长度部分。点的标记可用Tab、回车或空格选；上方绘图区只画你亲自指定的构件，不自动连成答案。</p>
+    <button class="btn ghost" id="sb-erase" type="button">撤所选构件</button>
+    <svg class="fig" id="sb-fig" viewBox="0 0 560 510" role="group" tabindex="0" aria-label="自己定刻度、描标记并连接箱须的绘图区"></svg>
+    <p id="sb-plan" class="small" style="overflow-wrap:anywhere" aria-live="polite">尚未定刻度。</p>
+    <label for="sb-why">我的画图说明：怎样定等距刻度？重合的标记如何处理？五数能说明什么，不能说明什么？</label><textarea id="sb-why" rows="3" maxlength="1000" style="width:100%;box-sizing:border-box"></textarea>
+    <div class="ctrl"><button class="btn" id="sb-check" type="button">核对我的图，文字另自检</button><button class="btn ghost" id="sb-reset" type="button">清空本工坊</button></div>
+    <div class="result" id="sb-feedback" aria-live="polite">先自己定刻度、描点、连接，再核对。</div>
+    <p class="small">箱线图只表示五数，不保证各段恰有25%观测，也不能仅凭一般五数图形的对称外观认定完整分布对称。箱体宽为0不等于全部数据相同；只有已知最小值等于最大值，才可判全组等值。草稿只在本页内存，刷新/清空即清除，不认证实物或合作经历。</p>
   </div>
 </section>
 

@@ -20,8 +20,16 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
+  .open-task label { display:block; margin:10px 0; }
+  .open-task input:not([type=checkbox]), .open-task select, .open-task textarea { font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); padding:8px; border-radius:6px; box-sizing:border-box; max-width:100%; }
+  .open-task input:not([type=checkbox]) { width:12em; }
+  .open-task textarea { width:100%; }
+  .open-task .actions { display:flex; flex-wrap:wrap; gap:8px; }
+  .open-task :focus-visible { outline:3px solid var(--a); outline-offset:2px; }
+  .open-task .point-grid { display:block; width:100%; height:auto; background:var(--card); }
+  .open-task .point-list { overflow-wrap:anywhere; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j10-1" data-standard="v2">
 <div class="wrap">
@@ -237,6 +245,53 @@
 </section>
 
 <section class="step" data-title="动手">
+  <h3>自己建模：先设元、写关系，再列式回查</h3>
+  <form class="card open-task" id="open-model" novalidate>
+    <p>小雅买了明信片和贴纸，两种都买了。明信片每张4元，贴纸每枚3元；一共8件，正好花29元。请自己给两个未知数命名，写清各自的含义和单位，再写两条相等关系及对应方程。不要只从现成方程里挑选。</p>
+    <label>第一个未知数的名称 <input id="model-name-a" maxlength="12" autocomplete="off"></label>
+    <label>它表示什么？<textarea id="model-meaning-a" rows="2" maxlength="120"></textarea></label>
+    <label>它的单位 <input id="model-unit-a" maxlength="20" autocomplete="off"></label>
+    <label>第二个未知数的名称 <input id="model-name-b" maxlength="12" autocomplete="off"></label>
+    <label>它表示什么？<textarea id="model-meaning-b" rows="2" maxlength="120"></textarea></label>
+    <label>它的单位 <input id="model-unit-b" maxlength="20" autocomplete="off"></label>
+    <label>第一条相等关系（用自己的话写）<textarea id="model-relation-a" rows="2" maxlength="240"></textarea></label>
+    <label>由这条关系写出的方程<textarea id="model-equation-a" rows="2" maxlength="160"></textarea></label>
+    <label>第二条相等关系（用自己的话写）<textarea id="model-relation-b" rows="2" maxlength="240"></textarea></label>
+    <label>由这条关系写出的方程<textarea id="model-equation-b" rows="2" maxlength="160"></textarea></label>
+    <p>用列表尝试或自己的办法找到一对数量，再回到题意检查。下面填的是实际物品数，请与自己设的未知数一一对应。</p>
+    <label>我回查的明信片张数 <input id="model-cards" inputmode="decimal" maxlength="40" autocomplete="off"></label>
+    <label>我回查的贴纸枚数 <input id="model-stickers" inputmode="decimal" maxlength="40" autocomplete="off"></label>
+    <div class="actions"><button class="btn" type="submit">回查数量，并展开文字自核准则</button><button class="btn ghost" type="reset">重置建模记录</button></div>
+    <p class="result" id="model-feedback" aria-live="polite"></p>
+    <div id="model-criteria" hidden>
+      <p><b>逐条人工核对，不能只看数值过关：</b></p>
+      <ol><li>两个名字是否不同、含义明确且始终一致？单位是否分别与明信片、贴纸对应？</li><li>一条关系应核总件数，另一条应核总价；只有重复的一条关系不够。</li><li>方程每一项是否与所设量对应、两边单位一致？若交换设元含义，单价系数也须相应交换；移项、换边等合法等价列式都可。</li><li>把自己找到的两个数代回自己写的每个方程，还要核实际件数和总价、两种数量都是正整数。</li></ol>
+      <p class="small">网页只计算下方两种实际物品数是否满足题意；设元、单位、文字关系和方程未自动判分。复杂等价写法或拿不准的推理请保留，交老师或同伴按以上准则核对，不因写法不同判错。</p>
+    </div>
+  </form>
+  <details class="more open-task" id="open-explore">
+    <summary>选做·章末数学活动：把自己找到的数对描出来</summary>
+    <p>在坐标纸上探索① x+y=4、② 2x−y=2。自己找数对，分别代入核对，再把它作为点的坐标描下；每个方程至少试两个不同的数对。可以继续试小数、分数、零或负数。</p>
+    <p class="small">这里只作选做观察：有限描点和连线不能证明一般结论，也不作为本章的求解步骤，不替代后续消元方法。图中只连接你已描的点，不自动补出整条轨迹。单选或网页记录不能代替亲手画图、小组交流。</p>
+    <form id="open-plot" novalidate>
+      <label>这次为哪个方程选数对？<select id="plot-equation"><option value="">请选择</option><option value="1">① x+y=4</option><option value="2">② 2x−y=2</option></select></label>
+      <label>x坐标 <input id="plot-x" inputmode="decimal" maxlength="40" autocomplete="off"></label>
+      <label>y坐标 <input id="plot-y" inputmode="decimal" maxlength="40" autocomplete="off"></label>
+      <p class="small">数值支持普通十进制数（至多六位小数）或分数；其他数式请在纸上或请老师核对，不会当普通数字猜读。此网格两坐标均在−2到6之间，超出时可另用纸画；每式最多保留12个不同点，只是显示容量，不是解的个数。</p>
+      <div class="actions"><button class="btn" type="submit">代入核对并描点</button><button class="btn ghost" type="reset">清空描点记录</button></div>
+      <p class="result" id="plot-feedback" aria-live="polite"></p>
+      <label><input type="checkbox" id="plot-connect"> 连接同一方程中自己已描的点（仅观察）</label>
+    </form>
+    <svg class="point-grid" id="open-grid" viewBox="0 0 520 520" role="img" aria-label="自己输入数对的描点网格"></svg>
+    <p class="point-list" id="plot-list" aria-live="polite">尚未描点。</p>
+    <form id="open-observe" novalidate>
+      <label>我观察并准备回查的公共数对：x <input id="observe-x" inputmode="decimal" maxlength="40" autocomplete="off"></label>
+      <label>y <input id="observe-y" inputmode="decimal" maxlength="40" autocomplete="off"></label>
+      <label>我的观察或回查想法（选填，文字由自己核对）<textarea id="observe-note" rows="2" maxlength="240"></textarea></label>
+      <div class="actions"><button class="btn" type="submit">逐式回查所填数对</button><button class="btn ghost" type="reset">重置观察记录</button></div>
+      <p class="result" id="observe-feedback" aria-live="polite"></p>
+    </form>
+  </details>
   <h3>① 一个方程的解：拖动 \(x\)，看 \(y\) 怎么跟着变</h3>
   <p class="small">方程 \(2x+y=8\)。拖动下面的圆点（或点一下圆点再用方向键）改变 \(x\)。金色箭头是 \(2x\)，绿色箭头是 \(y\)，两段拼起来总是走到 \(8\)。</p>
   <div class="card">
@@ -502,6 +557,121 @@
   drawAll();
   new MutationObserver(function () { focus1 = false; focus2 = null; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script>
+// j10-1独占活动：只反馈当前DOM，不写账本或掌握状态。
+(function () {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  // 仅明确映射全角数字/标点和常用负号；不上兼容归一化，²等保持不可识别。
+  const clean = s => s.replace(/[０-９]/g,c => String.fromCharCode(c.charCodeAt(0)-65248)).replace(/[−－]/g,'-').replace(/＋/g,'+').replace(/．/g,'.').replace(/／/g,'/').trim();
+  function rat(n,d=1n) {
+    if (!d) return null;
+    if (d<0n) { n=-n; d=-d; }
+    let a=n<0n?-n:n,b=d; while (b) { const t=a%b; a=b; b=t; }
+    return {n:n/a,d:d/a};
+  }
+  function value(s) {
+    const unwrap = t => { t=t.trim(); while (/^\([^()]*\)$/.test(t)) t=t.slice(1,-1).trim(); return t; };
+    const parts=unwrap(clean(s)).split('/').map(unwrap);
+    function decimal(t) {
+      if (!/^[+-]?(?:\d{1,9}(?:\.\d{1,6})?|\.\d{1,6})$/.test(t)) return null;
+      const k=(t.split('.')[1]||'').length; return rat(BigInt(t.replace('.','')),10n**BigInt(k));
+    }
+    if (parts.length>2) return null;
+    const a=decimal(parts[0]),b=parts.length===2?decimal(parts[1]):rat(1n);
+    return a&&b&&b.n!==0n?rat(a.n*b.d,a.d*b.n):null;
+  }
+  const add=(a,b)=>rat(a.n*b.d+b.n*a.d,a.d*b.d);
+  const times=(a,k)=>rat(a.n*BigInt(k),a.d);
+  const same=(a,n)=>a.n===BigInt(n)*a.d;
+  const show=a=>a.d===1n?String(a.n):a.n+'/'+a.d;
+  const inside=a=>a.n>=-2n*a.d&&a.n<=6n*a.d;
+  function clear(id) { $(id).textContent=''; delete $(id).dataset.state; }
+  function tell(id,text,state) { $(id).textContent=text; $(id).dataset.state=state; }
+  const writing=['name-a','meaning-a','unit-a','name-b','meaning-b','unit-b','relation-a','equation-a','relation-b','equation-b'];
+  $('open-model').addEventListener('submit', e => {
+    e.preventDefault();
+    if (writing.some(k=>!$('model-'+k).value.trim())) return tell('model-feedback','请先独立填写两个未知数、各自含义和单位、两条相等关系及对应方程，再核对。','retry');
+    if ($('model-name-a').value.trim()===$('model-name-b').value.trim()) return tell('model-feedback','两个不同的未知量请分别命名，并在两条方程中保持含义一致。','retry');
+    const a=value($('model-cards').value),b=value($('model-stickers').value);
+    if (!a||!b) return tell('model-feedback','物品数未识别：请用普通数字或分数；上标等其他数式需人工核对，不按普通数字判对。','format');
+    $('model-criteria').hidden=false;
+    if (a.d!==1n||b.d!==1n||a.n<=0n||b.n<=0n||a.n>=8n||b.n>=8n) return tell('model-feedback','题目两种都买了，数量须是正整数，且各自少于总件数。文字与列式仍须人工核对。','retry');
+    const count=add(a,b),cost=add(times(a,4),times(b,3));
+    if (!same(count,8)||!same(cost,29)) return tell('model-feedback','按你填的实际物品数，共'+show(count)+'件、花'+show(cost)+'元，还未同时符合两条题意。请重试；设元和方程文字未自动判分。','retry');
+    tell('model-feedback','数值回查相符：共'+show(count)+'件、花'+show(cost)+'元。仅这两项数值已核对；你的设元、单位、两条关系和列式仍须按下方准则人工自核，网页未自动判分。','review');
+  });
+  function clearModel() { clear('model-feedback'); $('model-criteria').hidden=true; }
+  $('open-model').addEventListener('input',clearModel);
+  $('open-model').addEventListener('reset',clearModel);
+  const points=[[],[]]; let marker=null;
+  const key=(x,y)=>show(x)+','+show(y);
+  const checks=(x,y)=>[add(x,y),add(times(x,2),times(y,-1))];
+  function clearObservation() { marker=null; clear('observe-feedback'); draw(); }
+  function draw() {
+    const svg=$('open-grid'),NS='http://www.w3.org/2000/svg';
+    const node=(tag,attrs,text)=>{const n=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));if(text!==undefined){n.textContent=text;if(tag==='text')n.setAttribute('data-figure-label-fixed','1');}svg.appendChild(n);return n;};
+    const X=x=>55+(x+2)*50,Y=y=>470-(y+2)*50;
+    const num=v=>Number(v.n)/Number(v.d);
+    svg.replaceChildren();
+    for(let n=-2;n<=6;n++) {
+      node('line',{x1:X(n),y1:70,x2:X(n),y2:470,stroke:'var(--muted)',opacity:0.3});
+      node('line',{x1:55,y1:Y(n),x2:455,y2:Y(n),stroke:'var(--muted)',opacity:0.3});
+      if(n) node('text',{x:X(n),y:Y(0)+22,'text-anchor':'middle',fill:'var(--fg)','font-size':17,'data-axis-value':'x:'+n},n);
+      if(n) node('text',{x:X(0)-12,y:Y(n)+6,'text-anchor':'end',fill:'var(--fg)','font-size':17,'data-axis-value':'y:'+n},n);
+    }
+    node('line',{x1:55,y1:Y(0),x2:470,y2:Y(0),stroke:'var(--fg)','stroke-width':2});
+    node('line',{x1:X(0),y1:470,x2:X(0),y2:55,stroke:'var(--fg)','stroke-width':2});
+    node('text',{x:X(0)-10,y:Y(0)+22,'text-anchor':'end',fill:'var(--fg)','font-size':17},'0');
+    node('text',{x:480,y:Y(0)+6,fill:'var(--fg)','font-size':20},'x');
+    node('text',{x:X(0)+10,y:52,fill:'var(--fg)','font-size':20},'y');
+    ['① 圆点：x+y=4','② 方点：2x−y=2'].forEach((s,i)=>node('text',{x:55+i*230,y:25,fill:i?'var(--b)':'var(--a)','font-size':18},s));
+    points.forEach((list,i)=>{
+      const col=i?'var(--b)':'var(--a)';
+      if($('plot-connect').checked&&list.length>=2) node('polyline',{points:list.slice().sort((a,b)=>num(a.x)-num(b.x)).map(p=>X(num(p.x))+','+Y(num(p.y))).join(' '),fill:'none',stroke:col,'stroke-width':2,'stroke-dasharray':'5 4'});
+      list.forEach(p=>{
+        const x=X(num(p.x)),y=Y(num(p.y)),n=node(i?'rect':'circle',i?{x:x-6,y:y-6,width:12,height:12,fill:'none',stroke:col,'stroke-width':3}:{cx:x,cy:y,r:5,fill:col});
+        n.setAttribute('data-equation',i+1);n.setAttribute('data-pair',key(p.x,p.y));
+        const t=document.createElementNS(NS,'title');t.textContent='方程'+(i+1)+'：('+key(p.x,p.y)+')';n.appendChild(t);
+      });
+    });
+    if(marker) node('circle',{cx:X(num(marker.x)),cy:Y(num(marker.y)),r:11,fill:'none',stroke:'var(--fg)','stroke-width':2,'data-observed':'true'});
+    $('plot-list').textContent=points.every(p=>!p.length)?'尚未描点。':points.map((p,i)=>'方程'+(i+1)+'：'+(p.map(q=>'('+key(q.x,q.y)+')').join('；')||'尚未描点')).join('。');
+  }
+  function readPair(prefix,out) {
+    const x=value($(prefix+'-x').value),y=value($(prefix+'-y').value);
+    if(!x||!y) { tell(out,'数值未识别：只核对普通小数或分数，不把上标、带字母或其他数式猜成数字；其他写法请转纸上或请老师核对。','format');return null; }
+    if(!inside(x)||!inside(y)) { tell(out,'超出这张小网格的−2到6范围，本次未描点或判定是否为解。可换网格在纸上代入、描点核对；超范围不等于方程不成立。','range');return null; }
+    return {x,y};
+  }
+  $('open-plot').addEventListener('submit',e=>{
+    e.preventDefault();const i=Number($('plot-equation').value)-1;
+    if(i!==0&&i!==1) return tell('plot-feedback','先选择要核对的方程，再自行填一对数。','retry');
+    const p=readPair('plot','plot-feedback');if(!p)return;
+    const v=checks(p.x,p.y);
+    if(!same(v[i],i?2:4)) return tell('plot-feedback','代入所选方程的左边得'+show(v[i])+'，没有等于右边；未添加这个点，请修改后重试。','retry');
+    if(points[i].some(q=>key(q.x,q.y)===key(p.x,p.y))) return tell('plot-feedback','这个数对已在所选方程中，未重复添加。可自己再找不同的数对。','noted');
+    if(points[i].length>=12) return tell('plot-feedback','每式只保留12个不同点用于显示，可清空后再试；这不表示方程只有这些解。','capacity');
+    points[i].push(p);clearObservation();
+    tell('plot-feedback','所选方程代入成立，已描出你输入的('+key(p.x,p.y)+')。请继续找数对；有限点只支持观察，不能证明一般结论。','ok');
+  });
+  $('open-observe').addEventListener('submit',e=>{
+    e.preventDefault();
+    if(points.some(p=>p.length<2)) return tell('observe-feedback','先为每个方程自行描出至少两个不同点，再观察。不要把少数点当作一般结论的证明。','retry');
+    const p=readPair('observe','observe-feedback');if(!p)return;
+    const v=checks(p.x,p.y);
+    if(!same(v[0],4)||!same(v[1],2)) return tell('observe-feedback','分别代入两式，左边得到'+show(v[0])+'和'+show(v[1])+'，还未同时等于各自右边。读图可能有偏差，请回查数对。','retry');
+    marker=p;draw();
+    tell('observe-feedback','你填的数对分别代入两式都成立，可作为这两方程的公共解。文字观察未自动判分；描点和连线仅作观察，不证明一般结论或唯一性，也不替代消元。','review');
+  });
+  $('open-plot').addEventListener('input',()=>{clear('plot-feedback');clearObservation();});
+  $('plot-connect').addEventListener('change',clearObservation);
+  $('open-plot').addEventListener('reset',()=>{points[0]=[];points[1]=[];clear('plot-feedback');$('open-observe').reset();clearObservation();});
+  $('open-observe').addEventListener('input',clearObservation);
+  $('open-observe').addEventListener('reset',clearObservation);
+  draw();
 })();
 </script>
 </body></html>

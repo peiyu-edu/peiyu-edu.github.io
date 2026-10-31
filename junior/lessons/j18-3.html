@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b8a-j18-3-finite-pour-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -19,8 +20,16 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+
+  #finite-pour-lab input, #finite-pour-lab select, #finite-pour-lab textarea { box-sizing:border-box; max-width:100%; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); padding:6px; }
+  #finite-pour-lab textarea { display:block; width:100%; min-height:90px; }
+  #finite-pour-lab input { width:125px; }
+  #finite-pour-lab table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:15px; }
+  #finite-pour-lab th, #finite-pour-lab td { border:1px solid var(--line); padding:6px 3px; text-align:center; overflow-wrap:anywhere; }
+  #finite-pour-lab td input { width:100%; min-width:0; }
+  #finite-pour-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j18-3" data-standard="v2">
 <div class="wrap">
@@ -256,6 +265,43 @@
     <div class="result" id="out-c" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-c" type="button">重置</button></div>
   </div>
+
+  <details class="more" id="finite-pour-lab" data-enrichment="optional">
+    <summary>选学：有限次倒水与裂项（可跳过，不作必修先修）</summary>
+    <p>把一容器装满时的初始水量看作1个整体。指定一个正整数 \(n\)，从第1次做到第 \(n\) 次；第 \(k\) 次倒出初始水量的 \(\frac1{k(k+1)}\)。每一项都以最初装满的水量作基准。自己计算每次倒出、累计倒出和最后余量，再提出猜想。</p>
+    <p class="small" id="pour-format">本表支持1—12次，不支持0次。比例用精确整数、小数或整数分数，分母为正；每个整数块、小数部分最多12位。首尾与分数线两侧可留空格，不能拆开数字，不输入逗号、算式、指数、百分号或单位。支持全角数字与负号“−”；不以近似小数代替不相等的精确分数。</p>
+    <form id="pour-setup" novalidate>
+      <div class="ctrl"><label>自选有限次数 n <input id="pour-n" aria-describedby="pour-format" autocomplete="off"></label><button class="btn" type="submit">建立本轮记录表</button></div>
+    </form>
+    <p id="pour-feedback" role="status"></p>
+    <div id="pour-active" hidden>
+      <form id="pour-check" novalidate>
+        <p id="pour-caption"></p>
+        <table><thead><tr><th scope="col">第几次</th><th scope="col">本次倒出比例</th><th scope="col">截至本次的累计</th></tr></thead><tbody id="pour-rows"></tbody></table>
+        <p><label>做完本轮后剩余比例 <input id="pour-remaining" aria-describedby="pour-format" autocomplete="off"></label></p>
+        <p><label>本轮累计倒出与初始量1相比 <select id="pour-compare"><option value="">先计算再选择</option><option value="less">少于1</option><option value="equal">等于1</option><option value="greater">多于1</option></select></label></p>
+        <button class="btn" type="submit">逐项核对并记录本轮</button>
+      </form>
+    </div>
+    <h4>已核对的有限过程</h4><div id="pour-history"></div>
+    <form id="pour-conjecture" novalidate>
+      <p><label for="pour-guess">记录至少两个不同n后，写你的猜想：累计与余量有什么规律？</label><textarea id="pour-guess" maxlength="1400"></textarea></p>
+      <p><label for="pour-reason">我的有限抵消草稿：每项怎样写成两个分数的差？列出有限首末项、中间项怎样逐对抵消，并说明余量为什么严格为正</label><textarea id="pour-reason" maxlength="2200"></textarea></p>
+      <button class="btn" type="submit">保存文字并打开有限说明自查</button>
+    </form>
+    <p id="pour-proof-feedback" role="status"></p>
+    <details class="more" id="pour-proof" hidden><summary>对照完整的有限抵消，逐项自查</summary>
+      <p>对正整数 \(k\)，通分得到：<br>\(\begin{aligned}\frac1k-\frac1{k+1}&=\frac{(k+1)-k}{k(k+1)}\\&=\frac1{k(k+1)}.\end{aligned}\)<br>这里 \(k\)、\(k+1\) 及它们的积都为正。</p>
+      <p>\(n=1\) 时只有 \(1-\frac12\)；\(n=2\) 时是 \((1-\frac12)+(\frac12-\frac13)\)。当 \(n\ge3\)，把恰好 \(n\) 项依次展开：</p>
+      <p>\(\begin{aligned}\text{累计}={}&(1-\tfrac12)+(\tfrac12-\tfrac13)\\&+\cdots+(\tfrac1n-\tfrac1{n+1})\\={}&1-\tfrac1{n+1}=\tfrac n{n+1}.\end{aligned}\)</p>
+      <p>中间每个 \(-1/j\)（\(j=2,\ldots,n\)）都有下一括号里的 \(+1/j\) 抵消；只留下首端1和末端 \(-1/(n+1)\)。\(n=1,2\) 的结果也符合相同表达式。</p>
+      <p>所以任意已经执行的有限正整数 \(n\) 次之后，剩余 \(1/(n+1)&gt;0\)，累计 \(n/(n+1)&lt;1\)。这段有限代数说明不受本表12次上界限制。第 \(k\) 次之前余 \(1/k\)，减去本次量后余 \(1/(k+1)\)，因此本次量也不会超过当时余量。</p>
+      <p>自查：① 基准始终是初始水量吗？② 写清正整数范围与非零分母了吗？③ 有列出首末项和全部中间抵消关系，而非只验几次吗？④ 由余量为正说明严格小于1了吗？文字只保存在本页，尚未判定正确，请对照后自行修改。</p>
+    </details>
+    <p class="small">表中全是理想的精确水量比例；量杯刻度、读数和挂壁残留会使实测近似。网页计算不认证你已完成实物实验。这里仅讨论有限次数的过程；数据与文字只留本页内存，刷新清除。</p>
+    <button class="btn ghost" id="pour-reset" type="button">清空并重做选学探究</button>
+  </details>
+
 </section>
 
 <section class="step" data-title="练一练">

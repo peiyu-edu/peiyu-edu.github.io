@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b7a-j5-1-equation-own-model-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -20,8 +21,12 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .ctrl button[disabled] { opacity: .45; cursor: not-allowed; }
+  #j51-own label { display:block; margin:12px 0; }
+  #j51-own input:not([type="checkbox"]), #j51-own textarea, #j51-own select { display:block; width:100%; max-width:100%; box-sizing:border-box; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:6px; padding:8px; }
+  #j51-own button { font:inherit; padding:8px 12px; margin:4px; }
+  #j51-own [data-history] { overflow-wrap:anywhere; padding-left:24px; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j5-1" data-standard="v2">
 <div class="wrap">
@@ -249,6 +254,57 @@
       <button class="btn ghost" id="reset-bal" type="button">重置</button>
     </div>
   </div>
+<div id="j51-own">
+<h2>从算术尝试到自己的方程</h2>
+<p>给社团买 4 本同价笔记本，另付包装费 6 元，总共花 34 元。每本多少钱？先尝试算术方法，写出卡住的地方或你的算法，再让未知量参与运算。</p>
+<p class="small">下面的文字只供你按准则自核，系统不会把任意文字判为正确，也不认证纸笔或同伴讨论已经发生。计算输入支持一个小写英文字母、整数、有限小数、括号及 + − * /；数乘字母可省略乘号。不支持的写法请改写，分数请用 /，不输入单位。数值用精确分数核对，不用近似小数代替。</p>
+<form data-work="model" class="card">
+<label>算术尝试与回头看<textarea name="attempt" rows="2" maxlength="800"></textarea></label>
+<label>① 设量：自己写含义、单位和取值限制<textarea name="meaning" rows="2" maxlength="800"></textarea></label>
+<label>你用的未知数字母<input name="variable" maxlength="1" autocomplete="off"></label>
+<label>未知量的单位<select name="unit"><option value="">请选择</option><option value="yuan">元/本</option><option value="book">本</option></select></label>
+<label>② 4 本笔记本的钱（元）<input name="quantity" autocomplete="off"></label>
+<label>笔记本与包装合计的钱（元）<input name="total" autocomplete="off"></label>
+<label>③ 自然语言等量关系<textarea name="relation" rows="2" maxlength="800"></textarea></label>
+<details class="more"><summary>文字自核准则（由你检查）</summary><p>设量是否是题目要求的每本单价、单位是否明确、价格是否非负？乘本数后是否得到元？等号两边是否表示同一笔总支出？算术方法要先求哪笔钱，方程如何让未知数参与？请据此修改自己的文字。</p></details>
+<label><input type="checkbox" name="self">我已按这些准则自核文字（系统不自动判真）</label>
+<label>④ 根据关系自主写一个方程<input name="equation" autocomplete="off"></label>
+<button type="submit">核对量式和方程</button><button type="reset">重新列式</button>
+<p class="result" data-feedback aria-live="polite"></p>
+</form>
+<form data-work="verify" class="card">
+<h3>把给定值放回你列的原方程</h3>
+<label>给定值<select name="candidate"><option value="">请选择</option><option value="5">5</option><option value="7">7</option><option value="8">8</option><option value="-7">−7</option></select></label>
+<label>代入后原方程左边的值<input name="left" autocomplete="off"></label>
+<label>代入后原方程右边的值<input name="right" autocomplete="off"></label>
+<label>你的判断<select name="judgment"><option value="">请选择</option><option value="yes">是方程的解</option><option value="no">不是方程的解</option></select></label>
+<button type="submit">核对代入</button><button type="reset">重试</button>
+<p class="result" data-feedback aria-live="polite"></p>
+</form>
+<h2>每一步都由你写：两边一起动</h2>
+<p>解 −3x + 6 = 18。每次选择双边动作、写所用的数或式子，亲写下一行等式并选择依据，再提交。你可以走不同路线；最终写成 x = 一个数，再回原方程检验。</p>
+<form data-work="solve" class="card">
+<p data-current>当前等式：−3x + 6 = 18</p><ol data-history></ol>
+<label>等式两边都<select name="operation"><option value="">请选择动作</option><option value="+">加</option><option value="-">减</option><option value="*">乘</option><option value="/">除以</option></select></label>
+<label>同一个数或式子（乘除只用数）<input name="operand" autocomplete="off"></label>
+<label>你写的下一行等式<input name="next" autocomplete="off"></label>
+<label>依据<select name="property"><option value="">请选择</option><option value="1">等式性质 1</option><option value="2">等式性质 2</option></select></label>
+<button type="submit">核对这一步</button><button type="reset">从原方程重来</button>
+<p class="result" data-feedback aria-live="polite"></p>
+</form>
+<form data-work="original" class="card">
+<label>你求出的 x<input name="answer" autocomplete="off"></label>
+<label>代入 −3x + 6 后的值<input name="left" autocomplete="off"></label>
+<label>原方程右边的值<input name="right" autocomplete="off"></label>
+<button type="submit">回原方程检验</button><button type="reset">重填检验</button>
+<p class="result" data-feedback aria-live="polite"></p>
+</form>
+<details class="more"><summary>把操作推广成一般的说理</summary>
+<p>自己先写：若 a=b，两边加（减）同一个数或式子，为什么仍相等？乘同一个非零数与乘 0 有什么差别？除以什么数必须拒绝？用一个含负数的相等等式试验，再用字母说明。</p>
+<label>我的说明<textarea rows="3" maxlength="1000"></textarea></label>
+<p>自核依据：a+c=b+c、a−c=b−c；ac=bc；c 不为 0 时 a/c=b/c。同乘 0 仍得到真的等式，但原来未知数的限制丢失，不能靠它求原方程的解。除以 0 无意义。乘除负数时等式仍用等号。这里提供自核准则，不自动判定说明已正确。</p>
+</details>
+</div>
 </section>
 
 <section class="step" data-title="练一练">

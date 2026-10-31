@@ -20,8 +20,14 @@
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
+
+  .workshop input,.workshop select {max-width:100%;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--muted);border-radius:5px;padding:6px;box-sizing:border-box}
+  .workshop input[type=number] {width:6em} .workshop input[type=range] {width:100%;padding:10px 0}
+  .workshop label {display:inline-block;margin:6px 10px 6px 0} .workshop button {margin:4px}
+  .workshop svg {width:100%;max-width:560px;margin:auto;display:block} .workshop fieldset {min-width:0;border:1px solid var(--line);margin:12px 0}
+  .workshop table {width:100%;border-collapse:collapse} .workshop th,.workshop td {padding:5px;text-align:center;border:1px solid var(--line)}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j6-3" data-standard="v2">
 <div class="wrap">
@@ -252,6 +258,52 @@
 </section>
 
 <section class="step" data-title="动手">
+
+  <div class="card workshop" id="angle-work">
+  <h3>自己量角，再画平分线</h3>
+  <p>原量角器演示会自动画半角；这里由你操作。① 对中：把量角器中心移到 O。② 重合：让零线沿 OA。③ 从 OA 所在的0刻度起读 OB。④ 取读数的一半，从 O 标出 C、画射线 OC（绿色）。量角器有一部分未覆盖到 OB 时，先查摆放，不能猜数。</p>
+  <svg id="angle-work-fig" viewBox="0 0 400 300" role="img" aria-label="待量角、可调量角器与自己画的射线"></svg>
+  <label>移动量角器中心 <input id="pro-offset" type="range" min="-30" max="50" step="1" value="30"></label>
+  <label>转动零线 <input id="pro-turn" type="range" min="-30" max="30" step="1" value="20"></label>
+  <form id="angle-read-form"><label>我的读数（度） <input id="angle-read" type="number" step="any" required></label><button class="btn">核对摆放与读数</button></form>
+  <label>我画的 OC 与 OA 夹角（度） <input id="half-angle" type="range" min="0" max="180" step="0.5" value="20"></label>
+  <div><button class="btn" id="half-check" type="button">核对我的平分线</button><button class="btn ghost" id="angle-retry" type="button">重试</button><button class="btn ghost" id="angle-next" type="button">换一个角</button></div>
+  <p id="angle-work-out" class="result" role="status">待你对中、对零线并读数。尚未核对平分线。</p>
+  <details class="more"><summary>纸笔或折纸：留下自己完成的图</summary><p>纸笔：任画一个小于平角且非零的角，对中、对零线量角；除以2，再对中并从同一个0刻度量出半角，标点 C，用直尺连接 O、C 并向前延长成射线。分别量 ∠AOC 与 ∠COB，允许相差一个最小刻度；若不接近，检查读数方向和顶点。这里只是度量核对，不是严格证明。</p><p>折纸：在透明薄纸上画角，折叠使 OA 与 OB 重合，折痕必须经过 O。展开后描出角内的折痕射线 OC，再叠一次确认两边确实重合。若只让边的局部相交而未重合，折痕不能作为平分线。网页核对仅表示数字操作符合条件，纸笔、折纸须自己或同伴另验；本章不要求尺规作角平分线。</p></details>
+  </div>
+  <div class="card workshop" id="seconds-work">
+  <h3>分、秒怎样进位和借位？自己填竖式</h3>
+  <p>1′=60″，1°=60′。把分化秒要 ×60，秒化分要 ÷60。例如 3′20″ 要先算 3×60，再加20；200″ 要先算 200÷60，商是分，余数是秒。</p>
+  <form id="seconds-form">
+  <label>2′15″ = <input id="sec-total" type="number" required> ″</label>
+  <table><thead><tr><th>加法</th><th>度 °</th><th>分 ′</th><th>秒 ″</th></tr></thead><tbody><tr><th></th><td>12</td><td>18</td><td>45</td></tr><tr><th>＋</th><td>3</td><td>46</td><td>30</td></tr></tbody></table>
+  <label>秒列合计 <input id="sec-sum" type="number" required></label><label>向分列进 <input id="sec-carry" type="number" required></label>
+  <label>加上进位后分列合计 <input id="min-sum" type="number" required></label>
+  <p>再把满60分的部分进到度列，填写最后结果：</p>
+  <label>度 <input id="dms-d" type="number" required></label><label>分 <input id="dms-m" type="number" required></label><label>秒 <input id="dms-s" type="number" required></label>
+  <button class="btn">核对每一步</button><button class="btn ghost" type="reset">重试</button></form>
+  <p id="seconds-out" class="result" role="status">先分列计算，满60进1；最后分、秒应都小于60。</p>
+  <details class="more"><summary>借位也用三列，动笔算后展开核对</summary><p>试算 20°4′10″ − 7°8′25″。先向分借1，秒列变成70；分只剩3，不够减8，再向度借1，分变63。</p><table><thead><tr><th></th><th>度 °</th><th>分 ′</th><th>秒 ″</th></tr></thead><tbody><tr><th>借位后</th><td>19</td><td>63</td><td>70</td></tr><tr><th>减数</th><td>7</td><td>8</td><td>25</td></tr><tr><th>差</th><td>12</td><td>55</td><td>45</td></tr></tbody></table><p>检查：12°55′45″ + 7°8′25″，秒70进1分，分64进1度，得20°4′10″。借1°添60′、借1′添60″，不能当成100进制。</p></details>
+  </div>
+  <div class="card workshop" id="equal-work">
+  <h3>两组分离的角：先记录，再猜性质</h3>
+  <p>改变 α，分别计算 α、β 的余角或补角。它们画在不同位置，比较只看数量关系。先试“等角”，再切“不同角”找反例。</p>
+  <label>α（度） <input id="equal-base" type="range" min="10" max="70" value="30" step="1"></label>
+  <label>第二个角 <select id="equal-kind"><option value="same">β=α</option><option value="different">β=α+10°</option></select></label>
+  <label>研究 <select id="equal-target"><option value="90">余角</option><option value="180">补角</option></select></label>
+  <svg id="equal-fig" viewBox="0 0 400 160" role="img" aria-label="两组位置分离的已知角"></svg>
+  <p id="equal-givens"></p>
+  <form id="equal-form"><label>α 对应的角（度） <input id="equal-first" type="number" step="any" required></label><label>β 对应的角（度） <input id="equal-second" type="number" step="any" required></label><label>我的猜想 <select id="equal-claim"><option value="">请选择</option><option value="same">两结果相等</option><option value="different">两结果不等</option></select></label><button class="btn">核对记录与理由</button></form>
+  <p id="equal-out" class="result" role="status">请先计算并提交两组结果。</p>
+  </div>
+  <details class="more workshop"><summary>补充操作卡：类比、数角、方向和拼角</summary>
+  <p>① 回看线段的“概念—表示—比较—运算—特殊点”，先在纸上写你想研究角的两个问题，再对照本节导读。可提出“怎么表示角”“怎样比较”“能否分成相等的两份”等，不只有一种合法提问。</p>
+  <p>② 从 O 向同一侧依次画 OA、OB、OC、OD 四条射线，相邻张角依次20°、30°、40°。先不计算，按起始边顺序列出所有小于平角的角，不重复。再核对角名能否倒写，顶点是否在中间。</p>
+  <form id="count-angle-form"><label>我数出 <input id="count-angle" type="number" required> 个角</label><button class="btn">核对有序配对</button></form><p id="count-angle-out" role="status"></p>
+  <p>③ 纸上画北、南、东、西方向线，以 O 为观察点，画北偏东35°的 OP、南偏东25°的 OQ；先找基准方向再量角。标出较小的 ∠POQ，写出所用和差算式。</p>
+  <form id="direction-form"><label>∠POQ（度） <input id="direction-value" type="number" step="any" required></label><button class="btn">核对方向角</button></form><p id="direction-out" role="status"></p>
+  <p>④ 实物三角尺：把45°和30°的角顶点重合、一条边对齐，分别让另两边在公共边同旁、异旁。先描出两条外边再量夹角，记录一张差角图、一张和角图。</p><details class="more"><summary>描画后展开核对拼角</summary><p>可得15°、75°。换60°再试：15°、105°。</p></details><p>所有可用的30°、45°、60°、90°都是15°整数倍，做和、差仍是15°整数倍；不能只凭“看起来像”画出20°。实物摆放由同伴核对，原钟面活动保留在下方。</p>
+  </details>
   <h3>① 量角器：角的度数与平分线</h3>
   <p class="small">拖动 \(B\) 点（或点一下用方向键，每次 \(1^\circ\)；PageUp、PageDown 每次 \(10^\circ\)）。虚线 \(OC\) 是 \(\angle AOB\) 的平分线，由代码算出。</p>
   <div class="card">
@@ -533,4 +585,6 @@
  if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+
+<script defer src="../assets/b7a-j6-3-approved-construction-restore-dev.js"></script>
 </body></html>

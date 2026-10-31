@@ -22,8 +22,18 @@
   .result .ok { color: var(--a); font-weight: 700; }
   .tb { border-collapse: collapse; margin: 6px 0; font-size: 15px; }
   .tb th, .tb td { border: 1px solid var(--line); padding: 3px 10px; text-align: center; }
+  #weighted-water-lab input,#weighted-water-lab select,#weighted-water-lab textarea { max-width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:6px; }
+  #weighted-water-lab textarea { display:block;width:100%;min-height:90px; }
+  .ww-fields { display:flex;flex-wrap:wrap;gap:10px;margin:10px 0; }
+  .ww-fields label { display:grid;gap:4px; }
+  .ww-fields input { width:140px; }
+  #weighted-water-lab table { width:100%;table-layout:fixed;border-collapse:collapse;font-size:15px; }
+  #weighted-water-lab td,#weighted-water-lab th { border:1px solid var(--line);padding:6px 3px;overflow-wrap:anywhere; }
+  #weighted-water-lab td input { width:100%;min-width:0; }
+  #weighted-water-lab p { overflow-wrap:anywhere; }
+  #weighted-water-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j24-1" data-standard="v2">
 <div class="wrap">
@@ -272,6 +282,45 @@
     <div class="result" id="out-m" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-m" type="button">重置</button></div>
   </div>
+  <h3>④ 自主用水探究：我列表、我计算</h3>
+  <div class="card" id="weighted-water-lab">
+    <p>为同一种用途自拟或读取无身份的每日用水量。每次观察的统计时长相同；同一组统一单位，不填姓名等个人资料。你可以录原始数据，也可以自己先整理成“值、频数”表，频数是该用量出现的次数。</p>
+    <p class="small" id="ww-format">原始数据用逗号或换行分项，1—20项；频数表每行写“水量,频数”，1—20行。频数为0—1000的非负整数，总频数必须大于0。水量在0—10000之间，约分后分母不超过100。数值支持整数、小数、整数分数；首尾/分数线两侧可空格，不能拆数字或写算式/指数/单位。支持全角数字和负号“−”；整数块最多120位、小数最多100位，核对精确值。</p>
+    <form id="ww-load" novalidate>
+      <div class="ww-fields"><label>录入方式<select id="ww-mode"><option value="raw">原始水量</option><option value="frequency">水量与频数</option></select></label><label>统一单位<select id="ww-unit"><option value="L">升（L）</option><option value="m3">立方米（m³）</option></select></label></div>
+      <p><label for="ww-data">本组数据</label><textarea id="ww-data" aria-describedby="ww-format"></textarea></p>
+      <button class="btn" type="submit">建立我的计算表</button>
+    </form>
+    <p id="ww-feedback" role="status"></p>
+    <div id="ww-calc" hidden>
+      <p id="ww-caption"></p>
+      <p class="small">原始数据由本页合并同值计频；频数表按你录入的行保留。下面仍须由你复核频数并填写各项总水量。零频行不代表实际观测，不能算进最小、最大值。</p>
+      <form id="ww-check" novalidate>
+        <table><thead><tr><th scope="col">水量</th><th scope="col">你复核的频数</th><th scope="col">该项总水量</th></tr></thead><tbody id="ww-rows"></tbody></table>
+        <div class="ww-fields"><label>总观察次数<input id="ww-count"></label><label>总水量<input id="ww-total"></label><label>平均水量<input id="ww-mean"></label><label>实际最小水量<input id="ww-min"></label><label>实际最大水量<input id="ww-max"></label></div>
+        <div class="ctrl"><button class="btn" type="submit">核对并记录本组</button><button class="btn ghost" type="button" id="ww-calculator" disabled>计算器：核加权平均</button></div>
+      </form>
+      <p class="small">先逐项完成一组2—5行、至少两种频数为正的水量的核对，才开放计算器。可以先手算再按按钮复核，或对后续组用参考；记录会区分两种操作，不认证独立手算或真实采集。</p>
+    </div>
+    <h4>本轮记录（最多8组）</h4><div id="ww-groups"></div>
+    <form id="ww-merge" novalidate>
+      <p>勾选2—6组作合并计算，视为互不重叠的观察；同一批不要重复计入。先统一用途、时长和单位。两组、三组以上都可试。</p>
+      <div id="ww-picks"></div>
+      <div class="ww-fields"><label>按实际次数合并后的平均数<input id="ww-combined"></label><label>这些组平均数直接平均的结果<input id="ww-naive"></label><label>两个结果<select id="ww-equality"><option value="">先判断</option><option value="same">相等</option><option value="different">不同</option></select></label></div>
+      <p><label for="ww-explain">写出平均水量的实际意义、组观察次数的作用与结论限制；不要只写“相等”或“不同”</label><textarea id="ww-explain" maxlength="1800"></textarea></p>
+      <button class="btn" type="submit">核合并数值，记录解释供自检</button>
+    </form>
+    <p id="ww-merge-feedback" role="status"></p>
+    <details class="more" id="ww-guide" hidden><summary>对照加权条件与实际口径</summary>
+      <p>合并总量是各组平均水量乘真实观察次数后相加，总次数是各组次数相加；用总量除总次数。忽略组观察次数，把组平均数直接平均，不能作为通用方法。零频值不属于实际观测范围；非负权的平均数应在正频水量的最小、最大值之间。</p>
+      <p>只对两组且观察次数均为正时，两种平均相等，恰在两组观察次数相等或均值相等时成立。这与本页前面的两组合并一致。</p>
+      <p>三组以上不能照搬这条相等条件：例如观察次数分别1、2、4，均值分别1、6、2时，合并平均数为(1×1+2×6+4×2)/7=3，组均值直接平均也为3；观察次数和均值都不全相同。不同组的贡献可能相消，仍要按总量与总次数算，不能由几个同值例子断言总能直接平均。</p>
+      <p>平均水量的单位同原数据；总量还取决于观察次数。实际比较须同用途、同统计时长、同单位；未统一单位要先换算重录。自拟或少量观察不能证明某措施造成节水，没有随机抽样依据不推到总体。自由解释只是记录，尚未判定正确，请对照修改。</p>
+    </details>
+    <button class="btn ghost" type="button" id="ww-reset">清空本轮用水探究</button>
+    <p class="small">全部数据、计算和解释只在本页内存中，刷新清除，不进入学习账本，也不认证实物或同伴活动经历。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -543,4 +592,5 @@
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
 })();
 </script>
+<script defer src="../assets/b8b-j24-1-weighted-water-dev.js"></script>
 </body></html>

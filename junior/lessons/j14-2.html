@@ -22,8 +22,9 @@
   .pf { background: var(--bg); border-radius: 8px; padding: 8px 12px; line-height: 1.9; overflow-x: auto; }
   .sumtab { width: 100%; border-collapse: collapse; font-size: 15px; }
   .sumtab td { border-top: 1px solid var(--line); padding: 6px 4px; vertical-align: top; }
+#c14-work label{display:block;margin:10px 0}#c14-work input,#c14-work textarea,#c14-work select{width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--card);padding:8px}#c14-work textarea{min-height:80px}#c14-work img{max-width:100%}#c14-work p{white-space:pre-wrap;overflow-wrap:anywhere}
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j14-2" data-standard="v2">
 <div class="wrap">
@@ -287,6 +288,22 @@
     <div class="result" id="out-hl" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-hl" type="button">重置</button></div>
   </div>
+<div class="card" id="c14-work">
+<h3>③ 自己作图、猜想和写证</h3>
+<p>纸上实作；尺规任务用直尺圆规留弧；反例可用量角器。先写后对照，不用勾股、等腰、中垂线或轴对称性质代证。记录仅留本页，刷新清空，不写学习账本。</p>
+<label>任务 <select id="c14-task"><option value="">请选择</option></select></label>
+<p id="c14-prompt"></p>
+<div id="c14-lengths" hidden>SSS边长：仅普通数字/最多三位小数；其它写法写入记录交人工核对。
+<label>u <input aria-label="第一条边长" id="c14-u"></label><label>v <input aria-label="第二条边长" id="c14-v"></label><label>w <input aria-label="第三条边长" id="c14-w"></label>
+<button type="button" class="btn" id="c14-test">检查能否作非退化三角形</button><p id="c14-number" role="status"></p></div>
+<form id="c14-form" hidden>
+<label>① 我的图/已知与操作（反例画两图；作图记圆心、半径、交点）<textarea id="c14-first" required></textarea></label>
+<label>② 条件加工/对应（证明用大括号按判定顺序列条件；作图逐步记弧线）<textarea id="c14-second" required></textarea></label>
+<label>③ 猜想/结论及理由（先写自己的判断；测量记可测量与单位）<textarea id="c14-third" required></textarea></label>
+<label>可选：纸图与圆弧痕迹（仅本机预览）<input type="file" accept="image/png,image/jpeg,image/webp" id="c14-photo"></label><img id="c14-image" alt="本机纸图预览，未判定" hidden>
+<button class="btn" type="submit">留记录并显示核对准则</button><button class="btn ghost" type="reset">重试本题</button><p id="c14-out" role="status"></p>
+</form><details class="more"><summary>本次提交记录</summary><div id="c14-records"></div></details>
+</div>
 </section>
 
 <section class="step" data-title="练一练">
@@ -568,6 +585,33 @@
   // 切换深浅色时重画，图里的颜色跟着变
   new MutationObserver(function () { focS = focH = null; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+<script id="c14-script">
+(()=>{'use strict';
+const tasks=[
+['AAS转ASA','非退化ABC、DEF，A=D、B=E（角），BC=EF。先用内角和写第三角等式，再用ASA列大括号并写对应结论。','∠C=180°−∠A−∠B=∠F；列｛∠B=∠E；BC=EF；∠C=∠F｝，得△ABC≌△DEF（ASA），再得AC=DF。'],
+['HL书写','先操作原HL/SSA图。已知∠C=∠F=90°，AB=DE，BC=EF。指出斜边，单独写直角，再列条件、全等式及一边一角相等。','先确认C/F直角；AB/DE为斜边，BC/EF为直角边。Rt△ABC≌Rt△DEF（HL），AC=DF、∠A=∠D；未给直角不能套HL。'],
+['加工条件','两不同直线AC、BD交M，M分别为AC、BD中点。画图，先加工已知，再列有序条件证明AB=CD。','AM=CM、BM=DM（中点）；∠AMB=∠CMD（对顶角）。△AMB≌△CMD（SAS），AB=CD。不可把待证边列作已知。'],
+['SSA两图','自画AB=9；B处以BA为边作30°射线；A为圆心、6为半径画弧。找射线上两个交点分别连图，记录相同边角与不同处，可另选数据重构。','此例有两个正向交点：AB公共，AC都为6，B都为30°，但BC不同。角B不是AB/AC夹角；并非任意SSA数据都有两图。'],
+['AAA两图','自己画两图：角均40°、60°、80°，对应前两角间边分别4、7。也可另选三互异正角和180°、不同对应边。记录怎样作出及为何不全等。','第三角用角和核对；三角互异使对应唯一，对应边4≠7，不能全等。只改位置不改大小不算反例。'],
+['复制角','取纸上0°<∠XOY<180°。O为圆心画弧截两边于U,V；目标顶点O′同半径弧截给定射线于U′，再以U′为心取UV为半径交弧于V′，选指定一侧，连O′V′。记三组等长及依据。','OU=O′U′、OV=O′V′、UV=U′V′，SSS得等角。保留两弧、交点与半径记录，零角/平角不套非退化三角形证明。'],
+['过外点平行','A≠B在直线l上，P在线外。延AP过P取Q，以PQ为一边，在B所在直线AP一侧复制∠BAP为∠RPQ，作PR。记录每个复制弧及判断依据。','∠BAP=∠RPQ为同位角，PR∥AB。核对用PQ而非PA，且R/B在AP同侧；复制角的三组等长仍须记录。'],
+['SSS三角形','自选三边，先检查三角不等式。作AB=u，以A为心v为半径、B为心w为半径画弧，交于C并连边。记录弧和三组对应边、依据；边界不可成时说明。','正边且任意两边和大于第三边才非退化；等号也不行。AC=v、BC=w、AB=u；与样板由SSS全等，两侧交点所得图全等。'],
+['SAS三角形','取两正线段u,v和纸上已知0°<θ<180°的角。作AB=u，A处复制θ，再沿该射线截AC=v，连BC。记录复制弧、截长和依据。','AB=u、∠BAC=θ、AC=v，SAS。角必须夹在已知两边之间；零边或0°/180°角退化。'],
+['ASA三角形','取正线段u和纸上两个已知正角α、β，先核角和<180°。作AB=u，A/B处向AB同侧复制两角，射线交C。记两次复制弧及三条件。','∠A=α、AB=u、∠B=β，ASA。角和等于或超过180°不成所给非退化三角形；同侧及指向不能省。'],
+['池岸测距','A在池对岸，B,O,D依次在直岸上，BO=DO>0，AB⊥BD。D作BD垂线交AO延长线于陆侧C。自选两三角形，列可量条件、证明，再选岸上替代量，写测量记录。','△ABO与△CDO：B/D直角、BO=DO、AOB=COD对顶角，ASA，全等后AB=CD，测CD可代AB；不要求测不可达OA。实地误差另记，不冒签已测。'],
+['拼接与猜想','自剪两个全等三角形，将对应AB边粘在一起、C/D在AB异侧，使CD交AB内部O。先猜连接线关系再证明；记对应边与每步判定，不能借中垂线等性质。','先由△ABC≌△ABD得∠CAB=∠DAB，再用AC=AD、AO公共及夹角，SAS得△ACO≌△ADO。CO=DO且AOC=AOD，邻补故为90°。不推出AO=BO。']];
+const $=id=>document.getElementById('c14-'+id),form=$('form');let photo;
+tasks.forEach((t,i)=>{const o=document.createElement('option');o.value=i;o.textContent=t[0];$('task').append(o);});
+function clear(){ $('out').textContent='';}
+function image(){if(photo)URL.revokeObjectURL(photo);photo=null;$('image').hidden=true;$('image').removeAttribute('src');}
+form.oninput=clear;form.onreset=()=>{clear();image();['u','v','w'].forEach(x=>$(x).value='');$('number').textContent='';};
+$('task').onchange=()=>{form.reset();const i=$('task').value;form.hidden=i==='';$('prompt').textContent=i===''?'':tasks[+i][1];$('lengths').hidden=i!=='7';};
+$('photo').onchange=()=>{image();clear();const f=$('photo').files[0];if(f&&/^image\/(png|jpeg|webp)$/.test(f.type)&&f.size<=8e6){photo=URL.createObjectURL(f);$('image').src=photo;$('image').hidden=false;}};
+$('test').onclick=()=>{const a=['u','v','w'].map(x=>$(x).value.trim());if(a.some(s=>!/^\d{1,6}(\.\d{1,3})?$/.test(s))){$('number').textContent='转人工核对；不拼数、不折上标。';return;}const n=a.map(s=>{const p=s.split('.');return BigInt(p[0])*1000n+BigInt((p[1]||'').padEnd(3,'0'));});$('number').textContent=n.every(x=>x>0n)&&n[0]+n[1]>n[2]&&n[0]+n[2]>n[1]&&n[1]+n[2]>n[0]?'满足三角不等式，可作图；仍须留弧。':'不能作非退化三角形：查零边、两边和及等号。';};
+['u','v','w'].forEach(x=>$(x).oninput=()=>$('number').textContent='');
+form.onsubmit=e=>{e.preventDefault();const t=tasks[+$('task').value],d=document.createElement('details'),s=document.createElement('summary'),p=document.createElement('p');s.textContent=t[0];p.textContent=['first','second','third'].map((x,i)=>(i+1)+' '+$(x).value).join('\n');d.append(s,p);$('records').append(d);$('out').textContent='已记录，未判定证明或实作。对照：'+t[2]+' 逐项自检图、弧、对应、理由。';};
 })();
 </script>
 </body></html>

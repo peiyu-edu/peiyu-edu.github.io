@@ -21,12 +21,12 @@
   .result .sum { color: var(--no); font-weight: 700; }
   .result .ok { color: var(--a); font-weight: 700; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j34-3" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
-<p class="crumb">九年级下册（旧版目录占位）· 第三十四章 投影与视图</p>
+<p class="crumb">九年级下册· 第三十四章 投影与视图</p>
 <h1>34.3 课题学习 制作立体模型</h1>
 <p class="lead">给你一组三视图，能不能用一张硬纸板把这个几何体做出来？这一节把「看三视图 → 画展开图 → 做模型 → 核对」走一遍：关键是算准展开图里每条边多长、扇形的圆心角多大。</p>
 <p class="small">说明：新版九下 2027 春才出版，本节先按旧版教材（原九下第二十九章 29.3）编排，出版后再对表。</p>
@@ -314,7 +314,7 @@
 </section>
 
 <section class="step" data-title="中考真题">
-  <p class="small">这一节按旧版目录占位；核不到原卷的题不放，真题待在有原卷库的机器上补。</p>
+  <p class="small">本节真题待补。</p>
   <div id="practice"></div>
 </section>
 
@@ -384,6 +384,14 @@
     el("line", { x1: cx, y1: by - hp, x2: cx, y2: by, stroke: c.muted, "stroke-width": 1.5, "stroke-dasharray": "5 4" }, p);
   }
   // 圆锥尺寸：r、h 是 0.5 的倍数；l 是否为 0.5 的倍数、n 是否为整数都用整数判断
+  function radicalMarkup(value) {
+    var ns = ' xmlns="http://www.w3.org/1998/Math/MathML"';
+    return value.replace(/√\((\d+(?:\.\d+)?)²\s*([+−])\s*(\d+(?:\.\d+)?)²\)/g, function (_, a, op, b) {
+      return '<math' + ns + '><msqrt><mrow><msup><mn>' + a + '</mn><mn>2</mn></msup><mo>' + op + '</mo><msup><mn>' + b + '</mn><mn>2</mn></msup></mrow></msqrt></math>';
+    }).replace(/√(\d+(?:\.\d+)?)/g, function (_, n) {
+      return '<math' + ns + '><msqrt><mn>' + n + '</mn></msqrt></math>';
+    });
+  }
   function cone(r, h) {
     var A = Math.round(2 * r), H = Math.round(2 * h), S = A * A + H * H, q = Math.round(Math.sqrt(S)), ex = q * q === S;
     var l = Math.sqrt(r * r + h * h), n = 360 * r / l;
@@ -401,7 +409,7 @@
     coneTri(p, 390, 190, r * S, h * S, c.a);
     txt(p, 390, 36, "r = " + fmt(r, 2), c.fg, 700, 19);
     txt(p, 390, 76, "h ≈ " + fmt(h, 2), c.no, 700, 19);
-    $("entry-note").textContent = "留 " + keep + "°：弧长 = 20π × " + keep + "/360 = " + fmt(20 * keep / 360, 2) + "π，就是底面圆的周长，底面半径 r = " + fmt(r, 2) + " cm；斜边还是 10 cm，高 h = √(10² − " + fmt(r, 2) + "²) ≈ " + fmt(h, 2) + " cm。";
+    $("entry-note").innerHTML = '留 ' + keep + '°：弧长 <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>20</mn><mi>π</mi><mo>×</mo><mfrac><mn>' + keep + '</mn><mn>360</mn></mfrac><mo>=</mo><mn>' + fmt(20 * keep / 360, 2) + '</mn><mi>π</mi></math>，就是底面圆的周长，底面半径 <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>r</mi><mo>=</mo><mn>' + fmt(r, 2) + '</mn></math> cm；斜边还是 10 cm，高 <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>h</mi><mo>=</mo><msqrt><mrow><msup><mn>10</mn><mn>2</mn></msup><mo>−</mo><msup><mn>' + fmt(r, 2) + '</mn><mn>2</mn></msup></mrow></msqrt><mo>≈</mo><mn>' + fmt(h, 2) + '</mn></math> cm。';
   }
   bar("entry-bar", function (t) { keep = +t.getAttribute("data-keep"); drawEntry(); });
 
@@ -433,7 +441,7 @@
       el("circle", { cx: 255, cy: 66 + o.l * S + 3 * S, r: 3 * S, fill: c.a, "fill-opacity": 0.25, stroke: c.a, "stroke-width": 2 }, p);
       note = "主视图底 6、高 4 的等腰三角形，俯视图带圆心的圆 → 圆锥，r = 3，h = 4，母线 l = √(3² + 4²) " + o.lt + "。展开图：半径 " + fmt(o.l, 2) + "、圆心角 " + fmt(o.n, 1) + "° 的扇形（不是三角形！）和半径 3 的圆。";
     }
-    $("m1-note").textContent = note;
+    $("m1-note").innerHTML = radicalMarkup(note);
   }
   bar("m1-bar", function (t) { m1 = t.getAttribute("data-k"); drawM1(); });
 
@@ -463,7 +471,7 @@
       txt(p, x0 + P * s / 2, 150, P + " × " + h, c.fg, 700, 17);
       note = (m2 === "tri" ? "底面是直角边 3、4 的直角三角形，斜边 √(3² + 4²) = 5。" : "底面是边长 3 的正方形。") + "侧面的竖条宽 " + sides.join("、") + "（颜色和底面的边一一对应，粘在一起），矩形长 = " + sides.join(" + ") + " = " + P + " = 底面周长，宽 = 高 4。";
     }
-    $("m2-note").textContent = note;
+    $("m2-note").innerHTML = radicalMarkup(note);
   }
   bar("m2-bar", function (t) { m2 = t.getAttribute("data-k"); drawM2(); });
 
@@ -476,7 +484,7 @@
     txt(p, 290, 36, "n " + o.nt + "°", c.a, 700, 18);
     txt(p, 290, 76, "l " + o.lt, c.fg, 700, 18);
     var tag = o.n > 240 ? "矮胖：r 接近 l，扇形快成整圆。" : o.n < 180 ? "瘦高：r 比 l 小得多，扇形窄。" : "中等：r ÷ l = " + fmt(m3[0] / o.l, 2) + "。";
-    $("m3-note").textContent = "r = " + m3[0] + "，h = " + m3[1] + "：l = √(" + m3[0] + "² + " + m3[1] + "²) " + o.lt + "，n = 360 × " + m3[0] + " ÷ " + fmt(o.l, 2) + " " + o.nt + "°。" + tag + "扇形占整圆的比例就是 r ÷ l。";
+    $("m3-note").innerHTML = radicalMarkup("r = " + m3[0] + "，h = " + m3[1] + "：l = √(" + m3[0] + "² + " + m3[1] + "²) " + o.lt + "，n = 360 × " + m3[0] + " ÷ " + fmt(o.l, 2) + " " + o.nt + "°。" + tag + "扇形占整圆的比例就是 r ÷ l。");
   }
   bar("m3-bar", function (t) { m3 = t.getAttribute("data-rh").split(",").map(Number); drawM3(); });
 
@@ -577,7 +585,7 @@
       hs.push(slider(fc, 170, 450, g[5], g[3], g[4], 0.5, v, g[2] ? c.b : c.a, g[0], function (nv, key) { if (g[2]) chh = nv; else cr = nv; focC = key ? g[2] : -1; drawCone(); }));
     });
     var rr = fmt(cr, 1), why = o.n >= 300 ? "r 和 l 差不多大（圆锥很矮胖），扇形快成整圆；但只要 h > 0，就有 r < l，n 到不了 360°。" : o.n <= 90 ? "r 比 l 小得多（圆锥瘦高），扇形很窄。" : "h 调大，l 变长、n 变小，圆锥变瘦高；r 调大，n 变大。";
-    $("out-cone").innerHTML = "r = " + rr + "，h = " + fmt(chh, 1) + "：母线 l = √(" + rr + "² + " + fmt(chh, 1) + "²) = √" + fmt(o.sq, 2) + " " + o.lt + "。扇形半径取 l；弧长要等于底面周长 2π × " + rr + " = " + (cr === 0.5 ? "" : fmt(2 * cr, 1)) + "π，所以圆心角 <span class=\"sum\">n = 360 × " + rr + " ÷ " + (o.ex ? o.lt.slice(2) : "l") + " " + o.nt + "°</span>。侧面积 πrl " + (o.ex ? "= " + fmt(cr * o.l, 2) : "≈ " + fmt(cr * o.l, 2)) + "π。" + why + (o.ex ? "" : "（≈ 处 l 保留两位小数、n 保留一位小数。）");
+    $("out-cone").innerHTML = radicalMarkup("r = " + rr + "，h = " + fmt(chh, 1) + "：母线 l = √(" + rr + "² + " + fmt(chh, 1) + "²) = √" + fmt(o.sq, 2) + " " + o.lt + "。扇形半径取 l；弧长要等于底面周长 2π × " + rr + " = " + (cr === 0.5 ? "" : fmt(2 * cr, 1)) + "π，所以圆心角 <span class=\"sum\">n = 360 × " + rr + " ÷ " + (o.ex ? o.lt.slice(2) : "l") + " " + o.nt + "°</span>。侧面积 πrl " + (o.ex ? "= " + fmt(cr * o.l, 2) : "≈ " + fmt(cr * o.l, 2)) + "π。" + why + (o.ex ? "" : "（≈ 处 l 保留两位小数、n 保留一位小数。）"));
     if (focC >= 0) hs[focC].focus();
   }
   $("reset-cone").onclick = function () { cr = CR0; chh = CH0; focC = -1; drawCone(); };

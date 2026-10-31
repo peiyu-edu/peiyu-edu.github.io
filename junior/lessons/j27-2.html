@@ -20,8 +20,14 @@
   .result .sum { color: var(--no); font-weight: 700; }
   .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
   .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--accent); }
+  #inverse-workshop input,#inverse-workshop select,#inverse-workshop textarea { font:inherit;box-sizing:border-box;max-width:100%;color:var(--fg);background:var(--card);border:1px solid var(--line);padding:6px; }
+  #inverse-workshop input { width:115px; } #inverse-workshop label { display:block;margin:8px 0; }
+  #inverse-workshop .iw-fields { display:flex;flex-wrap:wrap;gap:10px;align-items:end; }
+  #inverse-workshop table { width:100%;border-collapse:collapse; } #inverse-workshop th,#inverse-workshop td { border:1px solid var(--line);padding:6px;text-align:center; }
+  #inverse-workshop textarea { width:100%;min-height:100px; } #inverse-workshop p { overflow-wrap:anywhere; }
+  #inverse-workshop button { min-height:40px; } #inverse-workshop [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j27-2" data-standard="v2">
 <div class="wrap">
@@ -279,6 +285,43 @@
     <svg class="fig" id="fig-lab2" viewBox="0 0 560 260" role="img" aria-label="反比例函数面积不变量实验台"></svg>
     <p class="result" id="res-lab2" aria-live="polite"></p>
   </div>
+  <div class="card" id="inverse-workshop">
+    <h3>③ 由我列表、描点，分开画两支</h3>
+    <p>研究 \(y=k/x\)（\(k\ne0\)，\(x\ne0\)）。自己选k，再选三个不同的正幅值a、b、c，配成六个正负x。所有y由你算，点由你落，两支由你分别手连，不自动给标准曲线。</p>
+    <p class="small" id="iw-format">精确数值用整数、最多12位小数或整数分数（正分母），每个整数词元最多12位；首尾、分数线两侧可空格，数字内部不能拆开。不收逗号、指数、算式或单位，支持全角数字与负号“−”，不转换上下标/罗马数字。参数约分后分母不超过100。</p>
+    <p class="small">为便于看清，本工具支持 \(1/4\le|k|\le6\)，\(1/4\le a&lt;b&lt;c\le6\)，所选各点还须 \(1/4\le|y|\le6\)。这些是作图窗限制；一般反比例函数只要求k≠0，x可以取一切非零实数，窗外并非没有图象。</p>
+    <form id="iw-setup" novalidate><div class="iw-fields"><label>我选k <input id="iw-k" aria-describedby="iw-format" autocomplete="off"></label><label>正幅值a <input id="iw-a" aria-describedby="iw-format" autocomplete="off"></label><label>正幅值b <input id="iw-b" aria-describedby="iw-format" autocomplete="off"></label><label>正幅值c <input id="iw-c" aria-describedby="iw-format" autocomplete="off"></label></div><button class="btn" type="submit">采用我的k与成对x</button></form>
+    <p id="iw-feedback" role="status"></p>
+    <div id="iw-active" hidden>
+      <h4>1. 自己列表，再独立落点</h4>
+      <table><thead><tr><th scope="col">点</th><th scope="col">我选的x</th><th scope="col">我算的y</th></tr></thead><tbody id="iw-rows"></tbody></table>
+      <button class="btn" id="iw-table-check" type="button">核六个表值</button>
+      <p class="small">抽象坐标x、y无物理单位，两轴每大格1；窗口均为−6到6。选择表行后自己输入图上坐标并主动落点；也可在图上点取游标再落点。键盘方向键每次1/4单位，Enter取游标坐标，不自动落点。分数坐标可用输入框精确填写。</p>
+      <svg id="iw-fig" viewBox="0 0 560 560" role="application" tabindex="0" aria-label="由学生独立落点并分别手连两支的坐标格" style="width:100%;max-width:640px;display:block;touch-action:none"></svg>
+      <p id="iw-status" class="small" aria-live="polite"></p>
+      <div class="iw-fields"><label>对应表行 <select id="iw-row"><option value="">自行选择</option></select></label><label>图上x <input id="iw-px" aria-describedby="iw-format" autocomplete="off"></label><label>图上y <input id="iw-py" aria-describedby="iw-format" autocomplete="off"></label><button class="btn ghost" id="iw-plot" type="button">落点/改点</button><button class="btn" id="iw-points-check" type="button">核独立描点</button></div>
+      <h4>2. 分别留下两支的曲线痕迹</h4>
+      <label>本次手连哪一支 <select id="iw-branch"><option value="">自行选择</option><option value="neg">负x的这一支</option><option value="pos">正x的这一支</option></select></label>
+      <div class="ctrl"><button class="btn" id="iw-start" type="button">开始所选支手描</button><button class="btn ghost" id="iw-stop" type="button">结束手描</button><button class="btn ghost" id="iw-vertex" type="button">加入图上x/y为路径点</button><button class="btn ghost" id="iw-clear" type="button">清掉所选支重画</button></div>
+      <p class="small">核点后按住图格手描，或逐次输入自己的路径点；手描开启时Enter加入游标位置。每支按x从小到大，画所选三点之间的局部段，两端接到自描点，不接到轴上。另一支必须另画；在所选段以外曲线仍继续，不能把窗边当函数端点。只靠近你已落下的点8屏幕像素内会吸附，不生成正确点。</p>
+      <p class="small">屏幕以短折段记录近似手描，相邻横向间隔不超过1/2单位，并经过各个自描点。近似核图的纵误差须同时不超过约1/4单位和该处|y|的1/4，有浮点舍入余量；这是本屏幕准则，不是精确图象证明。故意试触轴、跨支或竖段，再按反馈纠正；重复同点可，回描只提示顺序不合，不由此直接断言非函数。</p>
+      <button class="btn" id="iw-graph-check" type="button">核两支局部连线</button>
+      <h4>3. 从自己的图与式子写观察</h4>
+      <label>这两支所在象限 <select id="iw-quadrants"><option value="">自行观察</option><option value="13">第一、三象限</option><option value="24">第二、四象限</option></select></label>
+      <div class="iw-fields"><label>只看负x支，x增大时y <select id="iw-neg-trend"><option value="">自行观察</option><option value="up">增大</option><option value="down">减小</option></select></label><label>只看正x支，x增大时y <select id="iw-pos-trend"><option value="">自行观察</option><option value="up">增大</option><option value="down">减小</option></select></label></div>
+      <label>能与坐标轴相交吗 <select id="iw-axes"><option value="">结合式子判断</option><option value="yes">能</option><option value="no">不能</option></select></label><label>两支关于什么成对 <select id="iw-symmetry"><option value="">自行观察</option><option value="origin">原点</option><option value="x">x轴</option><option value="y">y轴</option></select></label>
+      <label for="iw-reason">我的图式依据：符号与xy=k怎样对应？为什么增减要分支说？自选跨零两点作反例；有限表和局部图不能代替什么？</label><textarea id="iw-reason" maxlength="1800"></textarea>
+      <button class="btn" id="iw-record" type="button">核观察选项，当前文字仅供自检</button>
+    </div>
+    <p class="small">改k或成对取值会清掉本轮表、点、画痕和文字；已完成正负k的计数保留至“清空”。本轮文字可先自行复制。</p><p id="iw-records" class="small"></p><button class="btn ghost" id="iw-open-guide" type="button">正负k各画一幅后，对照一般式自检</button><p id="iw-guide-feedback" role="status"></p>
+    <details class="more" id="iw-guide" hidden><summary>图上观察之后，再看一般依据</summary>
+      <p>\(x\ne0\)、\(k\ne0\)给出\(y=k/x\ne0\)，因此图象不与两轴相交。由xy=k的符号判断象限；\((-x)(-y)=xy=k\)，所以成对点关于原点对称。有限点只能核对这些取值，不证明整条曲线的性质。</p>
+      <p>若\(x_1&lt;x_2\)且在同一支，\(x_1x_2&gt;0\)，有\(y_2-y_1=\dfrac{k(x_1-x_2)}{x_1x_2}\)。k&gt;0时此差为负，k&lt;0时为正，所以分别在每一支讨论增减；跨x=0时不沿用这个符号前提。检查你自选的跨支反例，不要把两支统一称递增或递减。</p>
+      <p>自查：成对x非0吗？计算与独立点一致吗？两支分开且未碰轴吗？有限窗外仍有曲线吗？增减是否写明同一支？文字只记录，尚未判定正确；按这些准则修改，不认证纸笔、合作或掌握。</p>
+    </details>
+    <button class="btn ghost" id="iw-reset" type="button">清空并重做双支作图</button><p class="small">所有草稿仅留本页内存，刷新清除，不写学习账本。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -549,5 +592,6 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+<script defer src="../assets/b9a-j27-2-teaching-workshop-dev.js"></script>
 </body>
 </html>

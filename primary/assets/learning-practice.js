@@ -2,6 +2,7 @@
 (function () {
   "use strict";
   if (document.body.dataset.learningPage !== "practice") return;
+  if (document.body.dataset.stage === "primary" && !new URLSearchParams(location.search).has("point") && !new URLSearchParams(location.search).has("section")) return;
   var host = document.getElementById("learning-app");
   if (!host) return;
   var dataAPI = window.PeiyuLearningData, state = window.PeiyuLearningState;
@@ -238,6 +239,7 @@
     index = data.index; knowledge = data.knowledge; state.load();
     variants = data.variants && Array.isArray(data.variants.items) ? data.variants.items.filter(function (item) { return item.status === "reviewed" && ["parallel", "review"].indexOf(item.role) >= 0 && typeof item.contentVersion === "string" && item.contentVersion && Array.isArray(item.options) && item.options.some(function (option) { return option.id === item.correct; }); }) : [];
     points = index.points.filter(function (p) { var full = fullPoint(p.id); return full && full.diagnostic && p.diagnosticVersion; });
+    if (document.body.dataset.stage === "primary" && !index.knowledge) return;
     render();
     if (narrow.addEventListener) narrow.addEventListener("change", function () {
       var chooser = host.querySelector("[data-lp-chooser]");

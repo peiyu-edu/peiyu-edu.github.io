@@ -490,7 +490,7 @@ function drawCompass(g, nx, ny, px, py, showLabels) {
 
       if (st.step === 0) {
         drawCompass(g, 265, 115, 305, 115, true);
-        readout(read, "先猜一猜线段 AB 和 CD 哪条长？再点「<b>① 针尖定 A，张开到 B</b>」用圆规量一量。", "点第一步按钮，用圆规量出线段AB的长。");
+        readout(read, "先猜一猜线段 AB 和 CD 哪条长？再点“<b>① 针尖定 A，张开到 B</b>”用圆规量一量。", "点第一步按钮，用圆规量出线段AB的长。");
       } else if (st.step === 1) {
         drawCompass(g, ax, ay, bx, by, true);
         readout(read, "第 1 步：把有针尖的脚固定在线段 AB 的<b>端点 A</b> 上，另一只脚张开对准<b>端点 B</b>，量出 AB 的长。", "先把有针尖的脚固定在端点A上，另一只脚张开对准端点B。");
@@ -878,7 +878,10 @@ function logI(what, d) { if (P) P.log("interact", Object.assign({ what: what }, 
           "第 2 步：把三角尺直角顶点对齐顶点、一条直角边重合，沿着<b>另一条直角边</b>画出第二条边。",
           "第 3 步：在角里面标上<b>直角符号「┐」</b>，直角就画好啦！"
         ];
-        readout(read, notes[st.drawStep], notes[st.drawStep].replace(/<[^>]+>/g, ""));
+        var displayNote = notes[st.drawStep]
+          .replace(/「/g, "“").replace(/」/g, "”")
+          .replace(/『/g, "‘").replace(/』/g, "’");
+        readout(read, displayNote, notes[st.drawStep].replace(/<[^>]+>/g, ""));
       }
 
       U.emit(root, Object.assign({mode: "right", preset: "p3a-u5-3:right"}, st));

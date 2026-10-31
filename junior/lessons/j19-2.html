@@ -19,8 +19,14 @@
   .route ol { margin: 6px 0 2px; padding-left: 22px; line-height: 1.8; }
   .result { font-size: 16px; margin: 8px 0; min-height: 3.4em; line-height: 1.8; overflow-wrap: anywhere; }
   .result .sum { color: var(--no); font-weight: 700; }
+  .raddiv-lab input,.raddiv-lab textarea { max-width:100%;box-sizing:border-box;font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:5px;padding:7px; }
+  .raddiv-lab textarea { display:block;width:100%;min-height:90px; }
+  .raddiv-fields { display:flex;flex-wrap:wrap;gap:12px;margin:12px 0; }
+  .raddiv-fields label { display:grid;gap:4px;flex:1;min-width:140px; }
+  .raddiv-fields input { width:100%; }
+  .raddiv-lab [hidden] { display:none!important; }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j19-2" data-standard="v2">
 <div class="wrap">
@@ -263,6 +269,36 @@
     <div class="result" id="out-rat" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-rat" type="button">重置</button></div>
   </div>
+  <h3>④ 自主探究：除法能怎样类比乘法？</h3>
+  <div class="card raddiv-lab" id="raddiv-lab">
+    <p>乘法的例子启发了法则。现在自选两个被开方数 \(a,b\)，分别计算“先开方再相除”与“先相除再开方”，比较结果，自己提出除法的猜想和适用条件。特别试试零放在不同位置会怎样。</p>
+    <p class="small" id="raddiv-format">本表的参数是绝对值不超过100、约分后分母不超过100的有理数。数值用整数、小数（最多4位）或整数分数，整数词元最多8位；分母为正，分数线两侧可留空格，不能拆开数字。支持全角数字与负号“−”；不输入指数、单位或算式。</p>
+    <form id="raddiv-sample" novalidate>
+      <div class="raddiv-fields"><label>被除数的被开方数 a<input id="raddiv-a" aria-describedby="raddiv-format" autocomplete="off"></label><label>除数的被开方数 b<input id="raddiv-b" aria-describedby="raddiv-format" autocomplete="off"></label></div>
+      <p class="small" id="raddiv-answer-format">结果只核对精确值，不判最简形式。可写有理数、sqrt(r)、sqrt(r)/q、k*sqrt(r)/q（也可用 √(r)）；k、r为有理数，q为正整数，乘号用 *，根号内必须带括号。r须非负。近似小数不能代替不相等的精确根式。</p>
+      <p><label for="raddiv-left">先开方再相除的结果</label><input id="raddiv-left" aria-describedby="raddiv-answer-format" autocomplete="off" style="width:100%"></p>
+      <p><label for="raddiv-quotient">两个被开方数的商</label><input id="raddiv-quotient" aria-describedby="raddiv-format" autocomplete="off" style="width:100%"></p>
+      <p><label for="raddiv-right">这个商的算术平方根</label><input id="raddiv-right" aria-describedby="raddiv-answer-format" autocomplete="off" style="width:100%"></p>
+      <button class="btn" type="submit">核对并记录我的一组计算</button>
+    </form>
+    <p id="raddiv-feedback" class="result" role="status"></p>
+    <p><b>本轮记录</b>（每个结果均为精确值）：</p><div id="raddiv-rows"></div>
+    <form id="raddiv-conjecture" novalidate>
+      <p><label for="raddiv-guess">至少记录三组不同参数，包含零分子和正分子，再写你的除法猜想及条件</label><textarea id="raddiv-guess" maxlength="1400"></textarea></p>
+      <p><label for="raddiv-reason">仿照算术平方根的定义，独立说明：左侧是否非负？它的平方是什么？怎样由此得出一般结论？</label><textarea id="raddiv-reason" maxlength="2200"></textarea></p>
+      <button class="btn" type="submit">保存文字并打开一般说明自查</button>
+    </form>
+    <p id="raddiv-proof-feedback" role="status"></p>
+    <details class="more" id="raddiv-proof" hidden><summary>用非负平方根的唯一性，对照自己的说明</summary>
+      <p>已知 \(a\ge0,b&gt;0\)。\(\sqrt a\) 存在且非负，\(\sqrt b\) 存在且为正，故令 \(u=\sqrt a/\sqrt b\) 时，除法有意义，且 \(u\ge0\)。</p>
+      <p>由商的平方与算术平方根的定义，\(u^2=(\sqrt a)^2/(\sqrt b)^2=a/b\)。这里没有使用待说明的根式除法法则。又因 \(a/b\ge0\)，它有唯一的非负平方根；\(u\) 正是这个数，所以 \(\sqrt a/\sqrt b=\sqrt{a/b}\)。</p>
+      <p>两个条件要分开：\(a=0\) 时分子为零，结果仍是零；\(b=0\) 时分母为零，不能除。负的被开方数在实数范围没有平方根；即使两个负数的商为正，也不能用无意义的左侧验证法则。只检查平方相等还不够，必须说明非负，才能使用算术平方根的唯一性。</p>
+      <p>逐项自查：① 有写 \(a\ge0,b&gt;0\) 吗？② 说明了除数为正和左侧非负吗？③ 求平方只用了已学性质，没有循环套除法法则吗？④ 用了非负平方根的唯一性吗？⑤ 一般字母说明与有限样本区分了吗？本表只提供猜想线索；文字只记录，尚未判定正确，请对照修改。</p>
+    </details>
+    <button class="btn ghost" type="button" id="raddiv-reset">清空并重做本轮探究</button>
+    <p class="small">本活动的样本与文字只在本页内存保留，刷新后清除。一般说明不受本表的数值上界限制。</p>
+  </div>
+
 </section>
 
 <section class="step" data-title="练一练">
@@ -518,6 +554,51 @@
   drawAll();
   new MutationObserver(function () { focusM = focusR = null; focusS = false; drawAll(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class"] });
   if (window.matchMedia) { var mq = matchMedia("(prefers-color-scheme: dark)"); if (mq.addEventListener) mq.addEventListener("change", drawAll); }
+})();
+</script>
+
+<script id="raddiv-script">
+(function(){
+  "use strict";
+  function $(id){return document.getElementById("raddiv-"+id);}
+  function rational(n,d){if(!d)throw Error("分母不能为零。");if(d<0n){n=-n;d=-d;}var a=n<0n?-n:n,b=d;while(b){var r=a%b;a=b;b=r;}return {n:n/a,d:d/a};}
+  function glyphs(s){return s.replace(/[０-９]/g,function(c){return String(c.charCodeAt(0)-65296);}).replace(/[−－]/g,"-").replace(/＋/g,"+").replace(/／/g,"/").replace(/．/g,".");}
+  function number(raw){var s=glyphs(raw).trim(),m;if(s.length>40)throw Error("数值词元过长。");
+    if((m=/^([+-]?\d{1,8})\s*\/\s*(\+?\d{1,8})$/.exec(s)))return rational(BigInt(m[1]),BigInt(m[2]));
+    if(!/^[+-]?(?:\d{1,8}(?:\.\d{1,4})?|\.\d{1,4})$/.test(s))throw Error("请按说明输入数值，不拆开数字，也不输入算式或指数。");
+    var p=s.split("."),d=10n**BigInt(p[1]?p[1].length:0);return rational(BigInt((p[0]||"0")+(p[1]||"")),d);
+  }
+  function mul(a,b){return rational(a.n*b.n,a.d*b.d);}
+  function div(a,b){return rational(a.n*b.d,a.d*b.n);}
+  function same(a,b){return a.n===b.n&&a.d===b.d;}
+  function text(a){return a.n+(a.d===1n?"":"/"+a.d);}
+  function result(raw){var s=glyphs(raw).trim(),m;if(s.length>180)throw Error("结果式子过长。");
+    if(!/sqrt|√/.test(s)){var v=number(s);return {square:mul(v,v),negative:v.n<0n,display:text(v)};}
+    m=/^(?:([^()*]+)\s*\*\s*)?(?:sqrt|√)\s*\(\s*([^()]*)\s*\)(?:\s*\/\s*(\+?\d{1,8}))?$/.exec(s);
+    if(!m)throw Error("根式格式用 sqrt(r) 或 k*sqrt(r)/q；不要省略括号或把两个根式连算。");
+    var k=m[1]?number(m[1]):rational(1n,1n),r=number(m[2]),q=m[3]?BigInt(m[3]):1n;
+    if(r.n<0n)throw Error("负的被开方数在实数范围没有平方根。");if(!q)throw Error("结果的分母不能为零。");
+    k=div(k,rational(q,1n));return {square:mul(mul(k,k),r),negative:k.n<0n&&r.n>0n,display:text(k)+"*sqrt("+text(r)+")"};
+  }
+  function feedback(id,s,state){$(id).textContent=s;if(state)$(id).dataset.state=state;else delete $(id).dataset.state;}
+  var rows=new Map();
+  function closeProof(){$("proof").hidden=true;$("proof").open=false;feedback("proof-feedback","");}
+  $("sample").onsubmit=function(e){e.preventDefault();try{
+    var a=number($("a").value),b=number($("b").value);
+    if(a.n<0n||b.n<0n)throw Error("实数范围要求被开方数非负；当前有负数，不能用两个负数的商为正来绕过开方条件。");
+    if(!b.n)throw Error("除数的被开方数 b 必须大于零：b=0 时分母为零。a=0 则可以。");
+    if(a.n>100n*a.d||b.n>100n*b.d||a.d>100n||b.d>100n)throw Error("本表参数不超过100，约分后分母不超过100；一般说明不受这个上界限制。");
+    var q=div(a,b),entered=number($("quotient").value),left=result($("left").value),right=result($("right").value);
+    if(!same(q,entered))throw Error("被开方数的商还需重算，注意除法与分数。");
+    if(left.negative||right.negative)throw Error("这里的两个结果都应非负；平方相同还不够，负值不是算术平方根。");
+    if(!same(left.square,q)||!same(right.square,q))throw Error("两个开方结果还需核对；这里比较精确值，不能用不相等的近似小数代替。");
+    var key=text(a)+","+text(b);if(rows.has(key))throw Error("这组参数已记录，请另选一组。");
+    rows.set(key,{a:a,b:b});var p=document.createElement("p");p.className="small";p.textContent="a="+text(a)+"，b="+text(b)+"；左侧 "+left.display+"；商 "+text(q)+"；右侧 "+right.display;$("rows").appendChild(p);closeProof();feedback("feedback","商与两个非负结果均精确核对，已记录 "+rows.size+" 组。可以提出猜想，但样本还不是一般证明。","ok");
+  }catch(error){feedback("feedback",error.message,"retry");}};
+  $("conjecture").onsubmit=function(e){e.preventDefault();var all=Array.from(rows.values());if(rows.size<3||!all.some(function(r){return r.a.n===0n;})||!all.some(function(r){return r.a.n>0n;})||!$("guess").value.trim()||!$("reason").value.trim()){feedback("proof-feedback","先记录至少三组不同参数，包含零分子与正分子，再写自己的猜想、条件和一般说明。","retry");return;}feedback("proof-feedback","文字只保存在本页，尚未判定正确；请展开准则逐项自查，尤其检查非负与唯一性。","recorded");$("proof").hidden=false;};
+  ["a","b","left","quotient","right"].forEach(function(id){$(id).addEventListener("input",function(){feedback("feedback","");closeProof();if(id==="a"||id==="b"){["left","quotient","right"].forEach(function(part){$(part).value="";});}});});
+  ["guess","reason"].forEach(function(id){$(id).addEventListener("input",closeProof);});
+  $("reset").onclick=function(){rows.clear();$("rows").textContent="";["sample","conjecture"].forEach(function(id){$(id).reset();});feedback("feedback","");closeProof();};
 })();
 </script>
 </body></html>

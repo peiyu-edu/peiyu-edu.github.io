@@ -11,6 +11,7 @@
 <script defer src="../assets/gaokao-solutions.js"></script>
 <script defer src="../assets/lesson.js"></script>
 <script defer src="../assets/video.js"></script>
+<script defer src="../assets/b8b-j24-4-group-cut-calculator-dev.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -22,8 +23,21 @@
   .result .ok { color: var(--a); font-weight: 700; }
   .tb { border-collapse: collapse; margin: 6px 0; font-size: 15px; }
   .tb th, .tb td { border: 1px solid var(--line); padding: 3px 8px; text-align: center; }
+
+  #group-cut-lab { overflow-wrap:anywhere; }
+  #group-cut-lab label { display:block; margin:8px 0; }
+  #group-cut-lab input, #group-cut-lab select, #group-cut-lab textarea { font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--muted); border-radius:6px; padding:8px; max-width:100%; box-sizing:border-box; }
+  #group-cut-lab textarea, #group-cut-lab input[type="text"] { width:100%; }
+  #group-cut-lab button { white-space:normal; min-height:44px; margin:4px 6px 4px 0; }
+  #group-cut-lab .btn:not(.ghost) { color:var(--card); }
+  #group-cut-lab .gc-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 16px; }
+  #group-cut-lab .gc-row { border:1px solid var(--line); border-radius:8px; padding:12px; margin:12px 0; }
+  #group-cut-lab [role="status"] { min-height:1.6em; }
+  #group-cut-lab fieldset { min-width:0; border:1px solid var(--line); margin:12px 0; }
+  #group-cut-lab :focus-visible { outline:3px solid var(--a); outline-offset:2px; }
+  @media(max-width:600px) { #group-cut-lab .gc-grid { grid-template-columns:1fr; } }
 </style>
-<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=93bfb82e353b"></script><script defer src="../assets/learning-course.js?v=3aa6949acee9"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=a4ed628c8256"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
 </head>
 <body data-stage="junior" data-sec="j24-4" data-standard="v2">
 <div class="wrap">
@@ -250,6 +264,46 @@
     <svg class="fig" id="fig-three" viewBox="0 0 560 190" role="img" aria-label="切两刀把八个数据分成三组"></svg>
     <div class="result" id="out-three" aria-live="polite"></div>
     <div class="ctrl"><button class="btn ghost" id="reset-three" type="button">重置</button></div>
+  </div>
+
+  <div class="card" id="group-cut-lab">
+    <h3>④ 自己输入、逐刀列表：我的两组分法</h3>
+    <p>把一组无身份的一元数据分成<strong>两个非空连续组</strong>。本工具只列排序后相邻间隔的切法，最多10项、9刀，不代表任意分组或分三组的全部方案。请勿输入姓名、个人成绩或健康数据。数据与解释只留本页内存，刷新或重置即清空，不进入学习记录。</p>
+    <form id="gc-form">
+      <label>数据（2—10项；每项−10000至10000，最多3位小数）<textarea id="gc-data" rows="3" spellcheck="false"></textarea></label>
+      <p class="small">用逗号或换行分项，重复观测要逐项保留；只接受普通数字，不接受算式、指数或上下标。负数和零可以输入。</p>
+      <div class="gc-grid">
+        <label>同一变量的单位（无量纲请写“无量纲”）<input id="gc-unit" type="text" maxlength="20" autocomplete="off"></label>
+        <label>输入顺序<select id="gc-order"><option value="">请选择</option><option value="sort">请工具从小到大排序</option><option value="sorted">已从小到大排好，请核验</option></select></label>
+        <label>分组规则<select id="gc-rule"><option value="">请选择</option><option value="value">按值分组：相同值必须同组</option><option value="index">按人数分组：允许拆开相同值的条目</option></select></label>
+      </div>
+      <p class="small">按值分组只允许相邻值不同的间隔；按人数分组允许所有相邻间隔，相同值按原输入编号排序。这两种规则不同，后一种不能称为“用一个值分界”。每个输入条目权重为1，不是频数压缩表。</p>
+      <button class="btn" type="button" id="gc-prepare">1 整理数据与允许边界</button>
+      <p id="gc-status" role="status" aria-live="polite"></p>
+      <div id="gc-prepared" hidden>
+        <p id="gc-sorted"></p><p id="gc-allowed"></p>
+        <label>亲自列出全部允许的边界编号（切在排序后的第几项后，用逗号隔开）<input id="gc-candidates" type="text" autocomplete="off"></label>
+        <button class="btn" type="button" id="gc-build">2 建立全部切法空表</button>
+        <p id="gc-build-status" role="status" aria-live="polite"></p>
+      </div>
+      <div id="gc-work" hidden>
+        <p>每刀先算各组平均数，再算该组各项与本组平均数之差的平方并相加。组内离差平方和＝两组离差平方和之和，不是两组方差之和。点击每行计算器查看参考，再亲自填写本行并核对；工具计算不等于独立手算。</p>
+        <p>计算表接受整数、普通小数或整数分数（分母正数）；循环小数请填精确分数。参考结果保持精确值，均值用原单位，离差平方和用原单位的平方。</p>
+        <div id="gc-rows"></div>
+        <p id="gc-progress" role="status" aria-live="polite"></p>
+        <fieldset>
+          <legend>3 比较全表，记录自己的选择</legend>
+          <label>所选边界<select id="gc-choice"><option value="">请选择</option></select></label>
+          <label>选择依据与实际意义<textarea id="gc-reason" rows="4" maxlength="2000"></textarea></label>
+          <p class="small">对照准则自核：引用全表比较结果，说明有无并列；写清两组对应的原条目、单位和组大小；若按其他实际目的选择，说明与组内离差平方和最小原则的区别。组大小不同时，合并均值须按各组条目数加权。工具不自动评判开放解释，也不认证实际采集或合作发生。</p>
+          <label><input id="gc-selfcheck" type="checkbox"> 我已按上面的准则检查说明，知道这不是系统判对。</label>
+          <button class="btn" type="button" id="gc-record">在本页暂存选择与说明</button>
+          <p id="gc-record-status" role="status" aria-live="polite"></p>
+          <div id="gc-record-output"></div>
+        </fieldset>
+      </div>
+      <button class="btn ghost" type="reset" id="gc-reset">清空本活动，重新开始</button>
+    </form>
   </div>
 </section>
 

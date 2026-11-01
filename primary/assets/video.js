@@ -38,7 +38,14 @@
     ".primary .vid-bar button { min-height: 44px; }",
     ".primary .vid-txt b, .primary .vid-txt span, .primary .vid-bar { font-size: 17px; }",
     ".primary.low .vid-txt b, .primary.low .vid-txt span, .primary.low .vid-bar, .primary.low .vid-bar button { font-size: 19px; }",
-    ".vid-err { color: var(--no); font-size: 15px; margin: 6px 0 0; }"
+    ".vid-err { color: var(--no); font-size: 15px; margin: 6px 0 0; }",
+    ".vid-note { display: inline-flex; align-items: center; gap: 10px; margin: 2px 0 12px; padding: 6px 14px 6px 6px; border-radius: 999px;",
+    "  background: color-mix(in srgb, var(--c) 10%, var(--card)); border: 1px solid color-mix(in srgb, var(--c) 35%, var(--line)); color: var(--fg); font-size: 15px; text-decoration: none; min-height: 40px; box-sizing: border-box; }",
+    ".vid-note:hover { border-color: var(--c); }",
+    ".vid-note:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }",
+    ".vid-note .vid-play { width: 28px; height: 28px; font-size: 14px; }",
+    ".primary .vid-note { font-size: 17px; min-height: 44px; }",
+    ".primary.low .vid-note { font-size: 19px; }"
   ].join("\n");
   document.head.appendChild(css);
 
@@ -121,13 +128,35 @@
     if (p && p.catch) p.catch(function () { /* 浏览器不让自动播放，学生再点一下即可 */ });
   }
 
+  // 课页标题下写一行「本节有讲解视频」，点一下跳到视频所在那一步（PY-385）
+  function announce(shown) {
+    // 高中课页由 wiki.js 的概念地图放「▶ 概念课视频｜先看这里」，这里不再重复
+    if (stage === "high") return;
+    var h1 = document.querySelector("h1");
+    if (!shown.length || !h1 || document.querySelector('.vid-note, a.hci-video-cta, a[href^="#step"][href$="-video"]')) return; // 少数课页已手写「概念课视频｜先看这里」
+    var first = shown[0].box, step = first.closest("section.step"), steps = Array.prototype.slice.call(document.querySelectorAll("section.step"));
+    var n = step ? steps.indexOf(step) + 1 : 0, dur = 0;
+    shown.forEach(function (x) { dur += +x.v.dur || 0; });
+    var a = document.createElement("a");
+    a.className = "vid-note";
+    a.href = n ? "#step" + n : "#";
+    a.innerHTML = '<span class="vid-play" aria-hidden="true">▶</span><span></span>';
+    a.lastChild.textContent = (shown.length > 1 ? "本" + (stage === "primary" ? "课" : "节") + "有 " + shown.length + " 段讲解视频" : "本" + (stage === "primary" ? "课" : "节") + "有讲解视频") + (dur ? "（" + minutes(dur) + "）" : "") + "，点这里去看";
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      if (n && location.hash !== "#step" + n) location.hash = "step" + n;
+      setTimeout(function () { first.scrollIntoView({ behavior: "smooth", block: "center" }); var b = first.querySelector("button"); if (b) b.focus({ preventScroll: true }); }, 80);
+    });
+    h1.insertAdjacentElement("afterend", a);
+  }
+
   function init() {
     var slots = document.querySelectorAll(".vid[data-video]");
     if (!slots.length) return;
     var listUrl = new URL("../data/videos.json", document.baseURI).href;
     fetch(listUrl, { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }).then(function (data) {
       var mine = (data.sections || {})[sec] || {};
-      var base = new URL(data.base || "", listUrl).href;
+      var base = new URL(data.base || "", listUrl).href, shown = [];
       Array.prototype.forEach.call(slots, function (box) {
         var id = box.getAttribute("data-video"), v = mine[id];
         if (v && v.reviewStatus === "withdrawn") {
@@ -141,7 +170,9 @@
         if (!v || !v.src) { box.remove(); return; }
         var subtitleUrl = typeof v.vtt === "string" && v.vtt ? new URL(v.vtt, base).href : "";
         button(box, id, v, new URL(v.src, base).href, subtitleUrl);
+        shown.push({ box: box, v: v });
       });
+      try { announce(shown); } catch (e) { /* 提示只是锦上添花，出错不影响视频 */ }
     });
   }
 

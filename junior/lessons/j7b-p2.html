@@ -516,9 +516,9 @@
   var m1 = document.getElementById("m1-fig"), m1n = document.getElementById("m1-note");
   function drawM1() {
     var c = C(), k = on("m1-bar").getAttribute("data-k"), data = monthly(40); m1.innerHTML = "";
-    var g = frame(m1, 46, 370, 20, 170, 8, 16, 2, 16, c);
+    var g = frame(m1, 46, 370, 20, 170, 0, 16, 4, 16, c);
     if (k === "bar") {
-      data.forEach(function (v, i) { el("rect", { x: g.X(i) - 9, y: g.Y(v), width: 18, height: g.Y(8) - g.Y(v), fill: c.b }, m1); });
+      data.forEach(function (v, i) { el("rect", { x: g.X(i) - 9, y: g.Y(v), width: 18, height: g.Y(0) - g.Y(v), fill: c.b }, m1); });
       m1n.textContent = "条形图：一眼比出哪个月最高（6 月 14.8 小时）、哪个月最低（12 月 9.2 小时）。";
     } else {
       el("polyline", { points: data.map(function (v, i) { return g.X(i) + "," + g.Y(v); }).join(" "), fill: "none", stroke: c.a, "stroke-width": 3 }, m1);
@@ -528,15 +528,26 @@
   }
   bar("m1-bar", drawM1);
 
+  // 条形图从 0 起算，柱高才能直接表示白昼时长。
+  function pairFrame(p, y0, y1, hi, step, c) {
+    function Y(v) { return y1 - v * (y1 - y0) / hi; }
+    el("line", { x1: 60, y1: y0, x2: 60, y2: y1, stroke: c.fg, "stroke-width": 1.5 }, p);
+    el("line", { x1: 60, y1: y1, x2: 360, y2: y1, stroke: c.fg, "stroke-width": 1.5 }, p);
+    for (var v = 0; v <= hi; v += step) {
+      el("line", { x1: 55, y1: Y(v), x2: 360, y2: Y(v), stroke: c.line, "stroke-width": 1 }, p);
+      txt(p, 52, Y(v) + 6, String(v), c.muted, 400, 16, "end");
+    }
+    return Y;
+  }
+
   /* 微图解 ②：纬度与变化幅度 */
   var m2 = document.getElementById("m2-fig"), m2n = document.getElementById("m2-note");
   function drawM2() {
     var c = C(), p = +on("m2-bar").getAttribute("data-p"), d = monthly(p), mx = Math.max.apply(null, d), mn = Math.min.apply(null, d); m2.innerHTML = "";
-    function Y(v) { return 170 - (v - 6) * 150 / 12; }
+    var Y = pairFrame(m2, 20, 170, 18, 6, c);
     el("line", { x1: 60, y1: Y(12), x2: 360, y2: Y(12), stroke: c.dim, "stroke-dasharray": "5 5" }, m2);
-    txt(m2, 52, Y(12) + 6, "12", c.muted, 400, 16, "end");
-    el("rect", { x: 120, y: Y(mx), width: 50, height: Y(6) - Y(mx), fill: c.hl }, m2);
-    el("rect", { x: 250, y: Y(mn), width: 50, height: Y(6) - Y(mn), fill: c.c }, m2);
+    el("rect", { x: 120, y: Y(mx), width: 50, height: Y(0) - Y(mx), fill: c.hl }, m2);
+    el("rect", { x: 250, y: Y(mn), width: 50, height: Y(0) - Y(mn), fill: c.c }, m2);
     txt(m2, 145, Y(mx) - 8, r1(mx), c.fg, 700, 17);
     txt(m2, 275, Y(mn) - 8, r1(mn), c.fg, 700, 17);
     txt(m2, 145, 192, "最长", c.fg, 400, 16);
@@ -549,9 +560,9 @@
   var m3 = document.getElementById("m3-fig"), m3n = document.getElementById("m3-note");
   function drawM3() {
     var c = C(), m = +on("m3-bar").getAttribute("data-m"), d = monthly(40), a = d[m], b = d[(m + 1) % 12], diff = Math.round((b - a) * 10) / 10; m3.innerHTML = "";
-    function Y(v) { return 160 - (v - 8) * 130 / 8; }
-    el("rect", { x: 90, y: Y(a), width: 60, height: Y(8) - Y(a), fill: c.b }, m3);
-    el("rect", { x: 230, y: Y(b), width: 60, height: Y(8) - Y(b), fill: c.a }, m3);
+    var Y = pairFrame(m3, 30, 160, 16, 8, c);
+    el("rect", { x: 90, y: Y(a), width: 60, height: Y(0) - Y(a), fill: c.b }, m3);
+    el("rect", { x: 230, y: Y(b), width: 60, height: Y(0) - Y(b), fill: c.a }, m3);
     txt(m3, 120, Y(a) - 8, r1(a), c.fg, 700, 17);
     txt(m3, 260, Y(b) - 8, r1(b), c.fg, 700, 17);
     txt(m3, 120, 182, (m + 1) + "/21", c.muted, 400, 16);

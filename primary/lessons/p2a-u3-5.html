@@ -375,11 +375,13 @@ function koujue(root, cfg) {
   function pickLine(i) {
     if (st.found) return;
     var row = st.row, p = i * row, v = verse(Math.min(i, row), Math.max(i, row));
-    log("line", { row: row, other: i, ok: p === a && row === d });
-    if (p === a && row === d) {
+    var matches = p === a && (row === d || i === d);
+    log("line", { row: row, other: i, ok: matches });
+    if (matches) {
+      var quotient = row === d ? i : row;
       st.found = i; draw();
-      say(read, "✓ 对了！" + v + "，商是 " + i + "。", v + "，商是" + cn(i) + "。", "ok");
-      root.querySelector(".kj-q").textContent = i;
+      say(read, "✓ 对了！" + v + "，商是 " + quotient + "。", v + "，商是" + cn(quotient) + "。", "ok");
+      root.querySelector(".kj-q").textContent = quotient;
       return;
     }
     if (p === a) { say(read, "✗ 还不对。" + v + "，得数是 " + a + "，可是这句里没有除数 " + d + "。除数是几，就想几的口诀。", null, "no"); return; }

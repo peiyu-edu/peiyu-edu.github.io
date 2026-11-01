@@ -121,7 +121,7 @@
     const q = snap.questions.find(x => x.questionType === "diagnostic" && x.pointId === card.id && x.questionId === entry.question.id && (x.contentVersion === entry.question.contentVersion || (entry.question.contentVersions || []).includes(x.contentVersion)));
     if (!q || !q.firstAnswer) return '<p class="cc-record">' + (q && q.feedbackSeen ? '已看过答案，之后再做记为订正。' : '第一次自己作答会记入“我的学习”，并安排复习。') + '</p>';
     // A wrong answer goes to 再练一练; the ledger keeps an earlier schedule (e.g. +7 days after a first correct answer), so say what is actually scheduled.
-    if (q.lastAnswer && q.lastAnswer.correct === false) return '<p class="cc-record">已放进『再练一练』，' + remindText(q.reviewDueAt) + '。</p>';
+    if (q.lastAnswer && q.lastAnswer.correct === false) return '<p class="cc-record">已放进‘再练一练’，' + remindText(q.reviewDueAt) + '。</p>';
     const first = q.firstAnswer.attemptKind === "independent" ? '第一次自己作答' + (q.firstAnswer.correct ? '答对了' : '答错了') : '已作答';
     return '<p class="cc-record">已记入“我的学习”：' + first + (q.reviewDueAt ? '，' + dueText(q.reviewDueAt) + '再来复习' : '') + '。</p>';
   }

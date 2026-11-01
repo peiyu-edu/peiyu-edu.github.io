@@ -471,7 +471,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       },
       info: function (a) {
         var r = 2 * a - 1;
-        if (r < a) return '<span class="ok">✓ a = ' + f2(a) + '：2a−1 = ' + f2(r) + ' \\(\\lt\\) a，\\(A=\\varnothing\\subseteq B\\) 成立。</span> 这就是「先查空集」要补回来的那一段：答案里 \\(a\\lt 1\\) 全部合法。';
+        if (r < a) return '<span class="ok">✓ a = ' + f2(a) + '：2a−1 = ' + f2(r) + ' \\(\\lt\\) a，\\(A=\\varnothing\\subseteq B\\) 成立。</span> 这就是“先查空集”要补回来的那一段：答案里 \\(a\\lt 1\\) 全部合法。';
         if (a >= 0 && r <= 3) return '<span class="ok">✓ a = ' + f2(a) + '：\\(A=[' + f2(a) + ',' + f2(r) + ']\\) 整段落在 \\(B\\) 内。</span> 端点不等式 \\(a\\ge 0\\) 且 \\(2a-1\\le 3\\) 都满足。';
         return '<span class="bad">✗ a = ' + f2(a) + '：2a−1 = ' + f2(r) + ' \\(\\gt\\) 3，\\(A\\) 伸出 \\(B\\) 外。</span> \\(a\\ge 1\\) 这一支的上界就是 \\(2a-1\\le 3\\Rightarrow a\\le 2\\)。';
       }
@@ -479,7 +479,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 第 2 章 ---- */
     {
       id: "amgm-hook", card: "amgm-hook", tpl: "slider",
-      title: "基本不等式「等号取不到」时，最小值跑去了端点",
+      title: "基本不等式“等号取不到”时，最小值跑去了端点",
       intro: "\\(f(x)=x+\\dfrac4x\\)，基本不等式给的下界是 \\(4\\)，等号在 \\(x=2\\)。拖动题目允许的定义域左端点 \\(x\\ge m\\)。",
       ask: { q: "若定义域是 \\(x\\ge 3\\)，\\(f(x)=x+\\dfrac4x\\) 的最小值是？", opts: ["仍是 \\(4\\)（基本不等式的下界）", "\\(f(3)=\\dfrac{13}{3}\\)（在端点取到）", "没有最小值"], ans: 1,
         why: "等号点 \\(x=2\\) 不在 \\([3,+\\infty)\\) 内，下界 \\(4\\) 取不到；对勾函数在 \\((2,+\\infty)\\) 上递增，最小值在左端点 \\(x=3\\)。" },
@@ -507,7 +507,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "quad-always-true", card: "quad-always-true", tpl: "slider",
       title: "区间上恒成立：直接套 \\(\\Delta\\lt 0\\) 为什么会把答案算窄？",
-      intro: "\\(x^2-ax+2\\gt 0\\) 对 \\(x\\in[3,5]\\) 恒成立。拖动 \\(a\\)，比较「\\(\\Delta\\lt 0\\) 法」的判断和区间上的真相。",
+      intro: "\\(x^2-ax+2\\gt 0\\) 对 \\(x\\in[3,5]\\) 恒成立。拖动 \\(a\\)，比较“\\(\\Delta\\lt 0\\) 法”的判断和区间上的真相。",
       ask: { q: "这题能直接令 \\(\\Delta\\lt 0\\) 求 \\(a\\) 吗？", opts: ["能，\\(\\Delta\\lt 0\\) 得 \\(a\\lt 2\\sqrt2\\)", "不能，区间上要看最小值，答案比 \\(a\\lt 2\\sqrt2\\) 宽", "不能，答案比 \\(a\\lt 2\\sqrt2\\) 窄"], ans: 1,
         why: "\\(\\Delta\\lt 0\\) 保证的是在整个 \\(\\mathbf R\\) 上为正，题目只要求 \\([3,5]\\) 上为正：抛物线可以有根，只要根落在区间外。正确做法是分离参数 \\(a\\lt x+\\dfrac2x\\) 在 \\([3,5]\\) 上的最小值 \\(\\dfrac{11}{3}\\)。" },
       ctrl: { label: "\\(a=\\)", min: 2, max: 5, step: 0.25, init: 3, quick: [{ label: "a=3（Δ>0 却成立）", v: 3 }, { label: "a=4（真失败）", v: 4 }] },
@@ -531,7 +531,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
         var D = a * a - 8, f = function (x) { return x * x - a * x + 2; };
         var mn = (a / 2 >= 3 && a / 2 <= 5) ? f(a / 2) : Math.min(f(3), f(5));
         var dOK = D < 0, real = mn > 0;
-        return "「套 \\(\\Delta\\lt 0\\)」说：" + (dOK ? '<span class="ok">成立</span>' : '<span class="bad">不成立</span>') + "（\\(\\Delta=" + String(D) + "\\)）；区间上的真相：最小值 \\(" + f2(mn) + "\\)，" +
+        return "“套 \\(\\Delta\\lt 0\\)”说：" + (dOK ? '<span class="ok">成立</span>' : '<span class="bad">不成立</span>') + "（\\(\\Delta=" + String(D) + "\\)）；区间上的真相：最小值 \\(" + f2(mn) + "\\)，" +
           (real ? '<span class="ok">恒成立 ✓</span>' : '<span class="bad">有 \\(x\\in[3,5]\\) 使 \\(f(x)\\le 0\\) ✗</span>') +
           (dOK !== real ? "。<b>两种判断不一致，这就是被 \\(\\Delta\\) 冤枉掉的一段</b>：正确范围 \\(a\\lt\\dfrac{11}{3}\\approx 3.67\\)。" : "。");
       }
@@ -559,7 +559,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "fn-parity-core", card: "fn-parity-core", tpl: "toggle",
-      title: "判断奇偶性，为什么「不先看定义域」一做就错？",
+      title: "判断奇偶性，为什么“不先看定义域”一做就错？",
       intro: "解析式都是 \\(f(x)=x^2\\)，满足 \\(f(-x)=f(x)\\)。切换三种定义域，看图象关于 \\(y\\) 轴还对称吗。",
       ask: { q: "\\(f(x)=x^2\\)，\\(x\\in[-1,2.5]\\)，它是偶函数吗？", opts: ["是，解析式满足 \\(f(-x)=f(x)\\)", "不是，定义域不对称，\\(f(-2)\\) 根本没定义", "是偶函数，但只在 \\([-1,1]\\) 上"], ans: 1,
         why: "奇偶性的第一步永远是看定义域是否关于原点对称。\\(x=2\\) 在定义域内而 \\(x=-2\\) 不在，\\(f(-2)=f(2)\\) 无从谈起，直接非奇非偶。" },
@@ -589,9 +589,9 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "fn-mono-def", card: "fn-mono-def", tpl: "toggle",
       title: "\\(y=\\dfrac1x\\) 的递减区间，为什么不能写成 \\((-\\infty,0)\\cup(0,+\\infty)\\)？",
-      intro: "「递减」是说：区间里任取 \\(x_1\\lt x_2\\) 都有 \\(f(x_1)\\gt f(x_2)\\)。切换取点方式，检验这句话。",
+      intro: "“递减”是说：区间里任取 \\(x_1\\lt x_2\\) 都有 \\(f(x_1)\\gt f(x_2)\\)。切换取点方式，检验这句话。",
       ask: { q: "\\(y=\\dfrac1x\\) 的单调递减区间能写成 \\((-\\infty,0)\\cup(0,+\\infty)\\) 吗？", opts: ["能，两段都递减", "不能，取 \\(x_1=-1\\lt x_2=2\\) 时 \\(f(x_1)\\lt f(x_2)\\)，并集上不递减", "不能，应写成 \\(\\mathbf R\\)"], ans: 1,
-        why: "并集是一个集合，递减要对集合里任意两点成立。跨过 \\(0\\) 取 \\(-1\\) 和 \\(2\\)，\\(f(-1)=-1\\lt f(2)=\\dfrac12\\)，反而变大了。所以两段要分开写，用「和」或逗号。" },
+        why: "并集是一个集合，递减要对集合里任意两点成立。跨过 \\(0\\) 取 \\(-1\\) 和 \\(2\\)，\\(f(-1)=-1\\lt f(2)=\\dfrac12\\)，反而变大了。所以两段要分开写，用“和”或逗号。" },
       ctrl: { init: "same", states: [{ key: "same", label: "同一支内取 \\(x_1=1,\\ x_2=2\\)" }, { key: "cross", label: "跨过 0 取 \\(x_1=-1,\\ x_2=2\\)" }] },
       view: { x: [-3, 3], y: [-3, 3], xt: [-2, -1, 1, 2], yt: [-2, -1, 1, 2] },
       scene: function (s) {
@@ -607,7 +607,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       info: function (s) {
         return s === "same"
           ? '<span class="ok">✓ \\(x_1\\lt x_2\\) 且 \\(f(x_1)=1\\gt f(x_2)=0.5\\)：</span>在 \\((0,+\\infty)\\) 这一支内确实递减。'
-          : '<span class="bad">✗ \\(x_1=-1\\lt x_2=2\\)，却有 \\(f(x_1)=-1\\lt f(x_2)=0.5\\)：</span>在「并集」上 \\(x\\) 变大 \\(f\\) 也变大，递减不成立。递减区间要写成 \\((-\\infty,0)\\) 和 \\((0,+\\infty)\\)。';
+          : '<span class="bad">✗ \\(x_1=-1\\lt x_2=2\\)，却有 \\(f(x_1)=-1\\lt f(x_2)=0.5\\)：</span>在“并集”上 \\(x\\) 变大 \\(f\\) 也变大，递减不成立。递减区间要写成 \\((-\\infty,0)\\) 和 \\((0,+\\infty)\\)。';
       }
     },
     {
@@ -661,7 +661,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "zero-theorem", card: "zero-theorem", tpl: "toggle",
-      title: "零点存在定理只说「有」，不说「没有」，也离不开连续",
+      title: "零点存在定理只说“有”，不说“没有”，也离不开连续",
       intro: "定理：\\(f\\) 在 \\([a,b]\\) 上连续且 \\(f(a)f(b)\\lt 0\\Rightarrow\\) \\((a,b)\\) 内有零点。切换三种情形，看哪些结论不能反着用。",
       ask: { q: "\\(f(a)\\cdot f(b)\\gt 0\\)，能断定 \\(f(x)\\) 在 \\((a,b)\\) 内没有零点吗？", opts: ["能", "不能，\\(f(x)=x^2-1\\) 在 \\([-2,2]\\) 上 \\(f(-2)f(2)\\gt 0\\) 却有两个零点", "能，但要求 \\(f\\) 连续"], ans: 1,
         why: "定理是单向的：异号 \\(\\Rightarrow\\) 有零点。同号时内部仍可能有零点。另外，若去掉连续性，定义完整的跳跃函数也能两端异号而没有零点：左侧取 \\(-1\\)、右侧含 \\(0\\) 取 \\(1\\)。" },
@@ -690,7 +690,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       },
       info: function (s) {
         if (s === "ok") return '<span class="ok">✓ 定理正用：</span>连续 + \\(f(0)f(2)=-1\\lt 0\\Rightarrow(0,2)\\) 内有零点，确实在 \\(x=1\\)。';
-        if (s === "even") return '<span class="bad">✗ 逆命题假：</span>\\(f(-2)f(2)=9\\gt 0\\)，可 \\(x=\\pm1\\) 是两个零点。这个例子两端同号却有两个零点，不能断定「没有」。';
+        if (s === "even") return '<span class="bad">✗ 逆命题假：</span>\\(f(-2)f(2)=9\\gt 0\\)，可 \\(x=\\pm1\\) 是两个零点。这个例子两端同号却有两个零点，不能断定“没有”。';
         return '<span class="bad">✗ 丢了连续性：</span>\\(h(-1)h(1)=-1\\lt 0\\)，但本例 \\(h(x)=-1\\)（\\(x\\lt0\\)）、\\(h(x)=1\\)（\\(x\\ge0\\)），在 \\(0\\) 跳跃；它在整个区间都有定义且从不等于 \\(0\\)。用定理前须核在整个闭区间连续。';
       }
     },
@@ -777,7 +777,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "seq-arith-geom", card: "seq-arith-geom", tpl: "toggle",
       title: "等比数列求和：\\(q=1\\) 时公式的分母是 \\(0\\)",
-      intro: "\\(a_1=2\\)，求前 \\(4\\) 项和。切换公比 \\(q\\)，比较「直接相加」和「套公式 \\(S_n=\\dfrac{a_1(1-q^n)}{1-q}\\)」。",
+      intro: "\\(a_1=2\\)，求前 \\(4\\) 项和。切换公比 \\(q\\)，比较“直接相加”和“套公式 \\(S_n=\\dfrac{a_1(1-q^n)}{1-q}\\)”。",
       ask: { q: "公比 \\(q\\) 含参数，直接套分式求和公式前必须先核查什么？", opts: ["直接套 \\(\\dfrac{a_1(1-q^4)}{1-q}\\)", "先分 \\(q=1\\) 与 \\(q\\ne 1\\) 讨论", "只求通项即可省略分母为零的检查"], ans: 1,
         why: "公式的分母是 \\(1-q\\)，\\(q=1\\) 时为 \\(0\\)，公式作废，此时 \\(S_n=na_1\\)。使用这个分式前须分 \\(q=1\\) 与 \\(q\\ne1\\)。也可直接相加写成 \\(S_4=2(1+q+q^2+q^3)\\)，此多项式在 \\(q=1\\) 仍有效；这不等于能把 \\(1\\) 直接代进原分式。" },
       ctrl: { init: "2", states: [{ key: "2", label: "\\(q=2\\)" }, { key: "1", label: "\\(q=1\\)" }, { key: "-1", label: "\\(q=-1\\)" }] },
@@ -794,7 +794,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       },
       info: function (s) {
         var q = Number(s);
-        if (q === 1) return '<span class="bad">✗ 公式作废：</span>分母 \\(1-q=0\\)。此时四项都是 \\(2\\)，\\(S_4=4a_1=8\\)。含参公比必须先写「当 \\(q=1\\) 时 \\(S_n=na_1\\)」。';
+        if (q === 1) return '<span class="bad">✗ 公式作废：</span>分母 \\(1-q=0\\)。此时四项都是 \\(2\\)，\\(S_4=4a_1=8\\)。含参公比必须先写“当 \\(q=1\\) 时 \\(S_n=na_1\\)”。';
         var f = 2 * (1 - Math.pow(q, 4)) / (1 - q);
         return '<span class="ok">✓ 公式可用：</span>\\(S_4=\\dfrac{2(1-(' + q + ')^4)}{1-(' + q + ')}=' + f2(f) + '\\)，与直接相加一致。';
       }
@@ -802,11 +802,11 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 选必二 第 5 章 ---- */
     {
       id: "calc-derivative-def", card: "calc-derivative-def", tpl: "routes",
-      title: "「在点处的切线」和「过点的切线」：\\(y=x^3\\) 过 \\((1,1)\\) 的切线有几条？",
+      title: "“在点处的切线”和“过点的切线”：\\(y=x^3\\) 过 \\((1,1)\\) 的切线有几条？",
       intro: "曲线 \\(y=x^3\\)，点 \\(A(1,1)\\) 在曲线上。点路线，看每种理解画出几条线。",
-      ask: { q: "「过点 \\(A(1,1)\\) 的曲线 \\(y=x^3\\) 的切线」有几条？", opts: ["1 条（就是在 \\(A\\) 处的切线）", "2 条（切点可以不是 \\(A\\)）", "无数条"], ans: 1,
-        why: "「过点」不要求 \\(A\\) 是切点。设切点 \\((t,t^3)\\)，切线 \\(y=3t^2(x-t)+t^3\\) 过 \\((1,1)\\) 得 \\(2t^3-3t^2+1=0\\)，即 \\((t-1)^2(2t+1)=0\\)：\\(t=1\\) 或 \\(t=-\\dfrac12\\)，两条。" },
-      ctrl: { init: "at", states: [{ key: "at", label: "在点 A 处的切线：\\(k=f'(1)=3\\)" }, { key: "through", label: "过点 A 的切线：设切点 \\((t,t^3)\\)" }, { key: "bad", label: "错法：把「过点」当「在点」" }] },
+      ask: { q: "“过点 \\(A(1,1)\\) 的曲线 \\(y=x^3\\) 的切线”有几条？", opts: ["1 条（就是在 \\(A\\) 处的切线）", "2 条（切点可以不是 \\(A\\)）", "无数条"], ans: 1,
+        why: "“过点”不要求 \\(A\\) 是切点。设切点 \\((t,t^3)\\)，切线 \\(y=3t^2(x-t)+t^3\\) 过 \\((1,1)\\) 得 \\(2t^3-3t^2+1=0\\)，即 \\((t-1)^2(2t+1)=0\\)：\\(t=1\\) 或 \\(t=-\\dfrac12\\)，两条。" },
+      ctrl: { init: "at", states: [{ key: "at", label: "在点 A 处的切线：\\(k=f'(1)=3\\)" }, { key: "through", label: "过点 A 的切线：设切点 \\((t,t^3)\\)" }, { key: "bad", label: "错法：把“过点”当“在点”" }] },
       view: { x: [-2.1, 2.1], y: [-3.2, 3.2], xt: [-2, -1, 1, 2], yt: [-2, -1, 1, 2] },
       scene: function (s) {
         var P = [{ t: "curve", f: function (x) { return x * x * x; }, from: -2.1, to: 2.1, color: "c", w: 3 }];
@@ -822,7 +822,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       info: function (s) {
         if (s === "at") return '<span class="ok">✓ 在点 A 处：</span>切点就是 \\(A\\)，\\(k=f\'(1)=3\\)，切线 \\(y-1=3(x-1)\\)，唯一一条。';
         if (s === "through") return '<span class="ok">✓ 过点 A：</span>切点 \\((t,t^3)\\) 待定，由切线过 \\((1,1)\\) 解得 \\(t=1\\) 或 \\(t=-\\dfrac12\\)，两条：\\(y=3x-2\\) 和 \\(y=\\dfrac34x+\\dfrac14\\)。';
-        return '<span class="bad">✗ 只画了一条：</span>题目说「过点」却按「在点」做，丢了切点 \\(\\left(-\\dfrac12,-\\dfrac18\\right)\\) 的那条金色线。看到「过点」先问：切点是谁？';
+        return '<span class="bad">✗ 只画了一条：</span>题目说“过点”却按“在点”做，丢了切点 \\(\\left(-\\dfrac12,-\\dfrac18\\right)\\) 的那条金色线。看到“过点”先问：切点是谁？';
       }
     },
     {

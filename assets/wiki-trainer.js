@@ -317,7 +317,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     } else if (!roundWrong) {
       html += '<p class="small">全对。换一章，或者切到跨章混合，难度会上来。</p>';
     } else {
-      html += '<p class="small">没想到的这几条，建议点卡片看一遍「什么时候用」，再回来重练：</p><ul>';
+      html += '<p class="small">没想到的这几条，建议点卡片看一遍“什么时候用”，再回来重练：</p><ul>';
       missed.forEach(function (c) {
         html += "<li>" + mathHtml(c.cue) + ' <button type="button" class="w-rel" data-goto="' + c.card + '">🔗 ' + esc(c.label) + "</button></li>";
       });

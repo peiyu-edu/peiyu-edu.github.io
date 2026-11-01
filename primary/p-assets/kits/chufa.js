@@ -111,7 +111,7 @@
         t(180, H - 10, st.a + " ÷ " + st.b + " = " + plan.quotient + (plan.remainder ? " …… " + plan.remainder : ""), "var(--fg)", 20);
       }
       if (done && !(names && st.k > plan.steps.length) && !names) t(180, H - 10, st.a + " ÷ " + st.b + " = " + plan.quotient + (plan.remainder ? " …… " + plan.remainder : ""), "var(--fg)", 20);
-      if (st.k === 0) read.textContent = "要算 " + st.a + " ÷ " + st.b + "。点「下一步」：商、乘、减，一位一位来。";
+      if (st.k === 0) read.textContent = "要算 " + st.a + " ÷ " + st.b + "。点“下一步”：商、乘、减，一位一位来。";
       else if (st.k > plan.steps.length) read.textContent = "认一认：" + st.a + " 是被除数，" + st.b + " 是除数，商是 " + plan.quotient + "，" + (plan.remainder ? "积 " + (plan.chunks[rows - 1].p) + "，余数是 " + plan.remainder + "（余数比除数小）。" : "最后一个积 " + plan.chunks[rows - 1].p + "，正好除尽，没有余数。");
       else if (done) read.textContent = cur.text + " 所以 " + st.a + " ÷ " + st.b + " = " + plan.quotient + (plan.remainder ? " ……" + plan.remainder : "") + "。";
       else read.textContent = cur.text;

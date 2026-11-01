@@ -427,7 +427,7 @@
         if (n && cfg.connect && chk.lonely) msg += "有 " + chk.lonely + " 块孤零零的，没有面和别的块整面贴合，不合要求。";
         else if (chk.all && n) { msg += "符合要求。"; cls = "ok"; }
       } else if (!d) {
-        msg = who + "用了 " + n + " 个小正方体。拖一拖可以转着看；点「转到…」正对着看。";
+        msg = who + "用了 " + n + " 个小正方体。拖一拖可以转着看；点“转到…”正对着看。";
       } else {
         var v = vs[d];
         msg = who + "从" + DIR[d].name + "看，看到 " + v.count + " 个方格；" + (v.hidden ? "有 " + v.hidden + " 个小正方体被挡住，看不到。" : "每个小正方体都看得到。");

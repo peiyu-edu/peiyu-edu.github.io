@@ -47,7 +47,7 @@ const modes = {
       '已知 \\(PA\\perp\\) 底面 \\(ABC\\)，\\(\\angle ABC=90^\\circ\\)。要证 \\(BC\\perp PB\\)：先证 \\(BC\\) 垂直于 \\(PB\\) 所在的平面 \\(PAB\\)。',
       '① \\(PA\\perp\\) 底面，\\(BC\\subset\\) 底面，所以 \\(PA\\perp BC\\)（线面垂直的性质）。',
       '② 又 \\(BC\\perp AB\\)，且 \\(PA\\cap AB=A\\)，所以 \\(BC\\perp\\) 平面 \\(PAB\\)（判定：垂直于面内两条<b>相交</b>直线）。',
-      '③ \\(PB\\subset\\) 平面 \\(PAB\\)，所以 \\(BC\\perp PB\\)。四个面都是直角三角形，这就是「鳖臑」。',
+      '③ \\(PB\\subset\\) 平面 \\(PAB\\)，所以 \\(BC\\perp PB\\)。四个面都是直角三角形，这就是“鳖臑”。',
     ][+p.st - 1],
     tags: ['A', 'B', 'C', 'P'],
     callouts: [
@@ -59,7 +59,7 @@ const modes = {
     def: String.raw`<h3>例 1 鳖臑模型</h3>
       <p class="def">三棱锥 \(P\text{-}ABC\) 中，\(PA\perp\) 底面 \(ABC\)，\(\angle ABC=90^\circ\)。求证：\(BC\perp PB\)。</p>
       <p>思路：要证线线垂直，先证线面垂直。\(BC\) 同时垂直于 \(PA\) 和 \(AB\)，这两条线相交于 \(A\)，所以 \(BC\perp\) 平面 \(PAB\)，从而垂直于面内的 \(PB\)。</p>
-      <p class="l3-note">《九章算术》把四个面都是直角三角形的四面体叫「鳖臑」（biē nào）。拖动三条棱的长度，四个直角始终都在。</p>`,
+      <p class="l3-note">《九章算术》把四个面都是直角三角形的四面体叫“鳖臑”（biē nào）。拖动三条棱的长度，四个直角始终都在。</p>`,
   },
   dih: {
     name: '二面角 P-BC-A', params: { a: 1.4, b: 1.2, h: 1.6, st: '1' },

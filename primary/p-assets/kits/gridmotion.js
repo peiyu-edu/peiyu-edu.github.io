@@ -262,7 +262,7 @@
     function symHint() {
       var G = D.given, K = D.kid, d0 = null, same = true, j;
       for (j = 0; j < G.length; j++) { if (D.fixed[j]) continue; var d = [K[j][0] - G[j][0], K[j][1] - G[j][1]]; if (!d0) d0 = d; else if (!eq(d, d0)) same = false; }
-      if (same && d0 && (d0[0] || d0[1])) return "这是把这一半照抄（平移）过去了，朝向没变。对应点要「反过来」：原来离对称轴近的点，对应点也离得近。";
+      if (same && d0 && (d0[0] || d0[1])) return "这是把这一半照抄（平移）过去了，朝向没变。对应点要“反过来”：原来离对称轴近的点，对应点也离得近。";
       for (j = 0; j < G.length; j++) if (D.bad[j]) break;
       var g = G[j], k = K[j], o = 1 - IDX, n = Math.abs(g[IDX] - AV), m = Math.abs(k[IDX] - AV);
       if (k[o] !== g[o]) return nm(j, 1) + " 要和 " + nm(j) + " 在同一条" + (IDX === 0 ? "横线" : "竖线") + "上，连线才和对称轴垂直。";
@@ -389,15 +389,15 @@
     }
     function rotRead() {
       var q = ((qn % 4) + 4) % 4;
-      if (!q) { msg(cfg.prompt || "点「顺时针 90°」或「逆时针 90°」，看它绕点 " + nm(PV) + " 转。"); return; }
+      if (!q) { msg(cfg.prompt || "点“顺时针 90°”或“逆时针 90°”，看它绕点 " + nm(PV) + " 转。"); return; }
       var s = q === 2 ? "绕点 " + nm(PV) + " 按" + (lastDir > 0 ? "顺" : "逆") + "时针方向旋转了 180°" : "绕点 " + nm(PV) + " 按" + (q === 1 ? "顺" : "逆") + "时针方向旋转了 90°";
       var e = edgeInfo();
       msg(s + "。" + (e ? "<br>" + e + "。" : ""));
     }
     function rotate(dir) {
-      if (Math.abs(qn + dir) > 2) { msg("已经转了 180°，转到对面了。点「重来」再转。"); return; }
+      if (Math.abs(qn + dir) > 2) { msg("已经转了 180°，转到对面了。点“重来”再转。"); return; }
       var o = cur[PV], end = cur.map(function (p) { return q90(p, o, dir); });
-      if (!inside(end)) { msg("再转就转出方格纸了。换个方向，或者点「重来」。", "no"); return; }
+      if (!inside(end)) { msg("再转就转出方格纸了。换个方向，或者点“重来”。", "no"); return; }
       var from = cur.map(function (p) { return p.slice(); });
       arcs = from.map(function (p) { return { p: p, r: Math.sqrt(Math.pow(p[0] - o[0], 2) + Math.pow(p[1] - o[1], 2)) }; });
       anim(800, function (t) { cur = from.map(function (p) { return turn(p, o, dir * t * Math.PI / 2); }); draw(); }, function () {
@@ -459,7 +459,7 @@
       rb.forEach(function (b) { b.disabled = sel < 0 || piv < 0; });
       logBox.innerHTML = plog.map(function (l, k) { return (k + 1) + ". " + l.t; }).join("<br>");
     }
-    function pickCorner(k) { piv = k; draw(); msg("绕" + cards[sel].name + "号卡片的" + cornerName(cards[sel].pts, k) + "的顶点转。点「顺时针 90°」或「逆时针 90°」。"); }
+    function pickCorner(k) { piv = k; draw(); msg("绕" + cards[sel].name + "号卡片的" + cornerName(cards[sel].pts, k) + "的顶点转。点“顺时针 90°”或“逆时针 90°”。"); }
     function selCard(j) { if (sel !== j) piv = -1; sel = j; draw(); msg(cards[j].name + "号卡片：横着、竖着拖它；点它的一个角当绕的点，就能转。"); }
     function pDone() {
       var n = cards.filter(cardDone).length;
@@ -502,7 +502,7 @@
       }).join("，") + "。";
     }
     function dPush(list, s) {
-      if (!list.every(inside)) { msg("再做就出方格纸了。点「撤一步」或「重来」。", "no"); return; }
+      if (!list.every(inside)) { msg("再做就出方格纸了。点“撤一步”或“重来”。", "no"); return; }
       var key = function (c) { return c.map(function (p) { return p.join(","); }).sort().join(" "); }, have = copies.map(key);
       if (list.some(function (c) { return have.indexOf(key(c)) >= 0; })) { msg(s.k === "r" ? "再转就回到原来那一面上了：转一整圈正好回到原处。" : "这样会和已有的图形完全叠在一起。", "no"); return; }
       copies = copies.concat(list); s.c = list.length; dsteps.push(s); draw();
@@ -561,8 +561,8 @@
       } else {
         D = { ghost: null };
         btn("对折", fold);
-        btn("重来", function () { D.ghost = null; reported = false; draw(); msg(cfg.prompt || "点「对折」，沿这条线折一折。"); });
-        draw(); msg(cfg.prompt || "点「对折」，沿这条线折一折。");
+        btn("重来", function () { D.ghost = null; reported = false; draw(); msg(cfg.prompt || "点“对折”，沿这条线折一折。"); });
+        draw(); msg(cfg.prompt || "点“对折”，沿这条线折一折。");
       }
     }
     if (mode === "move") {
@@ -701,13 +701,13 @@
         txt(CX - 16, CY + 24, "O", "fill:var(--no)", g);
       }
       function cread() {
-        if (!k) { msg(cfg.prompt || "指针指着「" + start + "」。点按钮，让它一大格一大格地走。"); return; }
+        if (!k) { msg(cfg.prompt || "指针指着“" + start + "”。点按钮，让它一大格一大格地走。"); return; }
         var end = ((start - 1 + k) % 12 + 12) % 12 + 1, n = Math.abs(k);
-        msg("从「" + start + "」走到「" + end + "」，指针绕点 O 按" + (k > 0 ? "顺" : "逆") + "时针方向旋转了 " + n * 30 + "°。<br>走了 " + n + " 大格，" + n + " × 30° = " + n * 30 + "°" + (n === 6 ? "，正好半圈" : "") + "。");
+        msg("从“" + start + "”走到“" + end + "”，指针绕点 O 按" + (k > 0 ? "顺" : "逆") + "时针方向旋转了 " + n * 30 + "°。<br>走了 " + n + " 大格，" + n + " × 30° = " + n * 30 + "°" + (n === 6 ? "，正好半圈" : "") + "。");
       }
       function go(d) {
         if (busy) return;
-        if (Math.abs(k + d) > 6) { msg("最多走半圈（6 大格）。点「重来」再试。"); return; }
+        if (Math.abs(k + d) > 6) { msg("最多走半圈（6 大格）。点“重来”再试。"); return; }
         var a = ang; k += d;
         anim(400, function (t) { ang = a + d * t * Math.PI / 6; drawC(); }, function () {
           ang = k * Math.PI / 6; drawC(); cread(); log("step", { k: k });

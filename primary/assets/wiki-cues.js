@@ -36,7 +36,7 @@ window.PEIYU_CUES = [
     "id": "c02-logic-subset",
     "ch": 1,
     "sec": "b1-1-4",
-    "cue": "问「\\(p\\) 是 \\(q\\) 的什么条件」或「已知必要/充分条件求参数范围」",
+    "cue": "问“\\(p\\) 是 \\(q\\) 的什么条件”或“已知必要/充分条件求参数范围”",
     "act": "化为解集包含关系：<b>小范围 \\(\\Rightarrow\\) 大范围</b>（谁小谁充分，谁大谁必要）",
     "card": "logic-subset",
     "label": "充分必要条件判断法"
@@ -45,7 +45,7 @@ window.PEIYU_CUES = [
     "id": "c03-logic-negation",
     "ch": 1,
     "sec": "b1-1-5",
-    "cue": "对含 \\(\\forall x\\in M\\) 或 \\(\\exists x\\in M\\) 的命题写「否定」",
+    "cue": "对含 \\(\\forall x\\in M\\) 或 \\(\\exists x\\in M\\) 的命题写“否定”",
     "act": "<b>论域 \\(M\\) 不变</b>，改量词（\\(\\forall\\leftrightarrow\\exists\\)）+ 否定结论（\\(\\le\\leftrightarrow &gt;\\)）",
     "card": "logic-negation",
     "label": "量词命题的否定"
@@ -55,7 +55,7 @@ window.PEIYU_CUES = [
     "ch": 1,
     "sec": "b1-1-1",
     "cue": "已知集合 \\(A=\\{1,\\ a,\\ a^2-a\\}\\) 且 \\(2\\in A\\)，求实数 \\(a\\)；若再要求 \\(A\\) 恰有三个元素呢",
-    "act": "把 \\(2\\) 分别对号到每个元素解出 \\(a\\)，再<b>代回检验互异性</b>：只问「\\(2\\in A\\)」时重复的 \\(a\\) 仍要留下，只有题目要求元素个数或互不相同时才舍去",
+    "act": "把 \\(2\\) 分别对号到每个元素解出 \\(a\\)，再<b>代回检验互异性</b>：只问“\\(2\\in A\\)”时重复的 \\(a\\) 仍要留下，只有题目要求元素个数或互不相同时才舍去",
     "card": "set-def-distinct",
     "label": "互异性检验与看代表元"
   },
@@ -127,7 +127,7 @@ window.PEIYU_CUES = [
     "ch": 2,
     "sec": "b1-2-1",
     "cue": "已知 \\(1&lt;a+b&lt;3\\)，\\(-1&lt;a-b&lt;1\\)，求 \\(3a+b\\) 的取值范围",
-    "act": "<b>整体待定系数</b>：设 \\(3a+b=m(a+b)+n(a-b)\\)，解得 \\(m=2,\\ n=1\\)，再按「同向可加」合成 \\(1&lt;3a+b&lt;7\\)；绝不先分别解出 \\(a,b\\) 的范围再相加",
+    "act": "<b>整体待定系数</b>：设 \\(3a+b=m(a+b)+n(a-b)\\)，解得 \\(m=2,\\ n=1\\)，再按“同向可加”合成 \\(1&lt;3a+b&lt;7\\)；绝不先分别解出 \\(a,b\\) 的范围再相加",
     "card": "ineq-props-diff",
     "label": "整体代换防范围扩大"
   },
@@ -145,7 +145,7 @@ window.PEIYU_CUES = [
     "ch": 2,
     "sec": "b1-2-2",
     "cue": "已知 \\(x&gt;0,\\ y&gt;0\\) 且 \\(x+2y=4\\)，求 \\(xy\\) 的最大值，并说明何时取到",
-    "act": "<b>和定积最大</b>：把 \\(x\\) 与 \\(2y\\) 看成两个正数，\\(x\\cdot 2y\\le\\left(\\dfrac{x+2y}{2}\\right)^2=4\\)，故 \\(xy\\le 2\\)；取等当且仅当 \\(x=2y=2\\)。写出「一正二定三相等」三查",
+    "act": "<b>和定积最大</b>：把 \\(x\\) 与 \\(2y\\) 看成两个正数，\\(x\\cdot 2y\\le\\left(\\dfrac{x+2y}{2}\\right)^2=4\\)，故 \\(xy\\le 2\\)；取等当且仅当 \\(x=2y=2\\)。写出“一正二定三相等”三查",
     "card": "amgm-core",
     "label": "基本不等式链与三相等"
   },
@@ -217,7 +217,7 @@ window.PEIYU_CUES = [
     "ch": 3,
     "sec": "b1-3-2",
     "cue": "写出函数 \\(y=\\dfrac{1}{x-1}\\) 的单调递减区间",
-    "act": "两段分开写 \\((-\\infty,1)\\) 和 \\((1,+\\infty)\\)，<b>中间不能用 \\(\\cup\\)</b>：并起来后 \\(f(0)=-1&lt;f(2)=1\\)，与「递减」矛盾",
+    "act": "两段分开写 \\((-\\infty,1)\\) 和 \\((1,+\\infty)\\)，<b>中间不能用 \\(\\cup\\)</b>：并起来后 \\(f(0)=-1&lt;f(2)=1\\)，与“递减”矛盾",
     "card": "fn-mono-def",
     "label": "单调区间书写红线"
   },
@@ -336,7 +336,7 @@ window.PEIYU_CUES = [
     "cue": "已知 \\(\\sin\\alpha+\\cos\\alpha\\)、\\(\\sin\\alpha-\\cos\\alpha\\)、\\(\\sin\\alpha\\cos\\alpha\\) 中的一个，求其余两个",
     "act": "用 \\((\\sin\\alpha\\pm\\cos\\alpha)^2=1\\pm2\\sin\\alpha\\cos\\alpha\\) 搭桥；开方后依据题设象限或角的范围定号。若条件不足，须保留多个可能值，不能凭空给平方根定正负。",
     "card": "trig-know1get2",
-    "label": "同角三角「知一求二」"
+    "label": "同角三角“知一求二”"
   },
   {
     "id": "c14-trig-know1get2",
@@ -388,7 +388,7 @@ window.PEIYU_CUES = [
     "ch": 5,
     "sec": "b1-5-3",
     "cue": "化简 \\(\\dfrac{\\sin(\\pi-\\alpha)\\cos\\left(\\dfrac{3\\pi}{2}+\\alpha\\right)}{\\cos(\\pi+\\alpha)\\tan(-\\alpha)}\\)",
-    "act": "逐项用<b>「奇变偶不变，符号看象限」</b>（把 \\(\\alpha\\) 当锐角定号）：\\(\\sin(\\pi-\\alpha)=\\sin\\alpha\\)，\\(\\cos\\left(\\dfrac{3\\pi}2+\\alpha\\right)=\\sin\\alpha\\)，\\(\\cos(\\pi+\\alpha)=-\\cos\\alpha\\)，\\(\\tan(-\\alpha)=-\\tan\\alpha\\)，约分得 \\(\\sin\\alpha\\)。保留原式定义域：\\(\\cos\\alpha\\ne0\\) 且 \\(\\sin\\alpha\\ne0\\)；约分不能补入原来无定义的角。",
+    "act": "逐项用<b>“奇变偶不变，符号看象限”</b>（把 \\(\\alpha\\) 当锐角定号）：\\(\\sin(\\pi-\\alpha)=\\sin\\alpha\\)，\\(\\cos\\left(\\dfrac{3\\pi}2+\\alpha\\right)=\\sin\\alpha\\)，\\(\\cos(\\pi+\\alpha)=-\\cos\\alpha\\)，\\(\\tan(-\\alpha)=-\\tan\\alpha\\)，约分得 \\(\\sin\\alpha\\)。保留原式定义域：\\(\\cos\\alpha\\ne0\\) 且 \\(\\sin\\alpha\\ne0\\)；约分不能补入原来无定义的角。",
     "card": "trig-unit-induce",
     "label": "诱导公式口诀化简"
   },
@@ -478,7 +478,7 @@ window.PEIYU_CUES = [
     "ch": 6,
     "sec": "b2-6-1",
     "cue": "判断：①若 \\(|\\boldsymbol a|=|\\boldsymbol b|\\)，则 \\(\\boldsymbol a=\\boldsymbol b\\)；②若 \\(\\boldsymbol a\\parallel\\boldsymbol b\\)，\\(\\boldsymbol b\\parallel\\boldsymbol c\\)，则 \\(\\boldsymbol a\\parallel\\boldsymbol c\\)；③平行四边形 \\(ABCD\\) 中 \\(\\overrightarrow{AB}=\\overrightarrow{DC}\\)",
-    "act": "逐条用<b>「大小 + 方向」双要素</b>核对：①缺方向，错；②\\(\\boldsymbol b=\\boldsymbol 0\\) 时传递失效，错；③模相等且方向相同，对。零向量与「向量不能比大小」是这类判断题的常设陷阱",
+    "act": "逐条用<b>“大小 + 方向”双要素</b>核对：①缺方向，错；②\\(\\boldsymbol b=\\boldsymbol 0\\) 时传递失效，错；③模相等且方向相同，对。零向量与“向量不能比大小”是这类判断题的常设陷阱",
     "card": "vec-concept-equiv",
     "label": "向量概念双要素与零向量"
   },
@@ -487,7 +487,7 @@ window.PEIYU_CUES = [
     "ch": 6,
     "sec": "b2-6-2",
     "cue": "化简 \\(\\overrightarrow{AB}-\\overrightarrow{AC}+\\overrightarrow{BD}-\\overrightarrow{CD}\\)，并说明结果是什么",
-    "act": "<b>减法化为「共起点，指向被减」</b>：\\(\\overrightarrow{AB}-\\overrightarrow{AC}=\\overrightarrow{CB}\\)，\\(\\overrightarrow{BD}-\\overrightarrow{CD}=\\overrightarrow{BD}+\\overrightarrow{DC}=\\overrightarrow{BC}\\)，相加 \\(\\overrightarrow{CB}+\\overrightarrow{BC}=\\boldsymbol 0\\)（零向量，不是数 \\(0\\)）",
+    "act": "<b>减法化为“共起点，指向被减”</b>：\\(\\overrightarrow{AB}-\\overrightarrow{AC}=\\overrightarrow{CB}\\)，\\(\\overrightarrow{BD}-\\overrightarrow{CD}=\\overrightarrow{BD}+\\overrightarrow{DC}=\\overrightarrow{BC}\\)，相加 \\(\\overrightarrow{CB}+\\overrightarrow{BC}=\\boldsymbol 0\\)（零向量，不是数 \\(0\\)）",
     "card": "vec-add-sub-tri",
     "label": "向量加减法则化简"
   },
@@ -504,7 +504,7 @@ window.PEIYU_CUES = [
     "id": "c20-complex-def-pure",
     "ch": 7,
     "sec": "b2-7-1",
-    "cue": "题干说明复数 \\(z=a+bi\\) 为「实数」或「纯虚数」求参数",
+    "cue": "题干说明复数 \\(z=a+bi\\) 为“实数”或“纯虚数”求参数",
     "act": "实数列 \\(b=0\\)；纯虚数必须同时列 <b>\\(a=0\\) 且 \\(b\\ne 0\\)</b>（注意：0 是实数不是纯虚数！）",
     "card": "complex-def-pure",
     "label": "代数形式与纯虚数条件"
@@ -639,7 +639,7 @@ window.PEIYU_CUES = [
     "id": "c48-prob-independence",
     "ch": 10,
     "sec": "b2-10-2",
-    "cue": "多系统同时工作、独立射击或求「至少一个发生」",
+    "cue": "多系统同时工作、独立射击或求“至少一个发生”",
     "act": "先核 \\(P(AB)=P(A)P(B)\\)。只有 \\(A,B\\) 独立时，至少一个发生才能写成 \\(1-P(\\overline A)P(\\overline B)\\)；一般用 \\(1-P(\\overline A\\cap\\overline B)\\)。互斥且概率都为正的事件不独立。",
     "card": "prob-independence",
     "label": "事件独立性与乘法公式"
@@ -657,8 +657,8 @@ window.PEIYU_CUES = [
     "id": "c103-prob-freq-sim",
     "ch": 10,
     "sec": "b2-10-3",
-    "cue": "抛一枚均匀硬币连续出现 \\(5\\) 次正面，有人说「第 \\(6\\) 次更可能是反面」，判断对错并说明理由",
-    "act": "<b>每次试验相互独立</b>，第 \\(6\\) 次正面的概率仍是 \\(0.5\\)；频率在大量重复中趋于稳定是宏观规律，不会「补偿」前面的结果",
+    "cue": "抛一枚均匀硬币连续出现 \\(5\\) 次正面，有人说“第 \\(6\\) 次更可能是反面”，判断对错并说明理由",
+    "act": "<b>每次试验相互独立</b>，第 \\(6\\) 次正面的概率仍是 \\(0.5\\)；频率在大量重复中趋于稳定是宏观规律，不会“补偿”前面的结果",
     "card": "prob-freq-sim",
     "label": "破除赌徒谬误"
   },
@@ -828,7 +828,7 @@ window.PEIYU_CUES = [
     "id": "c55-seq-sum-methods",
     "ch": 14,
     "sec": "e2-4-3",
-    "cue": "求「等差 \\(\\times\\) 等比」数列或分式相乘结构数列的和",
+    "cue": "求“等差 \\(\\times\\) 等比”数列或分式相乘结构数列的和",
     "act": "等差乘等比用<b>错位相减法</b>（同乘公比错位相减）；分母乘积分式用<b>裂项相消法</b>",
     "card": "seq-sum-methods",
     "label": "错位相减与裂项相消"

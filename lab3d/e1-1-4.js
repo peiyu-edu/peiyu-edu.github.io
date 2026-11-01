@@ -109,7 +109,7 @@ const modes = {
     ],
     def: String.raw`<h3>直线与平面所成的角</h3>
       <p class="def">设直线 \(l\) 的方向向量为 \(\boldsymbol u\)，平面 \(\alpha\) 的法向量为 \(\boldsymbol n\)，\(l\) 与 \(\alpha\) 所成的角为 \(\theta\)，则 \(\sin\theta=|\cos\langle\boldsymbol u,\boldsymbol n\rangle|=\dfrac{|\boldsymbol u\cdot\boldsymbol n|}{|\boldsymbol u||\boldsymbol n|}\)，\(\theta\in\left[0,\tfrac{\pi}{2}\right]\)。</p>
-      <p>平面取 \(A_1BD\)，\(\boldsymbol n=(bc,ca,ab)\)。点「变成正方体」后看 \(AC_1\)：它和法向量同向，线面角是 \(90^\circ\)。</p>`,
+      <p>平面取 \(A_1BD\)，\(\boldsymbol n=(bc,ca,ab)\)。点“变成正方体”后看 \(AC_1\)：它和法向量同向，线面角是 \(90^\circ\)。</p>`,
   },
   dih: {
     name: '二面角', params: { a: 2, b: 1.6, h: 1.2 },
@@ -175,7 +175,7 @@ makeLab({
     {
       q: '直线的方向向量与平面法向量的夹角是 \\(60^\\circ\\)，直线与平面所成的角是？',
       opts: ['\\(30^\\circ\\)', '\\(60^\\circ\\)', '\\(120^\\circ\\)'], answer: 0,
-      why: '\\(\\sin\\theta=|\\cos60^\\circ|=\\tfrac12\\)，\\(\\theta=30^\\circ\\)：线面角与「方向向量和法向量的夹角」互余。',
+      why: '\\(\\sin\\theta=|\\cos60^\\circ|=\\tfrac12\\)，\\(\\theta=30^\\circ\\)：线面角与“方向向量和法向量的夹角”互余。',
     },
     {
       q: '\\(PA\\perp\\) 底面，\\(P\\) 沿 \\(AA_1\\) 方向升高时，二面角 \\(P\\text{-}BD\\text{-}A\\) 怎样变化？',

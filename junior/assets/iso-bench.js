@@ -556,7 +556,7 @@
 
     if (desc) {
       desc.innerHTML =
-        `<b>祖暅原理等距实验台（「幂势既同，则积不容异」）</b>：半径 \\(R = ${R.toFixed(1)}\\)，当前截面高度 \\(h = ${h.toFixed(2)}\\)。<br>` +
+        `<b>祖暅原理等距实验台（“幂势既同，则积不容异”）</b>：半径 \\(R = ${R.toFixed(1)}\\)，当前截面高度 \\(h = ${h.toFixed(2)}\\)。<br>` +
         `① <b>左工位（半球截面）</b>：由勾股定理，截面圆半径 \\(r_1 = \\sqrt{R^2 - h^2} = ${rSphereSec.toFixed(2)}\\)，面积 \\(S_1 = \\pi(R^2 - h^2) = ${areaSec.toFixed(2)}\\)；<br>` +
         `② <b>右工位（圆柱挖圆锥截面）</b>：外圆半径 \\(R\\)，内圆锥在高度 \\(h\\) 处半径恰为 \\(h\\)，圆环面积 \\(S_2 = \\pi R^2 - \\pi h^2 = \\pi(R^2 - h^2) = ${areaSec.toFixed(2)}\\)；<br>` +
         `③ <b>体积定论</b>：任一高度 \\(h \\in [0, R]\\) 处两截面面积严格相等（右侧双表盘读数同步）。<span style="font-size:max(14px,1em)">半球体积 = 圆柱体积 − 圆锥体积</span>，故半球体积 \\(V = \\pi R^3 - \\dfrac{1}{3}\\pi R^3 = \\dfrac{2}{3}\\pi R^3 = ${vHemi.toFixed(2)}\\)\u2060。`;
@@ -1879,7 +1879,7 @@
     if (desc) {
       desc.innerHTML =
         `<b>面面平行判定激光验证台</b>：当平面 \\(\\alpha\\) 内两条直线夹角为 \\(${Math.round(spread)}^\\circ\\) 时，${isIntersecting ? `两直线<b>相交于点 \\(P\\)</b>（\\(a\\cap b=P\\)），且 \\(a\\parallel\\beta,\\ b\\parallel\\beta\\)，平面 \\(\\alpha\\) 的两个自由度被完全锁死（实际倾角 \\(0^\\circ\\)），严格保证 \\(\\alpha\\parallel\\beta\\)` : Math.abs(effTilt)<1e-12 ? "两直线<b>互相平行（无交点）</b>，当前倾角为 \\(0^\\circ\\)，此时 \\(\\alpha\\parallel\\beta\\)。这只是当前姿态；仅两条平行线不能保证平面平行，改变倾角即可构造相交反例。" : `两直线<b>互相平行（无交点）</b>，此时即便 \\(a\\parallel\\beta\\) 且 \\(b\\parallel\\beta\\)，平面 \\(\\alpha\\) 仍可绕直线翻折倾斜 \\(${Math.round(effTilt)}^\\circ\\) 与 \\(\\beta\\) 相交！`}<br>` +
-        `<b>考场规范红线</b>：线面平行判定必写「<b>\\(a\\not\\subset\\alpha\\)</b>」；面面平行判定必写「<b>\\(a\\cap b=P\\)（两条相交直线）</b>」，漏写相交条件必扣分！`;
+        `<b>考场规范红线</b>：线面平行判定必写“<b>\\(a\\not\\subset\\alpha\\)</b>”；面面平行判定必写“<b>\\(a\\cap b=P\\)（两条相交直线）</b>”，漏写相交条件必扣分！`;
       if (renderMath) renderMath();
     }
   }
@@ -2710,7 +2710,7 @@
 
     if (desc) {
       desc.innerHTML =
-        `<b>最小二乘「残差弹簧平方和」平衡杆台</b>：每个样本点 \\((x_i,y_i)\\) 与回归直线 \\(\\hat{y}=bx+\\hat{a}\\) 之间挂有竖直残差弹簧 \\(e_i=y_i-\\hat{y}_i\\)，总势能正比于残差平方和 \\(\\text{RSS}=\\sum e_i^2=${rss.toFixed(3)}\\)。<br>` +
+        `<b>最小二乘“残差弹簧平方和”平衡杆台</b>：每个样本点 \\((x_i,y_i)\\) 与回归直线 \\(\\hat{y}=bx+\\hat{a}\\) 之间挂有竖直残差弹簧 \\(e_i=y_i-\\hat{y}_i\\)，总势能正比于残差平方和 \\(\\text{RSS}=\\sum e_i^2=${rss.toFixed(3)}\\)。<br>` +
         `<b>两大核心铁律</b>：① 经验回归直线<b>必过样本中心点 \\((\\bar{x},\\bar{y})\\)</b>（当偏离 \\(\\Delta a\\ne 0\\) 时 \\(\\text{RSS}\\) 立即增大）；② 当且仅当 \\(b=\\hat{b}=0.73,\\ \\Delta a=0\\) 时，残差平方和达到全局极小值 \\(\\text{RSS}_{\\min}\\approx 0.071\\)！`;
       if (renderMath) renderMath();
     }

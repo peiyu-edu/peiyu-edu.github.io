@@ -194,7 +194,7 @@
     } else if (junior && !location.hash && section.value !== "all" && data.points.some(function (p) { return p.first_section === section.value; })) {
       api.renderPoint(detail, null, {});
       document.title = "本节选学知识点 · " + libraryTitle;
-      detail.innerHTML = '<div class="k-point"><h2>本节有选学知识点</h2><p>可以勾选「同时看选学与拓展」后从目录打开，也可以先回课时学习。</p></div>';
+      detail.innerHTML = '<div class="k-point"><h2>本节有选学知识点</h2><p>可以勾选“同时看选学与拓展”后从目录打开，也可以先回课时学习。</p></div>';
     } else if (!location.hash && section.value !== "all") {
       api.renderPoint(detail, null, {});
       document.title = "本节知识点正在整理 · " + libraryTitle;

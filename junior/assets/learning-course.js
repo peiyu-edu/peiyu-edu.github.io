@@ -666,7 +666,7 @@
       card.appendChild(main);
     } else {
       card.appendChild(el('p', '已经学到目前上线的最后一' + unitWord + '了', 'lc-nl-eyebrow'));
-      card.appendChild(el('p', '可以去「我的学习」回看做过的题，或在课程目录里挑一' + unitWord + '复习。', 'lc-nl-note'));
+      card.appendChild(el('p', '可以去“我的学习”回看做过的题，或在课程目录里挑一' + unitWord + '复习。', 'lc-nl-note'));
     }
     var links = el('div', '', 'lc-nl-links');
     var rec = el('a', '查看我的学习记录', 'lc-link'); rec.href = dataAPI.url('learning.html');

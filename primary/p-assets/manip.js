@@ -230,7 +230,7 @@
       diffT.style.opacity = st.cmp && !equal() ? 1 : 0;
       bCmp.setAttribute("aria-pressed", st.cmp ? "true" : "false");
       bCmp.textContent = st.cmp ? "放回去" : "叠一叠";
-      if (!st.cmp) readout(read, "切成了两块。两块一样大吗？点「叠一叠」看看。");
+      if (!st.cmp) readout(read, "切成了两块。两块一样大吗？点“叠一叠”看看。");
       else if (equal()) readout(read, "正好盖住，两块一样大！每块是这块蛋糕的 " + frac(1, 2), "正好盖住，两块一样大。每块是这块蛋糕的二分之一", "ok");
       else readout(read, "右边那块挪过来叠上，红框里多出一截：两块不一样大，不能说每块是 " + frac(1, 2), "叠上去，多出一截，两块不一样大，不能说每块是二分之一", "no");
       emit(root, { cut: st.cut, cmp: st.cmp, equal: equal() });

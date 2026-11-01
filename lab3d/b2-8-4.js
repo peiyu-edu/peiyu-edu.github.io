@@ -73,7 +73,7 @@ const modes = {
     },
     note(p, sc) {
       if (sc.r.rel !== 'skew') return sc.r.rel === 'parallel' ? '平行的两条直线所成的角规定为 \\(0^\\circ\\)。' : '';
-      return sc.pt.name ? `把 \\(${TEX(p.l2)}\\) 平移到 \\(${TEX(sc.pt.name)}\\)，它和 \\(${TEX(p.l1)}\\) 相交，夹出的锐角（或直角）就是所成的角。拖「平移 l₂」或点按钮看。`
+      return sc.pt.name ? `把 \\(${TEX(p.l2)}\\) 平移到 \\(${TEX(sc.pt.name)}\\)，它和 \\(${TEX(p.l1)}\\) 相交，夹出的锐角（或直角）就是所成的角。拖“平移 l₂”或点按钮看。`
         : `把 \\(${TEX(p.l2)}\\) 平移到过 \\(${TEX(pts(p.l1)[0])}\\) 的位置，夹出的锐角（或直角）就是所成的角。`;
     },
     callouts: [

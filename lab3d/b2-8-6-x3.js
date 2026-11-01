@@ -130,7 +130,7 @@ const modes = {
     def: String.raw`<h3>二面角取锐角还是钝角</h3>
       <p class="def">二面角的范围是 \(0^\circ\le\theta\le180^\circ\)，可以是钝角；两个平面所成的角范围是 \(0^\circ\le\varphi\le90^\circ\)。</p>
       <p>两个面都取<b>朝外</b>（或都取朝里）的法向量，它们的夹角是 \(180^\circ-\theta\)；一个朝外一个朝里，夹角就是 \(\theta\)。公式 \(\cos\varphi=\dfrac{|\boldsymbol n_1\cdot\boldsymbol n_2|}{|\boldsymbol n_1||\boldsymbol n_2|}\) 给出的是余弦；取了绝对值，所以 \(\varphi=\arccos\dfrac{|\boldsymbol n_1\cdot\boldsymbol n_2|}{|\boldsymbol n_1||\boldsymbol n_2|}=\min(\theta,\,180^\circ-\theta)\)，是两个平面所成的角。</p>
-      <p class="l3-note">把 \(\theta\) 拖过 \(90^\circ\)：\(\cos\theta\) 由正变负，但取绝对值的读数不变号。考题问「二面角」时，要看图判断是锐角还是钝角。</p>`,
+      <p class="l3-note">把 \(\theta\) 拖过 \(90^\circ\)：\(\cos\theta\) 由正变负，但取绝对值的读数不变号。考题问“二面角”时，要看图判断是锐角还是钝角。</p>`,
   },
 };
 

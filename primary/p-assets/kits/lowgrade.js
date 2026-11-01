@@ -295,7 +295,7 @@
       sq.forEach(function (s) { s.r.style.transform = "translate(" + rowX(s.row, s.j) + "px," + (s.row ? 130 : 40) + "px)"; });
       bOn.setAttribute("aria-pressed", st.on ? "true" : "false");
       emit(root, { a: a, b: b, on: st.on });
-      if (!st.on) { readout(ui.read, "上面 " + a + " 个，下面 " + b + " 个。哪一排多？点「一个对一个」看看。"); return; }
+      if (!st.on) { readout(ui.read, "上面 " + a + " 个，下面 " + b + " 个。哪一排多？点“一个对一个”看看。"); return; }
       if (!st.reported) { st.reported = true; emitAns(root, cfg, a + ":" + b, true, true); }
       for (var j = 0; j < Math.min(a, b); j++) {
         var x = 24 + j * 36 + 14;

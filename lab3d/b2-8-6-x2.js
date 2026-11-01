@@ -63,7 +63,7 @@ const modes = {
     def: String.raw`<h3>例 2 正方体的线面角</h3>
       <p class="def">正方体 \(ABCD\text{-}A_1B_1C_1D_1\) 棱长为 \(1\)，求体对角线 \(A_1C\) 与底面 \(ABCD\) 所成角的正切值。</p>
       <p>三步：<b>找垂足</b>（\(A_1A\perp\) 底面，垂足 \(A\)）→ <b>连射影</b>（\(AC\)）→ <b>解直角三角形</b>（\(\tan\varphi=\dfrac{1}{\sqrt2}=\dfrac{\sqrt2}{2}\)）。</p>
-      <p class="l3-note">拖成长方体：\(\tan\varphi=\dfrac{c}{\sqrt{a^2+b^2}}\)。读数里的「法向量算出的角」用的是 \(\sin\varphi=\dfrac{|\boldsymbol u\cdot\boldsymbol n|}{|\boldsymbol u||\boldsymbol n|}\)，两种算法一直相等。</p>`,
+      <p class="l3-note">拖成长方体：\(\tan\varphi=\dfrac{c}{\sqrt{a^2+b^2}}\)。读数里的“法向量算出的角”用的是 \(\sin\varphi=\dfrac{|\boldsymbol u\cdot\boldsymbol n|}{|\boldsymbol u||\boldsymbol n|}\)，两种算法一直相等。</p>`,
   },
   min: {
     name: '最小角', params: { a: 1.4, b: 1.4, c: 1.4, t: 40 },

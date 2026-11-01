@@ -75,7 +75,7 @@ const modes = {
     def: String.raw`<h3>例 3 点到平面的距离</h3>
       <p class="def">棱长为 \(2\) 的正方体中，求点 \(C_1\) 到平面 \(A_1BD\) 的距离。</p>
       <p>面内取 \(D\)：\(\overrightarrow{DC_1}=(0,2,2)\)，\(\overrightarrow{DC_1}\cdot\boldsymbol n=-4\)，\(d=\dfrac{|-4|}{\sqrt3}=\dfrac{4\sqrt3}{3}\)。换成 \(B\)：\(\overrightarrow{BC_1}=(-2,0,2)\)，点积还是 \(-4\)。</p>
-      <p class="l3-note">公式就是「\(\overrightarrow{QC_1}\) 在法向量上投影的长度」。拖动 \(Q\) 看：投影长不变，和直接量的垂线段 \(C_1H\) 一样长。</p>`,
+      <p class="l3-note">公式就是“\(\overrightarrow{QC_1}\) 在法向量上投影的长度”。拖动 \(Q\) 看：投影长不变，和直接量的垂线段 \(C_1H\) 一样长。</p>`,
   },
   pts: {
     name: '换一个点', params: { s: 2, x: 'C1' },

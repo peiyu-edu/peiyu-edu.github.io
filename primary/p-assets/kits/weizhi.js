@@ -40,11 +40,11 @@
     switch (method) {
       case "split+":
         if (A.t === 0 && B.t === 0) return no("两个都是一位数，直接相加就行，不用拆。");
-        var fit = A.t === 0 ? B.o + a : A.o + b, hintM = fit < 10 ? "不进位：个位相加，再和整十合起来。" : "换「先算个位」或「先凑整十」。";
+        var fit = A.t === 0 ? B.o + a : A.o + b, hintM = fit < 10 ? "不进位：个位相加，再和整十合起来。" : "换“先算个位”或“先凑整十”。";
         if (A.t === 0) return no("有一个数是一位数，不用拆成整十和几；把一位数放在后面算 " + b + " + " + a + "，" + hintM);
         if (B.t === 0) return no("有一个数是一位数，不用拆成整十和几；" + hintM);
         if (A.o === 0 || B.o === 0) return no("有一个数的个位是 0（是整十数），整十数加几直接合起来就行，不用拆。");
-        if (A.o + B.o >= 10) return no("个位 " + A.o + " + " + B.o + " 满十了，不能直接合起来；换「先算个位」或「先凑整十」。");
+        if (A.o + B.o >= 10) return no("个位 " + A.o + " + " + B.o + " 满十了，不能直接合起来；换“先算个位”或“先凑整十”。");
         r = a + b;
         st(a + " = " + A.t + " + " + A.o + (b >= 10 ? "，" + b + " = " + B.t + " + " + B.o : ""), "先把数拆成几个十和几个一。");
         st(A.t + " + " + B.t + " = " + (A.t + B.t), "整十加整十：" + A.t / 10 + " 个十加 " + B.t / 10 + " 个十是 " + (A.t + B.t) / 10 + " 个十。");
@@ -62,7 +62,7 @@
       case "ten+":
         if (b >= 10) return no("这种方法 b 要是一位数。");
         if (A.o + b < 10) return no("个位 " + A.o + " + " + b + " 不满十，不用凑整十。");
-        if (A.o + b === 10) return no("个位 " + A.o + " + " + b + " 正好凑成整十，没有「剩下的」可加；用「先算个位」更直接。");
+        if (A.o + b === 10) return no("个位 " + A.o + " + " + b + " 正好凑成整十，没有“剩下的”可加；用“先算个位”更直接。");
         r = a + b;
         st(b + " = " + (10 - A.o) + " + " + (b - (10 - A.o)), "把 " + b + " 拆成 " + (10 - A.o) + " 和 " + (b - (10 - A.o)) + "：先拿 " + (10 - A.o) + " 把 " + a + " 凑成整十。");
         st(a + " + " + (10 - A.o) + " = " + (A.t + 10), "凑成整十。");
@@ -70,10 +70,10 @@
         break;
       case "split-":
         if (a < b) return no("被减数要不小于减数。");
-        if (A.t === 0 || B.t === 0) return no("有一个数是一位数，不用拆成整十和几；换「拆出 10 来减」或「先减到整十」。");
+        if (A.t === 0 || B.t === 0) return no("有一个数是一位数，不用拆成整十和几；换“拆出 10 来减”或“先减到整十”。");
         if (B.o === 0) return no("减数是整十数，整十减整十直接算就行，不用拆。");
         if (A.t === B.t) return no("两个数的十位一样，整十减整十得 0，直接把个位相减就行。");
-        if (A.o < B.o) return no("个位 " + A.o + " 不够减 " + B.o + "；换「拆出 10 来减」或「先减到整十」。");
+        if (A.o < B.o) return no("个位 " + A.o + " 不够减 " + B.o + "；换“拆出 10 来减”或“先减到整十”。");
         r = a - b;
         st(a + " = " + A.t + " + " + A.o + (b >= 10 ? "，" + b + " = " + B.t + " + " + B.o : ""), "先把数拆成几个十和几个一。");
         st(A.t + " − " + B.t + " = " + (A.t - B.t), "整十减整十：" + A.t / 10 + " 个十减 " + B.t / 10 + " 个十，剩 " + (A.t - B.t) / 10 + " 个十。");
@@ -84,17 +84,17 @@
         if (b >= 10) return no("这种方法 b 要是一位数。");
         if (a < b) return no("被减数要不小于减数。");
         if (A.o >= b) return no("个位 " + A.o + " 够减 " + b + "，不用拆出 10。");
-        if (A.t < 20) return no("十位只有 1 个十，拆出 10 以后没有剩下的整十了；换「先减到整十」。");
+        if (A.t < 20) return no("十位只有 1 个十，拆出 10 以后没有剩下的整十了；换“先减到整十”。");
         r = a - b;
         st(a + " = " + (A.t - 10) + " + " + (10 + A.o), "个位 " + A.o + " 不够减 " + b + "：把 " + a + " 拆成 " + (A.t - 10) + " 和 " + (10 + A.o) + "（拆出一个 10）。");
-        st((10 + A.o) + " − " + b + " = " + (10 + A.o - b), "用「10 加个位」去减。");
+        st((10 + A.o) + " − " + b + " = " + (10 + A.o - b), "用“10 加个位”去减。");
         st((A.t - 10) + " + " + (10 + A.o - b) + " = " + r, "再和剩下的整十合起来。");
         break;
       case "ten-":
         if (b >= 10) return no("这种方法 b 要是一位数。");
         if (a < b) return no("被减数要不小于减数。");
         if (A.o >= b) return no("个位 " + A.o + " 够减 " + b + "，不用拆出 10。");
-        if (A.o === 0) return no("个位是 0 时，拆出的 10 就是整十里的一个十，用「拆出 10 来减」就行。");
+        if (A.o === 0) return no("个位是 0 时，拆出的 10 就是整十里的一个十，用“拆出 10 来减”就行。");
         r = a - b;
         st(a + " = " + (a - 10) + " + 10", "个位 " + A.o + " 不够减 " + b + "：把 " + a + " 拆成 " + (a - 10) + " 和 10。");
         st("10 − " + b + " = " + (10 - b), "先从 10 里减 " + b + "。");
@@ -119,7 +119,7 @@
           st(a / 10 / b + " 个十 = " + r, a / 10 / b + " 个十就是 " + r + "。");
         } else {
           var P = parts(a);
-          if (P.t === 0 || P.o === 0 || P.t % b !== 0 || P.o % b !== 0) return no(a + " 不能拆成「整十 + 几」再分别除以 " + b + "。");
+          if (P.t === 0 || P.o === 0 || P.t % b !== 0 || P.o % b !== 0) return no(a + " 不能拆成“整十 + 几”再分别除以 " + b + "。");
           st(a + " = " + P.t + " + " + P.o, "把 " + a + " 拆成整十和几，两部分都能被 " + b + " 整除。");
           st(P.t + " ÷ " + b + " = " + P.t / b, "先除整十部分。");
           st(P.o + " ÷ " + b + " = " + P.o / b, "再除个位部分。");
@@ -211,7 +211,7 @@
       svg.setAttribute("aria-label", "位值口算：" + st.a + " " + OPS[methods[st.m]] + " " + st.b + (plan.ok && st.k >= plan.steps.length ? " 等于 " + plan.result : ""));
       var done = plan.ok && st.k >= plan.steps.length;
       if (!plan.ok) read.textContent = plan.why;
-      else if (st.k === 0) read.textContent = "要算 " + st.a + " " + plan.op + " " + st.b + "。点「下一步」，按位值一步一步算。";
+      else if (st.k === 0) read.textContent = "要算 " + st.a + " " + plan.op + " " + st.b + "。点“下一步”，按位值一步一步算。";
       else if (done) read.textContent = plan.steps[plan.steps.length - 1].why + " 所以 " + st.a + " " + plan.op + " " + st.b + " = " + plan.result + "。";
       else read.textContent = plan.steps[st.k - 1].why;
       bPrev.disabled = !plan.ok || st.k <= 0; bNext.disabled = !plan.ok || done; bAll.disabled = !plan.ok || done; bReset.disabled = !plan.ok;

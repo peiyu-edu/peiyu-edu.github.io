@@ -236,7 +236,7 @@
         }
       }
       var msg=mode==="join" ? ["两块拼拢，一边变长，得到长方体。","四块排成一层，还是扁长方体，不能叫大正方体。","上下各四块，长宽高相等，拼成大正方体。","两个粗细相同的圆柱，圆面贴圆面，拼成更高的圆柱。"][pick] : apart?"一楼 "+lower+" 个，二楼 "+upper+" 个，合起来 "+count+" 个；上层下面也有支撑。":"先数一数，再抬起上层找被挡住的积木。";
-      ui.read(mode==="join"&&apart?"拆开后仍是同样的 "+count+" 块，点「拼拢」观察整体形状。":msg,{object:pick,apart:apart,count:count,lower:lower,upper:upper});
+      ui.read(mode==="join"&&apart?"拆开后仍是同样的 "+count+" 块，点“拼拢”观察整体形状。":msg,{object:pick,apart:apart,count:count,lower:lower,upper:upper});
     }
     draw();
   }
@@ -442,7 +442,7 @@
           var cur = items[st.last];
           readout(ui.read, cur.desc, cur.desc, "ok");
         } else if (count === items.length) {
-          readout(ui.read, "8 件物品都按形状分进 4 个筐啦！点「变图形」看看。", "八件物品都按形状分进四个筐啦！", "ok");
+          readout(ui.read, "8 件物品都按形状分进 4 个筐啦！点“变图形”看看。", "八件物品都按形状分进四个筐啦！", "ok");
         } else {
           readout(ui.read, "点上面的物品，按形状放进下面的 4 个筐里（已分 " + count + "/8）。");
         }
@@ -513,7 +513,7 @@
           el("text", { x: 180, y: 34, "text-anchor": "middle", style: "fill:var(--fg);font-size:16px;font-weight:700" }, gHint).textContent = words(st.i === 2 ? "平平的圆面在下面，稳稳立住" : (st.i <= 1 ? "平平的面贴着桌面滑行" : (st.i === 5 ? "上粗下细，打转拐弯" : "弯弯的面滚起来啦")));
           readout(ui.read, s.msg, s.msg, s.cls);
         } else {
-          readout(ui.read, "已选「" + s.name + "」，点「" + s.act + "」试试看！");
+          readout(ui.read, "已选“" + s.name + "”，点“" + s.act + "”试试看！");
         }
       }
       draw();
@@ -570,7 +570,7 @@
           el("text", { x: 180, y: 32, "text-anchor": "middle", style: "fill:" + (c.ok ? "var(--a)" : "var(--no)") + ";font-size:17px;font-weight:700" }, gTag).textContent = words(c.tag);
           readout(ui.read, c.msg, c.msg, c.ok ? "ok" : "no");
         } else {
-          readout(ui.read, "已摆好「" + c.name + "」，点「松手试试」看稳不稳！");
+          readout(ui.read, "已摆好“" + c.name + "”，点“松手试试”看稳不稳！");
         }
       }
       draw();
@@ -643,10 +643,10 @@
     }
     function cubeJoinLab(root) {
       var scenes = [
-        { name: "2 个正方体", joinedMsg: "2 个正方体拼在一起，一边变长了，拼成了 1 个长方体！", splitMsg: "这是 2 个一样的小正方体，点「拼拢」看看变成什么。" },
-        { name: "4 个正方体", joinedMsg: "4 个正方体摆成一层，看旁边还是扁扁的，它是长方体，还不是大正方体！", splitMsg: "4 个小正方体够不够拼成大正方体？点「拼拢」看看。" },
-        { name: "8 个正方体", joinedMsg: "下层 4 个加二层 4 个，一共 8 个小正方体，每个面一样大，拼成大正方体啦！", splitMsg: "下层 4 个、上层 4 个，一共 8 个小正方体。点「拼拢」合起来！" },
-        { name: "2 个圆柱", joinedMsg: "把两个平平的圆面叠在一起，拼成了 1 个更高的圆柱！", splitMsg: "2 个粗细一样的圆柱，点「拼拢」叠起来看看。" }
+        { name: "2 个正方体", joinedMsg: "2 个正方体拼在一起，一边变长了，拼成了 1 个长方体！", splitMsg: "这是 2 个一样的小正方体，点“拼拢”看看变成什么。" },
+        { name: "4 个正方体", joinedMsg: "4 个正方体摆成一层，看旁边还是扁扁的，它是长方体，还不是大正方体！", splitMsg: "4 个小正方体够不够拼成大正方体？点“拼拢”看看。" },
+        { name: "8 个正方体", joinedMsg: "下层 4 个加二层 4 个，一共 8 个小正方体，每个面一样大，拼成大正方体啦！", splitMsg: "下层 4 个、上层 4 个，一共 8 个小正方体。点“拼拢”合起来！" },
+        { name: "2 个圆柱", joinedMsg: "把两个平平的圆面叠在一起，拼成了 1 个更高的圆柱！", splitMsg: "2 个粗细一样的圆柱，点“拼拢”叠起来看看。" }
       ];
       scenes.forEach(content);
       var st = { i: 0, joined: true };
@@ -708,21 +708,21 @@
           l1: [[0, 0, true], [1, 0, false], [0, 1, false]],
           l2: [[0, 0]],
           msgLift: "看！二楼那块下面，藏着红色的第 1 块托着它！一楼 3 个加二楼 1 个，一共 4 个。",
-          msgDown: "看到 3 个面，其实是几个？点「抬起上层」看看二楼下面藏着谁！"
+          msgDown: "看到 3 个面，其实是几个？点“抬起上层”看看二楼下面藏着谁！"
         },
         {
           name: "小台阶 5 块",
           l1: [[0, 0, true], [1, 0, true], [0, 1, false]],
           l2: [[0, 0], [1, 0]],
           msgLift: "一楼有 3 个（后面 2 个托着二楼），二楼有 2 个，3 加 2 一共 5 个！",
-          msgDown: "小台阶一共有几个小正方体？点「抬起上层」分层数一数。"
+          msgDown: "小台阶一共有几个小正方体？点“抬起上层”分层数一数。"
         },
         {
           name: "双层 6 块",
           l1: [[0, 0, true], [1, 0, true], [0, 1, false], [1, 1, false]],
           l2: [[0, 0], [1, 0]],
           msgLift: "一楼满满 4 个，二楼 2 个，4 加 2 一共 6 个小正方体！",
-          msgDown: "一楼和二楼合起来有几个？点「抬起上层」看清楚。"
+          msgDown: "一楼和二楼合起来有几个？点“抬起上层”看清楚。"
         }
       ];
       piles.forEach(content);

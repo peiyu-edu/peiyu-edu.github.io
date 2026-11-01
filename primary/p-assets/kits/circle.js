@@ -154,7 +154,7 @@
         oT.setAttribute("x", st.x - 20); oT.setAttribute("y", st.y + 26);
         if (bKeep) bKeep.disabled = !st.drawn;
       }
-      function idle() { out(rd, "圆规两脚张开 <b>" + st.r + " cm</b>。点「转一圈画圆」。", "圆规两脚张开" + st.r + "厘米"); }
+      function idle() { out(rd, "圆规两脚张开 <b>" + st.r + " cm</b>。点“转一圈画圆”。", "圆规两脚张开" + st.r + "厘米"); }
       function moved() { st.drawn = false; path.setAttribute("d", ""); draw(); idle(); }
       function spin(broken) {
         if (st.busy) return;
@@ -257,7 +257,7 @@
           st.axes.push(l.a); if (st.axes.length > 8) st.axes.shift();
           clear(gAx);
           st.axes.forEach(function (a) { var c = Math.cos(rad(a)), si = Math.sin(rad(a)); el("line", { x1: cx - 128 * c, y1: cy - 128 * si, x2: cx + 128 * c, y2: cy + 128 * si, style: "stroke:var(--no);stroke-width:2.5;stroke-dasharray:8 6" }, gAx); });
-          var m = "两边正好重合！这条直径所在的直线是圆的对称轴（红虚线）。已经折出 " + st.axes.length + " 条，再点「沿直径对折」，换一条直径还能折。";
+          var m = "两边正好重合！这条直径所在的直线是圆的对称轴（红虚线）。已经折出 " + st.axes.length + " 条，再点“沿直径对折”，换一条直径还能折。";
           out(rd, m, "两边正好重合。这条直径所在的直线，是圆的对称轴。换一条直径，还能折。", "ok");
           log("fold", { axes: st.axes.length });
           if (!cfg.seg && !reported) { reported = true; emitAns("fold:" + st.axes.length, true); }
@@ -413,7 +413,7 @@
         trail.setAttribute("x1", X0); trail.setAttribute("x2", (x + 0.01).toFixed(1)); trail.style.display = st.th > 0 ? "" : "none";
         cnt.innerHTML = "<b>" + st.d + "</b>cm"; bMinus.disabled = st.d <= 1 || st.busy; bPlus.disabled = st.d >= 4 || st.busy; bGo.disabled = st.busy; bDia.disabled = !st.done || st.busy;
       }
-      function idle() { out(rd, "红点 A 先碰着尺子的 0。点「滚一圈」，让圆贴着尺子滚，不要滑。", "红点A先碰着尺子的零。点滚一圈，让圆贴着尺子滚，不要滑。"); }
+      function idle() { out(rd, "红点 A 先碰着尺子的 0。点“滚一圈”，让圆贴着尺子滚，不要滑。", "红点A先碰着尺子的零。点滚一圈，让圆贴着尺子滚，不要滑。"); }
       function meas() { return Math.round(Math.PI * st.d / st.p) * st.p; }
       function measT() { return meas().toFixed(st.p === 1 ? 0 : st.p === 0.1 ? 1 : 2); }
       function q2() { return (Math.round(meas() / st.d * 100 + 1e-7) / 100).toFixed(2); }
@@ -539,7 +539,7 @@
       }
       function say2() {
         var n = st.n;
-        if (!st.on) { out(rd, "把圆平均分成 " + n + " 份：上半圈涂红，下半圈涂蓝。点「拼一拼」。", "把圆平均分成" + n + "份，上半圈涂红，下半圈涂蓝。"); rd2.innerHTML = ""; rd2.className = "read"; return; }
+        if (!st.on) { out(rd, "把圆平均分成 " + n + " 份：上半圈涂红，下半圈涂蓝。点“拼一拼”。", "把圆平均分成" + n + "份，上半圈涂红，下半圈涂蓝。"); rd2.innerHTML = ""; rd2.className = "read"; return; }
         if (st.edge) { out(rd, "描一圈边：上面是红弧，下面是蓝弧，各是周长的一半；左右两边（绿虚线）是多出来的两条半径。拼好后周长变长了，面积没变。", "拼好后周长多了两条半径，变长了；面积没变。", "ok"); }
         else out(rd, n === 8 ? "拼成的图形边是波浪形的，有点像平行四边形。再多分几份试试。" : n === 16 ? "分成 16 份，更像长方形了。" : "分成 32 份，已经很接近长方形了：长 ≈ 周长的一半，宽 ≈ 半径。", n === 32 ? "分的份数越多，拼出的图形越接近长方形。长大约是周长的一半，宽大约是半径。" : "再多分几份试试。", n === 32 ? "ok" : "");
         var len = fmt(3.14 * rc);
@@ -764,7 +764,7 @@
         var a = cur.arcs[0], c = cur.cands[j][0];
         clear(gNow);
         el("path", { d: arcD(c[0], c[1], a.r, a.a0, a.a1), style: "fill:none;stroke:var(--no);stroke-width:3;stroke-dasharray:7 5" }, gNow);
-        out(rd, "以「" + cur.cands[j][1] + "」为圆心画，红虚线和图案对不上。看看这段弧的两头：它的圆心到两头要一样远。再点一个试试。", "以这一点为圆心画，弧对不上。弧的圆心，到弧的两头要一样远。再试一个。", "no");
+        out(rd, "以“" + cur.cands[j][1] + "”为圆心画，红虚线和图案对不上。看看这段弧的两头：它的圆心到两头要一样远。再点一个试试。", "以这一点为圆心画，弧对不上。弧的圆心，到弧的两头要一样远。再试一个。", "no");
         log("center", { ok: false });
         emitAns("center:" + cur.cands[j][1], false);
         firstTry = false;

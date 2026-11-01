@@ -252,7 +252,7 @@ function measure() {
     rows.push(['底面画出的面积', f2(top2), 'top2', top2]);
   }
   readout($('#ro'), rows);
-  $('#ro-note').innerHTML = '「→」左边是原图里的长度，右边是直观图里画出来的长度。';
+  $('#ro-note').innerHTML = '“→”左边是原图里的长度，右边是直观图里画出来的长度。';
 }
 
 // ---------- 标注、标签 ----------

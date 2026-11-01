@@ -109,7 +109,7 @@ const modes = {
     def: String.raw`<h3>例 4 (2) 直线与平面所成的角</h3>
       <p class="def">求直线 \(DE\) 与平面 \(A_1BD\) 所成角的正弦。</p>
       <p>\(\overrightarrow{DE}\cdot\boldsymbol n=2-1-2=-1\)，\(\sin\theta=\dfrac{|-1|}{3\times\sqrt3}=\dfrac{\sqrt3}{9}\)。</p>
-      <p class="l3-note">常见错误：把「和法向量的夹角」当成线面角，用了 \(\cos\)。看图：法向量垂直于平面，两个角加起来是 \(90^\circ\)。</p>`,
+      <p class="l3-note">常见错误：把“和法向量的夹角”当成线面角，用了 \(\cos\)。看图：法向量垂直于平面，两个角加起来是 \(90^\circ\)。</p>`,
   },
   dih: {
     name: '(3) 二面角定正负', params: { s: 2, q: 'C', nf: '1' },

@@ -264,7 +264,7 @@
       // 文字和「重做本节」包在一起，换行时不会拆开
       head.innerHTML = '<span class="hci-prog-r"><span class="hci-prog-t"></span><button type="button" class="hci-linkbtn">重做本节</button></span>';
       head.querySelector("button").onclick = function () {
-        if (!window.confirm("清空这一节的作答，从头再做？（「我的记录」里的历史不受影响）")) return;
+        if (!window.confirm("清空这一节的作答，从头再做？（“我的记录”里的历史不受影响）")) return;
         store("ans." + SEC, null); store("seen." + SEC, null); store("step." + SEC, null);
         try { history.replaceState(null, "", location.pathname); } catch (e) { /* ignore */ }
         location.reload();
@@ -407,7 +407,7 @@
     if (clear) {
       clear.textContent = "清空这台设备上的全部记录";
       clear.onclick = function () {
-        if (!window.confirm("确定清空？做题记录和学习进度都会删掉，找不回来。\n要交给老师的话，先点「复制记录」。")) return;
+        if (!window.confirm("确定清空？做题记录和学习进度都会删掉，找不回来。\n要交给老师的话，先点“复制记录”。")) return;
         try {
           localStorage.removeItem("peiyu.hs.log");
           localStorage.removeItem("peiyu.jh.log");

@@ -397,7 +397,7 @@
       svg.setAttribute("viewBox", "0 0 360 " + H);
       var who = st.w === 1 ? "第一个乘数" : "第二个乘数", from = st.w === 1 ? p0 : q0, to = st.w === 1 ? p : q, t2;
       if (!o) t2 = "先选改哪个乘数，再选乘几或除以几。另一个乘数不变。";
-      else if (!st.show) t2 = "现在是 " + p + " × " + q + "。" + who + " " + from + (mul ? " 乘 " : " 除以 ") + k + " 变成 " + to + "，积是多少？先想一想，再点「看积」。";
+      else if (!st.show) t2 = "现在是 " + p + " × " + q + "。" + who + " " + from + (mul ? " 乘 " : " 除以 ") + k + " 变成 " + to + "，积是多少？先想一想，再点“看积”。";
       else t2 = who + " " + from + (mul ? " 乘 " : " 除以 ") + k + "，积也" + (mul ? "乘 " : "除以 ") + k + "：" + P0 + (mul ? " × " : " ÷ ") + k + " = " + Pn + "。";
       readout(read, t2, st.show ? "ok" : "");
       if (o && st.show && !st.reported) { st.reported = true; emitAns(root, cfg, p + "×" + q + "=" + Pn, true, true); }
@@ -595,7 +595,7 @@
       }
       bp.textContent = p + "：" + NAME[st.sp]; bn.textContent = n + "：" + NAME[st.sn];
       bGo.textContent = !st.sp && !st.sn ? "直接算" : "估一估";
-      var t = "选一选每个数怎么估，再点「估一估」。";
+      var t = "选一选每个数怎么估，再点“估一估”。";
       if (st.last && st.marks.length) t = st.marks[st.marks.length - 1].e + " = " + st.last.v + "（" + u + "）。" + st.last.t;
       if (st.exact) t = (st.last ? t + "<br>" : "") + "精算：" + p + " × " + n + " = " + exact + "（" + u + "），" + (exact < m ? m + " > " + exact + "，够。" : exact === m ? "正好是 " + m + "，够。" : exact + " > " + m + "，不够。");
       readout(read, t, "");

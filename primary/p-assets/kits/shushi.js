@@ -224,7 +224,7 @@
       var C = s.col, Uc = UNIT[C];
       if (sl.kind === "c") {
         if (v === "none" || v === 0) return s.v + " 个" + Uc + "里有 " + Math.floor(s.v / 10) + " 个" + UNIT[C + 1] + "，要向" + PLACE[C + 1] + "进 " + Math.floor(s.v / 10) + "。";
-        if (sl.v === 0) return s.v + " 不满十，不用进位，点「不进位」。";
+        if (sl.v === 0) return s.v + " 不满十，不用进位，点“不进位”。";
         if (v === s.v % 10) return s.v % 10 + " 已经写在积里了。进的是 " + s.v + " 个" + Uc + "里有几个" + UNIT[C + 1] + "。";
         if (v === s.cin) return "那是上一位进上来的小 " + s.cin + "，已经加过了。现在看 " + s.v + " 里有几个十。";
         return s.v + " 个" + Uc + "里有几个" + UNIT[C + 1] + "，就向前一位进几。";
@@ -342,11 +342,11 @@
     function prompt(sl) {
       var pl = st.pl, s = pl.steps[sl.s];
       if (sl.kind === "zn") return "0 前面的数乘完了。积的末尾要添几个 0？";
-      if (sl.kind === "z0") return "第二次乘：用十位上的 " + pl.B[1] + " 去乘 " + pl.ca + "。个位这一格写什么？要空着就点「这一格空着」。";
+      if (sl.kind === "z0") return "第二次乘：用十位上的 " + pl.B[1] + " 去乘 " + pl.ca + "。个位这一格写什么？要空着就点“这一格空着”。";
       if (sl.kind === "z") return "前面乘完了。末尾的 0 落下来了吗？";
       if (sl.kind === "s") return s.t === "sum" ? "把上面几行加起来，从个位写起。" : "把两次乘得的数加起来，从个位加起：这一格写几？";
       if (sl.kind === "r") return "这一行写 " + s.d * pow(s.pa) + " × " + s.bd + " 的积，从右往左一格一格写。";
-      if (sl.kind === "c") return PLACE[s.col] + "乘得 " + s.v + " 个" + UNIT[s.col] + "，要向" + PLACE[s.col + 1] + "进几？不满十就点「不进位」。";
+      if (sl.kind === "c") return PLACE[s.col] + "乘得 " + s.v + " 个" + UNIT[s.col] + "，要向" + PLACE[s.col + 1] + "进几？不满十就点“不进位”。";
       if (sl.ci === 1) return "前面没有数位了，还有一位直接" + (st.v4 ? "写下来。" : "写进积。");
       if (st.v4) return (pl.two ? (s.k ? "第二次乘：用十位" : "第一次乘：用个位") + "上的 " : "用 ") + s.bd + " 乘 " + s.d + "，这一格写几？";
       return "用 " + s.bd + " 乘" + PLACE[s.pa] + "上的 " + s.d + "，积的" + PLACE[sl.col] + "写几？";
@@ -517,7 +517,7 @@
         else if (st.hint) readout(read, verdict(!st.wrong, st.hint) + (st.wrong ? "" : "<br>" + prompt(asl)), st.wrong ? "no" : "ok");
         else readout(read, head + prompt(asl));
       } else if (st.msg) { readout(read, st.msg); st.msg = ""; }
-      else if (st.pos === 0) readout(read, head + (v4 ? (S ? "0 前面的数对齐，0 伸到右边。" : "") : (st.tz && S ? "一位数写在 " + st.a + " 的第一个不是 0 的数下面。" : "")) + "点「下一步」，一位一位地乘。");
+      else if (st.pos === 0) readout(read, head + (v4 ? (S ? "0 前面的数对齐，0 伸到右边。" : "") : (st.tz && S ? "一位数写在 " + st.a + " 的第一个不是 0 的数下面。" : "")) + "点“下一步”，一位一位地乘。");
       else {
         readout(read, subText(st.subs[st.pos - 1]) + (last ? (v4 || pl.steps[pl.steps.length - 1].t === "sum" ? "" : "积是 " + pl.P + "。") + estText() : ""), last ? "ok" : "");
         if (last && !st.demoReported) { st.demoReported = true; emitAns(root, cfg, String(pl.P), true, true, qi); }
@@ -563,7 +563,7 @@
     if (cfg.swap) bSwap = ctr.appendChild(btn("交换乘数再算", function () {
       if (String(st.a).length !== String(st.b).length) return;
       var q = qs[qi]; qs[qi] = [q[1], q[0], q[2]]; setup(true);
-      if (!practice) { st.msg = "交换了两个乘数：" + st.a + " × " + st.b + "。点「下一步」再算一遍，看积是不是一样。"; draw(); }
+      if (!practice) { st.msg = "交换了两个乘数：" + st.a + " × " + st.b + "。点“下一步”再算一遍，看积是不是一样。"; draw(); }
       logI("shushi-swap", { a: st.a, b: st.b });
     }));
     if (qs.length > 1) ctr.appendChild(btn("换一题", function () { qi = (qi + 1) % qs.length; setup(false); }));

@@ -263,7 +263,7 @@
     var node = document.getElementById("learning-tree-context"), original = lesson(context.from);
     var variant = practiceVariant(selected);
     node.hidden = !original && !variant;
-    node.innerHTML = original ? '<span>来自「' + esc(original.title) + '」第 ' + esc(context.step) + ' 步</span><a href="' + esc(returnURL(original.id, 2).href) + '">' + (context.question ? "回到原题" : "回到原课时") + '</a>' : "";
+    node.innerHTML = original ? '<span>来自“' + esc(original.title) + '”第 ' + esc(context.step) + ' 步</span><a href="' + esc(returnURL(original.id, 2).href) + '">' + (context.question ? "回到原题" : "回到原课时") + '</a>' : "";
     if (junior && original && !points.some(function (p) { return lessonIds(p).includes(original.id); })) node.innerHTML += '<p>本课知识点正在整理，可以查找已收录的前置知识点。</p>';
     if (variant) node.innerHTML += '<a href="' + esc(practiceURL(selected).href) + '">回到刚才的练习</a>';
   }

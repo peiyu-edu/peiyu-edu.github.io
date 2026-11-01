@@ -173,8 +173,8 @@
     var s = sched[id];
     var justNow = s && s.t && (Date.now() - s.t) < 60000;
     if (justNow) {
-      return '<div class="sc-grade"><span class="sc-note">✓ 记为「<b>' + GRADE_TXT[s.g] + "</b>」，下次复习：<b>" + fmtDue(s.due) + "</b>" +
-        (s.g === "no" ? "。不会的卡，建议先点下面「去本节动手拖图」把图过一遍" : "") + "</span></div>";
+      return '<div class="sc-grade"><span class="sc-note">✓ 记为“<b>' + GRADE_TXT[s.g] + "</b>”，下次复习：<b>" + fmtDue(s.due) + "</b>" +
+        (s.g === "no" ? "。不会的卡，建议先点下面“去本节动手拖图”把图过一遍" : "") + "</span></div>";
     }
     return (
       '<div class="sc-grade" role="group" aria-label="自评">' +

@@ -30,7 +30,7 @@ const SHAPES = {
       <ol class="l3-steps">
         <li>两个互相平行的面叫 <span class="l3-term" data-co="base">底面</span>，其余各面叫 <span class="l3-term" data-co="side">侧面</span>。</li>
         <li>相邻侧面的公共边叫 <span class="l3-term" data-co="edge">侧棱</span>；它们<b>互相平行</b>，这是棱柱和棱台的分水岭。</li>
-        <li>底面是几边形就叫几棱柱。点「变成斜棱柱」：侧棱斜了，但仍互相平行，所以还是棱柱。</li>
+        <li>底面是几边形就叫几棱柱。点“变成斜棱柱”：侧棱斜了，但仍互相平行，所以还是棱柱。</li>
       </ol>`,
     controls: (c) => {
       c.slider({ key: 'n', label: '底面边数', min: 3, max: 8, step: 1, value: 4 });
@@ -54,7 +54,7 @@ const SHAPES = {
       <ol class="l3-steps">
         <li>这个多边形面叫 <span class="l3-term" data-co="base">底面</span>，有公共顶点的各个三角形面叫 <span class="l3-term" data-co="side">侧面</span>。</li>
         <li>各侧面的公共顶点叫棱锥的 <span class="l3-term" data-co="apex">顶点</span>，相邻侧面的公共边叫 <span class="l3-term" data-co="edge">侧棱</span>。</li>
-        <li>关键词是「<b>有一个公共顶点</b>」：只说「其余各面都是三角形」不够。</li>
+        <li>关键词是“<b>有一个公共顶点</b>”：只说“其余各面都是三角形”不够。</li>
       </ol>`,
     controls: (c) => {
       c.slider({ key: 'n', label: '底面边数', min: 3, max: 8, step: 1, value: 4 });
@@ -77,7 +77,7 @@ const SHAPES = {
       <ol class="l3-steps">
         <li>原棱锥的底面和截面分别叫 <span class="l3-term" data-co="base">下底面、上底面</span>。</li>
         <li>棱台的 <span class="l3-term" data-co="side">侧面</span> 都是梯形，<span class="l3-term" data-co="edge">侧棱</span> 延长后<b>交于一点</b>。</li>
-        <li>它也满足「两个面平行、其余各面是四边形」，但侧棱不平行，所以<b>不是棱柱</b>。点「延长侧棱」看看。</li>
+        <li>它也满足“两个面平行、其余各面是四边形”，但侧棱不平行，所以<b>不是棱柱</b>。点“延长侧棱”看看。</li>
       </ol>`,
     controls: (c) => {
       c.slider({ key: 'n', label: '底面边数', min: 3, max: 8, step: 1, value: 4 });
@@ -311,7 +311,7 @@ quiz($('#pane-quiz'), [
   {
     q: '有两个面互相平行，其余各面都是四边形的多面体，一定是棱柱吗？',
     opts: ['一定是', '不一定'], answer: 1,
-    why: '还要求「相邻两个四边形的公共边都互相平行」。棱台就满足前两条，但侧棱延长后交于一点。',
+    why: '还要求“相邻两个四边形的公共边都互相平行”。棱台就满足前两条，但侧棱延长后交于一点。',
     show: () => { S.cancelTweens(); SHAPES.frustum.params.ext = true; noteShow('frustum', { ext: true }); select('frustum'); }, showLabel: '看棱台的侧棱',
   },
   {

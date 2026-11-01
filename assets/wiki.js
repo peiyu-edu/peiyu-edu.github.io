@@ -132,10 +132,10 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "set-def-distinct", ch: 1, sec: "b1-1-1", secName: "1.1 集合的概念",
       kind: "concept", kindLabel: "🟢 概念与定义",
-      title: "集合互异性检验与描述法「看代表元」",
+      title: "集合互异性检验与描述法“看代表元”",
       keywords: ["互异性", "代表元", "点集", "数集", "列举法", "描述法"],
       trig: "含参集合求元素（如 \\(a\\in\\{1,a^2\\}\\)），或判断两个描述法集合的交集。",
-      key: "1. <b>重复元素怎么处理</b>：只问某个数在不在里面时，重复并成一个以后，这个数仍在集合里，不要因此舍掉。问「有几个元素」，或要求几个互不相同的数，才要代入看会不会并掉。<br>2. <b>描述法先看竖线前的代表元</b>：\\(\\{x\\mid y=f(x)\\}\\) 是定义域数集，\\(\\{y\\mid y=f(x)\\}\\) 是值域数集，\\(\\{(x,y)\\mid y=f(x)\\}\\) 是<b>坐标点集</b>。",
+      key: "1. <b>重复元素怎么处理</b>：只问某个数在不在里面时，重复并成一个以后，这个数仍在集合里，不要因此舍掉。问“有几个元素”，或要求几个互不相同的数，才要代入看会不会并掉。<br>2. <b>描述法先看竖线前的代表元</b>：\\(\\{x\\mid y=f(x)\\}\\) 是定义域数集，\\(\\{y\\mid y=f(x)\\}\\) 是值域数集，\\(\\{(x,y)\\mid y=f(x)\\}\\) 是<b>坐标点集</b>。",
       warn: "数集与点集属性不同，交集必为 \\(\\varnothing\\)；不要被竖线后面相同的方程迷惑。属于关系成立，不等于集合里有三个不同元素。",
       more: "例：\\(2\\in\\{1,a,a^2-a\\}\\) 时，\\(a=2\\) 和 \\(a=-1\\) 都成立。\\(a=2\\) 时集合是 \\(\\{1,2\\}\\)，\\(2\\) 仍在里面。只有再要求恰好 3 个元素，才丢掉 \\(a=2\\)。",
       rel: ["set-empty-trap", "set-ops-demorgan"]
@@ -148,7 +148,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       trig: "题干出现 \\(A\\subseteq B\\)、\\(A\\cap B=A\\) 或 \\(A\\cup B=B\\)，且子集 \\(A\\) 含参数。",
       key: "1. <b>等价转化</b>：\\(A\\cap B=A \\iff A\\subseteq B\\)；\\(A\\cup B=B \\iff A\\subseteq B\\)；\\(A\\cup B=A \\iff B\\subseteq A\\)。<br>2. <b>分类讨论两步走</b>：<br>① <b>先查 \\(A=\\varnothing\\)</b>：一次方程系数为 0 无解，或二次方程判别式 \\(\\Delta < 0\\)，或连续区间左端点大于右端点；<br>② <b>再令 \\(A\\ne\\varnothing\\)</b>：画数轴列不等式，<b>两端点能否取等号单独代入验证</b>。<br>3. <b>子集计数</b>：含 \\(n\\) 个元素的有限集有 \\(2^n\\) 个子集、\\(2^n-1\\) 个真子集、\\(2^n-2\\) 个非空真子集（\\(n\\ge 1\\)）。",
       warn: "严格区分 \\(\\varnothing\\)（空集，不含任何元素）、\\(0\\)（实数，不是集合）、\\(\\{0\\}\\)（含一个元素 0 的单元素集）与 \\(\\{\\varnothing\\}\\)（含一个元素 \\(\\varnothing\\) 的单元素集）。漏掉 \\(A=\\varnothing\\) 是高一含参集合题头号失分原因！",
-      more: "口诀：「子集含参先查空，数轴标根验端点」。当子集 \\(A\\) 的元素由方程或不等式给出时，无论是否含参，第一反应都要问：「这个集合有没有可能根本没有元素？」。",
+      more: "口诀：“子集含参先查空，数轴标根验端点”。当子集 \\(A\\) 的元素由方程或不等式给出时，无论是否含参，第一反应都要问：“这个集合有没有可能根本没有元素？”。",
       rel: ["set-def-distinct", "logic-subset"]
     },
     {
@@ -165,12 +165,12 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "logic-subset", ch: 1, sec: "b1-1-4", secName: "1.4 充分条件与必要条件",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "充分必要条件的集合判断法：「小范围推大范围」",
+      title: "充分必要条件的集合判断法：“小范围推大范围”",
       keywords: ["充分", "必要", "充要", "小范围", "大范围", "充分不必要"],
       trig: "判断充分/必要/充要条件，或已知充分不必要、必要不充分条件反求参数范围。",
       key: "设条件 \\(p,q\\) 对应的解集分别为 \\(P,Q\\)：<br>1. <b>核心法则（小范围推大范围）</b>：若 \\(P\\subseteq Q\\)，则 \\(p\\Rightarrow q\\)（范围小的条件是充分条件，范围大的条件是必要条件）；<br>2. <b>四种关系对应</b>：<br>• 若 \\(P\\subsetneqq Q\\)（\\(P\\) 是 \\(Q\\) 的真子集），则 \\(p\\) 是 \\(q\\) 的<b>充分不必要条件</b>；<br>• 若 \\(Q\\subsetneqq P\\)（即 \\(P\\supsetneqq Q\\)），则 \\(p\\) 是 \\(q\\) 的<b>必要不充分条件</b>；<br>• 若 \\(P=Q\\)，则 \\(p\\) 与 \\(q\\) <b>互为充要条件</b>（\\(p\\iff q\\)）；<br>• 若 \\(P\\not\\subseteq Q\\) 且 \\(Q\\not\\subseteq P\\)，则 \\(p\\) 是 \\(q\\) 的<b>既不充分也不必要条件</b>。",
-      warn: "1. 审题句式陷阱：「\\(p\\) 是 \\(q\\) 的充分条件」代表 \\(p\\Rightarrow q\\)；而「\\(p\\) 的充分条件是 \\(q\\)」主语是充分条件 \\(q\\)，代表 \\(q\\Rightarrow p\\)！<br>2. 空集也是子集：若 \\(p\\) 的解集为空集 \\(P=\\varnothing\\)，由 \\(\\varnothing\\subseteq Q\\) 可知 \\(P\\subseteq Q\\) 恒成立；当 \\(Q\\ne\\varnothing\\) 时仍然有 \\(P\\subsetneqq Q\\)，此时 \\(p\\) 仍是 \\(q\\) 的充分不必要条件。",
-      more: "证充分性不能代替证必要性；要否定「\\(p\\Rightarrow q\\)」只需举出一个满足条件 \\(p\\) 但不满足条件 \\(q\\) 的反例即可。",
+      warn: "1. 审题句式陷阱：“\\(p\\) 是 \\(q\\) 的充分条件”代表 \\(p\\Rightarrow q\\)；而“\\(p\\) 的充分条件是 \\(q\\)”主语是充分条件 \\(q\\)，代表 \\(q\\Rightarrow p\\)！<br>2. 空集也是子集：若 \\(p\\) 的解集为空集 \\(P=\\varnothing\\)，由 \\(\\varnothing\\subseteq Q\\) 可知 \\(P\\subseteq Q\\) 恒成立；当 \\(Q\\ne\\varnothing\\) 时仍然有 \\(P\\subsetneqq Q\\)，此时 \\(p\\) 仍是 \\(q\\) 的充分不必要条件。",
+      more: "证充分性不能代替证必要性；要否定“\\(p\\Rightarrow q\\)”只需举出一个满足条件 \\(p\\) 但不满足条件 \\(q\\) 的反例即可。",
       rel: ["set-empty-trap", "logic-negation"]
     },
     {
@@ -186,7 +186,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "ineq-props-diff", ch: 2, sec: "b1-2-1", secName: "2.1 等式性质与不等式性质",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "作差法比大小与「待定系数整体代换」防范围扩大",
+      title: "作差法比大小与“待定系数整体代换”防范围扩大",
       keywords: ["作差", "不等式性质", "倒数", "整体代换", "范围"],
       trig: "代数式比大小；或已知 \\(a+b,\\ a-b\\) 的范围求 \\(pa+qb\\) 的范围。",
       key: "1. <b>同向可加不可减，同正可乘不可除</b>：减法化为加相反数 \\(a+(-b)\\)。<br>2. <b>倒数比较先查顺序与符号</b>：已知 \\(a>b\\) 且 \\(ab\\ne0\\) 时，\\(\\dfrac1a<\\dfrac1b\\iff ab>0\\)。一般比较可由 \\(\\dfrac1a-\\dfrac1b=\\dfrac{b-a}{ab}\\) 判号。<br>3. <b>整体代换</b>：已知 \\(u=a+b,\\ v=a-b\\) 的范围求 \\(3a+b\\)，<b>必设 \\(3a+b = m(a+b)+n(a-b)\\)</b> 解出 \\(m=2,n=1\\) 一步合成。",
@@ -196,8 +196,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "amgm-const-one", ch: 2, sec: "b1-2-2", secName: "2.2 基本不等式",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "常数代换法（乘「1」法）求分式与整式最值",
-      keywords: ["乘「1」", "乘1", "常数代换", "1/a", "1/b", "分式"],
+      title: "常数代换法（乘“1”法）求分式与整式最值",
+      keywords: ["乘“1”", "乘1", "常数代换", "1/a", "1/b", "分式"],
       trig: "已知整式和 \\(ma+nb=c\\)（定值），求分式和 \\(\\dfrac{p}{a}+\\dfrac{q}{b}\\) 的最小值（或反之）。",
       key: "<b>先查条件，再构造1</b>：已知 \\(ma+nb=c\\) 时，只有 \\(c\\ne0\\) 才能写 \\((ma+nb)/c=1\\)。分母 \\(a,b\\) 须非零；使用基本不等式时，参与比较的两项还须为正。<br><b>例</b>：若 \\(a>0,b>0,a+2b=1\\)，则 \\[\\frac1a+\\frac1b=\\left(\\frac1a+\\frac1b\\right)(a+2b)=3+\\frac{2b}{a}+\\frac ab\\ge3+2\\sqrt2.\\]取等要求 \\(a=\\sqrt2\\,b\\)，联立题设得 \\(a=\\sqrt2-1,\\ b=(2-\\sqrt2)/2\\)，确实可取。一般系数或范围变化时，须重新检查正性、定值与取等可行性。",
       warn: "不能只见整式和固定就断言最小值存在。只给 \\(a+2b=1\\) 且允许负数时，令 \\(a=-\\varepsilon,b=(1+\\varepsilon)/2\\)，所求值可无限减小。分母为 \\(a+1\\) 时可以换元，但仍须按已知等式构造1，不能自行假定 \\((a+1)+b\\) 为定值。",
@@ -206,7 +206,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "amgm-core", ch: 2, sec: "b1-2-2", secName: "2.2 基本不等式",
       kind: "formula", kindLabel: "🔵 公式与结论",
-      title: "基本不等式链与「一正二定三相等」铁律",
+      title: "基本不等式链与“一正二定三相等”铁律",
       keywords: ["基本不等式", "均值", "和一定", "积一定", "a²+b²", "正数"],
       trig: "两正数的和、积、平方和互化与最值求解。",
       key: "对 \\(a>0,b>0\\)（当且仅当 \\(a=b\\) 时取等）：<br>$$\\frac{2}{\\dfrac{1}{a}+\\dfrac{1}{b}} \\le \\sqrt{ab} \\le \\frac{a+b}{2} \\le \\sqrt{\\frac{a^2+b^2}{2}}$$<br>• <b>积定和最小</b>：\\(ab=P \\Rightarrow a+b\\ge 2\\sqrt{P}\\)；<b>和定积最大</b>：\\(a+b=S \\Rightarrow ab\\le\\dfrac{S^2}{4}\\)。<br>• 对<b>任意实数 \\(a,b\\in\\mathbf R\\)</b> 恒成立：\\(a^2+b^2\\ge 2ab\\)，\\(ab\\le\\left(\\dfrac{a+b}{2}\\right)^2\\)。",
@@ -216,7 +216,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "amgm-hook", lab: "amgm-hook", ch: 2, sec: "b1-2-2", secName: "2.2 基本不等式",
       kind: "pitfall", kindLabel: "🔴 易错红线",
-      title: "对勾函数 f(x)=x+k/x 性质与「等号取不到」急救",
+      title: "对勾函数 f(x)=x+k/x 性质与“等号取不到”急救",
       keywords: ["等号", "取不到", "对勾", "下界", "单调性"],
       trig: "基本不等式算出的等号点 \\(x=\\sqrt{k}\\) 不在题目允许的区间 \\([m,n]\\) 内。",
       key: "对勾函数 \\(f(x)=x+\\dfrac{k}{x}\\)（\\(k>0\\)）在 \\((0,\\sqrt{k}]\\) <b>递减</b>，在 \\([\\sqrt{k},+\\infty)\\) <b>递增</b>。<br>• 若题目限定 \\(x\\ge m > \\sqrt{k}\\)，等号取不到，函数在该区间单调递增，<b>最小值在左端点 \\(x=m\\) 处取得，为 \\(m+\\dfrac{k}{m}\\)</b>！",
@@ -246,7 +246,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "quad-param", ch: 2, sec: "b1-2-3", secName: "2.3 二次函数与一元二次方程、不等式",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "含参一元二次不等式分类讨论「三步曲」",
+      title: "含参一元二次不等式分类讨论“三步曲”",
       keywords: ["二次不等式", "含参", "判别式", "两根", "因式分解"],
       trig: "解含参数 \\(a\\) 的二次不等式（如 \\(ax^2-(a+2)x+2 < 0\\)）。",
       key: "严格按三步顺序讨论：<br>1. <b>一查最高次系数 \\(a\\)</b>：讨论 \\(a=0\\)（一次式）、\\(a>0\\)（开口向上）、\\(a < 0\\)（开口向下）；<br>2. <b>二看因式分解与 \\(\\Delta\\)</b>：能十字相乘的直接求根，不能分解的按 \\(\\Delta>0,\\ =0,\\ <0\\) 讨论；<br>3. <b>三比两根 \\(x_1,x_2\\) 大小</b>：确定谁在左谁在右（含 \\(x_1=x_2\\) 重根）。",
@@ -266,7 +266,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "fn-abstract-ineq", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "奇偶性与单调性结合：脱去外层「f」解抽象不等式",
+      title: "奇偶性与单调性结合：脱去外层“f”解抽象不等式",
       keywords: ["抽象不等式","脱去外层","奇偶性与单调性结合"],
       trig: "已知 \\(f(x)\\) 的奇偶性和单调性，求解 \\(f(2x-1) < f(x+2)\\) 或 \\(f(x-1)+f(2x) < 0\\)。",
       key: "<b>分类标准步骤</b>：<br>• <b>奇函数</b>：由奇性将 \\(f(u)+f(v)<0\\) 化为 \\(f(u)<f(-v)\\)。只有当 \\(u,-v\\) 同在一个严格单调区间内，才可按该区间的递增或递减方向脱去 \\(f\\)。<br>• <b>偶函数</b>：在对称定义域内有 \\(f(u)=f(|u|)\\)、\\(f(v)=f(|v|)\\)。若 \\(f\\) 在包含 \\(|u|,|v|\\) 的非负定义域区间上<b>严格递增</b>，则 \\(f(u)<f(v)\\iff |u|<|v|\\)；若在该区间上<b>严格递减</b>，则 \\(f(u)<f(v)\\iff |u|>|v|\\)。<br>• <b>必须同步联立定义域</b>：先要求 \\(u,v\\) 在定义域内，再核查变换后的自变量属于所用的同一单调区间；不可把“单调”一律当成递增。",
@@ -287,7 +287,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "fn-odd-plus-c", ch: 3, sec: "b1-3-2", secName: "3.2 函数的基本性质",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "「奇函数 + 常数」对称中心与整体代换求值",
+      title: "“奇函数 + 常数”对称中心与整体代换求值",
       keywords: ["奇函数+常数", "对称中心", "f(x)+f(-x)", "整体代换"],
       trig: "解析式形如 \\(f(x)=g(x)+c\\)（其中 \\(g(x)\\) 是奇函数），已知 \\(f(a)=m\\) 求 \\(f(-a)\\)，或求对称区间上的最值之和。",
       key: "1. <b>核心恒等式</b>：若 \\(f(x) = g(x) + c\\) 且 \\(g(-x)=-g(x)\\)，则 <b>\\(f(x)+f(-x)=2c\\)</b>（图象关于点 \\((0,c)\\) 中心对称）。<br>2. <b>对称求值</b>：\\(f(-a) = 2c - f(a)\\)，无需解出具体未知参数。<br>3. <b>对称区间最值定理</b>：若 \\(f(x)\\) 在关于原点对称的区间 \\([-m,m]\\) 上的最大值为 \\(M\\)、最小值为 \\(N\\)，则必有 <b>\\(M+N=2c\\)</b>！",
@@ -308,7 +308,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "fn-power-five", ch: 3, sec: "b1-3-3", secName: "3.3 幂函数",
       kind: "formula", kindLabel: "🔵 公式与结论",
-      title: "幂函数概念与第一象限「指大图高」图象规律",
+      title: "幂函数概念与第一象限“指大图高”图象规律",
       keywords: ["幂函数", "x^a", "第一象限", "定点"],
       trig: "由幂函数定义求参数，或比较不同幂函数图象与函数值。",
       key: "1. <b>定义</b>：\\(y=x^\\alpha\\) 的系数为1。本阶段重点为 \\(\\alpha=1,2,3,\\tfrac12,-1\\) 的五个函数；一般指数的系统分类属于后续或延伸。<br>2. <b>正半轴比较</b>：五个模型均过 \\((1,1)\\)；前四个在 \\((0,+\\infty)\\) 递增，\\(1/x\\) 在此递减。\\(x>1\\) 时指数越大函数值越大，\\(0<x<1\\) 时顺序相反。整个定义域上的性质仍须分函数、分区间研究。",
@@ -358,7 +358,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "explog-compare", ch: 4, sec: "b1-4-4", secName: "4.4 对数函数",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "指、对、幂三数「比大小」实战三板斧",
+      title: "指、对、幂三数“比大小”实战三板斧",
       keywords: ["比大小", "对数函数", "反函数", "中间量", "4.2", "4.4"],
       trig: "高考高频题：比较含指数、对数、幂的三个数 \\(a,b,c\\) 的大小。",
       key: "1. <b>第一斧（跟 0 和 1 比，分阵营）</b>：先分出负数、\\((0,1)\\) 和 \\(>1\\)。<br>2. <b>第二斧（化同底或化同指）</b>：同底用指对函数单调性，同指数用幂函数单调性。<br>3. <b>第三斧（找中间桥梁值）</b>：同在 \\((0,1)\\) 或 \\(>1\\) 时，与 \\(\\dfrac12,\\ \\dfrac13,\\ \\dfrac32,\\ 2\\) 搭桥比较。",
@@ -368,7 +368,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "zero-theorem", lab: "zero-theorem", ch: 4, sec: "b1-4-5", secName: "4.5 函数的应用（二）",
       kind: "concept", kindLabel: "🟢 概念与定义",
-      title: "零点存在定理、二分法与「图象交点转零点」",
+      title: "零点存在定理、二分法与“图象交点转零点”",
       keywords: ["零点", "二分法", "交点", "实根个数"],
       trig: "定位零点所在区间 \\((k,k+1)\\)，或判断超越方程 \\(\\ln x + 2x - 6 = 0\\) 解的个数。",
       key: "1. <b>零点存在定理</b>：\\(h\\) 在 \\([a,b]\\) 连续且 \\(h(a)h(b)<0\\)，则在 \\((a,b)\\) 至少有一个零点；若另知严格单调，可进一步断言唯一。<br>2. <b>方程先构造差函数</b>：判断 \\(f(x)=g(x)\\) 的根，可设 \\(h=f-g\\)。使用定理须检查这个 \\(h\\) 的连续性和两端符号，不能只检查原来某一个函数。图象交点帮助分析，根数还须相应依据。",
@@ -388,17 +388,17 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "trig-know1get2", ch: 5, sec: "b1-5-2", secName: "5.2 三角函数的概念",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "单位圆定义、同角「知一求二」与齐次式弦化切",
+      title: "单位圆定义、同角“知一求二”与齐次式弦化切",
       keywords: ["同角三角函数","同角关系","知一求二","齐次式"],
       trig: "已知 \\(\\sin\\alpha\\pm\\cos\\alpha\\) 与 \\(\\sin\\alpha\\cos\\alpha\\) 之一求其余，或已知 \\(\\tan\\alpha\\) 求齐次式。",
       key: "1. <b>知一求二平方桥</b>：\\((\\sin\\alpha\\pm\\cos\\alpha)^2 = 1 \\pm 2\\sin\\alpha\\cos\\alpha\\)（开方时按象限判断正负）。<br>2. <b>齐次式弦化切</b>（已知 \\(\\tan\\alpha=m\\)）：<br>• 分式 \\(\\dfrac{a\\sin\\alpha+b\\cos\\alpha}{c\\sin\\alpha+d\\cos\\alpha}\\) 上下同除 \\(\\cos\\alpha\\)；<br>• 二次整式 \\(a\\sin^2\\alpha+b\\sin\\alpha\\cos\\alpha+c\\cos^2\\alpha\\) <b>先补除以 \\(\\sin^2\\alpha+\\cos^2\\alpha=1\\)</b>，再上下同除 \\(\\cos^2\\alpha\\)！",
-      warn: "单位圆象限符号口诀：「一全正、二正弦、三正切、四余弦」。",
+      warn: "单位圆象限符号口诀：“一全正、二正弦、三正切、四余弦”。",
       rel: ["trig-rad-sector", "trig-aux-angle"]
     },
     {
       id: "trig-unit-induce", ch: 5, sec: "b1-5-3", secName: "5.3 诱导公式",
       kind: "formula", kindLabel: "🔵 公式与结论",
-      title: "诱导公式「奇变偶不变，符号看象限」与凑角互余",
+      title: "诱导公式“奇变偶不变，符号看象限”与凑角互余",
       keywords: ["诱导公式", "奇变偶不变", "互余", "互补"],
       trig: "化简含 \\(\\dfrac{k\\pi}{2}\\pm\\alpha\\) 的三角式，或已知 \\(\\sin(\\alpha+\\dfrac{\\pi}{6})\\) 求 \\(\\cos(\\alpha-\\dfrac{\\pi}{3})\\)。",
       key: "1. <b>奇变偶不变，符号看象限</b>：看 \\(\\dfrac{\\pi}{2}\\) 的倍数 \\(k\\) 奇偶定函数名；把 \\(\\alpha\\) 视作锐角看原函数在对应象限的正负定符号。<br>2. <b>凑角互余互补</b>：先算未知角与已知角的<b>和或差</b>——若相加/相减得 \\(\\dfrac{\\pi}{2}\\)（互余，\\(\\sin\\leftrightarrow\\cos\\)）或 \\(\\pi\\)（互补），直接用诱导公式秒解！",
@@ -418,7 +418,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "trig-aux-angle", ch: 5, sec: "b1-5-5", secName: "5.5 三角恒等变换",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "二倍角降幂升幂与「辅助角公式（合一变形）」",
+      title: "二倍角降幂升幂与“辅助角公式（合一变形）”",
       keywords: ["二倍角", "降幂", "辅助角", "恒等变换", "两角和"],
       trig: "化简 \\(a\\sin\\omega x+b\\cos\\omega x\\) 或含 \\(\\sin^2 x,\\cos^2 x,\\sin x\\cos x\\) 的三角函数。",
       key: "标准三步化简流水线：<br>1. <b>二倍角降幂</b>：\\(\\sin^2 x=\\dfrac{1-\\cos 2x}{2}\\)，\\(\\cos^2 x=\\dfrac{1+\\cos 2x}{2}\\)，\\(\\sin x\\cos x=\\dfrac12\\sin 2x\\)；<br>2. <b>辅助角合一</b>：先查 \\(a^2+b^2>0\\)；若 \\(a=b=0\\)，原式恒为 \\(0\\)，无需定义辅助角。非零情形才有\\(a\\sin\\omega x+b\\cos\\omega x = \\sqrt{a^2+b^2}\\sin(\\omega x+\\varphi)\\)（其中 \\(\\cos\\varphi=\\dfrac{a}{\\sqrt{a^2+b^2}},\\ \\sin\\varphi=\\dfrac{b}{\\sqrt{a^2+b^2}}\\)）。",
@@ -498,7 +498,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "vec-sine-cosine-law", ch: 6, sec: "b2-6-4", secName: "6.4 平面向量的应用",
       kind: "formula", kindLabel: "🔵 公式与结论",
-      title: "正弦定理、余弦定理与解三角形「边角互化」",
+      title: "正弦定理、余弦定理与解三角形“边角互化”",
       keywords: ["正弦定理","余弦定理","解三角形","SSA"],
       trig: "已知三角形部分边角求其余边角、外接圆半径或判断三角形解的个数。",
       key: "在 \\(\\Delta ABC\\) 中（\\(R\\) 为外接圆半径）：<br>• <b>正弦定理</b>：$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R$$（边化角：\\(a=2R\\sin A\\)；角化边：\\(\\sin A = \\dfrac{a}{2R}\\)）。<br>• <b>余弦定理</b>：$$c^2 = a^2 + b^2 - 2ab\\cos C,\\qquad \\cos C = \\frac{a^2+b^2-c^2}{2ab}$$<br>• <b>面积公式</b>：\\(S = \\dfrac12 ab\\sin C = \\dfrac12 bc\\sin A = \\dfrac12 ac\\sin B = \\dfrac{abc}{4R}\\)。",
@@ -552,7 +552,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       keywords: ["棱柱", "棱锥", "棱台", "圆柱", "圆锥", "圆台", "球", "多面体", "旋转体", "空间几何体", "四面体"],
       trig: "判断空间几何体类型、识别棱柱底面侧棱性质或几何体截面性质。",
       key: "1. <b>棱柱</b>：有两个面互相平行（底面），其余各面都是平行四边形，且每相邻两个四边形的公共边互相平行。<br>2. <b>棱锥与棱台</b>：有一个面是多边形，其余各面是有公共顶点的三角形为棱锥；棱台是用<b>平行于底面的平面截棱锥</b>所得底面与截面之间的部分。<br>3. <b>旋转体</b>：矩形绕边旋转得圆柱、直角三角形绕直角边旋转得圆锥、直角梯形绕垂直于底的腰旋转得圆台、半圆绕直径旋转得球。",
-      warn: "不是「有两个平行面」就叫棱柱（侧棱必须互相平行！）；棱台的上下底必须相似且侧棱延长线必交于一点，不能把任意截切多面体叫棱台！",
+      warn: "不是“有两个平行面”就叫棱柱（侧棱必须互相平行！）；棱台的上下底必须相似且侧棱延长线必交于一点，不能把任意截切多面体叫棱台！",
       rel: ["geo-oblique-drawing", "geo-surface-volume"]
     },
     {
@@ -592,7 +592,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       keywords: ["线面平行","面面平行","线线平行","平行判定定理","平行性质定理"],
       trig: "证明空间直线与平面平行、证明两个平面平行，或利用平行寻找交线。",
       key: "1. <b>线面平行判定</b>（线线\\(\\to\\)线面）：若 <b>\\(a\\not\\subset\\alpha\\)</b>，\\(b\\subset\\alpha\\)，且 <b>\\(a\\parallel b\\)</b>，则 <b>\\(a\\parallel\\alpha\\)</b>（面外线平行面内线）。<br>2. <b>线面平行性质</b>（线面\\(\\to\\)线线）：若 \\(a\\parallel\\alpha\\)，\\(a\\subset\\beta\\)，\\(\\alpha\\cap\\beta=b\\)，则 <b>\\(a\\parallel b\\)</b>（交线必平行）。<br>3. <b>面面平行判定</b>（线面\\(\\to\\)面面）：一个平面内的<b>两条相交直线</b>分别平行于另一个平面，则两平面平行（\\(a\\subset\\alpha, b\\subset\\alpha, a\\cap b=P, a\\parallel\\beta, b\\parallel\\beta \\Rightarrow \\alpha\\parallel\\beta\\)）。<br>4. <b>面面平行性质</b>（面面\\(\\to\\)线线）：\\(\\alpha\\parallel\\beta\\)，\\(\\gamma\\cap\\alpha=a\\)，\\(\\gamma\\cap\\beta=b \\Rightarrow a\\parallel b\\)。",
-      warn: "线面平行判定书写证明时，漏写 \\(a\\not\\subset\\alpha\\) 必扣分！面面平行判定漏写「相交」条件必扣分（两条平行线平行另一平面无法锁定平面方向）！",
+      warn: "线面平行判定书写证明时，漏写 \\(a\\not\\subset\\alpha\\) 必扣分！面面平行判定漏写“相交”条件必扣分（两条平行线平行另一平面无法锁定平面方向）！",
       rel: ["geo-basic-facts-skew", "geo-perp-dihedral"]
     },
     {
@@ -650,8 +650,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       kind: "formula", kindLabel: "🔵 公式与结论",
       title: "事件相互独立充要条件与乘法公式（互斥绝非独立）",
       keywords: ["相互独立", "独立事件", "乘法公式", "互斥与独立", "至少一个发生"],
-      trig: "判断两个事件是否独立、求两系统同时正常概率、或求「至少一个发生」概率。",
-      key: "1. <b>独立充要条件</b>：\\(P(AB) = P(A)P(B)\\)。<br>2. <b>衍生独立性</b>：若 \\(A\\) 与 \\(B\\) 独立，则 \\(A\\) 与 \\(\\overline{B}\\)、\\(\\overline{A}\\) 与 \\(B\\)、\\(\\overline{A}\\) 与 \\(\\overline{B}\\) 均相互独立。<br>3. <b>「至少一个发生」套路</b>：\\(P(A\\cup B) = 1 - P(\\overline{A})P(\\overline{B})\\)。",
+      trig: "判断两个事件是否独立、求两系统同时正常概率、或求“至少一个发生”概率。",
+      key: "1. <b>独立充要条件</b>：\\(P(AB) = P(A)P(B)\\)。<br>2. <b>衍生独立性</b>：若 \\(A\\) 与 \\(B\\) 独立，则 \\(A\\) 与 \\(\\overline{B}\\)、\\(\\overline{A}\\) 与 \\(B\\)、\\(\\overline{A}\\) 与 \\(\\overline{B}\\) 均相互独立。<br>3. <b>“至少一个发生”套路</b>：\\(P(A\\cup B) = 1 - P(\\overline{A})P(\\overline{B})\\)。",
       warn: "必修阶段严禁引入条件概率！若 \\(P(A)>0, P(B)>0\\) 且两事件互斥，则 \\(P(AB)=0\\ne P(A)P(B)\\)，<b>两正概率事件互斥必不独立</b>！",
       rel: ["prob-classical-events", "rv-cond-bayes", "rv-binomial-hypergeom"]
     },
@@ -661,7 +661,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "频率稳定性、随机模拟映射与破除赌徒谬误",
       keywords: ["频率", "概率", "稳定性", "随机模拟", "赌徒谬误", "放回抽样"],
       trig: "用大量重复试验的频率估计未知概率、设计随机数模拟方案、或分析概率认知误区。",
-      key: "1. <b>频率 vs 概率</b>：频率是试验产生的一组随机数据，随试验变化；概率是事件内在的客观确定值。<br>2. <b>随机模拟设计</b>：设定随机数字（如 0～9），让对应事件发生的数字所占比例严格等于理论概率。<br>3. <b>破除赌徒谬误</b>：每次试验相互独立，硬币连出 5 次正面，第 6 次正面的概率依然是 0.5，前面试验绝不「欠」后面！",
+      key: "1. <b>频率 vs 概率</b>：频率是试验产生的一组随机数据，随试验变化；概率是事件内在的客观确定值。<br>2. <b>随机模拟设计</b>：设定随机数字（如 0～9），让对应事件发生的数字所占比例严格等于理论概率。<br>3. <b>破除赌徒谬误</b>：每次试验相互独立，硬币连出 5 次正面，第 6 次正面的概率依然是 0.5，前面试验绝不“欠”后面！",
       warn: "次数增多不保证每一步都更靠近概率，大数定律是宏观震荡收敛；随机模拟必须保持每次试验条件严格一致。",
       rel: ["prob-classical-events"]
     },
@@ -682,7 +682,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       keywords: ["空间基底", "不共面", "四点共面", "基底展开", "x+y+z=1"],
       trig: "选择基底线性表示未知空间向量、证明四点共面或求参数值。",
       key: "1. <b>空间基底</b>：三个<b>不共面</b>的向量 \\(\\{\\boldsymbol{e}_1,\\boldsymbol{e}_2,\\boldsymbol{e}_3\\}\\) 叫做空间的一个基底，任一向量 \\(\\boldsymbol{p}\\) 存在唯一的有序实数组 \\((x,y,z)\\) 使 \\(\\boldsymbol{p} = x\\boldsymbol{e}_1 + y\\boldsymbol{e}_2 + z\\boldsymbol{e}_3\\)。<br>2. <b>四点共面定理</b>：当点 \\(A,B,C\\) 不共线时，对空间任意参考点 \\(O\\)，\\(P, A, B, C\\) 四点共面的充要条件是存在实数 \\(x,y,z\\) 使：<br>$$\\vec{OP} = x\\vec{OA} + y\\vec{OB} + z\\vec{OC}\\quad \\text{且}\\quad <b>x + y + z = 1</b>$$",
-      warn: "仅「两两不共线」不能作为基底！三个向量若同在一个平面内，两两不共线但共面，绝不能构成空间基底；斜基底数量积展开必须保留 \\(\\boldsymbol{e}_i\\cdot\\boldsymbol{e}_j\\) 交叉项！",
+      warn: "仅“两两不共线”不能作为基底！三个向量若同在一个平面内，两两不共线但共面，绝不能构成空间基底；斜基底数量积展开必须保留 \\(\\boldsymbol{e}_i\\cdot\\boldsymbol{e}_j\\) 交叉项！",
       rel: ["vec3-ops-coplanar", "vec3-coord-ops", "vec-base-theorem"]
     },
     {
@@ -772,7 +772,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       keywords: ["双曲线", "渐近线", "实轴", "虚轴", "c²=a²+b²", "等轴双曲线"],
       trig: "求双曲线标准方程、渐近线方程、离心率或双分支轨迹判定。",
       key: "1. <b>严格定义</b>：到两焦点距离差的<b>绝对值</b> \\(||PF_1|-|PF_2|| = 2a\\)（\\(0&lt;2a&lt;2c\\)）。若无绝对值只表示一支！若 \\(2a=2c\\) 为两条向外射线；若 \\(2a&gt;2c\\) 无轨迹。<br>2. <b>标准方程正项定焦点</b>：<br>• 焦点在 \\(x\\) 轴：\\(\\dfrac{x^2}{a^2}-\\dfrac{y^2}{b^2}=1\\)（\\(a&gt;0,b&gt;0\\)）；焦点在 \\(y\\) 轴：\\(\\dfrac{y^2}{a^2}-\\dfrac{x^2}{b^2}=1\\)。<b>正项对应实轴</b>，切勿按分母大小判断（\\(a\\) 可以小于 \\(b\\)）！<br>3. <b>几何量关系</b>：<b>\\(c^2 = a^2 + b^2\\)</b>（\\(c\\) 最大！\\(e=\\dfrac{c}{a}&gt;1\\)）。<br>4. <b>渐近线方程</b>：令右边等于 0，\\(\\dfrac{x^2}{a^2}-\\dfrac{y^2}{b^2}=0 \\Rightarrow <b>y = \\pm\\dfrac{b}{a}x</b>\\)。等轴双曲线 \\(a=b \\iff e=\\sqrt{2}\\)，渐近线互相垂直（\\(y=\\pm x\\)）。",
-      warn: "双曲线焦点位置永远由「正项」决定，绝不能看分母大小！无绝对值的差等于常数只代表双曲线的一支！渐近线与双曲线无限逼近但绝不相交！",
+      warn: "双曲线焦点位置永远由“正项”决定，绝不能看分母大小！无绝对值的差等于常数只代表双曲线的一支！渐近线与双曲线无限逼近但绝不相交！",
       rel: ["conic-ellipse", "conic-parabola"]
     },
     {
@@ -782,7 +782,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       keywords: ["抛物线","焦点","准线","抛物线焦半径","x0+p/2","转化法"],
       trig: "求抛物线焦点准线、求抛物线上点到焦点距离最值或焦半径计算。",
       key: "1. <b>严格定义</b>：到定点 \\(F\\) 与定直线 \\(l\\) 距离相等的点的轨迹（\\(F\\notin l\\)）。<br>2. <b>四种标准形式与除以 4 法则</b>：<br>• \\(y^2=2px\\ (p&gt;0)\\)：向右开，焦点 \\((\\dfrac{p}{2},0)\\)，准线 \\(x=-\\dfrac{p}{2}\\)；<br>• \\(y^2=-2px\\)：向左开，焦点 \\((-\\dfrac{p}{2},0)\\)，准线 \\(x=\\dfrac{p}{2}\\)；<br>• \\(x^2=2py\\)：向上开，焦点 \\((0,\\dfrac{p}{2})\\)，准线 \\(y=-\\dfrac{p}{2}\\)；<br>• \\(x^2=-2py\\)：向下开，焦点 \\((0,-\\dfrac{p}{2})\\)，准线 \\(y=\\dfrac{p}{2}\\)。<br>• <b>口诀</b>：一次项定开口方向，<b>一次项的带符号系数除以 \\(4\\) 得焦点相应的非零坐标；系数的绝对值除以 \\(2\\) 才是正参数 \\(p\\)</b>！<br>3. <b>焦半径转准线神器</b>：对 \\(y^2=2px\\)，曲线上点 \\(P(x_0,y_0)\\) 的焦半径 <b>\\(|PF| = d = x_0 + \\dfrac{p}{2}\\)</b>。",
-      warn: "一次项系数除以 4 才是焦点坐标，切勿直接把 \\(2p\\) 当成焦点坐标！到定点的距离求最值，第一直觉必转化为「到准线的垂直距离」！",
+      warn: "一次项系数除以 4 才是焦点坐标，切勿直接把 \\(2p\\) 当成焦点坐标！到定点的距离求最值，第一直觉必转化为“到准线的垂直距离”！",
       rel: ["conic-ellipse", "conic-hyperbola"]
     },
     {
@@ -810,7 +810,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       kind: "method", kindLabel: "🟡 解题方法",
       title: "数列求和两大王牌套路：错位相减法与裂项相消法",
       keywords: ["求和套路", "错位相减", "裂项相消", "等差乘等比", "分式裂项"],
-      trig: "求解「等差×等比」数列求和、或分式分母乘积形式的级数求和。",
+      trig: "求解“等差×等比”数列求和、或分式分母乘积形式的级数求和。",
       key: "1. <b>错位相减法</b>：针对 \\(a_n=(\\alpha n+\\beta)q^n\\)。先分 \\(q=1\\) 与 \\(q\\ne1\\)：<br>• \\(q=1\\) 时是等差型，直接得 \\(S_n=\\alpha n(n+1)/2+n\\beta\\)。<br>• \\(q\\ne1\\) 时写出 \\(S_n\\)，同乘 \\(q\\) 并错位相减；\\(S_n-qS_n\\) 的最后一项是 \\(-q a_n=-(\\alpha n+\\beta)q^{n+1}\\)，中间项用等比求和，最后才除以 \\(1-q\\)。<br>2. <b>裂项相消法</b>：如 \\(\\dfrac{1}{n(n+k)}=\\dfrac1k\\left(\\dfrac1n-\\dfrac1{n+k}\\right)\\)（\\(k\\ne0\\)，且各分母非零），展开后检查首尾剩余项。",
       warn: "这里 \\(a_n\\) 已表示数列的完整第 \\(n\\) 项，故错位相减末项是 \\(-q a_n\\)，不是 \\(-a_nq^n\\)。例：\\(a_n=n2^n\\)，\\(n=3\\) 时末项为 \\(-2\\times24=-48\\)。使用分式前先查 \\(q=1\\)；裂项别漏系数 \\(1/k\\)。",
       rel: ["seq-arith-geom", "seq-an-sn-relation", "seq-math-induction"]
@@ -818,7 +818,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     {
       id: "seq-math-induction", ch: 14, sec: "e2-4-4", secName: "4.4 数学归纳法（选学）",
       kind: "method", kindLabel: "🟡 解题方法",
-      title: "数学归纳法两步规范与「归纳假设必用」铁律",
+      title: "数学归纳法两步规范与“归纳假设必用”铁律",
       keywords: ["数学归纳法", "归纳奠基", "归纳递推", "归纳假设", "正整数", "选学"],
       trig: "证明与正整数 \\(n\\) 相关的等式、整除性、不等式或数列猜想。",
       key: "1. <b>第一步：归纳奠基</b>：验证当 \\(n = n_0\\)（通常取 \\(n_0=1\\) 或题目给定的起始正整数）时命题成立。<br>2. <b>第二步：归纳递推</b>：假设当 \\(n = k\\ (k\\ge n_0, k\\in\\mathbf N^*)\\) 时命题成立，<b>以此为必须使用的前提条件</b>，推导出当 \\(n = k+1\\) 时命题也成立。<br>3. <b>结论宣告</b>：由 (1) 和 (2) 可知，命题对所有大于等于 \\(n_0\\) 的正整数 \\(n\\) 均成立。",
@@ -832,7 +832,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       keywords: ["瞬时变化率", "导数定义", "切线斜率", "割线极限", "在点处vs过点"],
       trig: "求函数在某点处的瞬时变化率、导数定义极限式或切线方程。",
       key: "1. <b>极限定义</b>：$$f'(x_0) = \\lim_{\\Delta x\\to 0} \\frac{f(x_0+\\Delta x) - f(x_0)}{\\Delta x}$$（瞬时变化率即平均变化率在 \\(\\Delta x\\to 0\\) 时的极限）。<br>2. <b>几何意义</b>：\\(f'(x_0)\\) 就是曲线上点 \\(P(x_0, f(x_0))\\) 处<b>切线的斜率 \\(k\\)</b>。<br>3. <b>点斜式切线方程</b>：$$y - f(x_0) = f'(x_0)(x - x_0)$$",
-      warn: "「在点 \\(P\\) 处的切线」与「过点 \\(P\\) 的切线」完全不同！「过点 \\(P\\)」的点不一定是切点，必须先设切点 \\((x_0, f(x_0))\\) 代入切线方程求解！",
+      warn: "“在点 \\(P\\) 处的切线”与“过点 \\(P\\) 的切线”完全不同！“过点 \\(P\\)”的点不一定是切点，必须先设切点 \\((x_0, f(x_0))\\) 代入切线方程求解！",
       rel: ["calc-rules-composite", "calc-monot-extrema"]
     },
     {
@@ -941,7 +941,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "样本相关系数 r 判定线性相关方向与强弱",
       keywords: ["相关系数","散点图","相关系数r","正相关","负相关","线性相关强弱"],
       trig: "由散点图或数据计算相关系数 \\(r\\)，定性或定量分析两变量的相关性与强弱。",
-      key: "1. <b>样本相关系数公式</b>：\\[r = \\dfrac{\\sum (x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum (x_i-\\bar{x})^2}\\sqrt{\\sum (y_i-\\bar{y})^2}}\\]<br>2. <b>数值意义</b>：分母中两个平方和都须非零，且 \\(|r|\\le 1\\)。\\(r>0\\) 为正相关，\\(r<0\\) 为负相关。<br>3. <b>怎么比强弱</b>：\\(|r|\\) 越接近 1，线性相关越强；越接近 0，线性相关越弱。比较几组数据时比 \\(|r|\\) 的大小。没有一个统一的「强相关」门槛，\\(r=0\\) 也不排除非线性关系。",
+      key: "1. <b>样本相关系数公式</b>：\\[r = \\dfrac{\\sum (x_i-\\bar{x})(y_i-\\bar{y})}{\\sqrt{\\sum (x_i-\\bar{x})^2}\\sqrt{\\sum (y_i-\\bar{y})^2}}\\]<br>2. <b>数值意义</b>：分母中两个平方和都须非零，且 \\(|r|\\le 1\\)。\\(r>0\\) 为正相关，\\(r<0\\) 为负相关。<br>3. <b>怎么比强弱</b>：\\(|r|\\) 越接近 1，线性相关越强；越接近 0，线性相关越弱。比较几组数据时比 \\(|r|\\) 的大小。没有一个统一的“强相关”门槛，\\(r=0\\) 也不排除非线性关系。",
       warn: "相关关系绝不等于因果关系！不要用 \\(|r|>0.75\\) 这类无来源的阈值下结论。散点图呈抛物线等非线性趋势时，不能只拿线性相关系数 \\(r\\) 说话。",
       rel: ["bivar-regression-fit", "bivar-chi-square"]
     },
@@ -987,7 +987,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   var TRACE = {
     "set-def-distinct": { sourceCards: ["M1-01-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
     "set-empty-trap": { sourceCards: ["M1-01-A"], evidenceLevel: "textbook", requiredPrereqs: ["set-def-distinct"],
-      notes: [["synthesis", "「含参子集先查空集」是整理的检查顺序，依据是空集是任何集合的子集。"]] },
+      notes: [["synthesis", "“含参子集先查空集”是整理的检查顺序，依据是空集是任何集合的子集。"]] },
     "set-ops-demorgan": { sourceCards: ["M1-01-A"], evidenceLevel: "textbook", requiredPrereqs: ["set-def-distinct"] },
     "logic-subset": { sourceCards: ["M1-01-B"], evidenceLevel: "textbook", requiredPrereqs: ["set-empty-trap"],
       notes: [["synthesis", "用集合包含判断条件关系是辅助方法，先统一变量和论域；箭头方向要能用命题解释，不只背口诀。"]] },
@@ -996,7 +996,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     "ineq-props-diff": { sourceCards: ["M1-02-A"], evidenceLevel: "textbook", requiredPrereqs: [],
       notes: [["synthesis", "待定系数整体代换是整理的方法，用来避免范围被放大。"]] },
     "amgm-const-one": { sourceCards: ["M1-02-B"], evidenceLevel: "synthesis", requiredPrereqs: ["amgm-core"],
-      notes: [["teacher", "基本不等式以简单最值为主，不刻意加大变形难度；乘「1」法是常见题型的整理。"]] },
+      notes: [["teacher", "基本不等式以简单最值为主，不刻意加大变形难度；乘“1”法是常见题型的整理。"]] },
     "amgm-core": { sourceCards: ["M1-02-B"], evidenceLevel: "textbook", requiredPrereqs: ["ineq-props-diff"],
       notes: [["synthesis", "教材主体是两正数的 √ab ≤ (a+b)/2 和任意实数的 a²+b² ≥ 2ab；两端的调和平均、平方平均是整理拓展。"]] },
     "amgm-hook": { sourceCards: ["M1-02-B", "M1-03-B"], evidenceLevel: "synthesis", requiredPrereqs: ["amgm-core"],
@@ -1022,7 +1022,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       mapNote: "函数应用属于 3.4；常见模型是二次函数，求最值要用二次函数与方程的联系。" },
     "exp-root-power": { sourceCards: ["M1-04-A"], evidenceLevel: "textbook", requiredPrereqs: [] },
     "exp-fn-prop": { sourceCards: ["M1-04-B"], evidenceLevel: "textbook", requiredPrereqs: ["exp-root-power", "fn-mono-def"],
-      notes: [["synthesis", "「同增异减」是整理的结论，用的时候要能按单调性定义说清楚。"]] },
+      notes: [["synthesis", "“同增异减”是整理的结论，用的时候要能按单调性定义说清楚。"]] },
     "log-change-base": { sourceCards: ["M1-04-C"], evidenceLevel: "textbook", requiredPrereqs: ["exp-root-power"],
       notes: [["synthesis", "log_{a^m} b^n = (n/m) log_a b 等推论由换底公式推出，现场能推即可。"]] },
     "explog-compare": { sourceCards: ["M1-04-B", "M1-04-C"], evidenceLevel: "synthesis", requiredPrereqs: ["exp-fn-prop", "log-change-base", "fn-power-five"],
@@ -1035,7 +1035,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     "trig-know1get2": { sourceCards: ["M1-05-B"], evidenceLevel: "textbook", requiredPrereqs: ["trig-rad-sector"],
       notes: [["teacher", "已知 tanα 等于字母参数 m 再求其余值这类参数化题不作要求；具体数值可以做。"], ["synthesis", "齐次式弦化切是整理的方法。"]] },
     "trig-unit-induce": { sourceCards: ["M1-05-B"], evidenceLevel: "textbook", requiredPrereqs: ["trig-know1get2"],
-      notes: [["synthesis", "「奇变偶不变」是整理的记法；教材用单位圆对称推导，先懂推导再用口诀。"]] },
+      notes: [["synthesis", "“奇变偶不变”是整理的记法；教材用单位圆对称推导，先懂推导再用口诀。"]] },
     "trig-graph-prop": { sourceCards: ["M1-05-C"], evidenceLevel: "textbook", requiredPrereqs: ["trig-unit-induce", "fn-parity-core"] },
     "trig-aux-angle": { sourceCards: ["M1-05-D"], evidenceLevel: "textbook", requiredPrereqs: ["trig-know1get2"],
       notes: [["teacher", "积化和差、和差化积、半角公式会推导即可，不要求记忆。"], ["synthesis", "辅助角公式由两角和的正弦公式推出。"]] },
@@ -1091,10 +1091,10 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       notes: [["synthesis", "两圆方程相减得公共弦、切线长公式是整理结论。"]] },
     "conic-ellipse": { sourceCards: ["E1-03-A"], evidenceLevel: "textbook", requiredPrereqs: ["geom-circle-line-rel"] },
     "conic-hyperbola": { sourceCards: ["E1-03-B"], evidenceLevel: "textbook", requiredPrereqs: ["conic-ellipse"],
-      notes: [["teacher", "双曲线是「了解」层级，不要把椭圆的深化题型照搬过来。"]] },
+      notes: [["teacher", "双曲线是“了解”层级，不要把椭圆的深化题型照搬过来。"]] },
     "conic-parabola": { sourceCards: ["E1-03-C", "E1-03-D"], evidenceLevel: "textbook", requiredPrereqs: ["geom-line-dist-intersect"],
       mapNote: "焦点准线互相转化是坐标法里的方法选择，对应方法选择那张源卡。",
-      notes: [["teacher", "抛物线是「了解」层级；控制代数运算难度，技巧繁多的定点定值题不作常规要求。"]] },
+      notes: [["teacher", "抛物线是“了解”层级；控制代数运算难度，技巧繁多的定点定值题不作常规要求。"]] },
     "seq-an-sn-relation": { sourceCards: ["E2-04-A"], evidenceLevel: "textbook", requiredPrereqs: ["fn-dom-same"] },
     "seq-arith-geom": { sourceCards: ["E2-04-B", "E2-04-C"], evidenceLevel: "textbook", requiredPrereqs: ["seq-an-sn-relation"],
       mapNote: "等差、等比两张源卡放进一张卡对照，便于比较通项、求和与下标性质。" },
@@ -1550,7 +1550,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       });
       if (!hitCards.length && !hitSecs.length) {
         drop.hidden = false;
-        drop.innerHTML = '<span class="small">未找到匹配项，试试搜「奇偶」「不等式」「诱导公式」「对数」。</span>';
+        drop.innerHTML = '<span class="small">未找到匹配项，试试搜“奇偶”“不等式”“诱导公式”“对数”。</span>';
         return;
       }
       var html = "";
@@ -1734,7 +1734,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       render: function (svg, desc, vals, cb) { window.IsoBench.renderSkewLinesBench(svg, desc, vals[0], vals[1], cb); }
     },
     "b2-8-5": {
-      title: "线面平行与面面平行「两条相交直线」双激光验证台", btn: "等距 3D 平行验证台", vb: "0 0 560 340",
+      title: "线面平行与面面平行“两条相交直线”双激光验证台", btn: "等距 3D 平行验证台", vb: "0 0 560 340",
       sliders: [
         { label: "面内两线夹角 \\(\\gamma\\)", min: 0, max: 90, step: 15, val: 60, fmt: function (v) { return v + "°"; } },
         { label: "扰动倾角 \\(\\tau\\)", min: -20, max: 20, step: 5, val: 15, fmt: function (v) { return v + "°"; } }
@@ -1783,7 +1783,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       render: function (svg, desc, vals, cb) { window.IsoBench.renderExpLogBench(svg, desc, vals[0], vals[1], cb); }
     },
     "b1-5-6": {
-      title: "「先平移后伸缩」vs「先伸缩后平移」双轨变速齿轮对比台", btn: "等距 3D 双轨相位台", vb: "0 0 560 340",
+      title: "“先平移后伸缩”vs“先伸缩后平移”双轨变速齿轮对比台", btn: "等距 3D 双轨相位台", vb: "0 0 560 340",
       sliders: [
         { label: "角频率 \\(\\omega\\)", min: 1.0, max: 3.0, step: 0.5, val: 2.0, fmt: function (v) { return v.toFixed(1); } },
         { label: "初相 \\(\\varphi\\)", min: -90, max: 90, step: 15, val: 60, fmt: function (v) { return v + "°"; } }
@@ -1834,7 +1834,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       render: function (svg, desc, vals, cb) { window.IsoBench.renderPascalBench(svg, desc, vals[0], Math.min(vals[0], vals[1]), cb); }
     },
     "e3-8-1": {
-      title: "最小二乘回归「残差弹簧平方和」物理平衡杆实验台", btn: "等距 3D 残差平衡杆", vb: "0 0 560 340",
+      title: "最小二乘回归“残差弹簧平方和”物理平衡杆实验台", btn: "等距 3D 残差平衡杆", vb: "0 0 560 340",
       sliders: [
         { label: "斜率 \\(b\\)", min: 0.0, max: 1.4, step: 0.01, val: 0.73, fmt: function (v) { return v.toFixed(2); } },
         { label: "截距偏离 \\(\\Delta a\\)", min: -1.0, max: 1.0, step: 0.2, val: 0.0, fmt: function (v) { return v.toFixed(1); } }

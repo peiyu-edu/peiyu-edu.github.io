@@ -134,11 +134,11 @@
       });
       html += stepHtml(sid, "cur", cur === "weak" ? "最后回到本节（" + weakLabel(mst[sid]) + "）" : "最后回到本节");
       html += "</div>";
-      html += '<p class="kga-why">薄弱先修不补，本节的错会反复出现。每节点「练一练」做 4–6 道，答对后图谱会自动点亮。</p>';
+      html += '<p class="kga-why">薄弱先修不补，本节的错会反复出现。每节点“练一练”做 4–6 道，答对后图谱会自动点亮。</p>';
     } else if (cur === "weak") {
       html += '<span class="small">先修链上没有薄弱节，问题就在本节自己：</span></div>';
       html += '<div class="kga-path">' + stepHtml(sid, "cur", "本节（" + weakLabel(mst[sid]) + "）") + "</div>";
-      html += '<p class="kga-why">先看本节的方法卡和红线，再回「练一练」把做错的那道重做一遍。</p>';
+      html += '<p class="kga-why">先看本节的方法卡和红线，再回“练一练”把做错的那道重做一遍。</p>';
     } else if (cur === "mastered") {
       var nextUnl = (meta.unlocks || []).filter(function (u) { return SEC_META[u] && status(mst, u) !== "mastered"; }).slice(0, 2);
       html += '<span class="small">本节已点亮。' + (nextUnl.length ? "顺着解锁往前走：" : "") + "</span></div>";
@@ -157,7 +157,7 @@
         });
         html += stepHtml(sid, "cur", "本节") + "</div>";
       }
-      html += '<p class="kga-why">做一遍本节「练一练」，图谱就会按你的对错点亮或标红，这里会给出要补的路径。</p>';
+      html += '<p class="kga-why">做一遍本节“练一练”，图谱就会按你的对错点亮或标红，这里会给出要补的路径。</p>';
     }
 
     // 2. 测一测

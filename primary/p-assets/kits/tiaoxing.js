@@ -24,7 +24,7 @@
     if (kind === "part") {
       var a = cfg.a, b = cfg.b, T = a + b;
       scenes.push({ title: "① 求总数（？在整体）", bars: [{ label: "一共", unknownTotal: true, segs: [seg(a, a + " " + unit, { color: "a" }), seg(b, b + " " + unit, { color: "c" })], total: T }],
-        steps: [{ text: "知道两个部分 " + a + " 和 " + b + "，要求「一共」：把两部分合起来，用加法。", eq: a + " + " + b + " = " + T }] });
+        steps: [{ text: "知道两个部分 " + a + " 和 " + b + "，要求“一共”：把两部分合起来，用加法。", eq: a + " + " + b + " = " + T }] });
       scenes.push({ title: "② 求一部分（？在部分）", bars: [{ label: "一共 " + T, segs: [seg(a, a + " " + unit, { color: "a" }), seg(b, b + " " + unit, { color: "c", unknown: true })], total: T }],
         steps: [{ text: "知道一共 " + T + " 和一个部分 " + a + "，要求另一个部分：从总数里去掉 " + a + "，用减法。", eq: T + " − " + a + " = " + b }] });
     } else if (kind === "compare") {
@@ -47,7 +47,7 @@
         { label: nb, segs: [seg(s, String(s), { color: "c", unknown: true, from: 1 }), seg(bd, "少 " + bd, { color: "c", dashed: true })] },
         { label: "一共", segs: [seg(ba, String(ba), { color: "a" }), seg(s, String(s), { color: "c", unknown: true, from: 1 })], unknownTotal: true, from: 3, total: ba + s }],
         steps: [{ text: "第 1 问：" + nb + "比" + na + "少 " + bd + "，" + nb + "有几" + unit + "？ 从 " + ba + " 里去掉 " + bd + "，用减法。", eq: ba + " − " + bd + " = " + s },
-                { text: "搭桥：第 1 问算出的 " + s + " 就是" + nb + "的数量，第 2 问要用它，不要再拿「少 " + bd + "」的 " + bd + " 去算。", eq: "" },
+                { text: "搭桥：第 1 问算出的 " + s + " 就是" + nb + "的数量，第 2 问要用它，不要再拿“少 " + bd + "”的 " + bd + " 去算。", eq: "" },
                 { text: "第 2 问：两人一共几" + unit + "？ " + na + " " + ba + " 加" + nb + " " + s + "，用加法。", eq: ba + " + " + s + " = " + (ba + s) }] });
     }
     return { scenes: scenes };
@@ -105,7 +105,7 @@
       }
       svg.setAttribute("viewBox", "0 0 360 " + Math.max(y + 14, 80));
       svg.setAttribute("aria-label", "条形图情境：" + sc.title + (lastEq() ? "，" + lastEq() : ""));
-      read.textContent = st.k === 0 ? sc.title + "：先看图，「？」是要求的，想一想用加法还是减法。点「下一步」。" : sc.steps[st.k - 1].text;
+      read.textContent = st.k === 0 ? sc.title + "：先看图，“？”是要求的，想一想用加法还是减法。点“下一步”。" : sc.steps[st.k - 1].text;
       bPrev.disabled = st.k <= 0; bNext.disabled = st.k >= sc.steps.length; bReset.disabled = st.k === 0;
       tabBtns.forEach(function (b, i) { b.setAttribute("aria-pressed", String(i === st.scene)); b.classList.toggle("on", i === st.scene); });
     }

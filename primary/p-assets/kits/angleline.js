@@ -876,7 +876,7 @@ function logI(what, d) { if (P) P.log("interact", Object.assign({ what: what }, 
         var notes = [
           "第 1 步：先画角的<b>顶点</b>，再从顶点出发画<b>第一条直直的边</b>。",
           "第 2 步：把三角尺直角顶点对齐顶点、一条直角边重合，沿着<b>另一条直角边</b>画出第二条边。",
-          "第 3 步：在角里面标上<b>直角符号「┐」</b>，直角就画好啦！"
+          "第 3 步：在角里面标上<b>直角符号“┐”</b>，直角就画好啦！"
         ];
         var displayNote = notes[st.drawStep]
           .replace(/「/g, "“").replace(/」/g, "”")

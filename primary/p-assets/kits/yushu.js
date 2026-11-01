@@ -101,7 +101,7 @@
       svg.setAttribute("aria-label", (showDiv ? "有余数的分一分：" : "分一分：") + st.total + " " + thing + "，每 " + st.k + " " + thing + "一份" + (over ? "，分成 " + st.n + " 份，还剩 " + r + " " + thing : ""));
       bMain.textContent = verb + "一" + unit; bMain.disabled = over;
       var line;
-      if (!st.n) line = st.total + " " + thing + "，每 " + st.k + " " + thing + "一份。点「" + bMain.textContent + "」，" + verb + "到不够一份为止。";
+      if (!st.n) line = st.total + " " + thing + "，每 " + st.k + " " + thing + "一份。点“" + bMain.textContent + "”，" + verb + "到不够一份为止。";
       else if (!over) line = verb + "了 " + st.n + " " + unit + "，用了 " + st.n * st.k + " " + thing + "，还有 " + r + " " + thing + "，够 " + st.k + " " + thing + "，还能再" + verb + "。";
       else if (r === 0) line = verb + "了 " + st.n + " " + unit + "，用了 " + st.n * st.k + " " + thing + "，正好" + verb + "完" + (showDiv ? "，没有余数。" : "，一个也没剩。");
       else line = showDiv

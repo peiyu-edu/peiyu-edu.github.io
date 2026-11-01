@@ -205,8 +205,8 @@
       }
       if (!moved()) {
         read.className = "read";
-        read.textContent = group ? T + " " + thing + "，每 " + k + " " + thing + "圈一份。点「圈一份」。"
-          : (cfg.hide ? "袋子里的" + (cfg.hideName || "东西") : T + " " + thing) + "，平均分到 " + n + " 个" + plate + "里。点「分一轮」。";
+        read.textContent = group ? T + " " + thing + "，每 " + k + " " + thing + "圈一份。点“圈一份”。"
+          : (cfg.hide ? "袋子里的" + (cfg.hideName || "东西") : T + " " + thing) + "，平均分到 " + n + " 个" + plate + "里。点“分一轮”。";
         emitC(); return;
       }
       var line, sayT;

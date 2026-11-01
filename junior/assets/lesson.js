@@ -632,11 +632,11 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");
-      ws.src = "../assets/wiki.js?v=vs-657264a7da5d";
+      ws.src = "../assets/wiki.js?v=vs-c8f2a86ec2c9";
       document.head.appendChild(ws);
     }
     var hs = document.createElement("script"); // 交互层（PY-53）
-    hs.src = "../assets/hci.js?v=vs-f3cb689fbc60";
+    hs.src = "../assets/hci.js?v=vs-6c5f1bf60d44";
     document.head.appendChild(hs);
   });
 })();

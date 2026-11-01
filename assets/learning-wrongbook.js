@@ -277,7 +277,7 @@
       else if (stage === "high" && !model.wrongbook.length) {
         // High school only indexes practice questions; lesson answers stay in 记录 (PY-328).
         var practiceLink = el("a", "去练习页 →"); practiceLink.href = "practice.html";
-        section.appendChild(el("p", "这里暂时没有题。错题本只收知识库和练习页的题，课内题的作答记在「记录」里。", "lw-note"));
+        section.appendChild(el("p", "这里暂时没有题。错题本只收知识库和练习页的题，课内题的作答记在“记录”里。", "lw-note"));
         section.appendChild(append(el("p"), practiceLink));
       } else section.appendChild(el("p", "这里暂时没有题。做过练习后再来看看。", "lw-note"));
       return section;

@@ -154,7 +154,7 @@
       for (var k = 0; k < st.k; k++) if (steps[k].write) el("text", { x: cx(steps[k].col), y: 186, "text-anchor": "middle", style: "fill:var(--a);font-size:28px;font-weight:700" }, svg).textContent = String(steps[k].digit);
       // 读数
       var done = st.k >= steps.length;
-      if (st.k === 0) read.textContent = (op === "-" ? "要算 " + st.a + " − " + st.b : "要算 " + st.a + " + " + st.b) + "。数位对齐，从个位算起，点「下一步」。";
+      if (st.k === 0) read.textContent = (op === "-" ? "要算 " + st.a + " − " + st.b : "要算 " + st.a + " + " + st.b) + "。数位对齐，从个位算起，点“下一步”。";
       else if (done) read.textContent = steps[steps.length - 1].text + " 所以 " + st.a + " " + (op === "-" ? "−" : "+") + " " + st.b + " = " + plan.result + "。";
       else read.textContent = cur.text;
       bPrev.disabled = st.k <= 0; bNext.disabled = done; bAll.disabled = done;

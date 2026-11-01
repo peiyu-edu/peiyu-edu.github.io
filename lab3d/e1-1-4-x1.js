@@ -72,7 +72,7 @@ const modes = {
         ['能当法向量吗', `<span>${p.k === 0 ? '不能（零向量）' : '能'}</span>`, 'ok', p.k === 0 ? '不能' : '能'],
       ];
     },
-    note: (p) => (p.k === 0 ? '\\(k=0\\) 时 \\(\\boldsymbol n=\\boldsymbol 0\\)：零向量和什么都「垂直」，但不能当法向量。' : [
+    note: (p) => (p.k === 0 ? '\\(k=0\\) 时 \\(\\boldsymbol n=\\boldsymbol 0\\)：零向量和什么都“垂直”，但不能当法向量。' : [
       '以 \\(D\\) 为原点，\\(DA,DC,DD_1\\) 为 \\(x,y,z\\) 轴。要找一个垂直于平面 \\(A_1BD\\) 的向量。',
       `面内取两个不共线的向量：\\(\\overrightarrow{DA_1}=(${p.s},0,${p.s})\\)，\\(\\overrightarrow{DB}=(${p.s},${p.s},0)\\)。`,
       '设 \\(\\boldsymbol n=(x,y,z)\\)，\\(\\boldsymbol n\\cdot\\overrightarrow{DA_1}=0\\)、\\(\\boldsymbol n\\cdot\\overrightarrow{DB}=0\\) 得 \\(z=-x\\)、\\(y=-x\\)。方程没逼 \\(x=0\\)，令 \\(x=1\\)，\\(\\boldsymbol n=(1,-1,-1)\\)。',
@@ -121,7 +121,7 @@ const modes = {
     note: (p) => (p.k === 0
       ? '\\(k=0\\) 时 \\(\\boldsymbol n=\\boldsymbol 0\\)，不能当法向量。它与任意向量的点积为 0，不能用它判断直线与平面的位置关系；请先取 \\(k\\ne0\\)。'
       : {
-      CB1: '\\(\\boldsymbol u\\cdot\\boldsymbol n=0\\) 只说明「平行或在面内」。再代入点 \\(C\\)：\\(\\boldsymbol n\\cdot\\overrightarrow{DC}\\ne0\\)，\\(C\\) 不在面内，所以平行。',
+      CB1: '\\(\\boldsymbol u\\cdot\\boldsymbol n=0\\) 只说明“平行或在面内”。再代入点 \\(C\\)：\\(\\boldsymbol n\\cdot\\overrightarrow{DC}\\ne0\\)，\\(C\\) 不在面内，所以平行。',
       AC1: '\\(k\\ne0\\) 时，\\(\\overrightarrow{AC_1}=(-s,s,s)=-\\dfrac{s}{k}\\boldsymbol n\\)，是非零法向量的非零倍数。两向量共线（反向也共线），所以直线垂直于平面。',
       A1B: '反例：\\(\\boldsymbol u\\cdot\\boldsymbol n=0\\)，起点 \\(A_1\\) 也满足 \\(\\boldsymbol n\\cdot\\overrightarrow{DA_1}=0\\)，直线就在平面里，不能说平行。',
       DC1: '\\(\\boldsymbol u\\cdot\\boldsymbol n\\ne0\\)，又不是 \\(\\boldsymbol n\\) 的倍数：直线和平面斜着相交。',
@@ -134,7 +134,7 @@ const modes = {
     def: String.raw`<h3>例 2 用法向量证平行、垂直</h3>
       <p class="def">接例 1，\(\boldsymbol n=(1,-1,-1)\)。证明：(1) \(CB_1\parallel\) 平面 \(A_1BD\)；(2) \(AC_1\perp\) 平面 \(A_1BD\)。</p>
       <p>(1) \(\overrightarrow{CB_1}\cdot\boldsymbol n=0\)，<b>再说明 \(C\) 不在平面内</b>，才能下结论平行。(2) \(\overrightarrow{AC_1}=-2\boldsymbol n\)，与法向量共线，所以垂直。</p>
-      <p class="l3-note">切到 \(A_1B\)：点积同样是 \(0\)，但它在面内。点「法向量反向」：结论一个都不变。</p>`,
+      <p class="l3-note">切到 \(A_1B\)：点积同样是 \(0\)，但它在面内。点“法向量反向”：结论一个都不变。</p>`,
   },
 };
 
@@ -151,7 +151,7 @@ makeLab({
     {
       q: '\\(\\overrightarrow{CB_1}\\cdot\\boldsymbol n=0\\)，能直接说 \\(CB_1\\parallel\\) 平面 \\(A_1BD\\) 吗？',
       opts: ['不能，还要说明 \\(C\\) 不在平面内', '能，点积为 0 就平行', '不能，还要算 \\(|\\overrightarrow{CB_1}|\\)'], answer: 0,
-      why: '点积为 0 只说明「平行或在面内」。\\(A_1B\\) 的点积也是 0，它就在面内。',
+      why: '点积为 0 只说明“平行或在面内”。\\(A_1B\\) 的点积也是 0，它就在面内。',
       show: show('pp', { l: 'A1B', k: 1 }), showLabel: '看 A₁B',
     },
     {

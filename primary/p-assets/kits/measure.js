@@ -924,8 +924,8 @@
       var coiled = it.rope && !straight;
       if (coiled) {
         sourceShape("path", { d: "M56 110 C86 70, 116 150, 146 105 C166 75, 126 140, 161 115", style: "fill:none;stroke:var(--a);stroke-width:5;stroke-linecap:round" }, svg);
-        sourceText(svg, 180, 154, sourceWords(labels.coiled, "盘着的跳绳（点「拉直跳绳」）"), "fill:var(--a);font-size:16px;font-weight:700");
-        sourceRead(box, sourceWords(cfg.coiledText, "跳绳盘在一起看着短，点「拉直跳绳」看看它真正有多长！"), null, "");
+        sourceText(svg, 180, 154, sourceWords(labels.coiled, "盘着的跳绳（点“拉直跳绳”）"), "fill:var(--a);font-size:16px;font-weight:700");
+        sourceRead(box, sourceWords(cfg.coiledText, "跳绳盘在一起看着短，点“拉直跳绳”看看它真正有多长！"), null, "");
       } else {
         var w = it.cm * scale, color = it.color || (it.cm > 100 ? "var(--a)" : "var(--b)");
         sourceShape("rect", { x: x0, y: 92, width: w, height: 32, rx: 6, style: "fill:" + color + ";opacity:.88", "data-role": "source-comparison" }, svg);
@@ -1111,8 +1111,8 @@
       var b = hb(it.name, "item-" + i, function () { st.idx = i; st.unit = it.good; draw(); });
       ctr1.appendChild(b); return b;
     });
-    var bCm = hb(sourceWords(labels.cm, "试填「厘米」"), "unit-cm", function () { st.unit = "cm"; draw(); });
-    var bM = hb(sourceWords(labels.m, "试填「米」"), "unit-m", function () { st.unit = "m"; draw(); });
+    var bCm = hb(sourceWords(labels.cm, "试填“厘米”"), "unit-cm", function () { st.unit = "cm"; draw(); });
+    var bM = hb(sourceWords(labels.m, "试填“米”"), "unit-m", function () { st.unit = "m"; draw(); });
     ctr2.appendChild(bCm); ctr2.appendChild(bM);
     if (cfg.reset === true) ctr2.appendChild(hb("重来", "reset", function () { st.idx = initial; st.unit = initialUnit; draw(); }));
     root.appendChild(ctr1); root.appendChild(ctr2); root.appendChild(read);

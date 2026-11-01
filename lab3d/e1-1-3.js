@@ -75,7 +75,7 @@ const modes = {
     },
     note: (p) => {
       const s = SYM[p.s].s, keep = ['x', 'y', 'z'].filter((_, i) => s[i] > 0);
-      return `${SYM[p.s].label}对称：${keep.length ? `${keep.join('、')} 不变，` : ''}其余坐标变号。口诀「关于谁对称，谁不变」。`;
+      return `${SYM[p.s].label}对称：${keep.length ? `${keep.join('、')} 不变，` : ''}其余坐标变号。口诀“关于谁对称，谁不变”。`;
     },
     tags: ['O', 'P', 'P′', 'x', 'y', 'z'],
     callouts: [

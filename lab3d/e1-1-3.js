@@ -118,7 +118,7 @@ const modes = {
     note: () => '沿 \\(x\\)、\\(y\\)、\\(z\\) 三个方向各走一段，三段两两垂直，所以距离 \\(=\\sqrt{(\\Delta x)^2+(\\Delta y)^2+(\\Delta z)^2}\\)，就是两次勾股定理。',
     tags: ['A', 'B', 'C', 'D', 'A1', 'B1', 'C1', 'D1', 'M', 'N'],
     callouts: [
-      { id: 'ab', title: '|AB| = √(Δx² + Δy² + Δz²)', text: '', at: 'ab', dx: -170, dy: -60 },
+      { id: 'ab', title: '两点间距离 =<br><math xmlns="http://www.w3.org/1998/Math/MathML" style="font-size:20px"><msqrt><mrow><msup><mrow><mi>Δx</mi></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mi>Δy</mi></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mi>Δz</mi></mrow><mn>2</mn></msup></mrow></msqrt></math>', text: '', at: 'ab', dx: -170, dy: -60 },
       { id: 'ly', title: '三段两两垂直', text: '沿 x、y、z 各走一段', at: 'ly', dx: 130, dy: 50 },
     ],
     def: String.raw`<h3>两点间距离与中点</h3>

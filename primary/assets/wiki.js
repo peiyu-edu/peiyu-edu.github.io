@@ -64,6 +64,19 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+
+/* PY-450: resolve beside the shared entrypoint, including junior asset mounts. */
+(function () {
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.currentScript || !document.currentScript.src || !document.createElement || !document.head) return;
+  var body = document.body;
+  if (/\/primary\//.test(window.location.pathname) || (body && body.dataset && (body.dataset.stage === 'primary' || body.dataset.wikiStage === 'primary' || /^p[1-6][ab]-/.test(body.dataset.sec || '')))) return;
+  if (/\/lab3d\//.test(window.location.pathname) || window.pyRadicalRequested) return;
+  window.pyRadicalRequested = true;
+  var script = document.createElement('script');
+  script.src = new URL('radical.js?v=py450-2', document.currentScript.src).href;
+  script.async = true;
+  document.head.appendChild(script);
+})();
 /* END SHARED MATH CONFIG */
 /* 培玉 · 高中数学 — Wiki 与教材主线（73 节）有机融合引擎
    自动为四个触点赋能：

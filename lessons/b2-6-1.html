@@ -8,8 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-af6283d9cbcf8e62"></script>
-<script defer src="../assets/lesson.js?v=sha256-ade58b890ce93bf9"></script>
+<script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
+<script defer src="../assets/lesson.js?v=sha256-88ce2abc58eede82"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-bc840972e87d"></script>
 <style>
@@ -17,7 +17,7 @@
   .result b { color: var(--fg); }
   .btn.active { background: var(--a); color: var(--card); border-color: var(--a); }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b2-6-1" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -31,8 +31,8 @@
   <div class="card predict" data-id="entry" data-answer="B">
     <svg class="entry-fig" id="entry-radar" viewBox="0 0 520 210" role="img" aria-label="海战雷达屏幕：舰艇O为中心，半径20km圆周与方向向量对比"></svg>
     <div class="entry-bar" id="entry-radar-bar">
-      <button type="button" data-m="0" class="on">只报距离 20 km（全圆周都可能！）</button>
-      <button type="button" data-m="1">加上方向：东偏北 30°（唯一锁定！）</button>
+      <button type="button" data-m="0" class="on">只报距离 20 km</button>
+      <button type="button" data-m="1">加上方向：东偏北 30°</button>
       <button type="button" data-m="2">加上方向：正西 180°</button>
     </div>
     <div class="entry-note" id="entry-radar-note"></div>
@@ -685,7 +685,9 @@
   /* ================= 0 从例子进入：海战雷达 ================= */
   var erSvg = document.getElementById("entry-radar"), erBar = document.getElementById("entry-radar-bar"), erNote = document.getElementById("entry-radar-note");
   var erMode = 0;
+  var erAnswered = false;
   function erDraw(m) {
+    var answered = erAnswered;
     erMode = m;
     var fg = css("--fg"), ca = css("--a"), cb = css("--b"), cc = css("--c"), hl = css("--hl"), no = css("--no"), mu = css("--muted"), ln = css("--line"), card = css("--card"), okS = css("--ok-soft"), noS = css("--no-soft");
     erSvg.innerHTML = "";
@@ -728,7 +730,7 @@
     svg("text", { x: rx + 96, y: 52, "text-anchor": "middle", fill: fg, "font-weight": 700, "font-size": 15 }, erSvg).textContent = m === 0 ? "只有大小（数量）" : "大小 + 方向（向量）";
     svg("text", { x: rx + 16, y: 84, fill: fg, "font-size": 14 }, erSvg).textContent = "• 距离大小：20 km";
     svg("text", { x: rx + 16, y: 114, fill: m === 0 ? no : ca, "font-weight": 700, "font-size": 14 }, erSvg).textContent = m === 0 ? "• 方向：未知（？°）" : (m === 1 ? "• 方向：东偏北 30°" : "• 方向：正西 180°");
-    svg("text", { x: rx + 16, y: 148, fill: m === 0 ? no : ca, "font-weight": 700, "font-size": 14 }, erSvg).textContent = m === 0 ? "→ 圆周上处处有可能！" : "→ 终点位置唯一确定！";
+    svg("text", { x: rx + 16, y: 148, fill: m === 0 ? no : ca, "font-weight": 700, "font-size": 14 }, erSvg).textContent = !answered ? "→ 这些信息够用吗？" : (m === 0 ? "→ 圆周上处处有可能！" : "→ 终点位置唯一确定！");
 
     [].forEach.call(erBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", parseInt(b.getAttribute("data-m"), 10) === m);
@@ -736,15 +738,16 @@
     erNote.innerHTML = m === 0
       ? "只报距离 <b>20 km</b>：快艇可能在半径 20 km 圆周上的<b>任意一点</b>，无法拦截！"
       : (m === 1 ? "同时给出<b>大小（20 km）</b>和<b>方向（东偏北 30°）</b>：有向线段 <b>OP</b> 唯一锁定目标！" : "同样是 <b>20 km</b>，方向改成<b>正西 180°</b>，终点就位于圆周左侧的 <b>Q</b> 点。");
+    if (!answered) erNote.textContent = "比较三种报告提供的信息：只给距离与同时给出方向时，你能怎样描述目标位置？";
   }
   [].forEach.call(erBar.querySelectorAll("button"), function (b) {
     b.onclick = function () { erDraw(parseInt(b.getAttribute("data-m"), 10)); };
   });
   document.addEventListener("predict:pick", function (ev) {
-    if (ev.detail && ev.detail.id === "entry") erDraw(ev.detail.choice === "A" ? 0 : 1);
+    if (ev.detail && ev.detail.id === "entry") { erAnswered = true; erDraw(ev.detail.choice === "A" ? 0 : 1); }
   });
   document.addEventListener("predict:reset", function (ev) {
-    if (ev.detail && ev.detail.id === "entry") erDraw(0);
+    if (ev.detail && ev.detail.id === "entry") { erAnswered = false; erDraw(0); }
   });
 
   /* ================= 讲清楚微图解 ①~⑤ ================= */

@@ -7,7 +7,7 @@
   <link rel="icon" href="../assets/logo.svg">
   <link rel="stylesheet" href="../assets/site.css">
   <link rel="stylesheet" href="../p-assets/primary.css">
-  <link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+  <link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9c18ac034f36"></script>
 <script defer src="../p-assets/primary.js"></script>
   <script defer src="../assets/video.js"></script>
   <script defer src="../p-assets/manip.js"></script>
@@ -83,7 +83,7 @@
         <span class="stat-pill">单次分数：<b id="u21-st-f">八分之三</b></span>
         <span class="stat-pill">连取次数：k = <b id="u21-st-k">6</b></span>
         <span class="stat-pill">公因数：<b id="u21-st-g" class="cb">2</b></span>
-        <span class="stat-pill">最简结果：<b id="u21-st-res" class="ca">四分之九</b></span>
+        <span class="stat-pill">最简结果：<b id="u21-st-res" class="ca">请计算</b></span>
       </div>
 
       <div class="ctrl-grid">
@@ -470,7 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("u21-st-f").textContent = cnFrac(n, d);
     document.getElementById("u21-st-k").textContent = String(k);
     document.getElementById("u21-st-g").textContent = g > 1 ? (k + "与" + d + "公因数 " + g) : "互质(1)";
-    document.getElementById("u21-st-res").textContent = simpD === 1 ? String(simpN) : cnFrac(simpN, simpD);
+    document.getElementById("u21-st-res").textContent = "请计算并约分";
 
     while (stage.firstChild) stage.removeChild(stage.firstChild);
 
@@ -533,16 +533,16 @@ document.addEventListener("DOMContentLoaded", function () {
       line1 = g > 1
         ? "① 先约分：" + k + " 与 " + d + " 同除以 " + g + "，得 " + (k / g) + " 和 " + partialD
         : "① 整数 " + k + " 与分母 " + d + " 互质，无需先约分";
-      line2 = "② 相乘：" + n + " × " + (k / g) + " = " + partialN + "，得 " + cnFrac(partialN, partialD);
+      line2 = "② 分子算 " + n + " × " + (k / g) + "，分母是 " + partialD;
       line3 = remaining > 1
-        ? "③ 分子分母再同除以 " + remaining + "，得 " + finalFraction
-        : "已是最简结果：" + finalFraction;
+        ? "③ 分子分母还可以同除以几？"
+        : "写出最简分数，再检验大小。";
     } else {
-      line1 = "① 先相乘：" + n + " × " + k + " = " + rawN + "，得 " + cnFrac(rawN, d);
+      line1 = "① 分子算 " + n + " × " + k + "，分母 " + d + " 不变";
       line2 = gAll > 1
-        ? "② 分子分母同除以 " + gAll + "，得 " + finalFraction
+        ? "② 分子分母可以同除以几？"
         : "② 分子分母互质，无需约分";
-      line3 = "最简结果：" + finalFraction;
+      line3 = "请写出最简分数。";
     }
     stage.appendChild(el("text", { x: 240, y: 168 + extraHeight, "text-anchor": "middle", "font-size": 16.5, "font-weight": 700, fill: "var(--fg)" }, line1));
     stage.appendChild(el("text", { x: 240, y: 196 + extraHeight, "text-anchor": "middle", "font-size": 16.5, "font-weight": 700, fill: "var(--b)" }, line2));
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var fIn = P ? P.fracHTML(n, d) : cnFrac(n, d);
     var fOut = simpD === 1 ? ("<b>" + simpN + "</b>") : (P ? P.fracHTML(simpN, simpD) : cnFrac(simpN, simpD));
     outEl.className = "read ok";
-    outEl.innerHTML = "实时算式：" + fIn + " × " + k + " ＝ " + fOut + "（共 " + rawN + " 个 " + (P ? P.fracHTML(1, d) : cnFrac(1, d)) + "）。";
+    outEl.innerHTML = "实时算式：" + fIn + " × " + k + " ＝ ？观察分数条，计算后约成最简分数。";
   }
 
   [slD, slN, slK].forEach(function (input) {

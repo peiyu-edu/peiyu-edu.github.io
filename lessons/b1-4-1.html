@@ -8,8 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-af6283d9cbcf8e62"></script>
-<script defer src="../assets/lesson.js?v=sha256-ade58b890ce93bf9"></script>
+<script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
+<script defer src="../assets/lesson.js?v=sha256-88ce2abc58eede82"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-bc840972e87d"></script>
 <style>
@@ -39,7 +39,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-4-1" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -53,10 +53,10 @@
   <div class="card predict" data-id="entry" data-answer="B">
     <svg class="entry-fig" id="entry-bact" viewBox="0 0 520 370" role="img" aria-label="相对数量的倍数连乘模型，不把非整数倍数当作细菌个数"></svg>
     <div class="entry-bar" id="entry-bact-bar">
-      <button type="button" data-x="1.5" class="on">试 x = 1.5 (1h变2.25倍，偏大)</button>
-      <button type="button" data-x="root">试 x = √2（约1.414）</button>
+      <button type="button" data-x="1.5" class="on">试 x = 1.5</button>
+      <button type="button" data-x="root">试满足 x²=2 的正数</button>
       <button type="button" data-x="1.414">试有限小数 x = 1.414</button>
-      <button type="button" data-x="1.2">试 x = 1.2 (1h变1.44倍，偏小)</button>
+      <button type="button" data-x="1.2">试 x = 1.2</button>
     </div>
     <div class="entry-note" id="entry-bact-note"></div>
     <p>半小时变成原来的几倍？</p>
@@ -364,7 +364,7 @@
       <p>中间项 \(a^{\frac12}\cdot a^{-\frac12}=a^0=1\)。选 B 的同学平方时漏了中间的 \(2\)。（根式要求 \(a\ge0\)，而负二分之一次幂还要求分母非零，两者合起来才是 \(a>0\)。）</p>
     </div>
   </div>
-  <p class="small">视频先求本题的 \(7\)，再追加 \(a^2+a^{-2}\) 得 \(47\)，练习指数继续翻倍。</p>
+  <p class="small">先独立完成本题，再看视频核对平方展开的中间项，并尝试继续求 \(a^2+a^{-2}\)。</p>
   <div class="vid" data-video="ex-pow"></div>
 </section>
 
@@ -589,34 +589,37 @@
   document.getElementById("reset2").addEventListener("click", function () { reset2(); plog({ fig: "approx", how: "reset" }); });
   /* ---------- 0 从例子进入：培养皿细菌半小时倍率 ---------- */
   var ebSvg = document.getElementById("entry-bact"), ebBar = document.getElementById("entry-bact-bar"), ebNote = document.getElementById("entry-bact-note");
+  var ebAnswered = false;
   function ebValue(value) { return value === "root" ? Math.SQRT2 : Number(value); }
   function ebDraw(value) {
     var x=ebValue(value), exact=value==="root", x2=x*x;
-    var shown=exact?"√2":String(x), result=exact?"2":String(Number(x2.toFixed(6)));
+    var shown=exact?(ebAnswered?"√2":"x"):String(x), result=exact?"2":String(Number(x2.toFixed(6)));
     var col=exact?"var(--a)":(x2>2?"var(--no)":"var(--b)");
     ebSvg.innerHTML="";
     ["0小时","半小时","1小时"].forEach(function(label,i){
-      var y=15+i*120, valueText=i===0?"1 倍":i===1?shown+" 倍":result+" 倍";
+      var y=15+i*120, valueText=i===0?"1 倍":i===1?shown+" 倍":(ebAnswered ? result+" 倍" : "计算两次增长后数量");
       mk(ebSvg,"text",{x:10,y:y+44,"font-size":22,fill:"var(--muted)"}).textContent=label;
       mk(ebSvg,"rect",{x:100,y:y,width:390,height:80,rx:8,fill:"var(--card)",stroke:i===2?col:"var(--line)","stroke-width":2});
       mk(ebSvg,"text",{x:295,y:y+36,"text-anchor":"middle","font-size":28,fill:i===2?col:"var(--fg)","font-weight":700}).textContent=valueText;
-      mk(ebSvg,"text",{x:295,y:y+64,"text-anchor":"middle","font-size":20,fill:"var(--muted)"}).textContent=i===0?"相对当前数量":i===1?(exact?"√2 ≈ 1.414214":"候选增长倍数"):(exact?"√2 × √2 = 2":shown+" × "+shown+" = "+result);
+      mk(ebSvg,"text",{x:295,y:y+64,"text-anchor":"middle","font-size":20,fill:"var(--muted)"}).textContent=i===0?"相对当前数量":i===1?(exact?(ebAnswered?"√2 ≈ 1.414214":"这个正数的近似值是多少？"):"候选增长倍数"):(exact?(ebAnswered?"√2 × √2 = 2":"x × x = 2"):shown+" × "+shown+" = "+(ebAnswered?result:"?"));
       if(i<2)mk(ebSvg,"text",{x:295,y:y+105,"text-anchor":"middle","font-size":22,fill:col}).textContent="↓ 乘 "+shown;
     });
     [].forEach.call(ebBar.querySelectorAll("button"),function(b){b.classList.toggle("on",b.getAttribute("data-x")===String(value));});
-    ebNote.textContent=exact?"精确增长倍数是√2，两个半小时连乘正好为2；1.414只是近似值。":shown+"² = "+result+"，"+(x2>2?"比2偏大。":"比2偏小；不能把四舍五入后的2当作精确相等。");
+    ebNote.textContent=exact&&!ebAnswered?"找一个正数，让它连乘两次正好等于2。你估计它在哪两个小数之间？":exact?"精确增长倍数是√2，两个半小时连乘正好为2；1.414只是近似值。":shown+"² = "+result+"，"+(x2>2?"比2偏大。":"比2偏小；不能把四舍五入后的2当作精确相等。");
+    if (!ebAnswered && !exact) ebNote.textContent = "把候选倍数连续乘两次，与一小时变为 2 倍的条件比较。";
   }
   [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
     b.addEventListener("click", function () { ebDraw(b.getAttribute("data-x")); });
   });
   document.addEventListener("predict:pick", function (ev) {
     if (ev.detail && ev.detail.id === "entry") {
+      ebAnswered = true;
       var m = { A: 1.5, B: "root", C: 1, D: 2 };
       if (m[ev.detail.choice]) ebDraw(m[ev.detail.choice]);
     }
   });
   document.addEventListener("predict:reset", function (ev) {
-    if (ev.detail && ev.detail.id === "entry") ebDraw(1.5);
+    if (ev.detail && ev.detail.id === "entry") { ebAnswered = false; ebDraw(1.5); }
   });
 
   var started=false;

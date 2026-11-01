@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9c18ac034f36"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <script defer src="../assets/video.js"></script>
@@ -143,7 +143,7 @@ function initRemSolve(root) {
   if (!root) return;
   var NS = "http://www.w3.org/2000/svg";
   var P = window.PeiyuP;
-  var st = { scene: "box", n: 26, per: 6 };
+  var st = { scene: "box", n: 26, per: 4 };
 
   function el(tag, attrs, parent, text) {
     var e = document.createElementNS(NS, tag);
@@ -174,7 +174,7 @@ function initRemSolve(root) {
   ctr1.appendChild(bBox); ctr1.appendChild(bBuy);
 
   var bSub = hb("−1", function () { if (st.n > 17) { st.n--; draw(); } });
-  var bAdd = hb("+1", function () { if (st.n < 25) { st.n++; draw(); } });
+  var bAdd = hb("+1", function () { if (st.n < 26) { st.n++; draw(); } });
   var bReset = hb("重来", function () { st.scene = "box"; st.n = 23; draw(); });
   ctr2.appendChild(bSub); ctr2.appendChild(bAdd); ctr2.appendChild(bReset);
 
@@ -184,7 +184,7 @@ function initRemSolve(root) {
     bBox.setAttribute("aria-pressed", isBox ? "true" : "false");
     bBuy.setAttribute("aria-pressed", !isBox ? "true" : "false");
     bSub.disabled = T <= 17;
-    bAdd.disabled = T >= 25;
+    bAdd.disabled = T >= 26;
 
     el("rect", { x: 8, y: 6, width: 344, height: 116, rx: 10, style: "fill:var(--bg);stroke:var(--line);stroke-width:1.5" }, svg);
     var headTxt = isBox
@@ -194,23 +194,23 @@ function initRemSolve(root) {
 
     // 画出 q 个完整份
     for (var i = 0; i < q; i++) {
-      var bx = 14 + i * 50, by = 36;
-      el("rect", { x: bx, y: by, width: 44, height: 48, rx: 8, style: "fill:var(--ok-soft);stroke:var(--a);stroke-width:2" }, svg);
-      el("text", { x: bx + 22, y: by + 28, "text-anchor": "middle", style: "fill:var(--a);font-size:15px;font-weight:700" }, svg, isBox ? "4块" : "4元");
-      el("text", { x: bx + 22, y: by + 68, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, svg, (i + 1) + (isBox ? "盒" : "个"));
+      var bx = 14 + i * 46, by = 36;
+      el("rect", { x: bx, y: by, width: 40, height: 48, rx: 8, style: "fill:var(--ok-soft);stroke:var(--a);stroke-width:2" }, svg);
+      el("text", { x: bx + 20, y: by + 28, "text-anchor": "middle", style: "fill:var(--a);font-size:15px;font-weight:700" }, svg, isBox ? "4块" : "4元");
+      el("text", { x: bx + 20, y: by + 68, "text-anchor": "middle", style: "fill:var(--fg);font-size:15px;font-weight:700" }, svg, (i + 1) + (isBox ? "盒" : "个"));
     }
 
     // 余下的部分
     if (r > 0) {
-      var rx = 14 + q * 50, ry = 36;
+      var rx = 14 + q * 46, ry = 36;
       if (isBox) {
-        el("rect", { x: rx, y: ry, width: 52, height: 48, rx: 8, style: "fill:var(--hl-soft);stroke:var(--c);stroke-width:2.2" }, svg);
-        el("text", { x: rx + 26, y: ry + 28, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "余" + r + "块");
-        el("text", { x: rx + 26, y: ry + 68, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "+1盒！");
+        el("rect", { x: rx, y: ry, width: 44, height: 48, rx: 8, style: "fill:var(--hl-soft);stroke:var(--c);stroke-width:2.2" }, svg);
+        el("text", { x: rx + 22, y: ry + 28, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "余" + r + "块");
+        el("text", { x: rx + 22, y: ry + 68, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "+1盒！");
       } else {
-        el("rect", { x: rx, y: ry, width: 52, height: 48, rx: 8, style: "fill:none;stroke:var(--muted);stroke-width:2;stroke-dasharray:4 3" }, svg);
-        el("text", { x: rx + 26, y: ry + 28, "text-anchor": "middle", style: "fill:var(--muted);font-size:15px;font-weight:700" }, svg, "余" + r + "元");
-        el("text", { x: rx + 26, y: ry + 68, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "不够买");
+        el("rect", { x: rx, y: ry, width: 44, height: 48, rx: 8, style: "fill:none;stroke:var(--muted);stroke-width:2;stroke-dasharray:4 3" }, svg);
+        el("text", { x: rx + 22, y: ry + 28, "text-anchor": "middle", style: "fill:var(--muted);font-size:15px;font-weight:700" }, svg, "余" + r + "元");
+        el("text", { x: rx + 22, y: ry + 68, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "不够买");
       }
     }
 

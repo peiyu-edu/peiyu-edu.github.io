@@ -90,7 +90,7 @@
     host.innerHTML='<div class="lf-hero"><div class="lf-hero-text"><p class="lf-eyebrow">培玉高中数学</p><h1 class="lf-heading">'+(l?'接着上次，'+ink('往前学一步')+'。':'从一个问题开始，把数学'+ink('想明白')+'。')+'</h1><p class="lf-intro">顺着课程理解概念，遇到不清楚的地方查知识树，再用一道题检查自己的想法。</p><section class="lf-current"><p class="lf-eyebrow">'+(l?'继续学习':'从这里开始')+'</p><h2>'+esc(l?l.title:'集合的概念')+'</h2><p class="lf-note">'+(l?'上次停在第 '+step+' 步。你可以继续，也可以先复习一道题。':'先分清“哪些对象放在一起”，再认识集合与元素。')+'</p><div class="lf-actions"><a class="lf-button" href="'+esc(l?D.returnHref({from:l.id,step:step,question:resume.questionId||''}):D.url('lessons/b1-1-1.html#step1'))+'">'+(l?'继续这一节':'开始集合第一课')+'</a><a class="lf-button secondary" href="'+D.url('courses.html')+'">选择其他课程</a></div></section></div>'+heroClip()+'</div><section class="lf-next"><h2>学到哪里不清楚，就从哪里接上</h2><ol><li><b>想</b>在课程里想一想、试一试。</li><li><b>查</b>查知识卡，把使用条件看清楚。</li><li><b>验</b>答题后回看原因，隔一段时间再检验。</li></ol><a href="'+D.url('learning.html')+'">查看我的作答与复习记录 →</a></section><section><h2>先看这三个部分</h2><div class="lf-topic-list">'+topic('集合与逻辑','sets','b1-1-1','元素、集合关系、运算与条件判断。',clip('sets'))+topic('函数','functions','b1-3-1','定义域、对应关系、性质与图象。',clip('func'))+topic('概率统计','probability-statistics','b2-9-1','从数据到结论，从随机现象到概率。',clip('stats'))+'</div><p><a href="'+D.url('knowledge.html')+'">打开完整知识库</a>　<a href="'+D.url('practice.html')+'">选一个知识点练习</a></p></section>'+tools();motion(host);clips(host);
   }
   // 初中、小学首页的「学习工具」：卡片、图标与高中同一套，只换成本学段已有的工具。
-  function jTools(){return tools([!NO_KNOWLEDGE?['knowledge.html','lf-tool-wiki','知识点卡','按册、章、节查定义、条件和易错点，带着问题回到课里。',FIG.wiki]:['practice.html','lf-tool-wiki','练一练与中考真题','每节第 4 步从易到难，第 5 步是中考真题。',FIG.practice],['textbook-map.html','lf-tool-map','教材路线图','按人教版（2024 新版）的册、章、节排好，看清每一节在全书的位置。',FIG.route],['lessons/j6-1.html','lf-tool-lab','数学实验台','拖动滑块折正方体、拼勾股立柱、展开圆锥，在课里动手看。',FIG.lab]]);}
+  function jTools(){return tools([!NO_KNOWLEDGE?['knowledge.html','lf-tool-wiki','知识点卡','按册、章、节查定义、条件和易错点，带着问题回到课里。',FIG.wiki]:['practice.html','lf-tool-wiki','练一练与中考真题','每节第 4 步从易到难，第 5 步是中考真题。',FIG.practice],['textbook-map.html','lf-tool-map','教材路线图','按册、章、节排好，看清每一节在全书的位置。',FIG.route],['lessons/j6-1.html','lf-tool-lab','数学实验台','拖动滑块折正方体、拼勾股立柱、展开圆锥，在课里动手看。',FIG.lab]]);}
   function pConceptHref(data,gradeNo){if(data.index.knowledge && data.index.points.length){return {href:"knowledge.html?book=p"+gradeNo+"a",fallback:false,hasCard:true};}var cards=(data.index.search||[]).filter(function(x){return x.kind==='point';});function atGrade(n){return cards.find(function(x){return new URL(x.href,location.href).searchParams.get('grade')===String(n);});}var match=atGrade(gradeNo),hit=match,g;for(g=gradeNo-1;!hit&&g>=1;g--)hit=atGrade(g);for(g=gradeNo+1;!hit&&g<=6;g++)hit=atGrade(g);return {href:hit?hit.href.split('#')[0]:'knowledge.html',fallback:!match,hasCard:!!hit};}
   function pTools(data,gradeNo){var t=[['courses.html?grade=g'+gradeNo,'lf-tool-map','课程目录','按年级、册、单元排好，每课都能从上次那一步继续。',FIG.route],['practice.html?grade=g'+gradeNo,'lf-tool-lab','练一练与单元闯关','每课的练一练和每单元 10 道闯关题。',FIG.practice]];if(data.index.conceptCards){var concept=pConceptHref(data,gradeNo);t.unshift([concept.href,'lf-tool-wiki','概念与易错卡',concept.fallback?(concept.hasCard?'暂无本年级卡，先看看已有年级的示例。':'暂无本年级卡。'):'看图把容易混的地方说清，再试一题；低年级可以听一听。',FIG.wiki]);}return tools(t);}
   // 外壳渲染的课程树说明里可能有 \( \) 公式，和课页一样交给 KaTeX。
@@ -115,18 +115,17 @@
     function draw(book){selected=book;var one={index:{lessons:data.index.lessons.filter(function(l){return l.bookId===book;})}};
       host.innerHTML='<h1 class="lf-heading">'+heading+'</h1><p class="lf-intro">'+intro+'</p><div class="lf-courses">'+jBookNav(data,book)+'<div>'+jTree(one,done,withActions)+'</div></div>';typeset(host);
       host.querySelectorAll('[data-book]').forEach(function(a){a.addEventListener('click',function(e){if(e.ctrlKey||e.metaKey)return;e.preventDefault();history.replaceState(null,'','?book='+a.dataset.book);draw(a.dataset.book);});});
-    }draw(selected);
+    }draw(selected);scrollCatalogAnchor();
   }
   function jHome(data){
-    var host=document.querySelector('#learning-app'),snap=S.snapshot(),resume=snap.resume,done=jDone(snap);
+    var host=document.querySelector('#learning-app'),snap=S.snapshot(),resume=snap.resume;
     var sec=resume&&(resume.sectionId||resume.section),l=sec&&D.lesson(sec),step=resume&&resume.step||1;
-    var ready=data.index.lessons.filter(function(x){return x.ready;}),seen=ready.filter(function(x){return done[x.id];}).length;
     var parts=[['数与式','j1-2','从数轴看相反数，再学有理数的运算与代数式。','junior-numbers'],['方程与不等式','j5-1','从天平的平衡，看等式两边怎样一起变。','junior-equations'],['图形与坐标','j6-1','从立体图形出发，认识点、线、面与平面图形。','junior-geometry']];
-    host.innerHTML='<div class="lf-hero"><div class="lf-hero-text"><p class="lf-eyebrow">培玉初中数学 · 人教版</p><h1 class="lf-heading">'+(l?'接着上次，'+ink('往前学一步')+'。':'从身边的例子开始，把数学'+ink('想明白')+'。')+'</h1><p class="lf-intro">每一节都从一个人人能答的例子进入，讲清楚之后自己动手拖一拖，再用练一练和中考真题检验。</p><section class="lf-current"><p class="lf-eyebrow">'+(l?'继续学习':'从这里开始')+'</p><h2>'+esc(l?l.title:'1.1 正数和负数')+'</h2><p class="lf-note">'+(l?'上次停在第 '+step+' 步。你可以继续，也可以换一节。':'零上和零下、收入和支出——意思相反的两个量，怎样用数一眼分开？')+'</p><div class="lf-actions"><a class="lf-button" href="'+esc(l?D.returnHref({from:l.id,step:step,question:resume.questionId||''}):jLessonHref('j1-1',1))+'">'+(l?'继续这一节':'开始第一课')+'</a><a class="lf-button secondary" href="'+D.url('courses.html')+'">选择其他课程</a></div></section></div>'+jHeroFig()+'</div>'
+    host.innerHTML='<div class="lf-hero"><div class="lf-hero-text"><p class="lf-eyebrow">培玉初中数学</p><h1 class="lf-heading">'+(l?'接着上次，'+ink('往前学一步')+'。':'从身边的例子开始，把数学'+ink('想明白')+'。')+'</h1><p class="lf-intro">每一节都从一个人人能答的例子进入，讲清楚之后自己动手拖一拖，再用练一练和中考真题检验。</p><section class="lf-current"><p class="lf-eyebrow">'+(l?'继续学习':'从这里开始')+'</p><h2>'+esc(l?l.title:'1.1 正数和负数')+'</h2><p class="lf-note">'+(l?'上次停在第 '+step+' 步。你可以继续，也可以换一节。':'零上和零下、收入和支出——意思相反的两个量，怎样用数一眼分开？')+'</p><div class="lf-actions"><a class="lf-button" href="'+esc(l?D.returnHref({from:l.id,step:step,question:resume.questionId||''}):jLessonHref('j1-1',1))+'">'+(l?'继续这一节':'开始第一课')+'</a><a class="lf-button secondary" href="'+D.url('courses.html')+'">全部课程</a></div></section></div>'+jHeroFig()+'</div>'
       +'<section class="lf-next"><h2>每一节都是五步</h2><ol><li><b>例</b>从例子进入，先猜一猜。</li><li><b>讲</b>讲清楚，再自己试试。</li><li><b>验</b>动手、练一练、中考真题。</li></ol><a href="'+D.url('learning.html')+'">查看我的作答记录 →</a></section>'
       +'<section><h2>先看这三个部分</h2><div class="lf-topic-list">'+parts.map(function(p){var x=D.lesson(p[1]);return '<article class="lf-topic">'+clip(p[3])+'<h3>'+p[0]+'</h3><p>'+p[2]+'</p><div><a href="'+jLessonHref(p[1],1)+'">从'+esc(x?x.title.replace(/^[\d.]+\s*/,''):'第一节')+'开始</a></div></article>';}).join('')+'</div>'+(!NO_KNOWLEDGE?'<p><a href="'+D.url('knowledge.html')+'">按册、章、节查知识点 →</a></p>':'')+'</section>'
-      +'<section class="lf-jh-tree"><h2>全部课程</h2><p class="lf-note">已上线 '+ready.length+' / '+data.index.lessons.length+' 节'+(seen?'，你学过其中 '+seen+' 节':'')+'。按人教版（2024 新版）教材顺序。</p><div class="lf-courses">'+jBookNav(data,'')+'<div>'+jTree({index:{lessons:data.index.lessons.filter(function(x){return x.bookId===(jBooks(data)[0]||{}).id;})}},done,false)+'<p><a href="'+D.url('courses.html')+'">看全部册别 →</a></p></div></div></section>'+jTools();
-    host.querySelectorAll('.lf-book-nav a').forEach(function(a){a.href=D.url('courses.html?book='+a.dataset.book);});typeset(host);motion(host);clips(host);
+      +jTools();
+    typeset(host);motion(host);clips(host);
   }
   function jKnowledge(data){if(data.index.knowledge&&data.index.points.length)return;var host=document.querySelector('#learning-app');host.innerHTML='<h1 class="lf-heading">初中知识库建设中</h1><p class="lf-intro">初中的概念卡和知识树还在整理。现在可以按课程学习，每节都有「讲清楚」和练习。</p><p><a class="lf-button" href="'+D.url('courses.html')+'">去课程目录</a></p>';}
   /* ---------- 小学学段 ---------- */
@@ -198,32 +197,26 @@
     }).join('');
   }
   function pHome(data){
-    var host=document.querySelector('#learning-app'),snap=S.snapshot(),done=jDone(snap),unitMap=pUnitMap(data);
+    var host=document.querySelector('#learning-app'),snap=S.snapshot();
     var gradeId=pGetGrade(data,snap);
     function draw(gId){
       gradeId=gId;pSetGrade(gId);
       var gInfo=P_GRADES.find(function(g){return g[0]===gId;})||P_GRADES[0],gTitle=gInfo[1];
       var gRes=pGradeResume(data,snap,gId),first=pFirstReady(data,gId);
       var globalSec=snap.resume&&(snap.resume.sectionId||snap.resume.section),globalL=globalSec&&D.lesson(globalSec);
-      var gradeLessons=data.index.lessons.filter(function(x){return x.gradeId===gId;});
-      var books=[];gradeLessons.forEach(function(l){if(!books.some(function(b){return b.id===l.bookId;}))books.push({id:l.bookId,title:l.bookTitle});});
-      var activeBook=books[0]?books[0].id:('p'+gInfo[2]+'a');
-      var readyCount=data.index.lessons.filter(function(x){return x.ready;}).length,seenCount=data.index.lessons.filter(function(x){return x.ready&&done[x.id];}).length;
       var curEyebrow=gRes?'继续上次 · '+gTitle:'这学期学到这里 · '+(first?first.bookTitle+' '+first.unitTitle:gTitle);
       var curTitle=gRes?gRes.lesson.title:(first?first.title:gTitle+'第一课');
-      var curNote=gRes?('上次停在第 '+gRes.step+' 步。你可以接着往下学，也可以先做几道题。'):(first&&first.summary?first.summary:'先动手摆一摆、分一分，自己看清道理。');
+      var curNote=gRes?('上次停在第 '+gRes.step+' 步。你可以接着往下学，也可以先做几道题。'):'先动手摆一摆、画一画，再做一道题。';
       var curHref=gRes?D.returnHref({from:gRes.lesson.id,step:gRes.step,question:gRes.question}):(first?jLessonHref(first.id,1):D.url('courses.html?grade='+gId));
       var curBtn=gRes?'继续这一课':'从这一课开始';
-      var secBtn=gRes&&first&&first.id!==gRes.lesson.id
-        ?'<a class="lf-button secondary" href="'+jLessonHref(first.id,1)+'">这学期学到这里（'+esc(first.rawTitle||first.title)+'）</a>'
-        :(globalL&&globalL.gradeId!==gId?'<a class="lf-button secondary" href="'+esc(D.returnHref({from:globalL.id,step:snap.resume.step||1,question:snap.resume.questionId||''}))+'">继续上次（'+esc(globalL.gradeTitle+' · '+(globalL.rawTitle||globalL.title))+'）</a>':'<a class="lf-button secondary" href="'+D.url('courses.html?grade='+gId)+'">看'+gTitle+'全部课程</a>');
-      host.innerHTML='<div class="lf-hero"><div class="lf-hero-text"><p class="lf-eyebrow">培玉小学数学 · 人教版</p><h1 class="lf-heading">'+(gRes?'接着上次，'+ink('往前学一步')+'。':'先选年级，动手把数学'+ink('想明白')+'。')+'</h1><p class="lf-intro">先选孩子的年级。每一课都能亲手摆学具、画图、填数，做完一道马上知道对不对。</p>'
-        +pGradeNav(gId)+pParentNote(gId)
-        +'<section class="lf-current"><p class="lf-eyebrow">'+esc(curEyebrow)+'</p><h2>'+esc(curTitle)+'</h2><p class="lf-note">'+esc(curNote)+'</p><div class="lf-actions"><a class="lf-button" href="'+esc(curHref)+'">'+curBtn+'</a>'+secBtn+'<a class="lf-button secondary" href="'+D.url('practice.html?grade='+gId)+'">去单元练习</a></div></section></div>'+pHeroFig(gId)+'</div>'
+      var secBtn='<a class="lf-button secondary" href="'+D.url('courses.html?grade='+gId)+'">全部课程</a>';
+      var otherResume=globalL&&globalL.gradeId!==gId?'<p class="lf-note"><a href="'+esc(D.returnHref({from:globalL.id,step:snap.resume.step||1,question:snap.resume.questionId||''}))+'">继续上次（'+esc(globalL.gradeTitle+' · '+(globalL.rawTitle||globalL.title))+'）</a></p>':'';
+      host.innerHTML='<div class="lf-hero"><div class="lf-hero-text"><p class="lf-eyebrow">培玉小学数学</p><h1 class="lf-heading">'+(gRes?'接着上次，'+ink('往前学一步')+'。':'先选年级，动手把数学'+ink('想明白')+'。')+'</h1><p class="lf-intro">选好年级，摆学具、画图、填数，一步步想明白。</p>'
+        +'<label class="lf-home-grade" for="lf-home-grade">选择年级 <select id="lf-home-grade" data-home-grade>'+P_GRADES.map(function(g){return '<option value="'+g[0]+'"'+(g[0]===gId?' selected':'')+'>'+g[1]+'</option>';}).join('')+'</select></label>'
+        +'<section class="lf-current"><p class="lf-eyebrow">'+esc(curEyebrow)+'</p><h2>'+esc(curTitle)+'</h2><p class="lf-note">'+esc(curNote)+'</p><div class="lf-actions"><a class="lf-button" href="'+esc(curHref)+'">'+curBtn+'</a>'+secBtn+'</div>'+otherResume+'</section></div>'+pHeroFig(gId)+'</div>'
         +'<section class="lf-next"><h2>每一课都是四步</h2><ol><li><b>想</b>从生活例子猜一猜。</li><li><b>摆</b>动手摆学具，看清道理。</li><li><b>说</b>把关键一句话说清楚。</li><li><b>练</b>当堂练一练，低年级还有「在家玩」。</li></ol><a href="'+D.url('learning.html')+'">查看我的作答与复习记录 →</a></section>'
-        +pHomeTopics()+'<section class="lf-jh-tree"><h2>'+gTitle+'课程目录</h2><p class="lf-note">全站已上线 '+readyCount+' / '+data.index.lessons.length+' 课'+(seenCount?'，已学过 '+seenCount+' 课':'')+'。点击上方年级按钮可切换一至六年级。</p><div class="lf-courses"><nav class="lf-book-nav" aria-label="教材册别">'+books.map(function(b){var n=gradeLessons.filter(function(l){return l.bookId===b.id&&l.ready;}).length;return '<a href="?grade='+gId+'&book='+b.id+'" data-book="'+b.id+'"'+(b.id===activeBook?' aria-current="page"':'')+'>'+esc(b.title)+(n?'（已上线 '+n+' 课）':' · 待上线')+'</a>';}).join('')+'</nav><div data-ps-home-tree>'+pUnitTree(gradeLessons.filter(function(l){return l.bookId===activeBook;}),unitMap,done,'courses',activeBook)+'<p><a href="'+D.url('courses.html?grade='+gId)+'">打开完整课程页 →</a></p></div></div></section>'+pTools(data,gInfo[2]);motion(host);clips(host);
-      host.querySelectorAll('[data-grade]').forEach(function(btn){btn.addEventListener('click',function(){history.replaceState(null,'','?grade='+btn.dataset.grade);draw(btn.dataset.grade);});});
-      host.querySelectorAll('[data-book]').forEach(function(a){a.addEventListener('click',function(e){if(e.ctrlKey||e.metaKey)return;e.preventDefault();activeBook=a.dataset.book;host.querySelectorAll('[data-book]').forEach(function(x){if(x.dataset.book===activeBook)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current');});host.querySelector('[data-ps-home-tree]').innerHTML=pUnitTree(gradeLessons.filter(function(l){return l.bookId===activeBook;}),unitMap,done,'courses',activeBook)+'<p><a href="'+D.url('courses.html?grade='+gId+'&book='+activeBook)+'">打开完整课程页 →</a></p>';});});
+        +pParentNote(gId)+pHomeTopics()+pTools(data,gInfo[2]);motion(host);clips(host);
+      host.querySelectorAll('[data-home-grade]').forEach(function(select){select.addEventListener('change',function(){history.replaceState(null,'','?grade='+select.value);draw(select.value);var next=host.querySelector('[data-home-grade]');if(next)next.focus();});});
     }
     draw(gradeId);
   }
@@ -241,10 +234,26 @@
       host.querySelectorAll('[data-grade]').forEach(function(btn){btn.addEventListener('click',function(){var nextG=btn.dataset.grade;history.replaceState(null,'','?grade='+nextG);draw(nextG,null);});});
       host.querySelectorAll('[data-book]').forEach(function(a){a.addEventListener('click',function(e){if(e.ctrlKey||e.metaKey)return;e.preventDefault();history.replaceState(null,'','?grade='+gId+'&book='+a.dataset.book);draw(gId,a.dataset.book);});});
     }
-    draw(gradeId,initBook);
+    draw(gradeId,initBook);scrollCatalogAnchor();
+  }
+  // Catalog rows arrive asynchronously, after the browser's initial fragment scroll.
+  function scrollCatalogAnchor(){
+    var id;try{id=decodeURIComponent(location.hash.slice(1));}catch(e){return;}
+    var target=id&&document.getElementById(id);if(target)target.scrollIntoView({block:'start'});
+  }
+  function homeCatalogAnchor(data){
+    if(page!=='home'||(!PRIMARY&&!JUNIOR))return false;
+    var id;try{id=decodeURIComponent(location.hash.slice(1));}catch(e){return false;}
+    if(!id)return false;
+    var item=(data.index.units||[]).find(function(u){return u.id===id;})||data.index.lessons.find(function(l){return l.chapterId===id||l.unitId===id||l.bookId===id;});
+    if(!item)return false;
+    var query=new URLSearchParams();query.set('book',item.bookId);
+    if(PRIMARY)query.set('grade',item.gradeId||'g'+item.bookId[1]);
+    location.replace(D.url('courses.html?'+query.toString()+'#'+encodeURIComponent(id)));
+    return true;
   }
   function pKnowledge(){var host=document.querySelector('#learning-app');host.innerHTML='<h1 class="lf-heading">小学知识库建设中</h1><p class="lf-intro">小学的概念卡和知识梳理还在整理。现在可以按年级和单元学习，每课都有动手教具和练习。</p><p><a class="lf-button" href="'+D.url('courses.html')+'">去课程目录</a></p>';}
-  function tools(t){t=t||[['wiki.html','lf-tool-wiki','概念与方法卡','做题卡壳时速查：定义、公式、解题套路和易错红线。',FIG.wiki],['textbook-map.html','lf-tool-map','教材路线图','按人教 A 版的册、章、节排好，看清每一节在全书的位置。',FIG.route],['anatomy.html','lf-tool-lab','数学实验台','拖动滑块看立体图形怎么变，每节配一份可打印的 A4 讲义。',FIG.lab]];return '<section class="lf-tools" aria-labelledby="lf-tools-title"><h2 id="lf-tools-title">学习工具</h2><div class="lf-tool-list">'+t.map(function(x){return '<a class="lf-tool '+x[1]+'" href="'+D.url(x[0])+'"><span class="lf-tool-icon">'+x[4]+'</span><span class="lf-tool-body"><strong>'+x[2]+'</strong><span>'+x[3]+'</span></span><span class="lf-tool-go" aria-hidden="true">→</span></a>';}).join('')+'</div></section>';}
+  function tools(t){t=t||[['wiki.html','lf-tool-wiki','概念与方法卡','做题卡壳时速查：定义、公式、解题套路和易错红线。',FIG.wiki],['textbook-map.html','lf-tool-map','教材路线图','按册、章、节排好，看清每一节在全书的位置。',FIG.route],['anatomy.html','lf-tool-lab','数学实验台','拖动滑块看立体图形怎么变，每节配一份可打印的 A4 讲义。',FIG.lab]];return '<section class="lf-tools" aria-labelledby="lf-tools-title"><h2 id="lf-tools-title">学习工具</h2><div class="lf-tool-list">'+t.map(function(x){return '<a class="lf-tool '+x[1]+'" href="'+D.url(x[0])+'"><span class="lf-tool-icon">'+x[4]+'</span><span class="lf-tool-body"><strong>'+x[2]+'</strong><span>'+x[3]+'</span></span><span class="lf-tool-go" aria-hidden="true">→</span></a>';}).join('')+'</div></section>';}
   function resources(){return '<nav class="lf-resources" aria-label="补充学习资源"><a href="'+D.url('wiki.html')+'">概念与方法卡</a><a href="'+D.url('textbook-map.html')+'">教材路线图</a><a href="'+D.url('anatomy.html')+'">数学实验台</a></nav>';}
   function courses(data){
     var host=document.querySelector('#learning-app'), books=[];data.index.lessons.forEach(function(l){if(!books.some(function(b){return b.id===l.bookId;}))books.push({id:l.bookId,title:l.bookTitle});});
@@ -270,6 +279,19 @@
   function refreshNavTarget(event){var a=event.target.closest&&event.target.closest('.lf-nav a');if(!a)return;var name=new URL(a.href).pathname.split('/').pop();if(name==='knowledge.html'||name==='practice.html')a.href=contextualHref(name);}
   ['pointerdown','focusin','click','auxclick','contextmenu'].forEach(function(type){document.addEventListener(type,refreshNavTarget,true);});
   function storageNotice(snapshot){var warning=document.querySelector('.lf-memory-warning');if(!snapshot.storage.memoryOnly){if(warning)warning.hidden=true;return;}if(!warning){warning=document.createElement('p');warning.className='lf-memory-warning';warning.setAttribute('role','status');var top=document.querySelector('header');if(top)top.after(warning);else document.body.prepend(warning);}warning.hidden=false;warning.textContent='浏览器暂时无法保存新记录。本页仍可练习，但刷新或离开后，本次新记录可能丢失。';}
-  D.load().then(function(data){if((JUNIOR||PRIMARY)&&data.index.knowledge&&data.index.points.length){NO_KNOWLEDGE=false;nav=[['home','index.html','首页'],['courses','courses.html','课程'],['knowledge','knowledge.html','知识库'],['practice','practice.html','练习'],['record','learning.html','我的学习']];}if(PRIMARY&&data.index.conceptCards){nav=[['home','index.html','首页'],['courses','courses.html','课程'],['knowledge','knowledge.html','知识库'],['practice','practice.html','练习'],['record','learning.html','我的学习']];}storageNotice(S.load());S.subscribe(storageNotice);installNav();ensureSearch();document.addEventListener('step',function(){installNav();});document.querySelectorAll('[data-learning-search]').forEach(function(h){searchUI(h,data);});if(PRIMARY){if(page==='home')pHome(data);if(page==='courses'&&!document.body.dataset.sec)pBookPage(data,'按年级和单元，一步一步学','人教版教材顺序。先选年级，再选册别与单元，每课都能从上次那一步继续。','courses');if(page==='practice'&&(!data.index.knowledge||(!new URLSearchParams(location.search).has('point')&&!new URLSearchParams(location.search).has('section'))))pBookPage(data,'选一单元或一课练习','按单元列各课时的「练一练」和单元闯关入口。','practice');if(page==='knowledge'&&!data.index.knowledge&&!data.index.conceptCards)pKnowledge();if(!NO_KNOWLEDGE)knowledgeEvidence(data);return;}if(JUNIOR){if(page==='home')jHome(data);if(page==='courses'&&!document.body.dataset.sec)jBookPage(data,'按课程，一步一步学','人教版（2024 新版）教材顺序。每节都可以从原来的位置继续。',true);if(page==='practice')jBookPage(data,'选一节练习','每节第 4 步「练一练」从易到难，第 5 步是中考真题。',true);if(page==='knowledge')jKnowledge(data);if(!NO_KNOWLEDGE)knowledgeEvidence(data);return;}
+  D.load().then(function(data){if(homeCatalogAnchor(data))return;if(page==='home'&&(PRIMARY||JUNIOR))window.addEventListener('hashchange',function(){homeCatalogAnchor(data);});if((JUNIOR||PRIMARY)&&data.index.knowledge&&data.index.points.length){NO_KNOWLEDGE=false;nav=[['home','index.html','首页'],['courses','courses.html','课程'],['knowledge','knowledge.html','知识库'],['practice','practice.html','练习'],['record','learning.html','我的学习']];}if(PRIMARY&&data.index.conceptCards){nav=[['home','index.html','首页'],['courses','courses.html','课程'],['knowledge','knowledge.html','知识库'],['practice','practice.html','练习'],['record','learning.html','我的学习']];}storageNotice(S.load());S.subscribe(storageNotice);installNav();ensureSearch();document.addEventListener('step',function(){installNav();});document.querySelectorAll('[data-learning-search]').forEach(function(h){searchUI(h,data);});if(PRIMARY){if(page==='home')pHome(data);if(page==='courses'&&!document.body.dataset.sec)pBookPage(data,'按年级和单元，一步一步学','人教版教材顺序。先选年级，再选册别与单元，每课都能从上次那一步继续。','courses');if(page==='practice'&&(!data.index.knowledge||(!new URLSearchParams(location.search).has('point')&&!new URLSearchParams(location.search).has('section'))))pBookPage(data,'选一单元或一课练习','按单元列各课时的「练一练」和单元闯关入口。','practice');if(page==='knowledge'&&!data.index.knowledge&&!data.index.conceptCards)pKnowledge();if(!NO_KNOWLEDGE)knowledgeEvidence(data);return;}if(JUNIOR){if(page==='home')jHome(data);if(page==='courses'&&!document.body.dataset.sec)jBookPage(data,'按课程，一步一步学','人教版（2024 新版）教材顺序。每节都可以从原来的位置继续。',true);if(page==='practice')jBookPage(data,'选一节练习','每节第 4 步「练一练」从易到难，第 5 步是中考真题。',true);if(page==='knowledge')jKnowledge(data);if(!NO_KNOWLEDGE)knowledgeEvidence(data);return;}
     if(page==='home')home(data);if(page==='courses'&&!document.body.dataset.sec)courses(data);knowledgeEvidence(data);}).catch(function(e){var h=document.querySelector('#learning-app');if(h){var first=PRIMARY?'lessons/p1a-u2-1.html':JUNIOR?'lessons/j1-1.html':'lessons/b1-1-1.html';h.innerHTML='<p role="alert">'+esc(e.message)+'</p><p><a href="'+D.url(first)+'">'+(PRIMARY||JUNIOR?'先打开第一课':'先打开集合课程')+'</a>，或刷新后重试。</p>';}});
+})();
+
+/* PY-450: resolve beside the shared entrypoint, including junior asset mounts. */
+(function () {
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.currentScript || !document.currentScript.src || !document.createElement || !document.head) return;
+  var body = document.body;
+  if (/\/primary\//.test(window.location.pathname) || (body && body.dataset && (body.dataset.stage === 'primary' || body.dataset.wikiStage === 'primary' || /^p[1-6][ab]-/.test(body.dataset.sec || '')))) return;
+  if (/\/lab3d\//.test(window.location.pathname) || window.pyRadicalRequested) return;
+  window.pyRadicalRequested = true;
+  var script = document.createElement('script');
+  script.src = new URL('radical.js?v=py450-2', document.currentScript.src).href;
+  script.async = true;
+  document.head.appendChild(script);
 })();

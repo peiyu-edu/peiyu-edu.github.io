@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9c18ac034f36"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <script defer src="../assets/video.js"></script>
@@ -50,9 +50,9 @@
   <div class="manip" data-ck='{"mode":"cut","r":4}'></div>
   <p>分的份数越多，拼出的图形越接近长方形。红色的弧是上半圈，蓝色的弧是下半圈：</p>
   <div class="card">
-    <p class="line">长方形的长，相当于圆周长的<b>一半</b>，是 π<i>r</i>；</p>
+    <p class="line">长方形的长由哪些弧拼成？它相当于圆周长的几分之几？</p>
     <p class="line">长方形的宽，相当于圆的<b>半径</b> <i>r</i>；</p>
-    <p class="line">长方形的面积 = 长 × 宽，所以圆的面积 = π<i>r</i> × <i>r</i> = π<i>r</i>²。</p>
+    <p class="line">长方形的面积 = 长 × 宽。请根据拼图推导圆的面积公式。</p>
   </div>
   <p class="key-say line">用 <i>S</i> 表示圆的面积：<i>S</i> = π<i>r</i>²</p>
 
@@ -338,7 +338,7 @@ function circleKit(root, cfg) {
       if (k === 1 && st.on) {
         var L = lay(), right = L.X0 + L.c / 2 + st.n / 2 * L.c, top = Yb - L.hh;
         el("path", { d: "M" + L.X0 + " " + (top - 8) + " L" + L.X0 + " " + (top - 16) + " L" + (right - L.c / 2) + " " + (top - 16) + " L" + (right - L.c / 2) + " " + (top - 8), style: "fill:none;stroke:var(--no);stroke-width:2" }, gT);
-        txt(gT, (L.X0 + right - L.c / 2) / 2, top - 24, "长 ≈ 周长的一半 = πr", "fill:var(--no)");
+        txt(gT, (L.X0 + right - L.c / 2) / 2, top - 24, "长由哪些弧拼成？", "fill:var(--no)");
         txt(gT, L.X0 - 6, (top + Yb) / 2 - 4, "宽", "fill:var(--b)", "end"); txt(gT, L.X0 - 6, (top + Yb) / 2 + 16, "≈ r", "fill:var(--b)", "end");
       }
     }
@@ -357,10 +357,9 @@ function circleKit(root, cfg) {
     function say2() {
       var n = st.n;
       if (!st.on) { out(rd, "把圆平均分成 " + n + " 份：上半圈涂红，下半圈涂蓝。点「拼一拼」。", "把圆平均分成" + n + "份，上半圈涂红，下半圈涂蓝。"); rd2.innerHTML = ""; rd2.className = "read"; return; }
-      if (st.edge) { out(rd, "描一圈边：上面是红弧，下面是蓝弧，各是周长的一半；左右两边（绿虚线）是多出来的两条半径。拼好后周长变长了，面积没变。", "拼好后周长多了两条半径，变长了；面积没变。", "ok"); }
-      else out(rd, n === 8 ? "拼成的图形边是波浪形的，有点像平行四边形。再多分几份试试。" : n === 16 ? "分成 16 份，更像长方形了。" : "分成 32 份，已经很接近长方形了：长 ≈ 周长的一半，宽 ≈ 半径。", n === 32 ? "分的份数越多，拼出的图形越接近长方形。长大约是周长的一半，宽大约是半径。" : "再多分几份试试。", n === 32 ? "ok" : "");
-      var len = fmt(3.14 * rc);
-      out(rd2, "<i>r</i> = " + rc + " cm 时：长 ≈ 3.14 × " + rc + " = " + len + " cm，宽 ≈ " + rc + " cm，面积 ≈ " + len + " × " + rc + " = " + fmt(3.14 * rc * rc) + " cm²。小块只是换了位置，面积还是这个圆的面积。");
+      if (st.edge) { out(rd, "描一圈边：观察上面的红弧和下面的蓝弧，各由原圆的哪些部分组成？左右绿虚线标出了半径。", "再多分几份试试。", "ok"); }
+      else out(rd, n === 8 ? "拼成的图形边是波浪形的，有点像平行四边形。再多分几份试试。" : n === 16 ? "分成 16 份，更像长方形了。" : "分成 32 份，更接近长方形了。请比较长与圆周长、宽与半径。", "再多分几份试试。", n === 32 ? "ok" : "");
+      out(rd2, "<i>r</i> = " + rc + " cm。小块只是换了位置，面积没变。长和宽分别怎样用半径表示？", "再多分几份试试。");
     }
     build();
   }

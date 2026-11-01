@@ -8,8 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-af6283d9cbcf8e62"></script>
-<script defer src="../assets/lesson.js?v=sha256-ade58b890ce93bf9"></script>
+<script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
+<script defer src="../assets/lesson.js?v=sha256-88ce2abc58eede82"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-bc840972e87d"></script>
 <style>
@@ -18,7 +18,7 @@
   .result .bad { color: var(--no); font-weight: 700; }
   .ctrl output { min-width: 3em; font-weight: 600; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-2-2" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -471,7 +471,7 @@
     }
     for (var s = yStep; s <= YMAX; s += yStep) {
       svg("line", { x1: X0 - 5, y1: cy(s), x2: X0, y2: cy(s), stroke: fg }, cv);
-      svg("text", { x: X0 - 9, y: cy(s) + 5, "text-anchor": "end" }, cv).textContent = s;
+      svg("text", { x: X0 - 9, y: cy(s) + 5, "text-anchor": "end" }, cv).textContent = ewAnswered ? s : "?";
     }
     svg("text", { x: X1 + 4, y: Yb - 8, "text-anchor": "end" }, cv).textContent = "x";
     // 下界线
@@ -531,7 +531,7 @@
 
   /* ================= 0 从例子进入：铁丝围长方形 ================= */
   var ew = document.getElementById("entry-wire"), ewBar = document.getElementById("entry-wire-bar"), ewNote = document.getElementById("entry-wire-note");
-  var ewW = 7;
+  var ewW = 7, ewAnswered = false;
   function ewDraw(w) {
     ewW = w;
     var h = 10 - w, area = w * h, u = 24, ox = 48, oy = 172;
@@ -539,7 +539,7 @@
     ew.innerHTML = "";
     // 虚线参照：5x5 正方形
     svg("rect", { x: ox, y: oy - 5 * u, width: 5 * u, height: 5 * u, fill: "none", stroke: hl, "stroke-width": 1.8, "stroke-dasharray": "5 4" }, ew);
-    svg("text", { x: ox + 5 * u + 6, y: oy - 5 * u + 15, fill: hl, "font-size": 14 }, ew).textContent = "5×5 参照框 （25格）";
+    svg("text", { x: ox + 5 * u + 6, y: oy - 5 * u + 15, fill: hl, "font-size": 14 }, ew).textContent = "5×5 参照框";
     // 当前 w x h 方格网
     svg("rect", { x: ox, y: oy - h * u, width: w * u, height: h * u, fill: ok, stroke: ca, "stroke-width": 2.5 }, ew);
     for (var i = 1; i < w; i++) svg("line", { x1: ox + i * u, y1: oy - h * u, x2: ox + i * u, y2: oy, stroke: ca, "stroke-opacity": 0.35 }, ew);
@@ -554,13 +554,17 @@
       var cw = c[0], s = cw * c[1], active = cw === w, bh = s * 4.6, x = bx0 + idx * (bw + gap), y = oy - bh;
       var g = svg("g", { style: "cursor:pointer" }, ew);
       svg("rect", { x: x, y: y, width: bw, height: bh, rx: 5, fill: active ? (cw === 5 ? hl : ca) : card, stroke: active ? (cw === 5 ? hl : ca) : ln, "stroke-width": active ? 2 : 1.2 }, g);
-      svg("text", { x: x + bw / 2, y: y - 6, "text-anchor": "middle", "font-weight": active ? 700 : 400, fill: active ? fg : mu, "font-size": 15 }, g).textContent = s;
+      svg("text", { x: x + bw / 2, y: y - 6, "text-anchor": "middle", "font-weight": active ? 700 : 400, fill: active ? fg : mu, "font-size": 15 }, g).textContent = ewAnswered ? s : "?";
       svg("text", { x: x + bw / 2, y: oy + 20, "text-anchor": "middle", fill: active ? fg : mu, "font-size": 13.5, "font-weight": active ? 700 : 400 }, g).textContent = c[2].split(" ")[0]; // 只写字母：手机上字放大后「A 9×1」会互相压住，长×宽在按钮上
       g.onclick = function () { ewDraw(cw); };
     });
     [].forEach.call(ewBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", parseInt(b.getAttribute("data-w"), 10) === w);
     });
+    if (!ewAnswered) {
+      ewNote.textContent = "当前长 " + w + " cm，宽 " + h + " cm。用长乘宽计算，再比较四种围法。";
+      return;
+    }
     ewNote.innerHTML = "当前围法：长 <b>" + w + "</b> + 宽 <b>" + h + "</b> = 10 cm（和一定），面积 = <b>" + w + " × " + h + " = " + area + "</b> cm²（每个方格为 1 cm²）" + (w === 5 ? "（<b>正方形时面积最大！</b>）" : "");
   }
   [].forEach.call(ewBar.querySelectorAll("button"), function (b) {
@@ -568,12 +572,13 @@
   });
   document.addEventListener("predict:pick", function (ev) {
     if (ev.detail && ev.detail.id === "entry") {
+      ewAnswered = true;
       var map = { A: 9, B: 7, C: 6, D: 5 };
       if (map[ev.detail.choice]) ewDraw(map[ev.detail.choice]);
     }
   });
   document.addEventListener("predict:reset", function (ev) {
-    if (ev.detail && ev.detail.id === "entry") ewDraw(7);
+    if (ev.detail && ev.detail.id === "entry") { ewAnswered = false; ewDraw(7); }
   });
 
   /* ================= 讲清楚微图解 ①：算术平均 vs 几何平均 ================= */

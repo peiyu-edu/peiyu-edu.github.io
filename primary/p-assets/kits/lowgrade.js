@@ -745,10 +745,11 @@
       }
       var t = A.total, g = A.gone, l = t - g;
       if (op === "+") return [0, "问号问的是剩下的那部分，一共已经知道了，是 " + t + " 只。加起来会比一共还多，不对。从一共里去掉一些，用减号。"];
-      if (x === g && y === t) return [0, "减法第一个数写一共的 " + t + " 只。" + g + " 只里拿不出 " + t + " 只。"];
+      // Accept the target equation before diagnosing roles that can share a value.
+      if (x === t && y === g && z === l) return [1, "对了！" + t + " − " + g + " = " + l + "，还剩 " + l + " " + unit + "。"];
+      if (x === g && y === t && g !== t) return [0, "减法第一个数写一共的 " + t + " 只。" + g + " 只里拿不出 " + t + " 只。"];
       if (x === l && x !== t) return [0, "第一个数要写一共有几只：" + t + " 只，不是剩下的。"];
       if (x === t && y === l && z === g) return [0, A.seen ? "看得见的 " + g + " 只是走了的。剩下的藏起来了，问号在那儿。要从 " + t + " 只里去掉走了的 " + g + " 只。" : "问号在剩下的那部分上。要从 " + t + " 只里去掉走了的 " + g + " 只。"];
-      if (x === t && y === g && z === l) return [1, "对了！" + t + " − " + g + " = " + l + "，还剩 " + l + " " + unit + "。"];
       if (x === t && y === g) return [0, t + " 只去掉 " + g + " 只，还剩几只？倒着数时 " + t + " 不算。"];
       return [0, "先看图：一共有几只？走了几只？问号在哪儿？"];
     }

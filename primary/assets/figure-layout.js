@@ -164,7 +164,12 @@
   function request() {if(!queued){queued=true;queueMicrotask(function(){queued=false;if(window.Peiyu&&Peiyu.layoutNow)Peiyu.layoutNow();});}}
   window.PeiyuFigureLayout={prepare:prepare,fit:fit};
   var observer=new MutationObserver(function(records){
-    var change=records.some(function(r){return r.target===document.documentElement||(r.target.closest&&r.target.closest('svg')&&!r.target.closest('.katex'))||[].some.call(r.addedNodes,function(n){return n.nodeType===1&&!internal(n)&&(n.matches('svg')||n.querySelector('svg'));});});
+    var change=records.some(function(r){
+      // Display overlays do not change source geometry or require another layout.
+      if(r.target.closest&&r.target.closest('.py-radical'))return false;
+      if(r.type==='childList'&&[].every.call(r.addedNodes,function(n){return internal(n);})&&[].every.call(r.removedNodes,function(n){return internal(n);}))return false;
+      return r.target===document.documentElement||(r.target.closest&&r.target.closest('svg')&&!r.target.closest('.katex'))||[].some.call(r.addedNodes,function(n){return n.nodeType===1&&!internal(n)&&(n.matches('svg')||n.querySelector('svg'));});
+    });
     if(change)request();
   });
   observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['d','x','y','cx','cy','transform','style','class']});

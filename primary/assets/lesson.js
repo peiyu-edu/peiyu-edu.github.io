@@ -64,6 +64,19 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', start);
   else start();
 })();
+
+/* PY-450: resolve beside the shared entrypoint, including junior asset mounts. */
+(function () {
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.currentScript || !document.currentScript.src || !document.createElement || !document.head) return;
+  var body = document.body;
+  if (/\/primary\//.test(window.location.pathname) || (body && body.dataset && (body.dataset.stage === 'primary' || body.dataset.wikiStage === 'primary' || /^p[1-6][ab]-/.test(body.dataset.sec || '')))) return;
+  if (/\/lab3d\//.test(window.location.pathname) || window.pyRadicalRequested) return;
+  window.pyRadicalRequested = true;
+  var script = document.createElement('script');
+  script.src = new URL('radical.js?v=py450-2', document.currentScript.src).href;
+  script.async = true;
+  document.head.appendChild(script);
+})();
 /* END SHARED MATH CONFIG */
 /* 培玉 · 高中数学互动站 — 页面公共脚本：步骤切换、先猜、真题练习、做题记录、KaTeX。
    每节页面只需：<body data-sec="b1-1-3">，步骤写成 <section class="step" data-title="…">，
@@ -615,11 +628,11 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     math(document.body);
     log("open", {});
     var fl = document.createElement("script");
-    fl.src = "../assets/figure-layout.js?v=vs-ce77f522581e";
+    fl.src = "../assets/figure-layout.js?v=vs-05ca98460be7";
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");
-      ws.src = "../assets/wiki.js?v=vs-6b55a0fe0acb";
+      ws.src = "../assets/wiki.js?v=vs-657264a7da5d";
       document.head.appendChild(ws);
     }
     var hs = document.createElement("script"); // 交互层（PY-53）

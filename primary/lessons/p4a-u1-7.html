@@ -5,7 +5,7 @@
 <link rel="icon" href="../assets/logo.svg">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../p-assets/primary.css">
-<link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9cc5b21b7881"></script>
+<link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=9c18ac034f36"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 
@@ -205,12 +205,12 @@ document.addEventListener("DOMContentLoaded", function () {
         el("rect", { x: 186, y: 16, width: 96, height: 80, rx: 8, style: "fill:var(--a);stroke:var(--a);stroke-width:2" }, svg);
         el("text", { x: 234, y: 68, "text-anchor": "middle", style: "fill:#fff;font-size:30px;font-weight:700" }, svg, "万");
       }
-      el("text", { x: 180, y: 126, "text-anchor": "middle", style: "fill:var(--b);font-size:16px;font-weight:700" }, svg, c.raw + " = " + c.ans);
+      el("text", { x: 180, y: 126, "text-anchor": "middle", style: "fill:var(--b);font-size:16px;font-weight:700" }, svg, cur === 3 ? "按级改写：结果是多少亿？" : c.raw + " = " + c.ans);
     } else {
       /* 整亿数：亿级 + 万级 + 个级 */
       el("rect", { x: 12, y: 16, width: 112, height: 80, rx: 8, style: "fill:var(--no-soft);stroke:var(--no);stroke-width:2" }, svg);
       el("text", { x: 68, y: 40, "text-anchor": "middle", style: "fill:var(--no);font-size:15px;font-weight:700" }, svg, "亿级（保留）");
-      el("text", { x: 68, y: 78, "text-anchor": "middle", style: "fill:var(--fg);font-size:26px;font-weight:700" }, svg, c.yi);
+      el("text", { x: 68, y: 78, "text-anchor": "middle", style: "fill:var(--fg);font-size:26px;font-weight:700" }, svg, cur === 3 ? "？" : c.yi);
 
       if (!folded) {
         el("rect", { x: 132, y: 16, width: 106, height: 80, rx: 8, style: "fill:var(--hl-soft);stroke:var(--c);stroke-width:2;stroke-dasharray:5 3" }, svg);
@@ -224,13 +224,14 @@ document.addEventListener("DOMContentLoaded", function () {
         el("rect", { x: 132, y: 16, width: 104, height: 80, rx: 8, style: "fill:var(--no);stroke:var(--no);stroke-width:2" }, svg);
         el("text", { x: 184, y: 68, "text-anchor": "middle", style: "fill:#fff;font-size:30px;font-weight:700" }, svg, "亿");
       }
-      el("text", { x: 180, y: 126, "text-anchor": "middle", style: "fill:var(--b);font-size:16px;font-weight:700" }, svg, c.raw + " = " + c.ans);
+      el("text", { x: 180, y: 126, "text-anchor": "middle", style: "fill:var(--b);font-size:16px;font-weight:700" }, svg, cur === 3 ? "按级改写：结果是多少亿？" : c.raw + " = " + c.ans);
     }
 
     var keepZero = (isYi ? c.yi : c.wan).split("").filter(function (ch) { return ch === "0"; }).length;
     var note = keepZero ? "（注意：" + (isYi ? "亿级" : "万级") + "里面的 " + keepZero + " 个 0 必须留着，不能去掉！）" : "";
     out.innerHTML = "去掉" + (isYi ? "万级和个级的 <b>8 个 0</b>" : "个级的 <b>4 个 0</b>") + "，换成「<b>" + c.unit + "</b>」字：<b>" + c.raw + " = " + c.ans + "</b>" + note;
-    if (P) {
+    if (cur === 3) out.textContent = "先分级，再想一想：改写成用亿作单位的数，哪些零去掉，哪些零保留？";
+    if (P && cur !== 3) {
       var sayStr = c.raw + "等于" + c.ans;
       var sb = P.sayButton(sayStr);
       sb.addEventListener("click", function () { P.say(sayStr, sb); });

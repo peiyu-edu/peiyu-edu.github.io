@@ -170,6 +170,7 @@
     }
     var statusLabels = { wrong: "待巩固", feedback: "反馈后已改对", review: "需要回看", corrected: "已改正", hidden: "已收起" };
     function sourceText(q) { return { predict: "课内", card: "课内", diagnostic: stage === "high" ? "练习" : "诊断", exam: stage === "primary" ? "单元测评" : "章末测验" }[q.questionType] || "课内"; }
+    function typeset(node) { if (win.PeiyuKnowledge && win.PeiyuKnowledge.renderMath) win.PeiyuKnowledge.renderMath(node); return node; }
     function item(q) {
       var li = el("li", undefined, "lw-item"); li.dataset.identity = q.identity;
       append(li, el("h3", q.title), el("p", chapters ? statusLabels[wrongStatus(q)] : stateText(q), "lw-state"));
@@ -212,13 +213,13 @@
         var toggle = button("看提示", function () {
           var feedback = r.feedback && Object.prototype.hasOwnProperty.call(r.feedback, q.lastChoice) ? r.feedback[q.lastChoice] : null;
           hint.textContent = typeof feedback === "string" && feedback ? feedback : "这次没有对应的提示。可以回课时看看。";
-          hint.hidden = !hint.hidden; toggle.setAttribute("aria-expanded", String(!hint.hidden));
+          typeset(hint); hint.hidden = !hint.hidden; toggle.setAttribute("aria-expanded", String(!hint.hidden));
         });
         toggle.setAttribute("aria-expanded", "false"); actions.appendChild(toggle); li.appendChild(hint);
       }
       actions.appendChild(button(hidden[q.identity] ? "恢复" : "先收起", function () { setHidden(q.identity, !hidden[q.identity]); }));
       var speech = say(q.title + (stage === "primary" && r.prompt ? "。" + r.prompt : "")); if (speech) actions.appendChild(speech);
-      li.appendChild(actions); return li;
+      li.appendChild(actions); return typeset(li);
     }
     function today() {
       var section = el("section", undefined, "lw-today"); section.id = "lw-today";
@@ -272,7 +273,14 @@
         return delta || (a.identity < b.identity ? -1 : a.identity > b.identity ? 1 : 0);
       });
       var ul = el("ul", undefined, "lw-list"); shown.forEach(function (q) { ul.appendChild(item(q)); });
-      section.appendChild(shown.length ? ul : el("p", "这里暂时没有题。做过练习后再来看看。", "lw-note")); return section;
+      if (shown.length) section.appendChild(ul);
+      else if (stage === "high" && !model.wrongbook.length) {
+        // High school only indexes practice questions; lesson answers stay in 记录 (PY-328).
+        var practiceLink = el("a", "去练习页 →"); practiceLink.href = "practice.html";
+        section.appendChild(el("p", "这里暂时没有题。错题本只收知识库和练习页的题，课内题的作答记在「记录」里。", "lw-note"));
+        section.appendChild(append(el("p"), practiceLink));
+      } else section.appendChild(el("p", "这里暂时没有题。做过练习后再来看看。", "lw-note"));
+      return section;
     }
     function tier(p) {
       if (p.state === "unseen") return null;

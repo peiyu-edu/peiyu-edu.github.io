@@ -139,8 +139,7 @@
     var views = events.filter(function (event) { return event.kind === "view"; });
     var ratings = events.filter(function (event) { return event.kind === "self-rating"; });
     var visits = events.filter(function (event) { return event.kind === "review"; });
-    var noKnowledge = index && index.knowledge === false;
-    var review = (snapshot.review || []).filter(function (item) { return isUnitTest(item) ? !!lesson(item.sectionId.replace(/-test$/, "")) : point(item.pointId) || (noKnowledge && lesson(item.sectionId)); }).sort(function (a, b) { return number(a.dueAt || a.reviewDueAt) - number(b.dueAt || b.reviewDueAt); });
+    var review = (snapshot.review || []).filter(function (item) { return isUnitTest(item) ? !!lesson(item.sectionId.replace(/-test$/, "")) : point(item.pointId) || lesson(item.sectionId); }).sort(function (a, b) { return number(a.dueAt || a.reviewDueAt) - number(b.dueAt || b.reviewDueAt); });
     var due = review.filter(function (item) { return item.due === true || number(item.dueAt || item.reviewDueAt) <= Date.now(); });
     var future = review.filter(function (item) { return due.indexOf(item) < 0; });
     var resume = snapshot.resume && lesson(snapshot.resume.sectionId) ? snapshot.resume : null;

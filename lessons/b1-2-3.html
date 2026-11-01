@@ -8,8 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-af6283d9cbcf8e62"></script>
-<script defer src="../assets/lesson.js?v=sha256-ade58b890ce93bf9"></script>
+<script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
+<script defer src="../assets/lesson.js?v=sha256-88ce2abc58eede82"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-bc840972e87d"></script>
 <style>
@@ -28,7 +28,7 @@
   details.more { margin: 16px 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px 14px; background: var(--card); }
   details.more summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 </style>
-<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=b507a8a5e20e"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=66d3732a4c54"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=ed45644629d5"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=8d4de64286ab"></script><script defer src="../assets/learning-course.js?v=d2311e59068c"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body data-sec="b1-2-3" data-gaokao-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca" data-bank-revision="ab2effa3e4713053a0fa088ab0407c3dca2b48ebb2262cccd356d0cbee51faca">
 <div class="wrap">
@@ -38,15 +38,15 @@
 <p class="lead">一条抛物线，同时回答三个问题：方程 \(ax^2+bx+c=0\) 有哪些根，不等式 \(ax^2+bx+c>0\)（或 \(&lt;0\)）在哪里成立。看图读答案，比背表格可靠。这里 \(a\ne0\)；二次项系数为零时另按一次式或常数处理。先从抛一个球的简化模型开始。</p>
 
 <section class="step" data-title="从例子进入">
-  <p>用一个竖直抛球的简化模型：从抛出到落地只看 \(0\le t\le4\)，\(t\) 秒后的高度是 \(h=4t-t^2\)（米）。点下面不同时刻 \(t\)（或直接点图上的圆点），看小球高度和抛物线怎么对应：</p>
+  <p>用一个竖直抛球的简化模型：从抛出开始，观察 \(0\le t\le4\)，\(t\) 秒后的高度是 \(h=4t-t^2\)（米）。点下面不同时刻 \(t\)（或直接点图上的圆点），看小球高度和抛物线怎么对应：</p>
   <div class="card predict" data-id="entry" data-answer="D">
     <svg class="entry-fig" id="entry-ball" viewBox="0 0 520 200" role="img" aria-label="竖直抛球高度标尺与右侧抛物线轨迹h=4t-t平方同步演示"></svg>
     <div class="entry-bar" id="entry-ball-bar">
       <button type="button" data-t="0">t=0 刚抛出</button>
-      <button type="button" data-t="1">A t=1 (3m)</button>
-      <button type="button" data-t="2">B t=2 最高(4m)</button>
-      <button type="button" data-t="3">C t=3 (3m)</button>
-      <button type="button" data-t="4" class="on">D t=4 落地(0m)</button>
+      <button type="button" data-t="1">t=1 秒</button>
+      <button type="button" data-t="2">t=2 秒</button>
+      <button type="button" data-t="3">t=3 秒</button>
+      <button type="button" data-t="4" class="on">t=4 秒</button>
     </div>
     <div class="entry-note" id="entry-ball-note"></div>
     <p>下面哪一刻，球正好落回地面？</p>
@@ -714,7 +714,7 @@
 
   /* ---------- 0 从例子进入：竖直抛球与抛物线 ---------- */
   var ebSvg = document.getElementById("entry-ball"), ebBar = document.getElementById("entry-ball-bar"), ebNote = document.getElementById("entry-ball-note");
-  var ebT = 2;
+  var ebT = 2, ebAnswered = false;
   function ebDraw(tVal) {
     ebT = tVal;
     var hVal = 4 * tVal - tVal * tVal;
@@ -764,12 +764,14 @@
 
     // 左侧小球实体
     svg("circle", { cx: bx, cy: by, r: 12, fill: hVal === 0 ? no : hl, stroke: card, "stroke-width": 2.5 }, ebSvg);
-    svg("text", { x: bx, y: gy + 22, "text-anchor": "middle", "font-weight": 700, fill: hVal === 0 ? no : ca, "font-size": 13.5 }, ebSvg).textContent = "h = " + hVal + " m";
+    svg("text", { x: bx, y: gy + 22, "text-anchor": "middle", "font-weight": 700, fill: hVal === 0 ? no : ca, "font-size": 13.5 }, ebSvg).textContent = ebAnswered ? "h = " + hVal + " m" : "h = ? m";
 
     [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", parseInt(b.getAttribute("data-t"), 10) === tVal);
     });
-    if (tVal === 4) {
+    if (!ebAnswered) {
+      ebNote.textContent = "当前 t = " + tVal + " 秒。代入 h = 4t − t²，判断小球是否回到地面。";
+    } else if (tVal === 4) {
       ebNote.innerHTML = "当 <b>t = 4 秒</b> 时：<b>h = 4×4 − 4² = 16 − 16 = 0 米</b>，小球<b>正好落回地面</b>（对应抛物线与横轴交点）！";
     } else if (tVal === 0) {
       ebNote.innerHTML = "当 <b>t = 0 秒</b> 时：<b>h = 0 米</b>，小球刚从地面抛出。";
@@ -778,18 +780,20 @@
     } else {
       ebNote.innerHTML = "当 <b>t = " + tVal + " 秒</b> 时：<b>h = 4×" + tVal + " − " + tVal + "² = 3 米 > 0</b>，小球还在空中 3 米处。";
     }
+    if (!ebAnswered) ebNote.textContent = "当前时刻是 t = " + tVal + " 秒。对照图象，并代入 h = 4t − t²，判断是否回到地面。";
   }
   [].forEach.call(ebBar.querySelectorAll("button"), function (b) {
     b.onclick = function () { ebDraw(parseInt(b.getAttribute("data-t"), 10)); };
   });
   document.addEventListener("predict:pick", function (ev) {
     if (ev.detail && ev.detail.id === "entry") {
+      ebAnswered = true;
       var map = { A: 1, B: 2, C: 3, D: 4 };
       if (map[ev.detail.choice]) ebDraw(map[ev.detail.choice]);
     }
   });
   document.addEventListener("predict:reset", function (ev) {
-    if (ev.detail && ev.detail.id === "entry") ebDraw(2);
+    if (ev.detail && ev.detail.id === "entry") { ebAnswered = false; ebDraw(2); }
   });
 
   document.addEventListener("DOMContentLoaded", function () { ebDraw(2); draw(); mReset(); initStep2(); });

@@ -251,3 +251,16 @@
   });
   window.PeiyuKnowledge = { stage: primary ? "primary" : junior ? "junior" : "high", availableInSection: availableInSection, load: load, renderPoint: renderPoint, getStatus: getStatus, pointHref: pointHref, renderMath: renderMath };
 })();
+
+/* PY-450: resolve beside the shared entrypoint, including junior asset mounts. */
+(function () {
+  if (typeof window === 'undefined' || typeof document === 'undefined' || !document.currentScript || !document.currentScript.src || !document.createElement || !document.head) return;
+  var body = document.body;
+  if (/\/primary\//.test(window.location.pathname) || (body && body.dataset && (body.dataset.stage === 'primary' || body.dataset.wikiStage === 'primary' || /^p[1-6][ab]-/.test(body.dataset.sec || '')))) return;
+  if (/\/lab3d\//.test(window.location.pathname) || window.pyRadicalRequested) return;
+  window.pyRadicalRequested = true;
+  var script = document.createElement('script');
+  script.src = new URL('radical.js?v=py450-2', document.currentScript.src).href;
+  script.async = true;
+  document.head.appendChild(script);
+})();

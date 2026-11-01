@@ -35,7 +35,7 @@ const modes = {
       ];
     },
     note: (p, sc) => (sc.r.rel === 'parallel' ? '\\(E\\) 是 \\(PC\\) 中点：\\(OE\\) 是 \\(\\triangle PAC\\) 的中位线，\\(OE\\parallel PA\\)，所以 \\(PA\\parallel\\) 平面 \\(BDE\\)。'
-      : '\\(E\\) 不是中点时 \\(OE\\) 与 \\(PA\\) 不平行，\\(PA\\) 会穿过平面 \\(BDE\\)。'),
+      : '观察当前读数：两条线是否平行？移动 E，寻找线面平行成立的位置。'),
     tags: ['P', 'A', 'B', 'C', 'D', 'O', 'E'],
     callouts: [
       { id: 'pa', title: '直线 PA', text: '在平面 BDE 外', at: 'pa', dx: -150, dy: -40 },
@@ -44,7 +44,7 @@ const modes = {
     ],
     def: String.raw`<h3>直线与平面平行的判定</h3>
       <p class="def">如果<b>平面外</b>一条直线与此平面<b>内</b>的一条直线平行，那么该直线与此平面平行。<br>\(a\not\subset\alpha,\ b\subset\alpha,\ a\parallel b\Rightarrow a\parallel\alpha\)</p>
-      <p>四棱锥 \(P\text{-}ABCD\) 的底面是正方形，\(O\) 是 \(AC\)、\(BD\) 的交点，\(E\) 在 \(PC\) 上。要证 \(PA\parallel\) 平面 \(BDE\)，就在平面 \(BDE\) 里找一条和 \(PA\) 平行的线：\(O\) 是 \(AC\) 中点，只有 \(E\) 也是 \(PC\) 中点时，\(OE\) 才是 \(\triangle PAC\) 的中位线，\(OE\parallel PA\)。</p>
+      <p>四棱锥 \(P\text{-}ABCD\) 的底面是正方形，\(O\) 是 \(AC\)、\(BD\) 的交点，\(E\) 在 \(PC\) 上。先找平面 \(PAC\) 与平面 \(BDE\) 的交线，再用三角形中平行线分线段成比例，推求 \(E\) 的位置。</p>
       <p><b>性质定理</b>：一条直线与一个平面平行，如果过该直线的平面与此平面相交，那么该直线与交线平行。</p>`,
   },
   pp: {

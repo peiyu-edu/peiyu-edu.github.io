@@ -266,7 +266,7 @@
       const targetBody = q.concentric
         ? `<p class="formula">${q.relation === 'coincident' ? '两圆重合：全平面 Pow₁(P)=Pow₂(P)，不存在唯一根轴（x₀ 无唯一值）' : `同心无根轴：Pow₁(P)−Pow₂(P) = ${fmt(q.powerGap)} ≠ 0（有限平面内不存在根轴 x₀）`}</p>`
         : `<p class="formula">根轴 x₀ = ${fmt(q.radicalX)}；Pow₁(P)=Pow₂(P)=${fmt(q.pow1)}</p><p>幂差 Pow₁(P)−Pow₂(P) = ${fmt(q.powerGap)}${q.radicalCenter ? `<br>三圆根心 R=(${fmt(q.radicalCenter[0])}, ${fmt(q.radicalCenter[1])})，三圆等幂=${fmt(q.centerPowers[0])}` : ''}</p>`;
-      read = `<p>圆心 O₁=(${fmt(q.O1[0])}, 0)，O₂=(${fmt(q.O2[0])}, 0)<br>位置关系：${relMap[q.relation]}</p><p>测试点 P=(${fmt(q.P[0])}, ${fmt(q.P[1])})${tangentNote}</p>${target(targetBody)}`;
+      read = `<p>圆心 O₁=(${fmt(q.O1[0])}, 0)，O₂=(${fmt(q.O2[0])}, 0)<br>位置关系：${relMap[q.relation]}</p><p>测试点 P 的纵坐标 y=${fmt(q.P[1])}${tangentNote}</p>${target(`<p>测试点 P=(${fmt(q.P[0])}, ${fmt(q.P[1])})</p>${targetBody}`)}`;
       legend = '绿圆 ω₁、蓝圆 ω₂、虚线圆 ω₃；棕色竖线为 ω₁ 与 ω₂ 的根轴，R 为三圆根心。可拖动 O₂ 改变圆心距 d，或拖动 P 沿根轴上下移动。';
       if (q.concentric) {
         expected = null;

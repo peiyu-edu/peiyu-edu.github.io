@@ -158,7 +158,7 @@ const modes = {
       const d = G.dot(sc.u, sc.v);
       return Math.abs(d) < 1e-9
         ? '数量积 \\(=0\\)，\\(\\overrightarrow{AE}\\perp\\overrightarrow{DF}\\)：\\(E\\) 正好是 \\(CC_1\\) 的中点。'
-        : `\\(2\\cdot1+2\\cdot(-2)+t\\cdot2=2t-2\\)，现在 \\(t=${c1(p.t)}\\)，数量积 \\(${d > 0 ? '>' : '<'}0\\)，夹角是${d > 0 ? '锐' : '钝'}角。`;
+        : `当前数量积 \\(${c1(d)}\\)，夹角是${d > 0 ? '锐' : '钝'}角。先列数量积为零的方程，再检验解是否在棱上。`;
     },
     tags: ['A', 'B', 'C', 'D', 'A1', 'B1', 'C1', 'D1', 'E', 'F'],
     callouts: [
@@ -168,7 +168,7 @@ const modes = {
     def: String.raw`<h3>垂直与平行的坐标条件</h3>
       <p class="def">设 \(\boldsymbol a=(a_1,a_2,a_3)\)，\(\boldsymbol b=(b_1,b_2,b_3)\)，则<br>\(\boldsymbol a\perp\boldsymbol b\iff a_1b_1+a_2b_2+a_3b_3=0\)；<br>\(\boldsymbol a\parallel\boldsymbol b\,(\boldsymbol b\ne\boldsymbol0)\iff \boldsymbol a=\lambda\boldsymbol b\)。</p>
       <p>正方体 \(ABCD\text{-}A_1B_1C_1D_1\) 棱长 2，\(E\) 在 \(CC_1\) 上，\(CE=t\)，\(F\) 是 \(A_1B_1\) 的中点。以 \(A\) 为原点建系：\(\overrightarrow{AE}=(2,2,t)\)，\(\overrightarrow{DF}=(1,-2,2)\)。</p>
-      <p class="l3-note">数量积 \(=2t-2\)，所以 \(t=1\) 时垂直。不建系就要找辅助线，建系后只是解一个一次方程。</p>`,
+      <p class="l3-note">按坐标计算数量积，令它等于零，求出参数后检查是否落在棱上的取值范围。</p>`,
   },
 };
 

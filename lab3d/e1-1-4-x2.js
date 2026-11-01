@@ -24,7 +24,7 @@ function projection(Q, X) {
 
 const modes = {
   dist: {
-    name: '求距离', params: { s: 2, u: 0, v: 0, st: '1' },
+    name: '求距离', params: { s: 1.5, u: 0, v: 0, st: '1' },
     selects: [{ key: 'st', label: '作图步骤', options: [['1', '① 点 C₁ 和平面 A₁BD'], ['2', '② 面内取一点 Q，连 QC₁'], ['3', '③ QC₁ 在 n 上的投影'], ['4', '④ 投影长 = 距离']] }],
     sliders: [SIDE, ['u', 'Q 沿 DB 走 u', 0, 1, 0.05], ['v', 'Q 沿 DA₁ 走 v', 0, 1, 0.05]],
     buttons: [
@@ -72,13 +72,13 @@ const modes = {
       { id: 'qx', title: 'QC₁', text: 'Q 在面内随便取', at: 'qx', dx: -170, dy: 40, when: at(2) },
       { id: 'qr', title: '投影长 = d', text: '|QC₁·n| / |n|', at: 'qr', dx: 150, dy: 60, when: at(3) },
     ],
-    def: String.raw`<h3>例 3 点到平面的距离</h3>
+    def: String.raw`<h3>例 3 点到平面的距离</h3><p class="l3-note">模型初始棱长为 1.5；以下练习另取棱长 2，请按练习条件计算。</p>
       <p class="def">棱长为 \(2\) 的正方体中，求点 \(C_1\) 到平面 \(A_1BD\) 的距离。</p>
-      <p>面内取 \(D\)：\(\overrightarrow{DC_1}=(0,2,2)\)，\(\overrightarrow{DC_1}\cdot\boldsymbol n=-4\)，\(d=\dfrac{|-4|}{\sqrt3}=\dfrac{4\sqrt3}{3}\)。换成 \(B\)：\(\overrightarrow{BC_1}=(-2,0,2)\)，点积还是 \(-4\)。</p>
+      <p>面内取一点，写出从该点指向 \(C_1\) 的向量，求它与法向量的数量积，再除以法向量的模。换成另一面内点，独立算一次作比较。</p>
       <p class="l3-note">公式就是“\(\overrightarrow{QC_1}\) 在法向量上投影的长度”。拖动 \(Q\) 看：投影长不变，和直接量的垂线段 \(C_1H\) 一样长。</p>`,
   },
   pts: {
-    name: '换一个点', params: { s: 2, x: 'C1' },
+    name: '换一个点', params: { s: 1.5, x: 'C1' },
     selects: [{ key: 'x', label: '到平面 A₁BD 的点', options: [['C1', '点 C₁'], ['A', '点 A'], ['C', '点 C'], ['B1', '点 B₁'], ['D1', '点 D₁']] }],
     sliders: [SIDE],
     scene(p) {

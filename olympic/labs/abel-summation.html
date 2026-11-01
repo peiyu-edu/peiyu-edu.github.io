@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>阿贝尔分部求和 · 有向面积实验</title><style>a{color:inherit;text-underline-offset:.18em}nav[aria-label="实验导航"]{margin-block:0 1rem}</style>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/labs/abel-summation/style.css">
+  <script type="module" src="../assets/labs/abel-summation/app.mjs"></script>
+</head>
+<body>
+<main class="lab" data-lab="abel-summation">
+  <header><nav aria-label="实验导航"><a class="brand" href="index.html">全部互动实验</a></nav>
+    <p class="eyebrow">FR022 · 数列 / 有限和 · 互动实验</p>
+    <button id="theme" type="button">切换深浅色</button>
+    <h1>把竖条的和，<br>换成横层的和。</h1>
+    <p class="intro">拖动参数，看阶梯矩形如何沿另一方向分解。遇到负项，就用有方向的宽与高计算面积。</p>
+  <a class="pill" href="../search.html">搜索</a></header>
+
+  <section class="card" aria-labelledby="setup-title">
+    <h2 id="setup-title">01 / 造一组数列</h2>
+    <form id="parameters">
+      <div class="controls">
+        <label for="count">项数 N <output id="count-value"></output><input id="count" type="range" min="0" max="12" step="1" value="5"></label>
+        <label for="a-kind">a 的形状<select id="a-kind"><option value="arithmetic">α + d(k − 1)</option><option value="alternating">α(−1)ᵏ⁻¹</option></select></label>
+        <label for="alpha">α <output id="alpha-value"></output><input id="alpha" type="range" min="-4" max="4" step="0.5" value="2"></label>
+        <label for="delta">d <output id="delta-value"></output><input id="delta" type="range" min="-3" max="3" step="0.5" value="-0.5"></label>
+        <label for="b-kind">b 的形状<select id="b-kind"><option value="arithmetic">β + e(k − 1)</option><option value="geometric">βqᵏ⁻¹</option><option value="reciprocal">β / k</option></select></label>
+        <label for="beta">β <output id="beta-value"></output><input id="beta" type="range" min="-4" max="4" step="0.5" value="3"></label>
+        <label for="step">e <output id="step-value"></output><input id="step" type="range" min="-3" max="3" step="0.5" value="-1"></label>
+        <label for="ratio">q <output id="ratio-value"></output><input id="ratio" type="range" min="-2" max="2" step="0.25" value="0.5"></label>
+      </div>
+      <button type="reset">恢复初始参数</button>
+    </form>
+    <details>
+      <summary>改用自定义数列</summary>
+      <p>两列等长，0 至 12 项，每项绝对值不超过 1000；空白列表示 N = 0。用逗号或空格分隔。</p>
+      <form id="custom">
+        <label for="a-input">a₁, …, aₙ<textarea id="a-input" rows="2" spellcheck="false"></textarea></label>
+        <label for="b-input">b₁, …, bₙ<textarea id="b-input" rows="2" spellcheck="false"></textarea></label>
+        <button type="submit">应用自定义数列</button>
+      </form>
+    </details>
+    <p id="input-error" role="alert"></p>
+    <p id="source-note"></p>
+    <div class="controls interval">
+      <label for="start">起点 m<input id="start" type="number" min="1" step="1" value="1"></label>
+      <label for="end">终点 n<input id="end" type="number" min="0" step="1" value="5"></label>
+      <label for="basis">横轴部分和<select id="basis"><option value="global">全局 Aₖ = a₁ + … + aₖ</option><option value="local">区间 Bₖ = aₘ + … + aₖ</option></select></label>
+    </div>
+    <p>允许 m = n + 1，表示空和；n = m 时只有一项。改变起点时，终点会自动调整到合法范围。</p>
+  </section>
+
+  <section class="card" aria-labelledby="area-title">
+    <h2 id="area-title">02 / 两个方向，同一有向总量</h2>
+    <p id="formula" class="formula"></p>
+    <p id="empty-note"></p>
+    <div class="legend"><span class="positive">实线 / 正贡献</span><span class="negative">虚线 / 负贡献</span><span>灰线 / 零贡献</span></div>
+    <p>两图采用同一坐标比例。竖条允许向左，横层允许向下；重叠区域按每块的符号累加，不能只看涂色并集。</p>
+    <div class="plots">
+      <figure><figcaption>竖向分条 / aₖ · bₖ</figcaption><svg id="direct-plot" viewBox="0 0 520 350" role="img" aria-labelledby="direct-title direct-desc"><title id="direct-title">直接求和的有向矩形</title><desc id="direct-desc">每块从前一个部分和走到当前部分和，高度从零到 b。颜色和线型表示贡献符号。</desc></svg></figure>
+      <figure><figcaption>横向分层 / 边界 + 差分</figcaption><svg id="abel-plot" viewBox="0 0 520 350" role="img" aria-labelledby="abel-title abel-desc"><title id="abel-title">分部求和的有向矩形</title><desc id="abel-desc">显示末边界、全局约定下的起点扣除项，以及相邻 b 之间的横层。每块的正负按系数乘有向宽乘有向高确定。</desc></svg></figure>
+    </div>
+    <label for="focus">逐块查看：竖条下标 k <output id="focus-value"></output><input id="focus" type="range" min="1" max="5" step="1" value="1"></label>
+    <p id="focus-note"></p>
+    <p id="boundary-note"></p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="数列与部分和表，可横向滚动"><table><thead><tr><th>k</th><th>aₖ</th><th>bₖ</th><th id="partial-heading">Aₖ</th><th>aₖbₖ</th></tr></thead><tbody id="sequence-rows"></tbody></table></div>
+  </section>
+
+  <section class="card prediction" aria-labelledby="prediction-title">
+    <h2 id="prediction-title">03 / 先预测，再核对</h2>
+    <p>预测当前区间 Σ aₖbₖ 的数值。总量与各块面积在预测吻合后显示；参数改变会清空预测和读数。</p>
+    <form id="prediction">
+      <label for="answer">你的预测<input id="answer" type="text" inputmode="decimal" autocomplete="off" placeholder="输入数值，支持科学记数法"></label>
+      <button type="submit">核对预测</button>
+    </form>
+    <p id="feedback" role="status"></p>
+    <div id="results" hidden>
+      <dl><div><dt>直接求和</dt><dd id="direct-value"></dd></div><div><dt>独立分部和</dt><dd id="abel-value"></dd></div><div><dt>浮点残差</dt><dd id="residual-value"></dd></div></dl>
+      <p id="decomposition"></p>
+    </div>
+  </section>
+
+  <section class="card theory" aria-labelledby="proof-title">
+    <h2 id="proof-title">04 / 为什么可以换方向？</h2>
+    <p>设 N ≥ 0，a₁,…,a<sub>N</sub> 与 b₁,…,b<sub>N</sub> 为任意有限实数列，A₀ = 0，Aₖ = Σⱼ₌₁ᵏ aⱼ。对整数 1 ≤ m ≤ n ≤ N：</p>
+    <p class="formula">Σₖ₌ₘⁿ aₖbₖ = Aₙbₙ − Aₘ₋₁bₘ + Σₖ₌ₘⁿ⁻¹ Aₖ(bₖ − bₖ₊₁)</p>
+    <p>由 aₖ = Aₖ − Aₖ₋₁，展开为 Σ Aₖbₖ − Σ Aₖ₋₁bₖ。将第二个和的下标改为 j = k − 1，它从 m − 1 到 n − 1；配对中间项，剩下末项 Aₙbₙ 与起点扣除项 −Aₘ₋₁bₘ。这就是离散的分部积分。</p>
+    <p>若改用 Bₘ₋₁ = 0、Bₖ = Σⱼ₌ₘᵏ aⱼ = Aₖ − Aₘ₋₁，则公式变为：</p>
+    <p class="formula">Σₖ₌ₘⁿ aₖbₖ = Bₙbₙ + Σₖ₌ₘⁿ⁻¹ Bₖ(bₖ − bₖ₊₁)</p>
+    <p>两种部分和不能混用。n = m 时差分和为空，公式退为 (Aₘ − Aₘ₋₁)bₘ = aₘbₘ。m = n + 1 时原和为 0，本实验直接返回空图与 0，不套用非空区间的边界公式，也不读取不存在的 b₀ 或 bₙ₊₁。</p>
+    <p>图解中令 P 表示当前选用的 A 或 B。左图第 k 块为 [Pₖ₋₁ → Pₖ] × [0 → bₖ]，有向面积 aₖbₖ。右图末矩形为 [0 → Pₙ] × [0 → bₙ]；横层为 [0 → Pₖ] × [bₖ₊₁ → bₖ]；全局约定还须减去 [0 → Aₘ₋₁] × [0 → bₘ]。一般矩形按 c(x₁ − x₀)(y₁ − y₀) 计贡献，c 为显示的系数；宽高都负时贡献为正。负项、零宽与零高都合法；不要求单调、非负或无重叠。</p>
+    <p>当 a 非负且 b 非负递减、m = 1 时，矩形较容易看作普通阶梯区域；超出这些条件就须保留方向。此处只讨论有限恒等式，不据此断言无穷级数收敛。</p>
+  </section>
+  <footer>原创互动实验 · 不计分，不保存学习记录 · 所有资源在本地</footer>
+</main>
+</body>
+<script type="application/json" id="lab-meta">{"id": "abel-summation", "title": "阿贝尔分部求和与面积对偶", "topic": "FR022", "related_topics": [], "status": "published", "author": "rog/codex", "batch": "PY-149-integration", "original": true, "independent_review": {"status": "passed", "by": "Codex (dsp-rog10), PY-149 independent mathematical review"}, "page": "abel-summation.html", "persistence": "none", "resources": "local-only", "check": "调整条件，先作预测，再核对；条件改变后重新预测。", "numeric_check": "trial/PY-149/labs/abel-summation/numeric-check.mjs", "review_evidence": {"sha": "9771d5f130703ba81da2852ccbf126b7853a58d1", "report": "s149-abel-summation-r/review.md"}}</script></html>

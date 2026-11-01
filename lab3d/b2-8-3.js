@@ -62,7 +62,7 @@ const SHAPES = {
     },
   },
   cyl: {
-    name: '圆柱', params: { R: 1, h: 2, e: 0 },
+    name: '圆柱', params: { R: 1.2, h: 2, e: 0 },
     build: (p) => buildCylinderUnfold(S, p),
     sliders: [['R', '底面半径', 0.5, 1.4, 0.1], ['h', '高', 0.8, 2.6, 0.1]],
     callouts: [
@@ -127,7 +127,7 @@ const SHAPES = {
     formula: String.raw`<h3>球</h3>
       <p>球面是弯的，<b>不能</b>像圆柱、圆锥那样剪开铺平，所以它的面积公式要用别的办法推（课本用的是“分割—求近似和”）。</p>
       <p class="def">\(S=4\pi R^2\)<br>\(V=\tfrac43\pi R^3\)</p>
-      <p class="l3-note">半径变成原来的 2 倍，表面积变成 4 倍，体积变成 8 倍。拉一下滑块验证。</p>`,
+      <p class="l3-note">把新半径代入公式，与原来的表面积、体积作比；观察半径的倍数在公式中分别乘了几次。</p>`,
     read: (p) => [['表面积 \\(4\\pi R^2\\)', pi(4 * p.R * p.R), 'St', 4 * Math.PI * p.R * p.R], ['体积 \\(\\tfrac43\\pi R^3\\)', pi((4 * p.R ** 3) / 3), 'V', (4 * Math.PI * p.R ** 3) / 3]],
   },
 };

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/labs/residue-primitive-root/style.css">
+  <title>余数轮盘 · 完全剩余系与原根</title><style>a{color:inherit;text-underline-offset:.18em}nav[aria-label="实验导航"]{margin-block:0 1rem}</style>
+</head>
+<body>
+<main class="lab" data-lab="residue-primitive-root">
+  <header><nav aria-label="实验导航"><a class="brand" href="index.html">全部互动实验</a></nav><p class="eyebrow">数论实验 / FR030</p><button id="theme" type="button">切换深浅色</button>
+    <h1>余数轮盘</h1><p class="lead">所有余数构成环；只有可逆的余数进入单位群。一个数的幂，能走遍哪里？</p>
+  <a class="pill" href="../search.html">搜索</a></header>
+  <section class="controls" aria-label="实验参数">
+    <label for="m">模数 m <input id="m" type="number" min="2" max="120" step="1" value="7" required></label>
+    <label for="a">整数 a <input id="a" type="number" min="-1000000" max="1000000" step="1" value="3" required></label>
+    <label for="b">整数 b <input id="b" type="number" min="-1000000" max="1000000" step="1" value="5" required></label>
+    <label for="operation">环运算 <select id="operation"><option value="add">加法 a + b</option><option value="multiply">乘法 a × b</option></select></label>
+    <label for="shift">代表元平移 q <input id="shift" type="number" min="-100" max="100" step="1" value="0" required></label>
+    <div class="presets"><button type="button" data-m="8" data-a="3">模 8</button><button type="button" data-m="9" data-a="2">模 9</button><button type="button" data-m="12" data-a="6">模 12</button><button type="button" id="reset">复位</button></div>
+  </section>
+  <p id="error" role="alert"></p>
+  <div class="workspace">
+    <section class="wheel-panel" aria-labelledby="wheel-heading"><h2 id="wheel-heading">先看全体余数</h2>
+      <svg id="wheel" viewBox="0 0 520 520" role="img" aria-labelledby="wheel-title wheel-desc"><title id="wheel-title">模 m 的余数轮盘</title><desc id="wheel-desc">圆上每个点表示一个余数。绿色表示单位。预测后显示从 1 开始的幂轨道。</desc></svg>
+      <p class="legend"><span class="dot"></span>单位 <span class="dot ordinary"></span>非单位 <span class="line"></span>已揭示的幂轨道</p>
+      <p id="ring-result"></p><p id="representatives" class="wrap"></p><p id="unit-list" class="wrap"></p>
+    </section>
+    <section class="experiment" aria-labelledby="predict-heading"><p class="eyebrow">预测 → 验证 → 换参</p><h2 id="predict-heading">a 是模 m 的原根吗？</h2>
+      <p>先判断 a 是否为单位，再判断它的幂能否遍历全部单位。图中此时只显示余数与单位。</p>
+      <form id="prediction-form"><label for="prediction">我的预测 <select id="prediction"><option value="">请选择</option><option value="yes">是原根</option><option value="no">是单位，但不是原根</option><option value="nonunit">不是单位，不能谈乘法阶</option></select></label><button type="submit">验证并展开轨道</button></form>
+      <p id="feedback" role="status"></p>
+      <div id="results" hidden>
+        <h3>从 a⁰ ≡ 1 出发</h3><p id="classification"></p>
+        <label for="exponent">幂指数 k <input id="exponent" type="range" min="0" max="12" value="0" step="1"></label>
+        <div class="step-buttons"><button id="previous" type="button">上一步</button><button id="next" type="button">下一步</button></div>
+        <p id="power-result"></p><p id="orbit" class="wrap"></p><p id="roots" class="wrap"></p>
+        <details><summary>为什么是这个结论？</summary><p id="explanation"></p></details>
+      </div>
+    </section>
+  </div>
+  <section class="notes" aria-labelledby="notes-heading"><h2 id="notes-heading">从余数环到原根</h2>
+    <ol>
+      <li><strong>完全剩余系。</strong>本实验限定整数模数 2 ≤ m ≤ 120。整数 x、y 同余当且仅当 m 整除 x − y。每个整数恰落在 0, 1, …, m − 1 中的一类。每类各取一个代表就得到完全剩余系，例如 qm, qm + 1, …, qm + m − 1；它们不要求与 m 互素。</li>
+      <li><strong>环与单位群。</strong>加法和乘法先计算再取余，结果不依赖代表元。单位是满足 gcd(a,m)=1 的余数：贝祖等式给出其乘法逆元；若存在逆元，公因子必整除 1。单位的个数记作 φ(m)，它们在乘法下构成群。0 不属于单位群。</li>
+      <li><strong>乘法阶。</strong>仅当 gcd(a,m)=1 时，ord<sub>m</sub>(a) 定义为使 aᵈ ≡ 1 (mod m) 的最小正整数 d。若两个幂相等，可乘逆元约去较低次幂，所以轨道从 1 开始循环，无前段。不同的前 d 个幂构成子群，其陪集将单位群等分，故 d 整除 φ(m)，并有 a<sup>φ(m)</sup> ≡ 1。</li>
+      <li><strong>原根。</strong>单位 a 是原根，当且仅当 ord<sub>m</sub>(a)=φ(m)，也即其幂走遍所有单位。原根不会生成非单位，也不会生成 0。并非每个模数都有原根。对于 m ≥ 2，存在原根恰在 m=2、4、pʳ、2pʳ（p 为奇素数，r ≥ 1）时成立；这是一般存在性定理，此处不证明。本轮盘通过逐个单位穷举幂轨道判定，不依赖该定理。</li>
+      <li><strong>非单位的幂。</strong>仍能计算 aᵏ，但此处不称其循环长度为“乘法阶”。本实验采用环中零次幂（空乘积）的约定 a⁰=1，包括 a=0。有限余数状态必重复，可能先有前段，再进入周期。轮盘将首次重复的箭头也画出，明确标出前段长度与周期长度。</li>
+    </ol>
+    <p>探索提示：分别试奇素数、奇素数的平方、2 的幂以及含不同奇素因子的合数。改变 q 检查代表元，改变 b 检查环运算；改变 m 或 a 后请重新预测。</p>
+  </section>
+  <footer>原创互动实验 · 不计分，不保存学习记录 · 所有资源在本地</footer>
+</main>
+<script type="module" src="../assets/labs/residue-primitive-root/app.mjs"></script>
+</body>
+<script type="application/json" id="lab-meta">{"id": "residue-primitive-root", "title": "剩余系、原根与同余轮盘", "topic": "FR030", "related_topics": [], "status": "published", "author": "rog/codex", "batch": "PY-149-integration", "original": true, "independent_review": {"status": "passed", "by": "Codex (dsp-rog3), PY-149 independent mathematical review"}, "page": "residue-primitive-root.html", "persistence": "none", "resources": "local-only", "check": "调整条件，先作预测，再核对；条件改变后重新预测。", "numeric_check": "trial/PY-149/labs/residue-primitive-root/numeric-check.mjs", "review_evidence": {"sha": "db3c93c1314efa72379f4d831f34c65ff6d34c30", "report": "s149-residue-primitive-root-r/review.md"}}</script></html>

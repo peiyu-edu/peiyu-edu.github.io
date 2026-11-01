@@ -117,7 +117,7 @@ const modes = {
       <p class="l3-note">推论：点 \(P\) 在平面 \(OAB\) 内 \(\iff\) \(\overrightarrow{OP}=x\overrightarrow{OA}+y\overrightarrow{OB}\)。</p>`,
   },
   dot: {
-    name: '数量积与夹角', params: { a: 1.6, b: 1.6, c: 1.6, s: 'AB1-BC1' },
+    name: '数量积与夹角', params: { a: 1.6, b: 1.2, c: 1, s: 'AB1-BC1' },
     selects: [{ key: 's', label: '两个向量', options: Object.entries(PAIRS).map(([k, v]) => [k, v.label]) }],
     sliders: DIMS,
     buttons: [{ label: '▶ 变成正方体', primary: true, to: (p) => { const s = snap((p.a + p.b + p.c) / 3); return { a: s, b: s, c: s }; } }],
@@ -160,7 +160,7 @@ const modes = {
     def: String.raw`<h3>空间向量的数量积</h3>
       <p class="def">\(\boldsymbol u\cdot\boldsymbol v=|\boldsymbol u||\boldsymbol v|\cos\langle\boldsymbol u,\boldsymbol v\rangle\)。两个向量的夹角要把它们<b>平移到同一起点</b>再量，范围 \(0^\circ\le\langle\boldsymbol u,\boldsymbol v\rangle\le180^\circ\)。</p>
       <p>\(\boldsymbol u\perp\boldsymbol v\iff\boldsymbol u\cdot\boldsymbol v=0\)；\(|\boldsymbol u|^2=\boldsymbol u\cdot\boldsymbol u\)。</p>
-      <p class="l3-note">正方体中 \(\overrightarrow{AB_1}\) 与 \(\overrightarrow{BC_1}\)：\(\overrightarrow{BC_1}=\overrightarrow{AD_1}\)，\(\triangle AB_1D_1\) 是正三角形，所以夹角是 \(60^\circ\)。</p>`,
+      <p class="l3-note">先把向量平移到同一起点，再求数量积和两个模。若变成正方体，可另找三角形的边长关系验算夹角。</p>`,
   },
 };
 

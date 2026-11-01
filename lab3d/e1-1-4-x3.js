@@ -24,7 +24,7 @@ const withE = (s, t) => { const V = G.cubeD(s); return { ...V, E: G.lerp(V.A1, V
 
 const modes = {
   ll: {
-    name: '(1) 线线角', params: { s: 2, t: 0.5 },
+    name: '(1) 线线角', params: { s: 2, t: 0.3 },
     sliders: [SIDE, TS], buttons: [MID, { label: '▶ E 到 B₁', to: () => ({ t: 1 }) }],
     scene(p) {
       const V = withE(p.s, p.t), w = G.sub(V.B, V.A1);
@@ -61,13 +61,13 @@ const modes = {
       { id: 'ab', title: '直线 A₁B', text: '平移到 E（虚线）', at: 'ab', dx: 140, dy: 60 },
       { id: 'g', title: '线线角 θ', text: '取较小角（≤90°）', at: 'g', dx: 140, dy: -60 },
     ],
-    def: String.raw`<h3>例 4 (1) 两条直线所成的角</h3>
+    def: String.raw`<h3>例 4 (1) 两条直线所成的角</h3><p class="l3-note">模型初始位置为 t=0.3，以下练习另取 E 为中点；先按练习条件推算，再用按钮核对。</p>
       <p class="def">接例 1，\(E\) 是棱 \(A_1B_1\) 的中点。求直线 \(DE\) 与 \(A_1B\) 所成角的余弦。</p>
-      <p>\(\overrightarrow{DE}=(2,1,2)\)，\(\overrightarrow{A_1B}=(0,2,-2)\)，点积 \(-2\)：\(\cos\theta=\dfrac{|-2|}{3\times2\sqrt2}=\dfrac{\sqrt2}{6}\)。</p>
+      <p>写出两个方向向量，求数量积及两个模；线线角取不超过直角的角，因此公式分子需取绝对值。代入中点条件后自行化简。</p>
       <p class="l3-note">两直线所成的角在 \(0^\circ\) 到 \(90^\circ\) 之间，所以取绝对值。拖动 \(t\) 把 \(E\) 推到 \(B_1\)：点积变成 \(0\)，两直线垂直。</p>`,
   },
   lp: {
-    name: '(2) 线面角', params: { s: 2, t: 0.5 },
+    name: '(2) 线面角', params: { s: 2, t: 0.3 },
     sliders: [SIDE, TS], buttons: [MID, { label: '▶ E 到 A₁（在面内）', to: () => ({ t: 0 }) }],
     scene(p) {
       const V = withE(p.s, p.t), H = G.footOnPlane(V.E, V.D, N);
@@ -106,13 +106,13 @@ const modes = {
       { id: 'th', title: '线面角 θ', text: '∠EDH', at: 'th', dx: -160, dy: 50 },
       { id: 'n', title: '法向量 n', text: '(1, −1, −1)', at: 'n', dx: 140, dy: -50 },
     ],
-    def: String.raw`<h3>例 4 (2) 直线与平面所成的角</h3>
+    def: String.raw`<h3>例 4 (2) 直线与平面所成的角</h3><p class="l3-note">本模式初始位置也是 t=0.3；练习求中点情形时，请另行代入。</p>
       <p class="def">求直线 \(DE\) 与平面 \(A_1BD\) 所成角的正弦。</p>
-      <p>\(\overrightarrow{DE}\cdot\boldsymbol n=2-1-2=-1\)，\(\sin\theta=\dfrac{|-1|}{3\times\sqrt3}=\dfrac{\sqrt3}{9}\)。</p>
+      <p>先求方向向量与法向量的数量积，再除以两个模；分清所得比值对应线面角的正弦还是余弦。</p>
       <p class="l3-note">常见错误：把“和法向量的夹角”当成线面角，用了 \(\cos\)。看图：法向量垂直于平面，两个角加起来是 \(90^\circ\)。</p>`,
   },
   dih: {
-    name: '(3) 二面角定正负', params: { s: 2, q: 'C', nf: '1' },
+    name: '(3) 二面角定正负', params: { s: 2, q: 'A', nf: '1' },
     selects: [
       { key: 'q', label: '问的是', options: [['C', '二面角 A₁-BD-C'], ['A', '二面角 A₁-BD-A']] },
       { key: 'nf', label: '平面 A₁BD 的法向量', options: [['1', 'n = (1, −1, −1)'], ['-1', 'n = (−1, 1, 1)']] },
@@ -160,10 +160,10 @@ const modes = {
       { id: 'n', title: '法向量 n', text: '平面 A₁BD', at: 'n', dx: 140, dy: -50 },
       { id: 'n0', title: 'n₀ = (0, 0, 1)', text: '底面', at: 'n0', dx: -150, dy: -60 },
     ],
-    def: String.raw`<h3>例 4 (3) 二面角的余弦</h3>
+    def: String.raw`<h3>例 4 (3) 二面角的余弦</h3><p class="l3-note">模型初始显示 A 侧半平面；练习另问 C 侧，请先重新辨认半平面。</p>
       <p class="def">求二面角 \(A_1\text{-}BD\text{-}C\) 的余弦。</p>
-      <p>底面法向量 \(\boldsymbol n_0=(0,0,1)\)，\(\cos\langle\boldsymbol n,\boldsymbol n_0\rangle=\dfrac{-1}{\sqrt3}\)。<b>定正负</b>：二面角 \(A_1\text{-}BD\text{-}C\) 是钝角，\(\cos\theta=-\dfrac{\sqrt3}{3}\)。</p>
-      <p class="l3-note">同一组法向量，问 \(A_1\text{-}BD\text{-}A\) 就是锐角，余弦 \(\dfrac{\sqrt3}{3}\)。法向量的方向随手取，二面角的正负要结合图形判断。</p>`,
+      <p>底面法向量可取 \(\boldsymbol n_0=(0,0,1)\)。先算两法向量夹角的余弦，再结合指定的两个半平面判断二面角的正负。</p>
+      <p class="l3-note">改变所问的半平面后重新辨认平面角；法向量的方向和二面角的方向必须分别核对。</p>`,
   },
 };
 

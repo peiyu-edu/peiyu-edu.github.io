@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>取整阶梯与勒让德计数 · 原创互动实验</title><style>a{color:inherit;text-underline-offset:.18em}nav[aria-label="实验导航"]{margin-block:0 1rem}</style><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/labs/floor-legendre/style.css">
+  <script type="module" src="../assets/labs/floor-legendre/app.mjs"></script>
+</head>
+<body>
+<main class="lab" data-lab="floor-legendre">
+  <header><nav aria-label="实验导航"><a class="brand" href="index.html">全部互动实验</a></nav>
+    <p class="eyebrow">数论 / FR030 / 原创互动实验 · 独立审阅待完成</p>
+    <button id="theme" type="button">切换明暗</button>
+    <h1>阶梯上，藏着多少个素因子？</h1>
+    <p>先读懂取整的边界，再把阶乘中的素因子按层数出来。改变条件，先预测，再核对。</p>
+  <a class="pill" href="../search.html">搜索</a></header>
+  <section aria-labelledby="floor-title">
+    <h2 id="floor-title">01 / 不超过 x 的最大整数</h2>
+    <div class="workspace">
+      <div>
+        <svg id="stairs" viewBox="0 0 520 400" role="img" aria-labelledby="stairs-title stairs-desc">
+          <title id="stairs-title">取整函数阶梯图</title>
+          <desc id="stairs-desc">横轴与纵轴范围均为负六到六。每级左端实心，右端空心。虚线标记当前横坐标。</desc>
+          <g id="stairs-drawing"></g>
+        </svg>
+        <p class="hint">实心端点属于本级，空心端点不属于本级。横向移动时，注意整数处如何跳变。</p>
+      </div>
+      <div class="controls">
+        <label for="x">横坐标 x（−6 ≤ x ≤ 6）</label>
+        <input id="x" type="number" min="-6" max="6" step="any" value="-1.2">
+        <label for="x-slide">移动横坐标（步长 0.01）</label>
+        <input id="x-slide" type="range" min="-6" max="6" step="0.01" value="-1.2">
+        <div class="buttons">
+          <button type="button" data-x="-2.001">−2 左侧</button>
+          <button type="button" data-x="-2">整数 −2</button>
+          <button type="button" data-x="-1.999">−2 右侧</button>
+        </div>
+        <p id="floor-error" class="error" role="status"></p>
+        <form id="floor-form" novalidate>
+          <label for="floor-guess">预测 ⌊x⌋（整数）</label>
+          <input id="floor-guess" type="text" inputmode="numeric" autocomplete="off">
+          <button type="submit">核对取整</button>
+        </form>
+        <p id="floor-feedback" role="status"></p>
+        <div id="floor-result" class="result" hidden></div>
+      </div>
+    </div>
+  </section>
+  <section aria-labelledby="legendre-title">
+    <h2 id="legendre-title">02 / 一层一层数 p</h2>
+    <p>v<sub>p</sub>(n!) 是 n! 中素数 p 的指数。图中的每一行是一层额外的 p；先预测总数再展开。</p>
+    <div class="workspace">
+      <div class="controls">
+        <label for="n">非负整数 n（至多 100 位）</label>
+        <input id="n" type="text" inputmode="numeric" autocomplete="off" value="25" maxlength="101">
+        <label for="n-slide">小范围观察 n（0–100）</label>
+        <input id="n-slide" type="range" min="0" max="100" step="1" value="25">
+        <p id="range-note" class="hint"></p>
+        <label for="p">素数 p（2–1 000 000）</label>
+        <input id="p" type="number" min="2" max="1000000" step="1" value="5">
+        <div class="buttons">
+          <button type="button" data-case="empty">观察 0!</button>
+          <button type="button" data-case="above">观察 p &gt; n</button>
+          <button type="button" data-case="large">大整数计数</button>
+        </div>
+        <p id="legendre-error" class="error" role="status"></p>
+        <form id="legendre-form" novalidate>
+          <label for="legendre-guess">预测 v<sub>p</sub>(n!)（整数）</label>
+          <input id="legendre-guess" type="text" inputmode="numeric" autocomplete="off">
+          <button type="submit">核对素因子数</button>
+        </form>
+        <p id="legendre-feedback" role="status"></p>
+      </div>
+      <div>
+        <div id="count-placeholder" class="placeholder">提交整数预测后，查看逐层计数与整点图。</div>
+        <div id="legendre-result" class="result" hidden></div>
+      </div>
+    </div>
+  </section>
+  <section aria-labelledby="proof-title" class="explanation">
+    <h2 id="proof-title">为什么这样数？</h2>
+    <h3>取整：朝负无穷方向</h3>
+    <p data-formula="floor-definition">⌊x⌋ = k 当且仅当 k ≤ x &lt; k + 1，其中 k 是整数。因此小数部分 {x} = x − ⌊x⌋ 满足 0 ≤ {x} &lt; 1。</p>
+    <p>截断是朝 0 去掉小数。非负数的截断与取整相同；负的非整数应先找到左侧的整数，不能把截断当成取整。可改变横坐标，核对后比较两种运算的读数。</p>
+    <p data-formula="jump">在整数 k 处：左极限是 k − 1，函数值和右极限都是 k。图像每一级是 [k, k + 1)，故取整函数右连续，整数处不连续。</p>
+    <h3>勒让德：按整除的层数计数</h3>
+    <p data-formula="legendre">n 是非负整数且 p 是素数时，v<sub>p</sub>(n!) = ∑<sub>j≥1</sub>⌊n / p<sup>j</sup>⌋。</p>
+    <p>对每个整数 m（1 ≤ m ≤ n），设 m 中有 e 个因子 p。它恰好被 p、p²、…、pᵉ 整除，所以在前 e 层各贡献 1。把有限个 m 的贡献按层相加，第 j 层就是 1 到 n 中 pʲ 的倍数个数，等于 ⌊n / pʲ⌋。当 pʲ &gt; n 后各层均为 0，因此求和有限。</p>
+    <p>当 p = 2 时，第一层数偶数，第二层再数 4 的倍数，第三层再数 8 的倍数。这种重复恰好反映各数含有多个 2。提交预测后可以查看当前 n 的完整分层。</p>
+    <p>边界：0! = 1；p &gt; n 时，1 到 n 中没有 p 的正倍数。用这两个事实判断计数，再提交预测查看各层。p 必须是素数：若把 p = 4 代入上述和式，n = 6 得 1，但 6! = 720 可被 4² 整除而不能被 4³ 整除，最高指数是 2，公式失效。</p>
+    <h3>精确范围与显示范围</h3>
+    <p>取整控件使用有限精度 JavaScript Number；若输入细小差别已被浮点舍入为整数，按舍入后的实际 x 计算，不用容差把近整数吸附到跳点。此处只观察 −6 到 6。n 以十进制文本转为 BigInt，不先转 Number；上限为 100 位，p 的上限为 1 000 000。指数和幂也用 BigInt。每轮把商整除 p，正商严格变小，最终归零，不会溢出或死循环。</p>
+    <p>n ≤ 100 时显示完整倍数整点；更大的 n 只显示各层精确计数与相对条形长度，不把截取的点阵冒充全体。滑条只控制小范围；大整数请使用文本框。改变条件会清空旧预测与反馈。所有运算在本页进行，不写学习记录。</p>
+  </section>
+  <footer>原创互动实验 · 不计分，不保存学习记录 · 所有资源在本地</footer>
+</main>
+</body>
+<script type="application/json" id="lab-meta">{"id": "floor-legendre", "title": "取整阶梯与勒让德计数", "topic": "FR030", "related_topics": [], "status": "published", "author": "rog/codex", "batch": "PY-149-integration", "original": true, "independent_review": {"status": "passed", "by": "Codex (dsp-rog8), PY-149 independent mathematical review"}, "page": "floor-legendre.html", "persistence": "none", "resources": "local-only", "check": "调整条件，先作预测，再核对；条件改变后重新预测。", "numeric_check": "trial/PY-149/labs/floor-legendre/numeric-check.mjs", "review_evidence": {"sha": "85f9618857f979a15168fa9a3db365f48f3ebd01", "report": "s149-floor-legendre-r/review.md"}}</script></html>

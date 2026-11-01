@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>焦点、准线与反射 · 原创互动实验</title><style>a{color:inherit;text-underline-offset:.18em}nav[aria-label="实验导航"]{margin-block:0 1rem}</style><link rel="icon" href="data:,"><link rel="stylesheet" href="../assets/labs/conic-focus-optics/style.css"><script type="module" src="../assets/labs/conic-focus-optics/app.mjs"></script></head>
+<body><main class="lab" data-lab="conic-focus-optics"><header><nav aria-label="实验导航"><a class="brand" href="index.html">全部互动实验</a></nav><p>原创互动实验 · FR037 / FR038 / FR039</p><h1>焦点、准线与反射</h1><button id="theme" type="button">切换浅深色</button><a class="pill" href="../search.html">搜索</a></header>
+<p>先选择曲线并移动点 P，观察焦准距离和光路。焦点弦可单独转动；实线是光传播方向，虚线是反向延长线。所有坐标使用相同尺度。</p>
+<section class="controls" aria-label="实验参数">
+<label>曲线<select id="kind"><option value="ellipse">椭圆</option><option value="hyperbola">双曲线</option><option value="parabola">抛物线</option></select></label>
+<label>尺度 a（抛物线为 p）<input id="scale" type="range" min="0.5" max="4" step="0.1" value="2"><output id="scale-value"></output></label>
+<label>离心率 e<input id="ecc" type="range" min="0.15" max="0.95" step="0.01" value="0.6"><output id="ecc-value"></output></label>
+<label>点参数 t<input id="param" type="range" min="-180" max="180" step="1" value="55"><output id="param-value"></output></label>
+<label>双曲线分支<select id="branch" disabled><option value="1">右支</option><option value="-1">左支</option></select></label>
+<label>测距与弦的焦点<select id="focus"><option value="0">F₁（左焦点）</option><option value="1">F₂（右焦点）</option></select></label>
+<label>焦点弦方向 α（度）<input id="angle" type="range" min="-180" max="180" step="1" value="90"><output id="angle-value"></output></label>
+</section>
+<p id="status" role="status"></p>
+<figure><svg id="plot" viewBox="0 0 720 500" role="img" aria-labelledby="plot-title plot-desc"><title id="plot-title">圆锥曲线与光路</title><desc id="plot-desc">坐标图随参数更新。光路用箭头、准线用点线、反向延长线用虚线表示，详细数据在下方。</desc></svg><figcaption>蓝：曲线；灰点线：准线；金：入射；红：反射；紫虚线：反向延长；绿：焦点弦。超出视窗的部分裁剪，未移动真实坐标。</figcaption></figure>
+<section><h2>先预测，再核对</h2><form id="prediction"><label>当前 PF 的长度是多少？<input id="answer" type="number" step="any" autocomplete="off"></label><button>核对预测</button></form><p id="feedback" role="status"></p><div id="readout"></div></section>
+<details><summary>数学说明与边界</summary>
+<h2>焦准定义与参数</h2><p>准线距离是到直线的垂直距离 |x−d|，不是到其某个定点的距离。椭圆 x²/a²+y²/b²=1，a&gt;b&gt;0，c²=a²−b²，e=c/a∈(0,1)；焦点 (±c,0) 分别配准线 x=±a/e。双曲线 x²/a²−y²/b²=1，a,b&gt;0，c²=a²+b²，e=c/a&gt;1，焦点与准线按相同正负号配对。两者均有 PF=e|x−d|，不可把左右焦点与准线交叉配对。圆 e=0 没有此形式的有限准线，本实验不将其冒充椭圆焦准模型。</p>
+<p>抛物线 y²=4px，p&gt;0，焦点 (p,0)，准线 x=−p，PF=x+p=d(P,准线)，故 e=1。本实验用 P=(pt²,2pt)，包含顶点 t=0。椭圆 P=(a cos t,b sin t)，t 以角度输入；双曲线 P=(±a cosh t,b sinh t)，t 为无量纲实数，两支均支持。</p>
+<h2>切线、法线与实际反射</h2><p>对隐式方程 f(x,y)=0，非零梯度 n=∇f 是法线方向，切线满足 n·(X−P)=0；无需除以斜率，因此顶点的竖直切线也有效。椭圆梯度为 (2x/a²,2y/b²)，双曲线为 (2x/a²,−2y/b²)，抛物线为 (−4p,2y)。单位入射方向 u 的反射为 v=u−2(u·n̂)n̂；v 与 u 的切向分量相同、法向分量相反，所以入射角等于反射角。</p>
+<p>椭圆上 |P−F₁|+|P−F₂|=2a；求梯度得法线平行于两条焦点单位向量的和，故从 F₁ 发出的入射光经反射后沿 P→F₂ 传播。双曲线上 ||P−F₁|−|P−F₂||=2a，每支分别求梯度，得法线平行于两条焦点单位向量的差。因此从 F₁ 发出的光反射后沿 F₂→P 的方向继续传播，只有反射线的反向延长线经过 F₂；图中 F₂ 是此反射光束的虚焦，不能画成实际光射向 F₂。两支皆然，顶点的焦点、P 共线也无需使用无定义角。</p>
+<p>抛物线可写 |P−F|−x=p，梯度平行于 (P−F)/|P−F|−(1,0)，故沿 (−1,0) 入射的平行光反射到焦点。由反射公式的可逆性，焦点发出的光反射后向 (+1,0) 平行传播。上述为理想二维镜面在 P 处的单次反射；不模拟遮挡或二次碰撞。</p>
+<h2>焦点弦与退化</h2><p>将直线 X=F+λ(cos α,sin α) 代入曲线，得到 Aλ²+Bλ+C=0。两个有限交点才构成通常的焦点弦。双曲线取渐近线方向时 A=0；抛物线取轴方向时 A=0，均仅剩一个有限交点，另端趋于无穷远；此时不报告有限弦长。双曲线焦点弦两端可能位于同一射线上，不预设 λ 异号。不把无穷远端点画成图边上的有限点。</p>
+<p>无效、非有限及过大的数值参数返回不可用状态。e=1 的椭圆/双曲线不属于本模型；过小焦距和过大参数受显式范围限制。若入射点等于光源，单位方向不存在，禁止反射与判答。有限合法的本控件参数下 P 不会等于焦点。预测接受与当前焦点距离的绝对误差 ≤0.02；修改参数后清空反馈和精确读数，不写入学习记录。</p>
+</details><footer>原创互动实验 · 不计分，不保存学习记录 · 所有资源在本地</footer></main></body><script type="application/json" id="lab-meta">{"id": "conic-focus-optics", "title": "焦点、准线与反射", "topic": "FR037", "related_topics": ["FR038", "FR039"], "status": "published", "author": "cav/codex", "batch": "PY-149-integration", "original": true, "independent_review": {"status": "passed", "by": "Codex (dsp-cav17), PY-149 independent mathematical review"}, "page": "conic-focus-optics.html", "persistence": "none", "resources": "local-only", "check": "调整条件，先作预测，再核对；条件改变后重新预测。", "numeric_check": "trial/PY-149/labs/conic-focus-optics/numeric-check.mjs", "review_evidence": {"sha": "bd72aa00c6c1e29135e9da41b28056d4542667be", "report": "s149-conic-focus-optics-r/review.md"}}</script></html>

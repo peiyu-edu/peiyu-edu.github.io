@@ -46,12 +46,12 @@ const modes = {
     callouts: [
       { id: 'bd', title: '直线 BD', text: '', at: 'bd', dx: 120, dy: 60 },
       { id: 'aa', title: 'AA₁ 平移到 OO₁', text: 'BD ⊥ AA₁ 始终成立', at: 'aa', dx: 130, dy: -60 },
-      { id: 'ac', title: 'AC', text: '底面是正方形时才 ⊥ BD', at: 'ac', dx: -150, dy: 50 },
+      { id: 'ac', title: 'AC', text: '检验它是否垂直于 BD', at: 'ac', dx: -150, dy: 50 },
     ],
     def: String.raw`<h3>直线与平面垂直的判定</h3>
       <p class="def">如果一条直线与一个平面内的<b>两条相交直线</b>都垂直，那么该直线与此平面垂直。<br>\(m,n\subset\alpha,\ m\cap n=P,\ l\perp m,\ l\perp n\Rightarrow l\perp\alpha\)</p>
-      <p>长方体中 \(AA_1\perp\) 底面，所以 \(BD\perp AA_1\)。只有 \(BD\perp AC\)（底面是正方形，对角线互相垂直）时，\(BD\) 才垂直于平面 \(ACC_1A_1\)。</p>
-      <p class="l3-note">\(\cos\angle(BD,AC)=\dfrac{|b^2-a^2|}{a^2+b^2}\)，\(a=b\) 时为 0。</p>`,
+      <p>长方体中 \(AA_1\perp\) 底面，所以 \(BD\perp AA_1\)。要用线面垂直判定，还需检验面内哪一条相交直线？用底面两条对角线的数量积列出边长应满足的条件。</p>
+      <p class="l3-note">先写出两条底面对角线的坐标，再令数量积为零；不要只凭透视图判断垂直。</p>`,
   },
   ang: {
     name: '线面角', params: { a: 1.8, b: 1.4, c: 1.2, s: 'A1C-ABCD' },
@@ -160,7 +160,7 @@ const modes = {
       ];
     },
     note: (p) => (Math.abs(p.a - p.b) < 1e-9 ? '\\(BD\\perp\\) 平面 \\(ACC_1A_1\\)，而 \\(BD\\subset\\) 平面 \\(A_1BD\\)，所以平面 \\(A_1BD\\perp\\) 平面 \\(ACC_1A_1\\)。'
-      : '底面不是正方形时 \\(BD\\) 不垂直于平面 \\(ACC_1A_1\\)，两平面也不垂直。'),
+      : '先检验 \\(BD\\) 与平面 \\(ACC_1A_1\\) 的位置关系，再用面面垂直的判定定理核对当前两个平面；请分别写出依据。'),
     tags: ['A', 'B', 'C', 'D', 'A1', 'B1', 'C1', 'D1', 'O'],
     callouts: [
       { id: 'bd', title: 'BD', text: '平面 A₁BD 里的一条线', at: 'bd', dx: 120, dy: 60 },
@@ -169,7 +169,7 @@ const modes = {
     ],
     def: String.raw`<h3>平面与平面垂直的判定</h3>
       <p class="def">如果一个平面过另一个平面的<b>垂线</b>，那么这两个平面垂直。<br>\(l\perp\beta,\ l\subset\alpha\Rightarrow\alpha\perp\beta\)</p>
-      <p>平面 \(A_1BD\) 过直线 \(BD\)。底面是正方形时 \(BD\perp\) 平面 \(ACC_1A_1\)（上一个实验），所以平面 \(A_1BD\perp\) 平面 \(ACC_1A_1\)。</p>
+      <p>平面 \(A_1BD\) 过直线 \(BD\)。先检验 \(BD\) 与平面 \(ACC_1A_1\) 的位置关系，再应用面面垂直的判定定理。</p>
       <p><b>性质定理</b>：两个平面垂直，一个平面内垂直于交线的直线与另一个平面垂直。</p>`,
   },
 };

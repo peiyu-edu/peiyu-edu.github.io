@@ -143,7 +143,7 @@ const modes = {
     ],
     def: String.raw`<h3>什么样的三个向量能做基底</h3>
       <p class="def">空间中任意三个<b>不共面</b>的向量都可以构成空间的一个基底；三个向量共面时，它们只能表示这个平面内的向量。</p>
-      <p>判断方法：看第三个向量能不能写成前两个的线性组合。例如 \(\overrightarrow{AC}=\overrightarrow{AB}+\overrightarrow{AD}\)，所以 \(\overrightarrow{AB},\overrightarrow{AD},\overrightarrow{AC}\) 共面；\(\overrightarrow{BD}=\overrightarrow{A_1D}-\overrightarrow{A_1B}\) 同理。</p>
+      <p>判断方法：尝试把第三个向量写成前两个的线性组合；若能写出，说明共面。若不能，需进一步证明三者不共面，不能只看透视图。</p>
       <p class="l3-note">以三个向量为棱的平行六面体体积为 0，就说明三者共面。</p>`,
   },
 };

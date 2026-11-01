@@ -87,10 +87,10 @@ const modes = {
     def: String.raw`<h3>例 1 求平面的法向量</h3>
       <p class="def">棱长为 \(2\) 的正方体 \(ABCD\text{-}A_1B_1C_1D_1\)，以 \(D\) 为原点，\(DA,DC,DD_1\) 为 \(x,y,z\) 轴建系。求平面 \(A_1BD\) 的一个法向量。</p>
       <p>面内取两个不共线向量，设 \(\boldsymbol n=(x,y,z)\)，令两个数量积都为 \(0\)，解出一组非零解：\(\boldsymbol n=(1,-1,-1)\)。</p>
-      <p class="l3-note">法向量不唯一：\(k\boldsymbol n\)（\(k\ne0\)）都行。拖动 \(k\) 看箭头伸缩、反向，两个点积一直是 \(0\)。</p>`,
+      <p class="l3-note">求法向量时要解齐两个正交条件，并检查所取解非零；可用点积读数核对。</p>`,
   },
   pp: {
-    name: '例 2 证平行、垂直', params: { s: 2, k: 1, l: 'CB1' },
+    name: '例 2 证平行、垂直', params: { s: 2, k: 1, l: 'DC1' },
     selects: [{ key: 'l', label: '直线（与平面 A₁BD）', options: Object.entries(LINES).map(([k, v]) => [k, v.label]) }],
     sliders: [SIDE, KS],
     buttons: [{ label: '▶ 法向量反向', primary: true, to: (p) => ({ k: p.k === 0 ? -1 : -p.k }) }],
@@ -132,9 +132,9 @@ const modes = {
       { id: 'n', title: '法向量 n', text: 'k(1, −1, −1)', at: 'n', dx: 140, dy: -50 },
     ],
     def: String.raw`<h3>例 2 用法向量证平行、垂直</h3>
-      <p class="def">接例 1，\(\boldsymbol n=(1,-1,-1)\)。证明：(1) \(CB_1\parallel\) 平面 \(A_1BD\)；(2) \(AC_1\perp\) 平面 \(A_1BD\)。</p>
-      <p>(1) \(\overrightarrow{CB_1}\cdot\boldsymbol n=0\)，<b>再说明 \(C\) 不在平面内</b>，才能下结论平行。(2) \(\overrightarrow{AC_1}=-2\boldsymbol n\)，与法向量共线，所以垂直。</p>
-      <p class="l3-note">切到 \(A_1B\)：点积同样是 \(0\)，但它在面内。点“法向量反向”：结论一个都不变。</p>`,
+      <p class="def">接例 1，\(\boldsymbol n=(1,-1,-1)\)。分别判断直线 \(CB_1\)、\(AC_1\) 与平面 \(A_1BD\) 的位置关系，并写出依据。</p>
+      <p>先算方向向量与法向量的数量积；若为零，还需检查直线是否在平面内。再检验两个向量是否为非零倍数关系。</p>
+      <p class="l3-note">分别把法向量乘非零数和乘零，重新核对判定条件；说明哪些条件仍成立，哪些条件失效。</p>`,
   },
 };
 

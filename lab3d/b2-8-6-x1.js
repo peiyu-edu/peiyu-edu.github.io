@@ -12,6 +12,13 @@ const FACES = [['A', 'B', 'C'], ['P', 'A', 'B'], ['P', 'B', 'C'], ['P', 'A', 'C'
 const angAt = (O, X, Y) => Math.acos(Math.max(-1, Math.min(1, G.dot(G.sub(X, O), G.sub(Y, O)) / (G.dist(X, O) * G.dist(Y, O)))));
 const at = (n) => (p) => +p.st >= n;
 
+// Keep measurement keys and values available while the printed first step shows prompts.
+const pendingReadouts = (rows) => rows.map(([label, tex, key, value], i) => [
+  `核对项 ${i + 1}`,
+  `<details><summary>推导后核对</summary>${tex.startsWith('<') ? tex : `\\(${tex}\\)`}<br>（${label}）</details>`,
+  key, value,
+]);
+
 const modes = {
   prove: {
     name: '证 BC⊥PB', params: { a: 1.4, b: 1.2, h: 1.6, st: '1' },
@@ -34,7 +41,7 @@ const modes = {
     read(p, { V }) {
       const right = FACES.filter((f) => [0, 1, 2].some((i) => Math.abs(angAt(V[f[i]], V[f[(i + 1) % 3]], V[f[(i + 2) % 3]]) - Math.PI / 2) < 1e-9)).length;
       const pb = G.dist(V.P, V.B);
-      return [
+      const rows = [
         ['\\(\\angle PAB\\)', dg(angAt(V.A, V.P, V.B)), 'pab', G.deg(angAt(V.A, V.P, V.B))],
         ['\\(\\angle PAC\\)', dg(angAt(V.A, V.P, V.C)), 'pac', G.deg(angAt(V.A, V.P, V.C))],
         ['\\(\\angle ABC\\)', dg(angAt(V.B, V.A, V.C)), 'abc', G.deg(angAt(V.B, V.A, V.C))],
@@ -42,6 +49,7 @@ const modes = {
         ['\\(PB=\\sqrt{PA^2+AB^2}\\)', pb.toFixed(4), 'pb', pb],
         ['直角三角形的面', `<span>${right} 个</span>`, 'faces', right],
       ];
+      return +p.st < 4 ? pendingReadouts(rows) : rows;
     },
     note: (p) => [
       '已知 \\(PA\\perp\\) 底面 \\(ABC\\)，\\(\\angle ABC=90^\\circ\\)。要证 \\(BC\\perp PB\\)：先证 \\(BC\\) 垂直于 \\(PB\\) 所在的平面 \\(PAB\\)。',
@@ -58,8 +66,8 @@ const modes = {
     ],
     def: String.raw`<h3>例 1 鳖臑模型</h3>
       <p class="def">三棱锥 \(P\text{-}ABC\) 中，\(PA\perp\) 底面 \(ABC\)，\(\angle ABC=90^\circ\)。求证：\(BC\perp PB\)。</p>
-      <p>思路：要证线线垂直，先证线面垂直。\(BC\) 同时垂直于 \(PA\) 和 \(AB\)，这两条线相交于 \(A\)，所以 \(BC\perp\) 平面 \(PAB\)，从而垂直于面内的 \(PB\)。</p>
-      <p class="l3-note">《九章算术》把四个面都是直角三角形的四面体叫“鳖臑”（biē nào）。拖动三条棱的长度，四个直角始终都在。</p>`,
+      <p>思路：要证线线垂直，可以先证线面垂直。请在平面 \(PAB\) 内找两条相交直线，分别说明它们与 \(BC\) 垂直的理由。</p>
+      <p class="l3-note">逐面检查：每个面中能否找到直角？写出依据后再统计，不要只凭图形外观判断。</p>`,
   },
   dih: {
     name: '二面角 P-BC-A', params: { a: 1.4, b: 1.2, h: 1.6, st: '1' },

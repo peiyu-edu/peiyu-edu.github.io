@@ -32,6 +32,13 @@ function normalLines(V, n1, n2, L) {
   ];
 }
 
+// Keep measurement keys and values available while the printed first step shows prompts.
+const pendingReadouts = (rows) => rows.map(([label, tex, key, value], i) => [
+  `核对项 ${i + 1}`,
+  `<details><summary>推导后核对</summary>${tex.startsWith('<') ? tex : `\\(${tex}\\)`}<br>（${label}）</details>`,
+  key, value,
+]);
+
 const modes = {
   reg: {
     name: '求二面角', params: { a: 1.6, st: '1' },
@@ -60,7 +67,7 @@ const modes = {
       const pd = G.dist(V.P, V.D), cd = G.dist(V.C, V.D), pc = G.dist(V.P, V.C);
       const cos = (pd * pd + cd * cd - pc * pc) / (2 * pd * cd);              // 几何法：余弦定理
       const cosN = -G.dot(n1, n2) / (G.len(n1) * G.len(n2));                // 法向量法（两个外法向量）
-      return [
+      const rows = [
         ['\\(PD=CD=\\dfrac{\\sqrt3}{2}a\\)', pd.toFixed(4), 'pd', pd],
         ['\\(PC=a\\)', pc.toFixed(4), 'pc', pc],
         ['\\(\\cos\\angle PDC\\)（余弦定理）', cos.toFixed(4), 'cos', cos],
@@ -68,6 +75,7 @@ const modes = {
         ['\\(-\\dfrac{\\boldsymbol n_1\\cdot\\boldsymbol n_2}{|\\boldsymbol n_1||\\boldsymbol n_2|}\\)（外法向量）', cosN.toFixed(4), 'cosN', cosN],
         ['法向量算出的角', dg(Math.acos(cosN)), 'thN', G.deg(Math.acos(cosN))],
       ];
+      return +p.st < 4 ? pendingReadouts(rows) : rows;
     },
     note: (p) => [
       '二面角 \\(P\\text{-}AB\\text{-}C\\)：棱 \\(AB\\)，两个面是 \\(PAB\\) 和 \\(CAB\\)，都是等边三角形。',
@@ -85,8 +93,8 @@ const modes = {
     ],
     def: String.raw`<h3>例 3 正四面体的二面角</h3>
       <p class="def">正四面体 \(P\text{-}ABC\) 的棱长都是 \(a\)，求二面角 \(P\text{-}AB\text{-}C\) 的平面角的余弦值。</p>
-      <p>取 \(AB\) 中点 \(D\)：等边三角形三线合一，\(PD\perp AB\)、\(CD\perp AB\)，\(\angle PDC\) 就是平面角。再用余弦定理：\(\cos\theta=\dfrac13\)，\(\theta\approx70.53^\circ\)。</p>
-      <p class="l3-note">拖动棱长 \(a\)：长度都变，\(\cos\theta=\dfrac13\) 不变。二面角只看形状，不看大小。</p>`,
+      <p>在棱上选取适当的点，在两个半平面内各作一条垂直于棱的射线。说明它们为何垂直，再用所得三角形的边长列余弦定理。</p>
+      <p class="l3-note">拖动棱长，比较所得的长度比，思考二面角是否随大小改变；完成计算后再核对读数。</p>`,
   },
   fold: {
     name: '折叠：锐角还是钝角', params: { a: 1.6, th: 60 },
@@ -111,7 +119,7 @@ const modes = {
       const nn = Math.acos(Math.max(-1, Math.min(1, c)));
       const kind = Math.abs(Math.cos(th)) < 1e-9 ? '直角' : th < Math.PI / 2 ? '锐角' : '钝角';
       return [
-        ['二面角 \\(\\theta=\\angle PDC\\)', dg(th), 'th', G.deg(th)],
+        ['二面角 \\(\\theta\\)（折叠参数）', dg(th), 'th', G.deg(th)],
         ['\\(\\cos\\theta\\)', Math.cos(th).toFixed(4), 'cos', Math.cos(th)],
         ['二面角是', `<span>${kind}</span>`, 'kind', kind],
         ['两个外法向量的夹角', dg(nn), 'nn', G.deg(nn)],

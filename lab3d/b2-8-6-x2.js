@@ -11,7 +11,7 @@ const at = (n) => (p) => +p.st >= n;
 
 const modes = {
   ang: {
-    name: '求线面角', params: { a: 1.4, b: 1.4, c: 1.4, st: '1' },
+    name: '求线面角', params: { a: 1.4, b: 1.2, c: 1.6, st: '1' },
     selects: [{ key: 'st', label: '作图步骤', options: [['1', '① 斜线 A₁C 与底面'], ['2', '② 找垂足：A₁A⊥底面'], ['3', '③ 连射影 AC'], ['4', '④ 解 Rt△A₁AC'], ['5', '⑤ 用法向量验算（选必一）']] }],
     sliders: DIMS, buttons: [cube],
     scene(p) {
@@ -60,13 +60,13 @@ const modes = {
       { id: 'pr', title: '射影 AC', text: '', at: 'pr', dx: 120, dy: 70, when: at(3) },
       { id: 'phi', title: '线面角 φ', text: '∠A₁CA', at: 'phi', dx: 130, dy: -40, when: at(4) },
     ],
-    def: String.raw`<h3>例 2 正方体的线面角</h3>
+    def: String.raw`<h3>例 2 正方体的线面角</h3><p class="l3-note">模型初始为长方体；以下练习另取正方体条件，先自行计算，再用“变成正方体”核对。</p>
       <p class="def">正方体 \(ABCD\text{-}A_1B_1C_1D_1\) 棱长为 \(1\)，求体对角线 \(A_1C\) 与底面 \(ABCD\) 所成角的正切值。</p>
-      <p>三步：<b>找垂足</b>（\(A_1A\perp\) 底面，垂足 \(A\)）→ <b>连射影</b>（\(AC\)）→ <b>解直角三角形</b>（\(\tan\varphi=\dfrac{1}{\sqrt2}=\dfrac{\sqrt2}{2}\)）。</p>
+      <p>三步：<b>找垂足</b> → <b>连射影</b> → <b>解直角三角形</b>。分别求出垂线段和射影的长度，再写它们的比；注意题目问的是正切。</p>
       <p class="l3-note">拖成长方体：\(\tan\varphi=\dfrac{c}{\sqrt{a^2+b^2}}\)。读数里的“法向量算出的角”用的是 \(\sin\varphi=\dfrac{|\boldsymbol u\cdot\boldsymbol n|}{|\boldsymbol u||\boldsymbol n|}\)，两种算法一直相等。</p>`,
   },
   min: {
-    name: '最小角', params: { a: 1.4, b: 1.4, c: 1.4, t: 40 },
+    name: '最小角', params: { a: 1.4, b: 1.2, c: 1.6, t: 40 },
     sliders: [...DIMS, ['t', 'l 的转动角 t（°）', 0, 180, 5]],
     buttons: [
       { label: '▶ l 转到射影方向', primary: true, to: () => ({ t: 0 }) },

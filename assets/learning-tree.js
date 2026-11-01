@@ -145,6 +145,7 @@
     }).join("");
     if (byBook) html = juniorBranches(visible);
     tree.innerHTML = html || '<p class="lt-empty">没有匹配的知识点。试试更短的关键词，或调整课时与范围。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>';
+    core.renderMath(tree);
     resultCount.textContent = visible.length + " 个知识点";
     tree.querySelectorAll("[data-tree-branch]").forEach(function (branch) {
       branch.addEventListener("toggle", function () {
@@ -185,6 +186,7 @@
       var juniorVisible = visiblePoints();
       detail.innerHTML = '<section class="lt-overview"><h2>' + (query ? '查找知识点' : '按册、章、节查知识点') + '</h2><p>' + (query ? '找到 ' + juniorVisible.length + ' 个匹配的知识点。' : (primary ? '已收录的知识点按册列出，选学与拓展可以按需跳过。' : '必学内容默认显示，选学与拓展按需打开。')) + '</p>' + (juniorBranches(juniorVisible) || '<p>已收录的知识点中没有匹配结果。可以换个关键词，或清除筛选后查找。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>') + '</section>';
       document.title = "知识库 · 培玉" + stageName + "数学";
+      core.renderMath(detail);
       return;
     }
     var visible = visiblePoints(), chosenDomain = domain(currentDomain), chosenLesson = lesson(currentSection);

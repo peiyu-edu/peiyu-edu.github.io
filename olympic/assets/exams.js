@@ -200,7 +200,7 @@
       submit(state, Date.now(), "manual"); persist(); render();
     });
     resetBtn.addEventListener("click", function () {
-      if (!root.confirm("开始新一份练习会替换本卷草稿；已写入「我的学习」的记录会保留。继续吗？")) return;
+      if (!root.confirm("开始新一份练习会替换本卷草稿；已写入“我的学习”的记录会保留。继续吗？")) return;
       state = fresh(config); persist(); root.location.reload();
     });
     function heartbeat() { var old = state.phase; tick(state, Date.now()); if (old === "running") persist(); render(); }

@@ -400,6 +400,7 @@
     });
     if (!list.children.length) list.appendChild(el('p', '本节知识点关系仍在整理，可打开知识库目录查找。', 'lc-note'));
     dialog.appendChild(list);
+    if (window.PeiyuKnowledge && window.PeiyuKnowledge.renderMath) window.PeiyuKnowledge.renderMath(list);
     var actions = el('div', '', 'lc-dialog-links');
     var full = el('a', '在知识库中查看', 'lc-link'); full.setAttribute('data-lc-full', '');
     var practice = el('a', '练习本节', 'lc-link'); practice.setAttribute('data-lc-practice', '');

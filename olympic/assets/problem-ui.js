@@ -200,7 +200,7 @@
       });
       var r = readRecord(P.id);
       if (r && r.first) note.textContent = n ? "已打开 " + n + " / " + layers.length + " 级。" : "";
-      else note.textContent = n ? "已打开 " + n + " 级。现在作答，这题会记为「看过提示后做对」。" : "一次打开一级。还没作答前每打开一级，这题都会记为「看过提示」。";
+      else note.textContent = n ? "已打开 " + n + " 级。现在作答，这题会记为“看过提示后做对”。" : "一次打开一级。还没作答前每打开一级，这题都会记为“看过提示”。";
     }
     var h2 = ladder.querySelector("h2");
     (h2 || ladder.firstChild).after(bar);

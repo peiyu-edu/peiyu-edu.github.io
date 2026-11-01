@@ -218,7 +218,7 @@
       var b = button("开始到期重做", review, "training-review"); b.disabled = d.at > Date.now(); box.append(b);
     } else if (!r.finished) box.append(link("继续当前任务", url(r, "task"), "training-resume-task"));
     box.append(link("查看今日练习", new URL("today.html", base).href));
-    box.append(el("p", "小结里保留了自评、用过的帮助和重做记录；完整记录可在「我的学习」下载。", "hint-text"));
+    box.append(el("p", "小结里保留了自评、用过的帮助和重做记录；完整记录可在“我的学习”下载。", "hint-text"));
   }
   function renderTask(r) {
     var box = document.getElementById("training-task"); if (!box) return;
@@ -271,7 +271,7 @@
     box.replaceChildren(); box.hidden = !r;
     if (!r) { document.body.classList.remove("training-foundation-active"); return; }
     document.body.classList.add("training-foundation-active");
-    box.append(el("p", "正在为「" + D.title_text + "」补基础：" + meta(r.selected[r.stage]).label));
+    box.append(el("p", "正在为“" + D.title_text + "”补基础：" + meta(r.selected[r.stage]).label));
     box.append(link("返回当前训练题", url(r, "task"), "training-return"));
   }
   function recentRoute(data) {

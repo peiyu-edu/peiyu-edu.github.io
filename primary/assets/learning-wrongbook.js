@@ -348,7 +348,7 @@
       if (!shownGroups) section.appendChild(el("p", "做过知识点自测后，这里会显示学习记录。", "lw-note"));
       if (config.tiers) section.appendChild(el("p", "还要练：有错题还没改对，或还没有计入的答对。基本会了：有计入的答对。有点生疏：会过，但已超过 " + (config.staleDays || 30) + " 天没有计入新的答对。", "lw-note"));
       if (stage === "junior") section.appendChild(el("p", "初步掌握：有一次计入的答对。已巩固：有两次计入的答对，两次间隔满 20 小时。", "lw-note"));
-      return section;
+      return typeset(section);
     }
     function render() {
       if (destroyed) return;

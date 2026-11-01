@@ -285,7 +285,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     card.appendChild(topBtn);
     card.appendChild(el("div", "small", '<span class="tag">' + esc(formatTag(p)) + "</span>" +
       (p.level ? '<span class="tag">' + esc(p.level) + "</span>" : "") + (p.note ? esc(p.note) : "")));
-    card.appendChild(el("div", "stem", "<b>" + (idx + 1) + ".</b> " + esc(p.stem)));
+    // Imported stems use bare line breaks; keep every other tag escaped.
+    card.appendChild(el("div", "stem", "<b>" + (idx + 1) + ".</b> " + esc(p.stem).replace(/&lt;br\s*\/?&gt;/gi, "<br>")));
     var fb = el("div", "fb"), sol = el("div", "sol");
     sol.hidden = true;
     sol.innerHTML = (p.answer ? "<p><b>答案：</b>" + esc(p.answer) + "</p>" : "") +

@@ -1686,7 +1686,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   function ensureIsoBenchLoaded(cb) {
     if (window.IsoBench) { cb(); return; }
     var s = document.createElement("script");
-    s.src = ROOT + "assets/iso-bench.js?v=vs-dd2c2924fb99";
+    s.src = ROOT + "assets/iso-bench.js?v=vs-a7f1296b47b5";
     s.onload = cb;
     document.head.appendChild(s);
   }
@@ -1909,6 +1909,32 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     return String(s || "").replace(/\s+/g, " ").trim();
   }
 
+  // KaTeX 可能已渲染：textContent 会把 MathML、TeX 注释和 HTML 三层压成一串，这里还原成 \(...\) 源码
+  function conceptSource(el) {
+    if (!el) return "";
+    var copy = el.cloneNode(true);
+    [].forEach.call(copy.querySelectorAll(".katex"), function (k) {
+      var tex = k.querySelector('annotation[encoding="application/x-tex"]');
+      var display = k.closest(".katex-display");
+      var box = display || k;
+      var source = !tex ? k.textContent : (display ? "\\[" + tex.textContent + "\\]" : "\\(" + tex.textContent + "\\)");
+      box.parentNode.replaceChild(document.createTextNode(source), box);
+    });
+    return conceptPlain(copy.textContent);
+  }
+
+  // 取第一句，最多 max 字：公式当成一个整体，句号和截断都不落在公式中间
+  function conceptSentence(source, max) {
+    var tokens = source.match(/\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]|\$\$[\s\S]*?\$\$|\$[^$]*\$|[\s\S]/g) || [];
+    var out = "";
+    for (var i = 0; i < tokens.length; i++) {
+      if (/^[。！？]$/.test(tokens[i])) break;
+      if (out.length + tokens[i].length > max) return out + "…";
+      out += tokens[i];
+    }
+    return out;
+  }
+
   function conceptAnchor(el, id) {
     if (!el) return null;
     if (!el.id || el.id === id) el.id = id;
@@ -2014,9 +2040,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       var coreLabel = document.createElement("b");
       coreLabel.textContent = "核心概念：";
       core.appendChild(coreLabel);
-      var leadText = conceptPlain(lead ? lead.textContent : "");
-      var sentence = leadText.split(/[。！？]/)[0] || meta.name;
-      if (sentence.length > 110) sentence = sentence.slice(0, 110) + "…";
+      var leadText = conceptSource(lead);
+      var sentence = conceptSentence(leadText, 110) || meta.name;
       core.appendChild(document.createTextNode(sentence + (/[。！？]$/.test(sentence) ? "" : "。")));
       map.appendChild(core);
 
@@ -2030,10 +2055,10 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       var cards = document.createElement("div");
       cards.className = "concept-grid";
       cards.style.margin = "4px 0 10px";
-      conceptCard(cards, "① 定义与符号", conceptPlain(definition.textContent || "本节核心定义与术语"), definition);
+      conceptCard(cards, "① 定义与符号", conceptSource(definition) || "本节核心定义与术语", definition);
       conceptCard(cards, "② 直觉与关系", "微图、生活模型和关键关系", intuition);
-      conceptCard(cards, "③ 方法与应用", conceptPlain(method.textContent || "示范题与解题方法"), method);
-      conceptCard(cards, "④ 边界与反例", conceptPlain(boundary.textContent || "易错边界与反例"), boundary);
+      conceptCard(cards, "③ 方法与应用", conceptSource(method) || "示范题与解题方法", method);
+      conceptCard(cards, "④ 边界与反例", conceptSource(boundary) || "易错边界与反例", boundary);
       map.appendChild(cards);
 
       var relation = document.createElement("p");
@@ -2049,6 +2074,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       map.appendChild(relation);
 
       firstStep.parentNode.insertBefore(map, firstStep);
+      ensureMath(map);
     }
     wireConceptMap(map);
 

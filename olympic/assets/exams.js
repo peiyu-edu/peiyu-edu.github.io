@@ -194,7 +194,11 @@
       recordResults(); renderSummary();
     }
     startBtn.addEventListener("click", function () { if (start(config, state, Number(minutes.value), Date.now())) { persist(); render(); } });
-    submitBtn.addEventListener("click", function () { submit(state, Date.now(), "manual"); persist(); render(); });
+    submitBtn.addEventListener("click", function () {
+      var blank = config.questions.filter(function (q) { return !String(state.answers[q.id] || "").trim(); }).length;
+      if (!root.confirm((blank ? "还有 " + blank + " 题没写。" : "") + "交卷后作答会冻结，不能再改。确定交卷吗？")) return;
+      submit(state, Date.now(), "manual"); persist(); render();
+    });
     resetBtn.addEventListener("click", function () {
       if (!root.confirm("开始新一份练习会替换本卷草稿；已写入「我的学习」的记录会保留。继续吗？")) return;
       state = fresh(config); persist(); root.location.reload();

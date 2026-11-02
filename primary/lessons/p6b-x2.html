@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var ans = r > 0 ? (q + 1) : q;
 
     el("text", { x: 180, y: 24, "text-anchor": "middle", style: "font-size:17px;font-weight:700;fill:var(--fg)" }, svg,
-       m + " ÷ " + n + " = " + q + (r > 0 ? (" …… " + r) : "（整除）") + " → 至少有 " + ans + " 只");
+       m + " 只鸽子放进 " + n + " 个鸽巢，怎样尽量均分？");
 
     var gap = n === 3 ? 104 : 80;
     var startX = n === 3 ? 36 : 24;
@@ -196,15 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
         el("circle", { cx: cx, cy: cy, r: 9, style: "fill:" + (isExtra ? "var(--a)" : "var(--b)") }, svg);
       }
       el("text", { x: bx + boxW / 2, y: 162, "text-anchor": "middle", style: "font-size:17px;font-weight:700;fill:" + (isMax ? "var(--a)" : "var(--fg)") }, svg,
-         (i + 1) + "号(" + cnt + "只)");
+         (i + 1) + "号");
     }
 
-    var txt = r > 0
-      ? ("先平均每个鸽巢放 <b>" + q + " 只</b>，余下的 <b>" + r + " 只</b>再往不同鸽巢各放 1 只，总有一个鸽巢至少有 <b>" + q + " + 1 = " + ans + "（只）</b>。")
-      : ("正好平均分完，每个鸽巢都有 <b>" + q + " 只</b>。");
+    var txt = "先用 " + m + " ÷ " + n + " 求商和余数。想一想：有余数时，只用商作为保证的只数够不够？再与图中的尽量均分方案核对。";
     read.className = "read ok";
     read.innerHTML = txt;
-    var plain = read.textContent;
+    var plain = "看图，算一算。";
     if (P) { var sb = P.sayButton(plain); sb.addEventListener("click", function () { P.say(plain, sb); }); read.appendChild(sb); }
     mBtns.forEach(function (b, i) { b.setAttribute("aria-pressed", i === st.m ? "true" : "false"); });
     nBtns.forEach(function (b, j) { b.setAttribute("aria-pressed", j === st.n ? "true" : "false"); });

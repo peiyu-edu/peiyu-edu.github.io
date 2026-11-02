@@ -464,10 +464,14 @@ function drawEntry() {
 var c = C(); ef.innerHTML = "";
 drawFold(ef, NET141, 2, entryT, [180, 125, 300, 210, 95], function (i) { return [i === 2 ? c.muted : c.a, i === 2 ? 0.3 : 0.2]; });
 txt(ef, 430, 110, entryT === 1 ? "立体图形" : entryT === 0 ? "平面图形" : "正在摊开", entryT === 1 ? c.a : entryT === 0 ? c.b : c.fg, 700, 20);
-txt(ef, 430, 152, "6 个正方形", c.fg, 400, 18);
-$("entry-note").textContent = entryT === 1 ? "纸盒：6 个面围成一个盒子，前后、左右、上下的面不在同一个平面里。" : entryT === 0 ? "完全铺平：6 个正方形都贴在桌面上，各部分在同一个平面里。" : "摊开一半：每个面绕着它和相邻面共用的那条棱往外翻，面本身没有变。";
+var answered = entryBox.classList.contains("done");
+txt(ef, 430, 152, answered ? "6 个正方形" : "观察各个面", c.fg, 400, 18);
+$("entry-note").textContent = answered ? (entryT === 1 ? "纸盒：6 个面围成一个盒子，前后、左右、上下的面不在同一个平面里。" : entryT === 0 ? "完全铺平：6 个正方形都贴在桌面上，各部分在同一个平面里。" : "摊开一半：每个面绕着它和相邻面共用的那条棱往外翻，面本身没有变。") : entryT === 1 ? "观察面的个数、形状和位置。" : entryT === 0 ? "对照纸盒和铺平图，哪些变了，哪些没变？" : "观察各个面怎样绕棱向外翻。";
 }
 bar("entry-bar", function (t) { entryT = +t.getAttribute("data-t"); drawEntry(); });
+var entryBox = ef.closest(".predict");
+entryBox.addEventListener("predict:pick", drawEntry);
+entryBox.addEventListener("predict:reset", drawEntry);
 /* 微图解 ①：立体 / 平面 / 立体的表面 */
 var m1 = $("m1-fig"), m1k = 0;
 var N1 = ["长方体、圆柱、圆锥、球：各部分不都在同一个平面内，是立体图形。圆柱、圆锥、球的表面有曲的面。",

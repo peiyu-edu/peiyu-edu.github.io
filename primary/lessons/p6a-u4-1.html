@@ -487,15 +487,17 @@ function circleKit(root, cfg) {
         var q = snap(p), o = E[1 - j];
         if (q[2] === "c" && o[2] === "c") {
           var a1 = Math.atan2(q[1] - cy, q[0] - cx), a2 = Math.atan2(o[1] - cy, o[0] - cx), df = Math.abs(((a1 - a2) * 180 / Math.PI + 540) % 360 - 180);
-          if (Math.abs(df - 180) < 9) q = [2 * cx - o[0], 2 * cy - o[1], "c"];
+          if (df < 0.1) q = [o[0], o[1], "c"];
+          else if (Math.abs(df - 180) < 9) q = [2 * cx - o[0], 2 * cy - o[1], "c"];
         }
         E[j] = q; segDraw();
       };
       var judge = function () {
         var a = E[0], b = E[1], len = Math.sqrt(Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2)) / R * rc, k;
         var thru = Math.abs((b[0] - a[0]) * (a[1] - cy) - (a[0] - cx) * (b[1] - a[1])) / Math.max(1, len / rc * R) < 2;
-        if ((a[2] === "o" && b[2] === "c") || (a[2] === "c" && b[2] === "o")) k = "r";
-        else if (a[2] === "c" && b[2] === "c" && thru) k = "d";
+        if (len < 1e-6) k = "point";
+        else if ((a[2] === "o" && b[2] === "c") || (a[2] === "c" && b[2] === "o")) k = "r";
+        else if (a[2] === "c" && b[2] === "c" && thru && len > rc) k = "d";
         else if (a[2] === "c" && b[2] === "c") k = "chord";
         else if (a[2] === "o" || b[2] === "o") k = "half";
         else k = "none";
@@ -505,6 +507,7 @@ function circleKit(root, cfg) {
         line.setAttribute("x1", E[0][0].toFixed(1)); line.setAttribute("y1", E[0][1].toFixed(1)); line.setAttribute("x2", E[1][0].toFixed(1)); line.setAttribute("y2", E[1][1].toFixed(1));
         at(hs[0], E[0][0], E[0][1]); at(hs[1], E[1][0], E[1][1]);
         var j = judge(), L = fmt(j.len, 1) + " cm", m = {
+          point: ["两个端点重合，没有形成线段；请移开一个端点。", "no"],
           r: ["是半径：从圆心连到圆上，长 " + L + "。", "ok"],
           d: ["是直径：通过圆心，两端都在圆上，长 " + L + "。", "ok"],
           chord: ["两端都在圆上，可是没有通过圆心：不是直径。它长 " + L + "，比直径 " + 2 * rc + " cm 短。", "no"],

@@ -158,24 +158,24 @@ document.addEventListener("DOMContentLoaded", function () {
   var grid = document.getElementById("u47-grid"), out = document.getElementById("u47-out");
   function mk(tag, at) { var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); return e; }
   function pts(poly) { return poly.map(function (p) { return (OX + p[0] * C) + "," + (OY - p[1] * C); }).join(" "); }
-  function base(s) { return s === 0 ? [[0, 0], [4, 0], [4, 2], [0, 2]] : [[0, 0], [4, 0], [0, 2]]; }
+  function base(s) { return s === 0 ? [[0, 0], [3, 0], [3, 2], [0, 2]] : [[0, 0], [3, 0], [0, 2]]; }
   function area(w, h, s) { return s === 0 ? w * h : w * h / 2; }
   function draw() {
     while (grid.firstChild) grid.removeChild(grid.firstChild);
     for (var i = 0; i <= 11; i++) grid.appendChild(mk("line", { x1: OX + i * C, y1: OY, x2: OX + i * C, y2: OY - 5 * C, stroke: "var(--line)", "stroke-width": 1 }));
     for (var j = 0; j <= 5; j++) grid.appendChild(mk("line", { x1: OX, y1: OY - j * C, x2: OX + 11 * C, y2: OY - j * C, stroke: "var(--line)", "stroke-width": 1 }));
     var fx = [1, 2, 0.5, 2][mode], fy = [1, 2, 0.5, 1][mode];
-    var w = 4 * fx, h = 2 * fy;
+    var w = 3 * fx, h = 2 * fy;
     var nw = base(shape).map(function (p) { return [p[0] * fx, p[1] * fy]; });
     document.getElementById("u47-old").setAttribute("points", pts(base(shape)));
     document.getElementById("u47-new").setAttribute("points", mode ? pts(nw) : "");
-    var ratioW = w + "∶4", ratioH = h + "∶2";
+    var ratioW = w + "∶3", ratioH = h + "∶2";
     var same = fx === fy;
     out.className = "read" + (mode === 0 ? "" : same ? " ok" : " no");
     var name = shape === 0 ? "长方形" : "直角三角形（两条直角边）";
-    if (mode === 0) out.innerHTML = "原图：" + name + "，横 4 格、竖 2 格，面积 " + area(4, 2, shape) + " 个方格。";
+    if (mode === 0) out.innerHTML = "原图：" + name + "，横 3 格、竖 2 格，面积 " + area(3, 2, shape) + " 个方格。";
     else out.innerHTML = "新图：横 " + w + " 格、竖 " + h + " 格。<br>对应边的比（新图∶原图）：横 " + ratioW + "，竖 " + ratioH +
-      "<br><b>" + (same ? "两条边的比相同，形状没变，只是" + (fx > 1 ? "放大" : "缩小") + "了。" : "两条边的比不同，形状变了，这不叫放大。") + "</b><br>面积：" + area(4, 2, shape) + " → " + area(w, h, shape) + " 个方格。";
+      "<br><b>" + (same ? "两条边的比相同，形状没变，只是" + (fx > 1 ? "放大" : "缩小") + "了。" : "两条边的比不同，形状变了，这不叫放大。") + "</b><br>面积：" + area(3, 2, shape) + " → " + area(w, h, shape) + " 个方格。";
     [].forEach.call(root.querySelectorAll("button[data-shape]"), function (b) { b.setAttribute("aria-pressed", +b.getAttribute("data-shape") === shape ? "true" : "false"); });
     [].forEach.call(root.querySelectorAll("button[data-mode]"), function (b) { b.setAttribute("aria-pressed", +b.getAttribute("data-mode") === mode ? "true" : "false"); });
   }

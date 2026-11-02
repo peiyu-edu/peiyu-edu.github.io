@@ -196,13 +196,12 @@ document.addEventListener("DOMContentLoaded", function () {
       var y = 36 + i * 42, isBest = v === best;
       el("text", { x: 10, y: y + 22, "font-size": 16.5, fill: "var(--fg)" }, names[i]);
       el("rect", { x: 92, y: y, width: Math.max(2, v * scale), height: 30, rx: 4,
-        fill: "var(--hl-soft)", stroke: isBest ? "var(--c)" : "var(--line)", "stroke-width": isBest ? 3 : 1.5 });
-      el("text", { x: 98 + v * scale, y: y + 22, "font-size": 16.5, "font-weight": isBest ? 700 : 400, fill: isBest ? "var(--c)" : "var(--fg)" }, v + " 元");
+        fill: "var(--hl-soft)", stroke: "var(--line)", "stroke-width": 1.5 });
+      el("text", { x: 98 + v * scale, y: y + 22, "font-size": 16.5, "font-weight": 400, fill: "var(--fg)" }, "待计算");
     });
     var bs = [];
     pay.forEach(function (v, i) { if (v === best) bs.push(["甲", "乙", "丙"][i]); });
-    out.textContent = "买 " + n + " 本：甲 " + pay[0] + " 元，乙 " + pay[1] + " 元，丙 " + pay[2] + " 元。" +
-      (bs.length > 1 ? "方案" + bs.join("、") + "一样多，都是 " + best + " 元。" : "方案" + bs[0] + "最省，付 " + best + " 元。");
+    out.textContent = "买 " + n + " 本，原价共 " + total + " 元。甲按八折，乙满 200 元减 50 元（只减一次），丙每 4 本付 3 本的钱。分别计算付款，再比较哪种方案更省。";
   }
   [].forEach.call(root.querySelectorAll(".ctrls button"), function (b) {
     b.addEventListener("click", function () {

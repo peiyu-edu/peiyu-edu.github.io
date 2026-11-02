@@ -180,11 +180,14 @@ function initChu9(root) {
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var q = st.q, picked = q >= 2, a = picked ? q * 9 : 0, tens = picked ? q - 1 : 0;
+    var questionId = { 4: "q4", 6: "q1", 7: "q5", 9: "q3" }[q];
+    var question = questionId && document.querySelector('.card[data-id="' + questionId + '"]');
+    var held = question && !question.classList.contains("done");
     btns.forEach(function (b, idx) { b.setAttribute("aria-pressed", picked && idx + 2 === q ? "true" : "false"); });
 
     // 左半：9 行 × 9 列方格（点中后才高亮前 q 行，并写出得数）
     var gx = 10, gy = 34, cw = 16;
-    el("text", { x: gx + (9 * cw) / 2, y: 24, "text-anchor": "middle", style: "fill:" + (picked ? "var(--a)" : "var(--muted)") + ";font-size:16.5px;font-weight:700" }, svg, picked ? (q + "行×9格=" + a) : "先点一个算式");
+    el("text", { x: gx + (9 * cw) / 2, y: 24, "text-anchor": "middle", style: "fill:" + (picked ? "var(--a)" : "var(--muted)") + ";font-size:16.5px;font-weight:700" }, svg, picked ? (held ? a + "格，每行9格" : q + "行×9格=" + a) : "先点一个算式");
     for (var r = 1; r <= 9; r++) {
       var active = picked && r <= q;
       for (var c = 0; c < 9; c++) {
@@ -204,13 +207,13 @@ function initChu9(root) {
       if (isCurr) {
         el("rect", { x: 168, y: ry - 16, width: 176, height: 21, rx: 4, style: "fill:var(--ok-soft);stroke:var(--a);stroke-width:1.2" }, svg);
       }
-      el("text", { x: 174, y: ry, style: "fill:" + (isCurr ? "var(--a)" : "var(--fg)") + ";font-size:16.5px;font-weight:" + (isCurr ? "700" : "600") }, svg, isCurr ? (ma + "÷9=" + m) : (ma + "÷9=？"));
-      if (isCurr) {
+      el("text", { x: 174, y: ry, style: "fill:" + (isCurr ? "var(--a)" : "var(--fg)") + ";font-size:16.5px;font-weight:" + (isCurr ? "700" : "600") }, svg, isCurr && !held ? (ma + "÷9=" + m) : (ma + "÷9=？"));
+      if (isCurr && !held) {
         el("text", { x: 266, y: ry, style: "fill:var(--c);font-size:16.5px;font-weight:700" }, svg, "（" + mt + "+1=" + m + "）");
       }
     }
 
-    var txt = picked
+    var txt = held ? a + " 个方格，每行 9 个。数一数有几行，先把这道题填完，再核对商。" : picked
       ? (a + " ÷ 9 = " + q + "（口诀：" + VERSES[q] + "）。被除数 " + a + " 的十位是 " + tens + "，" + tens + " + 1 = " + q + "。")
       : "点一个被除数，再看它除以 9 的商。商先不写出来。";
     read.className = "read ok";
@@ -221,6 +224,9 @@ function initChu9(root) {
       read.appendChild(sb);
     }
   }
+  ["fill:submit", "fill:peek", "primary:retry"].forEach(function (name) {
+    document.addEventListener(name, draw);
+  });
   draw();
 }
 

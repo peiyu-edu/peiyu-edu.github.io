@@ -238,8 +238,8 @@ document.addEventListener("DOMContentLoaded", function () {
       title: "🥤 调制糖水求含糖率（分母是糖+水）",
       name: "含糖率",
       formula: "含糖率 = 糖重 ÷ (糖重 + 水重) × 100%",
-      water: 80,
-      part: 20,
+      water: 75,
+      part: 25,
       step: 5,
       min: 5,
       max: 45,
@@ -262,19 +262,22 @@ document.addEventListener("DOMContentLoaded", function () {
   function sync() {
     var s = scenes[curIdx];
     var tot = s.mode === "sol" ? (curPart + s.water) : s.total;
-    var pct = Math.round((curPart / tot) * 1000) / 10;
+    var exactPct = curPart / tot * 100;
+    var pct = Math.round(exactPct * 10) / 10;
+    var eq = Math.abs(pct - exactPct) < 1e-9 ? " = " : " ≈ ";
     var w = Math.max(12, Math.round((curPart / tot) * 300));
     elTitle.textContent = s.title;
+    root.querySelector("button[data-act=max]").textContent = s.mode === "sol" ? "糖重调到 45 克" : "全部达标（上限）";
     elBar.setAttribute("width", String(w));
     if (s.mode === "sol") {
       elBarTxt.textContent = "糖 " + curPart + " 克 + 水 " + s.water + " 克 = 糖水 " + tot + " 克";
       elEq1.textContent = s.formula;
-      elEq2.textContent = curPart + " ÷ (" + curPart + " + " + s.water + ") × 100% = " + pct + "%";
-      elOut.innerHTML = "注意：分母是<b>糖加水一共 " + tot + " 克</b>，不是光除以水！含糖率 = <b>" + pct + "%</b>。";
+      elEq2.textContent = curPart + " ÷ (" + curPart + " + " + s.water + ") × 100%" + eq + pct + "%";
+      elOut.innerHTML = "注意：分母是<b>糖加水一共 " + tot + " 克</b>，不是光除以水！含糖率" + eq + "<b>" + pct + "%</b>。";
     } else {
       elBarTxt.textContent = s.partLabel + " " + curPart + " " + s.unit + "（" + s.totLabel + " " + tot + " " + s.unit + "）";
       elEq1.textContent = s.formula;
-      elEq2.textContent = curPart + " ÷ " + tot + " × 100% = " + pct + "%";
+      elEq2.textContent = curPart + " ÷ " + tot + " × 100%" + eq + pct + "%";
       if (curPart === tot) {
         elOut.innerHTML = "全部达到！" + s.name + "达到最高上限 <b>100%</b>，绝不可能超过 100%。";
       } else {

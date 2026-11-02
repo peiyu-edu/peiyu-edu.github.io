@@ -276,7 +276,7 @@ function circleKit(root, cfg) {
     el("circle", { cx: Rt[0], cy: Rt[1], r: r, style: "fill:var(--a);fill-opacity:.4;stroke:var(--fg);stroke-width:2.5" }, s);
     var sq = el("path", { style: "fill:var(--hl-soft);stroke:var(--fg);stroke-width:2.5" }, s), gTri = el("g", {}, s);
     txt(s, Rt[0], Rt[1] + r + 26, "外圆内方");
-    var bv = [1, 2, 3, "a"].map(function (v) { return btn("r = " + v, function () { st.v = v; tell(); log("sq", { v: v }); }); });
+    var bv = [1, 2, 6, "a"].map(function (v) { return btn("r = " + v, function () { st.v = v; tell(); log("sq", { v: v }); }); });
     var ctr2 = h("div", "ctrls");
     var bTri = btn("切成两个三角形", function () { st.tri = !st.tri; st.turn = false; st.k = 0; draw(); }, ctr2);
     var bTurn = btn("叠起来转一转", function () {
@@ -310,7 +310,7 @@ function circleKit(root, cfg) {
       } else if (!st.turn) tell();
     }
     function tell() {
-      bv.forEach(function (b, j) { pressed(b, [1, 2, 3, "a"][j] === st.v); });
+      bv.forEach(function (b, j) { pressed(b, [1, 2, 6, "a"][j] === st.v); });
       var v = st.v, isA = v === "a", r2 = isA ? 0 : v * v;
       var circle = isA ? "π<i>a</i>²" : (r2 === 1 ? "π" : r2 + "π"), sq4 = isA ? "4<i>a</i>²" : String(4 * r2), sq2 = isA ? "2<i>a</i>²" : String(2 * r2);
       tb.innerHTML = "<tr><th>圆的半径</th><td>" + (isA ? "<i>a</i>" : v) + " cm</td></tr><tr><th>圆的面积</th><td>" + circle + " cm²" + (isA ? "" : "（≈ " + fmt(3.14 * r2) + "）") + "</td></tr>" +

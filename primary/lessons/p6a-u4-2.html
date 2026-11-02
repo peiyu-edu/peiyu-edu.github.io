@@ -306,7 +306,7 @@ function circleKit(root, cfg) {
     hint.textContent = "拖红色的点 B（或用 Tab 选中后按方向键），把圆心角变大变小。";
     mount();
     function P2(a, r, ox, oy) { return [(ox == null ? cx : ox) + r * Math.cos(rad(-a)), (oy == null ? cy : oy) + r * Math.sin(rad(-a))]; }
-    function set(b) { b = Math.min(350, Math.max(10, b)); [90, 180, 270].forEach(function (t) { if (Math.abs(b - t) <= 6) b = t; }); st.b = b; draw(); }
+    function set(b) { b = Math.min(350, Math.max(10, b)); [90, 180, 270].forEach(function (t) { if (Math.abs(b - t) <= 2) b = t; }); st.b = b; draw(); }
     function draw() {
       var b = st.b, A = [cx + R, cy], B = P2(b, R), big = b > 180 ? 1 : 0, M = P2(b / 2, R + 24), Q = P2(b / 2, 48), m28 = P2(b, 28);
       pSec.setAttribute("d", "M" + cx + " " + cy + " L" + A[0] + " " + A[1] + " A" + R + " " + R + " 0 " + big + " 0 " + B[0].toFixed(1) + " " + B[1].toFixed(1) + " Z");
@@ -319,7 +319,7 @@ function circleKit(root, cfg) {
       tDeg.setAttribute("x", Q[0].toFixed(1)); tDeg.setAttribute("y", (Q[1] + 6).toFixed(1)); tDeg.textContent = b + "°";
       hB.setAttribute("aria-valuetext", b + "度");
       pSec.style.display = st.vtx || st.tri ? "none" : "";
-      pTri.style.display = st.tri && b < 180 ? "" : "none";
+      pTri.style.display = st.tri && b !== 180 ? "" : "none";
       pTri.setAttribute("d", "M" + cx + " " + cy + " L" + A[0] + " " + A[1] + " L" + B[0].toFixed(1) + " " + B[1].toFixed(1) + " Z");
       var C = P2(b / 2 + 180, R);
       pV.style.display = tC.style.display = st.vtx ? "" : "none";
@@ -328,7 +328,7 @@ function circleKit(root, cfg) {
       pressed(bV, st.vtx); pressed(bT, st.tri);
       var m, sy, cls = "";
       if (st.vtx) { m = "角 ACB 的顶点 C 在圆上，不在圆心：它不是圆心角，CA、CB 也不是半径。"; sy = m; cls = "no"; }
-      else if (st.tri && b >= 180) { m = "现在 A、O、B 已经不能围成三角形了。把圆心角调到 180° 以下再看。"; sy = m; }
+      else if (st.tri && b === 180) { m = "现在 A、O、B 在同一直线上，不能围成三角形。把圆心角调离 180° 再看。"; sy = m; }
       else if (st.tri) { m = "涂色的是三角形 AOB：A、B 之间是一条直直的线段。扇形的这条边是弯的弧，所以三角形 AOB 不是扇形。"; sy = m; cls = "no"; }
       else if (b === 90) { m = "圆心角 ∠AOB = 90°：这个扇形是圆的 " + fr(1, 4) + "。"; sy = "圆心角九十度，这个扇形是圆的四分之一。"; cls = "ok"; }
       else if (b === 180) { m = "圆心角 ∠AOB = 180°：这个扇形是半圆。"; sy = "圆心角一百八十度，这个扇形是半圆。"; cls = "ok"; }

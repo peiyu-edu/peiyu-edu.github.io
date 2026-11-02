@@ -191,6 +191,8 @@ function initLiangbu(root) {
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var s = st.step;
+    var firstDone = document.querySelector('.card[data-id="q1"]').classList.contains("done");
+    var secondDone = document.querySelector('.card[data-id="q2"]').classList.contains("done");
     b1.setAttribute("aria-pressed", s === 1 ? "true" : "false");
     b2.setAttribute("aria-pressed", s === 2 ? "true" : "false");
     b3.setAttribute("aria-pressed", s === 3 ? "true" : "false");
@@ -207,14 +209,14 @@ function initLiangbu(root) {
     }
     el("path", { d: "M" + bx + " " + (y1 - 3) + " L" + bx + " " + (y1 - 9) + " L" + (bx + bw) + " " + (y1 - 9) + " L" + (bx + bw) + " " + (y1 - 3), style: "fill:none;stroke:var(--a);stroke-width:1.8" }, svg);
     el("text", { x: bx + bw / 2, y: y1 - 13, "text-anchor": "middle", style: "fill:var(--a);font-size:16.5px;font-weight:700" }, svg,
-      s === 1 ? "（1）一共 ？人" : "（1）一共 24 人（6×4=24）");
+      firstDone ? "（1）一共 24 人（6×4=24）" : "（1）一共 ？人");
 
     // 中间等长传递提示
     if (s >= 2) {
       el("line", { x1: bx, y1: y1 + bh + 3, x2: bx, y2: y2 - 3, style: "stroke:var(--b);stroke-width:1.5;stroke-dasharray:4 3" }, svg);
       el("line", { x1: bx + bw, y1: y1 + bh + 3, x2: bx + bw, y2: y2 - 3, style: "stroke:var(--b);stroke-width:1.5;stroke-dasharray:4 3" }, svg);
       el("rect", { x: bx + 22, y: y1 + bh + 13, width: 240, height: 28, rx: 14, style: "fill:var(--hl-soft);stroke:var(--b);stroke-width:1.5" }, svg);
-      el("text", { x: bx + bw / 2, y: y1 + bh + 33, "text-anchor": "middle", style: "fill:var(--b);font-size:16.5px;font-weight:700" }, svg, "↓ 总数 24 人不变 ↓");
+      el("text", { x: bx + bw / 2, y: y1 + bh + 33, "text-anchor": "middle", style: "fill:var(--b);font-size:16.5px;font-weight:700" }, svg, firstDone ? "↓ 总数 24 人不变 ↓" : "↓ 同一群人，总数不变 ↓");
     }
 
     // 第二条色条：坐缆车或平均分组
@@ -230,7 +232,7 @@ function initLiangbu(root) {
         el("text", { x: sx2 + w2 / 2, y: y2 + 23, "text-anchor": "middle", style: "fill:var(--fg);font-size:16.5px;font-weight:700" }, svg, "8人");
       }
       el("path", { d: "M" + bx + " " + (y2 + bh + 4) + " L" + bx + " " + (y2 + bh + 10) + " L" + (bx + bw) + " " + (y2 + bh + 10) + " L" + (bx + bw) + " " + (y2 + bh + 4), style: "fill:none;stroke:var(--b);stroke-width:1.8" }, svg);
-      el("text", { x: bx + bw / 2, y: y2 + bh + 31, "text-anchor": "middle", style: "fill:var(--b);font-size:16.5px;font-weight:700" }, svg, "（2）24 ÷ 8 = 3（辆）");
+      el("text", { x: bx + bw / 2, y: y2 + bh + 31, "text-anchor": "middle", style: "fill:var(--b);font-size:16.5px;font-weight:700" }, svg, "（2）" + (firstDone ? "24" : "□") + " ÷ 8 = " + (secondDone ? "3" : "？") + "（辆）");
     } else {
       el("text", { x: 52, y: y2 + 23, "text-anchor": "end", style: "fill:var(--c);font-size:16.5px;font-weight:700" }, svg, "3组");
       var w3 = bw / 3;
@@ -240,14 +242,14 @@ function initLiangbu(root) {
         el("text", { x: sx3 + w3 / 2, y: y2 + 23, "text-anchor": "middle", style: "fill:var(--c);font-size:16.5px;font-weight:700" }, svg, "？人（8人）");
       }
       el("path", { d: "M" + bx + " " + (y2 + bh + 4) + " L" + bx + " " + (y2 + bh + 10) + " L" + (bx + bw) + " " + (y2 + bh + 10) + " L" + (bx + bw) + " " + (y2 + bh + 4), style: "fill:none;stroke:var(--c);stroke-width:1.8" }, svg);
-      el("text", { x: bx + bw / 2, y: y2 + bh + 31, "text-anchor": "middle", style: "fill:var(--c);font-size:16.5px;font-weight:700" }, svg, "（2）24 ÷ 3 = 8（人）");
+      el("text", { x: bx + bw / 2, y: y2 + bh + 31, "text-anchor": "middle", style: "fill:var(--c);font-size:16.5px;font-weight:700" }, svg, "（2）" + (firstDone ? "24" : "□") + " ÷ 3 = 8（人）");
     }
 
     var txt = s === 1
       ? "第（1）问：每条船 6 人，4 条船。先算一共有多少人。"
       : (s === 2
-        ? "把第（1）问算出的 24 人传给第（2）问：每 8 人坐一辆缆车，24 ÷ 8 = 3（辆）。"
-        : "把 24 人平均分成 3 个小组：24 ÷ 3 = 8（人）。");
+        ? "把第（1）问算出的人数传给第（2）问：每 8 人坐一辆缆车，先算要坐几辆。" + (firstDone && secondDone ? "24 ÷ 8 = 3（辆）。" : "")
+        : "把同一群人平均分成 3 个小组，每组 8 人。" + (firstDone ? "24 ÷ 3 = 8（人）。" : ""));
     read.className = "read ok";
     read.textContent = txt;
     if (P) {
@@ -256,6 +258,9 @@ function initLiangbu(root) {
       read.appendChild(sb);
     }
   }
+  ["fill:submit", "fill:peek", "primary:retry"].forEach(function (name) {
+    document.addEventListener(name, draw);
+  });
   draw();
 }
 

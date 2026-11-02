@@ -87,7 +87,7 @@
       <div class="micro-tabs" id="m-count-tabs">
         <button class="micro-tab active" data-tab="1">① 分类加法（互斥直达）</button>
         <button class="micro-tab" data-tab="2">② 分步乘法（连续工序）</button>
-        <button class="micro-tab" data-tab="3">③ 综合应用（先分类后分步）</button>
+        <button class="micro-tab" data-tab="3" disabled>③ 综合应用（完成下方三位偶数题后查看）</button>
       </div>
     </div>
     <div style="background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px; text-align:center;">
@@ -560,6 +560,16 @@
     var trapFig = document.getElementById("m-count-trap-fig");
     var tabs = document.querySelectorAll("#m-count-tabs .micro-tab");
     if (!fig || !desc) return;
+    var combinedTab = document.querySelector('#m-count-tabs [data-tab="3"]');
+    var combinedQuestion = document.querySelector('.predict[data-id="try-3"]');
+    // Follow the card state so restored answers and retries use the same gate.
+    function syncCombinedTab() {
+      combinedTab.disabled = !combinedQuestion.classList.contains("done");
+      combinedTab.textContent = combinedTab.disabled ? "③ 综合应用（完成下方三位偶数题后查看）" : "③ 综合应用（先分类后分步）";
+      if (combinedTab.disabled && combinedTab.classList.contains("active")) tabs[0].click();
+    }
+    new MutationObserver(syncCombinedTab).observe(combinedQuestion, { attributes: true, attributeFilter: ["class"] });
+    syncCombinedTab();
 
     function el(t, a, txt) {
       var e = document.createElementNS("http://www.w3.org/2000/svg", t);
@@ -696,6 +706,7 @@
 
     tabs.forEach(function(tab) {
       tab.addEventListener("click", function() {
+        if (tab.disabled) return;
         tabs.forEach(function(t) { t.classList.remove("active"); });
         tab.classList.add("active");
         var idx = tab.getAttribute("data-tab");

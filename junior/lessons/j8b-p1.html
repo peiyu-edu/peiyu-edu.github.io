@@ -179,7 +179,7 @@
     </div>
     <div class="trap-card">
       <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ②</span><span>附点就是“加一拍”</span></div>
-      <div class="trap-body"><div class="trap-wrong"><b>❌ 典型错解</b>：附点二分音符 \(=2+1=3\) 拍，附点八分音符 \(=\dfrac12+1\) 拍。</div><div class="trap-right"><b>✅ 改正</b>：附点是加上<b>原时值的一半</b>：附点八分音符 \(=\dfrac12\times\dfrac32=\dfrac34\) 拍。</div></div>
+      <div class="trap-body"><div class="trap-wrong"><b>❌ 典型错解</b>：附点二分音符是 \(3\) 拍，所以附点总是加一拍，附点八分音符 \(=\dfrac12+1\) 拍。</div><div class="trap-right"><b>✅ 改正</b>：附点是加上<b>原时值的一半</b>。附点二分音符仍是 \(2+1=3\) 拍，错在把它推广为所有附点都“加一拍”；附点八分音符 \(=\dfrac12\times\dfrac32=\dfrac34\) 拍。</div></div>
     </div>
     <div class="trap-card">
       <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ③</span><span>拍速快了，时长也“快”了</span></div>
@@ -205,7 +205,7 @@
       <button type="button" data-p="66.667">2/3</button>
       <button type="button" data-p="50">1/2</button>
     </div>
-    <div class="ctrl"><label for="r-l">振动部分（%）</label><input type="range" id="r-l" min="40" max="100" step="1" value="100"><button class="btn ghost" id="reset-str" type="button">重置</button></div>
+    <div class="ctrl"><label for="r-l">振动部分（%）</label><input type="range" id="r-l" min="40" max="100" step="any" value="100"><button class="btn ghost" id="reset-str" type="button">重置</button></div>
     <div class="result" id="out-str" aria-live="polite"></div>
   </div>
   <h3>② 进阶：五度相生转一圈</h3>
@@ -329,7 +329,7 @@
     return xs;
   }
   var NAMES = [[1, "原音"], [0.75, "纯四度"], [2 / 3, "纯五度"], [0.5, "八度"]];
-  function interval(fr) { for (var i = 0; i < NAMES.length; i++) if (Math.abs(fr - NAMES[i][0]) < 0.004) return NAMES[i][1]; return ""; }
+  function interval(fr) { for (var i = 0; i < NAMES.length; i++) if (Math.abs(fr - NAMES[i][0]) < 1e-10) return NAMES[i][1]; return ""; }
 
   /* 从例子进入 */
   var ef = document.getElementById("entry-fig"), en = document.getElementById("entry-note"), eL = 1;
@@ -400,7 +400,7 @@
     if (!nm) { for (var i = 0; i < NAMES.length; i++) if (Math.abs(fr - NAMES[i][0]) < 0.012) near = NAMES[i][1]; }
     os.innerHTML = "振动部分占 " + f(P, 1) + "%，频率 = 220 ÷ " + f(fr, 4) + " ≈ <span class=\"sum\">" + f(hz, 1) + " Hz</span>（是空弦的 " + f(1 / fr, 3) + " 倍）。" + (nm ? "弦长比是简单的比，和空弦构成<b>" + nm + "</b>。" : near ? "接近" + near + "，但比值不是精确的简单比。" : "不在上面四个常用按钮位置；可根据弦长与频率成反比算出对应频率。");
   }
-  bar("str-bar", function (t) { P = +t.getAttribute("data-p"); rl.value = Math.round(P); drawStr(); });
+  bar("str-bar", function (t) { P = +t.getAttribute("data-p"); if (P === 66.667) P = 200 / 3; rl.value = P; drawStr(); });
   rl.addEventListener("input", function () { P = +rl.value; setOn("str-bar", "", "data-p"); drawStr(); });
   document.getElementById("reset-str").onclick = function () { P = 100; rl.value = 100; setOn("str-bar", "100", "data-p"); drawStr(); };
 
@@ -421,7 +421,7 @@
       if (i % 2 === 0 || i === K) txt(fc, x0 + i * w + w / 2, y0 + 28, String(i), i === K ? c.no : c.fg, i === K ? 700 : 400, 19);
     }
     var v = s.L[K];
-    oc.innerHTML = "第 " + K + " 步：" + (K ? "这一步 " + s.ops[K] + "，" : "整根弦，") + "弦长 = <span class=\"sum\">" + f(v, 4) + "</span>（全弦为 1）。绿色柱是 ×2/3（三分损一），金色柱是 ×4/3（三分益一）。" + (K === 12 ? "转完 12 步，弦长是 524288/531441 ≈ 0.9865，没有回到 1：差了约 1.36%，这就是“音差”。" : K ? "再拖到第 12 步，看看能不能回到 1。" : "");
+    oc.innerHTML = "第 " + K + " 步：" + (K ? "这一步 " + s.ops[K] + "，" : "整根弦，") + "弦长 = <span class=\"sum\">" + f(v, 4) + "</span>（全弦为 1）。绿色柱是 ×2/3（三分损一），金色柱是 ×4/3（三分益一）。" + (K === 12 ? "转完 12 步，弦长是 524288/531441 ≈ 0.9865，没有回到 1：比原长短约 1.35%；对应频率比原音高约 1.36%，这就是“音差”。" : K ? "再拖到第 12 步，看看能不能回到 1。" : "");
   }
   rk.addEventListener("input", drawCyc);
   document.getElementById("reset-cyc").onclick = function () { rk.value = 4; drawCyc(); };

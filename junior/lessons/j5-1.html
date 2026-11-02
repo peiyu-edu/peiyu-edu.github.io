@@ -416,10 +416,14 @@
   function drawEntry() {
     var p = $("entry-fig"), c = C(), k = entryK, L = 3 * k + 7, t = L > 40 ? 1 : L < 40 ? -1 : 0; p.innerHTML = "";
     var e = balance(p, 260, 70, 150, 3, 7, 0, 40, t);
-    txt(p, e[0][0], 30, "左 " + L, c.b, 700, 20); txt(p, e[1][0], 30, "右 40", c.a, 700, 20);
+    var answered = entryBox.classList.contains("done");
+    txt(p, e[0][0], 30, answered ? "左 " + L : "左 3×" + k + "+7", c.b, 700, 20); txt(p, e[1][0], 30, "右 40", c.a, 700, 20);
     $("entry-note").textContent = "正在试每盒 " + k + " 元。先算 3 盒的钱加找回的钱，再与带去的 40 元比较；根据天平的位置判断这次试值是否合适。";
   }
   bar("entry-bar", function (k) { entryK = k; drawEntry(); });
+  var entryBox = $("entry-fig").closest(".predict");
+  entryBox.addEventListener("predict:pick", drawEntry);
+  entryBox.addEventListener("predict:reset", drawEntry);
 
   /* 微图解 ①：逐关检查 */
   var M1 = [

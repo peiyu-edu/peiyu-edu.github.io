@@ -289,9 +289,13 @@ document.addEventListener("DOMContentLoaded", function () {
         read.innerHTML = "太棒了！对折 <b>" + folds + " 次</b>（" + layers + " 层纸），头和身体从折痕画起、手连到边，展开正好是 <b>" + count + " 个手拉手的纸人</b>！";
       } else if (styleMode === "openEdge") {
         el("text", { x: 20, y: 28, style: "fill:var(--no);font-size:15px;font-weight:700" }, "展开失败：两边出现了半个不完整的纸人！");
-        drawHalfDoll(86, 108, 1.0, true, "var(--no-soft)");
-        if (count >= 2) drawFullDoll(180, 108, 0.95, true, "var(--no-soft)");
-        drawHalfDoll(274, 108, 1.0, false, "var(--no-soft)");
+        var edgeStep = count === 1 ? 156 : count === 2 ? 96 : 60;
+        var edgeStart = 180 - count * edgeStep / 2;
+        drawHalfDoll(edgeStart, 108, sc, true, "var(--no-soft)");
+        for (var full = 1; full < count; full++) {
+          drawFullDoll(edgeStart + full * edgeStep, 108, sc, true, "var(--no-soft)");
+        }
+        drawHalfDoll(edgeStart + count * edgeStep, 108, sc, false, "var(--no-soft)");
         el("text", { x: 180, y: 176, "text-anchor": "middle", style: "fill:var(--no);font-size:16px;font-weight:700" }, "✗ 头和身体画在开口边，展开后裂成半个人！");
         read.className = "read no";
         read.innerHTML = "哎呀！因为把头和身体画在了<b>开口边</b>，开口那两层没有连着，展开后两边各剩<b>半个不完整的纸人</b>！";

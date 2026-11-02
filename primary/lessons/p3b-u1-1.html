@@ -302,6 +302,12 @@ document.addEventListener("DOMContentLoaded", function () {
   var bReset = mkBtn("重来", function () { sIdx = 0; aIdx = 0; folded = false; rebuildAxisBtns(); draw(); });
   ctrAct.appendChild(bFold); ctrAct.appendChild(bReset);
 
+  function reflected(point, a, b) {
+    var dx = b[0] - a[0], dy = b[1] - a[1];
+    var t = ((point[0] - a[0]) * dx + (point[1] - a[1]) * dy) / (dx * dx + dy * dy);
+    return [2 * (a[0] + t * dx) - point[0], 2 * (a[1] + t * dy) - point[1]];
+  }
+
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var sh = SHAPES[sIdx], ax = sh.axes[aIdx];
@@ -334,8 +340,9 @@ document.addEventListener("DOMContentLoaded", function () {
         el("text", { x: 180, y: 174, "text-anchor": "middle", style: "fill:var(--a);font-size:16px;font-weight:700" }, "✓ 横着对折：完全重合！");
       } else {
         // Diagonal fold of rectangle shows mismatch!
+        var corner = reflected([rx, ry + rh], [rx, ry], [rx + rw, ry + rh]);
         el("polygon", { points: rx + "," + ry + " " + (rx + rw) + "," + ry + " " + (rx + rw) + "," + (ry + rh), style: "fill:var(--ok-soft);stroke:var(--fg);stroke-width:2.5" });
-        el("polygon", { points: rx + "," + ry + " " + (rx + 80) + "," + (ry - 39) + " " + (rx + rw) + "," + (ry + rh), style: "fill:var(--no-soft);fill-opacity:0.7;stroke:var(--no);stroke-width:2.5;stroke-dasharray:5 3" });
+        el("polygon", { points: rx + "," + ry + " " + corner.join(",") + " " + (rx + rw) + "," + (ry + rh), style: "fill:var(--no-soft);fill-opacity:0.7;stroke:var(--no);stroke-width:2.5;stroke-dasharray:5 3" });
         el("text", { x: 180, y: 176, "text-anchor": "middle", style: "fill:var(--no);font-size:16px;font-weight:700" }, "✗ 两个直角错开翘出，不重合！");
       }
     } else if (sIdx === 2) {
@@ -358,11 +365,27 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     } else {
       // Parallelogram
+      cy = 104;
       if (!folded) {
         el("polygon", { points: "125,64 265,64 235,144 95,144", style: "fill:var(--card);stroke:var(--fg);stroke-width:2.5" });
       } else {
-        el("polygon", { points: "125,64 180,64 180,144 95,144", style: "fill:var(--card);stroke:var(--fg);stroke-width:2" });
-        el("polygon", { points: "180,64 95,64 125,144 180,144", style: "fill:var(--no-soft);fill-opacity:0.7;stroke:var(--no);stroke-width:2.5;stroke-dasharray:5 3" });
+        // Fold the selected half across the same line shown by the dashed crease.
+        var fixed, moving, a, b;
+        if (ax.dir === "v") {
+          fixed = [[125,64],[180,64],[180,144],[95,144]];
+          moving = [[180,64],[265,64],[235,144],[180,144]];
+          a = [180,64]; b = [180,144];
+        } else if (ax.dir === "h") {
+          fixed = [[125,64],[265,64],[250,104],[110,104]];
+          moving = [[110,104],[250,104],[235,144],[95,144]];
+          a = [110,104]; b = [250,104];
+        } else {
+          fixed = [[125,64],[265,64],[235,144]];
+          moving = [[125,64],[95,144],[235,144]];
+          a = [125,64]; b = [235,144];
+        }
+        el("polygon", { points: fixed.map(function (p) { return p.join(","); }).join(" "), style: "fill:var(--card);stroke:var(--fg);stroke-width:2" });
+        el("polygon", { points: moving.map(function (p) { return reflected(p, a, b).join(","); }).join(" "), style: "fill:var(--no-soft);fill-opacity:0.7;stroke:var(--no);stroke-width:2.5;stroke-dasharray:5 3" });
         el("text", { x: 180, y: 176, "text-anchor": "middle", style: "fill:var(--no);font-size:16px;font-weight:700" }, "✗ 两边斜角错开，不能完全重合！");
       }
     }
@@ -376,6 +399,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (ax.dir === "d1") {
       if (sIdx === 1) {
         el("line", { x1: 105, y1: 64, x2: 255, y2: 148, style: "stroke:" + strokeCol + ";stroke-width:3;stroke-dasharray:6 4" });
+      } else if (sIdx === 3) {
+        el("line", { x1: 125, y1: 64, x2: 235, y2: 144, style: "stroke:" + strokeCol + ";stroke-width:3;stroke-dasharray:6 4" });
       } else {
         el("line", { x1: 132, y1: 58, x2: 228, y2: 154, style: "stroke:" + strokeCol + ";stroke-width:3;stroke-dasharray:6 4" });
       }

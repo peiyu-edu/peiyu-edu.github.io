@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-b0e7da29a8a0fe4d"></script>
+<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -449,7 +449,7 @@
   }
   function point(fig,p,color,name,offset) {
     svg("circle",{cx:p.x,cy:p.y,r:5,fill:color},fig);
-    if(name)text(fig,clamp(p.x+(offset?offset[0]:10),24,330),clamp(p.y+(offset?offset[1]:-12),18,320),name,color,offset&&offset[0]<0?"end":"start");
+    if(name)return text(fig,clamp(p.x+(offset?offset[0]:10),24,330),clamp(p.y+(offset?offset[1]:-12),18,320),name,color,offset&&offset[0]<0?"end":"start");
   }
   function arc(fig,cx,cy,r,start,amount,color) {
     amount=norm(amount);if(!amount)return;
@@ -487,11 +487,37 @@
   function fig2Draw() {
     var to=frame(fig2,CX2,CY2,U2,3),o={x:CX2,y:CY2},a=css("--a"),b=css("--b"),c=css("--c"),rw=Math.SQRT2*r2Val,tw=norm(45+th2Val),p1=to(Math.SQRT2,45),p2=to(r2Val,th2Val),pw=to(rw,tw);
     arrow(fig2,o,p1,b,2.5);point(fig2,p1,b,"z₁",[10,-10]);
-    if(r2Val){arrow(fig2,o,p2,c,2,"4 3");point(fig2,p2,c,"z₂",[-10,23]);arrow(fig2,o,pw,a,3.5);point(fig2,pw,a,"w",[12,23]);arc(fig2,CX2,CY2,32,45,th2Val,css("--hl"));}else point(fig2,o,a,"w = 0",[12,-14]);
+    if(r2Val){arrow(fig2,o,p2,c,2,"4 3");var multiplierLabel=point(fig2,p2,c,"z₂",[-10,23]);placeVectorLabel(multiplierLabel,p2);arrow(fig2,o,pw,a,3.5);var productLabel=point(fig2,pw,a,"w",[12,23]);placeVectorLabel(productLabel,pw);arc(fig2,CX2,CY2,32,45,th2Val,css("--hl"));}else point(fig2,o,a,"w = 0",[12,-14]);
     el("r2in").value=r2Val;el("th2in").value=th2Val;el("r2out").textContent=f2(r2Val);el("th2out").textContent=th2Val+"°";
     if(!r2Val)math(el("fig2out"),'<span class="bad">\\(z_2=0\\)，所以 \\(w=z_1z_2=0\\)，模为 \\(0\\)，没有辐角。零乘数不是可逆的旋转伸缩。</span>');
     else math(el("fig2out"),'基准（金）：\\(z_1=1+i\\)<br>乘数（蓝）：\\(z_2='+trigTex(r2Val,th2Val)+'\\)<br>乘积（绿）：\\(w='+f2(r2Val)+'\\sqrt2\\left(\\cos('+angleTex(tw)+')+i\\sin('+angleTex(tw)+')\\right)\\)<br><span class="eq">模变为原来的 '+f2(r2Val)+' 倍'+(r2Val<1?'（缩小）':r2Val>1?'（放大）':'（不变）')+'；'+(th2Val?'逆时针转 '+th2Val+'°':'方向不变')+'。乘积模 \\( '+f2(r2Val)+'\\sqrt2\\approx '+f2(rw)+'\\)，本课主值 '+tw+'°。</span>');
     fig2.setAttribute("aria-label",r2Val?"真实复平面：金色 z一，蓝色 z二，绿色乘积 w；各向量按同一单位绘制。":"乘数和乘积均为零，没有辐角。");
+  }
+  function placeVectorLabel(label,p) {
+    var others=Array.from(fig2.querySelectorAll("text")).filter(function(t){return t!==label;}).map(function(t){return t.getBBox();});
+    var lines=Array.from(fig2.querySelectorAll("line"));
+    var best=null,bestScore=Infinity;
+    // Move only labels; the vectors retain their shared coordinate scale.
+    [[12,-12],[-12,-12],[12,23],[-12,23],[12,42],[-12,42]].forEach(function(offset){
+      var x=clamp(p.x+offset[0],24,330),y=clamp(p.y+offset[1],18,320),anchor=offset[0]<0?"end":"start";
+      label.setAttribute("x",x);label.setAttribute("y",y);label.setAttribute("text-anchor",anchor);
+      var box=label.getBBox(),score=0;
+      others.forEach(function(other){
+        score+=Math.max(0,Math.min(box.x+box.width,other.x+other.width)-Math.max(box.x,other.x)+6)*Math.max(0,Math.min(box.y+box.height,other.y+other.height)-Math.max(box.y,other.y)+6);
+      });
+      lines.forEach(function(line){
+        var from=0,to=1;
+        var axes=[[line.x1.baseVal.value,line.x2.baseVal.value-line.x1.baseVal.value,box.x-3,box.x+box.width+3],[line.y1.baseVal.value,line.y2.baseVal.value-line.y1.baseVal.value,box.y-3,box.y+box.height+3]];
+        var crosses=axes.every(function(axis){
+          if(!axis[1])return axis[0]>=axis[2]&&axis[0]<=axis[3];
+          var a=(axis[2]-axis[0])/axis[1],b=(axis[3]-axis[0])/axis[1];
+          from=Math.max(from,Math.min(a,b));to=Math.min(to,Math.max(a,b));return from<=to;
+        });
+        if(crosses)score+=1000;
+      });
+      if(score<bestScore){bestScore=score;best={x:x,y:y,anchor:anchor};}
+    });
+    label.setAttribute("x",best.x);label.setAttribute("y",best.y);label.setAttribute("text-anchor",best.anchor);
   }
   el("r2in").addEventListener("input",function(){r2Val=clamp(Number(this.value)||0,0,2.2);fig2Draw();});el("th2in").addEventListener("input",function(){th2Val=norm(Number(this.value)||0);fig2Draw();});
   [["m-i",1,90],["m-neg1",1,180],["m-2",2,0],["m-half60",.5,60],["reset2",1,90]].forEach(function(row){el(row[0]).addEventListener("click",function(){r2Val=row[1];th2Val=row[2];fig2Draw();});});

@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-b0e7da29a8a0fe4d"></script>
+<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -390,7 +390,7 @@
   }
   // 弧度：15° 的倍数写成 π 的分数，否则写近似值
   function radStr(d) {
-    if (d % 15 !== 0) return "\\approx " + (d * Math.PI / 180).toFixed(2);
+    if (d % 15 !== 0) return (d * Math.PI / 180).toFixed(2);
     var n = d / 15, g = gcd(Math.abs(n), 12) || 12, a = n / g, b = 12 / g;
     if (a === 0) return "0";
     var s = a < 0 ? "-" : "", m = Math.abs(a);
@@ -407,8 +407,8 @@
     return (t !== "0" && v < 0 ? "-" : "") + t;
   }
   function show(E, v) {
-    if (E && /^-?[01]$/.test(E)) return E;
-    return E ? E + "\\approx " + num(v) : num(v);
+    if (E && /^-?[01]$/.test(E)) return "=" + E;
+    return E ? "=" + E + "\\approx " + num(v) : "\\approx " + num(v);
   }
   function where(d) {
     var r = mod(d, 360);
@@ -507,14 +507,14 @@
     var tanVal = tanOk ? y / x : null;
     var h = "";
     var turns = Math.trunc(deg / 360);
-    h += '<div class="row">\\(\\alpha=' + deg + '^\\circ=' + radStr(deg) + '\\)，' + where(deg);
+    h += '<div class="row">\\(\\alpha=' + deg + '^\\circ' + (deg % 15 === 0 ? '=' : '\\approx ') + radStr(deg) + '\\)，' + where(deg);
     if (turns !== 0) h += '；与 \\(' + (deg - 360 * turns) + '^\\circ\\) 终边相同（差 ' + Math.abs(turns) + ' 圈），三个函数值也相同';
     h += '</div>';
-    h += '<div class="row">\\(P(x,y)=(' + num(x) + ',\\ ' + num(y) + ')\\)</div>';
-    h += '<div class="row"><span class="ca">\\(\\sin\\alpha=y=' + show(sE, y) + '\\)</span>　<span class="cb">\\(\\cos\\alpha=x=' + show(cE, x) + '\\)</span></div>';
-    h += '<div class="row">\\(\\tan\\alpha=\\dfrac yx' + (tanOk ? '=' + show(tE, tanVal) + '\\)' : '\\)：<span class="no">没有意义</span>（终边在 \\(y\\) 轴上，\\(x=0\\)）') + '</div>';
-    h += '<div class="row">\\(\\sin^2\\alpha+\\cos^2\\alpha=' + num(y * y) + '+' + num(x * x) + '=' + num(x * x + y * y) + '\\)</div>';
-    if (Math.abs(x) > 1e-9) h += '<div class="small">只知道 \\(\\sin\\alpha=' + num(y) + '\\) 时，\\(P\\) 和 \\(P\'\\) 都可能，\\(\\cos\\alpha=\\pm' + num(Math.abs(x)) + '\\)，要靠象限定符号。</div>';
+    h += '<div class="row">\\(P(x,y)\\approx(' + num(x) + ',\\ ' + num(y) + ')\\)</div>';
+    h += '<div class="row"><span class="ca">\\(\\sin\\alpha=y' + show(sE, y) + '\\)</span>　<span class="cb">\\(\\cos\\alpha=x' + show(cE, x) + '\\)</span></div>';
+    h += '<div class="row">\\(\\tan\\alpha=\\dfrac yx' + (tanOk ? show(tE, tanVal) + '\\)' : '\\)：<span class="no">没有意义</span>（终边在 \\(y\\) 轴上，\\(x=0\\)）') + '</div>';
+    h += '<div class="row">恒等式：\\(\\sin^2\\alpha+\\cos^2\\alpha=1\\)。两项的读数：\\(\\sin^2\\alpha\\approx' + num(y * y) + '\\)，\\(\\cos^2\\alpha\\approx' + num(x * x) + '\\)。</div>';
+    if (Math.abs(x) > 1e-9) h += '<div class="small">只知道正弦值时，\\(P\\) 和 \\(P\'\\) 都可能；这两个点的余弦互为相反数，\\(\\cos\\alpha\\approx\\pm' + num(Math.abs(x)) + '\\)，要靠象限定符号。</div>';
     else h += '<div class="small">这时 \\(P\'\\) 和 \\(P\\) 重合：\\(\\sin\\alpha=\\pm1\\) 只对应 \\(\\cos\\alpha=0\\) 一种。</div>';
     out.innerHTML = h;
     if (window.Peiyu) Peiyu.math(out);

@@ -14,6 +14,51 @@
     var el=document.createElementNS(NS,tag); el.setAttribute("data-figure-layout","1");
     Object.keys(attrs).forEach(function(k){el.setAttribute(k,attrs[k]);});return el;
   }
+  function lightness(c) {
+    var rgb=String(c).match(/[0-9.]+/g);
+    if(String(c)[0]==='#'){var h=c.slice(1);if(h.length===3)h=h.split('').map(function(x){return x+x;}).join('');rgb=[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+    return rgb&&rgb.length>=3?(+rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722)/255:null;
+  }
+  // Axes, curves and thin bands are mathematical content, so labels step around
+  // them. Grids and tick marks are read through, whatever their colour: a run of
+  // parallel straight lines with one paint is treated as background.
+  function collectObstacles(svg,inv,scale) {
+    var cell=8/scale, cells=new Map(), owners=[];
+    var card=lightness(getComputedStyle(document.documentElement).getPropertyValue('--card').trim());
+    var runs=new Map();
+    function runKey(el,cs){
+      if(!el.matches('line'))return null;
+      var horizontal=el.getAttribute('y1')===el.getAttribute('y2'), vertical=el.getAttribute('x1')===el.getAttribute('x2');
+      return horizontal||vertical?(horizontal?'h':'v')+cs.stroke+cs.strokeWidth:null;
+    }
+    [].forEach.call(svg.querySelectorAll('line'),function(el){
+      var cs=getComputedStyle(el);if(el.closest('defs,clipPath,mask,[data-figure-layout]')||cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)<0.1)return;
+      var key=runKey(el,cs);if(key)runs.set(key,(runs.get(key)||0)+1);
+    });
+    [].forEach.call(svg.querySelectorAll('line,path,polyline,polygon,rect,circle,ellipse'),function(el){
+      if(el.closest('defs,clipPath,mask,[data-figure-layout]')||el.matches('.peiyu-hit,.hit,.grid')||!el.getTotalLength||!el.getScreenCTM())return;
+      var cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)<0.1)return;
+      var run=runKey(el,cs);if(run&&runs.get(run)>=4)return;
+      var box=rect(el,inv), thin=Math.min(box.w,box.h)*scale<=12;
+      var visible=function(paint,opacity){if(paint==='none'||Number(opacity)<0.1)return false;var l=lightness(paint);return l===null||card===null||Math.abs(l-card)>=0.15;};
+      if(!(visible(cs.stroke,cs.strokeOpacity)&&parseFloat(cs.strokeWidth)>0)&&!(thin&&visible(cs.fill,cs.fillOpacity)))return;
+      var length;try{length=el.getTotalLength();}catch(e){return;}if(!length)return;
+      var matrix=inv.multiply(el.getScreenCTM()), id=owners.length, n=Math.min(240,Math.ceil(length/(4/scale)));
+      owners.push({closed:el.matches('rect,circle,ellipse,polygon')||(el.matches('path')&&/z\s*$/i.test(el.getAttribute('d')||'')),box:box});
+      for(var i=0;i<=n;i++){
+        var pt=el.getPointAtLength(length*i/n).matrixTransform(matrix), key=Math.floor(pt.x/cell)+':'+Math.floor(pt.y/cell);
+        if(!cells.has(key))cells.set(key,[]);cells.get(key).push({x:pt.x,y:pt.y,id:id});
+      }
+    });
+    return {cell:cell,cells:cells,owners:owners};
+  }
+  function obstacleHits(o,box,pad,skip) {
+    var hits=0;
+    for(var cx=Math.floor((box.x-pad)/o.cell);cx<=Math.floor((box.x+box.w+pad)/o.cell);cx++)for(var cy=Math.floor((box.y-pad)/o.cell);cy<=Math.floor((box.y+box.h+pad)/o.cell);cy++){
+      (o.cells.get(cx+':'+cy)||[]).forEach(function(p){if(!skip[p.id]&&p.x>box.x-pad&&p.x<box.x+box.w+pad&&p.y>box.y-pad&&p.y<box.y+box.h+pad)hits++;});
+    }
+    return hits;
+  }
   function state(svg) {
     var s=states.get(svg);if(!s){s={ labels:new WeakMap(),notes:null,nextOrder:0 };states.set(svg,s);}return s;
   }
@@ -74,6 +119,7 @@
     var vb=svg.viewBox.baseVal, sr=svg.getBoundingClientRect();if(!vb.width||!sr.width)return;
     var s=state(svg), m=svg.getScreenCTM(), inv=m.inverse(), scale=Math.hypot(m.a,m.b), pad=3/scale;
     var labels=[], points=[], placed=[], notes=[];
+    var obstacles=collectObstacles(svg,inv,scale);
     var layer=node('g',{class:'figure-label-layer'});svg.appendChild(layer);
     [].forEach.call(svg.querySelectorAll('circle'),function(c){
       if(c.closest('defs')||c.matches('.peiyu-hit,.hit'))return;
@@ -86,8 +132,10 @@
       var rich=[].some.call(t.children,function(child){
         return child.tagName.toLowerCase()!=='tspan'||!child.classList.contains('py-par')||['x','y','dx','dy'].some(function(k){return child.hasAttribute(k);});
       });
-      if(!content||rich||style.display==='none'||style.visibility==='hidden'||Number(style.opacity)<0.1||!t.getBoundingClientRect().width)return;
+      if(!content||style.display==='none'||style.visibility==='hidden'||Number(style.opacity)<0.1||!t.getBoundingClientRect().width)return;
       for(var parent=t.parentElement;parent&&parent!==svg;parent=parent.parentElement){var ps=getComputedStyle(parent);if(ps.display==='none'||ps.visibility==='hidden'||Number(ps.opacity)<0.1)return;}
+      // Rich text stays put, so the others must keep clear of it.
+      if(rich){if(!t.closest('defs'))placed.push(rect(t,inv));return;}
       if(t.closest('defs,.tri-cell,.hd[data-k="c"],[role="button"],[data-figure-label-fixed="1"]')){if(!t.closest('defs'))placed.push(rect(t,inv));return;}
       var previous=s.labels.get(t), order=previous?previous.order:++s.nextOrder;s.labels.set(t,{order:order});
       var matrix=inv.multiply(t.getScreenCTM()), clone=t.cloneNode(true);
@@ -95,6 +143,8 @@
       clone.setAttribute('transform','matrix('+[matrix.a,matrix.b,matrix.c,matrix.d,matrix.e,matrix.f].join(' ')+')');
       ['fontSize','fontFamily','fontWeight','fontStyle','fill','fillOpacity','stroke','strokeWidth','strokeOpacity','textAnchor','dominantBaseline','letterSpacing'].forEach(function(k){clone.style[k]=style[k];});
       clone.style.fontSize=Math.max(parseFloat(style.fontSize),14/Math.hypot(t.getScreenCTM().a,t.getScreenCTM().b))+'px';
+      // A page's own halo would erase the line under the label, so placement replaces it.
+      if(style.paintOrder.indexOf('stroke')===0)clone.style.stroke='none';
       clone.style.visibility='visible';clone.style.pointerEvents='none';layer.appendChild(clone);
       var original={text:t.textContent,transform:clone.getAttribute('transform'),marker:null,placedTransform:null,order:order};
       labels.push({el:clone,original:original,base:rect(clone,inv)});
@@ -118,10 +168,20 @@
     });
     // Small, direct labels take precedence over prose. Each displaced label keeps
     // a short leader to its original position; neither axes nor data points move.
-    labels.sort(function(a,b){return a.base.w-b.base.w||a.original.order-b.original.order;});
+    // Tick values place first: a scale moved apart reads as other values.
+    function isTick(item){return /^[−-]?[0-9][0-9.,]*%?$/.test(item.original.text.trim());}
+    labels.sort(function(a,b){return isTick(b)-isTick(a)||a.base.w-b.base.w||a.original.order-b.original.order;});
+    function ownersAround(base) {
+      // A label sitting inside a closed shape (a button, a node) belongs to that shape.
+      var skip={},cx=base.x+base.w/2,cy=base.y+base.h/2;
+      obstacles.owners.forEach(function(o,i){if(o.closed&&cx>o.box.x&&cx<o.box.x+o.box.w&&cy>o.box.y&&cy<o.box.y+o.box.h)skip[i]=1;});
+      return skip;
+    }
+    function snug(o,base){return o.w>=base.w*0.8&&o.h>=base.h*0.6&&o.w<base.w*2&&o.h<base.h*2;}
     function choose(base) {
-      var step=Math.max(base.h+pad*2,14/scale), choices=[];
-      for(var ring=0;ring<=5;ring++){
+      var step=Math.max(base.h+pad*2,14/scale), choices=[], skip=ownersAround(base);
+      [0,0.25,0.5,0.75,1,2,3,4,5].forEach(function(ring0){
+        var ring=ring0;
         var offsets=ring===0?[[0,0]]:[[0,-ring*step],[0,ring*step],[ring*step,0],[-ring*step,0],[ring*step,-ring*step],[-ring*step,-ring*step],[ring*step,ring*step],[-ring*step,ring*step]];
         offsets.forEach(function(o){
           var x=Math.max(vb.x+pad,Math.min(vb.x+vb.width-pad-base.w,base.x+o[0]));
@@ -129,30 +189,70 @@
           var box={x:x,y:y,w:base.w,h:base.h}, score=0;
           placed.forEach(function(p){score+=overlap(box,p,pad)*1000000;});
           points.forEach(function(p){if(p.x>box.x-pad&&p.x<box.x+box.w+pad&&p.y>box.y-pad&&p.y<box.y+box.h+pad)score+=1000000000;});
+          var crossed=obstacleHits(obstacles,box,pad,skip);
+          Object.keys(skip).forEach(function(i){var o=obstacles.owners[i].box,mx=box.x+box.w/2,my=box.y+box.h/2;if(snug(o,base)&&(mx<o.x||mx>o.x+o.w||my<o.y||my>o.y+o.h))score+=1000000000;});
+          // Capped so a short mark stays by the point it names; only long text may travel to clear a line.
+          score+=Math.min(crossed*40000/(scale*scale),step*step*(base.w>base.h*3?6:1.5));
           score+=(x-base.x)*(x-base.x)+(y-base.y)*(y-base.y);
-          choices.push({box:box,score:score});
+          choices.push({box:box,score:score,crossed:crossed});
         });
-      }
+      });
       choices.sort(function(a,b){return a.score-b.score;});return choices[0];
     }
+    // A row or column of tick values is one scale: it shifts together, only away from its axis.
+    function glyphs(b){return {x:b.x,y:b.y+b.h*0.2,w:b.w,h:b.h*0.6};}
+    function placeScale(group,axis) {
+      group.forEach(function(item){item.scaleTried=true;});
+      // Line-height boxes overlap harmlessly; touching glyphs need the ordinary search.
+      if(group.some(function(a,i){return group.slice(i+1).some(function(b){return overlap(glyphs(a.base),glyphs(b.base),0)>0;});}))return;
+      var step=Math.max(group[0].base.h+pad*2,14/scale), best=null;
+      // x values sit below their axis and y values to the left of theirs.
+      [0,0.25,0.5,0.75,1].forEach(function(k){
+        var d=(axis==='x'?k:-k)*step, cost=d*d, fits=true;
+        group.forEach(function(item){
+          var b=item.base, box={x:b.x+(axis==='x'?0:d),y:b.y+(axis==='x'?d:0),w:b.w,h:b.h};
+          var ink=glyphs(box);
+          if(axis==='x'?ink.y+ink.h>vb.y+vb.height:ink.x<vb.x)fits=false;
+          placed.forEach(function(p){cost+=overlap(glyphs(box),p,0)*1000;});
+          points.forEach(function(p){if(p.x>box.x&&p.x<box.x+box.w&&p.y>box.y&&p.y<box.y+box.h)cost+=100000;});
+          cost+=obstacleHits(obstacles,box,pad,{})*400/(scale*scale);
+        });
+        if(fits&&(!best||cost<best.cost))best={cost:cost,d:d};
+      });
+      if(!best)return;
+      group.forEach(function(item){
+        // Only the end of a scale can overhang the figure; it steps in just far enough to stay whole.
+        var b=item.base, ink=glyphs(b), along=axis==='x'
+          ?Math.max(vb.x-b.x,Math.min(0,vb.x+vb.width-b.x-b.w))
+          :Math.max(vb.y-ink.y,Math.min(0,vb.y+vb.height-ink.y-ink.h));
+        if(best.d||along)move(item,axis==='x'?along:best.d,axis==='x'?best.d:along);
+        placed.push(rect(item.el,inv));item.scaled=true;
+      });
+    }
+    function near(a,b){return Math.abs(a-b)<1/scale;}
+    var scales=labels.filter(function(item){return isTick(item)&&!item.original.marker&&!Object.keys(ownersAround(item.base)).some(function(i){return snug(obstacles.owners[i].box,item.base);});});
+    scales.forEach(function(item){
+      if(item.scaled||item.scaleTried)return;
+      item.scaleTried=true;
+      var row=scales.filter(function(o){return !o.scaled&&!o.scaleTried&&near(o.base.y,item.base.y)||o===item;});
+      if(row.length>=3){placeScale(row,'x');return;}
+      var column=scales.filter(function(o){return o===item||!o.scaled&&!o.scaleTried&&(near(o.base.x+o.base.w,item.base.x+item.base.w)||near(o.base.x+o.base.w/2,item.base.x+item.base.w/2));});
+      if(column.length>=3)placeScale(column,'y');
+    });
     labels.forEach(function(item){
+      if(item.scaled)return;
       var base=item.base,best=choose(base);
       var collision=placed.some(function(p){return overlap(best.box,p,pad)>0;});
-      if(collision&&!item.original.marker&&base.w>36/scale){marker(item);base=item.base;best=choose(base);}
+      if(collision&&!item.original.marker&&base.w>36/scale&&!Object.keys(ownersAround(base)).some(function(i){return snug(obstacles.owners[i].box,base);})){marker(item);base=item.base;best=choose(base);}
       var dx=best.box.x-base.x,dy=best.box.y-base.y;
       if(Math.abs(dx)+Math.abs(dy)>0.05)move(item,dx,dy);
       var actual=rect(item.el,inv);placed.push(actual);
-      if(Math.hypot(dx,dy)*scale>5&&base.x>=vb.x&&base.x+base.w<=vb.x+vb.width&&base.y>=vb.y&&base.y+base.h<=vb.y+vb.height){
+      // Nudges that stay beside their anchor read correctly without a leader.
+      if(Math.hypot(dx,dy)>Math.max(5/scale,base.h*1.1)&&base.x>=vb.x&&base.x+base.w<=vb.x+vb.width&&base.y>=vb.y&&base.y+base.h<=vb.y+vb.height){
         layer.insertBefore(node('line',{x1:base.x+base.w/2,y1:base.y+base.h/2,x2:actual.x+actual.w/2,y2:actual.y+actual.h/2,stroke:'var(--muted)','stroke-width':1,'stroke-dasharray':'2 2','pointer-events':'none'}),layer.firstChild);
       }
-      // Match the text's own coordinate system. Opaque backing is visible and is
-      // explicitly checked by the auditor before dismissing a covered line.
-      var color=item.el.style.fill, card=getComputedStyle(document.documentElement).getPropertyValue('--card').trim();
-      function lightness(c){var rgb=c.match(/[0-9.]+/g);if(c[0]==='#'){var h=c.slice(1);if(h.length===3)h=h.split('').map(function(x){return x+x;}).join('');rgb=[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}return rgb&&rgb.length>=3?(+rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722)/255:1;}
-      var backing=Math.abs(lightness(color)-lightness(card))<0.25?'var(--fg)':'var(--card)';
-      var bb=item.el.getBBox(), bg=node('rect',{x:bb.x-2,y:bb.y-1,width:bb.width+4,height:bb.height+2,rx:2,fill:backing,'pointer-events':'none',class:'figure-label-bg'});
-      if(item.el.getAttribute('transform'))bg.setAttribute('transform',item.el.getAttribute('transform'));
-      var parent=item.el.parentNode;parent.appendChild(bg);parent.appendChild(item.el);
+      // Only a label with nowhere to go gets a hairline halo, and it never hides the line.
+      if(best.crossed){item.el.style.paintOrder='stroke';item.el.style.stroke='var(--card)';item.el.style.strokeWidth=(1.5/scale)+'px';item.el.style.strokeLinejoin='round';}
     });
     if(notes.length){
       var list=document.createElement('ol');list.className='figure-notes';list.setAttribute('data-figure-layout','1');list.setAttribute('aria-label','图中编号说明');

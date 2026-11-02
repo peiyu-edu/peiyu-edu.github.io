@@ -129,7 +129,7 @@ makeLab({
     },
     {
       q: '面内的点从 \\(D\\) 换成 \\(B\\)，\\(\\overrightarrow{BC_1}\\cdot\\boldsymbol n\\) 等于？',
-      opts: ['\\(-4\\)，和 \\(D\\) 一样', '\\(4\\)', '\\(0\\)'], answer: 0,
+      opts: ['\\(-4\\)', '\\(4\\)', '\\(0\\)'], answer: 0,
       why: '\\(\\overrightarrow{BC_1}=\\overrightarrow{DC_1}-\\overrightarrow{DB}\\)，而 \\(\\overrightarrow{DB}\\cdot\\boldsymbol n=0\\)，所以点积不变。',
       show: show('dist', { s: 2, u: 1, v: 0, st: '4' }), showLabel: 'Q 取 B',
     },

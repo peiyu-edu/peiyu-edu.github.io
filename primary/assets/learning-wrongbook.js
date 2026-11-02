@@ -169,7 +169,11 @@
       return hidden[q.identity] ? "hidden" : q.group === "corrected" ? "corrected" : q.streakWrong >= 2 ? "review" : q.fixedByRetry ? "feedback" : "wrong";
     }
     var statusLabels = { wrong: "待巩固", feedback: "反馈后已改对", review: "需要回看", corrected: "已改正", hidden: "已收起" };
-    function sourceText(q) { return { predict: "课内", card: "课内", diagnostic: stage === "high" ? "练习" : "诊断", exam: stage === "primary" ? "单元测评" : "章末测验" }[q.questionType] || "课内"; }
+    function sourceText(q) {
+      var row = rows.get(q.base);
+      if (row && row.role === "lesson-exam") return stage === "junior" ? "中考真题" : "高考真题";
+      return { predict: "课内", card: "课内", diagnostic: stage === "high" ? "练习" : "诊断", exam: stage === "primary" ? "单元测评" : "章末测验" }[q.questionType] || "课内";
+    }
     function typeset(node) { if (win.PeiyuKnowledge && win.PeiyuKnowledge.renderMath) win.PeiyuKnowledge.renderMath(node); return node; }
     function item(q) {
       var li = el("li", undefined, "lw-item"); li.dataset.identity = q.identity;
@@ -259,8 +263,7 @@
           select.addEventListener("change", function () { onChange(select.value); render(); host.querySelector('[aria-label="' + label + '"]').focus(); });
           controls.appendChild(select);
         }
-        // High school only indexes practice questions, so a source filter would have one option.
-        if (stage === "junior") selectControl("按来源筛选", [["", "全部来源"], ["predict", "课内"], ["diagnostic", "诊断"], ["exam", "章末测验"]], source, function (value) { source = value; });
+        if (stage === "junior") selectControl("按来源筛选", [["", "全部来源"], ["predict", "课内"], ["diagnostic", "诊断"], ["exam", "真题与测验"]], source, function (value) { source = value; });
         selectControl("错题排序", [["recent", "最近错"], ["oldest", "最早错"], ["count", "错误次数"], ["due", "复习到期"]], sort, function (value) { sort = value; });
       }
       var shown = model.wrongbook.filter(function (q) {
@@ -275,9 +278,8 @@
       var ul = el("ul", undefined, "lw-list"); shown.forEach(function (q) { ul.appendChild(item(q)); });
       if (shown.length) section.appendChild(ul);
       else if (stage === "high" && !model.wrongbook.length) {
-        // High school only indexes practice questions; lesson answers stay in 记录 (PY-328).
         var practiceLink = el("a", "去练习页 →"); practiceLink.href = "practice.html";
-        section.appendChild(el("p", "这里暂时没有题。错题本只收知识库和练习页的题，课内题的作答记在“记录”里。", "lw-note"));
+        section.appendChild(el("p", "这里暂时没有题。错题本收录知识库、练习页和课内真题，其他课内作答记在“记录”里。", "lw-note"));
         section.appendChild(append(el("p"), practiceLink));
       } else section.appendChild(el("p", "这里暂时没有题。做过练习后再来看看。", "lw-note"));
       return section;

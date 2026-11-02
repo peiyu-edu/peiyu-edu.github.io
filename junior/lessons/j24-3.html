@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
@@ -96,7 +96,8 @@
     </div>
   </div>
 
-  <h3>2. 核心点：求四分位数——先求中位数，再求两半的中位数</h3>
+  <p>儿童体检有时会写“身高在同龄人的第 80 百分位”，描述他在同龄人身高排序中靠近 80% 的位置；同身高的人多时，不能直接断言 80% 的人比他矮。它说的是位置，不是分数：第 80 百分位不等于“考了 80 分”。四分位数就是第 25、50、75 这三个百分位数。</p>
+<h3>2. 核心点：求四分位数——先求中位数，再求两半的中位数</h3>
   <div class="key" style="text-align:center; padding:14px 12px; overflow-x:auto">
     \(\underbrace{\text{排序}}_{\text{从小到大}}\ \to\ \color{#966524}{\underbrace{Q_2=\text{中位数}}_{\text{先切中间}}}\ \to\ \color{#2F7A56}{\underbrace{Q_1=\text{左半的中位数}}_{\text{中位数左侧的数据}}},\ \color{#3E5C76}{\underbrace{Q_3=\text{右半的中位数}}_{\text{中位数右侧的数据}}}\)
     <p class="small" style="margin:6px 0 0;color:var(--fg)">数据个数是<b>奇数</b>时，中位数本身是一个数据，它<b>不放进</b>左右两半。</p>
@@ -215,9 +216,7 @@
       </div>
     </div>
   </div>
-  <details class="more"><summary>再深一点（可以先跳过）：体检单上的“百分位”</summary>
-    <p>儿童体检有时会写“身高在同龄人的第 80 百分位”，描述他在同龄人身高排序中靠近 80% 的位置；同身高的人多时，不能直接断言 80% 的人比他矮。它说的是位置，不是分数：第 80 百分位不等于“考了 80 分”。四分位数就是第 25、50、75 这三个百分位数。</p>
-  </details>
+
 </section>
 
 <section class="step" data-title="动手">
@@ -412,8 +411,7 @@
     JUMP.forEach(function (v) { dot(ef, X(v), 104, c.c, 7); });
     var cuts = entryK === 0 ? [] : entryK === 1 ? [["Q₂", q.q2, c.b]] : [["Q₁", q.q1, c.a], ["Q₂", q.q2, c.b], ["Q₃", q.q3, c.a]];
     cuts.forEach(function (k) { el("line", { x1: X(k[1]), y1: 40, x2: X(k[1]), y2: 120, stroke: k[2], "stroke-width": 3 }, ef); txt(ef, X(k[1]), 32, k[0], k[2], 700, 18); });
-    var inside = JUMP.filter(function (v) { return v > q.q1 && v < q.q3; }).length;
-    document.getElementById("entry-note").textContent = entryK === 0 ? "12 个数已从小到大排好，点在数轴上。" : entryK === 1 ? "12 是偶数：中间一刀切在第 6、7 个之间，Q₂ = (126 + 131) ÷ 2 = " + f(q.q2) + "，左右各 6 个。" : "左半 6 个的中位数 Q₁ = (112 + 118) ÷ 2 = " + f(q.q1) + "，右半 6 个的中位数 Q₃ = (140 + 146) ÷ 2 = " + f(q.q3) + "。每份 3 个，阴影里有 " + inside + " 个。";
+    document.getElementById("entry-note").textContent = entryK === 0 ? "12 个数已从小到大排好，点在数轴上。" : entryK === 1 ? "12 是偶数：中间一刀切在第 6、7 个之间，Q₂ = (126 + 131) ÷ 2 = " + f(q.q2) + "，左右各 6 个。" : "左半 6 个的中位数 Q₁ = (112 + 118) ÷ 2 = " + f(q.q1) + "，右半 6 个的中位数 Q₃ = (140 + 146) ÷ 2 = " + f(q.q3) + "。数一数阴影里的点，再与全部 12 个点比较。";
   }
   bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
 

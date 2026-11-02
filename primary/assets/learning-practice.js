@@ -34,6 +34,14 @@
   function lesson(id) { return index.lessons.find(function (item) { return item.id === id; }); }
   function fullPoint(id) { return knowledge.points.find(function (item) { return item.id === id; }); }
   function pointIndex(id) { return points.find(function (item) { return item.id === id; }); }
+  function practiceTitle(point) {
+    // Knowledge-page headings can state the result of their own diagnostic.
+    var titles = {
+      "pyps.p5a.u4.001": "轴对称图形和对称轴",
+      "pyjh.ineq.016": "不等式组的解集判断"
+    };
+    return titles[point.id] || point.title;
+  }
   function scope(point) { return point.scope || point.course_scope || (fullPoint(point.id) || {}).course_scope; }
   function isExtra(point) { return ["optional", "enrichment"].indexOf(scope(point)) >= 0; }
   function scopeLabel(point) { return { required: "核心", selective_required: "选必", optional: "选学", enrichment: "拓展" }[scope(point)] || "知识点"; }
@@ -82,10 +90,10 @@
     var list = filtered();
     host.querySelector("[data-lp-count]").textContent = list.length + " 个知识点可练习";
     host.querySelector("[data-lp-list]").innerHTML = list.length ? list.map(function (point) {
-      return '<button type="button" class="lp-point" data-lp-point="' + esc(point.id) + '" aria-current="' + (point.id === selectedId ? "true" : "false") + '"><span>' + esc(point.title) + '</span><small>' + esc(scopeLabel(point) + " · " + statusText(point)) + '</small></button>';
+      return '<button type="button" class="lp-point" data-lp-point="' + esc(point.id) + '" aria-current="' + (point.id === selectedId ? "true" : "false") + '"><span>' + esc(practiceTitle(point)) + '</span><small>' + esc(scopeLabel(point) + " · " + statusText(point)) + '</small></button>';
     }).join("") : '<p class="lp-note">这组条件下还没有已审核的自测题。可以更换专题或课时。</p>';
     var current = host.querySelector("[data-lp-current]");
-    current.textContent = selectedId ? "当前：" + pointIndex(selectedId).title : "先选专题或课时，再选知识点";
+    current.textContent = selectedId ? "当前：" + practiceTitle(pointIndex(selectedId)) : "先选专题或课时，再选知识点";
     math(current);
     math(host.querySelector("[data-lp-list]"));
   }
@@ -122,7 +130,7 @@
     var unexposedVariant = variants.find(function (item) { return item.point_id === point.id && item.role === "parallel" && item.id !== quiz.id && question(point, item).canAnswerIndependently; });
     active = { pointId: point.id, submitted: !fresh && !!summary.lastAnswer };
     var domainInfo = knowledge.domains.find(function (item) { return item.id === point.domain; });
-    work.innerHTML = '<article class="lp-quiz"><header class="lp-quiz-head"><p class="lp-note">' + esc((domainInfo ? domainInfo.title + " / " : "") + point.group) + ' / <span data-lp-purpose>' + esc(purposeLabel(point, quiz)) + '</span></p><h2 data-lp-title tabindex="-1">' + esc(point.title) + '</h2><p class="lp-note">' + esc(scopeLabel(point)) + (isExtra(point) ? '内容，可按需练习，不作为核心课的默认要求。' : '内容') + '</p><a href="' + esc(pointHref(point.id)) + '">查看这个知识点</a><p><span class="lp-evidence-label" data-lp-evidence>' + esc(evidenceLabel(summary)) + '</span></p>' + (quiz.role === "review" ? '<p class="lp-note">复习题用来再次检验这个知识点。是否为首次作答，按这道题自己的记录区分。</p>' : '') + '</header>' +
+    work.innerHTML = '<article class="lp-quiz"><header class="lp-quiz-head"><p class="lp-note">' + esc((domainInfo ? domainInfo.title + " / " : "") + point.group) + ' / <span data-lp-purpose>' + esc(purposeLabel(point, quiz)) + '</span></p><h2 data-lp-title tabindex="-1">' + esc(practiceTitle(point)) + '</h2><p class="lp-note">' + esc(scopeLabel(point)) + (isExtra(point) ? '内容，可按需练习，不作为核心课的默认要求。' : '内容') + '</p><a href="' + esc(pointHref(point.id)) + '">查看这个知识点</a><p><span class="lp-evidence-label" data-lp-evidence>' + esc(evidenceLabel(summary)) + '</span></p>' + (quiz.role === "review" ? '<p class="lp-note">复习题用来再次检验这个知识点。是否为首次作答，按这道题自己的记录区分。</p>' : '') + '</header>' +
       (!summary.lastAnswer && !summary.canAnswerIndependently && unexposedVariant ? '<p class="lp-note">这个知识点还有一题尚未作答的平行变式。</p><p><button type="button" class="lp-button secondary" data-lp-fresh-variant>换一道尚未作答的变式</button></p>' : '') +
       '<form data-lp-quiz><fieldset><legend>选择一个答案，再核对理由</legend><p class="lp-prompt lp-katex">' + esc(quiz.prompt) + '</p><div class="lp-options">' + quiz.options.map(function (option, i) {
         return '<label class="lp-option" data-lp-option="' + esc(option.id) + '"><input type="radio" name="practice-answer" value="' + esc(option.id) + '"><span><b>' + String.fromCharCode(65 + i) + '.</b> ' + esc(option.text) + '<small class="lp-option-result" data-lp-result hidden></small></span></label>';

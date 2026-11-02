@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
@@ -242,8 +242,10 @@
       </div>
     </div>
   </div>
-  <details class="more"><summary>再深一点（可以先跳过）：古代的“鸡兔同笼”</summary>
-    <p>我国古代算书里有不少这样的名题，“鸡兔同笼”最有名。换个数试试：笼里鸡和兔共 \(20\) 个头、\(56\) 只脚。设鸡 \(x\) 只、兔 \(y\) 只：\(x+y=20\)，\(2x+4y=56\)。第二个方程减去第一个的 \(2\) 倍：\(2y=16\)，兔 \(8\) 只，鸡 \(12\) 只。古人的“假设全是鸡”的算法，其实就是这一步加减消元。</p>
+  <details class="more"><summary>再深一点（可以先跳过）：“假设全是鸡”对应哪一步消元？</summary>
+<p>鸡和兔共 \(20\) 个头、\(56\) 只脚。假设全是鸡，先算出的脚数比实际少多少？每把一只鸡换成兔会增加几只脚？把这两个想法和方程组的加减消元对应起来。</p><details class="more"><summary>想好后看解释</summary>
+<p>我国古代算书里有不少这样的名题，“鸡兔同笼”最有名。换个数试试：笼里鸡和兔共 \(20\) 个头、\(56\) 只脚。设鸡 \(x\) 只、兔 \(y\) 只：\(x+y=20\)，\(2x+4y=56\)。第二个方程减去第一个的 \(2\) 倍：\(2y=16\)，兔 \(8\) 只，鸡 \(12\) 只。古人的“假设全是鸡”的算法，其实就是这一步加减消元。</p>
+    </details>
   </details>
 </section>
 
@@ -528,6 +530,7 @@
     el("rect", { x: x0, y: y - 14, width: Z(val) - x0, height: 28, rx: 4, fill: ok ? c.a : col, opacity: ok ? 1 : 0.75 }, p);
     el("line", { x1: Z(target), y1: y - 24, x2: Z(target), y2: y + 24, stroke: c.no, "stroke-width": 3 }, p);
     txt(p, Z(target), y - 32, target + " h", c.no, 700, 19);
+    txt(p, x0 + w, y - 32, max + " h", c.muted, 400, 19, "end");
     txt(p, x0 - 16, y + 7, label, c.fg, 700, 20, "end");
   }
 
@@ -535,8 +538,9 @@
   var fb = document.getElementById("fig-boat"), ob = document.getElementById("out-boat"), BV = 16, BW = 2, focusB = null;
   function drawBoat() {
     var c = C(), v = BV, w = BW, t1 = 36 / (v + w), t2 = 36 / (v - w); fb.innerHTML = "";
-    gauge(fb, 70, t1, 4, 1.5, "顺流", c.b);
-    gauge(fb, 150, t2, 4, 2.25, "逆流", c.c);
+    var scale = Math.max(4, Math.ceil(t1), Math.ceil(t2));
+    gauge(fb, 70, t1, scale, 1.5, "顺流", c.b);
+    gauge(fb, 150, t2, scale, 2.25, "逆流", c.c);
     var hv = slider(fb, { x0: 110, x1: 450, y: 218, lo: 10, hi: 30, step: 1, val: v, col: c.b, name: "v", label: "静水速度 v（km/h）" }, function (nv, key) { BV = nv; focusB = key ? "v" : null; drawBoat(); });
     var hw = slider(fb, { x0: 110, x1: 450, y: 268, lo: 0, hi: 8, step: 0.5, val: w, col: c.c, name: "w", label: "水速 w（km/h）" }, function (nv, key) { BW = nv; focusB = key ? "w" : null; drawBoat(); });
     var ok = Math.abs(t1 - 1.5) < 1e-9 && Math.abs(t2 - 2.25) < 1e-9;

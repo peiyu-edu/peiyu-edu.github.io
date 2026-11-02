@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <script defer src="../assets/b8b-j24-4-group-cut-calculator-dev.js"></script>
 <style>
@@ -238,9 +238,11 @@
       </div>
     </div>
   </div>
-  <details class="more"><summary>再深一点（可以先跳过）：分成三组、大数据里的“聚类”</summary>
-    <p>要分成三组，就切两刀，比较所有“两刀”的切法，原理一样（“动手”③可以试）。网购平台把顾客按消费习惯分群、地图把相近的地点归成一片，用的都是“组内相近、组间不同”的思想，叫聚类，只是数据多得多，要靠计算机。</p>
-  </details>
+  <details class="more"><summary>再深一点（可跳过）：8个数据分三组有几种两刀方案？</summary>
+<p>把8个排序后的数据分成三个非空的连续组，只在相邻数据间切两刀。怎样不重不漏列出所有方案？先试着计数。</p><details class="more"><summary>想好后看解释</summary>
+<p>有7个间隙。第一刀按从左至右固定后，第二刀只能在其右侧，方案数为6+5+4+3+2+1=21。逐一计算三组的离差平方和再比较；即使数据有重复，也按排序位置确定切刀。</p>
+</details>
+</details>
 </section>
 
 <section class="step" data-title="动手">
@@ -429,7 +431,7 @@
     cutLine(ef, (X(SIT[m - 1]) + X(SIT[m])) / 2, 30, 120, c.no);
     SIT.forEach(function (v, i) { dot(ef, X(v), 92, i < m ? c.c : c.a, 9); });
     var a = SIT.slice(0, m), b = SIT.slice(m);
-    document.getElementById("entry-note").textContent = "第一组 " + a.join("，") + "；第二组 " + b.join("，") + "。" + (entryK === 0 ? "45 和 47 只差 2 个，却被拆开了。" : entryK === 1 ? "28 单独一组，31 和 52 却在一组。" : "切在 33 和 45 之间：这里空隙最大，两组各自很紧凑。");
+    document.getElementById("entry-note").textContent = "第一组 " + a.join("，") + "；第二组 " + b.join("，") + "。比较三种分法中每组数据的间隔，判断哪种分法让组内成绩更接近。";
   }
   bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });
 

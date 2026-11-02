@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
@@ -223,10 +223,11 @@
       </div>
     </div>
   </div>
-  <details class="more"><summary>再深一点（可以先跳过）：翻折会把“转向”倒过来</summary>
-    <p>沿 \(\triangle ABC\) 按 A→B→C 走一圈，如果是顺时针，那么平移或旋转后的 \(\triangle DEF\) 按 D→E→F 走，也是顺时针；翻折后的就变成逆时针了。所以翻折得到的两个全等三角形，对应顶点看起来常常“左右颠倒”。“动手”② 里可以亲手试：方向反了，怎么转都叠不上，必须先翻一次。</p>
-    <p>全等形不只是三角形：两枚同版的邮票、两片同一模具压出的饼干都是全等形。这一章只研究三角形。</p>
-  </details>
+  <details class="more"><summary>再深一点（可跳过）：对应顶点的走向改变了吗？</summary>
+<p>约定A、B、C分别对应D、E、F。沿A→B→C走一圈是顺时针时，平移、旋转或翻折后，沿D→E→F走的方向各怎样？用动手②验证。</p><details class="more"><summary>想好后看解释</summary>
+<p>按A↔D、B↔E、C↔F的对应顺序，平移或旋转保持走向；翻折会把顺时针变成逆时针。对应顶点要按记号确定，不能只凭左右位置。</p>
+</details>
+</details>
 </section>
 
 <section class="step" data-title="动手">
@@ -379,14 +380,14 @@
   var ef = document.getElementById("entry-fig"), entryK = 0;
   var FLAG = [Pt(80, 200), Pt(260, 200), Pt(130, 60)];
   var TRY = [[Pt(80, 200), Pt(314, 200), Pt(145, 18)], [Pt(80, 200), Pt(332, 200), Pt(200, 100)], FLAG];
-  var ENOTE = ["甲（虚线）的三条边都比样旗长，叠上去有一大圈露在外面：形状一样，大小不同。", "乙（虚线）和样旗面积一样大，可是一个矮胖、一个瘦高，叠上去有的地方露出来，有的地方盖不住。", "丙翻过来就和样旗严丝合缝：形状、大小都一样，只是原来摆的位置（正反面）不同。"];
+  var ENOTE = ["实线是样旗，虚线是甲。沿着三条边逐一比较，看看每一处边界能否对齐。", "实线是样旗，虚线是乙。面积相等时，三条边和三个角也一定能对齐吗？", "实线是样旗，虚线是翻过来的丙。逐一检查顶点和边界，再作选择。"];
   function drawEntry() {
     var c = C(), k = entryK; ef.innerHTML = "";
     tri(ef, FLAG, c.a, 0.25, null, 3);
     var ok = k === 2;
     tri(ef, TRY[k], ok ? c.a : c.no, 0, "8 6", 3);
     txt(ef, 430, 100, ["甲", "乙", "丙"][k] + " 叠上去", c.fg, 700, 20);
-    txt(ef, 430, 145, ok ? "完全重合" : "叠不严", ok ? c.a : c.no, 700, 24);
+    txt(ef, 430, 145, "比较边界", c.fg, 700, 24);
     document.getElementById("entry-note").textContent = ENOTE[k];
   }
   bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });

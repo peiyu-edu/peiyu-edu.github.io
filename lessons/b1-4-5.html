@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-b0e7da29a8a0fe4d"></script>
+<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -560,6 +560,7 @@
   ];
   function nice(r) { var p = Math.pow(10, Math.floor(Math.log(r) / Math.LN10)), m = r / p; return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p; }
   function fmt(v) { if (!isFinite(v)) return "—"; var a = Math.abs(v); return a >= 1000 ? String(Math.round(v)) : a >= 10 ? v.toFixed(1) : v.toFixed(2); }
+  function valueTex(v) { return (Math.abs(Number(fmt(v)) - v) < 1e-9 ? "=" : "\\approx ") + fmt(v); }
   function drawG() {
     var c = C(), X = g2.X, x = g2.x;
     [].forEach.call(document.querySelectorAll("#xsel [data-x]"), function (bt) { bt.setAttribute("aria-pressed", String(Number(bt.getAttribute("data-x")) === X)); });
@@ -606,10 +607,10 @@
       var i1 = order[k], i2 = order[k + 1];
       cmp.push(Math.abs(vals[i1] - vals[i2]) < 1e-9 ? "=" : ">");
     }
-    var html = "\\(x=" + fmt(x) + "\\)：\\(2^x=" + fmt(vals[0]) + "\\)，\\(x^2=" + fmt(vals[1]) + "\\)，\\(\\log_2x=" + fmt(vals[2]) + "\\)<br>" +
+    var html = "\\(x=" + fmt(x) + "\\)：\\(2^x" + valueTex(vals[0]) + "\\)，\\(x^2" + valueTex(vals[1]) + "\\)，\\(\\log_2x" + valueTex(vals[2]) + "\\)<br>" +
       "此刻 \\(" + TEX[order[0]] + cmp[0] + TEX[order[1]] + cmp[1] + TEX[order[2]] + "\\)";
     var r = vals[0] / vals[1];
-    html += "<br><span class=\"small\">\\(2^x\\) 是 \\(x^2\\) 的 \\(" + fmt(r) + "\\) 倍。" +
+    html += "<br><span class=\"small\">\\(2^x/x^2" + valueTex(r) + "\\)。" +
       (x > 2 + 1e-9 && x < 4 - 1e-9 ? "现在在 \\(2&lt;x&lt;4\\) 这一段，\\(x^2\\) 反而更大。" : x > 4 + 1e-9 ? "过了 \\(x=4\\)，\\(2^x\\) 一直在上面，而且越甩越远。" : x < 2 - 1e-9 ? "在 \\(0&lt;x&lt;2\\) 这一段，\\(2^x\\) 比 \\(x^2\\) 大。" : "这里正是两条曲线的交点（\\(x=2\\) 或 \\(x=4\\)）。") + "</span>";
     var info = document.getElementById("info2");
     info.innerHTML = html;

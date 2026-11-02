@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   /* 初中站还没有 Wiki、实验台、记录页：先隐藏公共脚本插入的这三个入口 */
@@ -267,10 +267,7 @@
       </div>
     </div>
   </div>
-  <details class="more"><summary>再深一点（可以先跳过）：为什么有的不证明？SSA 什么时候能定？</summary>
-    <p><b>基本事实为什么不证明：</b>推理总得有出发点。数学家挑出很少几条大家公认的命题当出发点（基本事实），其余的都由它们推出来：AAS 由 ASA 推出，下一节“角平分线的性质”又由 AAS 推出。古希腊《几何原本》就是这样搭起来的。</p>
-    <p><b>SSA：</b>如果已知的那个角是直角，就成了“动手”② 的情形：以 B 为圆心的弧和射线 CA 只交于一点，三角形唯一。这正是 HL：直角三角形里“两边一对角”的那个角就是直角。一般情况下，课本只下结论“不一定全等”。</p>
-  </details>
+
 </section>
 
 <section class="step" data-title="动手">
@@ -420,7 +417,7 @@
 
   /* 从例子进入：配玻璃 */
   var ef = document.getElementById("entry-fig"), entryK = 0;
-  var EN = ["只知道 AB：第三个顶点放哪儿都行，形状、大小各不相同。", "知道 AB 和 ∠A：C 在 ∠A 的另一条边上，可远可近，三角形还是不定。", "再知道 AC：C 的位置定死了，只能画出一个三角形。量这三个就够配。"];
+  var EN = ["只量 AB。比较图中第三个顶点的不同位置，想想这些三角形能否完全重合。", "再量 ∠A。观察第三个顶点还可以怎样移动，试着画出自己的候选图。", "再量 AC。检查三个数据各限制了什么，再判断能否配出同样的玻璃。"];
   function drawEntry() {
     var c = C(), k = entryK, A = Pt(60, 200), B = Pt(240, 200); ef.innerHTML = "";
     var tops = k === 0 ? [Pt(100, 70), Pt(190, 120), Pt(270, 40)] : k === 1 ? [80, 140, 200].map(function (t) { return ray(A, 50, t); }) : [ray(A, 50, 140)];
@@ -429,7 +426,7 @@
     if (k === 2) { seg(ef, A, tops[0], c.fg, 5); txt(ef, tops[0].x, tops[0].y - 14, "C", c.fg, 700, 18); }
     txt(ef, A.x - 4, A.y + 30, "A", c.fg, 700, 18); txt(ef, B.x, B.y + 30, "B", c.fg, 700, 18);
     txt(ef, 410, 100, "量了 " + (k + 1) + " 个", c.fg, 700, 20);
-    txt(ef, 410, 145, k === 2 ? "唯一确定" : "形状不定", k === 2 ? c.a : c.no, 700, 24);
+    txt(ef, 410, 145, "观察候选图", c.fg, 700, 24);
     document.getElementById("entry-note").textContent = EN[k];
   }
   bar("entry-bar", function (t) { entryK = +t.getAttribute("data-k"); drawEntry(); });

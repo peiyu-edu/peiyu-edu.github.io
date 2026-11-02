@@ -154,7 +154,7 @@ makeLab({
   quizItems: (show) => [
     {
       q: '\\(\\overrightarrow{AB},\\overrightarrow{AD},\\overrightarrow{AC}\\) 能作为空间的一个基底吗？',
-      opts: ['能', '不能，三个向量共面'], answer: 1,
+      opts: ['能', '不能'], answer: 1,
       why: '\\(\\overrightarrow{AC}=\\overrightarrow{AB}+\\overrightarrow{AD}\\)，三个向量都在底面内，共面，表示不出竖直方向的向量。',
       show: show('base', { s: 'AB-AD-AC' }), showLabel: '在模型上看',
     },

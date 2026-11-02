@@ -206,14 +206,20 @@ document.addEventListener("DOMContentLoaded", function () {
   addBtn(ctr2, "重来", function () { digits = EXAMPLES[0].slice(); showSplit = true; showZero = true; draw(); });
 
   function analyzeTier(arr, startIdx) {
-    /* 返回每个位置的状态："lead"（前导空白）, "digit"（非0）, "mute"（级末0不读）, "speak"(要读的0) */
+    /* 连续的零只在第一处标“读零”，其余标“不另读”。数本身为 0 时读一个零。 */
     var st = ["digit","digit","digit","digit"];
     var lastNonZero = -1;
     for (var i = 0; i < 4; i++) if (arr[i] !== 0) lastNonZero = i;
-    if (lastNonZero === -1) return ["mute","mute","mute","mute"];
+    if (lastNonZero === -1) {
+      return startIdx === 4 && digits.every(function (d) { return d === 0; })
+        ? ["lead","lead","lead","speak"] : ["mute","mute","mute","mute"];
+    }
     for (var j = lastNonZero + 1; j < 4; j++) st[j] = "mute";
     for (var k = 0; k <= lastNonZero; k++) {
-      if (arr[k] === 0) st[k] = (startIdx + k < firstActive()) ? "lead" : "speak";
+      if (arr[k] === 0) {
+        st[k] = startIdx + k < firstActive() ? "lead"
+          : (k > 0 && arr[k - 1] === 0 && st[k - 1] !== "lead" ? "join" : "speak");
+      }
     }
     return st;
   }
@@ -274,6 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
       else if (showZero && digits[i] === 0) {
         if (st === "mute") { fill = "var(--bg)"; stroke = "var(--muted)"; tcol = "var(--muted)"; tag = "不读"; }
         else if (st === "speak") { fill = "var(--no-soft)"; stroke = "var(--no)"; tcol = "var(--no)"; tag = "读零"; }
+        else if (st === "join") { fill = "var(--no-soft)"; tcol = "var(--no)"; tag = "不另读"; }
       } else if (active) {
         fill = i < 4 ? "var(--hl-soft)" : "var(--ok-soft)";
         stroke = i < 4 ? "var(--c)" : "var(--a)";

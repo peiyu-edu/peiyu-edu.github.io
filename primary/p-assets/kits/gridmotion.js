@@ -244,7 +244,7 @@
         var y = Math.max(18, Math.min(VH + 1, Y(A2) + (IDX === 1 ? 48 : 22)));
         // A narrow halo protects horizontal-axis text without masking the completed shape.
         if (IDX !== 1) el("rect", { x: x - width / 2, y: y - 19, width: width, height: 23, style: "fill:var(--card)" }, layer);
-        txt(x, y, name, "fill:var(--c);font-size:17px" + (IDX === 1 ? ";paint-order:stroke;stroke:var(--card);stroke-width:3;stroke-linejoin:round" : ""));
+        txt(x, y, name, "fill:var(--c);font-size:17px" + (IDX === 1 ? ";paint-order:stroke;stroke:var(--card);stroke-width:1.5;stroke-linejoin:round" : ""));
       }
     }
     function drawRuler(p, col) {

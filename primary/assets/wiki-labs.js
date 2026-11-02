@@ -238,7 +238,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       var tn = el("text", {
         x: x, y: y, "font-size": opt.size || FS, fill: color(opt.color || "fg"),
         "text-anchor": opt.anchor || "start", "font-weight": opt.bold ? 700 : 500,
-        "paint-order": "stroke", stroke: css("--bg") || "#fff", "stroke-width": 4, "stroke-linejoin": "round"
+        "paint-order": "stroke", stroke: css("--bg") || "#fff", "stroke-width": 1.5, "stroke-linejoin": "round"
       }, labels);
       tn.textContent = s;
       tn._labLabel = { x:x, y:y, text:s };

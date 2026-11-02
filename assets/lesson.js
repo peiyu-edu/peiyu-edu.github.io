@@ -277,6 +277,31 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
 
   function renderProblem(p, idx) {
     var card = el("div", "card prob");
+    var ledger = window.PeiyuLearningState, versions, evidence = Promise.resolve(), feedbackSeen = false;
+    // Load old exposure before this card writes to the compatibility log.
+    if (ledger) ledger.load();
+    function canonical(value) {
+      if (Array.isArray(value)) return "[" + value.map(canonical).join(",") + "]";
+      if (value && typeof value === "object") return "{" + Object.keys(value).sort().map(function (key) {
+        return JSON.stringify(key) + ":" + canonical(value[key]);
+      }).join(",") + "}";
+      return JSON.stringify(value);
+    }
+    if (ledger && window.PeiyuCNQuotes && window.crypto && window.crypto.subtle) {
+      evidence = window.PeiyuCNQuotes.digests(canonical(p), window.crypto, "sha256:").then(function (value) { versions = value; });
+    }
+    function recordExam(kind, details) {
+      var time = Date.now();
+      evidence = evidence.then(function () {
+        if (!versions) return;
+        ledger.record(Object.assign({ source: "course", sectionId: sec, questionType: "exam", questionId: p.id,
+          contentVersion: versions[versions.length - 1], contentVersions: versions, step: 5, kind: kind, time: time }, details));
+      }).catch(function () { /* The compatibility log remains available if local evidence fails. */ });
+    }
+    function revealExam() {
+      feedbackSeen = true;
+      recordExam("feedback");
+    }
     if (p.cards && Array.isArray(p.cards) && p.cards.length) {
       card.setAttribute("data-cards", p.cards.join(","));
     }
@@ -298,12 +323,15 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     sol.appendChild(foot);
 
     var done = false;
-    function finish(correct, choice) {
+    function finish(correct, choice, selfCheck) {
       if (done) return; done = true;
       card.classList.add("done");
       fb.className = "fb " + (correct ? "ok" : "no");
       fb.textContent = correct ? "对了。" : "不对，看看解析。";
       sol.hidden = false; math(sol);
+      recordExam("answer", { choice: choice, correct: correct, feedbackSeen: feedbackSeen,
+        selfCheck: selfCheck === true });
+      revealExam();
       log("answer", { id: p.id, choice: choice, correct: correct });
     }
 
@@ -377,8 +405,9 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
         inp.disabled = true;
         if (norm(inp.value) && norm(inp.value) === norm(p.answer)) { finish(true, inp.value); return; }
         // 写法不同也可能是对的：给出答案，让学生自己判
+        revealExam();
         sol.hidden = false; math(sol);
-        selfReport(card, function (ok) { finish(ok, inp.value + (ok ? "（自判对）" : "")); });
+        selfReport(card, function (ok) { finish(ok, inp.value + (ok ? "（自判对）" : ""), true); });
         chk.disabled = true;
       };
     } else {
@@ -386,8 +415,9 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       card.appendChild(see);
       see.onclick = function () {
         if (done) return;
+        revealExam();
         sol.hidden = false; math(sol); see.disabled = true;
-        selfReport(card, function (ok) { finish(ok, ok ? "自判对" : "自判错"); });
+        selfReport(card, function (ok) { finish(ok, ok ? "自判对" : "自判错", true); });
       };
     }
     card.appendChild(fb); card.appendChild(sol);
@@ -410,6 +440,9 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       problemStem.parentNode.insertBefore(problemFigures, problemStem.nextSibling);
     }
     window.PeiyuGaokaoSolutions.enhance(card, p);
+    card.querySelectorAll(".gs-hint").forEach(function (hint) {
+      hint.addEventListener("toggle", function () { if (hint.open) revealExam(); });
+    });
     return card;
   }
   function markRight(box, ans) {
@@ -629,11 +662,11 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     math(document.body);
     log("open", {});
     var fl = document.createElement("script");
-    fl.src = "../assets/figure-layout.js?v=vs-05ca98460be7";
+    fl.src = "../assets/figure-layout.js?v=vs-4aaa49c968d2";
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");
-      ws.src = "../assets/wiki.js?v=vs-5422af4be1ec";
+      ws.src = "../assets/wiki.js?v=vs-ac6681e773c0";
       document.head.appendChild(ws);
     }
     var hs = document.createElement("script"); // 交互层（PY-53）

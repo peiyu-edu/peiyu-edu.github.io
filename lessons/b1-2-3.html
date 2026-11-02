@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-b0e7da29a8a0fe4d"></script>
+<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -560,9 +560,10 @@
     });
 
     // 可拖动的点：顶点（a≠0）或 y 轴截距（a=0）
-    var hp = handlePos(), hx = clamp(px(hp.x), PX0, PX1), hy = clamp(py(hp.y), PY0, PY1);
+    var hp = handlePos(), inView = hp.x >= XL && hp.x <= XR && hp.y >= YB && hp.y <= YT;
+    var hx = inView ? px(hp.x) : clamp(px(hp.x), PX0 + 12, PX1 - 12), hy = inView ? py(hp.y) : H - 10;
     var h = svg("circle", { cx: hx, cy: hy, r: 11, fill: ca, stroke: card, "stroke-width": 3, tabindex: 0, role: "slider",
-      "aria-label": st.a === 0 ? "直线和 y 轴的交点，上下拖改 c" : "抛物线顶点，拖动改 b 和 c", "aria-valuenow": num(hp.y), style: "cursor:grab" }, fig);
+      "aria-label": !inView ? "参数把手，所控点已超出图窗" : st.a === 0 ? "直线和 y 轴的交点，上下拖改 c" : "抛物线顶点，拖动改 b 和 c", "aria-valuenow": num(hp.y), style: "cursor:grab" }, fig);
     h.id = "pfh";
     h.addEventListener("pointerdown", startDrag);
     h.addEventListener("keydown", onKey);
@@ -580,6 +581,7 @@
         : rs.length === 1 ? "一个重根：\\(x_1=x_2=" + rs[0].tex + "\\)（碰到 \\(x\\) 轴，不穿过）"
         : "没有实根：抛物线整个在 \\(x\\) 轴" + (a > 0 ? "上方" : "下方");
     }
+    if (!inView) html += "<br>" + (a === 0 ? "截距点" : "顶点") + "坐标为 \\((" + num(hp.x) + "," + num(hp.y) + ")\\)，已超出图窗；底部圆点仅是参数把手，不表示该点的位置。";
     info.innerHTML = html;
     Peiyu.math(info);
 
@@ -606,7 +608,9 @@
   function setVertex(x, y) {
     if (st.a === 0) { st.c = clamp(half(y), -6, 6); return; }
     st.b = clamp(half(-2 * st.a * x), -6, 6);
-    st.c = clamp(half(st.a * x * x + y), -6, 6);
+    // Recompute from the attainable x after b is rounded or clamped.
+    var vx = -st.b / (2 * st.a);
+    st.c = clamp(half(st.a * vx * vx + y), -6, 6);
   }
   function onKey(ev) {
     var hp = handlePos(), dx = 0, dy = 0;

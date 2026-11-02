@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-b0e7da29a8a0fe4d"></script>
+<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -509,7 +509,11 @@
     if (d) { ev.preventDefault(); cur = [clamp(cur[0] + d[0], 0, 5), clamp(cur[1] + d[1], 0, 5)]; paintDraw(); return; }
     if (ev.key === " " || ev.key === "Enter") { ev.preventDefault(); toggle(cur[0], cur[1]); }
   });
-  paint.addEventListener("focus", function () { focused = true; paintDraw(); });
+  paint.addEventListener("focus", function () {
+    focused = true;
+    // Pointer focus must keep the pressed cell alive until its click arrives.
+    if (paint.matches(":focus-visible")) paintDraw();
+  });
   paint.addEventListener("blur", function () { focused = false; paintDraw(); });
   selA2.addEventListener("change", function () { paintDraw(); Peiyu.log("interact", { id: "paint-A", A: EVENTS[evIndex(selA2, 0)].id }); });
   document.getElementById("paintclear").onclick = function () { for (var i = 0; i < 6; i++) for (var j = 0; j < 6; j++) B[i][j] = false; paintDraw(); };

@@ -1686,7 +1686,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   function ensureIsoBenchLoaded(cb) {
     if (window.IsoBench) { cb(); return; }
     var s = document.createElement("script");
-    s.src = ROOT + "assets/iso-bench.js?v=vs-a7f1296b47b5";
+    s.src = ROOT + "assets/iso-bench.js?v=vs-23a34e5658f2";
     s.onload = cb;
     document.head.appendChild(s);
   }

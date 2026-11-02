@@ -3,6 +3,7 @@
   "use strict";
   var STORE = "peiyu.olympic.v1";
   var THEME = "peiyu.olympic.theme";
+  var SHARED_THEME = "peiyu.hs.theme";
 
   // ---------- 本地记录 ----------
   var unsaved = null, unsavedBase = null, lastStored = null;
@@ -127,7 +128,15 @@
   }
 
   // ---------- 主题 ----------
-  try { var t = localStorage.getItem(THEME); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; } catch (e) { /* 忽略 */ }
+  function applyStoredTheme() {
+    try {
+      var t = localStorage.getItem(THEME);
+      if (t !== "dark" && t !== "light") t = localStorage.getItem(SHARED_THEME);
+      if (t === "dark" || t === "light") document.documentElement.dataset.theme = t;
+      else document.documentElement.removeAttribute("data-theme");
+    } catch (e) { /* 忽略 */ }
+  }
+  applyStoredTheme();
   function initTheme() {
     var b = document.querySelector("[data-theme-toggle]");
     if (!b) return;
@@ -145,14 +154,14 @@
       var next = dark ? "light" : "dark";
       document.documentElement.dataset.theme = next;
       try { localStorage.setItem(THEME, next); } catch (e) { /* 忽略 */ }
+      try { localStorage.setItem(SHARED_THEME, next); } catch (e) { /* 忽略 */ }
       sync();
     });
     window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", sync);
     window.addEventListener("pageshow", sync);
     window.addEventListener("storage", function (e) {
-      if (e.key !== THEME && e.key !== null) return;
-      if (e.newValue === "dark" || e.newValue === "light") document.documentElement.dataset.theme = e.newValue;
-      else document.documentElement.removeAttribute("data-theme");
+      if (e.key !== THEME && e.key !== SHARED_THEME && e.key !== null) return;
+      applyStoredTheme();
       sync();
     });
     sync();
@@ -731,11 +740,11 @@
     var nodes = Array.from(document.querySelectorAll('.katex')).filter(function (node) {
       return !node.closest('.katex-display');
     });
-    // One measurement phase, then one cleanup phase. The 1 px tolerance excludes
+    // One measurement phase, then one cleanup phase. The 3 px tolerance excludes
     // KaTeX ink/fractional pixel rounding from creating scrollbars on short math.
     nodes.forEach(function (node) { node.classList.add('inline-math-scroll'); });
     var fitting = nodes.filter(function (node) {
-      return node.clientWidth === 0 || node.scrollWidth <= node.clientWidth + 1;
+      return node.clientWidth === 0 || node.scrollWidth <= node.clientWidth + 3;
     });
     fitting.forEach(function (node) { node.classList.remove('inline-math-scroll'); });
   }

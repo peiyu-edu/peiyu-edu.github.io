@@ -404,7 +404,7 @@
     const fill = opts.warn ? "var(--iso-warn)" : opts.accent ? "var(--iso-accent)" : opts.tone === "muted" ? "var(--iso-mid)" : "var(--iso-hi)";
     const weight = opts.bold !== false ? "600" : "500";
     const size = opts.size || 12.5;
-    const strokeHalo = opts.halo !== false ? ` paint-order="stroke" stroke="var(--iso-card)" stroke-width="3.5" stroke-linejoin="round"` : "";
+    const strokeHalo = opts.halo !== false ? ` paint-order="stroke" stroke="var(--iso-card)" stroke-width="1.5" stroke-linejoin="round"` : "";
     return `<text x="${tenth(x)}" y="${tenth(y)}" text-anchor="${anchor}" font-size="${size}" font-weight="${weight}" fill="${fill}"${strokeHalo}>${text}</text>`;
   }
 
@@ -2040,7 +2040,7 @@
     const C = [[0, b], [a - b, b], [a - b, a], [0, a]];
     const scale = 220 / (a + b), tx = 34 + b * scale, ty = 76;
     const points = p => p.map(q => q.join(',')).join(' ');
-    const text = (x, y, value, fill = 'var(--iso-hi)', size = 22) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" font-weight="650" fill="${fill}" stroke="var(--iso-card)" stroke-width="3" paint-order="stroke">${value}</text>`;
+    const text = (x, y, value, fill = 'var(--iso-hi)', size = 22) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${size}" font-weight="650" fill="${fill}" stroke="var(--iso-card)" stroke-width="1.5" paint-order="stroke">${value}</text>`;
     const map = p => [tx + p[0] * scale, ty + p[1] * scale];
     const parts = ['<g data-figure-label-fixed="1">' + text(150, -20, '赵爽弦图：面积相加') + text(433, -20, '均值大小') + '</g>'];
     parts.push('<path d="M45 55H70" stroke="var(--iso-warn)" stroke-width="3"/>', text(112, 61, 'a = ' + a));

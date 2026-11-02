@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <script defer src="../assets/b9a-j27-3-teaching-workshop-dev.js"></script>
 <style>
@@ -447,6 +447,30 @@
 （1）表格中 \(a\) 的值是＿＿＿＿；
 （2）写出 \(F\) 关于 \(l\) 的函数关系式；
 （3）当 \(OA\) 的长增大时，拉力 \(F\) 是增大还是减小？请说明理由。</p>
+    <p class="small">受力示意（不按比例，OA 的长度随题设变化）</p>
+    <svg class="fig" viewBox="0 0 480 240" role="img" aria-label="桔槔受力示意：水平横杆上，A、B位于支点O两侧，OA的长度为l，OB长1米；A端拉力F与B端300牛物体的重力均竖直向下。" data-figure-label-fixed="1">
+      <g fill="none" stroke="var(--fg)" stroke-width="3">
+        <path d="M64 68H410"/>
+        <path d="M250 100L268 68L286 100Z" fill="var(--card)"/>
+        <path d="M398 68V92"/>
+        <rect x="374" y="92" width="48" height="34" fill="var(--hl)"/>
+      </g>
+      <g fill="var(--fg)">
+        <circle cx="72" cy="68" r="5"/><circle cx="268" cy="68" r="5"/><circle cx="398" cy="68" r="5"/>
+      </g>
+      <g fill="var(--fg)" font-size="24" text-anchor="middle">
+        <text x="72" y="44">A</text><text x="268" y="44">O</text><text x="398" y="44">B</text>
+        <text x="170" y="232">OA = l</text><text x="333" y="232">OB = 1 m</text>
+      </g>
+      <g stroke="var(--c)" fill="var(--c)" stroke-width="3">
+        <path d="M72 84V154M398 132V154"/>
+        <path d="M66 150L72 162L78 150ZM392 150L398 162L404 150Z"/>
+      </g>
+      <g fill="var(--c)" font-size="24">
+        <text x="90" y="132">F</text><text x="398" y="186" text-anchor="middle">300 N</text>
+      </g>
+      <path d="M72 196H398M72 190V202M268 190V202M398 190V202" fill="none" stroke="var(--muted)" stroke-width="2"/>
+    </svg>
     <details class="more"><summary>查看答案与解析，自行核对</summary><p><b>答案：</b>（1）\(a=100\)；（2）\(F=\dfrac{300}{l}\ (l&gt;0)\)；（3）减小</p><p>（1）\(1\times300=300\)，\(1.5\times200=300\)，\(2\times150=300\)，\(2.5\times120=300\)，积都是 \(300\)，所以 \(3a=300\)，\(a=100\)。（2）\(Fl=300\)，\(F=\frac{300}{l}\)，\(l&gt;0\)。（3）\(k=300&gt;0\)，\(l&gt;0\) 时在第一象限，\(F\) 随 \(l\) 增大而减小：\(OA\) 越长越省力。</p></details>
   </div>
 </section>
@@ -516,18 +540,22 @@ window.addEventListener("DOMContentLoaded", function () {
   /* 从例子进入：v = 6300 / t */
   var eT = 6;
   function drawEntry() {
+    var answered = $("entry-fig").closest(".predict").classList.contains("done");
     var t = eT, v = 6300 / t, ox = 70, oy = 168;
     function X(a) { return ox + (a - 5) * 75; } function Y(a) { return oy - (a - 500) * 0.2143; }
     var d = ""; for (var i = 0; i <= 60; i++) { var a = 5.5 + 5 * i / 60; d += (i ? " L " : "M ") + X(a).toFixed(1) + " " + Y(6300 / a).toFixed(1); }
     var h = L(60, oy, 530, oy, "var(--muted)", 1.5) + L(ox, 10, ox, oy + 6, "var(--muted)", 1.5) + T(540, oy + 24, "t/h", { a: "end", s: 18, f: "var(--muted)" }) + T(ox + 8, 22, "v", { a: "start", s: 18, f: "var(--muted)" });
     [6, 7, 8, 9, 10].forEach(function (a) { h += L(X(a), oy, X(a), oy + 6, "var(--muted)", 1.5) + T(X(a), oy + 26, a, { s: 18, f: "var(--muted)" }); });
     [700, 1000].forEach(function (a) { h += L(ox - 5, Y(a), ox, Y(a), "var(--muted)", 1.5) + T(ox - 9, Y(a) + 6, a, { a: "end", s: 18, f: "var(--muted)" }); });
-    h += P(d, "var(--c)", 3) + L(X(t), Y(v), X(t), oy, "var(--b)", 1.5, "5 4") + L(ox, Y(v), X(t), Y(v), "var(--b)", 1.5, "5 4") + D(X(t), Y(v), 7, "var(--b)") + T(X(t) + 12, Y(v) - 10, "v = " + fm(v), { a: "start", s: 19, f: "var(--b)", w: 700 });
+    h += P(d, "var(--c)", 3) + L(X(t), Y(v), X(t), oy, "var(--b)", 1.5, "5 4") + L(ox, Y(v), X(t), Y(v), "var(--b)", 1.5, "5 4") + D(X(t), Y(v), 7, "var(--b)");
+    if (answered) h += T(X(t) + 12, Y(v) - 10, "v = " + fm(v), { a: "start", s: 19, f: "var(--b)", w: 700 });
     $("entry-fig").innerHTML = h;
-    $("entry-note").textContent = "货物总量 6300 t 不变。限定 " + t + " h 卸完，每小时要卸 " + fm(v) + " t；时间限得越短，速度要求越高。v × t = " + fm(v) + " × " + t + " = 6300。";
+    $("entry-note").textContent = answered ? "货物总量 6300 t 不变。限定 " + t + " h 卸完，每小时要卸 " + fm(v) + " t；时间限得越短，速度要求越高。v × t = " + fm(v) + " × " + t + " = 6300。" : "货物总量 6300 t 不变，当前限定 " + t + " h 卸完。请由总量与时间计算速度，再判断题目要求的范围。";
   }
   bar("entry-bar", function (b) { eT = parseFloat(b.dataset.t); drawEntry(); });
   drawEntry();
+  $("entry-fig").closest(".predict").addEventListener("predict:pick", drawEntry);
+  $("entry-fig").closest(".predict").addEventListener("predict:reset", drawEntry);
 
   /* 微图解 1：四个模型都是「面积不变」 */
   var M1 = {

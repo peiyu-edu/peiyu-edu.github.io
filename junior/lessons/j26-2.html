@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <script defer src="../assets/b9a-j26-2-teaching-workshop-dev.js"></script>
 <style>
@@ -281,9 +281,11 @@
       </div>
     </div>
   </div>
-  <details class="more"><summary>再深一点（可以先跳过）：为什么 \(a\) 相同的抛物线都能“叠”在一起？</summary>
-    <p>平移只改变顶点位置，不改变形状，所以 \(y=a(x-h)^2+k\) 总可以由 \(y=ax^2\) 平移得到。这就是为什么只要 \(a\) 相同、顶点不同，两条抛物线就能重合：研究任意二次函数，先研究 \(y=ax^2\) 就够了。</p>
-  </details>
+  <details class="more"><summary>再深一点（可跳过）：同a的两条抛物线怎样平移？</summary>
+<p>从 \(y=2(x-1)^2+3\) 平移到 \(y=2(x+2)^2-1\)，应向哪里移动多少？为什么a相同就能保持形状？</p><details class="more"><summary>想好后看解释</summary>
+<p>顶点从(1,3)到(−2,−1)，所以向左3、向下4。两者都由y=2x²平移而来，a相同，开口方向与形状相同；平移只改变顶点位置。</p>
+</details>
+</details>
 </section>
 
 <section class="step" data-title="动手">
@@ -506,6 +508,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var entryNote = document.getElementById("entry-note");
   function renderEntry(step) {
     if (!entryFig) return;
+    var answered = entryFig.closest(".predict").classList.contains("done");
     var pts = [
       {x: -3, y: 9}, {x: -2, y: 4}, {x: -1, y: 1}, {x: 0, y: 0},
       {x: 1, y: 1}, {x: 2, y: 4}, {x: 3, y: 9}
@@ -538,11 +541,17 @@ document.addEventListener("DOMContentLoaded", function() {
     entryFig.innerHTML = h;
     if (entryNote) {
       if (step === 1) entryNote.textContent = '列表计算出：(-3,9), (-2,4), (-1,1), (0,0), (1,1), (2,4), (3,9) 等对应值。';
-      else if (step === 2) entryNote.textContent = '在坐标系中把点精准描出，清晰看出对称分布在 y 轴两侧。';
-      else entryNote.textContent = '用平滑曲线顺次连结各点，形成顶点在 (0,0)、开口向上的标准抛物线！';
+      else if (step === 2) entryNote.textContent = answered ? '在坐标系中把点精准描出，清晰看出对称分布在 y 轴两侧。' : '比较横坐标互为相反数的两个点，想一想图象的对称轴在哪里。';
+      else entryNote.textContent = answered ? '用平滑曲线顺次连结各点，形成顶点在 (0,0)、开口向上的标准抛物线！' : '用平滑曲线顺次连接各点，观察对称性，并找出图象的最低点。';
     }
   }
   renderEntry(1);
+  function refreshEntry() {
+    var selected = document.querySelector("#entry-bar button.on");
+    renderEntry(selected ? parseInt(selected.getAttribute("data-s"), 10) : 1);
+  }
+  entryFig.closest(".predict").addEventListener("predict:pick", refreshEntry);
+  entryFig.closest(".predict").addEventListener("predict:reset", refreshEntry);
   var entryBtns = document.querySelectorAll("#entry-bar button");
   entryBtns.forEach(function(b) {
     b.addEventListener("click", function() {

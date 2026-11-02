@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js"></script>
+<script defer src="../assets/lesson.js?v=e967d9b9c3cc"></script>
 <script defer src="../assets/video.js"></script>
 <script defer src="../assets/b9a-j9a-p1-teaching-workshop-dev.js"></script>
 <style>
@@ -329,6 +329,7 @@
   /* 从例子进入：停站次数 */
   var ef = document.getElementById("entry-fig"), en = document.getElementById("entry-note"), stops = 0;
   function drawEntry() {
+    var answered = ef.closest(".predict").classList.contains("done");
     var c = C(); ef.innerHTML = "";
     var x0 = 40, u = 160, T = 2 + stops * 0.1, avg = 600 / T;
     txt(ef, x0, 40, "跑 2 h", c.a, 700, 18, "start");
@@ -341,10 +342,12 @@
       el("line", { x1: x0 + h * u, y1: 100, x2: x0 + h * u, y2: 110, stroke: c.fg }, ef);
       txt(ef, x0 + h * u, 132, f(h, 1) + " h", c.fg, 400, 17);
     }
-    txt(ef, 260, 180, "平均 " + f(avg, 1) + " km/h", c.b, 700, 22);
-    en.textContent = stops ? "停 " + stops + " 站多用 " + stops * 6 + " 分钟，总时间 " + f(T, 1) + " h，平均速度 600 ÷ " + f(T, 1) + " ≈ " + f(avg, 1) + " km/h。" : "不停站：600 ÷ 300 = 2 h，平均速度就是 300 km/h。";
+    if (answered) txt(ef, 260, 180, "平均 " + f(avg, 1) + " km/h", c.b, 700, 22);
+    en.textContent = !answered ? "当前停 " + stops + " 站。先读出总时间，再用总路程除以总时间计算平均速度。" : stops ? "停 " + stops + " 站多用 " + stops * 6 + " 分钟，总时间 " + f(T, 1) + " h，平均速度 600 ÷ " + f(T, 1) + " ≈ " + f(avg, 1) + " km/h。" : "不停站：600 ÷ 300 = 2 h，平均速度就是 300 km/h。";
   }
   bar("entry-bar", function (t) { stops = +t.getAttribute("data-k"); drawEntry(); });
+  ef.closest(".predict").addEventListener("predict:pick", drawEntry);
+  ef.closest(".predict").addEventListener("predict:reset", drawEntry);
 
   /* 微图解 ①：单位换算 */
   var m1 = document.getElementById("m1-fig"), m1v = 216;

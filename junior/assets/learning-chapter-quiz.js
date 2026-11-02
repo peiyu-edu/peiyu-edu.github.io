@@ -88,6 +88,22 @@
     if (/(?:用|化成|写成).*分数/.test(prompt)) return "fraction";
     return "value";
   }
+  // Scaled groups and a shrinking viewBox can draw authored labels under 14px; raise them to 14px on screen.
+  function floorFigureText(svg) {
+    if (!svg) return;
+    var fit = function () {
+      Array.prototype.forEach.call(svg.querySelectorAll("text"), function (t) {
+        var m = t.getScreenCTM();
+        if (!m) return;
+        var base = t.getAttribute("data-base-size") || parseFloat(getComputedStyle(t).fontSize);
+        t.setAttribute("data-base-size", base);
+        t.style.fontSize = Math.max(base, 14 / Math.hypot(m.a, m.b)) + "px";
+      });
+    };
+    // The figure is built detached, so measure once it is laid out and again on every resize.
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(svg);
+    else { fit(); window.addEventListener("resize", fit); }
+  }
   function automatic(item) { return item.type !== "fill" || gradingMode(item) !== "self"; }
   function grade(item, response) {
     if (item.type !== "fill") return response === item.correct;
@@ -281,6 +297,7 @@
           var picture = doc.createElement("template");
           picture.innerHTML = item.figure;
           box.appendChild(picture.content.cloneNode(true));
+          floorFigureText(box.querySelector("svg.qfig"));
         }
         if (item.type === "fill") {
           var input = el(doc, "textarea", "cq-fill");

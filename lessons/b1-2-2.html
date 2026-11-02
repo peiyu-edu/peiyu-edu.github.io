@@ -8,8 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
+<script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
+<script defer src="../assets/lesson.js?v=sha256-90c27cd9ac1d7087"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -20,7 +20,7 @@
 </style>
 <link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=69e91cb27ec4"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=12443ecfd95f"></script><script defer src="../assets/learning-course.js?v=ca4dc7609376"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
-<body data-sec="b1-2-2" data-gaokao-bank-revision="339cbaeac797c939dc0642f78503af44942232229761f0575553e8c7091b6fe4" data-bank-revision="339cbaeac797c939dc0642f78503af44942232229761f0575553e8c7091b6fe4">
+<body data-sec="b1-2-2" data-gaokao-bank-revision="6996c7bdbdf1fa2a9fcc43079b05d99c3fa81de55a31d038c6dd74b18053aee1" data-bank-revision="6996c7bdbdf1fa2a9fcc43079b05d99c3fa81de55a31d038c6dd74b18053aee1">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
 <p class="crumb">必修第一册 · 第 2 章 一元二次函数、方程和不等式</p>
@@ -538,15 +538,18 @@
     var h = 10 - w, area = w * h, u = 24, ox = 48, oy = 172;
     var fg = css("--fg"), ca = css("--a"), ok = css("--ok-soft"), hl = css("--hl"), mu = css("--muted"), ln = css("--line"), card = css("--card");
     ew.innerHTML = "";
-    // 虚线参照：5x5 正方形
+    // Show the comparison construction only after the student's choice.
+    if (ewAnswered) {
     svg("rect", { x: ox, y: oy - 5 * u, width: 5 * u, height: 5 * u, fill: "none", stroke: hl, "stroke-width": 1.8, "stroke-dasharray": "5 4" }, ew);
     svg("text", { x: ox + 5 * u + 6, y: oy - 5 * u + 15, fill: hl, "font-size": 14 }, ew).textContent = "5×5 参照框";
+    }
     // 当前 w x h 方格网
     svg("rect", { x: ox, y: oy - h * u, width: w * u, height: h * u, fill: ok, stroke: ca, "stroke-width": 2.5 }, ew);
     for (var i = 1; i < w; i++) svg("line", { x1: ox + i * u, y1: oy - h * u, x2: ox + i * u, y2: oy, stroke: ca, "stroke-opacity": 0.35 }, ew);
     for (var j = 1; j < h; j++) svg("line", { x1: ox, y1: oy - j * u, x2: ox + w * u, y2: oy - j * u, stroke: ca, "stroke-opacity": 0.35 }, ew);
     svg("text", { x: ox + w * u / 2, y: oy + 22, "text-anchor": "middle", "font-weight": 700, fill: fg }, ew).textContent = "长 " + w + " cm";
     svg("text", { x: ox - 8, y: oy - h * u / 2 + 5, "text-anchor": "end", "font-weight": 700, fill: fg }, ew).textContent = "宽 " + h;
+    if (ewAnswered) {
     // 右侧四方案柱状对比
     var cases = [[9, 1, "A 9×1"], [7, 3, "B 7×3"], [6, 4, "C 6×4"], [5, 5, "D 5×5"]];
     var bx0 = 315, bw = 38, gap = 10;
@@ -559,6 +562,7 @@
       svg("text", { x: x + bw / 2, y: oy + 20, "text-anchor": "middle", fill: active ? fg : mu, "font-size": 13.5, "font-weight": active ? 700 : 400 }, g).textContent = c[2].split(" ")[0]; // 只写字母：手机上字放大后「A 9×1」会互相压住，长×宽在按钮上
       g.onclick = function () { ewDraw(cw); };
     });
+    }
     [].forEach.call(ewBar.querySelectorAll("button"), function (b) {
       b.classList.toggle("on", parseInt(b.getAttribute("data-w"), 10) === w);
     });

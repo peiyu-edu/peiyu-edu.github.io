@@ -230,8 +230,9 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   /* ---------- 真题练习 ---------- */
   var LETTERS = "ABCDE";
   function norm(s) {
+    // Keep TeX groups: moving a factor across a fraction bar changes its value.
     return String(s || "").replace(/\\[()\[\]]/g, "").replace(/\\(dfrac|tfrac)/g, "\\frac")
-      .replace(/\\left|\\right|\\,|\\;|\\!|\s|\$|\{|\}/g, "").replace(/\\/g, "")
+      .replace(/\\left|\\right|\\,|\\;|\\!|\s|\$/g, "").replace(/\\/g, "")
       .replace(/，/g, ",").replace(/．|。/g, "").toLowerCase();
   }
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
@@ -662,7 +663,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     math(document.body);
     log("open", {});
     var fl = document.createElement("script");
-    fl.src = "../assets/figure-layout.js?v=vs-4aaa49c968d2";
+    fl.src = "../assets/figure-layout.js?v=vs-9807ab2f315a";
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");

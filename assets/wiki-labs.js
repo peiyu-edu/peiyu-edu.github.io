@@ -479,7 +479,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 第 2 章 ---- */
     {
       id: "amgm-hook", card: "amgm-hook", tpl: "slider",
-      title: "基本不等式“等号取不到”时，最小值跑去了端点",
+      title: "基本不等式的等号取不到时，最小值在哪里？",
       intro: "\\(f(x)=x+\\dfrac4x\\)，基本不等式给的下界是 \\(4\\)，等号在 \\(x=2\\)。拖动题目允许的定义域左端点 \\(x\\ge m\\)。",
       ask: { q: "若定义域是 \\(x\\ge 3\\)，\\(f(x)=x+\\dfrac4x\\) 的最小值是？", opts: ["仍是 \\(4\\)（基本不等式的下界）", "\\(f(3)=\\dfrac{13}{3}\\)（在端点取到）", "没有最小值"], ans: 1,
         why: "等号点 \\(x=2\\) 不在 \\([3,+\\infty)\\) 内，下界 \\(4\\) 取不到；对勾函数在 \\((2,+\\infty)\\) 上递增，最小值在左端点 \\(x=3\\)。" },
@@ -506,8 +506,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "quad-always-true", card: "quad-always-true", tpl: "slider",
-      title: "区间上恒成立：直接套 \\(\\Delta\\lt 0\\) 为什么会把答案算窄？",
-      intro: "\\(x^2-ax+2\\gt 0\\) 对 \\(x\\in[3,5]\\) 恒成立。拖动 \\(a\\)，比较“\\(\\Delta\\lt 0\\) 法”的判断和区间上的真相。",
+      title: "区间上恒成立：能直接套 \\(\\Delta\\lt 0\\) 吗？",
+      intro: "\\(x^2-ax+2\\gt 0\\) 对 \\(x\\in[3,5]\\) 恒成立。拖动 \\(a\\)，比较“\\(\\Delta\\lt 0\\) 法”的判断和函数在区间上的实际取值。",
       ask: { q: "这题能直接令 \\(\\Delta\\lt 0\\) 求 \\(a\\) 吗？", opts: ["能，\\(\\Delta\\lt 0\\) 得 \\(a\\lt 2\\sqrt2\\)", "不能，区间上要看最小值，答案比 \\(a\\lt 2\\sqrt2\\) 宽", "不能，答案比 \\(a\\lt 2\\sqrt2\\) 窄"], ans: 1,
         why: "\\(\\Delta\\lt 0\\) 保证的是在整个 \\(\\mathbf R\\) 上为正，题目只要求 \\([3,5]\\) 上为正：抛物线可以有根，只要根落在区间外。正确做法是分离参数 \\(a\\lt x+\\dfrac2x\\) 在 \\([3,5]\\) 上的最小值 \\(\\dfrac{11}{3}\\)。" },
       ctrl: { label: "\\(a=\\)", min: 2, max: 5, step: 0.25, init: 3, quick: [{ label: "a=3（Δ>0 却成立）", v: 3 }, { label: "a=4（真失败）", v: 4 }] },
@@ -539,8 +539,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 第 3 章 ---- */
     {
       id: "fn-dom-same", card: "fn-dom-same", tpl: "toggle",
-      title: "约分之前先看定义域：\\(\\dfrac{x^2-1}{x-1}\\) 和 \\(x+1\\) 差在哪一个点？",
-      intro: "解析式化简前后看似一样，图象上却少了一个点。切换看一看。",
+      title: "\\(\\dfrac{x^2-1}{x-1}\\) 和 \\(x+1\\) 是同一个函数吗？",
+      intro: "解析式化简前后看起来一样。切换看一看，比较两者的定义域和图象。",
       ask: { q: "\\(f(x)=\\dfrac{x^2-1}{x-1}\\) 与 \\(g(x)=x+1\\) 是同一函数吗？", opts: ["是，约分后完全一样", "不是，\\(f\\) 的定义域少了 \\(x=1\\)", "是，去掉一个点不会影响是否为同一函数"], ans: 1,
         why: "同一函数要定义域相同且对应关系一致。约分前分母不能为 \\(0\\)，\\(f\\) 的定义域是 \\(x\\ne 1\\)；\\(g\\) 在 \\(x=1\\) 有定义。本例 \\(f\\) 的值域还少了 \\(2\\)，而 \\(g\\) 的值域为 \\(\\mathbf R\\)。定义域或对应关系不同，就不是同一函数。" },
       ctrl: { init: "f", states: [{ key: "f", label: "\\(f(x)=\\dfrac{x^2-1}{x-1}\\)" }, { key: "g", label: "\\(g(x)=x+1\\)" }] },
@@ -588,7 +588,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "fn-mono-def", card: "fn-mono-def", tpl: "toggle",
-      title: "\\(y=\\dfrac1x\\) 的递减区间，为什么不能写成 \\((-\\infty,0)\\cup(0,+\\infty)\\)？",
+      title: "\\(y=\\dfrac1x\\) 的递减区间，能写成 \\((-\\infty,0)\\cup(0,+\\infty)\\) 吗？",
       intro: "“递减”是说：区间里任取 \\(x_1\\lt x_2\\) 都有 \\(f(x_1)\\gt f(x_2)\\)。切换取点方式，检验这句话。",
       ask: { q: "\\(y=\\dfrac1x\\) 的单调递减区间能写成 \\((-\\infty,0)\\cup(0,+\\infty)\\) 吗？", opts: ["能，两段都递减", "不能，取 \\(x_1=-1\\lt x_2=2\\) 时 \\(f(x_1)\\lt f(x_2)\\)，并集上不递减", "不能，应写成 \\(\\mathbf R\\)"], ans: 1,
         why: "并集是一个集合，递减要对集合里任意两点成立。跨过 \\(0\\) 取 \\(-1\\) 和 \\(2\\)，\\(f(-1)=-1\\lt f(2)=\\dfrac12\\)，反而变大了。所以两段要分开写，用“和”或逗号。" },
@@ -612,7 +612,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "fn-model-app", card: "fn-model-app", tpl: "slider",
-      title: "闭区间上的二次函数最值：对称轴出了区间，顶点就不算数",
+      title: "闭区间上的二次函数最值：对称轴的位置怎样影响最小值？",
       intro: "\\(f(x)=(x-a)^2+1\\)，只在 \\(x\\in[0,2]\\) 上取值。拖动对称轴 \\(x=a\\)。",
       ask: { q: "\\(f(x)=(x-a)^2+1\\) 在 \\([0,2]\\) 上的最小值一定是 \\(1\\) 吗？", opts: ["是，顶点就是最小值", "不一定，对称轴 \\(x=a\\) 不在 \\([0,2]\\) 内时最小值在端点", "不一定，最小值总在 \\(x=1\\)"], ans: 1,
         why: "顶点的纵坐标 \\(1\\) 只有在 \\(x=a\\) 落进 \\([0,2]\\) 时才取得到；对称轴在区间左边时函数在区间上递增，最小值在 \\(x=0\\)；在右边时递减，最小值在 \\(x=2\\)。应用题先列实际定义域，就是为了这一步。" },
@@ -661,8 +661,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "zero-theorem", card: "zero-theorem", tpl: "toggle",
-      title: "零点存在定理只说“有”，不说“没有”，也离不开连续",
-      intro: "定理：\\(f\\) 在 \\([a,b]\\) 上连续且 \\(f(a)f(b)\\lt 0\\Rightarrow\\) \\((a,b)\\) 内有零点。切换三种情形，看哪些结论不能反着用。",
+      title: "零点存在定理：条件和结论能反过来用吗？",
+      intro: "定理：\\(f\\) 在 \\([a,b]\\) 上连续且 \\(f(a)f(b)\\lt 0\\Rightarrow\\) \\((a,b)\\) 内有零点。切换三种情形，检验定理的条件和结论。",
       ask: { q: "\\(f(a)\\cdot f(b)\\gt 0\\)，能断定 \\(f(x)\\) 在 \\((a,b)\\) 内没有零点吗？", opts: ["能", "不能，\\(f(x)=x^2-1\\) 在 \\([-2,2]\\) 上 \\(f(-2)f(2)\\gt 0\\) 却有两个零点", "能，但要求 \\(f\\) 连续"], ans: 1,
         why: "定理是单向的：异号 \\(\\Rightarrow\\) 有零点。同号时内部仍可能有零点。另外，若去掉连续性，定义完整的跳跃函数也能两端异号而没有零点：左侧取 \\(-1\\)、右侧含 \\(0\\) 取 \\(1\\)。" },
       ctrl: { init: "ok", states: [{ key: "ok", label: "连续且异号：\\(x-1\\) 在 \\([0,2]\\)" }, { key: "even", label: "同号却有零点：\\(x^2-1\\) 在 \\([-2,2]\\)" }, { key: "disc", label: "异号却无零点：区间内跳跃的函数" }] },
@@ -697,8 +697,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 第 5 章 ---- */
     {
       id: "trig-shift-scale", card: "trig-shift-scale", tpl: "routes",
-      title: "\\(\\sin x\\to\\sin\\left(2x+\\dfrac{\\pi}{3}\\right)\\)：先伸缩后平移时，为什么平移量是 \\(\\dfrac{\\pi}{6}\\)？",
-      intro: "目标 \\(y=\\sin\\left(2x+\\dfrac\\pi3\\right)=\\sin\\left[2\\left(x+\\dfrac\\pi6\\right)\\right]\\)（绿色粗线）。点路线，看哪条能和它重合。",
+      title: "\\(\\sin x\\to\\sin\\left(2x+\\dfrac{\\pi}{3}\\right)\\)：先伸缩后平移时，平移量是多少？",
+      intro: "目标 \\(y=\\sin\\left(2x+\\dfrac\\pi3\\right)\\)（绿色粗线）。点路线，看哪条能和它重合。",
       ask: { q: "把 \\(y=\\sin 2x\\) 的图象向左平移多少，得到 \\(y=\\sin\\left(2x+\\dfrac\\pi3\\right)\\)？", opts: ["\\(\\dfrac\\pi3\\)", "\\(\\dfrac\\pi6\\)", "\\(\\dfrac{2\\pi}3\\)"], ans: 1,
         why: "平移只作用在 \\(x\\) 本身：\\(\\sin 2x\\to\\sin 2(x+h)=\\sin(2x+2h)\\)，要 \\(2h=\\dfrac\\pi3\\)，所以 \\(h=\\dfrac\\pi6\\)。先平移后伸缩时才是移 \\(\\dfrac\\pi3\\)。" },
       ctrl: { init: "A", states: [{ key: "A", label: "路线 A：先左移 \\(\\dfrac\\pi3\\)，再横坐标缩半" }, { key: "B", label: "路线 B：先缩半，再左移 \\(\\dfrac\\pi6\\)" }, { key: "bad", label: "常见错法：先缩半，再左移 \\(\\dfrac\\pi3\\)" }] },
@@ -721,7 +721,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 选必一 第 2 章 ---- */
     {
       id: "geom-line-slope-eq", card: "geom-line-slope-eq", tpl: "slider",
-      title: "倾斜角从 \\(0^\\circ\\) 转到 \\(180^\\circ\\)，斜率并不是一路变大",
+      title: "倾斜角从 \\(0^\\circ\\) 转到 \\(180^\\circ\\)，斜率怎样变化？",
       intro: "\\(k=\\tan\\alpha\\)。拖动倾斜角 \\(\\alpha\\)，看直线和 \\(k\\) 的值，特别留意 \\(90^\\circ\\) 附近。",
       ask: { q: "倾斜角 \\(\\alpha\\) 从 \\(0^\\circ\\) 增大到接近 \\(180^\\circ\\)，斜率 \\(k\\) 一直在增大吗？", opts: ["是，\\(k\\) 随 \\(\\alpha\\) 单调递增", "不是，\\(\\alpha=90^\\circ\\) 时 \\(k\\) 不存在，两侧各自递增", "不是，\\(k\\) 单调递减"], ans: 1,
         why: "\\(\\tan\\alpha\\) 在 \\([0^\\circ,90^\\circ)\\) 和 \\((90^\\circ,180^\\circ)\\) 上分别递增，但 \\(90^\\circ\\) 处无定义，从 \\(89^\\circ\\) 到 \\(91^\\circ\\) 斜率从很大的正数跳到很小的负数。由 \\(k\\) 的范围求 \\(\\alpha\\) 要分两段。" },
@@ -776,7 +776,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     /* ---- 选必二 第 4 章 ---- */
     {
       id: "seq-arith-geom", card: "seq-arith-geom", tpl: "toggle",
-      title: "等比数列求和：\\(q=1\\) 时公式的分母是 \\(0\\)",
+      title: "等比数列求和：公比 \\(q\\) 含参数时怎样用公式？",
       intro: "\\(a_1=2\\)，求前 \\(4\\) 项和。切换公比 \\(q\\)，比较“直接相加”和“套公式 \\(S_n=\\dfrac{a_1(1-q^n)}{1-q}\\)”。",
       ask: { q: "公比 \\(q\\) 含参数，直接套分式求和公式前必须先核查什么？", opts: ["直接套 \\(\\dfrac{a_1(1-q^4)}{1-q}\\)", "先分 \\(q=1\\) 与 \\(q\\ne 1\\) 讨论", "只求通项即可省略分母为零的检查"], ans: 1,
         why: "公式的分母是 \\(1-q\\)，\\(q=1\\) 时为 \\(0\\)，公式作废，此时 \\(S_n=na_1\\)。使用这个分式前须分 \\(q=1\\) 与 \\(q\\ne1\\)。也可直接相加写成 \\(S_4=2(1+q+q^2+q^3)\\)，此多项式在 \\(q=1\\) 仍有效；这不等于能把 \\(1\\) 直接代进原分式。" },
@@ -827,7 +827,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     },
     {
       id: "calc-monot-extrema", card: "calc-monot-extrema", tpl: "toggle",
-      title: "\\(f'(x_0)=0\\) 不够：\\(x^2\\) 与 \\(x^3\\) 的极值为什么不同",
+      title: "\\(f'(x_0)=0\\) 与极值点：比较 \\(x^2\\) 与 \\(x^3\\)",
       intro: "比较 \\(y=x^2\\) 和 \\(y=x^3\\) 在 \\(x=0\\) 处：导数都为 \\(0\\)（蓝色虚线是 \\(f'\\)）。切换看导数两侧的符号。",
       ask: { q: "已知 \\(f\\) 在内点 \\(x_0\\) 的邻域内可导，\\(f'(x_0)=0\\) 是其为极值点的什么条件？", opts: ["充要条件", "必要不充分：驻点不一定是极值点", "充分不必要"], ans: 1,
         why: "函数在内点邻域内可导，且该点为极值点时，导数必为 \\(0\\)（必要），但 \\(y=x^3\\) 在 \\(x=0\\) 处 \\(f'(0)=0\\) 而两侧 \\(f'\\ge 0\\) 不变号，函数一路递增，\\(0\\) 不是极值点。本实验两例在驻点两侧各有固定导数符号，可用变号这个常用充分判据比较；不能把解出驻点直接当作已求出极值点。" },

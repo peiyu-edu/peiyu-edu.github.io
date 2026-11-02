@@ -121,8 +121,9 @@
     };
   }
 
-  /* 课时页脉络条 HTML：课时链接是同目录相对地址，rootPrefix 是站根（课时页里为 "../"）。 */
-  function chainHtml(model, rootPrefix) {
+  /* 课时页脉络条 HTML：课时链接是同目录相对地址，rootPrefix 是站根（课时页里为 "../"）。
+     opts.lockPoints：知识点标题常写着入口题的结论，开头那道题答完前只留一句提示和「现在显示」按钮。 */
+  function chainHtml(model, rootPrefix, opts) {
     var L = model.labels || LABELS;
     function link(r) {
       return r.ready ? '<a href="' + esc(r.id) + '.html">' + esc(r.name) + "</a>"
@@ -136,7 +137,10 @@
         (model.moreUnlocks ? " 等 " + (model.unlocks.length + model.moreUnlocks) + " 节" : "") + "</span>"
       : model.next ? "<span>➡️ 按课本顺序接着学：" + link(model.next) + "</span>"
         : "<span>➡️ 后续：" + esc(L.end) + "</span>";
-    var pts = model.points.length
+    var pts = model.points.length && opts && opts.lockPoints
+      ? '<span class="ws-points ws-points-locked">' + esc(L.pointLabel) + "：先答开头的问题，答完自动显示" +
+        '<button type="button" class="ws-show-points" data-ws-show-points>现在显示</button></span>'
+      : model.points.length
       ? '<span class="ws-points">' + esc(L.pointLabel) + "：" + model.points.slice(0, 4).map(function (p) {
         return '<a href="' + rootPrefix + esc(p.href || "knowledge.html#point=" + encodeURIComponent(p.id)) + '">' + esc(p.title) + "</a>";
       }).join(" · ") + (model.points.length > 4 ? " 等 " + model.points.length + " 个" : "") + "</span>"
@@ -194,7 +198,9 @@
     "border:1px solid var(--line);border-radius:var(--radius,10px);background:var(--card);font-size:15px;line-height:1.7;overflow-wrap:anywhere}" +
     ".ws-chain a{color:var(--a);font-weight:600;text-decoration:none}.ws-chain a:hover{text-decoration:underline}" +
     ".ws-chain .ws-lbl{font-weight:700}.ws-chain .ws-pending{color:var(--muted)}" +
-    ".ws-chain .ws-points{flex-basis:100%}.ws-chain .ws-tools{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}";
+    ".ws-chain .ws-points{flex-basis:100%}.ws-chain .ws-tools{display:flex;flex-wrap:wrap;gap:10px;margin-left:auto}" +
+    ".ws-chain .ws-points-locked{color:var(--muted)}.ws-chain .ws-show-points{font:inherit;font-size:14px;font-weight:600;margin-left:8px;" +
+    "padding:1px 10px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--a);cursor:pointer}";
 
   function injectStyle(doc) {
     if (doc.getElementById("ws-style")) return;
@@ -235,11 +241,35 @@
     chain.className = "ws-chain";
     chain.setAttribute("aria-label", "知识脉络");
     chain.setAttribute("data-ws-chain", sid);
-    chain.innerHTML = chainHtml(model, "../");
     var anchor = doc.querySelector("p.lead") || doc.querySelector("h1");
     if (!anchor) return;
+    /* 入口题 = 课时第一道选择 / 填空题；primary.js、lesson.js 答完（含查看答案）都给它加 done。 */
+    var entry = doc.querySelector("section.step .card.predict, section.step .card.q");
+    var locked = !!(entry && model.points.length && !entry.classList.contains("done"));
+    var observer = null;
+    function render() {
+      chain.innerHTML = chainHtml(model, "../", { lockPoints: locked });
+      renderMath(win, chain);
+    }
+    function unlock(focus) {
+      if (!locked) return;
+      locked = false;
+      if (observer) observer.disconnect();
+      render();
+      var first = focus && chain.querySelector(".ws-points a");
+      if (first) first.focus();
+    }
+    render();
     anchor.parentNode.insertBefore(chain, anchor.nextSibling);
-    renderMath(win, chain);
+    if (locked) {
+      if (win.MutationObserver) {
+        observer = new win.MutationObserver(function () { if (entry.classList.contains("done")) unlock(false); });
+        observer.observe(entry, { attributes: true, attributeFilter: ["class"] });
+      }
+      chain.addEventListener("click", function (ev) {
+        if (ev.target.closest && ev.target.closest("[data-ws-show-points]")) unlock(true);
+      });
+    }
     doc.dispatchEvent(new win.Event("peiyu:wiki-chain-ready"));
   }
 
@@ -406,7 +436,7 @@
 
   return {
     KINDS: KINDS, normalize: normalize, lessonIndex: lessonIndex, chainModel: chainModel,
-    chainHtml: chainHtml, validate: validate, boot: boot
+    chainHtml: chainHtml, validate: validate, setupLesson: setupLesson, boot: boot
   };
 });
 

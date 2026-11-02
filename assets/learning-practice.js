@@ -38,7 +38,11 @@
     // Knowledge-page headings can state the result of their own diagnostic.
     var titles = {
       "pyps.p5a.u4.001": "轴对称图形和对称轴",
-      "pyjh.ineq.016": "不等式组的解集判断"
+      "pyjh.ineq.016": "不等式组的解集判断",
+      "pyjh.tri.008": "三角形与结构",
+      "pyjh.cong.008": "三角形全等判定的适用条件",
+      "pyjh.coord.012": "沿两轴依次平移",
+      "pyjh.frac.016": "分式方程的检验"
     };
     return titles[point.id] || point.title;
   }

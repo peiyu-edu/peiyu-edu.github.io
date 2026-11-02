@@ -172,6 +172,7 @@
     function sourceText(q) {
       var row = rows.get(q.base);
       if (row && row.role === "lesson-exam") return stage === "junior" ? "中考真题" : "高考真题";
+      if (row && row.role === "bank-exam") return "真题库"; // PY-490 独立真题库
       return { predict: "课内", card: "课内", diagnostic: stage === "high" ? "练习" : "诊断", exam: stage === "primary" ? "单元测评" : "章末测验" }[q.questionType] || "课内";
     }
     function typeset(node) { if (win.PeiyuKnowledge && win.PeiyuKnowledge.renderMath) win.PeiyuKnowledge.renderMath(node); return node; }

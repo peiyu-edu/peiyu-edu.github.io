@@ -423,8 +423,21 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     return problem.alignment && typeof problem.alignment === "object" ? Object.keys(problem.alignment) : [];
   }
 
+  // Junior builds write reviewed exam figures to a content-addressed name and
+  // reference them from lessons/ (junior_figures.materialize). Nothing else may
+  // use a leading "../": not other directories, other types or other names.
+  var EXAM_FIGURE = /^\.\.\/(assets\/exam-figures\/[0-9a-f]{64}\.svg)$/;
+
   function safeFigure(path) {
-    return typeof path === "string" && /^assets\/gaokao\/[a-zA-Z0-9_./-]+\.(svg|png|webp|jpg|jpeg)$/.test(path) && path.indexOf("..") === -1;
+    if (typeof path !== "string") return false;
+    return EXAM_FIGURE.test(path) || (/^assets\/gaokao\/[a-zA-Z0-9_./-]+\.(svg|png|webp|jpg|jpeg)$/.test(path) && path.indexOf("..") === -1);
+  }
+
+  function figureUrl(src) {
+    if (!scriptSiteBase) return src; // Relative to the page, which is the form build output uses.
+    // scriptSiteBase is already the stage root, one level above lessons/.
+    var exam = EXAM_FIGURE.exec(src);
+    return new URL(exam ? exam[1] : src, scriptSiteBase).href;
   }
 
   function renderFigures(problem, phase) {
@@ -480,7 +493,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     figure.setAttribute("data-gaokao-figure-role", spec.role);
     figure.setAttribute("data-gaokao-figure-src", spec.src);
     var image = element("img");
-    image.src = scriptSiteBase ? new URL(spec.src, scriptSiteBase).href : spec.src;
+    image.src = figureUrl(spec.src);
     image.alt = spec.alt;
     image.loading = "lazy";
     figure.appendChild(image);

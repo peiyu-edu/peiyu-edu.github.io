@@ -8,8 +8,8 @@
 <script defer src="../assets/katex/katex.min.js"></script>
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
-<script defer src="../assets/gaokao-solutions.js?v=sha256-5656caa730970e0e"></script>
-<script defer src="../assets/lesson.js?v=sha256-e967d9b9c3cc764a"></script>
+<script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
+<script defer src="../assets/lesson.js?v=sha256-90c27cd9ac1d7087"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -24,7 +24,7 @@
 </style>
 <link rel="stylesheet" href="../assets/knowledge.css"><link rel="stylesheet" href="../assets/learning-shell.css?v=69e91cb27ec4"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=63d2f6949c83"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=12443ecfd95f"></script><script defer src="../assets/learning-course.js?v=ca4dc7609376"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
-<body data-sec="b1-3-2" data-gaokao-bank-revision="339cbaeac797c939dc0642f78503af44942232229761f0575553e8c7091b6fe4" data-bank-revision="339cbaeac797c939dc0642f78503af44942232229761f0575553e8c7091b6fe4">
+<body data-sec="b1-3-2" data-gaokao-bank-revision="6996c7bdbdf1fa2a9fcc43079b05d99c3fa81de55a31d038c6dd74b18053aee1" data-bank-revision="6996c7bdbdf1fa2a9fcc43079b05d99c3fa81de55a31d038c6dd74b18053aee1">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 高中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a><a class="rec" href="../record.html">我的记录</a></header>
 <p class="crumb">必修第一册 · 第 3 章 函数的概念与性质</p>
@@ -747,11 +747,16 @@
     function X(hr) { return x0 + (hr - 6) / 12 * (x1 - x0); }
     function Y(tp) { return y0 - tp / 25 * (y0 - y1); }
 
-    // 区域背景高亮
-    if (mode === "up" || mode === "all") {
+    // 作答前不用分色、底色和峰值强调提示走势；只在选中某一时段时用中性底色框出
+    var neutral = !answered;
+    if (neutral) {
+      if (mode === "up" || mode === "down") {
+        svg("rect", { x: X(mode === "up" ? 6 : 14), y: 20, width: mode === "up" ? X(14) - X(6) : X(18) - X(14), height: y0 - 20, rx: 6, fill: c.line, opacity: 0.3 }, etSvg);
+      }
+    } else if (mode === "up" || mode === "all") {
       svg("rect", { x: X(6), y: 20, width: X(14) - X(6), height: y0 - 20, rx: 6, fill: okS, opacity: mode === "up" ? 0.85 : 0.4 }, etSvg);
     }
-    if (mode === "down" || mode === "all") {
+    if (!neutral && (mode === "down" || mode === "all")) {
       svg("rect", { x: X(14), y: 20, width: X(18) - X(14), height: y0 - 20, rx: 6, fill: c.line, opacity: mode === "down" ? 0.55 : 0.25 }, etSvg);
     }
 
@@ -768,17 +773,22 @@
       if (idx <= 2) dUp += (idx ? "L" : "M") + X(pt[0]).toFixed(1) + " " + Y(pt[1]).toFixed(1);
       if (idx >= 2) dDn += (idx > 2 ? "L" : "M") + X(pt[0]).toFixed(1) + " " + Y(pt[1]).toFixed(1);
     });
-    svg("path", { d: dUp, fill: "none", stroke: c.a, "stroke-width": mode === "up" || mode === "all" ? 3.6 : 2, opacity: mode === "down" ? 0.35 : 1 }, etSvg);
-    svg("path", { d: dDn, fill: "none", stroke: c.b, "stroke-width": mode === "down" || mode === "all" ? 3.6 : 2, opacity: mode === "up" ? 0.35 : 1 }, etSvg);
+    if (neutral) {
+      svg("path", { d: dUp, fill: "none", stroke: c.a, "stroke-width": 3 }, etSvg);
+      svg("path", { d: dDn, fill: "none", stroke: c.a, "stroke-width": 3 }, etSvg);
+    } else {
+      svg("path", { d: dUp, fill: "none", stroke: c.a, "stroke-width": mode === "up" || mode === "all" ? 3.6 : 2, opacity: mode === "down" ? 0.35 : 1 }, etSvg);
+      svg("path", { d: dDn, fill: "none", stroke: c.b, "stroke-width": mode === "down" || mode === "all" ? 3.6 : 2, opacity: mode === "up" ? 0.35 : 1 }, etSvg);
+    }
 
     pts.forEach(function (pt) {
-      var hr = pt[0], tp = pt[1], isPeak = hr === 14;
-      var col = isPeak ? c.hl : (hr < 14 ? c.a : c.b);
+      var hr = pt[0], tp = pt[1], isPeak = hr === 14 && (!neutral || mode === "peak");
+      var col = neutral ? c.a : isPeak ? c.hl : (hr < 14 ? c.a : c.b);
       var g = svg("g", { style: "cursor:pointer" }, etSvg);
       svg("circle", { cx: X(hr), cy: Y(tp), r: isPeak ? 8 : 5.5, fill: isPeak ? c.hl : col, stroke: c.card, "stroke-width": 2 }, g);
-      svg("text", { x: hr === 6 ? X(hr) + 8 : (isPeak ? X(hr) - 10 : X(hr)), y: Y(tp) - (isPeak ? 10 : 9), "text-anchor": hr === 6 ? "start" : (isPeak ? "end" : "middle"), "font-weight": 700, fill: isPeak ? c.fg : col, "font-size": isPeak ? 13.5 : 13 }, g).textContent = tp + "°";
+      svg("text", { x: hr === 6 ? X(hr) + 8 : (hr === 14 ? X(hr) - 10 : X(hr)), y: Y(tp) - (isPeak ? 10 : 9), "text-anchor": hr === 6 ? "start" : (hr === 14 ? "end" : "middle"), "font-weight": 700, fill: isPeak ? c.fg : col, "font-size": isPeak ? 13.5 : 13 }, g).textContent = tp + "°";
       svg("text", { x: X(hr), y: y0 + 22, "text-anchor": "middle", fill: c.fg, "font-weight": isPeak ? 700 : 400, "font-size": 13 }, g).textContent = hr + "点";
-      g.onclick = function () { etDraw(isPeak ? "peak" : (hr < 14 ? "up" : "down")); };
+      g.onclick = function () { etDraw(hr === 14 ? "peak" : (hr < 14 ? "up" : "down")); };
     });
 
     [].forEach.call(etBar.querySelectorAll("button"), function (b) {

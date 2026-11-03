@@ -20,9 +20,8 @@
   function navHTML() {
     var entries=nav.slice(), at=entries.findIndex(function(n){return n[0]==='knowledge';});
     entries.splice(at<0?2:at+1,0,['wiki','wiki.html','速查']);
-    if(!PRIMARY&&!JUNIOR)entries.splice(entries.length-1,0,['exam-bank','exam-bank/index.html','高考题库']);
     function link(n,secondary){return '<a class="hci-link'+(secondary?' lf-nav-secondary':'')+'" href="'+esc(!NO_KNOWLEDGE&&(n[0]==='knowledge'||n[0]==='practice')?contextualHref(n[1]):D.url(n[1]))+'"'+(page===n[0]?' aria-current="page"':'')+'>'+n[2]+'</a>';}
-    var more=entries.filter(function(n){return n[0]==='record'||n[0]==='exam-bank';});
+    var more=entries.filter(function(n){return n[0]==='record';});
     return entries.map(function(n){return link(n,more.includes(n));}).join('')+'<details class="lf-nav-more"><summary>更多</summary><div>'+more.map(function(n){return link(n,false);}).join('')+'</div></details>';
   }
   function installNav() {

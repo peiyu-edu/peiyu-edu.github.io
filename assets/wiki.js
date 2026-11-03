@@ -2175,7 +2175,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
         "</div>" +
         '<div class="wk-drawer" hidden></div>';
       if (isTop) {
-        stepEl.insertBefore(box, stepEl.firstChild);
+        var examEntry = stepEl.querySelector(":scope > .lf-exam-bank-entry");
+        stepEl.insertBefore(box, examEntry ? examEntry.nextSibling : stepEl.firstChild);
       } else {
         var nextBtn = stepEl.querySelector(".next");
         if (nextBtn) stepEl.insertBefore(box, nextBtn);

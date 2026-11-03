@@ -213,6 +213,10 @@
         action = retry && retry.identity !== q.identity ? reviewLink("去做这道题", q.retryHref, retry, false) : reviewLink("去做这道题", q.href, q, false);
       }
       if (action) actions.appendChild(action);
+      if (r.role === "bank-exam" && q.current && q.streakWrong < 2 && /#step5$/.test(q.reviewHref || "")) {
+        var lessonReview = reviewLink("回课页第5步", q.reviewHref, q, true);
+        if (lessonReview) actions.appendChild(lessonReview);
+      }
       if (q.current && q.streakWrong < 2) {
         var hint = el("p", "", "lw-hint"); hint.hidden = true;
         var toggle = button("看提示", function () {

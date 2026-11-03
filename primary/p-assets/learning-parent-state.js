@@ -53,6 +53,15 @@
     var out = {};
     if (input.selfCheck === true) out.selfCheck = true;
     if (Array.isArray(input.pointIds)) out.pointIds = input.pointIds.filter(function (p) { return !!str(p); }).slice(0, 100);
+    var exam = input.mockExam;
+    if (obj(exam) && str(exam.attemptId, 100) && str(exam.paperId, 100) &&
+        typeof exam.score === "number" && Number.isFinite(exam.score) && exam.score >= 0 &&
+        typeof exam.maxScore === "number" && exam.maxScore > 0 && exam.maxScore <= 100 && exam.score <= exam.maxScore &&
+        typeof exam.elapsedMs === "number" && Number.isFinite(exam.elapsedMs) && exam.elapsedMs >= 0 && exam.elapsedMs <= 86400000 &&
+        typeof exam.submittedAt === "number" && Number.isFinite(exam.submittedAt) && exam.submittedAt > 0) {
+      out.mockExam = { attemptId: exam.attemptId, paperId: exam.paperId, score: exam.score, maxScore: exam.maxScore,
+        elapsedMs: exam.elapsedMs, submittedAt: exam.submittedAt };
+    }
     return out;
   }
   function quizScore(value) {

@@ -181,13 +181,23 @@
     app.appendChild(count);
     var groups = [];
     visible.forEach(function (item) {
-      var name = paperName(item), group = groups.find(function (g) { return g.name === name; });
+      var name = isOriginal(item) ? paperName(item) : item.paper || paperName(item), group = groups.find(function (g) { return g.name === name; });
       if (!group) { group = { name: name, paper: item.paper, items: [] }; groups.push(group); }
       group.items.push(item);
     });
     groups.forEach(function (group) {
       var section = el("section", "eb-paper");
       section.appendChild(el("h2", null, isOriginal(group.items[0]) ? group.name : group.paper || group.name));
+      if (!isOriginal(group.items[0])) {
+        var paper = (index.papers || []).find(function (p) { return p.paper === group.paper; });
+        if (paper) {
+          var exam = el("a", "btn ghost me-start", "整卷模考");
+          exam.href = "index.html?mock=" + encodeURIComponent(paper.id);
+          exam.setAttribute("aria-label", group.paper + " 整卷模考");
+          section.appendChild(exam);
+          section.appendChild(el("p", "eb-note", "整卷 " + paper.questions.length + " 题 · " + paper.minutes + " 分钟 · " + paper.maxScore + " 分" + (paper.estimated ? "（含估分）" : "")));
+        } else section.appendChild(el("p", "eb-note", "整卷模考暂未开放：只开放已审批题齐全、无拆分或重复题号，且题数与题型符合已核定全卷结构的试卷。"));
+      }
       var list = el("ol", "eb-list");
       group.items.forEach(function (item) { list.appendChild(itemLink(item, false)); });
       section.appendChild(list);
@@ -453,6 +463,12 @@
 
   function route() {
     var p = params();
+    if (window.PeiyuMockExam) window.PeiyuMockExam.unmount();
+    if (p.has("mock") && window.PeiyuMockExam) {
+      var paper = (index.papers || []).find(function (entry) { return entry.id === p.get("mock"); });
+      if (paper) { window.PeiyuMockExam.mount(app, paper, index, stage); return; }
+      app.replaceChildren(el("p", "eb-missing", "这套卷尚未通过整卷完整性检查，请返回题库列表。")); return;
+    }
     if (p.has("sec") && !selectedSection(p)) history.replaceState(null, "", hrefWith({ sec: null }));
     var q = params().get("q");
     if (q) renderQuestion(q); else { renderList(); document.title = (stage === "junior" ? "初中" : "高中") + "真题库 · 培玉"; }
@@ -464,7 +480,7 @@
     if (!data || data.version !== 1 || !Array.isArray(data.items)) throw new Error("bad index");
     index = data;
     if (inline) renderInline(); else route();
-    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q")) renderList(); });
+    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q") && !params().has("mock")) renderList(); });
   }).catch(function () {
     app.replaceChildren(el("p", "eb-missing", "真题库暂时打不开，请刷新重试。"));
   });

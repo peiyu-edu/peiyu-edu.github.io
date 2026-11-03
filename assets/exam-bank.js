@@ -164,7 +164,7 @@
     if (selected && selected.featuredIds) {
       var featured = el("section", "eb-featured");
       featured.appendChild(el("h2", null, "本节精选"));
-      featured.appendChild(el("p", "eb-note", "从基础到挑战，先独立作答，再看解析。"));
+      featured.appendChild(el("p", "eb-note", sourceNote(selected.featuredIds) + "从基础到挑战，先独立作答，再看解析。"));
       var picks = el("ol", "eb-list");
       selected.featuredIds.forEach(function (id) {
         var item = items.find(function (row) { return row.id === id && matches(row, p); });
@@ -219,10 +219,18 @@
     return li;
   }
 
+  function sourceNote(ids) {
+    var rows = index.items.filter(function (item) { return ids.indexOf(item.id) >= 0; });
+    var originals = rows.filter(isOriginal).length;
+    return originals ? "真题 " + (rows.length - originals) + " 道、原创 " + originals + " 道。" : "";
+  }
+
   function renderInline() {
     app.replaceChildren(el("h2", null, "本节精选"));
     var section = (index.sections || {})[inline.getAttribute("data-exam-bank-inline")];
     if (!section || !section.featuredIds) return;
+    var note = sourceNote(section.featuredIds);
+    if (note) app.appendChild(el("p", "eb-note", note));
     section.featuredIds.forEach(function (id) {
       if (section.ids.indexOf(id) < 0 || !index.items.some(function (item) { return item.id === id; })) return;
       var card = el("article", "card eb-card");

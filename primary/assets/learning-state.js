@@ -366,9 +366,16 @@
       if (legacySeen[id]) return true;
       legacySeen[id] = true; return false;
     }
+    // A lesson load logs "step" and "open" a few ms apart, often imported on separate passes; count one view.
+    function repeatedLegacyView(e) {
+      return e.kind === "view" && !!e.sectionId && Object.keys(state.marks).some(function (id) {
+        var m = state.marks[id];
+        return m.legacy && m.kind === "view" && m.sectionId === e.sectionId && Math.abs(m.time - e.time) <= 2000;
+      });
+    }
     function legacy(input, key) {
       var e = normalize(Object.assign({}, input, { contentVersion: null, dedupeKey: key }), 0, true);
-      if (!e || consumedLegacy(e.id) || legacyNativeMatch(input)) return;
+      if (!e || consumedLegacy(e.id) || legacyNativeMatch(input) || repeatedLegacyView(e)) return;
       insert(e);
     }
     function importLegacy() {
@@ -517,10 +524,25 @@
       else if (m.attemptKind === "independent") { c.independentAnswers++; if (m.correct) c.independentCorrect++; }
       else if (m.attemptKind === "retry") c.retries++; else c.otherAnswers++;
     }
+    // The old lesson log and the course script both note the same lesson open; keep the native view.
+    function echoViews() {
+      var native = dict(), echoes = dict();
+      Object.keys(state.marks).forEach(function (id) {
+        var m = state.marks[id];
+        if (m.kind === "view" && !m.legacy && m.sectionId) (native[m.sectionId] = native[m.sectionId] || []).push(m.time);
+      });
+      Object.keys(state.marks).forEach(function (id) {
+        var m = state.marks[id];
+        if (m.kind === "view" && m.legacy && m.sectionId && native[m.sectionId] &&
+            native[m.sectionId].some(function (t) { return Math.abs(t - m.time) <= 2000; })) echoes[id] = true;
+      });
+      return echoes;
+    }
     function snapshot() {
       ensure(); sync();
-      var totals = emptyCounts(), points = dict(), sections = dict(), questionCounts = dict();
+      var totals = emptyCounts(), points = dict(), sections = dict(), questionCounts = dict(), echoes = echoViews();
       Object.keys(state.marks).forEach(function (id) {
+        if (echoes[id]) return;
         var m = state.marks[id]; addCount(totals, m);
         if (m.identity) addCount(questionCounts[m.identity] || (questionCounts[m.identity] = emptyCounts()), m);
         if (m.pointId) addCount(points[m.pointId] || (points[m.pointId] = emptyCounts()), m);
@@ -530,7 +552,7 @@
       var review = questions.filter(function (q) { return q.reviewDueAt !== null; }).map(function (q) {
         return Object.assign({}, q, { dueAt: q.reviewDueAt, reason: q.reviewReason, due: q.reviewDueAt <= now() });
       }).sort(function (a, b) { return a.dueAt - b.dueAt; });
-      return copy(Object.assign({ version: 1, events: state.events, questions: questions, points: points, sections: sections, totals: totals, summary: totals,
+      return copy(Object.assign({ version: 1, events: state.events.filter(function (e) { return !echoes[e.id]; }), questions: questions, points: points, sections: sections, totals: totals, summary: totals,
         resume: state.resume, review: review, storage: { memoryOnly: memoryOnly, historyIncomplete: state.historyIncomplete,
           compacted: state.compacted, problems: problems, retainedEvents: state.events.length } }, Object.keys(state.submissions).length ? { submissions: state.submissions } : {}));
     }

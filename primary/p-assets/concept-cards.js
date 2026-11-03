@@ -146,7 +146,7 @@
     return '<article class="cc-card'+(low?' cc-low':'')+'" id="'+esc(card.id)+'" data-card="'+esc(card.id)+'">'
       + line(card.title,low,"h2") + '<div class="cc-body"><div class="cc-concept">' + line(card.concept,low)
       + '<h3>先看条件</h3>' + card.conditions.map(x=>line(x,low)).join("") + '</div>'
-      + '<figure class="cc-figure">'+diagram(card.intuition)+'<figcaption>'+words(card.intuition.caption,low)+sayButton(card.intuition.caption)+'</figcaption></figure></div>'
+      + (card.intuition ? '<figure class="cc-figure">'+diagram(card.intuition)+'<figcaption>'+words(card.intuition.caption,low)+sayButton(card.intuition.caption)+'</figcaption></figure>' : '') + '</div>'
       + '<div class="cc-myth"><h3>容易这样想</h3>' + line(card.misconception.error,low) + '<strong>换个想法</strong>'+line(card.misconception.correction,low)+'</div>'
       + quizHTML(card, low, snap)
       + '<nav class="cc-links" aria-label="相关课时">'+card.lessonIds.map(id=>'<a href="lessons/'+esc(id)+'.html">回第'+esc(id.split("-").pop())+'课动手试</a>').join("")+'</nav></article>';
@@ -239,7 +239,8 @@
       const option = q.options.find(o=>o.id===target.dataset.choice);
       if (store()) P.answer(store(), card, q, option.id);
       session.add(q.id);
-      feedback[card.id] = { questionId: q.id, choice: option.id, message: (option.id===q.correct?"你检查对了。":"再看图试一试。")+option.feedback };
+      const retry = card.intuition ? "再看图试一试。" : "再看条件试一试。";
+      feedback[card.id] = { questionId: q.id, choice: option.id, message: (option.id===q.correct?"你检查对了。":retry)+option.feedback };
     }
     const quiz = article.querySelector(".cc-quiz");
     quiz.outerHTML = quizHTML(card, /^p[12]/.test(card.unitId), snapshot());

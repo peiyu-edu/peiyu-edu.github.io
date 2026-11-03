@@ -80,8 +80,30 @@
 
   var index = null, versions = {};
 
+  function selectedSection(p) {
+    var sections = index.sections || {}, sec = p.get("sec");
+    return sec && Object.prototype.hasOwnProperty.call(sections, sec) ? sections[sec] : null;
+  }
+  function matchesSection(item, p) {
+    var section = selectedSection(p);
+    return !section || section.ids.indexOf(item.id) >= 0;
+  }
+  function sectionHeading() {
+    var section = selectedSection(params());
+    if (!section) return;
+    var heading = el("div", "eb-section");
+    heading.appendChild(el("p", null, "本节：" + section.title + " · " + section.ids.length + " 题"));
+    var all = el("a", null, "看全部真题");
+    all.href = hrefWith({ sec: null, q: null });
+    all.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); go({ sec: null, q: null });
+    });
+    heading.appendChild(all);
+    app.appendChild(heading);
+  }
   function matches(item, p) {
-    return (!p.get("region") || item.region === p.get("region")) &&
+    return matchesSection(item, p) && (!p.get("region") || item.region === p.get("region")) &&
       (!p.get("year") || String(item.year) === p.get("year")) &&
       (!p.get("type") || item.type === p.get("type")) &&
       (!p.get("point") || (item.points || []).indexOf(p.get("point")) >= 0);
@@ -99,6 +121,7 @@
   function renderList() {
     var p = params(), items = index.items;
     app.replaceChildren();
+    sectionHeading();
     if (!items.length) {
       var empty = el("section", "eb-empty");
       empty.appendChild(el("h2", null, "真题正在审核"));
@@ -186,12 +209,13 @@
 
   function renderQuestion(id) {
     app.replaceChildren();
+    sectionHeading();
     var nav = el("p", "eb-back"), back = el("a", null, "← 返回题目列表");
     back.href = hrefWith({ q: null });
     back.addEventListener("click", function (e) { e.preventDefault(); go({ q: null }); });
     nav.appendChild(back);
     app.appendChild(nav);
-    var summary = index.items.find(function (item) { return item.id === id; });
+    var summary = index.items.find(function (item) { return item.id === id && matchesSection(item, params()); });
     if (!summary) {
       app.appendChild(el("p", "eb-missing", "没有找到这道题，可能还在审核中。请返回列表重新选择。"));
       document.title = "真题库 · 培玉";
@@ -384,6 +408,8 @@
   }
 
   function route() {
+    var p = params();
+    if (p.has("sec") && !selectedSection(p)) history.replaceState(null, "", hrefWith({ sec: null }));
     var q = params().get("q");
     if (q) renderQuestion(q); else { renderList(); document.title = (stage === "junior" ? "初中" : "高中") + "真题库 · 培玉"; }
     math(app);

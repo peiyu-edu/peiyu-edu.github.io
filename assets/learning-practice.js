@@ -129,7 +129,7 @@
       title.focus({ preventScroll: true });
     }
   }
-  function renderQuestion(point, fresh) {
+  function renderQuestion(point, fresh, retry) {
     var work = host.querySelector("[data-lp-work]"), quiz = quizFor(point), summary = question(point, quiz);
     var unexposedVariant = variants.find(function (item) { return item.point_id === point.id && item.role === "parallel" && item.id !== quiz.id && question(point, item).canAnswerIndependently; });
     active = { pointId: point.id, submitted: !fresh && !!summary.lastAnswer };
@@ -141,7 +141,8 @@
       }).join("") + '</div></fieldset><p class="lp-alert" role="status" data-lp-warning hidden></p><div class="lp-actions"><button class="lp-button" type="submit" data-lp-submit>提交并查看解析</button></div><p class="lp-note">只记录这道题的表现。答对一道题还不足以判断是否掌握。</p></form>' +
       '<section class="lp-feedback" data-lp-feedback aria-live="polite" hidden></section><p class="lp-alert" data-lp-storage hidden>浏览器暂时无法保存记录；本页仍可练习，但刷新或离开后，本次新记录可能丢失。</p>' +
       (context.from ? '<p class="lp-return-line"><a href="' + esc(returnHref()) + '">回到' + esc(lesson(context.from).title) + ' · 第 ' + context.step + ' 步' + (context.question ? '原题' : '') + '</a></p>' : '') + '</article>';
-    state.record(Object.assign({}, identity(point, quiz), { kind: "view" }));
+    // Redoing the question already on screen is not a new view.
+    if (!retry) state.record(Object.assign({}, identity(point, quiz), { kind: "view" }));
     if (query.get("review") === "1" && !reviewStarts[quiz.id]) {
       state.record(Object.assign({}, identity(point, quiz), { kind: "review" })); reviewStarts[quiz.id] = true;
     }
@@ -194,7 +195,7 @@
     var reviewed = question(point, quiz);
     feedback.querySelector("[data-lp-review]").textContent = reviewed.reviewDueAt ? "已安排 " + date(reviewed.reviewDueAt) + " 再回看这个知识点。重做答对也会保留先前的复习安排。" : "可以稍后在“我的学习”回看这次记录。";
     feedback.querySelector("[data-lp-retry]").addEventListener("click", function () {
-      renderQuestion(point, true); work.querySelector('input[name="practice-answer"]').focus({ preventScroll: true });
+      renderQuestion(point, true, true); work.querySelector('input[name="practice-answer"]').focus({ preventScroll: true });
     });
     if (nextVariant) feedback.querySelector("[data-lp-variant]").addEventListener("click", function () {
       selectedVariant = nextVariant.id; updateAddress(); renderQuestion(point); work.querySelector("[data-lp-title]").focus({ preventScroll: true });

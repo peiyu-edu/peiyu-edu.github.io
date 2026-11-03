@@ -15,8 +15,6 @@
     document.title = libraryTitle;
     document.querySelector(".k-page-intro h1").textContent = libraryTitle;
     document.querySelector(".top .brand").textContent = "培玉 · 初中数学";
-    var methodLink = document.querySelector('.top a[href="wiki.html"]');
-    if (methodLink) methodLink.remove();
     search.placeholder = "如：有理数、方程、七年级下册";
     document.querySelector('label[for="knowledge-domain"]').textContent = "按册查看";
     document.querySelector('label[for="knowledge-section"]').textContent = "按节查看";

@@ -397,6 +397,10 @@
     try { return closeVal(evaluate(x), evaluate(y)); } catch (e) { return false; }
   }
 
+  function numericMismatch(a, b) {
+    try { return !closeVal(evaluate(norm(a)), evaluate(norm(b))); } catch (e) { return false; }
+  }
+
   // ---------- 题目页 ----------
   function initProblem() {
     var dataEl = document.getElementById("pdata");
@@ -488,6 +492,12 @@
         if (!v) { say("info", "先写下你的答案。"); return; }
         var ok = P.answers.length === 1 && same(v, P.answers[0]);
         if (ok) { record(P.id, "attempt", "ok"); say("ok", "答对了。"); showAnswer(); return; }
+        if (P.answers.length === 1 && numericMismatch(v, P.answers[0])) {
+          // 两边都是纯数值且不相等，不存在写法等价，直接记答错，可以再做。
+          record(P.id, "attempt", "no");
+          say("no", "不对，再想想；也可以先看提示。");
+          return;
+        }
         record(P.id, "attempt", null);
         showAnswer();
         say("info", "和标准答案对不上。看一眼上面的标准答案：");
@@ -724,7 +734,7 @@
     });
   }
 
-  window.PeiyuOlympic = { norm: norm, same: same, record: record, load: load, save: save };
+  window.PeiyuOlympic = { norm: norm, same: same, numericMismatch: numericMismatch, record: record, load: load, save: save };
   document.addEventListener("DOMContentLoaded", function () { initTheme(); initProblem(); initFeedback(); initTopic(); initRecord(); initLinks(); });
 })();
 

@@ -63,6 +63,12 @@
     if (!time || !Number.isFinite(Number(time))) return "时间未知";
     return new Date(Number(time)).toLocaleString("zh-CN", full ? { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" } : { month: "long", day: "numeric" });
   }
+  function dueLabel(time) {
+    // Same-day reviews need the hour, or "11月3日" reads like a future date.
+    var t = Number(time), today = new Date(), d = new Date(t);
+    if (!Number.isFinite(t) || !t || d.toDateString() !== today.toDateString()) return date(time);
+    return "今天 " + d.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" });
+  }
   function math(node) { if (window.PeiyuKnowledge) window.PeiyuKnowledge.renderMath(node); }
   function eventTitle(event) {
     var p = point(event.pointId), s = lesson(isUnitTest(event) ? event.sectionId.replace(/-test$/, "") : event.sectionId);
@@ -115,14 +121,14 @@
     if (!items.length) return '<p class="lp-note">' + (due ? '目前没有到期的复习安排。可以从课程或练习开始，记录会逐步积累。' : '有作答记录后，这里会列出之后的复习安排。') + '</p>';
     return '<ul class="lr-review-list">' + items.map(function (item) {
       if (isUnitTest(item)) {
-        return '<li><h3><a href="' + esc(eventHref(item)) + '">' + esc(eventTitle(item)) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><a class="lp-button secondary" href="' + esc(eventHref(item)) + '">回到这道测评题</a></li>';
+        return '<li><h3><a href="' + esc(eventHref(item)) + '">' + esc(eventTitle(item)) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(dueLabel(item.dueAt || item.reviewDueAt)) + '</p><a class="lp-button secondary" href="' + esc(eventHref(item)) + '">回到这道测评题</a></li>';
       }
       var p = point(item.pointId);
       if (p) {
-        return '<li><h3><a href="' + esc(knowledgeHref(p.id, item)) + '">' + esc(p.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(practiceHref(p.id, item, true)) + '">回看并练习</a></div></li>';
+        return '<li><h3><a href="' + esc(knowledgeHref(p.id, item)) + '">' + esc(p.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(dueLabel(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(practiceHref(p.id, item, true)) + '">回看并练习</a></div></li>';
       }
       var s = lesson(item.sectionId); if (!s) return "";
-      return '<li><h3><a href="' + esc(lessonHref(item)) + '">' + esc(s.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(date(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(lessonHref(item)) + '">回到这一课复习</a></div></li>';
+      return '<li><h3><a href="' + esc(lessonHref(item)) + '">' + esc(s.title) + '</a></h3><p class="lr-question">' + esc(questionLabel(item)) + '</p><p>' + esc(reviewReason(item)) + '</p><p class="lr-meta">' + (due ? '复习已到期' : '计划复习') + '：' + esc(dueLabel(item.dueAt || item.reviewDueAt)) + '</p><div class="lp-actions"><a class="lp-button secondary" href="' + esc(lessonHref(item)) + '">回到这一课复习</a></div></li>';
     }).join("") + '</ul>';
   }
   function group(title, count, hint, content, open) {

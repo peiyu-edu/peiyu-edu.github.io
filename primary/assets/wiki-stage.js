@@ -374,7 +374,8 @@
       win.setTimeout(function () { el.classList.remove("flash"); }, 1600);
     }
     function route() {
-      var params = new win.URLSearchParams(win.location.hash.slice(1));
+      var hash = win.location.hash.slice(1);
+      var params = new win.URLSearchParams(hash.startsWith("card-") ? "card=" + hash.slice(5) : hash);
       if (params.get("ch")) { current = params.get("ch"); apply(); flash(doc.getElementById("ch-" + current)); return; }
       if (params.get("card")) { current = "all"; doc.getElementById("ws-q").value = ""; apply(); flash(doc.getElementById("card-" + params.get("card"))); return; }
       if (params.get("map")) { flash(doc.getElementById("map-" + params.get("map"))); return; }

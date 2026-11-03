@@ -165,6 +165,7 @@
     if (p.prerequisite_notes.length) html += '<details class="k-more"><summary>开始前还会用到</summary>' + list(p.prerequisite_notes) + '</details>';
     html += '<section><h3>把知识接起来</h3><p class="k-relation-label">先把这些分清</p><div class="k-links">' + (pointLinks(p.prerequisites, context) || '<span class="k-note">本模块没有额外的知识点先修。</span>') + '</div><p class="k-relation-label">接着可以看</p><div class="k-links">' + (pointLinks(later, context) || '<span class="k-note">可以回课时练习，把这个点用起来。</span>') + '</div></section>';
     if (!junior && !primary && p.legacy_cards.length) html += '<section><h3>相关方法与红线卡</h3><div class="k-links">' + p.legacy_cards.map(function (card) { return '<a href="' + esc(new URL("wiki.html#card-" + encodeURIComponent(card.id), root).href) + '">' + esc(card.title) + '</a>'; }).join("") + '</div></section>';
+    html += '<div class="k-links"><a href="' + esc(methodHref(p)) + '">查方法卡</a>' + (!junior && !primary ? '<a href="' + esc(new URL("wiki.html#map=" + encodeURIComponent(p.first_section), root).href) + '">在图谱里看</a>' : '') + '</div>';
     html += '<footer class="k-lesson-links"><a class="btn ghost" href="' + esc(lessonHref(returnSection, "step2")) + '">回到' + esc(sectionTitle(returnSection)) + '讲解</a><a class="btn" href="' + esc(lessonHref(returnSection, "step4")) + '">去课时练习</a></footer></article>';
     host.innerHTML = html;
     var entry = state.points[id] || (state.points[id] = { viewedAt: 0 });
@@ -249,7 +250,11 @@
     });
     notify(null);
   });
-  window.PeiyuKnowledge = { stage: primary ? "primary" : junior ? "junior" : "high", availableInSection: availableInSection, load: load, renderPoint: renderPoint, getStatus: getStatus, pointHref: pointHref, renderMath: renderMath };
+  function methodHref(p) {
+    var card = (p.legacy_cards || [])[0];
+    return new URL("wiki.html" + (card ? "#card-" + encodeURIComponent(card.id) : ""), root).href;
+  }
+  window.PeiyuKnowledge = { stage: primary ? "primary" : junior ? "junior" : "high", methodHref: methodHref, availableInSection: availableInSection, load: load, renderPoint: renderPoint, getStatus: getStatus, pointHref: pointHref, renderMath: renderMath };
 })();
 
 /* PY-450: resolve beside the shared entrypoint, including junior asset mounts. */

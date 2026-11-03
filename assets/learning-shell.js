@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var D=window.PeiyuLearningData, S=window.PeiyuLearningState, esc=D.escape;
-  var page=document.body.dataset.learningPage || (document.body.dataset.sec?'courses':'resources');
+  var page=document.body.dataset.learningPage || (/\/wiki\.html$/.test(location.pathname)?'wiki':document.body.dataset.sec?'courses':'resources');
   // 初中知识导航由已审核学习索引决定；小学继续使用课程导航。
   var PRIMARY=document.body.dataset.stage==='primary'||/^p[1-6][ab]-/.test(document.body.dataset.sec||'');
   var JUNIOR=document.body.dataset.stage==='junior'||/^j(?:\d+-\d+|[789][ab]-p\d+)$/.test(document.body.dataset.sec||'');
@@ -17,9 +17,17 @@
     }
     return href;
   }
-  function navHTML() { return nav.map(function(n){return '<a class="hci-link" href="'+esc(!NO_KNOWLEDGE&&(n[0]==='knowledge'||n[0]==='practice')?contextualHref(n[1]):D.url(n[1]))+'"'+(page===n[0]?' aria-current="page"':'')+'>'+n[2]+'</a>';}).join(''); }
+  function navHTML() {
+    var entries=nav.slice(), at=entries.findIndex(function(n){return n[0]==='knowledge';});
+    entries.splice(at<0?2:at+1,0,['wiki','wiki.html','速查']);
+    if(!PRIMARY&&!JUNIOR)entries.splice(entries.length-1,0,['exam-bank','exam-bank/index.html','高考题库']);
+    function link(n,secondary){return '<a class="hci-link'+(secondary?' lf-nav-secondary':'')+'" href="'+esc(!NO_KNOWLEDGE&&(n[0]==='knowledge'||n[0]==='practice')?contextualHref(n[1]):D.url(n[1]))+'"'+(page===n[0]?' aria-current="page"':'')+'>'+n[2]+'</a>';}
+    var more=entries.filter(function(n){return n[0]==='record'||n[0]==='exam-bank';});
+    return entries.map(function(n){return link(n,more.includes(n));}).join('')+'<details class="lf-nav-more"><summary>更多</summary><div>'+more.map(function(n){return link(n,false);}).join('')+'</div></details>';
+  }
   function installNav() {
     var header=document.querySelector('header.top,header.lf-top'); if(!header)return;
+    header.classList.add('lf-unified-top');
     var n=header.querySelector('.hci-nav,.lf-nav');
     if(!n){n=document.createElement('nav');header.appendChild(n);}
     n.className='hci-nav lf-nav';n.setAttribute('aria-label','主要导航');n.innerHTML=navHTML();
@@ -90,7 +98,7 @@
     host.innerHTML='<div class="lf-hero"><div class="lf-hero-text"><p class="lf-eyebrow">培玉高中数学</p><h1 class="lf-heading">'+(l?'接着上次，'+ink('往前学一步')+'。':'从一个问题开始，把数学'+ink('想明白')+'。')+'</h1><p class="lf-intro">顺着课程理解概念，遇到不清楚的地方查知识树，再用一道题检查自己的想法。</p><section class="lf-current"><p class="lf-eyebrow">'+(l?'继续学习':'从这里开始')+'</p><h2>'+esc(l?l.title:'集合的概念')+'</h2><p class="lf-note">'+(l?'上次停在第 '+step+' 步。你可以继续，也可以先复习一道题。':'先分清“哪些对象放在一起”，再认识集合与元素。')+'</p><div class="lf-actions"><a class="lf-button" href="'+esc(l?D.returnHref({from:l.id,step:step,question:resume.questionId||''}):D.url('lessons/b1-1-1.html#step1'))+'">'+(l?'继续这一节':'开始集合第一课')+'</a><a class="lf-button secondary" href="'+D.url('courses.html')+'">选择其他课程</a></div></section></div>'+heroClip()+'</div><section class="lf-next"><h2>学到哪里不清楚，就从哪里接上</h2><ol><li><b>想</b>在课程里想一想、试一试。</li><li><b>查</b>查知识卡，把使用条件看清楚。</li><li><b>验</b>答题后回看原因，隔一段时间再检验。</li></ol><a href="'+D.url('learning.html')+'">查看我的作答与复习记录 →</a></section><section><h2>先看这三个部分</h2><div class="lf-topic-list">'+topic('集合与逻辑','sets','b1-1-1','元素、集合关系、运算与条件判断。',clip('sets'))+topic('函数','functions','b1-3-1','定义域、对应关系、性质与图象。',clip('func'))+topic('概率统计','probability-statistics','b2-9-1','从数据到结论，从随机现象到概率。',clip('stats'))+'</div><p><a href="'+D.url('knowledge.html')+'">打开完整知识库</a>　<a href="'+D.url('practice.html')+'">选一个知识点练习</a></p></section>'+tools();motion(host);clips(host);
   }
   // 初中、小学首页的「学习工具」：卡片、图标与高中同一套，只换成本学段已有的工具。
-  function jTools(){return tools([!NO_KNOWLEDGE?['knowledge.html','lf-tool-wiki','知识点卡','按册、章、节查定义、条件和易错点，带着问题回到课里。',FIG.wiki]:['practice.html','lf-tool-wiki','练一练与中考真题','每节第 4 步从易到难，第 5 步是中考真题。',FIG.practice],['textbook-map.html','lf-tool-map','教材路线图','按册、章、节排好，看清每一节在全书的位置。',FIG.route],['lessons/j6-1.html','lf-tool-lab','数学实验台','拖动滑块折正方体、拼勾股立柱、展开圆锥，在课里动手看。',FIG.lab]]);}
+  function jTools(){return tools([!NO_KNOWLEDGE?['knowledge.html','lf-tool-wiki','知识点卡','按册、章、节查定义、条件和易错点，带着问题回到课里。',FIG.wiki]:['practice.html','lf-tool-wiki','练一练与中考真题','每节第 4 步从易到难，第 5 步是中考真题。',FIG.practice],['overview.html','lf-tool-map','学习总览','按册、章、节排好，看每一节学到哪、收了几道中考真题。',FIG.route],['lessons/j6-1.html','lf-tool-lab','数学实验台','拖动滑块折正方体、拼勾股立柱、展开圆锥，在课里动手看。',FIG.lab]]);}
   function pConceptHref(data,gradeNo){if(data.index.knowledge && data.index.points.length){return {href:"knowledge.html?book=p"+gradeNo+"a",fallback:false,hasCard:true};}var cards=(data.index.search||[]).filter(function(x){return x.kind==='point';});function atGrade(n){return cards.find(function(x){return new URL(x.href,location.href).searchParams.get('grade')===String(n);});}var match=atGrade(gradeNo),hit=match,g;for(g=gradeNo-1;!hit&&g>=1;g--)hit=atGrade(g);for(g=gradeNo+1;!hit&&g<=6;g++)hit=atGrade(g);return {href:hit?hit.href.split('#')[0]:'knowledge.html',fallback:!match,hasCard:!!hit};}
   function pTools(data,gradeNo){var t=[['courses.html?grade=g'+gradeNo,'lf-tool-map','课程目录','按年级、册、单元排好，每课都能从上次那一步继续。',FIG.route],['practice.html?grade=g'+gradeNo,'lf-tool-lab','练一练与单元闯关','每课的练一练和每单元 10 道闯关题。',FIG.practice]];if(data.index.conceptCards){var concept=pConceptHref(data,gradeNo);t.unshift([concept.href,'lf-tool-wiki','概念与易错卡',concept.fallback?(concept.hasCard?'暂无本年级卡，先看看已有年级的示例。':'暂无本年级卡。'):'看图把容易混的地方说清，再试一题；低年级可以听一听。',FIG.wiki]);}return tools(t);}
   // 外壳渲染的课程树说明里可能有 \( \) 公式，和课页一样交给 KaTeX。

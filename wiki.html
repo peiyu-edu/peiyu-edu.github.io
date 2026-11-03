@@ -115,14 +115,16 @@
   }
   .kg-svg-wrap {
     background: var(--card); border: 1.5px solid var(--line); border-radius: 14px;
-    padding: 10px; margin: 12px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding: 10px; margin: 12px 0; min-width: 0;
     box-shadow: 0 4px 16px rgba(26,40,34,.05);
   }
-  .kg-svg-wrap svg { display: block; width: 100%; min-width: 1700px; height: auto; user-select: none; }
+  .kg-svg-wrap svg { display: block; width: 100%; height: auto; user-select: none; }
   .kg-svg-wrap svg g[data-map-pick] rect { transition: transform .12s ease, filter .12s ease; }
   .kg-svg-wrap svg g[data-map-pick]:hover { opacity: 1 !important; }
   .kg-svg-wrap:focus-visible { outline: 3px solid var(--hl); outline-offset: 2px; }
   .kg-scroll-hint { font-size: 14px; margin: 4px 0 8px; color: var(--muted); }
+  #kgFilterBar { flex-wrap: wrap; overflow: visible; }
+  #kgFilterBar .w-pill { white-space: normal; max-width: 100%; }
   .kg-inspector {
     background: var(--card); border: 1.5px solid var(--a); border-radius: 14px;
     padding: 16px 18px; margin: 14px 0; scroll-margin-top: 64px;
@@ -305,9 +307,9 @@
   </div>
 
   <!-- 交互式 SVG 地铁拓扑图 -->
-  <p class="small kg-scroll-hint" id="kgScrollHint">完整图谱可左右滑动，或聚焦图谱后按 ← / → 键查看；所有小节也在下方泳道列表中。</p>
-  <div class="kg-svg-wrap" tabindex="0" role="region" aria-label="可左右滚动的73节知识图谱" aria-describedby="kgScrollHint">
-    <svg id="kgSvg" viewBox="0 0 1120 604" role="img" aria-label="高中数学 73 节四大主线与跨章先修拓扑图谱"></svg>
+  <p class="small kg-scroll-hint" id="kgScrollHint">图谱按章纵向排列；聚焦节点后按 ← / → 切换小节，按 Enter 查看先修与后续。所有小节也在下方泳道列表中。</p>
+  <div class="kg-svg-wrap" tabindex="0" role="region" aria-label="73节知识图谱" aria-describedby="kgScrollHint">
+    <svg id="kgSvg" viewBox="0 0 1120 604" role="group" aria-label="高中数学 73 节四大主线与跨章先修拓扑图谱"></svg>
   </div>
 
   <!-- 选中节点深度诊断与方法卡抽屉 -->
@@ -340,12 +342,12 @@
 <footer>培玉智能 · 高中数学互动知识库（Wiki）。依据人教 A 版教材与教学约束提炼，真题与章节互动页双向联通。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="assets/wiki.js?v=vs-e15594c354d3"></script>
+<script src="assets/wiki.js?v=vs-aa5c766d8d8f"></script>
 <script src="assets/wiki-cues.js?v=vs-9b5649d0a5ba"></script>
 <script src="assets/wiki-trainer.js?v=vs-8203b8fc940b"></script>
 <script src="assets/wiki-cards.js?v=vs-25ea93c33b58"></script>
 <script src="assets/wiki-labs.js?v=vs-5d2eb0a71dbb"></script>
-<script src="assets/wiki-map-actions.js?v=vs-a8d9a94acfba"></script>
+<script src="assets/wiki-map-actions.js?v=kg-fit-c3dab1a0d6ca"></script>
 <script>
 (function () {
   var nextLabHint = 0, scheduled = false;
@@ -682,9 +684,9 @@
   function calcCapsuleWidth(label) {
     var w = 0;
     for (var i = 0; i < label.length; i++) {
-      w += label.charCodeAt(i) > 127 ? 10.2 : 5.8;
+      w += label.charCodeAt(i) > 127 ? 14 : 8;
     }
-    return Math.max(76, Math.ceil(w + 14));
+    return Math.max(90, Math.ceil(w + 22));
   }
 
   function getAncestors(targetSid) {
@@ -775,7 +777,6 @@
         title: "一、预备知识与代数地基",
         sub: "必修一 第1–2章 · 必修二 第7章（11节）",
         accent: cb,
-        top: 8, h: 140, r1: 68, r2: 120,
         rows: [
           [
             { chTitle: "必修一·第1章 集合与常用逻辑用语", secs: ["b1-1-1", "b1-1-2", "b1-1-3", "b1-1-4", "b1-1-5"] }
@@ -790,7 +791,6 @@
         title: "二、函数、数列与微积分初步",
         sub: "必修一 第3–5章 · 选必二 第4–5章（23节）",
         accent: ca,
-        top: 158, h: 140, r1: 218, r2: 270,
         rows: [
           [
             { chTitle: "必修一·第3章 函数的概念与性质", secs: ["b1-3-1", "b1-3-2", "b1-3-3", "b1-3-4"] },
@@ -807,7 +807,6 @@
         title: "三、几何与向量（平面解析 + 空间立体）",
         sub: "必修二 第6、8章 · 选必一 第1–3章（22节）",
         accent: cc,
-        top: 308, h: 140, r1: 368, r2: 420,
         rows: [
           [
             { chTitle: "必修二·第6章 平面向量及其应用", secs: ["b2-6-1", "b2-6-2", "b2-6-3", "b2-6-4"] },
@@ -824,7 +823,6 @@
         title: "四、概率、计数与统计推断",
         sub: "必修二 第9–10章 · 选必三 第6–8章（17节）",
         accent: "#7A5C8F",
-        top: 458, h: 140, r1: 518, r2: 570,
         rows: [
           [
             { chTitle: "必修二·第9章 统计", secs: ["b2-9-1", "b2-9-2", "b2-9-3"] },
@@ -839,7 +837,30 @@
       }
     };
 
-    var laneLeft = 8, laneWidth = 1104, laneRight = laneLeft + laneWidth, padX = 16;
+    // Use the available width as SVG units so labels stay readable while chapters wrap.
+    var mapWidth = Math.max(240, Math.floor(svgEl.getBoundingClientRect().width || 800));
+    var laneLeft = 4, laneWidth = mapWidth - 8, padX = 16;
+    var nextTop = 8;
+    function textLines(text, width, size) {
+      var lines = [], part = "", used = 0;
+      Array.from(text).forEach(function (c) {
+        var w = c.charCodeAt(0) > 127 ? size : size * 0.6;
+        if (used + w > width && part) { lines.push(part); part = ""; used = 0; }
+        part += c; used += w;
+      });
+      if (part) lines.push(part);
+      return lines;
+    }
+    function labelLines(text, x, y, width, size, color, parent) {
+      var lines = textLines(text, width, size);
+      lines.forEach(function (part, i) {
+        svg("rect", {x: x - 2, y: y + i * 20 - size, width: Math.min(width + 4, part.length * size + 4),
+          height: size + 4, rx: 3, fill: bg}, parent);
+        var t = svg("text", {x: x, y: y + i * 20, fill: color, "font-size": size}, parent);
+        t.textContent = part;
+      });
+      return lines.length * 20;
+    }
     var trayLayer = svg("g", {}, svgEl);
     var edgeLayerBg = svg("g", {}, svgEl);
     var edgeLayerDirect = svg("g", {}, svgEl);
@@ -851,123 +872,44 @@
     // 绘制泳道底框、左侧主线色条、顶部标题栏与 18 个章节分组托盘
     laneOrder.forEach(function (lid) {
       var lc = laneConfig[lid];
-      // 泳道外框
-      svg("rect", {
-        x: laneLeft, y: lc.top, width: laneWidth, height: lc.h,
-        rx: 12, fill: bg, stroke: line, "stroke-width": 1.2
-      }, trayLayer);
-      // 左侧主题色条
-      svg("rect", {
-        x: laneLeft, y: lc.top + 8, width: 4.5, height: lc.h - 16,
-        rx: 2.2, fill: lc.accent
-      }, headerLayer);
-      // 泳道标题与副标题（置于连线上层并带底色衬垫，防止跨泳道连线压字）
-      var titleBgW = lc.title.length * 13 + 12;
-      svg("rect", {
-        x: laneLeft + 11, y: lc.top + 6, width: titleBgW, height: 19,
-        rx: 5, fill: bg, opacity: 0.92
-      }, headerLayer);
-      var titleEl = svg("text", {
-        x: laneLeft + 15, y: lc.top + 20,
-        fill: fg, "font-size": 13, "font-weight": 700
-      }, headerLayer);
-      titleEl.textContent = lc.title;
-
-      var subBgW = lc.sub.length * 9.5 + 12;
-      svg("rect", {
-        x: laneRight - 14 - subBgW, y: lc.top + 6, width: subBgW, height: 18,
-        rx: 5, fill: bg, opacity: 0.92
-      }, headerLayer);
-      var subEl = svg("text", {
-        x: laneRight - 14, y: lc.top + 19,
-        "text-anchor": "end", fill: muted, "font-size": 11
-      }, headerLayer);
-      subEl.textContent = lc.sub;
-
-      // 计算每行内各章托盘与胶囊坐标
-      lc.rows.forEach(function (groups, rIdx) {
-        var cy = rIdx === 0 ? lc.r1 : lc.r2;
-        var flatSecs = [];
-        groups.forEach(function (g) {
-          g.secs.forEach(function (s, idx) {
-            flatSecs.push({ sid: s, gIdx: groups.indexOf(g), isGroupStart: idx === 0 && groups.indexOf(g) > 0 });
-            if (idx + 1 < g.secs.length) sameRowNext[s + "->" + g.secs[idx + 1]] = true;
+      lc.top = nextTop;
+      var innerW = laneWidth - padX * 2;
+      var y = lc.top + 24;
+      y += labelLines(lc.title, laneLeft + padX, y, innerW, 14, fg, headerLayer);
+      y += labelLines(lc.sub, laneLeft + padX, y, innerW, 12, muted, headerLayer) + 8;
+      var rowIndex = 0;
+      lc.rows.forEach(function (groups) {
+        groups.forEach(function (group) {
+          var trayTop = y - 14;
+          y += labelLines(group.chTitle, laneLeft + padX + 6, y, innerW - 12, 13, muted, headerLayer) + 8;
+          var x = laneLeft + padX + 6, cy = y + 10, previous = null;
+          group.secs.forEach(function (sid) {
+            var m = SEC_META[sid];
+            var label = shortSecTitle(m.name, sid) + (m.hub ? "★" : "");
+            var w = calcCapsuleWidth(label);
+            if (x + w > laneLeft + laneWidth - padX - 6) {
+              x = laneLeft + padX + 6; cy += 40; rowIndex++; previous = null;
+            }
+            pos[sid] = {x: x + w / 2, y: cy, w: w, row: rowIndex, strand: lid, label: label};
+            if (previous) sameRowNext[previous + "->" + sid] = true;
+            previous = sid;
+            x += w + 12;
           });
-        });
-
-        var widths = flatSecs.map(function (item) {
-          var m = SEC_META[item.sid];
-          var lbl = shortSecTitle(m.name, item.sid) + (m.hub ? "★" : "");
-          return calcCapsuleWidth(lbl);
-        });
-        var totalCapW = widths.reduce(function (a, b) { return a + b; }, 0);
-        var interGroupExtra = 18;
-        var totalExtra = (groups.length - 1) * interGroupExtra;
-        var innerW = laneWidth - padX * 2;
-        var baseGap = flatSecs.length > 1 ? (innerW - totalCapW - totalExtra) / (flatSecs.length - 1) : 0;
-
-        var curLeft = laneLeft + padX;
-        var groupBounds = groups.map(function () { return { left: Infinity, right: -Infinity }; });
-
-        flatSecs.forEach(function (item, i) {
-          if (item.isGroupStart) curLeft += interGroupExtra;
-          var w = widths[i];
-          var cx = curLeft + w / 2;
-          var m = SEC_META[item.sid];
-          pos[item.sid] = {
-            x: cx,
-            y: cy,
-            w: w,
-            row: rIdx,
-            strand: lid,
-            label: shortSecTitle(m.name, item.sid) + (m.hub ? "★" : "")
-          };
-          var gb = groupBounds[item.gIdx];
-          if (curLeft < gb.left) gb.left = curLeft;
-          if (curLeft + w > gb.right) gb.right = curLeft + w;
-          curLeft += w + baseGap;
-        });
-
-        // 绘制每个章节的柔和分组托盘与不透明章节名胶囊签
-        groups.forEach(function (g, gIdx) {
-          var gb = groupBounds[gIdx];
-          if (gb.left === Infinity) return;
-          svg("rect", {
-            x: (gb.left - 5).toFixed(1),
-            y: (cy - 24).toFixed(1),
-            width: (gb.right - gb.left + 10).toFixed(1),
-            height: 39,
-            rx: 8,
-            fill: cardBg,
-            "fill-opacity": 0.65,
-            stroke: line,
-            "stroke-width": 1
-          }, trayLayer);
-          var tagW = 0;
-          for (var ci = 0; ci < g.chTitle.length; ci++) {
-            tagW += g.chTitle.charCodeAt(ci) > 127 ? 9.5 : 5.5;
-          }
-          svg("rect", {
-            x: (gb.left + 2).toFixed(1),
-            y: (cy - 30.5).toFixed(1),
-            width: (tagW + 8).toFixed(1),
-            height: 13.5,
-            rx: 4,
-            fill: cardBg,
-            stroke: line,
-            "stroke-width": 0.7
-          }, headerLayer);
-          var gLbl = svg("text", {
-            x: (gb.left + 6).toFixed(1),
-            y: (cy - 20.5).toFixed(1),
-            fill: muted,
-            "font-size": 9.3,
-            "font-weight": 600
-          }, headerLayer);
-          gLbl.textContent = g.chTitle;
+          svg("rect", {x: laneLeft + padX, y: trayTop, width: innerW,
+            height: cy + 24 - trayTop, rx: 8, fill: cardBg, stroke: line}, trayLayer);
+          y = cy + 52;
+          rowIndex++;
         });
       });
+      lc.h = y - lc.top - 12;
+      var frame = svg("rect", {x: laneLeft, y: lc.top, width: laneWidth, height: lc.h,
+        rx: 12, fill: bg, stroke: line, "stroke-width": 1.2}, trayLayer);
+      trayLayer.insertBefore(frame, trayLayer.firstChild);
+      svg("rect", {x: laneLeft, y: lc.top + 8, width: 4, height: lc.h - 16,
+        rx: 2, fill: lc.accent}, headerLayer);
+      nextTop = lc.top + lc.h + 16;
     });
+    svgEl.setAttribute("viewBox", "0 0 " + mapWidth + " " + nextTop);
 
     function buildEdgePath(p1, p2, isSameRow) {
       if (isSameRow && Math.abs(p1.y - p2.y) < 4) {
@@ -977,11 +919,11 @@
           return "M" + x1.toFixed(1) + " " + p1.y.toFixed(1) + " L" + x2.toFixed(1) + " " + p2.y.toFixed(1);
         }
         var midX = (p1.x + p2.x) / 2;
-        return "M" + p1.x.toFixed(1) + " " + (p1.y - 12).toFixed(1) + " Q" + midX.toFixed(1) + " " + (p1.y - 23).toFixed(1) + " " + p2.x.toFixed(1) + " " + (p2.y - 12).toFixed(1);
+        return "M" + p1.x.toFixed(1) + " " + (p1.y - 16).toFixed(1) + " Q" + midX.toFixed(1) + " " + (p1.y - 27).toFixed(1) + " " + p2.x.toFixed(1) + " " + (p2.y - 16).toFixed(1);
       }
       var goDown = p2.y >= p1.y;
-      var sy = p1.y + (goDown ? 12 : -12);
-      var ey = p2.y + (goDown ? -12 : 12);
+      var sy = p1.y + (goDown ? 16 : -16);
+      var ey = p2.y + (goDown ? -16 : 16);
       var dy = ey - sy, dx = p2.x - p1.x;
       var cy1 = sy + dy * 0.45;
       var cy2 = sy + dy * 0.55;
@@ -1061,8 +1003,10 @@
         strokeCol = no; strokeW = 2.2; fillCol = noSoft; textCol = fg;
       }
 
-      var g = svg("g", { "data-map-pick": sid, style: "cursor:pointer" }, nodeLayer);
-      var w = p.w || 76, h = 24;
+      var g = svg("g", { "data-map-pick": sid, style: "cursor:pointer",
+        role: "button", tabindex: sid === curMapSec ? 0 : -1,
+        "aria-label": m.name, "aria-pressed": String(isSel) }, nodeLayer);
+      var w = p.w || 90, h = 32;
       var rectAttrs = {
         x: (p.x - w / 2).toFixed(1),
         y: (p.y - h / 2).toFixed(1),
@@ -1090,10 +1034,10 @@
       var label = p.label || (shortSecTitle(m.name, sid) + (m.hub ? "★" : ""));
       var t = svg("text", {
         x: p.x.toFixed(1),
-        y: (p.y + 3.8).toFixed(1),
+        y: (p.y + 4.8).toFixed(1),
         "text-anchor": "middle",
         fill: textCol,
-        "font-size": 10.5,
+        "font-size": 14,
         "font-weight": (isSel || isDirPre || isDirUnl || m.hub) ? 700 : 500
       }, g);
       t.textContent = label;
@@ -1229,11 +1173,49 @@
     lanesEl.innerHTML = lanesHtml || '<div class="card"><p class="small">当前筛选条件下暂无节点，点“全部 73 节”查看完整图谱。</p></div>';
   }
 
+  function focusMapNode(sid) {
+    var node = document.querySelector('#kgSvg [data-map-pick="' + sid + '"]');
+    if (node) {
+      [].forEach.call(document.querySelectorAll("#kgSvg [data-map-pick]"), function (item) {
+        item.setAttribute("tabindex", item === node ? 0 : -1);
+      });
+      node.focus({preventScroll: true});
+      node.scrollIntoView({block: "nearest", inline: "nearest"});
+    }
+  }
+  document.addEventListener("keydown", function (ev) {
+    if (!ev.target.closest(".kg-svg-wrap")) return;
+    var nodes = [].slice.call(document.querySelectorAll("#kgSvg [data-map-pick]"));
+    var current = ev.target.closest("#kgSvg [data-map-pick]") ||
+      document.querySelector('#kgSvg [data-map-pick="' + curMapSec + '"]');
+    if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") {
+      ev.preventDefault();
+      var index = (nodes.indexOf(current) + (ev.key === "ArrowRight" ? 1 : -1) + nodes.length) % nodes.length;
+      focusMapNode(nodes[index].getAttribute("data-map-pick"));
+    } else if ((ev.key === "Enter" || ev.key === " ") && current) {
+      ev.preventDefault();
+      curMapSec = current.getAttribute("data-map-pick");
+      renderKnowledgeMap();
+      focusMapNode(curMapSec);
+    }
+  });
+  var mapResizeFrame;
+  window.addEventListener("resize", function () {
+    cancelAnimationFrame(mapResizeFrame);
+    mapResizeFrame = requestAnimationFrame(function () {
+      var focused = document.activeElement && document.activeElement.closest("#kgSvg [data-map-pick]");
+      var sid = focused && focused.getAttribute("data-map-pick");
+      if (tabSecs.map.classList.contains("on")) renderKnowledgeMap();
+      if (sid) focusMapNode(sid);
+    });
+  });
   document.addEventListener("click", function (ev) {
     var pickBtn = ev.target.closest("[data-map-pick]");
     if (pickBtn) {
       curMapSec = pickBtn.getAttribute("data-map-pick");
+      var fromSvg = !!pickBtn.closest("#kgSvg");
       renderKnowledgeMap();
+      if (fromSvg) focusMapNode(curMapSec);
       return;
     }
     var fltBtn = ev.target.closest("[data-kg-filter]");

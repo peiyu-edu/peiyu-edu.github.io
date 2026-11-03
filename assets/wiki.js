@@ -2251,7 +2251,9 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
         '<div class="wk-drawer" hidden></div>';
       if (isTop) {
         var examEntry = stepEl.querySelector(":scope > .lf-exam-bank-entry");
-        stepEl.insertBefore(box, examEntry ? examEntry.nextSibling : stepEl.firstChild);
+        var examInline = stepEl.querySelector(":scope > [data-exam-bank-inline]");
+        var examEnd = examInline || examEntry;
+        stepEl.insertBefore(box, examEnd ? examEnd.nextSibling : stepEl.firstChild);
       } else {
         var nextBtn = stepEl.querySelector(".next");
         if (nextBtn) stepEl.insertBefore(box, nextBtn);

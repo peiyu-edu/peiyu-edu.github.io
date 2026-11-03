@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js?v=0527546cdacb"></script>
+<script defer src="../assets/lesson.js?v=83c07355feaf"></script>
 <script defer src="../assets/video.js"></script>
 <script defer src="../assets/b9a-j26-2-teaching-workshop-dev.js"></script>
 <style>
@@ -25,6 +25,8 @@
   .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
   .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--a); }
   .btn-sub { font-size: 14px; }
+  .entry-values { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 15px; margin: 12px 0; }
+  .entry-values th, .entry-values td { padding: 6px 2px; text-align: center; border: 1px solid var(--line); }
   #j26-workshop input[type="text"] { width: 100%; min-width: 0; box-sizing: border-box; }
   #j26-workshop select, #j26-workshop input, #j26-workshop textarea { font: inherit; color: var(--fg); background: var(--card); border: 1px solid var(--muted); border-radius: 4px; padding: 8px; max-width: 100%; }
   #j26-workshop label { display: block; margin: 8px 0; }
@@ -37,19 +39,20 @@
   #js-questions label { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 </style>
 <link rel="stylesheet" href="../assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=f5b5d748f240"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="../assets/learning-course.js?v=ca4dc7609376"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=51045962e4c5"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/exam-bank.css"><script defer src="../assets/exam-bank.js"></script>
 </head>
 <body data-stage="junior" data-sec="j26-2" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">九年级上册 · 第二十六章 二次函数</p>
 <h1>26.2 二次函数的图象和性质</h1>
-<p class="lead">平滑优美的抛物线，初中代数几何综合的最核心母体！从最简式 \(y = ax^2\) 出发，经历平移链条掌握顶点式 \(y = a(x-h)^2+k\)，运用配方法攻克一般式，看透“左加右减，上加下减”与对称轴增减性。</p>
+<p class="lead">二次函数的图象会是什么样？先从 \(y=x^2\) 的列表、描点、连线开始，再研究 \(y=ax^2\) 与平移后的图象，认识顶点式 \(y=a(x-h)^2+k\)，用配方法研究一般式的图象和性质。</p>
 
 <details class="more route">
   <summary>本节导读　先修：23.2 一次函数图象 · 25.2 配方法 · 26.1 二次函数概念 · 本节路线</summary>
   <p class="small" style="margin:6px 0 0">要用到：描点画图三步法（<a href="j22-2.html">回看 22.2</a>）、一次函数图象与平移（<a href="j23-2.html">回看 23.2</a>）、配方法解一元二次方程（<a href="j25-2.html">回看 25.2</a>）。</p>
   <ol class="small">
-    <li>从最简单的 \(y = x^2\) 描点连线进入：认识平滑轴对称的抛物线曲线。</li>
+    <li>从最简单的 \(y = x^2\) 开始：列表、描点、连线，观察图象的特点。</li>
     <li>研究最简式 \(y = ax^2\)：开口方向、对称轴（\(y\) 轴）、顶点（原点）与胖瘦。</li>
     <li>发现平移法则：从 \(y = ax^2\) 到顶点式 \(y = a(x-h)^2 + k\)，领悟“左加右减，上加下减”。</li>
     <li>一般式化顶点式：配方法推导顶点坐标与对称轴通用公式。</li>
@@ -60,8 +63,27 @@
 
 <section class="step" data-title="从例子进入">
   <p>在平面直角坐标系中，我们用“列表、描点、连线”画最简单的二次函数 \(y = x^2\) 的图象。自变量 \(x\) 与函数值 \(y\) 对应如下：</p>
-  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIyMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwieT14wrIg5o+P54K555Sf5oiQ5oqb54mp57q/5Zu+XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuaPj+eCuei/m+W6puWIh+aNolwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtcz1cIjFcIj7mraXpqqQgMe+8muWIl+ihqOiuoeeul+WvueW6lOeCuTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1zPVwiMlwiPuatpemqpCAy77ya5Z2Q5qCH57O75Lit57K+5YeG5o+P54K5PC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLXM9XCIzXCI+5q2l6aqkIDPvvJrnlKjlubPmu5Hmm7Lnur/pobrmrKHov57mjqU8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+6KeC5a+f55S75Ye655qE5Zu+6LGh77yM5a6D5piv5YWz5LqO5ZOq5p2h55u057q/5a+556ew55qE77yf5a6D55qE5pyA5L2O54K55L2N5LqO5L2V5aSE77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7lhbPkuo4gXFwoeFxcKSDovbTlr7nnp7DvvIzmnIDkvY7ngrnlnKggXFwoKDEsIDApXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5YWz5LqOIFxcKHlcXCkg6L205a+556ew77yM5pyA5L2O54K55Zyo5Y6f54K5IFxcKCgwLCAwKVxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuWFs+S6juWOn+eCueS4reW/g+WvueensO+8jOayoeacieacgOS9jueCuTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuS4jeWFt+Wkh+WvueensOaApzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkI8L2I+44CC5LqM5qyh5Ye95pWwIFxcKHkgPSB4XjJcXCkg55qE5Zu+6LGh5piv5LiA5p2h5YWz5LqOIDxiPlxcKHlcXCkg6L2077yI55u057q/IFxcKHggPSAwXFwp77yJ5a+556ewPC9iPueahOW5s+a7keabsue6v++8jOWug+eahOacgOS9jueCueaYrzxiPuWdkOagh+WOn+eCuSBcXCgoMCwgMClcXCk8L2I+44CCPC9wPlxuICAgICAgPHA+6L+Z5p2h5puy57q/5YOP5oqV5o636ZOF55CD5oiW5Za35rC05rGg5rC05p+x5Zyo56m65Lit55S75Ye655qE5byn57q/77yM5pWw5a2m5LiK5oqK5LqM5qyh5Ye95pWw55qE5Zu+6LGh57uf56ew5Li6PGI+5oqb54mp57q/PC9iPu+8iHBhcmFib2xh77yJ44CC6aG254K55piv5oqb54mp57q/55qE6L2s5oqY54K577yM5Lmf5piv5Ye95pWw55qE5p6B5YC854K544CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
-    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 220" role="img" aria-label="y=x² 描点生成抛物线图"></svg>
+  <div class="card predict" data-id="entry-shape" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjxiPuWbvuixoeS8muaYr+S7gOS5iOagt++8n+WFiOeMnOS4gOeMnOOAgjwvYj48L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuS4gOadoeebtOe6vzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuS4gOS4quWchjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuS4gOadoeW8r+absueahOe6vzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7lhYjluKbnnYDnjJzmg7PorqHnrpfkuIvpnaLnmoTlh73mlbDlgLzvvIzlho3nlKjljp/mnaXnmoTmj4/ngrnjgIHov57nur/mjInpkq7mo4DpqozvvJrov5nkupvngrnlj6/ku6XnlKjkuIDmnaHlubPmu5HnmoTmm7Lnur/ov57mjqXjgII8L3A+PC9kaXY+XG4gICJ9">
+    <p><b>图象会是什么样？先猜一猜。</b></p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>一条直线</button>
+      <button class="opt" data-v="B"><b>B</b>一个圆</button>
+      <button class="opt" data-v="C"><b>C</b>一条弯曲的线</button>
+    </div>
+    <div class="reveal"><p>先带着猜想计算下面的函数值，再用原来的描点、连线按钮检验：这些点可以用一条平滑的曲线连接。</p></div>
+  </div>
+  <div class="card" id="entry-calculation">
+    <p><b>把每个 x 代入 y=x²，先自己算一算。</b></p>
+    <table class="entry-values" aria-label="y=x² 函数值表">
+      <tbody>
+        <tr><th scope="row">x</th><td>−3</td><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+        <tr><th scope="row">y</th><td><span hidden data-entry-value>9</span></td><td><span hidden data-entry-value>4</span></td><td><span hidden data-entry-value>1</span></td><td><span hidden data-entry-value>0</span></td><td><span hidden data-entry-value>1</span></td><td><span hidden data-entry-value>4</span></td><td><span hidden data-entry-value>9</span></td></tr>
+      </tbody>
+    </table>
+    <button type="button" class="btn-sub" id="entry-calculate" aria-expanded="false">算一算，核对 y 值</button>
+  </div>
+  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIyMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwieT14wrIg5o+P54K55L2c5Zu+5Z2Q5qCH57O7XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuaPj+eCuei/m+W6puWIh+aNolwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEtcz1cIjFcIj7mraXpqqQgMe+8muWIl+ihqOiuoeeul+WvueW6lOeCuTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS1zPVwiMlwiPuatpemqpCAy77ya5Z2Q5qCH57O75Lit57K+5YeG5o+P54K5PC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLXM9XCIzXCI+5q2l6aqkIDPvvJrnlKjlubPmu5Hmm7Lnur/pobrmrKHov57mjqU8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+6KeC5a+f55S75Ye655qE5Zu+6LGh77yM5a6D5piv5YWz5LqO5ZOq5p2h55u057q/5a+556ew55qE77yf5a6D55qE5pyA5L2O54K55L2N5LqO5L2V5aSE77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7lhbPkuo4gXFwoeFxcKSDovbTlr7nnp7DvvIzmnIDkvY7ngrnlnKggXFwoKDEsIDApXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5YWz5LqOIFxcKHlcXCkg6L205a+556ew77yM5pyA5L2O54K55Zyo5Y6f54K5IFxcKCgwLCAwKVxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuWFs+S6juWOn+eCueS4reW/g+WvueensO+8jOayoeacieacgOS9jueCuTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuS4jeWFt+Wkh+WvueensOaApzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwPjxiPkI8L2I+44CC5LqM5qyh5Ye95pWwIFxcKHkgPSB4XjJcXCkg55qE5Zu+6LGh5piv5LiA5p2h5YWz5LqOIDxiPlxcKHlcXCkg6L2077yI55u057q/IFxcKHggPSAwXFwp77yJ5a+556ewPC9iPueahOW5s+a7keabsue6v++8jOWug+eahOacgOS9jueCueaYrzxiPuWdkOagh+WOn+eCuSBcXCgoMCwgMClcXCk8L2I+44CCPC9wPlxuICAgICAgPHA+6L+Z5p2h5puy57q/5YOP5oqV5o636ZOF55CD5oiW5Za35rC05rGg5rC05p+x5Zyo56m65Lit55S75Ye655qE5byn57q/77yM5pWw5a2m5LiK5oqK5LqM5qyh5Ye95pWw55qE5Zu+6LGh57uf56ew5Li6PGI+5oqb54mp57q/PC9iPu+8iHBhcmFib2xh77yJ44CC6aG254K55piv5oqb54mp57q/55qE6L2s5oqY54K577yM5Lmf5piv5Ye95pWw55qE5p6B5YC854K544CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 220" role="img" aria-label="y=x² 描点作图坐标系"></svg>
     <div class="entry-bar" id="entry-bar" role="group" aria-label="描点进度切换">
       <button type="button" class="on" data-s="1">步骤 1：列表计算对应点</button>
       <button type="button" data-s="2">步骤 2：坐标系中精准描点</button>
@@ -476,7 +498,7 @@
   </div>
 </section>
 
-<section class="step" data-title="中考真题"><section class="card lf-exam-bank-entry" aria-labelledby="section-exam-bank-title"><h2 id="section-exam-bank-title">本节中考真题</h2><p>共 56 道，按原卷题号排列，含解答题；先自己做，提交后看答案和分步解析。</p><p><a class="lf-button" href="../exam-bank/index.html?sec=j26-2">开始做本节真题</a></p></section>
+<section class="step" data-title="中考真题"><section class="card lf-exam-bank-entry" aria-labelledby="section-exam-bank-title"><h2 id="section-exam-bank-title">本节中考真题</h2><p>共 56 道，含 33 道解答题；先做本节精选，也可查看全部真题。先自己做，提交后看答案和分步解析。</p><p><a class="lf-button" href="../exam-bank/index.html?sec=j26-2">开始做本节真题</a></p></section><div class="eb eb-inline" data-exam-bank-inline="j26-2"><h2>本节精选</h2><p role="status">正在加载精选题…</p></div>
   <div class="card" style="margin-bottom:16px">
     <p class="small" style="margin:0">题型参照中考</p>
   </div>
@@ -492,6 +514,14 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  var calculated = false;
+  document.getElementById("entry-calculate").addEventListener("click", function() {
+    calculated = !calculated;
+    document.querySelectorAll("[data-entry-value]").forEach(function(value) { value.hidden = !calculated; });
+    this.setAttribute("aria-expanded", String(calculated));
+    this.textContent = calculated ? "收起 y 值，再算一次" : "算一算，核对 y 值";
+    refreshEntry();
+  });
   if (typeof renderMathInElement === "function") {
     renderMathInElement(document.body, {
       delimiters: [
@@ -540,7 +570,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     entryFig.innerHTML = h;
     if (entryNote) {
-      if (step === 1) entryNote.textContent = '列表计算出：(-3,9), (-2,4), (-1,1), (0,0), (1,1), (2,4), (3,9) 等对应值。';
+      if (step === 1) entryNote.textContent = calculated ? '列表计算出：(-3,9), (-2,4), (-1,1), (0,0), (1,1), (2,4), (3,9) 等对应值。' : '先把表中的 x 逐个代入 y=x²，算好后点“算一算”核对，再描点、连线。';
       else if (step === 2) entryNote.textContent = answered ? '在坐标系中把点精准描出，清晰看出对称分布在 y 轴两侧。' : '比较横坐标互为相反数的两个点，想一想图象的对称轴在哪里。';
       else entryNote.textContent = answered ? '用平滑曲线顺次连结各点，形成顶点在 (0,0)、开口向上的标准抛物线！' : '用平滑曲线顺次连接各点，观察对称性，并找出图象的最低点。';
     }

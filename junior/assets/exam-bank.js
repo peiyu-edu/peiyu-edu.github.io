@@ -4,7 +4,8 @@
    错题本按同一 base 和 contentVersion 从 wrongbook-index.json 找到本题。 */
 (function () {
   "use strict";
-  var app = document.getElementById("eb-app");
+  var inline = document.querySelector("[data-exam-bank-inline]");
+  var app = inline || document.getElementById("eb-app");
   if (!app) return;
   var LETTERS = "ABCDE", SECTION = "exam-bank";
   var stage = document.body.getAttribute("data-stage") === "junior" ? "junior" : "high";
@@ -17,7 +18,7 @@
     if (text != null) node.textContent = text;
     return node;
   }
-  function url(path) { return new URL(path, location.href).href; }
+  function url(path) { return new URL(path, inline ? new URL("../exam-bank/", location.href) : location.href).href; }
   function getJSON(path) {
     return fetch(url(path), { cache: "no-store" }).then(function (r) {
       if (!r.ok) throw new Error(r.status + " " + path);
@@ -54,8 +55,9 @@
       .replace(/\\left|\\right|\\,|\\;|\\!|\s|\$|\{|\}/g, "").replace(/\\/g, "")
       .replace(/，/g, ",").replace(/．|。/g, "").toLowerCase();
   }
-  function paperName(item) { return item.year + " " + (item.region || "") + (stage === "junior" ? "中考" : "高考"); }
-  function title(item) { return paperName(item) + " 第" + item.no + "题" + (item.part ? " " + item.part : ""); }
+  function isOriginal(item) { return item.source_type === "original"; }
+  function paperName(item) { return isOriginal(item) ? "原创解答题" : item.year + " " + (item.region || "") + (stage === "junior" ? "中考" : "高考"); }
+  function title(item) { return paperName(item) + (isOriginal(item) ? " · 第" : " 第") + item.no + "题" + (item.part ? " " + item.part : ""); }
   function params() { return new URLSearchParams(location.search); }
   function hrefWith(changes) {
     var p = params();
@@ -158,7 +160,22 @@
     clear.addEventListener("click", function () { go({ region: null, year: null, type: null, point: null }); });
     form.appendChild(clear);
     app.appendChild(form);
+    var selected = selectedSection(p);
+    if (selected && selected.featuredIds) {
+      var featured = el("section", "eb-featured");
+      featured.appendChild(el("h2", null, "本节精选"));
+      featured.appendChild(el("p", "eb-note", "从基础到挑战，先独立作答，再看解析。"));
+      var picks = el("ol", "eb-list");
+      selected.featuredIds.forEach(function (id) {
+        var item = items.find(function (row) { return row.id === id && matches(row, p); });
+        if (item) picks.appendChild(itemLink(item, true));
+      });
+      featured.appendChild(picks);
+      if (!picks.children.length) featured.appendChild(el("p", "eb-note", "本次筛选没有精选题，可清除筛选或查看下面的全部题目。"));
+      app.appendChild(featured);
+    }
     var visible = items.filter(function (item) { return matches(item, p); });
+    if (selected) app.appendChild(el("h2", "eb-all", "全部 " + selected.ids.length + " 道"));
     var count = el("p", "eb-count", "共 " + visible.length + " 道题" + (visible.length < items.length ? "（全部 " + items.length + " 道）" : "") + "，保留原卷题号和顺序。");
     count.setAttribute("role", "status");
     app.appendChild(count);
@@ -170,32 +187,51 @@
     });
     groups.forEach(function (group) {
       var section = el("section", "eb-paper");
-      section.appendChild(el("h2", null, group.paper || group.name));
+      section.appendChild(el("h2", null, isOriginal(group.items[0]) ? group.name : group.paper || group.name));
       var list = el("ol", "eb-list");
-      group.items.forEach(function (item) {
-        var li = el("li"), a = el("a", "eb-item");
-        a.href = hrefWith({ q: item.id });
-        a.addEventListener("click", function (e) {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
-          e.preventDefault(); go({ q: item.id });
-        });
-        a.appendChild(el("span", "eb-no", "第" + item.no + "题" + (item.part ? " " + item.part : "")));
-        var tags = el("span", "eb-tags");
-        tags.appendChild(el("span", "tag", item.type));
-        if (item.level) tags.appendChild(el("span", "tag", item.level));
-        if (item.figure) tags.appendChild(el("span", "tag", "有图"));
-        a.appendChild(tags);
-        if (item.points && item.points.length) a.appendChild(el("span", "eb-points", item.points.join(" · ")));
-        var s = status(item);
-        if (s) {
-          var mark = el("span", "eb-done eb-done-" + s, s === "right" ? "做对了" : "做错了");
-          a.appendChild(mark);
-        }
-        li.appendChild(a);
-        list.appendChild(li);
-      });
+      group.items.forEach(function (item) { list.appendChild(itemLink(item, false)); });
       section.appendChild(list);
       app.appendChild(section);
+    });
+  }
+
+  function itemLink(item, withSource) {
+    var li = el("li"), a = el("a", "eb-item");
+    a.href = hrefWith({ q: item.id });
+    a.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); go({ q: item.id });
+    });
+    a.appendChild(el("span", "eb-no", isOriginal(item) ? title(item) : "第" + item.no + "题" + (item.part ? " " + item.part : "")));
+    var tags = el("span", "eb-tags");
+    tags.appendChild(el("span", "tag", item.type));
+    if (item.level) tags.appendChild(el("span", "tag", item.level));
+    if (item.figure) tags.appendChild(el("span", "tag", "有图"));
+    a.appendChild(tags);
+    if (withSource && !isOriginal(item)) tags.appendChild(el("span", "eb-source", paperName(item)));
+    if (item.points && item.points.length) a.appendChild(el("span", "eb-points", item.points.join(" · ")));
+    var s = status(item);
+    if (s) {
+      var mark = el("span", "eb-done eb-done-" + s, s === "right" ? "做对了" : "做错了");
+      a.appendChild(mark);
+    }
+    li.appendChild(a);
+    return li;
+  }
+
+  function renderInline() {
+    app.replaceChildren(el("h2", null, "本节精选"));
+    var section = (index.sections || {})[inline.getAttribute("data-exam-bank-inline")];
+    if (!section || !section.featuredIds) return;
+    section.featuredIds.forEach(function (id) {
+      if (section.ids.indexOf(id) < 0 || !index.items.some(function (item) { return item.id === id; })) return;
+      var card = el("article", "card eb-card");
+      card.setAttribute("data-question-id", id);
+      card.appendChild(el("p", "eb-loading", "题目加载中…"));
+      app.appendChild(card);
+      getJSON("data/q/" + encodeURIComponent(id) + ".json").then(function (item) {
+        drawQuestion(card, item);
+      }).catch(function () { card.replaceChildren(el("p", "eb-missing", "题目暂时打不开，请刷新重试。")); });
     });
   }
 
@@ -236,7 +272,7 @@
 
   function drawQuestion(card, item) {
     card.replaceChildren();
-    var heading = el("h2", "eb-title", title(item));
+    var heading = el(inline ? "h3" : "h2", "eb-title", title(item));
     card.appendChild(heading);
     var meta = el("div", "eb-meta");
     meta.appendChild(el("span", "tag", item.type));
@@ -415,12 +451,12 @@
     math(app);
   }
 
-  window.addEventListener("popstate", function () { if (index) route(); });
+  window.addEventListener("popstate", function () { if (index && !inline) route(); });
   getJSON("data/index.json").then(function (data) {
     if (!data || data.version !== 1 || !Array.isArray(data.items)) throw new Error("bad index");
     index = data;
-    route();
-    if (ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q")) renderList(); });
+    if (inline) renderInline(); else route();
+    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q")) renderList(); });
   }).catch(function () {
     app.replaceChildren(el("p", "eb-missing", "真题库暂时打不开，请刷新重试。"));
   });

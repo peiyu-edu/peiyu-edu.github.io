@@ -181,13 +181,13 @@
       var label = input.closest("[data-lp-option]"), result = label.querySelector("[data-lp-result]");
       var correct = input.value === quiz.correct, wrong = input.value === answer.choice && !answer.correct;
       label.dataset.result = correct ? "correct" : wrong ? "incorrect" : "";
-      result.hidden = !correct && !wrong; result.textContent = correct ? "正确选项" : "你选择的答案";
+      result.hidden = !correct && !wrong; result.textContent = correct ? (input.value === answer.choice ? "✓ 你的答案（正确）" : "✓ 正确答案") : "✗ 你的答案（错误）";
     });
     work.querySelector("[data-lp-submit]").hidden = true;
     work.querySelector("[data-lp-warning]").hidden = true;
     work.querySelector("[data-lp-evidence]").textContent = (restored ? "上次作答：" : "本次作答：") + eventLabel(answer);
-    var feedback = work.querySelector("[data-lp-feedback]"); feedback.hidden = false;
-    feedback.innerHTML = '<h3 data-lp-feedback-title tabindex="-1">' + (restored ? "上次作答" : "这次作答") + (answer.correct ? "正确，核对一下理由" : "需要订正，先找出漏掉的条件") + '</h3><p>' + esc(chosen.feedback) + '</p><ol>' + quiz.reasoning.map(function (line) { return '<li>' + esc(line) + '</li>'; }).join("") + '</ol>' +
+    var feedback = work.querySelector("[data-lp-feedback]"); feedback.hidden = false; feedback.dataset.verdict = answer.correct ? "correct" : "incorrect";
+    feedback.innerHTML = '<h3 data-lp-feedback-title tabindex="-1">' + (restored ? "上次作答：" : "这次作答：") + (answer.correct ? "答对了，再核对一下理由" : "答错了，对照下面的理由看看错在哪") + '</h3><p>' + esc(chosen.feedback) + '</p><ol>' + quiz.reasoning.map(function (line) { return '<li>' + esc(line) + '</li>'; }).join("") + '</ol>' +
       '<h3>用这个知识点前，先确认</h3><ul>' + (point.conditions || []).map(function (line) { return '<li>' + esc(line) + '</li>'; }).join("") + '</ul><p><a href="' + esc(pointHref(point.id, true)) + '">回看适用条件与常见误解</a></p>' +
       '<div class="lp-next"><h3>接下来</h3><p class="lp-note">' + (nextVariant ? '可以换一道已审核的平行变式，检查能否在另一组条件中解释理由。' : selectedVariant ? '这组题暂时没有更多平行变式。' : '这道题还没有配套的平行题。') + '重新作答会使用当前这道题，并记为“反馈后重做”，不会增加首次独立作答次数。</p>' + (nextReview ? '<p class="lp-note">复习题单独记录，不会替代当前这道题的复习安排。</p>' : '') + '<div class="lp-actions">' + (nextVariant ? '<button type="button" class="lp-button" data-lp-variant>换一道已审核变式</button>' : '') + (nextReview ? '<button type="button" class="lp-button secondary" data-lp-review-question>做一道复习题</button>' : '') + '<button type="button" class="lp-button secondary" data-lp-retry>重新做这道题</button>' + (selectedVariant ? '<button type="button" class="lp-button secondary" data-lp-original>回到原诊断题</button>' : '') + '<a class="lp-button secondary" href="' + esc(contextual("learning.html").href) + '">查看学习记录</a></div><p class="lp-note" data-lp-review></p>' +
       '<form class="lp-rating" data-lp-rating><fieldset><legend>此刻的自评（与作答结果分别记录）</legend><label><input type="radio" name="self-rating" value="need-help">还需帮助</label><label><input type="radio" name="self-rating" value="practice-more">还想再练</label><label><input type="radio" name="self-rating" value="can-explain">能解释理由</label></fieldset><div class="lp-actions"><button type="submit" class="lp-button secondary">保存自评</button><span class="lp-note" role="status" data-lp-rating-status></span></div></form></div>';

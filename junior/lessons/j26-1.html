@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js?v=0527546cdacb"></script>
+<script defer src="../assets/lesson.js?v=83c07355feaf"></script>
 <script defer src="../assets/video.js"></script>
 <style>
   .hci-nav a[href$="wiki.html"], .hci-nav a[href$="anatomy.html"], .hci-nav a[href$="record.html"] { display: none !important; }
@@ -21,15 +21,26 @@
   .range-box { display: flex; align-items: center; gap: 12px; margin: 10px 0; flex-wrap: wrap; }
   .range-box input[type="range"] { flex: 1; min-width: 180px; accent-color: var(--accent); }
   .btn-sub { font-size: 14px; }
+  .model-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .model-table th, .model-table td { padding: 8px; text-align: left; border-bottom: 1px solid var(--line); }
+  .model-table .quadratic-term { color: var(--a); font-weight: 700; }
+  @media (max-width: 600px) {
+    .model-table thead { display: none; }
+    .model-table tr, .model-table td { display: block; }
+    .model-table td { border: 0; padding: 4px 0; }
+    .model-table tr { padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .model-table td::before { content: attr(data-label) "："; color: var(--muted); }
+  }
 </style>
 <link rel="stylesheet" href="../assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=f5b5d748f240"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="../assets/learning-course.js?v=ca4dc7609376"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><script defer src="../assets/wiki-stage.js?v=51045962e4c5"></script><link rel="stylesheet" href="../assets/learning-review-badges.css?v=e76775308191"><script defer src="../assets/learning-mastery.js?v=69254558a1dc"></script><script defer src="../assets/learning-review-badges.js?v=8fd826e818e2"></script>
+<link rel="stylesheet" href="../assets/exam-bank.css"><script defer src="../assets/exam-bank.js"></script>
 </head>
 <body data-stage="junior" data-sec="j26-1" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 初中数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">九年级上册 · 第二十六章 二次函数</p>
 <h1>26.1 二次函数的概念</h1>
-<p class="lead">从均匀匀速的一次直线，跃迁到弯曲加速的二次曲线！从周长固定的花坛面积、单循环比赛场次与年产量连续增长出发，看清二次函数的三大硬核特征，掌握一般形式 \(y=ax^2+bx+c\) 与实际自变量取值范围。</p>
+<p class="lead">从周长固定的花坛面积、单循环比赛场次与连续增长出发，观察数量关系中怎样出现二次项，认识二次函数的一般形式 \(y=ax^2+bx+c\) 与自变量的实际取值范围。</p>
 
 <details class="more route">
   <summary>本节导读　先修：22.1 函数概念 · 23.1 一次函数 · 25.1 一元二次方程 · 本节路线</summary>
@@ -39,19 +50,20 @@
     <li>抽象出二次函数的定义：整式、自变量最高次数为 2、二次项系数 \(a \ne 0\)。</li>
     <li>剖析一般形式 \(y = ax^2 + bx + c\)：各项系数与符号认读。</li>
     <li>明确自变量取值范围：纯代数实数范围 vs 现实物理情境的几何约束。</li>
-    <li>动手实验：在面积变化与一次二次对比台感受二次增长的加速效应。</li>
+    <li>动手实验：观察面积随边长的变化，对比一次函数与二次函数的增加量。</li>
     <li>自检与巩固练习，排查参数限制与定义域两大失分陷阱。</li>
   </ol>
+  <p>回忆一次函数是怎么学的：情境 → 概念 → 图象 → 性质 → 应用。二次函数也按这条路走，这一节先完成前两步。</p>
 </details>
 
 <section class="step" data-title="从例子进入">
   <p>学校打算用长为 \(40\text{ m}\) 的防护栏围成一个矩形花坛。设矩形的一边长为 \(x\text{ m}\)，花坛的面积为 \(y\text{ m}^2\)。随着这一边长度 \(x\) 的改变，面积 \(y\) 会怎样随之变化？它们之间有什么数量关系？</p>
-  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIwMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55+p5b2i5ZGo6ZW/5Zu65a6a6Z2i56ev5Y+Y5YyW5Zu+XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuefqeW9oui+uemVv+iwg+iKglwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEteD1cIjRcIj7kuIDovrnplb8geCA9IDQgbTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS14PVwiOFwiPuS4gOi+uemVvyB4ID0gOCBtPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLXg9XCIxMFwiPuS4gOi+uemVvyB4ID0gMTAgbe+8iOato+aWueW9ou+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS14PVwiMTRcIj7kuIDovrnplb8geCA9IDE0IG08L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+55+p5b2i5ZGo6ZW/5Li6IFxcKDQwXFx0ZXh0eyBtfVxcKe+8jOS4pOmCu+i+ueS5i+WSjOS4uiBcXCgyMFxcdGV4dHsgbX1cXCnjgILoi6XkuIDovrnplb/kuLogXFwoeFxcdGV4dHsgbX1cXCnvvIzliJnlj6bkuIDpgrvovrnplb/kuLogXFwoKDIwLXgpXFx0ZXh0eyBtfVxcKeOAgumdouenryBcXCh5ID0geCgyMC14KVxcKeOAguWxleW8gOaVtOeQhuWQju+8jOiHquWPmOmHjyBcXCh4XFwpIOeahOacgOmrmOasoeaVsOaYr+WHoO+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+MSDmrKHvvIjkuIDmrKHlh73mlbDvvIk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj4yIOasoe+8iOS6jOasoeWHveaVsO+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPjMg5qyhPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiN6IO956Gu5a6aPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QjwvYj7jgILlsZXlvIDop6PmnpDlvI/vvJpcXCh5ID0geCgyMC14KSA9IC14XjIgKyAyMHhcXCnjgILov5nph4zoh6rlj5jph48gXFwoeFxcKSDnmoTmnIDpq5jmrKHmlbDmmK8gPGI+MjwvYj7vvIE8L3A+XG4gICAgICA8cD7lnKjlhavlubTnuqfvvIzmiJHku6zlrabkuaDkuobkuIDmrKHlh73mlbAgXFwoeSA9IGt4ICsgYlxcKe+8iOaPj+i/sOWdh+WMgOOAgee6v+aAp+eahOWPmOWMlu+8ieOAguS9hueOsOWunuS4reabtOWkmumXrumimO+8iOWmgumdouenr+OAgemAn+W6puS6jOasoeaWueOAgee7j+a1juWIqea2puOAgeWkmuasoeWinumVv+eOh++8iea2ieWPiuS4pOS4quWPmOmHj+eahOS5mOenr++8jOeUseatpOS6p+eUn+S6huiHquWPmOmHj+S4uuS6jOasoeaWueeahOWFqOaWsOWHveaVsOKAlOKAlDxiPuS6jOasoeWHveaVsDwvYj7jgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+  <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzdmcgY2xhc3M9XCJlbnRyeS1maWdcIiBpZD1cImVudHJ5LWZpZ1wiIHZpZXdCb3g9XCIwIDAgNTIwIDIwMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi55+p5b2i5ZGo6ZW/5Zu65a6a6Z2i56ev5Y+Y5YyW5Zu+XCI+PC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cImVudHJ5LWJhclwiIGlkPVwiZW50cnktYmFyXCIgcm9sZT1cImdyb3VwXCIgYXJpYS1sYWJlbD1cIuefqeW9oui+uemVv+iwg+iKglwiPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgY2xhc3M9XCJvblwiIGRhdGEteD1cIjRcIj7kuIDovrnplb8geCA9IDQgbTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS14PVwiOFwiPuS4gOi+uemVvyB4ID0gOCBtPC9idXR0b24+XG4gICAgICA8YnV0dG9uIHR5cGU9XCJidXR0b25cIiBkYXRhLXg9XCIxMFwiPuS4gOi+uemVvyB4ID0gMTAgbTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiB0eXBlPVwiYnV0dG9uXCIgZGF0YS14PVwiMTRcIj7kuIDovrnplb8geCA9IDE0IG08L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8cCBjbGFzcz1cImVudHJ5LW5vdGVcIiBpZD1cImVudHJ5LW5vdGVcIiBhcmlhLWxpdmU9XCJwb2xpdGVcIj48L3A+XG4gICAgPHA+55+p5b2i5ZGo6ZW/5Li6IFxcKDQwXFx0ZXh0eyBtfVxcKe+8jOS4pOmCu+i+ueS5i+WSjOS4uiBcXCgyMFxcdGV4dHsgbX1cXCnjgILoi6XkuIDovrnplb/kuLogXFwoeFxcdGV4dHsgbX1cXCnvvIzliJnlj6bkuIDpgrvovrnplb/kuLogXFwoKDIwLXgpXFx0ZXh0eyBtfVxcKeOAgumdouenryBcXCh5ID0geCgyMC14KVxcKeOAguWxleW8gOaVtOeQhuWQju+8jOiHquWPmOmHjyBcXCh4XFwpIOeahOacgOmrmOasoeaVsOaYr+WHoO+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+MSDmrKHvvIjkuIDmrKHlh73mlbDvvIk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj4yIOasoe+8iOS6jOasoeWHveaVsO+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPjMg5qyhPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+5LiN6IO956Gu5a6aPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QjwvYj7jgILlsZXlvIDop6PmnpDlvI/vvJpcXCh5ID0geCgyMC14KSA9IC14XjIgKyAyMHhcXCnjgILov5nph4zoh6rlj5jph48gXFwoeFxcKSDnmoTmnIDpq5jmrKHmlbDmmK8gPGI+MjwvYj7vvIE8L3A+XG4gICAgICA8cD7lnKjlhavlubTnuqfvvIzmiJHku6zlrabkuaDkuobkuIDmrKHlh73mlbAgXFwoeSA9IGt4ICsgYlxcKe+8iOaPj+i/sOWdh+WMgOOAgee6v+aAp+eahOWPmOWMlu+8ieOAguS9hueOsOWunuS4reabtOWkmumXrumimO+8iOWmgumdouenr+OAgemAn+W6puS6jOasoeaWueOAgee7j+a1juWIqea2puOAgeWkmuasoeWinumVv+eOh++8iea2ieWPiuS4pOS4quWPmOmHj+eahOS5mOenr++8jOeUseatpOS6p+eUn+S6huiHquWPmOmHj+S4uuS6jOasoeaWueeahOWFqOaWsOWHveaVsOKAlOKAlDxiPuS6jOasoeWHveaVsDwvYj7jgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
     <svg class="entry-fig" id="entry-fig" viewBox="0 0 520 200" role="img" aria-label="矩形周长固定面积变化图"></svg>
     <div class="entry-bar" id="entry-bar" role="group" aria-label="矩形边长调节">
       <button type="button" class="on" data-x="4">一边长 x = 4 m</button>
       <button type="button" data-x="8">一边长 x = 8 m</button>
-      <button type="button" data-x="10">一边长 x = 10 m（正方形）</button>
+      <button type="button" data-x="10">一边长 x = 10 m</button>
       <button type="button" data-x="14">一边长 x = 14 m</button>
     </div>
     <p class="entry-note" id="entry-note" aria-live="polite"></p>
@@ -73,6 +85,30 @@
   <div class="vid" data-video="concept"></div>
 
   <h3>1. 先认识几个词：什么是二次函数？</h3>
+  <div class="card" id="model-comparison">
+    <p><b>先把三个情境的式子放在一起看</b></p>
+    <table class="model-table">
+      <thead><tr><th scope="col">情境</th><th scope="col">列出的式子</th><th scope="col">展开后的式子</th></tr></thead>
+      <tbody>
+        <tr><td data-label="情境">周长 40 m 的矩形花坛，一边长为 x m，面积为 y m²。</td><td data-label="列式">\(y=x(20-x)\)</td><td data-label="展开">\(y=\)<span class="quadratic-term">\(-x^2\)</span>\(+20x\)</td></tr>
+        <tr><td data-label="情境">两数的和为 14，其中一个数是 x，两数的积为 y。</td><td data-label="列式">\(y=x(14-x)\)</td><td data-label="展开">\(y=\)<span class="quadratic-term">\(-x^2\)</span>\(+14x\)</td></tr>
+        <tr><td data-label="情境">起初有 30 单位，连续两月按同一增长率 x 增长，两月后为 y 单位。</td><td data-label="列式">\(y=30(1+x)^2\)</td><td data-label="展开">\(y=\)<span class="quadratic-term">\(30x^2\)</span>\(+60x+30\)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card predict" data-id="model-common" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwPjxiPui/meS4ieS4quW8j+WtkOacieS7gOS5iOWFseWQjOeCue+8nzwvYj48L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuWxleW8gOWQjumDveWPquaciSB4wrIg6aG5PC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+5bGV5byA5ZCO6YO95piv5YWz5LqOIHgg55qE5pW05byP77yM5pyA6auY5qyh5pWw5Li6IDI8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj7lsZXlvIDlkI4geMKyIOmhueeahOezu+aVsOmDveebuOWQjDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj48Yj5EPC9iPuWxleW8gOWQjuW4uOaVsOmhuemDveS4jeS4uiAwPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJtb2RlbC1mZWVkYmFja1wiPjwvcD5cbiAgICAgIDxwPuS4ieS4quW8j+WtkOWxleW8gOWQjumDveaYr+WFs+S6jiB4IOeahOaVtOW8j++8jOacgOmrmOasoeaVsOS4uiAy77yM5LqM5qyh6aG557O75pWw6YO95LiN5Li6IDDjgILkuIvpnaLnlKjov5nkupvlhbHlkIzngrnorqTor4bkuozmrKHlh73mlbDjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
+    <p><b>这三个式子有什么共同点？</b></p>
+    <div class="opts cols">
+      <button class="opt" data-v="A"><b>A</b>展开后都只有 x² 项</button>
+      <button class="opt" data-v="B"><b>B</b>展开后都是关于 x 的整式，最高次数为 2</button>
+      <button class="opt" data-v="C"><b>C</b>展开后 x² 项的系数都相同</button>
+      <button class="opt" data-v="D"><b>D</b>展开后常数项都不为 0</button>
+    </div>
+    <div class="reveal">
+      <p class="model-feedback"></p>
+      <p>三个式子展开后都是关于 x 的整式，最高次数为 2，二次项系数都不为 0。下面用这些共同点认识二次函数。</p>
+    </div>
+  </div>
   <p class="small">前置知识：函数与一次函数（<a href="j22-1.html">回看 22.1</a>、<a href="j23-1.html">回看 23.1</a>）。我们来看看一个函数要成为“二次函数”，需要满足哪三个硬指标：</p>
   <ul>
     <li><b>整式函数</b>：等号右边必须是关于自变量的整式（未知数不能在分母里，也不能在根号里）。</li>
@@ -214,7 +250,7 @@
     <p class="small"><b>规范解答</b>：令 \(y = 5\)，代入得一元二次方程：<br>
     \(x^2 - 2x - 3 = 5 \implies x^2 - 2x - 8 = 0\)。<br>
     因式分解得 \((x-4)(x+2) = 0\)，解得 \(x_1 = 4, x_2 = -2\)。<br>
-    <b>核心启示</b>：一个二次函数值可能对应 <b>两个不同的自变量取值</b>，这在几何上意味着水平直线与抛物线有两个交点！</p>
+    <b>核心启示</b>：一个函数值可以对应<b>两个不同的自变量值</b>，这一点和一次函数不同。</p>
   </details>
 
   <h3>5. 用之前必查：三大翻车现场</h3>
@@ -255,8 +291,8 @@
 
 <section class="step" data-title="动手">
   <div class="card fig" id="rect-lab">
-    <p><span class="badge-pill badge-b">实验台 1</span><b>矩形面积动态联动实验：感受先增后减的抛物极值</b></p>
-    <p class="small">周长固定为 \(40\text{ m}\)，邻边之和为 \(20\text{ m}\)。拖动滑块改变宽 \(x\)，观察长方形面积如何达到巅峰：</p>
+    <p><span class="badge-pill badge-b">实验台 1</span><b>矩形面积动态联动实验：观察面积怎样随边长变化</b></p>
+    <p class="small">周长固定为 \(40\text{ m}\)，邻边之和为 \(20\text{ m}\)。拖动滑块改变宽 \(x\)，观察长方形的两条邻边和面积怎样变化：</p>
     <div class="range-box">
       <label for="w-slider"><b>宽 \(x\)：</b><span id="w-val">4.0</span> 米</label>
       <input type="range" id="w-slider" min="1" max="19" step="0.5" value="4">
@@ -264,11 +300,12 @@
     </div>
     <svg class="fig" id="rect-svg" viewBox="0 0 520 240" role="img" aria-label="矩形花坛面积动态联动图"></svg>
     <div class="result" id="rect-res"></div>
+    <p>面积可能是 100 m² 吗？先记下你的猜想，<a href="j26-4.html">26.4</a> 再来解决。</p>
   </div>
 
   <div class="card fig" id="grow-lab">
-    <p><span class="badge-pill badge-a">实验台 2（进阶）</span><b>进阶：一次均匀增长 vs 二次爆发增长对比沙盘</b></p>
-    <p class="small">拖动自变量 \(x\)（从 0 到 8），直观对比一次函数 \(y = 3x\) 与二次函数 \(y = x^2\) 的差距如何急剧拉大：</p>
+    <p><span class="badge-pill badge-a">实验台 2（进阶）</span><b>进阶：一次函数与二次函数的增加量对比</b></p>
+    <p class="small">拖动自变量 \(x\)（从 0 到 8），比较 \(y=3x\) 与 \(y=x^2\) 的函数值。当 x 从 0 开始每次增加 1，前者每次增加 3，后者依次增加 1、3、5、7……</p>
     <div class="range-box">
       <label for="x-slider"><b>自变量 \(x\)：</b><span id="x-val">2.0</span></label>
       <input type="range" id="x-slider" min="0" max="8" step="0.2" value="2">
@@ -320,8 +357,8 @@
     </div>
   </div>
 
-  <div class="card predict" data-id="e4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuOAkOW3qeWbuiA0wrfmjJHmiJjpopjjgJE8L2I+5bey55+l5LqM5qyh5Ye95pWwIFxcKHkgPSBheF4yICsgYnggKyBjXFwpIOeahOWbvuixoee7j+i/h+eCuSBcXCgoMSwgMClcXCnvvIzliJnku6PmlbDlvI8gXFwoYSArIGIgKyBjICsgMjAyNlxcKSDnmoTlgLzmmK/vvIggICDvvIk8L3A+XG4gICAgPGRldGFpbHMgY2xhc3M9XCJtb3JlXCI+PHN1bW1hcnk+5o+Q56S6PC9zdW1tYXJ5PjxwIGNsYXNzPVwic21hbGxcIj7lsIYgXFwoeCA9IDFcXCkg55u05o6l5Luj5YWl6Kej5p6Q5byP5b6X5YiwIFxcKGErYitjXFwpIOS4juWvueW6lOWHveaVsOWAvOeahOWFs+ezu+OAgjwvcD48L2RldGFpbHM+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj5cXCgyMDI2XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPlxcKDIwMjVcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+XFwoMFxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkRcIj7ml6Dms5Xnoa7lrpo8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj5BPC9iPuOAguaKiueCuSBcXCgoMSwgMClcXCkg5Luj5YWl5LqM5qyh5Ye95pWw6Kej5p6Q5byP77yaXFwoYSgxKV4yICsgYigxKSArIGMgPSAwIFxcaW1wbGllcyBhICsgYiArIGMgPSAwXFwp44CC5Zug5q2kIFxcKGEgKyBiICsgYyArIDIwMjYgPSAwICsgMjAyNiA9IDIwMjZcXCnjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
-    <p><b>【巩固 4·挑战题】</b>已知二次函数 \(y = ax^2 + bx + c\) 的图象经过点 \((1, 0)\)，则代数式 \(a + b + c + 2026\) 的值是（   ）</p>
+  <div class="card predict" data-id="e4" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwPjxiPuOAkOW3qeWbuiA0wrfmjJHmiJjpopjjgJE8L2I+5bey55+l5LqM5qyh5Ye95pWwIFxcKHkgPSBheF4yICsgYnggKyBjXFwp77yM5b2TIFxcKHg9MVxcKSDml7YgXFwoeT0wXFwp77yM5YiZ5Luj5pWw5byPIFxcKGEgKyBiICsgYyArIDIwMjZcXCkg55qE5YC85piv77yIICAg77yJPC9wPlxuICAgIDxkZXRhaWxzIGNsYXNzPVwibW9yZVwiPjxzdW1tYXJ5PuaPkOekujwvc3VtbWFyeT48cCBjbGFzcz1cInNtYWxsXCI+5bCGIFxcKHggPSAxXFwpIOebtOaOpeS7o+WFpeino+aekOW8j+W+l+WIsCBcXChhK2IrY1xcKSDkuI7lr7nlupTlh73mlbDlgLznmoTlhbPns7vjgII8L3A+PC9kZXRhaWxzPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+XFwoMjAyNlxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj5cXCgyMDI1XFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPlxcKDBcXCk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJEXCI+5peg5rOV56Gu5a6aPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHA+PGI+QTwvYj7jgILmioogXFwoeD0xXFwp44CBXFwoeT0wXFwpIOS7o+WFpeS6jOasoeWHveaVsOino+aekOW8j++8mlxcKGEoMSleMiArIGIoMSkgKyBjID0gMCBcXGltcGxpZXMgYSArIGIgKyBjID0gMFxcKeOAguWboOatpCBcXChhICsgYiArIGMgKyAyMDI2ID0gMCArIDIwMjYgPSAyMDI2XFwp44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+    <p><b>【巩固 4·挑战题】</b>已知二次函数 \(y = ax^2 + bx + c\)，当 \(x=1\) 时 \(y=0\)，则代数式 \(a + b + c + 2026\) 的值是（   ）</p>
     <details class="more"><summary>提示</summary><p class="small">将 \(x = 1\) 直接代入解析式得到 \(a+b+c\) 与对应函数值的关系。</p></details>
     <div class="opts cols">
       <button class="opt" data-v="A">\(2026\)</button>
@@ -330,7 +367,7 @@
       <button class="opt" data-v="D">无法确定</button>
     </div>
     <div class="reveal">
-      <p><b>A</b>。把点 \((1, 0)\) 代入二次函数解析式：\(a(1)^2 + b(1) + c = 0 \implies a + b + c = 0\)。因此 \(a + b + c + 2026 = 0 + 2026 = 2026\)。</p>
+      <p><b>A</b>。把 \(x=1\)、\(y=0\) 代入二次函数解析式：\(a(1)^2 + b(1) + c = 0 \implies a + b + c = 0\)。因此 \(a + b + c + 2026 = 0 + 2026 = 2026\)。</p>
     </div>
   </div>
 
@@ -341,7 +378,7 @@
     （2）当 \(a\) 为何值时，它是关于 \(x\) 的一次函数？（本题要求定义域为全体实数，按原式判断，不给未定义的点补值。）</p>
     <p class="small"><b>易错剖析</b>：很多同学只令最高次数等于 2，却忘了检验二次项系数是否被消为 0！<br>
     （1）要成为二次函数，必须同时满足 \(\begin{cases} a^2 = 2 \\ a - 1 \ne 0 \end{cases}\)，解得 <b>\(a = \pm\sqrt{2}\)</b>。<br>
-    （2）检查三种可能：① 幂项系数为 0：\(a - 1 = 0 \implies a = 1\)，此时指数为 1，原式在全体实数上化为 \(y = 2x - 3\)，是一次函数；② 幂项系数非零且指数为 1：\(a^2 = 1\) 且 \(a - 1 \ne 0 \implies a = -1\)，此时 \(y = -2x + 2x - 3 = -3\)，一次项抵消，成为常数函数，舍去；③ 指数为 0：\(a = 0\)，原式含 \(x^0\)，只在 \(x\ne0\) 时等于 1，\(x=0\) 时的 \(0^0\) 没有定义。因此只能在 \(x\ne0\) 时化为 \(y = 2x - 4\)，图象缺少 \((0,-4)\)，不满足本题的全实数定义域要求，舍去。其余情况幂项系数非零且指数既非 0 也非 1，不能化为一次式。故本题只有 \(a = 1\)。</p>
+    （2）检查三种可能：① 幂项系数为 0：\(a - 1 = 0 \implies a = 1\)，此时指数为 1，原式在全体实数上化为 \(y = 2x - 3\)，是一次函数；② 幂项系数非零且指数为 1：\(a^2 = 1\) 且 \(a - 1 \ne 0 \implies a = -1\)，此时 \(y = -2x + 2x - 3 = -3\)，一次项抵消，成为常数函数，舍去；③ 指数为 0：\(a = 0\)，原式含 \(x^0\)，只在 \(x\ne0\) 时等于 1，\(x=0\) 时的 \(0^0\) 没有定义。因此只能在 \(x\ne0\) 时化为 \(y = 2x - 4\)，\(x=0\) 时原式无定义，不满足全实数定义域要求，舍去。其余情况幂项系数非零且指数既非 0 也非 1，不能化为一次式。故本题只有 \(a = 1\)。</p>
   </details>
 
   <div class="card predict" data-id="consolidate-j26-1-fx-01" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwPjxiPuW3qeWbuue7g+S5oCAxPC9iPu+8muS4i+WIl+WHveaVsOS4re+8jFxcKHlcXCkg5pivIFxcKHhcXCkg55qE5LqM5qyh5Ye95pWw55qE5piv77yIICAg77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj5cXCh5PSh4KzIpXjIteF4yXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+XFwoeT1cXGRmcmFjezF9e3heMn0reFxcKTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPlxcKHk9eCg2LXgpXFwpPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiRFwiPjxiPkQ8L2I+XFwoeT14XjMtMnheMlxcKTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD48Yj5DPC9iPuOAgkEg5YyW566A5b6XIFxcKCh4KzIpXjIteF4yPTR4KzRcXCnvvIzmmK/kuIDmrKHlh73mlbDvvJtCIOeahCBcXCh4XFwpIOWcqOWIhuavjemHjO+8jOS4jeaYr+aVtOW8j++8m0Mg5bGV5byA5b6XIFxcKHk9LXheMis2eFxcKe+8jOacgOmrmOasoeaVsCAy44CB5LqM5qyh6aG557O75pWwIFxcKC0xXFxuZTBcXCnvvIzmmK/kuozmrKHlh73mlbDvvJtEIOacgOmrmOasoeaVsOaYryAz44CC6YCJIEPjgII8L3A+PC9kaXY+XG4gICJ9">
@@ -377,7 +414,7 @@
   </div>
 </section>
 
-<section class="step" data-title="中考真题"><section class="card lf-exam-bank-entry" aria-labelledby="section-exam-bank-title"><h2 id="section-exam-bank-title">本节中考真题</h2><p>共 3 道，按原卷题号排列，含解答题；先自己做，提交后看答案和分步解析。</p><p><a class="lf-button" href="../exam-bank/index.html?sec=j26-1">开始做本节真题</a></p></section>
+<section class="step" data-title="中考真题"><section class="card lf-exam-bank-entry" aria-labelledby="section-exam-bank-title"><h2 id="section-exam-bank-title">本节中考真题</h2><p>共 3 道，含 3 道解答题；先做本节精选，也可查看全部真题。先自己做，提交后看答案和分步解析。</p><p><a class="lf-button" href="../exam-bank/index.html?sec=j26-1">开始做本节真题</a></p></section><div class="eb eb-inline" data-exam-bank-inline="j26-1"><h2>本节精选</h2><p role="status">正在加载精选题…</p></div>
   <div class="card" style="margin-bottom:16px">
     <p class="small" style="margin:0">题型参照中考</p>
   </div>
@@ -391,6 +428,16 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  var modelQuestion = document.querySelector('[data-id="model-common"]');
+  modelQuestion.addEventListener("predict:pick", function(event) {
+    var hints = {
+      A: "再看看展开式：除了 x² 项，三个式子都还有一次项。",
+      B: "找到了：三个式子展开后最高次数都是 2。",
+      C: "比较高亮项的系数：前两个是 −1，第三个是 30，并不相同。",
+      D: "前两个展开式没有常数项，也就是常数项为 0。"
+    };
+    modelQuestion.querySelector(".model-feedback").textContent = hints[event.detail.choice];
+  });
   if (typeof renderMathInElement === "function") {
     renderMathInElement(document.body, {
       delimiters: [
@@ -563,10 +610,10 @@ document.addEventListener("DOMContentLoaded", function() {
       rectSvg.innerHTML = '<rect x="20" y="10" width="480" height="195" fill="var(--card)" stroke="var(--line)" stroke-width="1.5" rx="6"/>' +
         '<rect x="' + (260 - w*10) + '" y="' + (107 - x*4.5) + '" width="' + (w*20) + '" height="' + (x*9) + '" fill="color-mix(in srgb, var(--accent) 30%, transparent)" stroke="var(--accent)" stroke-width="2"/>' +
         '<text x="260" y="' + (112) + '" text-anchor="middle" font-size="15" font-weight="700" fill="var(--accent)">宽 ' + x + ' m × 长 ' + w.toFixed(1) + ' m</text>' +
-        '<text x="260" y="228" text-anchor="middle" font-size="14" fill="var(--muted)">面积 S = ' + area + ' m²（x = 10 时最大 100 m²）</text>';
+        '<text x="260" y="228" text-anchor="middle" font-size="14" fill="var(--muted)">面积 S = ' + area + ' m²</text>';
     }
     if (rectRes) {
-      rectRes.innerHTML = '宽为 <b>' + x + '</b> 米时，长为 <b>' + w.toFixed(1) + '</b> 米，花坛面积 <span class="sum">' + area + ' 平方米</span>。' + (x === 10 ? '宽 = 长 = 10 米（正方形）时，面积取得最大值 100 平方米。' : '宽越靠近 10 米，面积越大；离 10 米越远，面积越小。');
+      rectRes.innerHTML = '宽为 <b>' + x + '</b> 米时，长为 <b>' + w.toFixed(1) + '</b> 米，花坛面积 <span class="sum">' + area + ' 平方米</span>。两条邻边的和始终是 20 米，面积由两边相乘得到。';
     }
   }
   if (rectSlider) {
@@ -583,7 +630,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  // 6. 动手 2：一次增长 vs 二次爆发增长
+  // 6. 动手 2：比较函数值与增加量
   var xSlider = document.getElementById("x-slider");
   var xVal = document.getElementById("x-val");
   var growSvg = document.getElementById("grow-svg");
@@ -605,9 +652,8 @@ document.addEventListener("DOMContentLoaded", function() {
         '<text x="330" y="196" text-anchor="middle" font-size="14" fill="var(--accent)">y = x²</text>';
     }
     if (growRes) {
-      var diff = (y2 - y1).toFixed(1);
       growRes.innerHTML = '自变量 x = ' + x.toFixed(1) + '：一次函数值为 <b>' + y1.toFixed(1) + '</b>，二次函数值为 <span class="sum">' + y2.toFixed(1) + '</span>。' +
-        (Math.abs(y2 - y1) < 1e-9 ? (x === 0 ? '两者此刻都是 0。' : 'x = 3 时两者恰好相等，是交汇点。') : (y2 > y1 ? '二次函数已经反超一次函数（领先 ' + diff + '），而且越往后差距越大。' : '此时一次函数还领先（多 ' + (y1 - y2).toFixed(1) + '），但 x 过了 3 之后二次函数会追上并反超。'));
+        '当 x 从 0 开始每次增加 1，y = 3x 每次增加 3；y = x² 依次增加 1、3、5、7……，增加的量不相同。';
     }
   }
   if (xSlider) {

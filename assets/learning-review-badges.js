@@ -53,6 +53,9 @@
       if (!node) { node = doc.createElement(link ? "a" : "span"); node.className = "lrb-badge"; node.dataset.reviewBadge = key; parent.appendChild(node); }
       if (node.textContent !== text) node.textContent = text;
       if (link && node.getAttribute("href") !== href()) node.setAttribute("href", href());
+      node.title = "状态只看能否隔一段时间在不同题上答对，不等于已经学好了。";
+      var note = Array.from(parent.children).find(function (n) { return n.classList.contains("lrb-mastery-note"); });
+      if (!note) { note = doc.createElement("span"); note.className = "lrb-mastery-note"; note.textContent = node.title; parent.appendChild(note); }
     }
     function row(q) { return rows.get(q.base) || {}; }
     function belongs(q, key, id) {
@@ -67,8 +70,9 @@
       if (point) return point.state;
       var qs = model.questions.filter(function (q) { return q.current && q.questionType !== "lab" && belongs(q, key, id); });
       if (qs.some(function (q) { return q.state === "wrong"; })) return "wrong";
-      if (qs.length && qs.every(function (q) { return q.state === "secure"; })) return "secure";
-      if (qs.some(function (q) { return q.state === "learned" || q.state === "secure"; })) return "learned";
+      var points = model.points.filter(function (p) { return qs.some(function (q) { return q.pointIds.indexOf(p.pointId) >= 0; }); });
+      if (points.length && points.every(function (p) { return p.state === "secure"; })) return "secure";
+      if (points.some(function (p) { return p.state === "learned" || p.state === "secure"; })) return "learned";
       return qs.some(function (q) { return q.answered; }) ? "practicing" : "unseen";
     }
     function paint() {

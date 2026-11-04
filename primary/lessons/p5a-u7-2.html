@@ -8,26 +8,51 @@
 <link rel="stylesheet" href="../assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=50710be8ccc0"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="../assets/learning-course.js?v=ca4dc7609376"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=51045962e4c5"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
+<script defer src="../p-assets/kits/interval-tree-ruler.js"></script>
 
 <style>
 /* PY-151: preserve diagram coordinates while keeping labels readable. */
 .manip { max-width:100%; overflow-x:auto; }
 </style>
 <script defer src="../assets/video.js"></script>
+
+<style>
+/* Keep diagram labels at their original scale on narrow screens. */
+.primary[data-standard="v2"] .u7-fig { width:340px; min-width:340px; max-width:340px; }
+.primary[data-standard="v2"] .u7-wide { max-width:100%; overflow-x:auto; }
+.primary[data-standard="v2"] .u7-fig text { font-size:16px !important; }
+.primary[data-standard="v2"] .u7-micro { display:flex; flex-wrap:wrap; gap:12px; }
+.primary[data-standard="v2"] .u7-micro span { padding:8px; border:1px solid var(--line); border-radius:8px; }
+.primary[data-standard="v2"] .micro-box summary { min-height:44px; cursor:pointer; }
+.primary[data-standard="v2"] .example-steps { list-style:none; padding-left:0; }
+</style>
 </head>
-<body class="primary" data-stage="primary" data-sec="p5a-u7-2">
+<body class="primary" data-stage="primary" data-sec="p5a-u7-2" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">五年级上册 · 第七单元 可能性 · 第 2 课</p>
 <h1>可能性的大小</h1>
 <p class="lead">事件不仅有“可能发生”，而且发生的可能性还有大有小。什么决定了可能性的大小？</p>
 
+<details class="route" open>
+  <summary>本节路线导读</summary>
+  <p><b>核心问题：</b>两种颜色都可能出现，机会就一样大吗？</p>
+  <p>先回想“可能”，再调球数、看转盘，用几组例子比较机会。</p>
+  <p><a href="p5a-u7-1.html">先修：一定、可能、不可能</a> · 初中衔接：用列举和试验继续研究随机现象。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p5a-u7-2&amp;from=p5a-u7-2">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
-  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuiBlOasouS8muS4iuacieS4gOS4quaKveWlluWkp+i9rOebmO+8jOWchuebmOiiq+W5s+Wdh+WIhuaIkOS6hiA4IOS4quaJh+W9ouagvO+8jOWFtuS4rSA1IOagvOaYr+e6ouiJsu+8jDIg5qC85piv6buE6Imy77yMMSDmoLzmmK/ok53oibLjgII8L3A+XG4gICAgPHNwYW4gY2xhc3M9XCJzdmctc2Nyb2xsXCIgc3R5bGU9XCJkaXNwbGF5OmJsb2NrO21heC13aWR0aDoxMDAlO292ZXJmbG93LXg6YXV0b1wiIHJvbGU9XCJyZWdpb25cIiBhcmlhLWxhYmVsPVwi5Y+v5qiq5ZCR5rWP6KeI55qE5Zu+56S6XCIgdGFiaW5kZXg9XCIwXCI+PHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDM0MCAxNjRcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIjjmoLzovaznm5jvvJo157qiMum7hDHok51cIiBzdHlsZT1cIm1pbi13aWR0aDozMjFweFwiPlxuICAgICAgPCEtLSA157qiOiAwwrDliLAyMjXCsCAoNS84KSAtLT5cbiAgICAgIDxwYXRoIGQ9XCJNIDE3MCA4MiBMIDIzNCA4MiBBIDY0IDY0IDAgMSAxIDEyNC43IDM2LjcgWlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1ubyk7b3BhY2l0eTowLjQ1XCI+PC9wYXRoPlxuICAgICAgPCEtLSAy6buEOiAyMjXCsOWIsDMxNcKwICgyLzgpIC0tPlxuICAgICAgPHBhdGggZD1cIk0gMTcwIDgyIEwgMTI0LjcgMzYuNyBBIDY0IDY0IDAgMCAxIDIxNS4zIDM2LjcgWlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1iKTtvcGFjaXR5OjAuNDVcIj48L3BhdGg+XG4gICAgICA8IS0tIDHok506IDMxNcKw5YiwMzYwwrAgKDEvOCkgLS0+XG4gICAgICA8cGF0aCBkPVwiTSAxNzAgODIgTCAyMTUuMyAzNi43IEEgNjQgNjQgMCAwIDEgMjM0IDgyIFpcIiBzdHlsZT1cImZpbGw6dmFyKC0tYyk7b3BhY2l0eTowLjQ1XCI+PC9wYXRoPlxuICAgICAgPCEtLSA4IOetieWIhuaJh+W9oue6v+S4juWkluWchiAtLT5cbiAgICAgIDxsaW5lIHgxPVwiMTA2XCIgeTE9XCI4MlwiIHgyPVwiMjM0XCIgeTI9XCI4MlwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9saW5lPlxuICAgICAgPGxpbmUgeDE9XCIxNzBcIiB5MT1cIjE4XCIgeDI9XCIxNzBcIiB5Mj1cIjE0NlwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9saW5lPlxuICAgICAgPGxpbmUgeDE9XCIxMjQuN1wiIHkxPVwiMzYuN1wiIHgyPVwiMjE1LjNcIiB5Mj1cIjEyNy4zXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L2xpbmU+XG4gICAgICA8bGluZSB4MT1cIjIxNS4zXCIgeTE9XCIzNi43XCIgeDI9XCIxMjQuN1wiIHkyPVwiMTI3LjNcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvbGluZT5cbiAgICAgIDxjaXJjbGUgY3g9XCIxNzBcIiBjeT1cIjgyXCIgcj1cIjY0XCIgc3R5bGU9XCJmaWxsOm5vbmU7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MlwiPjwvY2lyY2xlPlxuICAgICAgPCEtLSDkuK3lv4PmjIfpkoggLS0+XG4gICAgICA8Y2lyY2xlIGN4PVwiMTcwXCIgY3k9XCI4MlwiIHI9XCI1XCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKVwiPjwvY2lyY2xlPlxuICAgICAgPGxpbmUgeDE9XCIxNzBcIiB5MT1cIjgyXCIgeDI9XCIxODhcIiB5Mj1cIjUyXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDozO3N0cm9rZS1saW5lY2FwOnJvdW5kXCI+PC9saW5lPlxuICAgICAgPHBvbHlnb24gcG9pbnRzPVwiMTkyLDQ1IDE4Miw1MiAxOTAsNTdcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpXCI+PC9wb2x5Z29uPlxuICAgICAgPCEtLSDor7TmmI7mloflrZfvvIjnva7kuo7pu4ToibLmiYflvaLlhoXpg6jkuI7kuKTkvqfmoIfms6jvvIzlrZflj7cgPj0gMTVweO+8jOWPqueUqCBDU1Mg5Y+Y6YeP77yJIC0tPlxuICAgICAgPHRleHQgeD1cIjE1MFwiIHk9XCI0MlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTVweDtmb250LXdlaWdodDo3MDBcIj7pu4ToibIy5qC8PC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjE1MlwiIHk9XCIxMThcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE1cHg7Zm9udC13ZWlnaHQ6NzAwXCI+57qi6ImyNeagvDwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCIyNzhcIiB5PVwiNjhcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1jKTtmb250LXNpemU6MTVweDtmb250LXdlaWdodDo3MDBcIj7ok53oibIx5qC8PC90ZXh0PlxuICAgICAgPGxpbmUgeDE9XCIyMjRcIiB5MT1cIjY0XCIgeDI9XCIyNDRcIiB5Mj1cIjY0XCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tYyk7c3Ryb2tlLXdpZHRoOjJcIj48L2xpbmU+XG4gICAgPC9zdmc+PC9zcGFuPlxuICAgIDxwIGNsYXNzPVwibGluZVwiPui9rOWKqOi9rOebmO+8jOaMh+mSiOWBnOWcqOWTquS4quminOiJsuWMuuWfn+eahOWPr+iDveaAp+acgOWkp++8n+WBnOWcqOWTquS4quWMuuWfn+eahOWPr+iDveaAp+acgOWwj++8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5YGc5Zyo57qi6Imy5Yy65Z+f55qE5Y+v6IO95oCn5pyA5aSn77yM5YGc5Zyo6JOd6Imy5Yy65Z+f55qE5Y+v6IO95oCn5pyA5bCPPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIue6ouiJsuWNoOS6hiA1IOagvO+8jOmdouenr+acgOWkp++8jOWBnOWcqOe6ouiJsueahOWPr+iDveaAp+i/nOWkp+S6jum7hOiJsuOAglwiPjxiPkI8L2I+5YGc5Zyo6buE6Imy5Yy65Z+f55qE5Y+v6IO95oCn5pyA5aSn77yM5YGc5Zyo57qi6Imy5Yy65Z+f55qE5Y+v6IO95oCn5pyA5bCPPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiIGRhdGEtaGludD1cIuS4ieenjeminOiJsueahOagvOWtkOaVsOmHj+S4jeS4gOagt+Wkmu+8jOWPr+iDveaAp+aYr+acieaYjuaYvuW3ruWIq+eahOOAglwiPjxiPkM8L2I+5LiJ56eN6aKc6Imy55qE5Y+v6IO95oCn5a6M5YWo55u45ZCM77yM5rKh5pyJ5Lu75L2V5beu5YirPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5a+577yM6YCJ5oupIDxiPkE8L2I+44CC57qi6Imy5Y2g5LqGIDUg5qC877yM6Z2i56ev5pyA5aSn77yM5oyH6ZKI5YGc5Zyo57qi6Imy55qEPGI+5Y+v6IO95oCn5pyA5aSnPC9iPu+8m+iTneiJsuWPquaciSAxIOagvO+8jOmdouenr+acgOWwj++8jOWBnOWcqOiTneiJsueahDxiPuWPr+iDveaAp+acgOWwjzwvYj7jgII8L3A+XG4gICAgICA8cD7ov5nor7TmmI7vvJo8Yj7kuovku7blj5HnlJ/nmoTlj6/og73mgKfmmK/mnInlpKflsI/nmoQ8L2I+77yBPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+  <div class="micro-box">
+    <p>上一课说红、蓝球都“可能”摸到。现在红球多一些，会怎样？</p>
+    <div class="u7-micro"><span>🔴 🔴 🔴 🔵 → 都能摸到</span></div>
+    <details><summary>想好后，再展开看下一步</summary><p>都有可能，不表示机会一样大。先猜哪种更容易，再进入实验台验证。</p></details>
+  </div>
+
+  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuiBlOasouS8muS4iuacieS4gOS4quaKveWlluWkp+i9rOebmO+8jOWchuebmOiiq+W5s+Wdh+WIhuaIkOS6hiA4IOS4quaJh+W9ouagvO+8jOWFtuS4rSA1IOagvOaYr+e6ouiJsu+8jDIg5qC85piv6buE6Imy77yMMSDmoLzmmK/ok53oibLjgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cInN2Zy1zY3JvbGxcIiBzdHlsZT1cImRpc3BsYXk6YmxvY2s7bWF4LXdpZHRoOjEwMCU7b3ZlcmZsb3cteDphdXRvXCIgcm9sZT1cInJlZ2lvblwiIGFyaWEtbGFiZWw9XCLlj6/mqKrlkJHmtY/op4jnmoTlm77npLpcIiB0YWJpbmRleD1cIjBcIj48ZGl2IGNsYXNzPVwiZmlnLXNjcm9sbCB1Ny13aWRlXCIgcm9sZT1cInJlZ2lvblwiIGFyaWEtbGFiZWw9XCLlm77npLrvvIjnqoTlsY/lj6/lt6blj7Pmu5HliqjvvIlcIiB0YWJpbmRleD1cIjBcIj48c3ZnIGNsYXNzPVwicWZpZyB1Ny1maWdcIiB2aWV3Qm94PVwiMCAwIDM0MCAxNjRcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIjjmoLzovaznm5jvvJo157qiMum7hDHok51cIiBzdHlsZT1cIm1pbi13aWR0aDozMjFweFwiPlxuICAgICAgPCEtLSA157qiOiAwwrDliLAyMjXCsCAoNS84KSAtLT5cbiAgICAgIDxwYXRoIGQ9XCJNIDE3MCA4MiBMIDIzNCA4MiBBIDY0IDY0IDAgMSAxIDEyNC43IDM2LjcgWlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1ubyk7b3BhY2l0eTowLjQ1XCI+PC9wYXRoPlxuICAgICAgPCEtLSAy6buEOiAyMjXCsOWIsDMxNcKwICgyLzgpIC0tPlxuICAgICAgPHBhdGggZD1cIk0gMTcwIDgyIEwgMTI0LjcgMzYuNyBBIDY0IDY0IDAgMCAxIDIxNS4zIDM2LjcgWlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1iKTtvcGFjaXR5OjAuNDVcIj48L3BhdGg+XG4gICAgICA8IS0tIDHok506IDMxNcKw5YiwMzYwwrAgKDEvOCkgLS0+XG4gICAgICA8cGF0aCBkPVwiTSAxNzAgODIgTCAyMTUuMyAzNi43IEEgNjQgNjQgMCAwIDEgMjM0IDgyIFpcIiBzdHlsZT1cImZpbGw6dmFyKC0tYyk7b3BhY2l0eTowLjQ1XCI+PC9wYXRoPlxuICAgICAgPCEtLSA4IOetieWIhuaJh+W9oue6v+S4juWkluWchiAtLT5cbiAgICAgIDxsaW5lIHgxPVwiMTA2XCIgeTE9XCI4MlwiIHgyPVwiMjM0XCIgeTI9XCI4MlwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9saW5lPlxuICAgICAgPGxpbmUgeDE9XCIxNzBcIiB5MT1cIjE4XCIgeDI9XCIxNzBcIiB5Mj1cIjE0NlwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MS41XCI+PC9saW5lPlxuICAgICAgPGxpbmUgeDE9XCIxMjQuN1wiIHkxPVwiMzYuN1wiIHgyPVwiMjE1LjNcIiB5Mj1cIjEyNy4zXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxLjVcIj48L2xpbmU+XG4gICAgICA8bGluZSB4MT1cIjIxNS4zXCIgeTE9XCIzNi43XCIgeDI9XCIxMjQuN1wiIHkyPVwiMTI3LjNcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjEuNVwiPjwvbGluZT5cbiAgICAgIDxjaXJjbGUgY3g9XCIxNzBcIiBjeT1cIjgyXCIgcj1cIjY0XCIgc3R5bGU9XCJmaWxsOm5vbmU7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MlwiPjwvY2lyY2xlPlxuICAgICAgPCEtLSDkuK3lv4PmjIfpkoggLS0+XG4gICAgICA8Y2lyY2xlIGN4PVwiMTcwXCIgY3k9XCI4MlwiIHI9XCI1XCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKVwiPjwvY2lyY2xlPlxuICAgICAgPGxpbmUgeDE9XCIxNzBcIiB5MT1cIjgyXCIgeDI9XCIxODhcIiB5Mj1cIjUyXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDozO3N0cm9rZS1saW5lY2FwOnJvdW5kXCI+PC9saW5lPlxuICAgICAgPHBvbHlnb24gcG9pbnRzPVwiMTkyLDQ1IDE4Miw1MiAxOTAsNTdcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpXCI+PC9wb2x5Z29uPlxuICAgICAgPCEtLSDor7TmmI7mloflrZfvvIjnva7kuo7pu4ToibLmiYflvaLlhoXpg6jkuI7kuKTkvqfmoIfms6jvvIzlrZflj7cgPj0gMTVweO+8jOWPqueUqCBDU1Mg5Y+Y6YeP77yJIC0tPlxuICAgICAgPHRleHQgeD1cIjE1MFwiIHk9XCI0MlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTVweDtmb250LXdlaWdodDo3MDBcIj7pu4ToibIy5qC8PC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjE1MlwiIHk9XCIxMThcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE1cHg7Zm9udC13ZWlnaHQ6NzAwXCI+57qi6ImyNeagvDwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCIyNzhcIiB5PVwiNjhcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1jKTtmb250LXNpemU6MTVweDtmb250LXdlaWdodDo3MDBcIj7ok53oibIx5qC8PC90ZXh0PlxuICAgICAgPGxpbmUgeDE9XCIyMjRcIiB5MT1cIjY0XCIgeDI9XCIyNDRcIiB5Mj1cIjY0XCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tYyk7c3Ryb2tlLXdpZHRoOjJcIj48L2xpbmU+XG4gICAgPC9zdmc+PC9kaXY+PC9kaXY+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+6L2s5Yqo6L2s55uY77yM5oyH6ZKI5YGc5Zyo5ZOq5Liq6aKc6Imy5Yy65Z+f55qE5Y+v6IO95oCn5pyA5aSn77yf5YGc5Zyo5ZOq5Liq5Yy65Z+f55qE5Y+v6IO95oCn5pyA5bCP77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7lgZzlnKjnuqLoibLljLrln5/nmoTlj6/og73mgKfmnIDlpKfvvIzlgZzlnKjok53oibLljLrln5/nmoTlj6/og73mgKfmnIDlsI88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi57qi6Imy5Y2g5LqGIDUg5qC877yM6Z2i56ev5pyA5aSn77yM5YGc5Zyo57qi6Imy55qE5Y+v6IO95oCn6L+c5aSn5LqO6buE6Imy44CCXCI+PGI+QjwvYj7lgZzlnKjpu4ToibLljLrln5/nmoTlj6/og73mgKfmnIDlpKfvvIzlgZzlnKjnuqLoibLljLrln5/nmoTlj6/og73mgKfmnIDlsI88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5LiJ56eN6aKc6Imy55qE5qC85a2Q5pWw6YeP5LiN5LiA5qC35aSa77yM5Y+v6IO95oCn5piv5pyJ5piO5pi+5beu5Yir55qE44CCXCI+PGI+QzwvYj7kuInnp43popzoibLnmoTlj6/og73mgKflrozlhajnm7jlkIzvvIzmsqHmnInku7vkvZXlt67liKs8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cCBjbGFzcz1cImxpbmVcIj7lr7nvvIzpgInmi6kgPGI+QTwvYj7jgILnuqLoibLljaDkuoYgNSDmoLzvvIzpnaLnp6/mnIDlpKfvvIzmjIfpkojlgZzlnKjnuqLoibLnmoQ8Yj7lj6/og73mgKfmnIDlpKc8L2I+77yb6JOd6Imy5Y+q5pyJIDEg5qC877yM6Z2i56ev5pyA5bCP77yM5YGc5Zyo6JOd6Imy55qEPGI+5Y+v6IO95oCn5pyA5bCPPC9iPuOAgjwvcD5cbiAgICAgIDxwPui/meivtOaYju+8mjxiPuS6i+S7tuWPkeeUn+eahOWPr+iDveaAp+aYr+acieWkp+Wwj+eahDwvYj7vvIE8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
     <p class="line">联欢会上有一个抽奖大转盘，圆盘被平均分成了 8 个扇形格，其中 5 格是红色，2 格是黄色，1 格是蓝色。</p>
-    <span class="svg-scroll" style="display:block;max-width:100%;overflow-x:auto" role="region" aria-label="可横向浏览的图示" tabindex="0"><svg class="qfig" viewBox="0 0 340 164" role="img" aria-label="8格转盘：5红2黄1蓝" style="min-width:321px">
+    <div class="svg-scroll" style="display:block;max-width:100%;overflow-x:auto" role="region" aria-label="可横向浏览的图示" tabindex="0"><div class="fig-scroll u7-wide" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig u7-fig" viewBox="0 0 340 164" role="img" aria-label="8格转盘：5红2黄1蓝" style="min-width:321px">
       <!-- 5红: 0°到225° (5/8) -->
       <path d="M 170 82 L 234 82 A 64 64 0 1 1 124.7 36.7 Z" style="fill:var(--no);opacity:0.45"/>
       <!-- 2黄: 225°到315° (2/8) -->
@@ -49,7 +74,7 @@
       <text x="152" y="118" text-anchor="middle" style="fill:var(--fg);font-size:15px;font-weight:700">红色5格</text>
       <text x="278" y="68" text-anchor="middle" style="fill:var(--c);font-size:15px;font-weight:700">蓝色1格</text>
       <line x1="224" y1="64" x2="244" y2="64" style="stroke:var(--c);stroke-width:2"/>
-    </svg></span>
+    </svg></div></div>
     <p class="line">转动转盘，指针停在哪个颜色区域的可能性最大？停在哪个区域的可能性最小？</p>
     <div class="opts cols">
       <button class="opt" data-v="A"><b>A</b>停在红色区域的可能性最大，停在蓝色区域的可能性最小</button>
@@ -65,20 +90,15 @@
 
 <section class="step" data-title="摆一摆">
   <div class="vid" data-video="concept"></div>
-  <h2>1. 数量（或面积）与可能性大小的关系</h2>
-  <p class="line">无论是转盘上的扇形格，还是盒子里的棋子，可能性的大小都遵循同一个规律：</p>
-  <div class="card">
-    <ul class="steps">
-      <li><b>数量多（面积大）的，可能性大</b>：盒子里装有 8 个红棋子和 2 个绿棋子，红棋子数量是绿棋子的 4 倍，所以随意摸出 1 个，<b>摸到红棋子的可能性大</b>。</li>
-      <li><b>数量少（面积小）的，可能性小</b>：绿棋子只有 2 个，在总数中占的份数少，所以<b>摸到绿棋子的可能性小</b>。</li>
-      <li><b>数量相等的，可能性相等</b>：如果放 5 个红棋子和 5 个绿棋子，两者数量一样多，摸到红棋子和绿棋子的<b>可能性一样大</b>。</li>
-    </ul>
-  </div>
+  <h2>先猜，再用球数验证</h2>
+  <p>先回想：红球和蓝球都有，就都可能摸到。若把红球加多，机会会不会变？把球数调成下列三组，每组先猜，再连摸 100 次比较记录。</p>
+  <div class="manip" id="u72-urn" data-manip="interval-tree-ruler" data-qualitative-urn data-cfg='{"mode":"urn-freq","red":5,"blue":1,"yellow":0}'></div>
+  <p><b>自己试试：</b>先试 5 红 1 蓝 0 黄，再试 1 红 5 蓝 0 黄，最后试 3 红 3 蓝 0 黄。比较哪种球更多、哪种更容易摸到；次数不一定正好按个数分配。</p>
 
-  <h2>2. 动手实验：可调比例的旋转转盘</h2>
+  <h2>再把发现用到转盘上：可调比例的旋转转盘</h2>
   <p class="line">切换下方不同的红、黄、蓝扇形格数配比，点击“转 1 次”或“连转 10 次”，观察指针落点的统计规律：</p>
   <div class="card manip" id="spin-demo-u72">
-    <svg class="stage" id="wheel-svg-u72" viewBox="0 0 340 165" role="img" aria-label="可调节红黄蓝比例的8格旋转转盘" style="min-width:321px">
+    <div class="fig-scroll u7-wide" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="stage u7-fig" id="wheel-svg-u72" viewBox="0 0 340 165" role="img" aria-label="可调节红黄蓝比例的8格旋转转盘" style="min-width:321px">
       <g id="wheel-sectors-u72"></g>
       <!-- 8 等分格线与外框 -->
       <line x1="36" y1="82" x2="164" y2="82" style="stroke:var(--fg);stroke-width:1.5"/>
@@ -98,7 +118,7 @@
       <text id="wheel-cnt-r" x="194" y="76" style="fill:var(--no);font-size:15px;font-weight:700">红：0 次</text>
       <text id="wheel-cnt-y" x="194" y="104" style="fill:var(--b);font-size:15px;font-weight:700">黄：0 次</text>
       <text id="wheel-cnt-b" x="194" y="132" style="fill:var(--c);font-size:15px;font-weight:700">蓝：0 次</text>
-    </svg>
+    </svg></div>
     <div class="ctrls">
       <button type="button" id="btn-cfg-521" aria-pressed="true">5红2黄1蓝</button>
       <button type="button" id="btn-cfg-125">1红2黄5蓝</button>
@@ -250,7 +270,25 @@
   </script>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+  <h2>从每个球的机会，推到每种颜色的机会</h2>
+  <ol><li>球除颜色外完全相同，放回摇匀，每个球被摸到的机会相同。</li>
+  <li>把 5 红、1 蓝换成 1 红、5 蓝，容易摸到的颜色也跟着换；再调成 3 红、3 蓝，两种颜色的机会一样大。</li>
+  <li>所以在同一盒里比较，哪种颜色的球多，摸到哪种的可能性就大。转盘也要看同样大小的格子各占多少。</li></ol>
+  <p>判断转盘时，要保证指针在各个等分格停下的机会相同；一次转到小区域，不会推翻这个比较。</p>
+  </div>
+  <h2>回到转盘与摸球，归纳共同点</h2>
+  <p class="line">无论是转盘上的扇形格，还是盒子里的棋子，可能性的大小都遵循同一个规律：</p>
+  <div class="card">
+    <ul class="steps">
+      <li><b>数量多（面积大）的，可能性大</b>：盒子里装有 8 个红棋子和 2 个绿棋子，红棋子数量是绿棋子的 4 倍，所以随意摸出 1 个，<b>摸到红棋子的可能性大</b>。</li>
+      <li><b>数量少（面积小）的，可能性小</b>：绿棋子只有 2 个，在总数中占的份数少，所以<b>摸到绿棋子的可能性小</b>。</li>
+      <li><b>数量相等的，可能性相等</b>：如果放 5 个红棋子和 5 个绿棋子，两者数量一样多，摸到红棋子和绿棋子的<b>可能性一样大</b>。</li>
+    </ul>
+  </div>
+
+
   <p class="key-say line">1. <b>可能性的大小与数量（面积）直接相关</b>：在总数中占的数量越多（或面积越大），发生的可能性就越大；占的数量越少，可能性越小。<br>2. <b>可能性大 ≠ 一定发生</b>：可能性再大，单次试验依然具有随机性；可能性再小，也有可能发生。<br>3. <b>公平的游戏规则</b>：只有当双方获胜的可能性大小完全相等时，游戏规则才是公平的。</p>
 
   <h2>两个容易错的地方</h2>
@@ -265,6 +303,25 @@
       <p>连续摸了 3 次红球并放回，就以为第 4 次“肯定该轮到绿球了”。</p></div>
     <div class="ok"><b class="t">✓ 每次摸球放回后都是全新的独立试验</b>
       <p>球放回摇匀后，盒子里红球依然占多数，下一次摸到红球的可能性依然更大。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>哪种颜色更容易摸到</h2><p>一个盒子有 7 个红球、3 个蓝球，球除颜色外相同。每次摸后放回摇匀，比较摸出两种颜色的可能性。</p>
+    <ol class="example-steps">
+      <li><details><summary>① 读懂题意</summary><p>先找出题目给的条件，再看提示。</p><p>先看条件：在同一个盒子里，每个球被摸到的机会相同。</p></details></li>
+      <li><details><summary>② 推导与道理</summary><p>先说说你的理由，再看推导。</p><p>7 个红球多于 3 个蓝球，所以摸到红球的可能性大；不用把它写成几分之几。</p></details></li>
+      <li><details><summary>③ 检验与易错</summary><p>结论能不能说“一定”？展开检验。</p><p>检验：蓝球仍有 3 个，因此下一次也可能摸到蓝球，不能说红球一定出现。</p></details></li>
+    </ol>
+  </div>
+  <div class="card predict" data-id="u72-example-try" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+PHA+5oqK5Lik56eN6aKc6Imy6YO96LCD5oiQIDUg5Liq77yM5a6D5Lus6KKr5pG45Yiw55qE5Y+v6IO95oCn5oCO5qC377yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+5LiA5qC35aSnPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIui/measoeS4pOenjeeQg+S4quaVsOebuOWQjO+8jOminOiJsuacrOi6q+S4jeS8muiuqeacuuS8muWPmOWkp+OAglwiPjxiPkI8L2I+57qi6Imy5LiA5a6a5pu05aSnPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPuS4gOagt+Wkp+OAgui/measoeS4pOenjeeQg+S4quaVsOebuOWQjO+8jOminOiJsuacrOi6q+S4jeS8muiuqeacuuS8muWPmOWkp+OAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <span class="q-tag">自己试试</span><p>把两种颜色都调成 5 个，它们被摸到的可能性怎样？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>一样大</button>
+      <button class="opt" data-v="B" data-hint="这次两种球个数相同，颜色本身不会让机会变大。"><b>B</b>红色一定更大</button>
+    </div>
+    <div class="reveal"><p>一样大。这次两种球个数相同，颜色本身不会让机会变大。</p></div>
   </div>
 </section>
 
@@ -329,4 +386,34 @@
 
 <nav class="back"><a class="home" href="../index.html">← 返回主页</a></nav>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Keep this unit qualitative while the shared kit supplies the live counts.
+  PeiyuManip.mount();
+  document.querySelectorAll("[data-qualitative-urn]").forEach(function (root) {
+    function describe() {
+      const state = JSON.parse(root.dataset.state);
+      const measures = JSON.parse(root.dataset.measurements);
+      const keys = ["red", "blue", "yellow"], names = ["红", "蓝", "黄"];
+      const total = measures.totalBalls;
+      let text = "盒子里没有球，不能摸。请先加入至少 1 个球。";
+      if (total) {
+        text = keys.map(function (key, i) {
+          const word = state[key] === 0 ? "不可能" : state[key] === total ? "一定" : "可能";
+          return names[i] + "球 " + state[key] + " 个：" + word + "摸到，已摸出 " + measures.counts[i] + " 次";
+        }).join("；") + "。次数不是球数；有多种颜色时，不能确定下一次摸到什么。";
+      }
+      root.querySelector(".read").textContent = text;
+      root.querySelector("svg").setAttribute("aria-description", text);
+      root.querySelectorAll("svg text").forEach(function (node) {
+        if (node.textContent.endsWith("%")) node.remove();
+        else if (node.textContent.startsWith("频数按最大值缩放")) node.textContent = "柱长表示摸出的次数";
+      });
+    }
+    root.addEventListener("manip:change", describe);
+    describe();
+  });
+});
+</script>
 </body></html>

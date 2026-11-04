@@ -111,6 +111,19 @@
     return text.indexOf(query.toLocaleLowerCase().trim()) >= 0;
   }
   function visiblePoints() { return points.filter(function (p) { return matches(p); }); }
+  function visibleConcepts() {
+    return primary && primaryConcepts ? primaryConcepts.cards.filter(function (card) {
+      var unit = lesson(card.unitId);
+      return (!currentBook || (unit && unit.bookId === currentBook)) &&
+        (currentDomain === "all" || card.unitId === currentDomain) &&
+        (currentSection === "all" || card.lessonIds.includes(currentSection)) &&
+        (!query || (card.title + " " + card.concept).toLocaleLowerCase().includes(query.toLocaleLowerCase().trim()));
+    }) : [];
+  }
+  function conceptLinkHTML(card) {
+    var target = new URL(primaryHref(card.unitId)); target.hash = "card=" + encodeURIComponent(card.id);
+    return '<a class="lt-point-link" href="' + esc(target.href) + '"><span>' + esc(card.title) + '</span></a>';
+  }
   function groups(items) {
     var result = [];
     items.forEach(function (p) {
@@ -146,18 +159,23 @@
     if (byBook) html = juniorBranches(visible);
     tree.innerHTML = html || '<p class="lt-empty">没有匹配的知识点。试试更短的关键词，或调整课时与范围。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>';
     core.renderMath(tree);
-    resultCount.textContent = visible.length + " 个知识点";
-    tree.querySelectorAll("[data-tree-branch]").forEach(function (branch) {
+    var concepts = visibleConcepts();
+    resultCount.textContent = visible.length + " 个知识点" + (concepts.length ? " · " + concepts.length + " 张概念与易错卡" : "");
+    bindBranches(tree);
+    var hint = document.getElementById("learning-tree-hint");
+    hint.textContent = chosen && !matches(chosen) ? "当前链接的知识点在筛选范围之外，详情仍保留。" : byBook ? "展开某章，再选择节内的知识点；也可以搜索或按专题浏览。" : "展开专题和分组，选择一个知识点。";
+  }
+  function bindBranches(root) {
+    root.querySelectorAll("[data-tree-branch]").forEach(function (branch) {
       branch.addEventListener("toggle", function () {
+        if (!branch.isConnected) return;
         if (branch.open) expanded.add(branch.dataset.treeBranch);
         else expanded.delete(branch.dataset.treeBranch);
       });
     });
-    var hint = document.getElementById("learning-tree-hint");
-    hint.textContent = chosen && !matches(chosen) ? "当前链接的知识点在筛选范围之外，详情仍保留。" : byBook ? "按册、章、节展开，选择一个知识点。" : "展开专题和分组，选择一个知识点。";
   }
   function juniorBranches(visible) {
-    var books = [];
+    var books = [], concepts = visibleConcepts();
     lessons.forEach(function (item) { if (!books.includes(item.bookId)) books.push(item.bookId); });
     return books.map(function (bookId) {
       var bookLessons = lessons.filter(function (item) { return item.bookId === bookId; });
@@ -167,12 +185,17 @@
         var sections = bookLessons.filter(function (item) { return item.chapterId === chapterId; });
         var rows = sections.map(function (item) {
           var members = visible.filter(function (p) { return lessonIds(p).includes(item.id); });
-          if (!members.length) return "";
+          var cards = concepts.filter(function (card) { return card.lessonIds.includes(item.id); });
+          if (!members.length && !cards.length) return "";
           var chosen = members.some(function (p) { return p.id === selected; });
           var optional = members.every(function (p) { return p.course_scope === "optional"; });
-          return '<details class="lt-group" data-junior-section="' + esc(item.id) + '"' + (chosen || (!optional && (query || currentSection === item.id)) ? ' open' : '') + '><summary>' + esc(item.title) + (optional && !item.title.includes("选学") ? '（选学）' : '') + '</summary><div class="lt-points">' + members.map(linkHTML).join("") + '</div></details>';
+          var sectionKey = "section:" + item.id;
+          var courseLink = item.ready !== false && !item.placeholder ? '<a class="lt-course-link" href="' + esc(url("lessons/" + item.id + ".html").href) + '" aria-label="' + esc('去课页：' + item.title) + '">去课页</a>' : "";
+          return '<details class="lt-group" data-tree-branch="' + esc(sectionKey) + '" data-junior-section="' + esc(item.id) + '"' + (expanded.has(sectionKey) || chosen || (!optional && (query || currentSection === item.id)) ? ' open' : '') + '><summary>' + esc(item.title) + (optional && members.length && !item.title.includes("选学") ? '（选学）' : '') + '</summary><div class="lt-points">' + courseLink + members.map(linkHTML).join("") + cards.map(conceptLinkHTML).join("") + '</div></details>';
         }).join("");
-        return rows ? '<details class="lt-group" data-junior-chapter="' + esc(chapterId) + '" open><summary>' + esc(sections[0].chapterTitle) + '</summary>' + rows + '</details>' : "";
+        var key = "chapter:" + chapterId;
+        var open = expanded.has(key) || sections.some(function (item) { return item.id === currentSection || visible.some(function (p) { return p.id === selected && lessonIds(p).includes(item.id); }); });
+        return rows ? '<details class="lt-group" data-tree-branch="' + esc(key) + '" data-junior-chapter="' + esc(chapterId) + '"' + (open ? ' open' : '') + '><summary>' + esc(sections[0].chapterTitle) + '</summary>' + rows + '</details>' : "";
       }).join("");
       return content ? '<details class="lt-topic" data-junior-book="' + esc(bookId) + '" open><summary>' + esc(bookLessons[0].bookTitle) + '</summary><div class="lt-groups">' + content + '</div></details>' : "";
     }).join("");
@@ -182,20 +205,13 @@
     return '<article class="lt-topic-card"><h3><a data-learning-domain="' + esc(d.id) + '" href="' + esc(domainURL(d.id).href) + '">' + esc(d.title) + '</a></h3><p>' + esc(names.slice(0, 4).join("、")) + (names.length > 4 ? "等" : "") + '</p><span>' + members.length + ' 个知识点</span></article>';
   }
   function renderOverview() {
-    if (byBook) {
-      var juniorVisible = visiblePoints();
-      detail.innerHTML = '<section class="lt-overview"><h2>' + (query ? '查找知识点' : '按册、章、节查知识点') + '</h2><p>' + (query ? '找到 ' + juniorVisible.length + ' 个匹配的知识点。' : (primary ? '已收录的知识点按册列出，选学与拓展可以按需跳过。' : '必学内容默认显示，选学与拓展按需打开。')) + '</p>' + (juniorBranches(juniorVisible) || '<p>已收录的知识点中没有匹配结果。可以换个关键词，或清除筛选后查找。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>') + '</section>';
-      document.title = "知识库 · 培玉" + stageName + "数学";
-      core.renderMath(detail);
-      return;
-    }
-    var visible = visiblePoints(), chosenDomain = domain(currentDomain), chosenLesson = lesson(currentSection);
+    var visible = visiblePoints(), concepts = visibleConcepts(), chosenDomain = domain(currentDomain), chosenLesson = lesson(currentSection);
     var filtered = !!(chosenDomain || chosenLesson || query);
     var title = query ? "查找知识点" : chosenLesson ? chosenLesson.title + "的知识点" : chosenDomain ? chosenDomain.title : "从一个专题开始";
-    var intro = filtered ? "选择知识点，先确认使用条件，再看容易混淆的地方。" : "先看它属于哪里，再把相近的概念分清。必修与选必默认显示，选学与拓展可以按需打开。";
+    var intro = query ? "找到 " + visible.length + " 个匹配的知识点。" : filtered ? "选择知识点，先确认使用条件，再看容易混淆的地方。" : "先看它属于哪里，再把相近的概念分清。选学与拓展可以按需打开或跳过。";
     var html = '<section class="lt-overview" aria-labelledby="learning-overview-heading"><h2 id="learning-overview-heading">' + esc(title) + '</h2><p class="lt-overview-intro">' + esc(intro) + '</p>';
-    if (!visible.length) {
-      html += '<div class="lt-empty-state"><h3>这里暂时没有匹配的知识点</h3><p>可以清除关键词或课时筛选，继续按专题查找。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>' + (chosenLesson ? '<a href="' + esc(returnURL(chosenLesson.id, 2).href) + '">打开课时讲解</a>' : "") + '</div>';
+    if (!visible.length && !concepts.length) {
+      html += '<div class="lt-empty-state"><h3>这里暂时没有匹配的知识点</h3><p>已收录的知识点中没有匹配结果。可以清除关键词或课时筛选，继续按专题查找。</p><button class="lt-text-button" type="button" data-clear-filters>清除筛选</button>' + (chosenLesson ? '<a href="' + esc(returnURL(chosenLesson.id, 2).href) + '">打开课时讲解</a>' : "") + '</div>';
     } else if (filtered) {
       domains.forEach(function (d) {
         var members = visible.filter(function (p) { return p.domain === d.id; });
@@ -204,19 +220,23 @@
           return '<details class="lt-overview-group"' + (query || chosenLesson ? " open" : "") + '><summary>' + esc(group.title) + '<span>' + group.points.length + ' 个知识点</span></summary><div>' + group.points.map(linkHTML).join("") + '</div></details>';
         }).join("") + '</section>';
       });
+      if (concepts.length) html += '<section class="lt-overview-domain"><h3>概念与易错卡</h3>' + concepts.map(conceptLinkHTML).join("") + '</section>';
     } else {
-      var primary = domains.filter(function (d) { return priority.indexOf(d.id) >= 0; });
-      var others = domains.filter(function (d) { return priority.indexOf(d.id) < 0; });
-      html += '<div class="lt-primary-topics">' + primary.map(function (d) { return topicCard(d, visible.filter(function (p) { return p.domain === d.id; })); }).join("") + '</div>';
+      var featured = domains.filter(function (d) { return priority.indexOf(d.id) >= 0 && visible.some(function (p) { return p.domain === d.id; }); });
+      if (!featured.length) featured = domains.filter(function (d) { return visible.some(function (p) { return p.domain === d.id; }); }).slice(0, 3);
+      var others = domains.filter(function (d) { return !featured.includes(d); });
+      html += '<div class="lt-primary-topics">' + featured.map(function (d) { return topicCard(d, visible.filter(function (p) { return p.domain === d.id; })); }).join("") + '</div>';
       html += '<section class="lt-more-topics"><h3>其他专题</h3><div class="lt-topic-list">' + others.map(function (d) {
         var members = visible.filter(function (p) { return p.domain === d.id; });
         return members.length ? '<a data-learning-domain="' + esc(d.id) + '" href="' + esc(domainURL(d.id).href) + '"><span>' + esc(d.title) + '</span><small>' + members.length + '</small></a>' : "";
       }).join("") + '</div></section>';
     }
+    if (!byBook) html += '<details class="lt-section-browser"><summary>按节浏览 · 展开章后查看节与知识点</summary>' + juniorBranches(visible) + '</details>';
     html += '</section>';
     detail.innerHTML = html;
-    document.title = (filtered ? title : "知识库") + " · 培玉高中数学";
+    document.title = (filtered ? title : "知识库") + " · 培玉" + stageName + "数学";
     core.renderMath(detail);
+    bindBranches(detail);
   }
   function patchDetailLinks(p) {
     detail.querySelectorAll("a[href]").forEach(function (anchor) {
@@ -275,6 +295,7 @@
   }
   function navigate(id) {
     if (!point(id)) return;
+    if (primary) { primaryGo(point(id).first_section.replace(/-\d+$/, ""), id); return; }
     if (!practiceVariant(id)) selectedVariant = "";
     selected = id;
     viewConditions = false;
@@ -301,7 +322,7 @@
     search.focus();
   }
   function renderPage() {
-    host.innerHTML = '<div class="lt-page"><header class="lt-heading"><h1>知识库</h1><p>' + (byBook ? '按册、章、节查找，带着条件回到题目。' : '按专题找知识点，带着条件回到题目。') + '</p></header><div class="lt-context" id="learning-tree-context" hidden></div><div class="lt-layout"><aside class="lt-sidebar" aria-label="知识点目录与筛选"><div class="lt-filters"><label for="learning-tree-search">查找知识点</label><div class="lt-search-row"><input id="learning-tree-search" type="search" placeholder="输入概念、条件或知识点名称" maxlength="200" autocomplete="off"><button id="learning-tree-clear" class="lt-text-button" type="button" hidden>清除</button></div><div class="lt-selects"><div><label for="learning-tree-domain">专题</label><select id="learning-tree-domain"><option value="all">全部专题</option>' + domains.map(function (d) { return '<option value="' + esc(d.id) + '">' + esc(d.title) + '</option>'; }).join("") + '</select></div><div><label for="learning-tree-section">课时</label><select id="learning-tree-section"><option value="all">全部课时</option>' + lessons.map(function (item) { return '<option value="' + esc(item.id) + '">' + esc(item.title) + '</option>'; }).join("") + '</select></div></div><label class="lt-check"><input id="learning-tree-extra" type="checkbox">显示选学与拓展</label></div><details id="learning-tree-directory" class="lt-directory"><summary>专题目录 <span id="learning-tree-count" aria-live="polite"></span></summary><p id="learning-tree-hint" class="lt-hint"></p><nav id="learning-tree" aria-label="专题、分组与知识点"></nav></details></aside><div id="learning-tree-detail" class="lt-detail" tabindex="-1"></div></div></div>';
+    host.innerHTML = '<div class="lt-page"><header class="lt-heading"><h1>知识库</h1><p>' + '搜索概念、按专题找知识点，带着条件回到题目。' + '</p></header><div class="lt-context" id="learning-tree-context" hidden></div><div class="lt-layout"><aside class="lt-sidebar" aria-label="知识点目录与筛选"><div class="lt-filters"><label for="learning-tree-search">查找知识点</label><div class="lt-search-row"><input id="learning-tree-search" type="search" placeholder="输入概念、条件或知识点名称" maxlength="200" autocomplete="off"><button id="learning-tree-clear" class="lt-text-button" type="button" hidden>清除</button></div><div class="lt-selects"><div><label for="learning-tree-domain">专题</label><select id="learning-tree-domain"><option value="all">全部专题</option>' + domains.map(function (d) { return '<option value="' + esc(d.id) + '">' + esc(d.title) + '</option>'; }).join("") + '</select></div><div><label for="learning-tree-section">按课时筛选</label><select id="learning-tree-section"><option value="all">全部课时</option>' + lessons.map(function (item) { return '<option value="' + esc(item.id) + '">' + esc(item.title) + '</option>'; }).join("") + '</select></div></div><label class="lt-check"><input id="learning-tree-extra" type="checkbox">显示选学与拓展</label></div><details id="learning-tree-directory" class="lt-directory"><summary>' + (byBook ? '按节浏览' : '专题目录') + ' <span id="learning-tree-count" aria-live="polite"></span></summary><p id="learning-tree-hint" class="lt-hint"></p><nav id="learning-tree" aria-label="专题、分组与知识点"></nav></details></aside><div id="learning-tree-detail" class="lt-detail" tabindex="-1"></div></div></div>';
     search = document.getElementById("learning-tree-search");
     domainSelect = document.getElementById("learning-tree-domain");
     sectionSelect = document.getElementById("learning-tree-section");
@@ -321,14 +342,14 @@
     sectionSelect.addEventListener("change", function () { currentSection = sectionSelect.value; filterChanged(true); });
     extra.addEventListener("change", function () { includeExtra = extra.checked; filterChanged(true); });
     document.getElementById("learning-tree-clear").addEventListener("click", function () { query = ""; filterChanged(false); search.focus(); });
-    host.addEventListener("click", function (event) {
+    host.onclick = function (event) {
       var target = event.target.closest("a, button");
       if (!target || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       if (target.hasAttribute("data-learning-point")) { event.preventDefault(); navigate(target.dataset.learningPoint); }
       else if (target.hasAttribute("data-learning-domain")) { event.preventDefault(); chooseDomain(target.dataset.learningDomain); }
       else if (target.hasAttribute("data-learning-overview")) { event.preventDefault(); selected = null; selectedVariant = ""; updateURL(true); renderDetail(true); }
       else if (target.hasAttribute("data-clear-filters")) { event.preventDefault(); clearFilters(); }
-    });
+    };
   }
   // Primary uses the PY-222 admitted books/units and the same practice identities.
   // Only the selected unit is mounted; no quiz or answer is duplicated in this directory.
@@ -372,6 +393,7 @@
     return '<article class="cc-card pk-card" id="point-' + esc(p.id) + '" data-primary-point="' + esc(p.id) + '" data-learning-point-card="' + esc(p.id) + '">'
       + '<h2><a data-learning-point="' + esc(p.id) + '" href="' + esc(primaryHref(p.first_section.replace(/-\d+$/, ""), p.id)) + '">' + esc(p.title) + '</a></h2>'
       + (!corePoint(p) ? '<p class="k-optional" data-primary-optional>这是' + (p.course_scope === 'optional' ? '选学' : '拓展') + '内容，可以先跳过。</p>' : '')
+      + '<p class="k-note">状态只看能否隔一段时间在不同题上答对，不等于已经学好了。</p>'
       + '<p>' + esc(p.definition) + '</p><h3>要点</h3>' + list(p.conditions)
       + (p.prerequisites.length ? '<h3>先想起这些知识</h3><div class="k-links">' + p.prerequisites.map(function (id) {
         var before = point(id); return before ? '<a data-learning-point="' + esc(id) + '" href="' + esc(primaryHref(before.first_section.replace(/-\d+$/, ""), id)) + '">' + esc(before.title) + '</a>' : '';
@@ -401,7 +423,7 @@
     var bookUnits = units.filter(function (u) { return u.bookId === unit.bookId; });
     var books = Array.from(new Map(units.filter(function (u) { return u.grade === unit.grade; }).map(function (u) { return [u.bookId, u.bookTitle]; })));
     host.innerHTML = '<div class="lt-page pk-library"><header class="lt-heading"><h1>知识库</h1><p>选一单元，把概念和容易混的地方想清楚，再做题试一试。</p></header>'
-      + '<div class="cc-filter"><nav class="cc-grades" aria-label="选择年级">' + [1,2,3,4,5,6].map(function (g) {
+      + '<a class="lt-back" href="' + esc(url('knowledge.html').href) + '">回到专题总览</a><div class="cc-filter"><nav class="cc-grades" aria-label="选择年级">' + [1,2,3,4,5,6].map(function (g) {
         var next = units.find(function (u) { return u.grade === g && u.bookId.endsWith(unit.bookId.slice(-1)) && primaryCardUnits.has(u.id); }) || units.find(function (u) { return u.grade === g && primaryCardUnits.has(u.id); }) || units.find(function (u) { return u.grade === g; });
         return '<a data-primary-unit="' + esc(next.id) + '" href="' + esc(primaryHref(next.id)) + '"' + (g === unit.grade ? ' aria-current="page"' : '') + '>' + '零一二三四五六'[g] + '年级</a>';
       }).join("") + '</nav><div class="pk-selects"><div><label for="pk-book">选择册别</label><select id="pk-book">' + books.map(function (b) { return '<option value="' + esc(b[0]) + '"' + (b[0] === unit.bookId ? ' selected' : '') + '>' + esc(b[1]) + '</option>'; }).join("") + '</select></div>'
@@ -417,16 +439,30 @@
     host.querySelector('#pk-book').addEventListener('change', function (e) { primaryGo((units.find(function (u) { return u.bookId === e.target.value && primaryCardUnits.has(u.id); }) || units.find(function (u) { return u.bookId === e.target.value; })).id); });
     document.title = unit.bookTitle + ' · ' + (unit.unitTitle || unit.title) + ' · 知识库';
     core.renderMath(host);
+    host.onclick = function (event) {
+      var a = event.target.closest("a[data-primary-unit], a[data-learning-point]");
+      if (!a || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      var p = point(a.dataset.learningPoint);
+      primaryGo(p ? p.first_section.replace(/-\d+$/, "") : a.dataset.primaryUnit, p && p.id);
+    };
     var target = selection.point ? document.getElementById('point-' + selection.point.id) : selection.card ? document.getElementById(selection.card.id) : focus ? document.getElementById('pk-unit-title') : null;
     if (target) { target.tabIndex = -1; target.focus({ preventScroll: true }); target.scrollIntoView({ block: 'start' }); }
   }
   function primaryGo(unitId, pointId) {
     history.pushState(null, '', primaryHref(unitId, pointId)); renderPrimaryPage(true);
   }
+  function primaryRoute() {
+    var params = new URLSearchParams(location.search);
+    // Existing unit, lesson and card links retain the original cards and practice flow.
+    return params.get("view") === "unit" || ["unit", "grade", "from"].some(function (key) { return params.has(key); }) || /^#(?:point|card)=/.test(location.hash);
+  }
   function restore() {
     if (!data) return;
-    if (primary) { if (primaryConcepts) renderPrimaryPage(false); return; }
-    readURL(); syncInputs(); renderContext(); renderDetail(false);
+    if (primary && (!primaryConcepts || primaryRoute())) { if (primaryConcepts) renderPrimaryPage(false); return; }
+    readURL();
+    if (primary) renderPage();
+    else { syncInputs(); renderContext(); renderDetail(false); }
   }
   function boot() {
     host.innerHTML = '<p class="lt-loading" role="status">正在打开知识库…</p>';
@@ -449,14 +485,7 @@
         window.PeiyuPrimaryConcepts.ready.then(function (value) {
           primaryConcepts = value;
           primaryCardUnits = new Set(points.map(function (p) { return lesson(p.first_section).unitId; }).concat(value.cards.map(function (c) { return c.unitId; })));
-          renderPrimaryPage(false);
-          host.addEventListener("click", function (event) {
-            var a = event.target.closest("a[data-primary-unit], a[data-learning-point]");
-            if (!a || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-            event.preventDefault();
-            var p = point(a.dataset.learningPoint);
-            primaryGo(p ? p.first_section.replace(/-\d+$/, "") : a.dataset.primaryUnit, p && p.id);
-          });
+          restore();
         }).catch(function () { host.innerHTML = '<h1>知识库</h1><p role="alert">概念卡暂时没有打开，请刷新重试。</p>'; });
         return;
       }

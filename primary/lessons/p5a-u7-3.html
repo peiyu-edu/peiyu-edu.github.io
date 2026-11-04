@@ -8,18 +8,43 @@
 <link rel="stylesheet" href="../assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="../assets/learning-course.css?v=bc1eb9068c0c"><link rel="stylesheet" href="../assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="../assets/learning-palette.css?v=af6b88a0c8a4"><link rel="stylesheet" href="../assets/knowledge.css"><script defer src="../assets/knowledge-core.js"></script><script defer src="../assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="../assets/learning-state.js?v=50710be8ccc0"></script><script defer src="../assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="../assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="../assets/learning-course.js?v=ca4dc7609376"></script><script defer src="../assets/learning-contrast-state.js?v=c65a32056158"></script><link rel="stylesheet" href="../p-assets/unit-results.css"><script defer src="../p-assets/unit-results.js"></script><script defer src="../assets/wiki-stage.js?v=51045962e4c5"></script>
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
+<script defer src="../p-assets/kits/interval-tree-ruler.js"></script>
 <script defer src="../assets/video.js"></script>
+
+<style>
+/* Keep diagram labels at their original scale on narrow screens. */
+.primary[data-standard="v2"] .u7-fig { width:340px; min-width:340px; max-width:340px; }
+.primary[data-standard="v2"] .u7-wide { max-width:100%; overflow-x:auto; }
+.primary[data-standard="v2"] .u7-fig text { font-size:16px !important; }
+.primary[data-standard="v2"] .u7-micro { display:flex; flex-wrap:wrap; gap:12px; }
+.primary[data-standard="v2"] .u7-micro span { padding:8px; border:1px solid var(--line); border-radius:8px; }
+.primary[data-standard="v2"] .micro-box summary { min-height:44px; cursor:pointer; }
+.primary[data-standard="v2"] .example-steps { list-style:none; padding-left:0; }
+</style>
 </head>
-<body class="primary" data-stage="primary" data-sec="p5a-u7-3">
+<body class="primary" data-stage="primary" data-sec="p5a-u7-3" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">五年级上册 · 第七单元 可能性 · 第 3 课</p>
 <h1>根据结果推测</h1>
 <p class="lead">如果不打开密封的盒子，怎样知道里面哪种颜色的球多？通过大量重复试验的数据，我们可以当一名数学小侦探！</p>
 
+<details class="route" open>
+  <summary>本节路线导读</summary>
+  <p><b>核心问题：</b>不知道盒里装什么，怎样用记录作推测？</p>
+  <p>先回想球数怎样影响机会，再收集数据、提出推测、开盒检验。</p>
+  <p><a href="p5a-u7-2.html">先修：可能性的大小</a> · 初中衔接：用列举和试验继续研究随机现象。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p5a-u7-3&amp;from=p5a-u7-3">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <div class="micro-box">
+    <p>上一课看着球数猜结果。这次倒过来：看结果猜球数。</p>
+    <div class="u7-micro"><span>盒里球数 → 摸出记录 → 反过来猜球数</span></div>
+    <details><summary>想好后，再展开看下一步</summary><p>只摸一次看不出多少；先记录几十次，再看不同颜色的次数差距。</p></details>
+  </div>
+
   <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuaVsOWtpuaOoueptuivvuS4iu+8jOS4gOS4quS4jemAj+aYjueahOWvhuWwgeiii+mHjOWPquijheaciee0q+eQg+WSjOapmeeQg++8iOmZpOminOiJsuWkluWujOWFqOS4gOagt++8ieOAguavj+S4quWwj+e7hOavj+asoeaRuOWHuiAxIOS4queQg++8jOiusOW9leminOiJsuWQjuaUvuWbnuaRh+WMgO+8jOmHjeWkjeaRuCAzMCDmrKHjgILlhajnj60gNiDkuKrlsI/nu4TnmoTntK/orqHmsYfmgLvlpoLkuIvooajvvJo8L3A+XG4gICAgPGRpdiBzdHlsZT1cIm92ZXJmbG93LXg6YXV0bzttYXJnaW46MTJweCAwO1wiPlxuICAgICAgPHRhYmxlIHN0eWxlPVwid2lkdGg6MTAwJTtib3JkZXItY29sbGFwc2U6Y29sbGFwc2U7dGV4dC1hbGlnbjpjZW50ZXI7Zm9udC1zaXplOjE1cHg7XCI+XG4gICAgICAgIDx0Ym9keT48dHIgc3R5bGU9XCJiYWNrZ3JvdW5kOnZhcigtLWNhcmQpO1wiPjx0aCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7cGFkZGluZzo2cHg7XCI+57uE5YirPC90aD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjHnu4Q8L3RkPjx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7cGFkZGluZzo2cHg7XCI+Mue7hDwvdGQ+PHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtwYWRkaW5nOjZweDtcIj4z57uEPC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjTnu4Q8L3RkPjx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7cGFkZGluZzo2cHg7XCI+Nee7hDwvdGQ+PHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtwYWRkaW5nOjZweDtcIj4257uEPC90ZD48dGggc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPuWQiOiuoTwvdGg+PC90cj5cbiAgICAgICAgPHRyPjx0aCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7cGFkZGluZzo2cHg7Y29sb3I6dmFyKC0tYik7XCI+57Sr55CD5qyh5pWwPC90aD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjIzPC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjI1PC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjIyPC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjI0PC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjI2PC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjI0PC90ZD48dGggc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O2NvbG9yOnZhcigtLWIpO1wiPjE0NCDmrKE8L3RoPjwvdHI+XG4gICAgICAgIDx0cj48dGggc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O2NvbG9yOnZhcigtLWMpO1wiPuapmeeQg+asoeaVsDwvdGg+PHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtwYWRkaW5nOjZweDtcIj43PC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjU8L3RkPjx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7cGFkZGluZzo2cHg7XCI+ODwvdGQ+PHRkIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtwYWRkaW5nOjZweDtcIj42PC90ZD48dGQgc3R5bGU9XCJib3JkZXI6MXB4IHNvbGlkIHZhcigtLWxpbmUpO3BhZGRpbmc6NnB4O1wiPjQ8L3RkPjx0ZCBzdHlsZT1cImJvcmRlcjoxcHggc29saWQgdmFyKC0tbGluZSk7cGFkZGluZzo2cHg7XCI+NjwvdGQ+PHRoIHN0eWxlPVwiYm9yZGVyOjFweCBzb2xpZCB2YXIoLS1saW5lKTtwYWRkaW5nOjZweDtjb2xvcjp2YXIoLS1jKTtcIj4zNiDmrKE8L3RoPjwvdHI+XG4gICAgICA8L3Rib2R5PjwvdGFibGU+XG4gICAgPC9kaXY+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5qC55o2u6L+ZIDE4MCDmrKHmkbjnkIPnmoTnu5/orqHmlbDmja7vvIzkvaDog73lr7nlr4blsIHooovph4zntKvnkIPlkozmqZnnkIPnmoTmlbDph4/kvZzlh7rmgI7moLfnmoTmjqjmtYvvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCLmqZnnkIPmkbjlh7rkuoYgMzYg5qyh77yM5pWw6YeP6Jm95bCR5L2G5bm25LiN5Li6IDDvvIzooovlrZDph4zmnInmqZnnkIPjgIJcIj48Yj5BPC9iPuiii+WtkOmHjOWFqOmDveaYr+e0q+eQg++8jOS4gOS4quapmeeQg+S5n+ayoeaciTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPuiii+WtkOmHjOW+iOWPr+iDveaYr+e0q+eQg+Wkmu+8jOapmeeQg+WwkTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCIxNDQg5qyh5pivIDM2IOasoeeahCA0IOWAje+8jOS4pOiAheaVsOmHj+W3rui3neW+iOWkp+OAglwiPjxiPkM8L2I+6KKL5a2Q6YeM57Sr55CD5ZKM5qmZ55CD55qE5pWw6YeP5LiA5a6a5a6M5YWo55u4562JPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5a+577yM6YCJ5oupIDxiPkI8L2I+44CC5pG45Ye657Sr55CD55qE5qyh5pWw77yIMTQ0IOasoe+8ieaYr+apmeeQg++8iDM2IOasoe+8ieeahCA0IOWAjeOAguagueaNruKAnOaVsOmHj+i2iuWkmu+8jOiiq+aRuOWIsOeahOWPr+iDveaAp+i2iuWkp+KAne+8jOaIkeS7rOWPr+S7peenkeWtpuWcsDxiPuaOqOa1i++8muiii+WtkOmHjOe0q+eQg+Wkmu+8jOapmeeQg+WwkTwvYj7vvIE8L3A+XG4gICAgICA8cD7moLnmja7or5Xpqoznu5Pmnpzov5vooYzpgIblkJHmjqjmtYvvvIzmmK/nu5/orqHkuI7np5HlrabmjqLnqbbnmoTph43opoHmlrnms5XjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
     <p class="line">数学探究课上，一个不透明的密封袋里只装有紫球和橙球（除颜色外完全一样）。每个小组每次摸出 1 个球，记录颜色后放回摇匀，重复摸 30 次。全班 6 个小组的累计汇总如下表：</p>
     <div style="overflow-x:auto;margin:12px 0;">
@@ -44,17 +69,7 @@
 
 <section class="step" data-title="摆一摆">
   <div class="vid" data-video="concept"></div>
-  <h2>1. 逆向推测的科学依据</h2>
-  <p class="line">为什么可以根据摸出的次数推测盒中物体的多少？</p>
-  <div class="card">
-    <ul class="steps">
-      <li><b>正向规律</b>：如果盒子里某种球的数量多，它被摸到的可能性就大；在多次摸球放回试验中，它出现的次数通常就会多。</li>
-      <li><b>逆向推测</b>：反过来，如果经过大量重复试验，某种球被摸出的次数明显占绝大多数，我们就可以合理推测：<b>这种球在盒子里的数量很可能更多</b>。</li>
-      <li><b>试验次数很关键</b>：如果只摸 1 次或者 2 次，可能会因为巧合出现偶然结果；<b>只有试验次数足够多，数据规律才越明显、推测才越可靠</b>！</li>
-    </ul>
-  </div>
-
-  <h2>2. 盲盒探秘实验台</h2>
+  <h2>先收集记录，再开盒验证</h2>
   <p class="line">下面有一个密封盲盒，里面装有红球和蓝球共 8 个，球除颜色外完全相同。每次随机摸出 1 个，记录后放回摇匀。先点击摸球按钮积累试验数据，再点击“打开盲盒验真相”揭晓答案！</p>
   <div class="card manip" id="infer-demo-u73">
     <div style="display:flex;justify-content:center;align-items:center;gap:16px;margin:10px 0;">
@@ -87,6 +102,11 @@
       目前累计试验 0 次。请先点击“+ 摸 20 次”或“+ 摸 100 次”开始摸球试验！
     </div>
   </div>
+
+  <h2>先猜，再用球数验证</h2>
+  <p>先完成上面的盲盒推测并开盒验证。再用下面的透明盒复查：先装 4 个红球、1 个蓝球，同一种配置的不同组记录会完全相同吗？</p>
+  <div class="manip" id="u73-urn" data-manip="interval-tree-ruler" data-qualitative-urn data-cfg='{"mode":"urn-freq","red":4,"blue":1,"yellow":0}'></div>
+  <p><b>自己试试：</b>先试 4 红 1 蓝 0 黄，连摸 100 次；再改成 1 红 4 蓝 0 黄，重新收集 100 次。比较两组记录，并说明为什么次数不能直接当球数。</p>
 
   <div class="card predict" data-id="try1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YGH5aaC5Zyo5LiA5qyh55uy55uS6K+V6aqM5Lit77yM57Sv6K6h5pG455CDIDEyMCDmrKHvvIznuqLnkIPlh7rnjrDkuoYgOTAg5qyh77yM6JOd55CD5Ye6546w5LqGIDMwIOasoe+8iOe6oueQg+asoeaVsOWkp+e6puaYr+iTneeQg+eahCAzIOWAje+8ieOAguW3suefpeebsuebkumHjOS4gOWFseaciSA4IOS4queQg++8jOebkuWtkOmHjOacgOacieWPr+iDveaYr++8mjwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+NiDkuKrnuqLnkIPjgIEyIOS4quiTneeQg++8iOe6oueQg+S4quaVsOaYr+iTneeQg+eahCAzIOWAje+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLlpoLmnpznuqLnkIPlkozok53nkIPlkIQgNCDkuKrvvIzmkbjlh7rnmoTmrKHmlbDlupTor6Xlt67kuI3lpJrkuIDmoLflpJrjgIJcIj48Yj5CPC9iPjQg5Liq57qi55CD44CBNCDkuKrok53nkIPvvIjkuKTnp43nkIPkuIDmoLflpJrvvIk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5pG45Ye657qi55CD55qE5qyh5pWw6L+c5aSa5LqO6JOd55CD77yM57qi55CD5bqU6K+l5q+U6JOd55CD5aSa5omN5a+544CCXCI+PGI+QzwvYj4yIOS4que6oueQg+OAgTYg5Liq6JOd55CD77yI6JOd55CD5q+U57qi55CD5aSa77yJPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPkHjgILnuqLnkIPmkbjlh7rnmoTmrKHmlbDlpKfnuqbmmK/ok53nkIPnmoQgMyDlgI3vvIzor7TmmI7nm5LlrZDph4znuqLnkIPnmoTkuKrmlbDkuZ/lpKfnuqbmmK/ok53nkIPnmoQgMyDlgI3jgII2IOS4que6oueQg+WSjCAyIOS4quiTneeQg+WKoOi1t+adpeato+WlveaYryA4IOS4queQg++8jOS4lCA2IMO3IDIgPSAz77yBPC9wPjwvZGl2PlxuICAifQ==">
     <span class="q-tag">自己试试</span>
@@ -183,8 +203,26 @@
   </script>
 </section>
 
-<section class="step" data-title="说一说">
-  <p class="key-say line">1. <b>逆向推测原理</b>：大量重复试验中，出现次数越多的物体，在整体中所占的数量通常越多。<br>2. <b>试验次数越多越可靠</b>：单次试验具有偶然性，只有经过几十次甚至上百次试验，数据的倍数或份数关系才会趋向稳定，推测才科学严谨。<br>3. <b>推测是合理估计而非绝对确定</b>：推测能判断哪个多哪个少或大致份数关系，但确切的真实个数还需要结合总数进行综合判断。</p>
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+  <h2>把上一课的规律反过来用</h2>
+  <ol><li>已知球数时，数量多的颜色，摸到的可能性大。</li>
+  <li>不知道球数时，先按“摸出—记录—放回—摇匀”重复试验；若红球多次记录都明显更多，可以推测红球可能更多。</li>
+  <li>再试一组或打开盒子检验。次数多让我们有更多依据，却不能保证每一组数据都更接近真实情况。</li></ol>
+  <p>摸出过蓝球，能确定盒中有蓝球；没摸到黄球，却不能只凭有限次试验断定没有黄球。</p>
+  </div>
+  <h2>用记录检查推测</h2>
+  <p class="line">为什么可以根据摸出的次数推测盒中物体的多少？</p>
+  <div class="card">
+    <ul class="steps">
+      <li><b>正向规律</b>：如果盒子里某种球的数量多，它被摸到的可能性就大；在多次摸球放回试验中，它出现的次数通常就会多。</li>
+      <li><b>逆向推测</b>：反过来，如果经过大量重复试验，某种球被摸出的次数明显占绝大多数，我们就可以合理推测：<b>这种球在盒子里的数量很可能更多</b>。</li>
+      <li><b>试验次数很关键</b>：如果只摸 1 次或者 2 次，可能会因为巧合出现偶然结果；<b>积累较多次试验，才有更多依据作推测；但不保证每次增加试验，记录都更接近实际情况</b>！</li>
+    </ul>
+  </div>
+
+
+  <p class="key-say line"><b>多次摸后放回摇匀，哪种颜色的记录明显更多，就推测盒中这种球可能更多；次数不是球数，推测也不是确定。</b></p>
 
   <h2>两个容易错的地方</h2>
   <div class="pair">
@@ -198,6 +236,25 @@
       <p>摸了 100 次摸出 80 次红球和 20 次黄球，误以为盒子里正好有 80 个红球和 20 个黄球。</p></div>
     <div class="ok"><b class="t">✓ 次数反映的是份数关系，不是绝对个数</b>
       <p>80 次和 20 次反映的是红球大约是黄球的 4 倍，盒子里可能只有 4 个红球和 1 个黄球。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>从记录提出推测</h2><p>两组都从同一盒球中摸球，摸后放回摇匀。第一组 60 次有 44 次红、16 次蓝；第二组 60 次有 46 次红、14 次蓝。怎样推测？</p>
+    <ol class="example-steps">
+      <li><details><summary>① 读懂题意</summary><p>先找出题目给的条件，再看提示。</p><p>先检查两组是不是同一盒、都放回摇匀，避免条件不同。</p></details></li>
+      <li><details><summary>② 推导与道理</summary><p>先说说你的理由，再看推导。</p><p>合起来红球 44 + 46 = 90 次，蓝球 16 + 14 = 30 次；红球明显更多，推测盒中红球可能更多。</p></details></li>
+      <li><details><summary>③ 检验与易错</summary><p>结论能不能说“一定”？展开检验。</p><p>90 和 30 是次数，不能说盒中有 90 个红球、30 个蓝球；还需要继续试验或开盒验证。</p></details></li>
+    </ol>
+  </div>
+  <div class="card predict" data-id="u73-example-try" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+PHA+5Y+q5Yet6L+ZIDEyMCDmrKHorrDlvZXvvIzog73noa7lrprnm5Lph4znuqLnkIPnmoTnoa7liIfkuKrmlbDlkJfvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7kuI3og73vvIzlj6rog73kvZzlkIjnkIbmjqjmtYs8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi5ZCM5LiA5Liq55CD5pS+5Zue5ZCO5Y+v5Lul5YaN6KKr5pG45Yiw77yMOTAg5qyh5LiN5pivIDkwIOS4queQg+OAglwiPjxiPkI8L2I+6IO977yM5q2j5aW95pyJIDkwIOS4qjwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7kuI3og73vvIzlj6rog73kvZzlkIjnkIbmjqjmtYvjgILlkIzkuIDkuKrnkIPmlL7lm57lkI7lj6/ku6Xlho3ooqvmkbjliLDvvIw5MCDmrKHkuI3mmK8gOTAg5Liq55CD44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <span class="q-tag">自己试试</span><p>只凭这 120 次记录，能确定盒里红球的确切个数吗？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>不能，只能作合理推测</button>
+      <button class="opt" data-v="B" data-hint="同一个球放回后可以再被摸到，90 次不是 90 个球。"><b>B</b>能，正好有 90 个</button>
+    </div>
+    <div class="reveal"><p>不能，只能作合理推测。同一个球放回后可以再被摸到，90 次不是 90 个球。</p></div>
   </div>
 </section>
 
@@ -420,4 +477,34 @@ document.addEventListener('DOMContentLoaded',function(){
 
 <nav class="back"><a class="home" href="../index.html">← 返回主页</a></nav>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Keep this unit qualitative while the shared kit supplies the live counts.
+  PeiyuManip.mount();
+  document.querySelectorAll("[data-qualitative-urn]").forEach(function (root) {
+    function describe() {
+      const state = JSON.parse(root.dataset.state);
+      const measures = JSON.parse(root.dataset.measurements);
+      const keys = ["red", "blue", "yellow"], names = ["红", "蓝", "黄"];
+      const total = measures.totalBalls;
+      let text = "盒子里没有球，不能摸。请先加入至少 1 个球。";
+      if (total) {
+        text = keys.map(function (key, i) {
+          const word = state[key] === 0 ? "不可能" : state[key] === total ? "一定" : "可能";
+          return names[i] + "球 " + state[key] + " 个：" + word + "摸到，已摸出 " + measures.counts[i] + " 次";
+        }).join("；") + "。次数不是球数；有多种颜色时，不能确定下一次摸到什么。";
+      }
+      root.querySelector(".read").textContent = text;
+      root.querySelector("svg").setAttribute("aria-description", text);
+      root.querySelectorAll("svg text").forEach(function (node) {
+        if (node.textContent.endsWith("%")) node.remove();
+        else if (node.textContent.startsWith("频数按最大值缩放")) node.textContent = "柱长表示摸出的次数";
+      });
+    }
+    root.addEventListener("manip:change", describe);
+    describe();
+  });
+});
+</script>
 </body></html>

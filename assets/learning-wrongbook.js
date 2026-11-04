@@ -196,9 +196,9 @@
         var filled = r.inputType && r.inputType !== "choice";
         li.appendChild(el("p", (filled ? "你上次填了 " : "你上次选了 ") + (!filled && /^[a-z]$/.test(q.lastChoice) ? q.lastChoice.toUpperCase() : q.lastChoice)));
       }
-      if (q.wrongCount) li.appendChild(el("p", q.selfCheck ? (q.selfCorrected ? "自评已改对（不计掌握证据）" : "自评不对，请重做后再核对") : "改正 " + q.fixes + "/2"));
+      if (q.wrongCount) li.appendChild(el("p", q.selfCheck ? (q.selfCorrected ? "自评已改对（不计掌握证据）" : "自评不对，请重做后再核对") : "改正 " + q.fixes + "/2（改错不计掌握证据）"));
       if (q.incomplete) li.appendChild(el("p", "这道题的早期记录不完整。", "lw-note"));
-      if (q.nextStrongAt && now() < q.nextStrongAt) li.appendChild(el("p", "满 20 小时后再试。", "lw-note"));
+      if (q.nextStrongAt && now() < q.nextStrongAt) li.appendChild(el("p", "满 7 天后再复习；现在也可以改错。", "lw-note"));
       var actions = el("div", undefined, "lw-actions"), action;
       if (q.versionStale || q.unavailable) {
         li.appendChild(el("p", "题目已更新。旧记录保留。"));
@@ -233,6 +233,7 @@
     function today() {
       var section = el("section", undefined, "lw-today"); section.id = "lw-today";
       append(section, heading(config.todayTitle || "今天复习"), el("p", (config.layout === "tabs" ? "共" : (config.todayTitle || "今天复习")) + " " + model.today.items.length + " 题", "lw-count"));
+      section.appendChild(el("p", "状态只看能否隔一段时间在不同题上答对，不等于已经学好了。", "lw-note"));
       if (model.today.remaining) section.appendChild(el("p", "还有 " + model.today.remaining + " 题"));
       if (!model.today.items.length) section.appendChild(el("p", "今天没有要复习的题。"));
       var items = el("ol");
@@ -353,8 +354,8 @@
         section.appendChild(detail);
       });
       if (!shownGroups) section.appendChild(el("p", "做过知识点自测后，这里会显示学习记录。", "lw-note"));
-      if (config.tiers) section.appendChild(el("p", "还要练：有错题还没改对，或还没有计入的答对。基本会了：有计入的答对。有点生疏：会过，但已超过 " + (config.staleDays || 30) + " 天没有计入新的答对。", "lw-note"));
-      if (stage === "junior") section.appendChild(el("p", "初步掌握：有一次计入的答对。已巩固：有两次计入的答对，两次间隔满 20 小时。", "lw-note"));
+      if (config.tiers) section.appendChild(el("p", "还要练：有错题还没改对，或独立答对的不同题还不足两道。基本会了：至少两道不同题独立答对。有点生疏：会过，但已超过 " + (config.staleDays || 30) + " 天没有计入新证据。", "lw-note"));
+      section.appendChild(el("p", "知识点初步掌握要独立答对至少两道不同题；已巩固还要两次相隔满 7 天。看过反馈后重做同题不算。", "lw-note"));
       return typeset(section);
     }
     function render() {
@@ -364,6 +365,7 @@
       model = mastery.derive(snapshot, store.answersReader ? store.answersReader() : function (id) { return store.answers(id); }, content, now(), { stage: stage, dailyLimit: Math.min(config.dailyLimit || (stage === "primary" ? 5 : 10), stage === "primary" ? 5 : 10), staleDays: config.staleDays });
       var page = el("div", undefined, "lw-page"); page.appendChild(el("h1", "我的学习"));
       page.appendChild(el("p", "记录只保存在这台设备的浏览器里，不会上传。", "lw-note"));
+      page.appendChild(el("p", "状态只看能否隔一段时间在不同题上答对，不等于已经学好了。", "lw-note lw-mastery-note"));
       if (snapshot.storage && snapshot.storage.memoryOnly) page.appendChild(el("p", "这次的记录可能保存不下来。", "lw-alert"));
       if (snapshot.storage && snapshot.storage.historyIncomplete) page.appendChild(el("p", "部分早期记录不完整，个别题的状态可能偏保守。", "lw-alert"));
       if (preferenceFailed || !storage) page.appendChild(el("p", "收起设置可能只在这次打开时有效。", "lw-alert"));

@@ -1,4 +1,4 @@
-/* Read-only mastery derived from local answer evidence; shared by primary/junior. */
+/* Read-only mastery derived from local answer evidence; shared by all three stages. */
 (function (root, factory) {
   "use strict";
   var quotes = typeof module === "object" && module.exports && typeof require === "function" ? require('./cn-quotes.js') : root.PeiyuCNQuotes;
@@ -7,7 +7,7 @@
   else if (root) root.PeiyuMastery = api;
 })(typeof globalThis !== "undefined" ? globalThis : this, function (quotes) {
   "use strict";
-  var GAP = 20 * 3600000, DAY = 86400000, FUTURE = 5 * 60000;
+  var DAY = 86400000, GAP = 7 * DAY, FUTURE = 5 * 60000;
   var LABELS = { unseen: "未作答", practicing: "练习中", learned: "初步掌握", secure: "已巩固", wrong: "待巩固" };
   var TYPES = ["predict", "diagnostic", "card", "exam"];
   function compare(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
@@ -46,7 +46,7 @@
     var limit = stageConfig.dailyLimit === undefined ? (stage === "primary" ? 5 : stage === "high" ? 8 : 10) : stageConfig.dailyLimit;
     var staleDays = stageConfig.staleDays === undefined ? (stage === "primary" ? 45 : stage === "high" ? 30 : 60) : stageConfig.staleDays;
     if (!Number.isInteger(limit) || limit < 1 || !Number.isFinite(staleDays) || staleDays <= 0) throw new TypeError("Invalid stageConfig limits");
-    var staleGap = staleDays * DAY, current = new Map(), models = new Map(), families = new Map();
+    var staleGap = staleDays * DAY, current = new Map(), models = new Map();
     var pointMeta = new Map(), pointGroups = new Map(), groupMeta = new Map();
     function addGroup(pointId, row) {
       var groupId = stage === "primary" ? row.unitId : row.chapterId;
@@ -76,7 +76,7 @@
       var q = Object.assign({}, ids, { stage: stage, sectionId: sectionId, pointIds: pointIds, family: family,
         title: row.title || ids.questionId, href: href, reviewHref: withoutFocus(reviewHref || href),
         versionStale: !!admitted && !isCurrent, unavailable: !admitted, current: isCurrent,
-        state: "unseen", anchorAt: null, lastStrongAt: null, nextStrongAt: null, fixes: 0, streakWrong: 0,
+        state: "unseen", independentCorrectAt: null, anchorAt: null, lastStrongAt: null, nextStrongAt: null, fixes: 0, streakWrong: 0,
         firstWrongAt: null, lastWrongAt: null, wrongCount: 0, lastChoice: stored && stored.lastAnswer ? stored.lastAnswer.choice : null,
         fixedByRetry: false, selfCheck: false, selfCorrected: false, recentWeakWrong: false, weakCorrect: false, incomplete: false, hasLegacy: false,
         clockAnomaly: false, clockAnomalyCount: 0, answered: false, againWrong: false,
@@ -86,10 +86,6 @@
         evidence: { s0: 0, s1Own: 0, s1Family: 0, weak: 0, startWeak: 0, ignored: 0 }, strongEvidence: [] });
       var model = { q: q, row: row, strongWrong: false, ownEligible: false, hasUnknown: false };
       models.set(q.identity, model);
-      if (isCurrent && TYPES.indexOf(q.questionType) >= 0) {
-        if (!families.has(family)) families.set(family, []);
-        families.get(family).push(model);
-      }
       return model;
     }
     var stored = new Map();
@@ -144,11 +140,14 @@
     function strong(model, a, strength) {
       var q = model.q;
       if (a.correct) {
-        if (q.state === "learned" || q.state === "secure") { q.state = "secure"; if (model.strongWrong) q.fixes = 2; }
-        else { q.state = "learned"; if (model.strongWrong) q.fixes = 1; }
+        // S1 only updates repair/time; point mastery consumes independent S0 successes.
+        q.state = "practicing";
+        if (strength === "S0") q.independentCorrectAt = a.time;
+        if (model.strongWrong) q.fixes = Math.min(2, q.fixes + 1);
         q.streakWrong = 0;
       } else {
-        q.againWrong = q.againWrong || q.state === "secure";
+        q.againWrong = q.againWrong || q.independentCorrectAt !== null;
+        q.independentCorrectAt = null;
         q.state = "wrong"; q.streakWrong++; q.fixes = 0; model.strongWrong = true;
       }
       q.anchorAt = a.time; q.lastStrongAt = a.time;
@@ -178,7 +177,7 @@
       model.ownEligible = true; q.answered = true;
       if (a.selfCheck) {
         // A self-correction closes the wrongbook task, not the mastery-evidence requirement.
-        q.selfCheck = true; q.evidence.weak++;
+        q.selfCheck = true; q.independentCorrectAt = null; q.fixes = 0; q.evidence.weak++;
         q.selfCorrected = a.correct && q.wrongCount > 0;
         q.state = a.correct ? "practicing" : "wrong";
         q.streakWrong = a.correct ? 0 : q.streakWrong + 1;
@@ -187,11 +186,9 @@
       }
       q.selfCheck = false; q.selfCorrected = false;
       if (q.state === "unseen") q.state = "practicing";
-      var strength = a.selfCheck ? "W" : q.anchorAt === null ? (a.attemptKind === "independent" ? "S0" : "start-W") : a.time - q.anchorAt >= GAP ? "S1" : "W";
-      // Test both sides using pre-event anchors; an own W never feeds family.
-      var targets = strength === "S0" || strength === "S1" ? (families.get(q.family) || []).filter(function (target) {
-        return target !== model && target.q.anchorAt !== null && a.time - target.q.anchorAt >= GAP;
-      }) : [];
+      // The ledger's attemptKind accounts for feedback exposure; afterReview only describes entry navigation.
+      var firstIndependent = q.anchorAt === null && a.attemptKind === "independent";
+      var strength = q.anchorAt === null ? (firstIndependent ? "S0" : "start-W") : a.time - q.anchorAt >= GAP ? "S1" : "W";
       if (strength === "S0" || strength === "S1") strong(model, a, strength);
       else {
         q.evidence.weak++;
@@ -199,7 +196,6 @@
         q.weakCorrect = a.correct; q.recentWeakWrong = !a.correct;
         if (strength === "start-W") { q.anchorAt = a.time; q.evidence.startWeak++; }
       }
-      targets.forEach(function (target) { strong(target, a, "family-S1"); });
     });
 
     var schedules = new Map();
@@ -226,13 +222,14 @@
     });
     var points = Array.from(byPoint.keys()).sort(compare).map(function (pid) {
       var qs = byPoint.get(pid), answered = qs.filter(function (q) { return q.answered; }).length;
-      var learned = qs.filter(function (q) { return q.state === "learned" || q.state === "secure"; }).length;
+      var correctTimes = qs.filter(function (q) { return q.independentCorrectAt !== null && q.state !== "wrong" && !q.selfCheck; })
+        .map(function (q) { return q.independentCorrectAt; }).sort(function (a, b) { return a - b; });
       var wrong = qs.filter(function (q) { return q.state === "wrong"; }).length;
-      var secure = qs.some(function (q) { return q.state === "secure"; });
+      var secure = correctTimes.length >= 2 && correctTimes[correctTimes.length - 1] - correctTimes[0] >= GAP;
       var last = qs.reduce(function (t, q) { return q.lastStrongAt === null ? t : Math.max(t || 0, q.lastStrongAt); }, null);
-      var state = !answered ? "unseen" : wrong ? "wrong" : secure && learned >= 2 ? "secure" : learned ? "learned" : "practicing";
+      var state = !answered ? "unseen" : wrong ? "wrong" : secure ? "secure" : correctTimes.length >= 2 ? "learned" : "practicing";
       return { pointId: pid, state: state, stateLabel: LABELS[state], questions: qs.length, answered: answered,
-        wrongOpen: qs.filter(function (q) { return q.wrongCount && q.state !== "secure" && !q.selfCorrected; }).length,
+        wrongOpen: qs.filter(function (q) { return q.wrongCount && q.fixes < 2 && !q.selfCorrected; }).length,
         lastStrongAt: last, stale: last !== null && now - last >= staleGap, groupIds: sorted(Array.from(pointGroups.get(pid) || [])) };
     });
     var groups = Array.from(groupMeta.keys()).sort(compare).map(function (gid) {
@@ -260,13 +257,18 @@
     }
     var wrongbook = questions.filter(function (q) { return TYPES.indexOf(q.questionType) >= 0 && q.wrongCount > 0; }).map(function (q) {
       var retry = retryTarget(q);
-      return Object.assign({}, q, { group: q.versionStale || q.unavailable ? "updated" : q.state === "secure" || q.selfCorrected ? "corrected" : "open",
+      return Object.assign({}, q, { group: q.versionStale || q.unavailable ? "updated" : q.fixes >= 2 || q.selfCorrected ? "corrected" : "open",
         currentHref: current.has(q.base) ? current.get(q.base).row.href || null : null,
         retryIdentity: retry.identity, retryHref: retry.href });
     });
-    function priority(q) { return q.needsReview ? 0 : q.wrongCount > 0 ? 1 : q.state === "learned" ? 2 : q.stale ? 3 : 4; }
+    function pointState(q) {
+      var related = points.filter(function (p) { return q.pointIds.indexOf(p.pointId) >= 0; });
+      return related.length && related.every(function (p) { return p.state === "secure"; }) ? "secure" :
+        related.some(function (p) { return p.state === "learned"; }) ? "learned" : q.state;
+    }
+    function priority(q) { return q.needsReview ? 0 : q.wrongCount > 0 ? 1 : pointState(q) === "learned" ? 2 : q.stale ? 3 : 4; }
     var candidates = questions.filter(function (q) {
-      return q.current && TYPES.indexOf(q.questionType) >= 0 && q.due && q.canRetry && (q.state !== "secure" || q.stale);
+      return q.current && TYPES.indexOf(q.questionType) >= 0 && q.due && q.canRetry && (pointState(q) !== "secure" || q.stale);
     }).sort(function (a, b) { return priority(a) - priority(b) || a.dueAt - b.dueAt || compare(a.identity, b.identity); });
     var items = candidates.slice(0, limit).map(function (q) {
       var selected = retryTarget(q);

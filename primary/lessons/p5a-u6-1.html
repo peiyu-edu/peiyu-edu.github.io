@@ -11,28 +11,38 @@
 <script defer src="../p-assets/primary.js"></script>
   <script defer src="../assets/video.js"></script>
   <script defer src="../p-assets/manip.js"></script>
+  <script defer src="../p-assets/kits/polygon-cut-lab.js"></script>
+
+<style>
+body.primary .hint, body.primary .small, body.primary .entry-note { font-size:14px; }
+body.primary .example-steps summary { cursor:pointer; min-height:44px; display:flex; align-items:center; font-weight:700; }
+body.primary .example-steps p { margin:6px 0; }
+body.primary .fig-scroll { max-width:100%; overflow-x:auto; }
+body.primary { font-size:17px; }
+body.primary .qfig { flex-shrink:0; min-width:300px; }
+</style>
 </head>
 <body class="primary" data-stage="primary" data-sec="p5a-u6-1" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb"><a href="../index.html">五年级上册</a> · <a href="p5a-u6.html">第六单元 多边形的面积</a> · 第 1 课</p>
 <h1>平行四边形的面积</h1>
-<p class="lead">把长方形活动木框拉成平行四边形，四条边一根没短，为什么里面的面积却变小了？沿着高剪一刀再平移，秘密立刻揭晓。</p>
+<p class="lead">长方形面积会算，平行四边形呢？先猜怎样剪拼，再用长方形的办法讲清理由。</p>
 
 <details class="route" open>
   <summary><span>🧭 本节路线导读</span><span class="small">转化思想 · 割补守恒 · 底高对应</span></summary>
-  <p class="route-summary"><b>核心问题</b>：平行四边形有斜边，方格数不整，怎样用“沿高割补平移”把它转化为长方形，推导出面积公式 <b>S = ah</b>，并彻底分清“邻边”与“高”？</p>
+  <p class="route-summary"><b>核心问题</b>：平行四边形有斜边，方格数不整，怎样用“沿高割补平移”把它转化为长方形，找到面积的算法，并分清“邻边”与“高”？</p>
   <div class="route-bridges">
     <a class="route-pill" href="p4a-u5-2.html">⬅ 先修：四上“平行四边形的底和高”</a>
     <a class="route-pill" href="p5a-u4-2.html">⬅ 先修：五上“图形的平移（面积守恒）”</a>
-    <a class="route-pill" href="p5a-u6-2.html">➡ 后继：五上“三角形与梯形的面积”</a>
+    <a class="route-pill" href="p5a-u6-2.html">➡ 后继：五上“公顷和平方千米”</a>
     <span class="route-pill">🔗 初中衔接：八下“平行四边形的性质与判定”</span>
   </div>
   <ol>
     <li><b>想一想</b>：拉动长方形木框，观察“周长不变、高变矮、面积变小”的认知冲突。</li>
     <li><b>摆一摆</b>：连续调节底、高、倾斜度与剪开位置，亲手把平行四边形割补成长方形。</li>
     <li><b>讲道理</b>：拆解割补前后的三个不变量，观看洞察直觉短片，对比三大高频陷阱。</li>
-    <li><b>看例题</b>：用波利亚三步法拆解“两组底高对应逆求”与“草坪小路平移巧算”。</li>
+    <li><b>看例题</b>：分步看懂“两组底和高”与“草坪小路平移巧算”。</li>
     <li><b>练一练</b>：从看图辨底高、不计算比大小到多步实际应用，分层闯关。</li>
   </ol>
 </details>
@@ -75,54 +85,18 @@
 <section class="step" data-title="摆一摆">
   <div class="vid" data-video="concept"></div>
   <div class="card">
-    <p><span class="badge-pill badge-a">连续割补实验台</span><b>任意调节底、高、斜度与剪开位置，看平行四边形怎样变成标准长方形</b></p>
-    <p>拖动滑块改变平行四边形的<b>底 a</b>、<b>高 h</b>和<b>倾斜偏移</b>；你还可以改变<b>沿高剪开的位置</b>，把它剪成两块，再拖动<b>平移拼合进度</b>把它拼成长方形。剪线经过顶点时，其中一块是直角三角形：</p>
+    <p><span class="badge-pill badge-a">连续割补实验台</span><b>沿高剪、平移拼，再换几组底和高</b></p>
+    <p>回想长方形面积是长 × 宽。先猜：沿高剪开，剪下的部分只平移，能不能拼成长方形？拖“平移拼合”到 100% 验证，再换底、高和倾斜偏移。</p>
 
-    <div class="manip" id="manip-u6-1">
-      <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="stage" id="u61-stage" viewBox="0 0 480 220" role="img" aria-label="平行四边形连续割补平移实验台"></svg></div>
 
-      <div class="stat-bar" id="u61-stats">
-        <span class="stat-pill">底 a = <b id="u61-st-a">6</b> cm</span>
-        <span class="stat-pill">高 h = <b id="u61-st-h">4</b> cm</span>
-        <span class="stat-pill">斜边 ≈ <b id="u61-st-s">4.5</b> cm</span>
-        <span class="stat-pill">面积 S = <b id="u61-st-area" class="ca">24</b> cm²</span>
-      </div>
-
-      <div class="ctrl-grid">
-        <div class="ctrl-item">
-          <label for="u61-sl-a"><span>底边 a</span><b id="u61-val-a">6 cm</b></label>
-          <input type="range" id="u61-sl-a" min="4" max="8" step="1" value="6">
-        </div>
-        <div class="ctrl-item">
-          <label for="u61-sl-h"><span>对应高 h</span><b id="u61-val-h">4 cm</b></label>
-          <input type="range" id="u61-sl-h" min="2" max="5" step="1" value="4">
-        </div>
-        <div class="ctrl-item">
-          <label for="u61-sl-skew"><span>倾斜偏移</span><b id="u61-val-skew">2 cm</b></label>
-          <input type="range" id="u61-sl-skew" min="1" max="3" step="1" value="2">
-          <p class="small" id="u61-skew-note" aria-live="polite" style="margin:4px 0 0"></p>
-        </div>
-        <div class="ctrl-item">
-          <label for="u61-sl-cut"><span>剪开位置</span><b id="u61-val-cut">从顶点剪</b></label>
-          <input type="range" id="u61-sl-cut" min="0" max="2" step="1" value="0">
-        </div>
-        <div class="ctrl-item" style="grid-column: 1 / -1">
-          <label for="u61-sl-move"><span>平移拼合进度（0% 原图 → 100% 拼成长方形）</span><b id="u61-val-move">0%</b></label>
-          <input type="range" id="u61-sl-move" min="0" max="100" step="5" value="0">
-        </div>
-      </div>
-
-      <div class="ctrls">
-        <button type="button" data-act="vertex">① 从顶点沿高剪拼</button>
-        <button type="button" data-act="mid">② 从底边中间沿高剪拼</button>
-        <button type="button" data-act="skew">③ 保持底高不变换斜度</button>
-        <button type="button" data-act="reset">重来</button>
-      </div>
-      <div class="read" id="u61-read" aria-live="polite"></div>
-    </div>
+    <div class="manip" id="manip-u6-1" data-manip="polygon-cut-lab" data-cfg='{"mode":"parallelogram","a":6,"h":4,"skew":2}'></div>
+    <details><summary>再换几组数，试一试木框</summary>
+    <p>试底 4、高 2；底 6、高 4；底 8、高 5。每次记录拼成的长和宽，看看它们分别对应原图的什么。切换“底边中间剪”后要重新拖到 100%。</p>
+    <p>另做木框实验：点“重来”，调底 6、高 4、倾斜偏移 0，再点“拉动木框”，慢慢增加“木框偏离直角”。比较周长与面积；再点一次可回到剪拼。</p>
+    </details>
   </div>
 
-  <div class="card predict" data-id="p5a-u6-1-try1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5UgMSDCtyDlrp7pqozlj5HnjrA8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5Zyo5a6e6aqM5Y+w6YeM77yM5L+d5oyB5bqVIGEgPSA3IGNt44CB6auYIGggPSA0IGNtIOS4jeWPmO+8jOaXoOiuuuS9oOaKiuKAnOWAvuaWnOWBj+enu+KAneiwg+aIkCAxIGNtIOi/mOaYryAzIGNt77yM5oiW6ICF5oqK4oCc5Ymq5byA5L2N572u4oCd5LuO6aG254K55o2i5Yiw5bqV6L655Lit6Ze077yM5ou85oiQ55qE6ZW/5pa55b2i5pyJ5LuA5LmI5YWx5ZCM54K577yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuWAvuaWnOWBj+enu+WPmOWkp+aXtu+8jOW3puWPs+S4pOadoeaWnOi+ueWPmOmVv+S6hu+8jOWOn+W5s+ihjOWbm+i+ueW9oueahOWRqOmVv+WPmOWkp+S6huOAglwiPjxiPkEuPC9iPiDljp/lubPooYzlm5vovrnlvaLnmoTmlpzovrnplb/luqblkozlkajplb/lp4vnu4jkuI3lj5g8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi5LuO5Lit6Ze05Ymq5byA5ou85oiQ55qE5L6d54S25piv6ZW/IDcgY23jgIHlrr0gNCBjbSDnmoTplb/mlrnlvaLvvIzpnaLnp6/kuI3kvJrlj5jlpKfjgIJcIj48Yj5CLjwvYj4g5LuO5bqV6L655Lit6Ze05Ymq5byA5q+U5LuO6aG254K55Ymq5byA5ou85Ye655qE6Z2i56ev5pu05aSnPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkMuPC9iPiDmi7zmiJDnmoTplb/mlrnlvaLplb/lp4vnu4jmmK8gNyBjbeOAgeWuveWni+e7iOaYryA0IGNt77yM6Z2i56ev5oGS5Li6IDI4IGNtwrI8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj7op4Llr5/mlY/plJDvvIE8L2I+5Y+q6KaB5bqVIGEgPSA3IGNtIOWSjOWvueW6lOmrmCBoID0gNCBjbSDkuI3lj5jvvIzml6Dorrrlm77lvaLmgI7kuYjlgL7mlpzjgIHku47lk6rmnaHpq5jliarlvIDvvIzlubPnp7vlkI7pg73mi7zmiJDlkIzkuIDkuKrplb8gNyBjbeOAgeWuvSA0IGNtIOeahOmVv+aWueW9ou+8jOmdouenr+mDveaYryA8Yj43IMOXIDQgPSAyOO+8iGNtwrLvvIk8L2I+44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+  <div class="card predict" data-id="p5a-u6-1-try1" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5UgMSDCtyDlrp7pqozlj5HnjrA8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5Zyo5a6e6aqM5Y+w6YeM77yM5L+d5oyB5bqVIGEgPSA3IGNt44CB6auYIGggPSA0IGNtIOS4jeWPmO+8jOaXoOiuuuS9oOaKiuKAnOWAvuaWnOWBj+enu+KAneiwg+aIkCAxIGNtIOi/mOaYryAzIGNt77yM5oiW6ICF5oqK4oCc5Ymq5byA5L2N572u4oCd5LuO6aG254K55o2i5Yiw5bqV6L655Lit6Ze077yM5ou85oiQ55qE6ZW/5pa55b2i5pyJ5LuA5LmI5YWx5ZCM54K577yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuWAvuaWnOWBj+enu+WPmOWkp+aXtu+8jOW3puWPs+S4pOadoeaWnOi+ueWPmOmVv+S6hu+8jOWOn+W5s+ihjOWbm+i+ueW9oueahOWRqOmVv+WPmOWkp+S6huOAglwiPjxiPkEuPC9iPiDljp/lubPooYzlm5vovrnlvaLnmoTmlpzovrnplb/luqblkozlkajplb/lp4vnu4jkuI3lj5g8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi5LuO5Lit6Ze05Ymq5byA5ou85oiQ55qE5L6d54S25piv6ZW/IDcgY23jgIHlrr0gNCBjbSDnmoTplb/mlrnlvaLvvIzpnaLnp6/kuI3kvJrlj5jlpKfjgIJcIj48Yj5CLjwvYj4g5LuO5bqV6L655Lit6Ze05Ymq5byA5q+U5LuO6aG254K55Ymq5byA5ou85Ye655qE6Z2i56ev5pu05aSnPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkMuPC9iPiDmi7zmiJDnmoTplb/mlrnlvaLplb/lp4vnu4jmmK8gNyBjbeOAgeWuveWni+e7iOaYryA0IGNt77yM6Z2i56ev5oGS5Li6IDI4IGNtwrI8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cD48Yj7kvaDmoLjlr7nkuoblupXlkozpq5jvvIE8L2I+5Y+q6KaB5bqVIGEgPSA3IGNtIOWSjOWvueW6lOmrmCBoID0gNCBjbSDkuI3lj5jvvIzml6Dorrrlm77lvaLmgI7kuYjlgL7mlpzjgIHku47lk6rmnaHpq5jliarlvIDvvIzlubPnp7vlkI7pg73mi7zmiJDlkIzkuIDkuKrplb8gNyBjbeOAgeWuvSA0IGNtIOeahOmVv+aWueW9ou+8jOmdouenr+mDveaYryA8Yj43IMOXIDQgPSAyOO+8iGNtwrLvvIk8L2I+44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
     <span class="q-tag">自己试试 1 · 实验发现</span>
     <p class="line">在实验台里，保持底 a = 7 cm、高 h = 4 cm 不变，无论你把“倾斜偏移”调成 1 cm 还是 3 cm，或者把“剪开位置”从顶点换到底边中间，拼成的长方形有什么共同点？</p>
     <div class="opts">
@@ -131,7 +105,7 @@
       <button class="opt" data-v="C"><b>C.</b> 拼成的长方形长始终是 7 cm、宽始终是 4 cm，面积恒为 28 cm²</button>
     </div>
     <div class="reveal">
-      <p><b>观察敏锐！</b>只要底 a = 7 cm 和对应高 h = 4 cm 不变，无论图形怎么倾斜、从哪条高剪开，平移后都拼成同一个长 7 cm、宽 4 cm 的长方形，面积都是 <b>7 × 4 = 28（cm²）</b>。</p>
+      <p><b>你核对了底和高！</b>只要底 a = 7 cm 和对应高 h = 4 cm 不变，无论图形怎么倾斜、从哪条高剪开，平移后都拼成同一个长 7 cm、宽 4 cm 的长方形，面积都是 <b>7 × 4 = 28（cm²）</b>。</p>
     </div>
   </div>
 
@@ -180,7 +154,7 @@
 
   <p class="key-say line">平行四边形的面积 ＝ 底 × 对应的高（S = ah）；底和高必须互相垂直对准，等底等高的平行四边形面积相等。</p>
 
-  <h2>三大高频翻车现场</h2>
+  <h2>三个容易错的地方</h2>
   <div class="trap-grid">
     <div class="trap-card">
       <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①（最高频）</span><span>把斜边当成高，直接拿两条邻边相乘</span></div>
@@ -225,7 +199,7 @@
 <!-- ==================== Step 4: 看例题 ==================== -->
 <section class="step" data-title="看例题">
   <div class="example-card">
-    <div class="ex-head"><span class="badge-pill badge-a">典型例题 1 · 两组底高与逆运算</span><span>波利亚三步拆解：先锁死对应关系，再用面积桥梁反求</span></div>
+    <div class="ex-head"><span class="badge-pill badge-a">典型例题 1 · 两组底高与逆运算</span><span>分步提示：先找对应底高，再用面积求另一条高</span></div>
     <p class="ex-stem">如图，一个平行四边形零件的两条邻边分别是 10 cm 和 8 cm，其中 10 cm 底边上的高是 6 cm。（1）这个零件的面积是多少平方厘米？（2）8 cm 那条边对应的高 h₂ 是多少厘米？</p>
     <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" style="max-width:350px" viewBox="0 0 350 180" role="img" aria-label="平行四边形两组底高示意图：底10高6，另一底8求对应高h2">
       <polygon points="111.247047,32 291.247047,32 196,140 16,140" fill="var(--hl-soft)" stroke="var(--fg)" stroke-width="2"/>
@@ -240,6 +214,7 @@
       <text x="178" y="74" text-anchor="middle" font-size="16.5" font-weight="700" fill="var(--c)">h₂ = ?</text>
       <text x="337" y="112" text-anchor="end" font-size="16.5" font-weight="700" fill="var(--b)">底 a₂ = 8 cm</text>
     </svg></div>
+    <details><summary>先想一想：先用哪一对底和高？</summary><p>先找直角对应，写出已知条件；涉及去掉小路时，先比较小路与草坪的高。</p></details>
     <div class="example-steps">
       <div class="ex-step"><span class="ex-tag ca">① 读懂题意（找直角对应）：</span>图中有两条底：下底 a₁ = 10 cm，右斜边 a₂ = 8 cm。已知高 h₁ = 6 cm 的直角记号落在 10 cm 底边上，所以 <b>10 cm 和 6 cm 是一对垂直搭档</b>；要求的是垂直于 8 cm 边的高 h₂。</div>
       <div class="ex-step s2"><span class="ex-tag cb">② 列式推导与算理：</span><br>第一步（求不变量面积）：用已知的一对底高求出平行四边形面积 <b>S = a₁ × h₁ = 10 × 6 = 60（cm²）</b>。<br>第二步（逆用公式求另一条高）：同一个平行四边形面积不变，换以 a₂ = 8 cm 为底时，<b>h₂ = S ÷ a₂ = 60 ÷ 8 = 7.5（cm）</b>。</div>
@@ -257,7 +232,7 @@
   </div>
 
   <div class="example-card">
-    <div class="ex-head"><span class="badge-pill badge-b">典型例题 2 · 平移拼合与等高模型</span><span>波利亚三步拆解：穿草坪的平行四边形小路</span></div>
+    <div class="ex-head"><span class="badge-pill badge-b">典型例题 2 · 平移拼合与等高模型</span><span>分步提示：穿草坪的平行四边形小路</span></div>
     <p class="ex-stem">一块平行四边形草坪，底是 16 米，高是 9 米。草坪中间修了一条底宽 2 米、从上通到下的平行四边形石子小路（如图）。除去小路后，实际种草的面积是多少平方米？</p>
     <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" style="max-width:340px" viewBox="0 0 320 125" role="img" aria-label="平行四边形草坪中间有一条宽2米的平行四边形小路">
       <polygon points="50,18 250,18 220,96 20,96" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2"/>
@@ -266,6 +241,7 @@
       <text x="56" y="60" font-size="15" font-weight="700" fill="var(--c)">高 9 m</text>
       <text x="145" y="114" text-anchor="middle" font-size="15" font-weight="700" fill="var(--fg)">总底 16 m（小路底宽 2 m）</text>
     </svg></div>
+    <details><summary>先想一想：先用哪一对底和高？</summary><p>先找直角对应，写出已知条件；涉及去掉小路时，先比较小路与草坪的高。</p></details>
     <div class="example-steps">
       <div class="ex-step"><span class="ex-tag ca">① 读懂题意（识别同高与平移）：</span>大草坪是底 16 m、高 9 m 的平行四边形；中间的小路连接上下两条平行边，因此小路本身也是<b>高为 9 m、底为 2 m</b> 的平行四边形！</div>
       <div class="ex-step s2"><span class="ex-tag cb">② 两种方法列式推导：</span><br>• <b>方法一（总面积 − 小路面积）</b>：16 × 9 − 2 × 9 = 144 − 18 = <b>126（平方米）</b>。<br>• <b>方法二（平移拼合法，更巧！）</b>：把右边那块草坪往左平移 2 米，跨过小路与左边草坪拼在一起，直接合成一个<b>底为 (16 − 2) = 14 米、高为 9 米</b>的新平行四边形！面积 ＝ 14 × 9 = <b>126（平方米）</b>。</div>
@@ -288,31 +264,31 @@
   <h2>直接用（看图与公式算理）</h2>
 
   <div class="card q" data-id="p5a-u6-1-q1" data-kind="num" data-answer="15" data-hint="平行四边形面积 = 底 × 垂直的高，注意题里哪条边是和底垂直的高。"
-       data-miss='{"7.5":"平行四边形面积直接是底乘高（6 × 2.5 = 15），不需要除以 2。","18":"3 m 是倾斜的邻边，不是垂直高度！要用底 6 m 乘垂直高 2.5 m。"}' data-lc-source="eyJhbnN3ZXIiOiIxNSIsImh0bWwiOiJcbiAgICA8cCBjbGFzcz1cImxpbmVcIj4xLiDlpoLlm77vvIzkuIDkuKrlubPooYzlm5vovrnlvaLmoIflh4blgZzovabkvY3vvIzlupXovrnplb8gNiDnsbPvvIzmlpzovrnplb8gMyDnsbPvvIzlnoLnm7Tkuo7lupXovrnnmoTpq5jmmK8gMi41IOexs+OAgui/meS4quWBnOi9puS9jeeahOmdouenr+aYr+WkmuWwkeW5s+aWueexs++8nzwvcD5cbiAgICA8c3ZnIGNsYXNzPVwicWZpZ1wiIHN0eWxlPVwibWF4LXdpZHRoOjMwMHB4XCIgdmlld0JveD1cIjAgMCAyODAgOTVcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuWBnOi9puS9jeW6lTbnsbPpq5gyLjXnsbPmlpzovrkz57GzXCI+XG4gICAgICA8cG9seWdvbiBwb2ludHM9XCI0NSwxNiAyMTUsMTYgMTkwLDc0IDIwLDc0XCIgZmlsbD1cInZhcigtLW9rLXNvZnQpXCIgc3Ryb2tlPVwidmFyKC0tYSlcIiBzdHJva2Utd2lkdGg9XCIyXCI+PC9wb2x5Z29uPlxuICAgICAgPGxpbmUgeDE9XCI0NVwiIHkxPVwiMTZcIiB4Mj1cIjQ1XCIgeTI9XCI3NFwiIHN0cm9rZT1cInZhcigtLWEpXCIgc3Ryb2tlLXdpZHRoPVwiMlwiIHN0cm9rZS1kYXNoYXJyYXk9XCIzIDJcIj48L2xpbmU+XG4gICAgICA8cG9seWxpbmUgcG9pbnRzPVwiNDUsNjYgNTMsNjYgNTMsNzRcIiBmaWxsPVwibm9uZVwiIHN0cm9rZT1cInZhcigtLWEpXCIgc3Ryb2tlLXdpZHRoPVwiMS41XCI+PC9wb2x5bGluZT5cbiAgICAgIDx0ZXh0IHg9XCI4MlwiIHk9XCI1MFwiIGZvbnQtc2l6ZT1cIjE0XCIgZm9udC13ZWlnaHQ9XCI3MDBcIiBmaWxsPVwidmFyKC0tYSlcIj7pq5ggMi41IG08L3RleHQ+XG4gICAgICA8dGV4dCB4PVwiMTE1XCIgeT1cIjkwXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBmb250LXNpemU9XCIxNFwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgZmlsbD1cInZhcigtLWZnKVwiPuW6lSA2IG08L3RleHQ+XG4gICAgICA8dGV4dCB4PVwiMjE4XCIgeT1cIjQ4XCIgZm9udC1zaXplPVwiMTRcIiBmaWxsPVwidmFyKC0tbXV0ZWQpXCI+5pac6L65IDMgbTwvdGV4dD5cbiAgICA8L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+6YCJ5YeG5LqS55u45Z6C55u055qE5bqV5ZKM6auY77yaPGI+UyA9IGFoID0gNiDDlyAyLjUgPSAxNe+8iOW5s+aWueexs++8iTwvYj7jgII8L3A+PC9kaXY+XG4gICJ9">
+       data-miss='{"7.5":"平行四边形面积直接是底乘高（6 × 2.5 = 15），不需要除以 2。","18":"3 m 是倾斜的邻边，不是垂直高度！要用底 6 m 乘垂直高 2.5 m。"}' data-lc-source="eyJhbnN3ZXIiOiIxNSIsImh0bWwiOiJcbiAgICA8cCBjbGFzcz1cImxpbmVcIj4xLiDlpoLlm77vvIzkuIDkuKrlubPooYzlm5vovrnlvaLmoIflh4blgZzovabkvY3vvIzlupXovrnplb8gNiDnsbPvvIzmlpzovrnplb8gMyDnsbPvvIzlnoLnm7Tkuo7lupXovrnnmoTpq5jmmK8gMi41IOexs+OAgui/meS4quWBnOi9puS9jeeahOmdouenr+aYr+WkmuWwkeW5s+aWueexs++8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwiZmlnLXNjcm9sbFwiIHJvbGU9XCJyZWdpb25cIiBhcmlhLWxhYmVsPVwi5Zu+56S677yI56qE5bGP5Y+v5bem5Y+z5ruR5Yqo77yJXCIgdGFiaW5kZXg9XCIwXCI+PHN2ZyBjbGFzcz1cInFmaWdcIiBzdHlsZT1cIm1heC13aWR0aDozMDBweFwiIHZpZXdCb3g9XCIwIDAgMjgwIDk1XCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLlgZzovabkvY3lupU257Gz6auYMi4157Gz5pac6L65M+exs1wiPlxuICAgICAgPHBvbHlnb24gcG9pbnRzPVwiNDUsMTYgMjE1LDE2IDE5MCw3NCAyMCw3NFwiIGZpbGw9XCJ2YXIoLS1vay1zb2Z0KVwiIHN0cm9rZT1cInZhcigtLWEpXCIgc3Ryb2tlLXdpZHRoPVwiMlwiPjwvcG9seWdvbj5cbiAgICAgIDxsaW5lIHgxPVwiNDVcIiB5MT1cIjE2XCIgeDI9XCI0NVwiIHkyPVwiNzRcIiBzdHJva2U9XCJ2YXIoLS1hKVwiIHN0cm9rZS13aWR0aD1cIjJcIiBzdHJva2UtZGFzaGFycmF5PVwiMyAyXCI+PC9saW5lPlxuICAgICAgPHBvbHlsaW5lIHBvaW50cz1cIjQ1LDY2IDUzLDY2IDUzLDc0XCIgZmlsbD1cIm5vbmVcIiBzdHJva2U9XCJ2YXIoLS1hKVwiIHN0cm9rZS13aWR0aD1cIjEuNVwiPjwvcG9seWxpbmU+XG4gICAgICA8dGV4dCB4PVwiODJcIiB5PVwiNTBcIiBmb250LXNpemU9XCIxNFwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgZmlsbD1cInZhcigtLWEpXCI+6auYIDIuNSBtPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjExNVwiIHk9XCI5MFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZm9udC1zaXplPVwiMTRcIiBmb250LXdlaWdodD1cIjcwMFwiIGZpbGw9XCJ2YXIoLS1mZylcIj7lupUgNiBtPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjIxOFwiIHk9XCI0OFwiIGZvbnQtc2l6ZT1cIjE0XCIgZmlsbD1cInZhcigtLW11dGVkKVwiPuaWnOi+uSAzIG08L3RleHQ+XG4gICAgPC9zdmc+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPumAieWHhuS6kuebuOWeguebtOeahOW6leWSjOmrmO+8mjxiPlMgPSBhaCA9IDYgw5cgMi41ID0gMTXvvIjlubPmlrnnsbPvvIk8L2I+44CCPC9wPjwvZGl2PlxuICAifQ==">
     <p class="line">1. 如图，一个平行四边形标准停车位，底边长 6 米，斜边长 3 米，垂直于底边的高是 2.5 米。这个停车位的面积是多少平方米？</p>
-    <svg class="qfig" style="max-width:300px" viewBox="0 0 280 95" role="img" aria-label="停车位底6米高2.5米斜边3米">
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" style="max-width:300px" viewBox="0 0 280 95" role="img" aria-label="停车位底6米高2.5米斜边3米">
       <polygon points="45,16 215,16 190,74 20,74" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2"/>
       <line x1="45" y1="16" x2="45" y2="74" stroke="var(--a)" stroke-width="2" stroke-dasharray="3 2"/>
       <polyline points="45,66 53,66 53,74" fill="none" stroke="var(--a)" stroke-width="1.5"/>
       <text x="82" y="50" font-size="14" font-weight="700" fill="var(--a)">高 2.5 m</text>
       <text x="115" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="var(--fg)">底 6 m</text>
       <text x="218" y="48" font-size="14" fill="var(--muted)">斜边 3 m</text>
-    </svg>
+    </svg></div>
     <div class="reveal"><p>选准互相垂直的底和高：<b>S = ah = 6 × 2.5 = 15（平方米）</b>。</p></div>
   </div>
 
   <div class="card q" data-id="p5a-u6-1-q2" data-kind="num" data-answer="8" data-hint="已知面积和底，求高：想一想底 × 高 = 面积，高该用什么运算求？"
-       data-miss='{"648":"求高要用面积除以底（72 ÷ 9 = 8），不能拿面积去乘底。","16":"如果底乘高等于 72，9 × 8 = 72，高是 8 分米，不是 16 分米。"}' data-lc-source="eyJhbnN3ZXIiOiI4IiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjIuIOS4gOWdl+W5s+ihjOWbm+i+ueW9ouWuo+S8oOWxleadv+eahOmdouenr+aYryA3MiDlubPmlrnliIbnsbPvvIzlroPnmoTlupXmmK8gOSDliIbnsbPjgILov5nmnaHlupXlr7nlupTnmoTpq5jmmK/lpJrlsJHliIbnsbPvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDMwMCAxOTBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIumimOW5suS4reeahOWbvuW9ouWSjOW3suefpeWwuuWvuO+8jOaJgOaxgumHj+S7pemXruWPt+ihqOekulwiIHN0eWxlPVwiZGlzcGxheTpibG9jazt3aWR0aDoxMDAlO21heC13aWR0aDozMDBweDtoZWlnaHQ6YXV0bzttYXJnaW46OHB4IGF1dG9cIj48cG9seWdvbiBwb2ludHM9XCI0NSwxNDAgMjI1LDE0MCAyNjAsNDUgODAsNDVcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MlwiPjwvcG9seWdvbj48bGluZSB4MT1cIjg1XCIgeTE9XCI0NVwiIHgyPVwiODVcIiB5Mj1cIjE0MFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1kYXNoYXJyYXk6NSA0XCI+PC9saW5lPjxsaW5lIHgxPVwiODVcIiB5MT1cIjEzMFwiIHgyPVwiOTVcIiB5Mj1cIjEzMFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyXCI+PC9saW5lPjxsaW5lIHgxPVwiOTVcIiB5MT1cIjEzMFwiIHgyPVwiOTVcIiB5Mj1cIjE0MFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyXCI+PC9saW5lPjx0ZXh0IHg9XCI5NVwiIHk9XCIxMDBcIiB0ZXh0LWFuY2hvcj1cInN0YXJ0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTZweFwiPumrmO+8nzwvdGV4dD48dGV4dCB4PVwiMTUwXCIgeT1cIjE2NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTZweFwiPjkgZG08L3RleHQ+PHRleHQgeD1cIjE4NVwiIHk9XCIxMjVcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE2cHhcIj5TID0gNzIgZG3CsjwvdGV4dD48L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+6YCG55So5YWs5byP77yaPGI+aCA9IFMgw7cgYSA9IDcyIMO3IDkgPSA477yI5YiG57Gz77yJPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+       data-miss='{"648":"求高要用面积除以底（72 ÷ 9 = 8），不能拿面积去乘底。","16":"如果底乘高等于 72，9 × 8 = 72，高是 8 分米，不是 16 分米。"}' data-lc-source="eyJhbnN3ZXIiOiI4IiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjIuIOS4gOWdl+W5s+ihjOWbm+i+ueW9ouWuo+S8oOWxleadv+eahOmdouenr+aYryA3MiDlubPmlrnliIbnsbPvvIzlroPnmoTlupXmmK8gOSDliIbnsbPjgILov5nmnaHlupXlr7nlupTnmoTpq5jmmK/lpJrlsJHliIbnsbPvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cImZpZy1zY3JvbGxcIiByb2xlPVwicmVnaW9uXCIgYXJpYS1sYWJlbD1cIuWbvuekuu+8iOeqhOWxj+WPr+W3puWPs+a7keWKqO+8iVwiIHRhYmluZGV4PVwiMFwiPjxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzMDAgMTkwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLpopjlubLkuK3nmoTlm77lvaLlkozlt7Lnn6XlsLrlr7jvvIzmiYDmsYLph4/ku6Xpl67lj7fooajnpLpcIiBzdHlsZT1cImRpc3BsYXk6YmxvY2s7d2lkdGg6MTAwJTttYXgtd2lkdGg6MzAwcHg7aGVpZ2h0OmF1dG87bWFyZ2luOjhweCBhdXRvXCI+PHBvbHlnb24gcG9pbnRzPVwiNDUsMTQwIDIyNSwxNDAgMjYwLDQ1IDgwLDQ1XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjJcIj48L3BvbHlnb24+PGxpbmUgeDE9XCI4NVwiIHkxPVwiNDVcIiB4Mj1cIjg1XCIgeTI9XCIxNDBcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1iKTtzdHJva2Utd2lkdGg6MjtzdHJva2UtZGFzaGFycmF5OjUgNFwiPjwvbGluZT48bGluZSB4MT1cIjg1XCIgeTE9XCIxMzBcIiB4Mj1cIjk1XCIgeTI9XCIxMzBcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1iKTtzdHJva2Utd2lkdGg6MlwiPjwvbGluZT48bGluZSB4MT1cIjk1XCIgeTE9XCIxMzBcIiB4Mj1cIjk1XCIgeTI9XCIxNDBcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1iKTtzdHJva2Utd2lkdGg6MlwiPjwvbGluZT48dGV4dCB4PVwiOTVcIiB5PVwiMTAwXCIgdGV4dC1hbmNob3I9XCJzdGFydFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE2cHhcIj7pq5jvvJ88L3RleHQ+PHRleHQgeD1cIjE1MFwiIHk9XCIxNjZcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE2cHhcIj45IGRtPC90ZXh0Pjx0ZXh0IHg9XCIxODVcIiB5PVwiMTI1XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpO2ZvbnQtc2l6ZToxNnB4XCI+UyA9IDcyIGRtwrI8L3RleHQ+PC9zdmc+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPumAhueUqOWFrOW8j++8mjxiPmggPSBTIMO3IGEgPSA3MiDDtyA5ID0gOO+8iOWIhuexs++8iTwvYj7jgII8L3A+PC9kaXY+XG4gICJ9">
     <p class="line">2. 一块平行四边形宣传展板的面积是 72 平方分米，它的底是 9 分米。这条底对应的高是多少分米？</p>
-    <svg class="qfig" viewBox="0 0 300 190" role="img" aria-label="题干中的图形和已知尺寸，所求量以问号表示" style="display:block;width:100%;max-width:300px;height:auto;margin:8px auto"><polygon points="45,140 225,140 260,45 80,45" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/><line x1="85" y1="45" x2="85" y2="140" style="stroke:var(--b);stroke-width:2;stroke-dasharray:5 4"/><line x1="85" y1="130" x2="95" y2="130" style="stroke:var(--b);stroke-width:2"/><line x1="95" y1="130" x2="95" y2="140" style="stroke:var(--b);stroke-width:2"/><text x="95" y="100" text-anchor="start" style="fill:var(--fg);font-size:16px">高？</text><text x="150" y="166" text-anchor="middle" style="fill:var(--fg);font-size:16px">9 dm</text><text x="185" y="125" text-anchor="middle" style="fill:var(--fg);font-size:16px">S = 72 dm²</text></svg>
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" viewBox="0 0 300 190" role="img" aria-label="题干中的图形和已知尺寸，所求量以问号表示" style="display:block;width:100%;max-width:300px;height:auto;margin:8px auto"><polygon points="45,140 225,140 260,45 80,45" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/><line x1="85" y1="45" x2="85" y2="140" style="stroke:var(--b);stroke-width:2;stroke-dasharray:5 4"/><line x1="85" y1="130" x2="95" y2="130" style="stroke:var(--b);stroke-width:2"/><line x1="95" y1="130" x2="95" y2="140" style="stroke:var(--b);stroke-width:2"/><text x="95" y="100" text-anchor="start" style="fill:var(--fg);font-size:16px">高？</text><text x="150" y="166" text-anchor="middle" style="fill:var(--fg);font-size:16px">9 dm</text><text x="185" y="125" text-anchor="middle" style="fill:var(--fg);font-size:16px">S = 72 dm²</text></svg></div>
     <div class="reveal"><p>逆用公式：<b>h = S ÷ a = 72 ÷ 9 = 8（分米）</b>。</p></div>
   </div>
 
   <h2>容易错（不计算直觉判断与陷阱辨析）</h2>
 
-  <div class="card predict" data-id="p5a-u6-1-q3" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjMuIOaKiuS4gOS4queUqOacqOadoemSieaIkOeahOmVv+aWueW9ouahhuaetuaLieaIkOS4gOS4quW5s+ihjOWbm+i+ueW9ou+8jOWug+eahOWRqOmVv+WSjOmdouenr+S8muaAjuagt+WPmOWMlu+8n++8iCDvvIk8L3A+XG4gICAgPHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDMwMCAyMTBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIumimOebruW3suefpeadoeS7tu+8jOaJgOaxgumHj+eVmeepulwiIHN0eWxlPVwiZGlzcGxheTpibG9jazt3aWR0aDoxMDAlO21heC13aWR0aDozMDBweDtoZWlnaHQ6YXV0bzttYXJnaW46OHB4IGF1dG9cIj48cmVjdCB4PVwiODVcIiB5PVwiNDJcIiB3aWR0aD1cIjEzMFwiIGhlaWdodD1cIjEwMFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoyXCI+PC9yZWN0PjxjaXJjbGUgY3g9XCI4NVwiIGN5PVwiNDJcIiByPVwiNVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1hKTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxXCI+PC9jaXJjbGU+PGNpcmNsZSBjeD1cIjIxNVwiIGN5PVwiNDJcIiByPVwiNVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1hKTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoxXCI+PC9jaXJjbGU+PGNpcmNsZSBjeD1cIjIxNVwiIGN5PVwiMTQyXCIgcj1cIjVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MVwiPjwvY2lyY2xlPjxjaXJjbGUgY3g9XCI4NVwiIGN5PVwiMTQyXCIgcj1cIjVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MVwiPjwvY2lyY2xlPjx0ZXh0IHg9XCIxNTBcIiB5PVwiMTgzXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpO2ZvbnQtc2l6ZToxNnB4XCI+5oqK6L+Z5Liq5pyo5p2h5qGG5p625ouJ5oiQ5bmz6KGM5Zub6L655b2iPC90ZXh0Pjwvc3ZnPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuWbm+agueacqOadoeeahOmVv+W6puS4neavq+ayoeacieaUueWPmO+8jOaJgOS7peWRqOmVv+aYr+S4jeWPmOeahOOAglwiPjxiPkEuPC9iPiDlkajplb/lj5jlsI/vvIzpnaLnp6/lj5jlsI88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi5aaC5p6c5piv5rK/6auY5Ymq5ou877yM6Z2i56ev5omN5LiN5Y+Y77yb5ouJ5Yqo5pyo5qGG5pe26auY5Y+Y55+u5LqG77yM6Z2i56ev5Lya5Y+Y5bCP44CCXCI+PGI+Qi48L2I+IOWRqOmVv+S4jeWPmO+8jOmdouenr+S4jeWPmDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DLjwvYj4g5ZGo6ZW/5LiN5Y+Y77yM6Z2i56ev5Y+Y5bCPPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPuacqOadoemVv+W6puayoeWPmO+8jOaJgOS7pTxiPuWRqOmVv+S4jeWPmDwvYj7vvJvmi4nmlpzlkI7kuIrlupXlvoDkuIvmjonvvIzlnoLnm7Tpq5jluqblj5jnn67vvIzlupXkuZjpq5jnrpflh7rnmoQ8Yj7pnaLnp6/lj5jlsI88L2I+44CCPC9wPjwvZGl2PlxuICAifQ==">
+  <div class="card predict" data-id="p5a-u6-1-q3" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjMuIOaKiuS4gOS4queUqOacqOadoemSieaIkOeahOmVv+aWueW9ouahhuaetuaLieaIkOS4gOS4quW5s+ihjOWbm+i+ueW9ou+8jOWug+eahOWRqOmVv+WSjOmdouenr+S8muaAjuagt+WPmOWMlu+8n++8iCDvvIk8L3A+XG4gICAgPGRpdiBjbGFzcz1cImZpZy1zY3JvbGxcIiByb2xlPVwicmVnaW9uXCIgYXJpYS1sYWJlbD1cIuWbvuekuu+8iOeqhOWxj+WPr+W3puWPs+a7keWKqO+8iVwiIHRhYmluZGV4PVwiMFwiPjxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzMDAgMjEwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLpopjnm67lt7Lnn6XmnaHku7bvvIzmiYDmsYLph4/nlZnnqbpcIiBzdHlsZT1cImRpc3BsYXk6YmxvY2s7d2lkdGg6MTAwJTttYXgtd2lkdGg6MzAwcHg7aGVpZ2h0OmF1dG87bWFyZ2luOjhweCBhdXRvXCI+PHJlY3QgeD1cIjg1XCIgeT1cIjQyXCIgd2lkdGg9XCIxMzBcIiBoZWlnaHQ9XCIxMDBcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MlwiPjwvcmVjdD48Y2lyY2xlIGN4PVwiODVcIiBjeT1cIjQyXCIgcj1cIjVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MVwiPjwvY2lyY2xlPjxjaXJjbGUgY3g9XCIyMTVcIiBjeT1cIjQyXCIgcj1cIjVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYSk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MVwiPjwvY2lyY2xlPjxjaXJjbGUgY3g9XCIyMTVcIiBjeT1cIjE0MlwiIHI9XCI1XCIgc3R5bGU9XCJmaWxsOnZhcigtLWEpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjFcIj48L2NpcmNsZT48Y2lyY2xlIGN4PVwiODVcIiBjeT1cIjE0MlwiIHI9XCI1XCIgc3R5bGU9XCJmaWxsOnZhcigtLWEpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjFcIj48L2NpcmNsZT48dGV4dCB4PVwiMTUwXCIgeT1cIjE4M1wiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTZweFwiPuaKiui/meS4quacqOadoeahhuaetuaLieaIkOW5s+ihjOWbm+i+ueW9ojwvdGV4dD48L3N2Zz48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCLlm5vmoLnmnKjmnaHnmoTplb/luqbkuJ3mr6vmsqHmnInmlLnlj5jvvIzmiYDku6Xlkajplb/mmK/kuI3lj5jnmoTjgIJcIj48Yj5BLjwvYj4g5ZGo6ZW/5Y+Y5bCP77yM6Z2i56ev5Y+Y5bCPPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIuWmguaenOaYr+ayv+mrmOWJquaLvO+8jOmdouenr+aJjeS4jeWPmO+8m+aLieWKqOacqOahhuaXtumrmOWPmOefruS6hu+8jOmdouenr+S8muWPmOWwj+OAglwiPjxiPkIuPC9iPiDlkajplb/kuI3lj5jvvIzpnaLnp6/kuI3lj5g8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+Qy48L2I+IOWRqOmVv+S4jeWPmO+8jOmdouenr+WPmOWwjzwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7mnKjmnaHplb/luqbmsqHlj5jvvIzmiYDku6U8Yj7lkajplb/kuI3lj5g8L2I+77yb5ouJ5pac5ZCO5LiK5bqV5b6A5LiL5o6J77yM5Z6C55u06auY5bqm5Y+Y55+u77yM5bqV5LmY6auY566X5Ye655qEPGI+6Z2i56ev5Y+Y5bCPPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
     <p class="line">3. 把一个用木条钉成的长方形框架拉成一个平行四边形，它的周长和面积会怎样变化？（ ）</p>
-    <svg class="qfig" viewBox="0 0 300 210" role="img" aria-label="题目已知条件，所求量留空" style="display:block;width:100%;max-width:300px;height:auto;margin:8px auto"><rect x="85" y="42" width="130" height="100" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/><circle cx="85" cy="42" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><circle cx="215" cy="42" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><circle cx="215" cy="142" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><circle cx="85" cy="142" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><text x="150" y="183" text-anchor="middle" style="fill:var(--fg);font-size:16px">把这个木条框架拉成平行四边形</text></svg>
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" viewBox="0 0 300 210" role="img" aria-label="题目已知条件，所求量留空" style="display:block;width:100%;max-width:300px;height:auto;margin:8px auto"><rect x="85" y="42" width="130" height="100" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/><circle cx="85" cy="42" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><circle cx="215" cy="42" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><circle cx="215" cy="142" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><circle cx="85" cy="142" r="5" style="fill:var(--a);stroke:var(--fg);stroke-width:1"/><text x="150" y="183" text-anchor="middle" style="fill:var(--fg);font-size:16px">把这个木条框架拉成平行四边形</text></svg></div>
     <div class="opts">
       <button class="opt" data-v="A" data-hint="四根木条的长度丝毫没有改变，所以周长是不变的。"><b>A.</b> 周长变小，面积变小</button>
       <button class="opt" data-v="B" data-hint="如果是沿高剪拼，面积才不变；拉动木框时高变矮了，面积会变小。"><b>B.</b> 周长不变，面积不变</button>
@@ -321,9 +297,9 @@
     <div class="reveal"><p>木条长度没变，所以<b>周长不变</b>；拉斜后上底往下掉，垂直高度变矮，底乘高算出的<b>面积变小</b>。</p></div>
   </div>
 
-  <div class="card predict" data-id="p5a-u6-1-q4" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjQuIOWmguWbvu+8jOWkueWcqOS4pOadoeW5s+ihjOe6v+S5i+mXtOeahOeUsuOAgeS5meS4pOS4quW5s+ihjOWbm+i+ueW9ou+8jOWug+S7rOeahOW6lei+uemDveaYryA1IGNt44CC5LiN55So6K6h566X5YW35L2T5pWw5YC877yM5q+U6L6D55Sy5ZKM5LmZ55qE6Z2i56ev77ya77yIIO+8iTwvcD5cbiAgICA8c3ZnIGNsYXNzPVwicWZpZ1wiIHN0eWxlPVwibWF4LXdpZHRoOjMyMHB4XCIgdmlld0JveD1cIjAgMCAzMDAgMTAwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLkuKTmnaHlubPooYznur/pl7TlupXpg73mmK81Y23nmoTnlLLkuZnkuKTkuKrlubPooYzlm5vovrnlvaJcIj5cbiAgICAgIDxsaW5lIHgxPVwiMTBcIiB5MT1cIjIwXCIgeDI9XCIyOTBcIiB5Mj1cIjIwXCIgc3Ryb2tlPVwidmFyKC0tbXV0ZWQpXCIgc3Ryb2tlLXdpZHRoPVwiMS41XCIgc3Ryb2tlLWRhc2hhcnJheT1cIjQgM1wiPjwvbGluZT5cbiAgICAgIDxsaW5lIHgxPVwiMTBcIiB5MT1cIjgwXCIgeDI9XCIyOTBcIiB5Mj1cIjgwXCIgc3Ryb2tlPVwidmFyKC0tbXV0ZWQpXCIgc3Ryb2tlLXdpZHRoPVwiMS41XCI+PC9saW5lPlxuICAgICAgPHBvbHlnb24gcG9pbnRzPVwiMzUsMjAgMTA1LDIwIDkwLDgwIDIwLDgwXCIgZmlsbD1cInZhcigtLW9rLXNvZnQpXCIgc3Ryb2tlPVwidmFyKC0tYSlcIiBzdHJva2Utd2lkdGg9XCIyXCI+PC9wb2x5Z29uPlxuICAgICAgPHBvbHlnb24gcG9pbnRzPVwiMTgwLDIwIDI1MCwyMCAyMDAsODAgMTMwLDgwXCIgZmlsbD1cInZhcigtLWhsLXNvZnQpXCIgc3Ryb2tlPVwidmFyKC0tYilcIiBzdHJva2Utd2lkdGg9XCIyXCI+PC9wb2x5Z29uPlxuICAgICAgPHRleHQgeD1cIjYyXCIgeT1cIjU1XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBmb250LXNpemU9XCIxNVwiIGZvbnQtd2VpZ2h0PVwiNzAwXCIgZmlsbD1cInZhcigtLWEpXCI+55SyPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjE5MFwiIHk9XCI1NVwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZm9udC1zaXplPVwiMTVcIiBmb250LXdlaWdodD1cIjcwMFwiIGZpbGw9XCJ2YXIoLS1iKVwiPuS5mTwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCI1NVwiIHk9XCI5NVwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZm9udC1zaXplPVwiMTRcIiBmb250LXdlaWdodD1cIjcwMFwiIGZpbGw9XCJ2YXIoLS1hKVwiPuW6lSA1IGNtPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjE2NVwiIHk9XCI5NVwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZm9udC1zaXplPVwiMTRcIiBmb250LXdlaWdodD1cIjcwMFwiIGZpbGw9XCJ2YXIoLS1iKVwiPuW6lSA1IGNtPC90ZXh0PlxuICAgIDwvc3ZnPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuS5meiZveeEtuaWnOi+ueabtOmVv+OAgeeci+i1t+adpeaLieW+l+W+iOmVv++8jOS9huWug+eahOWeguebtOmrmOW6puWSjOeUsuaYr+S4gOagt+eahO+8gVwiPjxiPkEuPC9iPiDkuZnnmoTpnaLnp6/mm7TlpKfvvIzlm6DkuLrkuZnmlpzlvpfmm7Tplb88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+Qi48L2I+IOeUsuWSjOS5meeahOmdouenr+S4gOagt+Wkp++8iOetieW6leetiemrmO+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCLnlLLlkozkuZnlupXpg73mmK8gNSBjbe+8jOWPiOWkueWcqOWQjOS4gOe7hOW5s+ihjOe6v+mXtO+8jOmrmOS5n+ebuOetie+8jOmdouenr+S4gOWumuebuOetieOAglwiPjxiPkMuPC9iPiDnlLLnmoTpnaLnp6/mm7TlpKfvvIzlm6DkuLrnlLLmm7TmraM8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+PGI+562J5bqV562J6auY5qih5Z6LPC9iPu+8muW5s+ihjOe6v+mXtOeahOi3neemu+WkhOWkhOebuOetie+8jOeUsuWSjOS5meW6lemDveaYryA1IGNt44CB6auY5Lmf55u4562J77yM5omA5LulPGI+6Z2i56ev5a6M5YWo55u4562JPC9iPu+8iOS9huS5meeahOaWnOi+ueabtOmVv++8jOaJgOS7peS5meeahOWRqOmVv+avlOeUsuWkp++8ieOAgjwvcD48L2Rpdj5cbiAgIn0=">
+  <div class="card predict" data-id="p5a-u6-1-q4" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjQuIOWmguWbvu+8jOWkueWcqOS4pOadoeW5s+ihjOe6v+S5i+mXtOeahOeUsuOAgeS5meS4pOS4quW5s+ihjOWbm+i+ueW9ou+8jOWug+S7rOeahOW6lei+uemDveaYryA1IGNt44CC5LiN55So6K6h566X5YW35L2T5pWw5YC877yM5q+U6L6D55Sy5ZKM5LmZ55qE6Z2i56ev77ya77yIIO+8iTwvcD5cbiAgICA8ZGl2IGNsYXNzPVwiZmlnLXNjcm9sbFwiIHJvbGU9XCJyZWdpb25cIiBhcmlhLWxhYmVsPVwi5Zu+56S677yI56qE5bGP5Y+v5bem5Y+z5ruR5Yqo77yJXCIgdGFiaW5kZXg9XCIwXCI+PHN2ZyBjbGFzcz1cInFmaWdcIiBzdHlsZT1cIm1heC13aWR0aDozMjBweFwiIHZpZXdCb3g9XCIwIDAgMzAwIDEwMFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Lik5p2h5bmz6KGM57q/6Ze05bqV6YO95pivNWNt55qE55Sy5LmZ5Lik5Liq5bmz6KGM5Zub6L655b2iXCI+XG4gICAgICA8bGluZSB4MT1cIjEwXCIgeTE9XCIyMFwiIHgyPVwiMjkwXCIgeTI9XCIyMFwiIHN0cm9rZT1cInZhcigtLW11dGVkKVwiIHN0cm9rZS13aWR0aD1cIjEuNVwiIHN0cm9rZS1kYXNoYXJyYXk9XCI0IDNcIj48L2xpbmU+XG4gICAgICA8bGluZSB4MT1cIjEwXCIgeTE9XCI4MFwiIHgyPVwiMjkwXCIgeTI9XCI4MFwiIHN0cm9rZT1cInZhcigtLW11dGVkKVwiIHN0cm9rZS13aWR0aD1cIjEuNVwiPjwvbGluZT5cbiAgICAgIDxwb2x5Z29uIHBvaW50cz1cIjM1LDIwIDEwNSwyMCA5MCw4MCAyMCw4MFwiIGZpbGw9XCJ2YXIoLS1vay1zb2Z0KVwiIHN0cm9rZT1cInZhcigtLWEpXCIgc3Ryb2tlLXdpZHRoPVwiMlwiPjwvcG9seWdvbj5cbiAgICAgIDxwb2x5Z29uIHBvaW50cz1cIjE4MCwyMCAyNTAsMjAgMjAwLDgwIDEzMCw4MFwiIGZpbGw9XCJ2YXIoLS1obC1zb2Z0KVwiIHN0cm9rZT1cInZhcigtLWIpXCIgc3Ryb2tlLXdpZHRoPVwiMlwiPjwvcG9seWdvbj5cbiAgICAgIDx0ZXh0IHg9XCI2MlwiIHk9XCI1NVwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgZm9udC1zaXplPVwiMTVcIiBmb250LXdlaWdodD1cIjcwMFwiIGZpbGw9XCJ2YXIoLS1hKVwiPueUsjwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCIxOTBcIiB5PVwiNTVcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIGZvbnQtc2l6ZT1cIjE1XCIgZm9udC13ZWlnaHQ9XCI3MDBcIiBmaWxsPVwidmFyKC0tYilcIj7kuZk8L3RleHQ+XG4gICAgICA8dGV4dCB4PVwiNTVcIiB5PVwiOTVcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIGZvbnQtc2l6ZT1cIjE0XCIgZm9udC13ZWlnaHQ9XCI3MDBcIiBmaWxsPVwidmFyKC0tYSlcIj7lupUgNSBjbTwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCIxNjVcIiB5PVwiOTVcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIGZvbnQtc2l6ZT1cIjE0XCIgZm9udC13ZWlnaHQ9XCI3MDBcIiBmaWxsPVwidmFyKC0tYilcIj7lupUgNSBjbTwvdGV4dD5cbiAgICA8L3N2Zz48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCLkuZnomb3nhLbmlpzovrnmm7Tplb/jgIHnnIvotbfmnaXmi4nlvpflvojplb/vvIzkvYblroPnmoTlnoLnm7Tpq5jluqblkoznlLLmmK/kuIDmoLfnmoTvvIFcIj48Yj5BLjwvYj4g5LmZ55qE6Z2i56ev5pu05aSn77yM5Zug5Li65LmZ5pac5b6X5pu06ZW/PC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkIuPC9iPiDnlLLlkozkuZnnmoTpnaLnp6/kuIDmoLflpKfvvIjnrYnlupXnrYnpq5jvvIk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi55Sy5ZKM5LmZ5bqV6YO95pivIDUgY23vvIzlj4jlpLnlnKjlkIzkuIDnu4TlubPooYznur/pl7TvvIzpq5jkuZ/nm7jnrYnvvIzpnaLnp6/kuIDlrprnm7jnrYnjgIJcIj48Yj5DLjwvYj4g55Sy55qE6Z2i56ev5pu05aSn77yM5Zug5Li655Sy5pu05q2jPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPjxiPuetieW6leetiemrmOaooeWeizwvYj7vvJrlubPooYznur/pl7TnmoTot53nprvlpITlpITnm7jnrYnvvIznlLLlkozkuZnlupXpg73mmK8gNSBjbeOAgemrmOS5n+ebuOetie+8jOaJgOS7pTxiPumdouenr+WujOWFqOebuOetiTwvYj7vvIjkvYbkuZnnmoTmlpzovrnmm7Tplb/vvIzmiYDku6XkuZnnmoTlkajplb/mr5TnlLLlpKfvvInjgII8L3A+PC9kaXY+XG4gICJ9">
     <p class="line">4. 如图，夹在两条平行线之间的甲、乙两个平行四边形，它们的底边都是 5 cm。不用计算具体数值，比较甲和乙的面积：（ ）</p>
-    <svg class="qfig" style="max-width:320px" viewBox="0 0 300 100" role="img" aria-label="两条平行线间底都是5cm的甲乙两个平行四边形">
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" style="max-width:320px" viewBox="0 0 300 100" role="img" aria-label="两条平行线间底都是5cm的甲乙两个平行四边形">
       <line x1="10" y1="20" x2="290" y2="20" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>
       <line x1="10" y1="80" x2="290" y2="80" stroke="var(--muted)" stroke-width="1.5"/>
       <polygon points="35,20 105,20 90,80 20,80" fill="var(--ok-soft)" stroke="var(--a)" stroke-width="2"/>
@@ -332,7 +308,7 @@
       <text x="190" y="55" text-anchor="middle" font-size="15" font-weight="700" fill="var(--b)">乙</text>
       <text x="55" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="var(--a)">底 5 cm</text>
       <text x="165" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="var(--b)">底 5 cm</text>
-    </svg>
+    </svg></div>
     <div class="opts">
       <button class="opt" data-v="A" data-hint="乙虽然斜边更长、看起来拉得很长，但它的垂直高度和甲是一样的！"><b>A.</b> 乙的面积更大，因为乙斜得更长</button>
       <button class="opt" data-v="B"><b>B.</b> 甲和乙的面积一样大（等底等高）</button>
@@ -344,9 +320,9 @@
   <h2>想一想（多步综合应用）</h2>
 
   <div class="card q" data-id="p5a-u6-1-q5" data-kind="num" data-answer="5" data-hint="先用 10 cm 的底和它对应的高算出面积，同一个平行四边形面积不变，再除以 12。"
-       data-miss='{"60":"60 是平行四边形的面积（10 × 6 = 60），还要除以另一条底 12 才能求出对应的高！","7.2":"不能拿 12 × 6 ÷ 10！面积是 10 × 6 = 60，另一条底 12 上的高是 60 ÷ 12 = 5。"}' data-lc-source="eyJhbnN3ZXIiOiI1IiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjUuIOS4gOS4quW5s+ihjOWbm+i+ueW9ouebuOahhu+8jOW6leaYryAxMCBjbe+8jOi/meadoeW6leWvueW6lOeahOmrmOaYryA2IGNt44CC5aaC5p6c5oqK5a6D56uL6LW35p2l77yM5Lul5Y+m5LiA5p2h6ZW/IDEyIGNtIOeahOi+ueS4uuW6le+8jOmCo+S5iCAxMiBjbSDov5nmnaHlupXlr7nlupTnmoTpq5jmmK/lpJrlsJHljpjnsbPvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDMyMCAxOTBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuW5s+ihjOWbm+i+ueW9ouW6lTEw5Y6Y57Gz77yM55u46YK76L65MTLljpjnsbPvvIw25Y6Y57Gz55qE6auY6JC95Zyo5bqV6L655bu26ZW/57q/5LiKXCIgc3R5bGU9XCJkaXNwbGF5OmJsb2NrO3dpZHRoOjEwMCU7bWF4LXdpZHRoOjMyMHB4O2hlaWdodDphdXRvO21hcmdpbjo4cHggYXV0b1wiPlxuICAgICAgPCEtLSBBdCAxMiBweC9jbSB0aGUgaG9yaXpvbnRhbCBvZmZzZXQgaXMgNipzcXJ0KDMpIGNtLCBiZXlvbmQgdGhlIDEwIGNtIGJhc2UuIC0tPlxuICAgICAgPHBvbHlnb24gcG9pbnRzPVwiMjAsMTQwIDE0MCwxNDAgMjY0LjcwNzY1OCw2OCAxNDQuNzA3NjU4LDY4XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjJcIj48L3BvbHlnb24+XG4gICAgICA8bGluZSB4MT1cIjE0MFwiIHkxPVwiMTQwXCIgeDI9XCIyODJcIiB5Mj1cIjE0MFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLW11dGVkKTtzdHJva2Utd2lkdGg6MS44O3N0cm9rZS1kYXNoYXJyYXk6NCAzXCI+PC9saW5lPlxuICAgICAgPGxpbmUgeDE9XCIyNjQuNzA3NjU4XCIgeTE9XCI2OFwiIHgyPVwiMjY0LjcwNzY1OFwiIHkyPVwiMTQwXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tYik7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWRhc2hhcnJheTo1IDRcIj48L2xpbmU+XG4gICAgICA8cG9seWxpbmUgcG9pbnRzPVwiMjU2LjcwNzY1OCwxNDAgMjU2LjcwNzY1OCwxMzIgMjY0LjcwNzY1OCwxMzJcIiBzdHlsZT1cImZpbGw6bm9uZTtzdHJva2U6dmFyKC0tYik7c3Ryb2tlLXdpZHRoOjEuOFwiPjwvcG9seWxpbmU+XG4gICAgICA8Y2lyY2xlIGN4PVwiMjY0LjcwNzY1OFwiIGN5PVwiMTQwXCIgcj1cIjIuNVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1iKVwiPjwvY2lyY2xlPlxuICAgICAgPHRleHQgeD1cIjY4XCIgeT1cIjEwNFwiIHRleHQtYW5jaG9yPVwiZW5kXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTdweFwiPjEyIGNtPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjI3NFwiIHk9XCIxMDdcIiB0ZXh0LWFuY2hvcj1cInN0YXJ0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTdweFwiPjYgY208L3RleHQ+XG4gICAgICA8dGV4dCB4PVwiODBcIiB5PVwiMTY3XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpO2ZvbnQtc2l6ZToxN3B4XCI+MTAgY208L3RleHQ+XG4gICAgICA8dGV4dCB4PVwiMjI1XCIgeT1cIjE4M1wiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLW11dGVkKTtmb250LXNpemU6MTdweFwiPuW6lei+ueW7tumVv+e6vzwvdGV4dD5cbiAgICA8L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+5LiN5Y+Y6YeP5piv6Z2i56ev77yaPGI+UyA9IDEwIMOXIDYgPSA2MO+8iGNtwrLvvIk8L2I+77ybMTIgY20g5bqV6L655LiK55qE6auY5Li6IDxiPjYwIMO3IDEyID0gNe+8iGNt77yJPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+       data-miss='{"60":"60 是平行四边形的面积（10 × 6 = 60），还要除以另一条底 12 才能求出对应的高！","7.2":"不能拿 12 × 6 ÷ 10！面积是 10 × 6 = 60，另一条底 12 上的高是 60 ÷ 12 = 5。"}' data-lc-source="eyJhbnN3ZXIiOiI1IiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjUuIOS4gOS4quW5s+ihjOWbm+i+ueW9ouebuOahhu+8jOW6leaYryAxMCBjbe+8jOi/meadoeW6leWvueW6lOeahOmrmOaYryA2IGNt44CC5aaC5p6c5oqK5a6D56uL6LW35p2l77yM5Lul5Y+m5LiA5p2h6ZW/IDEyIGNtIOeahOi+ueS4uuW6le+8jOmCo+S5iCAxMiBjbSDov5nmnaHlupXlr7nlupTnmoTpq5jmmK/lpJrlsJHljpjnsbPvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cImZpZy1zY3JvbGxcIiByb2xlPVwicmVnaW9uXCIgYXJpYS1sYWJlbD1cIuWbvuekuu+8iOeqhOWxj+WPr+W3puWPs+a7keWKqO+8iVwiIHRhYmluZGV4PVwiMFwiPjxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzMjAgMTkwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLlubPooYzlm5vovrnlvaLlupUxMOWOmOexs++8jOebuOmCu+i+uTEy5Y6Y57Gz77yMNuWOmOexs+eahOmrmOiQveWcqOW6lei+ueW7tumVv+e6v+S4ilwiIHN0eWxlPVwiZGlzcGxheTpibG9jazt3aWR0aDoxMDAlO21heC13aWR0aDozMjBweDtoZWlnaHQ6YXV0bzttYXJnaW46OHB4IGF1dG9cIj5cbiAgICAgIDwhLS0gQXQgMTIgcHgvY20gdGhlIGhvcml6b250YWwgb2Zmc2V0IGlzIDYqc3FydCgzKSBjbSwgYmV5b25kIHRoZSAxMCBjbSBiYXNlLiAtLT5cbiAgICAgIDxwb2x5Z29uIHBvaW50cz1cIjIwLDE0MCAxNDAsMTQwIDI2NC43MDc2NTgsNjggMTQ0LjcwNzY1OCw2OFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoyXCI+PC9wb2x5Z29uPlxuICAgICAgPGxpbmUgeDE9XCIxNDBcIiB5MT1cIjE0MFwiIHgyPVwiMjgyXCIgeTI9XCIxNDBcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1tdXRlZCk7c3Ryb2tlLXdpZHRoOjEuODtzdHJva2UtZGFzaGFycmF5OjQgM1wiPjwvbGluZT5cbiAgICAgIDxsaW5lIHgxPVwiMjY0LjcwNzY1OFwiIHkxPVwiNjhcIiB4Mj1cIjI2NC43MDc2NThcIiB5Mj1cIjE0MFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1kYXNoYXJyYXk6NSA0XCI+PC9saW5lPlxuICAgICAgPHBvbHlsaW5lIHBvaW50cz1cIjI1Ni43MDc2NTgsMTQwIDI1Ni43MDc2NTgsMTMyIDI2NC43MDc2NTgsMTMyXCIgc3R5bGU9XCJmaWxsOm5vbmU7c3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoxLjhcIj48L3BvbHlsaW5lPlxuICAgICAgPGNpcmNsZSBjeD1cIjI2NC43MDc2NThcIiBjeT1cIjE0MFwiIHI9XCIyLjVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYilcIj48L2NpcmNsZT5cbiAgICAgIDx0ZXh0IHg9XCI2OFwiIHk9XCIxMDRcIiB0ZXh0LWFuY2hvcj1cImVuZFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE3cHhcIj4xMiBjbTwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCIyNzRcIiB5PVwiMTA3XCIgdGV4dC1hbmNob3I9XCJzdGFydFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE3cHhcIj42IGNtPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjgwXCIgeT1cIjE2N1wiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTdweFwiPjEwIGNtPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjIyNVwiIHk9XCIxODNcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjE3cHhcIj7lupXovrnlu7bplb/nur88L3RleHQ+XG4gICAgPC9zdmc+PC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPuS4jeWPmOmHj+aYr+mdouenr++8mjxiPlMgPSAxMCDDlyA2ID0gNjDvvIhjbcKy77yJPC9iPu+8mzEyIGNtIOW6lei+ueS4iueahOmrmOS4uiA8Yj42MCDDtyAxMiA9IDXvvIhjbe+8iTwvYj7jgII8L3A+PC9kaXY+XG4gICJ9">
     <p class="line">5. 一个平行四边形相框，底是 10 cm，这条底对应的高是 6 cm。如果把它立起来，以另一条长 12 cm 的边为底，那么 12 cm 这条底对应的高是多少厘米？</p>
-    <svg class="qfig" viewBox="0 0 320 190" role="img" aria-label="平行四边形底10厘米，相邻边12厘米，6厘米的高落在底边延长线上" style="display:block;width:100%;max-width:320px;height:auto;margin:8px auto">
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" viewBox="0 0 320 190" role="img" aria-label="平行四边形底10厘米，相邻边12厘米，6厘米的高落在底边延长线上" style="display:block;width:100%;max-width:320px;height:auto;margin:8px auto">
       <!-- At 12 px/cm the horizontal offset is 6*sqrt(3) cm, beyond the 10 cm base. -->
       <polygon points="20,140 140,140 264.707658,68 144.707658,68" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/>
       <line x1="140" y1="140" x2="282" y2="140" style="stroke:var(--muted);stroke-width:1.8;stroke-dasharray:4 3"/>
@@ -357,14 +333,14 @@
       <text x="274" y="107" text-anchor="start" style="fill:var(--fg);font-size:17px">6 cm</text>
       <text x="80" y="167" text-anchor="middle" style="fill:var(--fg);font-size:17px">10 cm</text>
       <text x="225" y="183" text-anchor="middle" style="fill:var(--muted);font-size:17px">底边延长线</text>
-    </svg>
+    </svg></div>
     <div class="reveal"><p>不变量是面积：<b>S = 10 × 6 = 60（cm²）</b>；12 cm 底边上的高为 <b>60 ÷ 12 = 5（cm）</b>。</p></div>
   </div>
 
   <div class="card q" data-id="p5a-u6-1-q6" data-kind="num" data-answer="1080" data-hint="先算麦田的面积（底 × 高），再按每平方米的产量算总产量。"
-       data-miss='{"1500":"1500 是麦田的平方米数（50 × 30 = 1500），每平方米收 0.72 千克小麦，还要乘 0.72（或算每平方米能收多少）！请看清题目：每平方米收小麦 0.72 千克，1500 × 0.72 = 1080。","540":"平行四边形面积不用除以 2：50 × 30 = 1500（平方米），1500 × 0.72 = 1080（千克）。"}' data-lc-source="eyJhbnN3ZXIiOiIxMDgwIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjYuIOS4gOWdl+W5s+ihjOWbm+i+ueW9ouekuuiMg+m6pueUsO+8jOW6leaYryA1MCDnsbPvvIzlr7nlupTnmoTpq5jmmK8gMzAg57Gz44CC5aaC5p6c5bmz5Z2H5q+P5bmz5pa557Gz5pS25bCP6bqmIDAuNzIg5Y2D5YWL77yM6L+Z5Z2X6bqm55Sw5LiA5YWx5Y+v5Lul5pS25bCP6bqm5aSa5bCR5Y2D5YWL77yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzMDAgMTkwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLpuqbnlLDlupU1MOexs+mrmDMw57Gz77yM5Lqn6YeP55Sx5a2m55Sf6K6h566XXCIgc3R5bGU9XCJkaXNwbGF5OmJsb2NrO3dpZHRoOjEwMCU7bWF4LXdpZHRoOjMwMHB4O2hlaWdodDphdXRvO21hcmdpbjo4cHggYXV0b1wiPjxwb2x5Z29uIHBvaW50cz1cIjQ1LDE0MCAyMjUsMTQwIDI2MCw0NSA4MCw0NVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoyXCI+PC9wb2x5Z29uPjxsaW5lIHgxPVwiODVcIiB5MT1cIjQ1XCIgeDI9XCI4NVwiIHkyPVwiMTQwXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tYik7c3Ryb2tlLXdpZHRoOjI7c3Ryb2tlLWRhc2hhcnJheTo1IDRcIj48L2xpbmU+PGxpbmUgeDE9XCI4NVwiIHkxPVwiMTMwXCIgeDI9XCI5NVwiIHkyPVwiMTMwXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tYik7c3Ryb2tlLXdpZHRoOjJcIj48L2xpbmU+PGxpbmUgeDE9XCI5NVwiIHkxPVwiMTMwXCIgeDI9XCI5NVwiIHkyPVwiMTQwXCIgc3R5bGU9XCJzdHJva2U6dmFyKC0tYik7c3Ryb2tlLXdpZHRoOjJcIj48L2xpbmU+PHRleHQgeD1cIjk1XCIgeT1cIjEwMFwiIHRleHQtYW5jaG9yPVwic3RhcnRcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpO2ZvbnQtc2l6ZToxNnB4XCI+MzAg57GzPC90ZXh0Pjx0ZXh0IHg9XCIxNTBcIiB5PVwiMTY2XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpO2ZvbnQtc2l6ZToxNnB4XCI+NTAg57GzPC90ZXh0Pjwvc3ZnPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7nrKzkuIDmraXmsYLpuqbnlLDpnaLnp6/vvJo8Yj5TID0gNTAgw5cgMzAgPSAxNTAw77yI5bmz5pa557Gz77yJPC9iPu+8m+esrOS6jOatpeaxguaAu+S6p+mHj++8mjxiPjE1MDAgw5cgMC43MiA9IDEwODDvvIjljYPlhYvvvIk8L2I+44CCPC9wPjwvZGl2PlxuICAifQ==">
+       data-miss='{"1500":"1500 是麦田的平方米数（50 × 30 = 1500），每平方米收 0.72 千克小麦，还要乘 0.72（或算每平方米能收多少）！请看清题目：每平方米收小麦 0.72 千克，1500 × 0.72 = 1080。","540":"平行四边形面积不用除以 2：50 × 30 = 1500（平方米），1500 × 0.72 = 1080（千克）。"}' data-lc-source="eyJhbnN3ZXIiOiIxMDgwIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPjYuIOS4gOWdl+W5s+ihjOWbm+i+ueW9ouekuuiMg+m6pueUsO+8jOW6leaYryA1MCDnsbPvvIzlr7nlupTnmoTpq5jmmK8gMzAg57Gz44CC5aaC5p6c5bmz5Z2H5q+P5bmz5pa557Gz5pS25bCP6bqmIDAuNzIg5Y2D5YWL77yM6L+Z5Z2X6bqm55Sw5LiA5YWx5Y+v5Lul5pS25bCP6bqm5aSa5bCR5Y2D5YWL77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJmaWctc2Nyb2xsXCIgcm9sZT1cInJlZ2lvblwiIGFyaWEtbGFiZWw9XCLlm77npLrvvIjnqoTlsY/lj6/lt6blj7Pmu5HliqjvvIlcIiB0YWJpbmRleD1cIjBcIj48c3ZnIGNsYXNzPVwicWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzAwIDE5MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi6bqm55Sw5bqVNTDnsbPpq5gzMOexs++8jOS6p+mHj+eUseWtpueUn+iuoeeul1wiIHN0eWxlPVwiZGlzcGxheTpibG9jazt3aWR0aDoxMDAlO21heC13aWR0aDozMDBweDtoZWlnaHQ6YXV0bzttYXJnaW46OHB4IGF1dG9cIj48cG9seWdvbiBwb2ludHM9XCI0NSwxNDAgMjI1LDE0MCAyNjAsNDUgODAsNDVcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwtc29mdCk7c3Ryb2tlOnZhcigtLWZnKTtzdHJva2Utd2lkdGg6MlwiPjwvcG9seWdvbj48bGluZSB4MT1cIjg1XCIgeTE9XCI0NVwiIHgyPVwiODVcIiB5Mj1cIjE0MFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyO3N0cm9rZS1kYXNoYXJyYXk6NSA0XCI+PC9saW5lPjxsaW5lIHgxPVwiODVcIiB5MT1cIjEzMFwiIHgyPVwiOTVcIiB5Mj1cIjEzMFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyXCI+PC9saW5lPjxsaW5lIHgxPVwiOTVcIiB5MT1cIjEzMFwiIHgyPVwiOTVcIiB5Mj1cIjE0MFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyXCI+PC9saW5lPjx0ZXh0IHg9XCI5NVwiIHk9XCIxMDBcIiB0ZXh0LWFuY2hvcj1cInN0YXJ0XCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTZweFwiPjMwIOexszwvdGV4dD48dGV4dCB4PVwiMTUwXCIgeT1cIjE2NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTZweFwiPjUwIOexszwvdGV4dD48L3N2Zz48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+56ys5LiA5q2l5rGC6bqm55Sw6Z2i56ev77yaPGI+UyA9IDUwIMOXIDMwID0gMTUwMO+8iOW5s+aWueexs++8iTwvYj7vvJvnrKzkuozmraXmsYLmgLvkuqfph4/vvJo8Yj4xNTAwIMOXIDAuNzIgPSAxMDgw77yI5Y2D5YWL77yJPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
     <p class="line">6. 一块平行四边形示范麦田，底是 50 米，对应的高是 30 米。如果平均每平方米收小麦 0.72 千克，这块麦田一共可以收小麦多少千克？</p>
-    <svg class="qfig" viewBox="0 0 300 190" role="img" aria-label="麦田底50米高30米，产量由学生计算" style="display:block;width:100%;max-width:300px;height:auto;margin:8px auto"><polygon points="45,140 225,140 260,45 80,45" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/><line x1="85" y1="45" x2="85" y2="140" style="stroke:var(--b);stroke-width:2;stroke-dasharray:5 4"/><line x1="85" y1="130" x2="95" y2="130" style="stroke:var(--b);stroke-width:2"/><line x1="95" y1="130" x2="95" y2="140" style="stroke:var(--b);stroke-width:2"/><text x="95" y="100" text-anchor="start" style="fill:var(--fg);font-size:16px">30 米</text><text x="150" y="166" text-anchor="middle" style="fill:var(--fg);font-size:16px">50 米</text></svg>
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="qfig" viewBox="0 0 300 190" role="img" aria-label="麦田底50米高30米，产量由学生计算" style="display:block;width:100%;max-width:300px;height:auto;margin:8px auto"><polygon points="45,140 225,140 260,45 80,45" style="fill:var(--hl-soft);stroke:var(--fg);stroke-width:2"/><line x1="85" y1="45" x2="85" y2="140" style="stroke:var(--b);stroke-width:2;stroke-dasharray:5 4"/><line x1="85" y1="130" x2="95" y2="130" style="stroke:var(--b);stroke-width:2"/><line x1="95" y1="130" x2="95" y2="140" style="stroke:var(--b);stroke-width:2"/><text x="95" y="100" text-anchor="start" style="fill:var(--fg);font-size:16px">30 米</text><text x="150" y="166" text-anchor="middle" style="fill:var(--fg);font-size:16px">50 米</text></svg></div>
     <div class="reveal"><p>第一步求麦田面积：<b>S = 50 × 30 = 1500（平方米）</b>；第二步求总产量：<b>1500 × 0.72 = 1080（千克）</b>。</p></div>
   </div>
 </section>
@@ -374,7 +350,7 @@
 </div>
 
 <script>
-/* 五上几何样板 p5a-u6-1：Step 1 木框微图解 + Step 2 连续割补平移实验台 */
+/* 木框渐进微图解；割补实验调用公共 polygon-cut-lab。 */
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var NS = "http://www.w3.org/2000/svg";
@@ -468,165 +444,6 @@ document.addEventListener("DOMContentLoaded", function () {
     drawMicro(0);
   }
 
-  /* ---------- Step 2: 连续可操作割补平移实验台 ---------- */
-  var stage = document.getElementById("u61-stage");
-  var slA = document.getElementById("u61-sl-a");
-  var slH = document.getElementById("u61-sl-h");
-  var slSkew = document.getElementById("u61-sl-skew");
-  var slCut = document.getElementById("u61-sl-cut");
-  var slMove = document.getElementById("u61-sl-move");
-  var readEl = document.getElementById("u61-read");
-
-  function renderWorkbench() {
-    if (!stage) return;
-    var a = Number(slA.value);
-    var h = Number(slH.value);
-    var cutMode = Number(slCut.value); // 0: 顶点, 1: 偏左高, 2: 底边中间高
-    var movePct = Number(slMove.value) / 100;
-
-    var cutOffset = cutMode === 0 ? 0 : (cutMode === 1 ? a * 0.25 : a * 0.5);
-    // Keep the whole vertical cut inside both bases, including preset/input changes.
-    var maxSkew = Math.min(3, Math.floor(a - cutOffset));
-    slSkew.max = String(maxSkew);
-    var skew = Math.max(Number(slSkew.min), Math.min(Number(slSkew.value), maxSkew));
-    slSkew.value = String(skew);
-    var cutShapes = cutOffset === 0
-      ? "左块是直角三角形，右块是直角梯形"
-      : skew + cutOffset === a
-        ? "左块是直角梯形，右块是直角三角形"
-        : "两块都是直角梯形";
-    document.getElementById("u61-skew-note").textContent = "为让剪线穿过上下两条底，当前倾斜偏移最多为 " + maxSkew + " cm。本次" + cutShapes + "。";
-    var cutLabels = ["从左顶点剪", "从底边四分之一处剪", "从底边正中间剪"];
-
-    document.getElementById("u61-val-a").textContent = a + " cm";
-    document.getElementById("u61-val-h").textContent = h + " cm";
-    document.getElementById("u61-val-skew").textContent = skew + " cm";
-    document.getElementById("u61-val-cut").textContent = cutLabels[cutMode];
-    document.getElementById("u61-val-move").textContent = Math.round(movePct * 100) + "%";
-
-    var slant = Math.sqrt(h * h + skew * skew);
-    document.getElementById("u61-st-a").textContent = String(a);
-    document.getElementById("u61-st-h").textContent = String(h);
-    document.getElementById("u61-st-s").textContent = slant.toFixed(1);
-    document.getElementById("u61-st-area").textContent = String(a * h);
-
-    while (stage.firstChild) stage.removeChild(stage.firstChild);
-
-    var sc = 28;
-    var ox = 44, oy = 172;
-    var aPx = a * sc, hPx = h * sc, skPx = skew * sc;
-    var cutX = ox + skPx + cutOffset * sc;
-
-    /* 1cm 网格底纹 */
-    for (var gx = 0; gx <= 14; gx++) {
-      stage.appendChild(el("line", { x1: ox + gx * sc, y1: oy - 5 * sc, x2: ox + gx * sc, y2: oy, stroke: "var(--line)", "stroke-width": 0.9 }));
-    }
-    for (var gy = 0; gy <= 5; gy++) {
-      stage.appendChild(el("line", { x1: ox, y1: oy - gy * sc, x2: ox + 14 * sc, y2: oy - gy * sc, stroke: "var(--line)", "stroke-width": 0.9 }));
-    }
-
-    /* 原平行四边形顶点：
-       下底: (ox, oy) -> (ox + aPx, oy)
-       上底: (ox + skPx, oy - hPx) -> (ox + skPx + aPx, oy - hPx)
-       沿 x = cutX 垂直剪开：
-       右侧保留块：上底从 cutX 到 ox + skPx + aPx；下底从 cutX 到 ox + aPx
-       左侧剪下块：上底从 ox + skPx 到 cutX；下底从 ox 到 cutX
-       左侧块向右平移距离 = movePct * aPx */
-    var rightPts = [
-      cutX + "," + (oy - hPx),
-      (ox + skPx + aPx) + "," + (oy - hPx),
-      (ox + aPx) + "," + oy,
-      cutX + "," + oy
-    ].join(" ");
-    stage.appendChild(el("polygon", {
-      points: rightPts,
-      fill: "var(--hl-soft)",
-      stroke: "var(--a)",
-      "stroke-width": 2.4
-    }));
-
-    var shiftX = movePct * aPx;
-    var leftPts = [
-      (ox + skPx + shiftX) + "," + (oy - hPx),
-      (cutX + shiftX) + "," + (oy - hPx),
-      (cutX + shiftX) + "," + oy,
-      (ox + shiftX) + "," + oy
-    ].join(" ");
-    stage.appendChild(el("polygon", {
-      points: leftPts,
-      fill: "var(--c)",
-      "fill-opacity": "0.38",
-      stroke: "var(--c)",
-      "stroke-width": 2.4
-    }));
-
-    /* 剪开的高线与直角记号 */
-    stage.appendChild(el("line", { x1: cutX, y1: oy - hPx, x2: cutX, y2: oy, stroke: "var(--no)", "stroke-width": 2.2, "stroke-dasharray": "4 3" }));
-    stage.appendChild(el("polyline", { points: cutX + "," + (oy - 9) + " " + (cutX + 9) + "," + (oy - 9) + " " + (cutX + 9) + "," + oy, fill: "none", stroke: "var(--no)", "stroke-width": 1.6 }));
-
-    /* 尺寸标注 */
-    var baseStart = movePct === 1 ? cutX : ox;
-    var baseEnd = movePct === 1 ? (cutX + aPx) : (ox + aPx);
-    stage.appendChild(el("line", { x1: baseStart, y1: oy + 14, x2: baseEnd, y2: oy + 14, stroke: "var(--a)", "stroke-width": 2 }));
-    stage.appendChild(el("text", {
-      x: (baseStart + baseEnd) / 2,
-      y: oy + 34,
-      "text-anchor": "middle",
-      "font-size": 16.5,
-      "font-weight": 700,
-      fill: "var(--a)"
-    }, movePct === 1 ? ("拼成长方形的长 = 底 a = " + a + " cm") : ("平行四边形的底 a = " + a + " cm")));
-
-    stage.appendChild(el("text", {
-      x: cutX + 8,
-      y: oy - hPx / 2 + 5,
-      "font-size": 16.5,
-      "font-weight": 700,
-      fill: "var(--no)"
-    }, "高 h = " + h + " cm"));
-
-    if (movePct === 0) {
-      readEl.className = "read";
-      readEl.innerHTML = "当前平行四边形：底 <b>a = " + a + " cm</b>，高 <b>h = " + h + " cm</b>（斜边约 " + slant.toFixed(1) + " cm）。拖动“平移拼合进度”或点下方按钮看割补转化！";
-    } else if (movePct < 1) {
-      readEl.className = "read";
-      readEl.innerHTML = "正在沿高剪开并向右平移（进度 " + Math.round(movePct * 100) + "%）：剪下的部分已向右平移 <b>" + (Math.round(movePct * a * 100) / 100) + " cm</b>，到终点时共平移 " + a + " cm。";
-    } else {
-      readEl.className = "read ok";
-      readEl.innerHTML = "严丝合缝拼成长方形！长 = 底 <b>" + a + " cm</b>，宽 = 高 <b>" + h + " cm</b>，面积 <b>S = " + a + " × " + h + " = " + (a * h) + " cm²</b>！";
-    }
-  }
-
-  [slA, slH, slSkew, slCut, slMove].forEach(function (input) {
-    if (input) input.addEventListener("input", renderWorkbench);
-  });
-
-  var manipRoot = document.getElementById("manip-u6-1");
-  if (manipRoot) {
-    manipRoot.querySelector(".ctrls").addEventListener("click", function (e) {
-      var btn = e.target.closest("button[data-act]");
-      if (!btn) return;
-      var act = btn.getAttribute("data-act");
-      if (act === "vertex") {
-        slCut.value = "0";
-        slMove.value = slMove.value === "100" ? "0" : "100";
-      } else if (act === "mid") {
-        slCut.value = "2";
-        slMove.value = "100";
-      } else if (act === "skew") {
-        var nextSkew = Number(slSkew.value) + Number(slSkew.step);
-        slSkew.value = nextSkew > Number(slSkew.max) ? slSkew.min : String(nextSkew);
-      } else if (act === "reset") {
-        slA.value = "6";
-        slH.value = "4";
-        slSkew.value = "2";
-        slCut.value = "0";
-        slMove.value = "0";
-      }
-      renderWorkbench();
-    });
-  }
-  renderWorkbench();
 });
 </script>
 </body>

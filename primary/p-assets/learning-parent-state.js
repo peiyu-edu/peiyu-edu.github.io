@@ -547,9 +547,27 @@
       });
       return echoes;
     }
+    // The old lesson log can be imported a moment before the course script records the same answer
+    // (another pass, another tab); that legacy copy must not add a second review row or count.
+    function echoAnswers(echoes) {
+      var native = dict();
+      Object.keys(state.marks).forEach(function (id) {
+        var m = state.marks[id], parts = identityParts(m.identity);
+        if (m.kind === "answer" && !m.legacy && parts) (native[m.sectionId + "|" + parts[2]] = native[m.sectionId + "|" + parts[2]] || []).push(m);
+      });
+      Object.keys(state.marks).forEach(function (id) {
+        var m = state.marks[id], parts = identityParts(m.identity);
+        if (m.kind !== "answer" || !m.legacy || !parts || !m.sectionId) return;
+        if ((native[m.sectionId + "|" + parts[2]] || []).some(function (n) {
+          return (n.base === m.base || (stage === "primary" && primaryFallback(n, { sectionId: m.sectionId, questionId: parts[2], questionType: parts[0] }))) &&
+            n.choice === m.choice && n.correct === m.correct && Math.abs(n.time - m.time) <= 2000;
+        })) echoes[id] = true;
+      });
+      return echoes;
+    }
     function snapshot() {
       ensure(); sync();
-      var totals = emptyCounts(), points = dict(), sections = dict(), questionCounts = dict(), echoes = echoViews();
+      var totals = emptyCounts(), points = dict(), sections = dict(), questionCounts = dict(), echoes = echoAnswers(echoViews());
       Object.keys(state.marks).forEach(function (id) {
         if (echoes[id]) return;
         var m = state.marks[id]; addCount(totals, m);
@@ -558,7 +576,9 @@
         if (m.sectionId) addCount(sections[m.sectionId] || (sections[m.sectionId] = emptyCounts()), m);
       });
       var questions = Object.keys(state.questions).map(function (k) { return question(state.questions[k], questionCounts[k] || emptyCounts()); });
-      var review = questions.filter(function (q) { return q.reviewDueAt !== null; }).map(function (q) {
+      var review = questions.filter(function (q) {
+        return q.reviewDueAt !== null && !(q.reviewScheduleId && echoes[q.reviewScheduleId] && answerMarks(q.identity).every(function (a) { return echoes[a.id]; }));
+      }).map(function (q) {
         return Object.assign({}, q, { dueAt: q.reviewDueAt, reason: q.reviewReason, due: q.reviewDueAt <= now() });
       }).sort(function (a, b) { return a.dueAt - b.dueAt; });
       return copy(Object.assign({ version: 1, events: state.events.filter(function (e) { return !echoes[e.id]; }), questions: questions, points: points, sections: sections, totals: totals, summary: totals,

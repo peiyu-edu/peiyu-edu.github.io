@@ -4,13 +4,20 @@
   if (document.body.dataset.learningPage !== "record") return;
   var host = document.getElementById("learning-app");
   if (!host) return;
-  var dataAPI = window.PeiyuLearningData, state = window.PeiyuLearningState, index, knowledge, variants = [];
+  var dataAPI = window.PeiyuLearningData, state = window.PeiyuLearningState, index, knowledge, variants = [], concepts = {};
   var query = new URLSearchParams(location.search), context = { from: "", step: 4, question: "" };
   var ratingNames = { "need-help": "还需帮助", "practice-more": "还想再练", "can-explain": "能解释理由", no: "还需帮助", fuzzy: "还想再练", know: "能解释理由", unsure: "还不确定", developing: "还想再练", confident: "能解释理由" };
   var sourceNames = { practice: "练习页", knowledge: "知识库", course: "课时", lesson: "课时", legacy: "本地记录", import: "本地记录", "legacy-log": "学习日志", "legacy-knowledge": "知识库", "legacy-knowledge-history": "知识库", "legacy-hci": "课时", "legacy-cards": "卡片自评" };
   function esc(value) { return dataAPI.escape(value); }
   function url(path) { return new URL(path, dataAPI.root || document.baseURI); }
   function point(id) { return index.points.find(function (item) { return item.id === id; }); }
+  // Primary concept cards live outside the knowledge catalog; they only name and link their own self-test answers.
+  function concept(id) { return Object.prototype.hasOwnProperty.call(concepts, id) ? concepts[id] : null; }
+  function conceptHref(card) {
+    var target = url("knowledge.html"), grade = /^p([1-6])/.exec(card.unitId || "");
+    if (grade) { target.searchParams.set("grade", grade[1]); target.searchParams.set("unit", card.unitId); }
+    target.hash = "card=" + card.id; return target.href;
+  }
   function lesson(id) { return index.lessons.find(function (item) { return item.id === id; }) || (Array.isArray(index.units) && index.units.find(function (item) { return item.id === id; })); }
   function contextual(path) {
     var target = url(path);
@@ -42,6 +49,12 @@
       var matching = variants.filter(function (variant) { return variant.point_id === item.pointId && variant.role === "parallel"; });
       var position = matching.findIndex(function (variant) { return variant.id === item.questionId; });
       if (position >= 0) return "变式 " + (position + 1);
+      var card = concept(item.pointId);
+      if (card && card.diagnostic && card.diagnostic.id === item.questionId) return "自测题";
+      if (card && Array.isArray(card.practice)) {
+        var drill = card.practice.find(function (entry) { return entry.id === item.questionId; });
+        if (drill) return drill.role === "review" ? "复习题" : "变式 " + (card.practice.filter(function (entry) { return entry.role === drill.role; }).indexOf(drill) + 1);
+      }
       var full = knowledge.points.find(function (entry) { return entry.id === item.pointId; });
       if (full && full.diagnostic && full.diagnostic.id === item.questionId) return "原诊断题";
       return item.questionId === "unknown-diagnostic" ? "诊断题（题目不详）" : "历史诊断题（内容已更新）";
@@ -72,7 +85,7 @@
   function math(node) { if (window.PeiyuKnowledge) window.PeiyuKnowledge.renderMath(node); }
   function eventTitle(event) {
     var p = point(event.pointId), s = lesson(isUnitTest(event) ? event.sectionId.replace(/-test$/, "") : event.sectionId);
-    return isUnitTest(event) && s ? (s.unitTitle || s.title.replace(/\s*·\s*单元首页$/, "")) : p ? p.title : s ? s.title : "学习记录";
+    return isUnitTest(event) && s ? (s.unitTitle || s.title.replace(/\s*·\s*单元首页$/, "")) : p ? p.title : concept(event.pointId) ? concept(event.pointId).title : s ? s.title : "学习记录";
   }
   function eventHref(event) {
     if (isUnitTest(event)) {
@@ -80,6 +93,7 @@
       if (match) test.hash = "q-" + Number(match[1]); return test.href;
     }
     if (point(event.pointId)) return knowledgeHref(event.pointId, event);
+    if (concept(event.pointId)) return conceptHref(concept(event.pointId));
     if (lesson(event.sectionId)) return lessonHref(event);
     return url("courses.html").href;
   }
@@ -185,6 +199,12 @@
       if (/^[A-Za-z0-9_.:-]{1,100}$/.test(query.get("question") || "")) context.question = query.get("question");
     }
     render();
+    var unnamed = (state.snapshot().events || []).some(function (event) { return event.pointId && !point(event.pointId); });
+    if (index.conceptCards && unnamed) fetch(url("data/knowledge/primary-concepts.json").href).then(function (r) { return r.ok ? r.json() : null; }).then(function (data) {
+      if (!data || !Array.isArray(data.cards)) return;
+      data.cards.forEach(function (card) { if (card && card.id) concepts[card.id] = card; });
+      render();
+    }).catch(function () { /* Without the cards the generic title stays; the record itself is unaffected. */ });
     window.addEventListener("storage", function (event) { if (event.key === (state.key || "peiyu.hs.learning.v1")) render(); });
   }).catch(function () {
     host.innerHTML = '<div class="lp-page"><h1>学习记录暂时没有加载成功</h1><p>请刷新页面重试。已有的本地记录不会受到影响。</p><button class="lp-button" type="button" data-lr-reload>重新加载</button></div>';

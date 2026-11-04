@@ -179,24 +179,39 @@
     }
     function summary(container) {
       container.replaceChildren();
-      var total = 0, pending = 0, types = {}, points = {};
+      var total = 0, pending = 0, types = {}, points = new Map();
       paper.questions.forEach(function (q, i) {
         var value = session.scores[q.id], missing = value == null;
         if (missing) pending++; else total += value;
         if (!types[q.type]) types[q.type] = { score: 0, max: 0 };
         types[q.type].score += value || 0; types[q.type].max += q.maxScore;
         if (!missing && value < q.maxScore) {
-          var post = posts[q.id], names = (questions[i].points || []).concat(post.methodPoints || []);
-          Array.from(new Set(names.length ? names : ['未标注知识点'])).forEach(function (name) { points[name] = (points[name] || 0) + q.maxScore - value; });
+          var sections = Object.keys(index.sections || {}).filter(function (sid) { return index.sections[sid].ids.indexOf(q.id) >= 0; });
+          // Use the existing course mapping, never answer-side method sentences.
+          var groups = sections.map(function (sid) {
+            return { key: 'section:' + sid, name: index.sections[sid].title, href: '../lessons/' + encodeURIComponent(sid) + '.html#step5' };
+          });
+          if (!groups.length) {
+            var names = Array.from(new Set((questions[i].points || []).filter(function (name) { return typeof name === 'string' && name.trim(); })));
+            groups = (names.length ? names : ['未标注知识点']).map(function (name) { return { key: 'point:' + name, name: name }; });
+          }
+          groups.forEach(function (group) {
+            if (!points.has(group.key)) points.set(group.key, { name: group.name, href: group.href, lost: 0 });
+            points.get(group.key).lost += q.maxScore - value;
+          });
         }
       });
       container.appendChild(el('h3', null, pending ? '已计 ' + total + ' 分 · 还有 ' + pending + ' 题待自评' : '总分 ' + total + ' / ' + paper.maxScore + (paper.estimated ? '（含估分）' : '')));
       container.appendChild(el('p', 'eb-note', '本次用时 ' + duration(session.submittedAt - session.startedAt) + '。逐题用时从进入该题累计到切换下一题，包含在该题停留和离页的时间。'));
       Object.keys(types).forEach(function (name) { container.appendChild(el('p', null, name + '：' + types[name].score + ' / ' + types[name].max)); });
       container.appendChild(el('h4', null, '按知识点失分' + (pending ? '（已计分题）' : '')));
-      container.appendChild(el('p', 'eb-note', '一道题涉及多个知识点时分别列出该题失分，各项不可相加。'));
-      Object.keys(points).sort(function (a, b) { return points[b] - points[a]; }).forEach(function (name) { container.appendChild(el('p', null, name + '：失 ' + points[name] + ' 分')); });
-      if (!Object.keys(points).length) container.appendChild(el('p', null, '已计分题暂无失分。'));
+      container.appendChild(el('p', 'eb-note', '优先按所属课节汇总，无课节时按知识点标签汇总。一道题涉及多个课节或知识点时分别列出该题失分，各项不可相加。'));
+      Array.from(points.values()).sort(function (a, b) { return b.lost - a.lost; }).forEach(function (group) {
+        var row = el('p'), name = el(group.href ? 'a' : 'span', null, group.name);
+        if (group.href) name.href = group.href;
+        row.appendChild(name); row.appendChild(document.createTextNode('：失 ' + group.lost + ' 分')); container.appendChild(row);
+      });
+      if (!points.size) container.appendChild(el('p', null, '已计分题暂无失分。'));
       var link = el('a', 'btn ghost', '打开错题本'); link.href = '../record.html#lw-wrongbook'; container.appendChild(link);
     }
     function renderReport() {

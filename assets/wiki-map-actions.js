@@ -194,11 +194,10 @@
       if (!sec.querySelector(".kga-mobile-toggle")) {
         var b = document.createElement("button");
         b.type = "button"; b.className = "btn ghost kga-mobile-toggle";
-        b.textContent = "🗺️ 展开按章图谱";
+        b.textContent = "🗺️ 展开地铁图（可左右拖动）";
         b.addEventListener("click", function () {
           var open = wrap.classList.toggle("kga-open");
-          b.textContent = open ? "收起地铁图" : "🗺️ 展开按章图谱";
-          if (open) window.dispatchEvent(new Event("resize"));
+          b.textContent = open ? "收起地铁图" : "🗺️ 展开地铁图（可左右拖动）";
           if (open) wrap.scrollIntoView({ behavior: "smooth", block: "start" });
         });
         sec.insertBefore(b, wrap);

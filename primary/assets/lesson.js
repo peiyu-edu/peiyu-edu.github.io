@@ -667,7 +667,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     document.head.appendChild(fl);
     if (STAGE !== "junior") { // 方法 Wiki 只有高中卡片
       var ws = document.createElement("script");
-      ws.src = "../assets/wiki.js?v=vs-a76230af13b4";
+      ws.src = "../assets/wiki.js?v=vs-1cb8377d5556";
       document.head.appendChild(ws);
     }
     var hs = document.createElement("script"); // 交互层（PY-53）

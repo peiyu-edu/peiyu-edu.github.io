@@ -64,7 +64,7 @@
       header('按原卷题序在本页作答。解答过程写在纸上，交卷后对照答案与分步解析自评。交卷前不会加载答案文件。');
       app.appendChild(el('p', 'eb-note', paper.durationNote + '。倒计时按开考时间计算，刷新或离开页面不会暂停，到时自动交卷。'));
       app.appendChild(el('p', 'eb-note', paper.partialRule === 'new-per-option' ? '多选：全对得满分；漏选每个正确选项2分；错选或不选0分。' : '多选：全对得满分；只漏选得2分；错选或不选0分。'));
-      app.appendChild(el('p', 'eb-note', '填空支持标准答案及数字、分数、根式的常见写法；复杂符号请按题目格式输入。解答题和开放答案自评，成绩仅供本次练习复盘。'));
+      app.appendChild(el('p', 'eb-note', '填空支持数字、分数、根式、幂与 ln、π 的常见写法；未能识别的写法交卷后对照答案自评。解答题和开放答案也需自评，成绩仅供本次练习复盘。'));
       var draft = readDraft();
       if (validDraft(draft)) {
         app.appendChild(button(draft.submittedAt ? '查看上次报告 / 继续自评' : '继续本卷模考', function () {
@@ -215,7 +215,7 @@
       var link = el('a', 'btn ghost', '打开错题本'); link.href = '../record.html#lw-wrongbook'; container.appendChild(link);
     }
     function renderReport() {
-      header('已交卷。客观题已自动计分；请逐题对照答案、分步解析，自评解答题与开放答案。自评满分只表示本次自查结果。');
+      header('已交卷。可识别的客观题已自动计分；请逐题对照答案、分步解析，自评解答题、开放答案与未能识别的填空写法。自评满分只表示本次自查结果。');
       var totals = el('section', 'me-summary'); app.appendChild(totals); summary(totals);
       paper.questions.forEach(function (q, i) {
         var item = questions[i], post = posts[q.id], card = el('article', 'card eb-card gs-problem me-result');

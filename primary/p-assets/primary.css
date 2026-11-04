@@ -24,7 +24,13 @@ body.primary :is(.les-list, .unit) li.todo { color: var(--muted); }
 /* 步骤导航：按钮更大，便于手指点 */
 body.primary .steps button { min-height: 44px; font-size: 15px; padding: 8px 16px; }
 /* 从 #stepN 进课时，给吸顶步骤条留出位置，题干首行不被遮住。 */
-body.primary section.step { scroll-margin-top: 72px; }
+body.primary section.step {
+  scroll-margin-top: calc(var(--primary-steps-height, 64px) + 8px);
+}
+body.primary[data-standard="v2"] section.step {
+  /* Async video cards must not anchor a later heading and pull the step start under the bar. */
+  overflow-anchor: none;
+}
 body.primary.low .steps button { font-size: 16px; }
 /* 选中步骤在强调色底上用 --on-accent；:where() 把优先级压到和页内 `body.primary .steps button` 同级，自定步骤底色的页面（如 PY-160 复习页）以页内为准 */
 body.primary .steps button:where([aria-selected="true"]) { color: var(--on-accent); }

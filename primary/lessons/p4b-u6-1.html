@@ -21,10 +21,18 @@ table.vs tr.ln td { border-top:3px solid var(--fg); height:4px; }
 table.vs td.op { width:34px; font-size:26px; }
 table.vs td.now { background:var(--ok-soft); border-radius:8px; }
 table.vs td.res { color:var(--a); }
+
+.lab-adjust {display:grid;gap:8px;margin:12px 0;font-size:17px}
+.lab-adjust input {width:100%;min-height:44px;accent-color:var(--a)}
+.lab-adjust output {font-weight:700;color:var(--a)}
+.example-steps summary,.micro-box button {min-height:44px;font-size:17px;cursor:pointer}
+.example-steps details {margin:10px 0}
+.micro-box .ctrls button[aria-pressed="true"] {border-color:var(--a);font-weight:700}
+.micro-box svg text {fill:var(--fg);font-size:19px}
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4b-u6-1">
+<body class="primary" data-stage="primary" data-sec="p4b-u6-1" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级下册 · 第六单元 小数的加法和减法 · 第 1 课</p>
@@ -32,9 +40,45 @@ table.vs td.res { color:var(--a); }
 <p class="lead">两个小数的位数一样多，怎样用竖式加、减？小数点要放在哪里，一位一位该怎么算？</p>
 <p class="note-old">本单元按旧版教材编排。</p>
 
+<details class="route" open>
+  <summary>本节路线导读</summary>
+  <p><b>核心问题：</b>小数点对齐，为什么就能让相同单位相加减？</p>
+  <p><a href="p3b-u6-4.html">先修：一位小数加减</a> · <a href="p4b-u4-3.html">回看小数的性质</a></p>
+  <p>先回想旧办法，作出预测；调一调并比较几组数，讲清道理；再分步看例题，独立练习。以后到初中，仍要用相同单位计算、用估算检查。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p4b-u6-1&amp;from=p4b-u6-1">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p class="line">整数加减时，个位对个位。换成元、角、分，你会怎样对齐？先回想一位小数，再猜两位小数怎样算。</p>
+  <div class="micro-box" id="u6-micro">
+    <div class="ctrls" role="group" aria-label="回想并比较">
+      <button type="button" data-micro="0" aria-pressed="true">回想旧办法</button>
+      <button type="button" data-micro="1" aria-pressed="false">换一种情形</button>
+    </div>
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0">
+      <svg class="micro-fig" viewBox="0 0 360 116" role="img" aria-label="比较已有经验与新的情形">
+        <rect x="8" y="4" width="344" height="108" rx="12" style="fill:var(--a);fill-opacity:.08;stroke:var(--a)"/>
+        <text x="180" y="32" text-anchor="middle" id="u6-m1"></text>
+        <text x="180" y="64" text-anchor="middle" id="u6-m2"></text>
+        <text x="180" y="96" text-anchor="middle" id="u6-m3"></text>
+      </svg>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var lines = [["2.3 元 + 1.4 元", "元对元，角对角", "先想相同的单位"], ["2.36 元 + 1.47 元", "多了分，还能怎样对齐？", "先猜，再到竖式里验证"]];
+  var buttons = document.querySelectorAll("[data-micro]");
+  function show(k) {
+    lines[k].forEach(function (t, i) { document.getElementById("u6-m" + (i + 1)).textContent = t; });
+    buttons.forEach(function (b, i) { b.setAttribute("aria-pressed", i === k ? "true" : "false"); });
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { show(+b.dataset.micro); }); });
+  show(0);
+});
+</script>
+
   <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuWwj+a1t+S5sOS4gOaUr+eslCAyLjQ1IOWFg++8jOWPiOS5sOS4gOS4quacrOWtkCAxLjM4IOWFg+OAguS4gOWFseiKseS6huWkmuWwkeWFg++8n+WFiOS8sOS4gOS8sO+8jOWGjemAieOAgjwvcD5cbiAgICA8c3ZnIGNsYXNzPVwicWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzYwIDgwXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLnrJQyLjQ15YWD77yM5pys5a2QMS4zOOWFg1wiPlxuICAgICAgPHJlY3QgeD1cIjEwXCIgeT1cIjEyXCIgd2lkdGg9XCIxNjBcIiBoZWlnaHQ9XCI1NFwiIHJ4PVwiOFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1hKTtmaWxsLW9wYWNpdHk6LjI7c3Ryb2tlOnZhcigtLWEpO3N0cm9rZS13aWR0aDoyXCI+PC9yZWN0PlxuICAgICAgPHRleHQgeD1cIjkwXCIgeT1cIjQ2XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYSk7Zm9udC1zaXplOjE5cHg7Zm9udC13ZWlnaHQ6NzAwXCI+56yUIDIuNDUg5YWDPC90ZXh0PlxuICAgICAgPHJlY3QgeD1cIjE5MFwiIHk9XCIxMlwiIHdpZHRoPVwiMTYwXCIgaGVpZ2h0PVwiNTRcIiByeD1cIjhcIiBzdHlsZT1cImZpbGw6dmFyKC0taGwpO2ZpbGwtb3BhY2l0eTouMjtzdHJva2U6dmFyKC0taGwpO3N0cm9rZS13aWR0aDoyXCI+PC9yZWN0PlxuICAgICAgPHRleHQgeD1cIjI3MFwiIHk9XCI0NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTlweDtmb250LXdlaWdodDo3MDBcIj7mnKzlrZAgMS4zOCDlhYM8L3RleHQ+XG4gICAgPC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCIzLjczIOWwkeS6huS4gOeCue+8mjUg5YiG5YqgIDgg5YiG5pivIDEzIOWIhu+8jOa7oeS6hiAxMCDliIbvvIzopoHlkJEgMSDop5Lov5sgMSDop5LjgILmiorov5vkvY3kuZ/liqDkuIrlho3nnIvjgIJcIj48Yj5BPC9iPjMuNzMg5YWDPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+My44MyDlhYM8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwiMzgzIOWFg+WkquWkmuS6huOAgjIg5aSa5YWD5YqgIDEg5aSa5YWD77yM5aSn57qmIDQg5YWD77yM5b6X5pWw6YeM6KaB5pyJ5bCP5pWw54K544CCXCI+PGI+QzwvYj4zODMg5YWDPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5a+577yMMy44MyDlhYPjgILlhYPlr7nlhYPjgIHop5Llr7nop5LjgIHliIblr7nliIbvvIw1IOWIhiArIDgg5YiG5ruhIDEwIOWIhuimgei/myAxIOinkuOAguS4i+mdouS4gOS9jeS4gOS9jeadpeeul+OAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
     <p class="line">小海买一支笔 2.45 元，又买一个本子 1.38 元。一共花了多少元？先估一估，再选。</p>
     <svg class="qfig" viewBox="0 0 360 80" role="img" aria-label="笔2.45元，本子1.38元">
@@ -58,8 +102,15 @@ table.vs td.res { color:var(--a); }
 <div class="vid" data-video="concept"></div>
 
   <h2>1. 小数点对齐，从最右边算起</h2>
-  <p class="line">选一道题，点“下一步”。每点一次，算一个数位；淡色底的那一列就是正在算的。</p>
-  <div class="card manip" id="m-vs">
+  <p class="line">先猜会不会进位或退位，再选题、拖动第二笔钱。点“下一步”逐位核对；淡色底标出正在算的数位。数量条的一整格表示 10 元。</p>
+  <div class="card manip" id="m-vs" tabindex="0" aria-label="可调数字实验台">
+    <label class="lab-adjust" for="lab-range">第二笔钱（元，每次调 0.01 元） <output id="lab-value" for="lab-range"></output>
+      <input id="lab-range" type="range" min="0" max="999" step="1" value="0">
+    </label>
+    <div class="fig-scroll" role="region" aria-label="数量条（窄屏可左右滑动）" tabindex="0">
+      <svg class="stage" id="lab-model" viewBox="0 0 360 150" role="img" aria-label="数量条随调整变化"></svg>
+    </div>
+
     <div class="ctrls vs-pick" role="group" aria-label="选一道题">
       <button type="button" data-i="0" aria-pressed="true">2.64 + 1.79</button>
       <button type="button" data-i="1" aria-pressed="false">7.31 − 4.56</button>
@@ -81,7 +132,7 @@ table.vs td.res { color:var(--a); }
     if (!root) return;
     var PROBS = [ { op: "+", a: 264, b: 179 }, { op: "-", a: 731, b: 456 }, { op: "+", a: 538, b: 241 } ];
     var UNIT = ["分", "角", "元"], NAME = ["百分位", "十分位", "个位"];
-    var idx = 0, step = 0;
+    var idx = 0, step = 0, adjusted = null;
     function $(id) { return document.getElementById(id); }
     function dig(n, k) { return Math.floor(n / Math.pow(10, k)) % 10; }
     function fmt(n) { var f = n % 100; return Math.floor(n / 100) + "." + (f < 10 ? "0" : "") + f; }
@@ -106,8 +157,29 @@ table.vs td.res { color:var(--a); }
       return out;
     }
     function cell(cls, txt) { return "<td" + (cls ? ' class="' + cls + '"' : "") + ">" + txt + "</td>"; }
+
+    // 数量条共用同一把尺；标签独立放在条外，短条也不会挤掉文字。
+    function model(values, labels, scale) {
+      var colors = ["--a", "--b", "--fg"];
+      var svg = document.getElementById("lab-model"), html = "";
+      values.forEach(function (v, i) {
+        var y = 20 + i * 45;
+        html += '<text x="20" y="' + y + '" style="fill:var(--fg);font-size:18px">' + labels[i] + '</text>';
+        html += '<rect x="20" y="' + (y + 6) + '" width="320" height="12" style="fill:none;stroke:var(--line)"/>';
+        html += '<rect x="20" y="' + (y + 6) + '" width="' + (320 * v / scale) + '" height="12" style="fill:var(' + colors[i] + ');fill-opacity:.55;stroke:var(' + colors[i] + ')"/>';
+      });
+      svg.innerHTML = html;
+    }
     function render() {
-      var p = PROBS[idx], r = calc(p, step), html;
+      var preset = PROBS[idx];
+      var p = { a: preset.a, b: adjusted === null ? preset.b : adjusted, op: preset.op };
+      var r = calc(p, step), html;
+      $("lab-range").max = p.op === "+" ? 999 - p.a : p.a;
+      $("lab-range").value = p.b;
+      $("lab-value").textContent = fmt(p.b);
+      $("lab-range").setAttribute("aria-valuetext", fmt(p.b) + " 元");
+      var total = p.op === "+" ? p.a + p.b : p.a - p.b;
+      model([p.a, p.b, total], ["第一笔 " + fmt(p.a) + " 元", "第二笔 " + fmt(p.b) + " 元", (p.op === "+" ? "合起来 " : "相差 ") + (step === 3 ? fmt(total) + " 元" : "？")], 1000);
       var ks = [2, 1, 0];
       function numRow(n, op, cls) {
         var h = "<tr>" + cell("op", op);
@@ -148,12 +220,14 @@ table.vs td.res { color:var(--a); }
       [].forEach.call(root.querySelectorAll(".vs-pick button"), function (b, i) { b.setAttribute("aria-pressed", i === idx ? "true" : "false"); });
     }
     [].forEach.call(root.querySelectorAll(".vs-pick button"), function (b) {
-      b.addEventListener("click", function () { idx = +b.getAttribute("data-i"); step = 0; render(); });
+      b.addEventListener("click", function () { idx = +b.getAttribute("data-i"); adjusted = null; step = 0; render(); });
     });
+    $("lab-range").addEventListener("input", function () { adjusted = +this.value; step = 0; render(); });
     $("vs-next").addEventListener("click", function () { step = Math.min(3, step + 1); render(); });
-    $("vs-0").addEventListener("click", function () { step = 0; render(); });
+    $("vs-0").addEventListener("click", function () { adjusted = null; step = 0; render(); });
     root.addEventListener("keydown", function (e) {
-      if (e.target.tagName === "BUTTON") return;
+      if (e.target !== root) return;
+      if (["ArrowLeft", "ArrowRight", "Enter"].indexOf(e.key) >= 0) e.preventDefault();
       if (e.key === "ArrowRight" || e.key === "Enter") { step = Math.min(3, step + 1); render(); }
       if (e.key === "ArrowLeft") { step = Math.max(0, step - 1); render(); }
     });
@@ -161,12 +235,46 @@ table.vs td.res { color:var(--a); }
   });
   </script>
 
+  <p class="line">先估得数，再分别试不进位、要进位和要退位的题。每次把第二个数调小或调大一点，哪些数位会变化？三道都试过后，用自己的话说说为什么要对齐。</p>
+</section>
+
+<section class="step" data-title="讲道理">
+  <h2>先说你的发现，再讲清原因</h2>
+  <p class="line">2.64 元 + 1.79 元中，4 分与 9 分合成 13 分，换成 1 角 3 分；这 1 角加入角那一列。7.31 元 − 4.56 元中，1 分不够减 6 分，就把 1 角换成 10 分。加减时，相同的单位要对着算。</p>
   <h2>2. 为什么小数点要对齐</h2>
-  <div class="card">
+  <div class="why-box">
     <p class="line">用元角分想：2.64 元是 2 元 6 角 4 分，1.79 元是 1 元 7 角 9 分。只有<b>同样的单位</b>才能直接加：分加分，角加角，元加元。</p>
     <p class="line">小数点对齐，十分位就对着十分位，百分位对着百分位，相同数位上下对齐。算的时候<b>从最右边的数位算起</b>：满 10 向前一位进 1；不够减，向前一位借 1 当 10。得数的小数点，对着上面的小数点写。</p>
   </div>
 
+
+  <p class="key-say line">位数相同的小数加减：小数点上下对齐，从最右边的数位算起；加法满 10 向前一位进 1，减法不够减向前一位借 1 当 10；得数的小数点和上面的小数点对齐。</p>
+
+  <h2>两个容易错的地方</h2>
+  <div class="pair">
+    <div class="no"><b class="t">✗ 漏掉进位</b>
+      <p>0.86 + 0.58，写成 1.34。</p></div>
+    <div class="ok"><b class="t">✓ 每一位都把进来的数加上</b>
+      <p>6 + 8 = 14，写 4 进 1；8 + 5 + 1 = 14，写 4 进 1；个位 1。得 1.44。</p></div>
+  </div>
+  <div class="pair">
+    <div class="no"><b class="t">✗ 忘了得数的小数点</b>
+      <p>1.78 − 1.46，写成 32。</p></div>
+    <div class="ok"><b class="t">✓ 先估，再把点点上</b>
+      <p>1.78 比 1.46 多一点点，差不到 1，是 0.32。得数的小数点对着上面的小数点。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>先自己想，再逐步核对</h2>
+    <p class="line">两条彩带分别长 3.47 米和 2.86 米，接起来长多少米？</p>
+    <div class="example-steps">
+      <details><summary>① 读懂题意：求哪一部分？</summary><p class="line">求两段合起来的长度，用加法；先估 3 米多加 2 米多，大约 6 米。</p></details>
+      <details><summary>② 列式推导：先算哪里，为什么？</summary><p class="line">3.47 + 2.86：百分位 7 + 6 = 13，写 3 进 1；十分位 4 + 8 + 1 = 13，写 3 进 1；个位 3 + 2 + 1 = 6。得 6.33 米。</p></details>
+      <details><summary>③ 检验：怎样知道结果合理？</summary><p class="line">6.33 − 2.86 = 3.47，能还原第一段；6.33 米也与大约 6 米相符。两次进位都要加上。</p></details>
+    </div>
+  </div>
   <div class="card q" data-id="try1" data-kind="num" data-dec data-answer="6.04"
        data-miss='{"5.94":"5.94 漏了百分位进的 1：8 分 + 6 分 = 14 分，写 4，向十分位进 1。","5.04":"5.04 漏了十分位进的 1：5 + 4 + 进来的 1 = 10，写 0，向个位进 1。","604":"604 没写小数点。先估：3 多加 2 多，大约 6。得数的小数点对着上面的小数点。"}'
        data-hint="从百分位算起，满 10 向前一位进 1；每一位都要把进来的 1 加上。" data-lc-source="eyJhbnN3ZXIiOiI2LjA0IiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+My41OCArIDIuNDYgPSDvvJ88L3A+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwIGNsYXNzPVwibGluZVwiPjMuNTggKyAyLjQ2ID0gNi4wNOOAguS4pOasoei/m+S9jemDveS4jeiDvea8j+OAgjwvcD48L2Rpdj5cbiAgIn0=">
@@ -180,24 +288,6 @@ table.vs td.res { color:var(--a); }
     <span class="q-tag">自己试试</span>
     <p class="line">9.04 − 5.68 = ？</p>
     <div class="reveal"><p class="line">9.04 − 5.68 = 3.36。验算：3.36 + 5.68 = 9.04。</p></div>
-  </div>
-</section>
-
-<section class="step" data-title="说一说">
-  <p class="key-say line">位数相同的小数加减：小数点上下对齐，从最右边的数位算起；加法满 10 向前一位进 1，减法不够减向前一位借 1 当 10；得数的小数点和上面的小数点对齐。</p>
-
-  <h2>两个容易错的地方</h2>
-  <div class="pair">
-    <div class="no"><b class="t">✗ 漏掉进位</b>
-      <p>0.76 + 0.39，写成 1.05。</p></div>
-    <div class="ok"><b class="t">✓ 每一位都把进来的数加上</b>
-      <p>6 + 9 = 15，写 5 进 1；7 + 3 + 1 = 11，写 1 进 1；个位 1。得 1.15。</p></div>
-  </div>
-  <div class="pair">
-    <div class="no"><b class="t">✗ 忘了得数的小数点</b>
-      <p>1.78 − 1.46，写成 32。</p></div>
-    <div class="ok"><b class="t">✓ 先估，再把点点上</b>
-      <p>1.78 比 1.46 多一点点，差不到 1，是 0.32。得数的小数点对着上面的小数点。</p></div>
   </div>
 </section>
 

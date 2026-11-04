@@ -24,37 +24,57 @@
 .g3-rubric { border-left:4px solid var(--a); padding:10px; margin-top:12px; }
 .g3-status { min-height:1.5em; }
 </style>
+<style>
+#m-u5-3 input[type="range"] { width:100%; min-height:44px; accent-color:var(--a); }
+#m-u5-3 .read { overflow-wrap:anywhere; }
+.micro-answer[hidden], .micro-guess[hidden] { display:none; }
+.micro-box button { min-height:44px; padding:8px 12px; color:var(--fg); background:var(--hl-soft); border:1px solid var(--muted); border-radius:8px; font:inherit; }
+.example-steps summary { min-height:44px; cursor:pointer; font-weight:700; }
+</style>
+<style>
+body.primary[data-standard="v2"] .wrap .manip .fig-scroll > svg.stage,
+body.primary[data-standard="v2"] .micro-box .fig-scroll > svg.micro-fig { min-width:0; width:100%; height:auto; max-height:none; }
+</style>
 </head>
-<body class="primary" data-stage="primary" data-sec="p6a-u5-3">
+<body class="primary" data-stage="primary" data-sec="p6a-u5-3" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb"><a href="../index.html">六年级上册</a> · <a href="p6a-u5.html">第五单元 百分数</a> · 第 3 课</p>
 <h1>求一个数的百分之几</h1>
 <p class="lead">求一个数的百分之几是多少，该怎样列式？百分数又怎样化成小数？</p>
 
+<details class="route" open>
+<summary>这一课怎么走</summary>
+<p class="route-summary">把百分数写回熟悉的分数，研究“求一个数的百分之几”为什么也用乘法。</p>
+<div class="route-bridges"><a class="route-pill" href="p6a-u1-1.html">回看：分数乘法</a><a class="route-pill" href="p6a-u5-1.html">回看：百分数的意义</a><span class="route-pill">以后：用方程解决实际问题</span></div>
+<ol><li>先猜学校男生人数，再用旧办法验证。</li><li>调百分数与总量，比较几个结果。</li><li>解释互化的理由，再独立列式。</li></ol>
+</details>
   <!-- ==================== Step 1: 想一想 ==================== -->
 <p class="concept-link"><a href="../knowledge.html?section=p6a-u5-3&amp;from=p6a-u5-3">查看本课概念与易错卡</a></p>
 
   <section class="step on" data-title="想一想">
-    <div class="card">
+    <div class="card micro-box">
       <p class="line">哪个学校的男生更多？</p>
+      <p>以前求 800 的 <span class="fr" data-n="48" data-d="100"></span> 会怎样算？现在写成 48%，你猜办法要不要变？先别计算，猜一猜哪个学校的男生更多。</p>
       <p>第一中学和第二中学的学生总数与男生占比分别如下：</p>
 
-      <svg class="qfig" viewBox="0 0 360 120" role="img" aria-label="一中与二中男生人数对比图">
+      <div class="fig-scroll" role="region" aria-label="学校人数图（窄屏可左右滑动）" tabindex="0"><svg class="micro-fig" viewBox="0 0 360 120" role="img" aria-label="一中与二中男生人数对比图">
           <!-- 一中 -->
           <rect x="18" y="15" width="154" height="90" rx="8" fill="var(--hl-soft)" stroke="var(--a)" stroke-width="2"/>
           <text x="95" y="40" text-anchor="middle" font-size="17.3" font-weight="700" fill="var(--a)">第一中学 （800人）</text>
           <text x="95" y="65" text-anchor="middle" font-size="17.3" fill="var(--fg)">男生占 48%</text>
-          <text x="95" y="92" text-anchor="middle" font-size="17.3" font-weight="700" fill="var(--a)">800 × 48% = 384 人</text>
+          <text class="micro-answer" hidden x="95" y="92" text-anchor="middle" font-size="17.3" font-weight="700" fill="var(--a)">800 × 48% = 384 人</text>
 
           <!-- 二中 -->
           <rect x="188" y="15" width="154" height="90" rx="8" fill="var(--card)" stroke="var(--b)" stroke-width="2"/>
           <text x="265" y="40" text-anchor="middle" font-size="17.3" font-weight="700" fill="var(--b)">第二中学 （750人）</text>
           <text x="265" y="65" text-anchor="middle" font-size="17.3" fill="var(--fg)">男生占 54%</text>
-          <text x="265" y="92" text-anchor="middle" font-size="17.3" font-weight="700" fill="var(--b)">750 × 54% = 405 人</text>
-        </svg>
-
-      <p>一中总人数虽然多，但男生占比低；二中男生有 405 人，比一中多 405 − 384 = 21（人）！</p>
+          <text class="micro-answer" hidden x="265" y="92" text-anchor="middle" font-size="17.3" font-weight="700" fill="var(--b)">750 × 54% = 405 人</text>
+        <text class="micro-guess" x="95" y="92" text-anchor="middle" font-size="17.3" fill="var(--fg)">男生有多少人？</text>
+        <text class="micro-guess" x="265" y="92" text-anchor="middle" font-size="17.3" fill="var(--fg)">男生有多少人？</text>
+        </svg></div>
+      <button type="button" id="u53-verify" aria-expanded="false">猜好了，用乘法验证</button>
+      <p id="u53-comparison" hidden>800 × 48% = 384，750 × 54% = 405。二中男生多 21 人。总人数和占比要一起看，不能只比其中一个数。</p>
     </div>
 
     <div class="card predict" data-id="p6a-u5-3-pre" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5rGC5LiA5Liq5pWw55qE5Yeg5YiG5LmL5Yeg55So5LmY5rOV77yM6YKj5LmI5rGC5LiA5Liq5pWw55qE55m+5YiG5LmL5Yeg5bqU6K+l55So5LuA5LmI6L+Q566X77yfPC9wPlxuICAgICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCLlt7Lnn6XmgLvmlbDmsYLpg6jliIbph4/nlKjkuZjms5XvvIzkuI3mmK/pmaTms5XjgIJcIj5BLiDnlKjpmaTms5XorqHnrpc8L2J1dHRvbj5cbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj5CLiDlkIzmoLfnlKjkuZjms5XvvJrljZXkvY3igJwx4oCd55qE6YePIMOXIOeZvuWIhuaVsDwvYnV0dG9uPlxuICAgICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiIGRhdGEtaGludD1cIueZvuWIhuaVsOS4jeaYr+WFt+S9k+eahOW3ruWAvO+8jOS4jeiDveebtOaOpeebuOWHj+OAglwiPkMuIOeUqOWHj+azleiuoeeulzwvYnV0dG9uPlxuICAgICAgPC9kaXY+XG4gICAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICAgIDxwPjxiPuaguOW/g+mAmuazlTwvYj7vvJrnmb7liIbmlbDmnKzotKjlsLHmmK/liIbmr43kuLogMTAwIOeahOWIhuaVsO+8geaxguS4gOS4quaVsOeahOeZvuWIhuS5i+WHoO+8jDxiPuWujOWFqOmBteW+quaxguS4gOS4quaVsOeahOWHoOWIhuS5i+WHoOeahOS5mOazleinhOWImTwvYj7vvJrljZXkvY3igJwx4oCd55qE6YePIMOXIOeZvuWIhuaVsO+8gTwvcD5cbiAgICAgIDwvZGl2PlxuICAgICJ9">
@@ -74,12 +94,12 @@
   <section class="step" data-title="摆一摆">
   <div class="vid" data-video="concept"></div>
     <div class="card">
-      <p class="line">1. 百分数、小数、分数三态互化与乘法推演台</p>
-      <p>计算“一个数 × 百分数”时，通常把百分数<b>化成小数或最简分数</b>再算。点下面的百分数档位和总量按钮，观察三态互化与乘法结果：</p>
+      <p class="line">1. 百分数、小数、分数互相转化，再用乘法计算</p>
+      <p>先保持总量为 320，分别试 25%、50%、75%：涂色部分和结果怎样变？再保持 75%，把总量调成原来的 2 倍。先说猜想，再拖滑块验证。</p>
     </div>
 
     <div class="card manip" id="m-u5-3">
-      <svg class="stage" viewBox="0 0 360 235" role="group" aria-label="百分数小数分数三态互化与乘法条形图">
+      <div class="fig-scroll" role="region" aria-label="百分数条形图（窄屏可左右滑动）" tabindex="0"><svg class="stage" viewBox="0 0 360 235" role="group" aria-label="百分数小数分数三态互化与乘法条形图">
         <!-- 三态互化卡片 -->
         <rect x="15" y="12" width="102" height="58" rx="8" fill="var(--hl-soft)" stroke="var(--a)" stroke-width="1.5"/>
         <text x="66" y="34" text-anchor="middle" font-size="16.6" fill="var(--fg)">百分数</text>
@@ -90,8 +110,8 @@
         <text id="u53-dec" x="180" y="58" text-anchor="middle" font-size="18.2" font-weight="700" fill="var(--b)">0.75</text>
 
         <rect x="243" y="12" width="102" height="58" rx="8" fill="var(--card)" stroke="var(--c)" stroke-width="1.5"/>
-        <text x="294" y="34" text-anchor="middle" font-size="16.6" fill="var(--fg)">最简分数</text>
-        <text id="u53-fr" x="294" y="58" text-anchor="middle" font-size="17.7" font-weight="700" fill="var(--c)">四分之三</text>
+        <text x="294" y="29" text-anchor="middle" font-size="16.6" fill="var(--fg)">最简分数</text>
+        <g id="u53-fr" fill="var(--c)" font-size="16" text-anchor="middle"><text id="u53-n" x="294" y="47" fill="var(--c)">3</text><line x1="270" y1="50" x2="318" y2="50" stroke="var(--c)"/><text id="u53-d" x="294" y="67" fill="var(--c)">4</text></g>
 
         <!-- 条形图 -->
         <text id="u53-tot-lbl" x="180" y="96" text-anchor="middle" font-size="17.7" font-weight="700" fill="var(--fg)">总量（单位“1”）：320</text>
@@ -101,7 +121,11 @@
 
         <rect x="20" y="180" width="320" height="44" rx="8" fill="var(--hl-soft)" stroke="var(--a)" stroke-width="1.5"/>
         <text id="u53-eq" x="180" y="208" text-anchor="middle" font-size="17.7" font-weight="700" fill="var(--a)">320 × 75% = 320 × 0.75 = 240</text>
-      </svg>
+      </svg></div>
+      <div class="ctrl-grid">
+        <div class="ctrl-item"><label for="u53-percent">取总量的百分之几 <output id="u53-percent-value">75%</output></label><input id="u53-percent" type="range" min="0" max="100" step="0.5" value="75"></div>
+        <div class="ctrl-item"><label for="u53-total">总量 <output id="u53-total-value">320</output></label><input id="u53-total" type="range" min="80" max="960" step="80" value="320"></div>
+      </div>
       <div class="ctrls">
         <button type="button" data-idx="0">12.5%</button>
         <button type="button" data-idx="1">25%</button>
@@ -113,17 +137,61 @@
         <button type="button" data-act="reset">重来</button>
       </div>
       <p class="read" id="u53-out" aria-live="polite"></p>
+      <p class="hint">自己试试：把 8%、40%、12.5% 各写成小数，再拖到对应位置核对。这里的总量只表示数值，不规定是人数。</p>
     </div>
 
+
+
+
+  </section>
+
+  <!-- ==================== Step 3: 说一说 ==================== -->
+  <section class="step" data-title="讲道理">
+    <div class="why-box">
+      <h3>写法变了，表示的大小为什么没变？</h3>
+      <ol>
+        <li>25% 就是 <span class="fr" data-n="25" data-d="100"></span>，也就是 0.25。再看 8% = <span class="fr" data-n="8" data-d="100"></span> = 0.08，75% = <span class="fr" data-n="75" data-d="100"></span> = 0.75。你能说出共同的改写办法吗？</li>
+        <li>百分号表示“除以 100”。去掉 % 后要除以 100，所以小数点向左移两位；反过来写成百分数，写出的数扩大 100 倍，同时添上表示除以 100 的 %，大小不变。</li>
+        <li>求 320 的 75%，就是求 320 的 <span class="fr" data-n="75" data-d="100"></span>：先平均分成 100 份，每份 3.2，再取 75 份，3.2 × 75 = 240。所以可写成 320 × 75% = 240。</li>
+      </ol>
+      <p>换成 25%、50% 也能这样解释。百分数可以先化成小数，也可以先化成分数；用的是以前学过的乘法。</p>
+    </div>
     <div class="card">
-      <p class="line">2. 互化口诀</p>
+      <p class="line">把刚才的发现说清楚</p>
       <ul>
         <li><b>百分数化小数</b>：去掉 %，小数点向<b>左移动两位</b>（如 48% = 0.48，8% = 0.08）。</li>
         <li><b>小数化百分数</b>：小数点向<b>右移动两位</b>，添上 %（如 0.25 = 25%，1.2 = 120%）。</li>
         <li><b>百分数与分数互化</b>：75% = <span class="fr" data-n="75" data-d="100"></span> = <span class="fr" data-n="3" data-d="4"></span>；<span class="fr" data-n="1" data-d="8"></span> = 0.125 = 12.5%。</li>
       </ul>
     </div>
+    <p class="key-say line">求一个数的百分之几是多少，用乘法计算：单位“1”的量 × 百分数；百分数化小数，去掉百分号、小数点向左移动两位。</p>
 
+    <h2>两个容易错的地方</h2>
+    <div class="pair">
+      <div class="no"><b class="t">✗ 小数点移错位：把 40% 化成 0.04，或把 8% 化成 0.8</b>
+        位数没数清，导致 900 × 40% 算成 900 × 0.04 = 36。</div>
+      <div class="ok"><b class="t">✓ 严格移动两位：40% = 0.4，8% = 0.08</b>
+        去掉 % 后小数点向左移两位：900 × 40% = 900 × 0.4 = 360。</div>
+    </div>
+    <div class="pair">
+      <div class="no"><b class="t">✗ 求一个数的百分之几，错用除法</b>
+        求 900 本图书的 40%，算成 900 ÷ 40% = 2250（本），比总数还多。</div>
+      <div class="ok"><b class="t">✓ 单位“1”已知，求部分量一律用乘法</b>
+        900 × 40% = 360（本）。这里求的是图书总数的 40%，所以结果小于总数；一般求一个数的百分之几时，百分数也可以超过 100%。原数大于 0 且百分数超过 100% 时，结果就会大于原数。</div>
+    </div>
+  </section>
+
+  <section class="step" data-title="看例题">
+    <article class="example-card">
+      <p class="ex-head">例题 · 把开头的学校问题算清楚</p>
+      <p class="ex-stem">第一中学有 800 人，男生占 48%；第二中学有 750 人，男生占 54%。哪个学校的男生更多？多多少人？</p>
+      <p>先自己画两条总量条，再按需要逐步打开提示。</p>
+      <div class="example-steps">
+        <details class="ex-step"><summary>① 读懂题意：谁是单位“1”？</summary><p>一中以 800 人为单位“1”，二中以 750 人为单位“1”。求各校男生人数，就是分别求各自总人数的百分之几。</p></details>
+        <details class="ex-step s2"><summary>② 列式：怎样用旧办法计算？</summary><p>48% = 0.48，54% = 0.54。一中：800 × 0.48 = 384（人）；二中：750 × 0.54 = 405（人）。405 − 384 = 21（人），二中多 21 人。</p></details>
+        <details class="ex-step s3"><summary>③ 检验：结果和一半比合理吗？</summary><p>48% 略少于一半，384 应略小于 400；54% 略多于一半，405 应略大于 375。两校的总人数不同，不能只比较百分号前的数。</p></details>
+      </div>
+    </article>
     <div class="card predict" data-id="p6a-u5-3-try" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICAgIDxwIGNsYXNzPVwibGluZVwiPuWtpuagoeWQiOWUseWbouaciSA2MCDkurrvvIzlhbbkuK3lpbPnlJ/kurrmlbDljaDmgLvkurrmlbDnmoQgNzUl44CC5aWz55Sf5pyJ5aSa5bCR5Lq677yfPC9wPlxuICAgICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCLnrpfmiJDkuoYgNjAgw7cgNzUl77yM5rGC5LiA5Liq5pWw55qE55m+5YiG5LmL5Yeg55So5LmY5rOV44CCXCI+QS4gODAg5Lq6PC9idXR0b24+XG4gICAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+Qi4gNDUg5Lq6PC9idXR0b24+XG4gICAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwiMTUg5Lq65piv55S355Sf5Lq65pWw77yINjAgLSA0NSA9IDE177yJ77yM6aKY55uu6Zeu55qE5piv5aWz55Sf5Lq65pWw44CCXCI+Qy4gMTUg5Lq6PC9idXR0b24+XG4gICAgICA8L2Rpdj5cbiAgICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgICAgPHA+6K6h566X5pa55rOV77yaNjAgw5cgNzUlID0gNjAgw5cgPHNwYW4gY2xhc3M9XCJmclwiIGRhdGEtbj1cIjNcIiBkYXRhLWQ9XCI0XCI+PC9zcGFuPiA9IDQ177yI5Lq677yJ44CC5Lmf5Y+v5Lul55So5bCP5pWw566X77yaNjAgw5cgMC43NSA9IDQ177yI5Lq677yJ44CCPC9wPlxuICAgICAgPC9kaXY+XG4gICAgIn0=">
       <span class="q-tag">自己试试</span>
       <p class="line">学校合唱团有 60 人，其中女生人数占总人数的 75%。女生有多少人？</p>
@@ -135,25 +203,6 @@
       <div class="reveal">
         <p>计算方法：60 × 75% = 60 × <span class="fr" data-n="3" data-d="4"></span> = 45（人）。也可以用小数算：60 × 0.75 = 45（人）。</p>
       </div>
-    </div>
-  </section>
-
-  <!-- ==================== Step 3: 说一说 ==================== -->
-  <section class="step" data-title="说一说">
-    <p class="key-say line">求一个数的百分之几是多少，用乘法计算：单位“1”的量 × 百分数；百分数化小数，去掉百分号、小数点向左移动两位。</p>
-
-    <h2>两个容易错的地方</h2>
-    <div class="pair">
-      <div class="no"><b class="t">✗ 小数点只移了一位：把 40% 化成 0.04，或把 8% 化成 0.8</b>
-        位数没数清，导致 1200 × 40% 算成 1200 × 0.04 = 48。</div>
-      <div class="ok"><b class="t">✓ 严格移动两位：40% = 0.4，8% = 0.08</b>
-        去掉 % 后小数点向左移两位：1200 × 40% = 1200 × 0.4 = 480。</div>
-    </div>
-    <div class="pair">
-      <div class="no"><b class="t">✗ 求一个数的百分之几，错用除法</b>
-        求 1200 本图书的 40%，算成 1200 ÷ 40% = 3000（本），比总数还多。</div>
-      <div class="ok"><b class="t">✓ 单位“1”已知，求部分量一律用乘法</b>
-        1200 × 40% = 480（本）。这里求的是图书总数的 40%，所以结果小于总数；一般求一个数的百分之几时，百分数也可以超过 100%。原数大于 0 且百分数超过 100% 时，结果就会大于原数。</div>
     </div>
   </section>
 
@@ -240,66 +289,57 @@
 <nav class="back"><a class="home" href="p6a-u5.html">← 返回本单元</a> <a class="home" href="../index.html">← 返回主页</a></nav>
 </div>
 <script>
-/* 百分数、小数、分数三态互化与乘法推演台（p6a-u5-3 页内教具） */
+/* 保留原条形图，百分数与总量连续联动；用整数约分保留半个百分点。 */
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
   var root = document.getElementById("m-u5-3");
   if (!root) return;
   var P = window.PeiyuP;
-  var items = [
-    { pct: "12.5%", dec: 0.125, n: 1, d: 8, cnFr: "八分之一" },
-    { pct: "25%", dec: 0.25, n: 1, d: 4, cnFr: "四分之一" },
-    { pct: "40%", dec: 0.4, n: 2, d: 5, cnFr: "五分之二" },
-    { pct: "50%", dec: 0.5, n: 1, d: 2, cnFr: "二分之一" },
-    { pct: "75%", dec: 0.75, n: 3, d: 4, cnFr: "四分之三" },
-    { pct: "80%", dec: 0.8, n: 4, d: 5, cnFr: "五分之四" }
-  ];
-  var totals = [320, 640, 960];
-  var curIdx = 4, totIdx = 0;
-
-  var elPct = document.getElementById("u53-pct");
-  var elDec = document.getElementById("u53-dec");
-  var elFr = document.getElementById("u53-fr");
-  var elTotLbl = document.getElementById("u53-tot-lbl");
-  var elBar = document.getElementById("u53-bar");
-  var elBarLbl = document.getElementById("u53-bar-lbl");
-  var elEq = document.getElementById("u53-eq");
-  var elOut = document.getElementById("u53-out");
-
+  var items = [12.5, 25, 40, 50, 75, 80], totals = [320, 640, 960];
+  var pct = 75, tot = 320;
+  var pctInput = document.getElementById("u53-percent"), totalInput = document.getElementById("u53-total");
+  function gcd(a, b) { while (b) { var r = a % b; a = b; b = r; } return a; }
+  function fmt(value) { return String(Number(value.toFixed(4))); }
   function sync() {
-    var it = items[curIdx], tot = totals[totIdx];
-    var res = Math.round(tot * it.dec);
-    elPct.textContent = it.pct;
-    elDec.textContent = String(it.dec);
-    elFr.textContent = it.cnFr;
-    elTotLbl.textContent = "总量（单位“1”）：" + tot;
-    elBar.setAttribute("width", String(Math.round(300 * it.dec)));
-    elBarLbl.textContent = tot + " 的 " + it.pct + " 是 " + res;
-    elEq.textContent = tot + " × " + it.pct + " = " + tot + " × " + it.dec + " = " + res;
-
-    var frHtml = P ? P.fracHTML(it.n, it.d) : it.cnFr;
-    elOut.innerHTML = "<b>" + it.pct + "</b> 化成小数是 <b>" + it.dec + "</b>，化成分数是 " + frHtml + "；求 " + tot + " 的 " + it.pct + " 用乘法：<b>" + tot + " × " + it.pct + " = " + res + "</b>。";
-    var sayStr = it.pct + "化成小数是" + it.dec + "，化成分数是" + it.cnFr + "，" + tot + "乘" + it.pct + "等于" + res + "。";
-    if (P) {
-      var sb = P.sayButton(sayStr);
-      sb.addEventListener("click", function (e) { P.say(sayStr, e.currentTarget); });
-      elOut.appendChild(sb);
-    }
-    [].forEach.call(root.querySelectorAll(".ctrls button[data-idx]"), function (b) {
-      b.setAttribute("aria-pressed", +b.getAttribute("data-idx") === curIdx ? "true" : "false");
+    var dec = pct / 100, numerator = Math.round(pct * 2), denominator = 200;
+    var common = gcd(numerator, denominator), n = numerator / common, d = denominator / common;
+    var res = tot * numerator / denominator;
+    pctInput.value = pct; totalInput.value = tot;
+    document.getElementById("u53-percent-value").textContent = fmt(pct) + "%";
+    document.getElementById("u53-total-value").textContent = tot;
+    document.getElementById("u53-pct").textContent = fmt(pct) + "%";
+    document.getElementById("u53-dec").textContent = fmt(dec);
+    document.getElementById("u53-n").textContent = n;
+    document.getElementById("u53-d").textContent = d;
+    document.getElementById("u53-tot-lbl").textContent = "总量（单位“1”）：" + tot;
+    document.getElementById("u53-bar").setAttribute("width", String(300 * dec));
+    document.getElementById("u53-bar-lbl").textContent = tot + " 的 " + fmt(pct) + "% 是 " + fmt(res);
+    document.getElementById("u53-eq").textContent = tot + " × " + fmt(pct) + "% = " + fmt(res);
+    var frHtml = P ? P.fracHTML(n, d) : n + " ÷ " + d;
+    document.getElementById("u53-out").innerHTML = "<b>" + fmt(pct) + "%</b> = <b>" + fmt(dec) + "</b> = " + frHtml + "；" + tot + " × " + fmt(pct) + "% = " + tot + " × " + fmt(dec) + " = <b>" + fmt(res) + "</b>。";
+    [].forEach.call(root.querySelectorAll(".ctrls button[data-idx]"), function (button) {
+      button.setAttribute("aria-pressed", String(items[+button.dataset.idx] === pct));
     });
   }
-
-  [].forEach.call(root.querySelectorAll(".ctrls button"), function (b) {
-    b.addEventListener("click", function () {
-      var idx = b.getAttribute("data-idx"), act = b.getAttribute("data-act");
-      if (idx != null) curIdx = +idx;
-      else if (act === "tot") totIdx = (totIdx + 1) % totals.length;
-      else if (act === "reset") { curIdx = 4; totIdx = 0; }
+  pctInput.addEventListener("input", function () { pct = Number(pctInput.value); sync(); });
+  totalInput.addEventListener("input", function () { tot = Number(totalInput.value); sync(); });
+  [].forEach.call(root.querySelectorAll(".ctrls button"), function (button) {
+    button.addEventListener("click", function () {
+      if (button.dataset.idx != null) pct = items[+button.dataset.idx];
+      else if (button.dataset.act === "tot") tot = totals[(totals.indexOf(tot) + 1) % totals.length];
+      else if (button.dataset.act === "reset") { pct = 75; tot = 320; }
       sync();
     });
   });
-
+  var verify = document.getElementById("u53-verify");
+  verify.addEventListener("click", function () {
+    var open = verify.getAttribute("aria-expanded") !== "true";
+    verify.setAttribute("aria-expanded", String(open));
+    document.querySelectorAll(".micro-answer").forEach(function (text) { text.toggleAttribute("hidden", !open); });
+    document.querySelectorAll(".micro-guess").forEach(function (text) { text.toggleAttribute("hidden", open); });
+    document.getElementById("u53-comparison").hidden = !open;
+    verify.textContent = open ? "收起验证，再猜一次" : "猜好了，用乘法验证";
+  });
   sync();
 });
 </script>

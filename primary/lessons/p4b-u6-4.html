@@ -15,10 +15,18 @@
 .rg-pick button[aria-pressed="true"] { border-color:var(--a); background:var(--ok-soft); font-weight:700; }
 .rg-step { text-align:center; font-size:22px; margin:6px 0; min-height:32px; }
 .rg-step .hit { color:var(--a); font-weight:700; }
+
+.lab-adjust {display:grid;gap:8px;margin:12px 0;font-size:17px}
+.lab-adjust input {width:100%;min-height:44px;accent-color:var(--a)}
+.lab-adjust output {font-weight:700;color:var(--a)}
+.example-steps summary,.micro-box button {min-height:44px;font-size:17px;cursor:pointer}
+.example-steps details {margin:10px 0}
+.micro-box .ctrls button[aria-pressed="true"] {border-color:var(--a);font-weight:700}
+.micro-box svg text {fill:var(--fg);font-size:19px}
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4b-u6-4">
+<body class="primary" data-stage="primary" data-sec="p4b-u6-4" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级下册 · 第六单元 小数的加法和减法 · 第 4 课</p>
@@ -26,9 +34,45 @@
 <p class="lead">整数里的加法交换律、结合律，小数里还能用吗？用它们能不能算得又快又对？</p>
 <p class="note-old">本单元按旧版教材编排。</p>
 
+<details class="route" open>
+  <summary>本节路线导读</summary>
+  <p><b>核心问题：</b>换顺序、先凑整，为什么没有改变小数的总和？</p>
+  <p><a href="p4b-u3-2.html">先修：加法运算律</a> · <a href="p4b-u4-3.html">回看小数的性质</a></p>
+  <p>先回想旧办法，作出预测；调一调并比较几组数，讲清道理；再分步看例题，独立练习。以后到初中，仍要用相同单位计算、用估算检查。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p4b-u6-4&amp;from=p4b-u6-4">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p class="line">整数 2 + 5 + 8，先算 2 + 8 会更快。把数换成小数，这样换位置还有道理吗？先找能凑整的一对，再用两种顺序核对。</p>
+  <div class="micro-box" id="u6-micro">
+    <div class="ctrls" role="group" aria-label="回想并比较">
+      <button type="button" data-micro="0" aria-pressed="true">回想旧办法</button>
+      <button type="button" data-micro="1" aria-pressed="false">换一种情形</button>
+    </div>
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0">
+      <svg class="micro-fig" viewBox="0 0 360 116" role="img" aria-label="比较已有经验与新的情形">
+        <rect x="8" y="4" width="344" height="108" rx="12" style="fill:var(--a);fill-opacity:.08;stroke:var(--a)"/>
+        <text x="180" y="32" text-anchor="middle" id="u6-m1"></text>
+        <text x="180" y="64" text-anchor="middle" id="u6-m2"></text>
+        <text x="180" y="96" text-anchor="middle" id="u6-m3"></text>
+      </svg>
+    </div>
+  </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var lines = [["2 + 5 + 8", "把 2 和 8 放在一起", "三份总量会改变吗？"], ["2.6 + 5.2 + 7.4", "哪两份可以先凑整？", "先猜，再比较不同顺序"]];
+  var buttons = document.querySelectorAll("[data-micro]");
+  function show(k) {
+    lines[k].forEach(function (t, i) { document.getElementById("u6-m" + (i + 1)).textContent = t; });
+    buttons.forEach(function (b, i) { b.setAttribute("aria-pressed", i === k ? "true" : "false"); });
+  }
+  buttons.forEach(function (b) { b.addEventListener("click", function () { show(+b.dataset.micro); }); });
+  show(0);
+});
+</script>
+
   <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuWwj+S4veeahOS4ieS4quWtmOmSsee9kOmHjOWIhuWIq+aciSAyLjcg5YWD44CBNC42IOWFg+OAgTMuMyDlhYPjgILopoHnrpfkuIDlhbHmnInlpJrlsJHlhYPvvIzlk6rkuKTkuKrnvZDph4znmoTpkrHliqDotbfmnaXmraPlpb3mmK/mlbTmlbDvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDM2MCA4MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5LiJ5Liq5a2Y6ZKx572Q77yM5YiG5Yir5pivMi435YWD44CBNC425YWD44CBMy4z5YWDXCI+XG4gICAgICA8cmVjdCB4PVwiOFwiIHk9XCIxMlwiIHdpZHRoPVwiMTA4XCIgaGVpZ2h0PVwiNTRcIiByeD1cIjhcIiBzdHlsZT1cImZpbGw6dmFyKC0tYSk7ZmlsbC1vcGFjaXR5Oi4yO3N0cm9rZTp2YXIoLS1hKTtzdHJva2Utd2lkdGg6MlwiPjwvcmVjdD5cbiAgICAgIDx0ZXh0IHg9XCI2MlwiIHk9XCI0NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWEpO2ZvbnQtc2l6ZToxOXB4O2ZvbnQtd2VpZ2h0OjcwMFwiPjIuNyDlhYM8L3RleHQ+XG4gICAgICA8cmVjdCB4PVwiMTI2XCIgeT1cIjEyXCIgd2lkdGg9XCIxMDhcIiBoZWlnaHQ9XCI1NFwiIHJ4PVwiOFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1iKTtmaWxsLW9wYWNpdHk6LjI7c3Ryb2tlOnZhcigtLWIpO3N0cm9rZS13aWR0aDoyXCI+PC9yZWN0PlxuICAgICAgPHRleHQgeD1cIjE4MFwiIHk9XCI0NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWIpO2ZvbnQtc2l6ZToxOXB4O2ZvbnQtd2VpZ2h0OjcwMFwiPjQuNiDlhYM8L3RleHQ+XG4gICAgICA8cmVjdCB4PVwiMjQ0XCIgeT1cIjEyXCIgd2lkdGg9XCIxMDhcIiBoZWlnaHQ9XCI1NFwiIHJ4PVwiOFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1hKTtmaWxsLW9wYWNpdHk6LjI7c3Ryb2tlOnZhcigtLWEpO3N0cm9rZS13aWR0aDoyXCI+PC9yZWN0PlxuICAgICAgPHRleHQgeD1cIjI5OFwiIHk9XCI0NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWEpO2ZvbnQtc2l6ZToxOXB4O2ZvbnQtd2VpZ2h0OjcwMFwiPjMuMyDlhYM8L3RleHQ+XG4gICAgPC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHMgY29sc1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIiBkYXRhLWhpbnQ9XCIyLjcg5YqgIDQuNiDmmK8gNy4z77yM5LiN5piv5pW05pWw44CC5Y2B5YiG5L2N5LiKIDcgKyA2ID0gMTPvvIzlpJrlh7rnmoTmmK8gMyDkuKrljYHliIbkuYvkuIDjgIJcIj48Yj5BPC9iPjIuNyDlhYPlkowgNC42IOWFgzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIj48Yj5CPC9iPjIuNyDlhYPlkowgMy4zIOWFgzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCI0LjYg5YqgIDMuMyDmmK8gNy4577yM5LiN5piv5pW05pWw44CC5Y2B5YiG5L2N5LiKIDYgKyAzID0gOe+8jOi/mOW3riAxIOS4quWNgeWIhuS5i+S4gOOAglwiPjxiPkM8L2I+NC42IOWFg+WSjCAzLjMg5YWDPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5a+577yMMi43ICsgMy4zID0gNu+8jOato+WlveaYr+aVtOaVsOOAguWFiOaKiuWug+S7rOWKoOi1t+adpe+8jOWGjeWKoCA0LjbvvIzlsLHmmK8gMTAuNiDlhYPjgILmlbTmlbDph4znmoTliqDms5Xov5DnrpflvovvvIzlnKjlsI/mlbDph4zkuZ/og73nlKjlkJfvvJ/kuIvpnaLoh6rlt7HmnaXor5XjgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
     <p class="line">小丽的三个存钱罐里分别有 2.7 元、4.6 元、3.3 元。要算一共有多少元，哪两个罐里的钱加起来正好是整数？</p>
     <svg class="qfig" viewBox="0 0 360 80" role="img" aria-label="三个存钱罐，分别是2.7元、4.6元、3.3元">
@@ -54,8 +98,15 @@
 <div class="vid" data-video="concept"></div>
 
   <h2>1. 换个顺序，结果变不变</h2>
-  <p class="line">选一个算式，再点一种加法顺序：先算哪两个数。看看每种顺序的得数。</p>
-  <div class="card manip" id="m-rg">
+  <p class="line">先选题或拖动中间那一份，猜哪两份能凑整，再点不同顺序核对。每整格表示 10 元，数量条随顺序交换位置，每份的长短有没有改变？</p>
+  <div class="card manip" id="m-rg" tabindex="0" aria-label="可调数字实验台">
+    <label class="lab-adjust" for="lab-range">中间那一份（元，每次调 0.01 元） <output id="lab-value" for="lab-range"></output>
+      <input id="lab-range" type="range" min="0" max="999" step="1" value="0">
+    </label>
+    <div class="fig-scroll" role="region" aria-label="数量条（窄屏可左右滑动）" tabindex="0">
+      <svg class="stage" id="lab-model" viewBox="0 0 360 150" role="img" aria-label="数量条随调整变化"></svg>
+    </div>
+
     <div class="ctrls rg-pick" role="group" aria-label="选一个算式">
       <button type="button" data-i="0" aria-pressed="true">算式一</button>
       <button type="button" data-i="1" aria-pressed="false">算式二</button>
@@ -81,7 +132,7 @@
     if (!root) return;
     var SETS = [ [470, 390, 230], [145, 680, 255], [528, 376, 472] ];
     var PAIRS = [ [0, 1], [1, 2], [0, 2] ];
-    var idx = 0, mode = -1;
+    var idx = 0, mode = -1, adjusted = null;
     function $(id) { return document.getElementById(id); }
     function fmt(n) {
       var ip = Math.floor(n / 100), fp = n % 100, s = "";
@@ -90,8 +141,28 @@
       if (s.charAt(1) === "0") s = s.charAt(0);
       return ip + "." + s;
     }
+
+    // 数量条共用同一把尺；标签独立放在条外，短条也不会挤掉文字。
+    function model(values, labels, scale) {
+      var colors = ["--a", "--b", "--fg"];
+      var svg = document.getElementById("lab-model"), html = "";
+      values.forEach(function (v, i) {
+        var y = 20 + i * 45;
+        html += '<text x="20" y="' + y + '" style="fill:var(--fg);font-size:18px">' + labels[i] + '</text>';
+        html += '<rect x="20" y="' + (y + 6) + '" width="320" height="12" style="fill:none;stroke:var(--line)"/>';
+        html += '<rect x="20" y="' + (y + 6) + '" width="' + (320 * v / scale) + '" height="12" style="fill:var(' + colors[i] + ');fill-opacity:.55;stroke:var(' + colors[i] + ')"/>';
+      });
+      svg.innerHTML = html;
+    }
     function render() {
-      var v = SETS[idx], total = v[0] + v[1] + v[2];
+      var v = SETS[idx].slice();
+      if (adjusted !== null) v[1] = adjusted;
+      var total = v[0] + v[1] + v[2];
+      $("lab-range").value = v[1];
+      $("lab-value").textContent = fmt(v[1]);
+      $("lab-range").setAttribute("aria-valuetext", fmt(v[1]) + " 元");
+      var order = mode < 0 ? [0, 1, 2] : PAIRS[mode].concat([3 - PAIRS[mode][0] - PAIRS[mode][1]]);
+      model(order.map(function (k) {return v[k];}), order.map(function (k) {return ["第一份 ", "第二份 ", "第三份 "][k] + fmt(v[k]) + " 元";}), 1000);
       $("rg-expr").textContent = fmt(v[0]) + " + " + fmt(v[1]) + " + " + fmt(v[2]) + " = ?";
       [].forEach.call(root.querySelectorAll(".rg-pick button"), function (b, i) { b.setAttribute("aria-pressed", i === idx ? "true" : "false"); });
       if (mode < 0) {
@@ -107,14 +178,16 @@
       $("rg-read").textContent = "三个数一样，先算哪两个都是 " + fmt(total) + "。" + (whole ? "这样先凑成整数，后面最好算。" : "");
     }
     [].forEach.call(root.querySelectorAll(".rg-pick button"), function (b) {
-      b.addEventListener("click", function () { idx = +b.getAttribute("data-i"); mode = -1; render(); });
+      b.addEventListener("click", function () { idx = +b.getAttribute("data-i"); adjusted = null; mode = -1; render(); });
     });
+    $("lab-range").addEventListener("input", function () { adjusted = +this.value; mode = -1; render(); });
     $("rg-a").addEventListener("click", function () { mode = 0; render(); });
     $("rg-b").addEventListener("click", function () { mode = 1; render(); });
     $("rg-c").addEventListener("click", function () { mode = 2; render(); });
-    $("rg-0").addEventListener("click", function () { mode = -1; render(); });
+    $("rg-0").addEventListener("click", function () { adjusted = null; mode = -1; render(); });
     root.addEventListener("keydown", function (e) {
-      if (e.target.tagName === "BUTTON") return;
+      if (e.target !== root) return;
+      if (["ArrowLeft", "ArrowRight", "Enter"].indexOf(e.key) >= 0) e.preventDefault();
       if (e.key === "ArrowLeft") { mode = (mode + 2) % 3; render(); }
       if (e.key === "ArrowRight") { mode = (mode + 1) % 3; render(); }
     });
@@ -122,36 +195,25 @@
   });
   </script>
 
+  <p class="line">三种顺序都点一遍，比较中间得数和总和；再换两组数。拖动中间那一份，原来能凑整的一对还在吗？请自己再举一个能凑整的例子，说明哪两份只是换了位置。</p>
+</section>
+
+<section class="step" data-title="讲道理">
+  <h2>先说你的发现，再讲清原因</h2>
+  <p class="line">以 1 分为单位看，4.7 元、3.9 元、2.3 元分别是 470 分、390 分、230 分。同样的三堆分币，先合哪两堆、怎样交换位置，总枚数都不变。换回用元记录，总钱数仍相同；两份凑成整元时，最后一步就更方便。</p>
   <h2>2. 整数里成立的，小数里也成立</h2>
-  <div class="card">
-    <p class="line">整数里，交换两个加数的位置，和不变，例如<b>2.7 + 3.3 = 3.3 + 2.7</b>（加法交换律）。三个数相加，先加哪两个，和也不变，例如<b>(2.7 + 3.3) + 4.6 = 2.7 + (3.3 + 4.6)</b>（加法结合律）。</p>
+  <div class="why-box">
+    <p class="line">回想整数：交换两个加数的位置，和不变。现在用小数验证：<b>2.7 + 3.3 = 3.3 + 2.7</b>（加法交换律）。三个数相加，先加哪两个，和也不变，例如<b>(2.7 + 3.3) + 4.6 = 2.7 + (3.3 + 4.6)</b>（加法结合律）。</p>
     <p class="line">刚才你试了三个小数的加法，每种顺序的得数都一样。小数也是由计数单位拼成的数，小数点对齐以后，相同数位上的数相加，和整数加法的道理完全一样，所以这两条规律<b>小数里也成立</b>。</p>
     <p class="line">用的时候，先找“加起来是整数”的两个数：看小数部分，0.6 和 0.4，0.25 和 0.75，十分位、百分位凑起来正好进成 1。</p>
   </div>
 
-  <div class="card q" data-id="try1" data-kind="num" data-dec data-answer="9.3"
-       data-miss='{"6":"6 只是 2.4 和 3.6 的和，还没有加 3.3。"}'
-       data-hint="2.4 和 3.6 的小数部分 0.4 + 0.6 = 1，先算 2.4 + 3.6，再加 3.3。" data-lc-source="eyJhbnN3ZXIiOiI5LjMiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj7nlKjlh5HmlbTnmoTlip7ms5XnrpfvvJoyLjQgKyAzLjMgKyAzLjYgPSDvvJ/vvIjlhYjkuqTmjaLkvY3nva7vvIzmioogMi40IOWSjCAzLjYg5pS+5Zyo5LiA6LW377yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj4yLjQgKyAzLjMgKyAzLjYgPSAyLjQgKyAzLjYgKyAzLjMgPSA2ICsgMy4zID0gOS4z44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <span class="q-tag">自己试试</span>
-    <p class="line">用凑整的办法算：2.4 + 3.3 + 3.6 = ？（先交换位置，把 2.4 和 3.6 放在一起）</p>
-    <div class="reveal"><p class="line">2.4 + 3.3 + 3.6 = 2.4 + 3.6 + 3.3 = 6 + 3.3 = 9.3。</p></div>
-  </div>
-
   <h2>3. 连减两个数，也可以先加后减</h2>
-  <div class="card">
+  <div class="why-box">
     <p class="line">一张 20.5 元的卡，先花 6.8 元，再花 3.2 元。一共花了 6.8 + 3.2 = 10 元，所以还剩 20.5 − 10 = 10.5 元。</p>
     <p class="line">这就是 <b>20.5 − 6.8 − 3.2 = 20.5 − (6.8 + 3.2)</b>：连续减去两个数，等于减去它们的和。括号里的 6.8 + 3.2 正好凑成整数 10。</p>
   </div>
-  <div class="card q" data-id="try2" data-kind="num" data-dec data-answer="7.4"
-       data-miss='{"10.2":"10.2 是 13.4 − 4.6 + 1.4。连续减去两个数，1.4 也要减。","8.8":"8.8 只减了 4.6，还要再减 1.4。","6":"6 是 4.6 + 1.4 的和，还要用 13.4 去减它。"}'
-       data-hint="先算括号里的 4.6 + 1.4，再用 13.4 减去它。" data-lc-source="eyJhbnN3ZXIiOiI3LjQiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj4xMy40IOKIkiA0LjYg4oiSIDEuNCA9IDEzLjQg4oiSICg0LjYgKyAxLjQpID0g77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj40LjYgKyAxLjQgPSA277yMMTMuNCDiiJIgNiA9IDcuNOOAgjwvcD48L2Rpdj5cbiAgIn0=">
-    <span class="q-tag">自己试试</span>
-    <p class="line">13.4 − 4.6 − 1.4 = 13.4 − (4.6 + 1.4) = ？</p>
-    <div class="reveal"><p class="line">4.6 + 1.4 = 6，13.4 − 6 = 7.4。</p></div>
-  </div>
-</section>
 
-<section class="step" data-title="说一说">
   <p class="key-say line">整数里的加法交换律、结合律，小数里也成立。多个小数相加，先把加起来是整数的数凑在一起；连续减去几个数，可以减去它们的和。</p>
 
   <h2>两个容易错的地方</h2>
@@ -166,6 +228,33 @@
       <p>14.6 − (5.6 + 3.2) 写成 14.6 − 5.6 + 3.2。</p></div>
     <div class="ok"><b class="t">✓ 括号前面是减号，两个数都要减</b>
       <p>14.6 − (5.6 + 3.2) = 14.6 − 5.6 − 3.2 = 9 − 3.2 = 5.8。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>先自己想，再逐步核对</h2>
+    <p class="line">一条路线分三段，分别长 2.75 千米、4.6 千米和 1.25 千米，全长多少千米？</p>
+    <div class="example-steps">
+      <details><summary>① 读懂题意：求哪一部分？</summary><p class="line">求三段合起来的长度，用加法。先找小数部分能凑成 1 的两段，猜哪种顺序更方便。</p></details>
+      <details><summary>② 列式推导：先算哪里，为什么？</summary><p class="line">2.75 + 4.6 + 1.25 = (2.75 + 1.25) + 4.6 = 4 + 4.6 = 8.6 千米。交换位置并先合这两段，只改变计算顺序。</p></details>
+      <details><summary>③ 检验：怎样知道结果合理？</summary><p class="line">按原顺序算：2.75 + 4.6 = 7.35，7.35 + 1.25 = 8.6。两种顺序相同，没有漏掉任何一段。</p></details>
+    </div>
+  </div>
+  <div class="card q" data-id="try1" data-kind="num" data-dec data-answer="9.3"
+       data-miss='{"6":"6 只是 2.4 和 3.6 的和，还没有加 3.3。"}'
+       data-hint="2.4 和 3.6 的小数部分 0.4 + 0.6 = 1，先算 2.4 + 3.6，再加 3.3。" data-lc-source="eyJhbnN3ZXIiOiI5LjMiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj7nlKjlh5HmlbTnmoTlip7ms5XnrpfvvJoyLjQgKyAzLjMgKyAzLjYgPSDvvJ/vvIjlhYjkuqTmjaLkvY3nva7vvIzmioogMi40IOWSjCAzLjYg5pS+5Zyo5LiA6LW377yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj4yLjQgKyAzLjMgKyAzLjYgPSAyLjQgKyAzLjYgKyAzLjMgPSA2ICsgMy4zID0gOS4z44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <span class="q-tag">自己试试</span>
+    <p class="line">用凑整的办法算：2.4 + 3.3 + 3.6 = ？（先交换位置，把 2.4 和 3.6 放在一起）</p>
+    <div class="reveal"><p class="line">2.4 + 3.3 + 3.6 = 2.4 + 3.6 + 3.3 = 6 + 3.3 = 9.3。</p></div>
+  </div>
+
+  <div class="card q" data-id="try2" data-kind="num" data-dec data-answer="7.4"
+       data-miss='{"10.2":"10.2 是 13.4 − 4.6 + 1.4。连续减去两个数，1.4 也要减。","8.8":"8.8 只减了 4.6，还要再减 1.4。","6":"6 是 4.6 + 1.4 的和，还要用 13.4 去减它。"}'
+       data-hint="先算括号里的 4.6 + 1.4，再用 13.4 减去它。" data-lc-source="eyJhbnN3ZXIiOiI3LjQiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj4xMy40IOKIkiA0LjYg4oiSIDEuNCA9IDEzLjQg4oiSICg0LjYgKyAxLjQpID0g77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj40LjYgKyAxLjQgPSA277yMMTMuNCDiiJIgNiA9IDcuNOOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <span class="q-tag">自己试试</span>
+    <p class="line">13.4 − 4.6 − 1.4 = 13.4 − (4.6 + 1.4) = ？</p>
+    <div class="reveal"><p class="line">4.6 + 1.4 = 6，13.4 − 6 = 7.4。</p></div>
   </div>
 </section>
 

@@ -10,22 +10,48 @@
 <script defer src="../p-assets/manip.js"></script>
 
 <style>
-/* PY-151: preserve diagram coordinates while keeping labels readable. */
+/* Keep the original diagrams readable inside their own scroll region. */
+body.primary { font-size:17px; }
 .manip { max-width:100%; overflow-x:auto; }
-.manip svg.stage { min-width:340px; }
+.manip svg.stage,
+body.primary[data-standard="v2"] .manip .fig-scroll > svg.stage { min-width:340px; }
+.micro-box .micro-toggle { min-height:44px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 12px; }
+body.primary[data-standard="v2"] .micro-box svg.micro-fig { min-width:320px; max-width:320px; }
+.manip label { display:block; margin:10px 0; }
+.manip input { font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--line); border-radius:6px; min-height:44px; max-width:100%; box-sizing:border-box; }
+.manip input[type=range] { width:100%; }
+.manip .live-word { line-height:1.8; overflow-wrap:anywhere; }
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4a-u1-8">
+<body class="primary" data-stage="primary" data-standard="v2" data-sec="p4a-u1-8">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级上册 · 第一单元 万以上数的认识 · 第 8 课</p>
 <h1>求近似数</h1>
 <p class="lead">不是整万、整亿的数，怎样用“四舍五入”法求出它大约是多少万、多少亿？</p>
 
+<details class="route" open>
+  <summary>本节路线：怎样用一个整万或整亿数，表示“差不多有多少”？</summary>
+  <p>先想想以前学过的办法，猜一猜，再动手试试；换几个数比一比，说说道理，再看例题、做练习。</p>
+  <p><a href="p4a-u1-7.html">先修：整万、整亿数的改写</a> · 初中衔接：七上“有理数及其大小比较”，继续研究数怎样排列、比较。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p4a-u1-8&amp;from=p4a-u1-8">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p>以前估计人数时会说“大约”。现在先看数轴：原数更靠近哪一个整万数？</p>
+  <div class="micro-box" data-micro='[["24180 在 2 万和 3 万之间", "更靠近哪一个整万数？"], ["26180 在 2 万和 3 万之间", "换一个数，选择会不会变？"]]'>
+    <button type="button" class="micro-toggle" aria-pressed="false">换个情形想一想</button>
+    <div class="fig-scroll" role="region" aria-label="旧知与新情形对照图" tabindex="0">
+      <svg class="micro-fig" viewBox="0 0 320 90" role="img" aria-label="从旧经验提出新问题">
+        <rect x="4" y="4" width="312" height="82" rx="8" style="fill:var(--hl-soft);stroke:var(--c)"/>
+        <text x="160" y="35" text-anchor="middle" style="fill:var(--fg);font-size:17px">24180 在 2 万和 3 万之间</text>
+        <text x="160" y="65" text-anchor="middle" style="fill:var(--fg);font-size:16px">更靠近哪一个整万数？</text>
+      </svg>
+    </div>
+  </div>
+
   <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPumZiOWPlOWPlOi/meS4quaciOWBpeatpei1sOS4gOWFsei1sOS6hiA8Yj4yNDMxODA8L2I+IOatpeOAguWcqOaVsOi9tOS4iueci++8jDI0MzE4MCDlpLnlnKggMjQg5LiH77yIMjQwMDAw77yJ5ZKMIDI1IOS4h++8iDI1MDAwMO+8ieS5i+mXtO+8jOWug+emu+WTquS4gOS4quaVtOS4h+aVsOabtOi/ke+8n+Wkp+e6puaYr+WHoOS4h+atpe+8nzwvcD5cbiAgICA8c3BhbiBjbGFzcz1cInN2Zy1zY3JvbGxcIiBzdHlsZT1cImRpc3BsYXk6YmxvY2s7bWF4LXdpZHRoOjEwMCU7b3ZlcmZsb3cteDphdXRvXCIgcm9sZT1cInJlZ2lvblwiIGFyaWEtbGFiZWw9XCLlj6/mqKrlkJHmtY/op4jnmoTlm77npLpcIiB0YWJpbmRleD1cIjBcIj48c3ZnIGNsYXNzPVwicWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzQwIDg4XCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLmlbDovbTmoIflh7ogMjQwMDAw44CBMjQ1MDAw44CBMjUwMDAwIOWSjCAyNDMxODDvvIzmr5TovoPlroPliLDkuKTnq6/nmoTot53nprtcIiBzdHlsZT1cIm1pbi13aWR0aDozMjFweFwiPlxuICAgICAgPGxpbmUgeDE9XCIyOFwiIHkxPVwiNDhcIiB4Mj1cIjMxMlwiIHkyPVwiNDhcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjIuNVwiPjwvbGluZT5cbiAgICAgIDxsaW5lIHgxPVwiMjhcIiB5MT1cIjM4XCIgeDI9XCIyOFwiIHkyPVwiNThcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjIuNVwiPjwvbGluZT5cbiAgICAgIDx0ZXh0IHg9XCIyOFwiIHk9XCI3NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWEpO2ZvbnQtc2l6ZToxNXB4O2ZvbnQtd2VpZ2h0OjcwMFwiPjI0IOS4hzwvdGV4dD5cbiAgICAgIDxsaW5lIHgxPVwiMTcwXCIgeTE9XCIzOFwiIHgyPVwiMTcwXCIgeTI9XCI1OFwiIHN0eWxlPVwic3Ryb2tlOnZhcigtLW11dGVkKTtzdHJva2Utd2lkdGg6MjtzdHJva2UtZGFzaGFycmF5OjMgMlwiPjwvbGluZT5cbiAgICAgIDx0ZXh0IHg9XCIxNzBcIiB5PVwiNzZcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1tdXRlZCk7Zm9udC1zaXplOjE1cHhcIj4yNDUwMDA8L3RleHQ+XG4gICAgICA8bGluZSB4MT1cIjMxMlwiIHkxPVwiMzhcIiB4Mj1cIjMxMlwiIHkyPVwiNThcIiBzdHlsZT1cInN0cm9rZTp2YXIoLS1mZyk7c3Ryb2tlLXdpZHRoOjIuNVwiPjwvbGluZT5cbiAgICAgIDx0ZXh0IHg9XCIzMTJcIiB5PVwiNzZcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1iKTtmb250LXNpemU6MTVweDtmb250LXdlaWdodDo3MDBcIj4yNSDkuIc8L3RleHQ+XG4gICAgICA8Y2lyY2xlIGN4PVwiMTE4XCIgY3k9XCI0OFwiIHI9XCI2XCIgc3R5bGU9XCJmaWxsOnZhcigtLW5vKVwiPjwvY2lyY2xlPlxuICAgICAgPHRleHQgeD1cIjExOFwiIHk9XCIyNlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLW5vKTtmb250LXNpemU6MTZweDtmb250LXdlaWdodDo3MDBcIj4yNDMxODA8L3RleHQ+XG4gICAgPC9zdmc+PC9zcGFuPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiPjxiPkE8L2I+56a7IDI0IOS4h+abtOi/ke+8jOWkp+e6puaYryAyNCDkuIfmraXvvIgyNDMxODAg4omIIDI0IOS4h++8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLmraPkuK3pl7TmmK8gMjQ1MDAw77yI5Y2D5L2N5pivIDXvvInjgIIyNDMxODAg55qE5Y2D5L2N5pivIDPvvIzlnKjkuK3ngrnlt6bovrnvvIznprsgMjQg5LiH5pu06L+R44CCXCI+PGI+QjwvYj7nprsgMjUg5LiH5pu06L+R77yM5aSn57qm5pivIDI1IOS4h+atpTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCIyNDMxODAg5ZyoIDI0NTAwMCDlt6bovrnvvIzliLDkuKTnq6/ot53nprvkuI3kuIDmoLfjgIJcIj48Yj5DPC9iPuWcqOato+S4remXtO+8jOemu+S4pOi+ueS4gOagt+i/kTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwIGNsYXNzPVwibGluZVwiPuWvue+8gTI0MzE4MCDnmoQ8Yj7ljYPkvY3kuIrmmK8gM++8iOWwj+S6jiA177yJPC9iPu+8jOWcqOato+S4remXtCAyNDUwMDAg55qE5bem6L6577yM56a7IDI0IOS4h+abtOi/ke+8jOaKiuS4h+S9jeWQjumdoueahOWwvuaVsOiIjeWOu++8jDxiPjI0MzE4MCDiiYggMjQg5LiHPC9iPuOAgui/meenjeaxgui/keS8vOaVsOeahOaWueazleWPqzxiPuKAnOWbm+iIjeS6lOWFpeKAneazlTwvYj7jgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
     <p class="line">陈叔叔这个月健步走一共走了 <b>243180</b> 步。在数轴上看，243180 夹在 24 万（240000）和 25 万（250000）之间，它离哪一个整万数更近？大约是几万步？</p>
     <span class="svg-scroll" style="display:block;max-width:100%;overflow-x:auto" role="region" aria-label="可横向浏览的图示" tabindex="0"><svg class="qfig" viewBox="0 0 340 88" role="img" aria-label="数轴标出 240000、245000、250000 和 243180，比较它到两端的距离" style="min-width:321px">
@@ -53,13 +79,10 @@
 <section class="step" data-title="摆一摆">
   <div class="vid" data-video="concept"></div>
   <h2>1. 四舍五入数轴缩放观察台</h2>
-  <p class="line">点下面的“千位 = 0～9”按钮或切换模式（省略万位 / 省略亿位），看数轴上的红点越过中点“5”时怎样从“四舍”变成“五入”。</p>
+  <p class="line">拖动尾数滑块，或用方向键微调；切换“保留到万位”和“保留到亿位”，看看红点到达中点时，近似数怎样变化。</p>
   <div class="manip" id="round-u1-8"></div>
-
-  <div class="card">
-    <p class="line"><b>用“四舍五入”法求近似数：</b><br>1. 是“舍”还是“入”，<b>只看省略的尾数部分的最高位</b>上的数是小于 5 还是大于或等于 5：<br>· 省略<b>万位</b>后面的尾数 → 看<b>千位</b>；<br>· 省略<b>亿位</b>后面的尾数 → 看<b>千万位</b>；<br>2. <b>小于 5（0、1、2、3、4）</b>：把尾数全部舍去，改写成 0（“四舍”）；<br>3. <b>大于或等于 5（5、6、7、8、9）</b>：向前一位<b>进 1</b>，再把尾数舍去改写成 0（“五入”）；<br>4. 求近似数表示按要求保留到万位或亿位的精度，<b>用约等号“≈”连接</b>。原数恰好是整万或整亿时，数值可能不变，不能只凭大小是否改变来区分准确数和近似数。</p>
-  </div>
-
+  <p class="line"><b>先猜后验：</b>先猜 244180 和 245180 分别更靠近 24 万还是 25 万，再拖动尾数验证。把尾数调到一半的 5000，正好一样近时怎么办？再试亿位模式。</p>
+  <p>试过至少两种情形后，先用自己的话说发现，再到“讲道理”核对。</p>
   <div class="card q" data-id="try1" data-kind="num" data-answer="37"
        data-miss='{"36":"千位上是 5！按照“四舍五入”法，大于或等于 5 都要向前一位（万位）进 1，所以 36 + 1 = 37 万。","365":"省略万位后面的尾数，个级的 4 位都要舍去，写成多少“万”。"}'
        data-hint="分级：36|5200。千位上是 5，满 5 要“五入”，向万位进 1。" data-lc-source="eyJhbnN3ZXIiOiIzNyIsImh0bWwiOiJcbiAgICA8c3BhbiBjbGFzcz1cInEtdGFnXCI+6Ieq5bex6K+V6K+VPC9zcGFuPlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuecgeeVpeS4h+S9jeWQjumdoueahOWwvuaVsO+8jOaxguWHuui/keS8vOaVsO+8mjxiPjM2NTIwMCDiiYgg77yIIO+8ieS4hzwvYj7jgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPuWNg+S9jeS4iuaYryA177yM5ruhIDUg5ZCR5LiH5L2N6L+bIDHvvJozNiArIDEgPSAzN++8jOaJgOS7pSA8Yj4zNjUyMDAg4omIIDM3IOS4hzwvYj7jgII8L3A+PC9kaXY+XG4gICJ9">
@@ -68,16 +91,24 @@
     <div class="reveal"><p>千位上是 5，满 5 向万位进 1：36 + 1 = 37，所以 <b>365200 ≈ 37 万</b>。</p></div>
   </div>
 
-  <div class="card q" data-id="try2" data-kind="num" data-answer="15"
-       data-miss='{"16":"省略亿位后面的尾数只看千万位！千万位上是 4（小于 5），直接舍去，不要被百万位上的 9 迷惑了。","154":"要把亿位后面的万级和个级全部省略，写成多少“亿”。"}'
-       data-hint="分级：15|4900|0000。省略亿位后面的尾数只看千万位（4），4 小于 5，是舍还是入？" data-lc-source="eyJhbnN3ZXIiOiIxNSIsImh0bWwiOiJcbiAgICA8c3BhbiBjbGFzcz1cInEtdGFnXCI+6Ieq5bex6K+V6K+VPC9zcGFuPlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuecgeeVpeS6v+S9jeWQjumdoueahOWwvuaVsO+8jOaxguWHuui/keS8vOaVsO+8mjxiPjE1NDkwMDAwMDAg4omIIO+8iCDvvInkur88L2I+44CCPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7lj6rnnIvlsL7mlbDmnIDpq5jkvY3vvIjljYPkuIfkvY3kuIrnmoQgNO+8ie+8jDQg5bCP5LqOIDUg55u05o6l6IiN5Y6777yI5LiN566h5ZCO6Z2i55qEIDnvvInvvIzmiYDku6UgPGI+MTU0OTAwMDAwMCDiiYggMTUg5Lq/PC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
-    <span class="q-tag">自己试试</span>
-    <p class="line">省略亿位后面的尾数，求出近似数：<b>1549000000 ≈ （ ）亿</b>。</p>
-    <div class="reveal"><p>只看尾数最高位（千万位上的 4），4 小于 5 直接舍去（不管后面的 9），所以 <b>1549000000 ≈ 15 亿</b>。</p></div>
-  </div>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+    <h3>先比较，再说清为什么</h3>
+    <ol>
+      <li>244180 离 24 万有 4180，离 25 万有 5820，所以选更近的 24 万；245180 离 25 万更近。</li>
+      <li>24 万和 25 万的中间是 245000。千位为 0～4 时在前半段；千位为 5～9 时在中间或后半段。正好一半时，约定向前进 1。</li>
+      <li>所以，求整万近似数只看千位，求整亿近似数只看千万位，看看这一位够不够 5，后面的尾数不影响舍入。先说说发现，再给这个办法起个名字。</li>
+    </ol>
+  </div>
+
+
+  <div class="card">
+    <p class="line"><b>用“四舍五入”法求近似数：</b><br>1. 是“舍”还是“入”，<b>只看省略的尾数部分的最高位</b>上的数是小于 5 还是大于或等于 5：<br>· 省略<b>万位</b>后面的尾数 → 看<b>千位</b>；<br>· 省略<b>亿位</b>后面的尾数 → 看<b>千万位</b>；<br>2. <b>小于 5（0、1、2、3、4）</b>：把尾数全部舍去，改写成 0（“四舍”）；<br>3. <b>大于或等于 5（5、6、7、8、9）</b>：向前一位<b>进 1</b>，再把尾数舍去改写成 0（“五入”）；<br>4. 求近似数表示按要求保留到万位或亿位的精度，<b>用约等号“≈”连接</b>。原数恰好是整万或整亿时，数值可能不变，不能只凭大小是否改变来区分准确数和近似数。</p>
+  </div>
+
+
   <p class="key-say line">用“四舍五入”法求近似数，只看省略的尾数部分的最高位（省略万位看千位，省略亿位看千万位）：小于 5 就舍去，大于或等于 5 就向前一位进 1，用“≈”连接。</p>
 
   <h2>两个容易错的地方</h2>
@@ -92,6 +123,25 @@
       写成 836000 = 84 万。</div>
     <div class="ok"><b class="t">✓ 只改计数单位用“=”，按要求求近似数用“≈”</b>
       840000 = 84 万（只改计数单位）；<b>836000 ≈ 84 万</b>（求近似数）。</div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>例题：把 678200 省略万位后面的尾数，约是多少万？</h2>
+    <p>先自己试着说；需要时，逐步打开提示。</p>
+    <div class="example-steps">
+      <details class="ex-step s1"><summary>① 读懂题意</summary><p>找到万位，确定要用“万”作单位；紧挨着右边是千位。</p></details>
+      <details class="ex-step s2"><summary>② 推导与算理</summary><p>千位是 8，达到 5，要向万位进 1：67 + 1 = 68。</p></details>
+      <details class="ex-step s3"><summary>③ 检查与易错点</summary><p>678200 ≈ 68 万。原数离 68 万更近；这是近似数，用“≈”，不能用“=”。</p></details>
+    </div>
+  </div>
+  <div class="card q" data-id="try2" data-kind="num" data-answer="15"
+       data-miss='{"16":"省略亿位后面的尾数只看千万位！千万位上是 4（小于 5），直接舍去，不要被百万位上的 9 迷惑了。","154":"要把亿位后面的万级和个级全部省略，写成多少“亿”。"}'
+       data-hint="分级：15|4900|0000。省略亿位后面的尾数只看千万位（4），4 小于 5，是舍还是入？" data-lc-source="eyJhbnN3ZXIiOiIxNSIsImh0bWwiOiJcbiAgICA8c3BhbiBjbGFzcz1cInEtdGFnXCI+6Ieq5bex6K+V6K+VPC9zcGFuPlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuecgeeVpeS6v+S9jeWQjumdoueahOWwvuaVsO+8jOaxguWHuui/keS8vOaVsO+8mjxiPjE1NDkwMDAwMDAg4omIIO+8iCDvvInkur88L2I+44CCPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7lj6rnnIvlsL7mlbDmnIDpq5jkvY3vvIjljYPkuIfkvY3kuIrnmoQgNO+8ie+8jDQg5bCP5LqOIDUg55u05o6l6IiN5Y6777yI5LiN566h5ZCO6Z2i55qEIDnvvInvvIzmiYDku6UgPGI+MTU0OTAwMDAwMCDiiYggMTUg5Lq/PC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <span class="q-tag">自己试试</span>
+    <p class="line">省略亿位后面的尾数，求出近似数：<b>1549000000 ≈ （ ）亿</b>。</p>
+    <div class="reveal"><p>只看尾数最高位（千万位上的 4），4 小于 5 直接舍去（不管后面的 9），所以 <b>1549000000 ≈ 15 亿</b>。</p></div>
   </div>
 </section>
 
@@ -142,7 +192,7 @@
 
   <div class="card q" data-id="p6" data-kind="num" data-answer="45000"
        data-miss='{"50000":"50000 省略万位是 5 万。比 5 万小、又能够通过“五入”进位得到 5 万的五位数，万位是 4，千位最小是 5（45000）。","45001":"45000 的千位也是 5，45000 ≈ 5 万，而且 45000 比 45001 更小！","44999":"44999 的千位是 4，四舍五入后约等于 4 万，不是 5 万。"}'
-       data-hint="要使这个数尽量小且 ≈ 5 万，它应该比 5 万小（万位是 4），通过千位“五入”进 1 得到 5 万：千位最小是 5，百位、十位、个位最小都是 0。" data-lc-source="eyJhbnN3ZXIiOiI0NTAwMCIsImh0bWwiOiJcbiAgICA8cCBjbGFzcz1cImxpbmVcIj42LiDkuIDkuKrmlbDnnIHnlaXkuIfkvY3lkI7pnaLnmoTlsL7mlbDlkI48Yj7nuqbnrYnkuo4gNSDkuIc8L2I+77yM6L+Z5Liq5pWwPGI+5pyA5bCPPC9iPuaYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+6KaB5L2/5Y6f5pWw5pyA5bCP77yM5LiH5L2N5pivIDTvvIzljYPkvY3mu6EgNSDlkJHkuIfkvY3ov5sgMe+8iOWNg+S9jeacgOWwj+WhqyA177yJ77yM55m+5L2N44CB5Y2B5L2N44CB5Liq5L2N6YO95aGrIDDvvIzmnIDlsI/mmK8gPGI+NDUwMDA8L2I+77yI5pyA5aSn5YiZ5pivIDU0OTk577yJ44CCPC9wPjwvZGl2PlxuICAifQ==">
+       data-hint="要让这个数尽量小，又能四舍五入到 5 万，万位要是 4，靠千位满 5 向前进 1。千位最小填 5，百位、十位、个位最小都填 0。" data-lc-source="eyJhbnN3ZXIiOiI0NTAwMCIsImh0bWwiOiJcbiAgICA8cCBjbGFzcz1cImxpbmVcIj42LiDkuIDkuKrmlbDnnIHnlaXkuIfkvY3lkI7pnaLnmoTlsL7mlbDlkI48Yj7nuqbnrYnkuo4gNSDkuIc8L2I+77yM6L+Z5Liq5pWwPGI+5pyA5bCPPC9iPuaYr+WkmuWwke+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+6KaB5L2/5Y6f5pWw5pyA5bCP77yM5LiH5L2N5pivIDTvvIzljYPkvY3mu6EgNSDlkJHkuIfkvY3ov5sgMe+8iOWNg+S9jeacgOWwj+WhqyA177yJ77yM55m+5L2N44CB5Y2B5L2N44CB5Liq5L2N6YO95aGrIDDvvIzmnIDlsI/mmK8gPGI+NDUwMDA8L2I+77yI5pyA5aSn5YiZ5pivIDU0OTk577yJ44CCPC9wPjwvZGl2PlxuICAifQ==">
     <p class="line">6. 一个数省略万位后面的尾数后<b>约等于 5 万</b>，这个数<b>最小</b>是多少？</p>
     <div class="reveal"><p>要使原数最小，万位是 4，千位满 5 向万位进 1（千位最小填 5），百位、十位、个位都填 0，最小是 <b>45000</b>（最大则是 54999）。</p></div>
   </div>
@@ -178,17 +228,19 @@ document.addEventListener("DOMContentLoaded", function () {
     var b = h("button", "", txt); b.type = "button";
     b.addEventListener("click", fn); bar.appendChild(b); return b;
   }
-  var bWan = addBtn(ctr, "省略万位（看千位）", function () { mode = "wan"; lead = 24; tail = "180"; draw(); });
-  var bYi = addBtn(ctr, "省略亿位（看千万位）", function () { mode = "yi"; lead = 15; tail = "6000000"; draw(); });
+  var bWan = addBtn(ctr, "保留到万位（看千位）", function () { mode = "wan"; lead = 24; tail = "180"; draw(); });
+  var bYi = addBtn(ctr, "保留到亿位（看千万位）", function () { mode = "yi"; lead = 15; tail = "6000000"; draw(); });
   addBtn(ctr, "重来", function () { mode = "wan"; lead = 24; keyDigit = 3; tail = "180"; draw(); });
 
-  var dBtns = [];
-  for (var d = 0; d <= 9; d++) {
-    (function (val) {
-      var b = addBtn(ctr2, String(val), function () { keyDigit = val; draw(); });
-      dBtns.push(b);
-    })(d);
-  }
+  var tailLabel = h("label", "", "调节尾数，观察数轴上的点：");
+  var tailInput = h("input"); tailInput.type = "range"; tailInput.min = "0"; tailInput.step = "1";
+  tailInput.setAttribute("aria-label", "调节尾数");
+  tailInput.addEventListener("input", function () {
+    var scale = mode === "wan" ? 1000 : 10000000;
+    keyDigit = Math.floor(Number(this.value) / scale);
+    tail = String(Number(this.value) % scale).padStart(mode === "wan" ? 3 : 7, "0"); draw();
+  });
+  tailLabel.appendChild(tailInput); root.insertBefore(tailLabel, out);
 
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
@@ -197,16 +249,17 @@ document.addEventListener("DOMContentLoaded", function () {
     var watchName = isWan ? "千位" : "千万位";
     bWan.setAttribute("aria-pressed", isWan ? "true" : "false");
     bYi.setAttribute("aria-pressed", !isWan ? "true" : "false");
-    dBtns.forEach(function (b, idx) { b.setAttribute("aria-pressed", idx === keyDigit ? "true" : "false"); });
+    tailInput.max = isWan ? "9999" : "99999999";
+    tailInput.value = String(keyDigit * (isWan ? 1000 : 10000000) + Number(tail));
 
     var isUp = keyDigit >= 5;
     var resVal = isUp ? (lead + 1) : lead;
 
     /* 顶部大数拆解显示 */
-    el("rect", { x: 14, y: 8, width: 332, height: 42, rx: 6, style: "fill:var(--card);stroke:var(--line);stroke-width:1.4" }, svg);
+    el("rect", { x: 14, y: 8, width: 332, height: 48, rx: 6, style: "fill:var(--card);stroke:var(--line);stroke-width:1.4" }, svg);
     var rawStr = String(lead) + " | " + String(keyDigit) + tail;
-    el("text", { x: 180, y: 36, "text-anchor": "middle", style: "fill:var(--fg);font-size:20px;font-weight:700" }, svg,
-      lead + " | [" + watchName + "：" + keyDigit + "] " + tail + " ≈ " + resVal + " " + unit);
+    el("text", { x: 180, y: 27, "text-anchor": "middle", style: "fill:var(--fg);font-size:20px;font-weight:700" }, svg, rawStr);
+    el("text", { x:180, y:49, "text-anchor":"middle", style:"fill:var(--fg);font-size:16px" }, svg, watchName + "：" + keyDigit + " → " + resVal + unit);
 
     /* 数轴区间：四舍区 vs 五入区 */
     var x0 = 32, x1 = 328, xm = (x0 + x1) / 2;
@@ -246,6 +299,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   draw();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".micro-box[data-micro]").forEach(function (box) {
+    var state = 0, states = JSON.parse(box.getAttribute("data-micro"));
+    box.querySelector("button").addEventListener("click", function () {
+      state = 1 - state;
+      this.setAttribute("aria-pressed", String(state === 1));
+      box.querySelectorAll("svg text").forEach(function (text, i) { text.textContent = states[state][i]; });
+    });
+  });
+  document.querySelectorAll(".manip svg.stage").forEach(function (svg) {
+    var region = document.createElement("div"); region.className = "fig-scroll";
+    region.setAttribute("role", "region"); region.setAttribute("tabindex", "0");
+    region.setAttribute("aria-label", "计数图示（窄屏可左右滑动）");
+    svg.parentNode.insertBefore(region, svg); region.appendChild(svg);
+  });
+  document.querySelectorAll(".manip").forEach(function (root) {
+    root.addEventListener("keydown", function (event) {
+      var target = event.target.closest(".part[role=button]");
+      if (!target || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      var index = Array.from(root.querySelectorAll(".part[role=button]")).indexOf(target);
+      target.dispatchEvent(new MouseEvent("click", { bubbles:true }));
+      var next = root.querySelectorAll(".part[role=button]")[index];
+      if (next) next.focus();
+    });
+  });
 });
 </script>
 </body></html>

@@ -10,8 +10,18 @@
 <script defer src="../p-assets/manip.js"></script>
 <script defer src="../p-assets/kits/gridmotion.js"></script>
 <script defer src="../assets/video.js"></script>
+<style>
+body.primary .small {font-size:14px}
+.motion-lab {margin:16px 0;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.motion-lab label {display:block;margin:12px 0;font-size:17px}
+.motion-lab input[type="range"] {display:block;width:100%;min-height:44px}
+.motion-lab select,.motion-lab button,.micro-box button {font:inherit;min-height:44px;padding:6px 12px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px}
+.motion-lab .fig-scroll > svg.stage {min-width:360px}
+.motion-lab .readout {font-size:17px;line-height:1.7}
+.example-steps summary {min-height:44px;cursor:pointer;font-size:17px}
+</style>
 </head>
-<body class="primary" data-stage="primary" data-sec="p5b-u5-2">
+<body class="primary" data-stage="primary" data-sec="p5b-u5-2" data-standard="v2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="p5b-u5.html">← 本单元</a></header>
 <p class="crumb">五年级下册 · 第五单元 图形的运动（三） · 第 2 课</p>
@@ -19,9 +29,27 @@
 <p class="lead">三角形绕一个顶点转了 90°，转到哪里去了？怎样在方格纸上画出旋转后的图形？</p>
 <p class="line" style="color:var(--muted);font-size:15px">本单元按旧版教材编排。</p>
 
+<details class="route" open>
+<summary>本节路线导读</summary>
+<p><b>核心问题：</b>怎样从一个端点的位置，找到整个图形转后的位置？</p>
+<p><a href="p5b-u5-1.html">先修：旋转的特征和性质</a> · 初中衔接：图形的旋转，继续研究转动中不变的关系。</p>
+<p>先回忆平移和直角 → 猜一猜 → 动手核对几个例子 → 说出理由 → 看分步例题，再独立练习。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p5b-u5-2&amp;from=p5b-u5-2">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <div class="card micro-box">
+    <p>以前研究平移，会先看一个点，再看整个图形。现在把纸板的一角用图钉固定在 O：它还能平着搬走吗？先回忆直角和旋转：只找到一个点，能确定整个三角形吗？</p>
+    <div class="entry-bar"><button type="button" data-micro-turn="0" aria-pressed="true">看原图</button> <button type="button" data-micro-turn="1" aria-pressed="false">预测后转一转</button></div>
+    <div class="fig-scroll" role="region" aria-label="固定一角的纸板图示（窄屏可左右滑动）" tabindex="0"><svg class="micro-fig" viewBox="0 0 380 190" role="img" aria-label="一角固定在 O 的三角形纸板">
+      <polygon points="190,100 190,35 235,100" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4"/>
+      <g id="motion-micro"><polygon points="190,100 190,35 235,100" fill="var(--hl-soft)" stroke="var(--a)" stroke-width="3"/></g>
+      <circle cx="190" cy="100" r="4" fill="var(--fg)"/><text x="170" y="120" fill="var(--fg)" font-size="18">O</text>
+    </svg></div>
+    <p id="micro-note" aria-live="polite">先看原图：O 是固定点。先作预测，再看转动。</p>
+  </div>
+
   <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuS4gOagueaXl+adhuerluedgO+8jOS4i+err+aYr+eCuSBP77yM5LiK56uv5piv54K5IEHjgILorqnml5fmnYbnu5UgTyDmjInpobrml7bpkojmlrnlkJHml4vovawgOTDCsO+8jEEg54K55Lya6L2s5Yiw5ZOq6YeM77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIumhuuaXtumSiOaYr+WSjOaMh+mSiOS4gOagt+eahOaWueWQke+8muerluebtOWQkeS4iui9rCA5MMKwIOaYr+WQkeWPs+OAglwiPjxiPkE8L2I+TyDnmoTlt6bovrk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj5PIOeahOWPs+i+uTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCLovazkuoYgOTDCsO+8jOS9jee9ruWPmOS6huOAglwiPjxiPkM8L2I+6L+Y5ZyoIE8g55qE5LiK6Z2iPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPkLjgILlkJHkuIrnmoTmnYbvvIzpobrml7bpkojovawgOTDCsCDlj5jmiJDlkJHlj7PjgILnlLvml4vovazlkI7nmoTlm77lvaLvvIzlsLHmmK/miorlm77lvaLnmoTovrnkuIDmnaHkuIDmnaHovazov4fljrvjgII8L3A+PC9kaXY+XG4gICJ9">
     <p class="line">一根旗杆竖着，下端是点 O，上端是点 A。让旗杆绕 O 按顺时针方向旋转 90°，A 点会转到哪里？</p>
     <div class="opts">
@@ -36,6 +64,7 @@
 <section class="step" data-title="摆一摆">
 <div class="vid" data-video="concept"></div>
 
+  <p>沿用上一课的方法：先口头预测，再画点。两块方格纸都可用鼠标、触屏，或聚焦后用方向键和回车放点；放错可撤一步重画。</p>
   <h2>1. 顺时针转 90°，画一画</h2>
   <p class="line">三角形绕点 O 按<b>顺时针</b>方向旋转 90°。点格点，按顺序画出 A、B 转过去的位置 A′、B′。</p>
   <div class="manip" data-manip="gridmotion" data-cfg='{"mode":"rot","task":"draw","dir":"cw","w":12,"h":8,"shape":[[4,3],[7,3],[4,5]],"labels":["O","A","B"],"pivot":0}'></div>
@@ -67,6 +96,15 @@
   </div>
   <h2>3. 点不在绕点的同一横线或竖线上时</h2>
   <p class="line">在方格纸上标出绕点 O：从 O 向右走 2 格，再向上走 1 格到点 P。顺时针转 90°，把这条折线路线的两段一起转：向右 2 格变成向下 2 格，向上 1 格变成向右 1 格。因此从 O 向下 2 格再向右 1 格，就是 P′。逆时针转时，向右 2 格变成向上 2 格，向上 1 格变成向左 1 格。两段都要转，长度不变。</p>
+<div class="manip motion-lab" id="rotation-lab">
+  <p>虚线是原图，实线是转动中的图。先猜，再拖动；用方向键也能调节滑块。</p>
+  <label>转动方向 <select id="turn-direction"><option value="1">顺时针</option><option value="-1">逆时针</option></select></label>
+  <label>转过的角度 <output id="angle-value">0°</output><input id="turn-angle" type="range" min="0" max="90" step="1" value="0"></label>
+  <label>从 O 向右走的格数 <output id="length-value">4 格</output><input id="turn-length" type="range" min="2" max="4" step="1" value="4"></label>
+  <div class="fig-scroll" role="region" aria-label="旋转图示（窄屏可左右滑动）" tabindex="0"><svg class="stage" id="turn-fig" viewBox="0 0 360 240" role="img" aria-label="绕点 O 旋转的过程"></svg></div>
+  <p class="readout" id="turn-readout" aria-live="polite"></p>
+  <button type="button" id="turn-reset">重来</button>
+</div><p>先把向右的格数分别设为 2、3、4，预测终点在哪，再拖到 90° 核对。先概括：两段路线的方向怎样变，长度怎样变？</p>
   <div class="card predict" data-id="try-slant" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5UgMzwvc3Bhbj48cCBjbGFzcz1cImxpbmVcIj7ngrkgUSDlnKggTyDnmoTlj7PovrkgMyDmoLzjgIHkuIrovrkgMiDmoLzjgILor7flnKjnurjkuIrnlLvlh7rpobrml7bpkojovawgOTDCsCDlkI7nmoTkvY3nva7vvIzlho3pgInmi6njgII8L3A+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuS4pOautei3r+e6v+mDveimgei9rO+8jOS4jeiDveWPquS6pOaNouaVsOWtl+iAjOS4jeaUueaWueWQkeOAglwiPjxiPkE8L2I+TyDnmoTlj7PovrkgMyDmoLzjgIHkuIvovrkgMiDmoLw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+TyDnmoTlj7PovrkgMiDmoLzjgIHkuIvovrkgMyDmoLw8L2J1dHRvbj48YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiIGRhdGEtaGludD1cIuWQkeWPs+i9rOaIkOWQkeS4iu+8jOaYr+mAhuaXtumSiOOAglwiPjxiPkM8L2I+TyDnmoTlt6bovrkgMiDmoLzjgIHkuIrovrkgMyDmoLw8L2J1dHRvbj48L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+QuOAguWQkeWPsyAzIOagvOi9rOaIkOWQkeS4iyAzIOagvO+8jOWQkeS4iiAyIOagvOi9rOaIkOWQkeWPsyAyIOagvO+8jOWGjeaKiuerr+eCuei/nuWbniBP44CCPC9wPjwvZGl2PlxuICAifQ==">
     <span class="q-tag">自己试试 3</span><p class="line">点 Q 在 O 的右边 3 格、上边 2 格。请在纸上画出顺时针转 90° 后的位置，再选择。</p>
     <div class="opts"><button class="opt" data-v="A" data-hint="两段路线都要转，不能只交换数字而不改方向。"><b>A</b>O 的右边 3 格、下边 2 格</button><button class="opt" data-v="B"><b>B</b>O 的右边 2 格、下边 3 格</button><button class="opt" data-v="C" data-hint="向右转成向上，是逆时针。"><b>C</b>O 的左边 2 格、上边 3 格</button></div>
@@ -74,7 +112,10 @@
   </div>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box"><h2>为什么可以先找点，再连图？</h2>
+  <ol><li>O 不动。把 OA 和 OB 都绕 O 按同一方向转一个直角，两个端点就分别到 A′、B′；两条边都保留原长。</li><li>把 O、A′、B′ 顺次连起来，就像把一块硬纸板转过去。不能让一条边顺时针，另一条边逆时针。</li><li>端点不在同一横线或竖线上时，先用横、竖两段路线找到它。两段一起转，同样能确定新位置。</li></ol>
+  <p>比较刚才画出的顺、逆时针两幅图：哪一个点始终不动？哪两项检查可以防止把旋转画成平移？先说发现，再读结论。</p></div>
   <div class="key-say">
     <span class="tag">记住这句话</span>
     <b>画旋转后的图形：一找绕的点，二转与绕的点相连的边（各转 90°），三连成新图形。再数一数每条边的格数是否不变。</b>
@@ -87,10 +128,20 @@
     <div class="box ok"><div class="lbl">对：顺时针和逆时针要分清</div><p>顺时针和钟面指针走的方向相同，逆时针相反。</p></div>
     <div class="box no"><div class="lbl">错：方向转反</div><p>顺时针画成逆时针，图形位置就错了。</p></div>
   </div>
-  <details class="why">
-    <summary>为什么转 90° 后的边和原来的垂直？</summary>
+  <div class="why-box">
+    <h3>用直角检验</h3>
     <p>90° 就是一个直角。边绕点转了一个直角，转后的边和原来的边就成了直角，互相垂直。</p>
-  </details>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+<div class="card example-card"><h2>例：两条边都要转</h2>
+<p>三角形 OAB 中，A 在 O 上方 3 格，B 在 O 右方 2 格。画出绕 O 顺时针转 90° 后的图形。</p>
+<div class="example-steps"><details><summary>① 读懂：先标哪个点？</summary><p>先在方格纸上画原图并标出 O。O 不动，要找的是 A′ 和 B′。</p></details>
+<details><summary>② 画一画：分别转两条边</summary><p>向上 3 格转为向右 3 格，得到 A′；向右 2 格转为向下 2 格，得到 B′。顺次连接 O、A′、B′、O。</p></details>
+<details><summary>③ 检验：方向和格数都对吗？</summary><p>OA′ 与 OA 成直角，仍长 3 格；OB′ 与 OB 成直角，仍长 2 格。两条边都沿顺时针转，O 仍在原处。</p></details></div>
+<p><b>自己试试：</b>在纸上改成逆时针，再用上方第二块方格纸的方法检查。先独立画，最后展开核对。</p>
+<details><summary>画好后核对</summary><p>A′ 在 O 左方 3 格，B′ 在 O 上方 2 格。不是把原图整体向左搬。</p></details></div>
 </section>
 
 <section class="step" data-title="练一练">
@@ -163,6 +214,49 @@
 <nav class="back"><a href="p5b-u5-1.html">← 上一课：旋转的特征和性质</a> · <a href="p5b-u5.html">返回本单元</a></nav>
 </div>
 <script>
+
+(function () {
+  "use strict";
+  var fig = document.getElementById("turn-fig"), angle = document.getElementById("turn-angle"), length = document.getElementById("turn-length"), direction = document.getElementById("turn-direction");
+  var routeMode = document.body.dataset.sec === "p5b-u5-2";
+  // Clear the grid behind labels so letters stay readable during rotation.
+  function text(x, y, value) { return '<rect x="' + (x-16) + '" y="' + (y-18) + '" width="32" height="24" fill="var(--card)"/><text x="' + x + '" y="' + y + '" fill="var(--fg)" font-size="18" text-anchor="middle">' + value + '</text>'; }
+  function point(x, y, a) { return [180 + 16 * (x * Math.cos(a) - y * Math.sin(a)), 120 + 16 * (x * Math.sin(a) + y * Math.cos(a))]; }
+  function pts(points) { return points.map(function(p) { return p.join(","); }).join(" "); }
+  function draw() {
+    var n = Number(length.value), deg = Number(angle.value), a = Number(direction.value) * deg * Math.PI / 180;
+    var source = routeMode ? [[0,0],[n,0],[n,-2]] : [[0,0],[n,0],[0,-3]];
+    var before = source.map(function(p) { return point(p[0], p[1], 0); }), after = source.map(function(p) { return point(p[0], p[1], a); });
+    var markup = '';
+    for (var x=52;x<=308;x+=16) markup += '<path d="M'+x+' 24V216" stroke="var(--line)" fill="none"/>';
+    for (var y=24;y<=216;y+=16) markup += '<path d="M52 '+y+'H308" stroke="var(--line)" fill="none"/>';
+    var tag = routeMode ? 'polyline' : 'polygon';
+    markup += '<'+tag+' points="'+pts(before)+'" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="5 4"/>';
+    markup += '<'+tag+' points="'+pts(after)+'" fill="'+(routeMode ? 'none' : 'var(--hl-soft)')+'" stroke="var(--a)" stroke-width="3"/>';
+    markup += '<circle cx="180" cy="120" r="4" fill="var(--fg)"/>' + text(165,140,'O');
+    if (routeMode) markup += text(after[2][0]+14,after[2][1]-10,deg ? 'P′' : 'P');
+    else markup += text(after[1][0]+14,after[1][1]+6,deg ? 'A′' : 'A') + text(after[2][0],after[2][1]-12,deg ? 'B′' : 'B');
+    fig.innerHTML = markup;
+    document.getElementById('angle-value').textContent = deg + '°';
+    document.getElementById('length-value').textContent = n + ' 格';
+    var dir = direction.value === '1' ? '顺时针' : '逆时针';
+    document.getElementById('turn-readout').textContent = routeMode ?
+      '原路线：从 O 向右 ' + n + ' 格，再向上 2 格。两段一起绕 O ' + dir + '转了 ' + deg + '°，两段长度仍是 ' + n + ' 格和 2 格。' + (deg === 90 ? (direction.value === '1' ? '现在先向下走，再向右走。' : '现在先向上走，再向左走。') : '拖到 90°，检查两段各朝哪里。') :
+      '绕点 O 按' + dir + '方向旋转了 ' + deg + '°。OA 仍长 ' + n + ' 格，OB 仍长 3 格；O 始终不动。';
+  }
+  [angle,length,direction].forEach(function(control) { control.addEventListener('input',draw); control.addEventListener('change',draw); });
+  document.getElementById('turn-reset').addEventListener('click',function() { angle.value=0;length.value=4;direction.value='1';draw(); });
+  var micro = document.getElementById('motion-micro');
+  document.querySelectorAll('[data-micro-turn]').forEach(function(button) {
+    button.addEventListener('click',function() {
+      var turned = button.dataset.microTurn === '1';
+      micro.setAttribute('transform',turned ? 'rotate(90 190 100)' : 'rotate(0 190 100)');
+      document.getElementById('micro-note').textContent = turned ? 'O 留在原处，整块纸板绕 O 转了一个直角。把它和直接平着搬比较。' : '先看原图：O 是固定点。先作预测，再看转动。';
+      document.querySelectorAll('[data-micro-turn]').forEach(function(b) { b.setAttribute('aria-pressed',String(b === button)); });
+    });
+  });
+  draw();
+}());
 
 </script>
 </body></html>

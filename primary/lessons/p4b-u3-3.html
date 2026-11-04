@@ -12,20 +12,57 @@
 .manip { max-width:100%; overflow-x:auto; }
 .note-old { color:var(--muted, var(--fg)); opacity:.75; font-size:15px; margin-top:-6px; }
 .cut-svg { width:100%; max-width:420px; height:auto; display:block; margin:6px auto; }
+
+/* Keep the original diagrams readable inside a local scrolling region. */
+.v2-slider { display:grid; grid-template-columns:1fr; gap:4px; margin:10px 0; }
+.v2-slider input { width:100%; min-width:0; min-height:44px; accent-color:var(--a); }
+.v2-slider label { font-size:17px; }
+.micro-toggle { min-height:44px; padding:6px 12px; font-size:17px; border:1.5px solid var(--line); border-radius:10px; background:var(--card); color:var(--fg); cursor:pointer; }
+.micro-box text { fill:var(--fg); font-size:18px; }
+.micro-box .micro-alt { opacity:0; }
+.micro-box[data-view="1"] .micro-alt { opacity:1; }
+.micro-box[data-view="1"] .micro-first { opacity:.3; }
+.micro-note { min-height:3em; }
+.example-steps summary { min-height:44px; cursor:pointer; font-size:17px; font-weight:700; }
+.example-steps details { border:1px solid var(--line); border-radius:10px; padding:8px 12px; }
+.example-steps p { margin:6px 0; }
+.fig-scroll { margin:8px 0; }
+body.primary[data-standard="v2"] .manip .fig-scroll > svg.stage { min-width:300px; }
+body.primary[data-standard="v2"] .micro-box .fig-scroll > svg.micro-fig { min-width:300px; }
+body.primary[data-standard="v2"] #arr-svg { max-height:240px; height:240px; }
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4b-u3-3">
+<body class="primary" data-standard="v2" data-stage="primary" data-sec="p4b-u3-3">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级下册 · 第三单元 运算定律 · 第 3 课</p>
 <h1>减法的运算性质</h1>
-<p class="lead">连着减去两个数，可以先把两个数合起来，再一次减去。合起来正好凑整，计算就变简单了。</p>
+<p class="lead">加法里能把两部分先合起来。连着减去两部分时，能不能也先想一共去掉多少？</p>
+<details class="route" open>
+  <summary>本课怎么学</summary>
+  <p class="route-summary">连着去掉两部分，怎样合成一次去掉？</p>
+  <div class="route-bridges"><a class="route-pill" href="p4b-u3-2.html">先修：回看学过的算法</a><span class="route-pill">初中衔接：用运算律比较不同算法</span></div>
+  <p>先回想旧方法并猜一猜，再换数验证；用图讲清道理，最后分步看例题、独立练习。</p>
+</details>
 <p class="note-old">本单元按旧版教材编排。</p>
 
 <p class="concept-link"><a href="../knowledge.html?section=p4b-u3-3&amp;from=p4b-u3-3">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+<div class="micro-box" id="micro-look" data-view="0">
+  <p><b>从旧方法想起：</b>总数 480</p>
+  <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="micro-fig" viewBox="0 0 360 125" role="img" aria-label="两部分数量的示意图">
+    <rect x="24" y="20" width="150" height="48" rx="6" fill="var(--a)" fill-opacity=".2" stroke="var(--a)"/>
+    <rect x="186" y="20" width="150" height="48" rx="6" fill="var(--b)" fill-opacity=".2" stroke="var(--b)"/>
+    <text fill="var(--fg)" font-size="18" x="99" y="50" text-anchor="middle">去掉 130</text><text fill="var(--fg)" font-size="18" x="261" y="50" text-anchor="middle">再去掉 70</text>
+    <g class="micro-first"><text fill="var(--fg)" font-size="18" x="180" y="103" text-anchor="middle">先分别看清每一部分</text></g>
+    <g class="micro-alt"><path d="M24 76V82H336V76" fill="none" stroke="var(--fg)" stroke-width="2"/><text fill="var(--fg)" font-size="18" x="180" y="115" text-anchor="middle">再联系起来看，数量有没有变？</text></g>
+  </svg></div>
+  <button type="button" class="micro-toggle" aria-pressed="false">换个看法</button>
+  <p class="micro-note" aria-live="polite">先看图，再作下面的预测；图只示意数量关系。</p>
+</div>
+
   <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuaWh+WFt+W6l+aciSA2MDAg5byg6LS057q444CC5LiK5Y2I5Y2W5Ye6IDE0NSDlvKDvvIzkuIvljYjlj4jljZblh7ogNTUg5byg44CC546w5Zyo6L+Y5Ymp5aSa5bCR5byg77yfPC9wPlxuICAgIDxzdmcgY2xhc3M9XCJxZmlnXCIgdmlld0JveD1cIjAgMCAzNjAgODBcIiByb2xlPVwiaW1nXCIgYXJpYS1sYWJlbD1cIuS4gOWFsTYwMOW8oO+8jOWFiOWNljE0NeW8oO+8jOWGjeWNljU15bygXCI+XG4gICAgICA8cmVjdCB4PVwiMTBcIiB5PVwiMTJcIiB3aWR0aD1cIjM0MFwiIGhlaWdodD1cIjMwXCIgcng9XCI2XCIgc3R5bGU9XCJmaWxsOnZhcigtLWNhcmQpO3N0cm9rZTp2YXIoLS1saW5lKTtzdHJva2Utd2lkdGg6MlwiPjwvcmVjdD5cbiAgICAgIDxyZWN0IHg9XCIxMFwiIHk9XCIxMlwiIHdpZHRoPVwiODJcIiBoZWlnaHQ9XCIzMFwiIHJ4PVwiNlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1hKTtmaWxsLW9wYWNpdHk6LjM1O3N0cm9rZTp2YXIoLS1hKTtzdHJva2Utd2lkdGg6MlwiPjwvcmVjdD5cbiAgICAgIDxyZWN0IHg9XCI5MlwiIHk9XCIxMlwiIHdpZHRoPVwiMzFcIiBoZWlnaHQ9XCIzMFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1iKTtmaWxsLW9wYWNpdHk6LjM1O3N0cm9rZTp2YXIoLS1iKTtzdHJva2Utd2lkdGg6MlwiPjwvcmVjdD5cbiAgICAgIDx0ZXh0IHg9XCIxMFwiIHk9XCI3MFwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE3cHhcIj7lhYjljZYgMTQ1PC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjM1MFwiIHk9XCI3MFwiIHRleHQtYW5jaG9yPVwiZW5kXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MTdweFwiPuWGjeWNliA1NTwvdGV4dD5cbiAgICA8L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIjUxMCDmmK8gNjAwIOKIkiAxNDUgKyA1NSDnmoTnu5PmnpzjgILljZblh7rljrvnmoQgNTUg5byg5LiN5Lya5Zue5Yiw5bqX6YeM77yM5LiN6IO95Yqg5Zue5p2l44CCXCI+PGI+QTwvYj41MTAg5bygPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiPjxiPkI8L2I+NDAwIOW8oDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCI0NTUg5Y+q5YeP5LqG5LiK5Y2I55qEIDE0NSDlvKDvvIzkuIvljYjlj4jljZblh7rnmoQgNTUg5byg6L+Y5rKh5YeP44CCXCI+PGI+QzwvYj40NTUg5bygPC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5a+577yM6L+Y5YmpIDQwMCDlvKDjgILkvaDkuZ/lj6/ku6Xmg7PvvJrkuKTmrKHkuIDlhbHljZblh7ogMTQ1ICsgNTUgPSAyMDAg5byg77yM5LiA5qyh5YeP5Y67IDIwMO+8jOS5n+aYryA2MDAg4oiSIDIwMCA9IDQwMOOAgui/meWwseaYr+S7iuWkqeimgeWtpueahOOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
     <p class="line">文具店有 600 张贴纸。上午卖出 145 张，下午又卖出 55 张。现在还剩多少张？</p>
     <svg class="qfig" viewBox="0 0 360 80" role="img" aria-label="一共600张，先卖145张，再卖55张">
@@ -48,10 +85,15 @@
 
 <section class="step" data-title="摆一摆">
 <div class="vid" data-video="concept"></div>
+<p class="card">自己试试：先把第二次去掉的数减到 0，再让两次合起来正好是 480。两条线段的剩余部分还相同吗？先说预测，再操作，最后说出哪一部分没变。</p>
 
   <h2>1. 先减两次，再一次减去</h2>
   <p class="line">一共 480 个，先去掉一部分，再去掉一部分。点“＋”“－”改变两次去掉的个数，看下面两条线段：剩下的一样长吗？</p>
   <div class="card manip" id="m-cut">
+    <div class="v2-slider">
+      <label for="cut-first">拖动第一次去掉的个数</label><input type="range" id="cut-first" min="0" max="410" step="10" value="130">
+      <label for="cut-second">拖动第二次去掉的个数</label><input type="range" id="cut-second" min="0" max="350" step="10" value="70">
+    </div>
     <div class="ctrls">
       <span class="count">第一次去掉 <button type="button" id="ca-" aria-label="第一次少去掉 10">－</button><b id="ca" aria-live="polite">0</b><button type="button" id="ca+" aria-label="第一次多去掉 10">＋</button></span>
       <span class="count">第二次去掉 <button type="button" id="cb-" aria-label="第二次少去掉 10">－</button><b id="cb" aria-live="polite">0</b><button type="button" id="cb+" aria-label="第二次多去掉 10">＋</button></span>
@@ -60,7 +102,7 @@
       <button type="button" id="cswap">交换两次的顺序</button>
       <button type="button" id="creset">重来</button>
     </div>
-    <svg class="cut-svg" id="cut-svg" viewBox="0 -6 360 176" role="img" aria-label="线段图：分两次去掉与合起来一次去掉，剩下的一样长"></svg>
+    <div class="fig-scroll" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="cut-svg stage" id="cut-svg" viewBox="0 -6 360 176" role="img" aria-label="线段图：分两次去掉与合起来一次去掉，剩下的一样长"></svg></div>
     <p class="read" id="c-read1" aria-live="polite"></p>
     <p class="read" id="c-read2" aria-live="polite"></p>
     <p class="read" id="c-read3" aria-live="polite"></p>
@@ -76,7 +118,7 @@
     function $(id) { return document.getElementById(id); }
     function seg(x, w, cls, label, y) {
       var s = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="30" style="' + cls + '"/>';
-      if (w >= 46 && label) s += '<text x="' + (x + w / 2) + '" y="' + (y + 21) + '" text-anchor="middle" style="fill:var(--fg);font-size:16px">' + label + "</text>";
+      if (w >= 46 && label) s += '<text x="' + (x + w / 2) + '" y="' + (y + 21) + '" text-anchor="middle" style="fill:var(--fg);font-size:17px">' + label + "</text>";
       return s;
     }
     function row(y, parts) {
@@ -94,14 +136,16 @@
     var AB = "fill:var(--a);fill-opacity:.2;stroke:var(--a);stroke-width:2;stroke-dasharray:5 3";
     function render() {
       $("ca").textContent = a; $("cb").textContent = b;
+      $("cut-first").max = TOTAL - b; $("cut-first").value = a;
+      $("cut-second").max = TOTAL - a; $("cut-second").value = b;
       $("ca-").disabled = a <= 0; $("cb-").disabled = b <= 0;
       $("ca+").disabled = a + b + STEP > TOTAL; $("cb+").disabled = a + b + STEP > TOTAL;
       var rest = TOTAL - a - b, both = a + b;
-      var svg = '<text x="10" y="18" style="fill:var(--fg);font-size:16px">分两次去掉</text>';
+      var svg = '<text x="10" y="18" style="fill:var(--fg);font-size:17px">分两次去掉</text>';
       svg += row(24, [{ n: a, st: A, label: a }, { n: b, st: B, label: b }, { n: rest, st: R, label: rest }]);
-      svg += '<text x="10" y="102" style="fill:var(--fg);font-size:16px">合起来一次去掉</text>';
+      svg += '<text x="10" y="102" style="fill:var(--fg);font-size:17px">合起来一次去掉</text>';
       svg += row(108, [{ n: both, st: AB, label: both }, { n: rest, st: R, label: rest }]);
-      svg += '<text x="350" y="164" text-anchor="end" style="fill:var(--fg);font-size:16px">绿色：剩下的 ' + rest + '</text>';
+      svg += '<text x="350" y="164" text-anchor="end" style="fill:var(--fg);font-size:17px">绿色：剩下的 ' + rest + '</text>';
       $("cut-svg").innerHTML = svg;
       $("c-read1").textContent = TOTAL + " − " + a + " − " + b + " = " + rest;
       $("c-read2").textContent = TOTAL + " − (" + a + " + " + b + ") = " + TOTAL + " − " + both + " = " + rest;
@@ -118,30 +162,15 @@
     $("cb+").addEventListener("click", function () { move("b", STEP); });
     $("cswap").addEventListener("click", function () { var t = a; a = b; b = t; render(); });
     $("creset").addEventListener("click", function () { a = 130; b = 70; render(); });
+    $("cut-first").addEventListener("input", function () { move("a", Number(this.value) - a); });
+    $("cut-second").addEventListener("input", function () { move("b", Number(this.value) - b); });
     render();
   });
   </script>
 
-  <h2>2. 写成算式</h2>
-  <div class="card">
-    <p class="line">还是上面的例子：<b>480 − 130 − 70 = 280</b>，也可以写成 <b>480 − (130 + 70) = 480 − 200 = 280</b>。</p>
-    <p class="line">用话说：<b>连续减去两个数，等于减去这两个数的和</b>。括号里是<b>加</b>，因为两次去掉的合在一起。</p>
-    <p class="line">还有一点：两次去掉的数可以换顺序，480 − 130 − 70 = 480 − 70 − 130。但<b>最前面的 480 不能动</b>。</p>
-  </div>
 
-  <h2>3. 合起来凑整，算得快</h2>
-  <div class="card">
-    <p class="line">720 − 85 − 15：85 + 15 = 100，先合起来，再一次减去。</p>
-    <p class="line">720 − 85 − 15 = 720 − (85 + 15) = 720 − 100 = 620。</p>
-  </div>
 
-  <div class="card q" data-id="try1" data-kind="num" data-answer="440"
-       data-miss='{"100":"100 是 90 + 10 的和，还要用 540 去减它。","630":"630 是 540 + 90，用加了。题目是连续减去，540 − 90 − 10。","530":"530 = 540 − 10，只减了第二个数 10，第一个数 90 还没减。","450":"450 = 540 − 90，只减了第一个数，第二个数 10 还没减。"}'
-       data-hint="先把 90 和 10 合起来，再用 540 减去这个和。" data-lc-source="eyJhbnN3ZXIiOiI0NDAiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj41NDAg4oiSIDkwIOKIkiAxMCA9IO+8n++8iOWFiOaKiiA5MCDlkowgMTAg5ZCI6LW35p2l77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj41NDAg4oiSICg5MCArIDEwKSA9IDU0MCDiiJIgMTAwID0gNDQw44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <span class="q-tag">自己试试</span>
-    <p class="line">540 − 90 − 10 = ？（先把 90 和 10 合起来）</p>
-    <div class="reveal"><p class="line">540 − (90 + 10) = 540 − 100 = 440。</p></div>
-  </div>
+
   <div class="card predict" data-id="try2" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YWI5Y675o6JIDQw77yM5YaN5Y675o6JIDMw77yM5ZKM5LiA5qyh5Y675o6J5aSa5bCR5piv5LiA5qC355qE77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzIGNvbHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCIgZGF0YS1oaW50PVwiMTAg5pivIDQwIOKIkiAzMOOAguS4pOasoeWOu+aOieeahOS4nOilv+aYr+WQiOWcqOS4gOi1t+eahO+8jOimgeeUqOWKoOOAglwiPjxiPkE8L2I+MTA8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj43MDwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCIxMjAwIOaYryA0MCDDlyAzMOOAgui/memHjOaYr+WOu+aOieS4pOasoe+8jOimgeaKiuS4pOasoeeahOS4quaVsOWKoOi1t+adpeOAglwiPjxiPkM8L2I+MTIwMDwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj7lr7nvvIw0MCArIDMwID0gNzDjgILkuIDmrKHljrvmjokgNzDvvIzliankuIvnmoTmlbDlkozliIbkuKTmrKHljrvmjonkuIDmoLfjgII8L3A+PC9kaXY+XG4gICJ9">
     <span class="q-tag">自己试试</span>
     <p class="line">先去掉 40，再去掉 30，和一次去掉多少是一样的？</p>
@@ -154,7 +183,16 @@
   </div>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+<div class="why-box"><h2>图里的什么没有变？</h2><ol><li>把总线段分成第一次去掉、第二次去掉、剩下的三部分。两次去掉的是互不重叠的两部分。</li><li>一次去掉它们的和，拿走的还是这两部分，绿色剩余段就一样长。括号里应是加法。</li><li>本课不出现负数：两次去掉的个数合起来不能超过总数。被减数不换，只交换两次去掉的顺序。</li></ol></div>
+  <h2>2. 写成算式</h2>
+  <div class="card">
+    <p class="line">还是上面的例子：<b>480 − 130 − 70 = 280</b>，也可以写成 <b>480 − (130 + 70) = 480 − 200 = 280</b>。</p>
+    <p class="line">用话说：<b>连续减去两个数，等于减去这两个数的和</b>。括号里是<b>加</b>，因为两次去掉的合在一起。</p>
+    <p class="line">还有一点：两次去掉的数可以换顺序，480 − 130 − 70 = 480 − 70 − 130。但<b>最前面的 480 不能动</b>。</p>
+  </div>
+
+
   <p class="key-say line">连续减去两个数，等于减去这两个数的和。两个减数合起来凑整，先减和，再算更简单；被减数不能动，后面两个减数可以换顺序。</p>
 
   <h2>两个容易错的地方</h2>
@@ -166,9 +204,20 @@
   </div>
   <div class="pair">
     <div class="no"><b class="t">✗ 把最前面的数也换了位置</b>
-      <p>80 − 30 − 20 写成 30 − 80 − 20。30 里拿不出 80。</p></div>
+      <p>90 − 40 − 20 写成 40 − 90 − 20。40 里拿不出 90。</p></div>
     <div class="ok"><b class="t">✓ 只换后面两个减数</b>
-      <p>80 − 20 − 30，结果和 80 − 30 − 20 一样，都是 30。</p></div>
+      <p>90 − 20 − 40，结果和 90 − 40 − 20 一样，都是 30。</p></div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+<div class="example-card card"><h2>先自己想，再逐步打开</h2><p>文具箱有 720 张彩纸，先用 85 张，再用 15 张，还剩多少张？</p><div class="example-steps"><details><summary>① 读懂题意</summary><p>读懂题意：720 是原有总数，85 和 15 都是用掉的部分，要连续减。</p></details><details><summary>② 列式推导</summary><p>列式推导：720 − 85 − 15 = 720 − (85 + 15) = 720 − 100 = 620（张）。</p></details><details><summary>③ 检查与易错提醒</summary><p>检查：620 + 85 + 15 = 720。把剩下和两次用掉的加回去，等于原有总数。</p></details></div></div>
+  <div class="card q" data-id="try1" data-kind="num" data-answer="440"
+       data-miss='{"100":"100 是 90 + 10 的和，还要用 540 去减它。","630":"630 是 540 + 90，用加了。题目是连续减去，540 − 90 − 10。","530":"530 = 540 − 10，只减了第二个数 10，第一个数 90 还没减。","450":"450 = 540 − 90，只减了第一个数，第二个数 10 还没减。"}'
+       data-hint="先把 90 和 10 合起来，再用 540 减去这个和。" data-lc-source="eyJhbnN3ZXIiOiI0NDAiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj41NDAg4oiSIDkwIOKIkiAxMCA9IO+8n++8iOWFiOaKiiA5MCDlkowgMTAg5ZCI6LW35p2l77yJPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cCBjbGFzcz1cImxpbmVcIj41NDAg4oiSICg5MCArIDEwKSA9IDU0MCDiiJIgMTAwID0gNDQw44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <span class="q-tag">自己试试</span>
+    <p class="line">540 − 90 − 10 = ？（先把 90 和 10 合起来）</p>
+    <div class="reveal"><p class="line">540 − (90 + 10) = 540 − 100 = 440。</p></div>
   </div>
 </section>
 
@@ -245,4 +294,15 @@
 <section class="card stage-bridge" data-bridge="primary-to-junior" aria-labelledby="stage-bridge-next-title"><style>.olympiad-bridge,.stage-bridge{margin:18px 0;padding:16px;border:1px solid var(--line,#E2DCD0);border-radius:var(--radius,12px);background:var(--card,#fff)}.olympiad-bridge h2,.stage-bridge h2{margin:0 0 6px;font-size:1.1em}.olympiad-bridge .bridge-links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}.olympiad-bridge .bridge-links a,.stage-bridge .bridge-link{display:inline-block;padding:4px 12px;border:1px solid var(--line,#E2DCD0);border-radius:999px;text-decoration:none;color:inherit;background:var(--card,#fff);font-weight:600;font-size:.95em}.stage-bridge .bridge-link:hover,.olympiad-bridge .bridge-links a:hover{border-color:var(--a,#2F7A56);color:var(--a,#2F7A56)}.stage-bridge .bridge-pending{color:var(--muted,#5E6B64);font-weight:500}.stage-bridge .bridge-list{list-style:none;padding:0;margin:10px 0 8px;display:grid;gap:10px}.stage-bridge .bridge-list li{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:8px 12px;border:1px solid var(--line,#E2DCD0);border-radius:10px;background:var(--bg,#F7F4EE)}.stage-bridge .bridge-why{font-size:.93em;color:var(--fg,#1A2822);line-height:1.6}.olympiad-bridge .bridge-all,.stage-bridge .bridge-all{font-size:.92em;margin:6px 0 0}</style><h2 id="stage-bridge-next-title">往后学 · 初中数学</h2><p class="small">把这一单元学扎实，到了初中就能顺畅接上下面的内容：</p><ul class="bridge-list"><li><a class="bridge-link" href="../../junior/lessons/j2-2.html">初中 · 2.2 有理数的乘法与除法</a><span class="bridge-why">小学整数与分数的交换律、结合律、分配律以及倒数求法，是有理数乘除确定符号后进行简便运算与约分化简的直接基础。</span></li><li><a class="bridge-link" href="../../junior/lessons/j4-2.html">初中 · 4.2 整式的加法与减法</a><span class="bridge-why">合并同类项 ax+bx=(a+b)x 与去括号法则的本质就是乘法分配律在含字母项上的逆用与正用。</span></li></ul><p class="bridge-all"><a href="../../junior/courses.html">打开初中数学课程目录</a></p></section>
 <nav class="back"><a class="home" href="../index.html">← 返回主页</a></nav>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var box = document.getElementById("micro-look"), button = box.querySelector("button");
+  button.addEventListener("click", function () {
+    var alternate = box.dataset.view !== "1";
+    box.dataset.view = alternate ? "1" : "0";
+    button.setAttribute("aria-pressed", String(alternate));
+    box.querySelector(".micro-note").textContent = alternate ? "这两部分合起来，是用加还是用减？" : "先分别看清每一部分，再作下面的预测。";
+  });
+});
+</script>
 </body></html>

@@ -10,22 +10,48 @@
 <script defer src="../p-assets/manip.js"></script>
 
 <style>
-/* PY-151: preserve diagram coordinates while keeping labels readable. */
+/* Keep the original diagrams readable inside their own scroll region. */
+body.primary { font-size:17px; }
 .manip { max-width:100%; overflow-x:auto; }
-.manip svg.stage { min-width:340px; }
+.manip svg.stage,
+body.primary[data-standard="v2"] .manip .fig-scroll > svg.stage { min-width:340px; }
+.micro-box .micro-toggle { min-height:44px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 12px; }
+body.primary[data-standard="v2"] .micro-box svg.micro-fig { min-width:320px; max-width:320px; }
+.manip label { display:block; margin:10px 0; }
+.manip input { font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--line); border-radius:6px; min-height:44px; max-width:100%; box-sizing:border-box; }
+.manip input[type=range] { width:100%; }
+.manip .live-word { line-height:1.8; overflow-wrap:anywhere; }
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4a-u1-4">
+<body class="primary" data-stage="primary" data-standard="v2" data-sec="p4a-u1-4">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级上册 · 第一单元 万以上数的认识 · 第 4 课</p>
 <h1>亿以上数的认识和读法</h1>
 <p class="lead">从一亿往后数还有哪些更大的计数单位？含有亿级、万级、个级三级的数怎样读？</p>
 
+<details class="route" open>
+  <summary>本节路线：多了亿级，原来的分级读数办法还能用吗？</summary>
+  <p>先想想以前学过的办法，猜一猜，再动手试试；换几个数比一比，说说道理，再看例题、做练习。</p>
+  <p><a href="p4a-u1-2.html">先修：两级数的读法</a> · 初中衔接：七上“有理数及其大小比较”，继续研究数怎样排列、比较。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p4a-u1-4&amp;from=p4a-u1-4">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p>读两级数时，我们先分级再读。加上亿级以后，先猜这个办法哪里变、哪里不变。</p>
+  <div class="micro-box" data-micro='[["36 | 2400", "三十六万二千四百"], ["36 | 2400 | 0000", "每四位一组，最高一组叫什么？"]]'>
+    <button type="button" class="micro-toggle" aria-pressed="false">换个情形想一想</button>
+    <div class="fig-scroll" role="region" aria-label="旧知与新情形对照图" tabindex="0">
+      <svg class="micro-fig" viewBox="0 0 320 90" role="img" aria-label="从旧经验提出新问题">
+        <rect x="4" y="4" width="312" height="82" rx="8" style="fill:var(--hl-soft);stroke:var(--c)"/>
+        <text x="160" y="35" text-anchor="middle" style="fill:var(--fg);font-size:17px">36 | 2400</text>
+        <text x="160" y="65" text-anchor="middle" style="fill:var(--fg);font-size:16px">三十六万二千四百</text>
+      </svg>
+    </div>
+  </div>
+
   <div class="card predict" data-id="entry" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuS6uuS4gOeUn+eahOW/g+i3s+Wkp+e6puaciSAyNSDkur/liLAgMzAg5Lq/5qyh44CC5aaC5p6c5LuO5LiA5Lq/5byA5aeL77yM5LiA5Lq/5LiA5Lq/5Zyw5pWw77yM5pWw5ruhIDxiPjEwIOS4quS4gOS6vzwvYj7mmK/lpJrlsJHvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDMyMCA4NFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5Lq/57qn5YyF5ZCr5Y2D5Lq/5L2N44CB55m+5Lq/5L2N44CB5Y2B5Lq/5L2N5ZKM5Lq/5L2N77yM5oOz5LiA5oOz5ruh5Y2B5oCO5qC36L+b5L2NXCI+XG4gICAgICA8cmVjdCB4PVwiMTBcIiB5PVwiMTBcIiB3aWR0aD1cIjMwMFwiIGhlaWdodD1cIjY0XCIgcng9XCI4XCIgc3R5bGU9XCJmaWxsOnZhcigtLW5vLXNvZnQpO3N0cm9rZTp2YXIoLS1ubyk7c3Ryb2tlLXdpZHRoOjEuOFwiPjwvcmVjdD5cbiAgICAgIDx0ZXh0IHg9XCIxNjBcIiB5PVwiMzZcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjE2cHg7Zm9udC13ZWlnaHQ6NzAwXCI+5Lq/57qn77ya5Y2D5Lq/5L2NIMK3IOeZvuS6v+S9jSDCtyDljYHkur/kvY0gwrcg5Lq/5L2NPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjE2MFwiIHk9XCI2MlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLW5vKTtmb250LXNpemU6MTdweDtmb250LXdlaWdodDo3MDBcIj4xMCDkuKrkuIDkur8g4oaSIO+8nzwvdGV4dD5cbiAgICA8L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIjEwIOS4quS4gOWNg+S4h+aJjeaYr+S4gOS6v++8m+eOsOWcqOavj+S4gOS7vemDveaYr+S4gOS6v++8jDEwIOS4quS4gOS6v+avlOS4gOS6v+Wkp+WNgeWAjeOAglwiPjxiPkE8L2I+5LiA5Y2D5LiHPC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIjEwIOS4quWNgeS6v+aJjeaYr+S4gOeZvuS6v+OAgjEwIOS4quS4gOS6v+aYr+WNgeS6v+OAglwiPjxiPkI8L2I+5LiA55m+5Lq/PC9idXR0b24+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQ1wiPjxiPkM8L2I+5Y2B5Lq/PC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPlxuICAgICAgPHAgY2xhc3M9XCJsaW5lXCI+5a+577yBPGI+MTAg5Liq5LiA5Lq/5piv5Y2B5Lq/77yMMTAg5Liq5Y2B5Lq/5piv5LiA55m+5Lq/77yMMTAg5Liq5LiA55m+5Lq/5piv5LiA5Y2D5Lq/PC9iPuOAguWDj+i/meagt++8jOavj+ebuOmCu+S4pOS4quiuoeaVsOWNleS9jeS5i+mXtOeahOi/m+eOh+mDveaYryAxMCDnmoTorqHmlbDmlrnms5Xlj6vkvZw8Yj7ljYHov5vliLborqHmlbDms5U8L2I+44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
     <p class="line">人一生的心跳大约有 25 亿到 30 亿次。如果从一亿开始，一亿一亿地数，数满 <b>10 个一亿</b>是多少？</p>
     <svg class="qfig" viewBox="0 0 320 84" role="img" aria-label="亿级包含千亿位、百亿位、十亿位和亿位，想一想满十怎样进位">
@@ -49,11 +75,8 @@
   <h2>1. 十二位三级数位表与分级读数台</h2>
   <p class="line">点下面的亿以上大数，或者直接点表格里的数字改变它，看看分成<b>亿级、万级、个级</b>三级后，每一级怎样读、末尾和中间的 0 怎样处理。</p>
   <div class="manip" id="read-u1-4"></div>
-
-  <div class="card">
-    <p class="line"><b>亿以上数的读法：</b><br>1. <b>先分级</b>（从右边起每四位一级，分成个级、万级、亿级），再从最高级（<b>亿级</b>）读起；<br>2. 读完亿级或万级的数，要在后面加上<b>“亿”</b>字或<b>“万”</b>字；<br>3. <b>每级末尾不管有几个 0，都不读</b>；其他数位上有一个 0 或连续几个 0，<b>都只读一个零</b>。</p>
-  </div>
-
+  <p class="line"><b>先猜后验：</b>先读例 2，再把亿位上的 0 改成 1，看看读法怎样变。再用例 4 研究整个万级都是 0 的情况。比较后说说：哪些 0 合起来只读一个零？</p>
+  <p>试过至少两种情形后，先用自己的话说发现，再到“讲道理”核对。</p>
   <div class="card predict" data-id="try1" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YWI57uZ5Y2B5L2N5pWwIDxiPjcwMDAwMDAwMDA8L2I+IOWIhue6p++8iDcwfDAwMDB8MDAwMO+8ie+8jOWug+W6lOivpeivu+S9nOS7gOS5iO+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIjcwIOWcqOS6v+e6p++8iOWNgeS6v+S9jeaYryA377yM5Lq/5L2N5pivIDDvvInvvIzooajnpLogNzAg5Liq5Lq/77yM5LiN5piv5LiD5Lq/44CCXCI+PGI+QTwvYj7kuIPkur88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuIPljYHkur88L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5LiH57qn5ZKM5Liq57qn55qEIDgg5LiqIDAg5YWo5Zyo5q+P57qn5pyr5bC+77yM5LiA5Liq6Zu25Lmf5LiN6K+744CCXCI+PGI+QzwvYj7kuIPljYHkur/pm7bkuIc8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+QuOAguS6v+e6p+aYryA3MO+8jOivu+S9nOS4g+WNgeS6v++8m+S4h+e6p+WSjOS4que6p+WFqOaYryAwIOS4jeivu++8jOaJgOS7peivu+S9nDxiPuS4g+WNgeS6vzwvYj7jgII8L3A+PC9kaXY+XG4gICJ9">
     <span class="q-tag">自己试试</span>
     <p class="line">先给十位数 <b>7000000000</b> 分级（70|0000|0000），它应该读作什么？</p>
@@ -65,19 +88,24 @@
     <div class="reveal"><p>B。亿级是 70，读作七十亿；万级和个级全是 0 不读，所以读作<b>七十亿</b>。</p></div>
   </div>
 
-  <div class="card predict" data-id="try2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YaN6K+75Y2B5LqM5L2N5pWwIDxiPjUwMDh8MDYwMHwwMDAwPC9iPu+8jOS4i+mdouWTquS4quivu+azleaYr+WvueeahO+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuS6lOWNg+mbtuWFq+S6v+mbtuWFreeZvuS4hzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLkuIfnuqfmmK8gMDYwMO+8jOWNg+S4h+S9jeS4iuaYryAw77yI5Zyo5LiH57qn5byA5aS077yJ77yM5b+F6aG76K+75Ye65LiA5Liq4oCc6Zu24oCd44CCXCI+PGI+QjwvYj7kupTljYPpm7blhavkur/lha3nmb7kuIc8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5LiH57qnIDA2MDAg5pyr5bC+55qE5Lik5LiqIDAg5Zyo5LiH57qn5pyr5bC+77yM5LiN6K+777yBXCI+PGI+QzwvYj7kupTljYPpm7blhavkur/pm7blha3nmb7kuIfpm7Y8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+QeOAguS6v+e6p+KAnDUwMDjigJ3or7vkvZzkupTljYPpm7blhavkur/vvIzkuIfnuqfigJwwNjAw4oCd6K+75L2c6Zu25YWt55m+5LiH77yM5Liq57qn5YWoIDAg5LiN6K+777yM5ZCI6LW35p2l5pivPGI+5LqU5Y2D6Zu25YWr5Lq/6Zu25YWt55m+5LiHPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
-    <span class="q-tag">自己试试</span>
-    <p class="line">再读十二位数 <b>5008|0600|0000</b>，下面哪个读法是对的？</p>
-    <div class="opts">
-      <button class="opt" data-v="A"><b>A</b>五千零八亿零六百万</button>
-      <button class="opt" data-v="B" data-hint="万级是 0600，千万位上是 0（在万级开头），必须读出一个“零”。"><b>B</b>五千零八亿六百万</button>
-      <button class="opt" data-v="C" data-hint="万级 0600 末尾的两个 0 在万级末尾，不读！"><b>C</b>五千零八亿零六百万零</button>
-    </div>
-    <div class="reveal"><p>A。亿级“5008”读作五千零八亿，万级“0600”读作零六百万，个级全 0 不读，合起来是<b>五千零八亿零六百万</b>。</p></div>
-  </div>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+    <h3>先比较，再说清为什么</h3>
+    <ol>
+      <li>一亿接着一亿地数，满 10 个一亿换成 1 个十亿；继续满十换一，得到百亿、千亿。</li>
+      <li>个级、万级都占四位，亿级也按同样顺序排四位。三级各按原来四位数的办法读，亿级读完加“亿”，万级读完加“万”。</li>
+      <li>70 | 0000 | 0000 后面没有别的非零数字，末尾不读零；6 | 0000 | 0500 中间隔着空级，要补读一个零。先比较，再概括读法。</li>
+    </ol>
+  </div>
+
+
+  <div class="card">
+    <p class="line"><b>亿以上数的读法：</b><br>1. <b>先分级</b>（从右边起每四位一级，分成个级、万级、亿级），再从最高级（<b>亿级</b>）读起；<br>2. 读完亿级或万级的数，要在后面加上<b>“亿”</b>字或<b>“万”</b>字；<br>3. <b>每级末尾不管有几个 0，都不读</b>；其他数位上有一个 0 或连续几个 0，<b>都只读一个零</b>。</p>
+  </div>
+
+
   <p class="key-say line">每相邻两个计数单位之间的进率都是 10 的计数方法叫作十进制计数法。读亿以上的数，先从右往左每四位分级，从亿级读起，读完亿级加“亿”字、读完万级加“万”字。</p>
 
   <h2>两个容易错的地方</h2>
@@ -92,6 +120,28 @@
       把 200|5000|3000 错读成“二百亿<b>零</b>五千万三千”。</div>
     <div class="ok"><b class="t">✓ 亿级末尾 0 不读，万级千位也不是 0 就不读零</b>
       200|5000|3000 读作“二百亿五千万三千”（一个零也不读）。</div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>例题：53 | 0400 | 2000 怎样读？</h2>
+    <p>先自己试着说；需要时，逐步打开提示。</p>
+    <div class="example-steps">
+      <details class="ex-step s1"><summary>① 读懂题意</summary><p>从右起核对：个级 2000，万级 0400，亿级 53。</p></details>
+      <details class="ex-step s2"><summary>② 推导与算理</summary><p>亿级读“五十三亿”；万级开头有 0，读“零四百万”；个级读“二千”。</p></details>
+      <details class="ex-step s3"><summary>③ 检查与易错点</summary><p>合读“五十三亿零四百万二千”。个级千位不是 0，两级间不用再添一个零。</p></details>
+    </div>
+  </div>
+  <div class="card predict" data-id="try2" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YaN6K+75Y2B5LqM5L2N5pWwIDxiPjUwMDh8MDYwMHwwMDAwPC9iPu+8jOS4i+mdouWTquS4quivu+azleaYr+WvueeahO+8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuS6lOWNg+mbtuWFq+S6v+mbtuWFreeZvuS4hzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLkuIfnuqfmmK8gMDYwMO+8jOWNg+S4h+S9jeS4iuaYryAw77yI5Zyo5LiH57qn5byA5aS077yJ77yM5b+F6aG76K+75Ye65LiA5Liq4oCc6Zu24oCd44CCXCI+PGI+QjwvYj7kupTljYPpm7blhavkur/lha3nmb7kuIc8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5LiH57qnIDA2MDAg5pyr5bC+55qE5Lik5LiqIDAg5Zyo5LiH57qn5pyr5bC+77yM5LiN6K+777yBXCI+PGI+QzwvYj7kupTljYPpm7blhavkur/pm7blha3nmb7kuIfpm7Y8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+PHA+QeOAguS6v+e6p+KAnDUwMDjigJ3or7vkvZzkupTljYPpm7blhavkur/vvIzkuIfnuqfigJwwNjAw4oCd6K+75L2c6Zu25YWt55m+5LiH77yM5Liq57qn5YWoIDAg5LiN6K+777yM5ZCI6LW35p2l5pivPGI+5LqU5Y2D6Zu25YWr5Lq/6Zu25YWt55m+5LiHPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <span class="q-tag">自己试试</span>
+    <p class="line">再读十二位数 <b>5008|0600|0000</b>，下面哪个读法是对的？</p>
+    <div class="opts">
+      <button class="opt" data-v="A"><b>A</b>五千零八亿零六百万</button>
+      <button class="opt" data-v="B" data-hint="万级是 0600，千万位上是 0（在万级开头），必须读出一个“零”。"><b>B</b>五千零八亿六百万</button>
+      <button class="opt" data-v="C" data-hint="万级 0600 末尾的两个 0 在万级末尾，不读！"><b>C</b>五千零八亿零六百万零</button>
+    </div>
+    <div class="reveal"><p>A。亿级“5008”读作五千零八亿，万级“0600”读作零六百万，个级全 0 不读，合起来是<b>五千零八亿零六百万</b>。</p></div>
   </div>
 </section>
 
@@ -222,7 +272,32 @@ document.addEventListener("DOMContentLoaded", function () {
     return out.replace(/^一十/, "十");
   }
 
+  var tierRead = h("p", "live-word"); root.appendChild(tierRead);
+  var numberLabel = h("label", "", "自己造一个数（最多 12 位）：");
+  var numberInput = h("input"); numberInput.type = "text";
+  numberInput.inputMode = "numeric"; numberInput.maxLength = 12;
+  numberInput.setAttribute("aria-label", "自己造一个数");
+  var numberHint = h("p", "hint", "改好数字后按回车，或点输入框外面；也可以点图中的数位逐个改。");
+  numberHint.setAttribute("aria-live", "polite");
+  function applyNumber() {
+    var text = numberInput.value.trim();
+    if (!/^\d{1,12}$/.test(text)) { numberHint.textContent = "请输入 1～12 位的非负整数。"; return; }
+    digits = text.padStart(12, "0").split("").map(Number);
+    numberHint.textContent = "先自己分级、读写，再与图和读数核对。";
+    draw();
+  }
+  numberInput.addEventListener("change", applyNumber);
+  numberInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyNumber(); } });
+  numberLabel.appendChild(numberInput); root.insertBefore(numberLabel, out); root.insertBefore(numberHint, out);
+
+  addBtn("再数一亿", function () {
+    var value = Number(digits.join(""));
+    if (value + 100000000 > 999999999999) { numberHint.textContent = "已经到十二位数的边界，先减小这个数再数。"; return; }
+    digits = String(value + 100000000).padStart(12, "0").split("").map(Number); draw();
+  });
+
   function draw() {
+    numberInput.value = String(Number(digits.join("")));
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var tiers = [
       { name: "亿级（加“亿”）", x: 6, w: 114, col: "var(--no)", bg: "var(--no-soft)" },
@@ -260,10 +335,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var rWan = vWan ? ((vYi && wan[0] === 0 ? "零" : "") + readFour(wan) + "万") : (vYi && vGe ? "零" : "（不读）");
     var rGe = vGe ? (((vYi || vWan) && ge[0] === 0 && vWan ? "零" : "") + readFour(ge)) : "（不读）";
 
-    el("text", { x: 63, y: 138, "text-anchor": "middle", style: "fill:var(--no);font-size:15px;font-weight:700" }, svg, practice ? "亿级怎样读？" : rYi);
-    el("text", { x: 180, y: 138, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, practice ? "万级怎样读？" : rWan);
-    el("text", { x: 297, y: 138, "text-anchor": "middle", style: "fill:var(--a);font-size:15px;font-weight:700" }, svg, practice ? "个级怎样读？" : rGe);
+    el("text", { x: 63, y: 138, "text-anchor": "middle", style: "fill:var(--no);font-size:15px;font-weight:700" }, svg, "亿级读法见下方");
+    el("text", { x: 180, y: 138, "text-anchor": "middle", style: "fill:var(--c);font-size:15px;font-weight:700" }, svg, "万级读法见下方");
+    el("text", { x: 297, y: 138, "text-anchor": "middle", style: "fill:var(--a);font-size:15px;font-weight:700" }, svg, "个级读法见下方");
 
+    tierRead.textContent = "亿级：" + (practice ? "自己读一读" : rYi) + "；万级：" + (practice ? "自己读一读" : rWan) + "；个级：" + (practice ? "自己读一读" : rGe);
     var rd = readTwelve(digits);
     var disp = (vYi ? String(vYi) + " | " : "") + digits.slice(4, 8).join("") + " | " + digits.slice(8, 12).join("");
     out.innerHTML = "分级：<b>" + disp + "</b> → 读作：<b>" + rd + "</b>";
@@ -275,6 +351,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   draw();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".micro-box[data-micro]").forEach(function (box) {
+    var state = 0, states = JSON.parse(box.getAttribute("data-micro"));
+    box.querySelector("button").addEventListener("click", function () {
+      state = 1 - state;
+      this.setAttribute("aria-pressed", String(state === 1));
+      box.querySelectorAll("svg text").forEach(function (text, i) { text.textContent = states[state][i]; });
+    });
+  });
+  document.querySelectorAll(".manip svg.stage").forEach(function (svg) {
+    var region = document.createElement("div"); region.className = "fig-scroll";
+    region.setAttribute("role", "region"); region.setAttribute("tabindex", "0");
+    region.setAttribute("aria-label", "计数图示（窄屏可左右滑动）");
+    svg.parentNode.insertBefore(region, svg); region.appendChild(svg);
+  });
+  document.querySelectorAll(".manip").forEach(function (root) {
+    root.addEventListener("keydown", function (event) {
+      var target = event.target.closest(".part[role=button]");
+      if (!target || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      var index = Array.from(root.querySelectorAll(".part[role=button]")).indexOf(target);
+      target.dispatchEvent(new MouseEvent("click", { bubbles:true }));
+      var next = root.querySelectorAll(".part[role=button]")[index];
+      if (next) next.focus();
+    });
+  });
 });
 </script>
 </body></html>

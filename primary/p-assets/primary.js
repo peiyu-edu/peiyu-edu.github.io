@@ -164,6 +164,12 @@
       return b;
     });
     steps[0].parentNode.insertBefore(nav, steps[0]);
+    function measureSteps() {
+      body.style.setProperty("--primary-steps-height", Math.ceil(nav.getBoundingClientRect().height) + "px");
+    }
+    // Wrapping and font loading can change the sticky bar's height independently of the viewport.
+    if (window.ResizeObserver) new ResizeObserver(measureSteps).observe(nav);
+    else window.addEventListener("resize", measureSteps);
     steps.forEach(function (s, i) {
       s.id = s.id || "step" + (i + 1);
       if (i === steps.length - 1) return;
@@ -176,13 +182,50 @@
     });
     function show(i, scroll) {
       steps.forEach(function (s, j) { s.classList.toggle("on", j === i); btns[j].setAttribute("aria-selected", j === i ? "true" : "false"); });
-      if (scroll) { nav.scrollIntoView({ block: "start" }); log("step", { step: i + 1 }); }
+      measureSteps();
+      if (scroll) {
+        (body.getAttribute("data-standard") === "v2" ? steps[i] : nav).scrollIntoView({ block: "start" });
+        log("step", { step: i + 1 });
+      }
       document.dispatchEvent(new CustomEvent("step:show", { detail: { step: i + 1 } }));
       document.dispatchEvent(new CustomEvent("step", { detail: i + 1 }));
     }
     var m0 = location.hash.match(/^#step(\d+)$/);
     var idx0 = m0 ? Math.min(Math.max(parseInt(m0[1], 10), 1), steps.length) - 1 : 0;
     show(idx0, false);
+    // Repair only an untouched v2 entry; subsequent user navigation owns the reading position.
+    if (m0 && body.getAttribute("data-standard") === "v2") {
+      var pendingEntryScroll = true;
+      var entryHash = location.hash;
+      var entryInputs = ["wheel", "touchstart", "pointerdown", "keydown", "click", "hashchange"];
+      function cancelEntryScroll() {
+        pendingEntryScroll = false;
+        entryInputs.forEach(function (type) { window.removeEventListener(type, cancelEntryScroll, true); });
+        window.removeEventListener("scroll", cancelMovedEntryScroll, true);
+        window.removeEventListener("load", finishEntryScroll);
+      }
+      function finishEntryScroll() {
+        requestAnimationFrame(function () {
+          if (!pendingEntryScroll) return;
+          var stillAtEntry = location.hash === entryHash && steps[idx0].classList.contains("on");
+          cancelEntryScroll();
+          if (!stillAtEntry) return;
+          measureSteps();
+          steps[idx0].scrollIntoView({ block: "start" });
+        });
+      }
+      function cancelMovedEntryScroll() {
+        var top = steps[idx0].getBoundingClientRect().top;
+        var margin = parseFloat(window.getComputedStyle(steps[idx0]).scrollMarginTop) || 0;
+        // Native initial fragment scrolling can use either the element edge or its scroll margin.
+        if (top < -1 || top > margin + 1) cancelEntryScroll();
+      }
+      entryInputs.forEach(function (type) {
+        window.addEventListener(type, cancelEntryScroll, { capture: true, passive: true });
+      });
+      window.addEventListener("scroll", cancelMovedEntryScroll, { capture: true, passive: true });
+      window.addEventListener("load", finishEntryScroll, { once: true });
+    }
     window.addEventListener("hashchange", function () {
       var m = location.hash.match(/^#step(\d+)$/);
       if (m) {

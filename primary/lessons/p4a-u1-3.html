@@ -10,22 +10,48 @@
 <script defer src="../p-assets/manip.js"></script>
 
 <style>
-/* PY-151: preserve diagram coordinates while keeping labels readable. */
+/* Keep the original diagrams readable inside their own scroll region. */
+body.primary { font-size:17px; }
 .manip { max-width:100%; overflow-x:auto; }
-.manip svg.stage { min-width:340px; }
+.manip svg.stage,
+body.primary[data-standard="v2"] .manip .fig-scroll > svg.stage { min-width:340px; }
+.micro-box .micro-toggle { min-height:44px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 12px; }
+body.primary[data-standard="v2"] .micro-box svg.micro-fig { min-width:320px; max-width:320px; }
+.manip label { display:block; margin:10px 0; }
+.manip input { font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--line); border-radius:6px; min-height:44px; max-width:100%; box-sizing:border-box; }
+.manip input[type=range] { width:100%; }
+.manip .live-word { line-height:1.8; overflow-wrap:anywhere; }
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4a-u1-3">
+<body class="primary" data-stage="primary" data-standard="v2" data-sec="p4a-u1-3">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级上册 · 第一单元 万以上数的认识 · 第 3 课</p>
 <h1>亿以内数的写法</h1>
 <p class="lead">听到或看到汉字大数，怎样写出正确的数字、不漏掉占位“0”？</p>
 
+<details class="route" open>
+  <summary>本节路线：只读一个“零”，写数时为什么可能写几个 0？</summary>
+  <p>先想想以前学过的办法，猜一猜，再动手试试；换几个数比一比，说说道理，再看例题、做练习。</p>
+  <p><a href="p4a-u1-2.html">先修：亿以内数的读法</a> · 初中衔接：七上“有理数及其大小比较”，继续研究数怎样排列、比较。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p4a-u1-3&amp;from=p4a-u1-3">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p>写三位数时，空的数位怎样办？如果空的是个级的千位、百位和十位呢？</p>
+  <div class="micro-box" data-micro='[["七百零五 → 705", "十位空着，用 0 占位"], ["七万零五 → 7 | ？", "个级要占几个数位？"]]'>
+    <button type="button" class="micro-toggle" aria-pressed="false">换个情形想一想</button>
+    <div class="fig-scroll" role="region" aria-label="旧知与新情形对照图" tabindex="0">
+      <svg class="micro-fig" viewBox="0 0 320 90" role="img" aria-label="从旧经验提出新问题">
+        <rect x="4" y="4" width="312" height="82" rx="8" style="fill:var(--hl-soft);stroke:var(--c)"/>
+        <text x="160" y="35" text-anchor="middle" style="fill:var(--fg);font-size:17px">七百零五 → 705</text>
+        <text x="160" y="65" text-anchor="middle" style="fill:var(--fg);font-size:16px">十位空着，用 0 占位</text>
+      </svg>
+    </div>
+  </div>
+
   <div class="card predict" data-id="entry" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuWNmueJqemmhumHjOS4gOS7tumdkumTnOWZqOS4iumTuOS6huKAnDxiPuS4ieWNgeWFreS4h+mbtuS6jOeZvuWbm+WNgeS6lDwvYj7igJ3kuKrlrZfnmoTkv6Hmga/jgILlhpnov5nkuKrmlbDml7bvvIzljYPkvY3kuIrkuIDkuKrljZXkvY3kuZ/msqHmnInvvIzlupTor6XmgI7kuYjlhpnvvJ88L3A+XG4gICAgPHN2ZyBjbGFzcz1cInFmaWdcIiB2aWV3Qm94PVwiMCAwIDMyMCA4NFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5LiJ5Y2B5YWt5LiH6Zu25LqM55m+5Zub5Y2B5LqU5oyJ5LiH5a2X5YiG5Lik57qnXCI+XG4gICAgICA8cmVjdCB4PVwiMTBcIiB5PVwiMTJcIiB3aWR0aD1cIjEzNlwiIGhlaWdodD1cIjYwXCIgcng9XCI2XCIgc3R5bGU9XCJmaWxsOnZhcigtLWhsLXNvZnQpO3N0cm9rZTp2YXIoLS1jKTtzdHJva2Utd2lkdGg6MS44XCI+PC9yZWN0PlxuICAgICAgPHRleHQgeD1cIjc4XCIgeT1cIjM2XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tYyk7Zm9udC1zaXplOjE1cHg7Zm9udC13ZWlnaHQ6NzAwXCI+5LiH57qn77ya5LiJ5Y2B5YWt5LiHPC90ZXh0PlxuICAgICAgPHRleHQgeD1cIjc4XCIgeT1cIjYyXCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tZmcpO2ZvbnQtc2l6ZToyMHB4O2ZvbnQtd2VpZ2h0OjcwMFwiPjMgNjwvdGV4dD5cbiAgICAgIDxyZWN0IHg9XCIxNTZcIiB5PVwiMTJcIiB3aWR0aD1cIjE1NFwiIGhlaWdodD1cIjYwXCIgcng9XCI2XCIgc3R5bGU9XCJmaWxsOnZhcigtLW9rLXNvZnQpO3N0cm9rZTp2YXIoLS1hKTtzdHJva2Utd2lkdGg6MS44XCI+PC9yZWN0PlxuICAgICAgPHRleHQgeD1cIjIzM1wiIHk9XCIzNlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWEpO2ZvbnQtc2l6ZToxNXB4O2ZvbnQtd2VpZ2h0OjcwMFwiPuS4que6p++8mumbtuS6jOeZvuWbm+WNgeS6lDwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCIyMzNcIiB5PVwiNjJcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1mZyk7Zm9udC1zaXplOjIwcHg7Zm9udC13ZWlnaHQ6NzAwXCI+PyAyIDQgNTwvdGV4dD5cbiAgICA8L3N2Zz5cbiAgICA8ZGl2IGNsYXNzPVwib3B0cyBjb2xzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuWmguaenOepuuedgOS4jeWGme+8jDM2IOWSjCAyNDUg6L+e6LW35p2l5Y+Y5oiQIDM2MjQ177yM5oiQ5LqG5LiJ5LiH5YWt5Y2D5LqM55m+5Zub5Y2B5LqU77yM5bCR5LqG5LiA5L2N77yBXCI+PGI+QTwvYj4zNjI0Ne+8iOWNg+S9jeS4jeWGme+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLlj6rmnInljYPkvY3msqHmnInljZXkvY3vvIzlhpkgMSDkuKogMCDlsLHlpJ/kuobvvJvlhpnkuKTkuKogMCDkvJrmiorkuIfnuqfmjKTliLDnmb7kuIfkvY3ljrvjgIJcIj48Yj5CPC9iPjM2MDAyNDU8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCI+PGI+QzwvYj4zNjAyNDXvvIjljYPkvY3lhpkgMCDljaDkvY3vvIk8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cCBjbGFzcz1cImxpbmVcIj7lr7nvvIHlhYjlnIjlh7rigJw8Yj7kuIc8L2I+4oCd5a2X5YiG5Lik57qn77ya5LiH57qn5YaZIDxiPjM2PC9iPu+8jOS4que6p+WNg+S9jeS4iuS4gOS4quS5n+ayoeacie+8jOWwseWcqOWNg+S9jeWGmSA8Yj4wPC9iPiDljaDkvY3vvIzkuKrnuqflhpnmu6EgNCDkvY3mmK8gPGI+MDI0NTwvYj7vvIzlkIjotbfmnaXmmK8gPGI+MzYwMjQ1PC9iPuOAgjwvcD5cbiAgICA8L2Rpdj5cbiAgIn0=">
     <p class="line">博物馆里一件青铜器上铸了“<b>三十六万零二百四十五</b>”个字的信息。写这个数时，千位上一个单位也没有，应该怎么写？</p>
     <svg class="qfig" viewBox="0 0 320 84" role="img" aria-label="三十六万零二百四十五按万字分两级">
@@ -52,11 +78,8 @@
   <h2>1. 圈出“万”字分级写数台</h2>
   <p class="line">点下面的汉字大数，再点“圈出‘万’字”和“补齐占位 0”，看一看万级和个级怎样对准数位格子落子；你也可以点格子里的数字改一改。</p>
   <div class="manip" id="write-u1-3"></div>
-
-  <div class="card">
-    <p class="line"><b>含有两级的数的写法：</b><br>1. <b>先写万级，再写个级</b>（先找“万”字，“万”字前面写万级，“万”字后面写个级）；<br>2. <b>哪个数位上一个单位也没有，就在那个数位上写 0</b>（个级必须写满 4 位！）。</p>
-  </div>
-
+  <p class="line"><b>先猜后验：</b>对比“四万零九十”和“二千零五十万零七百”。先说出每一级要占几个数位，再打开占位 0 高亮。点数字改成自己的数，再读回来。</p>
+  <p>试过至少两种情形后，先用自己的话说发现，再到“讲道理”核对。</p>
   <div class="card q" data-id="try1" data-kind="num" data-answer="408"
        data-miss='{"48":"“四百零八万”里十万位上一个也没有，要写 0 占位，万级是 408，不是 48。","4080":"4080 是四千零八十；“四百零八万”的万级是三位数 408。"}'
        data-hint="圈出“万”字：“万”字前面是“四百零八”，十万位写 0 占位，万级写哪三个数字？" data-lc-source="eyJhbnN3ZXIiOiI0MDgiLCJodG1sIjoiXG4gICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICA8cCBjbGFzcz1cImxpbmVcIj7lhpnigJw8Yj7lm5vnmb7pm7blhavkuIfkupTljYM8L2I+4oCd5pe277yM5Liq57qn5YaZIDUwMDDvvIzpgqPkuYg8Yj7kuIfnuqc8L2I+5bqU6K+l5YaZ5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7kuIfnuqflhpkgPGI+NDA4PC9iPu+8jOS4que6p+WGmSA8Yj41MDAwPC9iPu+8jOWQiOi1t+adpeWGmeS9nCA8Yj40MDg1MDAwPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
@@ -65,16 +88,24 @@
     <div class="reveal"><p>万级写 <b>408</b>，个级写 <b>5000</b>，合起来写作 <b>4085000</b>。</p></div>
   </div>
 
-  <div class="card q" data-id="try2" data-kind="num" data-answer="70060"
-       data-miss='{"7060":"你只写了一个 0，7060 读作七千零六十！个级“零六十”里，千位和百位都没有，要写两个 0（0060）。","700060":"万级是“七万”（7），个级写满 4 位是 0060，合起来是五位数 70060，不是六位数。"}'
-       data-hint="先写万级“七”，再写个级“零六十”；注意个级必须占满千、百、十、个 4 个数位，空着的数位都要写 0 占位。" data-lc-source="eyJhbnN3ZXIiOiI3MDA2MCIsImh0bWwiOiJcbiAgICA8c3BhbiBjbGFzcz1cInEtdGFnXCI+6Ieq5bex6K+V6K+VPC9zcGFuPlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuWwj+W/g+mZt+mYse+8mjxiPuS4g+S4h+mbtuWFreWNgTwvYj4g5YaZ5L2c5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7or7vmlbDph4zomb3nhLblj6ror7vkuobkuIDkuKrigJzpm7bigJ3vvIzkvYbkuKrnuqfnmoTljYPkvY3lkoznmb7kvY3pg73mmK/nqbrnmoTvvIzlv4XpobvlhpnkuKTkuKogMCDljaDkvY3vvJo8Yj43fDAwNjA8L2I+77yM5YaZ5L2cIDxiPjcwMDYwPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
-    <span class="q-tag">自己试试</span>
-    <p class="line">小心陷阱：<b>七万零六十</b> 写作多少？</p>
-    <div class="reveal"><p>读数里虽然只读了一个“零”，但个级的千位和百位都是空的，必须写两个 0 占位：<b>7|0060</b>，写作 <b>70060</b>。</p></div>
-  </div>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+    <h3>先比较，再说清为什么</h3>
+    <ol>
+      <li>四万零九十：万级是 4，个级的九十占十位和个位；千位、百位都空着，所以个级是 0090。</li>
+      <li>二千零五十万零七百：万级写 2050，个级写 0700。万级末尾和个级开头的 0 都有自己的位置。</li>
+      <li>两例都说明：写几个 0 由空着的数位决定，不能只数汉字里有几个“零”。请自己举一个需要补两个 0 的数。</li>
+    </ol>
+  </div>
+
+
+  <div class="card">
+    <p class="line"><b>含有两级的数的写法：</b><br>1. <b>先写万级，再写个级</b>（先找“万”字，“万”字前面写万级，“万”字后面写个级）；<br>2. <b>哪个数位上一个单位也没有，就在那个数位上写 0</b>（个级必须写满 4 位！）。</p>
+  </div>
+
+
   <p class="key-say line">写亿以内的数，先圈出“万”字分两级，先写万级再写个级；哪个数位上一个单位也没有，就在那个数位上写 0（个级一定写满 4 位）。</p>
 
   <h2>两个容易错的地方</h2>
@@ -89,6 +120,25 @@
       把“三千零五十万零四百”写成 3050400（万位漏了 0）。</div>
     <div class="ok"><b class="t">✓ 万级也要对准数位：“三千零五十万”是 3050 万</b>
       万级写 <b>3050</b>，个级写 <b>0400</b> → <b>30500400</b>。</div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>例题：“六万零三十”怎样写？</h2>
+    <p>先自己试着说；需要时，逐步打开提示。</p>
+    <div class="example-steps">
+      <details class="ex-step s1"><summary>① 读懂题意</summary><p>圈出“万”：万级是六，个级是零三十。</p></details>
+      <details class="ex-step s2"><summary>② 推导与算理</summary><p>万级写 6；个级的千、百位空着，十位是 3，个位是 0，写 0030。</p></details>
+      <details class="ex-step s3"><summary>③ 检查与易错点</summary><p>合起来是 60030。重新分级 6 | 0030，读回“六万零三十”，没有少位。</p></details>
+    </div>
+  </div>
+  <div class="card q" data-id="try2" data-kind="num" data-answer="70060"
+       data-miss='{"7060":"你只写了一个 0，7060 读作七千零六十！个级“零六十”里，千位和百位都没有，要写两个 0（0060）。","700060":"万级是“七万”（7），个级写满 4 位是 0060，合起来是五位数 70060，不是六位数。"}'
+       data-hint="先写万级“七”，再写个级“零六十”；注意个级必须占满千、百、十、个 4 个数位，空着的数位都要写 0 占位。" data-lc-source="eyJhbnN3ZXIiOiI3MDA2MCIsImh0bWwiOiJcbiAgICA8c3BhbiBjbGFzcz1cInEtdGFnXCI+6Ieq5bex6K+V6K+VPC9zcGFuPlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuWwj+W/g+mZt+mYse+8mjxiPuS4g+S4h+mbtuWFreWNgTwvYj4g5YaZ5L2c5aSa5bCR77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD7or7vmlbDph4zomb3nhLblj6ror7vkuobkuIDkuKrigJzpm7bigJ3vvIzkvYbkuKrnuqfnmoTljYPkvY3lkoznmb7kvY3pg73mmK/nqbrnmoTvvIzlv4XpobvlhpnkuKTkuKogMCDljaDkvY3vvJo8Yj43fDAwNjA8L2I+77yM5YaZ5L2cIDxiPjcwMDYwPC9iPuOAgjwvcD48L2Rpdj5cbiAgIn0=">
+    <span class="q-tag">自己试试</span>
+    <p class="line">小心陷阱：<b>七万零六十</b> 写作多少？</p>
+    <div class="reveal"><p>读数里虽然只读了一个“零”，但个级的千位和百位都是空的，必须写两个 0 占位：<b>7|0060</b>，写作 <b>70060</b>。</p></div>
   </div>
 </section>
 
@@ -224,7 +274,25 @@ document.addEventListener("DOMContentLoaded", function () {
     return { parts: parts, word: word };
   }
 
+  var numberLabel = h("label", "", "自己造一个数（最多 8 位）：");
+  var numberInput = h("input"); numberInput.type = "text";
+  numberInput.inputMode = "numeric"; numberInput.maxLength = 8;
+  numberInput.setAttribute("aria-label", "自己造一个数");
+  var numberHint = h("p", "hint", "改好数字后按回车，或点输入框外面；也可以点图中的数位逐个改。");
+  numberHint.setAttribute("aria-live", "polite");
+  function applyNumber() {
+    var text = numberInput.value.trim();
+    if (!/^\d{1,8}$/.test(text)) { numberHint.textContent = "请输入 1～8 位的非负整数。"; return; }
+    digits = text.padStart(8, "0").split("").map(Number);
+    numberHint.textContent = "先自己分级、读写，再与图和读数核对。";
+    draw();
+  }
+  numberInput.addEventListener("change", applyNumber);
+  numberInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyNumber(); } });
+  numberLabel.appendChild(numberInput); root.insertBefore(numberLabel, out); root.insertBefore(numberHint, out);
+
   function draw() {
+    numberInput.value = String(Number(digits.join("")));
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     bCir.textContent = "圈出“万”字：" + (circled ? "开" : "关");
     bCir.setAttribute("aria-pressed", circled ? "true" : "false");
@@ -280,6 +348,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   draw();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".micro-box[data-micro]").forEach(function (box) {
+    var state = 0, states = JSON.parse(box.getAttribute("data-micro"));
+    box.querySelector("button").addEventListener("click", function () {
+      state = 1 - state;
+      this.setAttribute("aria-pressed", String(state === 1));
+      box.querySelectorAll("svg text").forEach(function (text, i) { text.textContent = states[state][i]; });
+    });
+  });
+  document.querySelectorAll(".manip svg.stage").forEach(function (svg) {
+    var region = document.createElement("div"); region.className = "fig-scroll";
+    region.setAttribute("role", "region"); region.setAttribute("tabindex", "0");
+    region.setAttribute("aria-label", "计数图示（窄屏可左右滑动）");
+    svg.parentNode.insertBefore(region, svg); region.appendChild(svg);
+  });
+  document.querySelectorAll(".manip").forEach(function (root) {
+    root.addEventListener("keydown", function (event) {
+      var target = event.target.closest(".part[role=button]");
+      if (!target || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      var index = Array.from(root.querySelectorAll(".part[role=button]")).indexOf(target);
+      target.dispatchEvent(new MouseEvent("click", { bubbles:true }));
+      var next = root.querySelectorAll(".part[role=button]")[index];
+      if (next) next.focus();
+    });
+  });
 });
 </script>
 </body></html>

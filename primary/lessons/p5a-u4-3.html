@@ -9,8 +9,9 @@
 <script defer src="../p-assets/primary.js"></script>
 <script defer src="../p-assets/manip.js"></script>
 <script defer src="../assets/video.js"></script>
+<style>.micro-box:has(input:checked) svg > rect{visibility:hidden}body.primary[data-standard] .steps button,body.primary summary{min-height:44px}</style>
 </head>
-<body class="primary" data-stage="primary" data-sec="p5a-u4-3">
+<body class="primary" data-stage="primary" data-sec="p5a-u4-3" data-standard="v2">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <pattern id="g20" x="10" y="10" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" style="fill:none;stroke:var(--line);stroke-width:1"/></pattern>
 </defs></svg>
@@ -20,11 +21,19 @@
 <h1>用平移求面积</h1>
 <p class="lead">边是弯的，面积怎么算？挪一挪就会算了。</p>
 
+<details class="route" open>
+  <summary>本节路线导读</summary>
+  <p>怎样把不会算的图形变成会算的图形？先猜，再操作检验，最后讲清理由。</p>
+  <p><a href="p5a-u4-2.html">先修：平移</a>。初中求面积也会用到把图形拼成已会算的图形。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p5a-u4-3&amp;from=p5a-u4-3">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p class="line">以前求长方形面积用什么办法？遇到弯边，能不能先挪一块，变成会算的长方形？</p>
   <p class="line">你学过用平移求面积。还记得吗？先来猜一猜。</p>
-  <div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPui/meWdl+mlvOW5suS4iumdouWHuOWHuuS4gOWdl++8jOS4i+mdouWHuei/m+S4gOWdl++8jOS4pOadoei+uemDveaYr+W8r+eahOOAguaAjuagt+eul+Wug+eahOmdouenr+acgOaWueS+v++8nzwvcD5cbiAgICA8c3ZnIGNsYXNzPVwicWZpZ1wiIHZpZXdCb3g9XCIwIDAgMjAwIDE0MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5pa55qC857q45LiK5LiA5Z2X6ZW/5pa55b2i6aW85bmy77yM5LiK6L655Ye45Ye65LiA5Liq5Y2K5ZyG77yM5LiL6L655Ye56L+b5LiA5Liq5LiA5qC355qE5Y2K5ZyGXCIgc3R5bGU9XCJtYXgtd2lkdGg6MjYwcHhcIj5cbiAgICAgIDxyZWN0IHg9XCIxMFwiIHk9XCIxMFwiIHdpZHRoPVwiMTgwXCIgaGVpZ2h0PVwiMTIwXCIgc3R5bGU9XCJmaWxsOnVybCgjZzIwKVwiPjwvcmVjdD5cbiAgICAgIDxwYXRoIGQ9XCJNMzAgNTAgSDcwIEEyMCAyMCAwIDAgMSAxMTAgNTAgSDE3MCBWMTEwIEgxMTAgQTIwIDIwIDAgMCAwIDcwIDExMCBIMzAgWlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoyLjVcIj48L3BhdGg+XG4gICAgPC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7miorlh7jlh7rnmoTkuIDlnZfmjKrliLDlh7nov5vljrvnmoTlnLDmlrk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi5pWw5qC85a2Q5pe277yM5LiN5ruh5LiA5qC855qE6YO9566X5LiA5qC877yM566X5Ye65p2l5q+U55yf55qE5aSn77yM5Y+q5piv4oCc5aSn57qm4oCd44CC5pyJ5LiN55So5Lyw55qE5Yqe5rOV44CCXCI+PGI+QjwvYj7mlbDmoLzlrZDvvIzkuI3mu6HkuIDmoLznmoTpg73nrpfkuIDmoLw8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5byv55qE6L655LiN5Lya55u05o6l566X77yM5Y+v5Lul5oOz5Yqe5rOV5oqK5a6D5Y+Y5oiQ5Lya566X55qE5Zu+5b2i44CCXCI+PGI+QzwvYj7ovrnmmK/lvK/nmoTvvIznrpfkuI3kuoY8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cCBjbGFzcz1cImxpbmVcIj7lr7nvvIHlh7jlh7rnmoTkuIDlnZflkozlh7nov5vnmoTnvLrlj6PkuIDmoLflpKfvvIzmiorlroM8Yj7lubPnp7s8L2I+6L+H5Y676KGl5LiK77yM5bCx5Y+Y5oiQ5LqG6ZW/5pa55b2i44CCPC9wPlxuICAgICAgPHA+6L+Z5LiA6K++5oqK6L+Z5Liq5Yqe5rOV55So54af77ya5bmz56e75Yeg5qC877yM5Y+Y5oiQ5aSa6ZW/5aSa5a6955qE6ZW/5pa55b2i44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
+  <div class="micro-box" style="border:0;padding:0;background:none"><label style="display:flex;align-items:center;min-height:44px"><input type="checkbox">遮住方格，先看边界</label>
+<div class="card predict" data-id="entry" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPui/meWdl+mlvOW5suS4iumdouWHuOWHuuS4gOWdl++8jOS4i+mdouWHuei/m+S4gOWdl++8jOS4pOadoei+uemDveaYr+W8r+eahOOAguaAjuagt+eul+Wug+eahOmdouenr+acgOaWueS+v++8nzwvcD5cbiAgICA8c3ZnIGNsYXNzPVwicWZpZ1wiIHZpZXdCb3g9XCIwIDAgMjAwIDE0MFwiIHJvbGU9XCJpbWdcIiBhcmlhLWxhYmVsPVwi5pa55qC857q45LiK5LiA5Z2X6ZW/5pa55b2i6aW85bmy77yM5LiK6L655Ye45Ye65LiA5Liq5Y2K5ZyG77yM5LiL6L655Ye56L+b5LiA5Liq5LiA5qC355qE5Y2K5ZyGXCIgc3R5bGU9XCJtYXgtd2lkdGg6MjYwcHhcIj5cbiAgICAgIDxyZWN0IHg9XCIxMFwiIHk9XCIxMFwiIHdpZHRoPVwiMTgwXCIgaGVpZ2h0PVwiMTIwXCIgc3R5bGU9XCJmaWxsOnVybCgjZzIwKVwiPjwvcmVjdD5cbiAgICAgIDxwYXRoIGQ9XCJNMzAgNTAgSDcwIEEyMCAyMCAwIDAgMSAxMTAgNTAgSDE3MCBWMTEwIEgxMTAgQTIwIDIwIDAgMCAwIDcwIDExMCBIMzAgWlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tZmcpO3N0cm9rZS13aWR0aDoyLjVcIj48L3BhdGg+XG4gICAgPC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCI+PGI+QTwvYj7miorlh7jlh7rnmoTkuIDlnZfmjKrliLDlh7nov5vljrvnmoTlnLDmlrk8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCIgZGF0YS1oaW50PVwi5pWw5qC85a2Q5pe277yM5LiN5ruh5LiA5qC855qE6YO9566X5LiA5qC877yM566X5Ye65p2l5q+U55yf55qE5aSn77yM5Y+q5piv4oCc5aSn57qm4oCd44CC5pyJ5LiN55So5Lyw55qE5Yqe5rOV44CCXCI+PGI+QjwvYj7mlbDmoLzlrZDvvIzkuI3mu6HkuIDmoLznmoTpg73nrpfkuIDmoLw8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwi5byv55qE6L655LiN5Lya55u05o6l566X77yM5Y+v5Lul5oOz5Yqe5rOV5oqK5a6D5Y+Y5oiQ5Lya566X55qE5Zu+5b2i44CCXCI+PGI+QzwvYj7ovrnmmK/lvK/nmoTvvIznrpfkuI3kuoY8L2J1dHRvbj5cbiAgICA8L2Rpdj5cbiAgICA8ZGl2IGNsYXNzPVwicmV2ZWFsXCI+XG4gICAgICA8cCBjbGFzcz1cImxpbmVcIj7lr7nvvIHlh7jlh7rnmoTkuIDlnZflkozlh7nov5vnmoTnvLrlj6PkuIDmoLflpKfvvIzmiorlroM8Yj7lubPnp7s8L2I+6L+H5Y676KGl5LiK77yM5bCx5Y+Y5oiQ5LqG6ZW/5pa55b2i44CCPC9wPlxuICAgICAgPHA+6L+Z5LiA6K++5oqK6L+Z5Liq5Yqe5rOV55So54af77ya5bmz56e75Yeg5qC877yM5Y+Y5oiQ5aSa6ZW/5aSa5a6955qE6ZW/5pa55b2i44CCPC9wPlxuICAgIDwvZGl2PlxuICAifQ==">
     <p class="line">这块饼干上面凸出一块，下面凹进一块，两条边都是弯的。怎样算它的面积最方便？</p>
     <svg class="qfig" viewBox="0 0 200 140" role="img" aria-label="方格纸上一块长方形饼干，上边凸出一个半圆，下边凹进一个一样的半圆" style="max-width:260px">
       <rect x="10" y="10" width="180" height="120" style="fill:url(#g20)"/>
@@ -40,10 +49,12 @@
       <p>这一课把这个办法用熟：平移几格，变成多长多宽的长方形。</p>
     </div>
   </div>
+</div>
 </section>
 
 <section class="step" data-title="摆一摆">
   <div class="vid" data-video="concept"></div>
+  <p class="line">先猜凸出的那一块能不能正好补进缺口，再拖动检验。补上之前，想一想：移动会添一块或少一块吗？</p>
   <h2>1. 拖一拖：把凸出的一块补进缺口</h2>
   <p class="line">每格的边长是 1 cm。按住上面凸出的一块，向下拖进缺口。</p>
   <div class="manip" data-gm='{"mode":"move","w":11,"h":7,"pieces":[{"d":"M2 3 H9 V6 H6 A1 1 0 0 0 4 6 H2 Z","box":[2,3,9,6],"fixed":true,"tone":"a"},{"d":"M4 3 A1 1 0 0 1 6 3 Z","box":[4,2,6,3],"tone":"b"}],"target":[0,3],"showTarget":false,"ok":"正好补上！变成了长 7 格、宽 3 格的长方形。","prompt":"按住凸出的半圆，向下拖。"}'></div>
@@ -73,16 +84,20 @@
   </div>
 
   <p>要能这样补，凸出的一块和缺口要<b>一模一样大、朝向也一样</b>，只平移就能放进去。</p>
+  <p class="line">比较弯边和小房子两次操作：都挪了哪一块？有没有重叠或缺口？先说共同的办法，再看下一步的理由。</p>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+    <h2>为什么平移以后面积不变？</h2>
+    <p>平移只是把那一块换了个地方，它没有被拉大，也没有被压小，每一小块都还在。原来的图形和拼出的长方形，用的是同样的几块，所以面积一样。</p>
+    <p>这一招以后还要用：学平行四边形、三角形、梯形的面积时，也是把它们变成会算的图形。</p>
+    </div>
+
   <p class="key-say line">凸出来的一块和凹进去的缺口一样大，把它平移过去补上，就变成会算的长方形，面积不变。</p>
   <p>写的时候照三段写：<b>阅读理解</b>（哪里不能直接算）→ <b>分析解答</b>（向哪个方向平移几格，变成长几、宽几的长方形，列式，写答句）→ <b>回顾反思</b>（平移起了什么作用）。</p>
 
-  <details class="card"><summary><b>为什么</b>平移以后面积不变？</summary>
-    <p>平移只是把那一块换了个地方，它没有被拉大，也没有被压小，每一小块都还在。原来的图形和拼出的长方形，用的是同样的几块，所以面积一样。</p>
-    <p>这一招以后还要用：学平行四边形、三角形、梯形的面积时，也是把它们变成会算的图形。</p>
-  </details>
+
 
   <h2>两个容易错的地方</h2>
   <div class="pair">
@@ -99,6 +114,27 @@
     <div class="ok"><b class="t">✓ 平移补满，正好是长方形</b>
       不用估，长 × 宽就是准的。</div>
   </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <article class="example-card">
+    <h2>拼好以后重新量</h2>
+    <p class="line">把凸出的一块补进缺口后，得到长 6 cm、宽 4 cm 的长方形。原图形的面积是多少？</p>
+    <p>先自己想一想；需要时，按顺序打开提示。</p>
+    <div class="example-steps">
+      <details><summary>① 读懂题意</summary><p>先确认挪过去的一块正好补满，没有重叠，也没有丢掉任何一块。</p></details>
+      <details><summary>② 想一想怎样做</summary><p>用拼好的长方形计算：6 × 4 = 24（cm²）。原图形面积也是 24 cm²。</p></details>
+      <details><summary>③ 检查结果</summary><p>挪动只改位置；再检查长和宽量的是拼好后的长方形。</p></details>
+    </div>
+    <div class="card predict" data-id="example-try" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgICAgPHNwYW4gY2xhc3M9XCJxLXRhZ1wiPuiHquW3seivleivlTwvc3Bhbj5cbiAgICAgIDxwIGNsYXNzPVwibGluZVwiPuiLpeaLvOWlveeahOmVv+aWueW9oumVv+S4jeWPmOOAgeWuveWPmOaIkCAzIGNt77yM6Z2i56ev5bqU5oCO5qC35YiX5byP77yfPC9wPlxuICAgICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPjYgw5cgMzwvYnV0dG9uPlxuICAgICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQlwiIGRhdGEtaGludD1cIumVv+WKoOWuveS4jeaYr+mdouenr+OAguaDs+aDs+acieWHoOaOkuOAgeavj+aOkuWHoOW5s+aWueWOmOexs+OAglwiPjxiPkI8L2I+NiArIDM8L2J1dHRvbj5cbiAgICAgIDwvZGl2PlxuICAgICJ9">
+      <span class="q-tag">自己试试</span>
+      <p class="line">若拼好的长方形长不变、宽变成 3 cm，面积应怎样列式？</p>
+      <div class="opts">
+        <button class="opt" data-v="A"><b>A</b>6 × 3</button>
+        <button class="opt" data-v="B" data-hint="长加宽不是面积。想想有几排、每排几平方厘米。"><b>B</b>6 + 3</button>
+      </div>
+    </div>
+  </article>
 </section>
 
 <section class="step" data-title="练一练">
@@ -322,24 +358,7 @@ document.addEventListener('DOMContentLoaded',function(){
 <nav class="back"><a class="home" href="../index.html">← 返回主页</a></nav>
 </div>
 <script>
-/* 方格纸图形运动组件，待收进 manip.js。p5a-u4-1…7 七页共用同一份，按 data-gm 配置（页面里只内联本页用到的模式）：
-     <div class="manip" data-gm='{"mode":"sym","w":12,"h":8,…}'></div>
-   公共 cfg：w、h（几格宽、几格高），shape（顶点都在格点上，[[x,y],…]，左上角是 [0,0]），labels（顶点名），
-            open（true = 线段 / 折线，不封口），tone（a|b|c|hl），ok（判对后的话），aria。
-   mode
-     sym     轴对称。axis {"x":6} 竖着的对称轴 / {"y":4} 横着的 / {"line":[x1,y1,x2,y2]}（只用于「对折」看）。
-             task "complete"：shape 是一半（含对称轴上的点），孩子按顺序点格点放对应点，放齐自动判；「对折」检验。
-             task "fold"：shape 是整个图形，点「对折」看这条线是不是对称轴。ruler true：「数格子」，数正要放的点（放齐后数放错的点）离对称轴几格。
-     move    平移。shape 或 pieces [{pts|d, box, fixed, ghost, tone}]，不 fixed 的那块整格拖，只能横着或竖着走；
-             target [dx,dy] 到了就判对；track 顶点下标：画脚印、标 A 和 A′；gap true：读数里同时说中间空了几格。
-             task "draw" + by [dx,dy]：孩子画平移后的图形（点各顶点的对应点）。
-     rot     旋转。pivot（绕的点，顶点下标），pick true：点顶点换绕的点；clock true：在绕的点上叠钟面。
-             task "draw" + dir "cw"|"ccw"|"any"：画绕点旋转 90° 后的图形（any = 两个方向都判对）。
-     puzzle  拼图。cards [{at:[x,y], s, rot, goal:[x,y,rot], tone, name}]，rot 是顺时针转了几个 90°。
-             卡片只能横竖拖、绕卡片的一个角转 90°，没有翻面。每一步自动写成一句话。
-     design  设计图案。shape（基本图形）、o（绕的点）、name：连续平移、绕点 O 旋转 90°、以竖线为对称轴对称；自动写设计说明。
-     clock   钟面。start（1–12）：一根指针一大格一大格地走，读出方向和度数（最多走半圈）。
-   数由代码算；拖不出方格纸；鼠标、触屏（pointer）、键盘（Tab、方向键、回车）都能用；有「重来」。 */
+/* 页内方格纸教具，按 data-gm 配置。 */
 function gridMotion(root, cfg) {
 var NS = "http://www.w3.org/2000/svg", PP = window.PeiyuP, mode = cfg.mode;
 var W = cfg.w || 12, H = cfg.h || 8, LB = cfg.labels || [], OPEN = !!cfg.open;
@@ -387,6 +406,7 @@ if (k < 1) requestAnimationFrame(f); else end();
 }
 function log(what, d) { if (PP) PP.log("interact", Object.assign({ what: "gm-" + mode + "-" + what }, d || {})); }
 var read = h("div", "read"), D = null;
+read.setAttribute("role", "status"); read.setAttribute("aria-live", "polite");
 function drawPin(o) { dot(o, 8, "fill:var(--no);stroke:var(--card);stroke-width:2"); }
 function msg(html, cls) {
 read.className = "read" + (cls ? " " + cls : "");

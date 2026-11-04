@@ -10,22 +10,48 @@
 <script defer src="../p-assets/manip.js"></script>
 
 <style>
-/* PY-151: preserve diagram coordinates while keeping labels readable. */
+/* Keep the original diagrams readable inside their own scroll region. */
+body.primary { font-size:17px; }
 .manip { max-width:100%; overflow-x:auto; }
-.manip svg.stage { min-width:340px; }
+.manip svg.stage,
+body.primary[data-standard="v2"] .manip .fig-scroll > svg.stage { min-width:340px; }
+.micro-box .micro-toggle { min-height:44px; font:inherit; color:var(--fg); background:var(--card); border:1px solid var(--line); border-radius:8px; padding:6px 12px; }
+body.primary[data-standard="v2"] .micro-box svg.micro-fig { min-width:320px; max-width:320px; }
+.manip label { display:block; margin:10px 0; }
+.manip input { font:inherit; color:var(--fg); background:var(--bg); border:1px solid var(--line); border-radius:6px; min-height:44px; max-width:100%; box-sizing:border-box; }
+.manip input[type=range] { width:100%; }
+.manip .live-word { line-height:1.8; overflow-wrap:anywhere; }
 </style>
 <script defer src="../assets/video.js"></script>
 </head>
-<body class="primary" data-stage="primary" data-sec="p4a-u1-2">
+<body class="primary" data-stage="primary" data-standard="v2" data-sec="p4a-u1-2">
 <div class="wrap">
 <header class="top"><a href="../index.html" aria-label="返回首页" title="返回首页" style="display:inline-flex;align-items:center"><img src="../assets/logo.svg" alt=""></a><a class="brand" href="../index.html">培玉 · 小学数学</a><span class="sp"></span><a class="home" href="../index.html">← 返回主页</a></header>
 <p class="crumb">四年级上册 · 第一单元 万以上数的认识 · 第 2 课</p>
 <h1>亿以内数的读法</h1>
 <p class="lead">含有万级和个级的大数怎样读？数里的“0”哪些不读、哪些要读？</p>
 
+<details class="route" open>
+  <summary>本节路线：同样是 0，为什么有的读、有的不读？</summary>
+  <p>先想想以前学过的办法，猜一猜，再动手试试；换几个数比一比，说说道理，再看例题、做练习。</p>
+  <p><a href="p4a-u1-1.html">先修：数位与数级</a> · 初中衔接：七上“有理数及其大小比较”，继续研究数怎样排列、比较。</p>
+</details>
+
 <p class="concept-link"><a href="../knowledge.html?section=p4a-u1-2&amp;from=p4a-u1-2">查看本课概念与易错卡</a></p>
 
 <section class="step" data-title="想一想">
+  <p>先回忆万以内数的读法。把同样的数字放到万级，哪些读法可以沿用？</p>
+  <div class="micro-box" data-micro='[["4826：四千八百二十六", "4826 个一，照四位数读"], ["4826 | 0000", "换成 4826 个万，怎样读？"]]'>
+    <button type="button" class="micro-toggle" aria-pressed="false">换个情形想一想</button>
+    <div class="fig-scroll" role="region" aria-label="旧知与新情形对照图" tabindex="0">
+      <svg class="micro-fig" viewBox="0 0 320 90" role="img" aria-label="从旧经验提出新问题">
+        <rect x="4" y="4" width="312" height="82" rx="8" style="fill:var(--hl-soft);stroke:var(--c)"/>
+        <text x="160" y="35" text-anchor="middle" style="fill:var(--fg);font-size:17px">4826：四千八百二十六</text>
+        <text x="160" y="65" text-anchor="middle" style="fill:var(--fg);font-size:16px">4826 个一，照四位数读</text>
+      </svg>
+    </div>
+  </div>
+
   <div class="card predict" data-id="entry" data-answer="B" data-lc-source="eyJhbnN3ZXIiOiJCIiwiaHRtbCI6IlxuICAgIDxwIGNsYXNzPVwibGluZVwiPuS4que6p+S4iueahOaVsCA8Yj4zNjgyPC9iPiDor7vkvZzigJzkuInljYPlha3nmb7lhavljYHkuozigJ3jgILlpoLmnpzmioogMzY4MiDnp7vliLA8Yj7kuIfnuqc8L2I+77yM5Y+Y5oiQ5pW05LiH5pWwIDxiPjM2ODIwMDAwPC9iPu+8jOaAjuagt+ivu+acgOeugOS+v++8nzwvcD5cbiAgICA8c3ZnIGNsYXNzPVwicWZpZ1wiIHZpZXdCb3g9XCIwIDAgMzIwIDkyXCIgcm9sZT1cImltZ1wiIGFyaWEtbGFiZWw9XCLkuIfnuqcgMzY4MiDlkozkuKrnuqcgMDAwMCDnmoTlr7nnhafooahcIj5cbiAgICAgIDxyZWN0IHg9XCIxMFwiIHk9XCI4XCIgd2lkdGg9XCIxNDZcIiBoZWlnaHQ9XCI3NlwiIHJ4PVwiNlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1obC1zb2Z0KTtzdHJva2U6dmFyKC0tYyk7c3Ryb2tlLXdpZHRoOjEuOFwiPjwvcmVjdD5cbiAgICAgIDx0ZXh0IHg9XCI4M1wiIHk9XCIzMFwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWMpO2ZvbnQtc2l6ZToxNXB4O2ZvbnQtd2VpZ2h0OjcwMFwiPuS4h+e6p++8iOihqOekuuWkmuWwkeS4quS4h++8iTwvdGV4dD5cbiAgICAgIDx0ZXh0IHg9XCI4M1wiIHk9XCI2NlwiIHRleHQtYW5jaG9yPVwibWlkZGxlXCIgc3R5bGU9XCJmaWxsOnZhcigtLWZnKTtmb250LXNpemU6MjRweDtmb250LXdlaWdodDo3MDBcIj4zIDYgOCAyPC90ZXh0PlxuICAgICAgPHJlY3QgeD1cIjE2NFwiIHk9XCI4XCIgd2lkdGg9XCIxNDZcIiBoZWlnaHQ9XCI3NlwiIHJ4PVwiNlwiIHN0eWxlPVwiZmlsbDp2YXIoLS1vay1zb2Z0KTtzdHJva2U6dmFyKC0tYSk7c3Ryb2tlLXdpZHRoOjEuOFwiPjwvcmVjdD5cbiAgICAgIDx0ZXh0IHg9XCIyMzdcIiB5PVwiMzBcIiB0ZXh0LWFuY2hvcj1cIm1pZGRsZVwiIHN0eWxlPVwiZmlsbDp2YXIoLS1hKTtmb250LXNpemU6MTVweDtmb250LXdlaWdodDo3MDBcIj7kuKrnuqfvvIjooajnpLrlpJrlsJHkuKrkuIDvvIk8L3RleHQ+XG4gICAgICA8dGV4dCB4PVwiMjM3XCIgeT1cIjY2XCIgdGV4dC1hbmNob3I9XCJtaWRkbGVcIiBzdHlsZT1cImZpbGw6dmFyKC0tbXV0ZWQpO2ZvbnQtc2l6ZToyNHB4O2ZvbnQtd2VpZ2h0OjcwMFwiPjAgMCAwIDA8L3RleHQ+XG4gICAgPC9zdmc+XG4gICAgPGRpdiBjbGFzcz1cIm9wdHNcIj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJBXCIgZGF0YS1oaW50PVwi5q+P5L2N5pWw5ZCO6YO95bim5LiA5Liq4oCc5LiH4oCd5a2X5aSq5ZWw5Zem5LqG44CC5LiH57qn6KGo56S6IDM2ODIg5Liq5LiH77yM5Y+q6KaB5Zyo5pyA5ZCO5Yqg5LiA5Liq4oCc5LiH4oCd5a2X44CCXCI+PGI+QTwvYj7kuInljYPkuIflha3nmb7kuIflhavljYHkuIfkuozkuIc8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJCXCI+PGI+QjwvYj7kuInljYPlha3nmb7lhavljYHkuozkuIc8L2J1dHRvbj5cbiAgICAgIDxidXR0b24gY2xhc3M9XCJvcHRcIiBkYXRhLXY9XCJDXCIgZGF0YS1oaW50PVwiMzY4MiDlnKjkuIfnuqfkuIrvvIzooajnpLogMzY4MiDkuKrkuIfvvIzkuI3og73mvI/mjonlkI7pnaLnmoTigJzkuIfigJ3lrZfvvIzogIzkuJTkuKrnuqfnmoQgNCDkuKogMCDkuI3or7vjgIJcIj48Yj5DPC9iPuS4ieWNg+WFreeZvuWFq+WNgeS6jOmbtumbtumbtumbtjwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj5cbiAgICAgIDxwIGNsYXNzPVwibGluZVwiPuWvue+8geS4h+e6p+eahOaVsOihqOekuuWkmuWwkeS4quKAnOS4h+KAne+8jOaJgOS7pTxiPuaMieeFp+S4que6p+eahOaVsOeahOivu+azleadpeivu++8jOWGjeWcqOWQjumdouWKoOS4iuS4gOS4quKAnOS4h+KAneWtlzwvYj7vvIzor7vkvZzigJzkuInljYPlha3nmb7lhavljYHkuozkuIfigJ3jgII8L3A+XG4gICAgPC9kaXY+XG4gICJ9">
     <p class="line">个级上的数 <b>3682</b> 读作“三千六百八十二”。如果把 3682 移到<b>万级</b>，变成整万数 <b>36820000</b>，怎样读最简便？</p>
     <svg class="qfig" viewBox="0 0 320 92" role="img" aria-label="万级 3682 和个级 0000 的对照表">
@@ -52,11 +78,8 @@
   <h2>1. 分级线与“0”的读法高亮器</h2>
   <p class="line">点下面的不同例数，或者直接点某一位数字改变它，开关“分级线”和“0 的读法剖析”，看清楚哪些 0 静音不读、哪些 0 读一个“零”。</p>
   <div class="manip" id="read-u1-2"></div>
-
-  <div class="card">
-    <p class="line"><b>含有两级的数的读法：</b><br>1. <b>先读万级，再读个级</b>（先从右往左每 4 位画一条分级线）；<br>2. 万级的数，要按照个级的数的读法来读，再在后面加上一个<b>“万”</b>字；<br>3. <b>每级末尾不管有几个 0，都不读</b>；其他数位上有一个 0 或连续几个 0，<b>都只读一个零</b>。</p>
-  </div>
-
+  <p class="line"><b>先猜后验：</b>先读例 A，再读例 B。只把个级千位从非零改成 0，先猜会不会多读一个“零”，再看读数。自己再造一组来验证。</p>
+  <p>试过至少两种情形后，先用自己的话说发现，再到“讲道理”核对。</p>
   <div class="card predict" data-id="try1" data-answer="A" data-lc-source="eyJhbnN3ZXIiOiJBIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YWI5YiG57qn77yaPGI+NDgwfDYwMDA8L2I+44CC5LiH57qn5pyr5bC+5pyJ5LiA5LiqIDDvvIzkuKrnuqfmnKvlsL7mnInkuInkuKogMO+8jOi/meS4quaVsOW6lOivpeaAjuS5iOivu++8nzwvcD5cbiAgICA8ZGl2IGNsYXNzPVwib3B0c1wiPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkFcIj48Yj5BPC9iPuWbm+eZvuWFq+WNgeS4h+WFreWNg++8iOS4gOS4qumbtuS5n+S4jeivu++8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCI0ODAg5Zyo5LiH57qn77yMMCDlnKjkuIfnuqfnmoTmnKvlsL7vvIjkuIfkvY3kuIrvvInvvIHigJzmr4/nuqfmnKvlsL7nmoQgMCDpg73kuI3or7vigJ3vvIzmiYDku6XkuIfkvY3kuIrnmoQgMCDkuI3or7vjgIJcIj48Yj5CPC9iPuWbm+eZvuWFq+WNgeS4h+mbtuWFreWNgzwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIiBkYXRhLWhpbnQ9XCLkuKrnuqfmmK8gNjAwMO+8jOivu+S9nOWFreWNg++8jOS4jeaYr+WFreeZvuOAglwiPjxiPkM8L2I+5Zub55m+5YWr5Y2B5LiH5YWt55m+PC9idXR0b24+XG4gICAgPC9kaXY+XG4gICAgPGRpdiBjbGFzcz1cInJldmVhbFwiPjxwPkHjgII0ODAg55qEIDAg5ZyoPGI+5LiH57qn5pyr5bC+PC9iPu+8jDYwMDAg55qE5LiJ5LiqIDAg5ZyoPGI+5Liq57qn5pyr5bC+PC9iPu+8m+avj+e6p+acq+WwvueahCAwIOmDveS4jeivu++8jOaJgOS7peivu+S9nDxiPuWbm+eZvuWFq+WNgeS4h+WFreWNgzwvYj7jgII8L3A+PC9kaXY+XG4gICJ9">
     <span class="q-tag">自己试试</span>
     <p class="line">先分级：<b>480|6000</b>。万级末尾有一个 0，个级末尾有三个 0，这个数应该怎么读？</p>
@@ -68,19 +91,24 @@
     <div class="reveal"><p>A。480 的 0 在<b>万级末尾</b>，6000 的三个 0 在<b>个级末尾</b>；每级末尾的 0 都不读，所以读作<b>四百八十万六千</b>。</p></div>
   </div>
 
-  <div class="card predict" data-id="try2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YaN55yLIDxiPjIwMDV8MDA3MDwvYj7vvJrkuIfnuqfkuK3pl7TmnInkuKTkuKogMO+8jOS4que6p+W8gOWktOS5n+acieS4pOS4qiAw77yM5LiA5YWx6KaB6K+75Yeg5Liq4oCc6Zu24oCd77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuS4h+e6pyAyMDA1IOivu+KAnOS6jOWNg+mbtuS6lOS4h+KAne+8iDEg5Liq6Zu277yJ77yM5Liq57qnIDAwNzAg6K+74oCc6Zu25LiD5Y2B4oCd77yIMSDkuKrpm7bvvInvvIzlkIjotbfmnaXmmK8gMiDkuKrpm7bjgIJcIj48Yj5BPC9iPuWPquivuyAxIOS4qumbtu+8iOS6jOWNg+mbtuS6lOS4h+S4g+WNge+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLov57nu63lh6DkuKogMCDlj6ror7vkuIDkuKrpm7bvvIzogIzkuJTkuKrnuqfmnKvlsL7nmoQgMCDkuI3or7vvvIzkuI3kvJror7sgNCDkuKrpm7bjgIJcIj48Yj5CPC9iPuivuyA0IOS4qumbtjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuivuyAyIOS4qumbtu+8muS6jOWNg+mbtuS6lOS4h+mbtuS4g+WNgTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD5D44CC5LiH57qn4oCcMjAwNeKAnei/nue7reS4pOS4qiAwIOWPquivu+S4gOS4qumbtu+8iOS6jOWNg+mbtuS6lOS4h++8ie+8m+S4que6p+KAnDAwNzDigJ3ljYPkvY3nmb7kvY3ov57nu63kuKTkuKogMCDlj6ror7vkuIDkuKrpm7bvvIzkuKrkvY3mnKvlsL7nmoQgMCDkuI3or7vvvIjpm7bkuIPljYHvvInvvIzlkIjotbfmnaXor7vkvZw8Yj7kuozljYPpm7bkupTkuIfpm7bkuIPljYE8L2I+44CCPC9wPjwvZGl2PlxuICAifQ==">
-    <span class="q-tag">自己试试</span>
-    <p class="line">再看 <b>2005|0070</b>：万级中间有两个 0，个级开头也有两个 0，一共要读几个“零”？</p>
-    <div class="opts">
-      <button class="opt" data-v="A" data-hint="万级 2005 读“二千零五万”（1 个零），个级 0070 读“零七十”（1 个零），合起来是 2 个零。"><b>A</b>只读 1 个零（二千零五万七十）</button>
-      <button class="opt" data-v="B" data-hint="连续几个 0 只读一个零，而且个级末尾的 0 不读，不会读 4 个零。"><b>B</b>读 4 个零</button>
-      <button class="opt" data-v="C"><b>C</b>读 2 个零：二千零五万零七十</button>
-    </div>
-    <div class="reveal"><p>C。万级“2005”连续两个 0 只读一个零（二千零五万）；个级“0070”千位百位连续两个 0 只读一个零，个位末尾的 0 不读（零七十），合起来读作<b>二千零五万零七十</b>。</p></div>
-  </div>
 </section>
 
-<section class="step" data-title="说一说">
+<section class="step" data-title="讲道理">
+  <div class="why-box">
+    <h3>先比较，再说清为什么</h3>
+    <ol>
+      <li>540 | 7000 的两级分别是“五百四十”和“七千”；两级末尾的 0 不读。</li>
+      <li>450 | 0600 的万级仍按四位数读；个级千位空着，需要读“零六百”，才不会听成六千。</li>
+      <li>3008 | 0050 中，两段连续的 0 各读一个零。请先用自己的话说说：要不要读零，为什么要先分级？</li>
+    </ol>
+  </div>
+
+
+  <div class="card">
+    <p class="line"><b>含有两级的数的读法：</b><br>1. <b>先读万级，再读个级</b>（先从右往左每 4 位画一条分级线）；<br>2. 万级的数，要按照个级的数的读法来读，再在后面加上一个<b>“万”</b>字；<br>3. <b>每级末尾不管有几个 0，都不读</b>；其他数位上有一个 0 或连续几个 0，<b>都只读一个零</b>。</p>
+  </div>
+
+
   <p class="key-say line">读亿以内的数，先从右往左每四位分级：先读万级（加“万”字），再读个级；每级末尾不管有几个 0 都不读，其他数位有一个 0 或连续几个 0 都只读一个零。</p>
 
   <h2>两个容易错的地方</h2>
@@ -95,6 +123,28 @@
       360|0400 错读成“三百六十万四百”。</div>
     <div class="ok"><b class="t">✓ 万级末尾 0 不读，但个级开头的 0 必须读一个零</b>
       360|0400 读作“三百六十万<b>零</b>四百”。</div>
+  </div>
+</section>
+
+<section class="step" data-title="看例题">
+  <div class="example-card">
+    <h2>例题：图书室有 6200700 册书，这个数怎样读？</h2>
+    <p>先自己试着说；需要时，逐步打开提示。</p>
+    <div class="example-steps">
+      <details class="ex-step s1"><summary>① 读懂题意</summary><p>先从右边起分级：620 | 0700。</p></details>
+      <details class="ex-step s2"><summary>② 推导与算理</summary><p>万级读“六百二十万”；个级开头有 0，读“零七百”。</p></details>
+      <details class="ex-step s3"><summary>③ 检查与易错点</summary><p>合读“六百二十万零七百”。回看千位空着，万级和个级末尾的 0 都不另读。</p></details>
+    </div>
+  </div>
+  <div class="card predict" data-id="try2" data-answer="C" data-lc-source="eyJhbnN3ZXIiOiJDIiwiaHRtbCI6IlxuICAgIDxzcGFuIGNsYXNzPVwicS10YWdcIj7oh6rlt7Hor5Xor5U8L3NwYW4+XG4gICAgPHAgY2xhc3M9XCJsaW5lXCI+5YaN55yLIDxiPjIwMDV8MDA3MDwvYj7vvJrkuIfnuqfkuK3pl7TmnInkuKTkuKogMO+8jOS4que6p+W8gOWktOS5n+acieS4pOS4qiAw77yM5LiA5YWx6KaB6K+75Yeg5Liq4oCc6Zu24oCd77yfPC9wPlxuICAgIDxkaXYgY2xhc3M9XCJvcHRzXCI+XG4gICAgICA8YnV0dG9uIGNsYXNzPVwib3B0XCIgZGF0YS12PVwiQVwiIGRhdGEtaGludD1cIuS4h+e6pyAyMDA1IOivu+KAnOS6jOWNg+mbtuS6lOS4h+KAne+8iDEg5Liq6Zu277yJ77yM5Liq57qnIDAwNzAg6K+74oCc6Zu25LiD5Y2B4oCd77yIMSDkuKrpm7bvvInvvIzlkIjotbfmnaXmmK8gMiDkuKrpm7bjgIJcIj48Yj5BPC9iPuWPquivuyAxIOS4qumbtu+8iOS6jOWNg+mbtuS6lOS4h+S4g+WNge+8iTwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkJcIiBkYXRhLWhpbnQ9XCLov57nu63lh6DkuKogMCDlj6ror7vkuIDkuKrpm7bvvIzogIzkuJTkuKrnuqfmnKvlsL7nmoQgMCDkuI3or7vvvIzkuI3kvJror7sgNCDkuKrpm7bjgIJcIj48Yj5CPC9iPuivuyA0IOS4qumbtjwvYnV0dG9uPlxuICAgICAgPGJ1dHRvbiBjbGFzcz1cIm9wdFwiIGRhdGEtdj1cIkNcIj48Yj5DPC9iPuivuyAyIOS4qumbtu+8muS6jOWNg+mbtuS6lOS4h+mbtuS4g+WNgTwvYnV0dG9uPlxuICAgIDwvZGl2PlxuICAgIDxkaXYgY2xhc3M9XCJyZXZlYWxcIj48cD5D44CC5LiH57qn4oCcMjAwNeKAnei/nue7reS4pOS4qiAwIOWPquivu+S4gOS4qumbtu+8iOS6jOWNg+mbtuS6lOS4h++8ie+8m+S4que6p+KAnDAwNzDigJ3ljYPkvY3nmb7kvY3ov57nu63kuKTkuKogMCDlj6ror7vkuIDkuKrpm7bvvIzkuKrkvY3mnKvlsL7nmoQgMCDkuI3or7vvvIjpm7bkuIPljYHvvInvvIzlkIjotbfmnaXor7vkvZw8Yj7kuozljYPpm7bkupTkuIfpm7bkuIPljYE8L2I+44CCPC9wPjwvZGl2PlxuICAifQ==">
+    <span class="q-tag">自己试试</span>
+    <p class="line">再看 <b>2005|0070</b>：万级中间有两个 0，个级开头也有两个 0，一共要读几个“零”？</p>
+    <div class="opts">
+      <button class="opt" data-v="A" data-hint="万级 2005 读“二千零五万”（1 个零），个级 0070 读“零七十”（1 个零），合起来是 2 个零。"><b>A</b>只读 1 个零（二千零五万七十）</button>
+      <button class="opt" data-v="B" data-hint="连续几个 0 只读一个零，而且个级末尾的 0 不读，不会读 4 个零。"><b>B</b>读 4 个零</button>
+      <button class="opt" data-v="C"><b>C</b>读 2 个零：二千零五万零七十</button>
+    </div>
+    <div class="reveal"><p>C。万级“2005”连续两个 0 只读一个零（二千零五万）；个级“0070”千位百位连续两个 0 只读一个零，个位末尾的 0 不读（零七十），合起来读作<b>二千零五万零七十</b>。</p></div>
   </div>
 </section>
 
@@ -252,7 +302,25 @@ document.addEventListener("DOMContentLoaded", function () {
     return out.replace(/^一十/, "十");
   }
 
+  var numberLabel = h("label", "", "自己造一个数（最多 8 位）：");
+  var numberInput = h("input"); numberInput.type = "text";
+  numberInput.inputMode = "numeric"; numberInput.maxLength = 8;
+  numberInput.setAttribute("aria-label", "自己造一个数");
+  var numberHint = h("p", "hint", "改好数字后按回车，或点输入框外面；也可以点图中的数位逐个改。");
+  numberHint.setAttribute("aria-live", "polite");
+  function applyNumber() {
+    var text = numberInput.value.trim();
+    if (!/^\d{1,8}$/.test(text)) { numberHint.textContent = "请输入 1～8 位的非负整数。"; return; }
+    digits = text.padStart(8, "0").split("").map(Number);
+    numberHint.textContent = "先自己分级、读写，再与图和读数核对。";
+    draw();
+  }
+  numberInput.addEventListener("change", applyNumber);
+  numberInput.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyNumber(); } });
+  numberLabel.appendChild(numberInput); root.insertBefore(numberLabel, out); root.insertBefore(numberHint, out);
+
   function draw() {
+    numberInput.value = String(Number(digits.join("")));
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     bSplit.textContent = "分级线：" + (showSplit ? "开" : "关");
     bSplit.setAttribute("aria-pressed", showSplit ? "true" : "false");
@@ -308,6 +376,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   draw();
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".micro-box[data-micro]").forEach(function (box) {
+    var state = 0, states = JSON.parse(box.getAttribute("data-micro"));
+    box.querySelector("button").addEventListener("click", function () {
+      state = 1 - state;
+      this.setAttribute("aria-pressed", String(state === 1));
+      box.querySelectorAll("svg text").forEach(function (text, i) { text.textContent = states[state][i]; });
+    });
+  });
+  document.querySelectorAll(".manip svg.stage").forEach(function (svg) {
+    var region = document.createElement("div"); region.className = "fig-scroll";
+    region.setAttribute("role", "region"); region.setAttribute("tabindex", "0");
+    region.setAttribute("aria-label", "计数图示（窄屏可左右滑动）");
+    svg.parentNode.insertBefore(region, svg); region.appendChild(svg);
+  });
+  document.querySelectorAll(".manip").forEach(function (root) {
+    root.addEventListener("keydown", function (event) {
+      var target = event.target.closest(".part[role=button]");
+      if (!target || (event.key !== "Enter" && event.key !== " ")) return;
+      event.preventDefault();
+      var index = Array.from(root.querySelectorAll(".part[role=button]")).indexOf(target);
+      target.dispatchEvent(new MouseEvent("click", { bubbles:true }));
+      var next = root.querySelectorAll(".part[role=button]")[index];
+      if (next) next.focus();
+    });
+  });
 });
 </script>
 </body></html>

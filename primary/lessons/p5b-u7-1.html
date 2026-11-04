@@ -59,8 +59,8 @@ body.primary[data-standard="v2"] .stage text { font-size:18px !important; }
     <p class="line">点图上的点，读出这一天的高度。再点“条形图”和“折线图”换一换，比一比哪个更容易看出变化。点线段的中间，看看会提示什么。</p>
     <div class="fig-scroll" role="region" aria-label="折线图实验台（窄屏可左右滑动）" tabindex="0"><svg class="stage" id="m1-svg" viewBox="0 0 360 250" role="img" aria-label="豆苗每天的高度"></svg></div>
     <div class="ctrls" id="m1-ctrls"><button type="button" data-v="line">折线图</button><button type="button" data-v="bar">条形图</button></div>
-    <label class="lab-range">实验副本：第 7 天高度 <output id="lab-value">14 cm</output><input id="lab-value-range" type="range" min="10" max="16" step="0.5" value="14" aria-label="调整实验副本第七天高度"></label>
-    <p class="lab-note">先猜：第 7 天的点降低后，最后一段会怎样？再拖动验证。只改实验副本，练习仍用原记录。</p>
+    <label class="lab-range">实验副本：第 7 天高度 <output id="lab-value">15 cm</output><input id="lab-value-range" type="range" min="10" max="16" step="0.5" value="15" aria-label="调整实验副本第七天高度"></label>
+    <p class="lab-note">先猜：第 7 天的点降低后，最后一段会怎样？再拖动验证。实验台用另一株豆苗的数据，练习用各题给出的记录。</p>
     <label class="lab-range">选一天读数<input id="lab-day" type="range" min="1" max="7" step="1" value="1" aria-label="选择实验台日期"></label>
     <div class="ctrls"><button type="button" id="lab-reset">恢复原记录</button></div>
     <output class="read" id="m1-out" aria-live="polite"></output>
@@ -216,12 +216,12 @@ document.addEventListener("DOMContentLoaded", function () {
   /* 豆苗高度：第 1~7 天；折线 / 条形 切换；点读数；点线段提示 */
   var svg = document.getElementById("m1-svg"), out = document.getElementById("m1-out"), ct = document.getElementById("m1-ctrls");
   if (!svg) return;
-  var D = [2, 4, 7, 9, 10, 10, 14], view = "line", sel = -1, note = "";
+  var D = [1, 3, 6, 8, 11, 11, 15], view = "line", sel = -1, note = "";
   [].forEach.call(ct.querySelectorAll("button"), function (b) { b.addEventListener("click", function () { view = b.getAttribute("data-v"); sel = -1; note = ""; draw(); }); });
   var range = document.getElementById("lab-value-range"), day = document.getElementById("lab-day");
   range.addEventListener("input", function () { D[6] = +range.value; sel = 6; day.value = 7; note = ""; draw(); });
   day.addEventListener("input", function () { sel = +day.value - 1; note = ""; draw(); });
-  document.getElementById("lab-reset").addEventListener("click", function () { D[6] = 14; range.value = 14; day.value = 1; view = "line"; sel = -1; note = ""; draw(); });
+  document.getElementById("lab-reset").addEventListener("click", function () { D[6] = 15; range.value = 15; day.value = 1; view = "line"; sel = -1; note = ""; draw(); });
   function draw() {
     document.getElementById("lab-value").textContent = D[6] + " cm";
     PeiyuP.syncControls(ct, { v: view });

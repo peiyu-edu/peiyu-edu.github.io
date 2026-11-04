@@ -53,7 +53,7 @@ body[data-standard="v2"] .micro-box svg {min-width:360px;width:360px;height:160p
 
   <h2>2. 一些物体也可以平均分</h2>
   <div class="card manip" id="m1">
-    <p class="line">有 12 个苹果。先选平均分成几份，再点“涂一份”，看涂的苹果占几分之几。</p>
+    <p class="line">有 24 个苹果。先选平均分成几份，再点“涂一份”，看涂的苹果占几分之几。</p>
     <div class="fig-scroll u4-svg-wrap" role="region" aria-label="图示（窄屏可左右滑动）" tabindex="0"><svg class="stage" id="m1-svg" viewBox="0 0 360 210" role="img" aria-label="把一些苹果平均分"></svg></div>
     <div class="ctrls" id="m1-ctrls"><button type="button" data-d="2">分 2 份</button><button type="button" data-d="3">分 3 份</button><button type="button" data-d="4">分 4 份</button><button type="button" data-d="6">分 6 份</button><button type="button" data-a="1">涂一份</button><button type="button" data-a="0">重来</button><button type="button" id="u4-lab-reset">重置实验</button></div>
     <output class="read" id="m1-out" aria-live="polite"></output>
@@ -72,7 +72,7 @@ body[data-standard="v2"] .micro-box svg {min-width:360px;width:360px;height:160p
 
 
   <h2>3. 分率和长度要分清</h2>
-  <p class="line"><span class="fr" data-n="3" data-d="4"></span> 表示把单位“1”平均分成 4 份，取 3 份，是一个数；<span class="fr" data-n="3" data-d="4"></span> 米表示把 1 米平均分成 4 份，取 3 份，是确定的长度。4 米绳子的 <span class="fr" data-n="3" data-d="4"></span> 长 3 米，不能直接说长 <span class="fr" data-n="3" data-d="4"></span> 米。先说清单位“1”是谁，再说具体数量。</p>
+  <p class="line"><span class="fr" data-n="3" data-d="4"></span> 表示把单位“1”平均分成 4 份，取 3 份，是一个数；<span class="fr" data-n="3" data-d="4"></span> 米表示把 1 米平均分成 4 份，取 3 份，是确定的长度。12 米绳子的 <span class="fr" data-n="3" data-d="4"></span> 长 9 米，不能直接说长 <span class="fr" data-n="3" data-d="4"></span> 米。先说清单位“1”是谁，再说具体数量。</p>
 </section>
 
 <section class="step" data-title="讲道理">
@@ -87,7 +87,7 @@ body[data-standard="v2"] .micro-box svg {min-width:360px;width:360px;height:160p
     <div class="box no"><div class="lbl">错：随便分成几块都叫几分之一</div><p>大小不一样的块，不能都叫四分之一。</p></div>
   </div>
   <div class="pair">
-    <div class="box ok"><div class="lbl">对：一些物体也可以看作单位“1”</div><p>把 12 个桃子看作一个整体，平均分成 4 份，一份是整体的四分之一。</p></div>
+    <div class="box ok"><div class="lbl">对：一些物体也可以看作单位“1”</div><p>把 24 个桃子看作一个整体，平均分成 4 份，一份是整体的四分之一。</p></div>
     <div class="box no"><div class="lbl">错：分数单位是分子</div><p><span class="fr" data-n="3" data-d="5"></span> 的分数单位是 <span class="fr" data-n="1" data-d="5"></span>，不是 3。</p></div>
   </div>
   <div class="why-box">
@@ -189,7 +189,7 @@ function bar(svg, x, y, w, h, parts, filled, col) {
     svg.appendChild(el("rect", { x: x + i * w / parts, y: y, width: w / parts, height: h, style: "stroke:var(--fg);stroke-width:1.2;fill:" + (i < filled ? (col || "var(--hl)") : "var(--card)") }));
 }
 document.addEventListener("DOMContentLoaded", function () {
-  /* 12 个苹果平均分成 d 份，涂 k 份 */
+  /* 24 个苹果平均分成 d 份，涂 k 份 */
   var svg = document.getElementById("m1-svg"), out = document.getElementById("m1-out"), ct = document.getElementById("m1-ctrls"); if (!svg) return;
   var d = 4, k = 0;
   [].forEach.call(ct.querySelectorAll("button:not(#u4-lab-reset)"), function (b) {
@@ -213,16 +213,16 @@ slider("取的份数",0,function(){return d;},function(){return k;},function(x){
   document.getElementById("u4-lab-reset").addEventListener("click",function(){d=4;k=0;draw();});
   function draw() {
     ranges.forEach(function(sync){sync();});
-    document.getElementById("m1").dataset.state=JSON.stringify({d:d,k:k,total:12,selected:12*k/d});
+    document.getElementById("m1").dataset.state=JSON.stringify({d:d,k:k,total:24,selected:24*k/d});
     PeiyuP.syncControls(ct, { d: d });
     clr(svg); svg.appendChild(el("rect", { x: 4, y: 4, width: 352, height: 202, rx: 10, style: "fill:var(--bg);stroke:var(--line)" }));
-    var per = 12 / d;
+    var per = 24 / d;
     for(var group=0;group<d;group++){
       var gx=14+(group%3)*110,gy=12+Math.floor(group/3)*58;
       svg.appendChild(el("rect",{x:gx,y:gy,width:104,height:52,rx:6,fill:"none",stroke:"var(--fg)","stroke-width":2}));
-      for(var j=0;j<per;j++) svg.appendChild(el("circle",{cx:gx+16+(j%3)*32,cy:gy+14+Math.floor(j/3)*24,r:10,fill:group<k?"var(--no)":"var(--hl)",stroke:"var(--fg)"}));
+      for(var j=0;j<per;j++) svg.appendChild(el("circle",{cx:gx+16+(j%3)*32,cy:gy+12+Math.floor(j/3)*28/Math.max(1,Math.ceil(per/3)-1),r:per>6?5:10,fill:group<k?"var(--no)":"var(--hl)",stroke:"var(--fg)"}));
     }
-    svg.appendChild(el("text", { x: 14, y: 140, style: "font-size:16px;font-weight:800;fill:var(--fg)" }, "12 个平均分成 " + d + " 份，每份 " + per + " 个"));
+    svg.appendChild(el("text", { x: 14, y: 140, style: "font-size:16px;font-weight:800;fill:var(--fg)" }, "24 个平均分成 " + d + " 份，每份 " + per + " 个"));
     if (k) { sf(svg, 70, 168, k, d, 20, "var(--no)"); svg.appendChild(el("text", { x: 110, y: 186, style: "font-size:16px;font-weight:800;fill:var(--fg)" }, "= " + per * k + " 个苹果")); }
     out.className = "read";
     out.innerHTML = k ? "涂了 " + k + " 份，是整体的 " + FH(k, d) + "，一共 " + per * k + " 个；里面有 " + k + " 个 " + FH(1, d) + "。" : "每一份是整体的 " + FH(1, d) + "。点“涂一份”。";

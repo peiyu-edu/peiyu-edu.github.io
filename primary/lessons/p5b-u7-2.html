@@ -59,8 +59,8 @@ body.primary[data-standard="v2"] .stage text { font-size:18px !important; }
     <p class="line">看图例，分清哪条线是谁的。点一个日期，读两个人的个数。也可以只看甲或只看乙。</p>
     <div class="fig-scroll" role="region" aria-label="折线图实验台（窄屏可左右滑动）" tabindex="0"><svg class="stage" id="m2-svg" viewBox="0 0 360 260" role="img" aria-label="甲乙两人跳绳"></svg></div>
     <div class="ctrls" id="m2-ctrls"><button type="button" data-s="0">都显示</button><button type="button" data-s="1">只看甲</button><button type="button" data-s="2">只看乙</button></div>
-    <label class="lab-range">实验副本：乙周五跳绳 <output id="lab-value">66 个</output><input id="lab-value-range" type="range" min="40" max="80" step="1" value="66" aria-label="调整实验副本乙周五个数"></label>
-    <p class="lab-note">先猜：只改变乙周五的个数，最后两点可能有几种高低关系？拖动找一找，再恢复原记录。练习仍用原记录。</p>
+    <label class="lab-range">实验副本：乙周五跳绳 <output id="lab-value">68 个</output><input id="lab-value-range" type="range" min="40" max="80" step="1" value="68" aria-label="调整实验副本乙周五个数"></label>
+    <p class="lab-note">先猜：只改变乙周五的个数，最后两点可能有几种高低关系？拖动找一找，再恢复原记录。实验台与练习分别使用不同的记录。</p>
     <label class="lab-range">选一天读数<input id="lab-day" type="range" min="1" max="5" step="1" value="1" aria-label="选择实验台日期"></label>
     <div class="ctrls"><button type="button" id="lab-reset">恢复原记录</button></div>
     <output class="read" id="m2-out" aria-live="polite"></output>
@@ -211,12 +211,12 @@ document.addEventListener("DOMContentLoaded", function () {
   /* 复式折线图：甲（实线）乙（虚线），周一~周五；点日期读数 */
   var svg = document.getElementById("m2-svg"), out = document.getElementById("m2-out"), ct = document.getElementById("m2-ctrls");
   if (!svg) return;
-  var A = [40, 45, 50, 52, 60], B = [30, 42, 50, 58, 66], D = ["一", "二", "三", "四", "五"], show = 0, sel = -1;
+  var A = [32, 38, 46, 54, 62], B = [24, 36, 48, 56, 68], D = ["一", "二", "三", "四", "五"], show = 0, sel = -1;
   [].forEach.call(ct.querySelectorAll("button"), function (b) { b.addEventListener("click", function () { show = +b.getAttribute("data-s"); draw(); }); });
   var range = document.getElementById("lab-value-range"), day = document.getElementById("lab-day");
   range.addEventListener("input", function () { B[4] = +range.value; sel = 4; day.value = 5; draw(); });
   day.addEventListener("input", function () { sel = +day.value - 1; draw(); });
-  document.getElementById("lab-reset").addEventListener("click", function () { B[4] = 66; range.value = 66; day.value = 1; show = 0; sel = -1; draw(); });
+  document.getElementById("lab-reset").addEventListener("click", function () { B[4] = 68; range.value = 68; day.value = 1; show = 0; sel = -1; draw(); });
   function draw() {
     document.getElementById("lab-value").textContent = B[4] + " 个";
     PeiyuP.syncControls(ct, { s: show });

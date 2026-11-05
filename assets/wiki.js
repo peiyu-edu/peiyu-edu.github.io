@@ -199,7 +199,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "常数代换法（乘“1”法）求分式与整式最值",
       keywords: ["乘“1”", "乘1", "常数代换", "1/a", "1/b", "分式"],
       trig: "已知整式和 \\(ma+nb=c\\)（定值），求分式和 \\(\\dfrac{p}{a}+\\dfrac{q}{b}\\) 的最小值（或反之）。",
-      key: "<b>先查条件，再构造1</b>：已知 \\(ma+nb=c\\) 时，只有 \\(c\\ne0\\) 才能写 \\((ma+nb)/c=1\\)。分母 \\(a,b\\) 须非零；使用基本不等式时，参与比较的两项还须为正。<br><b>例</b>：若 \\(a>0,b>0,a+2b=1\\)，则 \\[\\frac1a+\\frac1b=\\left(\\frac1a+\\frac1b\\right)(a+2b)=3+\\frac{2b}{a}+\\frac ab\\ge3+2\\sqrt2.\\]取等要求 \\(a=\\sqrt2\\,b\\)，联立题设得 \\(a=\\sqrt2-1,\\ b=(2-\\sqrt2)/2\\)，确实可取。一般系数或范围变化时，须重新检查正性、定值与取等可行性。",
+      key: "<b>先查条件，再构造1</b>：已知 \\(ma+nb=c\\) 时，只有 \\(c\\ne0\\) 才能写 \\((ma+nb)/c=1\\)。分母 \\(a,b\\) 须非零；使用基本不等式时，参与比较的两项还须为正。<br><b>例</b>：若 \\(a>0,b>0,a+2b=1\\)，则 \\[\\begin{aligned}\\frac1a+\\frac1b&=\\left(\\frac1a+\\frac1b\\right)(a+2b)\\\\&=3+\\frac{2b}{a}+\\frac ab\\\\&\\ge3+2\\sqrt2.\\end{aligned}\\]取等要求 \\(a=\\sqrt2\\,b\\)，联立题设得 \\(a=\\sqrt2-1,\\ b=(2-\\sqrt2)/2\\)，确实可取。一般系数或范围变化时，须重新检查正性、定值与取等可行性。",
       warn: "不能只见整式和固定就断言最小值存在。只给 \\(a+2b=1\\) 且允许负数时，取 \\(a<0\\) 且越来越接近 \\(0\\)，令 \\(b=(1-a)/2\\)，则 \\(1/a\\) 越来越小而 \\(1/b\\) 接近 \\(2\\)，所求值可无限减小。分母为 \\(a+1\\) 时可以换元，但仍须按已知等式构造1，不能自行假定 \\((a+1)+b\\) 为定值。",
       rel: ["amgm-core", "amgm-shift"]
     },
@@ -209,7 +209,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "基本不等式链与“一正二定三相等”铁律",
       keywords: ["基本不等式", "均值", "和一定", "积一定", "a²+b²", "正数"],
       trig: "两正数的和、积、平方和互化与最值求解。",
-      key: "对 \\(a>0,b>0\\)（当且仅当 \\(a=b\\) 时取等）：<br>$$\\frac{2}{\\dfrac{1}{a}+\\dfrac{1}{b}} \\le \\sqrt{ab} \\le \\frac{a+b}{2} \\le \\sqrt{\\frac{a^2+b^2}{2}}$$<br>• <b>积定和最小</b>：\\(ab=P \\Rightarrow a+b\\ge 2\\sqrt{P}\\)；<b>和定积最大</b>：\\(a+b=S \\Rightarrow ab\\le\\dfrac{S^2}{4}\\)。<br>• 对<b>任意实数 \\(a,b\\in\\mathbf R\\)</b> 恒成立：\\(a^2+b^2\\ge 2ab\\)，\\(ab\\le\\left(\\dfrac{a+b}{2}\\right)^2\\)。",
+      key: "对 \\(a>0,b>0\\)（当且仅当 \\(a=b\\) 时取等）：<br>$$\\begin{gathered}\\frac{2}{\\dfrac{1}{a}+\\dfrac{1}{b}} \\le \\sqrt{ab} \\le \\frac{a+b}{2}\\\\\\frac{a+b}{2} \\le \\sqrt{\\frac{a^2+b^2}{2}}\\end{gathered}$$<br>• <b>积定和最小</b>：\\(ab=P \\Rightarrow a+b\\ge 2\\sqrt{P}\\)；<b>和定积最大</b>：\\(a+b=S \\Rightarrow ab\\le\\dfrac{S^2}{4}\\)。<br>• 对<b>任意实数 \\(a,b\\in\\mathbf R\\)</b> 恒成立：\\(a^2+b^2\\ge 2ab\\)，\\(ab\\le\\left(\\dfrac{a+b}{2}\\right)^2\\)。",
       warn: "不等式本身只需核对适用的正数条件；积或和不固定时也能使用，但若右侧还随变量变化，就不能直接把它当作最小值。<b>利用它求最值时</b>，要得到固定的界，并检查等号能否在题目允许的范围内成立。连续使用多次时，各处等号须能同时成立，才能得到最值。",
       rel: ["amgm-const-one", "amgm-shift", "amgm-hook"]
     },
@@ -501,7 +501,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "正弦定理、余弦定理与解三角形“边角互化”",
       keywords: ["正弦定理","余弦定理","解三角形","SSA"],
       trig: "已知三角形部分边角求其余边角、外接圆半径或判断三角形解的个数。",
-      key: "在 \\(\\Delta ABC\\) 中（\\(R\\) 为外接圆半径）：<br>• <b>正弦定理</b>：$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R$$（边化角：\\(a=2R\\sin A\\)；角化边：\\(\\sin A = \\dfrac{a}{2R}\\)）。<br>• <b>余弦定理</b>：$$c^2 = a^2 + b^2 - 2ab\\cos C,\\qquad \\cos C = \\frac{a^2+b^2-c^2}{2ab}$$<br>• <b>面积公式</b>：\\(S = \\dfrac12 ab\\sin C = \\dfrac12 bc\\sin A = \\dfrac12 ac\\sin B = \\dfrac{abc}{4R}\\)。",
+      key: "在 \\(\\Delta ABC\\) 中（\\(R\\) 为外接圆半径）：<br>• <b>正弦定理</b>：$$\\frac{a}{\\sin A} = \\frac{b}{\\sin B} = \\frac{c}{\\sin C} = 2R$$（边化角：\\(a=2R\\sin A\\)；角化边：\\(\\sin A = \\dfrac{a}{2R}\\)）。<br>• <b>余弦定理</b>：$$\\begin{gathered}c^2 = a^2 + b^2 - 2ab\\cos C,\\\\\\cos C = \\frac{a^2+b^2-c^2}{2ab}\\end{gathered}$$<br>• <b>面积公式</b>：\\(S = \\dfrac12 ab\\sin C = \\dfrac12 bc\\sin A = \\dfrac12 ac\\sin B = \\dfrac{abc}{4R}\\)。",
       warn: "SSA 陷阱：已知两边 \\(a,b\\) 及对角 \\(A\\) 时，若 \\(A\\) 为锐角且 \\(b\\sin A&lt;a&lt;b\\)，三角形有<b>两解</b>：所求角 \\(B\\) 的两个值一锐一钝，绝不能只取计算出来的锐角！但当 \\(B\\) 为锐角时，\\(C=180^\\circ-A-B\\) 仍可能为钝角，所以两个解不一定一锐一钝。",
       rel: ["vec-dot-product", "trig-aux-angle"]
     },
@@ -541,7 +541,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "复数的三角表示式与乘除法几何旋转（选学）",
       keywords: ["三角形式", "辐角", "旋转", "选学", "极坐标"],
       trig: "复数代数式与三角式互化，或利用模长辐角求高次幂与旋转几何。",
-      key: "设非零复数 \\(z=a+bi\\)，\\(a,b\\in\\mathbb R\\)。模 \\(r=\\sqrt{a^2+b^2}>0\\)，辐角满足 \\(\\cos\\theta=a/r\\)、\\(\\sin\\theta=b/r\\)，相差 \\(2k\\pi\\)（\\(k\\in\\mathbb Z\\)）表示同一方向。<br>• <b>标准三角形式</b>：$$z=r(\\cos\\theta+i\\sin\\theta)$$<br>• <b>乘除法</b>（以下两数都非零）：<b>模长相乘（除），辐角相加（减）</b>。$$z_1z_2=r_1r_2[\\cos(\\theta_1+\\theta_2)+i\\sin(\\theta_1+\\theta_2)]$$$$\\frac{z_1}{z_2}=\\frac{r_1}{r_2}[\\cos(\\theta_1-\\theta_2)+i\\sin(\\theta_1-\\theta_2)]$$<br>• <b>乘方</b>：反复使用乘法公式可得 \\(z^n=r^n(\\cos n\\theta+i\\sin n\\theta)\\)（\\(n\\in\\mathbb N^*\\)，选学拓展）。<br>• <b>几何意义</b>：乘以非零复数 \\(r(\\cos\\theta+i\\sin\\theta)\\)，向量旋转角 \\(\\theta\\)（正角逆时针、负角顺时针），长度变为原来的 \\(r\\) 倍；\\(0<r<1\\) 时缩短，\\(r>1\\) 时伸长。乘 \\(i\\) 则模不变、逆时针转 \\(90^\\circ\\)。",
+      key: "设非零复数 \\(z=a+bi\\)，\\(a,b\\in\\mathbb R\\)。模 \\(r=\\sqrt{a^2+b^2}>0\\)，辐角满足 \\(\\cos\\theta=a/r\\)、\\(\\sin\\theta=b/r\\)，相差 \\(2k\\pi\\)（\\(k\\in\\mathbb Z\\)）表示同一方向。<br>• <b>标准三角形式</b>：$$z=r(\\cos\\theta+i\\sin\\theta)$$<br>• <b>乘除法</b>（以下两数都非零）：<b>模长相乘（除），辐角相加（减）</b>。$$\\begin{aligned}z_1z_2=r_1r_2\\big[&\\cos(\\theta_1+\\theta_2)\\\\&+i\\sin(\\theta_1+\\theta_2)\\big]\\end{aligned}$$$$\\begin{aligned}\\frac{z_1}{z_2}=\\frac{r_1}{r_2}\\big[&\\cos(\\theta_1-\\theta_2)\\\\&+i\\sin(\\theta_1-\\theta_2)\\big]\\end{aligned}$$<br>• <b>乘方</b>：反复使用乘法公式可得 \\(z^n=r^n(\\cos n\\theta+i\\sin n\\theta)\\)（\\(n\\in\\mathbb N^*\\)，选学拓展）。<br>• <b>几何意义</b>：乘以非零复数 \\(r(\\cos\\theta+i\\sin\\theta)\\)，向量旋转角 \\(\\theta\\)（正角逆时针、负角顺时针），长度变为原来的 \\(r\\) 倍；\\(0<r<1\\) 时缩短，\\(r>1\\) 时伸长。乘 \\(i\\) 则模不变、逆时针转 \\(90^\\circ\\)。",
       warn: "选学内容。本课把非零复数的辐角主值取在 \\([0,2\\pi)\\)，一般辐角可相差 \\(2k\\pi\\)。读模与角前，先化成<b>模为正、角相同、cos 在前、中间加号</b>的标准式。例如 \\(\\cos\\theta-i\\sin\\theta=\\cos(-\\theta)+i\\sin(-\\theta)\\)；若模前系数为负，可把角加 \\(\\pi\\) 后改为正模。零的模为 \\(0\\)，没有辐角；除数必须非零。",
       rel: ["complex-plane-mod", "trig-know1get2"]
     },
@@ -561,7 +561,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "斜二测画法规则与原图/直观图面积换算公式",
       keywords: ["斜二测", "直观图", "45度", "折半", "面积比", "S'=√2/4 S"],
       trig: "已知原图形求直观图面积，或已知直观图面积逆求原图真实面积。",
-      key: "1. <b>斜二测画法三规则</b>：<br>• \\(x\\) 轴（水平）方向：平行性不变，<b>长度保持不变</b>；<br>• \\(y\\) 轴（纵向）方向：画成与 \\(x'\\) 轴夹角 \\(45^\\circ\\)（或 \\(135^\\circ\\)），<b>长度折半（变为原来的 \\(\\dfrac12\\)）</b>；<br>• \\(z\\) 轴（竖直）方向：平行性不变，<b>长度保持不变</b>。<br>2. <b>水平面内图形的面积换算核心公式</b>（原图在水平 \\(xOy\\) 平面内，按上述规则作图）：<br>$$S_{\\text{直观图}} = \\frac{\\sqrt{2}}{4} S_{\\text{原图}},\\qquad S_{\\text{原图}} = 2\\sqrt{2} S_{\\text{直观图}}$$",
+      key: "1. <b>斜二测画法三规则</b>：<br>• \\(x\\) 轴（水平）方向：平行性不变，<b>长度保持不变</b>；<br>• \\(y\\) 轴（纵向）方向：画成与 \\(x'\\) 轴夹角 \\(45^\\circ\\)（或 \\(135^\\circ\\)），<b>长度折半（变为原来的 \\(\\dfrac12\\)）</b>；<br>• \\(z\\) 轴（竖直）方向：平行性不变，<b>长度保持不变</b>。<br>2. <b>水平面内图形的面积换算核心公式</b>（原图在水平 \\(xOy\\) 平面内，按上述规则作图）：<br>$$\\begin{gathered}S_{\\text{直观图}} = \\frac{\\sqrt{2}}{4} S_{\\text{原图}},\\\\S_{\\text{原图}} = 2\\sqrt{2} S_{\\text{直观图}}\\end{gathered}$$",
       warn: "直观图上互相垂直的两条线，原图中不一定垂直！不平行于坐标轴的斜边、对角线，长度不能直接照搬或折半，应先按规则定端点，再连线。逆求原图面积时切勿记反乘成 \\(\\frac{\\sqrt{2}}{4}\\)，上述水平面内的原图面积比直观图面积大，必须乘以 \\(2\\sqrt{2}\\)！面积公式只适用于水平面内的图形，不能直接套用到竖直面或任意倾斜面。",
       rel: ["geo-polyhedron-rot"]
     },
@@ -631,7 +631,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "两层合并均值与方差分解公式（层内+层间）",
       keywords: ["合并均值", "合并方差", "层间方差", "加权平均", "统计决策"],
       trig: "求两组或多组数据合并后的总均值与总方差，或进行统计结论决策评价。",
-      key: "1. <b>合并均值</b>：\\(\\bar{x} = w_1\\bar{x}_1 + w_2\\bar{x}_2\\)（两层样本量为 \\(n_1,n_2>0\\)，权重 \\(w_1=\\frac{n_1}{n_1+n_2}\\)，\\(w_2=\\frac{n_2}{n_1+n_2}\\)）。<br>2. <b>合并方差分解</b>：<br>\\[s^2 = w_1[s_1^2 + (\\bar{x}_1-\\bar{x})^2] + w_2[s_2^2 + (\\bar{x}_2-\\bar{x})^2]\\]<br>由两部分组成：各层内部的平均波动 \\(w_1 s_1^2 + w_2 s_2^2\\)，加上各层均值偏离总均值产生的<b>层间波动</b>！",
+      key: "1. <b>合并均值</b>：\\(\\bar{x} = w_1\\bar{x}_1 + w_2\\bar{x}_2\\)（两层样本量为 \\(n_1,n_2>0\\)，权重 \\(w_1=\\frac{n_1}{n_1+n_2}\\)，\\(w_2=\\frac{n_2}{n_1+n_2}\\)）。<br>2. <b>合并方差分解</b>：<br>\\[\\begin{aligned}s^2 ={}&w_1[s_1^2 + (\\bar{x}_1-\\bar{x})^2]\\\\&+w_2[s_2^2 + (\\bar{x}_2-\\bar{x})^2]\\end{aligned}\\]<br>由两部分组成：各层内部的平均波动 \\(w_1 s_1^2 + w_2 s_2^2\\)，加上各层均值偏离总均值产生的<b>层间波动</b>！",
       warn: "一般不能把两组方差直接作算术平均：须按人数加权，并计入均值差产生的层间波动。若两组人数相等且均值相同，合并方差恰等于 \\((s_1^2+s_2^2)/2\\)，这是可以直接平均的特例。",
       rel: ["stat-percentile-var", "stat-sampling"]
     },
@@ -661,7 +661,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "频率稳定性、随机模拟映射与破除赌徒谬误",
       keywords: ["频率", "概率", "稳定性", "随机模拟", "赌徒谬误", "放回抽样"],
       trig: "用大量重复试验的频率估计未知概率、设计随机数模拟方案、或分析概率认知误区。",
-      key: "1. <b>频率 vs 概率</b>：频率是试验产生的一组随机数据，随试验变化；概率是事件内在的客观确定值。<br>2. <b>随机模拟设计</b>：设定随机数字（如 0～9），让对应事件发生的数字所占比例严格等于理论概率。<br>3. <b>破除赌徒谬误</b>：每次试验相互独立，硬币连出 5 次正面，第 6 次正面的概率依然是 0.5，前面试验绝不“欠”后面！",
+      key: "1. <b>频率 vs 概率</b>：频率是试验产生的一组随机数据，随试验变化；概率是事件内在的客观确定值。<br>2. <b>随机模拟设计</b>：设定随机数字（如 0～9），让对应事件发生的数字所占比例严格等于理论概率。<br>3. <b>破除赌徒谬误</b>：抛掷公平硬币（正反面等可能），且每次试验相互独立；即使连出 5 次正面，第 6 次正面的概率依然是 0.5，前面试验绝不“欠”后面！",
       warn: "大量重复试验时，频率在概率附近波动并趋于稳定，但不保证每增加一次试验就更接近概率；随机模拟必须保持每次试验条件严格一致。",
       rel: ["prob-classical-events"]
     },
@@ -681,7 +681,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "空间向量基本定理与四点共面充要条件",
       keywords: ["空间基底", "不共面", "四点共面", "基底展开", "x+y+z=1"],
       trig: "选择基底线性表示未知空间向量、证明四点共面或求参数值。",
-      key: "1. <b>空间基底</b>：三个<b>不共面</b>的向量 \\(\\{\\boldsymbol{e}_1,\\boldsymbol{e}_2,\\boldsymbol{e}_3\\}\\) 叫做空间的一个基底，任一向量 \\(\\boldsymbol{p}\\) 存在唯一的有序实数组 \\((x,y,z)\\) 使 \\(\\boldsymbol{p} = x\\boldsymbol{e}_1 + y\\boldsymbol{e}_2 + z\\boldsymbol{e}_3\\)。<br>2. <b>四点共面定理</b>：当点 \\(A,B,C\\) 不共线时，对空间任意参考点 \\(O\\)，\\(P, A, B, C\\) 四点共面的充要条件是存在实数 \\(x,y,z\\) 使：<br>$$\\vec{OP} = x\\vec{OA} + y\\vec{OB} + z\\vec{OC}\\quad \\text{且}\\quad <b>x + y + z = 1</b>$$",
+      key: "1. <b>空间基底</b>：三个<b>不共面</b>的向量 \\(\\{\\boldsymbol{e}_1,\\boldsymbol{e}_2,\\boldsymbol{e}_3\\}\\) 叫做空间的一个基底，任一向量 \\(\\boldsymbol{p}\\) 存在唯一的有序实数组 \\((x,y,z)\\) 使 \\(\\boldsymbol{p} = x\\boldsymbol{e}_1 + y\\boldsymbol{e}_2 + z\\boldsymbol{e}_3\\)。<br>2. <b>四点共面定理</b>：当点 \\(A,B,C\\) 不共线时，对空间任意参考点 \\(O\\)，\\(P, A, B, C\\) 四点共面的充要条件是存在实数 \\(x,y,z\\) 使：<br>$$\\begin{gathered}\\vec{OP} = x\\vec{OA} + y\\vec{OB} + z\\vec{OC}\\\\\\text{且}\\quad \\mathbf{x + y + z = 1}\\end{gathered}$$",
       warn: "仅“两两不共线”不能作为基底！三个向量若同在一个平面内，两两不共线但共面，绝不能构成空间基底；斜基底数量积展开必须保留 \\(\\boldsymbol{e}_i\\cdot\\boldsymbol{e}_j\\) 交叉项！",
       rel: ["vec3-ops-coplanar", "vec3-coord-ops", "vec-base-theorem"]
     },
@@ -701,7 +701,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "空间向量法三大夹角与点面距离公式全景",
       keywords: ["法向量", "点面距离", "异面角", "线面角", "二面角", "sinθ"],
       trig: "用向量法求点到平面距离、异面直线所成角、线面角与二面角大小。",
-      key: "设直线方向向量为 \\(\\boldsymbol{u},\\boldsymbol{v}\\)，平面法向量为 \\(\\boldsymbol{n},\\boldsymbol{n}_1,\\boldsymbol{n}_2\\)（以上向量均非零）：<br>• <b>点 \\(P\\) 到平面 \\(\\alpha\\) 距离</b>：$$d = \\frac{|\\vec{AP}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{n}|}\\quad (A\\in\\alpha)$$<br>• <b>异面直线所成角</b>：$$\\cos\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{v}|}{|\\boldsymbol{u}||\\boldsymbol{v}|}\\in[0,1),\\quad \\theta\\in(0, 90^\\circ]$$<br>• <b>直线与平面所成角</b>：$$\\sin\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{u}||\\boldsymbol{n}|}\\in[0,1],\\quad \\theta\\in[0, 90^\\circ]$$（注意是 <b>\\(\\sin\\theta\\)</b>，因为法向量垂直于平面，线面角与方向向量、法向量所成的不大于 \\(90^\\circ\\) 的角互余，后者的余弦值就是 \\(\\sin\\theta\\)）。<br>• <b>二面角</b>：$$\\cos\\theta = \\pm\\frac{\\boldsymbol{n}_1\\cdot\\boldsymbol{n}_2}{|\\boldsymbol{n}_1||\\boldsymbol{n}_2|},\\quad \\theta\\in[0, 180^\\circ]$$",
+      key: "设直线方向向量为 \\(\\boldsymbol{u},\\boldsymbol{v}\\)，平面法向量为 \\(\\boldsymbol{n},\\boldsymbol{n}_1,\\boldsymbol{n}_2\\)（以上向量均非零）：<br>• <b>点 \\(P\\) 到平面 \\(\\alpha\\) 距离</b>：$$d = \\frac{|\\vec{AP}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{n}|}\\quad (A\\in\\alpha)$$<br>• <b>异面直线所成角</b>：$$\\begin{gathered}\\cos\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{v}|}{|\\boldsymbol{u}||\\boldsymbol{v}|}\\in[0,1),\\\\\\theta\\in(0, 90^\\circ]\\end{gathered}$$<br>• <b>直线与平面所成角</b>：$$\\begin{gathered}\\sin\\theta = \\frac{|\\boldsymbol{u}\\cdot\\boldsymbol{n}|}{|\\boldsymbol{u}||\\boldsymbol{n}|}\\in[0,1],\\\\\\theta\\in[0, 90^\\circ]\\end{gathered}$$（注意是 <b>\\(\\sin\\theta\\)</b>，因为法向量垂直于平面，线面角与方向向量、法向量所成的不大于 \\(90^\\circ\\) 的角互余，后者的余弦值就是 \\(\\sin\\theta\\)）。<br>• <b>二面角</b>：$$\\cos\\theta = \\pm\\frac{\\boldsymbol{n}_1\\cdot\\boldsymbol{n}_2}{|\\boldsymbol{n}_1||\\boldsymbol{n}_2|},\\quad \\theta\\in[0, 180^\\circ]$$",
       warn: "二面角绝不能机械取绝对值算成锐角！必须结合几何图形观察二面角是钝角（\\(\\cos\\theta&lt;0\\)）还是锐角（\\(\\cos\\theta&gt;0\\)）后确定正负号！",
       rel: ["vec3-coord-ops", "geo-perp-dihedral", "vec-dot-product"]
     },
@@ -801,7 +801,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "等差等比数列通项性质、前 n 项和与对称下标和",
       keywords: ["等差数列", "等比数列", "通项公式", "前n项和", "公差", "公比", "下标和性质"],
       trig: "求解等差、等比数列的基本量（首项、公差/公比、项数），或利用下标和性质化简计算。",
-      key: "1. <b>等差数列</b>：\\(a_n = a_1 + (n-1)d\\)；前 \\(n\\) 项和 \\(S_n = \\dfrac{n(a_1+a_n)}{2} = na_1 + \\dfrac{n(n-1)}{2}d\\)；若 \\(m+n = p+q\\)，则 \\(a_m + a_n = a_p + a_q\\)。<br>2. <b>等比数列</b>：\\(a_n = a_1 q^{n-1}\\)；若 \\(m+n = p+q\\)，则 \\(a_m a_n = a_p a_q\\)；前 \\(n\\) 项和：<br>\\[S_n = \\begin{cases} \\dfrac{a_1(1-q^n)}{1-q} = \\dfrac{a_1 - a_n q}{1-q}, & q\\ne 1 \\\\ na_1, & q=1 \\end{cases}\\]",
+      key: "1. <b>等差数列</b>：\\(a_n = a_1 + (n-1)d\\)；前 \\(n\\) 项和 \\(S_n = \\dfrac{n(a_1+a_n)}{2} = na_1 + \\dfrac{n(n-1)}{2}d\\)；若 \\(m+n = p+q\\)，则 \\(a_m + a_n = a_p + a_q\\)。<br>2. <b>等比数列</b>：\\(a_n = a_1 q^{n-1}\\)；若 \\(m+n = p+q\\)，则 \\(a_m a_n = a_p a_q\\)；前 \\(n\\) 项和：<br>\\[S_n=\\begin{cases}\\dfrac{a_1(1-q^n)}{1-q},&q\\ne1\\\\na_1,&q=1\\end{cases}\\]（\\(q\\ne1\\) 时，也可写为 \\(S_n=\\dfrac{a_1-a_nq}{1-q}\\)。）",
       warn: "等比数列求和 \\(S_n\\) 必须<b>优先分类讨论 \\(q=1\\) 与 \\(q\\ne 1\\)</b>！遗漏 \\(q=1\\) 是数列大题头号扣分点。",
       rel: ["seq-an-sn-relation", "seq-sum-methods", "seq-math-induction"]
     },
@@ -831,7 +831,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "导数本质极限定义与曲线切线几何意义",
       keywords: ["瞬时变化率", "导数定义", "切线斜率", "割线极限", "在点处vs过点"],
       trig: "求函数在某点处的瞬时变化率、导数定义极限式或切线方程。",
-      key: "1. <b>极限定义</b>：$$f'(x_0) = \\lim_{\\Delta x\\to 0} \\frac{f(x_0+\\Delta x) - f(x_0)}{\\Delta x}$$（瞬时变化率即平均变化率在 \\(\\Delta x\\to 0\\) 时的极限）。<br>2. <b>几何意义</b>：\\(f'(x_0)\\) 就是曲线上点 \\(P(x_0, f(x_0))\\) 处<b>切线的斜率 \\(k\\)</b>。<br>3. <b>点斜式切线方程</b>：$$y - f(x_0) = f'(x_0)(x - x_0)$$",
+      key: "1. <b>极限定义</b>：$$\\begin{aligned}f'(x_0)&=\\lim_{h\\to0}\\frac{f(x_0+h)-f(x_0)}{h}\\end{aligned}$$（瞬时变化率即平均变化率在 \\(h\\to 0\\) 时的极限）。<br>2. <b>几何意义</b>：\\(f'(x_0)\\) 就是曲线上点 \\(P(x_0, f(x_0))\\) 处<b>切线的斜率 \\(k\\)</b>。<br>3. <b>点斜式切线方程</b>：$$y - f(x_0) = f'(x_0)(x - x_0)$$",
       warn: "“在点 \\(P\\) 处的切线”与“过点 \\(P\\) 的切线”完全不同！“过点 \\(P\\)”的点不一定是切点，必须先设切点 \\((x_0, f(x_0))\\) 代入切线方程求解！",
       rel: ["calc-rules-composite", "calc-monot-extrema"]
     },
@@ -961,7 +961,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       title: "2×2 列联表与 χ² 独立性检验四步法则",
       keywords: ["列联表", "独立性检验", "卡方统计量", "零假设", "临界值", "推翻独立"],
       trig: "由 2×2 列联表计算卡方统计量 \\(\\chi^2\\)，查临界值表判断两分类变量是否有关联。",
-      key: "1. <b>适用条件</b>：样本中的观察相互独立，分类互斥且完备；四个行、列合计须为正。表格第一行为 \\(a,b\\)，第二行为 \\(c,d\\)。各格期望频数按“行合计×列合计÷总数”计算，如左上格为 \\((a+b)(a+c)/n\\)；本卡采用四格期望频数均不小于 \\(5\\) 的条件。实际应用还可按教师用书建议，检查四个观测频数是否均不小于 \\(5\\)。<br>2. <b>零假设 \\(H_0\\)</b>：两个分类变量相互独立。<br>3. <b>统计量</b>：\\[\\chi^2=\\dfrac{n(ad-bc)^2}{(a+b)(c+d)(a+c)(b+d)},\\qquad n=a+b+c+d.\\]<br>4. <b>按显著性水平判断</b>：在近似模型适用时，\\(\\alpha=0.05\\) 对应临界值 \\(3.841\\)，\\(\\alpha=0.01\\) 对应 \\(6.635\\)。统计量达到相应临界值，就按该水平拒绝 \\(H_0\\)；未达到只表示证据不足，不能证明独立。",
+      key: "1. <b>适用条件</b>：样本中的观察相互独立，分类互斥且完备；四个行、列合计须为正。表格第一行为 \\(a,b\\)，第二行为 \\(c,d\\)。各格期望频数按“行合计×列合计÷总数”计算，如左上格为 \\((a+b)(a+c)/n\\)；本卡采用四格期望频数均不小于 \\(5\\) 的条件。实际应用还可按教师用书建议，检查四个观测频数是否均不小于 \\(5\\)。<br>2. <b>零假设 \\(H_0\\)</b>：两个分类变量相互独立。<br>3. <b>统计量</b>：\\[\\begin{gathered}R_1=a+b,\\quad R_2=c+d,\\\\C_1=a+c,\\quad C_2=b+d,\\\\\\chi^2=\\frac{n(ad-bc)^2}{R_1R_2C_1C_2},\\\\n=a+b+c+d.\\end{gathered}\\]<br>4. <b>按显著性水平判断</b>：在近似模型适用时，\\(\\alpha=0.05\\) 对应临界值 \\(3.841\\)，\\(\\alpha=0.01\\) 对应 \\(6.635\\)。统计量达到相应临界值，就按该水平拒绝 \\(H_0\\)；未达到只表示证据不足，不能证明独立。",
       warn: "\\(\\alpha\\) 描述 \\(H_0\\) 为真时检验规则的误拒风险；这里使用的是大样本近似，不能把 \\(1-\\alpha\\) 解释成这次结论正确的概率。显著关联也不能推出因果关系。小样本或期望频数过小，不能直接套本卡临界值。",
       rel: ["bivar-corr-r", "stat-sampling"]
     },

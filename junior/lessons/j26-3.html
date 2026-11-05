@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css">
 <script defer src="../assets/gaokao-solutions.js"></script>
-<script defer src="../assets/lesson.js?v=77d7b87eb73b"></script>
+<script defer src="../assets/lesson.js?v=44fa2b58f075"></script>
 <script defer src="../assets/junior-consolidation.js"></script>
 <script defer src="../assets/video.js"></script>
 <style>
@@ -526,37 +526,37 @@ document.addEventListener("DOMContentLoaded", function() {
   var m3Note = document.getElementById("m3-note");
   function renderM3(k) {
     if (!m3Fig) return;
-    var cx = 210, cy = 75, scaleX = 40, scaleY = 14;
+    var cx = 210, cy = 75, scaleX = 30, scaleY = 7;
     var h = '<rect x="20" y="10" width="420" height="150" fill="var(--card)" stroke="var(--line)" stroke-width="1.5" rx="6"/>';
     h += '<line x1="30" y1="' + cy + '" x2="430" y2="' + cy + '" stroke="#64748b" stroke-width="1.5"/>';
     var d = 'M ';
-    for (var x = -1.8; x <= 3.8; x += 0.1) {
+    for (var x = -2.8; x <= 4.8; x += 0.1) {
       var px = cx + x * scaleX;
-      var py = cy - (x*x - 2*x - 3) * scaleY;
-      d += (x === -1.8 ? '' : 'L ') + px.toFixed(1) + ' ' + py.toFixed(1) + ' ';
+      var py = cy - (x*x - 2*x - 8) * scaleY;
+      d += (x === -2.8 ? '' : 'L ') + px.toFixed(1) + ' ' + py.toFixed(1) + ' ';
     }
     h += '<path d="' + d + '" fill="none" stroke="#cbd5e1" stroke-width="2"/>';
 
     if (k === "gt") {
-      // x < -1 或 x > 3 高亮
+      // x < -2 或 x > 4 高亮
       var dLeft = 'M ', dRight = 'M ';
-      for (var x = -1.8; x <= -1.0; x += 0.1) {
-        dLeft += (x === -1.8 ? '' : 'L ') + (cx + x*scaleX).toFixed(1) + ' ' + (cy - (x*x - 2*x - 3)*scaleY).toFixed(1) + ' ';
+      for (var x = -2.8; x <= -2.0; x += 0.1) {
+        dLeft += (x === -2.8 ? '' : 'L ') + (cx + x*scaleX).toFixed(1) + ' ' + (cy - (x*x - 2*x - 8)*scaleY).toFixed(1) + ' ';
       }
-      for (var x = 3.0; x <= 3.8; x += 0.1) {
-        dRight += (x === 3.0 ? '' : 'L ') + (cx + x*scaleX).toFixed(1) + ' ' + (cy - (x*x - 2*x - 3)*scaleY).toFixed(1) + ' ';
+      for (var x = 4.0; x <= 4.8; x += 0.1) {
+        dRight += (x === 4.0 ? '' : 'L ') + (cx + x*scaleX).toFixed(1) + ' ' + (cy - (x*x - 2*x - 8)*scaleY).toFixed(1) + ' ';
       }
       h += '<path d="' + dLeft + '" fill="none" stroke="var(--accent)" stroke-width="3.5"/>';
       h += '<path d="' + dRight + '" fill="none" stroke="var(--accent)" stroke-width="3.5"/>';
-      if (m3Note) m3Note.textContent = 'y > 0：对应 x 轴上方的两支曲线，解集为 x < -1 或 x > 3。';
+      if (m3Note) m3Note.textContent = 'y > 0：对应 x 轴上方的两支曲线，解集为 x < -2 或 x > 4。';
     } else {
-      // -1 < x < 3 高亮
+      // -2 < x < 4 高亮
       var dMid = 'M ';
-      for (var x = -1.0; x <= 3.0; x += 0.1) {
-        dMid += (x === -1.0 ? '' : 'L ') + (cx + x*scaleX).toFixed(1) + ' ' + (cy - (x*x - 2*x - 3)*scaleY).toFixed(1) + ' ';
+      for (var x = -2.0; x <= 4.0; x += 0.1) {
+        dMid += (x === -2.0 ? '' : 'L ') + (cx + x*scaleX).toFixed(1) + ' ' + (cy - (x*x - 2*x - 8)*scaleY).toFixed(1) + ' ';
       }
       h += '<path d="' + dMid + '" fill="none" stroke="var(--no)" stroke-width="3.5"/>';
-      if (m3Note) m3Note.textContent = 'y < 0：对应 x 轴下方的弯曲部分，解集为 -1 < x < 3。';
+      if (m3Note) m3Note.textContent = 'y < 0：对应 x 轴下方的弯曲部分，解集为 -2 < x < 4。';
     }
     m3Fig.innerHTML = h;
   }

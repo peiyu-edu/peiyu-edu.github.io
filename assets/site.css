@@ -6,6 +6,7 @@
   --muted: #5E6B64;
   --line: #E2DCD0;
   --a: #2F7A56;      /* 松绿：第一个量、主色 */
+  --accent: #16452B; /* SVG labels also sit on translucent accent fills. */
   --wk-pill-active-fg: #2B7150;
   --b: #966524;      /* 赤金：第二个量 */
   --c: #3E5C76;      /* 黛蓝：第三个量 */
@@ -22,6 +23,7 @@
   :root:not([data-theme="light"]) {
     --bg: #141B18; --card: #1D2622; --fg: #E9E5DC; --muted: #A8B0AA; --line: #2E3A34;
     --a: #5FB58A; --b: #D3A15C; --c: #7FA3C4; --hl: #E2B65A; --hl-soft: #3A3220;
+    --accent: #C7FFDD;
     --wk-pill-active-fg: var(--a);
     --no: #E07A62; --ok-soft: #1F3A2C; --no-soft: #3D2620; --dim: #6F6A60;
     color-scheme: dark;
@@ -30,10 +32,15 @@
 :root[data-theme="dark"] {
   --bg: #141B18; --card: #1D2622; --fg: #E9E5DC; --muted: #A8B0AA; --line: #2E3A34;
   --a: #5FB58A; --b: #D3A15C; --c: #7FA3C4; --hl: #E2B65A; --hl-soft: #3A3220;
+  --accent: #C7FFDD;
   --wk-pill-active-fg: var(--a);
   --no: #E07A62; --ok-soft: #1F3A2C; --no-soft: #3D2620; --dim: #6F6A60;
   color-scheme: dark;
 }
+
+/* Legacy sandboxes keep a light drawing surface in either theme. */
+svg:has(> rect[fill="#f8fafc"], > rect[fill="#f6f8fa"]) { --accent: #16452B; }
+button[style*="background:var(--accent)"] { color: var(--card) !important; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }

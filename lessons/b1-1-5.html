@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
-<script defer src="../assets/lesson.js?v=sha256-0e8d418be294566c"></script>
+<script defer src="../assets/lesson.js?v=sha256-668847f47fd3a8a0"></script>
 <script defer src="../assets/student-textbook.js"></script>
 <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -180,10 +180,10 @@
       <div class="trap-head"><span class="badge-pill badge-no">翻车现场 ①</span><span>写否定时乱改讨论范围</span></div>
       <div class="trap-body">
         <div class="trap-wrong">
-          <b>❌ 典型错解</b>：把“\(\forall x&gt;1,\ x^2&gt;1\)”写成“\(\exists x\le 1,\ x^2\le 1\)”。
+          <b>❌ 典型错解</b>：把“\(\forall x&gt;2,\ x^2&gt;4\)”写成“\(\exists x\le 2,\ x^2\le 4\)”。
         </div>
         <div class="trap-right">
-          <b>注意讨论范围</b>：\(x&gt;1\) 是讨论范围，写否定时<b>保持不变</b>，正确否定是“\(\exists x&gt;1,\ x^2\le 1\)”。
+          <b>注意讨论范围</b>：\(x&gt;2\) 是讨论范围，写否定时<b>保持不变</b>，正确否定是“\(\exists x&gt;2,\ x^2\le 4\)”。
         </div>
       </div>
     </div>
@@ -193,11 +193,11 @@
       <div class="trap-body">
         <div class="trap-vs">
           <div class="trap-wrong">
-            <b>❌ 典型错解</b>：把 \(x^2&gt;0\) 的否定写成 \(x^2&lt;0\)。
-          </div>
+          <b>❌ 典型错解</b>：把“\(\forall x\in\mathbf R,\ |x-2|&gt;3\)”的否定写成“\(\exists x\in\mathbf R,\ |x-2|&lt;3\)”。
+        </div>
           <div class="trap-right">
-            <b>✅ 看右图秒懂真相</b>：“不大于”就是“小于或等于”！\(&gt;0\) 的反面必为 <b>\(\le 0\)</b>，例如原命题“\(\forall x\in\mathbf R,\ x^2&gt;0\)”为假；错写成“\(\exists x\in\mathbf R,\ x^2&lt;0\)”也为假。这说明后者不是它的否定，正确否定是“\(\exists x\in\mathbf R,\ x^2\le0\)”。
-          </div>
+          <b>核对等号</b>：“不大于”包括“小于”和“等于”。正确否定为“\(\exists x\in\mathbf R,\ |x-2|\le3\)”。取 \(x=5\)，等号成立，正好说明漏掉等号就漏了这个反例。右图用一般分界值 \(c\) 表示两边。
+        </div>
         </div>
         <div>
           <svg class="micro-fig" id="m-neg-fig" viewBox="0 0 280 140" role="img" aria-label="大于与小于等于数轴微图解"></svg>
@@ -725,23 +725,23 @@ document.addEventListener("DOMContentLoaded", function () {
   function drawNegTrap() {
     if (!mNegSvg) return;
     mNegSvg.innerHTML = "";
-    // 上层蓝色 x > 0
-    mNegSvg.appendChild(svgEl("text", { x: 195, y: 24, "text-anchor": "middle", fill: "var(--b)", "font-weight": 700, "font-size": 12 }, "原结论： x > 0 （空心）"));
+    // 上层蓝色 x > c
+    mNegSvg.appendChild(svgEl("text", { x: 195, y: 24, "text-anchor": "middle", fill: "var(--b)", "font-weight": 700, "font-size": 12 }, "原结论： x > c （空心）"));
     mNegSvg.appendChild(svgEl("line", { x1: 140, y1: 36, x2: 250, y2: 36, stroke: "var(--b)", "stroke-width": 2.5 }));
     mNegSvg.appendChild(svgEl("circle", { cx: 140, cy: 36, r: 4, fill: "var(--card)", stroke: "var(--b)", "stroke-width": 2 }));
 
-    // 中层绿色 x <= 0
-    mNegSvg.appendChild(svgEl("text", { x: 85, y: 56, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 12 }, "反面： x ≤ 0 （含0实心）"));
+    // 中层绿色 x <= c
+    mNegSvg.appendChild(svgEl("text", { x: 85, y: 56, "text-anchor": "middle", fill: "var(--a)", "font-weight": 700, "font-size": 12 }, "反面： x ≤ c （含c实心）"));
     mNegSvg.appendChild(svgEl("line", { x1: 30, y1: 68, x2: 140, y2: 68, stroke: "var(--a)", "stroke-width": 2.5 }));
     mNegSvg.appendChild(svgEl("circle", { cx: 140, cy: 68, r: 4.5, fill: "var(--a)" }));
 
-    // 下层数轴与原点 0
+    // 下层数轴与分界点 c
     mNegSvg.appendChild(svgEl("line", { x1: 20, y1: 92, x2: 260, y2: 92, stroke: "var(--line)", "stroke-width": 1.6 }));
     mNegSvg.appendChild(svgEl("path", { d: "M 255 88 L 263 92 L 255 96 Z", fill: "var(--muted)" }));
     mNegSvg.appendChild(svgEl("line", { x1: 140, y1: 87, x2: 140, y2: 97, stroke: "var(--fg)", "stroke-width": 1.5 }));
-    mNegSvg.appendChild(svgEl("text", { x: 140, y: 110, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, "0"));
+    mNegSvg.appendChild(svgEl("text", { x: 140, y: 110, "text-anchor": "middle", fill: "var(--fg)", "font-size": 13 }, "c"));
 
-    mNegSvg.appendChild(svgEl("text", { x: 140, y: 130, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 12 }, "> 0 的反面必须是 ≤ 0，不能漏掉 0！"));
+    mNegSvg.appendChild(svgEl("text", { x: 140, y: 130, "text-anchor": "middle", fill: "var(--hl)", "font-weight": 700, "font-size": 12 }, "> c 的反面必须是 ≤ c，不能漏掉 c！"));
   }
 
   function initStep2() {

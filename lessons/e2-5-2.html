@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
-<script defer src="../assets/lesson.js?v=sha256-0e8d418be294566c"></script>
+<script defer src="../assets/lesson.js?v=sha256-668847f47fd3a8a0"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -288,7 +288,7 @@
 
 <section class="step" data-title="动手">
   <h3>导数运算与切线斜率双屏联动台</h3>
-  <p class="small">上图为原函数 \(f(x) = x e^{-x}\)，下图为其导函数 \(f'(x) = (1-x)e^{-x}\)。滑动 \(x_0\)，实时观察原函数上的切线姿态与导函数曲线高度的绝对对应关系：</p>
+  <p class="small">上图为原函数 \(f(x) = x e^{-2x}\)，下图为其导函数 \(f'(x) = (1-2x)e^{-2x}\)。滑动 \(x_0\)，实时观察原函数上的切线姿态与导函数曲线高度的绝对对应关系：</p>
 
   <div class="ctrl">
     <label for="posValX">自变量位置 \(x_0\) = </label>
@@ -391,7 +391,7 @@
   var svg = document.getElementById("dualDerivSvg");
   var desc = document.getElementById("dualDesc");
 
-  // 原函数 f(x) = x * e^(-x) 在上半屏，导函数 f'(x) = (1-x) * e^(-x) 在下半屏
+  // 原函数 f(x) = x * e^(-2x) 在上半屏，导函数 f'(x) = (1-2x) * e^(-2x) 在下半屏
   var oX = 115;
   var oY1 = 96;
   var oY2 = 248;
@@ -399,8 +399,8 @@
   var scaleY1 = 48;
   var scaleY2 = 34;
 
-  function f(x) { return x * Math.exp(-x); }
-  function df(x) { return (1 - x) * Math.exp(-x); }
+  function f(x) { return x * Math.exp(-2*x); }
+  function df(x) { return (1 - 2*x) * Math.exp(-2*x); }
 
   function render() {
     var parsedX = parseInt(xIn.value, 10);
@@ -427,7 +427,7 @@
     h.push('<line x1="' + oX + '" y1="20" x2="' + oX + '" y2="142" stroke="var(--line)" stroke-width="1.2"/>');
     h.push('<text x="528" y="' + (oY1 + 4) + '" font-size="11" fill="var(--muted)">x</text>');
     h.push('<text x="' + (oX + 6) + '" y="30" font-size="11" fill="var(--muted)">y</text>');
-    h.push('<text x="515" y="32" font-size="12" font-weight="700" fill="var(--c)" text-anchor="end">原函数 f(x) = x e⁻ˣ</text>');
+    h.push('<text x="515" y="32" font-size="12" font-weight="700" fill="var(--c)" text-anchor="end">原函数 f(x) = x e⁻²ˣ</text>');
 
     // 绘制 f(x) 曲线
     var pts1 = [];
@@ -455,7 +455,7 @@
     h.push('<line x1="' + oX + '" y1="160" x2="' + oX + '" y2="284" stroke="var(--line)" stroke-width="1.2"/>');
     h.push('<text x="528" y="' + (oY2 + 4) + '" font-size="11" fill="var(--muted)">x</text>');
     h.push('<text x="' + (oX + 6) + '" y="170" font-size="11" fill="var(--muted)">y\'</text>');
-    h.push('<text x="515" y="174" font-size="12" font-weight="700" fill="var(--a)" text-anchor="end">导函数 f\'(x) = (1 - x)e⁻ˣ</text>');
+    h.push('<text x="515" y="174" font-size="12" font-weight="700" fill="var(--a)" text-anchor="end">导函数 f\'(x) = (1 - 2x)e⁻²ˣ</text>');
 
     // 绘制 f'(x) 曲线
     var pts2 = [];
@@ -477,8 +477,8 @@
 
     svg.innerHTML = h.join("");
 
-    var slopeStatus = Math.abs(curSlope) < 0.03 ? '水平切线（k=0，极值点！）' : curSlope > 0 ? '斜率为正（原函数严格递增 ↗）' : '斜率为负（原函数严格递减 ↘）';
-    desc.innerHTML = '<b>微积分核心对应关系</b>：当前 x₀ = <b>' + rawX.toFixed(1) + '</b>。上屏原函数的切线斜率 <b>k = ' + curSlope.toFixed(3) + '</b>，下屏导函数的纵坐标高度恰为 <b>f\'(x₀) = ' + curSlope.toFixed(3) + '</b>（' + slopeStatus + '）。当 x₀ = 1 时，导函数穿过横轴为 0，原函数正好到达最高峰！';
+    var slopeStatus = Math.abs(curSlope) < 1e-9 ? '水平切线（k=0，极值点！）' : curSlope > 0 ? '斜率为正（原函数严格递增 ↗）' : '斜率为负（原函数严格递减 ↘）';
+    desc.innerHTML = '<b>微积分核心对应关系</b>：当前 x₀ = <b>' + rawX.toFixed(1) + '</b>。上屏原函数的切线斜率 <b>k = ' + curSlope.toFixed(3) + '</b>，下屏导函数的纵坐标高度恰为 <b>f\'(x₀) = ' + curSlope.toFixed(3) + '</b>（' + slopeStatus + '）。当 x₀ = 0.5 时，导函数穿过横轴为 0，原函数正好到达最高峰！';
   }
 
   resetBtn.addEventListener("click", function () {

@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
-<script defer src="../assets/lesson.js?v=sha256-0e8d418be294566c"></script>
+<script defer src="../assets/lesson.js?v=sha256-668847f47fd3a8a0"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -195,7 +195,7 @@
   <div class="card">
     <p class="small">例 4</p>
     <p>\(\dfrac{y^2}{9}-\dfrac{x^2}{16}=1\)：令右端为 \(0\)，得 \(y^2=\dfrac{9}{16}x^2\)，渐近线 \(y=\pm\dfrac34x\)。</p>
-    <p>对比 \(\dfrac{x^2}{9}-\dfrac{y^2}{16}=1\)：令右端为 \(0\)，得 \(y^2=\dfrac{16}{9}x^2\)，渐近线 \(y=\pm\dfrac43x\)。分母一样，正项换了，斜率倒置。</p>
+    <p>对比 \(\dfrac{x^2}{4}-\dfrac{y^2}{9}=1\) 与 \(\dfrac{y^2}{4}-\dfrac{x^2}{9}=1\)：令右端为 \(0\)，渐近线分别为 \(y=\pm\dfrac32x\) 与 \(y=\pm\dfrac23x\)。同一组分母，正项换了，斜率倒置。</p>
   </div>
   <div class="card predict" data-id="try-1" data-answer="A">
     <p>自己试试：已知双曲线方程为 \(\dfrac{x^2}{4} - \dfrac{y^2}{12} = 1\)，则该双曲线的离心率 \(e\) 和渐近线方程分别为：</p>
@@ -943,18 +943,18 @@
   function scene(axis,v,a,b){var m={kind:"hyperbola",a:a,b:b,axis:axis},p=chart(fig,m,v),c=Math.hypot(a,b);p.line(-6,0,6,0,"axis");p.line(0,-5.5,0,5.5,"axis");var k=axis==="x"?b/a:a/b;p.line(-5,-5*k,5,5*k,"asymptote","5 4");p.line(-5,5*k,5,-5*k,"asymptote","5 4");p.curve(-.95,.95,1);p.curve(-.95,.95,-1);p.dot(axis==="x"?-c:0,axis==="x"?0:-c,"focus");p.dot(axis==="x"?c:0,axis==="x"?0:c,"focus");return p;}
   function draw(){fig.innerHTML="";
     if(mode==="def"){
-      var p=scene("x",{ox:270,oy:155,u:20},3,4);
-      p.line(-3,-4,3,-4);p.line(3,-4,3,4);p.line(3,4,-3,4);p.line(-3,4,-3,-4);p.line(0,0,3,4,"diagonal");
-      text(fig,p.X(1.5),p.Y(-.8),"a=3");text(fig,p.X(3.8),p.Y(2),"b=4");text(fig,p.X(1.1),p.Y(3.3),"c=5");
-      cap.textContent="双曲线x²/9−y²/16=1，a=3、b=4、c=√(a²+b²)=5。矩形宽2a、高2b，半对角线长c；矩形对角线所在直线是渐近线y=±(4/3)x。焦点在(±5,0)，两焦半径之差绝对值恒为2a=6。";
+      var p=scene("x",{ox:270,oy:155,u:20},2,3);
+      p.line(-2,-3,2,-3);p.line(2,-3,2,3);p.line(2,3,-2,3);p.line(-2,3,-2,-3);p.line(0,0,2,3,"diagonal");
+      text(fig,p.X(1),p.Y(-.8),"a=2");text(fig,p.X(2.8),p.Y(1.5),"b=3");text(fig,p.X(.8),p.Y(2.6),"c=√13");
+      cap.textContent="双曲线x²/4−y²/9=1，a=2、b=3、c=√(a²+b²)=√13。矩形宽2a、高2b，半对角线长c；矩形对角线所在直线是渐近线y=±(3/2)x。焦点在(±√13,0)，两焦半径之差绝对值恒为2a=4。";
     }else if(mode==="asymp"){
-      var p=scene("x",{ox:270,oy:155,u:20},3,4),t=.85,P=p.at(t,1),k=4/3,A=k,B=-1,dot=A*P.x+B*P.y,qx=P.x-A*dot/(A*A+B*B),qy=P.y-B*dot/(A*A+B*B);
+      var p=scene("x",{ox:270,oy:155,u:20},2,3),t=.85,P=p.at(t,1),k=3/2,A=k,B=-1,dot=A*P.x+B*P.y,qx=P.x-A*dot/(A*A+B*B),qy=P.y-B*dot/(A*A+B*B);
       p.dot(P.x,P.y,"point","P",13,-15);p.dot(qx,qy,"foot","Q",-15,-15);p.line(P.x,P.y,qx,qy,"projection");
       cap.textContent="同一条双曲线与渐近线按真实方程绘制。P到渐近线的垂足Q由向量投影计算，PQ垂直该渐近线。沿单支趋向无穷远时距离趋于0；曲线始终在对应渐近线的一侧，不相交。";
     }else{
-      scene("x",{ox:135,oy:154,u:12},3,4);scene("y",{ox:405,oy:154,u:12},3,4);
+      scene("x",{ox:135,oy:154,u:12},2,3);scene("y",{ox:405,oy:154,u:12},2,3);
       text(fig,135,282,"x²为正：左右支");text(fig,405,282,"y²为正：上下支");
-      cap.textContent="左图x²/9−y²/16=1，焦点在x轴；右图y²/9−x²/16=1，焦点在y轴。两支均由参数方程cosh/sinh生成且彼此分离。焦点轴由正项决定，不能比较分母大小来判断。";
+      cap.textContent="左图x²/4−y²/9=1，焦点在x轴；右图y²/4−x²/9=1，焦点在y轴。两支均由参数方程cosh/sinh生成且彼此分离。焦点轴由正项决定，不能比较分母大小来判断。";
     }
   }
   document.querySelectorAll(".micro-box .micro-tab").forEach(function(b){b.addEventListener("click",function(){mode=b.getAttribute("data-mode");document.querySelectorAll(".micro-box .micro-tab").forEach(function(t){t.classList.toggle("active",t===b);});draw();});});draw();

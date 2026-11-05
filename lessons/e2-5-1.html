@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
-<script defer src="../assets/lesson.js?v=sha256-0e8d418be294566c"></script>
+<script defer src="../assets/lesson.js?v=sha256-668847f47fd3a8a0"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -134,7 +134,7 @@
   <!-- 组件三：色彩语义主公式 -->
   <h3>2. 平均变化率、导数与几何意义主公式</h3>
   <p>导数是平均变化率在区间无限收缩时的极限，几何上严格对应切线的斜率：</p>
-  <div class="key" style="text-align:center;padding:12px;background:#f8fafc;border-left:4px solid #0284c7;border-radius:6px;margin:12px 0">
+  <div class="key" style="color:#1e293b;text-align:center;padding:12px;background:#f8fafc;border-left:4px solid #0284c7;border-radius:6px;margin:12px 0">
     <div style="font-size:15px">
       割线斜率（平均变化率）：\(\color{#0284c7}{\dfrac{\Delta y}{\Delta x}} = \dfrac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\)
     </div>
@@ -241,9 +241,9 @@
   <div class="trap-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin:16px 0">
     <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
       <div style="font-weight:700;color:#dc2626;font-size:14px;margin-bottom:6px">⚠️ 误区一：混淆“在点处”与“过点”</div>
-      <div style="font-size:14px;color:#991b1b;margin-bottom:4px">❌ 错误：求过原点与 \(y=x^2+1\) 的切线，直接令 \(k=f'(0)=0\)</div>
+      <div style="font-size:14px;color:#991b1b;margin-bottom:4px">❌ 错误：求过原点与 \(y=x^2+9\) 的切线，直接令 \(k=f'(0)=0\)</div>
       <div style="font-size:14px;color:#166534;background:#dcfce7;padding:6px;border-radius:6px">
-        ✅ 正确：原点不在曲线上！必须设切点 \((t, t^2+1)\)，解得 \(t=\pm1\)，切线有 \(y=\pm2x\) 两条！
+        ✅ 正确：原点不在曲线上！必须设切点 \((t, t^2+9)\)，由 \(0=9-t^2\) 解得 \(t=\pm3\)，切线有 \(y=\pm6x\) 两条！
       </div>
     </div>
     <div class="trap-card" style="border:1px solid #fecaca;background:#fff5f5;border-radius:10px;padding:14px">
@@ -268,7 +268,7 @@
       <svg id="m-der-trap-fig" viewBox="0 0 540 260" role="img" aria-label="过原点向抛物线作两条切线与三次函数原点的水平切线" style="width:100%;height:auto;display:block"></svg>
     </div>
     <div style="font-size:14px;color:var(--text-subtle,#64748b);margin-top:6px">
-      左图：过原点向 \(y=x^2+1\) 引切线，对称产生两条切线 \(y=\pm2x\)；右图：\(y=x^3\) 在原点的切线 \(y=0\) 直接穿越拐点。
+      左图：过原点向 \(y=x^2+9\) 引切线，对称产生两条切线 \(y=\pm6x\)；右图：\(y=x^3\) 在原点的切线 \(y=0\) 直接穿越拐点。
     </div>
   </div>
 
@@ -600,7 +600,7 @@
   function label(svg, x, y, text, color, anchor) {
     return add(svg, "text", {x:x, y:y, fill:color || colors.ink, "font-size":24, "text-anchor":anchor || "middle"}, text);
   }
-  function value(model, x) { return model === "cubic" ? x*x*x : model === "half-square" ? x*x/2 : x*x+1; }
+  function value(model, x) { return model === "cubic" ? x*x*x : model === "half-square" ? x*x/2 : x*x+9; }
   function slope(model, x) { return model === "cubic" ? 3*x*x : model === "half-square" ? x : 2*x; }
   function project(v, x, y) { return {x:v.ox+x*v.sx, y:v.oy-y*v.sy}; }
   function metadata(v, model, role) { return {"data-role":role, "data-model":model, "data-ox":v.ox, "data-oy":v.oy, "data-sx":v.sx, "data-sy":v.sy}; }
@@ -652,9 +652,9 @@
     label(svg,270,28,"放大 P 附近",colors.ink);label(svg,270,294,"切线 y = x − 0.5",colors.tangent);
   }
   function externalTangents(svg,v) {
-    var model="square-plus-one";
-    curve(svg,model,v,-1.6,1.6,[-1,1]);
-    [-1,1].forEach(function(x){tangent(svg,model,v,x,Math.min(0,x*1.6),Math.max(0,x*1.6));point(svg,model,v,x,"contact");});
+    var model="square-plus-nine";
+    curve(svg,model,v,-4.2,4.2,[-3,3]);
+    [-3,3].forEach(function(x){tangent(svg,model,v,x,Math.min(0,x*1.6),Math.max(0,x*1.6));point(svg,model,v,x,"contact");});
     var o=project(v,0,0);add(svg,"circle",{cx:o.x,cy:o.y,r:5,fill:colors.secant,"data-role":"external"});
     label(svg,o.x,o.y+31,"O(0,0)",colors.secant);
   }
@@ -664,21 +664,21 @@
     var p=point(svg,"half-square",left,1,"P");label(svg,p.x+10,p.y-14,"P",colors.curve,"start");
     label(svg,135,30,"在 P 处",colors.ink);label(svg,135,63,"y=x²/2",colors.curve);
     add(svg,"line",{x1:270,y1:18,x2:270,y2:285,stroke:colors.line});
-    externalTangents(svg,{ox:405,oy:245,sx:60,sy:40});
-    label(svg,405,30,"过 O 点",colors.ink);label(svg,405,63,"y=x²+1",colors.curve);
+    externalTangents(svg,{ox:405,oy:245,sx:22,sy:6});
+    label(svg,405,30,"过 O 点",colors.ink);label(svg,405,63,"y=x²+9",colors.curve);
   }
   function renderFig() {
     var svg=document.getElementById("m-der-fig"),desc=document.getElementById("m-der-desc");
     if(!svg)return;svg.innerHTML="";
     if(curTab===0){drawTab0(svg);if(desc)desc.innerHTML="<b>① 割线逼近切线</b>：同一条曲线 y=x²/2 上固定 P(1,0.5)，取 Q₁ 的横坐标为 3、Q₂ 为 1.6。两条割线都经过 P 和各自的 Q；斜率从 2 降至 1.3，继续逼近切线斜率 f′(1)=1。";}
     else if(curTab===1){drawTab1(svg);if(desc)desc.innerHTML="<b>② 局部以直代曲</b>：放大同一个切点 P(1,0.5) 附近，曲线仍为 y=x²/2，切线为 y=x−0.5。它们在 P 处相遇且斜率相同；差值为 (x−1)²/2，越靠近 P 越小。";}
-    else{drawTab2(svg);if(desc)desc.innerHTML="<b>③ 在点处与过点</b>：左图是在曲线上的 P(1,0.5) 处作切线；右图的 O(0,0) 不在 y=x²+1 上。设切点横坐标 t，切线过 O 得 1−t²=0，所以切点为 (−1,2)、(1,2)，两条切线为 y=−2x、y=2x。";}
+    else{drawTab2(svg);if(desc)desc.innerHTML="<b>③ 在点处与过点</b>：左图是在曲线上的 P(1,0.5) 处作切线；右图的 O(0,0) 不在 y=x²+9 上。设切点横坐标 t，切线过 O 得 9−t²=0，所以切点为 (−3,18)、(3,18)，两条切线为 y=−6x、y=6x。";}
   }
   window.setMDerTab=function(idx){curTab=idx;document.querySelectorAll("#m-der-tabs button").forEach(function(b,i){b.style.borderColor=i===idx?"var(--a)":"var(--line)";b.style.background=i===idx?"var(--a)":"transparent";b.style.color=i===idx?"var(--card)":"var(--fg)";});renderFig();};
   function drawTrapFig() {
     var svg=document.getElementById("m-der-trap-fig");if(!svg)return;svg.innerHTML="";
-    externalTangents(svg,{ox:135,oy:190,sx:55,sy:40});label(svg,135,28,"y=x²+1",colors.curve);
-    label(svg,135,245,"y=±2x",colors.tangent);
+    externalTangents(svg,{ox:135,oy:225,sx:22,sy:6});label(svg,135,28,"y=x²+9",colors.curve);
+    label(svg,135,245,"y=±6x",colors.tangent);
     add(svg,"line",{x1:270,y1:15,x2:270,y2:240,stroke:colors.line});
     var v={ox:405,oy:135,sx:62,sy:27};
     curve(svg,"cubic",v,-1.4,1.4,[0]);tangent(svg,"cubic",v,0,-1.55,1.55);

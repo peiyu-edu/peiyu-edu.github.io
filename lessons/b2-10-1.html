@@ -9,7 +9,7 @@
 <script defer src="../assets/katex/auto-render.min.js"></script>
 <link rel="stylesheet" href="../assets/gaokao-solutions.css?v=sha256-bc0facce2a3cf9bc">
 <script defer src="../assets/gaokao-solutions.js?v=sha256-aa28cf0b8984a341"></script>
-<script defer src="../assets/lesson.js?v=sha256-0e8d418be294566c"></script>
+<script defer src="../assets/lesson.js?v=sha256-668847f47fd3a8a0"></script>
 <script defer src="../assets/student-textbook.js"></script>
   <script defer src="../assets/video.js?v=vs-63cdef4e2d59"></script>
 <style>
@@ -105,8 +105,8 @@
     <div class="concept-card">
       <div class="concept-head"><span class="badge-pill">思维陷阱</span> 基本事件 vs 类别合并</div>
       <p><b>基本事件</b>：构成样本空间的单元素子集，古典概型要求<b>等可能性</b>（每个点权重均为 \(\frac{1}{n}\)）。</p>
-      <p><b>类别合并</b>：将结果按某种特征粗暴归类（如两枚硬币正面数 0, 1, 2）。各类别含样本点数不同，<b>不再等可能</b>！</p>
-      <p class="small">警惕：抛两枚硬币“一正一反”包含（正反）与（反正）两点，概率为 \(\frac{2}{4}=\frac12\)，绝非三类平分的 \(\frac13\)！</p>
+      <p><b>类别合并</b>：将结果按某种特征粗暴归类（如七张编号卡按“1、2、大于2”分组）。各类别含样本点数不同，<b>不再等可能</b>！</p>
+      <p class="small">警惕：均匀抽取这七张编号卡时，“大于 2”这一类包含多个样本点，“编号为 1”只含一个样本点。类别的机会大小不同，不能把三类平分！</p>
     </div>
   </div>
 
@@ -250,14 +250,8 @@
   <div class="trap-grid">
     <div class="trap-card">
       <div class="trap-tag">翻车现场 1：粗暴合并类别，丢掉等可能</div>
-      <div class="compare-row bad">
-        <span class="icon">❌</span>
-        <span>抛两枚硬币求“一正一反”，误认为只有“两正、两反、一正一反”3 类，算出 \(P=\frac13\)</span>
-      </div>
-      <div class="compare-row good">
-        <span class="icon">✔</span>
-        <span>展开完整有序样本点 \(\Omega=\{\text{正正},\text{正反},\text{反正},\text{反反}\}\)，“一正一反”占 2 点，\(P=\frac24=\frac12\)</span>
-      </div>
+      <div class="compare-row bad"><span class="icon">❌</span><span>从标有 1 到 7 的七张同样卡片中随机抽一张，把结果合并成“抽到 1、抽到 2、抽到大于 2 的数”三类，认为每类概率都是 \(\frac13\)。</span></div>
+      <div class="compare-row good"><span class="icon">✔</span><span>先展开等可能样本点：\(\Omega=\{1,2,3,4,5,6,7\}\)。事件“抽到大于 2 的数”含 5 个样本点，概率为 \(\frac57\)，合并后的三类并不等可能。</span></div>
     </div>
     <div class="trap-card">
       <div class="trap-tag">翻车现场 2：非互斥事件盲目直接相加</div>
@@ -284,9 +278,9 @@
   </div>
 
   <div class="micro-box" style="margin-top:14px;">
-    <div class="micro-title">反例微图解：两枚硬币样本空间网格（为什么“一正一反”是 2 个样本点）</div>
-    <svg id="m-prob-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="两枚硬币样本点等可能分解反例图"></svg>
-    <div class="micro-caption">有序数对（第 1 枚，第 2 枚）展开为 \(2 \times 2 = 4\) 个等可能格点，对角线两格同属“一正一反”，权重是单格的 2 倍！</div>
+    <div class="micro-title">反例微图解：七张编号卡的样本点与类别（为什么不能三类平分）</div>
+    <svg id="m-prob-trap-fig" class="micro-fig" viewBox="0 0 540 170" role="img" aria-label="七张编号卡等可能样本点与三种不等可能类别"></svg>
+    <div class="micro-caption">七张同样的编号卡是七个等可能样本点；“大于 2”这一类占五个点，不能把三个类别当成等可能。</div>
   </div>
 
   <details class="more">
@@ -534,7 +528,7 @@
   var coins = document.getElementById("coins"), nin = document.getElementById("nin"), kin = document.getElementById("kin"), coinIsoBtn = document.getElementById("coiniso");
   var n, k, coinIso = false;
   function comb(a, b) { var r = 1; for (var i = 1; i <= b; i++) r = r * (a - b + i) / i; return Math.round(r); }
-  function coinReset() { n = 2; k = 1; nin.value = n; kin.value = k; coinDraw(); }
+  function coinReset() { n = 4; k = 2; nin.value = n; kin.value = k; coinDraw(); }
   function coinDraw() {
     k = clamp(k, 0, n); kin.max = n; kin.value = k;
     document.getElementById("nout").textContent = n;
@@ -786,47 +780,15 @@
       return el;
     }
 
-    // Grid coordinates
-    // 2x2 grid on left side: x: 70, y: 40, cell size: 70
-    s("text", { x: 140, y: 22, fill: "var(--fg)", "font-size": "11.5", "font-weight": "bold", "text-anchor": "middle" }, "有序样本空间 Ω （4 个等可能格点）");
-
-    // Headers
-    s("text", { x: 105, y: 42, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "第2枚： 正");
-    s("text", { x: 175, y: 42, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "middle" }, "第2枚： 反");
-    s("text", { x: 55, y: 82, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "end" }, "第1枚： 正");
-    s("text", { x: 55, y: 132, fill: "var(--muted)", "font-size": "10.5", "text-anchor": "end" }, "第1枚： 反");
-
-    // Cells
-    // (正, 正)
-    s("rect", { x: 70, y: 55, width: 70, height: 48, fill: "var(--card)", stroke: "var(--line)" });
-    s("text", { x: 105, y: 77, fill: "var(--fg)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(正, 正)");
-    s("text", { x: 105, y: 93, fill: "var(--muted)", "font-size": "9.5", "text-anchor": "middle" }, "25% (1/4)");
-
-    // (正, 反) -> Highlight blue
-    s("rect", { x: 140, y: 55, width: 70, height: 48, fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 1.5 });
-    s("text", { x: 175, y: 77, fill: "#1d4ed8", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(正, 反)");
-    s("text", { x: 175, y: 93, fill: "#2563eb", "font-size": "9.5", "font-weight": "bold", "text-anchor": "middle" }, "一正一反");
-
-    // (反, 正) -> Highlight blue
-    s("rect", { x: 70, y: 103, width: 70, height: 48, fill: "rgba(37,99,235,0.18)", stroke: "#2563eb", "stroke-width": 1.5 });
-    s("text", { x: 105, y: 125, fill: "#1d4ed8", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(反, 正)");
-    s("text", { x: 105, y: 141, fill: "#2563eb", "font-size": "9.5", "font-weight": "bold", "text-anchor": "middle" }, "一正一反");
-
-    // (反, 反)
-    s("rect", { x: 140, y: 103, width: 70, height: 48, fill: "var(--card)", stroke: "var(--line)" });
-    s("text", { x: 175, y: 125, fill: "var(--fg)", "font-size": "11", "font-weight": "bold", "text-anchor": "middle" }, "(反, 反)");
-    s("text", { x: 175, y: 141, fill: "var(--muted)", "font-size": "9.5", "text-anchor": "middle" }, "25% (1/4)");
-
-    // Right Callout Box
-    s("rect", { x: 242, y: 35, width: 286, height: 116, rx: 6, fill: "var(--card)", stroke: "var(--line)", "stroke-width": 1.5 });
-    s("text", { x: 254, y: 60, fill: "#dc2626", "font-size": "11.5", "font-weight": "bold" }, "❌ 典型误区：直接数类别");
-    s("text", { x: 258, y: 78, fill: "var(--muted)", "font-size": "10.5" }, "看作“两正、一正一反、两反”3类 → 误算 1/3");
-
-    s("line", { x1: 254, y1: 90, x2: 516, y2: 90, stroke: "var(--line)", "stroke-width": 1 });
-
-    s("text", { x: 254, y: 110, fill: "#059669", "font-size": "11.5", "font-weight": "bold" }, "✔ 正确算法：展开等可能样本点");
-    s("text", { x: 258, y: 128, fill: "var(--fg)", "font-size": "10.5", "font-weight": "bold" }, "“一正一反”含 2 个样本点 → P = 2/4 = 1/2");
-    s("text", { x: 258, y: 143, fill: "var(--muted)", "font-size": 10 }, "对角线两点机会翻倍，绝非三者均等！");
+    s("text", { x: 270, y: 20, fill: "var(--fg)", "font-size": 13, "font-weight": 700, "text-anchor": "middle" }, "七张同样的编号卡：每张被抽到的概率为 1/7");
+    for (var n = 1; n <= 7; n++) {
+      var x = 17 + (n - 1) * 73, selected = n > 2;
+      s("rect", { x: x, y: 36, width: 64, height: 44, rx: 5, fill: selected ? "var(--ok-soft)" : "var(--card)", stroke: selected ? "var(--a)" : "var(--line)" });
+      s("text", { x: x + 32, y: 64, fill: selected ? "var(--a)" : "var(--fg)", "font-size": 18, "font-weight": 700, "text-anchor": "middle" }, String(n));
+    }
+    s("text", { x: 270, y: 108, fill: "var(--b)", "font-size": 13, "text-anchor": "middle" }, "三类：抽到1、抽到2、抽到大于2的数");
+    s("text", { x: 270, y: 136, fill: "var(--a)", "font-size": 14, "font-weight": 700, "text-anchor": "middle" }, "对应概率为 1/7、1/7、5/7，并不等可能");
+    s("text", { x: 270, y: 160, fill: "var(--muted)", "font-size": 12, "text-anchor": "middle" }, "先数等可能的样本点，再合并成所求事件");
   }
 
   initMProbFig();

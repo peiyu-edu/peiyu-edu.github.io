@@ -6,13 +6,18 @@
       本节没有信号时退而练本章。
    3. 手机宽度（≤ 700px）：默认折叠地铁图，泳道矩阵和筛选条移到检查器上方；可展开地铁图。
    依赖：window.PEIYU_SEC_META、PEIYU_COMPUTE_MASTERY（wiki.js）、PEIYU_CUES / PEIYU_CUE_TRAINER（wiki-cues.js、wiki-trainer.js）。 */
-(function () {
+(function initMapActions() {
   "use strict";
 
   var SEC_META = window.PEIYU_SEC_META || {};
   var CARDS = window.PEIYU_WIKI_CARDS || [];
   var MOBILE = "(max-width: 700px)";
-  if (!Object.keys(SEC_META).length) return;
+  if (!Object.keys(SEC_META).length) {
+    if (window.PEIYU_WIKI_GRAPH_READY) window.PEIYU_WIKI_GRAPH_READY.then(function () {
+      if (Object.keys(window.PEIYU_SEC_META || {}).length) initMapActions();
+    }).catch(function () { /* The map shows its own load error. */ });
+    return;
+  }
 
   /* ---------- 样式 ---------- */
   (function injectStyle() {

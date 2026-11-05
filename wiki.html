@@ -194,7 +194,7 @@
   .lab .lab-scroll-hint { margin:4px 0 7px; font-size:14px; line-height:1.6; color:var(--muted); }
 </style>
 <script defer src="assets/hci.js?v=vs-6c5f1bf60d44"></script>
-<link rel="stylesheet" href="assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="assets/knowledge-core.js"></script><script defer src="assets/cn-quotes.js?v=bf7f303db75a"></script><script defer src="assets/learning-state.js?v=50710be8ccc0"></script><script defer src="assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="assets/knowledge-core.js"></script><script defer src="assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body>
 <div class="wrap">
@@ -345,9 +345,11 @@
 <nav class="lf-resources" aria-label="补充学习资源"><a href="wiki.html">概念与方法卡</a><a href="textbook-map.html">教材路线图</a><a href="anatomy.html">数学实验台</a><a href="review.html">高考压轴</a></nav><footer>培玉智能 · 高中数学互动知识库（Wiki）。依据人教 A 版教材与教学约束提炼，真题与章节互动页双向联通。<span class="credit">设计：余博西 · 武江铮 · 赵亭朴</span></footer>
 </div>
 
-<script src="assets/wiki.js?v=vs-68e48a8818a5"></script>
+<script src="assets/cn-quotes.js"></script>
+<script src="assets/learning-state.js"></script>
+<script src="assets/wiki.js?v=vs-41ed470c8bd6"></script>
 <script src="assets/wiki-cues.js?v=vs-3e93be6e5a9f"></script>
-<script src="assets/wiki-trainer.js?v=vs-8203b8fc940b"></script>
+<script src="assets/wiki-trainer.js?v=vs-c92ff9305ffa"></script>
 <script src="assets/wiki-cards.js?v=vs-25ea93c33b58"></script>
 <script src="assets/wiki-labs.js?v=vs-5d2eb0a71dbb"></script>
 <script src="assets/wiki-map-actions.js?v=vs-a127bb52f86d"></script>
@@ -725,6 +727,7 @@
   }
 
   function renderKnowledgeMap() {
+    if (!Object.keys(SEC_META).length) return;
     var svgEl = document.getElementById("kgSvg");
     var inspEl = document.getElementById("kgInspector");
     var lanesEl = document.getElementById("kgLanes");
@@ -1252,25 +1255,32 @@
   });
 
   document.addEventListener("DOMContentLoaded", function () {
-    var h = location.hash || "";
-    var chMatch = h.match(/ch=(\d+)/);
-    if (chMatch) { curCh = chMatch[1]; syncPills(); }
-    renderCards();
-    var mapSecMatch = h.match(/map=([a-z0-9-]+)/);
-    if (mapSecMatch && SEC_META[mapSecMatch[1]]) {
-      curMapSec = mapSecMatch[1];
-      switchTab("map");
-      setTimeout(function () {
-        document.getElementById("kgInspector").scrollIntoView({ block: "start" });
-      }, 60);
-    } else if (/tab=map/.test(h)) {
-      switchTab("map");
-    }
-    renderMath(document.body);
-    var cardMatch = h.match(/card-([a-z0-9-]+)/);
-    if (cardMatch) {
-      setTimeout(function () { jumpToCard(cardMatch[1]); }, 60);
-    }
+    window.PEIYU_WIKI_GRAPH_READY.then(function () {
+      var h = location.hash || "";
+      var chMatch = h.match(/ch=(\d+)/);
+      if (chMatch) { curCh = chMatch[1]; syncPills(); }
+      renderCards();
+      var mapSecMatch = h.match(/map=([a-z0-9-]+)/);
+      if (mapSecMatch && SEC_META[mapSecMatch[1]]) {
+        curMapSec = mapSecMatch[1];
+        switchTab("map");
+        setTimeout(function () {
+          document.getElementById("kgInspector").scrollIntoView({ block: "start" });
+        }, 60);
+      } else if (/tab=map/.test(h)) {
+        switchTab("map");
+      }
+      renderMath(document.body);
+      var cardMatch = h.match(/card-([a-z0-9-]+)/);
+      if (cardMatch) {
+        setTimeout(function () { jumpToCard(cardMatch[1]); }, 60);
+      }
+      if (window.PeiyuLearningState) window.PeiyuLearningState.subscribe(function () {
+        if (tabSecs.map.classList.contains("on")) renderKnowledgeMap();
+      });
+    }).catch(function () {
+      document.getElementById("kgMasterySummary").textContent = "图谱暂未加载，请刷新重试。";
+    });
   });
 })();
 </script>

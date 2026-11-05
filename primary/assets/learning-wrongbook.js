@@ -109,14 +109,20 @@
       try { return list(win.speechSynthesis.getVoices()).find(function (v) { return v.localService && /^zh/.test(v.lang); }) || null; }
       catch (_) { return null; }
     }
-    function say(text) {
-      if (!voice()) return null;
-      return button("听一听", function () {
+    // Pre-generated mp3 via primary.js (loaded data-say-only on the primary record page); local voice for the rest.
+    function sayPlayer() { return config.readAloud ? win.PeiyuSay || null : null; }
+    function say(text, low) {
+      var player = sayPlayer();
+      if (!voice() && !(player && player.has(text))) return null;
+      function local() {
         try {
           var localVoice = voice(); if (!localVoice) throw Error("local voice unavailable");
           var speech = new win.SpeechSynthesisUtterance(text); speech.lang = "zh-CN"; speech.rate = .85; speech.voice = localVoice;
           win.speechSynthesis.cancel(); win.speechSynthesis.speak(speech);
         } catch (_) { announce("这次没有朗读出来，可以看拼音。"); }
+      }
+      return button("听一听", function () {
+        if (player) player.play(text, null, { low: low, fallback: local }); else local();
       });
     }
     function safeHref(href, explanation) {
@@ -227,7 +233,8 @@
         toggle.setAttribute("aria-expanded", "false"); actions.appendChild(toggle); li.appendChild(hint);
       }
       actions.appendChild(button(hidden[q.identity] ? "恢复" : "先收起", function () { setHidden(q.identity, !hidden[q.identity]); }));
-      var speech = say(q.title + (stage === "primary" && r.prompt ? "。" + r.prompt : "")); if (speech) actions.appendChild(speech);
+      // Whole line = the mp3 key: tools/gen_say_audio.py wrongbook_text() must stay identical.
+      var speech = say(q.title + (stage === "primary" && r.prompt ? "。" + r.prompt : ""), /^p[12]/.test(r.unitId || q.owner || "")); if (speech) actions.appendChild(speech);
       li.appendChild(actions); return typeset(li);
     }
     function today() {
@@ -369,7 +376,7 @@
       if (snapshot.storage && snapshot.storage.memoryOnly) page.appendChild(el("p", "这次的记录可能保存不下来。", "lw-alert"));
       if (snapshot.storage && snapshot.storage.historyIncomplete) page.appendChild(el("p", "部分早期记录不完整，个别题的状态可能偏保守。", "lw-alert"));
       if (preferenceFailed || !storage) page.appendChild(el("p", "收起设置可能只在这次打开时有效。", "lw-alert"));
-      if (config.readAloud && !voice()) page.appendChild(el("p", "这台设备暂不支持本地朗读，可以看拼音。", "lw-note"));
+      if (config.readAloud && !voice() && !(sayPlayer() && sayPlayer().published())) page.appendChild(el("p", "这台设备暂不支持本地朗读，可以看拼音。", "lw-note"));
       var sections = [today(), wrongbook(), learned()];
       if (config.layout === "tabs") {
         var nav = el("nav", undefined, "lw-tabs"), tabs = [], panels = [sections[1], sections[2], sections[0]];

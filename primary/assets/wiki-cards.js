@@ -6,7 +6,7 @@
    - 卡片库顶部「今日待复习」面板：到期卡数、新卡数，「开始复习」只看到期卡，复习完给提示。
    - 从训练器 / 课程页 / 搜索胶囊跳过来的那张卡自动翻开。
    存储：复习计划 localStorage peiyu.hs.cards = { cardId: { g, t, due:"YYYY-MM-DD", n } }；
-   每次自评也写 peiyu.hs.log（{kind:"card", sec, id, ch, grade, correct}），记录页与图谱把「不会 / 模糊」算作该节薄弱。 */
+   每次自评也写 peiyu.hs.log（{kind:"card", sec, id, ch, grade, correct}），用于复习安排，不作为图谱作答证据。 */
 (function () {
   "use strict";
 

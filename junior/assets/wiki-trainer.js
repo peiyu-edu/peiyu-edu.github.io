@@ -83,7 +83,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
    两种模式：
    - 先想再揭晓（默认）：只给题干信号，学生在心里说出第一步，再点「揭晓」，再自评「想对了 / 没想到」。
      结果写进 localStorage peiyu.hs.log（{kind:"cue", sec, id, ch, card, correct}），格式与 lesson.js 相同，
-     「我的记录」页能导出，薄弱卡诊断与图谱掌握度会把它算进去。上次「没想到」的条目下一轮优先出。
+     「我的记录」页能导出，不作为图谱作答证据。上次「没想到」的条目下一轮优先出。
    - 查表模式：原决策树平铺（题干 → 做法 + 查看卡片），做题卡壳时直接查。
    范围：跨章混合（每轮 12 条）或某一章（该章全部）。 */
 (function () {
@@ -92,6 +92,8 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   var CUES = window.PEIYU_CUES || [];
   var CH_NAMES = window.PEIYU_CUE_CHAPTERS || {};
   var SEC_META = window.PEIYU_SEC_META || {};
+  // HCI tab restoration may replace the hash while graph data is loading.
+  var bootHash = location.hash || "";
   var CARDS = window.PEIYU_WIKI_CARDS || [];
   var BY_ID = {};
   CARDS.forEach(function (c) { BY_ID[c.id] = c; });
@@ -433,7 +435,7 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
 
   /* ---------- 启动 ---------- */
   function boot() {
-    var h = location.hash || "";
+    var h = bootHash;
     var m = h.match(/(?:^|[#&])ch=(\d+)/);
     var ms = h.match(/(?:^|[#&])sec=([a-z0-9-]+)/);
     if (/tab=tree/.test(h)) {
@@ -445,8 +447,13 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     if (mode === "train") buildQueue();
     render();
   }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
-  else boot();
+  function ready() {
+    Promise.resolve(window.PEIYU_WIKI_GRAPH_READY).then(boot).catch(function () {
+      mount.textContent = "知识图谱加载失败，请刷新重试。";
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ready);
+  else ready();
 
   window.PEIYU_CUE_TRAINER = {
     rebuild: function () { buildQueue(); render(); },

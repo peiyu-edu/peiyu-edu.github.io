@@ -10,14 +10,24 @@
   // Per page: chosen question and last feedback per card; no-store answers only unlock the variant here.
   const selected = {}, feedback = {}, session = new Set(), reviewed = new Set();
   const esc = value => String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  function integer(n) {
+    if (n.length > 1 && n[0] === "0") return Array.from(n, digit => cn[Number(digit)]).join("");
+    const x = Number(n);
+    if (x < 10) return cn[x];
+    if (x < 100) return (x >= 20 ? cn[Math.floor(x / 10)] : "") + "十" + (x % 10 ? cn[x % 10] : "");
+    return n;
+  }
+  function number(n) {
+    const [whole, part] = n.split(".");
+    return integer(whole) + (part ? "点" + Array.from(part, digit => cn[Number(digit)]).join("") : "");
+  }
+  // The result is also the mp3 key: tools/gen_say_audio.py concept_spoken() must stay identical.
   function spoken(text) {
-    return text.replace(/\d+/g, n => {
-      if (n.length > 1 && n[0] === "0") return Array.from(n, digit => cn[Number(digit)]).join("");
-      const x = Number(n);
-      if (x < 10) return cn[x];
-      if (x < 100) return (x >= 20 ? cn[Math.floor(x / 10)] : "") + "十" + (x % 10 ? cn[x % 10] : "");
-      return n;
-    }).replace(/＋/g, "加").replace(/＝/g, "等于");
+    return text.replace(/(\d+(?:\.\d+)?)%/g, (_, n) => "百分之" + number(n))
+      .replace(/(\d)\s*−\s*(?=\d)/g, "$1减")
+      .replace(/\d+\.\d+|\d+/g, number)
+      .replace(/米\/(?=[时分秒])/g, "米每")
+      .replace(/＋/g, "加").replace(/＝/g, "等于");
   }
   function sayButton(text) {
     return '<button class="cc-say" type="button" data-cc-say="' + esc(spoken(text)) + '" aria-label="朗读：' + esc(text) + '">听一听</button>';
@@ -202,16 +212,22 @@
   }
   function navigate(url,push=true) {
     if(push)history.pushState(null,"",url);else history.replaceState(null,"",url);
-    if(window.speechSynthesis)speechSynthesis.cancel();
+    if(window.PeiyuSay)PeiyuSay.stop();else if(window.speechSynthesis)speechSynthesis.cancel();
     draw();
+  }
+  function browserSpeech(text, button) {
+    if(!window.speechSynthesis) { button.textContent="此设备暂不支持朗读"; return; }
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang="zh-CN"; utterance.rate=0.85; speechSynthesis.speak(utterance);
   }
   app.addEventListener("click",e=>{
     const say = e.target.closest("[data-cc-say]");
     if(say) {
-      if(!window.speechSynthesis) { say.textContent="此设备暂不支持朗读"; return; }
-      speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(say.dataset.ccSay);
-      utterance.lang="zh-CN"; utterance.rate=0.85; speechSynthesis.speak(utterance); return;
+      // Same lookup as the lesson buttons (primary.js); the browser voice only reads lines without an mp3.
+      if(window.PeiyuSay) PeiyuSay.play(say.dataset.ccSay, say, { low: !!say.closest(".cc-low"), fallback: browserSpeech });
+      else browserSpeech(say.dataset.ccSay, say);
+      return;
     }
     const target = e.target.closest("[data-choice],[data-cc-question],.cc-answer summary");
     if(!target)return;

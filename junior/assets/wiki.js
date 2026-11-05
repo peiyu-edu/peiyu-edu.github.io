@@ -1238,150 +1238,49 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
       "<p>源卡编号：" + c.sourceCards.join("、") + "。依据层级说明本卡主体内容，不把整理方法或拓展变成必学要求。</p></details>";
   }
 
-  /* 四大课程主线定义 */
-  var STRANDS = {
-    prep: { id: "prep", name: "一、预备知识与代数工具主线", short: "预备与代数", desc: "集合、逻辑、不等式、二次方程与复数——全高中的推理语言与变形地基" },
-    func: { id: "func", name: "二、函数、数列与微积分主线", short: "函数与导数", desc: "函数性质 → 指对幂与三角 → 数列差分 → 导数与变化率" },
-    geom: { id: "geom", name: "三、几何与空间代数主线", short: "几何与向量", desc: "平面向量 → 立体几何与空间向量 → 直线和圆 → 圆锥曲线" },
-    prob: { id: "prob", name: "四、计数、概率与统计主线", short: "概率与统计", desc: "抽样与用样本估计总体 → 古典概型与独立性 → 计数原理 → 随机变量与成对统计" }
-  };
-
-  /* 节名与真实数学先修图谱（覆盖高中全部 18 章 73 节完整有向无环图 DAG）
-     - prereqs: 真正的数学硬先修（含跨册、跨章依赖）
-     - unlocks: 由脚本在初始化时自动根据 prereqs 反向生成（学完本节可解锁的后置节）
-     - prev / next: 保留主认知链前后指针，兼容线性导航与自动化测试
-     - hub: 出度高、跨章综合题高频依赖的「★ 核心枢纽节」
-     - insight: 关联的培玉 3b1b 视觉洞察视频（#1–#39）
-     - comp: 关联的高中联赛一试预赛专题（FR001–FR045） */
-  var SEC_META = {
-    /* 必修一 第 1 章 集合与常用逻辑用语 */
-    "b1-1-1": { name: "1.1 集合的概念", ch: 1, strand: "prep", stage: 0, prev: null, next: "b1-1-2", prereqs: [], comp: "FR001 集合与容斥" },
-    "b1-1-2": { name: "1.2 集合间的基本关系", ch: 1, strand: "prep", stage: 0, prev: "b1-1-1", next: "b1-1-3", prereqs: ["b1-1-1"], comp: "FR001 子集计数" },
-    "b1-1-3": { name: "1.3 集合的基本运算", ch: 1, strand: "prep", stage: 0, prev: "b1-1-2", next: "b1-1-4", prereqs: ["b1-1-2"], hub: true, comp: "FR001 交并补与摩根律" },
-    "b1-1-4": { name: "1.4 充分条件与必要条件", ch: 1, strand: "prep", stage: 0, prev: "b1-1-2", next: "b1-1-5", prereqs: ["b1-1-2"] },
-    "b1-1-5": { name: "1.5 全称量词与存在量词", ch: 1, strand: "prep", stage: 0, prev: "b1-1-4", next: "b1-2-1", prereqs: ["b1-1-4"] },
-
-    /* 必修一 第 2 章 一元二次函数、方程和不等式 */
-    "b1-2-1": { name: "2.1 等式性质与不等式性质", ch: 2, strand: "prep", stage: 0, prev: "b1-1-3", next: "b1-2-2", prereqs: ["b1-1-3"], insight: "ep19 解方程就是天平" },
-    "b1-2-2": { name: "2.2 基本不等式", ch: 2, strand: "prep", stage: 0, prev: "b1-2-1", next: "b1-2-3", prereqs: ["b1-2-1"], hub: true, comp: "FR009 均值与柯西不等式" },
-    "b1-2-3": { name: "2.3 二次函数与一元二次方程、不等式", ch: 2, strand: "prep", stage: 0, prev: "b1-2-1", next: "b1-3-1", prereqs: ["b1-1-3", "b1-2-1"], hub: true, insight: "ep23 配方 / ep24 抛物线顶点", comp: "FR002 二次函数与方程根分布" },
-
-    /* 必修一 第 3 章 函数的概念与性质 */
-    "b1-3-1": { name: "3.1 函数的概念及其表示", ch: 3, strand: "func", stage: 0, prev: "b1-2-3", next: "b1-3-2", prereqs: ["b1-1-3", "b1-2-3"], hub: true, comp: "FR003 函数的定义域与值域" },
-    "b1-3-2": { name: "3.2 函数的基本性质", ch: 3, strand: "func", stage: 0, prev: "b1-3-1", next: "b1-3-3", prereqs: ["b1-1-5", "b1-2-1", "b1-2-3", "b1-3-1"], hub: true, insight: "ep26 图像平移为什么是左加右减", comp: "FR005 单调性奇偶性与周期性" },
-    "b1-3-3": { name: "3.3 幂函数", ch: 3, strand: "func", stage: 0, prev: "b1-3-2", next: "b1-3-4", prereqs: ["b1-3-2"] },
-    "b1-3-4": { name: "3.4 函数的应用（一）", ch: 3, strand: "func", stage: 0, prev: "b1-3-2", next: "b1-4-1", prereqs: ["b1-2-2", "b1-2-3", "b1-3-2"] },
-
-    /* 必修一 第 4 章 指数函数与对数函数 */
-    "b1-4-1": { name: "4.1 指数", ch: 4, strand: "func", stage: 1, prev: "b1-3-3", next: "b1-4-2", prereqs: ["b1-3-3"] },
-    "b1-4-2": { name: "4.2 指数函数", ch: 4, strand: "func", stage: 1, prev: "b1-4-1", next: "b1-4-3", prereqs: ["b1-3-2", "b1-4-1"], hub: true, comp: "FR006 指数与对数函数" },
-    "b1-4-3": { name: "4.3 对数", ch: 4, strand: "func", stage: 1, prev: "b1-4-2", next: "b1-4-4", prereqs: ["b1-4-1"] },
-    "b1-4-4": { name: "4.4 对数函数", ch: 4, strand: "func", stage: 1, prev: "b1-4-3", next: "b1-4-5", prereqs: ["b1-3-2", "b1-4-2", "b1-4-3"], hub: true, insight: "ep27 指数增长与对数：同一张图的两种读法", comp: "FR006 对数运算与性质" },
-    "b1-4-5": { name: "4.5 函数的应用（二）", ch: 4, strand: "func", stage: 1, prev: "b1-4-4", next: "b1-5-1", prereqs: ["b1-2-3", "b1-3-2", "b1-4-2", "b1-4-4"], hub: true, comp: "FR007 函数零点与方程根" },
-
-    /* 必修一 第 5 章 三角函数 */
-    "b1-5-1": { name: "5.1 任意角和弧度制", ch: 5, strand: "func", stage: 1, prev: "b1-3-1", next: "b1-5-2", prereqs: ["b1-3-1"] },
-    "b1-5-2": { name: "5.2 三角函数的概念", ch: 5, strand: "func", stage: 1, prev: "b1-5-1", next: "b1-5-3", prereqs: ["b1-5-1"], hub: true, insight: "ep28 单位圆上的 sin 和 cos" },
-    "b1-5-3": { name: "5.3 诱导公式", ch: 5, strand: "func", stage: 1, prev: "b1-5-2", next: "b1-5-4", prereqs: ["b1-5-2"] },
-    "b1-5-4": { name: "5.4 三角函数的图象与性质", ch: 5, strand: "func", stage: 1, prev: "b1-5-3", next: "b1-5-5", prereqs: ["b1-3-2", "b1-5-3"], comp: "FR012 三角函数图象与性质" },
-    "b1-5-5": { name: "5.5 三角恒等变换", ch: 5, strand: "func", stage: 1, prev: "b1-5-3", next: "b1-5-6", prereqs: ["b1-5-2", "b1-5-3"], hub: true, comp: "FR011 三角恒等变换与求值" },
-    "b1-5-6": { name: "5.6 函数 y=Asin(ωx+φ)", ch: 5, strand: "func", stage: 1, prev: "b1-5-4", next: "b1-5-7", prereqs: ["b1-3-2", "b1-5-4", "b1-5-5"], insight: "ep26 图像平移与伸缩" },
-    "b1-5-7": { name: "5.7 三角函数的应用", ch: 5, strand: "func", stage: 1, prev: "b1-5-6", next: "b2-6-1", prereqs: ["b1-5-6"] },
-
-    /* 必修二 第 6 章 平面向量及其应用 */
-    "b2-6-1": { name: "6.1 平面向量的概念", ch: 6, strand: "geom", stage: 2, prev: "b1-5-2", next: "b2-6-2", prereqs: ["b1-5-2"] },
-    "b2-6-2": { name: "6.2 平面向量的运算", ch: 6, strand: "geom", stage: 2, prev: "b2-6-1", next: "b2-6-3", prereqs: ["b1-5-2", "b2-6-1"], insight: "ep32 向量加法：首尾相接", comp: "FR015 平面向量线性运算与数量积" },
-    "b2-6-3": { name: "6.3 平面向量基本定理及坐标表示", ch: 6, strand: "geom", stage: 2, prev: "b2-6-2", next: "b2-6-4", prereqs: ["b2-6-2"], hub: true, comp: "FR016 向量坐标与极化恒等式" },
-    "b2-6-4": { name: "6.4 平面向量的应用", ch: 6, strand: "geom", stage: 2, prev: "b2-6-3", next: "b2-7-1", prereqs: ["b1-2-2", "b1-5-5", "b2-6-2", "b2-6-3"], hub: true, comp: "FR013 正余弦定理与解三角形" },
-
-    /* 必修二 第 7 章 复数 */
-    "b2-7-1": { name: "7.1 复数的概念", ch: 7, strand: "prep", stage: 2, prev: "b1-2-3", next: "b2-7-2", prereqs: ["b1-2-3", "b2-6-3"] },
-    "b2-7-2": { name: "7.2 复数的四则运算", ch: 7, strand: "prep", stage: 2, prev: "b2-7-1", next: "b2-7-3", prereqs: ["b2-7-1"], insight: "ep33 乘以 i 就是转 90°", comp: "FR017 复数运算与几何意义" },
-    "b2-7-3": { name: "7.3 复数的三角表示（选学）", ch: 7, strand: "prep", stage: 2, prev: "b2-7-2", next: "b2-8-1", prereqs: ["b1-5-5", "b2-7-2"], insight: "ep33 复数旋转与棣莫弗定理", comp: "FR017 单位根与复数三角式" },
-
-    /* 必修二 第 8 章 立体几何初步 */
-    "b2-8-1": { name: "8.1 基本立体图形", ch: 8, strand: "geom", stage: 2, prev: "b2-6-1", next: "b2-8-2", prereqs: [] },
-    "b2-8-2": { name: "8.2 立体图形的直观图", ch: 8, strand: "geom", stage: 2, prev: "b2-8-1", next: "b2-8-3", prereqs: ["b2-8-1"] },
-    "b2-8-3": { name: "8.3 简单几何体的表面积与体积", ch: 8, strand: "geom", stage: 2, prev: "b2-8-2", next: "b2-8-4", prereqs: ["b2-8-1", "b2-8-2"], insight: "ep14 圆锥为什么是圆柱的 1/3", comp: "FR020 立体几何体积与外接球" },
-    "b2-8-4": { name: "8.4 空间点、直线、平面之间的位置关系", ch: 8, strand: "geom", stage: 2, prev: "b2-8-1", next: "b2-8-5", prereqs: ["b2-8-1"] },
-    "b2-8-5": { name: "8.5 空间直线、平面的平行", ch: 8, strand: "geom", stage: 2, prev: "b2-8-4", next: "b2-8-6", prereqs: ["b2-8-4"] },
-    "b2-8-6": { name: "8.6 空间直线、平面的垂直", ch: 8, strand: "geom", stage: 2, prev: "b2-8-5", next: "e1-1-1", prereqs: ["b2-8-4", "b2-8-5"], hub: true, comp: "FR021 空间线面关系与二面角" },
-
-    /* 必修二 第 9 章 统计 */
-    "b2-9-1": { name: "9.1 随机抽样", ch: 9, strand: "prob", stage: 2, prev: "b1-1-1", next: "b2-9-2", prereqs: ["b1-1-1"] },
-    "b2-9-2": { name: "9.2 用样本估计总体", ch: 9, strand: "prob", stage: 2, prev: "b2-9-1", next: "b2-9-3", prereqs: ["b2-9-1"], hub: true, insight: "ep35 平均数就是削峰填谷" },
-    "b2-9-3": { name: "9.3 统计案例", ch: 9, strand: "prob", stage: 2, prev: "b2-9-2", next: "b2-10-1", prereqs: ["b2-9-2"] },
-
-    /* 必修二 第 10 章 概率 */
-    "b2-10-1": { name: "10.1 随机事件与概率", ch: 10, strand: "prob", stage: 2, prev: "b1-1-3", next: "b2-10-2", prereqs: ["b1-1-3"], hub: true, comp: "FR030 古典概型与几何概型" },
-    "b2-10-2": { name: "10.2 事件的相互独立性", ch: 10, strand: "prob", stage: 2, prev: "b2-10-1", next: "b2-10-3", prereqs: ["b2-10-1"] },
-    "b2-10-3": { name: "10.3 频率与概率", ch: 10, strand: "prob", stage: 2, prev: "b2-10-2", next: "e3-6-1", prereqs: ["b2-9-2", "b2-10-1"], insight: "ep36 抛硬币：频率为什么会稳定" },
-
-    /* 选必一 第 1 章 空间向量与立体几何 */
-    "e1-1-1": { name: "1.1 空间向量及其运算", ch: 11, strand: "geom", stage: 3, prev: "b2-6-2", next: "e1-1-2", prereqs: ["b2-6-2", "b2-8-4"] },
-    "e1-1-2": { name: "1.2 空间向量基本定理", ch: 11, strand: "geom", stage: 3, prev: "e1-1-1", next: "e1-1-3", prereqs: ["b2-6-3", "e1-1-1"] },
-    "e1-1-3": { name: "1.3 空间向量及其运算的坐标表示", ch: 11, strand: "geom", stage: 3, prev: "e1-1-2", next: "e1-1-4", prereqs: ["b2-6-3", "b2-8-6", "e1-1-2"] },
-    "e1-1-4": { name: "1.4 空间向量的应用", ch: 11, strand: "geom", stage: 3, prev: "e1-1-3", next: "e1-2-1", prereqs: ["b2-8-5", "b2-8-6", "e1-1-3"], hub: true, comp: "FR022 空间向量与立体几何综合" },
-
-    /* 选必一 第 2 章 直线和圆的方程 */
-    "e1-2-1": { name: "2.1 直线的倾斜角与斜率", ch: 12, strand: "geom", stage: 3, prev: "b2-6-3", next: "e1-2-2", prereqs: ["b1-5-2", "b2-6-3"], insight: "ep22 斜率：一次函数的坡度" },
-    "e1-2-2": { name: "2.2 直线的方程", ch: 12, strand: "geom", stage: 3, prev: "e1-2-1", next: "e1-2-3", prereqs: ["e1-2-1"], hub: true, comp: "FR023 直线方程与对称问题" },
-    "e1-2-3": { name: "2.3 直线的交点坐标与距离公式", ch: 12, strand: "geom", stage: 3, prev: "e1-2-2", next: "e1-2-4", prereqs: ["b2-6-3", "e1-2-2"] },
-    "e1-2-4": { name: "2.4 圆的方程", ch: 12, strand: "geom", stage: 3, prev: "e1-2-3", next: "e1-2-5", prereqs: ["b1-2-3", "e1-2-3"] },
-    "e1-2-5": { name: "2.5 直线与圆、圆与圆的位置关系", ch: 12, strand: "geom", stage: 3, prev: "e1-2-4", next: "e1-3-1", prereqs: ["b1-2-3", "e1-2-3", "e1-2-4"], hub: true, comp: "FR024 圆的方程与切线弦长" },
-
-    /* 选必一 第 3 章 圆锥曲线的方程 */
-    "e1-3-1": { name: "3.1 椭圆", ch: 13, strand: "geom", stage: 3, prev: "e1-2-5", next: "e1-3-2", prereqs: ["b1-2-2", "b1-2-3", "b2-6-3", "e1-2-2", "e1-2-4"], hub: true, comp: "FR025 椭圆性质与解析几何联立" },
-    "e1-3-2": { name: "3.2 双曲线", ch: 13, strand: "geom", stage: 3, prev: "e1-3-1", next: "e1-3-3", prereqs: ["b1-2-3", "e1-2-2", "e1-3-1"], comp: "FR026 双曲线与渐近线" },
-    "e1-3-3": { name: "3.3 抛物线", ch: 13, strand: "geom", stage: 3, prev: "e1-3-2", next: "e2-4-1", prereqs: ["b1-2-3", "e1-2-3", "e1-3-1"], comp: "FR027 抛物线焦半径与定点定值" },
-
-    /* 选必二 第 4 章 数列 */
-    "e2-4-1": { name: "4.1 数列的概念", ch: 14, strand: "func", stage: 4, prev: "b1-3-1", next: "e2-4-2", prereqs: ["b1-3-1"], comp: "FR008 递推数列与通项" },
-    "e2-4-2": { name: "4.2 等差数列", ch: 14, strand: "func", stage: 4, prev: "e2-4-1", next: "e2-4-3", prereqs: ["b1-2-3", "e2-4-1"], hub: true, insight: "ep29 等差数列求和 / ep39 差分：离散的导数", comp: "FR008 等差数列与高阶差分" },
-    "e2-4-3": { name: "4.3 等比数列", ch: 14, strand: "func", stage: 4, prev: "e2-4-2", next: "e2-4-4", prereqs: ["b1-4-2", "e2-4-1", "e2-4-2"], hub: true, comp: "FR008 等比数列与裂项错位求和" },
-    "e2-4-4": { name: "4.4 数学归纳法（选学）", ch: 14, strand: "func", stage: 4, prev: "e2-4-3", next: "e2-5-1", prereqs: ["b1-1-5", "e2-4-2", "e2-4-3"], comp: "FR010 数学归纳法" },
-
-    /* 选必二 第 5 章 一元函数的导数及其应用 */
-    "e2-5-1": { name: "5.1 导数的概念及其意义", ch: 15, strand: "func", stage: 4, prev: "b1-3-2", next: "e2-5-2", prereqs: ["b1-3-2", "e1-2-1", "e2-4-2"], insight: "ep30 导数：把曲线放大到变成直线 / ep39 差分" },
-    "e2-5-2": { name: "5.2 导数的运算", ch: 15, strand: "func", stage: 4, prev: "e2-5-1", next: "e2-5-3", prereqs: ["b1-3-3", "b1-4-2", "b1-4-4", "b1-5-4", "e2-5-1"], insight: "ep31 为什么 (x²)′=2x" },
-    "e2-5-3": { name: "5.3 导数在研究函数中的应用", ch: 15, strand: "func", stage: 4, prev: "e2-5-2", next: "e3-6-1", prereqs: ["b1-2-3", "b1-3-2", "b1-4-5", "e2-5-2"], hub: true, comp: "FR004 导数极值、恒成立与零点压轴" },
-
-    /* 选必三 第 6 章 计数原理 */
-    "e3-6-1": { name: "6.1 分类加法计数原理与分步乘法计数原理", ch: 16, strand: "prob", stage: 5, prev: "b1-1-3", next: "e3-6-2", prereqs: ["b1-1-3"] },
-    "e3-6-2": { name: "6.2 排列与组合", ch: 16, strand: "prob", stage: 5, prev: "e3-6-1", next: "e3-6-3", prereqs: ["e3-6-1"], hub: true, comp: "FR028 排列组合与经典计数模型" },
-    "e3-6-3": { name: "6.3 二项式定理", ch: 16, strand: "prob", stage: 5, prev: "e3-6-2", next: "e3-7-1", prereqs: ["e2-4-1", "e3-6-2"], comp: "FR029 二项式定理与组合恒等式" },
-
-    /* 选必三 第 7 章 随机变量及其分布 */
-    "e3-7-1": { name: "7.1 条件概率与全概率公式", ch: 17, strand: "prob", stage: 5, prev: "b2-10-2", next: "e3-7-2", prereqs: ["b2-10-1", "b2-10-2", "e3-6-2"], hub: true, insight: "ep37 条件概率：把样本空间缩小", comp: "FR030 条件概率与贝叶斯递推" },
-    "e3-7-2": { name: "7.2 离散型随机变量及其分布列", ch: 17, strand: "prob", stage: 5, prev: "e3-7-1", next: "e3-7-3", prereqs: ["b1-3-1", "e3-6-2", "e3-7-1"] },
-    "e3-7-3": { name: "7.3 离散型随机变量的数字特征", ch: 17, strand: "prob", stage: 5, prev: "e3-7-2", next: "e3-7-4", prereqs: ["b2-9-2", "e3-7-2"] },
-    "e3-7-4": { name: "7.4 二项分布与超几何分布", ch: 17, strand: "prob", stage: 5, prev: "e3-7-3", next: "e3-7-5", prereqs: ["b2-10-2", "e3-6-3", "e3-7-3"], hub: true, insight: "ep38 高尔顿板与二项分布" },
-    "e3-7-5": { name: "7.5 正态分布", ch: 17, strand: "prob", stage: 5, prev: "e3-7-4", next: "e3-8-1", prereqs: ["b1-3-2", "b1-4-2", "e3-7-3"] },
-
-    /* 选必三 第 8 章 成对数据的统计分析 */
-    "e3-8-1": { name: "8.1 成对数据的统计相关性", ch: 18, strand: "prob", stage: 5, prev: "b2-9-2", next: "e3-8-2", prereqs: ["b2-6-3", "b2-9-2"] },
-    "e3-8-2": { name: "8.2 一元线性回归模型及其应用", ch: 18, strand: "prob", stage: 5, prev: "e3-8-1", next: "e3-8-3", prereqs: ["e1-2-2", "e2-5-3", "e3-8-1"] },
-    "e3-8-3": { name: "8.3 列联表与独立性检验", ch: 18, strand: "prob", stage: 5, prev: "e3-8-2", next: null, prereqs: ["b2-10-2", "e3-8-1"] }
-  };
-
-  /* 自动根据 prereqs 反向构建每个节点的 unlocks（后置解锁节点列表） */
-  Object.keys(SEC_META).forEach(function (sid) {
-    SEC_META[sid].id = sid;
-    SEC_META[sid].prereqs = SEC_META[sid].prereqs || [];
-    var cards = CARDS.filter(function (c) { return c.sec === sid; });
-    SEC_META[sid].optional = cards.length > 0 && cards.every(function (c) { return c.optional; });
-    SEC_META[sid].electiveParts = cards.reduce(function (parts, c) {
-      return parts.concat(c.electiveParts.map(function (p) { return p.part; }));
-    }, []);
-    SEC_META[sid].unlocks = [];
-  });
-  Object.keys(SEC_META).forEach(function (sid) {
-    SEC_META[sid].prereqs.forEach(function (pid) {
-      if (SEC_META[pid] && SEC_META[pid].unlocks.indexOf(sid) < 0) {
-        SEC_META[pid].unlocks.push(sid);
-      }
+  /* Graphs are stage-owned data. Keep exported objects stable while loading. */
+  var STRANDS = {}, SEC_META = {};
+  var wikiBody = document.body;
+  var WIKI_STAGE = wikiBody && (wikiBody.dataset.stage || wikiBody.dataset.wikiStage) || "high";
+  function installGraph(raw) {
+    if (!raw || !raw.sections || !raw.strands) throw new Error("Invalid Wiki graph data");
+    Object.keys(raw.strands).forEach(function (id) { STRANDS[id] = raw.strands[id]; });
+    Object.keys(raw.sections).forEach(function (sid) {
+      var source = raw.sections[sid];
+      if (source.release === "draft") return;
+      SEC_META[sid] = Object.assign({}, source, { id: sid, prereqs: (source.prereqs || []).slice(), unlocks: [] });
     });
-  });
+    Object.keys(SEC_META).forEach(function (sid) {
+      var meta = SEC_META[sid];
+      if (WIKI_STAGE === "high") {
+        var cards = CARDS.filter(function (c) { return c.sec === sid; });
+        meta.optional = cards.length > 0 && cards.every(function (c) { return c.optional; });
+        meta.electiveParts = cards.reduce(function (parts, c) {
+          return parts.concat(c.electiveParts.map(function (p) { return p.part; }));
+        }, []);
+      }
+      meta.prereqs = meta.prereqs.filter(function (pid) { return !!SEC_META[pid]; });
+      ["prev", "next"].forEach(function (key) { if (!SEC_META[meta[key]]) meta[key] = null; });
+      meta.prereqs.forEach(function (pid) { SEC_META[pid].unlocks.push(sid); });
+    });
+    return { sections: SEC_META, strands: STRANDS, stage: WIKI_STAGE };
+  }
+  // An injected graph supports synchronous exporters; browsers use their own stage root.
+  var suppliedGraph = window.PEIYU_WIKI_GRAPH_DATA;
+  var graphReady;
+  if (suppliedGraph) {
+    installGraph(suppliedGraph);
+    graphReady = Promise.resolve();
+  } else if (typeof window.fetch === "function") {
+    var graphUrl = wikiBody && wikiBody.dataset.wikiGraph || ROOT + "data/knowledge-graph.json";
+    graphReady = window.fetch(graphUrl).then(function (response) {
+      if (!response.ok) throw new Error("Wiki graph load failed: " + response.status);
+      return response.json();
+    }).then(installGraph);
+  } else {
+    graphReady = Promise.resolve();
+  }
+  window.PEIYU_WIKI_GRAPH_READY = graphReady;
 
   var BY_ID = {}, BY_SEC = {}, BY_CH = {};
   CARDS.forEach(function (c) {
@@ -1393,32 +1292,52 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
   /* 计算本地做题学情：返回每节 { total, right, wrong, status: "mastered"|"weak"|"untouched" } */
   function computeMastery() {
     var logs = [];
-    try { logs = JSON.parse(localStorage.getItem("peiyu.hs.log") || "[]"); } catch (e) {}
+    try { logs = JSON.parse(localStorage.getItem("peiyu." + ({ high: "hs", junior: "jh", primary: "ps" }[WIKI_STAGE]) + ".log") || "[]"); } catch (e) {}
+    if (!Array.isArray(logs)) logs = [];
     var stats = {};
     Object.keys(SEC_META).forEach(function (sid) {
       stats[sid] = { total: 0, right: 0, wrong: 0, questionTotal: 0, questionRight: 0, questionWrong: 0, status: "untouched" };
     });
-    // 按 (sec + 题号 id) 取最新一次作答，避免重做后仍算错，同时记录历史错题数
-    var latest = {}, latestQuestions = {};
-    logs.forEach(function (ev) {
-      if ((ev.kind === "answer" || ev.kind === "predict" || ev.kind === "cue" || ev.kind === "card" || ev.kind === "lab") && ev.sec && stats[ev.sec]) {
-        var key = ev.sec + "::" + (ev.id || stats[ev.sec].total);
-        latest[key] = ev;
-        if (ev.kind === "answer" && ev.id !== undefined && ev.id !== null && String(ev.id) !== "") latestQuestions[ev.sec + "::" + ev.id] = ev;
-      }
+    var latest = {};
+    function selfRated(ev) {
+      return ev.selfCheck === true || ev.attemptKind === "self-check" || !!ev.rating ||
+        /自判[对错]/.test(ev.choice || "");
+    }
+    function add(ev, key, isExam, timestamp) {
+      if (!ev || !stats[ev.sec] || typeof ev.correct !== "boolean" || selfRated(ev)) return;
+      var old = latest[key];
+      if (!old || timestamp >= old.time) latest[key] = { sec: ev.sec, correct: ev.correct, exam: isExam, time: timestamp };
+    }
+    // Only judged answers count; page/video visits, feedback and self-ratings do not.
+    logs.forEach(function (ev, index) {
+      if (!ev || ["answer", "predict", "lab"].indexOf(ev.kind) < 0) return;
+      var isExam = ev.kind === "answer" && ev.id !== undefined && ev.id !== null && String(ev.id) !== "";
+      add(ev, JSON.stringify([ev.kind, ev.sec, String(ev.id === undefined ? index : ev.id)]), isExam, Number(ev.t) || index);
     });
-    Object.keys(latest).forEach(function (k) {
-      var ev = latest[k];
-      var s = stats[ev.sec];
-      if (!s) return;
+    var store = window.PeiyuLearningState;
+    if (store && store.stage === WIKI_STAGE) {
+      var snapshot = store.load();
+      // Questions retain lastAnswer even after the event log has been compacted.
+      (snapshot.questions || []).forEach(function (q) {
+        var ev = q.lastAnswer;
+        if (!ev || ev.kind !== "answer" || ["exam", "diagnostic", "predict", "lab"].indexOf(q.questionType) < 0) return;
+        var sec = ev.sectionId || q.sectionId;
+        var kind = q.questionType === "exam" ? "answer" : q.questionType;
+        var owner = kind === "diagnostic" ? q.pointId : sec;
+        var key = JSON.stringify([kind, owner, q.questionId]);
+        // A course self-check also has an unmarked compatibility-log copy.
+        if (selfRated(ev)) { delete latest[key]; return; }
+        add({ sec: sec, correct: ev.correct }, key, kind === "answer", ev.time || 0);
+      });
+    }
+    Object.keys(latest).forEach(function (key) {
+      var ev = latest[key], s = stats[ev.sec];
       s.total++;
-      if (ev.correct) s.right++;
-      else s.wrong++;
-    });
-    Object.keys(latestQuestions).forEach(function (key) {
-      var ev = latestQuestions[key], s = stats[ev.sec];
-      s.questionTotal++;
-      if (ev.correct) s.questionRight++; else s.questionWrong++;
+      if (ev.correct) s.right++; else s.wrong++;
+      if (ev.exam) {
+        s.questionTotal++;
+        if (ev.correct) s.questionRight++; else s.questionWrong++;
+      }
     });
     Object.keys(stats).forEach(function (sid) {
       var s = stats[sid];
@@ -2393,9 +2312,10 @@ if (typeof module !== "undefined" && module.exports) module.exports = PY_MATH;
     else if (!/wiki\.html/.test(location.pathname)) setupHomePage();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+  function start() {
+    if (suppliedGraph) { init(); return; }
+    graphReady.then(init).catch(function (error) { console.error(error); });
   }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
 })();

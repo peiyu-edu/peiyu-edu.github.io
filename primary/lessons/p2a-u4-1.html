@@ -294,6 +294,18 @@ document.addEventListener("DOMContentLoaded", function () {
     if (sayText && P) node.appendChild(P.sayButton(sayText)).addEventListener("click", function (ev) { P.say(sayText, ev.currentTarget); });
   }
 
+  // Keep the crayon length for the child to count in the exercise.
+  (function () {
+    var root = document.getElementById("m-ruler");
+    root.addEventListener("manip:change", function (ev) {
+      if (ev.detail.name !== "蜡笔" || !ev.detail.aligned) return;
+      var read = root.querySelector(".read");
+      if (!read) return;
+      var text = "对好刻度后，自己数一数蜡笔跨过几个一厘米大格。";
+      setRead(read, text, text, "");
+    });
+  })();
+
   /* 1. 大拃小拃量书桌 */
   (function initZhaDesk() {
     var root = document.getElementById("m-zha");

@@ -288,6 +288,7 @@ function fenyifen(root, cfg) {
     modeBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-m") === st.mode ? "true" : "false"); });
     sizeBtns.forEach(function (b) { b.setAttribute("aria-pressed", +b.getAttribute("data-v") === size() ? "true" : "false"); });
     perBtns.forEach(function (b) { b.setAttribute("aria-pressed", +b.getAttribute("data-v") === st.per ? "true" : "false"); });
+    var practice = total === 30;
     var group = st.mode === "group", hide = !group && cfg.hide && !done();
     var r = rem();
     // —— 还没分的一堆 ——
@@ -324,7 +325,7 @@ function fenyifen(root, cfg) {
         var latest = group ? b === st.parts - 1 : j >= e1 - (st.rounds[st.rounds.length - 1] || 0);
         el("circle", { cx: ix0 + (j % bc) * 22, cy: by + 18 + Math.floor(j / bc) * 22, r: 9, style: "fill:" + (latest ? "var(--a)" : "var(--b)") }, svg);
       }
-      el("text", { x: bx + bw / 2, y: by + bh + 22, "text-anchor": "middle", style: "fill:var(--fg);font-size:17px;font-weight:700" }, svg).textContent = inBox + " " + thing;
+      el("text", { x: bx + bw / 2, y: by + bh + 22, "text-anchor": "middle", style: "fill:var(--fg);font-size:17px;font-weight:700" }, svg).textContent = (practice ? "数一数" : inBox + " " + thing);
     }
     var H = Math.ceil(pileH + 18 + lay.height + 4);
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
@@ -352,11 +353,13 @@ function fenyifen(root, cfg) {
         + "分成了 " + parts + " 份，每份 " + per + " " + thing + "，正好分完。";
       sayT = (group ? cn(T) + thing + "，每" + cn(k) + thing + "一份。" : cn(T) + thing + "，平均分成" + cn(n) + "份。")
         + "分成了" + cn(parts) + "份，每份" + cn(per) + thing + "，正好分完。";
+      if (practice) line = sayT = "分好了。请自己数一数每份有几个、分成了几份，再填写下面的问题。";
       setRead(read, line, sayT, "ok");
     } else {
       var last = st.rounds[st.rounds.length - 1] || 0;
       line = group ? "圈了 " + parts + " 份，每份 " + k + " " + thing + "。还有 " + r + " " + thing + "没分。"
         : "分了 " + st.rounds.length + " 轮，这一轮分掉 " + last * n + " " + thing + "。每" + plate + "现在 " + e1 + " " + thing + "。";
+      if (practice) line = "继续分一分，边操作边数一数。";
       setRead(read, line, null, "");
     }
     // 连减与除法算式
@@ -366,7 +369,7 @@ function fenyifen(root, cfg) {
       html += "<span>" + T + " − " + subs.join(" − ") + " = " + r + "</span>";
     }
     if (cfg.eq && done()) {
-      var d = group ? k : n, qq = group ? parts : per;
+      var d = group ? k : n, qq = practice ? "？" : (group ? parts : per);
       if (cfg.names) {
         html += '<span class="eqn" style="display:inline-grid;grid-template-columns:repeat(5,auto);gap:0 8px;text-align:center;font-size:26px;font-weight:700">'
           + '<span style="color:var(--a)">' + T + "</span><span>÷</span><span style=\"color:var(--c)\">" + d + "</span><span>=</span><span style=\"color:var(--b)\">" + qq + "</span>"
@@ -375,7 +378,7 @@ function fenyifen(root, cfg) {
         html += '<span style="font-size:26px;font-weight:700">' + T + " ÷ " + d + " = " + qq + "</span>";
       }
       read2.innerHTML = html;
-      if (P) read2.appendChild(P.sayButton(cn(T) + "除以" + cn(d) + "等于" + cn(qq))).addEventListener("click", function (ev) { P.say(ev.currentTarget.getAttribute("data-say"), ev.currentTarget); });
+      if (P) read2.appendChild(P.sayButton(practice ? "看算式，想一想商是多少，再填写下面的问题。" : cn(T) + "除以" + cn(d) + "等于" + cn(qq))).addEventListener("click", function (ev) { P.say(ev.currentTarget.getAttribute("data-say"), ev.currentTarget); });
     } else {
       read2.innerHTML = html;
     }

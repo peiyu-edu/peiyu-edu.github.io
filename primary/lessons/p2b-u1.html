@@ -300,12 +300,13 @@ function initU1Hub(root) {
     el("text", { x: 295, y: 76, "text-anchor": "middle", style: "fill:var(--a);font-size:19px;font-weight:700" }, svg, String(T));
     el("text", { x: 295, y: 102, "text-anchor": "middle", style: "fill:var(--fg);font-size:19px;font-weight:700" }, svg, String(prod));
     el("line", { x1: 266, y1: 110, x2: 320, y2: 110, style: "stroke:var(--fg);stroke-width:2" }, svg);
-    el("text", { x: 300, y: 134, "text-anchor": "middle", style: "fill:var(--c);font-size:19px;font-weight:700" }, svg, String(r));
+    el("text", { x: 300, y: 134, "text-anchor": "middle", style: "fill:var(--c);font-size:19px;font-weight:700" }, svg, (T === 13 && d === 5 ? "？" : String(r)));
 
     var msg = r === 0
       ? (T + " ÷ " + d + " = " + q + "（盘），正好分完，没有剩余。")
       : (T + " ÷ " + d + " = " + q + "（盘）…… " + r + "（个），余数 " + r + " < 除数 " + d + "。");
     out.className = "read ok";
+    if (T === 13 && d === 5) msg = "13 个，每 5 个一盘。数一数余下几个，再填写后面的问题。";
     out.textContent = msg;
     if (P) {
       var sb = P.sayButton(msg);

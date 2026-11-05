@@ -203,16 +203,16 @@ function initZeroSub(root) {
     el("text", { x: 80, y: 114, "text-anchor": "middle", style: "fill:var(--a);font-size:28px;font-weight:700" }, svg, "−");
     el("line", { x1: 66, y1: 126, x2: 298, y2: 126, style: "stroke:var(--fg);stroke-width:2.5" }, svg);
 
-    el("text", { x: xs[2], y: 162, "text-anchor": "middle", style: "fill:" + (st.step >= 2 ? "var(--a)" : "var(--muted)") + ";font-size:30px;font-weight:700" }, svg, st.step >= 2 ? String(s[2]) : "？");
+    el("text", { x: xs[2], y: 162, "text-anchor": "middle", style: "fill:" + (st.step >= 2 ? "var(--a)" : "var(--muted)") + ";font-size:30px;font-weight:700" }, svg, "？");
     el("text", { x: xs[1], y: 162, "text-anchor": "middle", style: "fill:" + (st.step >= 3 ? "var(--a)" : "var(--muted)") + ";font-size:30px;font-weight:700" }, svg, st.step >= 3 ? String(s[1]) : "？");
     el("text", { x: xs[0], y: 162, "text-anchor": "middle", style: "fill:" + (st.step >= 4 ? "var(--a)" : "var(--muted)") + ";font-size:30px;font-weight:700" }, svg, st.step >= 4 ? String(s[0]) : "？");
 
     var msgs = [
       "402 − 156：个位 2 减 6 不够减，十位又是 0，先向百位借！",
       "第 1 步（百位退十位）：百位 4 退 1 剩 3，十位变成 10 个十。",
-      "第 2 步（十位退个位并算个位）：十位从 10 里退 1 给个位还剩 9！个位 12 − 6 = 6。",
+      "第 2 步（十位退个位并算个位）：十位从 10 里退 1 给个位还剩 9！个位用 12 减 6，自己算一算。",
       "第 3 步（算十位）：十位现在剩 9，9 − 5 = 4！",
-      "第 4 步（算百位）：百位 4 退 1 剩 3，3 − 1 = 2。402 − 156 = 246！"
+      "第 4 步（算百位）：百位 4 退 1 剩 3，3 − 1 = 2。合起来的差是多少？请填写下面的问题。"
     ];
     var txt = msgs[st.step];
     out.className = st.step === 4 ? "read ok" : "read";
@@ -264,22 +264,22 @@ function initSubCheck(root) {
     el("text", { x: x + 26, y: 102, "text-anchor": "middle", style: "fill:var(--a);font-size:24px;font-weight:700" }, svg, op);
     el("text", { x: x + 132, y: 102, "text-anchor": "end", style: "fill:var(--fg);font-size:26px;font-weight:700;letter-spacing:6px" }, svg, String(botN));
     el("line", { x1: x + 18, y1: 114, x2: x + 140, y2: 114, style: "stroke:var(--fg);stroke-width:2" }, svg);
-    el("text", { x: x + 132, y: 146, "text-anchor": "end", style: "fill:" + (active ? "var(--a)" : "var(--muted)") + ";font-size:28px;font-weight:700;letter-spacing:6px" }, svg, active ? String(resN) : "？？？");
+    el("text", { x: x + 132, y: 146, "text-anchor": "end", style: "fill:" + (active ? "var(--a)" : "var(--muted)") + ";font-size:28px;font-weight:700;letter-spacing:6px" }, svg, active && resN !== 246 ? String(resN) : "？？？");
   }
 
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     drawCard(10, "原减法竖式", "−", 402, 156, 246, true);
     if (st.mode === 2) {
-      drawCard(192, "减法验算：被减数−差", "−", 402, 246, 156, true);
+      drawCard(192, "减法验算：被减数−差", "−", 402, "？", 156, true);
     } else {
-      drawCard(192, "加法验算：差+减数", "+", 246, 156, 402, st.mode === 1);
+      drawCard(192, "加法验算：差+减数", "+", "？", 156, 402, st.mode === 1);
     }
 
     var msgs = [
-      "已算出 402 − 156 = 246。点上面的按钮，用加法或减法验算它！",
-      "方法一（加法验算）：用差 246 加减数 156，得 402，正好等于被减数！",
-      "方法二（减法验算）：用被减数 402 减差 246，得 156，正好等于减数！"
+      "先算出 402 − 156 的差。点上面的按钮，用加法或减法验算它！",
+      "方法一（加法验算）：用你算出的差加减数 156，得 402，正好等于被减数！",
+      "方法二（减法验算）：用被减数 402 减去你算出的差，得 156，正好等于减数！"
     ];
     var txt = msgs[st.mode];
     out.className = st.mode > 0 ? "read ok" : "read";

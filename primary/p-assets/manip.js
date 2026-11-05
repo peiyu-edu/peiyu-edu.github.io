@@ -387,10 +387,12 @@
       }
       var bx = gapX(st.a);
       barHit.setAttribute("x", bx - 15); barLine.setAttribute("x", bx - 3);
-      bar.setAttribute("aria-valuenow", String(st.a));
-      bar.setAttribute("aria-valuetext", n + " 分成 " + st.a + " 和 " + b);
-      var top = dir === "down", yT = top ? 120 : 220, yP = top ? 220 : 120;
       var coverL = !st.open && hide === "left", coverR = !st.open && hide === "right";
+      // The numeric slider value must not reveal a covered part to screen readers.
+      if (coverL || coverR) bar.removeAttribute("aria-valuenow");
+      else bar.setAttribute("aria-valuenow", String(st.a));
+      bar.setAttribute("aria-valuetext", n + " 分成 " + (coverL ? "？" : st.a) + " 和 " + (coverR ? "？" : b));
+      var top = dir === "down", yT = top ? 120 : 220, yP = top ? 220 : 120;
       el("line", { x1: 180, y1: yT + (top ? 22 : -22), x2: 120, y2: yP + (top ? -22 : 22), style: "stroke:var(--fg);stroke-width:2.5" }, gTree);
       el("line", { x1: 180, y1: yT + (top ? 22 : -22), x2: 240, y2: yP + (top ? -22 : 22), style: "stroke:var(--fg);stroke-width:2.5" }, gTree);
       box(gTree, 180, yT, n, "var(--fg)", false);

@@ -199,6 +199,7 @@ function initTiaoxian8(root) {
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var n = st.n, prod = 8 * n;
+    var result = n === 6 ? "？" : prod;
     bMinus.disabled = n <= 1;
     bPlus.disabled = n >= 8;
     numBtns.forEach(function (b, idx) { b.setAttribute("aria-pressed", idx + 1 === n ? "true" : "false"); });
@@ -224,20 +225,20 @@ function initTiaoxian8(root) {
       var tx = x0 + m * stepW, isLand = m === n;
       el("line", { x1: tx, y1: lineY - 5, x2: tx, y2: lineY + 5, style: "stroke:var(--fg);stroke-width:1.8" }, svg);
       if (isLand) el("circle", { cx: tx, cy: lineY, r: 5.5, style: "fill:var(--c)" }, svg);
-      el("text", { x: tx, y: lineY + 22, "text-anchor": "middle", style: "fill:" + (isLand ? "var(--c)" : (m <= n ? "var(--a)" : "var(--muted)")) + ";font-size:16.5px;font-weight:700" }, svg, String(m * 8));
+      el("text", { x: tx, y: lineY + 22, "text-anchor": "middle", style: "fill:" + (isLand ? "var(--c)" : (m <= n ? "var(--a)" : "var(--muted)")) + ";font-size:16.5px;font-weight:700" }, svg, (m === 6 ? "？" : String(m * 8)));
     }
 
     // 3. 底部算式与口诀卡
     el("rect", { x: 10, y: 134, width: 196, height: 62, rx: 10, style: "fill:var(--bg);stroke:var(--b);stroke-width:2" }, svg);
-    el("text", { x: 108, y: 160, "text-anchor": "middle", style: "fill:var(--fg);font-size:19px;font-weight:700" }, svg, "8 × " + n + " = " + prod);
-    el("text", { x: 108, y: 185, "text-anchor": "middle", style: "fill:var(--b);font-size:17px;font-weight:700" }, svg, n === 8 ? "乘数相同，只写一道" : (n + " × 8 = " + prod));
+    el("text", { x: 108, y: 160, "text-anchor": "middle", style: "fill:var(--fg);font-size:19px;font-weight:700" }, svg, "8 × " + n + " = " + result);
+    el("text", { x: 108, y: 185, "text-anchor": "middle", style: "fill:var(--b);font-size:17px;font-weight:700" }, svg, n === 8 ? "乘数相同，只写一道" : (n + " × 8 = " + result));
 
     el("rect", { x: 214, y: 134, width: 136, height: 62, rx: 10, style: "fill:var(--hl-soft);stroke:var(--a);stroke-width:2.2" }, svg);
     el("text", { x: 282, y: 157, "text-anchor": "middle", style: "fill:var(--muted);font-size:17px;font-weight:700" }, svg, "乘法口诀");
-    el("text", { x: 282, y: 184, "text-anchor": "middle", style: "fill:var(--a);font-size:20px;font-weight:700" }, svg, VERSES[n]);
+    el("text", { x: 282, y: 184, "text-anchor": "middle", style: "fill:var(--a);font-size:20px;font-weight:700" }, svg, (n === 6 ? "请自己想口诀" : VERSES[n]));
 
-    var txt = n + " 朵小花是 " + n + " 个 8，数线跳到 " + prod + "。口诀：" + VERSES[n] + "。";
-    var sayTxt = (P ? P.cn(n) : n) + "朵小花是" + (P ? P.cn(n) : n) + "个八，数线跳到" + (P ? P.cn(prod) : prod) + "。口诀：" + VERSES[n] + "。";
+    var txt = n + " 朵小花是 " + n + " 个 8，数线跳到 " + result + "。口诀：" + (n === 6 ? "请自己想口诀" : VERSES[n]) + "。";
+    var sayTxt = n === 6 ? "请自己数图或想口诀，算出总数，再填写下面的问题。" : (P ? P.cn(n) : n) + "朵小花是" + (P ? P.cn(n) : n) + "个八，数线跳到" + (P ? P.cn(prod) : prod) + "。口诀：" + (n === 6 ? "请自己想口诀" : VERSES[n]) + "。";
     read.className = "read ok";
     read.textContent = txt;
     if (P) {

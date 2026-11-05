@@ -219,6 +219,7 @@ function initQiban7(root) {
   function draw() {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var n = st.n, prod = 7 * n;
+    var result = n === 3 ? "？" : prod;
     bMinus.disabled = n <= 1;
     bPlus.disabled = n >= 7;
     numBtns.forEach(function (b, idx) { b.setAttribute("aria-pressed", idx + 1 === n ? "true" : "false"); });
@@ -246,20 +247,20 @@ function initQiban7(root) {
       }
       el("line", { x1: x0, y1: ty, x2: x0, y2: ty + rh * 2, style: "stroke:var(--line);stroke-width:1.2" }, svg);
       el("text", { x: x0 + cw / 2, y: ty + 21, "text-anchor": "middle", style: "fill:var(--fg);font-size:17px;font-weight:700" }, svg, String(c));
-      el("text", { x: x0 + cw / 2, y: ty + rh + 21, "text-anchor": "middle", style: "fill:" + (c <= n ? "var(--a)" : "var(--muted)") + ";font-size:17px;font-weight:700" }, svg, c <= n ? String(c * 7) : "？");
+      el("text", { x: x0 + cw / 2, y: ty + rh + 21, "text-anchor": "middle", style: "fill:" + (c <= n ? "var(--a)" : "var(--muted)") + ";font-size:17px;font-weight:700" }, svg, c <= n && c !== 3 ? String(c * 7) : "？");
     }
 
     // 3. 底部算式与口诀卡
     el("rect", { x: 10, y: 134, width: 196, height: 64, rx: 10, style: "fill:var(--bg);stroke:var(--b);stroke-width:2" }, svg);
-    el("text", { x: 108, y: 161, "text-anchor": "middle", style: "fill:var(--fg);font-size:19px;font-weight:700" }, svg, "7 × " + n + " = " + prod);
-    el("text", { x: 108, y: 187, "text-anchor": "middle", style: "fill:var(--b);font-size:17px;font-weight:700" }, svg, n === 7 ? "乘数相同，只写一道" : (n + " × 7 = " + prod));
+    el("text", { x: 108, y: 161, "text-anchor": "middle", style: "fill:var(--fg);font-size:19px;font-weight:700" }, svg, "7 × " + n + " = " + result);
+    el("text", { x: 108, y: 187, "text-anchor": "middle", style: "fill:var(--b);font-size:17px;font-weight:700" }, svg, n === 7 ? "乘数相同，只写一道" : (n + " × 7 = " + result));
 
     el("rect", { x: 214, y: 134, width: 136, height: 64, rx: 10, style: "fill:var(--hl-soft);stroke:var(--a);stroke-width:2.2" }, svg);
     el("text", { x: 282, y: 158, "text-anchor": "middle", style: "fill:var(--muted);font-size:17px;font-weight:700" }, svg, "乘法口诀");
-    el("text", { x: 282, y: 185, "text-anchor": "middle", style: "fill:var(--a);font-size:20px;font-weight:700" }, svg, VERSES[n]);
+    el("text", { x: 282, y: 185, "text-anchor": "middle", style: "fill:var(--a);font-size:20px;font-weight:700" }, svg, (n === 3 ? "请自己想口诀" : VERSES[n]));
 
-    var txt = n + " 艘小船是 " + n + " 个 7，一共 " + prod + " 块彩板。口诀：" + VERSES[n] + "。";
-    var sayTxt = (P ? P.cn(n) : n) + "艘小船是" + (P ? P.cn(n) : n) + "个七，一共" + (P ? P.cn(prod) : prod) + "块彩板。口诀：" + VERSES[n] + "。";
+    var txt = n + " 艘小船是 " + n + " 个 7，一共 " + result + " 块彩板。口诀：" + (n === 3 ? "请自己想口诀" : VERSES[n]) + "。";
+    var sayTxt = n === 3 ? "请自己数图或想口诀，算出总数，再填写下面的问题。" : (P ? P.cn(n) : n) + "艘小船是" + (P ? P.cn(n) : n) + "个七，一共" + (P ? P.cn(prod) : prod) + "块彩板。口诀：" + (n === 3 ? "请自己想口诀" : VERSES[n]) + "。";
     read.className = "read ok";
     read.textContent = txt;
     if (P) {

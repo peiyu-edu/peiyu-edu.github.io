@@ -156,7 +156,8 @@
      结论是「一定够 / 一定不够 / 说不准」三种之一；说不准时提示换个方向估。 */
   function kancheng(root, cfg) {
     var cases = cfg.cases && cfg.cases.length ? cfg.cases : [{ x: 788, m: 6, T: 5000, q: "788 名同学，每人 6 元，5000 元够不够？" }], ci = 0, st = {}, firstTry = true, reported = false;
-    var qp = h("p", "line"), svg = el("svg", { class: "stage", viewBox: "0 0 360 126", role: "group", "aria-label": "看成" });
+    // SVG <g> is not a CSS layout box; put touch-action on the SVG viewport.
+    var qp = h("p", "line"), svg = el("svg", { class: "stage", viewBox: "0 0 360 126", role: "group", "aria-label": "看成", style: "touch-action:none" });
     var read = h("div", "read"), ctr = h("div", "ctrls");
     read.setAttribute("aria-live", "polite"); read.style.flexDirection = "column";
     root.appendChild(qp); root.appendChild(svg); root.appendChild(read); root.appendChild(ctr);
@@ -210,6 +211,7 @@
         if (i !== st.at) { st.at = i; drawKeep(); }
       });
       knob.addEventListener("pointerup", function () { if (st.drag) { st.drag = false; draw(); logI("kancheng", { see: st.items[st.at] }); checkKancheng(); } });
+      knob.addEventListener("pointercancel", function () { st.drag = false; draw(); });
       say();
     }
     function drawKeep() { /* 拖动中只挪圆钮和读数，不重建圆钮（保住 pointer capture） */

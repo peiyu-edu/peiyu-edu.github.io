@@ -281,11 +281,11 @@
       num.setAttribute("font-size", "16");
       num.setAttribute("font-weight", "700");
       num.setAttribute("fill", active ? "var(--c)" : "var(--muted)");
-      num.textContent = String((i + 1) * 5);
+      num.textContent = (i + 1) + "朵";
       svg.appendChild(num);
     }
 
-    var tot = k * 5;
+    var tot = k === 4 ? "？" : k * 5;
     var eq = k === 5 ? "5 × 5 = 25" : ("5 × " + k + " = " + tot + "  或  " + k + " × 5 = " + tot);
     var btm = document.createElementNS(ns, "text");
     btm.setAttribute("x", "170");
@@ -294,13 +294,13 @@
     btm.setAttribute("font-size", "16");
     btm.setAttribute("font-weight", "700");
     btm.setAttribute("fill", "var(--fg)");
-    btm.textContent = "口诀：" + VERSES[k] + " （" + eq + "）";
+    btm.textContent = k === 4 ? "4 个 5，一共有多少？" : "口诀：" + VERSES[k] + " （" + eq + "）";
     svg.appendChild(btm);
 
     var addParts = [];
     for(var m=0; m<k; m++) addParts.push(5);
     var addStr = k === 1 ? "1 个 5 是 5" : (addParts.join(" + ") + " = " + tot);
-    out.textContent = "当前：" + k + " 朵梅花（" + k + " 个 5）→ " + addStr + " → 算式 " + eq + " → 口诀：" + VERSES[k];
+    out.textContent = k === 4 ? "4 朵梅花，每朵 5 个花瓣。数一数或用口诀算一算，再填写下面的问题。" : "当前：" + k + " 朵梅花（" + k + " 个 5）→ " + addStr + " → 算式 " + eq + " → 口诀：" + VERSES[k];
 
     document.querySelectorAll(".m3-cnt").forEach(function(b){
       b.classList.toggle("is-on", Number(b.dataset.k) === k);

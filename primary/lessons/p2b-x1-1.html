@@ -40,12 +40,12 @@
 
   <div class="pair">
     <div class="no">
-      <b class="t">容易错：4 时 55 分读成 5 时 55 分</b>
-      <p>分针指着 11（55 分）时，时针已经很靠近 5，但<b>还没走到 5</b>，不能读成 5 时 55 分。</p>
+      <b class="t">容易错：6 时 55 分读成 7 时 55 分</b>
+      <p>分针指着 11（55 分）时，时针已经很靠近 7，但<b>还没走到 7</b>，不能读成 7 时 55 分。</p>
     </div>
     <div class="ok">
       <b class="t">这样做：看时针刚刚走过谁</b>
-      <p>时针在 4 和 5 之间，刚刚走过 4，所以是 <b>4 时 55 分</b>（再过 5 分钟才到 5 时）。</p>
+      <p>时针在 6 和 7 之间，刚刚走过 6，所以是 <b>6 时 55 分</b>（再过 5 分钟才到 7 时）。</p>
     </div>
   </div>
 </section>
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var presets = [
     { h: 7, m: 5, label: "7:05（不满10分）" },
     { h: 8, m: 30, label: "8:30（半点）" },
-    { h: 4, m: 55, label: "4:55（快到5时）" }
+    { h: 6, m: 55, label: "6:55（快到7时）" }
   ];
   var cur = presets[0];
 
@@ -194,13 +194,14 @@ document.addEventListener("DOMContentLoaded", function () {
     el("circle", { cx: cx, cy: cy, r: 4.5, style: "fill:var(--fg)" }, g);
     g.addEventListener("click", function () { bAdd5.click(); });
 
+    var practice = cur.h === 4 && cur.m === 55;
     var padM = cur.m < 10 ? "0" + cur.m : String(cur.m);
     el("rect", { x: 212, y: 36, width: 136, height: 148, rx: 12, style: "fill:var(--hl-soft);stroke:var(--a);stroke-width:2" }, svg);
     el("text", { x: 280, y: 78, "text-anchor": "middle", style: "fill:var(--no);font-size:17px;font-weight:700" }, svg).textContent = "时针走过 " + cur.h;
-    el("text", { x: 280, y: 112, "text-anchor": "middle", style: "fill:var(--a);font-size:17px;font-weight:700" }, svg).textContent = "分针走了 " + cur.m + " 分";
-    el("text", { x: 280, y: 154, "text-anchor": "middle", style: "fill:var(--fg);font-size:24px;font-weight:700" }, svg).textContent = cur.h + ":" + padM;
+    el("text", { x: 280, y: 112, "text-anchor": "middle", style: "fill:var(--a);font-size:17px;font-weight:700" }, svg).textContent = (practice ? "数一数分针的小格" : "分针走了 " + cur.m + " 分");
+    el("text", { x: 280, y: 154, "text-anchor": "middle", style: "fill:var(--fg);font-size:24px;font-weight:700" }, svg).textContent = practice ? "几点几分？" : cur.h + ":" + padM;
 
-    var msg = "时针走过 " + cur.h + "，分针走了 " + cur.m + " 小格，是 " + cur.h + " 时 " + padM + " 分（" + cur.h + ":" + padM + "）。";
+    var msg = practice ? "时针走过几？分针走过多少小格？请自己读一读。" : "时针走过 " + cur.h + "，分针走了 " + cur.m + " 小格，是 " + cur.h + " 时 " + padM + " 分（" + cur.h + ":" + padM + "）。";
     read.className = "read ok";
     read.textContent = msg;
     if (window.PeiyuP) {

@@ -17,9 +17,9 @@
   }
   function lines(s) {
     if (!s.trim()) throw Error('请先填写记录。');
-    return s.trim().split(/\r?\n/).map(x => {
+    return s.trim().split(/\r?\n/).map((x, i) => {
       const pair = x.trim().split(/[,，]/).map(v => v.trim());
-      if (pair.length !== 2) throw Error('每行恰好两项，用一个逗号分隔。');
+      if (pair.length !== 2) throw Error('第' + (i+1) + '行需要两项，用一个逗号分开，如 1,A。');
       return pair;
     });
   }
@@ -29,7 +29,7 @@
       const id = integer(a, 1, 80);
       if (!ids.includes(id)) throw Error('编号不在本轮名单：' + id);
       if (seen.has(id)) throw Error('编号重复：' + id + '。请回查原始记录，不能重复计数。');
-      if (!/^[A-F]$/.test(b) || b.charCodeAt(0) - 65 >= k) throw Error('代码不属于本问卷选项，请按大写代码记录。');
+      if (!/^[A-F]$/.test(b) || b.charCodeAt(0) - 65 >= k) throw Error('编号' + id + '后面的“' + b + '”不是本问卷的代码；请用已有选项的大写字母。');
       seen.add(id); result.push([id, b]);
     }
     if (seen.size !== ids.length) throw Error('本轮还缺 ' + (ids.length - seen.size) + ' 项；保留未响应记录并复核，不擅自换签。');
@@ -81,19 +81,93 @@
   const root = document.getElementById('own-survey');
   if (!root || root.dataset.ready) return;
   root.dataset.ready = 'true';
+
+  // Author display rules must not expose later phases marked hidden.
+  root.classList.add('own-workspace');
+  const phaseStyle = document.createElement('style');
+  phaseStyle.textContent = '.own-workspace [hidden]{display:none!important}.own-workspace input,.own-workspace select,.own-workspace textarea,.own-workspace button{font:inherit;max-width:100%;box-sizing:border-box}';
+  root.append(phaseStyle);
+  // Page-local feedback: keep the first correction beside its control.
+  let activeField = null;
+  function clearErrors() {
+    root.querySelectorAll('[data-input-error]').forEach(e => {
+      const id=e.id;
+      root.querySelectorAll('[aria-describedby]').forEach(input=>{
+        const ids=input.getAttribute('aria-describedby').split(/\s+/).filter(v=>v!==id);
+        if(ids.length)input.setAttribute('aria-describedby',ids.join(' '));else input.removeAttribute('aria-describedby');
+      });e.remove();
+    });
+    root.querySelectorAll('[aria-invalid="true"]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function fieldError(input, message) {
+    if (!input) return;
+    const panel=input.closest('[data-survey-stage]');
+    if(panel) showStage(Number(panel.dataset.surveyStage));
+    if(input.closest('[data-counts]')) counts.hidden=false;
+    clearErrors();
+    for(let parent=input.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    input.setAttribute('aria-invalid', 'true');
+    const note = document.createElement('span');
+    note.dataset.inputError = 'true'; note.setAttribute('role', 'alert');
+    note.id=(input.id||input.name||'own-field')+'-error';
+    const described=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+    if(!described.includes(note.id))described.push(note.id);
+    input.setAttribute('aria-describedby',described.join(' '));
+    note.style.cssText = 'display:block;font-size:15px;overflow-wrap:anywhere;color:var(--no)';
+    note.textContent = message; input.insertAdjacentElement('afterend', note);
+    if (!input.closest('[hidden]')) input.focus();
+  }
+  function atField(input, run) { activeField = input; return run(); }
+  function inputHelp(element) {
+    if (!element) return;
+    const d = document.createElement('details'); d.className = 'more';
+    const s = document.createElement('summary'); s.textContent = '怎么输入？';
+    element.before(d); d.append(s, element);
+  }
+  root.addEventListener('input', clearErrors);
+  root.addEventListener('change', clearErrors);
+  root.addEventListener('reset', clearErrors);
+
   const $ = id => root.querySelector('#os-' + id), form = $('form');
-  const value = id => $(id).value.trim();
+  const value = id => { activeField = $(id); return activeField.value.trim(); };
+  let stage = 0;
+  const back = document.createElement('button'); back.type='button';back.textContent='返回上一段';
+  form.append(back);back.onclick=()=>showStage(Math.max(0,stage-1));
+  function showStage(n) {
+    stage=n;root.querySelectorAll('[data-survey-stage]').forEach(e=>e.hidden=Number(e.dataset.surveyStage)!==n);
+    back.hidden=n===0;
+    clearErrors();
+    showRevision();
+  }
+  const counts = document.createElement('div'); counts.dataset.counts='true';
+  $('counts').closest('label').before(counts);
+  let next=$('counts').closest('label');
+  while(next && next!==$('organize')){const after=next.nextElementSibling;counts.append(next);next=after;}
+  counts.hidden=true;
+  const proceed=document.createElement('button');proceed.type='button';proceed.textContent='问卷已自核，开始查8个';
+  proceed.onclick=()=>showStage(1);$('rubric').append(proceed);
+  const rawHelp=document.createElement('details');rawHelp.className='more';
+  rawHelp.innerHTML='<summary>怎么输入？</summary><p>原始记录每行写编号和代码，如 1,A。频数每行写代码和个数，如 A,3；没有的类也填0。不填个人信息。</p>';
+  $('raw').closest('label').before(rawHelp);
+  const revision=$('reason').closest('label');
+  counts.append(revision);
+  function showRevision() {
+    // Move the same control with the current task; keep its existing draft.
+    if(stage===3) $('expand').before(revision); else counts.append(revision);
+  }
+  showStage(0);
   let active = null, smallDone = false, organized = false, history = [];
   function say(id, text) { $(id).textContent = text; }
   function draft() { return Array.from(form.querySelectorAll('input,textarea,select')).map(x => [x.id, x.value]); }
   function clearData() { organized = false; say('data-out', ''); $('chart').replaceChildren(); }
   function clearActive() { active = null; clearData(); say('task', ''); say('cards', ''); $('raw').value = ''; $('counts').value = ''; }
   function needDraft() {
-    if (!value('question') || !value('definition')) throw Error('先写调查问题和概念规则；文字正确性仍需人工自核。');
+    if (!value('question')) throw Error('先写你想调查什么。');
+    if (!value('definition')) throw Error('写清怎样判断一个书签属于哪类。');
     return options(value('options'));
   }
   function attempt(id, fn) {
-    try { fn(); } catch (e) { say(id, e.message); }
+    clearErrors(); try { fn(); } catch (e) { fieldError(activeField, e.message); say(id, e.message); }
   }
   function prepare(total, n, method) {
     const opts = needDraft();
@@ -110,7 +184,7 @@
     say('preview', '你的问卷草稿：' + value('question') + '\n规则：' + value('definition') + '\n' + opts.map((x, i) => String.fromCharCode(65 + i) + '：' + x).join('；') + '\n请按下面准则自核，程序未判合格。');
     $('rubric').hidden = false;
   });
-  $('small').onclick = () => attempt('task', () => { prepare(8, 8, 'all'); smallDone = false; });
+  $('small').onclick = () => attempt('task', () => { prepare(8, 8, 'all'); smallDone = false;counts.hidden=true;showStage(2); });
   $('cost').onclick = () => attempt('cost-out', () => {
     const t = integer(value('time'), 1, 120);
     say('cost-out', '按逐个查看、不并行的模型：小箱8个需 ' + (8 * t) + ' 分钟；全校80个需 ' + (80 * t) + ' 分钟。先自己权衡，再选调查办法。只调查一部分并估计全体，才叫抽样调查。真实耗时还受准备、往返等影响。');
@@ -120,17 +194,18 @@
     const t = integer(value('time'), 1, 120), method = value('method');
     if (!method || !value('decision') || !value('range') || !value('capacity')) throw Error('先选办法，分别写成本理由、范围评价与容量评价；这些理由需人工评价。');
     const n = method === 'all' ? 80 : integer(value('size'), 1, 79);
-    prepare(80, n, method);
+    prepare(80, n, method);counts.hidden=true;showStage(2);
     say('cost-out', '本方案逐个查看预计 ' + (n * t) + ' 分钟，全面查看需 ' + (80 * t) + ' 分钟。容量 ' + n + '；这不是精度保证。');
   });
   $('organize').onclick = () => attempt('data-out', () => {
     clearData();
     if (!active) throw Error('先准备本轮调查名单。');
-    if (!value('origin')) throw Error('请如实写数据来源与划记/核查说明。');
     const rows = records(value('raw'), active.ids, active.opts.length);
-    if (active.source === 'model' && rows.some(([id, c]) => c !== String.fromCharCode(65 + (id - 1) % active.opts.length))) throw Error('录入与虚构代码卡不符，请逐项回查，不为结论修改记录。');
+    if (active.source === 'model' && rows.some(([id, c]) => c !== String.fromCharCode(65 + (id - 1) % active.opts.length))) {const wrong=rows.find(([id,c])=>c!==String.fromCharCode(65+(id-1)%active.opts.length));activeField=$('raw');throw Error('编号'+wrong[0]+'的代码与本轮代码卡不同，请回查这一行。');}
+    if(counts.hidden) {counts.hidden=false;say('data-out','逐个记录通过。接着划记，写出各类有几个。');$('organize').textContent='核对频数，生成对照图';return;}
+    if (!value('origin')) throw Error('写清这轮数据来自模拟还是实际观察，以及怎样核查。');
     const freq = frequencies(rows, active.opts.length), entered = countInput(value('counts'), active.opts.length, active.n);
-    if (freq.some((x, i) => x !== entered[i])) throw Error('你的频数表与原始记录不一致。请逐行划记，检查漏记或重记后重试。');
+    if (freq.some((x, i) => x !== entered[i])) throw Error(String.fromCharCode(65+freq.findIndex((x,i)=>x!==entered[i]))+'类的频数与记录不一致。只重数这一类，检查是否漏记或重记。');
     const stamp = JSON.stringify({ active, rows, draft: draft().filter(x => x[0] !== 'os-reason') });
     if (history.length && history[history.length - 1].stamp !== stamp && !value('reason')) throw Error('请写本轮修订/新一轮理由；原始旧稿必须保留。');
     if (!history.length || history[history.length - 1].stamp !== stamp) history.push({ stamp, text: draft().map(x => x.join(': ')).join('\n') + '\n名单: ' + active.ids.join(',') });
@@ -148,21 +223,26 @@
       const bar = document.createElement('div'); bar.className = 'os-bar'; bar.style.width = (n / active.n * 100) + '%'; bar.setAttribute('aria-hidden', 'true'); td.append(bar);
     });
     $('chart').append(table);
-    say('data-out', '编号、代码与频数结构核对一致，合计 ' + active.n + '。图由程序生成供对照；请核对自己的纸上划记和条形图。比例四舍五入可能不恰好合100%。未自动核实问卷语义、真实观察、手绘或同伴活动。');
+    say('data-out', '记录与频数一致，合计 ' + active.n + '。未自动核实真实调查和文字，请自核。');
+    showStage(active.total===8?3:4); say(active.total===8?'cost-out':'review','已核对本轮'+active.n+'条记录和频数；接着完成这一段。');
     say('history', '已在本页内存保留 ' + history.length + ' 版原始稿，刷新/清空会失去；请及时本地导出。');
   });
   form.addEventListener('submit', e => {
     e.preventDefault();
     say('review', '成果评价（人工自核/同伴讨论，不自动授予合格）：\n①问卷中立、定义清楚、选项互斥覆盖吗？用边界物品试填。\n②小箱是否逐个记录？扩大范围为何选择该办法？\n③名单是否覆盖总体且机会相等？容量与时间取舍有何依据？容量大不能补救范围偏差。\n④原始稿、划记、表、图是否互相一致？真实数据有来源和同伴核验吗？\n⑤样本结论是否只作估计，承认换样本可能不同？方案修改有理由且保留旧数据吗？\n本页当前' + (organized ? '记录结构已核对；' : '尚无本轮结构核对结果；') + '不证明调查已真实完成。把问卷、方案、原稿、图表、结论及修改理由一起交给同伴/老师评价。');
+    const text=$('review').textContent;
+    $('review').replaceChildren(document.createTextNode('逐项自核；这不证明调查已真实完成。'));
+    text.split('\n').slice(1).forEach((line,i)=>{const d=document.createElement('details');d.className='more';const summary=document.createElement('summary');summary.textContent=['问卷是否清楚？','调查过程是否完整？','名单和容量合适吗？','记录与图表一致吗？','结论和修改有依据吗？'][i]||'交给同伴或老师看';const p=document.createElement('p');p.textContent=line;d.append(summary,p);$('review').append(d);});
+
   });
   form.addEventListener('input', e => {
     say('review', '');
     const id = e.target.id;
     if (['os-question', 'os-definition', 'os-options', 'os-source'].includes(id)) {
-      smallDone = false; clearActive(); say('preview', ''); $('rubric').hidden = true;
+      smallDone = false; clearActive(); showStage(0); counts.hidden=true; say('preview', ''); $('rubric').hidden = true;
     } else if (['os-raw', 'os-counts', 'os-origin', 'os-reason'].includes(id)) {
       if (active?.total === 8 && id !== 'os-reason') smallDone = false;
-      clearData();
+      clearData();if(id!=='os-reason')showStage(2);
     } else if (['os-method', 'os-size', 'os-time'].includes(id)) {
       say('cost-out', '');
       if (active?.total === 80) clearActive();
@@ -174,7 +254,7 @@
     const a = document.createElement('a'); a.href = url; a.download = 'survey-draft.txt'; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   form.addEventListener('reset', () => {
-    active = null; smallDone = false; organized = false; history = [];
+    active = null; smallDone = false; organized = false; history = []; showStage(0);counts.hidden=true;clearErrors();
     for (const id of ['preview', 'cost-out', 'task', 'cards', 'data-out', 'review', 'history']) say(id, '');
     $('chart').replaceChildren(); $('rubric').hidden = true; $('model').hidden = false; $('model').open = false;
   });

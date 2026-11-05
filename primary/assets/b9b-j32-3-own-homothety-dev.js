@@ -5,6 +5,50 @@
   var root = document.getElementById("b9b-own-homothety");
   if (!root || root.dataset.ready) return;
   root.dataset.ready = "true";
+
+  // Author display rules must not expose later phases marked hidden.
+  root.classList.add('own-workspace');
+  const phaseStyle = document.createElement('style');
+  phaseStyle.textContent = '.own-workspace [hidden]{display:none!important}.own-workspace input,.own-workspace select,.own-workspace textarea,.own-workspace button{font:inherit;max-width:100%;box-sizing:border-box}';
+  root.append(phaseStyle);
+  // Page-local feedback: keep the first correction beside its control.
+  let activeField = null;
+  function clearErrors() {
+    root.querySelectorAll('[data-input-error]').forEach(e => {
+      const id=e.id;
+      root.querySelectorAll('[aria-describedby]').forEach(input=>{
+        const ids=input.getAttribute('aria-describedby').split(/\s+/).filter(v=>v!==id);
+        if(ids.length)input.setAttribute('aria-describedby',ids.join(' '));else input.removeAttribute('aria-describedby');
+      });e.remove();
+    });
+    root.querySelectorAll('[aria-invalid="true"]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function fieldError(input, message) {
+    if (!input) return;
+    clearErrors();
+    for(let parent=input.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    input.setAttribute('aria-invalid', 'true');
+    const note = document.createElement('span');
+    note.dataset.inputError = 'true'; note.setAttribute('role', 'alert');
+    note.id=(input.id||input.name||'own-field')+'-error';
+    const described=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+    if(!described.includes(note.id))described.push(note.id);
+    input.setAttribute('aria-describedby',described.join(' '));
+    note.style.cssText = 'display:block;font-size:15px;overflow-wrap:anywhere;color:var(--no)';
+    note.textContent = message; input.insertAdjacentElement('afterend', note);
+    if (!input.closest('[hidden]')) input.focus();
+  }
+  function atField(input, run) { activeField = input; return run(); }
+  function inputHelp(element) {
+    if (!element) return;
+    const d = document.createElement('details'); d.className = 'more';
+    const s = document.createElement('summary'); s.textContent = '怎么输入？';
+    element.before(d); d.append(s, element);
+  }
+  root.addEventListener('input', clearErrors);
+  root.addEventListener('change', clearErrors);
+  root.addEventListener('reset', clearErrors);
+
   root.querySelector("#own-domain").textContent += " O 选 [−2,2] 的整数格点；正比 k 选 1/2、1、3/2、2。坐标可带正负号，填整数、小数（最多4位）或整数分数（分子及正分母最多4位），须在半单位网格内，不填单位或算式。";
   var style = document.createElement("style");
   style.textContent = `  #b9b-own-homothety { overflow-wrap: anywhere; scroll-margin-top:80px; }
@@ -42,6 +86,7 @@
   root.querySelector("#own-guide").insertAdjacentHTML("beforeend", `      <p>对每个顶点，先数从 O 出发的横、竖位移，按 k 倍走；同侧方向不变，异侧方向全部反过来。中心不是原点时，不能直接把顶点坐标乘 k。中心若和顶点重合，该点保持不动，不列距离之比。</p>
       <p>检查每组对应点是否与 O 共线，到 O 的距离比是否为 k，整幅图是否统一在同侧或异侧；再检查对应边是否平行或共线。k=1 时，同侧为原图，异侧为中心对称图。未指定位置时，两幅都要画。坐标核验不能代替纸图自查。</p>
 `);
+  inputHelp(root.querySelector("#own-domain"));
   var form = root.querySelector("#own-form"), feedback = root.querySelector("#own-feedback");
   var guide = root.querySelector("#own-guide"), second = root.querySelector("#own-figure-2");
   var ox = root.querySelector("#own-ox"), oy = root.querySelector("#own-oy");
@@ -50,7 +95,7 @@
   var ratios = { "1/2": [1, 2], "1": [1, 1], "3/2": [3, 2], "2": [2, 1] };
   function inputs() { return Array.from(root.querySelectorAll("input")); }
   function invalidate(message) {
-    feedback.textContent = message || "作图稿已编辑，请重新核验。";
+    clearErrors(); feedback.textContent = message || "作图稿已编辑，请重新核验。";
     delete feedback.dataset.result;
     guide.open = false;
     guide.hidden = true;
@@ -58,10 +103,10 @@
   }
   function settingsChanged() {
     inputs().forEach(function (input) { input.value = ""; });
-    second.hidden = side.value !== "both";
+    second.hidden = true;
     second.disabled = second.hidden;
     root.querySelector("#own-task").textContent = side.value === "both" ?
-      "按当前中心、正比 k 作图。未指定同异侧：同侧和异侧各交一幅，图1、图2顺序不限。" :
+      "先画同侧图，填图1的三个点。核对后再画异侧图；最终两幅都要交。" :
       "按当前中心、正比 k 作图。只交一幅" + (side.value === "same" ? "同侧" : "异侧") + "图；与中心重合的顶点保持不动。";
     invalidate("条件已更新，坐标已清空。请重新在纸上作图并填写。");
   }
@@ -110,7 +155,7 @@
     invalidate();
     var cfg = config();
     if (!cfg) { feedback.textContent = "条件超出本工作区范围，请重置后重新选择。"; return; }
-    var figures = [], error = null, count = cfg.side === "both" ? 2 : 1;
+    var figures = [], error = null, count = cfg.side === "both" && !second.hidden ? 2 : 1;
     for (var f = 1; f <= count; f++) {
       var points = names.map(function (name) {
         return ["x", "y"].map(function (axis) {
@@ -126,22 +171,32 @@
     }
     if (error) {
       feedback.textContent = "请检查" + error.label + "：填 −12 到 12 内的半单位网格数，可用整数、小数或整数分数；不能留空。";
-      error.input.focus();
+      fieldError(error.input, feedback.textContent);
       return;
     }
-    var results = figures.map(function (points) { return checkFigure(points, cfg); });
+    var results = figures.map(function (points) { return checkFigure(points, count === 1 && cfg.side === "both" ? Object.assign({},cfg,{side:"same"}) : cfg); });
     var messages = [];
     results.forEach(function (result, i) {
-      if (result.failures.length) messages.push("图" + (i + 1) + "：" + result.failures.join("；"));
+      if (result.failures.length) messages.push("图" + (i + 1) + "：" + result.failures[0]);
     });
     if (!messages.length && count === 2 && results[0].direction === results[1].direction)
       messages.push("未指定位置时需同侧、异侧各一幅，不能重复提交同一种位置。");
+    if (!messages.length && cfg.side === "both" && count === 1) {
+      second.hidden=false;second.disabled=false;
+      feedback.textContent="同侧图通过。接着在图2填异侧图；最终会把两图一起核对。";
+      return;
+    }
+    if (messages.length) {
+      const i=results.findIndex(r=>r.failures.length), name=i>=0 ? (results[i].failures[0].match(/[ABC]/)||['A'])[0] : 'A';
+      const input=root.querySelector('#own-'+(i>=0?i+1:2)+'-'+name+'-x');
+      fieldError(input,messages[0]);
+    }
     feedback.dataset.result = messages.length ? "retry" : "pass";
     feedback.textContent = messages.length ? "还需调整。" + messages.join("。") + "。修改后可再次核验。" :
       "坐标核验通过：对应点共线、距离比及整幅图的位置均符合条件。请在纸图上逐一核对这些条件并顺次连边；纸上作图由你自查。";
     guide.hidden = false;
   });
-  inputs().forEach(function (input) { input.addEventListener("input", function () { invalidate(); }); });
+  inputs().forEach(function (input) { input.addEventListener("input", function () { invalidate(); if(input.closest("#own-figure-1")&&side.value==="both"){second.hidden=true;second.disabled=true;} }); });
   [ox, oy, ratio, side].forEach(function (select) {
     select.addEventListener("input", settingsChanged);
     select.addEventListener("change", settingsChanged);
@@ -151,4 +206,5 @@
     settingsChanged();
     feedback.textContent = "已重置。先在纸上尝试，再填写坐标。";
   });
+  settingsChanged();
 })();

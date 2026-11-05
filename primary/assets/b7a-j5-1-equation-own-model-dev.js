@@ -4,6 +4,52 @@
   const root = document.getElementById('j51-own');
   if (document.body.dataset.sec !== 'j5-1' || !root || root.dataset.mounted) return;
   root.dataset.mounted = 'true';
+
+  // Author display rules must not expose later phases marked hidden.
+  root.classList.add('own-workspace');
+  const phaseStyle = document.createElement('style');
+  phaseStyle.textContent = '.own-workspace [hidden]{display:none!important}.own-workspace input,.own-workspace select,.own-workspace textarea,.own-workspace button{font:inherit;max-width:100%;box-sizing:border-box}';
+  root.append(phaseStyle);
+  // Page-local feedback: keep the first correction beside its control.
+  let activeField = null;
+  function clearErrors() {
+    root.querySelectorAll('[data-input-error]').forEach(e => {
+      const id=e.id;
+      root.querySelectorAll('[aria-describedby]').forEach(input=>{
+        const ids=input.getAttribute('aria-describedby').split(/\s+/).filter(v=>v!==id);
+        if(ids.length)input.setAttribute('aria-describedby',ids.join(' '));else input.removeAttribute('aria-describedby');
+      });e.remove();
+    });
+    root.querySelectorAll('[aria-invalid="true"]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function fieldError(input, message) {
+    if (!input) return;
+    const panel = input.closest('[data-phase]');
+    if (panel) showPhase(Number(panel.dataset.phase));
+    clearErrors();
+    for(let parent=input.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    input.setAttribute('aria-invalid', 'true');
+    const note = document.createElement('span');
+    note.dataset.inputError = 'true'; note.setAttribute('role', 'alert');
+    note.id=(input.id||input.name||'own-field')+'-error';
+    const described=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+    if(!described.includes(note.id))described.push(note.id);
+    input.setAttribute('aria-describedby',described.join(' '));
+    note.style.cssText = 'display:block;font-size:15px;overflow-wrap:anywhere;color:var(--no)';
+    note.textContent = message; input.insertAdjacentElement('afterend', note);
+    if (!input.closest('[hidden]')) input.focus();
+  }
+  function atField(input, run) { activeField = input; return run(); }
+  function inputHelp(element) {
+    if (!element) return;
+    const d = document.createElement('details'); d.className = 'more';
+    const s = document.createElement('summary'); s.textContent = '怎么输入？';
+    element.before(d); d.append(s, element);
+  }
+  root.addEventListener('input', clearErrors);
+  root.addEventListener('change', clearErrors);
+  root.addEventListener('reset', clearErrors);
+
   const gcd = (a, b) => { a = a < 0n ? -a : a; while (b) { [a, b] = [b, a % b]; } return a; };
   function q(n, d = 1n) {
     if (!d) throw Error('除以 0 无意义');
@@ -44,7 +90,7 @@
         tokens.push({t:'n', v:m[0]}); p += m[0].length;
       } else if (s[p] === variable) { tokens.push({t:'v'}); p++; }
       else if ('+-*/()'.includes(s[p])) { tokens.push({t:s[p++]}); }
-      else throw Error('暂未核对此字符或写法，请用声明的输入语法改写');
+      else throw Error('第 ' + (p + 1) + ' 个字符“' + s[p] + '”不能放在这里。字母请用你所设的小写字母。');
     }
     let i = 0;
     const at = () => tokens[i]?.t;
@@ -76,7 +122,7 @@
       return a;
     }
     const a = sum();
-    if (i !== tokens.length) throw Error('暂未核对相邻词元，请补写运算符；不要拆开数字');
+    if (i !== tokens.length) throw Error('这段式子暂未核对：两个数之间少了运算符；一个数的数字不要用空格拆开');
     return a;
   }
   function constant(s) { const a = parse(s); if (!zero(a[0])) throw Error('这里请填写一个数'); return a[1]; }
@@ -87,41 +133,71 @@
   }
   const form = name => root.querySelector('[data-work="' + name + '"]');
   const field = (f, name) => f.elements.namedItem(name);
-  const get = (f, name) => field(f, name).value;
+  const get = (f, name) => { activeField = field(f, name); return activeField.value; };
   const feedback = (f, text = '') => { f.querySelector('[data-feedback]').textContent = text; };
   const model = form('model'), verify = form('verify'), solve = form('solve'), original = form('original');
   let modelEquation = null, current = equation('-3x+6=18'), finalLine = false;
-  function clearVerification() { modelEquation = null; feedback(verify); }
+  function clearVerification() { modelEquation = null; feedback(verify); verify.hidden = solve.hidden = original.hidden = true; root.querySelector('[data-solve-intro]').hidden = true; }
   model.addEventListener('input', clearVerification);
   model.addEventListener('change', clearVerification);
-  function readModel() {
+  let phase = 0;
+  function showPhase(n) {
+    clearErrors(); feedback(model);
+    phase = n;
+    model.querySelectorAll('[data-phase]').forEach(e => e.hidden = Number(e.dataset.phase) !== n);
+    model.querySelector('[data-back]').hidden = n === 0;
+  }
+  function readMeaning() {
     const v = get(model, 'variable');
     if (!/^[a-z]$/.test(v)) throw Error('请自己选择一个小写英文字母表示未知数');
-    for (const name of ['attempt', 'meaning', 'relation']) if (!get(model, name).trim()) throw Error('请先写全算术尝试、设量和自然语言关系，再按准则自核');
-    if (!field(model, 'self').checked) throw Error('请按准则自核你的文字；系统不自动判断文字是否正确');
-    if (get(model, 'unit') !== 'yuan') throw Error('本活动核对的是每本单价，应使用元/本；其它设量暂未核对，请据题意改写');
-    const quantity = parse(get(model, 'quantity'), v), total = parse(get(model, 'total'), v);
-    if (!same(quantity, [q(4n), Z])) throw Error('4 本的钱与所设单价尚不一致；检查本数与单价的关系及单位');
-    if (!same(total, [q(4n), q(6n)])) throw Error('合计钱数尚不一致；检查是否计入包装费');
+    for (const name of ['attempt', 'meaning']) if (!get(model, name).trim()) throw Error(name === 'attempt' ? '先写你打算怎样算，或写卡在哪里。' : '写清这个字母表示什么、用什么单位。');
+    if (get(model, 'unit') !== 'yuan') throw Error('每本的价格，用“元/本”表示。');
+    return v;
+  }
+  function readQuantities(v) {
+    const quantity = parse(get(model, 'quantity'), v);
+    if (!same(quantity, [q(4n), Z])) throw Error('这里是4本的钱，检查本数与每本价格怎样相乘。');
+    const total = parse(get(model, 'total'), v);
+    if (!same(total, [q(4n), q(6n)])) throw Error('总钱数还要算上6元包装费。');
+    if (!get(model, 'relation').trim()) throw Error('先写全这句关系：哪两笔钱相等？');
+    return total;
+  }
+  function readModel() {
+    const v = readMeaning(), total = readQuantities(v);
+    activeField = field(model, 'self');
+    if (!activeField.checked) throw Error('展开文字自核准则，检查后再勾选。');
     const e = equation(get(model, 'equation'), v);
-    if (!((same(e[0], total) && same(e[1], C(34))) || (same(e[1], total) && same(e[0], C(34))))) throw Error('暂未核对这条建模路线。请按你写的总支出关系列式，两边分别表示合计钱数和已知总钱数；这不表示其它合法列式错误');
+    if (!((same(e[0], total) && same(e[1], C(34))) || (same(e[1], total) && same(e[0], C(34))))) throw Error('等号两边应分别是你写的总钱数和34元。其他列式请先在纸上自核。');
     return e;
   }
+  model.querySelector('[data-back]').onclick = () => { showPhase(Math.max(0, phase - 1)); clearVerification(); };
+  showPhase(0);
   function submit(f, run) {
-    f.addEventListener('submit', event => { event.preventDefault(); try { run(); } catch (error) { feedback(f, error.message); } });
+    f.addEventListener('submit', event => { event.preventDefault(); try { run(); } catch (error) { fieldError(activeField, error.message); feedback(f, error.message); } });
     for (const type of ['input', 'change']) f.addEventListener(type, () => feedback(f));
     f.addEventListener('reset', () => feedback(f));
   }
-  submit(model, () => { modelEquation = readModel(); feedback(model, '量式和方程核对通过。文字仅由你按准则自核，未自动判真。价格应非负；请再代入给定值检验原两边。'); });
-  model.addEventListener('reset', clearVerification);
+  submit(model, () => {
+    if (phase < 2) {
+      const v = readMeaning();
+      if (phase === 1) readQuantities(v);
+      showPhase(phase + 1); feedback(model, phase === 1 ? '接着用字母写出两笔钱。文字还要自己检查。' : '量式核对通过。检查文字，再列方程。'); return;
+    }
+    modelEquation = readModel(); verify.hidden = false;
+    feedback(model, '量式和方程核对通过。接着选一个数代入；文字按准则自核。');
+  });
+  model.addEventListener('reset', () => { clearVerification(); showPhase(0); clearErrors(); });
   submit(verify, () => {
     if (!modelEquation) throw Error('请先提交并核对你列的方程；编辑后需重新提交');
     if (!get(verify, 'candidate')) throw Error('请选择一个给定值');
     const x = constant(get(verify, 'candidate')), l = value(modelEquation[0], x), r = value(modelEquation[1], x);
-    const a = constant(get(verify, 'left')), b = constant(get(verify, 'right'));
-    if (!eq(a, l) || !eq(b, r)) throw Error('代入值尚未核对一致，请分别重算原方程两边（负数代入加括号）');
+    const a = constant(get(verify, 'left'));
+    if (!eq(a, l)) throw Error('左边的计算尚未核对一致，负数代入时要加括号。');
+    const b = constant(get(verify, 'right'));
+    if (!eq(b, r)) throw Error('右边的计算尚未核对一致，请代回原方程右边。');
     const isSolution = eq(l, r);
     if (get(verify, 'judgment') !== (isSolution ? 'yes' : 'no')) throw Error('请根据原方程两边是否相等重新判断');
+    solve.hidden = false; root.querySelector('[data-solve-intro]').hidden = false;
     feedback(verify, '原左边 = ' + str(l) + '，原右边 = ' + str(r) + '；' + (isSolution ? '相等，是方程的解，且单价非负，符合题意。' : '不相等，不是原方程的解。') + (x[0] < 0n ? '负单价也不符合本题的实际范围。' : ''));
   });
   submit(solve, () => {
@@ -147,13 +223,13 @@
     root.querySelector('[data-history]').append(li);
     root.querySelector('[data-current]').textContent = '当前等式：' + get(solve, 'next');
     for (const name of ['operation', 'operand', 'next', 'property']) field(solve, name).value = '';
-    feedback(original);
+    feedback(original); original.hidden = !finalLine;
     feedback(solve, finalLine ? '已写成 x = 一个数。请将它代回原方程核对。' : '这一步的双边动作、等式和依据核对通过。继续亲写下一步。');
   });
   solve.addEventListener('reset', () => {
     current = equation('-3x+6=18'); finalLine = false;
     root.querySelector('[data-current]').textContent = '当前等式：−3x + 6 = 18';
-    root.querySelector('[data-history]').replaceChildren(); original.reset();
+    root.querySelector('[data-history]').replaceChildren(); original.reset(); original.hidden = true;
   });
   submit(original, () => {
     if (!finalLine) throw Error('请先逐步亲写到 x = 一个数，再检验');

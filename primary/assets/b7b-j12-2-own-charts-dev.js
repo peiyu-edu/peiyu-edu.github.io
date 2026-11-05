@@ -4,6 +4,52 @@
   var root = document.getElementById('j12-own-charts');
   if (!root || document.body.dataset.sec !== 'j12-2' || root.dataset.ready) return;
   root.dataset.ready = '1';
+
+  // Author display rules must not expose later phases marked hidden.
+  root.classList.add('own-workspace');
+  const phaseStyle = document.createElement('style');
+  phaseStyle.textContent = '.own-workspace [hidden]{display:none!important}.own-workspace input,.own-workspace select,.own-workspace textarea,.own-workspace button{font:inherit;max-width:100%;box-sizing:border-box}';
+  root.append(phaseStyle);
+  // Page-local feedback: keep the first correction beside its control.
+  let activeField = null;
+  function clearErrors() {
+    root.querySelectorAll('[data-input-error]').forEach(e => {
+      const id=e.id;
+      root.querySelectorAll('[aria-describedby]').forEach(input=>{
+        const ids=input.getAttribute('aria-describedby').split(/\s+/).filter(v=>v!==id);
+        if(ids.length)input.setAttribute('aria-describedby',ids.join(' '));else input.removeAttribute('aria-describedby');
+      });e.remove();
+    });
+    root.querySelectorAll('[aria-invalid="true"]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function fieldError(input, message) {
+    if (!input) return;
+    const key=input.dataset.field;
+    if(input.closest('.oc-row')&&input.closest('.card')===pieBox) setPiePhase(key==='count'?0:['pct','angle'].includes(key)?1:2);
+    clearErrors();
+    for(let parent=input.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    input.setAttribute('aria-invalid', 'true');
+    const note = document.createElement('span');
+    note.dataset.inputError = 'true'; note.setAttribute('role', 'alert');
+    note.id=(input.id||input.name||'own-field')+'-error';
+    const described=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+    if(!described.includes(note.id))described.push(note.id);
+    input.setAttribute('aria-describedby',described.join(' '));
+    note.style.cssText = 'display:block;font-size:15px;overflow-wrap:anywhere;color:var(--no)';
+    note.textContent = message; input.insertAdjacentElement('afterend', note);
+    if (!input.closest('[hidden]')) input.focus();
+  }
+  function atField(input, run) { activeField = input; return run(); }
+  function inputHelp(element) {
+    if (!element) return;
+    const d = document.createElement('details'); d.className = 'more';
+    const s = document.createElement('summary'); s.textContent = '怎么输入？';
+    element.before(d); d.append(s, element);
+  }
+  root.addEventListener('input', clearErrors);
+  root.addEventListener('change', clearErrors);
+  root.addEventListener('reset', clearErrors);
+
   var style = document.createElement('style');
   style.textContent = '#j12-own-charts input,#j12-own-charts select,#j12-own-charts textarea{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:4px;max-width:100%;padding:5px;box-sizing:border-box}#j12-own-charts input{width:5.2em}#j12-own-charts textarea{display:block;width:100%;min-height:5em}#j12-own-charts label{display:inline-block;margin:5px}#j12-own-charts .oc-row{border-bottom:1px solid var(--line);padding:8px 0}#j12-own-charts .oc-scroll{overflow-x:auto}#j12-own-charts svg{display:block;width:100%;max-width:400px;height:auto;color:var(--fg);touch-action:manipulation}#j12-own-charts button{margin:4px;white-space:normal}#j12-own-charts output{display:block;min-height:1.8em;overflow-wrap:anywhere}';
   root.appendChild(style);
@@ -42,13 +88,33 @@
   }
   // 1. Students calculate the table and place cumulative rays on a protractor.
   var pieBox = node('div',null,root); pieBox.className='card';
-  node('h3','A. 列表、量角，自己画扇形图和条形图',pieBox);
+  var pieTitle=node('h3','A. 数一数：三类各有几个？',pieBox);
   var pieSet = select(pieBox,'练习数据',['常规','含零类','全一类','需舍入']);
   var pieRaw = node('p','',pieBox), pieRows = node('div',null,pieBox);
   node('p','填频数、百分数数值（不带%）、圆心角数值（不带°）。比例与角度若需近似，统一保留一位小数；原始计数不改。作图从正上方的0°射线顺时针量起，逐类输入累计终边角；零类终边不前进，全一类画满圆。每类自己标类别名和百分比。',pieBox);
   var activeRay = select(pieBox,'量哪条终边',['甲类终边','乙类终边','丙类终边']);
   var pieFig = svg(pieBox,'学生量角构成的扇形图'), pieLegend=node('div','',pieBox), barFig = svg(pieBox,'学生设置柱高的条形图');
-  var pieOut = output(pieBox), pf = [], pv;
+  var pieOut = output(pieBox), pf = [], pv, piePhase=0;
+  var angleNote=node('p','甲的终边角=甲的圆心角；乙的终边角=甲角+乙角；丙再加上丙角。从上方0°顺时针量。',pieBox);
+  function setPiePhase(n) {
+    piePhase=n;
+    pieTitle.textContent=['A. 数一数：三类各有几个？','A. 算占比和圆心角','A. 按算出的数画两张图'][n];
+    pf.forEach(f=>Object.keys(f).forEach(key=>f[key].closest('label').hidden=n===0?key!=='count':n===1?!['pct','angle'].includes(key):!['end','height','name','mark'].includes(key)));
+    [activeRay.closest('label'),pieFig,pieLegend,barFig,angleNote].forEach(e=>e.toggleAttribute('hidden',n<2));
+    if(pieDraw)pieDraw.hidden=n<2;
+  }
+  function pieIssue(stage) {
+    var counts=['甲','乙','丙'].map(n=>pv.filter(v=>v===n).length),cum=0;
+    for(var i=0;i<pf.length;i++){
+      var f=pf[i],c=counts[i],p=100*c/pv.length,a=360*c/pv.length;cum+=a;
+      var checks=[[f.count,near(number(f.count,0,100,true),c),'频数：只数这一类出现几次。']];
+      if(stage>=1)checks.push([f.pct,displayed(number(f.pct,0,100),p),'百分数：这一类个数÷总个数×100，必要时保留一位小数。'],[f.angle,displayed(number(f.angle,0,360),a),'圆心角：这一类占比×360，必要时保留一位小数。']);
+      if(stage>=2)checks.push([f.end,displayed(number(f.end,0,360),cum),'终边角：从0°起，把前面各类的角加起来。'],[f.height,near(number(f.height,0,100,true),c),'柱高应表示这一类的个数。'],[f.name,f.name.value.trim()===['甲','乙','丙'][i],'类名要与原记录对应。'],[f.mark,displayed(number(f.mark,0,100),p),'图上百分数应与这一类算出的百分数相同。']);
+      var bad=checks.find(x=>!x[1]);if(bad)return{input:bad[0],text:['甲','乙','丙'][i]+'类'+bad[2]};
+    }
+    if(stage>=2&&number(pf[2].end,0,360)!==360)return{input:pf[2].end,text:'最后一条终边要回到360°。'};
+    return null;
+  }
   pieFig.addEventListener('pointerdown', function (ev) {
     var rect=pieFig.getBoundingClientRect(), x=(ev.clientX-rect.left)*400/rect.width-200, y=(ev.clientY-rect.top)*300/rect.height-145;
     if (Math.hypot(x,y)<30 || Math.hypot(x,y)>135) return;
@@ -66,11 +132,11 @@
     var sets = [['甲','乙','甲','丙','甲','乙','甲','丙'],['甲','甲','乙','甲'],['甲','甲','甲'],['甲','乙','丙']];
     pv=sets[Number(pieSet.value)]; pieRaw.textContent='社团徽章类别记录（单位：个）：'+pv.join('、'); pieRows.replaceChildren(); pf=[];
     ['甲','乙','丙'].forEach(function(n,i) { var r=node('div',null,pieRows); r.className='oc-row'; node('b',n+'类',r); var f={}; [['count','频数'],['pct','百分数'],['angle','圆心角'],['end','累计终边角'],['height','条形柱高'],['name','图上类名'],['mark','图上百分数']].forEach(function(k){f[k[0]]=field(r,n+'类'+k[1],k[0],k[0]==='name');}); pf.push(f); });
-    pieOut.textContent=''; pieLegend.replaceChildren(); if(reason) reason.querySelector('textarea').value=''; activeRay.value='0'; protractor(); barFig.replaceChildren(); delete pieFig.dataset.drawn; delete barFig.dataset.drawn;
+    pieOut.textContent=''; pieLegend.replaceChildren(); if(reason) reason.querySelector('textarea').value=''; activeRay.value='0'; protractor(); barFig.replaceChildren(); delete pieFig.dataset.drawn; delete barFig.dataset.drawn; setPiePhase(0);
   }
-  button(pieBox,'按我的角度和柱高绘制',function(){
+  var pieDraw=button(pieBox,'按我的角度和柱高绘制',function(){
     var ends=pf.map(function(f){return number(f.end,0,360);}), heights=pf.map(function(f){return number(f.height,0,100,true);});
-    if(ends.some(function(x){return x===null;}) || heights.some(function(x){return x===null;}) || ends.some(function(x,i){return i&&x<ends[i-1];})) { pieOut.textContent='请用递增或相等的0至360数值填写累计终边角；柱高用0至100整数。';return; }
+    if(ends.some(function(x){return x===null;}) || heights.some(function(x){return x===null;}) || ends.some(function(x,i){return i&&x<ends[i-1];})) { var bad=pf.findIndex((f,i)=>ends[i]===null||heights[i]===null||(i&&ends[i]<ends[i-1]));fieldError(ends[bad]===null||(bad&&ends[bad]<ends[bad-1])?pf[bad].end:pf[bad].height,'终边角填0至360，不能比前一类小；柱高填0至100的整数。');return; }
     protractor(); var start=0;
     ends.forEach(function(end,i){ var span=end-start,t1=start*Math.PI/180,t2=end*Math.PI/180;
       if(span===360) shape(pieFig,'circle',{cx:200,cy:145,r:100,fill:colors[i],opacity:.65});
@@ -83,19 +149,19 @@
     pieFig.dataset.drawn=barFig.dataset.drawn='1';
     pieOut.textContent='已按你的输入绘制；再核对表、扇形与柱高。';
   });
-  button(pieBox,'核对我的表和两张图',function(){
-    var counts=['甲','乙','丙'].map(function(n){return pv.filter(function(v){return v===n;}).length;}), cumulative=0, issues=[];
-    pf.forEach(function(f,i){var c=counts[i],p=100*c/pv.length,a=360*c/pv.length;cumulative+=a;
-      if(!near(number(f.count,0,100,true),c)) issues.push('第'+(i+1)+'类频数');
-      if(!displayed(number(f.pct,0,100),p)||!displayed(number(f.angle,0,360),a)) issues.push('第'+(i+1)+'类比例或角度');
-      if(!displayed(number(f.end,0,360),cumulative)||!near(number(f.height,0,100,true),c)) issues.push('第'+(i+1)+'类终边或柱高');
-      if(f.name.value.trim()!==['甲','乙','丙'][i]||!displayed(number(f.mark,0,100),p)) issues.push('第'+(i+1)+'类图注');
-    });
-    if(number(pf[2].end,0,360)!==360) issues.push('最后终边须回到360°');
-    if(!pieFig.dataset.drawn||!barFig.dataset.drawn) issues.push('请先绘制当前两张图');
-    pieOut.textContent=issues.length?'请重查：'+issues.join('、')+'。频数÷总数×100求百分数，再乘360÷100求角度；终边要累计。':'表与构图数值一致。精确比例合计100%、角度360°；显示舍入允许微小差额，不改变原始数据。还须检查图上的类别与标注。';
+  button(pieBox,'核对这一步',function(){
+    clearErrors();
+    var issue=pieIssue(piePhase);
+    if(issue){fieldError(issue.input,issue.text);pieOut.textContent='先改旁边提示的这一项。';return;}
+    if(piePhase<2){setPiePhase(piePhase+1);pieOut.textContent=piePhase===1?'频数通过。接着算各类的百分数和圆心角。':'比例和角度通过。接着标终边、设柱高，再绘图。';return;}
+    if(!pieFig.dataset.drawn||!barFig.dataset.drawn){pieOut.textContent='先点“按我的角度和柱高绘制”，再核对两张图。';return;}
+    pieOut.textContent='表和两张图的数值一致。舍入会有微小差额，原始个数不变。';
   });
-  button(pieBox,'重做本组',loadPie); pieSet.onchange=loadPie; clear(pieRows,pieOut,[pieFig,barFig]);pieRows.addEventListener('input',function(){pieLegend.replaceChildren();protractor();}); loadPie();
+  button(pieBox,'重做本组',loadPie); pieSet.onchange=loadPie; clear(pieRows,pieOut,[pieFig,barFig]);pieRows.addEventListener('input',function(){pieLegend.replaceChildren();protractor();
+    var target=arguments[0]?.target;
+    if(target?.dataset.field==='count')setPiePhase(0);
+    else if(['pct','angle'].includes(target?.dataset.field))setPiePhase(1);
+  }); loadPie();
   var reason=node('div',null,pieBox); node('label','同一数据两张图：若要比较数量／显示构成，你各选哪张？联系分类数据的性质，写出理由。',reason); node('textarea','',reason);
   // 2. Full four-step grouping, manual assignment, table and independent heights.
   var histBox=node('div',null,root); histBox.className='card';node('h3','B. 从逐个划记到等组距直方图',histBox);
@@ -106,7 +172,12 @@
   function loadHist(){hd=histSet.value==='0'?[10,12,14,14,18,20,20,22]:[7,7,7,7];histRaw.textContent='原始长度/cm：'+hd.join('、');[diff,start,width,groups].forEach(function(e){e.value='';});work.replaceChildren();histFig.replaceChildren();delete histFig.dataset.drawn;histOut.textContent='';hp=null;}
   button(plan,'建立我的空表',function(){
     var s=number(start,0,30,true),w=number(width,1,20,true),k=number(groups,1,8,true);
-    if(s===null||w===null||k===null){histOut.textContent='起点用0至30整数，组距用1至20整数，组数用1至8整数。';return;}
+    if(s===null){fieldError(start,'起点填0至30的整数。');return;}
+    if(w===null){fieldError(width,'组距填1至20的整数。');return;}
+    if(k===null){fieldError(groups,'组数填1至8的整数。');return;}
+    if(!near(number(diff,0,100,true),Math.max(...hd)-Math.min(...hd))){fieldError(diff,'用最大值减最小值，再算一次。');return;}
+    if(s>Math.min(...hd)){fieldError(start,'起点不能大于最小的数。');return;}
+    if(s+w*k<=Math.max(...hd)){fieldError(groups,'最后一组的右端要大于最大值；可以改组数或组距。');return;}
     hp={s:s,w:w,k:k};assignment=hd.map(function(){return null;});hf=[];work.replaceChildren();histFig.replaceChildren();delete histFig.dataset.drawn;histOut.textContent='';
     node('p','每个原始数据先选一组划记。改选会移去旧记号，不会重复计数；表中再自行填频数，另设柱高，最后写合计。',work);
     var marks=node('div',null,work), table=node('div',null,work);
@@ -116,15 +187,18 @@
   });
   button(histBox,'按我的柱高绘图',function(){if(!hp){histOut.textContent='先建立空表。';return;}var vals=hf.map(function(f){return number(f.height,0,100,true);});if(vals.some(function(x){return x===null;})){histOut.textContent='每组柱高都需填写0至100整数，包括零频组。';return;}var names=[];for(var i=0;i<=hp.k;i++)names.push(hp.s+i*hp.w);bars(histFig,vals,names,true);label(histFig,365,290,'cm');histFig.dataset.drawn='1';histOut.textContent='已按你的柱高画等宽、相邻的柱。';});
   button(histBox,'核对四步',function(){
-    if(!hp){histOut.textContent='先填写分组计划、建立空表。';return;}
-    var min=Math.min.apply(null,hd),max=Math.max.apply(null,hd),issues=[];
-    if(!near(number(diff,0,100,true),max-min))issues.push('最大最小之差');
-    if(hp.s>min||hp.s+hp.w*hp.k<=max)issues.push('分组覆盖：起点不大于最小值，最后右端严格大于最大值');
-    if(assignment.some(function(g,i){return g===null||hd[i]<hp.s+g*hp.w||hd[i]>=hp.s+(g+1)*hp.w;}))issues.push('逐项划记：边界只归后一组，不重不漏');
-    var total=0;hf.forEach(function(f,i){var n=hd.filter(function(v){return v>=hp.s+i*hp.w&&v<hp.s+(i+1)*hp.w;}).length;var c=number(f.count,0,100,true);total+=c===null?0:c;if(!near(c,n)||!near(number(f.height,0,100,true),n))issues.push('第'+(i+1)+'组频数或柱高');});
-    if(!near(number(hf.total,0,100,true),hd.length)||total!==hd.length)issues.push('合计与数据总数');
-    if(!histFig.dataset.drawn)issues.push('请先绘制当前柱图');
-    histOut.textContent=issues.length?'请重查：'+issues.join('；')+'。':'四步数值与逐项归组一致。图上相邻组等宽，零频组仍占一个组距；高表示频数。改变组距可重做比较，不能把不同宽的柱都按频数高度理解面积。';
+    clearErrors();
+    if(!hp){fieldError(start,'先填写分组计划，建立空表。');return;}
+    var bad=assignment.findIndex((g,i)=>g===null||hd[i]<hp.s+g*hp.w||hd[i]>=hp.s+(g+1)*hp.w);
+    if(bad>=0){fieldError(work.querySelector('[data-item="'+bad+'"]'),'第'+(bad+1)+'项分组还不对。左端算在本组，右端算到下一组。');return;}
+    for(var i=0;i<hf.length;i++){
+      var n=hd.filter(v=>v>=hp.s+i*hp.w&&v<hp.s+(i+1)*hp.w).length;
+      if(!near(number(hf[i].count,0,100,true),n)){fieldError(hf[i].count,'第'+(i+1)+'组频数还不对，只重数这一组。');return;}
+      if(!near(number(hf[i].height,0,100,true),n)){fieldError(hf[i].height,'第'+(i+1)+'组柱高要表示这一组的频数。');return;}
+    }
+    if(!near(number(hf.total,0,100,true),hd.length)){fieldError(hf.total,'合计应与原始数据的个数相同。');return;}
+    if(!histFig.dataset.drawn){histOut.textContent='先按你的柱高绘图，再核对。';return;}
+    histOut.textContent='四步一致。等宽的组用柱高表示频数，空组也保留位置。';
   });
   button(histBox,'重做本组',loadHist);histSet.onchange=loadHist;
   plan.addEventListener('input',function(){hp=null;work.replaceChildren();histFig.replaceChildren();delete histFig.dataset.drawn;histOut.textContent='';});clear(work,histOut,[histFig]);loadHist();
@@ -144,6 +218,23 @@
   var actual=field(misleading,'图一实际数量比（第二天÷第一天）','actual'), visual=field(misleading,'图一可见柱长比','visual'), early=field(misleading,'图二前段每天增长/cm','early'), late=field(misleading,'图二后段每天增长/cm','late');
   var judgment=select(misleading,'对两句断言的判断',['请选择','两句都可直接成立','两句都不能直接成立','仅图一句成立','仅图二句成立']);
   node('textarea','',misleading).setAttribute('aria-label','我对两幅图误导的解释与改图办法');var misOut=output(misleading);
-  button(misleading,'核对计算并看解释',function(){var ok=near(number(actual,0,10),1.2)&&near(number(visual,0,10),2)&&near(number(early,0,10),2)&&near(number(late,0,10),.5)&&judgment.value==='2';misOut.textContent=ok?'计算与判断一致：柱长比2不等于实际比1.2；前后每天增长2和0.5 cm，并非同速。条形图可从0重画；时间轴按0、1、5真实距离重画。非0纵轴并非在所有图中都错，清楚标明尺度的变化图可以使用；真实时间比例下的不均匀点间距合法。你的文字仍需依据这些准则自核。':'先据坐标计算：柱长应减去轴起点；每天增长需除以各段实际天数。修改后可再次核对。';});
-  clear(misleading,misOut,[]);button(misleading,'重新判断',function(){misleading.querySelectorAll('input,textarea').forEach(function(e){e.value='';});judgment.value='0';misOut.textContent='';});
+  button(misleading,'核对计算并看解释',function(){
+    clearErrors();
+    var tests=[[actual,1.2,'实际数量比用第二天数量÷第一天数量。'],[visual,2,'柱长从80开始算，两根柱都先减80。'],[early,2,'前段增加的高度÷前段天数。'],[late,.5,'后段经历了4天，增长量要除以4。']];
+    var bad=tests.find(x=>!near(number(x[0],0,10),x[1]));
+    if(bad){fieldError(bad[0],bad[2]);return;}
+    if(judgment.value!=='2'){fieldError(judgment,'再比较实际数量比和柱长比，以及两段每天的增长。');return;}
+    misOut.textContent='计算与判断一致：柱长比2，实际比1.2；每天分别增长2和0.5 cm。';
+    var d=node('details',null,misOut);d.className='more';node('summary','详细解释与改图办法',d);
+    node('p','条形图可从0重画；时间轴按0、1、5的真实距离重画；不均匀点间距合法，前提是按真实时间比例绘制。非0纵轴并非都错，清楚标明尺度的变化图可以使用。解释文字仍请自核。',d);
+  });
+  clear(misleading,misOut,[]);button(misleading,'重新判断',function(){clearErrors();misleading.querySelectorAll('input,textarea').forEach(function(e){e.value='';});judgment.value='0';misOut.textContent='';});
+  var sections=[pieBox,histBox,reflect,misleading], menu=node('label','选做一个活动 ');
+  var choice=node('select',null,menu);choice.setAttribute('aria-label','选做一个图表活动');
+  ['A 数一数、画两张图','B 分组、画直方图','C 趋势与纸笔作图','D 检查有问题的图'].forEach((t,i)=>choice.append(new Option(t,String(i))));
+  pieBox.before(menu);
+  function choose(){sections.forEach((e,i)=>e.hidden=i!==Number(choice.value));clearErrors();}
+  choice.onchange=choose;choose();setPiePhase(0);
+  sections.forEach(box=>Array.from(box.children).filter(e=>e.tagName==='P'&&e.textContent.length>80).forEach(inputHelp));
+
 })();

@@ -1,7 +1,7 @@
 /* j5-2 only. Exact rational arithmetic; deliberately closed input grammar. */
 (function () {
   'use strict';
-  const unsupported = '暂未核对：请按本区语法改写；这不表示你的数学想法错误。';
+  const unsupported = '这个式子暂未核对。看看是否漏了数、运算符或括号；也可展开“怎么输入？”。';
   function need(ok, msg = unsupported) { if (!ok) throw new Error(msg); }
   function gcd(a, b) { a = a < 0n ? -a : a; b = b < 0n ? -b : b; while (b) [a, b] = [b, a % b]; return a; }
   function q(n, d = 1n) {
@@ -31,7 +31,7 @@
       if (/\s/.test(s[i])) { i++; continue; }
       const m = /^(?:0|[1-9][0-9]{0,5})(?:\.[0-9]{1,6})?/.exec(s.slice(i));
       if (m) { ts.push({ t: 'n', s: m[0] }); i += m[0].length; }
-      else { need(/[x()+*/-]/.test(s[i])); ts.push({ t: s[i], s: s[i++] }); }
+      else { need(/[x()+*/-]/.test(s[i]), '第' + (i + 1) + '个字符“' + s[i] + '”暂未核对。请用小写x、数字或运算符。'); ts.push({ t: s[i], s: s[i++] }); }
       need(ts.length <= 100);
     }
     // A space never joins digits: `1 2`, `1 .2`, `0.1 2` stay invalid.
@@ -64,7 +64,7 @@
       while (ts[at]?.t === '+' || ts[at]?.t === '-') { const op = ts[at++].t; a = node(op, { left: a, right: product() }); }
       return a;
     }
-    const tree = sum(); need(at === ts.length);
+    const tree = sum(); need(at === ts.length, '从“' + (ts[at]?.s || '') + '”起暂未核对：检查是否少了运算符，或数字被空格拆开。');
     function calc(t) {
       if (t.op === 'num') return { a: zero, b: t.value, hasX: false };
       if (t.op === 'x') return { a: one, b: zero, hasX: true };
@@ -78,7 +78,7 @@
     return { ...calc(tree), tree };
   }
   function equation(raw) {
-    const parts = raw.split('='); need(parts.length === 2);
+    const parts = raw.split('='); need(parts.length === 2, '方程要有且只有一个等号，请用 =。');
     return parts.map(parse);
   }
   function number(raw) { const a = parse(raw); need(!a.hasX); return a.b; }
@@ -199,18 +199,21 @@
   if (!root || root.dataset.mounted) return;
   root.dataset.mounted = 'true';
   root.innerHTML = `
-    <h2>先自己列、自己解，再对照</h2>
-    <p>这里不预填下一步。先按题意列式，再根据式子的特点选操作；可以跳过不需要的步骤。已有讲解和图解仍在下方。</p>
+    <h2>先列一个方程</h2>
+    <p>读题后，先写一个表示两边一样多的方程。</p>
+    <details class="more"><summary>怎么输入？</summary>
     <p class="small">核对语法：只用小写x、整数或最多6位小数、+ − * / 和圆括号；数字可紧接x或左括号，其他乘法请写*。分母只用已知数。每次只写一个等号，不写单位或省略号；数的空格不会拼接。列式可把原数量展开、合并x项、移项或换边，请保留情境中的数及其运算关系；只给末解不算建模。未支持写法会提示暂未核对。</p>
+    </details>
     <label>选择一个情境 <select id="own-case">${cases.map((c, i) => `<option value="${i}">${c.title}</option>`).join('')}</select></label>
     <p id="own-story"></p>
     <form id="own-model" class="card">
-      <label>x表示什么？两边各表示什么量？等量关系是什么？<textarea id="own-meaning" rows="3"></textarea></label>
+      <label>自己列出的方程 <input id="own-equation" autocomplete="off"></label>
+      <div data-model-meaning hidden>      <label>x表示什么？两边各表示什么量？等量关系是什么？<textarea id="own-meaning" rows="3"></textarea></label>
       <p class="small">这段文字只供你自核，不自动判真，也不表示已发生纸笔或同伴讨论。</p>
       <label><span id="own-expr-label0"></span>的式子 <input id="own-expr0" autocomplete="off"></label>
       <label><span id="own-expr-label1"></span>的式子 <input id="own-expr1" autocomplete="off"></label>
-      <label>自己列出的方程 <input id="own-equation" autocomplete="off"></label>
-      <button type="submit">核对数量关系，开始推演</button>
+</div>
+      <button type="submit">核对这一步</button>
       <p id="own-model-feedback" role="status"></p>
       <details id="own-model-compare" hidden><summary>对照一种列式的设量和意义（你的文字仍需自核）</summary><p id="own-model-meaning"></p></details>
     </form>
@@ -227,11 +230,11 @@
       <label>下一行等式 <input id="own-next" autocomplete="off"></label>
       <button type="submit">核对这一行和依据</button> <button type="button" id="own-undo">退回上一行</button>
       <p id="own-step-feedback" role="status"></p>
-      <p class="small">操作和等式由程序逐边核对；“为什么”的文字只供自核。可把合并写在双边动作的同一行；去括号与合并只核两边各自恒等，不核你心里采用的书写顺序。</p>
+      <details class="more"><summary>核对哪些内容？</summary><p class="small">操作和等式由程序逐边核对；“为什么”的文字只供自核。可把合并写在双边动作的同一行；去括号与合并只核两边各自恒等，不核你心里采用的书写顺序。</p></details>
     </form>
     <form id="own-verify" class="card" hidden>
       <h3>代回原式，再答全部问量</h3>
-      <p class="small" id="own-unit-note"></p>
+      <details class="more"><summary>怎么输入数值和单位？</summary><p class="small" id="own-unit-note"></p></details>
       <label>求出的x <input id="own-x" autocomplete="off"></label>
       <label>代入最初方程的左边，计算结果 <input id="own-left" autocomplete="off"></label>
       <label>代入最初方程的右边，计算结果 <input id="own-right" autocomplete="off"></label>
@@ -259,7 +262,51 @@
       </form>
     </details>`;
   const $ = id => root.querySelector('#' + id);
-  let index = 0, original = '', lines = [];
+
+  // Author display rules must not expose later phases marked hidden.
+  root.classList.add('own-workspace');
+  const phaseStyle = document.createElement('style');
+  phaseStyle.textContent = '.own-workspace [hidden]{display:none!important}.own-workspace input,.own-workspace select,.own-workspace textarea,.own-workspace button{font:inherit;max-width:100%;box-sizing:border-box}';
+  root.append(phaseStyle);
+  // Page-local feedback: keep the first correction beside its control.
+  let activeField = null;
+  function clearErrors() {
+    root.querySelectorAll('[data-input-error]').forEach(e => {
+      const id=e.id;
+      root.querySelectorAll('[aria-describedby]').forEach(input=>{
+        const ids=input.getAttribute('aria-describedby').split(/\s+/).filter(v=>v!==id);
+        if(ids.length)input.setAttribute('aria-describedby',ids.join(' '));else input.removeAttribute('aria-describedby');
+      });e.remove();
+    });
+    root.querySelectorAll('[aria-invalid="true"]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function fieldError(input, message) {
+    if (!input) return;
+    clearErrors();
+    for(let parent=input.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    input.setAttribute('aria-invalid', 'true');
+    const note = document.createElement('span');
+    note.dataset.inputError = 'true'; note.setAttribute('role', 'alert');
+    note.id=(input.id||input.name||'own-field')+'-error';
+    const described=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+    if(!described.includes(note.id))described.push(note.id);
+    input.setAttribute('aria-describedby',described.join(' '));
+    note.style.cssText = 'display:block;font-size:15px;overflow-wrap:anywhere;color:var(--no)';
+    note.textContent = message; input.insertAdjacentElement('afterend', note);
+    if (!input.closest('[hidden]')) input.focus();
+  }
+  function atField(input, run) { activeField = input; return run(); }
+  function inputHelp(element) {
+    if (!element) return;
+    const d = document.createElement('details'); d.className = 'more';
+    const s = document.createElement('summary'); s.textContent = '怎么输入？';
+    element.before(d); d.append(s, element);
+  }
+  root.addEventListener('input', clearErrors);
+  root.addEventListener('change', clearErrors);
+  root.addEventListener('reset', clearErrors);
+
+  let index = 0, original = '', lines = [], modelPhase = 0;
   const feedback = (id, s = '') => { $(id).textContent = s; };
   function clearVerify() { $('own-verify').reset(); $('own-verify').hidden = true; feedback('own-verify-feedback'); }
   function showLines() {
@@ -272,21 +319,30 @@
   }
   function reset() {
     index = Number($('own-case').value); const c = cases[index];
-    $('own-model').reset(); invalidateModel(); $('own-story').textContent = c.text;
+    $('own-model').reset(); modelPhase = 0; root.querySelector('[data-model-meaning]').hidden = true; clearErrors(); invalidateModel(); $('own-story').textContent = c.text;
     $('own-unit-note').textContent = 'x和代入原式的左右值都按题设的“' + c.unit + '”填写。最后两问量可分别用质量单位克/g、千克/kg，或长度单位米/m；数值须随单位精确换算。其它单位暂未核对，不能把质量与长度互换。';
     c.labels.forEach((s, i) => { $('own-expr-label' + i).textContent = s; $('own-quantity-label' + i).textContent = s; });
     $('own-repeat').reset(); feedback('own-repeat-feedback'); feedback('own-repeat-reading'); $('own-repeat-compare').hidden = true; $('own-repeat-compare').open = false;
   }
-  function attempt(id, run) { try { run(); } catch (e) { feedback(id, e.message); } }
+  function attempt(id, run) { clearErrors(); try { run(); } catch (e) { fieldError(activeField, e.message); feedback(id, e.message); } }
+  const read = (id, run) => atField($(id), () => run($(id).value));
   $('own-case').addEventListener('change', reset); $('own-reset').addEventListener('click', reset);
   $('own-model').addEventListener('input', invalidateModel);
   $('own-model').addEventListener('submit', ev => {
     ev.preventDefault(); invalidateModel(); attempt('own-model-feedback', () => {
-      need($('own-meaning').value.trim(), '先写下设量、两边量及等量关系；文字请自己核对。');
-      $('own-model-meaning').textContent = '这是一种参考列式的意义；采用重排关系时，请自行说明你写的每一边：' + cases[index].meaning; $('own-model-compare').hidden = false;
+      read('own-equation', raw => model(raw, index, cases[index].expressions));
+      const meaning = root.querySelector('[data-model-meaning]');
+      if (modelPhase === 0 && !$('own-meaning').value.trim()) {
+        modelPhase = 1; meaning.hidden = false;
+        feedback('own-model-feedback', '方程的数量关系通过。接着说清x的意思，再写两个问量的式子。'); return;
+      }
+      read('own-meaning', raw => need(raw.trim(), '写清x是什么、两边各是什么量。文字请按准则自核。'));
+      [0,1].forEach(i => read('own-expr' + i, raw => need(same(parse(raw), parse(cases[index].expressions[i])), '这个问量与x的关系还不符，回题目看看。')));
+      activeField = $('own-equation');
       model($('own-equation').value, index, [0, 1].map(i => $('own-expr' + i).value));
+      $('own-model-meaning').textContent = '参考：' + cases[index].meaning; $('own-model-compare').hidden = false;
       original = $('own-equation').value; lines = [original]; showLines(); $('own-solve').hidden = false;
-      feedback('own-model-feedback', '方程和两问量的式子通过本区原数量关系核对。两边量的实际意义及文字解释仍请自行核对，再逐行推演。');
+      feedback('own-model-feedback', '方程和两个量式通过。接着自己写下一行；文字按准则自核。');
     });
   });
   function operandVisibility() { $('own-operand-label').hidden = ['expand', 'collect'].includes($('own-action').value); }
@@ -295,8 +351,11 @@
   $('own-solve').addEventListener('change', () => { feedback('own-step-feedback'); clearVerify(); });
   $('own-solve').addEventListener('submit', ev => {
     ev.preventDefault(); attempt('own-step-feedback', () => {
-      need($('own-why').value.trim(), '先写为什么选这一步；文字只供自核。');
+      read('own-action', raw => need(raw, '先选这一步要做什么。'));
+      read('own-why', raw => need(raw.trim(), '写一句为什么选这一步；文字只供自核。'));
       const next = $('own-next').value, action = $('own-action').value;
+      if (!['expand','collect'].includes(action)) read('own-operand', raw => parse(raw));
+      read('own-next', raw => equation(raw)); activeField = $('own-next');
       const e = step(lines[lines.length - 1].split(' ｜ ')[0], next, action, $('own-operand').value);
       const label = $('own-action').selectedOptions[0].textContent;
       lines.push(next + ' ｜ ' + label + ($('own-operand-label').hidden ? '' : '：' + $('own-operand').value) + '；自述（仅自核）：' + $('own-why').value.trim()); showLines();
@@ -311,9 +370,13 @@
   $('own-verify').addEventListener('input', () => feedback('own-verify-feedback'));
   $('own-verify').addEventListener('submit', ev => {
     ev.preventDefault(); attempt('own-verify-feedback', () => {
-      need($('own-range').value.trim(), '先写下实际范围检查；文字请自己核对。');
+      read('own-range', raw => need(raw.trim(), '写一句这些长度或质量能否存在；文字请自己核对。'));
+      const x = read('own-x', number), e = equation(original);
+      ['own-left','own-right'].forEach((id,i) => read(id, raw => need(eq(number(raw), val(e[i],x)), '把x代回最初方程的这一边，再算一次。')));
+      [0,1].forEach(i => { read('own-quantity'+i, number); read('own-unit'+i, u => need(eq(inOriginalUnit($('own-quantity'+i).value,u,cases[index].unit),val(parse(cases[index].expressions[i]),x)), '第'+(i+1)+'个问量的数值或单位不相符；换单位也要换数值。')); });
+      activeField = $('own-x');
       verify(original, $('own-x').value, $('own-left').value, $('own-right').value, [0, 1].map(i => $('own-quantity' + i).value), [0, 1].map(i => $('own-unit' + i).value), index);
-      feedback('own-verify-feedback', '代原式的左右数值、两个问量、单位及数值范围均通过。设量、两边量和步骤作用的文字仍需你逐项自核；可到下方图解对照。');
+      feedback('own-verify-feedback', '原式、两个问量、单位和范围均通过。文字理由仍请对照折叠准则自核。');
     });
   });
   function clearRepeat() { feedback('own-repeat-feedback'); $('own-repeat-compare').hidden = true; $('own-repeat-compare').open = false; }
@@ -324,6 +387,9 @@
   $('own-repeat').addEventListener('reset', () => { clearRepeat(); feedback('own-repeat-reading'); });
   $('own-repeat').addEventListener('submit', ev => {
     ev.preventDefault(); attempt('own-repeat-feedback', () => {
+      read('own-block', raw => need(/^[0-9]{1,3}$/.test(raw), '循环节填1至3位数字。'));
+      ['own-repeat-m','own-repeat-n','own-repeat-d'].forEach(id => read(id, number));
+      read('own-repeat-sub', equation); activeField = $('own-repeat-sub');
       const r = repeat($('own-block').value, $('own-repeat-m').value, $('own-repeat-sub').value, $('own-repeat-n').value, $('own-repeat-d').value);
       feedback('own-repeat-feedback', '移位、相减及最简分数通过。');
       $('own-repeat-proof').textContent = '循环节有' + r.k + '位。' + r.m + 'x与x的小数部分完全相同，相减得' + r.coefficient + 'x=' + r.a + '，所以x=' + r.fraction + '。这是无限重复展式的移位相减，不是有限截断小数的等号。' + (r.fraction === '1' ? '全9的无限重复展式等于1，不能说它小于1。' : '');

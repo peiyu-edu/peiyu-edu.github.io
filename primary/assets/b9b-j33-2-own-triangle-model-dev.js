@@ -4,6 +4,50 @@
   if (!document.body || document.body.dataset.sec !== 'j33-2') return;
   const root = document.getElementById('own-triangle-model');
   if (!root) return;
+
+  // Author display rules must not expose later phases marked hidden.
+  root.classList.add('own-workspace');
+  const phaseStyle = document.createElement('style');
+  phaseStyle.textContent = '.own-workspace [hidden]{display:none!important}.own-workspace input,.own-workspace select,.own-workspace textarea,.own-workspace button{font:inherit;max-width:100%;box-sizing:border-box}';
+  root.append(phaseStyle);
+  // Page-local feedback: keep the first correction beside its control.
+  let activeField = null;
+  function clearErrors() {
+    root.querySelectorAll('[data-input-error]').forEach(e => {
+      const id=e.id;
+      root.querySelectorAll('[aria-describedby]').forEach(input=>{
+        const ids=input.getAttribute('aria-describedby').split(/\s+/).filter(v=>v!==id);
+        if(ids.length)input.setAttribute('aria-describedby',ids.join(' '));else input.removeAttribute('aria-describedby');
+      });e.remove();
+    });
+    root.querySelectorAll('[aria-invalid="true"]').forEach(e => e.removeAttribute('aria-invalid'));
+  }
+  function fieldError(input, message) {
+    if (!input) return;
+    clearErrors();
+    for(let parent=input.parentElement;parent&&parent!==root;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    input.setAttribute('aria-invalid', 'true');
+    const note = document.createElement('span');
+    note.dataset.inputError = 'true'; note.setAttribute('role', 'alert');
+    note.id=(input.id||input.name||'own-field')+'-error';
+    const described=(input.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean);
+    if(!described.includes(note.id))described.push(note.id);
+    input.setAttribute('aria-describedby',described.join(' '));
+    note.style.cssText = 'display:block;font-size:15px;overflow-wrap:anywhere;color:var(--no)';
+    note.textContent = message; input.insertAdjacentElement('afterend', note);
+    if (!input.closest('[hidden]')) input.focus();
+  }
+  function atField(input, run) { activeField = input; return run(); }
+  function inputHelp(element) {
+    if (!element) return;
+    const d = document.createElement('details'); d.className = 'more';
+    const s = document.createElement('summary'); s.textContent = '怎么输入？';
+    element.before(d); d.append(s, element);
+  }
+  root.addEventListener('input', clearErrors);
+  root.addEventListener('change', clearErrors);
+  root.addEventListener('reset', clearErrors);
+
   const get = id => root.querySelector('#ot-' + id);
   const sqrt = Math.sqrt;
   // 每项均有明确构型与单位。特殊值保留根式，非特殊角只用题给近似。
@@ -86,43 +130,61 @@
       node('path',{d:`M${mark[0]+dx},${mark[1]} v${dy} h${-dx}`,fill:'none',stroke:'var(--no)','stroke-width':2});
     }
   }
+  let stage=0;
+  const construction=document.createElement('div');
+  get('line').closest('label').before(construction);
+  ['line','right','relation'].forEach(id=>construction.append(get(id).closest('label')));
+  const calculation=get('values').closest('fieldset');
+  const back=document.createElement('button');back.type='button';back.className='btn ghost';back.textContent='返回上一步';
+  get('check').after(back);back.onclick=()=>setStage(Math.max(0,stage-1));
+  function setStage(n) {
+    clearErrors();clearFeedback();
+    stage=n;construction.hidden=n===0;calculation.hidden=n!==2;
+    get('line').closest('label').hidden=get('right').closest('label').hidden=get('state').value!=='unique';
+    back.hidden=n===0;
+  }
   let current=tasks[0];
   function clearFeedback() {get('feedback').textContent='待你尝试（修改后需重新核对）。';get('explain').hidden=true;get('explain').open=false;get('solution').textContent='';}
   function load() {
     current=tasks.find(t=>t.id===get('case').value)||tasks[0];
     get('case').value=current.id;
     ['state','line','right','unit'].forEach(id=>get(id).value='');get('notes').value='';
-    options(get('relation'),relations);
+    const families = current.rel==='direction' ? ['direction','wrong-dir','legs'] :
+      current.rel==='up' ? ['up','wrong-up','down'] :
+      ['sum','difference'].includes(current.rel) ? ['sum','difference','wrong-sum'] :
+      ['scale','badside','badangle','badpair'].includes(current.rel) ? ['scale','badside','badangle','badpair'] :
+      ['legs','hyp','angle','slope','wrong-slope'];
+    options(get('relation'),relations.filter(([id])=>[current.rel,...families].includes(id)));
     get('prompt').textContent=current.prompt;
     get('values').replaceChildren();
     current.fields.forEach(([name,,kind],i)=>{
       const label=document.createElement('label');label.textContent=name+(kind==='angle'?'（°）':'（长度）')+' ';
-      const input=document.createElement('input');input.id='ot-value-'+i;input.type='text';input.inputMode='decimal';input.autocomplete='off';input.setAttribute('aria-label',name+(kind==='angle'?' 度':' 长度'));label.append(input);get('values').append(label);
+      const input=document.createElement('input');input.id='ot-value-'+i;input.type='text';input.inputMode='decimal';input.autocomplete='off';input.setAttribute('aria-label',name+(kind==='angle'?' 度':' 长度'));label.append(input,document.createTextNode('（最后保留一位小数）'));get('values').append(label);
     });
-    clearFeedback();draw(current);
+    setStage(0);clearErrors();clearFeedback();draw(current);
   }
   function check() {
-    const state=get('state').value, unique=state==='unique';
-    const values=current.fields.map((_,i)=>get('value-'+i).value.trim());
-    if(!state||!get('relation').value||(unique&&(!get('line').value||!get('right').value||!get('unit').value||values.some(v=>!v)))) {
-      get('feedback').textContent='先完成自己的判断与理由；若判断能唯一求解，还须选择补线、直角、关系并填完数值和单位。';return;
-    }
-    const expected=current.state||'unique';
-    const errors=[];
-    if(state!==expected) errors.push('存在性 / 唯一性判断');
-    if(get('relation').value!==current.rel) errors.push('关系组或条件理由');
+    clearErrors();
+    const expected=current.state||'unique', state=get('state').value;
+    const fail=(id,text)=>{if(id==='unit'||id.startsWith('value-'))setStage(2);fieldError(get(id),text);get('feedback').textContent=text;};
+    if(!state) return fail('state','先判断：这些条件能不能确定唯一答案？');
+    if(state!==expected) return fail('state', expected==='scale' ? '想一想：把各边都放大，题给的角会改变吗？' : expected==='invalid' ? '再看边长和角度，能画出题目说的三角形吗？' : '再看已知的边和角，能否确定这个直角三角形？');
+    if(stage===0) {setStage(1);get('feedback').textContent=expected==='unique'?'判断通过。接着选补线、直角和关系。':'判断通过。接着选出条件不足或矛盾的理由。';return;}
     if(expected==='unique') {
-      if(get('line').value!==current.line) errors.push('本工作单的补线方案');
-      if(get('right').value!==current.right) errors.push('直角位置');
-      if(get('unit').value!==(current.unit||'m')) errors.push('长度单位');
-      current.fields.forEach(([name,target],i)=>{
-        // 精确到0.1：只接受应写出的舍入值，不用宽容区间掩盖精度错误。
-        const v=values[i];const rounded=Number(target.toFixed(1));
-        if(!/^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(v)||Number(v)!==rounded) errors.push(name+'的数值 / 末步精度');
-      });
-    } else if(values.some(Boolean)||get('unit').value) errors.push('不能求解时应留空的数值 / 单位');
-    get('feedback').textContent=errors.length?'本次仍需检查：'+errors.join('、')+'。可展开解说，再修改重试。':'本题有限结构与数值核对通过；纸笔图、完整推理和测量尚须按准则自核。';
-    get('solution').textContent=current.solution+' 本工作单只收所列补线方案；其他等价作法请按准则自核，不作自动否定。';
+      if(get('line').value!==current.line) return fail('line','补线方案还不符：找能构成所需直角三角形的线，也可以选择不补线。');
+      if(get('right').value!==current.right) return fail('right','直角位置：找两条互相垂直的边相交的点。');
+    }
+    if(get('relation').value!==current.rel) return fail('relation','这个关系组还不对应题给的边或角；检查角的对边、邻边和公共边。');
+    if(expected==='unique') {
+      if(stage===1) {setStage(2);get('feedback').textContent='构型与关系通过。现在算数值，最后保留一位小数。';return;}
+      for(let i=0;i<current.fields.length;i++) {
+        const [name,target]=current.fields[i], v=get('value-'+i).value.trim();
+        if(!/^(?:0|[1-9]\d*)(?:\.\d+)?$/.test(v)||Number(v)!==Number(target.toFixed(1))) return fail('value-'+i,name+'还不相符。中间别提前舍入，最后保留到0.1。');
+      }
+      if(get('unit').value!==(current.unit||'m')) return fail('unit','按题目给的长度单位填写。');
+    } else if(current.fields.some((_,i)=>get('value-'+i).value.trim())||get('unit').value) return fail('unit','不能唯一求出数值时，数值和单位都留空。');
+    get('feedback').textContent=expected==='unique'?'结构与数值核对通过。纸笔图和完整推理尚须按折叠准则自核。':'判断和条件理由核对通过。这题不能填唯一数值。';
+    get('solution').textContent=current.solution+' 其他等价作法请在纸上按准则自核。';
     get('explain').hidden=false;
   }
   options(get('case'),tasks.map(t=>[t.id,t.title]));
@@ -130,6 +192,6 @@
   get('reset').addEventListener('click',load);
   get('check').addEventListener('click',check);
   root.addEventListener('input',e=>{if(e.target.matches('input,textarea,select')) {clearFeedback();draw(current);}});
-  root.addEventListener('change',e=>{if(e.target.id!=='ot-case'&&e.target.matches('select')) {clearFeedback();draw(current);}});
+  root.addEventListener('change',e=>{if(e.target.id==='ot-state')setStage(0);if(e.target.id!=='ot-case'&&e.target.matches('select')) {clearFeedback();draw(current);}});
   load();
 })();

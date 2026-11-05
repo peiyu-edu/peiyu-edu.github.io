@@ -31,7 +31,10 @@
   }
   // 题面：普通行保留换行；连续两行以上、格数相同的「｜」行排成表格（与课内真题的写法一致）。
   function stemText(parent, value) {
-    var lines = String(value || "").replace(/\n\s*\n(\s*\n)+/g, "\n\n").split(/\r?\n/), plain = [];
+    PY_MATH.stemParas(value).forEach(function (para) { stemPara(parent, para); });
+  }
+  function stemPara(parent, value) {
+    var lines = value.split("\n"), plain = [];
     function flush() { if (plain.length) parent.appendChild(el("span", "eb-stem-text", plain.join("\n"))); plain = []; }
     for (var i = 0; i < lines.length;) {
       var width = lines[i].split("｜").length, rows = [], j = i;
@@ -56,8 +59,8 @@
       .replace(/，/g, ",").replace(/．|。/g, "").toLowerCase();
   }
   function isOriginal(item) { return item.source_type === "original"; }
-  function paperName(item) { return isOriginal(item) ? "原创解答题" : item.year + " " + (item.region || "") + (stage === "junior" ? "中考" : "高考"); }
-  function title(item) { return paperName(item) + (isOriginal(item) ? " · 第" : " 第") + item.no + "题" + (item.part ? " " + item.part : ""); }
+  function paperName(item) { return isOriginal(item) ? "原创解答题" : PY_MATH.paperName(item); }
+  function title(item) { return isOriginal(item) ? paperName(item) + " · 第" + item.no + "题" + (item.part ? " " + item.part : "") : PY_MATH.paperTitle(item); }
   function params() { return new URLSearchParams(location.search); }
   function hrefWith(changes) {
     var p = params();
@@ -181,19 +184,19 @@
     app.appendChild(count);
     var groups = [];
     visible.forEach(function (item) {
-      var name = isOriginal(item) ? paperName(item) : item.paper || paperName(item), group = groups.find(function (g) { return g.name === name; });
+      var name = paperName(item), group = groups.find(function (g) { return g.name === name; });
       if (!group) { group = { name: name, paper: item.paper, items: [] }; groups.push(group); }
       group.items.push(item);
     });
     groups.forEach(function (group) {
       var section = el("section", "eb-paper");
-      section.appendChild(el("h2", null, isOriginal(group.items[0]) ? group.name : group.paper || group.name));
+      section.appendChild(el("h2", null, group.name));
       if (!isOriginal(group.items[0])) {
         var paper = (index.papers || []).find(function (p) { return p.paper === group.paper; });
         if (paper) {
           var exam = el("a", "btn ghost me-start", "整卷模考");
           exam.href = "index.html?mock=" + encodeURIComponent(paper.id);
-          exam.setAttribute("aria-label", group.paper + " 整卷模考");
+          exam.setAttribute("aria-label", group.name + " 整卷模考");
           section.appendChild(exam);
           section.appendChild(el("p", "eb-note", "整卷 " + paper.questions.length + " 题 · " + paper.minutes + " 分钟 · " + paper.maxScore + " 分" + (paper.estimated ? "（含估分）" : "")));
         } else section.appendChild(el("p", "eb-note", "整卷模考暂未开放：只开放已审批题齐全、无拆分或重复题号，且题数与题型符合已核定全卷结构的试卷。"));
@@ -239,18 +242,46 @@
     app.replaceChildren(el("h2", null, "本节精选"));
     var section = (index.sections || {})[inline.getAttribute("data-exam-bank-inline")];
     if (!section || !section.featuredIds) return;
-    var note = sourceNote(section.featuredIds);
-    if (note) app.appendChild(el("p", "eb-note", note));
-    section.featuredIds.forEach(function (id) {
-      if (section.ids.indexOf(id) < 0 || !index.items.some(function (item) { return item.id === id; })) return;
+    var ids = section.featuredIds.filter(function (id) {
+      return section.ids.indexOf(id) >= 0 && index.items.some(function (item) { return item.id === id; });
+    });
+    var cards = ids.map(function (id) {
       var card = el("article", "card eb-card");
       card.setAttribute("data-question-id", id);
       card.appendChild(el("p", "eb-loading", "题目加载中…"));
       app.appendChild(card);
-      getJSON("data/q/" + encodeURIComponent(id) + ".json").then(function (item) {
-        drawQuestion(card, item);
-      }).catch(function () { card.replaceChildren(el("p", "eb-missing", "题目暂时打不开，请刷新重试。")); });
+      return card;
     });
+    var loads = ids.map(function (id) {
+      return getJSON("data/q/" + encodeURIComponent(id) + ".json").catch(function () { return null; });
+    });
+    // 同屏不重复：课内「真题练习」已有的题不再进精选，精选内部同题（文理卷）只留第一道。
+    practiceKeys().then(function (seen) {
+      return Promise.all(loads).then(function (items) {
+        var kept = [];
+        items.forEach(function (item, i) {
+          var key = item && PY_MATH.stemKey(item.stem, item.choices);
+          if (!item) { cards[i].replaceChildren(el("p", "eb-missing", "题目暂时打不开，请刷新重试。")); return; }
+          if (seen.some(function (other) { return PY_MATH.sameQuestion(key, other); })) { cards[i].remove(); return; }
+          seen.push(key);
+          kept.push(ids[i]);
+          drawQuestion(cards[i], item);
+        });
+        var note = sourceNote(kept);
+        if (note) app.insertBefore(el("p", "eb-note", note), app.children[1] || null);
+        if (!app.querySelector(".eb-card")) inline.hidden = true;
+      });
+    });
+  }
+  function practiceKeys() {
+    var seen = [], sec = document.body.getAttribute("data-sec");
+    if (!sec || !document.getElementById("practice")) return Promise.resolve(seen);
+    return fetch(new URL("../data/sections/" + sec + ".json", location.href).href, { cache: "no-store" }).then(function (r) {
+      return r.ok ? r.json() : [];
+    }).then(function (rows) {
+      (Array.isArray(rows) ? rows : []).forEach(function (p) { seen.push(PY_MATH.stemKey(p.stem, p.choices)); });
+      return seen;
+    }).catch(function () { return seen; });
   }
 
   function record(item, kind, details) {
@@ -295,7 +326,6 @@
     var meta = el("div", "eb-meta");
     meta.appendChild(el("span", "tag", item.type));
     if (item.level) meta.appendChild(el("span", "tag", item.level));
-    if (item.sourceLabel) meta.appendChild(el("span", "eb-source", "题面版本：" + item.sourceLabel));
     card.appendChild(meta);
     if (item.points && item.points.length) card.appendChild(el("p", "eb-points", "知识点：" + item.points.join("、")));
     var stem = el("div", "stem eb-stem");
@@ -371,6 +401,7 @@
       feedback.className = "fb eb-feedback"; feedback.textContent = "";
       sol.hidden = true; sol.replaceChildren();
       drawAnswer();
+      math(answerArea);
       var first = answerArea.querySelector("button,input");
       if (first) first.focus();
     }
@@ -386,8 +417,8 @@
           b.type = "button";
           b.setAttribute("data-v", LETTERS[i]);
           b.appendChild(el("b", null, LETTERS[i]));
-          var label = el("span", "eb-opt-text", item.choiceDescriptions ? item.choiceDescriptions[i] : c);
-          b.appendChild(label);
+          var text = PY_MATH.choiceText(item.choiceDescriptions ? item.choiceDescriptions[i] : c, LETTERS[i]);
+          if (text) b.appendChild(el("span", "eb-opt-text", text));
           if (multi) b.setAttribute("aria-pressed", "false");
           b.addEventListener("click", function () {
             if (done) return;

@@ -144,12 +144,63 @@
         });
         content.replaceChildren(fragment);
         content.setAttribute("aria-busy", "false");
+        var placementFiles = {}, placementAsked = false;
+        /* The latest placement papers as a map overlay, or null. Papers load only once a student has handed one in. */
+        function placementResults() {
+          var logic = win.PeiyuPlacement, store = win.PeiyuLearningState;
+          if (!logic || !store) return null;
+          var snapshot = store.load();
+          var taken = logic.stageConfig("primary").papers.filter(function (p) { return logic.latestAttempt(snapshot, p.book); });
+          if (!taken.length) return null;
+          var missing = taken.map(logic.paperFile).filter(function (name) { return !placementFiles[name]; });
+          if (missing.length) {
+            if (!placementAsked) {
+              placementAsked = true;
+              Promise.all(missing.map(function (name) {
+                return win.fetch("data/placement/" + name + ".json", { cache: "no-store" })
+                  .then(function (r) { if (!r.ok) throw new Error("placement"); return r.json(); })
+                  .then(function (d) { placementFiles[name] = d; });
+              })).then(function () { placementAsked = false; refresh(); }).catch(function () { placementAsked = false; });
+            }
+            return null;
+          }
+          return logic.overlay(snapshot, taken.map(function (p) {
+            return { book: p.book, title: p.title, data: logic.paperData(p, placementFiles[logic.paperFile(p)]) };
+          }));
+        }
+        function stateText(result) {
+          return result.label + (result.provisional ? " · " + win.PeiyuPlacement.PROVISIONAL : "");
+        }
+        function renderPlacement(placed) {
+          var box = doc.getElementById("um-placement");
+          if (!placed) return;
+          box.textContent = "";
+          box.appendChild(el("h3", "", "摸底结果"));
+          var again = el("a", "", "查看或重新摸底 →");
+          again.href = "placement.html";
+          box.appendChild(again);
+          placed.books.forEach(function (book) {
+            box.appendChild(el("h4", "", book.title));
+            var list = el("ul");
+            book.results.forEach(function (r) {
+              var li = el("li");
+              li.appendChild(el("span", "", r.title));
+              li.appendChild(el("span", "um-pl-state um-pl-" + r.state, stateText(r)));
+              list.appendChild(li);
+            });
+            box.appendChild(list);
+          });
+          box.appendChild(el("p", "", "摸底最多点亮到“基本会了”。“初步”表示只做过第一段。已有练习作答的单元，以练习记录为准。"));
+        }
         function refresh() {
           var summary = aggregate(map, win.PEIYU_COMPUTE_MASTERY());
+          var placed = placementResults(), lit = placed ? placed.sections : {};
+          renderPlacement(placed);
           map.units.forEach(function (unit) {
             var state = summary[unit.id].status, target = states[unit.id];
-            target.node.className = "um-unit st-" + state;
-            target.label.textContent = STATES[state];
+            var placement = state === "untouched" ? lit[unit.id] : null;
+            target.node.className = "um-unit st-" + state + (placement ? " pl-" + placement.state : "");
+            target.label.textContent = placement ? "摸底：" + stateText(placement) : STATES[state];
           });
         }
         refresh();

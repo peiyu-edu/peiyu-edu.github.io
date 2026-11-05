@@ -16,7 +16,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (quotes) {
   "use strict";
   var KEY = "peiyu.hs.learning.v1", DAY = 86400000;
-  var KINDS = ["view", "answer", "feedback", "resume", "self-rating", "review", "quiz-submit"];
+  var KINDS = ["view", "answer", "feedback", "resume", "self-rating", "review", "quiz-submit", "placement"];
   var TYPES = ["diagnostic", "predict", "exam", "card", "lab", "cue"];
   function obj(v) { return v && typeof v === "object" && !Array.isArray(v); }
   function dict() { return Object.create(null); }
@@ -71,6 +71,21 @@
         value.correct > value.total || value.selfCorrect > value.selfTotal || value.total + value.selfTotal > 12 || (!value.total && !value.selfTotal)) return null;
     return { correct: value.correct, total: value.total, selfCorrect: value.selfCorrect, selfTotal: value.selfTotal };
   }
+  // One submitted placement paper (PY-458). Items keep only ids and the outcome; prompts stay in the question bank.
+  function placementPaper(value) {
+    if (!obj(value) || !str(value.attemptId, 100) || !str(value.book, 40) || [1, 2].indexOf(value.stage) < 0) return null;
+    if (!Array.isArray(value.scope) || !value.scope.length || value.scope.length > 100 || !value.scope.every(function (s) { return !!str(s); })) return null;
+    if (!Array.isArray(value.items) || !value.items.length || value.items.length > 60) return null;
+    var items = [];
+    for (var i = 0; i < value.items.length; i++) {
+      var it = value.items[i];
+      if (!obj(it) || !str(it.questionId) || !str(it.pointId) || !str(it.sectionId) || !str(it.chapterId) || !str(it.contentVersion) ||
+          !str(it.choice, 40) || ["correct", "wrong", "not-yet"].indexOf(it.response) < 0) return null;
+      items.push({ questionId: it.questionId, pointId: it.pointId, sectionId: it.sectionId, chapterId: it.chapterId,
+        contentVersion: it.contentVersion, choice: it.choice, response: it.response });
+    }
+    return { attemptId: value.attemptId, book: value.book, stage: value.stage, scope: value.scope.slice(), items: items };
+  }
   function normalize(input, now, legacy) {
     if (!obj(input) || KINDS.indexOf(input.kind) < 0) return null;
     var ids = identifiers(input), t = time(input.time === undefined ? now : input.time);
@@ -88,6 +103,10 @@
       e.score = quizScore(input.score);
       if (!e.score || !e.identity || !e.contentVersion) return null;
     }
+    if (input.kind === "placement") {
+      e.placement = placementPaper(input.placement);
+      if (!e.placement || legacy) return null;
+    }
     if (input.kind === "self-rating" && !e.rating) return null;
     if (input.kind !== "answer") e.correct = null;
     // Explicit ids are scoped to an identity. The default also deduplicates duplicate listeners.
@@ -95,7 +114,7 @@
       [e.kind, e.identity, e.sectionId, e.pointId, e.choice, e.correct, e.feedbackSeen, e.step, e.rating, e.time].concat(e.score ? [e.score] : []));
     return e;
   }
-  function blank() { return { version: 1, events: [], questions: dict(), submissions: dict(), marks: dict(), guards: dict(), resume: null, historyIncomplete: false, compacted: false }; }
+  function blank() { return { version: 1, events: [], questions: dict(), submissions: dict(), placements: dict(), marks: dict(), guards: dict(), resume: null, historyIncomplete: false, compacted: false }; }
   function earlier(a, b) { if (!a) return b; if (!b) return a; if (a.time === b.time && a.id === b.id) return stableChoice(a, b); return a.time < b.time || (a.time === b.time && a.id < b.id) ? a : b; }
   function later(a, b) { if (!a) return b; if (!b) return a; if (a.time === b.time && a.id === b.id) return stableChoice(a, b); return a.time > b.time || (a.time === b.time && a.id > b.id) ? a : b; }
   function newQuestion(e) { return Object.assign(identifiers(e), { firstAnswer: null, lastAnswer: null, feedbackSeen: false, legacyExposure: false, lastReview: null, reviewConsumedId: null, reviewDueAt: null, reviewReason: null, reviewScheduledAt: 0, reviewScheduleId: null }); }
@@ -105,6 +124,7 @@
       out.historyIncomplete = out.historyIncomplete || s.historyIncomplete;
       out.compacted = out.compacted || s.compacted;
       Object.keys(s.submissions).forEach(function (k) { out.submissions[k] = earlier(out.submissions[k], s.submissions[k]); });
+      Object.keys(s.placements).forEach(function (k) { out.placements[k] = earlier(out.placements[k], s.placements[k]); });
       Object.keys(s.guards).forEach(function (k) { out.guards[k] = true; });
       Object.keys(s.marks).forEach(function (k) { out.marks[k] = Object.assign({}, out.marks[k] ? stableChoice(out.marks[k], s.marks[k]) : s.marks[k]); });
       s.events.forEach(function (e) { events[e.id] = events[e.id] ? stableChoice(events[e.id], e) : e; });
@@ -191,6 +211,11 @@
       if (submission && submission.kind === "quiz-submit" && submission.identity === k) out.submissions[k] = earlier(out.submissions[k], submission);
     });
     out.events.forEach(function (e) { if (e.kind === "quiz-submit") out.submissions[e.identity] = earlier(out.submissions[e.identity], e); });
+    // Absent in every ledger written before PY-458; such a ledger loads and re-serializes unchanged.
+    if (obj(s.placements)) Object.keys(s.placements).forEach(function (k) {
+      var paper = event(s.placements[k]);
+      if (paper && paper.kind === "placement" && paper.id === k) out.placements[k] = paper;
+    });
     Object.keys(s.marks).forEach(function (k) {
       var m = s.marks[k]; if (!obj(m) || k.length > 100 || KINDS.indexOf(m.kind) < 0) return;
       out.marks[k] = { kind: m.kind, identity: identityParts(str(m.identity, 1000)) ? m.identity : null, base: str(m.base, 700), time: time(m.time), choice: str(m.choice, 300), sectionId: str(m.sectionId), pointId: str(m.pointId),
@@ -264,6 +289,7 @@
         var removed = dict(), detailed = dict(), removedQuestions = dict();
         // Paper snapshots follow the same observed-deletion rule as question rows.
         Object.keys(baseline.submissions).forEach(function (id) { if (!next.submissions[id]) delete state.submissions[id]; });
+        Object.keys(baseline.placements).forEach(function (id) { if (!next.placements[id]) delete state.placements[id]; });
         Object.keys(baseline.questions).forEach(function (id) { if (!next.questions[id]) { removedQuestions[id] = true; delete state.questions[id]; } });
         Object.keys(state.marks).forEach(function (id) { if (removedQuestions[state.marks[id].identity]) { removed[id] = true; delete state.marks[id]; } });
         priorIds.forEach(function (id) { if (!next.marks[id]) { removed[id] = true; delete state.marks[id]; } });
@@ -291,6 +317,7 @@
     function write() {
       var persisted = Object.assign({}, state);
       if (!Object.keys(state.submissions).length) delete persisted.submissions;
+      if (!Object.keys(state.placements).length) delete persisted.placements;
       var serialized = canonical(persisted);
       if (storage.getItem(KEY) !== serialized) storage.setItem(KEY, serialized);
       writtenRaw = serialized;
@@ -319,7 +346,15 @@
     }
     function guard(q) { return !!(state.guards[q.base] || state.guards[JSON.stringify([q.questionType, q.questionType === "diagnostic" ? q.pointId : q.sectionId, "*"])]); }
     function insert(e) {
-      if (state.marks[e.id]) return state.events.find(function (old) { return old.id === e.id; }) || e;
+      if (state.marks[e.id]) return state.events.find(function (old) { return old.id === e.id; }) || state.placements[e.id] || e;
+      // A placement paper only feeds the map: no question row, answer mark, timeline event, review date or guard.
+      // Ordinary practice must behave as if the paper never happened; question selection keeps first answers free.
+      if (e.kind === "placement") {
+        state.placements[e.id] = e;
+        state.marks[e.id] = { kind: e.kind, identity: null, base: null, time: e.time, choice: null, sectionId: null, pointId: null, correct: null, attemptKind: null, legacy: false };
+        dirty = true; marksByIdentity = null;
+        return e;
+      }
       var q = e.kind !== "quiz-submit" && e.identity && (state.questions[e.identity] || (state.questions[e.identity] = newQuestion(e)));
       if (e.kind === "answer") {
         var pastLegacy = guard(e);
@@ -583,7 +618,8 @@
       }).sort(function (a, b) { return a.dueAt - b.dueAt; });
       return copy(Object.assign({ version: 1, events: state.events.filter(function (e) { return !echoes[e.id]; }), questions: questions, points: points, sections: sections, totals: totals, summary: totals,
         resume: state.resume, review: review, storage: { memoryOnly: memoryOnly, historyIncomplete: state.historyIncomplete,
-          compacted: state.compacted, problems: problems, retainedEvents: state.events.length } }, Object.keys(state.submissions).length ? { submissions: state.submissions } : {}));
+          compacted: state.compacted, problems: problems, retainedEvents: state.events.length } }, Object.keys(state.submissions).length ? { submissions: state.submissions } : {},
+        Object.keys(state.placements).length ? { placements: Object.keys(state.placements).map(function (k) { return state.placements[k]; }).sort(function (a, b) { return a.time - b.time || a.id.localeCompare(b.id); }) } : {}));
     }
     function record(input) {
       ensure(); sync(); var e = normalize(resolveInput(input), now(), false);

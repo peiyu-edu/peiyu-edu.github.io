@@ -113,6 +113,7 @@ h3 { font-size: 17px; margin: 18px 0 6px; }
 .sol { border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; }
 .selfrep { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 .prob .stem { white-space: pre-line; }
+.stem-para { display: block; margin-top: .6em; }
 .prob input[type=text] { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); width: min(260px, 100%); }
 
 /* 刷新重做 / 重新作答 */
@@ -194,6 +195,14 @@ footer .credit { display: block; margin-top: 4px; }
 
 /* 长的行间公式在手机上不撑宽页面，在自己的框里横向滚动 */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+/* 卡片放不下的块级公式：先在顶层运算符处换行（PY_MATH.fitDisplay），仍放不下才横滑并显示提示 */
+.katex-display.py-math-broken { display: block; text-align: left; line-height: 2; }
+.katex-display.py-math-broken > .katex, .gs-problem .katex-display.py-math-broken > .katex { display: inline; width: auto; min-width: 0; white-space: normal; }
+.py-math-wide { display: block; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding-bottom: 5px; }
+.py-math-scroll:focus-visible, .py-math-wide:focus-visible { outline: 2px solid var(--hl, var(--a)); outline-offset: 2px; }
+.py-math-hint { display: block; margin: 2px 0 6px; font-size: 14px; color: var(--muted); text-align: right; }
+/* KaTeX sets inline fractions at .7em. This floor reaches a fraction's own numerator and denominator only, never the exponents inside them. */
+.katex .mfrac > .vlist-t > .vlist-r > .vlist > span > :is(.sizing.reset-size6.size3, .sizing.reset-size3.size1) { font-size: max(.7em, 14px); }
 
 /* 顶栏在手机上：按钮多了就整体换行，单个按钮里的字不拆行（wiki 按钮、我的记录、返回主页） */
 .top { flex-wrap: wrap; row-gap: 8px; }

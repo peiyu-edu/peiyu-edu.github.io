@@ -186,6 +186,18 @@
   .kg-node-pill.is-unlock { border-color: var(--a); background: var(--ok-soft); font-weight: 600; }
   .kg-node-pill.st-mastered { border-left: 4px solid var(--a); }
   .kg-node-pill.st-weak { border-left: 4px solid var(--no); background: var(--no-soft); }
+  .kg-node-pill.pl-basic { border-left: 4px dashed var(--a); }
+  .kg-node-pill.pl-rusty { border-left: 4px dashed var(--b); }
+  .kg-node-pill.pl-not-yet { border-left: 4px dashed var(--no); }
+  .kg-placement { font-size: 14px; }
+  .kg-placement a { color: var(--c); font-weight: 600; }
+  .kg-pl-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 6px 22px; }
+  .kg-pl-note { margin: 8px 0 0; }
+  .kg-pl-book { margin: 10px 0 0; font-weight: 700; }
+  .kg-pl-list li { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .kg-pl-state { flex: none; font-weight: 700; }
+  .kg-pl-state.pl-basic { color: var(--a); } .kg-pl-state.pl-rusty { color: var(--b); } .kg-pl-state.pl-not-yet { color: var(--no); }
+  .kg-pl-state.pl-not-learned, .kg-pl-state.pl-untested { color: var(--muted); font-weight: 500; }
 
   /* Keep Labs labels readable inside a local native scroll region. */
   .lab .lab-figure-scroll { max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; border-radius:10px; }
@@ -194,7 +206,7 @@
   .lab .lab-scroll-hint { margin:4px 0 7px; font-size:14px; line-height:1.6; color:var(--muted); }
 </style>
 <script defer src="assets/hci.js?v=vs-6c5f1bf60d44"></script>
-<link rel="stylesheet" href="assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="assets/knowledge-core.js"></script><script defer src="assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="assets/learning-shell.js?v=aa562a97ec8d"></script><script defer src="assets/learning-contrast-state.js?v=c65a32056158"></script>
+<link rel="stylesheet" href="assets/learning-shell.css?v=9443b1109555"><link rel="stylesheet" href="assets/learning-contrast.css?v=727819d54b96"><link rel="stylesheet" href="assets/learning-palette.css?v=af6b88a0c8a4"><script defer src="assets/knowledge-core.js"></script><script defer src="assets/learning-data.js?v=bbbf3aa7c419"></script><script defer src="assets/learning-shell.js?v=77a59f95b514"></script><script defer src="assets/learning-contrast-state.js?v=c65a32056158"></script>
 </head>
 <body>
 <div class="wrap">
@@ -309,6 +321,8 @@
     </div>
   </div>
 
+  <div class="kg-placement wk-box" id="kgPlacement"><a href="placement.html">高中摸底：先选学到哪，再测一测，结果会点亮这张图 →</a></div>
+
   <!-- 交互式 SVG 地铁拓扑图 -->
   <p class="small kg-scroll-hint" id="kgScrollHint">完整图谱可左右滑动，或聚焦图谱后按 ← / → 键查看；所有小节也在下方泳道列表中。</p>
   <div class="kg-svg-wrap" tabindex="0" role="region" aria-label="可左右滚动的73节知识图谱" aria-describedby="kgScrollHint">
@@ -347,11 +361,12 @@
 
 <script src="assets/cn-quotes.js"></script>
 <script src="assets/learning-state.js"></script>
-<script src="assets/wiki.js?v=vs-41ed470c8bd6"></script>
+<script src="assets/learning-placement.js"></script>
+<script src="assets/wiki.js?v=vs-1e7dc4b77442"></script>
 <script src="assets/wiki-cues.js?v=vs-3e93be6e5a9f"></script>
-<script src="assets/wiki-trainer.js?v=vs-c92ff9305ffa"></script>
+<script src="assets/wiki-trainer.js?v=vs-7b8baa360cb9"></script>
 <script src="assets/wiki-cards.js?v=vs-25ea93c33b58"></script>
-<script src="assets/wiki-labs.js?v=vs-5d2eb0a71dbb"></script>
+<script src="assets/wiki-labs.js?v=vs-c5d7f1c191e9"></script>
 <script src="assets/wiki-map-actions.js?v=vs-a127bb52f86d"></script>
 <script>
 (function () {
@@ -726,6 +741,35 @@
     return set;
   }
 
+  /* 摸底结果叠加在图上（PY-458）：每章一个状态，节上用虚线与练习证据区分；练习证据优先，mastery 本身不变。 */
+  var placementData = {}, placementAsked = false;
+  function placementResults() {
+    var logic = window.PeiyuPlacement, store = window.PeiyuLearningState;
+    if (!logic || !logic.PAPERS || !store) return null; // a cached older script must not take the map down
+    var snapshot = store.load(), taken = logic.PAPERS.filter(function (p) { return logic.latestAttempt(snapshot, p.book); });
+    if (!taken.length) return null;
+    var missing = taken.filter(function (p) { return !placementData[p.book]; });
+    if (missing.length) {
+      if (!placementAsked) {
+        placementAsked = true;
+        Promise.all(missing.map(function (p) {
+          return fetch("data/placement/" + p.book + ".json", { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error("placement"); return r.json(); })
+            .then(function (d) { placementData[p.book] = d; });
+        })).then(function () { placementAsked = false; renderKnowledgeMap(); }).catch(function () { placementAsked = false; });
+      }
+      return null;
+    }
+    return logic.overlay(snapshot, taken.map(function (p) { return { book: p.book, title: p.title, data: placementData[p.book] }; }));
+  }
+  function renderPlacementPanel(placed) {
+    var el = document.getElementById("kgPlacement");
+    if (!el || !placed) return;
+    el.innerHTML = '<div class="wk-box-hd">摸底结果 <a href="placement.html">查看或重新摸底 →</a></div>' + placed.books.map(function (b) {
+      return '<div class="kg-pl-book">' + b.title + '</div><ul class="kg-pl-list">' + b.results.map(function (r) {
+        return "<li><span>" + r.title + '</span><span class="kg-pl-state pl-' + r.state + '">' + r.label + (r.provisional ? " · " + window.PeiyuPlacement.PROVISIONAL : "") + "</span></li>";
+      }).join("") + "</ul>";
+    }).join("") + '<p class="small kg-pl-note">图上的节：绿色虚线框是基本会了，金色是有点生疏，红色是测了不会。做过练习的节按练习记录显示。摸底不计入上面的进度。</p>';
+  }
   function renderKnowledgeMap() {
     if (!Object.keys(SEC_META).length) return;
     var svgEl = document.getElementById("kgSvg");
@@ -734,6 +778,8 @@
     if (!svgEl || !inspEl || !lanesEl) return;
 
     var mastery = window.PEIYU_COMPUTE_MASTERY ? window.PEIYU_COMPUTE_MASTERY() : {};
+    var placed = placementResults(), placedSec = placed ? placed.sections : {};
+    renderPlacementPanel(placed);
     var cntMastered = 0, cntWeak = 0, cntHub = 0;
     Object.keys(SEC_META).forEach(function (sid) {
       if (SEC_META[sid].hub) cntHub++;
@@ -1068,6 +1114,11 @@
       if (mst === "weak" && !isSel) {
         strokeCol = no; strokeW = 2.2; fillCol = noSoft; textCol = fg;
       }
+      var placedState = mst === "untouched" && !isSel && placedSec[sid] ? placedSec[sid].state : "";
+      if (placedState) {
+        strokeCol = placedState === "basic" ? ca : placedState === "rusty" ? cb : no;
+        strokeW = 2.2; dash = "4 2.5"; fillCol = placedState === "basic" ? okSoft : placedState === "not-yet" ? noSoft : cardBg; textCol = fg;
+      }
 
       var g = svg("g", { "data-map-pick": sid, style: "cursor:pointer" }, nodeLayer);
       var w = p.w || 76, h = 24;
@@ -1210,10 +1261,12 @@
           var mst = mastery[sid] ? mastery[sid].status : "untouched";
           if (mst === "mastered") cls += " st-mastered";
           else if (mst === "weak") cls += " st-weak";
+          var placedHere = mst === "untouched" ? placedSec[sid] : null;
+          if (placedHere) cls += " pl-" + placedHere.state;
           var badge = sid === curMapSec ? "🎯" : (directPre[sid] ? "⬅️先修" : (directUnl[sid] ? "➡️解锁" : (m.hub ? "★" : "")));
           return (
             '<button type="button" class="' + cls + '" data-map-pick="' + sid + '">' +
-              "<span>" + m.name + "</span>" +
+              "<span>" + m.name + (placedHere ? '<br><span class="small">摸底：' + placedHere.label + (placedHere.provisional ? " · 初步" : "") + "</span>" : "") + "</span>" +
               (badge ? '<span class="small" style="font-weight:700;white-space:nowrap">' + badge + "</span>" : "") +
             "</button>"
           );

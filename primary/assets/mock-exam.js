@@ -11,6 +11,11 @@
   function button(text, fn) {
     var node = el('button', 'btn ghost', text); node.type = 'button'; node.addEventListener('click', fn); return node;
   }
+  function stemBlock(value) {
+    var box = el('div', 'eb-stem');
+    PY_MATH.stemParas(value).forEach(function (para) { box.appendChild(el('span', 'eb-stem-text', para)); });
+    return box;
+  }
   function math(node) { if (window.PeiyuGaokaoSolutions) window.PeiyuGaokaoSolutions.math(node); }
   function duration(ms) { var s = Math.ceil(ms / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
   function signature(paper, questions) { return JSON.stringify(paper) + questions.map(function (q) { return q.contentVersion; }).join('|'); }
@@ -39,7 +44,7 @@
       document.removeEventListener('visibilitychange', tick);
     };
     function header(text) {
-      app.replaceChildren(el('h2', null, paper.paper));
+      app.replaceChildren(el('h2', null, PY_MATH.paperName(paper)));
       var back = el('a', 'eb-back', '返回题库列表'); back.href = 'index.html'; app.appendChild(back);
       app.appendChild(el('p', 'eb-note', paper.minutes + ' 分钟 · 满分 ' + paper.maxScore + ' 分' + (paper.estimated ? '（含估分）' : '')));
       app.appendChild(el('p', 'eb-note', paper.scoreNote));
@@ -99,7 +104,7 @@
         var q = paper.questions[i], card = el('article', 'card eb-card gs-problem me-question');
         card.id = 'mock-q-' + item.no;
         card.appendChild(el('h3', null, '第' + item.no + '题 · ' + item.type + ' · ' + q.maxScore + '分' + (q.estimated ? '（估分）' : '')));
-        card.appendChild(el('div', 'eb-stem eb-stem-text', item.stem));
+        card.appendChild(stemBlock(item.stem));
         if (item.figure) {
           var figure = el('img', 'me-figure'); figure.src = item.figure.src; figure.alt = item.figure.alt; card.appendChild(figure);
         }
@@ -114,7 +119,7 @@
               if (session.submittedAt || core.remaining(session, Date.now()) === 0) { finish(); return; }
               session.choices[item.id] = Array.from(answer.querySelectorAll('input:checked')).map(function (x) { return x.value; }).join(''); save();
             });
-            label.appendChild(input); label.appendChild(el('span', null, letter + ' ' + (item.choiceDescriptions ? item.choiceDescriptions[j] : value))); answer.appendChild(label);
+            label.appendChild(input); label.appendChild(el('span', null, letter + ' ' + PY_MATH.choiceText(item.choiceDescriptions ? item.choiceDescriptions[j] : value, letter))); answer.appendChild(label);
           });
         } else {
           var input = el(item.type === '解答' ? 'textarea' : 'input', 'me-text');
@@ -221,9 +226,9 @@
         var item = questions[i], post = posts[q.id], card = el('article', 'card eb-card gs-problem me-result');
         card.appendChild(el('h3', null, '第' + q.no + '题 · ' + q.type + ' · 用时 ' + duration(session.times[i] || 0)));
         var original = el('details', 'me-original'); original.appendChild(el('summary', null, '查看本题题面'));
-        original.appendChild(el('div', 'eb-stem eb-stem-text', item.stem));
+        original.appendChild(stemBlock(item.stem));
         if (item.figure) { var image = el('img', 'me-figure'); image.src = item.figure.src; image.alt = item.figure.alt; original.appendChild(image); }
-        (item.choices || []).forEach(function (choice, j) { original.appendChild(el('p', null, 'ABCDE'[j] + ' ' + (item.choiceDescriptions ? item.choiceDescriptions[j] : choice))); });
+        (item.choices || []).forEach(function (choice, j) { original.appendChild(el('p', null, 'ABCDE'[j] + ' ' + PY_MATH.choiceText(item.choiceDescriptions ? item.choiceDescriptions[j] : choice, 'ABCDE'[j]))); });
         card.appendChild(original);
         card.appendChild(el('p', 'me-your-answer', '你的作答：' + (session.choices[q.id] || '未作答')));
         var mark = el('p', 'me-mark'); card.appendChild(mark);

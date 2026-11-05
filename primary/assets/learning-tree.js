@@ -383,13 +383,7 @@
   }
   function primaryPointCard(p) {
     var list = function (items) { return '<ul>' + items.map(function (v) { return '<li>' + esc(v) + '</li>'; }).join("") + '</ul>'; };
-    function prerequisiteNote(line) {
-      // Remove ID-only annotations as a whole, keeping the surrounding explanation readable.
-      return line.replace(/[（(]\s*pyps\.[a-z0-9]+\.u[0-9]+(?:\.(?:[0-9]+|\*))?(?:[\s、,，;；]+pyps\.[a-z0-9]+\.u[0-9]+(?:\.(?:[0-9]+|\*))?)*\s*[）)]/g, "")
-        .replace(/pyps\.[a-z0-9]+\.u[0-9]+(?:\.(?:[0-9]+|\*))?/g, function (id) {
-          var before = point(id); return before ? before.title : "相关知识";
-        });
-    }
+    var notes = p.prerequisite_notes.map(core.studentNote).filter(Boolean);
     return '<article class="cc-card pk-card" id="point-' + esc(p.id) + '" data-primary-point="' + esc(p.id) + '" data-learning-point-card="' + esc(p.id) + '">'
       + '<h2><a data-learning-point="' + esc(p.id) + '" href="' + esc(primaryHref(p.first_section.replace(/-\d+$/, ""), p.id)) + '">' + esc(p.title) + '</a></h2>'
       + (!corePoint(p) ? '<p class="k-optional" data-primary-optional>这是' + (p.course_scope === 'optional' ? '选学' : '拓展') + '内容，可以先跳过。</p>' : '')
@@ -398,7 +392,7 @@
       + (p.prerequisites.length ? '<h3>先想起这些知识</h3><div class="k-links">' + p.prerequisites.map(function (id) {
         var before = point(id); return before ? '<a data-learning-point="' + esc(id) + '" href="' + esc(primaryHref(before.first_section.replace(/-\d+$/, ""), id)) + '">' + esc(before.title) + '</a>' : '';
       }).join("") + '</div>' : '')
-      + (p.prerequisite_notes.length ? '<div class="pk-note">' + list(p.prerequisite_notes.map(prerequisiteNote)) + '</div>' : '')
+      + (notes.length ? '<div class="pk-note">' + list(notes) + '</div>' : '')
       + '<details class="cc-answer"><summary>易错提醒</summary>' + p.misconceptions.map(function (m) { return '<p><b>容易这样想：</b>' + esc(m.error) + '</p><p><b>换个想法：</b>' + esc(m.correction) + '</p>'; }).join("") + '</details>'
       + '<details class="cc-answer" data-primary-outcomes><summary>学完可以做什么</summary>' + list(p.outcomes) + '</details>'
       + '<details class="cc-answer" data-primary-boundary><summary>学习范围与可用方法</summary><h3>可以这样做</h3>' + list(p.boundary.allowed) + '<h3>这里不默认要求</h3>' + list(p.boundary.not_assumed) + '</details>'

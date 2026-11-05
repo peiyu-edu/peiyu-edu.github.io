@@ -210,7 +210,8 @@
     return n;
   }
   function math(root, node) {
-    if (root && typeof root.renderMathInElement === "function") {
+    if (root && root.PY_MATH) root.PY_MATH.render(node);
+    else if (root && typeof root.renderMathInElement === "function") {
       try {
         root.renderMathInElement(node, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }], throwOnError: false });
       } catch (_) { /* 公式渲染失败时保留原文 */ }

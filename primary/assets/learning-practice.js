@@ -83,11 +83,16 @@
     if (includeExtras) target.searchParams.set("extras", "1"); else target.searchParams.delete("extras");
     history.replaceState(null, "", target.href);
   }
+  // 高中课时下拉用教材节号（b2-7-1 → 7.1），不给学生看内部编号；初中标题本身已带节号（PY-518）。
+  function sectionLabel(item) {
+    var m = /^[be]\d-(\d+)-(\d+)$/.exec(item.id);
+    return (m ? m[1] + "." + m[2] + " " : "") + item.title;
+  }
   function renderOptions() {
     var select = host.querySelector("[data-lp-section]");
     select.innerHTML = '<option value="">所有课时</option>' + index.lessons.filter(function (item) {
       return !domain || points.some(function (p) { return p.domain === domain && p.lessonIds.indexOf(item.id) >= 0; });
-    }).map(function (item) { return '<option value="' + esc(item.id) + '">' + esc(item.id + " " + item.title) + '</option>'; }).join("");
+    }).map(function (item) { return '<option value="' + esc(item.id) + '">' + esc(sectionLabel(item)) + '</option>'; }).join("");
     select.value = section;
   }
   function renderList() {

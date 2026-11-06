@@ -21,7 +21,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
   "use strict";
   var primary = { stage: "primary", listTitle: "再练一练", dailyLimit: 5, staleDays: 45,
-    phonetics: true, readAloud: true, layout: "sections", preferenceKey: "peiyu.ps.wrongbook.v1",
+    phonetics: true, readAloud: false, layout: "sections", preferenceKey: "peiyu.ps.wrongbook.v1",
     pointPrefix: "pyps.", labels: { unseen: "○ 还没做", wrong: "↻ 再练练", practicing: "△ 练习中", learned: "✓ 学过了", secure: "★ 记牢了" } };
   var junior = { stage: "junior", listTitle: "错题本", todayTitle: "今日复习", learnedTitle: "掌握度", dailyLimit: 10, staleDays: 60,
     phonetics: false, readAloud: false, layout: "tabs", preferenceKey: "peiyu.jh.wrongbook.v1", pointPrefix: "pyjh.",
@@ -233,8 +233,9 @@
         toggle.setAttribute("aria-expanded", "false"); actions.appendChild(toggle); li.appendChild(hint);
       }
       actions.appendChild(button(hidden[q.identity] ? "恢复" : "先收起", function () { setHidden(q.identity, !hidden[q.identity]); }));
-      // Whole line = the mp3 key: tools/gen_say_audio.py wrongbook_text() must stay identical.
-      var speech = say(q.title + (stage === "primary" && r.prompt ? "。" + r.prompt : ""), /^p[12]/.test(r.unitId || q.owner || "")); if (speech) actions.appendChild(speech);
+      // PY-517：小学错题本已关掉朗读（readAloud: false）；要是再打开，也只给一二年级的题。知识库行没有 unitId，看 owner。
+      var low = /^(pyps\.)?p[12]/.test(r.unitId || r.owner || q.owner || "");
+      var speech = low ? say(q.title + (stage === "primary" && r.prompt ? "。" + r.prompt : ""), low) : null; if (speech) actions.appendChild(speech);
       li.appendChild(actions); return typeset(li);
     }
     function today() {

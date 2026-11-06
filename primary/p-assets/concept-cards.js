@@ -29,7 +29,9 @@
       .replace(/米\/(?=[时分秒])/g, "米每")
       .replace(/＋/g, "加").replace(/＝/g, "等于");
   }
-  function sayButton(text) {
+  // 只有一二年级（low）出「听一听」：三年级起学生自己能读（PY-517）
+  function sayButton(text, low) {
+    if (!low) return '';
     return '<button class="cc-say" type="button" data-cc-say="' + esc(spoken(text)) + '" aria-label="朗读：' + esc(text) + '">听一听</button>';
   }
   function words(text, low) {
@@ -38,7 +40,7 @@
     return Array.from(text).map((ch, i) => /[一-鿿]/.test(ch) ? '<ruby>' + esc(ch) + '<rt>' + esc(readings[i]) + '</rt></ruby>' : esc(ch)).join("");
   }
   function line(text, low, tag = "p") {
-    return '<' + tag + '>' + words(text, low) + sayButton(text) + '</' + tag + '>';
+    return '<' + tag + '>' + words(text, low) + sayButton(text, low) + '</' + tag + '>';
   }
   function svg(content, caption, height = 150) {
     return '<svg viewBox="0 0 320 ' + height + '" role="img" aria-label="' + esc(caption) + '">' + content + '</svg>';
@@ -148,7 +150,7 @@
     const fbHTML = fb && fb.questionId === d.id ? line(fb.message, low) : '';
     return '<section class="cc-quiz" aria-label="自测"><h3>自己试一题</h3><div class="cc-qtabs" role="group" aria-label="选题">' + tabsHTML(card, open, d) + '</div>'
       + '<p class="cc-lock"' + (locked ? '' : ' hidden') + '>' + locked + '</p>' + line(d.prompt,low)
-      + '<div class="cc-options">'+d.options.map(o=>'<div><button type="button" data-choice="'+o.id+'" aria-pressed="'+(!!fb && fb.questionId === d.id && fb.choice === o.id)+'">'+words(o.text,low)+'</button>'+sayButton(o.text)+'</div>').join("")+'</div>'
+      + '<div class="cc-options">'+d.options.map(o=>'<div><button type="button" data-choice="'+o.id+'" aria-pressed="'+(!!fb && fb.questionId === d.id && fb.choice === o.id)+'">'+words(o.text,low)+'</button>'+sayButton(o.text,low)+'</div>').join("")+'</div>'
       + '<div class="cc-feedback" role="status" aria-live="polite">' + fbHTML + '</div>' + recordNote(card, entry, snap)
       + '<details class="cc-answer"><summary>看答案和理由</summary>'+line(d.answer,low)+'</details></section>';
   }
@@ -156,7 +158,7 @@
     return '<article class="cc-card'+(low?' cc-low':'')+'" id="'+esc(card.id)+'" data-card="'+esc(card.id)+'">'
       + line(card.title,low,"h2") + '<div class="cc-body"><div class="cc-concept">' + line(card.concept,low)
       + '<h3>先看条件</h3>' + card.conditions.map(x=>line(x,low)).join("") + '</div>'
-      + (card.intuition ? '<figure class="cc-figure">'+diagram(card.intuition)+'<figcaption>'+words(card.intuition.caption,low)+sayButton(card.intuition.caption)+'</figcaption></figure>' : '') + '</div>'
+      + (card.intuition ? '<figure class="cc-figure">'+diagram(card.intuition)+'<figcaption>'+words(card.intuition.caption,low)+sayButton(card.intuition.caption,low)+'</figcaption></figure>' : '') + '</div>'
       + '<div class="cc-myth"><h3>容易这样想</h3>' + line(card.misconception.error,low) + '<strong>换个想法</strong>'+line(card.misconception.correction,low)+'</div>'
       + quizHTML(card, low, snap)
       + '<nav class="cc-links" aria-label="相关课时">'+card.lessonIds.map(id=>'<a href="lessons/'+esc(id)+'.html">回第'+esc(id.split("-").pop())+'课动手试</a>').join("")+'</nav></article>';

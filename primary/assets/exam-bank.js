@@ -35,16 +35,52 @@
   }
   function stemPara(parent, value) {
     var lines = value.split("\n"), plain = [];
-    function flush() { if (plain.length) parent.appendChild(el("span", "eb-stem-text", plain.join("\n"))); plain = []; }
+    function appendText(node, text) {
+      text.split(/<br\s*\/?\s*>/gi).forEach(function (part, i) {
+        if (i) node.appendChild(document.createElement("br"));
+        if (part) node.appendChild(document.createTextNode(part));
+      });
+    }
+    function flush() {
+      if (plain.length) {
+        var span = el("span", "eb-stem-text");
+        appendText(span, plain.join("\n"));
+        parent.appendChild(span);
+      }
+      plain = [];
+    }
     for (var i = 0; i < lines.length;) {
-      var width = lines[i].split("｜").length, rows = [], j = i;
-      while (width > 1 && j < lines.length && lines[j].split("｜").length === width) { rows.push(lines[j].split("｜")); j++; }
+      var delimiter = lines[i].indexOf("｜") >= 0 ? "｜" : "|";
+      var firstLine = lines[i].trim();
+      var markdownRow = delimiter === "｜" || firstLine.charAt(0) === "|" ||
+        firstLine.charAt(firstLine.length - 1) === "|" || /\s\|\s/.test(firstLine);
+      if (!markdownRow) { plain.push(lines[i]); i++; continue; }
+      var cells = lines[i].split(delimiter), width = cells.length, rows = [], j = i;
+      while (width > 1 && j < lines.length) {
+        var nextDelimiter = lines[j].indexOf("｜") >= 0 ? "｜" : "|";
+        var nextLine = lines[j].trim();
+        var next = lines[j].split(nextDelimiter);
+        var nextMarkdownRow = nextDelimiter === "｜" || nextLine.charAt(0) === "|" ||
+          nextLine.charAt(nextLine.length - 1) === "|" || /\s\|\s/.test(nextLine);
+        if (nextDelimiter !== delimiter || !nextMarkdownRow || next.length !== width) break;
+        rows.push(next); j++;
+      }
       if (rows.length < 2) { plain.push(lines[i]); i++; continue; }
       flush();
       var wrap = el("div", "eb-table-wrap"), table = el("table", "eb-table");
-      rows.forEach(function (cells) {
+      rows = rows.filter(function (row) {
+        var cells = row.slice();
+        if (cells[0].trim() === "" && cells[cells.length - 1].trim() === "") cells = cells.slice(1, -1);
+        return !cells.length || !cells.every(function (cell) { return /^\s*:?-{3,}:?\s*$/.test(cell); });
+      });
+      rows.forEach(function (cells, rowIndex) {
         var tr = el("tr");
-        cells.forEach(function (cell, c) { tr.appendChild(el(c === 0 ? "th" : "td", null, cell.trim())); });
+        if (cells[0].trim() === "" && cells[cells.length - 1].trim() === "") cells = cells.slice(1, -1);
+        cells.forEach(function (cell) {
+          var cellNode = el(rowIndex === 0 ? "th" : "td");
+          appendText(cellNode, cell.trim());
+          tr.appendChild(cellNode);
+        });
         table.appendChild(tr);
       });
       wrap.appendChild(table);
@@ -169,16 +205,15 @@
       featured.appendChild(el("h2", null, "本节精选"));
       featured.appendChild(el("p", "eb-note", sourceNote(selected.featuredIds) + "从基础到挑战，先独立作答，再看解析。"));
       var picks = el("ol", "eb-list");
-      selected.featuredIds.forEach(function (id) {
-        var item = items.find(function (row) { return row.id === id && matches(row, p); });
-        if (item) picks.appendChild(itemLink(item, true));
-      });
+      dedupeItems(selected.featuredIds.map(function (id) {
+        return items.find(function (row) { return row.id === id && matches(row, p); });
+      }).filter(Boolean)).forEach(function (item) { picks.appendChild(itemLink(item, true)); });
       featured.appendChild(picks);
       if (!picks.children.length) featured.appendChild(el("p", "eb-note", "本次筛选没有精选题，可清除筛选或查看下面的全部题目。"));
       app.appendChild(featured);
     }
-    var visible = items.filter(function (item) { return matches(item, p); });
-    if (selected) app.appendChild(el("h2", "eb-all", "全部 " + selected.ids.length + " 道"));
+    var visible = dedupeItems(items.filter(function (item) { return matches(item, p); }));
+    if (selected) app.appendChild(el("h2", "eb-all", "全部 " + visible.length + " 道"));
     var count = el("p", "eb-count", "共 " + visible.length + " 道题" + (visible.length < items.length ? "（全部 " + items.length + " 道）" : "") + "，保留原卷题号和顺序。");
     count.setAttribute("role", "status");
     app.appendChild(count);
@@ -208,6 +243,33 @@
     });
   }
 
+  function figureOnly(item) {
+    var choices = item.choiceDescriptions || item.choices || [];
+    return choices.length > 0 && choices.every(function (choice, i) {
+      return PY_MATH.choiceText(choice, LETTERS[i]) === "";
+    });
+  }
+  function dedupeItems(items) {
+    var kept = [], keys = [];
+    items.forEach(function (item) { if (item) delete item._otherExamSources; });
+    items.forEach(function (item) {
+      if (!item || !item.stem || figureOnly(item)) { kept.push(item); return; }
+      var choices = item.choiceDescriptions || item.choices || [];
+      var key = PY_MATH.stemKey(item.stem || "", choices);
+      var found = -1;
+      keys.some(function (other, i) {
+        if (PY_MATH.sameQuestion(key, other.key)) { found = i; return true; }
+        return false;
+      });
+      if (found < 0) { keys.push({ key: key, item: item }); kept.push(item); }
+      else {
+        var primary = keys[found].item;
+        primary._otherExamSources = (primary._otherExamSources || []).concat([item]);
+      }
+    });
+    return kept;
+  }
+
   function itemLink(item, withSource) {
     var li = el("li"), a = el("a", "eb-item");
     a.href = hrefWith({ q: item.id });
@@ -215,7 +277,11 @@
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
       e.preventDefault(); go({ q: item.id });
     });
-    a.appendChild(el("span", "eb-no", isOriginal(item) ? title(item) : "第" + item.no + "题" + (item.part ? " " + item.part : "")));
+    var label = isOriginal(item) ? title(item) : "第" + item.no + "题" + (item.part ? " " + item.part : "");
+    if (item._otherExamSources && item._otherExamSources.length) {
+      label += "（另见" + item._otherExamSources.map(function (other) { return paperName(other) + "第" + other.no + "题"; }).join("、") + "）";
+    }
+    a.appendChild(el("span", "eb-no", label));
     var tags = el("span", "eb-tags");
     tags.appendChild(el("span", "tag", item.type));
     if (item.level) tags.appendChild(el("span", "tag", item.level));

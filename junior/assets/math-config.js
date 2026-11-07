@@ -60,6 +60,7 @@ var PY_MATH = (function () {
   function fitOne(box) {
     if (!box.isConnected || !box.clientWidth) return;
     if (box.classList.contains("eb-table-wrap")) { scrollHint(box, "题目数据表，可左右滑动"); return; }
+    if (box.classList.contains("eb-figure")) { scrollHint(box, "题图较宽，可左右滑动"); return; }
     if (box.classList.contains("opts")) { if ([].some.call(box.children, optionOverflows)) box.classList.remove("cols"); return; }
     if (box.matches(BANK_BLOCK)) {
       // Bank formulas wrap at their operators; one that cannot (a long list, an array) scrolls alone.
@@ -105,7 +106,7 @@ var PY_MATH = (function () {
   }) : null;
   function fitDisplay(root) {
     if (!root.querySelectorAll) return;
-    var fits = ".prob .katex-display, .eb-card .katex-display, .predict .katex-display, .eb-table-wrap, .opts.cols, " + BANK_BLOCK;
+    var fits = ".prob .katex-display, .eb-card .katex-display, .predict .katex-display, .eb-table-wrap, .eb-figure, .opts.cols, " + BANK_BLOCK;
     (root.matches && root.matches(fits) ? [root] : []).concat([].slice.call(root.querySelectorAll(fits))).forEach(function (box) {
       if (displayObserver && !box.pyFitWatched) { box.pyFitWatched = true; displayObserver.observe(box); }
       fitOne(box);

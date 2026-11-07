@@ -34,6 +34,19 @@
   function lesson(id) { return index.lessons.find(function (item) { return item.id === id; }); }
   function fullPoint(id) { return knowledge.points.find(function (item) { return item.id === id; }); }
   function pointIndex(id) { return points.find(function (item) { return item.id === id; }); }
+  function sectionLabel(item) {
+    var id = item.id || "";
+    var high = /^[be]\d-(\d+)-(\d+)$/.exec(id);
+    if (high) return high[1] + "." + high[2] + " " + item.title;
+    var primary = /^p([1-6])([ab])(?:-|$)/.exec(id);
+    if (primary) {
+      var book = { "1a": "一上", "1b": "一下", "2a": "二上", "2b": "二下",
+        "3a": "三上", "3b": "三下", "4a": "四上", "4b": "四下",
+        "5a": "五上", "5b": "五下", "6a": "六上", "6b": "六下" }[primary[1] + primary[2]];
+      return book + " " + item.title;
+    }
+    return item.title;
+  }
   function practiceTitle(point) {
     // Knowledge-page headings can state the result of their own diagnostic.
     var titles = {
@@ -84,10 +97,6 @@
     history.replaceState(null, "", target.href);
   }
   // 高中课时下拉用教材节号（b2-7-1 → 7.1），不给学生看内部编号；初中标题本身已带节号（PY-518）。
-  function sectionLabel(item) {
-    var m = /^[be]\d-(\d+)-(\d+)$/.exec(item.id);
-    return (m ? m[1] + "." + m[2] + " " : "") + item.title;
-  }
   function renderOptions() {
     var select = host.querySelector("[data-lp-section]");
     select.innerHTML = '<option value="">所有课时</option>' + index.lessons.filter(function (item) {

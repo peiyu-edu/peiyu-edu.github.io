@@ -19,6 +19,20 @@
   function math(node) { if (window.PeiyuGaokaoSolutions) window.PeiyuGaokaoSolutions.math(node); }
   function duration(ms) { var s = Math.ceil(ms / 1000); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
   function signature(paper, questions) { return JSON.stringify(paper) + questions.map(function (q) { return q.contentVersion; }).join('|'); }
+  function scoringBlock(post) {
+    var scoring = post && post.scoring, points = post && post.scoring_pts;
+    if (!Array.isArray(scoring) || !Array.isArray(points) || scoring.length === 0 || scoring.length !== points.length) return null;
+    var box = el('section', 'me-scoring');
+    box.appendChild(el('h4', null, '本题得分点（自写，非官方）'));
+    var list = el('ol');
+    scoring.forEach(function (text, i) {
+      if (typeof text !== 'string' || !Number.isInteger(points[i]) || points[i] <= 0) return;
+      list.appendChild(el('li', null, text + '（' + points[i] + '分）'));
+    });
+    if (!list.children.length) return null;
+    box.appendChild(list);
+    return box;
+  }
 
   function mount(app, paper, index, stage) {
     dispose();
@@ -242,6 +256,8 @@
           select.value = session.scores[q.id] == null ? '' : String(session.scores[q.id]);
           select.disabled = !!session.recorded[q.id];
           label.appendChild(select); card.appendChild(label);
+          var scoring = q.type === '解答' ? scoringBlock(post) : null;
+          if (scoring) card.appendChild(scoring);
           var confirm = button('确认本题自评', function () {
             if (select.value === '') return;
             session.scores[q.id] = Number(select.value); record(i, true); save();

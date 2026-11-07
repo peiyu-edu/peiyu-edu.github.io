@@ -96,6 +96,9 @@
   }
   function isOriginal(item) { return item.source_type === "original"; }
   function paperName(item) { return isOriginal(item) ? "原创解答题" : PY_MATH.paperName(item); }
+  function isEnrichment(item) {
+    return ["提高", "综合", "较难", "挑战", "压轴"].indexOf(item.level) >= 0;
+  }
   function title(item) { return isOriginal(item) ? paperName(item) + " · 第" + item.no + "题" + (item.part ? " " + item.part : "") : PY_MATH.paperTitle(item); }
   function params() { return new URLSearchParams(location.search); }
   function hrefWith(changes) {
@@ -285,6 +288,9 @@
     var tags = el("span", "eb-tags");
     tags.appendChild(el("span", "tag", item.type));
     if (item.level) tags.appendChild(el("span", "tag", item.level));
+    if (withSource && isEnrichment(item)) {
+      tags.appendChild(el("span", "tag", "学有余力"));
+    }
     if (item.figure) tags.appendChild(el("span", "tag", "有图"));
     a.appendChild(tags);
     if (withSource && !isOriginal(item)) tags.appendChild(el("span", "eb-source", paperName(item)));
@@ -392,6 +398,7 @@
     var meta = el("div", "eb-meta");
     meta.appendChild(el("span", "tag", item.type));
     if (item.level) meta.appendChild(el("span", "tag", item.level));
+    if (isEnrichment(item)) meta.appendChild(el("span", "tag", "学有余力"));
     card.appendChild(meta);
     if (item.points && item.points.length) card.appendChild(el("p", "eb-points", "知识点：" + item.points.join("、")));
     var stem = el("div", "stem eb-stem");

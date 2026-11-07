@@ -1,4 +1,5 @@
-/* Whole-paper exam: only q/ is requested before submission; the answer gate is here. */
+/* Whole-paper exam and topic timed sets (paper.kind === 'set'): only q/ is requested
+   before submission; the answer gate is here. */
 (function () {
   'use strict';
   var core = window.PeiyuMockExamCore, dispose = function () {};
@@ -37,12 +38,15 @@
   function mount(app, paper, index, stage) {
     dispose();
     var alive = true, session, questions, posts, clock, interval, busy = false;
-    var ledger = window.PeiyuLearningState, key = 'peiyu.' + (stage === 'junior' ? 'jh' : 'hs') + '.mock-draft.v1';
+    var timed = paper.kind === 'set', name = timed ? '限时练' : '整卷模考';
+    var ledger = window.PeiyuLearningState, prefix = 'peiyu.' + (stage === 'junior' ? 'jh' : 'hs');
+    // Each timed set keeps its own draft so it never replaces a whole-paper attempt.
+    var key = timed ? prefix + '.timed-draft.v1.' + paper.id : prefix + '.mock-draft.v1';
     var storageOK = true, saveWarning = el('p', 'eb-note');
     saveWarning.setAttribute('role', 'status');
     function save() {
       try { localStorage.setItem(key, JSON.stringify(session)); } catch (_) { storageOK = false; }
-      saveWarning.textContent = storageOK ? '草稿与报告只保存在这台设备；逐题成绩沿用学习账本，可在“我的学习”导出。' : '浏览器无法保存草稿。请保持此页打开；关闭后可能丢失本次模考。';
+      saveWarning.textContent = storageOK ? '草稿与报告只保存在这台设备；逐题成绩沿用学习账本，可在“我的学习”导出。' : '浏览器无法保存草稿。请保持此页打开；关闭后可能丢失本次' + name + '。';
     }
     function get(path) {
       return fetch(new URL('data/' + path, location.href).href, { cache: 'no-store' }).then(function (r) {
@@ -58,8 +62,9 @@
       document.removeEventListener('visibilitychange', tick);
     };
     function header(text) {
-      app.replaceChildren(el('h2', null, PY_MATH.paperName(paper)));
-      var back = el('a', 'eb-back', '返回题库列表'); back.href = 'index.html'; app.appendChild(back);
+      app.replaceChildren(el('h2', null, timed ? paper.title : PY_MATH.paperName(paper)));
+      var back = el('a', 'eb-back', timed ? '返回专题复习' : '返回题库列表');
+      back.href = timed ? '../review.html#' + encodeURIComponent(paper.topic) : 'index.html'; app.appendChild(back);
       app.appendChild(el('p', 'eb-note', paper.minutes + ' 分钟 · 满分 ' + paper.maxScore + ' 分' + (paper.estimated ? '（含估分）' : '')));
       app.appendChild(el('p', 'eb-note', paper.scoreNote));
       if (text) app.appendChild(el('p', null, text));
@@ -68,7 +73,7 @@
     function newSession() {
       var now = Date.now();
       session = { version: 1, paperId: paper.id, signature: signature(paper, questions),
-        attemptId: 'mock-' + now.toString(36) + '-' + Math.random().toString(36).slice(2, 8),
+        attemptId: (timed ? 'set-' : 'mock-') + now.toString(36) + '-' + Math.random().toString(36).slice(2, 8),
         startedAt: now, deadline: now + paper.minutes * 60000, submittedAt: null,
         lastTick: now, current: 0, times: [], choices: {}, scores: {}, recorded: {} };
       save(); renderExam();
@@ -80,19 +85,22 @@
         && Number.isInteger(value.current) && value.current >= 0 && value.current < questions.length;
     }
     function intro() {
-      header('按原卷题序在本页作答。解答过程写在纸上，交卷后对照答案与分步解析自评。交卷前不会加载答案文件。');
+      header(timed ? '本专题 3 道真题按由易到难排好，在本页依次作答。解答过程写在纸上，交卷后对照答案与分步解析自评。交卷前看不到答案。'
+        : '按原卷题序在本页作答。解答过程写在纸上，交卷后对照答案与分步解析自评。交卷前不会加载答案文件。');
       app.appendChild(el('p', 'eb-note', paper.durationNote + '。倒计时按开考时间计算，刷新或离开页面不会暂停，到时自动交卷。'));
-      app.appendChild(el('p', 'eb-note', paper.partialRule === 'new-per-option' ? '多选：全对得满分；漏选每个正确选项2分；错选或不选0分。' : '多选：全对得满分；只漏选得2分；错选或不选0分。'));
+      if (!timed || paper.questions.some(function (q) { return q.type === '多选'; })) {
+        app.appendChild(el('p', 'eb-note', paper.partialRule === 'new-per-option' ? '多选：全对得满分；漏选每个正确选项2分；错选或不选0分。' : '多选：全对得满分；只漏选得2分；错选或不选0分。'));
+      }
       app.appendChild(el('p', 'eb-note', '填空支持数字、分数、根式、幂与 ln、π 的常见写法；未能识别的写法交卷后对照答案自评。解答题和开放答案也需自评，成绩仅供本次练习复盘。'));
       var draft = readDraft();
       if (validDraft(draft)) {
-        app.appendChild(button(draft.submittedAt ? '查看上次报告 / 继续自评' : '继续本卷模考', function () {
+        app.appendChild(button(draft.submittedAt ? '查看上次报告 / 继续自评' : timed ? '继续本次限时练' : '继续本卷模考', function () {
           session = draft;
           if (session.submittedAt) loadAnswers(); else { renderExam(); tick(); }
         }));
       } else if (draft && draft.paperId === paper.id) app.appendChild(el('p', 'eb-note', '题库版本已更新，旧草稿不再参与本次计分，请重新开考。'));
-      app.appendChild(button('开始整卷模考', function () {
-        if (draft && !window.confirm('重新开考会替换这台设备上的模考草稿和报告，学习账本保留。继续吗？')) return;
+      app.appendChild(button('开始' + name, function () {
+        if (draft && !window.confirm('重新开考会替换这台设备上的' + name + '草稿和报告，学习账本保留。继续吗？')) return;
         newSession();
       }));
     }
@@ -111,18 +119,19 @@
       app.appendChild(bar);
       var nav = el('nav', 'me-question-nav'); nav.setAttribute('aria-label', '题号导航');
       questions.forEach(function (item, i) {
-        var jump = el('a', null, String(item.no)); jump.href = '#mock-q-' + item.no;
+        var no = paper.questions[i].no, jump = el('a', null, String(no)); jump.href = '#mock-q-' + no;
         jump.addEventListener('click', function () { focusQuestion(i); }); nav.appendChild(jump);
       }); app.appendChild(nav);
       questions.forEach(function (item, i) {
         var q = paper.questions[i], card = el('article', 'card eb-card gs-problem me-question');
-        card.id = 'mock-q-' + item.no;
-        card.appendChild(el('h3', null, '第' + item.no + '题 · ' + item.type + ' · ' + q.maxScore + '分' + (q.estimated ? '（估分）' : '')));
+        card.id = 'mock-q-' + q.no;
+        card.appendChild(el('h3', null, '第' + q.no + '题 · ' + item.type + ' · ' + q.maxScore + '分' + (q.estimated ? '（估分）' : '')));
+        if (timed) card.appendChild(el('p', 'eb-note', PY_MATH.paperTitle(item)));
         card.appendChild(stemBlock(item.stem));
         if (item.figure) {
           var figure = el('img', 'me-figure'); figure.src = item.figure.src; figure.alt = item.figure.alt; card.appendChild(figure);
         }
-        var answer = el('fieldset', 'me-answer'), legend = el('legend', null, '第' + item.no + '题作答');
+        var answer = el('fieldset', 'me-answer'), legend = el('legend', null, '第' + q.no + '题作答');
         answer.appendChild(legend);
         if (item.choices && item.choices.length) {
           item.choices.forEach(function (value, j) {
@@ -137,7 +146,7 @@
           });
         } else {
           var input = el(item.type === '解答' ? 'textarea' : 'input', 'me-text');
-          input.setAttribute('aria-label', '第' + item.no + '题答案'); input.autocomplete = 'off';
+          input.setAttribute('aria-label', '第' + q.no + '题答案'); input.autocomplete = 'off';
           if (item.type === '解答') input.placeholder = '在纸上写出过程，可在这里记下最后结论或“已在纸上作答”';
           input.value = session.choices[item.id] || '';
           input.addEventListener('input', function () {
@@ -272,11 +281,15 @@
           var link = el('a', 'me-lesson', '回课页第5步：' + index.sections[sid].title);
           link.href = '../lessons/' + encodeURIComponent(sid) + '.html#step5'; card.appendChild(link);
         });
+        if (timed && q.review) {
+          var topic = el('a', 'me-lesson', '回专题看这道题的分步提示和易错点');
+          topic.href = '../review.html#' + encodeURIComponent(q.review); card.appendChild(topic);
+        }
         app.appendChild(card);
       });
       math(app);
     }
-    app.replaceChildren(el('p', null, '正在准备整卷题目…'));
+    app.replaceChildren(el('p', null, timed ? '正在准备限时练题目…' : '正在准备整卷题目…'));
     Promise.all(paper.questions.map(function (q) { return get('q/' + encodeURIComponent(q.id) + '.json').then(function (item) {
       if (item.id !== q.id) throw Error('question mismatch'); return item;
     }); })).then(function (items) { if (!alive) return; questions = items; intro(); }).catch(function () {

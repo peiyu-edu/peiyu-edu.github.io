@@ -573,6 +573,11 @@
       if (paper) { window.PeiyuMockExam.mount(app, paper, index, stage); return; }
       app.replaceChildren(el("p", "eb-missing", "这套卷尚未通过整卷完整性检查，请返回题库列表。")); return;
     }
+    if (p.has("set") && window.PeiyuMockExam) {
+      var set = (index.sets || []).find(function (entry) { return entry.id === p.get("set"); });
+      if (set) { window.PeiyuMockExam.mount(app, set, index, stage); return; }
+      app.replaceChildren(el("p", "eb-missing", "这份限时练暂未开放，请返回专题复习页。")); return;
+    }
     if (p.has("sec") && !selectedSection(p)) history.replaceState(null, "", hrefWith({ sec: null }));
     var q = params().get("q");
     if (q) renderQuestion(q); else { renderList(); document.title = (stage === "junior" ? "初中" : "高中") + "真题库 · 培玉"; }
@@ -584,7 +589,7 @@
     if (!data || data.version !== 1 || !Array.isArray(data.items)) throw new Error("bad index");
     index = data;
     if (inline) renderInline(); else route();
-    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q") && !params().has("mock")) renderList(); });
+    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q") && !params().has("mock") && !params().has("set")) renderList(); });
   }).catch(function () {
     app.replaceChildren(el("p", "eb-missing", "真题库暂时打不开，请刷新重试。"));
   });

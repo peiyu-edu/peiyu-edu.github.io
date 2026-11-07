@@ -10,7 +10,7 @@
   var LETTERS = "ABCDE", SECTION = "exam-bank";
   var stage = document.body.getAttribute("data-stage") === "junior" ? "junior" : "high";
   var ledger = window.PeiyuLearningState, solutions = window.PeiyuGaokaoSolutions;
-  var FILTERS = [["region", "地区"], ["year", "年份"], ["type", "题型"], ["point", "知识点"]];
+  var FILTERS = [["region", "地区"], ["year", "年份"], ["type", "题型"], ["difficulty", "难度"], ["point", "知识点"]];
 
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -99,6 +99,16 @@
   function isEnrichment(item) {
     return ["提高", "综合", "较难", "挑战", "压轴"].indexOf(item.level) >= 0;
   }
+  // Public three-level filter mapping.  Existing bank rows use level labels:
+  // 基础→基础；中档/应用/中等/适中/进阶→中档；提高/综合/较难/挑战/压轴→挑战.
+  // An unknown future label is deliberately treated as 中档 so it remains visible.
+  function difficulty(item) {
+    var level = String(item && item.level || "");
+    if (level === "基础") return "基础";
+    if (["提高", "综合", "较难", "挑战", "压轴"].indexOf(level) >= 0) return "挑战";
+    if (["中档", "应用", "中等", "适中", "进阶"].indexOf(level) >= 0) return "中档";
+    return "中档";
+  }
   function title(item) { return isOriginal(item) ? paperName(item) + " · 第" + item.no + "题" + (item.part ? " " + item.part : "") : PY_MATH.paperTitle(item); }
   function params() { return new URLSearchParams(location.search); }
   function hrefWith(changes) {
@@ -150,15 +160,20 @@
     return matchesSection(item, p) && (!p.get("region") || item.region === p.get("region")) &&
       (!p.get("year") || String(item.year) === p.get("year")) &&
       (!p.get("type") || item.type === p.get("type")) &&
+      (!p.get("difficulty") || difficulty(item) === p.get("difficulty")) &&
       (!p.get("point") || (item.points || []).indexOf(p.get("point")) >= 0);
   }
   function facet(key, items) {
     var values = [];
     items.forEach(function (item) {
-      (key === "point" ? item.points || [] : [item[key]]).forEach(function (v) {
+      (key === "point" ? item.points || [] : [key === "difficulty" ? difficulty(item) : item[key]]).forEach(function (v) {
         if (v != null && v !== "" && values.indexOf(String(v)) < 0) values.push(String(v));
       });
     });
+    if (key === "difficulty") {
+      var order = { "基础": 0, "中档": 1, "挑战": 2 };
+      return values.sort(function (a, b) { return order[a] - order[b]; });
+    }
     return key === "year" ? values.sort().reverse() : values.sort(function (a, b) { return a.localeCompare(b, "zh-CN"); });
   }
 
@@ -199,7 +214,7 @@
     var clear = el("button", "btn ghost eb-clear", "清除筛选");
     clear.type = "button";
     clear.hidden = !FILTERS.some(function (f) { return p.get(f[0]); });
-    clear.addEventListener("click", function () { go({ region: null, year: null, type: null, point: null }); });
+    clear.addEventListener("click", function () { go({ region: null, year: null, type: null, difficulty: null, point: null }); });
     form.appendChild(clear);
     app.appendChild(form);
     var selected = selectedSection(p);

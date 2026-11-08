@@ -10,7 +10,7 @@
   var LETTERS = "ABCDE", SECTION = "exam-bank";
   var stage = document.body.getAttribute("data-stage") === "junior" ? "junior" : "high";
   var ledger = window.PeiyuLearningState, solutions = window.PeiyuGaokaoSolutions;
-  var FILTERS = [["region", "地区"], ["year", "年份"], ["type", "题型"], ["difficulty", "难度"], ["point", "知识点"]];
+  var FILTERS = [["region", "地区"], ["year", "年份"], ["type", "题型"], ["difficulty", "难度"], ["point", "知识点"], ["method", "方法"]];
   // 题单打印（PY-493）：一张题单最多 30 道；勾选状态只在本页内存里，换筛选条件也保留。
   var PRINT_MAX = 30, picking = false, picked = [];
   // A4 纵向、左右页边距各 14mm 时的版心宽（182mm ≈ 688px），留 4px 余量。
@@ -142,6 +142,15 @@
     var sections = index.sections || {}, sec = p.get("sec");
     return sec && Object.prototype.hasOwnProperty.call(sections, sec) ? sections[sec] : null;
   }
+  function selectedMethod(p) {
+    var methods = index.methods || {}, method = p.get("method");
+    return method && Object.prototype.hasOwnProperty.call(methods, method) ? methods[method] : null;
+  }
+  function methodIds(item) {
+    return Object.keys(index.methods || {}).filter(function (id) {
+      return index.methods[id].ids.indexOf(item.id) >= 0;
+    });
+  }
   function matchesSection(item, p) {
     var section = selectedSection(p);
     return !section || section.ids.indexOf(item.id) >= 0;
@@ -165,12 +174,14 @@
       (!p.get("year") || String(item.year) === p.get("year")) &&
       (!p.get("type") || item.type === p.get("type")) &&
       (!p.get("difficulty") || difficulty(item) === p.get("difficulty")) &&
-      (!p.get("point") || (item.points || []).indexOf(p.get("point")) >= 0);
+      (!p.get("point") || (item.points || []).indexOf(p.get("point")) >= 0) &&
+      (!p.get("method") || methodIds(item).indexOf(p.get("method")) >= 0);
   }
   function facet(key, items) {
     var values = [];
     items.forEach(function (item) {
-      (key === "point" ? item.points || [] : [key === "difficulty" ? difficulty(item) : item[key]]).forEach(function (v) {
+      (key === "point" ? item.points || [] : key === "method" ? methodIds(item) :
+        [key === "difficulty" ? difficulty(item) : item[key]]).forEach(function (v) {
         if (v != null && v !== "" && values.indexOf(String(v)) < 0) values.push(String(v));
       });
     });
@@ -208,7 +219,11 @@
         var q = new URLSearchParams(p.toString()); q.delete(f[0]);
         return matches(item, q);
       });
-      facet(f[0], rest).forEach(function (v) { select.appendChild(new Option(f[0] === "year" ? v + " 年" : v, v)); });
+      facet(f[0], rest).forEach(function (v) {
+        var count = f[0] === "method" ? rest.filter(function (item) { return methodIds(item).indexOf(v) >= 0; }).length : 0;
+        var label = f[0] === "year" ? v + " 年" : f[0] === "method" ? index.methods[v].name + "（" + count + " 题）" : v;
+        select.appendChild(new Option(label, v));
+      });
       select.value = p.get(f[0]) || "";
       if (select.value !== (p.get(f[0]) || "")) select.value = "";
       select.addEventListener("change", function () { var c = {}; c[f[0]] = select.value; go(c); });
@@ -218,9 +233,22 @@
     var clear = el("button", "btn ghost eb-clear", "清除筛选");
     clear.type = "button";
     clear.hidden = !FILTERS.some(function (f) { return p.get(f[0]); });
-    clear.addEventListener("click", function () { go({ region: null, year: null, type: null, difficulty: null, point: null }); });
+    clear.addEventListener("click", function () { go({ region: null, year: null, type: null, difficulty: null, point: null, method: null }); });
     form.appendChild(clear);
     app.appendChild(form);
+    var method = selectedMethod(p);
+    if (method) {
+      var explanation = el("section", "eb-method");
+      explanation.appendChild(el("h2", null, method.name));
+      explanation.appendChild(el("p", null, method.description));
+      explanation.appendChild(el("p", null, "已经告诉你这组题用哪种方法，适合学完方法卡后集中练；想练“看题认方法”，用复习专题里的混排。"));
+      (method.topics || []).forEach(function (topic) {
+        var link = el("a", null, "先看方法卡：" + topic.title);
+        link.href = topic.href;
+        explanation.appendChild(link);
+      });
+      app.appendChild(explanation);
+    }
     var selected = selectedSection(p);
     if (selected && selected.featuredIds) {
       var featured = el("section", "eb-featured");
@@ -234,7 +262,11 @@
       if (!picks.children.length) featured.appendChild(el("p", "eb-note", "本次筛选没有精选题，可清除筛选或查看下面的全部题目。"));
       app.appendChild(featured);
     }
-    var visible = dedupeItems(items.filter(function (item) { return matches(item, p); }));
+    var matched = items.filter(function (item) { return matches(item, p); });
+    // A method's index names published IDs, so its visible count must include
+    // every matching ID even when the same stem appears in another paper.
+    var visible = method ? matched : dedupeItems(matched);
+    if (method) visible.forEach(function (item) { delete item._otherExamSources; });
     if (selected) app.appendChild(el("h2", "eb-all", "全部 " + visible.length + " 道"));
     var count = el("p", "eb-count", "共 " + visible.length + " 道题" + (visible.length < items.length ? "（全部 " + items.length + " 道）" : "") + "，保留原卷题号和顺序。");
     count.setAttribute("role", "status");
@@ -887,6 +919,7 @@
       app.replaceChildren(el("p", "eb-missing", "这份限时练暂未开放，请返回专题复习页。")); return;
     }
     if (p.has("sec") && !selectedSection(p)) history.replaceState(null, "", hrefWith({ sec: null }));
+    if (p.has("method") && !selectedMethod(p)) history.replaceState(null, "", hrefWith({ method: null }));
     if (p.has("print")) { renderPrint(); math(app); return; }
     var q = params().get("q");
     if (q) renderQuestion(q); else { renderList(); document.title = (stage === "junior" ? "初中" : "高中") + "真题库 · 培玉"; }

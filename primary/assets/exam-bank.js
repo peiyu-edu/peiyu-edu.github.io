@@ -11,6 +11,10 @@
   var stage = document.body.getAttribute("data-stage") === "junior" ? "junior" : "high";
   var ledger = window.PeiyuLearningState, solutions = window.PeiyuGaokaoSolutions;
   var FILTERS = [["region", "地区"], ["year", "年份"], ["type", "题型"], ["difficulty", "难度"], ["point", "知识点"]];
+  // 题单打印（PY-493）：一张题单最多 30 道；勾选状态只在本页内存里，换筛选条件也保留。
+  var PRINT_MAX = 30, picking = false, picked = [];
+  // A4 纵向、左右页边距各 14mm 时的版心宽（182mm ≈ 688px），留 4px 余量。
+  var PRINT_WIDTH = 684;
 
   function el(tag, cls, text) {
     var node = document.createElement(tag);
@@ -235,6 +239,7 @@
     var count = el("p", "eb-count", "共 " + visible.length + " 道题" + (visible.length < items.length ? "（全部 " + items.length + " 道）" : "") + "，保留原卷题号和顺序。");
     count.setAttribute("role", "status");
     app.appendChild(count);
+    app.appendChild(printBar(visible));
     var groups = [];
     visible.forEach(function (item) {
       var name = paperName(item), group = groups.find(function (g) { return g.name === name; });
@@ -316,6 +321,18 @@
       a.appendChild(mark);
     }
     li.appendChild(a);
+    if (picking) {
+      li.className = "ebp-row";
+      var pick = el("label", "ebp-pick"), box = el("input");
+      box.type = "checkbox";
+      box.value = item.id;
+      box.checked = picked.indexOf(item.id) >= 0;
+      box.setAttribute("aria-label", "选入题单：" + title(item));
+      box.addEventListener("change", function () { setPicked(item.id, box.checked); });
+      pick.appendChild(box);
+      pick.appendChild(el("span", null, "选入"));
+      li.appendChild(pick);
+    }
     return li;
   }
 
@@ -580,8 +597,284 @@
     math(card);
   }
 
+  // ---- 题单打印 ----
+  function printBar(visible) {
+    var bar = el("section", "ebp-bar");
+    bar.setAttribute("aria-label", "打印题单");
+    var text = el("p", "ebp-bar-text"), msg = el("p", "ebp-msg");
+    msg.setAttribute("role", "status");
+    msg.setAttribute("aria-live", "polite");
+    var printBtn = el("button", "btn ebp-go", "打印题单");
+    printBtn.type = "button";
+    var pickBtn = el("button", "btn ghost ebp-toggle", picking ? "不挑了，按筛选打印" : "自己挑题");
+    pickBtn.type = "button";
+    pickBtn.setAttribute("aria-pressed", String(picking));
+    var clearBtn = el("button", "btn ghost ebp-clear", "清空勾选");
+    clearBtn.type = "button";
+    function refresh() {
+      var ids = sheetIds(visible);
+      text.textContent = picking
+        ? "勾选想打印的题（换筛选条件也会保留），已选 " + picked.length + " 道。"
+        : "把当前筛选出的 " + ids.length + " 道题排成 A4 题单，答案另起一页。";
+      clearBtn.hidden = !picking || !picked.length;
+      msg.textContent = "";
+    }
+    bar._refresh = refresh;
+    printBtn.addEventListener("click", function () {
+      var ids = sheetIds(visible);
+      if (!ids.length) { msg.textContent = picking ? "先勾选至少 1 道题。" : "当前没有题可以打印。"; return; }
+      if (ids.length > PRINT_MAX) {
+        msg.textContent = (picking ? "已勾选 " : "当前筛选出 ") + ids.length + " 道，一张题单最多 " + PRINT_MAX + " 道。" +
+          (picking ? "请取消一些勾选。" : "再加一个筛选条件，或者点“自己挑题”选 " + PRINT_MAX + " 道以内。");
+        return;
+      }
+      go({ print: ids.join(","), pick: picking ? "1" : null, answers: null, q: null });
+    });
+    pickBtn.addEventListener("click", function () { picking = !picking; renderList(); math(app); focusSoon(".ebp-toggle"); });
+    clearBtn.addEventListener("click", function () {
+      picked = [];
+      app.querySelectorAll(".ebp-pick input").forEach(function (box) { box.checked = false; });
+      refresh();
+      printBtn.focus();
+    });
+    refresh();
+    var actions = el("div", "ebp-actions");
+    actions.appendChild(printBtn); actions.appendChild(pickBtn); actions.appendChild(clearBtn);
+    bar.appendChild(text); bar.appendChild(actions); bar.appendChild(msg);
+    return bar;
+  }
+  function focusSoon(selector) { var node = app.querySelector(selector); if (node) node.focus(); }
+  function sheetIds(visible) {
+    if (!picking) return visible.map(function (item) { return item.id; });
+    // 按题库顺序（年份新→旧、原卷题号）排题，和列表一致。
+    return index.items.filter(function (item) { return picked.indexOf(item.id) >= 0; }).map(function (item) { return item.id; });
+  }
+  function setPicked(id, on) {
+    var at = picked.indexOf(id);
+    if (on && at < 0) picked.push(id);
+    if (!on && at >= 0) picked.splice(at, 1);
+    app.querySelectorAll(".ebp-pick input").forEach(function (box) { if (box.value === id) box.checked = on; });
+    var bar = app.querySelector(".ebp-bar");
+    if (bar && bar._refresh) bar._refresh();
+  }
+  function sheetScope(p) {
+    if (p.get("pick")) return "自选题目";
+    var parts = [], section = selectedSection(p);
+    if (section) parts.push("本节：" + section.title);
+    FILTERS.forEach(function (f) {
+      var v = p.get(f[0]);
+      if (v) parts.push(f[1] + "：" + (f[0] === "year" ? v + " 年" : v));
+    });
+    return parts.join(" · ");
+  }
+  function choiceCols(texts) {
+    var longest = texts.reduce(function (n, t) { return Math.max(n, String(t).replace(/\\[a-z]+|[{}$\s]/gi, "").length); }, 0);
+    return longest <= 8 ? 4 : longest <= 18 ? 2 : 1;
+  }
+  function printQuestion(item, n) {
+    var li = el("li", "ebp-q" + (item.type === "解答" ? " ebp-long" : ""));
+    li.setAttribute("data-question-id", item.id);
+    var head = el("p", "ebp-head");
+    head.appendChild(el("span", "ebp-no", n + "."));
+    head.appendChild(el("span", "ebp-type", "［" + item.type + "］"));
+    head.appendChild(el("span", "ebp-source", "（" + title(item) + "）"));
+    li.appendChild(head);
+    var stem = el("div", "stem eb-stem ebp-stem");
+    stemText(stem, item.stem);
+    li.appendChild(stem);
+    if (item.figure) {
+      var fig = el("figure", "eb-figure ebp-figure"), img = el("img");
+      img.src = url(item.figure.src);
+      img.alt = item.figure.alt || "本题的示意图";
+      img.loading = "eager";
+      fig.appendChild(img);
+      li.appendChild(fig);
+    }
+    var choices = item.choices || [];
+    var texts = choices.map(function (c, i) { return PY_MATH.choiceText(item.choiceDescriptions ? item.choiceDescriptions[i] : c, LETTERS[i]); });
+    if (choices.length && texts.some(Boolean)) {
+      var list = el("ol", "ebp-choices ebp-cols-" + choiceCols(texts));
+      texts.forEach(function (text, i) {
+        var row = el("li");
+        row.appendChild(el("b", null, LETTERS[i] + "．"));
+        if (text) row.appendChild(el("span", null, text));
+        list.appendChild(row);
+      });
+      li.appendChild(list);
+    }
+    if (item.type === "填空") li.appendChild(el("p", "ebp-blank", "答："));
+    else if (item.type === "解答") {
+      var space = el("div", "ebp-space");
+      space.setAttribute("aria-hidden", "true");
+      li.appendChild(space);
+    }
+    return li;
+  }
+  function printAnswer(item, post, n) {
+    var li = el("li", "ebp-a");
+    li.setAttribute("data-question-id", item.id);
+    var head = el("h3", "ebp-head");
+    head.appendChild(el("span", "ebp-no", n + "."));
+    head.appendChild(el("span", "ebp-source", "（" + title(item) + "）"));
+    li.appendChild(head);
+    if (!post) { li.appendChild(el("p", "eb-missing", "这道题的答案暂时打不开，请刷新重试。")); return li; }
+    if (post.openAnswer) li.appendChild(el("p", "eb-note", "这道题的答案不唯一，下面给出一个例子和全部可取的范围。"));
+    // 与题目卡片一样包一层 .eb-solution：屏幕上长公式在框内横向滚动，不撑宽整页。
+    var body = el("div", "eb-solution ebp-solution");
+    if (solutions && solutions.render) body.appendChild(solutions.render({ answer: post.answer, solution: post.solution, explanation: post.explanation }));
+    else { body.appendChild(el("p", null, "答案：" + post.answer)); prose(body, post.solution); }
+    li.appendChild(body);
+    var scoring = post.scoring, pts = post.scoring_pts;
+    if (item.type === "解答" && Array.isArray(scoring) && Array.isArray(pts) && scoring.length && scoring.length === pts.length) {
+      var box = el("section", "me-scoring ebp-scoring"), ol = el("ol");
+      box.appendChild(el("h4", null, "本题得分点（自写，非官方）"));
+      scoring.forEach(function (text, i) {
+        if (typeof text === "string" && Number.isInteger(pts[i]) && pts[i] > 0) ol.appendChild(el("li", null, text + "（" + pts[i] + "分）"));
+      });
+      if (ol.children.length) { box.appendChild(ol); li.appendChild(box); }
+    }
+    return li;
+  }
+  // 纸上不能横向滚动：KaTeX 里排成一整块、不能折行的部分（数组排的表、长列式）比版心宽时，
+  // 只把这一个公式按比例缩到版心宽（@media print 里用 zoom），其余文字保持原字号。
+  function fitPrintMath(root) {
+    [].forEach.call(root.querySelectorAll(".katex"), function (formula) {
+      if (formula.parentElement && formula.parentElement.closest(".katex")) return;
+      formula.classList.remove("ebp-fit");
+      formula.style.removeProperty("--ebp-fit");
+      function widest() {
+        var w = 0;
+        [].forEach.call(formula.querySelectorAll(".katex-html > .base, .katex-html > .tag"), function (part) {
+          w = Math.max(w, part.getBoundingClientRect().width);
+        });
+        return w;
+      }
+      var w = widest();
+      if (w <= PRINT_WIDTH) return;
+      // 缩放后字形宽度不完全按比例变（中文字体取整），所以试缩、再量，直到放得下。
+      var fit = 1;
+      for (var i = 0; i < 6 && w > PRINT_WIDTH; i++) {
+        fit = Math.floor(fit * PRINT_WIDTH / w * 1000) / 1000;
+        formula.style.zoom = fit;
+        w = widest();
+      }
+      formula.style.removeProperty("zoom");
+      formula.classList.add("ebp-fit");
+      formula.style.setProperty("--ebp-fit", fit.toString());
+    });
+  }
+  function renderPrint() {
+    var p = params(), name = stage === "junior" ? "初中" : "高中";
+    var wanted = String(p.get("print") || "").split(",").filter(Boolean);
+    var rows = [];
+    wanted.forEach(function (id) {
+      var item = index.items.find(function (row) { return row.id === id; });
+      if (item && rows.indexOf(item) < 0) rows.push(item);
+    });
+    var over = rows.length > PRINT_MAX;
+    rows = rows.slice(0, PRINT_MAX);
+    app.replaceChildren();
+    document.body.setAttribute("data-eb-print", "");
+    document.title = name + "真题题单 · 培玉";
+    var tools = el("section", "ebp-tools");
+    tools.setAttribute("aria-label", "题单设置");
+    var back = el("a", "ebp-back", "← 返回题目列表");
+    back.href = hrefWith({ print: null, pick: null, answers: null });
+    back.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      e.preventDefault(); go({ print: null, pick: null, answers: null });
+    });
+    tools.appendChild(back);
+    var note = el("p", "eb-note ebp-tip", "打印时纸张选 A4、纵向；想要电子版，就在打印对话框里选“存储为 PDF”。");
+    tools.appendChild(note);
+    if (over) tools.appendChild(el("p", "ebp-msg", "一张题单最多 " + PRINT_MAX + " 道，这里只排了前 " + PRINT_MAX + " 道。"));
+    if (wanted.length > rows.length && !over) tools.appendChild(el("p", "ebp-msg", "有 " + (wanted.length - rows.length) + " 道题已不在题库里，题单里没有排进去。"));
+    var withAnswers = p.get("answers") !== "0";
+    var toggle = el("label", "ebp-option"), check = el("input");
+    check.type = "checkbox";
+    check.checked = withAnswers;
+    toggle.appendChild(check);
+    toggle.appendChild(el("span", null, "附上答案与解析（另起一页）"));
+    tools.appendChild(toggle);
+    var printBtn = el("button", "btn ebp-print", "打印 / 存成 PDF");
+    printBtn.type = "button";
+    printBtn.disabled = true;
+    printBtn.addEventListener("click", function () { window.print(); });
+    tools.appendChild(printBtn);
+    app.appendChild(tools);
+
+    var sheet = el("article", "ebp-sheet");
+    sheet.setAttribute("aria-label", name + "真题题单");
+    var header = el("header", "ebp-header");
+    header.appendChild(el("h2", null, name + "数学 · 真题题单"));
+    var scope = sheetScope(p);
+    header.appendChild(el("p", "ebp-scope", (scope ? scope + " · " : "") + "共 " + rows.length + " 题"));
+    var fields = el("p", "ebp-fields");
+    ["姓名", "班级", "日期"].forEach(function (label) { fields.appendChild(el("span", null, label + "＿＿＿＿＿＿")); });
+    header.appendChild(fields);
+    sheet.appendChild(header);
+    if (!rows.length) {
+      sheet.appendChild(el("p", "eb-missing", "这张题单里没有题。请返回题库重新筛选或勾选。"));
+      app.appendChild(sheet);
+      return;
+    }
+    var qs = el("ol", "ebp-questions");
+    sheet.appendChild(qs);
+    var answers = el("section", "ebp-answers");
+    answers.setAttribute("aria-label", "答案与解析");
+    answers.appendChild(el("h2", null, "答案与解析"));
+    var alist = el("ol", "ebp-answer-list");
+    answers.appendChild(alist);
+    answers.hidden = !withAnswers;
+    sheet.appendChild(answers);
+    app.appendChild(sheet);
+    var loaded = rows.map(function (item) {
+      return getJSON("data/q/" + encodeURIComponent(item.id) + ".json").catch(function () { return null; });
+    });
+    var posts = null;
+    function loadAnswers() {
+      if (!posts) posts = Promise.all(rows.map(function (item) {
+        return getJSON("data/a/" + encodeURIComponent(item.id) + ".json").then(function (value) {
+          if (!value || value.id !== item.id) throw new Error("answer mismatch");
+          return value;
+        }).catch(function () { return null; });
+      })).then(function (values) {
+        alist.replaceChildren();
+        values.forEach(function (post, i) { alist.appendChild(printAnswer(rows[i], post, i + 1)); });
+        math(alist);
+        fitPrintMath(alist);
+      });
+      return posts;
+    }
+    var ready = Promise.all(loaded).then(function (items) {
+      items.forEach(function (item, i) {
+        if (!item) {
+          var miss = el("li", "ebp-q");
+          miss.appendChild(el("p", "eb-missing", (i + 1) + ". 这道题暂时打不开，请刷新重试。"));
+          qs.appendChild(miss);
+        } else qs.appendChild(printQuestion(item, i + 1));
+      });
+      math(qs);
+      fitPrintMath(qs);
+    });
+    check.addEventListener("change", function () {
+      history.replaceState(null, "", hrefWith({ answers: check.checked ? null : "0" }));
+      answers.hidden = !check.checked;
+      if (check.checked) { printBtn.disabled = true; loadAnswers().then(function () { printBtn.disabled = false; }); }
+    });
+    Promise.all([ready, withAnswers ? loadAnswers() : null]).then(function () {
+      // 字体加载完再量一次，宽度才准。
+      return document.fonts && document.fonts.ready ? document.fonts.ready.catch(function () {}) : null;
+    }).then(function () {
+      fitPrintMath(sheet);
+      printBtn.disabled = false;
+      sheet.setAttribute("data-ready", "");
+    });
+  }
+
   function route() {
     var p = params();
+    document.body.removeAttribute("data-eb-print");
     if (window.PeiyuMockExam) window.PeiyuMockExam.unmount();
     if (p.has("mock") && window.PeiyuMockExam) {
       var paper = (index.papers || []).find(function (entry) { return entry.id === p.get("mock"); });
@@ -594,6 +887,7 @@
       app.replaceChildren(el("p", "eb-missing", "这份限时练暂未开放，请返回专题复习页。")); return;
     }
     if (p.has("sec") && !selectedSection(p)) history.replaceState(null, "", hrefWith({ sec: null }));
+    if (p.has("print")) { renderPrint(); math(app); return; }
     var q = params().get("q");
     if (q) renderQuestion(q); else { renderList(); document.title = (stage === "junior" ? "初中" : "高中") + "真题库 · 培玉"; }
     math(app);
@@ -604,7 +898,7 @@
     if (!data || data.version !== 1 || !Array.isArray(data.items)) throw new Error("bad index");
     index = data;
     if (inline) renderInline(); else route();
-    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q") && !params().has("mock") && !params().has("set")) renderList(); });
+    if (!inline && ledger && ledger.subscribe) ledger.subscribe(function () { if (index && !params().get("q") && !params().has("mock") && !params().has("set") && !params().has("print")) renderList(); });
   }).catch(function () {
     app.replaceChildren(el("p", "eb-missing", "真题库暂时打不开，请刷新重试。"));
   });
